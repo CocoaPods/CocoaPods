@@ -150,29 +150,29 @@ describe_cli 'pod' do
     # Test subspecs inheritance
 
     describe 'Integrates a project with CocoaPods' do
-      behaves_like cli_spec 'install_new',
+      it_behaves_like cli_spec 'install_new',
                             'install --no-repo-update'
     end
 
     describe 'Adds a Pod to an existing installation' do
-      behaves_like cli_spec 'install_add_pod',
+      it_behaves_like cli_spec 'install_add_pod',
                             'install --no-repo-update'
     end
 
     describe 'Removes a Pod from an existing installation' do
-      behaves_like cli_spec 'install_remove_pod',
+      it_behaves_like cli_spec 'install_remove_pod',
                             'install --no-repo-update'
     end
 
     describe 'Creates an installation with multiple target definitions' do
-      behaves_like cli_spec 'install_multiple_targets',
+      it_behaves_like cli_spec 'install_multiple_targets',
                             'install --no-repo-update'
     end
 
     description = 'Installs a Pod with different subspecs activated across different targets'
     if has_mercurial
       describe description do
-        behaves_like cli_spec 'install_subspecs',
+        it_behaves_like cli_spec 'install_subspecs',
                               'install --no-repo-update'
       end
     else
@@ -180,19 +180,19 @@ describe_cli 'pod' do
     end
 
     describe 'Installs a Pod with subspecs and does not duplicate the prefix header' do
-      behaves_like cli_spec 'install_subspecs_no_duplicate_prefix',
+      it_behaves_like cli_spec 'install_subspecs_no_duplicate_prefix',
                             'install --no-repo-update'
     end
 
     describe 'Installs a Pod with a local source' do
-      behaves_like cli_spec 'install_local_source',
+      it_behaves_like cli_spec 'install_local_source',
                             'install --no-repo-update'
     end
 
     description = 'Installs a Pod with an external source'
     if has_mercurial
       describe description do
-        behaves_like cli_spec 'install_external_source',
+        it_behaves_like cli_spec 'install_external_source',
                               'install --no-repo-update'
       end
     else
@@ -200,47 +200,47 @@ describe_cli 'pod' do
     end
 
     describe 'Installs a Pod given the podspec' do
-      behaves_like cli_spec 'install_podspec',
+      it_behaves_like cli_spec 'install_podspec',
                             'install --no-repo-update'
     end
 
     describe 'Installs a Pod with a custom module map' do
-      behaves_like cli_spec 'install_custom_module_map',
+      it_behaves_like cli_spec 'install_custom_module_map',
                             'install --no-repo-update'
     end
 
     describe 'Installs a Pod with a custom module name' do
-      behaves_like cli_spec 'install_custom_module_name',
+      it_behaves_like cli_spec 'install_custom_module_name',
                             'install --no-repo-update'
     end
 
     describe 'Performs an installation using a custom workspace' do
-      behaves_like cli_spec 'install_custom_workspace',
+      it_behaves_like cli_spec 'install_custom_workspace',
                             'install --no-repo-update'
     end
 
     describe 'Integrates a target with custom build settings' do
-      behaves_like cli_spec 'install_custom_build_configuration',
+      it_behaves_like cli_spec 'install_custom_build_configuration',
                             'install --no-repo-update'
     end
 
     describe 'Integrates a Pod with resources' do
-      behaves_like cli_spec 'install_resources',
+      it_behaves_like cli_spec 'install_resources',
                             'install --no-repo-update'
     end
 
     describe 'Integrates a Pod without source files but with resources' do
-      behaves_like cli_spec 'install_resources_no_source_files',
+      it_behaves_like cli_spec 'install_resources_no_source_files',
                             'install --no-repo-update'
     end
 
     describe 'Integrates a Pod using frameworks with resources' do
-      behaves_like cli_spec 'install_framework_resources',
+      it_behaves_like cli_spec 'install_framework_resources',
                             'install --no-repo-update'
     end
 
     describe 'Integrates a Pod using non Objective-C source files' do
-      behaves_like cli_spec 'install_non_objective_c_files',
+      it_behaves_like cli_spec 'install_non_objective_c_files',
                             'install --no-repo-update'
     end
 
@@ -254,12 +254,12 @@ describe_cli 'pod' do
     # @todo add tests for all the hooks API
     #
     describe 'Runs the Podfile callbacks' do
-      behaves_like cli_spec 'install_podfile_callbacks',
+      it_behaves_like cli_spec 'install_podfile_callbacks',
                             'install --no-repo-update'
     end
 
     describe 'Uses Lockfile checkout options' do
-      behaves_like cli_spec 'install_using_checkout_options',
+      it_behaves_like cli_spec 'install_using_checkout_options',
                             'install --no-repo-update'
     end
   end
@@ -268,12 +268,12 @@ describe_cli 'pod' do
 
   describe 'Pod update' do
     describe 'Updates an existing installation' do
-      behaves_like cli_spec 'update_all',
+      it_behaves_like cli_spec 'update_all',
                             'update --no-repo-update'
     end
 
     describe 'Updates a selected Pod in an existing installation' do
-      behaves_like cli_spec 'update_selected',
+      it_behaves_like cli_spec 'update_selected',
                             'update Reachability --no-repo-update'
     end
   end
@@ -284,13 +284,13 @@ describe_cli 'pod' do
     describe 'Lints a Pod from source with a prepare_command' do
       # We have to disable verbose mode by adding --no-verbose here,
       # otherwise xcodebuild output is included in execution output.
-      behaves_like cli_spec 'lib_lint_with_prepare_command',
+      it_behaves_like cli_spec 'lib_lint_with_prepare_command',
                             'lib lint',
                             '--no-verbose'
     end
 
     describe 'Lints a Pod' do
-      behaves_like cli_spec 'spec_lint',
+      it_behaves_like cli_spec 'spec_lint',
                             'spec lint --quick'
     end
   end
@@ -299,7 +299,7 @@ describe_cli 'pod' do
 
   describe 'Pod init' do
     describe 'Initializes a Podfile with a single platform' do
-      behaves_like cli_spec 'init_single_platform',
+      it_behaves_like cli_spec 'init_single_platform',
                             'init'
     end
   end

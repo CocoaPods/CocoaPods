@@ -2,8 +2,8 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::Cache::Clean do
-    extend SpecHelper::Command
-    extend SpecHelper::TemporaryCache
+    include SpecHelper::Command
+    include SpecHelper::TemporaryCache
 
     before do
       SpecHelper::TemporaryCache.set_up_test_cache

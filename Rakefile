@@ -131,10 +131,10 @@ begin
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
       title 'Running the specs'
-      sh "bundle exec bacon #{specs('**/*')}"
+      sh "bundle exec rspec #{specs('**/*')}"
 
       title 'Running Integration tests'
-      sh 'bundle exec bacon spec/integration.rb'
+      sh 'bundle exec rspec spec/integration.rb'
 
       title 'Running examples'
       Rake::Task['examples:build'].invoke

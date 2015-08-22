@@ -115,7 +115,7 @@ module Pod
       end
 
       it 'includes folders in the resources' do
-        @accessor.resources.should.include?(@root + 'Resources/sub_dir')
+        @accessor.resources.should.include(@root + 'Resources/sub_dir')
       end
 
       it 'returns the preserve paths' do
@@ -126,11 +126,11 @@ module Pod
 
       it 'includes folders in the preserve paths' do
         @spec_consumer.stubs(:preserve_paths).returns(['Resources'])
-        @accessor.preserve_paths.should.include?(@root + 'Resources')
+        @accessor.preserve_paths.should.include(@root + 'Resources')
       end
 
       it 'returns the paths of the framework bundles' do
-        @accessor.vendored_frameworks.should.include?(@root + 'Bananalib.framework')
+        @accessor.vendored_frameworks.should.include(@root + 'Bananalib.framework')
       end
 
       it 'returns the paths of the framework headers' do
@@ -146,7 +146,7 @@ module Pod
       end
 
       it 'returns the paths of the library files' do
-        @accessor.vendored_libraries.should.include?(@root + 'libBananalib.a')
+        @accessor.vendored_libraries.should.include(@root + 'libBananalib.a')
       end
 
       it 'returns the resource bundles of the pod' do
@@ -207,13 +207,14 @@ module Pod
         it 'when false returns all source files as non-arc' do
           @spec_consumer.stubs(:requires_arc).returns(false)
           @accessor.non_arc_source_files.should == @accessor.source_files
-          @accessor.arc_source_files.should.be.empty?
+          @accessor.arc_source_files.should.be.kind_of(Array)
+          @accessor.arc_source_files.should.be.empty
         end
 
         it 'when true returns all source files as arc' do
           @spec_consumer.stubs(:requires_arc).returns(true)
           @accessor.arc_source_files.should == @accessor.source_files
-          @accessor.non_arc_source_files.should.be.empty?
+          @accessor.non_arc_source_files.should.be.empty
         end
 
         it 'when a file pattern returns all source files as arc that match' do

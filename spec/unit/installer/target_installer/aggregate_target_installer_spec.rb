@@ -135,7 +135,7 @@ module Pod
         @installer.install!
         support_files_dir = config.sandbox.target_support_files_dir('Pods')
         script = support_files_dir + 'Pods-resources.sh'
-        script.read.should.not.include?('logo-sidebar.png')
+        script.read.should.not.include('logo-sidebar.png')
       end
 
       xit 'adds the resources bundles to the copy resources script' do

@@ -78,7 +78,7 @@ module Pod
         out.should.match /target_definitions:/
         out.should.match /platform: ios/
         out.should.match /- SSZipArchive:/
-        out.should.end_with?("\n\r\n")
+        out.should.end_with("\n\r\n")
       end
     end
 

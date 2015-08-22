@@ -27,15 +27,11 @@ group :development do
 
   gem 'cocoapods-dependencies'
 
-  gem 'bacon'
-  gem 'mocha'
-  gem 'mocha-on-bacon'
-  gem 'prettybacon'
+  gem 'rspec'
   gem 'webmock'
   gem 'inch'
 
   # Integration tests
-  gem 'diffy'
   gem 'clintegracon'
   gem 'rubocop'
 end

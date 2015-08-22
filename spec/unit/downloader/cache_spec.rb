@@ -84,7 +84,7 @@ module Pod
     end
 
     describe 'when the cache is incomplete' do
-      shared 'it falls back to download the pod' do
+      shared_examples 'it falls back to download the pod' do
         describe 'when downloading a released pod' do
           it 'does download the source' do
             Downloader::Git.any_instance.expects(:download).never
@@ -125,7 +125,7 @@ module Pod
       end
 
       describe 'because the spec is missing' do
-        behaves_like 'it falls back to download the pod'
+        it_behaves_like 'it falls back to download the pod'
       end
 
       describe 'because the spec is invalid' do
@@ -137,7 +137,7 @@ module Pod
           end
         end
 
-        behaves_like 'it falls back to download the pod'
+        it_behaves_like 'it falls back to download the pod'
       end
     end
 

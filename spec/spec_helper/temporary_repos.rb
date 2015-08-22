@@ -82,7 +82,8 @@ module SpecHelper
     module_function :tmp_repos_path
 
     def self.extended(base)
-      base.before do
+      base.send(:include, self)
+      base.before(:each) do
         tmp_repos_path.mkpath
       end
     end

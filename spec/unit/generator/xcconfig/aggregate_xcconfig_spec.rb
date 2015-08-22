@@ -23,18 +23,15 @@ module Pod
           @target.target_definition.whitelist_pod_for_configuration(@spec.name, 'Release')
           @podfile = @target.target_definition.podfile
           @generator = AggregateXCConfig.new(@target, 'Release')
+          @xcconfig = @generator.generate
         end
 
-        shared 'AggregateXCConfig' do
+        shared_examples 'AggregateXCConfig' do
           it 'returns the path of the pods root relative to the user project' do
             @generator.target.relative_pods_root.should == '${SRCROOT}/Pods'
           end
 
           #--------------------------------------------------------------------#
-
-          before do
-            @xcconfig = @generator.generate
-          end
 
           it 'generates the xcconfig' do
             @xcconfig.class.should == Xcodeproj::Config
@@ -98,7 +95,7 @@ module Pod
             fixture_spec('banana-lib/BananaLib.podspec')
           end
 
-          behaves_like 'AggregateXCConfig'
+          it_behaves_like 'AggregateXCConfig'
 
           it 'configures the project to load all members that implement Objective-c classes or categories' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
@@ -146,7 +143,7 @@ module Pod
             Target.any_instance.stubs(:requires_frameworks?).returns(true)
           end
 
-          behaves_like 'AggregateXCConfig'
+          it_behaves_like 'AggregateXCConfig'
 
           it "doesn't configure the project to load all members that implement Objective-c classes or categories" do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-ObjC'

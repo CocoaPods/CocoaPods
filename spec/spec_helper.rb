@@ -20,11 +20,6 @@
 # Set up
 #-----------------------------------------------------------------------------#
 
-require 'rubygems'
-require 'bundler/setup'
-require 'bacon'
-require 'mocha-on-bacon'
-require 'pretty_bacon'
 require 'pathname'
 
 require 'active_support/core_ext/string/strip'
@@ -74,25 +69,94 @@ if ENV['SKIP_XCODEBUILD'].nil? && Pod::Executable.which('xcodebuild').nil?
   ENV['SKIP_XCODEBUILD'] = 'true'
 end
 
-Bacon.summary_at_exit
+RSpec.configure do |config|
+  config.include SpecHelper::Fixture
+  config.include SpecHelper::Command
+  config.include Pod::Config::Mixin
+  def skip_xcodebuild?
+    ENV['SKIP_XCODEBUILD']
+  end
 
-module Bacon
-  class Context
-    include Pod::Config::Mixin
-    include SpecHelper::Fixture
-    include SpecHelper::Command
+  def temporary_directory
+    SpecHelper.temporary_directory
+  end
 
-    def skip_xcodebuild?
-      ENV['SKIP_XCODEBUILD']
+  config.mock_with :rspec do |mocks|
+    mocks.syntax = :should
+
+    ::Object.send(:define_method, :stubs) { |*args, &blk| stub(*args, &blk) }
+    ::Object.send(:define_method, :expects) { |*args, &blk| should_receive(*args, &blk) }
+    ::RSpec::Mocks::MessageExpectation.send(:define_method, :returns) { |*args, &blk| and_return(*args, &blk) }
+    ::RSpec::Mocks::AnyInstance::StubChain.send(:define_method, :returns) { |*args, &blk| and_return(*args, &blk) }
+    ::RSpec::Mocks::AnyInstance::PositiveExpectationChain.send(:define_method, :returns) { |*args, &blk| and_return(*args, &blk) }
+    ::RSpec::Matchers::BuiltIn::OperatorMatcher.send(:define_method, :raise) do |*args, &blk|
+      matcher = ::RSpec::Matchers::BuiltIn::RaiseError.new(*args, &blk)
+      method = is_a?(::RSpec::Matchers::BuiltIn::NegativeOperatorMatcher) ? :should_not : :should
+      @actual.send(method, matcher)
+      matcher.instance_variable_get(:@actual_error)
+    end
+    ::RSpec::Matchers::BuiltIn::OperatorMatcher.send(:define_method, :not) { ::RSpec::Matchers::BuiltIn::NegativeOperatorMatcher.new(@actual) }
+    ::RSpec::Matchers::BuiltIn::OperatorMatcher.send(:include, ::RSpec::Matchers)
+    class BeShim
+      include ::RSpec::Matchers
+      def initialize(actual, should_method)
+        @actual = actual
+        @should_method = should_method
+      end
+      def method_missing(m, *args, &blk)
+        m = m.to_s.chomp('?').to_sym
+        matcher = case m
+        when :true
+          be_truthy
+        when :false
+          be_falsey
+        when :nil
+          be_nil
+        when :kind_of
+          be_a_kind_of(*args)
+        else
+          ::RSpec::Matchers::BuiltIn::BePredicate.new(:"be_#{m}", *args, &blk)
+        end
+        @actual.send(@should_method, matcher)
+      end
     end
 
-    def temporary_directory
-      SpecHelper.temporary_directory
+    ::RSpec::Matchers::BuiltIn::OperatorMatcher.send(:define_method, :be) do
+      method = is_a?(::RSpec::Matchers::BuiltIn::NegativeOperatorMatcher) ? :should_not : :should
+      BeShim.new(@actual, method)
+    end
+
+    class ::RSpec::Matchers::BuiltIn::OperatorMatcher
+      alias_method :cp_method_missing, :method_missing
+      def method_missing(m, *args, &blk)
+        wo = m.to_s.chomp('?').to_sym
+        if wo == m
+          cp_method_missing(m, *args, &blk)
+        else
+          send(wo, *args, &blk)
+        end
+      end
+    end
+    ::RSpec::Core::ExampleGroup.send(:define_method, :stub) { |*args, &blk| double(*args, &blk) }
+    ::RSpec::Core::ExampleGroup.send(:define_method, :mock) { |*args, &blk| double(*args, &blk) }
+    ::RSpec::Core::ExampleGroup.send(:define_method, :should) do |*args, &blk|
+      d = double()
+      def d.raise(*args, &blk);
+        matcher = ::RSpec::Matchers::BuiltIn::RaiseError.new(*args)
+        method = @not ? :should_not : :should
+        blk.send(method, matcher)
+        matcher.instance_variable_get(:@actual_error)
+      end
+      def d.not
+        @not = true
+        self
+      end
+      d
     end
   end
-end
 
-Mocha::Configuration.prevent(:stubbing_non_existent_method)
+  config.expect_with(:rspec) { |c| c.syntax = :should }
+end
 
 module SpecHelper
   def self.temporary_directory

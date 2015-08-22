@@ -571,7 +571,7 @@ module Pod
 
       it 'returns that an update is required when there is no sandbox manifest' do
         @analyzer.sandbox.stubs(:manifest).returns(nil)
-        @analyzer.should.send(:checkout_requires_update?, @dependency)
+        @analyzer.send(:checkout_requires_update?, @dependency).should.be.true
       end
 
       before do

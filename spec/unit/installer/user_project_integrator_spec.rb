@@ -53,7 +53,7 @@ module Pod
         end
 
         describe '#warn_about_xcconfig_overrides' do
-          shared 'warn_about_xcconfig_overrides' do
+          def warn_about_xcconfig_overrides
             target_config = stub(:name => 'Release', :build_settings => @user_target_build_settings)
             user_target = stub(:name => 'SampleProject', :build_configurations => [target_config])
             @target.stubs(:user_targets).returns([user_target])
@@ -61,32 +61,31 @@ module Pod
             @target.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
             @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target])
 
-            @integrator.unstub(:warn_about_xcconfig_overrides)
             @integrator.send(:warn_about_xcconfig_overrides)
           end
 
           it 'check that the integrated target does not override the CocoaPods build settings' do
             @user_target_build_settings = { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1'] }
-            behaves_like 'warn_about_xcconfig_overrides'
+            warn_about_xcconfig_overrides
             UI.warnings.should.include 'The `SampleProject [Release]` target ' \
               'overrides the `GCC_PREPROCESSOR_DEFINITIONS` build setting'
           end
 
           it 'allows the use of the alternate form of the inherited flag' do
             @user_target_build_settings = { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1', '${inherited}'] }
-            behaves_like 'warn_about_xcconfig_overrides'
+            warn_about_xcconfig_overrides
             UI.warnings.should.not.include 'GCC_PREPROCESSOR_DEFINITIONS'
           end
 
           it 'allows build settings which inherit the settings form the CocoaPods xcconfig' do
             @user_target_build_settings = { 'GCC_PREPROCESSOR_DEFINITIONS' => ['FLAG=1', '$(inherited)'] }
-            behaves_like 'warn_about_xcconfig_overrides'
+            warn_about_xcconfig_overrides
             UI.warnings.should.not.include 'GCC_PREPROCESSOR_DEFINITIONS'
           end
 
           it "ignores certain build settings which don't inherit the settings form the CocoaPods xcconfig" do
             @user_target_build_settings = { 'CODE_SIGN_IDENTITY' => 'Mac Developer' }
-            behaves_like 'warn_about_xcconfig_overrides'
+            warn_about_xcconfig_overrides
             UI.warnings.should.not.include 'CODE_SIGN_IDENTITY'
           end
         end

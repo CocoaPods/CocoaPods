@@ -212,68 +212,72 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    def it_should_check_for_existence(command)
-      it "errors if a given podspec doesn't exist" do
-        e = lambda { command('spec', command, 'some_pod_that_doesnt_exist').run }.should.raise Informative
-        e.message.should.match /Unable to find a pod with/
+    module CommandHelpers
+      def it_should_check_for_existence(command)
+        it "errors if a given podspec doesn't exist" do
+          e = lambda { command('spec', command, 'some_pod_that_doesnt_exist').run }.should.raise Informative
+          e.message.should.match /Unable to find a pod with/
+        end
       end
-    end
 
-    def it_should_check_for_ambiguity(command)
-      it 'complains provided spec name is ambigious' do
-        e = lambda { command('spec', command, 'AF').run }.should.raise Informative
-        e.message.should.match /More than one/
+      def it_should_check_for_ambiguity(command)
+        it 'complains provided spec name is ambigious' do
+          e = lambda { command('spec', command, 'AF').run }.should.raise Informative
+          e.message.should.match /More than one/
+        end
       end
-    end
 
-    def describe_regex_support(command, raise_class = nil)
-      describe 'RegEx support' do
-        before do
-          @test_source = Source.new(fixture('spec-repos/test_repo'))
-          Source::Aggregate.any_instance.stubs(:sources).returns([@test_source])
-          SourcesManager.updated_search_index = nil
-          yield if block_given?
-        end
-
-        it 'raise when using an invalid regex' do
-          lambda { run_command('spec', command, '--regex', '+') }.should.raise CLAide::Help
-        end
-
-        it 'does not try to validate the query as a regex with plain-text mode' do
-          l = lambda { run_command('spec', command, '+') }
-          if raise_class
-            l.should.raise raise_class
-          else
-            l.should.not.raise CLAide::Help
+      def describe_regex_support(command, raise_class = nil)
+        describe 'RegEx support' do
+          before do
+            @test_source = Source.new(fixture('spec-repos/test_repo'))
+            Source::Aggregate.any_instance.stubs(:sources).returns([@test_source])
+            SourcesManager.updated_search_index = nil
+            yield if block_given?
           end
-        end
 
-        it 'uses regex search when asked for regex mode' do
-          l = lambda { run_command('spec', command, '--regex', 'Ba(na)+Lib') }
-          if raise_class
-            l.should.raise raise_class
-          else
-            l.should.not.raise
+          it 'raise when using an invalid regex' do
+            lambda { run_command('spec', command, '--regex', '+') }.should.raise CLAide::Help
           end
-          UI.output.should.include? 'BananaLib'
-          UI.output.should.not.include? 'Pod+With+Plus+Signs'
-          UI.output.should.not.include? 'JSONKit'
-        end
 
-        it 'uses plain-text search when not asked for regex mode' do
-          l = lambda { run_command('spec', command, 'Pod+With+Plus+Signs') }
-          if raise_class
-            l.should.raise raise_class
-          else
-            l.should.not.raise
+          it 'does not try to validate the query as a regex with plain-text mode' do
+            l = lambda { run_command('spec', command, '+') }
+            if raise_class
+              l.should.raise raise_class
+            else
+              l.should.not.raise CLAide::Help
+            end
           end
-          UI.output.should.include? 'Pod+With+Plus+Signs'
-          UI.output.should.not.include? 'BananaLib'
+
+          it 'uses regex search when asked for regex mode' do
+            l = lambda { run_command('spec', command, '--regex', 'Ba(na)+Lib') }
+            if raise_class
+              l.should.raise raise_class
+            else
+              l.should.not.raise
+            end
+            UI.output.should.include? 'BananaLib'
+            UI.output.should.not.include? 'Pod+With+Plus+Signs'
+            UI.output.should.not.include? 'JSONKit'
+          end
+
+          it 'uses plain-text search when not asked for regex mode' do
+            l = lambda { run_command('spec', command, 'Pod+With+Plus+Signs') }
+            if raise_class
+              l.should.raise raise_class
+            else
+              l.should.not.raise
+            end
+            UI.output.should.include? 'Pod+With+Plus+Signs'
+            UI.output.should.not.include? 'BananaLib'
+          end
         end
       end
     end
 
     describe Command::Spec::Which do
+      extend CommandHelpers
+
       it_should_check_for_existence('which')
       it_should_check_for_ambiguity('which')
 
@@ -289,6 +293,8 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe Command::Spec::Cat do
+      extend CommandHelpers
+
       it_should_check_for_existence('cat')
       it_should_check_for_ambiguity('cat')
 
@@ -309,6 +315,8 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe Command::Spec::Edit do
+      extend CommandHelpers
+
       before do
         @path_saved = ENV['PATH']
       end

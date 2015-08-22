@@ -43,7 +43,7 @@ module Pod
           'subspec does not exist in all versions' do
           @resolver.instance_variable_set(:@cached_sets, {})
           possibilities = @resolver.search_for(Dependency.new('SDWebImage/Core'))
-          possibilities.should.not.include? nil
+          possibilities.should.not.include nil
         end
       end
 
@@ -566,7 +566,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.3.4)']
       end
 
@@ -578,7 +578,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
       end
 
@@ -590,7 +590,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (0.10.1)']
       end
 
@@ -602,7 +602,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
       end
 
@@ -614,7 +614,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
 
@@ -626,7 +626,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
 
@@ -638,7 +638,7 @@ module Pod
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
-        specs.should != ['AFNetworking (1.0RC3)']
+        specs.should.not == ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
 

@@ -14,7 +14,7 @@ module Pod
       [/BananaLib/,
        /JSONKit/,
        /\d+ pods were found/,
-      ].each { |regex| out.should =~ regex }
+      ].each { |regex| out.should.match regex }
     end
 
     it 'presents the known pods with versions' do
@@ -25,7 +25,7 @@ module Pod
       [/BananaLib 1.0/,
        /JSONKit #{jsonkit_set.versions.first}/,
        /\d+ pods were found/,
-      ].each { |regex| out.should =~ regex }
+      ].each { |regex| out.should.match regex }
     end
   end
 end

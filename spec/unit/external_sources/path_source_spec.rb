@@ -22,7 +22,7 @@ module Pod
       @subject = ExternalSources.from_dependency(dependency, podfile_path)
       @subject.fetch(config.sandbox)
       path = config.sandbox.specifications_root + 'Reachability.podspec.json'
-      path.should.exist?
+      path.should.exist
     end
 
     it 'returns the description' do
@@ -47,22 +47,22 @@ module Pod
       should.raise Informative do
         @subject.fetch(config.sandbox)
       end.message.should.match /No podspec found for `Reachability` in `#{temporary_directory}`/
+    end
 
-      it 'marks a pod as relative' do
-        @subject.stubs(:params).returns(:path => './Reachability')
-        Pathname.any_instance.stubs(:exist?).returns(true)
-        config.sandbox.stubs(:store_podspec)
-        @subject.fetch(config.sandbox)
-        config.sandbox.local_path_was_absolute?('Reachability').should.be.false
-      end
+    it 'marks a pod as relative' do
+      @subject.stubs(:params).returns(:path => './Reachability')
+      Pathname.any_instance.stubs(:exist?).returns(true)
+      config.sandbox.stubs(:store_podspec)
+      @subject.fetch(config.sandbox)
+      config.sandbox.local_path_was_absolute?('Reachability').should.be.false
+    end
 
-      it 'marks a pod as absolute' do
-        @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
-        Pathname.any_instance.stubs(:exist?).returns(true)
-        config.sandbox.stubs(:store_podspec)
-        @subject.fetch(config.sandbox)
-        config.sandbox.local_path_was_absolute?('Reachability').should.be.true
-      end
+    it 'marks a pod as absolute' do
+      @subject.stubs(:params).returns(:path => fixture('integration/Reachability'))
+      Pathname.any_instance.stubs(:exist?).returns(true)
+      config.sandbox.stubs(:store_podspec)
+      @subject.fetch(config.sandbox)
+      config.sandbox.local_path_was_absolute?('Reachability').should.be.true
     end
 
     describe '#podspec_path' do
