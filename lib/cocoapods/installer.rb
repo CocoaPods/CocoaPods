@@ -115,7 +115,6 @@ module Pod
 
     def prepare
       UI.message 'Preparing' do
-        FileUtils.chmod_R('+w', sandbox.root)
         sandbox.prepare
         ensure_plugins_are_installed!
         Migrator.migrate(sandbox)
@@ -307,18 +306,14 @@ module Pod
             install_source_of_pod(spec.name)
           end
         else
-          UI.titled_section("Using #{spec}", title_options)
+          UI.titled_section("Using #{spec}", title_options) do
+            create_pod_installer(spec.name)
+          end
         end
       end
     end
 
-    # Install the Pods. If the resolver indicated that a Pod should be
-    # installed and it exits, it is removed an then reinstalled. In any case if
-    # the Pod doesn't exits it is installed.
-    #
-    # @return [void]
-    #
-    def install_source_of_pod(pod_name)
+    def create_pod_installer(pod_name)
       specs_by_platform = {}
       pod_targets.each do |pod_target|
         if pod_target.root_spec.name == pod_name
@@ -329,9 +324,20 @@ module Pod
 
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
-      pod_installer.install!
       @pod_installers << pod_installer
-      @installed_specs.concat(specs_by_platform.values.flatten.uniq)
+      pod_installer
+    end
+
+    # Install the Pods. If the resolver indicated that a Pod should be
+    # installed and it exits, it is removed an then reinstalled. In any case if
+    # the Pod doesn't exits it is installed.
+    #
+    # @return [void]
+    #
+    def install_source_of_pod(pod_name)
+      pod_installer = create_pod_installer(pod_name)
+      pod_installer.install!
+      @installed_specs.concat(pod_installer.specs_by_platform.values.flatten.uniq)
     end
 
     # Cleans the sources of the Pods if the config instructs to do so.
@@ -342,6 +348,18 @@ module Pod
       return unless config.clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
+    end
+
+    # Unlocks the sources of the Pods.
+    #
+    # @todo Why the @pod_installers might be empty?
+    #
+    def unlock_pod_sources
+      return unless @pod_installers
+      @pod_installers.each do |installer|
+        pod_target = pod_targets.find { |target| target.pod_name == installer.name }
+        installer.unlock_files!(pod_target.file_accessors)
+      end
     end
 
     # Locks the sources of the Pods if the config instructs to do so.
@@ -444,6 +462,7 @@ module Pod
     # @return [void]
     #
     def perform_post_install_actions
+      unlock_pod_sources
       run_plugins_post_install_hooks
       warn_for_deprecations
       lock_pod_sources

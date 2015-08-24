@@ -74,12 +74,22 @@ module Pod
       #
       def lock_files!(file_accessors)
         return if local?
+        each_source_file(file_accessors) do |source_file|
+          FileUtils.chmod('u-w', source_file)
+        end
+      end
 
-        file_accessors.each do |file_accessor|
-          file_accessor.source_files.each do |source_file|
-            next unless source_file.exist?
-            FileUtils.chmod('-w', source_file)
-          end
+      # Unlocks the source files if appropriate.
+      #
+      # @todo   As the pre install hooks need to run before cleaning this
+      #         method should be refactored.
+      #
+      # @return [void]
+      #
+      def unlock_files!(file_accessors)
+        return if local?
+        each_source_file(file_accessors) do |source_file|
+          FileUtils.chmod('u+w', source_file)
         end
       end
 
@@ -170,6 +180,15 @@ module Pod
 
       def released?
         !local? && !head_pod? && !predownloaded? && sandbox.specification(root_spec.name) != root_spec
+      end
+
+      def each_source_file(file_accessors, &blk)
+        file_accessors.each do |file_accessor|
+          file_accessor.source_files.each do |source_file|
+            next unless source_file.exist?
+            blk[source_file]
+          end
+        end
       end
 
       #-----------------------------------------------------------------------#
