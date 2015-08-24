@@ -37,6 +37,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Tyler Fox](https://github.com/smileyborg)
   [#3908](https://github.com/CocoaPods/CocoaPods/issues/3908)
 
+* Fix source locking/unlocking.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4059](https://github.com/CocoaPods/CocoaPods/issues/4059)
+
 ##### Enhancements
 
 * Collapse the namespaced public and private pod xcconfig into one single
