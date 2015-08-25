@@ -124,16 +124,25 @@ describe_cli 'pod' do
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
     s.replace_path `which bash`.chomp, 'BASH_BIN'
+    s.replace_path `which curl`.chomp, 'CURL_BIN'
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
-    s.replace_pattern /#{Dir.tmpdir}\/[\w-]+/i, 'TMPDIR'
+    s.replace_pattern /#{Dir.tmpdir}\/[\w-]+/io, 'TMPDIR'
     s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
     s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
+
     s.replace_path %r{
       `[^`]*? # The opening backtick on a plugin path
       ([[[:alnum:]]_+-]+?) # The plugin name
       (- ([[:xdigit:]]+ | #{Gem::Version::VERSION_PATTERN}))? # The version or SHA
       /lib/cocoapods_plugin.rb # The actual plugin file that gets loaded
-    }ix, '`\1/lib/cocoapods_plugin.rb'
+    }iox, '`\1/lib/cocoapods_plugin.rb'
+
+    s.replace_pattern %r{
+      ^(\s* \$ \s (CURL_BIN | #{`which curl`.strip}) .* \n)
+      ^\s* % \s* Total .* \n
+      ^\s* Dload \s* Upload .* \n
+      (^\s* [[:cntrl:]] .* \n)+
+    }iox, "\\1\n"
   end
 
   describe 'Pod install' do
