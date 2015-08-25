@@ -37,11 +37,8 @@ Downloading dependencies
 
 -> Installing Realm (0.94.1)
  > Http download
-   $ /usr/bin/curl -f -L -o ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs
-     % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                    Dload  Upload   Total   Spent    Left  Speed
-        0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0   100   401    0   401    0     0    781      0 --:--:-- --:--:-- --:--:--   781
-        0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0     1 13.3M    1  203k    0     0   104k      0  0:02:10  0:00:01  0:02:09  223k    33 13.3M   33 4612k    0     0  1553k      0  0:00:08  0:00:02  0:00:06 2384k    76 13.3M   76 10.2M    0     0  2670k      0  0:00:05  0:00:03  0:00:02 3629k   100 13.3M  100 13.3M    0     0  3010k      0  0:00:04  0:00:04 --:--:-- 3903k
+   $ CURL_BIN -f -L -o ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs
+
    $ /usr/bin/unzip ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip -d ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm
    Archive:  ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip
       creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/
