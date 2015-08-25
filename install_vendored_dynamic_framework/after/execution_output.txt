@@ -25,7 +25,7 @@ Fetching external sources
        git checkout -b new_branch_name
      
  > Running prepare command
-   $ /usr/local/bin/bash -c  set -e sh build.sh cocoapods-setup without-core
+   $ BASH_BIN -c  set -e sh build.sh cocoapods-setup without-core
 
 Resolving dependencies of `Podfile`
 
@@ -40,8 +40,8 @@ Downloading dependencies
    $ /usr/bin/curl -f -L -o ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs
      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                     Dload  Upload   Total   Spent    Left  Speed
-        0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0     0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0   100   403    0   403    0     0    770      0 --:--:-- --:--:-- --:--:--   769
-        0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0     0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0     1 13.3M    1  145k    0     0  43725      0  0:05:19  0:00:03  0:05:16  106k     7 13.3M    7  994k    0     0   225k      0  0:01:00  0:00:04  0:00:56  421k    29 13.3M   29 4004k    0     0   739k      0  0:00:18  0:00:05  0:00:13 1189k    56 13.3M   56 7676k    0     0  1194k      0  0:00:11  0:00:06  0:00:05 1754k    83 13.3M   83 11.1M    0     0  1535k      0  0:00:08  0:00:07  0:00:01 2283k   100 13.3M  100 13.3M    0     0  1699k      0  0:00:08  0:00:08 --:--:-- 2930k
+        0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0   100   401    0   401    0     0    781      0 --:--:-- --:--:-- --:--:--   781
+        0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0     1 13.3M    1  203k    0     0   104k      0  0:02:10  0:00:01  0:02:09  223k    33 13.3M   33 4612k    0     0  1553k      0  0:00:08  0:00:02  0:00:06 2384k    76 13.3M   76 10.2M    0     0  2670k      0  0:00:05  0:00:03  0:00:02 3629k   100 13.3M  100 13.3M    0     0  3010k      0  0:00:04  0:00:04 --:--:-- 3903k
    $ /usr/bin/unzip ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip -d ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm
    Archive:  ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip
       creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/
