@@ -74,10 +74,12 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-SampleApp_2` (`SampleApp.xcodeproj` project)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
 
@@ -86,3 +88,11 @@ Integrating target `Pods-test` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+
+[!] The `SampleAppTests [Debug]` target overrides the `FRAMEWORK_SEARCH_PATHS` build setting defined in `Pods/Target Support Files/Pods-test/Pods-test.debug.xcconfig'. This can lead to problems with the CocoaPods installation
+
+[!] The `SampleAppTests [Release]` target overrides the `FRAMEWORK_SEARCH_PATHS` build setting defined in `Pods/Target Support Files/Pods-test/Pods-test.release.xcconfig'. This can lead to problems with the CocoaPods installation
+    - Use the `$(inherited)` flag, or
+    - Remove the build settings from the target.
+    - Use the `$(inherited)` flag, or
+    - Remove the build settings from the target.

@@ -1,0 +1,38 @@
+Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework
+├── Headers
+│   ├── RLMArray.h
+│   ├── RLMCollection.h
+│   ├── RLMConstants.h
+│   ├── RLMDefines.h
+│   ├── RLMMigration.h
+│   ├── RLMObject.h
+│   ├── RLMObjectBase.h
+│   ├── RLMObjectSchema.h
+│   ├── RLMPlatform.h
+│   ├── RLMProperty.h
+│   ├── RLMRealm.h
+│   ├── RLMResults.h
+│   ├── RLMSchema.h
+│   └── Realm.h
+├── Info.plist
+├── Modules
+│   └── module.modulemap
+├── PrivateHeaders
+│   ├── RLMArray_Private.h
+│   ├── RLMListBase.h
+│   ├── RLMMigration_Private.h
+│   ├── RLMObjectSchema_Private.h
+│   ├── RLMObjectStore.h
+│   ├── RLMObject_Private.h
+│   ├── RLMProperty_Private.h
+│   ├── RLMRealmUtil.h
+│   ├── RLMRealm_Dynamic.h
+│   ├── RLMRealm_Private.h
+│   ├── RLMResults_Private.h
+│   └── RLMSchema_Private.h
+├── Realm
+├── _CodeSignature
+│   └── CodeResources
+└── strip-frameworks.sh
+
+4 directories, 31 files

@@ -65,6 +65,7 @@ Targets:
       - Default.png
       - Default@2x.png
       - Default-568h@2x.png
+    - Embed Pods Frameworks: []
     - Copy Pods Resources: []
     Build Configurations:
     - Debug:

@@ -22,6 +22,7 @@ File References:
     - Pods-SampleApp_1-acknowledgements.markdown
     - Pods-SampleApp_1-acknowledgements.plist
     - Pods-SampleApp_1-dummy.m
+    - Pods-SampleApp_1-frameworks.sh
     - Pods-SampleApp_1-resources.sh
     - Pods-SampleApp_1.debug.xcconfig
     - Pods-SampleApp_1.release.xcconfig
@@ -29,6 +30,7 @@ File References:
     - Pods-SampleApp_2-acknowledgements.markdown
     - Pods-SampleApp_2-acknowledgements.plist
     - Pods-SampleApp_2-dummy.m
+    - Pods-SampleApp_2-frameworks.sh
     - Pods-SampleApp_2-resources.sh
     - Pods-SampleApp_2.debug.xcconfig
     - Pods-SampleApp_2.release.xcconfig

@@ -6,9 +6,9 @@ File References:
     - Foundation.framework
 - Pods:
   - Moment:
+    - parseIt.ym
     - TimeParser.c
     - TimeParser.h
-    - parseIt.ym
     - tokeIt.l
     - Support Files:
       - Moment.xcconfig
@@ -22,6 +22,7 @@ File References:
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
+    - Pods-frameworks.sh
     - Pods-resources.sh
     - Pods.debug.xcconfig
     - Pods.release.xcconfig
@@ -33,9 +34,9 @@ Targets:
     Build Phases:
     - SourcesBuildPhase:
       - Moment-dummy.m
+      - parseIt.ym
       - TimeParser.c:
           COMPILER_FLAGS: -fno-objc-arc
-      - parseIt.ym
       - tokeIt.l
     - FrameworksBuildPhase:
       - Foundation.framework

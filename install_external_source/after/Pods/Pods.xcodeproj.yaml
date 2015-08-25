@@ -6,24 +6,25 @@ File References:
     - Foundation.framework
 - Pods:
   - PodTest:
-    - Support Files:
-      - PodTest.xcconfig
-      - PodTest-dummy.m
-      - PodTest-prefix.pch
     - subspec_1:
       - subspec_1.h
       - subspec_1.m
     - subspec_2:
       - subspec_2.h
       - subspec_2.m
+    - Support Files:
+      - PodTest.xcconfig
+      - PodTest-dummy.m
+      - PodTest-prefix.pch
 - Products:
-  - libPodTest.a
   - libPods.a
+  - libPodTest.a
 - Targets Support Files:
   - Pods:
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
+    - Pods-frameworks.sh
     - Pods-resources.sh
     - Pods.debug.xcconfig
     - Pods.release.xcconfig
@@ -31,6 +32,39 @@ File References:
 
 
 Targets:
+- Pods:
+    Build Phases:
+    - SourcesBuildPhase:
+      - Pods-dummy.m
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.debug.xcconfig
+    - Release:
+        Build Settings:
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          PODS_ROOT: $(SRCROOT)
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+          PRODUCT_NAME: $(TARGET_NAME)
+          OTHER_LIBTOOLFLAGS: ''
+        Base Configuration: Pods.release.xcconfig
 - PodTest:
     Build Phases:
     - SourcesBuildPhase:
@@ -71,39 +105,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/PodTest/PodTest-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
         Base Configuration: PodTest.xcconfig
-- Pods:
-    Build Phases:
-    - SourcesBuildPhase:
-      - Pods-dummy.m
-    - FrameworksBuildPhase:
-      - Foundation.framework
-    Build Configurations:
-    - Debug:
-        Build Settings:
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-          PODS_ROOT: $(SRCROOT)
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'YES'
-          OTHER_LDFLAGS: ''
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          OTHER_LIBTOOLFLAGS: ''
-        Base Configuration: Pods.debug.xcconfig
-    - Release:
-        Build Settings:
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-          PODS_ROOT: $(SRCROOT)
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          MTL_ENABLE_DEBUG_INFO: 'NO'
-          OTHER_LDFLAGS: ''
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-          PRODUCT_NAME: $(TARGET_NAME)
-          OTHER_LIBTOOLFLAGS: ''
-        Base Configuration: Pods.release.xcconfig
 
 
 

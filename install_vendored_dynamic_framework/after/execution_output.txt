@@ -1,0 +1,1032 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --no-verbose --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `Realm` from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/eb75af97091affac5bb783ac8fd6d86dd659c2f3/Realm.podspec`
+-> Pre-downloading: `RealmSwift` from `https://github.com/realm/realm-cocoa.git`, tag `v0.94.1`
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/realm/realm-cocoa.git ROOT/tmp/install_vendored_dynamic_framework/Pods/RealmSwift --single-branch --depth 1 --branch v0.94.1
+     Cloning into 'ROOT/tmp/install_vendored_dynamic_framework/Pods/RealmSwift'...
+     Note: checking out '878d041b6b4356fa074f3d1b57fb8557b00dbec9'.
+     
+     You are in 'detached HEAD' state. You can look around, make experimental
+     changes and commit them, and you can discard any commits you make in this
+     state without impacting any branches by performing another checkout.
+     
+     If you want to create a new branch to retain commits you create, you may
+     do so (now or later) by using -b with the checkout command again. Example:
+     
+       git checkout -b new_branch_name
+     
+ > Running prepare command
+   $ /usr/local/bin/bash -c  set -e sh build.sh cocoapods-setup without-core
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A Realm
+  A RealmSwift
+
+Downloading dependencies
+
+-> Installing Realm (0.94.1)
+ > Http download
+   $ /usr/bin/curl -f -L -o ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs
+     % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                    Dload  Upload   Total   Spent    Left  Speed
+        0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0     0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0   100   403    0   403    0     0    770      0 --:--:-- --:--:-- --:--:--   769
+        0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0     0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0     1 13.3M    1  145k    0     0  43725      0  0:05:19  0:00:03  0:05:16  106k     7 13.3M    7  994k    0     0   225k      0  0:01:00  0:00:04  0:00:56  421k    29 13.3M   29 4004k    0     0   739k      0  0:00:18  0:00:05  0:00:13 1189k    56 13.3M   56 7676k    0     0  1194k      0  0:00:11  0:00:06  0:00:05 1754k    83 13.3M   83 11.1M    0     0  1535k      0  0:00:08  0:00:07  0:00:01 2283k   100 13.3M  100 13.3M    0     0  1699k      0  0:00:08  0:00:08 --:--:-- 2930k
+   $ /usr/bin/unzip ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip -d ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm
+   Archive:  ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/file.zip
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/docs.webloc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._docs.webloc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Backlink  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/ViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/._ViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Encryption  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/._AppIcon.appiconset  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/._LaunchImage.launchimage  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._Images.xcassets  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._GroupedTableView  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/default-v0.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._default-v0.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/default-v1.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._default-v1.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/default-v2.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._default-v2.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Migration  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/project.pbxproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/._project.pbxproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Backlink.xcscheme  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Backlink.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Encryption.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Encryption.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/GroupedTableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._GroupedTableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Migration.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Migration.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Simple.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Simple.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/TableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._TableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/._xcschemes  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/._xcshareddata  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._RealmExamples.xcodeproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Simple  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/._AppIcon.appiconset  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/._LaunchImage.launchimage  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._Images.xcassets  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._TableView  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/._swift-1.2  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Backlink  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/ViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/._ViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Encryption  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/._AppIcon.appiconset  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/._LaunchImage.launchimage  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._Images.xcassets  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._GroupedTableView  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/default-v0.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._default-v0.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/default-v1.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._default-v1.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/default-v2.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._default-v2.realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Migration  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/project.pbxproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/._project.pbxproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Backlink.xcscheme  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Backlink.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Encryption.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Encryption.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/GroupedTableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._GroupedTableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Migration.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Migration.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Simple.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Simple.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/TableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._TableView.xcscheme  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/._xcschemes  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/._xcshareddata  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._RealmExamples.xcodeproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/._AppDelegate.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Simple  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._AppDelegate.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/._AppIcon.appiconset  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/Contents.json  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/._Contents.json  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/._LaunchImage.launchimage  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._Images.xcassets  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._TableViewController.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._TableView  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/._swift-2.0  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/._ios  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/examples/README.md  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/._README.md  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._examples  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/CodeResources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/._CodeResources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/.__CodeSignature  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/Realm.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._Realm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Headers  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/._module.modulemap  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Modules  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMArray_Private.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMArray_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._PrivateHeaders  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/strip-frameworks.sh  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._strip-frameworks.sh  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/._Realm.framework  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/CodeResources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/._CodeResources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/.__CodeSignature  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/RealmSwift-Swift.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/._RealmSwift-Swift.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._Headers  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/._module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftdoc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/._RealmSwift.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._Modules  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/._RealmSwift.framework  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/._swift-1.2  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/CodeResources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/._CodeResources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/.__CodeSignature  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/Realm.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._Realm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Headers  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/._module.modulemap  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Modules  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMArray_Private.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMArray_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._PrivateHeaders  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/strip-frameworks.sh  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._strip-frameworks.sh  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/._Realm.framework  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/CodeResources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/._CodeResources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/.__CodeSignature  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/RealmSwift-Swift.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/._RealmSwift-Swift.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._Headers  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/._module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftdoc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/._RealmSwift.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._Modules  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/._RealmSwift.framework  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/._swift-2.0  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._ios  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/LICENSE.txt  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._LICENSE.txt  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Headers  -> Versions/Current/Headers 
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Headers  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Modules  -> Versions/Current/Modules 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Modules  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/PrivateHeaders  -> Versions/Current/PrivateHeaders 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._PrivateHeaders  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Realm  -> Versions/Current/Realm 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Realm  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Resources  -> Versions/Current/Resources 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Resources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/Realm.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._Realm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Headers  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/._module.modulemap  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Modules  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMArray_Private.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMArray_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._PrivateHeaders  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Realm  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/CHANGELOG.md  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/._CHANGELOG.md  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/LICENSE  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/._LICENSE  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Resources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/._A  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/Current  -> A 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/._Current  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Versions  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/._Realm.framework  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Headers  -> Versions/Current/Headers 
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Headers  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Modules  -> Versions/Current/Modules 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Modules  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/RealmSwift  -> Versions/Current/RealmSwift 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._RealmSwift  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Resources  -> Versions/Current/Resources 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Resources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/RealmSwift-Swift.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/._RealmSwift-Swift.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._Headers  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/._module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/._RealmSwift.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._Modules  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._RealmSwift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._Resources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/._A  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/Current  -> A 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/._Current  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Versions  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/._RealmSwift.framework  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/._swift-1.2  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Headers  -> Versions/Current/Headers 
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Headers  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Modules  -> Versions/Current/Modules 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Modules  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/PrivateHeaders  -> Versions/Current/PrivateHeaders 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._PrivateHeaders  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Realm  -> Versions/Current/Realm 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Realm  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Resources  -> Versions/Current/Resources 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Resources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/Realm.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._Realm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Headers  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/._module.modulemap  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Modules  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMArray_Private.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMArray_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._PrivateHeaders  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Realm  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/CHANGELOG.md  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/._CHANGELOG.md  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/LICENSE  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/._LICENSE  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Resources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/._A  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/Current  -> A 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/._Current  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Versions  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/._Realm.framework  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Headers  -> Versions/Current/Headers 
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Headers  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Modules  -> Versions/Current/Modules 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Modules  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/RealmSwift  -> Versions/Current/RealmSwift 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._RealmSwift  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Resources  -> Versions/Current/Resources 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Resources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/RealmSwift-Swift.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/._RealmSwift-Swift.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._Headers  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/._module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/._RealmSwift.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._Modules  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._RealmSwift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/._Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._Resources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/._A  
+       linking: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/Current  -> A 
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/._Current  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Versions  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/._RealmSwift.framework  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/._swift-2.0  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._osx  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/README.md  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._README.md  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/InfoPlist.strings  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/._InfoPlist.strings  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._en.lproj  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RealmPlugin-Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RealmPlugin-Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RealmPlugin-Prefix.pch  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RealmPlugin-Prefix.pch  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPRealmPlugin.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPRealmPlugin.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPRealmPlugin.m  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPRealmPlugin.m  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPSimulatorManager.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPSimulatorManager.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPSimulatorManager.m  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPSimulatorManager.m  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._RealmPlugin  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/project.pbxproj  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/._project.pbxproj  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._RealmPlugin.xcodeproj  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/rlm_lldb.py  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._rlm_lldb.py  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/___FILEBASENAME___.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/.____FILEBASENAME___.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/___FILEBASENAME___.m  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/.____FILEBASENAME___.m  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._Objective-C  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/___FILEBASENAME___.swift  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/.____FILEBASENAME___.swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._Swift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/TemplateIcon.icns  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._TemplateIcon.icns  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/TemplateInfo.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._TemplateInfo.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/._Realm Model Object.xctemplate  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/._file_templates  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/plugin/Templates/install_templates.sh  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/._install_templates.sh  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._Templates  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._plugin  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/CodeResources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/._CodeResources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/.__CodeSignature  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/Realm.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._Realm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMArray.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMCollection.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMConstants.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMDefines.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMMigration.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMObject.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMObjectBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMObjectSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMPlatform.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMProperty.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMRealm.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMResults.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMSchema.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Headers  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Modules/._module.modulemap  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Modules  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMArray_Private.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMArray_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMListBase.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMMigration_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMObject_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMObjectSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMObjectStore.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMProperty_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMRealm_Dynamic.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMRealm_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMRealmUtil.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMResults_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMSchema_Private.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._PrivateHeaders  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Realm  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/._Realm.framework  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/CodeResources  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/._CodeResources  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/.__CodeSignature  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/RealmSwift-Swift.h  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/._RealmSwift-Swift.h  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._Headers  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Info.plist  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._Info.plist  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/._module.modulemap  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftdoc  
+      creating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftdoc  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/._RealmSwift.swiftmodule  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._Modules  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._RealmSwift  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/._RealmSwift.framework  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/realm-swift-0.94.1/._watchos  
+     inflating: ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/__MACOSX/._realm-swift-0.94.1  
+   finishing deferred symbolic links:
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Headers -> Versions/Current/Headers
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Modules -> Versions/Current/Modules
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/PrivateHeaders -> Versions/Current/PrivateHeaders
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Realm -> Versions/Current/Realm
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Resources -> Versions/Current/Resources
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/Current -> A
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Headers -> Versions/Current/Headers
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Modules -> Versions/Current/Modules
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/RealmSwift -> Versions/Current/RealmSwift
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Resources -> Versions/Current/Resources
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/Current -> A
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Headers -> Versions/Current/Headers
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Modules -> Versions/Current/Modules
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/PrivateHeaders -> Versions/Current/PrivateHeaders
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Realm -> Versions/Current/Realm
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Resources -> Versions/Current/Resources
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/Current -> A
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Headers -> Versions/Current/Headers
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Modules -> Versions/Current/Modules
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/RealmSwift -> Versions/Current/RealmSwift
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Resources -> Versions/Current/Resources
+     ROOT/tmp/install_vendored_dynamic_framework/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/Current -> A
+
+-> Installing RealmSwift (0.94.1)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `RealmSwift` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/RealmSwift/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/RealmSwift/RealmSwift.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/RealmSwift/RealmSwift-umbrella.h`
+    - Installing target `Pods` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods/Pods.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods/Pods-umbrella.h`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods` (`SampleApp.xcodeproj` project)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Copy Pods Resources' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
+  - Running post install hooks
+    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`

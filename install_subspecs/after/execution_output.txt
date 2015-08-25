@@ -58,6 +58,7 @@ Integrating target `Pods-OS X App` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks

@@ -1,4 +1,5 @@
-CODE_SIGN_IDENTITY = 
+CODE_SIGN_IDENTITY =
+FRAMEWORK_SEARCH_PATHS = $(inherited)
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/../Frameworks' '@loader_path/Frameworks'
 OTHER_CFLAGS = $(inherited) -iquote "$CONFIGURATION_BUILD_DIR/SamplePodWithResources.framework/Headers"
