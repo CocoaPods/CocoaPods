@@ -48,6 +48,7 @@ require 'pretty_bacon'
 require 'colored'
 require 'clintegracon'
 require 'fileutils'
+require 'integration/file_tree'
 require 'integration/xcodeproj_project_yaml'
 require 'tmpdir'
 
@@ -71,7 +72,7 @@ CLIntegracon.configure do |c|
   end
 
   c.transform_produced '**/*.framework' do |path|
-    tree = `tree '#{path}'`
+    tree = FileTree.to_tree(path)
     FileUtils.rm_rf path
     File.open(path, 'w') { |f| f << tree }
   end
@@ -122,6 +123,7 @@ describe_cli 'pod' do
     s.replace_path ROOT.to_s, 'ROOT'
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
+    s.replace_path `which bash`.chomp, 'BASH_BIN'
     s.replace_user_path 'Library/Caches/CocoaPods', 'CACHES_DIR'
     s.replace_pattern /#{Dir.tmpdir}\/[\w-]+/i, 'TMPDIR'
     s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
