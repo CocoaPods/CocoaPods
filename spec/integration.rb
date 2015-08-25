@@ -47,6 +47,7 @@ require 'bundler/setup'
 require 'pretty_bacon'
 require 'colored'
 require 'clintegracon'
+require 'fileutils'
 require 'integration/xcodeproj_project_yaml'
 require 'tmpdir'
 
@@ -67,6 +68,12 @@ CLIntegracon.configure do |c|
     File.open("#{path}.yaml", 'w') do |file|
       file.write xcodeproj.to_yaml
     end
+  end
+
+  c.transform_produced '**/*.framework' do |path|
+    tree = `tree '#{path}'`
+    FileUtils.rm_rf path
+    File.open(path, 'w') { |f| f << tree }
   end
 
   # Register special handling for YAML files
@@ -224,6 +231,13 @@ describe_cli 'pod' do
     describe 'Integrates a Pod using non Objective-C source files' do
       behaves_like cli_spec 'install_non_objective_c_files',
                             'install --no-repo-update'
+    end
+
+    describe 'Integrates a Pod using a dynamic vendored framework' do
+      # We have to disable verbose mode by adding --no-verbose here,
+      # otherwise curl output is included in execution output.
+      behaves_like cli_spec 'install_vendored_dynamic_framework',
+                            'install --no-repo-update --no-verbose'
     end
 
     # @todo add tests for all the hooks API
