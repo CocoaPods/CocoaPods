@@ -14,38 +14,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#1437](https://github.com/CocoaPods/CocoaPods/issues/1437)
   [#3760](https://github.com/CocoaPods/CocoaPods/issues/3760)
 
-##### Bug Fixes
-
-* Build settings specified in `pod_target_xcconfig` of a spec are also for
-  library targets only applied to the pod target.  
-  [Marius Rackwitz](https://github.com/mrackwitz)
-  [#3906](https://github.com/CocoaPods/CocoaPods/issues/3906)
-
-* Use APPLICATION_EXTENSION_API_ONLY for watchOS 2 extensions.  
-  [Boris Bügling](https://github.com/neonichu)
-  [#3920](https://github.com/CocoaPods/CocoaPods/pull/3920)
-
-* Prevent copying resources to installation directory when `SKIP_INSTALL` is enabled.  
-  [Dominique d'Argent](https://github.com/nubbel)
-  [#3971](https://github.com/CocoaPods/CocoaPods/pull/3971)
-
-* Embed frameworks into app and watch extensions.  
-  [Boris Bügling](https://github.com/neonichu)
-  [#4004](https://github.com/CocoaPods/CocoaPods/pull/4004)
-
-* Fix missing `$(inherited)` for generated xcconfig `LIBRARY_SEARCH_PATHS` and `HEADER_SEARCH_PATHS` build settings.  
-  [Tyler Fox](https://github.com/smileyborg)
-  [#3908](https://github.com/CocoaPods/CocoaPods/issues/3908)
-
-* Fix source locking/unlocking.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#4059](https://github.com/CocoaPods/CocoaPods/issues/4059)
-
-* Include the `-ObjC` linker flag when static `vendored_frameworks` are present.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#3870](https://github.com/CocoaPods/CocoaPods/issues/3870)
-  [#3992](https://github.com/CocoaPods/CocoaPods/issues/3992)
-
 ##### Enhancements
 
 * Collapse the namespaced public and private pod xcconfig into one single
@@ -53,7 +21,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#3916](https://github.com/CocoaPods/CocoaPods/pull/3916)
 
-* Add `--sources` option to `push` command.
+* Add `--sources` option to `push` command.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#3912](https://github.com/CocoaPods/CocoaPods/issues/3912)
 
@@ -66,7 +34,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3926](https://github.com/CocoaPods/CocoaPods/issues/3926)
 
-* Add `:source_provider` hook to allow plugins to provide sources
+* Add `:source_provider` hook to allow plugins to provide sources.  
   [Eric Amorde](https://github.com/amorde)
   [#3190](https://github.com/CocoaPods/CocoaPods/issues/3190)
   [#3792](https://github.com/CocoaPods/CocoaPods/pull/3792)
@@ -86,6 +54,39 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add support for dynamic `vendored_frameworks` and `vendored_libraries`.  
   [Samuel Giddins](https://github.com/segiddins)
   [#1993](https://github.com/CocoaPods/CocoaPods/issues/1993)
+
+##### Bug Fixes
+
+* Build settings specified in `pod_target_xcconfig` of a spec are also for
+  library targets only applied to the pod target.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#3906](https://github.com/CocoaPods/CocoaPods/issues/3906)
+
+* Use APPLICATION_EXTENSION_API_ONLY for watchOS 2 extensions.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3920](https://github.com/CocoaPods/CocoaPods/pull/3920)
+
+* Prevent copying resources to installation directory when `SKIP_INSTALL` is enabled.  
+  [Dominique d'Argent](https://github.com/nubbel)
+  [#3971](https://github.com/CocoaPods/CocoaPods/pull/3971)
+
+* Embed frameworks into app and watch extensions.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#4004](https://github.com/CocoaPods/CocoaPods/pull/4004)
+
+* Fix missing `$(inherited)` for generated xcconfig `LIBRARY_SEARCH_PATHS`
+  and `HEADER_SEARCH_PATHS` build settings.  
+  [Tyler Fox](https://github.com/smileyborg)
+  [#3908](https://github.com/CocoaPods/CocoaPods/issues/3908)
+
+* Fix source locking/unlocking.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4059](https://github.com/CocoaPods/CocoaPods/issues/4059)
+
+* Include the `-ObjC` linker flag when static `vendored_frameworks` are present.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3870](https://github.com/CocoaPods/CocoaPods/issues/3870)
+  [#3992](https://github.com/CocoaPods/CocoaPods/issues/3992)
 
 
 ## 0.38.2 (2015-07-25)
