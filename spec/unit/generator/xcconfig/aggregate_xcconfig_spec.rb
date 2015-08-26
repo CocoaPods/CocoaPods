@@ -158,7 +158,7 @@ module Pod
             end
 
             it 'does not add the framework build path to the xcconfig' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) '
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
             end
 
             it 'configures the project to load all members that implement Objective-c classes or categories' do
@@ -209,7 +209,7 @@ module Pod
 
           describe 'with an unscoped pod target' do
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) '
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
