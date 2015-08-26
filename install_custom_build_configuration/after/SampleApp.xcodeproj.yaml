@@ -44,6 +44,7 @@ Targets:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
+    - Embed Pods Frameworks: []
     - Copy Pods Resources: []
     Build Configurations:
     - Debug:

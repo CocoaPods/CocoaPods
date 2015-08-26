@@ -17,6 +17,7 @@ File References:
     - Pods-SampleApp-acknowledgements.markdown
     - Pods-SampleApp-acknowledgements.plist
     - Pods-SampleApp-dummy.m
+    - Pods-SampleApp-frameworks.sh
     - Pods-SampleApp-resources.sh
     - Pods-SampleApp.debug.xcconfig
     - Pods-SampleApp.release.xcconfig

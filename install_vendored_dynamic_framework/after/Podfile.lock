@@ -1,0 +1,26 @@
+PODS:
+  - Realm (0.94.1)
+  - RealmSwift (0.94.1):
+    - Realm (= 0.94.1)
+
+DEPENDENCIES:
+  - Realm (from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/eb75af97091affac5bb783ac8fd6d86dd659c2f3/Realm.podspec`)
+  - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, tag `v0.94.1`)
+
+EXTERNAL SOURCES:
+  Realm:
+    :podspec: https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/eb75af97091affac5bb783ac8fd6d86dd659c2f3/Realm.podspec
+  RealmSwift:
+    :git: https://github.com/realm/realm-cocoa.git
+    :tag: v0.94.1
+
+CHECKOUT OPTIONS:
+  RealmSwift:
+    :git: https://github.com/realm/realm-cocoa.git
+    :tag: v0.94.1
+
+SPEC CHECKSUMS:
+  Realm: e2953d96309f2a8e250848dec6f6c81debdfbb49
+  RealmSwift: 1cfcf6f9bd4de8674797d000de346d9588ca2028
+
+COCOAPODS: 0.38.2

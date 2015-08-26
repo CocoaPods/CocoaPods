@@ -43,6 +43,7 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks

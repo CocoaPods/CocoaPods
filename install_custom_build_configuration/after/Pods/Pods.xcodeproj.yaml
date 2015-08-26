@@ -21,6 +21,7 @@ File References:
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
+    - Pods-frameworks.sh
     - Pods-resources.sh
     - Pods.custom debug - missing some settings .xcconfig
     - Pods.custom release.xcconfig

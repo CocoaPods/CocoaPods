@@ -80,6 +80,7 @@ File References:
     - Pods-acknowledgements.markdown
     - Pods-acknowledgements.plist
     - Pods-dummy.m
+    - Pods-frameworks.sh
     - Pods-resources.sh
     - Pods.debug.xcconfig
     - Pods.release.xcconfig
@@ -94,8 +95,8 @@ Targets:
       - AFHTTPRequestOperationManager.m
       - AFHTTPSessionManager.m
       - AFNetworkActivityIndicatorManager.m
-      - AFNetworkReachabilityManager.m
       - AFNetworking-dummy.m
+      - AFNetworkReachabilityManager.m
       - AFSecurityPolicy.m
       - AFURLConnectionOperation.m
       - AFURLRequestSerialization.m
@@ -119,8 +120,8 @@ Targets:
       - AFHTTPRequestOperationManager.h
       - AFHTTPSessionManager.h
       - AFNetworkActivityIndicatorManager.h
-      - AFNetworkReachabilityManager.h
       - AFNetworking.h
+      - AFNetworkReachabilityManager.h
       - AFSecurityPolicy.h
       - AFURLConnectionOperation.h
       - AFURLRequestSerialization.h
