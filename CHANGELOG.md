@@ -32,7 +32,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Embed frameworks into app and watch extensions.  
   [Boris Bügling](https://github.com/neonichu)
   [#4004](https://github.com/CocoaPods/CocoaPods/pull/4004)
-  
+
 * Fix missing `$(inherited)` for generated xcconfig `LIBRARY_SEARCH_PATHS` and `HEADER_SEARCH_PATHS` build settings.  
   [Tyler Fox](https://github.com/smileyborg)
   [#3908](https://github.com/CocoaPods/CocoaPods/issues/3908)
@@ -40,6 +40,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix source locking/unlocking.  
   [Samuel Giddins](https://github.com/segiddins)
   [#4059](https://github.com/CocoaPods/CocoaPods/issues/4059)
+
+* Include the `-ObjC` linker flag when static `vendored_frameworks` are present.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3870](https://github.com/CocoaPods/CocoaPods/issues/3870)
+  [#3992](https://github.com/CocoaPods/CocoaPods/issues/3992)
 
 ##### Enhancements
 
@@ -77,6 +82,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [Core#190](https://github.com/CocoaPods/Core/issues/190)
   [#2682](https://github.com/CocoaPods/CocoaPods/issues/2682)
+
+* Add support for dynamic `vendored_frameworks` and `vendored_libraries`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1993](https://github.com/CocoaPods/CocoaPods/issues/1993)
 
 
 ## 0.38.2 (2015-07-25)

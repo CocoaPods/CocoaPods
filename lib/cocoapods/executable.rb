@@ -45,13 +45,9 @@ module Pod
     #
     # @return [String] the output of the command (STDOUT and STDERR).
     #
-    # @todo   Find a way to display the live output of the commands.
-    #
-    def self.execute_command(executable, command, raise_on_failure)
+    def self.execute_command(executable, command, raise_on_failure = true)
       bin = which(executable)
       raise Informative, "Unable to locate the executable `#{executable}`" unless bin
-
-      require 'shellwords'
 
       command = command.map(&:to_s)
       full_command = "#{bin} #{command.join(' ')}"
@@ -64,7 +60,8 @@ module Pod
       end
 
       status = popen3(bin, command, stdout, stderr)
-      output = stdout.join + stderr.join
+      stdout, stderr = stdout.join, stderr.join
+      output = stdout + stderr
       unless status.success?
         if raise_on_failure
           raise Informative, "#{full_command}\n\n#{output}"
@@ -72,6 +69,7 @@ module Pod
           UI.message("[!] Failed: #{full_command}".red)
         end
       end
+
       output
     end
 
@@ -93,6 +91,38 @@ module Pod
         end
       end
       nil
+    end
+
+    # Runs the given command, capturing the desired output.
+    #
+    # @param  [String] bin
+    #         The binary to use.
+    #
+    # @param  [Array<#to_s>] command
+    #         The command to send to the binary.
+    #
+    # @param  [Symbol] capture
+    #         Whether it should raise if the command fails.
+    #
+    # @raise  If the executable could not be located.
+    #
+    # @return [(String, Process::Status)]
+    #         The desired captured output from the command, and the status from
+    #         running the command.
+    #
+    def self.capture_command(executable, command, capture: :merge)
+      bin = which(executable)
+      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
+
+      require 'open3'
+      command = command.map(&:to_s)
+      case capture
+      when :merge then Open3.capture2e(bin, *command)
+      when :both then Open3.capture3(bin, *command)
+      when :out then Open3.capture2(bin, *command)
+      when :err then Open3.capture3(bin, *command).drop(1)
+      when :none then Open3.capture2(bin, *command).last
+      end
     end
 
     private

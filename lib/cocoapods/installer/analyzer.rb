@@ -306,6 +306,7 @@ module Pod
           # transitive dependencies can't be deduplicated.
           pod_targets.flat_map do |target|
             dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
+            target.dependent_targets = dependent_targets
             if dependent_targets.any?(&:scoped?)
               target.scoped
             else

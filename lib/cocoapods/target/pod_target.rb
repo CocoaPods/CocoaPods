@@ -33,6 +33,11 @@ module Pod
     attr_reader :scoped
     alias_method :scoped?, :scoped
 
+    # @return [Array<PodTarget>] the targets that this target has a dependency
+    #         upon.
+    #
+    attr_accessor :dependent_targets
+
     # @param [Array<Specification>] @spec #see spec
     # @param [Array<TargetDefinition>] target_definitions @see target_definitions
     # @param [Sandbox] sandbox @see sandbox
@@ -49,6 +54,7 @@ module Pod
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
+      @dependent_targets = []
     end
 
     # @return [Array<PodTarget>] a scoped copy for each target definition.
@@ -60,6 +66,7 @@ module Pod
           target.user_build_configurations = user_build_configurations
           target.native_target = native_target
           target.archs = archs
+          target.dependent_targets = dependent_targets.map(&:scoped)
         end
       end
     end

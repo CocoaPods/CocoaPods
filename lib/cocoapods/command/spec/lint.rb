@@ -23,7 +23,7 @@ module Pod
             ['--no-clean', 'Lint leaves the build directory intact for inspection'],
             ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
             ['--use-libraries', 'Lint uses static libraries to install the spec'],
-            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependant pods ' \
+            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
              '(defaults to https://github.com/CocoaPods/Specs.git). ' \
              'Multiple sources must be comma-delimited.'],
             ['--private', 'Lint skips checks that apply only to public specs'],

@@ -53,11 +53,12 @@ module Pod
         #
         def generate
           includes_static_libs = !target.requires_frameworks?
-          includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_libraries.empty? }
+          includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_static_artifacts.empty? }
           config = {
             'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target, includes_static_libs),
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
+            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
           }
           @xcconfig = Xcodeproj::Config.new(config)
 
@@ -112,7 +113,7 @@ module Pod
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
             end
             if pod_targets.any? { |t| t.should_build? && t.scoped? }
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) "$PODS_FRAMEWORK_BUILD_PATH"'
+              build_settings['FRAMEWORK_SEARCH_PATHS'] = '"$PODS_FRAMEWORK_BUILD_PATH"'
             end
             @xcconfig.merge!(build_settings)
           else

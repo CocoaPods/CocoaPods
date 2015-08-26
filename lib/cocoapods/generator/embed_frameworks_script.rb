@@ -34,7 +34,7 @@ module Pod
       # @return [String] The contents of the embed frameworks script.
       #
       def script
-        script = <<-eos.strip_heredoc
+        script = <<-SH.strip_heredoc
           #!/bin/sh
           set -e
 
@@ -47,8 +47,10 @@ module Pod
           {
             if [ -r "${BUILT_PRODUCTS_DIR}/$1" ]; then
               local source="${BUILT_PRODUCTS_DIR}/$1"
-            else
+            elif [ -r "${BUILT_PRODUCTS_DIR}/$(basename "$1")" ]; then
               local source="${BUILT_PRODUCTS_DIR}/$(basename "$1")"
+            elif [ -r "$1" ]; then
+              local source="$1"
             fi
 
             local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
@@ -62,14 +64,24 @@ module Pod
             echo "rsync -av --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${destination}\\""
             rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${destination}"
 
+            local basename
+            basename="$(basename -s .framework "$1")"
+            binary="${destination}/${basename}.framework/${basename}"
+            if ! [ -r "$binary" ]; then
+              binary="${destination}/${basename}"
+            fi
+
+            # Strip invalid architectures so "fat" simulator / device frameworks work on device
+            if [[ "$(file "$binary")" == *"dynamically linked shared library"* ]]; then
+              strip_invalid_archs "$binary"
+            fi
+
             # Resign the code if required by the build settings to avoid unstable apps
             code_sign_if_enabled "${destination}/$(basename "$1")"
 
             # Embed linked Swift runtime libraries
-            local basename
-            basename="$(basename "$1" | sed -E s/\\\\..+// && exit ${PIPESTATUS[0]})"
             local swift_runtime_libs
-            swift_runtime_libs=$(xcrun otool -LX "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/${basename}.framework/${basename}" | grep --color=never @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
+            swift_runtime_libs=$(xcrun otool -LX "$binary" | grep --color=never @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
             for lib in $swift_runtime_libs; do
               echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${destination}\\""
               rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
@@ -87,15 +99,33 @@ module Pod
             fi
           }
 
-        eos
-        script += "\n" unless frameworks_by_config.values.all?(&:empty?)
+          # Strip invalid architectures
+          strip_invalid_archs() {
+            binary="$1"
+            # Get architectures for current file
+            archs="$(lipo -info "$binary" | rev | cut -d ':' -f1 | rev)"
+            stripped=""
+            for arch in $archs; do
+              if ! [[ "${VALID_ARCHS}" == *"$arch"* ]]; then
+                # Strip non-valid architectures in-place
+                lipo -remove "$arch" -output "$binary" "$binary" || exit 1
+                stripped="$stripped $arch"
+              fi
+            done
+            if [[ "$stripped" ]]; then
+              echo "Stripped $binary of architectures:$stripped"
+            fi
+          }
+
+        SH
+        script << "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks|
           unless frameworks.empty?
-            script += %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+            script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
             frameworks.each do |framework|
-              script += "  install_framework '#{framework}'\n"
+              script << %(  install_framework "#{framework}"\n)
             end
-            script += "fi\n"
+            script << "fi\n"
           end
         end
         script

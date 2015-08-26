@@ -251,7 +251,7 @@ module Pod
         UI.warnings = ''
         set_up_test_repo_for_update
         Dir.chdir(test_repo_path) do
-          `git remote set-url origin https://example.com`
+          `git remote set-url origin file:///dev/null`
         end
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.warnings.should.include('not able to update the `master` repo')

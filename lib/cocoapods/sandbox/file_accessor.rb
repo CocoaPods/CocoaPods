@@ -152,6 +152,22 @@ module Pod
         paths_for_attribute(:vendored_frameworks, true)
       end
 
+      # @return [Array<Pathname>] The paths of the dynamic framework bundles
+      #         that come shipped with the Pod.
+      #
+      def vendored_dynamic_frameworks
+        vendored_frameworks.select do |framework|
+          dynamic_binary?(framework + framework.basename('.*'))
+        end
+      end
+
+      # @return [Array<Pathname>] The paths of the static (fake) framework
+      #         bundles that come shipped with the Pod.
+      #
+      def vendored_static_frameworks
+        vendored_frameworks - vendored_dynamic_frameworks
+      end
+
       # @param  [Pathname] framework
       #         The vendored framework to search into.
       # @return [Pathname] The path of the header directory of the
@@ -185,6 +201,36 @@ module Pod
       #
       def vendored_libraries
         paths_for_attribute(:vendored_libraries)
+      end
+
+      # @return [Array<Pathname>] The paths of the dynamic libraries
+      #         that come shipped with the Pod.
+      #
+      def vendored_dynamic_libraries
+        vendored_libraries.select do |library|
+          dynamic_binary?(library)
+        end
+      end
+
+      # @return [Array<Pathname>] The paths of the static libraries
+      #         that come shipped with the Pod.
+      #
+      def vendored_static_libraries
+        vendored_libraries - vendored_dynamic_libraries
+      end
+
+      # @return [Array<Pathname>] The paths of the dynamic binary artifacts
+      #         that come shipped with the Pod.
+      #
+      def vendored_dynamic_artifacts
+        vendored_dynamic_libraries + vendored_dynamic_frameworks
+      end
+
+      # @return [Array<Pathname>] The paths of the static binary artifacts
+      #         that come shipped with the Pod.
+      #
+      def vendored_static_artifacts
+        vendored_static_libraries + vendored_static_frameworks
       end
 
       # @return [Hash{String => Array<Pathname>}] A hash that describes the
@@ -313,6 +359,17 @@ module Pod
         result = []
         result << path_list.glob(patterns, options)
         result.flatten.compact.uniq
+      end
+
+      # @param  [Pathname] binary
+      #         The file to be checked for being a dynamic Mach-O binary.
+      #
+      # @return [Boolean] Whether `binary` can be dynamically linked.
+      #
+      def dynamic_binary?(binary)
+        return unless binary.file?
+        output, status = Executable.capture_command('file', [binary], :capture => :out)
+        status.success? && output =~ /dynamically linked/
       end
 
       #-----------------------------------------------------------------------#

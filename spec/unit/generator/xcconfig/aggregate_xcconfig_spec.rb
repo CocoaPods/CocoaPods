@@ -158,7 +158,7 @@ module Pod
             end
 
             it 'does not add the framework build path to the xcconfig' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil?
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
             end
 
             it 'configures the project to load all members that implement Objective-c classes or categories' do

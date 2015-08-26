@@ -490,6 +490,13 @@ module Pod
       end
 
       it 'validates a podspec with dependencies' do
+        podspec = stub_podspec(/.*name.*/, '"name": "SBJson",').gsub(/.*version.*/, '"version": "3.2",')
+        file = write_podspec(podspec, 'SBJson.podspec.json')
+        spec = Specification.from_file(file)
+        set = mock
+        set.stubs(:all_specifications).returns([spec])
+        Source::Aggregate.any_instance.stubs(:search).with(Dependency.new('SBJson', '~> 3.2')).returns(set)
+
         podspec = stub_podspec(/.*name.*/, '"name": "ZKit",')
         podspec.gsub!(/.*requires_arc.*/, '"dependencies": { "SBJson": [ "~> 3.2" ] }, "requires_arc": false')
         file = write_podspec(podspec, 'ZKit.podspec.json')

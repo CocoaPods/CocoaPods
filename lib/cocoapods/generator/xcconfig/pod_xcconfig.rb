@@ -43,6 +43,7 @@ module Pod
           target_search_paths = target.build_headers.search_paths(target.platform)
           sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
           search_paths = target_search_paths.concat(sandbox_search_paths).uniq
+          framework_search_paths = target.dependent_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks).map { |fw| '${PODS_ROOT}/' << fw.dirname.relative_path_from(target.sandbox.root).to_s }
 
           config = {
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
@@ -50,8 +51,11 @@ module Pod
             'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'SKIP_INSTALL' => 'YES',
+            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ' << XCConfigHelper.quote(framework_search_paths)
             # 'USE_HEADERMAP' => 'NO'
           }
+
+          @xcconfig = Xcodeproj::Config.new(config)
 
           if target.requires_frameworks? && target.scoped?
             # Only quote the FRAMEWORK_SEARCH_PATHS entry, because it’s a setting that takes multiple values.
@@ -61,10 +65,9 @@ module Pod
               'FRAMEWORK_SEARCH_PATHS' => '"$PODS_FRAMEWORK_BUILD_PATH"',
               'CONFIGURATION_BUILD_DIR' => '$PODS_FRAMEWORK_BUILD_PATH',
             }
-            config.merge!(build_settings)
+            @xcconfig.merge!(build_settings)
           end
 
-          @xcconfig = Xcodeproj::Config.new(config)
           XCConfigHelper.add_settings_for_file_accessors_of_target(target, @xcconfig)
           target.file_accessors.each do |file_accessor|
             @xcconfig.merge!(file_accessor.spec_consumer.pod_target_xcconfig)

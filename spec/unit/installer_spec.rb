@@ -386,6 +386,7 @@ module Pod
         end
         @installer.stubs(:podfile).returns(podfile)
         @installer.stubs(:lockfile).returns(nil)
+        Downloader::Git.any_instance.expects(:download).once
         Downloader::Git.any_instance.expects(:download_head).once
         Downloader::Git.any_instance.stubs(:checkout_options).returns({})
         @installer.prepare

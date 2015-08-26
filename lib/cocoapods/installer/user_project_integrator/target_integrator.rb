@@ -43,10 +43,10 @@ module Pod
               XCConfigIntegrator.integrate(target, native_targets),
               update_to_cocoapods_0_34,
               update_to_cocoapods_0_37_1,
-              remove_embed_frameworks_script_phases,
+              update_to_cocoapods_0_39,
               unless native_targets_to_integrate.empty?
                 add_pods_library
-                add_embed_frameworks_script_phase if target.requires_frameworks?
+                add_embed_frameworks_script_phase
                 add_copy_resources_script_phase
                 add_check_manifest_lock_script_phase
                 true
@@ -112,8 +112,27 @@ module Pod
         # @todo   This can be removed for CocoaPods 1.0
         #
         def update_to_cocoapods_0_37_1
-          (native_targets - native_targets_to_embed_in).any? do |native_target|
+          targets_to_embed = native_targets.select do |target|
+            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
+          end
+          (native_targets - targets_to_embed).any? do |native_target|
             remove_embed_frameworks_script_phase(native_target)
+          end
+        end
+
+        # Adds the embed frameworks script when integrating as a static library.
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        # @todo   This can be removed for CocoaPods 1.0
+        #
+        def update_to_cocoapods_0_39
+          requires_update = native_targets_to_embed_in.any? do |target|
+            !target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          end
+          if requires_update
+            add_embed_frameworks_script_phase
+            true
           end
         end
 
@@ -163,19 +182,6 @@ module Pod
             phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
             script_path = target.embed_frameworks_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
-          end
-        end
-
-        # Delete 'Embed Pods Frameworks' Build Phases, if they exist
-        # and are not needed anymore due to not integrating the
-        # dependencies by frameworks.
-        #
-        # @return [Bool] whether any changes to the project were made.
-        #
-        def remove_embed_frameworks_script_phases
-          return false if target.requires_frameworks?
-          native_targets.any? do |native_target|
-            remove_embed_frameworks_script_phase(native_target)
           end
         end
 
