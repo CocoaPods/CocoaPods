@@ -56,11 +56,11 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 26dbf1a9a3a260c912f14999e952a140a7109aff
+  revision: 82542cb68816691a35053dfd4b9333ede8158a0c
   branch: master
   specs:
-    cocoapods-trunk (0.6.3)
-      nap (~> 1.0)
+    cocoapods-trunk (0.6.4)
+      nap (>= 0.8, < 2.0)
       netrc (= 0.7.8)
 
 GIT
@@ -80,7 +80,7 @@ PATH
       cocoapods-downloader (~> 0.9.3)
       cocoapods-plugins (~> 0.4.2)
       cocoapods-stats (~> 0.6.1)
-      cocoapods-trunk (~> 0.6.3)
+      cocoapods-trunk (~> 0.6.4)
       cocoapods-try (~> 0.5.1)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -208,6 +208,3 @@ DEPENDENCIES
   ruby-prof
   webmock
   xcodeproj!
-
-BUNDLED WITH
-   1.10.6
