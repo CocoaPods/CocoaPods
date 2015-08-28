@@ -7,13 +7,13 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9396853b7e9363c32ac4c8b60c4d652c36e5824e
+  revision: b764c274e255b74d4f8efdd2f9cc82faa9bad297
   branch: master
   specs:
     cocoapods-core (0.39.0.beta.2)
       activesupport (>= 3.2.15)
       fuzzy_match (~> 2.0.4)
-      nap (~> 0.8.0)
+      nap (~> 1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
@@ -85,7 +85,7 @@ PATH
       colored (~> 1.2)
       escape (~> 0.0.4)
       molinillo (~> 0.3.1)
-      nap (~> 0.8)
+      nap (~> 1.0)
       xcodeproj (~> 0.27.0)
 
 GEM
@@ -136,7 +136,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    nap (0.8.0)
+    nap (1.0.0)
     netrc (0.7.8)
     notify (0.5.2)
     parser (2.2.0.3)
@@ -202,7 +202,7 @@ DEPENDENCIES
   mocha-on-bacon
   molinillo!
   prettybacon
-  rake
+  rake (~> 10.0)
   rb-fsevent
   rubocop
   ruby-prof
