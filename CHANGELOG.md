@@ -4,6 +4,14 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## 0.39.0.beta.3 (2015-08-28)
+
+##### Bug Fixes
+
+* This release fixes a file permissions error when using the RubyGem.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 0.39.0.beta.2 (2015-08-27)
 
 ##### Bug Fixes
