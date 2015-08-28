@@ -409,10 +409,10 @@ module Pod
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
       all_predecessors = ->(vertex) do
         pred = vertex.predecessors
-        pred + pred.map(&all_predecessors).reduce(Set.new, &:&) << vertex
+        pred + pred.map(&all_predecessors).reduce(Set.new, &:|) << vertex
       end
       vertex = dependency_graph.vertex_named(dependency.name)
-      predecessors = all_predecessors[vertex].reject { |v| v.explicit_requirements.empty? }
+      predecessors = all_predecessors[vertex].reject { |v| !dependency_graph.root_vertex_named(v.name) }
       platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
 
       platforms_to_satisfy.all? do |platform_to_satisfy|
