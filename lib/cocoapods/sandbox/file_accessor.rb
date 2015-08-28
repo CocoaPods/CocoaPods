@@ -241,7 +241,9 @@ module Pod
       def resource_bundles
         result = {}
         spec_consumer.resource_bundles.each do |name, file_patterns|
-          paths = expanded_paths(file_patterns, :include_dirs => true)
+          paths = expanded_paths(file_patterns,
+                                 :exclude_patterns => spec_consumer.exclude_files,
+                                 :include_dirs => true)
           result[name] = paths
         end
         result
