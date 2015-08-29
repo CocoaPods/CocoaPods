@@ -114,7 +114,9 @@ Targets:
       - Foundation.framework
       - SystemConfiguration.framework
     - HeadersBuildPhase:
-      - Reachability.h
+      - Reachability.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:

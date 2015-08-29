@@ -41,7 +41,9 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - TimeParser.h
+      - TimeParser.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:

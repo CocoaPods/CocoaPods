@@ -64,7 +64,9 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - JSONKit.h
+      - JSONKit.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:
@@ -201,7 +203,9 @@ Targets:
       - Foundation.framework
       - SystemConfiguration.framework
     - HeadersBuildPhase:
-      - Reachability.h
+      - Reachability.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:

@@ -116,25 +116,63 @@ Targets:
       - Security.framework
       - SystemConfiguration.framework
     - HeadersBuildPhase:
-      - AFHTTPRequestOperation.h
-      - AFHTTPRequestOperationManager.h
-      - AFHTTPSessionManager.h
-      - AFNetworkActivityIndicatorManager.h
-      - AFNetworking.h
-      - AFNetworkReachabilityManager.h
-      - AFSecurityPolicy.h
-      - AFURLConnectionOperation.h
-      - AFURLRequestSerialization.h
-      - AFURLResponseSerialization.h
-      - AFURLSessionManager.h
-      - UIActivityIndicatorView+AFNetworking.h
-      - UIAlertView+AFNetworking.h
-      - UIButton+AFNetworking.h
-      - UIImageView+AFNetworking.h
-      - UIKit+AFNetworking.h
-      - UIProgressView+AFNetworking.h
-      - UIRefreshControl+AFNetworking.h
-      - UIWebView+AFNetworking.h
+      - AFHTTPRequestOperation.h:
+          ATTRIBUTES:
+          - Public
+      - AFHTTPRequestOperationManager.h:
+          ATTRIBUTES:
+          - Public
+      - AFHTTPSessionManager.h:
+          ATTRIBUTES:
+          - Public
+      - AFNetworkActivityIndicatorManager.h:
+          ATTRIBUTES:
+          - Public
+      - AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - AFNetworkReachabilityManager.h:
+          ATTRIBUTES:
+          - Public
+      - AFSecurityPolicy.h:
+          ATTRIBUTES:
+          - Public
+      - AFURLConnectionOperation.h:
+          ATTRIBUTES:
+          - Public
+      - AFURLRequestSerialization.h:
+          ATTRIBUTES:
+          - Public
+      - AFURLResponseSerialization.h:
+          ATTRIBUTES:
+          - Public
+      - AFURLSessionManager.h:
+          ATTRIBUTES:
+          - Public
+      - UIActivityIndicatorView+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIAlertView+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIButton+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIImageView+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIKit+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIProgressView+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIRefreshControl+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
+      - UIWebView+AFNetworking.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:
@@ -204,7 +242,9 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - RKValueTransformers.h
+      - RKValueTransformers.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:
@@ -241,7 +281,9 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - SEGModule.h
+      - SEGModule.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:
