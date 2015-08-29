@@ -66,7 +66,7 @@ module Pod
           target.user_build_configurations = user_build_configurations
           target.native_target = native_target
           target.archs = archs
-          target.dependent_targets = dependent_targets.map(&:scoped)
+          target.dependent_targets = dependent_targets.flat_map(&:scoped)
         end
       end
     end
