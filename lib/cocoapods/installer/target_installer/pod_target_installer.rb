@@ -89,15 +89,13 @@ module Pod
           header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(header_file_refs) do |build_file|
             # Set added headers as public if needed
-            if target.requires_frameworks?
-              build_file.settings ||= {}
-              if public_headers.include?(build_file.file_ref.real_path)
-                build_file.settings['ATTRIBUTES'] = ['Public']
-              elsif private_headers.include?(build_file.file_ref.real_path)
-                build_file.settings['ATTRIBUTES'] = ['Private']
-              else
-                build_file.settings['ATTRIBUTES'] = ['Project']
-              end
+            build_file.settings ||= {}
+            if public_headers.include?(build_file.file_ref.real_path)
+              build_file.settings['ATTRIBUTES'] = ['Public']
+            elsif private_headers.include?(build_file.file_ref.real_path)
+              build_file.settings['ATTRIBUTES'] = ['Private']
+            else
+              build_file.settings['ATTRIBUTES'] = ['Project']
             end
           end
 
