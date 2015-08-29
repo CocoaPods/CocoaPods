@@ -140,6 +140,11 @@ module Pod
         ]
       end
 
+      it 'handles when the framework headers directory does not exist' do
+        Pathname.any_instance.stubs(:directory?).returns(false)
+        FileAccessor.vendored_frameworks_headers_dir(@root + 'Bananalib.framework').should == @root + 'Bananalib.framework/Headers'
+      end
+
       it 'returns the paths of the library files' do
         @accessor.vendored_libraries.should.include?(@root + 'libBananalib.a')
       end

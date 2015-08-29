@@ -4,6 +4,16 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Using vendored frameworks without a `Headers` directory will no longer cause a
+  crash.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3967](https://github.com/CocoaPods/CocoaPods/issues/3967)
+
+
 ## 0.39.0.beta.3 (2015-08-28)
 
 ##### Bug Fixes
