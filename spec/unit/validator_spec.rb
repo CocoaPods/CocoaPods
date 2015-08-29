@@ -404,11 +404,11 @@ module Pod
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
-        command = 'xcodebuild clean build -target Pods'
-        validator.expects(:`).with("#{command} 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk appletvsimulator 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk watchsimulator 2>&1").once.returns('')
+        command = %w(clean build -workspace App.xcworkspace -scheme App)
+        Executable.expects(:capture_command).with('xcodebuild', command, capture: :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator), capture: :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator), capture: :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator), capture: :merge).once.returns(['', stub(:success? => true)])
         validator.validate
       end
 

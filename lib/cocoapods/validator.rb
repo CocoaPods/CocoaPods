@@ -257,17 +257,24 @@ module Pod
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
         @consumer = spec.consumer(platform)
         setup_validation_environment
-        download_pod
-        check_file_patterns
-        install_pod
-        validate_vendored_dynamic_frameworks
-        build_pod
-        tear_down_validation_environment
+        begin
+          create_app_project
+          download_pod
+          check_file_patterns
+          install_pod
+          add_app_project_import
+          validate_vendored_dynamic_frameworks
+          build_pod
+        ensure
+          tear_down_validation_environment
+        end
         validated?
       end
       return false if fail_fast && !valid
       perform_extensive_subspec_analysis(spec) unless @no_subspecs
     rescue => e
+      message = e.to_s
+      message << "\n" << e.backtrace.join("\n") << "\n" if config.verbose?
       error('unknown', "Encountered an unknown error (#{e}) during validation.")
       false
     end
@@ -339,11 +346,11 @@ module Pod
       validation_dir.rmtree if validation_dir.exist?
       validation_dir.mkpath
       @original_config = Config.instance.clone
-      config.installation_root = validation_dir
-      config.sandbox_root      = validation_dir + 'Pods'
-      config.silent            = !config.verbose
-      config.integrate_targets = false
-      config.skip_repo_update  = true
+      config.installation_root   = validation_dir
+      config.silent              = !config.verbose
+      config.integrate_targets   = true
+      config.skip_repo_update    = true
+      config.deterministic_uuids = false
     end
 
     def tear_down_validation_environment
@@ -361,13 +368,44 @@ module Pod
       @file_accessor = @installer.pod_targets.flat_map(&:file_accessors).find { |fa| fa.spec.name == consumer.spec.name }
     end
 
+    def create_app_project
+      app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
+      deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
+      app_project.new_target(:application, 'App', consumer.platform_name, deployment_target)
+      app_project.save
+      app_project.recreate_user_schemes
+      Xcodeproj::XCScheme.share_scheme(app_project.path, 'App')
+    end
+
+    def add_app_project_import
+      app_project = Xcodeproj::Project.open(validation_dir + 'App.xcodeproj')
+      pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
+      language = pod_target.uses_swift? ? :swift : :objc
+
+      if language == :swift
+        source_file = validation_dir.+('App/main.swift')
+        source_file.parent.mkpath
+        import_statement = use_frameworks ? "import #{pod_target.product_module_name}\n" : ''
+        source_file.open('w') { |f| f << import_statement }
+      else
+        source_file = validation_dir.+('App/main.m')
+        source_file.parent.mkpath
+        import_statement = use_frameworks ? "@import #{pod_target.product_module_name};\n" : ''
+        source_file.open('w') { |f| f << "@import Foundation;\n#{import_statement}int main() {}\n" }
+      end
+
+      source_file_ref = app_project.new_group('App', 'App').new_file(source_file)
+      app_project.targets.first.add_file_references([source_file_ref])
+      app_project.save
+    end
+
     # It creates a podfile in memory and builds a library containing the pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
       %i(determine_dependency_product_types verify_no_duplicate_framework_names
          verify_no_static_framework_transitive_dependencies
-         verify_framework_usage generate_pods_project
+         verify_framework_usage generate_pods_project integrate_user_project
          perform_post_install_actions).each { |m| @installer.send(m) }
 
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
@@ -412,7 +450,7 @@ module Pod
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
-          output = Dir.chdir(config.sandbox_root) { xcodebuild }
+          output = xcodebuild
           UI.puts output
           parsed_output = parse_xcodebuild_output(output)
           parsed_output.each do |message|
@@ -631,18 +669,17 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
-      command = 'xcodebuild clean build -target Pods'
-
+      command = %W(clean build -workspace App.xcworkspace -scheme App)
       case consumer.platform_name
       when :ios
-        command << ' CODE_SIGN_IDENTITY=- -sdk iphonesimulator'
+        command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
       when :watchos
-        command << ' CODE_SIGN_IDENTITY=- -sdk watchsimulator'
+        command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
       when :tvos
-        command << ' CODE_SIGN_IDENTITY=- -sdk appletvsimulator'
+        command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
       end
 
-      output, status = _xcodebuild "#{command} 2>&1"
+      output, status = Dir.chdir(validation_dir) { _xcodebuild(command) }
 
       unless status.success?
         message = 'Returned an unsuccessful exit code.'
@@ -659,9 +696,8 @@ module Pod
     #         resulting status.
     #
     def _xcodebuild(command)
-      UI.puts command if config.verbose
-      output = `#{command}`
-      [output, $?]
+      UI.puts 'xcodebuild ' << command.join(' ') if config.verbose
+      Executable.capture_command('xcodebuild', command, capture: :merge)
     end
 
     #-------------------------------------------------------------------------#
