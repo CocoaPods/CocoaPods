@@ -390,7 +390,16 @@ module Pod
       else
         source_file = validation_dir.+('App/main.m')
         source_file.parent.mkpath
-        import_statement = use_frameworks ? "@import #{pod_target.product_module_name};\n" : ''
+        import_statement = if use_frameworks
+          "@import #{pod_target.product_module_name};\n"
+        else
+          header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"
+          if pod_target.sandbox.public_headers.root.+(header_name).file?
+            "#import <#{header_name}>\n"
+          else
+            ''
+          end
+        end
         source_file.open('w') { |f| f << "@import Foundation;\n#{import_statement}int main() {}\n" }
       end
 
