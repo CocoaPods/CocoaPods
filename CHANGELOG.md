@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4092](https://github.com/CocoaPods/CocoaPods/issues/4092)
 
+* Take into account a specification's `exclude_files` when constructing resource
+  bundles.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4065](https://github.com/CocoaPods/CocoaPods/issues/4065)
+
 
 ## 0.39.0.beta.3 (2015-08-28)
 
