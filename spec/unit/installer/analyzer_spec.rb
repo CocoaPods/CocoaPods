@@ -116,6 +116,29 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
+      it 'generates the set of dependent pod targets' do
+        @podfile = Pod::Podfile.new do
+          platform :ios, '8.0'
+          xcodeproj 'SampleProject/SampleProject'
+          pod 'RestKit', '~> 0.23.0'
+          target 'TestRunner' do
+            pod 'RestKit/Testing', '~> 0.23.0'
+          end
+        end
+        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+        target = @analyzer.analyze.targets.first
+        restkit_target = target.pod_targets.find { |pt| pt.pod_name == 'RestKit' }
+        restkit_target.should.be.scoped
+        restkit_target.dependent_targets.map(&:pod_name).sort.should == %w(
+          AFNetworking
+          ISO8601DateFormatterValueTransformer
+          RKValueTransformers
+          SOCKit
+          TransitionKit
+        )
+        restkit_target.dependent_targets.all?(&:scoped).should.be.true
+      end
+
       describe 'deduplication' do
         before do
           repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
