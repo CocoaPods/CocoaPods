@@ -191,6 +191,30 @@ module Pod
         ]
       end
 
+      it 'selects only platform-compatible versions for transitive dependencies' do
+        spec = Pod::Spec.new do |s|
+          s.name = 'lib'
+          s.version = '1.0'
+          s.platform = :ios, '5.0'
+          s.subspec('Calendar') {}
+          s.subspec('Classes') { |ss| ss.dependency 'lib/Calendar' }
+          s.subspec('RequestManager') do |ss|
+            ss.dependency 'lib/Classes'
+            ss.dependency 'AFNetworking'
+          end
+          s.default_subspec = 'RequestManager'
+        end
+        @podfile = Podfile.new do
+          platform :ios, '5.0'
+          pod 'lib'
+        end
+        @resolver.stubs(:podfile).returns(@podfile)
+        @resolver.send(:cached_sets)['lib'] = stub(:all_specifications => [spec])
+        @resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+          'AFNetworking (1.3.4)', 'lib (1.0)', 'lib/Calendar (1.0)', 'lib/Classes (1.0)', 'lib/RequestManager (1.0)'
+        ]
+      end
+
       it 'raises an informative error when version conflicts are caused by platform incompatibilities' do
         @podfile = Podfile.new do
           platform :osx, '10.7'

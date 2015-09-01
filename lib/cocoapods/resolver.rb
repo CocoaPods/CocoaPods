@@ -38,6 +38,7 @@ module Pod
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
+      @cached_sets = {}
     end
 
     #-------------------------------------------------------------------------#
@@ -58,7 +59,6 @@ module Pod
           @platforms_by_dependency[dep].push(target.platform).uniq!
         end
       end
-      @cached_sets = {}
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target.tap do |specs_by_target|
         specs_by_target.values.flatten.each do |spec|
