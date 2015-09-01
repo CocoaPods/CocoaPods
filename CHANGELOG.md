@@ -13,6 +13,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3967](https://github.com/CocoaPods/CocoaPods/issues/3967)
 
+* Computing the set of transitive dependencies for a pod target,
+  even if the target is scoped, will no longer smash the stack.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4092](https://github.com/CocoaPods/CocoaPods/issues/4092)
+
 
 ## 0.39.0.beta.3 (2015-08-28)
 

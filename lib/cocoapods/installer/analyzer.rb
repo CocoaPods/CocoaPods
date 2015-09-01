@@ -314,11 +314,14 @@ module Pod
             end
           end
         else
-          specs_by_target.flat_map do |target_definition, specs|
+          pod_targets = specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by.group_by(&:root).values.uniq
             grouped_specs.flat_map do |pod_specs|
               generate_pod_target([target_definition], pod_specs, :scoped => true)
             end
+          end
+          pod_targets.each do |target|
+            target.dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
           end
         end
       end
@@ -340,12 +343,14 @@ module Pod
       def transitive_dependencies_for_pod_target(pod_target, targets)
         if targets.any?
           dependent_targets = pod_target.dependencies.flat_map do |dep|
+            next [] if pod_target.pod_name == dep
             targets.select { |t| t.pod_name == dep }
           end
           remaining_targets = targets - dependent_targets
-          dependent_targets + dependent_targets.flat_map do |target|
+          dependent_targets += dependent_targets.flat_map do |target|
             transitive_dependencies_for_pod_target(target, remaining_targets)
           end
+          dependent_targets.uniq
         else
           []
         end
