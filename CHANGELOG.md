@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4065](https://github.com/CocoaPods/CocoaPods/issues/4065)
 
+* Fix resolving to platform-compatible versions of transitive dependencies.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4084](https://github.com/CocoaPods/CocoaPods/issues/4084)
+
 
 ## 0.39.0.beta.3 (2015-08-28)
 

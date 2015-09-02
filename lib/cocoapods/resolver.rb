@@ -38,6 +38,7 @@ module Pod
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
+      @cached_sets = {}
     end
 
     #-------------------------------------------------------------------------#
@@ -58,7 +59,6 @@ module Pod
           @platforms_by_dependency[dep].push(target.platform).uniq!
         end
       end
-      @cached_sets = {}
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       specs_by_target.tap do |specs_by_target|
         specs_by_target.values.flatten.each do |spec|
@@ -409,10 +409,10 @@ module Pod
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
       all_predecessors = ->(vertex) do
         pred = vertex.predecessors
-        pred + pred.map(&all_predecessors).reduce(Set.new, &:&) << vertex
+        pred + pred.map(&all_predecessors).reduce(Set.new, &:|) << vertex
       end
       vertex = dependency_graph.vertex_named(dependency.name)
-      predecessors = all_predecessors[vertex].reject { |v| v.explicit_requirements.empty? }
+      predecessors = all_predecessors[vertex].reject { |v| !dependency_graph.root_vertex_named(v.name) }
       platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
 
       platforms_to_satisfy.all? do |platform_to_satisfy|
