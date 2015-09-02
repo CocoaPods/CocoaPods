@@ -169,6 +169,16 @@ module Pod
         @accessor.resource_bundle_files.should == resource_paths
       end
 
+      it 'takes into account exclude_files when creating the resource bundles of the pod' do
+        @spec_consumer.stubs(:exclude_files).returns(['**/*.png'])
+        @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
+        resource_paths = [
+          @root + 'Resources/Images.xcassets',
+          @root + 'Resources/sub_dir',
+        ]
+        @accessor.resource_bundles.should == { 'BananaLib' => resource_paths }
+      end
+
       it 'returns the prefix header of the specification' do
         @accessor.prefix_header.should == @root + 'Classes/BananaLib.pch'
       end
