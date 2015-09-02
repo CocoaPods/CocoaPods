@@ -24,10 +24,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: e35ab1eda7e98ad052e3b0314c632ff814c5c7a8
+  revision: 27aecbfd66e883d1df616355347246b30fec551d
   branch: master
   specs:
-    xcodeproj (0.27.1)
+    xcodeproj (0.27.2)
       activesupport (>= 3)
       claide (~> 0.9.1)
       colored (~> 1.2)
@@ -86,7 +86,7 @@ PATH
       escape (~> 0.0.4)
       molinillo (~> 0.3.1)
       nap (~> 1.0)
-      xcodeproj (~> 0.27.1)
+      xcodeproj (~> 0.27.2)
 
 GEM
   remote: https://rubygems.org/
@@ -208,3 +208,6 @@ DEPENDENCIES
   ruby-prof
   webmock
   xcodeproj!
+
+BUNDLED WITH
+   1.10.6
