@@ -48,6 +48,13 @@ GIT
       nap
 
 GIT
+  remote: https://github.com/CocoaPods/cocoapods-search.git
+  revision: 1d315c26b6fbc82341493f97d7f45d74be0ee8f5
+  branch: master
+  specs:
+    cocoapods-search (0.1.0)
+
+GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
   revision: 464ed12e3d0d60ca942c7cf30e06ef4e11c86b12
   branch: master
@@ -79,6 +86,7 @@ PATH
       cocoapods-core (= 0.39.0.beta.4)
       cocoapods-downloader (~> 0.9.3)
       cocoapods-plugins (~> 0.4.2)
+      cocoapods-search (~> 0.1.0)
       cocoapods-stats (~> 0.6.1)
       cocoapods-trunk (~> 0.6.4)
       cocoapods-try (~> 0.5.1)
@@ -191,6 +199,7 @@ DEPENDENCIES
   cocoapods-dependencies
   cocoapods-downloader!
   cocoapods-plugins!
+  cocoapods-search!
   cocoapods-stats!
   cocoapods-trunk!
   cocoapods-try!

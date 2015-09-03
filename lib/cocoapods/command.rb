@@ -20,7 +20,6 @@ module Pod
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/project'
     require 'cocoapods/command/repo'
-    require 'cocoapods/command/search'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
     require 'cocoapods/command/init'
