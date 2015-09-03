@@ -49,10 +49,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 4af63d57cf6a4746a94739eb15f74ffa073e95a2
+  revision: 1d315c26b6fbc82341493f97d7f45d74be0ee8f5
   branch: master
   specs:
-    cocoapods-search (0.0.1)
+    cocoapods-search (0.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
@@ -86,7 +86,7 @@ PATH
       cocoapods-core (= 0.39.0.beta.3)
       cocoapods-downloader (~> 0.9.3)
       cocoapods-plugins (~> 0.4.2)
-      cocoapods-search (~> 0.0.1)
+      cocoapods-search (~> 0.1.0)
       cocoapods-stats (~> 0.6.1)
       cocoapods-trunk (~> 0.6.4)
       cocoapods-try (~> 0.5.1)
@@ -217,3 +217,6 @@ DEPENDENCIES
   ruby-prof
   webmock
   xcodeproj!
+
+BUNDLED WITH
+   1.10.6
