@@ -404,8 +404,9 @@ module Pod
         Executable.stubs(:which).with('git').returns(git)
         Executable.expects(:which).with('xcodebuild').times(3).returns('/usr/bin/xcodebuild')
         command = 'xcodebuild clean build -target Pods'
-        validator.expects(:`).with("#{command} 2>&1").twice.returns('')
+        validator.expects(:`).with("#{command} 2>&1").once.returns('')
         validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
+        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk watchsimulator 2>&1").once.returns('')        
         validator.validate
       end
 
