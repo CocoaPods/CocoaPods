@@ -45,6 +45,8 @@ module Pod
 
           SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
 
+          SWIFT_RUNTIME_LIBS_TO_INTEGRATE=""
+
           install_framework()
           {
             if [ -r "${BUILT_PRODUCTS_DIR}/$1" ]; then
@@ -83,9 +85,9 @@ module Pod
             local swift_runtime_libs
             swift_runtime_libs=$(xcrun otool -LX "$binary" | grep --color=never @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
             for lib in $swift_runtime_libs; do
-              echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${FRAMEWORKS_DIR}\\""
-              rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${FRAMEWORKS_DIR}"
-              code_sign_if_enabled "${FRAMEWORKS_DIR}/${lib}"
+              if [[ $SWIFT_RUNTIME_LIBS_TO_INTEGRATE != *"$lib"* ]]; then
+                SWIFT_RUNTIME_LIBS_TO_INTEGRATE="$SWIFT_RUNTIME_LIBS_TO_INTEGRATE $lib"
+              fi
             done
           }
 
@@ -128,6 +130,16 @@ module Pod
             script << "fi\n"
           end
         end
+        script << <<-SH.strip_heredoc
+
+          # Embed linked Swift runtime libraries
+          for lib in $SWIFT_RUNTIME_LIBS_TO_INTEGRATE; do
+            echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${FRAMEWORKS_DIR}\\""
+            rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${FRAMEWORKS_DIR}"
+            code_sign_if_enabled "${FRAMEWORKS_DIR}/${lib}"
+          done
+
+        SH
         script
       end
     end
