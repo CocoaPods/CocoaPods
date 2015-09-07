@@ -56,8 +56,8 @@ module Pod
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.frameworks_build_phase
-          ref = phase.files.find { |f| f.file_ref.path == 'libPods.a' }
-          ref.should.not.be.nil
+          build_file = phase.files.find { |f| f.file_ref.path == 'libPods.a' }
+          build_file.should.not.be.nil
         end
 
         it 'adds a Copy Pods Resources build phase to each target' do
