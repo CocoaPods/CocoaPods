@@ -44,6 +44,7 @@ module Pod
               update_to_cocoapods_0_34,
               update_to_cocoapods_0_37_1,
               update_to_cocoapods_0_39,
+              update_to_cocoapods_0_40,
               unless native_targets_to_integrate.empty?
                 add_pods_library
                 add_embed_frameworks_script_phase
@@ -161,15 +162,8 @@ module Pod
             target_basename = target.product_basename
             new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
               frameworks.new_product_ref_for_target(target_basename, target.product_type)
-            build_file = build_phase.build_file(new_product_ref) ||
+            build_phase.build_file(new_product_ref) ||
               build_phase.add_file_reference(new_product_ref, true)
-            if target.requires_frameworks?
-              # Weak link the aggregate target's product, because as it contains
-              # no symbols, it isn't copied into the app bundle. dyld will so
-              # never try to find the missing executable at runtime.
-              build_file.settings ||= {}
-              build_file.settings['ATTRIBUTES'] = ['Weak']
-            end
           end
         end
 

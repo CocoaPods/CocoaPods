@@ -73,7 +73,6 @@ module Pod
           phase = target.frameworks_build_phase
           build_file = phase.files.find { |f| f.file_ref.path == 'Pods.framework' }
           build_file.should.not.be.nil
-          build_file.settings['ATTRIBUTES'].should == %w(Weak)
         end
 
         it 'adds a Copy Pods Resources build phase to each target' do
