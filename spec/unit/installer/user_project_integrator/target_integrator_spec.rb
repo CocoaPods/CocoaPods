@@ -47,6 +47,17 @@ module Pod
           phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh\""
         end
 
+        it 'fixes the "Link binary with libraries" build phase of legacy installations' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.frameworks_build_phase
+          build_file = phase.files.find { |f| f.file_ref.path == 'Pods.framework' }
+          build_file.settings = { 'ATTRIBUTES' => %w(Weak) }
+          @target_integrator.integrate!
+          build_file.settings.should.be.nil
+        end
+
         it 'adds references to the Pods static libraries to the Frameworks group' do
           @target_integrator.integrate!
           @target_integrator.send(:user_project)['Frameworks/libPods.a'].should.not.be.nil

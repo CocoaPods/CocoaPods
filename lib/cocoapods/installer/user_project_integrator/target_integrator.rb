@@ -137,6 +137,30 @@ module Pod
           end
         end
 
+        # Reset the linking of the product reference to strong.
+        #
+        # @return [Bool] whether any changes to the project were made.
+        #
+        # @todo   This can be removed for CocoaPods 1.0
+        #
+        def update_to_cocoapods_0_40
+          frameworks = user_project.frameworks_group
+          native_targets_to_embed_in.any? do |native_target|
+            build_phase = native_target.frameworks_build_phase
+
+            product_ref = frameworks.files.find { |f| f.path == target.product_name }
+            if product_ref
+              build_file = build_phase.build_file(product_ref)
+              if build_file \
+                && build_file.settings.is_a?(Hash) \
+                && build_file.settings['ATTRIBUTES'].is_a?(Array) \
+                && build_file.settings['ATTRIBUTES'].include?('Weak')
+                build_file.settings = nil
+              end
+            end
+          end
+        end
+
         # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to
         # the frameworks group of the project and adds it to the frameworks
