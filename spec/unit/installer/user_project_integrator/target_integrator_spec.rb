@@ -60,6 +60,22 @@ module Pod
           build_file.should.not.be.nil
         end
 
+        it 'adds references to the Pods static framework to the Frameworks group' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          @target_integrator.send(:user_project)['Frameworks/Pods.framework'].should.not.be.nil
+        end
+
+        it 'adds the Pods static framework to the "Link binary with libraries" build phase of each target' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.frameworks_build_phase
+          build_file = phase.files.find { |f| f.file_ref.path == 'Pods.framework' }
+          build_file.should.not.be.nil
+          build_file.settings['ATTRIBUTES'].should == %w(Weak)
+        end
+
         it 'adds a Copy Pods Resources build phase to each target' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
