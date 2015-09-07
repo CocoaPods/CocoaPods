@@ -49,7 +49,7 @@ module Pod
 
         it 'adds references to the Pods static libraries to the Frameworks group' do
           @target_integrator.integrate!
-          @target_integrator.send(:user_project)['Frameworks/libPods.a'].should.not.nil?
+          @target_integrator.send(:user_project)['Frameworks/libPods.a'].should.not.be.nil
         end
 
         it 'adds the libPods static library to the "Link binary with libraries" build phase of each target' do
