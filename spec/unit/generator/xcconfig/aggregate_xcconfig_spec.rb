@@ -4,24 +4,23 @@ module Pod
   module Generator
     module XCConfig
       describe AggregateXCConfig do
-        def spec
-          fixture_spec('banana-lib/BananaLib.podspec')
+        def specs
+          [fixture_spec('banana-lib/BananaLib.podspec')]
         end
 
-        def pod_target(spec)
-          fixture_pod_target(spec)
+        def pod_target(spec, target_definition)
+          fixture_pod_target(spec, [target_definition])
         end
 
         before do
-          @spec = spec
-          @spec.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
-          @spec.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
-          @pod_target = pod_target(@spec)
-          @consumer = @pod_target.spec_consumers.last
-          @target = fixture_aggregate_target([@pod_target])
-          @target.target_definition.should == @pod_target.target_definitions.first
-          @target.target_definition.whitelist_pod_for_configuration(@spec.name, 'Release')
-          @podfile = @target.target_definition.podfile
+          @target_definition = fixture_target_definition
+          @specs = specs
+          @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
+          @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
+          @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
+          @target = fixture_aggregate_target(@pod_targets, @target_definition)
+          @target.target_definition.should == @pod_targets.first.target_definitions.first
+          @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           @generator = AggregateXCConfig.new(@target, 'Release')
         end
 
@@ -33,6 +32,8 @@ module Pod
           #--------------------------------------------------------------------#
 
           before do
+            @consumer = @pod_targets.first.spec_consumers.last
+            @podfile = @target.target_definition.podfile
             @xcconfig = @generator.generate
           end
 
@@ -74,7 +75,7 @@ module Pod
 
         describe 'if a pod target does not contain source files' do
           before do
-            @pod_target.file_accessors.first.stubs(:source_files).returns([])
+            @pod_targets.first.file_accessors.first.stubs(:source_files).returns([])
             @xcconfig = @generator.generate
           end
 
@@ -94,8 +95,8 @@ module Pod
         #-----------------------------------------------------------------------#
 
         describe 'with library' do
-          def spec
-            fixture_spec('banana-lib/BananaLib.podspec')
+          def specs
+            [fixture_spec('banana-lib/BananaLib.podspec')]
           end
 
           behaves_like 'AggregateXCConfig'
@@ -115,8 +116,8 @@ module Pod
           end
 
           describe 'with a scoped pod target' do
-            def pod_target(spec)
-              fixture_pod_target(spec).scoped.first
+            def pod_target(spec, target_definition)
+              fixture_pod_target(spec, [target_definition]).scoped.first
             end
 
             it 'links the pod targets with the aggregate target' do
@@ -138,8 +139,8 @@ module Pod
         end
 
         describe 'with framework' do
-          def spec
-            fixture_spec('orange-framework/OrangeFramework.podspec')
+          def specs
+            [fixture_spec('orange-framework/OrangeFramework.podspec')]
           end
 
           before do
@@ -153,8 +154,8 @@ module Pod
           end
 
           describe 'with a vendored-library pod' do
-            def spec
-              fixture_spec('monkey/monkey.podspec')
+            def specs
+              [fixture_spec('monkey/monkey.podspec')]
             end
 
             it 'does add the framework build path to the xcconfig' do
@@ -172,7 +173,7 @@ module Pod
 
             it 'includes the public header paths as system headers' do
               expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
-              @generator.stubs(:pod_targets).returns([@pod_target, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'))])
+              @generator.stubs(:pod_targets).returns([@pod_targets.first, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'), @target_definition)])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
@@ -193,8 +194,8 @@ module Pod
           end
 
           describe 'with a scoped pod target' do
-            def pod_target(spec)
-              fixture_pod_target(spec).scoped.first
+            def pod_target(spec, target_definition)
+              fixture_pod_target(spec, [target_definition]).scoped.first
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
@@ -271,12 +272,16 @@ module Pod
         #-----------------------------------------------------------------------#
 
         describe 'with multiple pod targets with user_target_xcconfigs' do
+          def specs
+            [
+              fixture_spec('banana-lib/BananaLib.podspec'),
+              fixture_spec('orange-framework/OrangeFramework.podspec'),
+            ]
+          end
+
           before do
-            spec_b = fixture_spec('orange-framework/OrangeFramework.podspec')
-            @pod_target_b = fixture_pod_target(spec_b)
-            @consumer_a = @consumer
-            @consumer_b = @pod_target_b.spec_consumers.last
-            @target.pod_targets << @pod_target_b
+            @consumer_a = @pod_targets[0].spec_consumers.last
+            @consumer_b = @pod_targets[1].spec_consumers.last
           end
 
           describe 'with boolean build settings' do
@@ -315,7 +320,7 @@ module Pod
             it 'adds values from all subspecs' do
               @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
               consumer_c = mock(:user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' })
-              @pod_target_b.stubs(:spec_consumers).returns([@consumer_b, consumer_c])
+              @pod_targets[1].stubs(:spec_consumers).returns([@consumer_b, consumer_c])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'
             end
