@@ -19,7 +19,6 @@ module Pod
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
           @target = fixture_aggregate_target(@pod_targets, @target_definition)
-          @target.target_definition.should == @pod_targets.first.target_definitions.first
           @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           @generator = AggregateXCConfig.new(@target, 'Release')
         end
@@ -121,7 +120,7 @@ module Pod
             end
 
             it 'links the pod targets with the aggregate target' do
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Pods-BananaLib"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib-Pods"'
             end
           end
 
@@ -189,21 +188,28 @@ module Pod
             end
           end
 
-          it 'sets the PODS_FRAMEWORK_BUILD_PATH build variable' do
-            @xcconfig.to_hash['PODS_FRAMEWORK_BUILD_PATH'].should == '"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods"'
-          end
-
           describe 'with a scoped pod target' do
+            def specs
+              [
+                fixture_spec('banana-lib/BananaLib.podspec'),
+                fixture_spec('orange-framework/OrangeFramework.podspec'),
+              ]
+            end
+
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, [target_definition]).scoped.first
+              target_definition = fixture_target_definition(spec.name)
+              target_definition.stubs(:parent).returns(@target_definition.podfile)
+              fixture_pod_target(spec, [target_definition, @target_definition].uniq).tap do |pod_target|
+                pod_target.stubs(:scope_suffix).returns(target_definition.label)
+              end
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) $PODS_FRAMEWORK_BUILD_PATH'
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$CONFIGURATION_BUILD_DIR/Pods-BananaLib" "$CONFIGURATION_BUILD_DIR/Pods-OrangeFramework"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-              expected = '$(inherited) -iquote "$PODS_FRAMEWORK_BUILD_PATH/OrangeFramework.framework/Headers"'
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/Pods-BananaLib/BananaLib.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/Pods-OrangeFramework/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
           end
