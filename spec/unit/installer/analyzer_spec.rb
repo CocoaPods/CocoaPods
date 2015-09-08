@@ -498,6 +498,18 @@ module Pod
         e.message.should.match %r{RestKit \(from `https://github.com/RestKit/RestKit.git`\)}
         e.message.should.match /RestKit \(~> 0.23.0\)/
       end
+
+      it 'handles `podspec` dependencies' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          xcodeproj 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          podspec :path => SourcesManager.master.first.specification_path('RestKit', '0.23.0')
+          pod 'AFNetworking', :git => 'https://github.com/Alamofire/AFNetworking.git', :tag => '1.3.4'
+        end
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        @analyzer.analyze.specifications.map(&:to_s).should == []
+      end
     end
 
     describe 'using lockfile checkout options' do
