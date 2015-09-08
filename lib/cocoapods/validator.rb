@@ -608,8 +608,8 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
-      command = 'xcodebuild clean build -target Pods
-'
+      command = 'xcodebuild clean build -target Pods'
+
       case consumer.platform_name
       when :ios
         command << ' CODE_SIGN_IDENTITY=- -sdk iphonesimulator'
