@@ -132,12 +132,12 @@ module Pod
 
       it 'generates the model to represent the target definitions' do
         target = @analyzer.analyze.targets.first
-        target.pod_targets.map(&:name).sort.should == [
-          'JSONKit',
-          'AFNetworking',
-          'SVPullToRefresh',
-          'Pods-SampleProject-libextobjc',
-        ].sort
+        target.pod_targets.map(&:name).sort.should == %w(
+          JSONKit
+          AFNetworking
+          libextobjc
+          SVPullToRefresh
+        ).sort
         target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods-SampleProject')
 
         target.pod_targets.map(&:archs).uniq.should == [[]]
@@ -237,11 +237,11 @@ module Pod
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-CLITool/Pods-CLITool-monkey
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-monkey
-            Pods-SampleProject/Pods-SampleProject-BananaLib
-            Pods-SampleProject/Pods-SampleProject-monkey
+            Pods-CLITool/monkey-osx
+            Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
+            Pods-SampleProject-TestRunner/monkey-ios
+            Pods-SampleProject/BananaLib-Pods-SampleProject
+            Pods-SampleProject/monkey-ios
           ).sort
         end
 
@@ -265,10 +265,10 @@ module Pod
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-monkey
-            Pods-SampleProject/Pods-SampleProject-BananaLib
-            Pods-SampleProject/Pods-SampleProject-monkey
+            Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
+            Pods-SampleProject-TestRunner/monkey-Pods-SampleProject-TestRunner
+            Pods-SampleProject/BananaLib-Pods-SampleProject
+            Pods-SampleProject/monkey-Pods-SampleProject
           ).sort
         end
       end

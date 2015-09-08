@@ -59,10 +59,13 @@ module Pod
 
           if target.requires_frameworks? && target.scoped?
             build_settings = {
-              'PODS_FRAMEWORK_BUILD_PATH' => XCConfigHelper.quote([target.configuration_build_dir]),
-              'FRAMEWORK_SEARCH_PATHS' => '$PODS_FRAMEWORK_BUILD_PATH',
-              'CONFIGURATION_BUILD_DIR' => '$PODS_FRAMEWORK_BUILD_PATH',
+              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
             }
+            scoped_dependent_targets = target.dependent_targets.select { |t| t.should_build? && t.scoped? }
+            unless scoped_dependent_targets.empty?
+              framework_search_paths = scoped_dependent_targets.map(&:relative_configuration_build_dir).uniq
+              build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths)
+            end
             @xcconfig.merge!(build_settings)
           end
 
