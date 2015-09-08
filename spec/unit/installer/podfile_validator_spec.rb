@@ -5,6 +5,7 @@ module Pod
     describe 'podspec/path in combination with other download strategies' do
       it 'validates that podspec is not used in combination with other download strategies' do
         podfile = Pod::Podfile.new do
+          abstract!(false)
           pod 'JSONKit', :podspec => 'https://raw.githubusercontent.com/CocoaPods/Specs/master/Specs/JSONKit/1.5pre/JSONKit.podspec.json',
                          :git => 'git@github.com:johnezang/JSONKit.git'
         end
@@ -19,6 +20,7 @@ module Pod
 
       it 'validates that path is not used in combination with other download strategies' do
         podfile = Pod::Podfile.new do
+          abstract!(false)
           pod 'JSONKit', :path => './JSONKit/1.5pre/JSONKit.podspec.json',
                          :git => 'git@github.com:johnezang/JSONKit.git'
         end
@@ -33,6 +35,7 @@ module Pod
 
       it 'validates when calling `valid?` before calling `validate`' do
         podfile = Pod::Podfile.new do
+          abstract!(false)
           pod 'JSONKit', :path => './JSONKit/1.5pre/JSONKit.podspec.json',
                          :git => 'git@github.com:johnezang/JSONKit.git'
         end
@@ -47,6 +50,7 @@ module Pod
     describe 'multiple download strategies' do
       it 'validates that only one download strategy is specified' do
         podfile = Pod::Podfile.new do
+          abstract!(false)
           pod 'JSONKit', :svn => 'svn.example.com/JSONKit',
                          :git => 'git@github.com:johnezang/JSONKit.git'
         end

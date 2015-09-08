@@ -17,7 +17,7 @@ gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7
 
 group :development do
   cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
+  cp_gem 'cocoapods-core',        'Core', 'seg-podfile-refactor'
   cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
   cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',     'cocoapods-plugins'

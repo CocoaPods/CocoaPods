@@ -17,6 +17,7 @@ module Pod
       @target_definition = target_definition
       @sandbox = sandbox
       @pod_targets = []
+      @search_paths_aggregate_targets = []
       @file_accessors = []
       @xcconfigs = {}
     end
@@ -102,6 +103,8 @@ module Pod
     # @return [Array<PodTarget>] The dependencies for this target.
     #
     attr_accessor :pod_targets
+
+    attr_accessor :search_paths_aggregate_targets
 
     # @param  [String] build_configuration The build configuration for which the
     #         the pod targets should be returned.

@@ -58,8 +58,7 @@ module Pod
 
     describe '#compute_targets' do
       it 'returns the targets specified in the target definition' do
-        target_definition = Podfile::TargetDefinition.new(:default, nil)
-        target_definition.link_with = ['UserTarget']
+        target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
         user_project = Xcodeproj::Project.new('path')
         user_project.new_target(:application, 'FirstTarget', :ios)
         user_project.new_target(:application, 'UserTarget', :ios)
@@ -70,13 +69,12 @@ module Pod
       end
 
       it 'raises if it is unable to find the targets specified by the target definition' do
-        target_definition = Podfile::TargetDefinition.new(:default, nil)
-        target_definition.link_with = %w(UserTarget AnotherUserTarget)
+        target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
         user_project = Xcodeproj::Project.new('path')
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
         e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
-        e.message.should.match /Unable to find the targets named `UserTarget` and `AnotherUserTarget`/
+        e.message.should.match /Unable to find a target named `UserTarget`/
       end
 
       it 'returns the target with the same name of the target definition' do
@@ -97,27 +95,6 @@ module Pod
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
         e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
         e.message.should.match /Unable to find a target named/
-      end
-
-      it 'returns the first target of the project if the target definition is named default' do
-        target_definition = Podfile::TargetDefinition.new('Pods', nil)
-        target_definition.link_with_first_target = true
-        user_project = Xcodeproj::Project.new('path')
-        user_project.new_target(:application, 'FirstTarget', :ios)
-        user_project.new_target(:application, 'UserTarget', :ios)
-
-        target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        targets = target_inspector.send(:compute_targets, user_project)
-        targets.map(&:name).should == ['FirstTarget']
-      end
-
-      it 'raises if the default target definition cannot be linked because there are no user targets' do
-        target_definition = Podfile::TargetDefinition.new(:default, nil)
-        user_project = Xcodeproj::Project.new('path')
-
-        target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
-        e.message.should.match /Unable to find a target/
       end
     end
 

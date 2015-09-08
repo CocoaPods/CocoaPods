@@ -27,6 +27,7 @@ module Pod
       #
       def validate
         validate_pod_directives
+        validate_no_abstract_only_pods!
 
         @validated = true
       end
@@ -38,7 +39,7 @@ module Pod
       def valid?
         validate unless @validated
 
-        @validated && errors.size == 0
+        @validated && errors.empty?
       end
 
       # A message describing any errors in the
@@ -79,6 +80,22 @@ module Pod
         if pod_spec_or_path && specified_downloaders.size > 0
           add_error "The dependency `#{dependency.name}` specifies `podspec` or `path` in combination with other" \
             ' download strategies. This is not allowed'
+        end
+      end
+
+      def validate_no_abstract_only_pods!
+        abstract_pods = ->(target_definition) do
+          if !target_definition.abstract? || !target_definition.children.empty?
+            target_definition.children.flat_map do |td|
+              abstract_pods[td]
+            end
+          else
+            target_definition.dependencies
+          end
+        end
+        pods = podfile.root_target_definitions.flat_map(&abstract_pods).uniq
+        pods.each do |pod|
+          add_error "The dependency `#{pod}` is not used in any concrete target."
         end
       end
     end
