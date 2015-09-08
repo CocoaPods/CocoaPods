@@ -665,6 +665,7 @@ module Pod
       urls     = source_urls
       Pod::Podfile.new do
         urls.each { |u| source(u) }
+        abstract!(false)
         use_frameworks!(use_frameworks)
         platform(platform_name, deployment_target)
         if local

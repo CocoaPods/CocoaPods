@@ -87,15 +87,9 @@ module Pod
 
         #---------------------------------------------------------------------#
 
-        private
+        protected
 
-        # Add build settings, which ensure that the pod targets can be imported
-        # from the integrating target by all sort of imports, which are:
-        #  - `#import <…>`
-        #  - `#import "…"`
-        #  - `@import …;` / `import …`
-        #
-        def generate_settings_to_import_pod_targets
+        def settings_to_import_pod_targets
           if target.requires_frameworks?
             framework_header_search_paths = pod_targets.select(&:should_build?).map do |target|
               if target.scoped?
@@ -118,17 +112,32 @@ module Pod
             if pod_targets.any? { |t| t.should_build? && t.scoped? }
               build_settings['FRAMEWORK_SEARCH_PATHS'] = '"$PODS_FRAMEWORK_BUILD_PATH"'
             end
-            @xcconfig.merge!(build_settings)
+            build_settings
           else
             # Make headers discoverable from $PODS_ROOT/Headers directory
             header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-            build_settings = {
+            {
               # by `#import "…"`
               'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem'),
             }
-            @xcconfig.merge!(build_settings)
+          end
+        end
+
+        private
+
+        # Add build settings, which ensure that the pod targets can be imported
+        # from the integrating target by all sort of imports, which are:
+        #  - `#import <…>`
+        #  - `#import "…"`
+        #  - `@import …;` / `import …`
+        #
+        def generate_settings_to_import_pod_targets
+          @xcconfig.merge!(settings_to_import_pod_targets)
+          target.search_paths_aggregate_targets.each do |search_paths_target|
+            generator = AggregateXCConfig.new(search_paths_target, configuration_name)
+            @xcconfig.merge!(generator.settings_to_import_pod_targets)
           end
         end
 

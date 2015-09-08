@@ -19,7 +19,12 @@ def generate_podfile(pods = ['JSONKit'])
   Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
-    pods.each { |name| pod name }
+    target 'SampleProject' do
+      pods.each { |name| pod name }
+      target 'SampleProjectTests' do
+        inherit! :search_paths
+      end
+    end
   end
 end
 
@@ -29,7 +34,12 @@ def generate_local_podfile
   Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
-    pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+    target 'SampleProject' do
+      pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+      target 'SampleProjectTests' do
+        inherit! :search_paths
+      end
+    end
   end
 end
 
@@ -226,7 +236,9 @@ module Pod
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
 
-          target 'TestRunner', :exclusive => true do
+          target 'SampleProject'
+          target 'TestRunner' do
+            inherit! :search_paths
             pod 'monkey', :path => (fixture_path + 'monkey').to_s
           end
         end
@@ -259,6 +271,7 @@ module Pod
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          target 'SampleProject'
         end
         lockfile = generate_lockfile
         config.integrate_targets = false
@@ -282,6 +295,7 @@ module Pod
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          target 'SampleProject'
         end
         @lockfile = generate_lockfile
 
@@ -323,6 +337,7 @@ module Pod
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          target 'SampleProject'
         end
         lockfile = generate_lockfile
         config.integrate_targets = false
@@ -365,7 +380,7 @@ module Pod
 
         it 'stores the targets created by the analyzer' do
           @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
+          @installer.aggregate_targets.map(&:name).sort.should == ["Pods-SampleProject", "Pods-SampleProjectTests"]
           @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
 
@@ -373,7 +388,7 @@ module Pod
           @installer.update = true
           Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
+          @installer.aggregate_targets.map(&:name).sort.should == ["Pods-SampleProject", "Pods-SampleProjectTests"]
           @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
       end
@@ -436,6 +451,7 @@ module Pod
           platform :osx, '10.10'
           pod 'CargoBay', '2.1.0'
           pod 'AFNetworking/NSURLSession', :head
+          abstract!(false)
         end
         @installer.stubs(:podfile).returns(podfile)
         @installer.stubs(:lockfile).returns(nil)

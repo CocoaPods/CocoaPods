@@ -102,18 +102,9 @@ module Pod
         #
         def compute_targets(user_project)
           native_targets = user_project.native_targets
-          if link_with = target_definition.link_with
-            targets = native_targets.select { |t| link_with.include?(t.name) }
-            raise Informative, "Unable to find the targets named #{link_with.map { |x| "`#{x}`" }.to_sentence}" \
-              "to link with target definition `#{target_definition.name}`" if targets.empty?
-          elsif target_definition.link_with_first_target?
-            targets = [native_targets.first].compact
-            raise Informative, 'Unable to find a target' if targets.empty?
-          else
-            target = native_targets.find { |t| t.name == target_definition.name.to_s }
-            targets = [target].compact
-            raise Informative, "Unable to find a target named `#{target_definition.name}`" if targets.empty?
-          end
+          target = native_targets.find { |t| t.name == target_definition.name.to_s }
+          targets = [target].compact
+          raise Informative, "Unable to find a target named `#{target_definition.name}`" if targets.empty?
           targets
         end
 

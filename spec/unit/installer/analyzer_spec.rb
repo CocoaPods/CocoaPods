@@ -7,14 +7,19 @@ module Pod
         @podfile = Pod::Podfile.new do
           platform :ios, '6.0'
           xcodeproj 'SampleProject/SampleProject'
-          pod 'JSONKit',                     '1.5pre'
-          pod 'AFNetworking',                '1.0.1'
-          pod 'SVPullToRefresh',             '0.4'
-          pod 'libextobjc/EXTKeyPathCoding', '0.2.3'
 
-          target 'TestRunner' do
+          target 'SampleProject' do
+            pod 'JSONKit',                     '1.5pre'
+            pod 'AFNetworking',                '1.0.1'
+            pod 'SVPullToRefresh',             '0.4'
             pod 'libextobjc/EXTKeyPathCoding', '0.2.3'
-            pod 'libextobjc/EXTSynthesize',    '0.2.3'
+
+            target 'TestRunner' do
+              inherit! :search_paths
+
+              pod 'libextobjc/EXTKeyPathCoding', '0.2.3'
+              pod 'libextobjc/EXTSynthesize',    '0.2.3'
+            end
           end
         end
 
@@ -131,9 +136,9 @@ module Pod
           'JSONKit',
           'AFNetworking',
           'SVPullToRefresh',
-          'Pods-libextobjc',
+          'Pods-SampleProject-libextobjc',
         ].sort
-        target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods')
+        target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods-SampleProject')
 
         target.pod_targets.map(&:archs).uniq.should == [[]]
 
@@ -187,22 +192,24 @@ module Pod
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
             xcodeproj 'SampleProject/SampleProject'
-            pod 'BananaLib'
-            pod 'monkey'
-
-            target 'TestRunner' do
+            target 'SampleProject' do
               pod 'BananaLib'
               pod 'monkey'
+
+              target 'TestRunner' do
+                pod 'BananaLib'
+                pod 'monkey'
+              end
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods/BananaLib
-            Pods/monkey
-            Pods-TestRunner/BananaLib
-            Pods-TestRunner/monkey
+            Pods-SampleProject-TestRunner/BananaLib
+            Pods-SampleProject-TestRunner/monkey
+            Pods-SampleProject/BananaLib
+            Pods-SampleProject/monkey
           ).sort
         end
 
@@ -214,9 +221,11 @@ module Pod
             pod 'BananaLib'
             pod 'monkey'
 
-            target 'TestRunner' do
-              pod 'BananaLib'
-              pod 'monkey'
+            target 'SampleProject' do
+              target 'TestRunner' do
+                pod 'BananaLib'
+                pod 'monkey'
+              end
             end
 
             target 'CLITool' do
@@ -228,11 +237,11 @@ module Pod
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods/Pods-BananaLib
-            Pods/Pods-monkey
-            Pods-TestRunner/Pods-TestRunner-BananaLib
-            Pods-TestRunner/Pods-TestRunner-monkey
             Pods-CLITool/Pods-CLITool-monkey
+            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
+            Pods-SampleProject-TestRunner/Pods-monkey
+            Pods-SampleProject/Pods-SampleProject-BananaLib
+            Pods-SampleProject/Pods-monkey
           ).sort
         end
       end
@@ -335,8 +344,10 @@ module Pod
         podfile = Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
-          pod 'AFNetworking'
-          pod 'AFNetworkActivityLogger'
+          target 'SampleProject' do
+            pod 'AFNetworking'
+            pod 'AFNetworkActivityLogger'
+          end
         end
         hash = {}
         hash['PODS'] = [
@@ -367,7 +378,9 @@ module Pod
         podfile = Podfile.new do
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
-          pod 'ARAnalytics/Mixpanel'
+          target 'SampleProject' do
+            pod 'ARAnalytics/Mixpanel'
+          end
         end
         hash = {}
         hash['PODS'] = ['ARAnalytics/CoreIOS (2.8.0)', { 'ARAnalytics/Mixpanel (2.8.0)' => ['ARAnlytics/CoreIOS', 'Mixpanel'] }, 'Mixpanel (2.5.1)']
@@ -454,9 +467,6 @@ module Pod
           'libextobjc/EXTKeyPathCoding (0.2.3)',
         ]
         @analyzer.analyze.targets[1].pod_targets.map(&:specs).flatten.map(&:to_s).should == [
-          'AFNetworking (1.0.1)',
-          'JSONKit (1.5pre)',
-          'SVPullToRefresh (0.4)',
           'libextobjc/EXTKeyPathCoding (0.2.3)',
           'libextobjc/EXTSynthesize (0.2.3)',
         ]
@@ -469,8 +479,10 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios, '8.0'
-          pod 'RestKit', '~> 0.23.0'
-          pod 'RestKit', '<= 0.23.2'
+          target 'SampleProject' do
+            pod 'RestKit', '~> 0.23.0'
+            pod 'RestKit', '<= 0.23.2'
+          end
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.analyze
@@ -542,8 +554,10 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios
-          pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
-          pod 'SEGModules', :git => 'https://github.com/segiddins/Modules.git'
+          target 'SampleProject' do
+            pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
+            pod 'SEGModules', :git => 'https://github.com/segiddins/Modules.git'
+          end
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         e = should.raise(Informative) { analyzer.analyze }
@@ -559,8 +573,10 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios
-          pod 'RestKit/Core', :git => 'https://github.com/RestKit/RestKit.git'
-          pod 'RestKit', :git => 'https://github.com/segiddins/RestKit.git'
+          target 'SampleProject' do
+            pod 'RestKit/Core', :git => 'https://github.com/RestKit/RestKit.git'
+            pod 'RestKit', :git => 'https://github.com/segiddins/RestKit.git'
+          end
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         e = should.raise(Informative) { analyzer.analyze }
@@ -576,8 +592,10 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           xcodeproj 'SampleProject/SampleProject'
           platform :ios
-          pod 'RestKit', :git => 'https://github.com/RestKit/RestKit.git'
-          pod 'RestKit', '~> 0.23.0'
+          target 'SampleProject' do
+            pod 'RestKit', :git => 'https://github.com/RestKit/RestKit.git'
+            pod 'RestKit', '~> 0.23.0'
+          end
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         e = should.raise(Informative) { analyzer.analyze }
@@ -591,7 +609,9 @@ module Pod
     describe 'using lockfile checkout options' do
       before do
         @podfile = Pod::Podfile.new do
-          pod 'BananaLib', :git => 'example.com'
+          target 'SampleProject' do
+            pod 'BananaLib', :git => 'example.com'
+          end
         end
         @dependency = @podfile.dependencies.first
 
