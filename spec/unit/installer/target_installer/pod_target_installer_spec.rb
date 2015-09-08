@@ -275,7 +275,7 @@ module Pod
         before do
           @project.add_pod_group('snake', fixture('snake'))
 
-          @pod_target = fixture_pod_target('snake/snake.podspec', @target_definition)
+          @pod_target = fixture_pod_target('snake/snake.podspec', [@target_definition])
           @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
           @pod_target.stubs(:requires_frameworks? => true)
           group = @project.group_for_spec('snake')
