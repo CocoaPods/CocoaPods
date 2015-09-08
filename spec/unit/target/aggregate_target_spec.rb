@@ -198,7 +198,7 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', fixture_target_definition('iOS Example'))
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', [fixture_target_definition('iOS Example')])
           @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
           @target.stubs(:requires_frameworks?).returns(true)
           @target.pod_targets = [@pod_target]
