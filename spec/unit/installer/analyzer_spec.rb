@@ -196,7 +196,7 @@ module Pod
             Pods/Pods-BananaLib
             Pods/Pods-monkey
             Pods-TestRunner/Pods-TestRunner-BananaLib
-            Pods-TestRunner/Pods-monkey
+            Pods-TestRunner/Pods-TestRunner-monkey
             Pods-CLITool/Pods-CLITool-monkey
           ).sort
         end
