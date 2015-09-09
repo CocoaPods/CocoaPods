@@ -35,6 +35,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   and includes `use_frameworks!` for Swift projects.
   [Jamie Evans](https://github.com/JamieREvans)
 
+* Either generate just one pod target or generate it once for each target
+  definition.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4034](https://github.com/CocoaPods/CocoaPods/issues/4034)
+
+
 ## 0.39.0.beta.4 (2015-09-02)
 
 ##### Bug Fixes
