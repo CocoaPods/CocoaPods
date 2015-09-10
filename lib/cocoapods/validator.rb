@@ -94,6 +94,8 @@ module Pod
           platform_message = '[OSX] '
         elsif result.platforms == [:watchos]
           platform_message = '[watchOS] '
+        elsif result.platforms == [:tvos]
+          platform_message = '[tvOS] '
         end
 
         subspecs_message = ''

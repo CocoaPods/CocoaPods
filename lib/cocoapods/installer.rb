@@ -569,10 +569,12 @@ module Pod
         osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
         ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
         watchos_deployment_target = platforms.select { |p| p.name == :watchos }.map(&:deployment_target).min
+        tvos_deployment_target = platforms.select { |p| p.name == :tvos }.map(&:deployment_target).min
         @pods_project.build_configurations.each do |build_configuration|
           build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
           build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
           build_configuration.build_settings['WATCHOS_DEPLOYMENT_TARGET'] = watchos_deployment_target.to_s if watchos_deployment_target
+          build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
           build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
           build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
         end
