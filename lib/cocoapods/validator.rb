@@ -617,6 +617,8 @@ module Pod
         command << ' CODE_SIGN_IDENTITY=- -sdk iphonesimulator'
       when :watchos
         command << ' CODE_SIGN_IDENTITY=- -sdk watchsimulator'
+      when :tvos
+        command << ' CODE_SIGN_IDENTITY=- -sdk appletvsimulator'
       end
 
       output, status = _xcodebuild "#{command} 2>&1"
