@@ -406,7 +406,7 @@ module Pod
         command = 'xcodebuild clean build -target Pods'
         validator.expects(:`).with("#{command} 2>&1").once.returns('')
         validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk watchsimulator 2>&1").once.returns('')
+        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk watchsimulator 2>&1").once.returns('')        
         validator.validate
       end
 
