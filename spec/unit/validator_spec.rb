@@ -604,7 +604,6 @@ module Pod
 
         validator = test_swiftpod
 
-        p validator.results
         validator.results.count.should == 0
       end
     end
