@@ -15,7 +15,7 @@ gem 'json', '1.7.7'
 
 group :development do
   cp_gem 'claide',               'CLAide'
-  cp_gem 'cocoapods-core',       'Core'
+  cp_gem 'cocoapods-core',       'Core', 'tvos-support'
   cp_gem 'cocoapods-downloader', 'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',    'cocoapods-plugins'
   cp_gem 'cocoapods-search',     'cocoapods-search'
@@ -23,7 +23,7 @@ group :development do
   cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
   cp_gem 'cocoapods-try',        'cocoapods-try'
   cp_gem 'molinillo',            'Molinillo', '0.3-stable'
-  cp_gem 'xcodeproj',            'Xcodeproj'
+  cp_gem 'xcodeproj',            'Xcodeproj', 'tvos-support'
 
   gem 'cocoapods-dependencies'
 
