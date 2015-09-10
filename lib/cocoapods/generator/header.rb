@@ -84,6 +84,7 @@ module Pod
       def generate_platform_import_header
         case platform.name
         when :ios then "#import <UIKit/UIKit.h>\n"
+        when :tvos then "#import <UIKit/UIKit.h>\n"
         when :osx then "#import <Cocoa/Cocoa.h>\n"
         else "#import <Foundation/Foundation.h>\n"
         end
