@@ -44,7 +44,6 @@ module Pod
               update_to_cocoapods_0_34,
               update_to_cocoapods_0_37_1,
               update_to_cocoapods_0_39,
-              update_to_cocoapods_0_40,
               unless native_targets_to_integrate.empty?
                 add_pods_library
                 add_embed_frameworks_script_phase
@@ -133,19 +132,10 @@ module Pod
           end
           if requires_update
             add_embed_frameworks_script_phase
-            true
           end
-        end
 
-        # Reset the linking of the product reference to strong.
-        #
-        # @return [Bool] whether any changes to the project were made.
-        #
-        # @todo   This can be removed for CocoaPods 1.0
-        #
-        def update_to_cocoapods_0_40
           frameworks = user_project.frameworks_group
-          native_targets_to_embed_in.any? do |native_target|
+          native_targets_to_embed_in.each do |native_target|
             build_phase = native_target.frameworks_build_phase
 
             product_ref = frameworks.files.find { |f| f.path == target.product_name }
@@ -156,9 +146,12 @@ module Pod
                 && build_file.settings['ATTRIBUTES'].is_a?(Array) \
                 && build_file.settings['ATTRIBUTES'].include?('Weak')
                 build_file.settings = nil
+                requires_update = true
               end
             end
           end
+
+          requires_update
         end
 
         # Adds spec product reference to the frameworks build phase of the
