@@ -609,7 +609,14 @@ module Pod
     #
     def xcodebuild
       command = 'xcodebuild clean build -target Pods'
-      command << ' CODE_SIGN_IDENTITY=- -sdk iphonesimulator' if consumer.platform_name == :ios
+
+      case consumer.platform_name
+      when :ios
+        command << ' CODE_SIGN_IDENTITY=- -sdk iphonesimulator'
+      when :watchos
+        command << ' CODE_SIGN_IDENTITY=- -sdk watchsimulator'
+      end
+
       output, status = _xcodebuild "#{command} 2>&1"
 
       unless status.success?
