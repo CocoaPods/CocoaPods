@@ -641,6 +641,27 @@ module Pod
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
+
+      it 'raises when there is no explicit version specified and there are only pre-release versions' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'PrereleaseMonkey'
+        end
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
+        e = lambda { resolver.resolve }.should.raise Informative
+        e.message.should.match(/There is no corresponding stable version for `PrereleaseMonkey`/)
+        e.message.should.match(/You should explicitly specify the version in order to install a pre-release version of `PrereleaseMonkey`/)
+      end
+
+      it 'resolves when there is explicit pre-release version specified and there are only pre-release versions' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'PrereleaseMonkey', '1.0-beta1'
+        end
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
+        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs.should == ['PrereleaseMonkey (1.0-beta1)']
+      end
     end
   end
 end

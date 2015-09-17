@@ -389,10 +389,10 @@ module Pod
               conflict.requirement.external_source ||
               conflict.requirement.head?)
               )
-              # Conflict was caused by not specifying an explicit version for the requirement #[name],
-              # and there is no available stable version for the requirement.
-              message = "There is no corresponding stable version for `#{name}`. " \
-              "You should explicitly specify the version in order to install a pre-release version of `#{name}`"
+            # Conflict was caused by not specifying an explicit version for the requirement #[name],
+            # and there is no available stable version for the requirement.
+            message = "There is no corresponding stable version for `#{name}`. " \
+            "You should explicitly specify the version in order to install a pre-release version of `#{name}`"
           elsif !conflict.existing
             conflict.requirements.values.flatten.each do |r|
               unless search_for(r).empty?
