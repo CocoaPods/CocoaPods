@@ -383,7 +383,12 @@ module Pod
               'version requirement to your Podfile ' \
               "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
               "or revert to a stable version by running `pod update #{name}`."
-          elsif (conflict.possibility && conflict.possibility.version.prerelease?) && (conflict.requirement && !(conflict.requirement.prerelease? || conflict.requirement.external_source || conflict.requirement.head?))
+          elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
+              (conflict.requirement && !(
+              conflict.requirement.prerelease? ||
+              conflict.requirement.external_source ||
+              conflict.requirement.head?)
+              )
               # Conflict was caused by not specifying an explicit version for the requirement #[name],
               # and there is no available stable version for the requirement.
               message = "There is no corresponding stable version for `#{name}`. " \
