@@ -40,6 +40,32 @@ module Pod
         @dirs
       end
 
+      def datamodels
+          @datamodels
+        end
+        
+        # @return [void] the .xcdatamodeld internals are already exposed by Dir.glob,
+        # it should be take as a file so that it can be added to project as a source file.
+        #
+        def wrap_xcdatamodeld_as_file
+          @datamodels = @dirs.select { |d| (d =~ /\.xcdatamodeld$/) != nil }
+          return unless @datamodels.count > 0
+  
+          #files/dirs under that dir had been globbed, remove them
+          left_files = @files
+          left_dirs = @dirs
+          @datamodels.map do |bundle_dir|
+            left_files = left_files.reject { |sub_file| sub_file.include?(bundle_dir) }
+            left_dirs = left_dirs.reject { |sub_dir| 
+              sub_dir.include?(bundle_dir) && sub_dir.length > bundle_dir.length
+            }
+          end
+          @files = left_files
+          @dirs = left_dirs
+          
+          @datamodels = @datamodels.map { |d| "#{root}/"+d }
+        end
+
       # @return [void] Reads the file system and populates the files and paths
       #         lists.
       #
