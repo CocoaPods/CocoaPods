@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   flags set correctly.  
   [Andrea Aresu](https://github.com/aaresu/)
 
+* Remove SDKROOT relative search path as it isn't needed anymore since XCTest.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#4219](https://github.com/CocoaPods/CocoaPods/issues/4219)
+
+
 ## 0.39.0.beta.4 (2015-09-02)
 
 ##### Bug Fixes
