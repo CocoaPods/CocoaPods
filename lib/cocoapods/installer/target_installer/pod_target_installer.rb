@@ -36,6 +36,20 @@ module Pod
 
       private
 
+      # Remove the default headers folder path settings for static library pod
+      # targets.
+      #
+      # @return [Hash{String => String}]
+      #
+      def custom_build_settings
+        settings = super
+        unless target.requires_frameworks?
+          settings['PRIVATE_HEADERS_FOLDER_PATH'] = ''
+          settings['PUBLIC_HEADERS_FOLDER_PATH'] = ''
+        end
+        settings
+      end
+
       #-----------------------------------------------------------------------#
 
       SOURCE_FILE_EXTENSIONS = Sandbox::FileAccessor::SOURCE_FILE_EXTENSIONS
