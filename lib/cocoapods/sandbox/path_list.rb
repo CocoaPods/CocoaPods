@@ -57,12 +57,12 @@ module Pod
         @datamodels.map do |bundle_dir|
           left_files = left_files.reject { |sub_file| sub_file.include?(bundle_dir) }
           left_dirs = left_dirs.reject { |sub_dir| sub_dir.include?(bundle_dir) && sub_dir.length > bundle_dir.length }
-          end
-          @files = left_files
-          @dirs = left_dirs
-
-          @datamodels = @datamodels.map { |d| "#{root}/" + d }
         end
+        @files = left_files
+        @dirs = left_dirs
+
+        @datamodels = @datamodels.map { |d| "#{root}/" + d }
+      end
 
       # @return [void] Reads the file system and populates the files and paths
       #         lists.

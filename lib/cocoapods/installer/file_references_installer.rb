@@ -187,7 +187,7 @@ module Pod
           end
         end
       end
-  
+
       def add_datamodels_to_pods_group
         file_accessors.each do |file_accessor|
           file_accessor.path_list.datamodels.each do |model|
