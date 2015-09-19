@@ -390,9 +390,14 @@ module Pod
               conflict.requirement.head?)
               )
             # Conflict was caused by not specifying an explicit version for the requirement #[name],
-            # and there is no available stable version for the requirement.
-            message = "There is no corresponding stable version for `#{name}`. " \
-            "You should explicitly specify the version in order to install a pre-release version of `#{name}`"
+            # and there is no available stable version satisfying constraints for the requirement.
+            message = "There are only pre-release versions available satisfying the following requirements:\n"
+            conflict.requirements.values.flatten.each do |r|
+              unless search_for(r).empty?
+                message << "\n\t'#{name}', '#{r.requirement}'\n"
+              end
+            end
+            message << "\nYou should explicitly specify the version in order to install a pre-release version"
           elsif !conflict.existing
             conflict.requirements.values.flatten.each do |r|
               unless search_for(r).empty?

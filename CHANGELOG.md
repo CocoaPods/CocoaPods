@@ -8,13 +8,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Use watchsimulator when validating pods with the watchOS platform.  
 * Give a meaningful message for the case where there is no available stable version for a pod,
   and user do not explicitly specify the required version.
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#4197](https://github.com/CocoaPods/CocoaPods/issues/4197)
 
-* Use watchsimulator when validatng PodSpecs with watchOS compatibility.  
+* Use watchsimulator when validating pods with the watchOS platform.
   [Thomas Kollbach](https://github.com/toto)
   [#4130](https://github.com/CocoaPods/CocoaPods/issues/4130)
   

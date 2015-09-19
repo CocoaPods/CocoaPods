@@ -642,15 +642,28 @@ module Pod
         specs.should == ['AFNetworking (1.2.1)']
       end
 
-      it 'raises when there is no explicit version specified and there are only pre-release versions' do
+      it 'raises when no constraints are specified and only pre-release versions are available' do
         podfile = Podfile.new do
           platform :ios
           pod 'PrereleaseMonkey'
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
         e = lambda { resolver.resolve }.should.raise Informative
-        e.message.should.match(/There is no corresponding stable version for `PrereleaseMonkey`/)
-        e.message.should.match(/You should explicitly specify the version in order to install a pre-release version of `PrereleaseMonkey`/)
+        e.message.should.match(/There are only pre-release versions available satisfying the following requirements/)
+        e.message.should.match(/PrereleaseMonkey.*>= 0/)
+        e.message.should.match(/You should explicitly specify the version in order to install a pre-release version/)
+      end
+
+      it 'raises when no explicit version is specified and only pre-release versions satisfy constraints' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'AFNetworking', '< 1.0', '> 0.10.1'
+        end
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, SourcesManager.all)
+        e = lambda { resolver.resolve }.should.raise Informative
+        e.message.should.match(/There are only pre-release versions available satisfying the following requirements/)
+        e.message.should.match(/AFNetworking.*< 1\.0, > 0\.10\.1/)
+        e.message.should.match(/You should explicitly specify the version in order to install a pre-release version/)
       end
 
       it 'resolves when there is explicit pre-release version specified and there are only pre-release versions' do
