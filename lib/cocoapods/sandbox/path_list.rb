@@ -13,7 +13,10 @@ module Pod
       # @return [Pathname] The root of the list whose files and directories
       #         are used to perform the matching operations.
       #
-      attr_accessor :root, :datamodel
+      attr_accessor :root
+
+      # @return [Absolutepathname] The list of .xcdatamodeld bundles in source files
+      attr_accessor :datamodels
 
       # Initialize a new instance
       #
@@ -22,6 +25,7 @@ module Pod
       def initialize(root)
         @root = root
         @glob_cache = {}
+        @datamodels = []
       end
 
       # @return [Array<String>] The list of absolute the path of all the files
