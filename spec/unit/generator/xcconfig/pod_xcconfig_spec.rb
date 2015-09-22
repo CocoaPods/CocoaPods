@@ -47,14 +47,6 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework "iAd"')
           end
 
-          it 'includes the developer frameworks search paths when SenTestingKit is detected' do
-            @spec.xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
-            @spec.frameworks = ['SenTestingKit']
-            xcconfig = @generator.generate
-            framework_search_paths = xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS']
-            framework_search_paths.should.include('$(SDKROOT)/Developer')
-          end
-
           it 'does not configure the project to load all members that implement Objective-c classes or categories from the static library' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-ObjC'
           end

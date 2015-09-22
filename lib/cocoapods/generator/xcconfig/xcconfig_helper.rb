@@ -74,7 +74,7 @@ module Pod
           xcconfig.libraries.merge(consumer.libraries)
           xcconfig.frameworks.merge(consumer.frameworks)
           xcconfig.weak_frameworks.merge(consumer.weak_frameworks)
-          add_developers_frameworks_if_needed(xcconfig, consumer.platform_name)
+          add_developers_frameworks_if_needed(xcconfig)
         end
 
         # Configures the given Xcconfig with the build settings for the given
@@ -183,17 +183,12 @@ module Pod
         #
         # @return [void]
         #
-        def self.add_developers_frameworks_if_needed(xcconfig, platform)
+        def self.add_developers_frameworks_if_needed(xcconfig)
           matched_frameworks = xcconfig.frameworks & %w(XCTest SenTestingKit)
           unless matched_frameworks.empty?
             search_paths = xcconfig.attributes['FRAMEWORK_SEARCH_PATHS'] ||= ''
             search_paths_to_add = []
             search_paths_to_add << '$(inherited)'
-            if platform == :ios || platform == :watchos
-              search_paths_to_add << '"$(SDKROOT)/Developer/Library/Frameworks"'
-            else
-              search_paths_to_add << '"$(DEVELOPER_LIBRARY_DIR)/Frameworks"'
-            end
             frameworks_path = '"$(PLATFORM_DIR)/Developer/Library/Frameworks"'
             search_paths_to_add << frameworks_path
             search_paths_to_add.each do |search_path|
