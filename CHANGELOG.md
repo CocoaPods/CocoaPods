@@ -8,11 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Use watchsimulator when validatng PodSpecs with watchOS compatibility.  
+* Use watchsimulator when validating pods with the watchOS platform.  
   [Thomas Kollbach](https://github.com/toto)
   [#4130](https://github.com/CocoaPods/CocoaPods/issues/4130)
   
-* C or C++ preprocessor output files with `.i` extension now have their compiler 
+* C or C++ preprocessor output files with `.i` extension now have their compiler
   flags set correctly.  
   [Andrea Aresu](https://github.com/aaresu/)
 
