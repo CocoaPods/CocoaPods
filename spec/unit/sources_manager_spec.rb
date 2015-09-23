@@ -86,17 +86,7 @@ module Pod
 
       it "generates the search index before performing a search if it doesn't exits" do
         SourcesManager.stubs(:all).returns([@test_source])
-        Source::Aggregate.any_instance.expects(:generate_search_index).returns('BananaLib' => {})
-        Source::Aggregate.any_instance.expects(:update_search_index).never
-        SourcesManager.updated_search_index = nil
-        SourcesManager.search_by_name('BananaLib', true)
-      end
-
-      it 'updates the search index before performing a search if it exits' do
-        File.open(SourcesManager.search_index_path, 'w') { |file| file.write("---\nBananaLib:\n  version: 0.0.1") }
-        SourcesManager.stubs(:all).returns([@test_source])
-        Source::Aggregate.any_instance.expects(:generate_search_index).never
-        Source::Aggregate.any_instance.expects(:update_search_index).returns('BananaLib' => {})
+        Source::Aggregate.any_instance.expects(:generate_search_index_for_source).with(@test_source).returns('BananaLib' => ['BananaLib'])
         SourcesManager.updated_search_index = nil
         SourcesManager.search_by_name('BananaLib', true)
       end
@@ -105,7 +95,7 @@ module Pod
         SourcesManager.unstub(:search_index_path)
         config.cache_root = Config::DEFAULTS[:cache_root]
         path = SourcesManager.search_index_path.to_s
-        path.should.match %r{Library/Caches/CocoaPods/search_index.yaml}
+        path.should.match %r{Library/Caches/CocoaPods/search_index.json}
       end
 
       describe 'managing sources by URL' do
@@ -239,12 +229,6 @@ module Pod
         set_up_test_repo_for_update
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /is up to date/
-      end
-
-      it 'uses the only fast forward git option' do
-        set_up_test_repo_for_update
-        SourcesManager.expects(:git!).with { |options| options.should.include? '--ff-only' }
-        SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 
       it 'prints a warning if the update failed' do

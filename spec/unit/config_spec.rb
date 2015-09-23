@@ -161,7 +161,7 @@ module Pod
       end
 
       it 'returns the search index file' do
-        @config.search_index_file.to_s.should.end_with?('search_index.yaml')
+        @config.search_index_file.to_s.should.end_with?('search_index.json')
       end
     end
 

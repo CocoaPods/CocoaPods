@@ -274,7 +274,7 @@ module Pod
     # @return [Pathname] The file to use to cache the search data.
     #
     def search_index_file
-      cache_root + 'search_index.yaml'
+      cache_root + 'search_index.json'
     end
 
     private
