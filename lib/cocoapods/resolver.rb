@@ -383,6 +383,21 @@ module Pod
               'version requirement to your Podfile ' \
               "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
               "or revert to a stable version by running `pod update #{name}`."
+          elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
+              (conflict.requirement && !(
+              conflict.requirement.prerelease? ||
+              conflict.requirement.external_source ||
+              conflict.requirement.head?)
+              )
+            # Conflict was caused by not specifying an explicit version for the requirement #[name],
+            # and there is no available stable version satisfying constraints for the requirement.
+            message = "There are only pre-release versions available satisfying the following requirements:\n"
+            conflict.requirements.values.flatten.each do |r|
+              unless search_for(r).empty?
+                message << "\n\t'#{name}', '#{r.requirement}'\n"
+              end
+            end
+            message << "\nYou should explicitly specify the version in order to install a pre-release version"
           elsif !conflict.existing
             conflict.requirements.values.flatten.each do |r|
               unless search_for(r).empty?
