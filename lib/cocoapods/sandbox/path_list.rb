@@ -15,6 +15,9 @@ module Pod
       #
       attr_accessor :root
 
+      # @return [Absolutepathname] The list of .xcdatamodeld bundles in source files
+      attr_accessor :datamodels
+
       # Initialize a new instance
       #
       # @param  [Pathname] root The root of the PathList.
@@ -22,6 +25,7 @@ module Pod
       def initialize(root)
         @root = root
         @glob_cache = {}
+        @datamodels = []
       end
 
       # @return [Array<String>] The list of absolute the path of all the files
@@ -38,6 +42,26 @@ module Pod
       def dirs
         read_file_system unless @dirs
         @dirs
+      end
+
+      # @return [void] the .xcdatamodeld internals are already exposed by Dir.glob,
+      # it should be take as a file so that it can be added to project as a source file.
+      #
+      def wrap_xcdatamodeld_as_file
+        @datamodels = @dirs.select { |d| !(d =~ /\.xcdatamodeld$/).nil? }
+        return unless @datamodels.count > 0
+
+        # files/dirs under that dir had been globbed, remove them
+        left_files = @files
+        left_dirs = @dirs
+        @datamodels.map do |bundle_dir|
+          left_files = left_files.reject { |sub_file| sub_file.include?(bundle_dir) }
+          left_dirs = left_dirs.reject { |sub_dir| sub_dir.include?(bundle_dir) && sub_dir.length > bundle_dir.length }
+        end
+        @files = left_files
+        @dirs = left_dirs
+
+        @datamodels = @datamodels.map { |d| "#{root}/" + d }
       end
 
       # @return [void] Reads the file system and populates the files and paths

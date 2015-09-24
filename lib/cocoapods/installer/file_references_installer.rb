@@ -57,6 +57,7 @@ module Pod
       def refresh_file_accessors
         file_accessors.each do |fa|
           fa.path_list.read_file_system
+          fa.path_list.wrap_xcdatamodeld_as_file
         end
       end
 
@@ -70,6 +71,7 @@ module Pod
       def add_source_files_references
         UI.message '- Adding source files to Pods project' do
           add_file_accessors_paths_to_pods_group(:source_files, nil, true)
+          add_datamodels_to_pods_group
         end
       end
 
@@ -182,6 +184,16 @@ module Pod
           paths.each do |path|
             group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
             pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development)
+          end
+        end
+      end
+
+      def add_datamodels_to_pods_group
+        file_accessors.each do |file_accessor|
+          file_accessor.path_list.datamodels.each do |model|
+            group = pods_project.group_for_spec(file_accessor.spec.name, nil)
+            UI.message "- Adding data model #{model}"
+            pods_project.add_file_reference(model, group, false)
           end
         end
       end
