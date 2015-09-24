@@ -13,7 +13,3 @@ Lint/UselessAccessModifier:
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
   Max: 292
-
-# Offense count: 19
-Metrics/PerceivedComplexity:
-  Max: 10

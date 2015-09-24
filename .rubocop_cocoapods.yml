@@ -5,6 +5,7 @@ AllCops:
     - ./*.gemspec
   Exclude:
     - ./spec/fixtures/**/*
+    - ./vendor/bundle/**/*
 
 # At the moment not ready to be used
 # https://github.com/bbatsov/rubocop/issues/947
@@ -58,6 +59,11 @@ Next:
 Metrics/ClassLength:
   Enabled: false
 
+# Arbitrary max lengths for modules simply do not work and enabling this will
+# lead to a never ending stream of annoyance and changes.
+Metrics/ModuleLength:
+  Enabled: false
+
 # Arbitrary max lengths for methods simply do not work and enabling this will
 # lead to a never ending stream of annoyance and changes.
 Metrics/MethodLength:
@@ -75,6 +81,11 @@ Metrics/AbcSize:
 # It will be obvious which code is complex, Rubocop should only lint simple
 # rules for us.
 Metrics/CyclomaticComplexity:
+  Enabled: false
+
+# It will be obvious which code is complex, Rubocop should only lint simple
+# rules for us.
+Metrics/PerceivedComplexity:
   Enabled: false
 
 #- CocoaPods support for Ruby 1.8.7 ------------------------------------------#
@@ -113,4 +124,3 @@ ClassAndModuleChildren:
 UselessComparison:
   Exclude:
     - spec/**/*
-
