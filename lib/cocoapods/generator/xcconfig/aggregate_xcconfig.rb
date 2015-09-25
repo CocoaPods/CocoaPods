@@ -60,6 +60,9 @@ module Pod
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
           }
+          if pod_targets.any?(&:uses_swift?)
+            config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
+          end
           @xcconfig = Xcodeproj::Config.new(config)
 
           @xcconfig.merge!(merged_user_target_xcconfigs)

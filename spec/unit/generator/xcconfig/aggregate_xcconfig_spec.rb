@@ -225,6 +225,16 @@ module Pod
           it 'adds the COCOAPODS macro definition' do
             @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) "-D" "COCOAPODS"'
           end
+
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift' do
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
+          end
+
+          it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is no swift' do
+            @generator.send(:pod_targets).each { |pt| pt.stubs(:uses_swift?).returns(false) }
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
+          end
         end
 
         #-----------------------------------------------------------------------#
