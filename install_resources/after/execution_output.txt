@@ -32,6 +32,7 @@ Generating Pods project
     - Installing target `Pods-SampleApp` OS X 10.8
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
+    - Generating deterministic UUIDs
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
 

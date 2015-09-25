@@ -43,6 +43,7 @@ Generating Pods project
       - Generating umbrella header at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-umbrella.h`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
+    - Generating deterministic UUIDs
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
 

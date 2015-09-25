@@ -76,8 +76,12 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - subspec_1.h
-      - subspec_2.h
+      - subspec_1.h:
+          ATTRIBUTES:
+          - Public
+      - subspec_2.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:

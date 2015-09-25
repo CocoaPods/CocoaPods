@@ -75,8 +75,12 @@ Targets:
     - FrameworksBuildPhase:
       - Foundation.framework
     - HeadersBuildPhase:
-      - AFRaptureXMLRequestOperation.h
-      - Foo.h
+      - AFRaptureXMLRequestOperation.h:
+          ATTRIBUTES:
+          - Public
+      - Foo.h:
+          ATTRIBUTES:
+          - Public
     Build Configurations:
     - Debug:
         Build Settings:
