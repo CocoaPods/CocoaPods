@@ -6,6 +6,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* The `EMBEDDED_CONTENT_CONTAINS_SWIFT` build setting will now be set when
+  appropriate.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Use watchsimulator when validating pods with the watchOS platform.  
