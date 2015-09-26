@@ -454,6 +454,7 @@ module Pod
         end
       end
 
+      _validate_header_mappings_dir
       if consumer.spec.root?
         _validate_license
         _validate_module_map
@@ -491,9 +492,23 @@ module Pod
     def _validate_header_files(attr_name)
       non_header_files = file_accessor.send(attr_name).
         select { |f| !Sandbox::FileAccessor::HEADER_EXTENSIONS.include?(f.extname) }.
-        map { |f| f.relative_path_from file_accessor.root }
+        map { |f| f.relative_path_from(file_accessor.root) }
       unless non_header_files.empty?
         error(attr_name, "The pattern matches non-header files (#{non_header_files.join(', ')}).")
+      end
+    end
+
+    def _validate_header_mappings_dir
+      return unless header_mappings_dir = file_accessor.spec_consumer.header_mappings_dir
+      absolute_mappings_dir = file_accessor.root + header_mappings_dir
+      unless absolute_mappings_dir.directory?
+        error('header_mappings_dir', "The header_mappings_dir (`#{header_mappings_dir}`) is not a directory.")
+      end
+      non_mapped_headers = file_accessor.headers.
+        reject { |h| h.to_path.start_with?(absolute_mappings_dir.to_path) }.
+        map { |f| f.relative_path_from(file_accessor.root) }
+      unless non_mapped_headers.empty?
+        error('header_mappings_dir', "There are header files outside of the header_mappings_dir (#{non_mapped_headers.join(', ')}).")
       end
     end
 
