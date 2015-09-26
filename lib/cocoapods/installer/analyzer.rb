@@ -292,9 +292,9 @@ module Pod
           pod_targets = distinct_targets.flat_map do |_, targets_by_distinctors|
             if targets_by_distinctors.count > 1
               # There are different sets of subspecs or the spec is used across different platforms
-              targets_by_distinctors.map do |distinctor, target_definitions|
+              targets_by_distinctors.flat_map do |distinctor, target_definitions|
                 specs, = *distinctor
-                generate_pod_target(target_definitions, specs, :scoped => true)
+                generate_pod_target(target_definitions, specs).scoped
               end
             else
               (specs, _), target_definitions = targets_by_distinctors.first
@@ -317,7 +317,7 @@ module Pod
           pod_targets = specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by.group_by(&:root).values.uniq
             grouped_specs.flat_map do |pod_specs|
-              generate_pod_target([target_definition], pod_specs, :scoped => true)
+              generate_pod_target([target_definition], pod_specs).scoped
             end
           end
           pod_targets.each do |target|
@@ -364,13 +364,10 @@ module Pod
       # @param  [Array<Specification>] specs
       #         the specifications of an equal root.
       #
-      # @param  [Bool] scoped
-      #         whether the pod target should be scoped
-      #
       # @return [PodTarget]
       #
-      def generate_pod_target(target_definitions, pod_specs, scoped: false)
-        pod_target = PodTarget.new(pod_specs, target_definitions, sandbox, scoped)
+      def generate_pod_target(target_definitions, pod_specs)
+        pod_target = PodTarget.new(pod_specs, target_definitions, sandbox)
 
         if config.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
