@@ -174,7 +174,7 @@ module Pod
     #
     def requirement_satisfied_by?(requirement, activated, spec)
       existing_vertices = activated.vertices.values.select do |v|
-        Specification.root_name(v.name) ==  requirement.root_name
+        Specification.root_name(v.name) == requirement.root_name
       end
       existing = existing_vertices.map(&:payload).compact.first
       requirement_satisfied =

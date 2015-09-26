@@ -23,7 +23,9 @@ module Pod
 
         def initialize(argv)
           @shallow = argv.flag?('shallow', false)
-          @name, @url, @branch = argv.shift_argument, argv.shift_argument, argv.shift_argument
+          @name = argv.shift_argument
+          @url = argv.shift_argument
+          @branch = argv.shift_argument
           super
         end
 

@@ -137,14 +137,12 @@ describe_cli 'pod' do
       /lib/cocoapods_plugin.rb # The actual plugin file that gets loaded
     }iox, '`\1/lib/cocoapods_plugin.rb'
 
-    # rubocop:disable Style/RegexpLiteral
     s.replace_pattern %r{
       ^(\s* \$ \s (CURL_BIN | #{`which curl`.strip}) .* \n)
       ^\s* % \s* Total .* \n
       ^\s* Dload \s* Upload .* \n
       (^\s* [[:cntrl:]] .* \n)+
     }iox, "\\1\n"
-    # rubocop:enable Style/RegexpLiteral
   end
 
   describe 'Pod install' do

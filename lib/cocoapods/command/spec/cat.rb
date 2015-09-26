@@ -37,7 +37,7 @@ module Pod
           query = @use_regex ? @query : Regexp.escape(@query)
           filepath = if @show_all
                        specs = get_path_of_spec(query, @show_all).split(/\n/)
-                       index = UI.choose_from_array(specs, "Which spec would you like to print [1-#{ specs.count }]? ")
+                       index = UI.choose_from_array(specs, "Which spec would you like to print [1-#{specs.count}]? ")
                        specs[index]
                      else
                        get_path_of_spec(query)

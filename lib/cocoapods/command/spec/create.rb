@@ -15,7 +15,8 @@ module Pod
         ]
 
         def initialize(argv)
-          @name_or_url, @url = argv.shift_argument, argv.shift_argument
+          @name_or_url = argv.shift_argument
+          @url = argv.shift_argument
           super
         end
 
@@ -73,7 +74,7 @@ module Pod
           data[:name]          = repo['name']
           data[:summary]       = (repo['description'] || '').gsub(/["]/, '\"')
           data[:homepage]      = (repo['homepage'] && !repo['homepage'].empty?) ? repo['homepage'] : repo['html_url']
-          data[:author_name]   = user['name']  || user['login']
+          data[:author_name]   = user['name'] || user['login']
           data[:author_email]  = user['email'] || 'email@address.com'
           data[:source_url]    = repo['clone_url']
 

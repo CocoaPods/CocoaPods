@@ -18,7 +18,7 @@ module Pod
         #
         def self.quote(strings, prefix = nil)
           prefix = "#{prefix} " if prefix
-          strings.sort.map { |s| %W(          #{prefix}"#{s}"          ) }.join(' ')
+          strings.sort.map { |s| %W( #{prefix}"#{s}"          ) }.join(' ')
         end
 
         # Return the default linker flags

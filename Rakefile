@@ -54,7 +54,7 @@ begin
       sh "git checkout #{specs_branch}"
       sh 'git pull'
 
-      yaml_file  = 'CocoaPods-version.yml'
+      yaml_file = 'CocoaPods-version.yml'
       unless File.exist?(yaml_file)
         $stderr.puts red("[!] Unable to find #{yaml_file}!")
         exit 1
