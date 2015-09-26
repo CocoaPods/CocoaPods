@@ -83,15 +83,7 @@ module Pod
 
           header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
           native_target.add_file_references(header_file_refs) do |build_file|
-            # Set added headers as public if needed
-            build_file.settings ||= {}
-            if public_headers.include?(build_file.file_ref.real_path)
-              build_file.settings['ATTRIBUTES'] = ['Public']
-            elsif private_headers.include?(build_file.file_ref.real_path)
-              build_file.settings['ATTRIBUTES'] = ['Private']
-            else
-              build_file.settings['ATTRIBUTES'] = ['Project']
-            end
+            add_header(build_file, public_headers, private_headers)
           end
 
           other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
@@ -283,6 +275,39 @@ module Pod
 
       def custom_module_map
         @custom_module_map ||= target.file_accessors.first.module_map
+      end
+
+      def header_mappings_dir
+        return @header_mappings_dir if defined?(@header_mappings_dir)
+        file_accessor = target.file_accessors.first
+        @header_mappings_dir = if dir = file_accessor.spec_consumer.header_mappings_dir
+                                 file_accessor.path_list.root + dir
+                               end
+      end
+
+      def add_header(build_file, public_headers, private_headers)
+        file_ref = build_file.file_ref
+        acl = if public_headers.include?(file_ref.real_path)
+                'Public'
+              elsif private_headers.include?(file_ref.real_path)
+                'Private'
+              else
+                'Project'
+              end
+
+        if target.requires_frameworks? && header_mappings_dir
+          relative_path = file_ref.real_path.relative_path_from(header_mappings_dir)
+          sub_dir = relative_path.dirname
+          copy_phase_name = "Copy #{sub_dir} #{acl} Headers"
+          copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
+            native_target.new_copy_files_build_phase(copy_phase_name)
+          copy_phase.symbol_dst_subfolder_spec = :products_directory
+          copy_phase.dst_path = "$(#{acl.upcase}_HEADERS_FOLDER_PATH)/#{sub_dir}"
+          copy_phase.add_file_reference(file_ref, true)
+        else
+          build_file.settings ||= {}
+          build_file.settings['ATTRIBUTES'] = [acl]
+        end
       end
 
       #-----------------------------------------------------------------------#
