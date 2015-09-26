@@ -67,21 +67,21 @@ module Pod
       it 'searches sets by name' do
         sets = SourcesManager.search_by_name('BananaLib')
         sets.all? { |s| s.class == Specification::Set }.should.be.true
-        sets.any? { |s| s.name  == 'BananaLib' }.should.be.true
+        sets.any? { |s| s.name == 'BananaLib' }.should.be.true
       end
 
       it 'can perform a full text search of the sets' do
         SourcesManager.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Chunky', true)
         sets.all? { |s| s.class == Specification::Set }.should.be.true
-        sets.any? { |s| s.name  == 'BananaLib' }.should.be.true
+        sets.any? { |s| s.name == 'BananaLib' }.should.be.true
       end
 
       it 'can perform a full text regexp search of the sets' do
         SourcesManager.stubs(:all).returns([@test_source])
         sets = SourcesManager.search_by_name('Ch[aeiou]nky', true)
         sets.all? { |s| s.class == Specification::Set }.should.be.true
-        sets.any? { |s| s.name  == 'BananaLib' }.should.be.true
+        sets.any? { |s| s.name == 'BananaLib' }.should.be.true
       end
 
       it "generates the search index before performing a search if it doesn't exits" do

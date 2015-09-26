@@ -36,7 +36,7 @@ module Pod
 
     def self.options
       [
-        ['--silent',   'Show nothing'],
+        ['--silent', 'Show nothing'],
       ].concat(super)
     end
 

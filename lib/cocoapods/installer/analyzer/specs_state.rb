@@ -23,9 +23,9 @@ module Pod
           @unchanged = []
 
           if pods_by_state
-            @added     = pods_by_state[:added]     || []
-            @deleted   = pods_by_state[:removed]   || []
-            @changed   = pods_by_state[:changed]   || []
+            @added     = pods_by_state[:added] || []
+            @deleted   = pods_by_state[:removed] || []
+            @changed   = pods_by_state[:changed] || []
             @unchanged = pods_by_state[:unchanged] || []
           end
         end
@@ -51,10 +51,10 @@ module Pod
         # @return [void]
         #
         def print
-          added    .sort.each { |pod| UI.message('A'.green  + " #{pod}", '', 2) }
-          deleted  .sort.each { |pod| UI.message('R'.red    + " #{pod}", '', 2) }
+          added    .sort.each { |pod| UI.message('A'.green + " #{pod}", '', 2) }
+          deleted  .sort.each { |pod| UI.message('R'.red + " #{pod}", '', 2) }
           changed  .sort.each { |pod| UI.message('M'.yellow + " #{pod}", '', 2) }
-          unchanged.sort.each { |pod| UI.message('-'        + " #{pod}", '', 2) }
+          unchanged.sort.each { |pod| UI.message('-' + " #{pod}", '', 2) }
         end
 
         # Adds the name of a Pod to the give state.

@@ -47,10 +47,10 @@ module Pod
 
       it 'computes the state of the Podfile respect to the Lockfile' do
         state = @analyzer.analyze.podfile_state
-        state.added.should     == %w(AFNetworking libextobjc/EXTKeyPathCoding libextobjc/EXTSynthesize)
-        state.changed.should   == %w()
+        state.added.should == %w(AFNetworking libextobjc/EXTKeyPathCoding libextobjc/EXTSynthesize)
+        state.changed.should == %w()
         state.unchanged.should == %w(JSONKit SVPullToRefresh)
-        state.deleted.should   == %w(NUI)
+        state.deleted.should == %w(NUI)
       end
 
       #--------------------------------------#
@@ -239,7 +239,7 @@ module Pod
       end
 
       it 'unlocks dependencies in a case-insensitive manner' do
-        @analyzer.update =  { :pods => %w(JSONKit) }
+        @analyzer.update = { :pods => %w(JSONKit) }
         @analyzer.analyze
         @analyzer.send(:locked_dependencies).map(&:payload).map(&:to_s).
           should == ['SVPullToRefresh (= 0.4)']

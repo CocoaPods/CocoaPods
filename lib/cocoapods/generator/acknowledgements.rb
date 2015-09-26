@@ -77,7 +77,7 @@ module Pod
             if license_file.exist?
               text = IO.read(license_file)
             else
-              UI.warn "Unable to read the license file `#{license_file }` " \
+              UI.warn "Unable to read the license file `#{license_file}` " \
               "for the spec `#{spec}`"
             end
           end

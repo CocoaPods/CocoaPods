@@ -69,6 +69,7 @@ module Pod
         def @installer.run_podfile_pre_install_hooks
           @hook_called = true
         end
+
         def @installer.clean_pod_sources
           @hook_called.should.be.true
         end
@@ -87,6 +88,7 @@ module Pod
         def @installer.run_podfile_post_install_hooks
           @hook_called = true
         end
+
         def @installer.write_pod_project
           @hook_called.should.be.true
         end
@@ -102,6 +104,7 @@ module Pod
         def @installer.run_source_provider_hooks
           @hook_called = true
         end
+
         def @installer.analyze(*)
           @hook_called.should.be.true
         end
@@ -180,7 +183,7 @@ module Pod
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
 
           target 'TestRunner', :exclusive => true do
-            pod 'monkey',        :path => (fixture_path + 'monkey').to_s
+            pod 'monkey', :path => (fixture_path + 'monkey').to_s
           end
         end
         lockfile = generate_lockfile

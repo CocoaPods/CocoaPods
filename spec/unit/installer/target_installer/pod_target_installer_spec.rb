@@ -53,7 +53,7 @@ module Pod
       it "adds the user's build configurations to the target" do
         @pod_target.user_build_configurations.merge!('AppStore' => :release, 'Test' => :debug)
         @installer.install!
-        @project.targets.first.build_configurations.map(&:name).sort.should == %w(        AppStore Debug Release Test        )
+        @project.targets.first.build_configurations.map(&:name).sort.should == %w( AppStore Debug Release Test        )
       end
 
       it 'it creates different hash instances for the build settings of various build configurations' do

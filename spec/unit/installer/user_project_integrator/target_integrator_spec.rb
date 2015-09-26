@@ -15,9 +15,9 @@ module Pod
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.link_with_first_target = true
         @pod_bundle = AggregateTarget.new(target_definition, config.sandbox)
-        @pod_bundle.user_project_path  = project_path
+        @pod_bundle.user_project_path = project_path
         @pod_bundle.client_root = project_path.dirname
-        @pod_bundle.user_target_uuids  = [@target.uuid]
+        @pod_bundle.user_target_uuids = [@target.uuid]
         configuration = Xcodeproj::Config.new(
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         )
@@ -189,7 +189,7 @@ module Pod
           build_file.file_ref = @project.new(Xcodeproj::Project::PBXVariantGroup)
           @target_integrator.stubs(:user_project).returns(@project)
           @target.frameworks_build_phase.files << build_file
-          @target_integrator.send(:native_targets).map(&:name).should == %w(          SampleProject          )
+          @target_integrator.send(:native_targets).map(&:name).should == %w( SampleProject          )
         end
 
         it 'is robust against build files with missing file references' do
@@ -197,7 +197,7 @@ module Pod
           build_file.file_ref = nil
           @target_integrator.stubs(:user_project).returns(@project)
           @target.frameworks_build_phase.files << build_file
-          @target_integrator.send(:native_targets).map(&:name).should == %w(          SampleProject          )
+          @target_integrator.send(:native_targets).map(&:name).should == %w( SampleProject          )
         end
       end
     end

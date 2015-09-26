@@ -293,7 +293,7 @@ module Pod
             if targets_by_distinctors.count > 1
               # There are different sets of subspecs or the spec is used across different platforms
               targets_by_distinctors.map do |distinctor, target_definitions|
-                specs, _ = *distinctor
+                specs, = *distinctor
                 generate_pod_target(target_definitions, specs, :scoped => true)
               end
             else

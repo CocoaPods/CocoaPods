@@ -7,7 +7,7 @@ module Pod
   module UserInterface
     require 'colored'
 
-    @title_colors      =  %w(    yellow green    )
+    @title_colors      =  %w( yellow green    )
     @title_level       =  0
     @indentation_level =  2
     @treat_titles_as_messages = false
@@ -298,14 +298,14 @@ module Pod
       #
       def choose_from_array(array, message)
         array.each_with_index do |item, index|
-          UI.puts "#{ index + 1 }: #{ item }"
+          UI.puts "#{index + 1}: #{item}"
         end
 
         UI.puts message
 
         index = UI.gets.chomp.to_i - 1
         if index < 0 || index > array.count - 1
-          raise Informative, "#{ index + 1 } is invalid [1-#{ array.count }]"
+          raise Informative, "#{index + 1} is invalid [1-#{array.count}]"
         else
           index
         end

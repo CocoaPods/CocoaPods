@@ -7,7 +7,7 @@ class Xcodeproj::Project
     sections = []
     sorted_keys = ['File References', 'Targets', 'Build Configurations']
     sorted_keys.each do |key|
-      yaml =  { key => pretty_print_output[key] }.to_yaml
+      yaml = { key => pretty_print_output[key] }.to_yaml
       sections << yaml
     end
     (sections * "\n\n").gsub!('---', '')

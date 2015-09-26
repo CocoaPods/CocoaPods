@@ -252,7 +252,8 @@ module Pod
       def check_version_information(dir)
         versions = version_information(dir)
         unless repo_compatible?(dir)
-          min, max = versions['min'], versions['max']
+          min = versions['min']
+          max = versions['max']
           version_msg = (min == max) ? min : "#{min} - #{max}"
           raise Informative, "The `#{dir.basename}` repo requires " \
           "CocoaPods #{version_msg} (currently using #{Pod::VERSION})\n".red +
@@ -293,7 +294,8 @@ module Pod
       def repo_compatible?(dir)
         versions = version_information(dir)
 
-        min, max = versions['min'], versions['max']
+        min = versions['min']
+        max = versions['max']
         bin_version  = Gem::Version.new(Pod::VERSION)
         supports_min = !min || bin_version >= Gem::Version.new(min)
         supports_max = !max || bin_version <= Gem::Version.new(max)
@@ -329,7 +331,7 @@ module Pod
       #
       def version_information(dir)
         require 'yaml'
-        yaml_file  = dir + 'CocoaPods-version.yml'
+        yaml_file = dir + 'CocoaPods-version.yml'
         return {} unless yaml_file.exist?
         begin
           YAMLHelper.load_file(yaml_file)

@@ -35,7 +35,7 @@ module Pod
       repo_make('test_repo')
       Dir.chdir(temporary_directory) do
         spec = "Spec.new do |s|; s.name = 'Broken'; s.version = '1.0' end"
-        File.open('Broken.podspec',  'w') { |f| f.write(spec) }
+        File.open('Broken.podspec', 'w') { |f| f.write(spec) }
         cmd = command('repo', 'push', 'test_repo')
         Validator.any_instance.stubs(:validated?).returns(false)
 
@@ -48,7 +48,7 @@ module Pod
       repo_make('test_repo')
 
       Dir.chdir(temporary_directory) do
-        File.open('JSON.podspec.json',  'w') { |f| f.write('{}') }
+        File.open('JSON.podspec.json', 'w') { |f| f.write('{}') }
         cmd = command('repo', 'push', 'test_repo')
         cmd.send(:podspec_files).should == [Pathname('JSON.podspec.json')]
       end

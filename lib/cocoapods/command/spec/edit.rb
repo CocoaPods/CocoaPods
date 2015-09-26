@@ -45,7 +45,7 @@ module Pod
           end
 
           exec_editor(filepath.to_s) if File.exist? filepath
-          raise Informative, "#{ filepath } doesn't exist."
+          raise Informative, "#{filepath} doesn't exist."
         end
 
         # Looks up an executable in the search paths

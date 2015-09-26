@@ -105,7 +105,7 @@ module Pod
         if registrations
           hooks = registrations[name]
           if hooks
-            UI.message "- Running #{name.to_s.gsub('_', ' ')} hooks" do
+            UI.message "- Running #{name.to_s.tr('_', ' ')} hooks" do
               hooks.each do |hook|
                 next if whitelisted_plugins && !whitelisted_plugins.key?(hook.plugin_name)
                 UI.message "- #{hook.plugin_name || 'unknown plugin'} from " \

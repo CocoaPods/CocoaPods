@@ -48,7 +48,7 @@ module Pod
           set = sets.find { |s| s.name == spec }
         else
           names = sets.map(&:name) * ', '
-          raise Informative, "More than one spec found for '#{ spec }':\n#{ names }"
+          raise Informative, "More than one spec found for '#{spec}':\n#{names}"
         end
 
         unless show_all
@@ -77,7 +77,7 @@ module Pod
 
           versions.each do |version|
             spec = source.specification(set.name, version)
-            paths += "#{ pathname_from_spec(spec, source) }\n"
+            paths += "#{pathname_from_spec(spec, source)}\n"
           end
         end
 
@@ -102,7 +102,7 @@ module Pod
         end
 
         if !best_source || !best_version
-          raise Informative, "Unable to locate highest known specification for `#{ set.name }'"
+          raise Informative, "Unable to locate highest known specification for `#{set.name}'"
         end
 
         [best_source.specification(set.name, best_version), best_source]

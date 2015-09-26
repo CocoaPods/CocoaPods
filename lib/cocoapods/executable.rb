@@ -54,13 +54,16 @@ module Pod
 
       if Config.instance.verbose?
         UI.message("$ #{full_command}")
-        stdout, stderr = Indenter.new(STDOUT), Indenter.new(STDERR)
+        stdout = Indenter.new(STDOUT)
+        stderr = Indenter.new(STDERR)
       else
-        stdout, stderr = Indenter.new, Indenter.new
+        stdout = Indenter.new
+        stderr = Indenter.new
       end
 
       status = popen3(bin, command, stdout, stderr)
-      stdout, stderr = stdout.join, stderr.join
+      stdout = stdout.join
+      stderr = stderr.join
       output = stdout + stderr
       unless status.success?
         if raise_on_failure
@@ -197,7 +200,7 @@ module Pod
       #
       def <<(value)
         super
-        io << "#{ indent }#{ value }" if io
+        io << "#{indent}#{value}" if io
       end
     end
   end
