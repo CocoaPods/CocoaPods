@@ -38,10 +38,14 @@ module Pod
           #!/bin/sh
           set -e
 
-          echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-          mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+          FRAMEWORKS_DIR="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+
+          echo "mkdir -p ${FRAMEWORKS_DIR}"
+          mkdir -p "${FRAMEWORKS_DIR}"
 
           SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
+
+          SWIFT_RUNTIME_LIBS_TO_INTEGRATE=""
 
           install_framework()
           {
@@ -53,22 +57,20 @@ module Pod
               local source="$1"
             fi
 
-            local destination="${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-
             if [ -L "${source}" ]; then
                 echo "Symlinked..."
                 source="$(readlink "${source}")"
             fi
 
             # use filter instead of exclude so missing patterns dont' throw errors
-            echo "rsync -av --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${destination}\\""
-            rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${destination}"
+            echo "rsync -av --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${FRAMEWORKS_DIR}\\""
+            rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${FRAMEWORKS_DIR}"
 
             local basename
             basename="$(basename -s .framework "$1")"
-            binary="${destination}/${basename}.framework/${basename}"
+            binary="${FRAMEWORKS_DIR}/${basename}.framework/${basename}"
             if ! [ -r "$binary" ]; then
-              binary="${destination}/${basename}"
+              binary="${FRAMEWORKS_DIR}/${basename}"
             fi
 
             # Strip invalid architectures so "fat" simulator / device frameworks work on device
@@ -77,15 +79,15 @@ module Pod
             fi
 
             # Resign the code if required by the build settings to avoid unstable apps
-            code_sign_if_enabled "${destination}/$(basename "$1")"
+            code_sign_if_enabled "${FRAMEWORKS_DIR}/$(basename "$1")"
 
             # Embed linked Swift runtime libraries
             local swift_runtime_libs
             swift_runtime_libs=$(xcrun otool -LX "$binary" | grep --color=never @rpath/libswift | sed -E s/@rpath\\\\/\\(.+dylib\\).*/\\\\1/g | uniq -u  && exit ${PIPESTATUS[0]})
             for lib in $swift_runtime_libs; do
-              echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${destination}\\""
-              rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
-              code_sign_if_enabled "${destination}/${lib}"
+              if [[ $SWIFT_RUNTIME_LIBS_TO_INTEGRATE != *"$lib"* ]]; then
+                SWIFT_RUNTIME_LIBS_TO_INTEGRATE="$SWIFT_RUNTIME_LIBS_TO_INTEGRATE $lib"
+              fi
             done
           }
 
@@ -128,6 +130,16 @@ module Pod
             script << "fi\n"
           end
         end
+        script << <<-SH.strip_heredoc
+
+          # Embed linked Swift runtime libraries
+          for lib in $SWIFT_RUNTIME_LIBS_TO_INTEGRATE; do
+            echo "rsync -auv \\"${SWIFT_STDLIB_PATH}/${lib}\\" \\"${FRAMEWORKS_DIR}\\""
+            rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${FRAMEWORKS_DIR}"
+            code_sign_if_enabled "${FRAMEWORKS_DIR}/${lib}"
+          done
+
+        SH
         script
       end
     end
