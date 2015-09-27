@@ -7,11 +7,11 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 623ca5ca1dc15ba9e8abab5c3b1a7f7f3deae833
-  branch: tvos-support
+  revision: 9cc774457e8326e7fed6961bab83cefeac67f266
+  branch: master
   specs:
     cocoapods-core (0.39.0.beta.4)
-      activesupport (>= 3.2.15)
+      activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
@@ -24,8 +24,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 06283f254e8137c4d9512d29b91afd1fdcfa053c
-  branch: tvos-support
+  revision: 8347cca0149d6506c0a785a8faa7f6a17dee29fd
+  branch: master
   specs:
     xcodeproj (0.27.2)
       activesupport (>= 3)
