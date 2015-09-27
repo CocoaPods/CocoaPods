@@ -295,49 +295,6 @@ module Pod
           end
         end
       end
-
-      #--------------------------------------------------------------------------------#
-
-      describe 'concerning framework versions' do
-        before do
-          @pod_target.stubs(:requires_frameworks? => true)
-          @spec.stubs(:version => Version.new('1.2.3'))
-        end
-
-        it 'sets the project and library version' do
-          settings = @installer.send(:custom_build_settings)
-          settings['CURRENT_PROJECT_VERSION'].should == '1.2.3'
-          settings['DYLIB_CURRENT_VERSION'].should == '$(CURRENT_PROJECT_VERSION)'
-        end
-
-        it 'sets the library compatibility version to the major version' do
-          settings = @installer.send(:custom_build_settings)
-          settings['DYLIB_COMPATIBILITY_VERSION'].should == '1'
-        end
-
-        it 'sets the library compatibility version to the exact version when it is less than v1 (because SemVer makes no promises)' do
-          @spec.stubs(:version => Version.new('0.1.2'))
-          settings = @installer.send(:custom_build_settings)
-          settings['DYLIB_COMPATIBILITY_VERSION'].should == '0.1.2'
-        end
-
-        describe 'with weird version numbers' do
-          handles = -> (version, project_version, compatibility_version) do
-            it "handles #{version}" do
-              @spec.stubs(:version => Version.new(version))
-              settings = @installer.send(:custom_build_settings)
-              settings['CURRENT_PROJECT_VERSION'].should == project_version
-              settings['DYLIB_COMPATIBILITY_VERSION'].should == compatibility_version
-            end
-          end
-
-          handles['1.alpha', '1.0.0', '1']
-          handles['0.1-alpha', '0.1.0', '0.1.0']
-          handles['1.2.3.4', '1.2.3', '1']
-          handles['0.2.3.4', '0.2.3', '0.2.3']
-          handles['1.alpha.2', '1.0.0', '1']
-        end
-      end
     end
   end
 end
