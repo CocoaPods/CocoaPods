@@ -102,6 +102,7 @@ module Pod
           @validator.stubs(:download_pod)
           @validator.stubs(:check_file_patterns)
           @validator.stubs(:install_pod)
+          @validator.stubs(:add_app_project_import)
           @validator.stubs(:build_pod)
           @validator.stubs(:tear_down_validation_environment)
           WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
@@ -128,7 +129,7 @@ module Pod
             WebMock::API.stub_request(:head, /found/).to_return(:status => 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/redirect/')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
 
           it 'does not fail if the homepage does not support HEAD' do
@@ -136,7 +137,7 @@ module Pod
             WebMock::API.stub_request(:get, /page/).to_return(:status => 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
 
           it 'does not fail if the homepage errors on HEAD' do
@@ -144,7 +145,7 @@ module Pod
             WebMock::API.stub_request(:get, /page/).to_return(:status => 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
 
           it 'does not follow redirects infinitely' do
@@ -166,7 +167,7 @@ module Pod
             Specification.any_instance.stubs(:homepage).returns(
               'http://banana-corp.local/redirect')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
         end
 
@@ -300,8 +301,8 @@ module Pod
         validator.stubs(:validate_url)
         validator.stubs(:validate_screenshots)
         validator.stubs(:check_file_patterns)
-        validator.stubs(:check_file_patterns)
         validator.stubs(:install_pod)
+        validator.stubs(:add_app_project_import)
         %i(prepare resolve_dependencies download_dependencies).each do |m|
           Installer.any_instance.stubs(m)
         end
@@ -538,6 +539,7 @@ module Pod
         @validator.stubs(:validate_screenshots)
         @validator.stubs(:check_file_patterns)
         @validator.stubs(:install_pod)
+        @validator.stubs(:add_app_project_import)
         %i(prepare resolve_dependencies download_dependencies).each do |m|
           Installer.any_instance.stubs(m)
         end
