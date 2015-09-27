@@ -176,29 +176,33 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'YES'
+          PRIVATE_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: AFNetworking.xcconfig
     - Release:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'NO'
+          PRIVATE_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/AFNetworking/AFNetworking-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: AFNetworking.xcconfig
 - Pods:
     Build Phases:
@@ -248,29 +252,33 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'YES'
+          PRIVATE_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: RKValueTransformers.xcconfig
     - Release:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'NO'
+          PRIVATE_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: RKValueTransformers.xcconfig
 - SEGModules:
     Build Phases:
@@ -287,29 +295,33 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'YES'
+          PRIVATE_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: SEGModules.xcconfig
     - Release:
         Build Settings:
-          OTHER_LIBTOOLFLAGS: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          OTHER_LDFLAGS: ''
-          MTL_ENABLE_DEBUG_INFO: 'NO'
+          PRIVATE_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          SKIP_INSTALL: 'YES'
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          OTHER_LDFLAGS: ''
+          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LIBTOOLFLAGS: ''
         Base Configuration: SEGModules.xcconfig
 
 
