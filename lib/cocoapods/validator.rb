@@ -275,7 +275,7 @@ module Pod
     rescue => e
       message = e.to_s
       message << "\n" << e.backtrace.join("\n") << "\n" if config.verbose?
-      error('unknown', "Encountered an unknown error (#{e}) during validation.")
+      error('unknown', "Encountered an unknown error (#{message}) during validation.")
       false
     end
 
