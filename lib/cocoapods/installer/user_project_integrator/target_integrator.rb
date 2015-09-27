@@ -227,7 +227,7 @@ module Pod
           native_targets_to_integrate.each do |native_target|
             phase = create_or_update_build_phase(native_target, phase_name)
             native_target.build_phases.unshift(phase).uniq!
-            phase.shell_script = <<-EOS.strip_heredoc
+            phase.shell_script = <<-SH.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
               if [[ $? != 0 ]] ; then
                   cat << EOM
@@ -235,7 +235,7 @@ module Pod
               EOM
                   exit 1
               fi
-            EOS
+            SH
           end
         end
 
