@@ -71,6 +71,27 @@ module Pod
 
       #--------------------------------------#
 
+      describe 'headers folder paths' do
+        it 'does not set them for framework targets' do
+          @pod_target.stubs(:requires_frameworks? => true)
+          @installer.install!
+          @project.targets.first.build_configurations.each do |config|
+            config.build_settings['PUBLIC_HEADERS_FOLDER_PATH'].should.be.nil
+            config.build_settings['PRIVATE_HEADERS_FOLDER_PATH'].should.be.nil
+          end
+        end
+
+        it 'empties them for non-framework targets' do
+          @installer.install!
+          @project.targets.first.build_configurations.each do |config|
+            config.build_settings['PUBLIC_HEADERS_FOLDER_PATH'].should.be.empty
+            config.build_settings['PRIVATE_HEADERS_FOLDER_PATH'].should.be.empty
+          end
+        end
+      end
+
+      #--------------------------------------#
+
       it 'adds the source files of each pod to the target of the Pod library' do
         @installer.install!
         names = @installer.target.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
