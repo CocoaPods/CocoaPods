@@ -39,14 +39,19 @@ module Pod
         def run
           prefix = @shallow ? 'Creating shallow clone of' : 'Cloning'
           UI.section("#{prefix} spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
-            config.repos_dir.mkpath
-            Dir.chdir(config.repos_dir) do
-              command = ['clone', @url, @name]
-              command << '--depth=1' if @shallow
-              git!(command)
+            begin
+              config.repos_dir.mkpath
+            rescue SystemCallError => e
+              raise Informative, "Could not create repos directory '#{config.repos_dir}'\n#{e.errno.to_s} #{e.message}"
+            else
+              Dir.chdir(config.repos_dir) do
+                command = ['clone', @url, @name]
+                command << '--depth=1' if @shallow
+                git!(command)
+              end
+              Dir.chdir(dir) { git!('checkout', @branch) } if @branch
+              SourcesManager.check_version_information(dir)
             end
-            Dir.chdir(dir) { git!('checkout', @branch) } if @branch
-            SourcesManager.check_version_information(dir)
           end
         end
       end
