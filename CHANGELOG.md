@@ -60,6 +60,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4083](https://github.com/CocoaPods/CocoaPods/issues/4083)
 
+* The headers folders paths for static library pods will be unset, fixing
+  validation when archives are uploaded to iTunes Connect.  
+  [Boris Bügling](https://github.com/neonichu)
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4119](https://github.com/CocoaPods/CocoaPods/issues/4119)
+
 
 ## 0.39.0.beta.4 (2015-09-02)
 
