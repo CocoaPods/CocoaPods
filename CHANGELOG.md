@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [DJ Tarazona](https://github.com/djtarazona)
   [#4188](https://github.com/CocoaPods/CocoaPods/issues/4188)
 
+* A post-install summary of the pods installed is now printed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4124](https://github.com/CocoaPods/CocoaPods/issues/4124)
+
 ##### Bug Fixes
 
 * Give a meaningful message for the case where there is no available stable
