@@ -94,6 +94,8 @@ module Pod
           platform_message = '[OSX] '
         elsif result.platforms == [:watchos]
           platform_message = '[watchOS] '
+        elsif result.platforms == [:tvos]
+          platform_message = '[tvOS] '
         end
 
         subspecs_message = ''
@@ -615,6 +617,8 @@ module Pod
         command << ' CODE_SIGN_IDENTITY=- -sdk iphonesimulator'
       when :watchos
         command << ' CODE_SIGN_IDENTITY=- -sdk watchsimulator'
+      when :tvos
+        command << ' CODE_SIGN_IDENTITY=- -sdk appletvsimulator'
       end
 
       output, status = _xcodebuild "#{command} 2>&1"

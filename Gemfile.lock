@@ -7,11 +7,11 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9b06e3d9a6212cabf7ab6e3a77c849df3a983a4f
+  revision: 9cc774457e8326e7fed6961bab83cefeac67f266
   branch: master
   specs:
     cocoapods-core (0.39.0.beta.4)
-      activesupport (>= 3.2.15)
+      activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 27aecbfd66e883d1df616355347246b30fec551d
+  revision: 8347cca0149d6506c0a785a8faa7f6a17dee29fd
   branch: master
   specs:
     xcodeproj (0.27.2)
