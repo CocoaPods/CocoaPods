@@ -39,20 +39,47 @@ module Pod
         def run
           prefix = @shallow ? 'Creating shallow clone of' : 'Cloning'
           UI.section("#{prefix} spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
-            begin
-              config.repos_dir.mkpath
-            rescue SystemCallError => e
-              raise Informative, "Could not create repos directory '#{config.repos_dir}'\n#{e.errno.to_s} #{e.message}"
-            else
-              Dir.chdir(config.repos_dir) do
-                command = ['clone', @url, @name]
-                command << '--depth=1' if @shallow
-                git!(command)
-              end
-              Dir.chdir(dir) { git!('checkout', @branch) } if @branch
-              SourcesManager.check_version_information(dir)
-            end
+            create_repos_dir
+            clone_repo
+            checkout_branch
+            SourcesManager.check_version_information(dir)
           end
+        end
+
+        private
+
+        # Creates the repos directory specified in the configuration by
+        # `config.repos_dir`.
+        #
+        # @return [void]
+        #
+        # @raise  If the directory cannot be created due to a system error.
+        #
+        def create_repos_dir
+          config.repos_dir.mkpath
+        rescue SystemCallError => e
+          raise Informative, "Could not create repos directory '#{config.repos_dir}'\n#{e.message}"
+        end
+
+        # Clones the git spec-repo according to parameters passed to the
+        # command.
+        #
+        # @return [void]
+        #
+        def clone_repo
+          Dir.chdir(config.repos_dir) do
+            command = ['clone', @url, @name]
+            command << '--depth=1' if @shallow
+            git!(command)
+          end
+        end
+
+        # Checks out the branch of the git spec-repo if provided.
+        #
+        # @return [void]
+        #
+        def checkout_branch
+          Dir.chdir(dir) { git!('checkout', @branch) } if @branch
         end
       end
     end
