@@ -45,6 +45,7 @@ Integrating target `Pods` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+  Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
 
 [!] The `:local` option of the Podfile has been renamed to `:path` and it is deprecated.
 

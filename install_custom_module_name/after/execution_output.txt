@@ -85,3 +85,4 @@ Integrating target `Pods` (`Example.xcodeproj` project)
   Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+  Pod installation complete! There is 1 dependency from the Podfile and 2 total pods installed.
