@@ -12,6 +12,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   appropriate.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* The embed frameworks script will no longer manually copy over the Swift
+  runtime libraries on Xcode 7 and later.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [earltedly](https://github.com/segiddins)
+  [DJ Tarazona](https://github.com/djtarazona)
+  [#4188](https://github.com/CocoaPods/CocoaPods/issues/4188)
+
 ##### Bug Fixes
 
 * Give a meaningful message for the case where there is no available stable
