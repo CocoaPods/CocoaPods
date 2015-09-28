@@ -8,7 +8,7 @@ Harassment in code and discussion or violation of physical boundaries is complet
 
 ### In detail
 
-Harassment includes offensive verbal comments related to gender, sexual orientation, disability, physical appearance, body size, race, religion, sexual images, deliberate intimidation, stalking, sustained disruption, and unwelcome sexual attention.
+Harassment includes offensive verbal comments related to gender, sexual orientation, disability, physical appearance, body size, race, ethnicity, religion, sexual images, deliberate intimidation, stalking, sustained disruption, and unwelcome sexual attention.
 
 Individuals asked to stop any harassing behavior are expected to comply immediately.
 
@@ -26,7 +26,7 @@ Finally, don't forget that it is human to make mistakes! We all do. Let’s work
 
 ### Thanks
 
-Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/e3ce14f5ecd9b729338435c8689553ef209d83aa/CODE_OF_CONDUCT.md), [JSConf Code of Conduct](http://jsconf.com/codeofconduct.html), [Fedora Code of Conduct](http://fedoraproject.org/code-of-conduct), and [Contributor Covenant](http:contributor-covenant.org), version 1.1.0 for inspiration and ideas.
+Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/e3ce14f5ecd9b729338435c8689553ef209d83aa/CODE_OF_CONDUCT.md), [JSConf Code of Conduct](http://jsconf.com/codeofconduct.html), [Fedora Code of Conduct](http://fedoraproject.org/code-of-conduct), and [Contributor Covenant](http://contributor-covenant.org), version 1.2.0 for inspiration and ideas.
 
 ### License
 
