@@ -58,7 +58,8 @@ module Pod
         def create_repos_dir
           config.repos_dir.mkpath
         rescue SystemCallError => e
-          raise Informative, "Could not create repos directory '#{config.repos_dir}'.\n#{e.class.name}: #{e.message}"
+          raise Informative, "Could not create '#{config.repos_dir}', the CocoaPods repo cache directory.\n" \
+            "#{e.class.name}: #{e.message}"
         end
 
         # Clones the git spec-repo according to parameters passed to the
