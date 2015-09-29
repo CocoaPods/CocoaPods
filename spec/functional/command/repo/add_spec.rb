@@ -38,5 +38,14 @@ module Pod
         `git log --pretty=oneline`.strip.split("\n").size.should == 1
       end
     end
+
+    it 'raises an informative error when the repos directory fails to be created' do
+      repos_dir = config.repos_dir
+      def repos_dir.mkpath
+        raise SystemCallError, 'Operation not permitted'
+      end
+      e = lambda { run_command('repo', 'add', 'private', test_repo_path) }.should.raise Informative
+      e.message.should.match /Could not create '#{tmp_repos_path}', the CocoaPods repo cache directory./
+    end
   end
 end

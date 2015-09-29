@@ -71,6 +71,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Sylvain Guillopé](https://github.com/sguillope)
   [#3151](https://github.com/CocoaPods/CocoaPods/issues/3151)
 
+* Gracefully handle exception if creating the repos directory fails due to a
+  system error like a permission issue.
+  [Sylvain Guillopé](https://github.com/sguillope)
+  [#4177](https://github.com/CocoaPods/CocoaPods/issues/4177)
+
 ## 0.39.0.beta.4 (2015-09-02)
 
 ##### Bug Fixes
