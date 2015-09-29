@@ -45,7 +45,7 @@ module Pod
         raise SystemCallError, 'Operation not permitted'
       end
       e = lambda { run_command('repo', 'add', 'private', test_repo_path) }.should.raise Informative
-      e.message.should.match /Could not create repos directory '#{tmp_repos_path}'/
+      e.message.should.match /Could not create '#{tmp_repos_path}', the CocoaPods repo cache directory./
     end
   end
 end
