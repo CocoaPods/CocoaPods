@@ -636,7 +636,7 @@ module Pod
       def verify_platforms_specified!
         unless config.integrate_targets?
           podfile.target_definition_list.each do |target_definition|
-            if target_definition.dependencies.size > 0 && target_definition.platform.nil?
+            if !target_definition.empty? && target_definition.platform.nil?
               raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
             end
           end

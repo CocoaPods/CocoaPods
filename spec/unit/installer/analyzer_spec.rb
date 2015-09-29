@@ -221,7 +221,7 @@ module Pod
           config.integrate_targets = false
         end
 
-        it 'does not require a platform for a podless target' do
+        it 'does not require a platform for an empty target' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             xcodeproj 'SampleProject/SampleProject'
@@ -235,7 +235,21 @@ module Pod
           lambda { analyzer.analyze }.should.not.raise
         end
 
-        it 'raises if a target with pods does not specify a platform' do
+        it 'does not raise if a target with dependencies inherits the platform from its parent' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            xcodeproj 'SampleProject/SampleProject'
+            platform :osx
+            target 'TestRunner' do
+              pod 'monkey'
+            end
+          end
+
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          lambda { analyzer.analyze }.should.not.raise
+        end
+
+        it 'raises if a target with dependencies does not have a platform' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             xcodeproj 'SampleProject/SampleProject'
