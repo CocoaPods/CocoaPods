@@ -57,7 +57,7 @@ module Pod
         #
         def create_repos_dir
           config.repos_dir.mkpath
-        rescue SystemCallError => e
+        rescue => e
           raise Informative, "Could not create '#{config.repos_dir}', the CocoaPods repo cache directory.\n" \
             "#{e.class.name}: #{e.message}"
         end
