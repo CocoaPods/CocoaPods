@@ -212,6 +212,57 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
+      describe 'no-integrate platform validation' do
+        before do
+          repos = [fixture('spec-repos/test_repo')]
+          aggregate = Pod::Source::Aggregate.new(repos)
+          Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
+          aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
+          config.integrate_targets = false
+        end
+
+        it 'does not require a platform for an empty target' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            xcodeproj 'SampleProject/SampleProject'
+            target 'TestRunner' do
+              platform :osx
+              pod 'monkey'
+            end
+          end
+
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          lambda { analyzer.analyze }.should.not.raise
+        end
+
+        it 'does not raise if a target with dependencies inherits the platform from its parent' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            xcodeproj 'SampleProject/SampleProject'
+            platform :osx
+            target 'TestRunner' do
+              pod 'monkey'
+            end
+          end
+
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          lambda { analyzer.analyze }.should.not.raise
+        end
+
+        it 'raises if a target with dependencies does not have a platform' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            xcodeproj 'SampleProject/SampleProject'
+            target 'TestRunner' do
+              pod 'monkey'
+            end
+          end
+
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          lambda { analyzer.analyze }.should.raise Informative
+        end
+      end
+
       it 'returns all the configurations the user has in any of its projects and/or targets' do
         target_definition = @analyzer.podfile.target_definition_list.first
         target_definition.stubs(:build_configurations).returns('AdHoc' => :test)

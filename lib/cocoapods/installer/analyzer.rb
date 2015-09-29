@@ -255,7 +255,7 @@ module Pod
           target.client_root = config.installation_root
           target.user_target_uuids = []
           target.user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
-          if target_definition.platform.name == :osx
+          if target_definition.platform && target_definition.platform.name == :osx
             target.archs = '$(ARCHS_STANDARD_64_BIT)'
           end
         end
@@ -636,7 +636,7 @@ module Pod
       def verify_platforms_specified!
         unless config.integrate_targets?
           podfile.target_definition_list.each do |target_definition|
-            unless target_definition.platform
+            if !target_definition.empty? && target_definition.platform.nil?
               raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
             end
           end
