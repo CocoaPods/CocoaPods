@@ -50,16 +50,28 @@ module Pod
         #         The xcconfig to edit.
         #
         def self.add_settings_for_file_accessors_of_target(target, xcconfig)
-          # Recursively process all dependent targets to ensure dependency vendored
-          # frameworks and libraries are added to OTHER_LDFLAGS and FRAMEWORK_SEARCH_PATHS.
+          target.file_accessors.each do |file_accessor|
+            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
+          end
+          XCConfigHelper.add_vendored_dependency_build_settings(target, xcconfig)
+        end
+
+        # Adds build settings for vendored frameworks and libraries.
+        #
+        # @param [PodTarget] target
+        #        The pod target, which holds the list of +Spec::FileAccessor+.
+        #
+        # @param [Xcodeproj::Config] xcconfig
+        #        The xcconfig to edit.
+        #
+        def self.add_vendored_dependency_build_settings(target, xcconfig)
           if target.host_requires_frameworks?
             target.dependent_targets.each do |dependent_target|
-              add_settings_for_file_accessors_of_target(dependent_target, xcconfig)
+              XCConfigHelper.add_vendored_dependency_build_settings(dependent_target, xcconfig)
             end
           end
 
           target.file_accessors.each do |file_accessor|
-            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
             file_accessor.vendored_frameworks.each do |vendored_framework|
               XCConfigHelper.add_framework_build_settings(vendored_framework, xcconfig, target.sandbox.root)
             end
