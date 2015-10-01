@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 4e7b02d849c3e82dff7c1cdacf33df45516acaf3
+  revision: b44534d04023fbe82182a8be33d5c728f74c1b9c
   branch: master
   specs:
     claide (0.9.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9cc774457e8326e7fed6961bab83cefeac67f266
+  revision: ff8f9e00f601c247344b421dee7934933aaf017b
   branch: master
   specs:
     cocoapods-core (0.39.0.beta.4)
@@ -24,10 +24,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 8347cca0149d6506c0a785a8faa7f6a17dee29fd
+  revision: 8df79c548f100e52c24688fde6e886603a243324
   branch: master
   specs:
-    xcodeproj (0.27.2)
+    xcodeproj (0.28.0)
       activesupport (>= 3)
       claide (~> 0.9.1)
       colored (~> 1.2)
@@ -49,14 +49,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 1d315c26b6fbc82341493f97d7f45d74be0ee8f5
+  revision: b85d8a86a08b9d30cd6d4b2c156bae5215f74c12
   branch: master
   specs:
     cocoapods-search (0.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
-  revision: 464ed12e3d0d60ca942c7cf30e06ef4e11c86b12
+  revision: ab3fcaab3e6a04176c9add80bbfa69b9e7d68056
   branch: master
   specs:
     cocoapods-stats (0.6.1)
@@ -94,7 +94,7 @@ PATH
       escape (~> 0.0.4)
       molinillo (~> 0.3.1)
       nap (~> 1.0)
-      xcodeproj (~> 0.27.2)
+      xcodeproj (~> 0.28.0)
 
 GEM
   remote: https://rubygems.org/
@@ -139,7 +139,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.8.0)
+    minitest (5.8.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
