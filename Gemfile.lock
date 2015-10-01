@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: ff8f9e00f601c247344b421dee7934933aaf017b
+  revision: 62297124586428b0fdd6d791d2e1d15da3a8ac6c
   branch: master
   specs:
-    cocoapods-core (0.39.0.beta.4)
+    cocoapods-core (0.39.0.beta.5)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
@@ -80,10 +80,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.39.0.beta.4)
+    cocoapods (0.39.0.beta.5)
       activesupport (>= 4.0.2)
       claide (~> 0.9.1)
-      cocoapods-core (= 0.39.0.beta.4)
+      cocoapods-core (= 0.39.0.beta.5)
       cocoapods-downloader (~> 0.9.3)
       cocoapods-plugins (~> 0.4.2)
       cocoapods-search (~> 0.1.0)
