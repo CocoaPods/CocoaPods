@@ -67,12 +67,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#4119](https://github.com/CocoaPods/CocoaPods/issues/4119)
 
 * Don't require the `platform` attribute for targets without any declared pods
-  when running `pod install --no-integrate`.
+  when running `pod install --no-integrate`.  
   [Sylvain Guillopé](https://github.com/sguillope)
   [#3151](https://github.com/CocoaPods/CocoaPods/issues/3151)
 
 * Gracefully handle exception if creating the repos directory fails due to a
-  system error like a permission issue.
+  system error like a permission issue.  
   [Sylvain Guillopé](https://github.com/sguillope)
   [#4177](https://github.com/CocoaPods/CocoaPods/issues/4177)
 
