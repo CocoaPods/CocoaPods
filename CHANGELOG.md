@@ -6,6 +6,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* Activesupport 4 is now required, breaking compatibility with applications
+  locked to `3.x.y`.  
+
 ##### Enhancements
 
 * The `EMBEDDED_CONTENT_CONTAINS_SWIFT` build setting will now be set when
