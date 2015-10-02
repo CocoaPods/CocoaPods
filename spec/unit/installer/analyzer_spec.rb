@@ -206,8 +206,8 @@ module Pod
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-SampleProject-TestRunner/BananaLib
-            Pods-SampleProject-TestRunner/monkey
+            Pods-TestRunner/BananaLib
+            Pods-TestRunner/monkey
             Pods-SampleProject/BananaLib
             Pods-SampleProject/monkey
           ).sort
