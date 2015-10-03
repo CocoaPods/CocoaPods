@@ -127,7 +127,7 @@ module Pod
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == '-framework "Parse"'
-            hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"$(PODS_ROOT)/Parse"'
+            hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/Parse"'
           end
 
           it "doesn't override existing linker flags" do
@@ -143,7 +143,7 @@ module Pod
             xcconfig = Xcodeproj::Config.new('FRAMEWORK_SEARCH_PATHS' => '"path/to/frameworks"')
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
-            hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"path/to/frameworks" "$(PODS_ROOT)/Parse"'
+            hash_config['FRAMEWORK_SEARCH_PATHS'].should == '"path/to/frameworks" "${PODS_ROOT}/Parse"'
           end
         end
 
@@ -156,7 +156,7 @@ module Pod
             @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
-            hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "$(PODS_ROOT)/MapBox/Proj4"'
+            hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/MapBox/Proj4"'
           end
         end
 

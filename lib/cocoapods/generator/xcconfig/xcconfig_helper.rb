@@ -52,6 +52,26 @@ module Pod
         def self.add_settings_for_file_accessors_of_target(target, xcconfig)
           target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
+          end
+          XCConfigHelper.add_vendored_dependency_build_settings(target, xcconfig)
+        end
+
+        # Adds build settings for vendored frameworks and libraries.
+        #
+        # @param [PodTarget] target
+        #        The pod target, which holds the list of +Spec::FileAccessor+.
+        #
+        # @param [Xcodeproj::Config] xcconfig
+        #        The xcconfig to edit.
+        #
+        def self.add_vendored_dependency_build_settings(target, xcconfig)
+          if target.requires_frameworks?
+            target.dependent_targets.each do |dependent_target|
+              XCConfigHelper.add_vendored_dependency_build_settings(dependent_target, xcconfig)
+            end
+          end
+
+          target.file_accessors.each do |file_accessor|
             file_accessor.vendored_frameworks.each do |vendored_framework|
               XCConfigHelper.add_framework_build_settings(vendored_framework, xcconfig, target.sandbox.root)
             end
@@ -91,7 +111,7 @@ module Pod
         #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
           name = File.basename(framework_path, '.framework')
-          dirname = '$(PODS_ROOT)/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
+          dirname = '${PODS_ROOT}/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-framework #{name}",
             'FRAMEWORK_SEARCH_PATHS' => quote([dirname]),
@@ -113,7 +133,7 @@ module Pod
         #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
           name = File.basename(library_path, '.a').sub(/\Alib/, '')
-          dirname = '$(PODS_ROOT)/' + library_path.dirname.relative_path_from(sandbox_root).to_s
+          dirname = '${PODS_ROOT}/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-l#{name}",
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ' + quote([dirname]),
