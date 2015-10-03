@@ -4,6 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Support for adding dependency target vendored libraries and frameworks to build settings.  
+  [Kevin Coleman](https://github.com/kcoleman731)
+  [#4278](https://github.com/CocoaPods/CocoaPods/pull/4278)
+
+
 ## 0.39.0.beta.5 (2015-10-01)
 
 ##### Breaking
@@ -28,10 +37,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4124](https://github.com/CocoaPods/CocoaPods/issues/4124)
 
-* Support for adding dependency target vendored libraries and frameworks to build settings.  
-  [Kevin Coleman](https://github.com/kcoleman731)
-  [#4278](https://github.com/CocoaPods/CocoaPods/pull/4278)
-  
 ##### Bug Fixes
 
 * Give a meaningful message for the case where there is no available stable
