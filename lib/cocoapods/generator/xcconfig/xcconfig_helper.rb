@@ -65,7 +65,7 @@ module Pod
         #        The xcconfig to edit.
         #
         def self.add_vendored_dependency_build_settings(target, xcconfig)
-          if target.host_requires_frameworks?
+          if target.requires_frameworks?
             target.dependent_targets.each do |dependent_target|
               XCConfigHelper.add_vendored_dependency_build_settings(dependent_target, xcconfig)
             end

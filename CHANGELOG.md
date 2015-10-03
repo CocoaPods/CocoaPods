@@ -23,8 +23,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4124](https://github.com/CocoaPods/CocoaPods/issues/4124)
 
-* Support for adding dependency target vendored libraries and frameworks to build settings.
+* Support for adding dependency target vendored libraries and frameworks to build settings.  
   [Kevin Coleman](https://github.com/kcoleman731)
+  [#4278](https://github.com/CocoaPods/CocoaPods/pull/4278)
   
 ##### Bug Fixes
 
