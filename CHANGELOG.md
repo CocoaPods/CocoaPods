@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kevin Coleman](https://github.com/kcoleman731)
   [#4278](https://github.com/CocoaPods/CocoaPods/pull/4278)
 
+* Always link the aggregate target as static to the user project.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4137](https://github.com/CocoaPods/CocoaPods/pull/4137)
+
 
 ## 0.39.0.beta.5 (2015-10-01)
 
@@ -91,12 +95,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#4177](https://github.com/CocoaPods/CocoaPods/issues/4177)
 
 ## 0.39.0.beta.4 (2015-09-02)
-
-##### Enhancements
-
-* Always link the aggregate target as static to the user project.  
-  [Marius Rackwitz](https://github.com/mrackwitz)
-  [#4137](https://github.com/CocoaPods/CocoaPods/pull/4137)
 
 ##### Bug Fixes
 
