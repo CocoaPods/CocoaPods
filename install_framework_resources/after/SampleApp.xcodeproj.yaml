@@ -34,9 +34,7 @@ Targets:
       - ViewController.swift
       - AppDelegate.swift
     - FrameworksBuildPhase:
-      - Pods_SampleApp.framework:
-          ATTRIBUTES:
-          - Weak
+      - Pods_SampleApp.framework
     - ResourcesBuildPhase:
       - Images.xcassets
       - Main.storyboard
@@ -65,9 +63,7 @@ Targets:
     - SourcesBuildPhase:
       - SampleAppTests.swift
     - FrameworksBuildPhase:
-      - Pods_SampleAppTests.framework:
-          ATTRIBUTES:
-          - Weak
+      - Pods_SampleAppTests.framework
     - ResourcesBuildPhase: []
     - Embed Pods Frameworks: []
     - Copy Pods Resources: []

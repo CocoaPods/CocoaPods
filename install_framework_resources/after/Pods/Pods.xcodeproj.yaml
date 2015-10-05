@@ -73,6 +73,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+          MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -99,6 +100,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+          MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
@@ -135,6 +137,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+          MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -161,6 +164,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+          MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'

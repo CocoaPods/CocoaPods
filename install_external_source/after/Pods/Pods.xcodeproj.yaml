@@ -44,6 +44,7 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MACH_O_TYPE: staticlib
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -57,6 +58,7 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MACH_O_TYPE: staticlib
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''

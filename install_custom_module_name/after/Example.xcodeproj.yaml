@@ -23,9 +23,7 @@ Targets:
       - ViewController.swift
       - AppDelegate.swift
     - FrameworksBuildPhase:
-      - Pods.framework:
-          ATTRIBUTES:
-          - Weak
+      - Pods.framework
     - ResourcesBuildPhase: []
     - Embed Pods Frameworks: []
     - Copy Pods Resources: []

@@ -37,9 +37,7 @@ Targets:
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
-      - Pods.framework:
-          ATTRIBUTES:
-          - Weak
+      - Pods.framework
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf

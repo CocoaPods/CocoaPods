@@ -65,6 +65,7 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MACH_O_TYPE: staticlib
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -78,6 +79,7 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MACH_O_TYPE: staticlib
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -154,6 +156,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods-OS X App/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+          MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/Pods-OS X App/Pods-OS X App.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -181,6 +184,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/Pods-OS X App/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
+          MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/Pods-OS X App/Pods-OS X App.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
