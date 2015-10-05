@@ -24,7 +24,7 @@ module Pod
             explicit_dependencies = lockfile.to_hash['DEPENDENCIES'] || []
             explicit_dependencies.each do |string|
               dependency = Dependency.new(string)
-              dependency_graph.add_root_vertex(dependency.name, nil)
+              dependency_graph.add_vertex(dependency.name, nil, true)
             end
 
             pods = lockfile.to_hash['PODS'] || []

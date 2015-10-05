@@ -22,7 +22,7 @@ group :development do
   cp_gem 'cocoapods-stats',      'cocoapods-stats'
   cp_gem 'cocoapods-trunk',      'cocoapods-trunk'
   cp_gem 'cocoapods-try',        'cocoapods-try'
-  cp_gem 'molinillo',            'Molinillo', '0.3-stable'
+  cp_gem 'molinillo',            'Molinillo'
   cp_gem 'xcodeproj',            'Xcodeproj'
 
   gem 'cocoapods-dependencies'

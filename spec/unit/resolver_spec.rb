@@ -2,7 +2,7 @@ require File.expand_path('../../spec_helper', __FILE__)
 
 def dependency_graph_from_array(locked_dependencies)
   locked_dependencies.reduce(Molinillo::DependencyGraph.new) do |graph, dep|
-    graph.add_root_vertex(dep.name, dep)
+    graph.add_vertex(dep.name, dep, true)
     graph
   end
 end
