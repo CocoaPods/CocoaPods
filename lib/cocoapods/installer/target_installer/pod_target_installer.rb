@@ -310,6 +310,15 @@ module Pod
         end
       end
 
+      # The deployment target for the pod target, which is the maximum of all
+      # the deployment targets for the current platform of the target.
+      #
+      # @return [String] The deployment target.
+      #
+      def deployment_target
+        target.specs.map { |spec| spec.deployment_target(target.platform) }.max
+      end
+
       #-----------------------------------------------------------------------#
     end
   end

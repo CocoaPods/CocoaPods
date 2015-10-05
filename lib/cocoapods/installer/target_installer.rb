@@ -39,7 +39,6 @@ module Pod
         product_type = target.product_type
         name = target.label
         platform = target.platform.name
-        deployment_target = target.platform.deployment_target.to_s
         language = target.uses_swift? ? :swift : :objc
         @native_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
 
@@ -57,6 +56,12 @@ module Pod
         end
 
         target.native_target = @native_target
+      end
+
+      # @return [String] The deployment target.
+      #
+      def deployment_target
+        target.platform.deployment_target.to_s
       end
 
       # Returns the customized build settings which are overridden in the build
