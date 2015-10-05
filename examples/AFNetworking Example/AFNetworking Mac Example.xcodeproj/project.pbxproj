@@ -153,6 +153,7 @@
 				F8129BF81591061B009BFE23 /* Frameworks */,
 				F8129BF91591061B009BFE23 /* Resources */,
 				CC1632E381344B54BA63986B /* Copy Pods Resources */,
+				F0DC30B6798CF042746A5614 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,6 +230,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0DC30B6798CF042746A5614 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AFNetworking Example/Pods-AFNetworking Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
