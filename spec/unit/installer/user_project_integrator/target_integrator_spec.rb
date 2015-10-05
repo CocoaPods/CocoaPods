@@ -24,6 +24,9 @@ module Pod
         @pod_bundle.xcconfigs['Debug'] = configuration
         @pod_bundle.xcconfigs['Release'] = configuration
         @target_integrator = TargetIntegrator.new(@pod_bundle)
+        @target_integrator.private_methods.grep(/^update_to_cocoapods_/).each do |method|
+          @target_integrator.stubs(method)
+        end
       end
 
       describe '#integrate!' do
@@ -48,6 +51,7 @@ module Pod
         end
 
         it 'fixes the "Link binary with libraries" build phase of legacy installations' do
+          @target_integrator.unstub(:update_to_cocoapods_0_39)
           @pod_bundle.stubs(:requires_frameworks? => true)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first

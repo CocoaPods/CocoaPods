@@ -127,11 +127,16 @@ module Pod
         # @todo   This can be removed for CocoaPods 1.0
         #
         def update_to_cocoapods_0_39
-          requires_update = native_targets_to_embed_in.any? do |target|
-            !target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          targets_to_embed = native_targets.select do |target|
+            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
+          end
+          requires_update = targets_to_embed.any? do |target|
+            !target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
           end
           if requires_update
-            add_embed_frameworks_script_phase
+            targets_to_embed.each do |native_target|
+              add_embed_frameworks_script_phase_to_target(native_target)
+            end
           end
 
           frameworks = user_project.frameworks_group
@@ -190,10 +195,14 @@ module Pod
         #
         def add_embed_frameworks_script_phase
           native_targets_to_embed_in.each do |native_target|
-            phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
-            script_path = target.embed_frameworks_script_relative_path
-            phase.shell_script = %("#{script_path}"\n)
+            add_embed_frameworks_script_phase_to_target(native_target)
           end
+        end
+
+        def add_embed_frameworks_script_phase_to_target(native_target)
+          phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
+          script_path = target.embed_frameworks_script_relative_path
+          phase.shell_script = %("#{script_path}"\n)
         end
 
         # Delete a 'Embed Pods Frameworks' Copy Files Build Phase if present
