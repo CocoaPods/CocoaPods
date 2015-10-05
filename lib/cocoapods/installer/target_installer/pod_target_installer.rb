@@ -112,6 +112,7 @@ module Pod
             file_references = paths.map { |sf| project.reference_for_path(sf) }
             label = target.resources_bundle_target_label(bundle_name)
             bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
+            bundle_target.deployment_target = target.platform.deployment_target.to_s
             bundle_target.product_reference.tap do |bundle_product|
               bundle_file_name = "#{bundle_name}.bundle"
               bundle_product.name = bundle_file_name
