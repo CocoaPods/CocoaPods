@@ -64,6 +64,7 @@ Integrating client project
 
 Integrating target `Pods` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
+  Adding Build Phase 'Embed Pods Frameworks' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
   Pod installation complete! There are 2 dependencies from the Podfile and 2 total pods installed.

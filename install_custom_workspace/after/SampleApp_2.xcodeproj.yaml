@@ -43,6 +43,7 @@ Targets:
       - MainMenu.xib
     - Copy Pods Resources: []
     - Copy Pods Resources: []
+    - Embed Pods Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
