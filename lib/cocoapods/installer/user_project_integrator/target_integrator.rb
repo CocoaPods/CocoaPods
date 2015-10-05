@@ -132,8 +132,26 @@ module Pod
           end
           if requires_update
             add_embed_frameworks_script_phase
-            true
           end
+
+          frameworks = user_project.frameworks_group
+          native_targets.each do |native_target|
+            build_phase = native_target.frameworks_build_phase
+
+            product_ref = frameworks.files.find { |f| f.path == target.product_name }
+            if product_ref
+              build_file = build_phase.build_file(product_ref)
+              if build_file &&
+                  build_file.settings.is_a?(Hash) &&
+                  build_file.settings['ATTRIBUTES'].is_a?(Array) &&
+                  build_file.settings['ATTRIBUTES'].include?('Weak')
+                build_file.settings = nil
+                requires_update = true
+              end
+            end
+          end
+
+          requires_update
         end
 
         # Adds spec product reference to the frameworks build phase of the
@@ -161,15 +179,8 @@ module Pod
             target_basename = target.product_basename
             new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
               frameworks.new_product_ref_for_target(target_basename, target.product_type)
-            build_file = build_phase.build_file(new_product_ref) ||
+            build_phase.build_file(new_product_ref) ||
               build_phase.add_file_reference(new_product_ref, true)
-            if target.requires_frameworks?
-              # Weak link the aggregate target's product, because as it contains
-              # no symbols, it isn't copied into the app bundle. dyld will so
-              # never try to find the missing executable at runtime.
-              build_file.settings ||= {}
-              build_file.settings['ATTRIBUTES'] = ['Weak']
-            end
           end
         end
 

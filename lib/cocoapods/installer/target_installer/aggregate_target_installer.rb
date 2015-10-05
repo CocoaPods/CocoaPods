@@ -47,6 +47,7 @@ module Pod
           'OTHER_LIBTOOLFLAGS' => '',
           'PODS_ROOT'          => '$(SRCROOT)',
           'SKIP_INSTALL'       => 'YES',
+          'MACH_O_TYPE'        => 'staticlib',
         }
         super.merge(settings)
       end

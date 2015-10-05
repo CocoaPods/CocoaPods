@@ -101,6 +101,13 @@ module Pod
         end
       end
 
+      it 'will be built as static library' do
+        @installer.install!
+        @installer.target.native_target.build_configurations.each do |config|
+          config.build_settings['MACH_O_TYPE'].should == 'staticlib'
+        end
+      end
+
       it 'will be skipped when installing' do
         @installer.install!
         @installer.target.native_target.build_configurations.each do |config|
