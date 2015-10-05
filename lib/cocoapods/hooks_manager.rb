@@ -1,4 +1,4 @@
-require 'rubygems'
+require 'active_support/core_ext/hash/indifferent_access'
 
 module Pod
   # Provides support for the hook system of CocoaPods. The system is designed
@@ -112,7 +112,9 @@ module Pod
                            "`#{hook.block.source_location.first}`" do
                   block = hook.block
                   if block.arity > 1
-                    block.call(context, whitelisted_plugins[hook.plugin_name])
+                    user_options = whitelisted_plugins[hook.plugin_name]
+                    user_options = user_options.with_indifferent_access if user_options
+                    block.call(context, user_options)
                   else
                     block.call(context)
                   end
