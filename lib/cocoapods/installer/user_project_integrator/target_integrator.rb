@@ -135,16 +135,16 @@ module Pod
           end
 
           frameworks = user_project.frameworks_group
-          native_targets_to_embed_in.each do |native_target|
+          native_targets.each do |native_target|
             build_phase = native_target.frameworks_build_phase
 
             product_ref = frameworks.files.find { |f| f.path == target.product_name }
             if product_ref
               build_file = build_phase.build_file(product_ref)
-              if build_file \
-                && build_file.settings.is_a?(Hash) \
-                && build_file.settings['ATTRIBUTES'].is_a?(Array) \
-                && build_file.settings['ATTRIBUTES'].include?('Weak')
+              if build_file &&
+                build_file.settings.is_a?(Hash) &&
+                build_file.settings['ATTRIBUTES'].is_a?(Array) &&
+                build_file.settings['ATTRIBUTES'].include?('Weak')
                 build_file.settings = nil
                 requires_update = true
               end
