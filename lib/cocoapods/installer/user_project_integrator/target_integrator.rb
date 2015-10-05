@@ -142,9 +142,9 @@ module Pod
             if product_ref
               build_file = build_phase.build_file(product_ref)
               if build_file &&
-                build_file.settings.is_a?(Hash) &&
-                build_file.settings['ATTRIBUTES'].is_a?(Array) &&
-                build_file.settings['ATTRIBUTES'].include?('Weak')
+                  build_file.settings.is_a?(Hash) &&
+                  build_file.settings['ATTRIBUTES'].is_a?(Array) &&
+                  build_file.settings['ATTRIBUTES'].include?('Weak')
                 build_file.settings = nil
                 requires_update = true
               end
