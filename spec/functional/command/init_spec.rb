@@ -53,15 +53,17 @@ module Pod
         project.new_target(:application, 'AppA', :ios)
         project.new_target(:application, 'AppB', :ios)
         project.new_target(:application, "App'C", :ios)
+        project.new_aggregate_target('Aggregate')
         project.save
 
         run_command('init')
 
-        config.podfile.nil?.should == false
-        config.podfile.target_definitions.length.should == project.targets.length + 1
-        config.podfile.target_definitions['AppA'].nil?.should == false
-        config.podfile.target_definitions['AppB'].nil?.should == false
-        config.podfile.target_definitions["App'C"].nil?.should == false
+        config.podfile.should.not.be.nil
+        config.podfile.target_definitions.length.should == project.targets.length
+        config.podfile.target_definitions['AppA'].should.not.be.nil
+        config.podfile.target_definitions['AppB'].should.not.be.nil
+        config.podfile.target_definitions["App'C"].should.not.be.nil
+        config.podfile.target_definitions['Aggregate'].should.be.nil
       end
     end
 
