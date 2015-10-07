@@ -7,7 +7,6 @@ module Pod
         describe 'in general' do
           before do
             @monkey_spec = fixture_spec('monkey/monkey.podspec')
-            @monkey_spec.vendored_framework = 'monkey.framework'
             @monkey_pod_target = fixture_pod_target(@monkey_spec)
 
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
@@ -54,6 +53,10 @@ module Pod
 
           it 'includes the vendored dynamic frameworks for dependecy pods of the specification' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "monkey"')
+          end
+
+          it 'includes does not include vendored static frameworks for dependecy pods of the specification' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-l"monkey.a"')
           end
 
           it 'does not configure the project to load all members that implement Objective-c classes or categories from the static library' do
