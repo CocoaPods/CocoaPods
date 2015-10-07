@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "http://monkey.local/monkey.git", :tag => s.version.to_s }
   s.license          = 'MIT'
 
-  s.vendored_framework    = 'monkey.framework'
+  s.vendored_framework    = 'dynamic-monkey.framework'
   s.vendored_library      = 'monkey.a'
   s.public_header_files   = 'monkey.h'
 end

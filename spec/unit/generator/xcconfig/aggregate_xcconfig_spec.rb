@@ -157,13 +157,9 @@ module Pod
               fixture_spec('monkey/monkey.podspec')
             end
 
-            it 'does not add the framework build path to the xcconfig' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
-            end
-
-            it 'configures the project to load all members that implement Objective-c classes or categories' do
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
-            end
+            # it 'does not add the framework build path to the xcconfig' do
+            #   @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
+            # end
 
             it 'does not include framework header paths as local headers for pods that are linked statically' do
               monkey_headers = '-iquote "$CONFIGURATION_BUILD_DIR/monkey.framework/Headers"'
