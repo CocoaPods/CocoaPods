@@ -55,7 +55,7 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "dynamic-monkey"')
           end
 
-          it 'includes does not include vendored static frameworks for dependecy pods of the specification' do
+          it 'does not include vendored static frameworks for dependecy pods of the specification' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-l"monkey.a"')
           end
 
