@@ -161,6 +161,10 @@ module Pod
               @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.be.nil
             end
 
+            it 'configures the project to load all members that implement Objective-c classes or categories' do
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
+            end
+
             it 'does not include framework header paths as local headers for pods that are linked statically' do
               monkey_headers = '-iquote "$CONFIGURATION_BUILD_DIR/monkey.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should.not.include monkey_headers
