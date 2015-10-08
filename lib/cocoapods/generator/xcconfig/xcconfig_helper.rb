@@ -65,6 +65,9 @@ module Pod
         # @param [Xcodeproj::Config] xcconfig
         #        The xcconfig to edit.
         #
+        # @param [Spec::FileAccessor] file_accessor
+        #        The file accessor, which holds the list of static frameworks.
+        #
         def self.add_static_dependency_build_settings(target, xcconfig, file_accessor)
           file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
             XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, target.sandbox.root)
