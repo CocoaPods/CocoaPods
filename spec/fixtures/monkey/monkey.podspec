@@ -7,6 +7,8 @@ Pod::Spec.new do |s|
   s.homepage         = "http://httpbin.org/html"
   s.source           = { :git => "http://monkey.local/monkey.git", :tag => s.version.to_s }
   s.license          = 'MIT'
-  s.vendored_library = 'monkey.a'
-  s.public_header_files = 'monkey.h'
+
+  s.vendored_framework    = 'dynamic-monkey.framework'
+  s.vendored_library      = 'monkey.a'
+  s.public_header_files   = 'monkey.h'
 end

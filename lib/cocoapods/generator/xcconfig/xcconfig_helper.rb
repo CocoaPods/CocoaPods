@@ -52,11 +52,12 @@ module Pod
         def self.add_settings_for_file_accessors_of_target(target, xcconfig)
           target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
+            XCConfigHelper.add_static_dependency_build_settings(target, xcconfig, file_accessor)
           end
-          XCConfigHelper.add_vendored_dependency_build_settings(target, xcconfig)
+          XCConfigHelper.add_dynamic_dependency_build_settings(target, xcconfig)
         end
 
-        # Adds build settings for vendored frameworks and libraries.
+        # Adds build settings for static vendored frameworks and libraries.
         #
         # @param [PodTarget] target
         #        The pod target, which holds the list of +Spec::FileAccessor+.
@@ -64,19 +65,39 @@ module Pod
         # @param [Xcodeproj::Config] xcconfig
         #        The xcconfig to edit.
         #
-        def self.add_vendored_dependency_build_settings(target, xcconfig)
+        # @param [Spec::FileAccessor] file_accessor
+        #        The file accessor, which holds the list of static frameworks.
+        #
+        def self.add_static_dependency_build_settings(target, xcconfig, file_accessor)
+          file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
+            XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, target.sandbox.root)
+          end
+          file_accessor.vendored_static_libraries.each do |vendored_static_library|
+            XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, target.sandbox.root)
+          end
+        end
+
+        # Adds build settings for dynamic vendored frameworks and libraries.
+        #
+        # @param [PodTarget] target
+        #        The pod target, which holds the list of +Spec::FileAccessor+.
+        #
+        # @param [Xcodeproj::Config] xcconfig
+        #        The xcconfig to edit.
+        #
+        def self.add_dynamic_dependency_build_settings(target, xcconfig)
           if target.requires_frameworks?
             target.dependent_targets.each do |dependent_target|
-              XCConfigHelper.add_vendored_dependency_build_settings(dependent_target, xcconfig)
+              XCConfigHelper.add_dynamic_dependency_build_settings(dependent_target, xcconfig)
             end
           end
 
           target.file_accessors.each do |file_accessor|
-            file_accessor.vendored_frameworks.each do |vendored_framework|
-              XCConfigHelper.add_framework_build_settings(vendored_framework, xcconfig, target.sandbox.root)
+            file_accessor.vendored_dynamic_frameworks.each do |vendored_dynamic_framework|
+              XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, target.sandbox.root)
             end
-            file_accessor.vendored_libraries.each do |vendored_library|
-              XCConfigHelper.add_library_build_settings(vendored_library, xcconfig, target.sandbox.root)
+            file_accessor.vendored_dynamic_libraries.each do |vendored_dynamic_library|
+              XCConfigHelper.add_library_build_settings(vendored_dynamic_library, xcconfig, target.sandbox.root)
             end
           end
         end
