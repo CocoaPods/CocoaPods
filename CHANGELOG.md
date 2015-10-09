@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4137](https://github.com/CocoaPods/CocoaPods/pull/4137)
 
+##### Bug Fixes
+
+* Only link dynamic vendored frameworks and libraries of pod dependencies.  
+  [Kevin Coleman](https://github.com/kcoleman731)
+  [#4341](https://github.com/CocoaPods/CocoaPods/pull/4341)
 
 ## 0.39.0.beta.5 (2015-10-01)
 
