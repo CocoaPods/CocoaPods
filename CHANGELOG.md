@@ -24,6 +24,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4137](https://github.com/CocoaPods/CocoaPods/pull/4137)
 
+
 ## 0.39.0.beta.5 (2015-10-01)
 
 ##### Breaking
