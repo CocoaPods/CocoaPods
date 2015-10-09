@@ -6,6 +6,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Podfile-specified options are passed to plugins as hashes that treat string
+  and symbol keys identically.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3354](https://github.com/CocoaPods/CocoaPods/issues/3354)
+
+
 ##### Bug Fixes
 
 * Only link dynamic vendored frameworks and libraries of pod dependencies.  
