@@ -37,8 +37,8 @@ module Pod
         @installer.install!
         target = @project.targets.first
         target.platform_name.should == :ios
-        target.deployment_target.should == '6.0'
-        target.build_settings('Debug')['IPHONEOS_DEPLOYMENT_TARGET'].should == '6.0'
+        target.deployment_target.should == '4.3'
+        target.build_settings('Debug')['IPHONEOS_DEPLOYMENT_TARGET'].should == '4.3'
       end
 
       it 'sets the platform and the deployment target for OS X targets' do
@@ -46,8 +46,8 @@ module Pod
         @installer.install!
         target = @project.targets.first
         target.platform_name.should == :osx
-        target.deployment_target.should == '10.8'
-        target.build_settings('Debug')['MACOSX_DEPLOYMENT_TARGET'].should == '10.8'
+        target.deployment_target.should == '10.6'
+        target.build_settings('Debug')['MACOSX_DEPLOYMENT_TARGET'].should == '10.6'
       end
 
       it "adds the user's build configurations to the target" do

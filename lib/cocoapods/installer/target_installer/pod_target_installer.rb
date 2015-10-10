@@ -316,7 +316,8 @@ module Pod
       # @return [String] The deployment target.
       #
       def deployment_target
-        target.specs.map { |spec| spec.deployment_target(target.platform) }.max
+        default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[target.platform.name]
+        target.specs.map { |spec| spec.deployment_target(target.platform) || default }.max
       end
 
       #-----------------------------------------------------------------------#
