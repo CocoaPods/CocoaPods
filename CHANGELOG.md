@@ -4,6 +4,15 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Bug Fixes
+
+* Fix a crash in dependency resolution when running Ruby 2.3.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4345](https://github.com/CocoaPods/CocoaPods/issues/4345)
+
+
 ## 0.39.0 (2015-10-09)
 
 ##### Enhancements

@@ -14,6 +14,10 @@ module Pod
           specification.send(method, *args, &block)
         end
 
+        def respond_to_missing?(method, include_all = false)
+          specification.respond_to?(method, include_all)
+        end
+
         def subspec_by_name(name = nil, raise_if_missing = true)
           if !name || name == self.name
             self
