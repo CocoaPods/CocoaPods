@@ -1,5 +1,6 @@
 os:
   - osx
+osx_image: xcode7
 language: ruby
 cache: bundler
 rvm:
