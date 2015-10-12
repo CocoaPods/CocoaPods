@@ -141,17 +141,29 @@ module Pod
       # @return [void]
       #
       def store_podspec(sandbox, spec, json = false)
-        if spec.is_a? Pathname
-          spec = Specification.from_file(spec).to_pretty_json
-          json = true
-        elsif spec.is_a?(String) && !json
-          spec = Specification.from_string(spec, 'spec.podspec').to_pretty_json
-          json = true
-        elsif spec.is_a?(Specification)
-          spec = spec.to_pretty_json
-          json = true
+        case spec
+        when Pathname
+          spec = Specification.from_file(spec)
+        when String
+          path = "#{name}.podspec"
+          path << '.json' if json
+          spec = Specification.from_string(spec, path)
         end
-        sandbox.store_podspec(name, spec, true, json)
+        validate_podspec(spec)
+        sandbox.store_podspec(name, spec.to_pretty_json, true, true)
+      end
+
+      def validate_podspec(podspec)
+        validator                = Validator.new(podspec, [])
+        validator.quick          = true
+        validator.allow_warnings = true
+        validator.ignore_public_only_results = true
+        Config.instance.with_changes(:silent => true) do
+          validator.validate
+        end
+        unless validator.validated?
+          raise Informative, "The `#{name}` pod failed to validate due to #{validator.failure_reason}:\n#{validator.results_message}"
+        end
       end
     end
   end

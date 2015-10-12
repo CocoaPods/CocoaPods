@@ -88,6 +88,11 @@ module Pod
     # @return [void]
     #
     def print_results
+      UI.puts results_message
+    end
+
+    def results_message
+      message = ''
       results.each do |result|
         if result.platforms == [:ios]
           platform_message = '[iOS] '
@@ -114,9 +119,9 @@ module Pod
         when :warning then type = 'WARN'
         when :note    then type = 'NOTE'
         else raise "#{result.type}" end
-        UI.puts "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.attribute_name}: #{result.message}"
+        message << "    - #{type.ljust(5)} | #{platform_message}#{subspecs_message}#{result.attribute_name}: #{result.message}\n"
       end
-      UI.puts
+      message << "\n"
     end
 
     def failure_reason
