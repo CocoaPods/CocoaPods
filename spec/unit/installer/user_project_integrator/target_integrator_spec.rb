@@ -10,12 +10,12 @@ module Pod
       before do
         project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
         @project = Xcodeproj::Project.open(project_path)
-        Xcodeproj::Project.new(config.sandbox.project_path).save
+        Project.new(config.sandbox.project_path).save
         @target = @project.targets.first
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.link_with_first_target = true
         @pod_bundle = AggregateTarget.new(target_definition, config.sandbox)
-        @pod_bundle.user_project_path = project_path
+        @pod_bundle.user_project = @project
         @pod_bundle.client_root = project_path.dirname
         @pod_bundle.user_target_uuids = [@target.uuid]
         configuration = Xcodeproj::Config.new(

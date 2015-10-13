@@ -491,7 +491,7 @@ module Pod
         end
 
         before do
-          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
+          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}, :target_inspections => nil))
         end
 
         it 'creates the Pods project' do
@@ -656,7 +656,7 @@ module Pod
       describe '#write_pod_project' do
         before do
           @installer.stubs(:aggregate_targets).returns([])
-          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}))
+          @installer.stubs(:analysis_result).returns(stub(:all_user_build_configurations => {}, :target_inspections => nil))
           @installer.send(:prepare_pods_project)
         end
 
@@ -695,7 +695,7 @@ module Pod
 
           aggregate_target = AggregateTarget.new(nil, config.sandbox)
           aggregate_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-          aggregate_target.stubs(:user_project_path).returns(proj.path)
+          aggregate_target.stubs(:user_project).returns(proj)
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
 
           @installer.send(:prepare_pods_project)

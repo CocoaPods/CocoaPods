@@ -35,6 +35,8 @@ module Pod
         #         due to the presence of Swift source in the user's targets
         #
         attr_accessor :recommends_frameworks
+
+        attr_accessor :project
       end
     end
   end

@@ -548,9 +548,7 @@ module Pod
     #
     def prepare_pods_project
       UI.message '- Creating Pods project' do
-        object_version = aggregate_targets.map(&:user_project_path).compact.map do |path|
-          Xcodeproj::Project.open(path).object_version.to_i
-        end.min
+        object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
 
         if object_version
           @pods_project = Pod::Project.new(sandbox.project_path, false, object_version)

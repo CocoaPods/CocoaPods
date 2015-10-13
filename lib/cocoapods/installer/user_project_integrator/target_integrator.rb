@@ -268,7 +268,7 @@ module Pod
         #         match the given target.
         #
         def native_targets
-          @native_targets ||= target.user_targets(user_project)
+          @native_targets ||= target.user_targets
         end
 
         # @return [Array<PBXNativeTarget>] The list of all the targets that
@@ -305,7 +305,7 @@ module Pod
         # @return [Project]
         #
         def user_project
-          @user_project ||= Xcodeproj::Project.open(target.user_project_path)
+          target.user_project
         end
 
         # @return [Specification::Consumer] the consumer for the specifications.

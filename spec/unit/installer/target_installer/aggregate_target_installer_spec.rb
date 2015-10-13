@@ -24,7 +24,6 @@ module Pod
 
         @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-        @target.user_project_path = config.sandbox.root + '../user_project.xcodeproj'
         @target.client_root = config.sandbox.root.dirname
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
 

@@ -31,7 +31,7 @@ module Pod
 
       it 'returns the user targets' do
         project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-        @target.user_project_path = project_path
+        @target.user_project = Xcodeproj::Project.open(project_path)
         @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
         targets = @target.user_targets
         targets.count.should == 1

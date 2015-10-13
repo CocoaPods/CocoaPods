@@ -246,7 +246,7 @@ module Pod
 
         if config.integrate_targets?
           target_inspection = result.target_inspections[target_definition]
-          target.user_project_path = target_inspection.project_path
+          target.user_project = target_inspection.project
           target.client_root = target.user_project_path.dirname
           target.user_target_uuids = target_inspection.project_target_uuids
           target.user_build_configurations = target_inspection.build_configurations
@@ -654,12 +654,19 @@ module Pod
       def inspect_targets_to_integrate
         inspection_result = {}
         UI.section 'Inspecting targets to integrate' do
-          podfile.target_definition_list.each do |target_definition|
-            inspector = TargetInspector.new(target_definition, config.installation_root)
-            results = inspector.compute_results
-            inspection_result[target_definition] = results
-            UI.message('Using `ARCHS` setting to build architectures of ' \
-              "target `#{target_definition.label}`: (`#{results.archs.join('`, `')}`)")
+          inspectors = podfile.target_definition_list.map do |target_definition|
+            TargetInspector.new(target_definition, config.installation_root)
+          end
+          inspectors.group_by(&:compute_project_path).each do |project_path, target_inspectors|
+            project = Xcodeproj::Project.open(project_path)
+            target_inspectors.each do |inspector|
+              target_definition = inspector.target_definition
+              inspector.user_project = project
+              results = inspector.compute_results
+              inspection_result[target_definition] = results
+              UI.message('Using `ARCHS` setting to build architectures of ' \
+                "target `#{target_definition.label}`: (`#{results.archs.join('`, `')}`)")
+            end
           end
         end
         inspection_result
