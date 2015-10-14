@@ -74,6 +74,7 @@ module Pod
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
         @result.sandbox_state   = generate_sandbox_state
+        verify_extension_bs
         @result
       end
 
@@ -273,6 +274,7 @@ module Pod
         target.pod_targets = pod_targets.select do |pod_target|
           pod_target.target_definitions.include?(target_definition)
         end
+        target.embedded_pod_targets = target.pod_targets
         target
       end
 
@@ -691,6 +693,25 @@ module Pod
           end
         end
         inspection_result
+      end
+
+      def verify_extension_bs
+        inspections = Hash(@result.target_inspections)
+        inspections.each do |td, inspection|
+          project = Xcodeproj::Project.open(inspection.project_path)
+          inspection.targets_to_embed_in.each do |native_target|
+            td_for_target, inspection_for_target = inspections.find { |_, i| i.project_target_uuids.include?(native_target.uuid) }
+            at_for_target = @result.targets.find { |at| at.target_definition == td_for_target }
+            next unless at_for_target
+            embedded_at = @result.targets.find { |at| at.target_definition == td }
+            at_for_target.embedded_pod_targets.push(*embedded_at.pod_targets)
+            pod_targets_by_name = at_for_target.embedded_pod_targets.group_by(&:pod_name)
+            pod_targets_by_name.each do |name, pt|
+              raise "duplicate, non-matching pod targets for #{name} in #{embedded_at.label}" if pt.size > 1
+            end
+            at_for_target.embedded_targets << embedded_at
+          end
+        end
       end
     end
   end

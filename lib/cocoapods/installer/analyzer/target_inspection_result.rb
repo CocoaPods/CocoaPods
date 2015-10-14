@@ -16,6 +16,10 @@ module Pod
         #
         attr_accessor :project_target_uuids
 
+        #
+        #
+        attr_accessor :targets_to_embed_in
+
         # @return [Hash{String=>Symbol}] A hash representing the user build
         #         configurations where each key corresponds to the name of a
         #         configuration and its value to its type (`:debug` or

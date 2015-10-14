@@ -43,6 +43,7 @@ module Pod
           result.build_configurations = compute_build_configurations(targets)
           result.platform = compute_platform(targets)
           result.archs = compute_archs(targets)
+          result.targets_to_embed_in = compute_targets_to_embed_in(targets, user_project)
           result.project = user_project
           result
         end
@@ -168,6 +169,16 @@ module Pod
           user_targets.flat_map do |target|
             Array(target.common_resolved_build_setting('ARCHS'))
           end.compact.uniq.sort
+        end
+
+        def compute_targets_to_embed_in(user_targets, user_project)
+          user_targets.flat_map do |target|
+            user_project.native_targets.select do |native_target|
+              native_target.copy_files_build_phases.any? do |phase|
+                phase.files_references.include?(target.product_reference)
+              end
+            end
+          end.uniq
         end
 
         # Checks if any of the targets for the {TargetDefinition} computed before

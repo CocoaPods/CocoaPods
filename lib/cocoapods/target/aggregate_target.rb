@@ -18,6 +18,7 @@ module Pod
       @sandbox = sandbox
       @pod_targets = []
       @search_paths_aggregate_targets = []
+      @embedded_pod_targets = []
       @file_accessors = []
       @xcconfigs = {}
     end
@@ -108,6 +109,8 @@ module Pod
     #         target must be able to import, but will not directly link against.
     #
     attr_accessor :search_paths_aggregate_targets
+
+    attr_accessor :embedded_pod_targets
 
     # @param  [String] build_configuration The build configuration for which the
     #         the pod targets should be returned.
