@@ -124,6 +124,8 @@ module Pod
           sets = set_names.map do |name|
             aggregate.representative_set(name)
           end
+          # Remove nil values because representative_set return nil if no pod is found in any of the sources.
+          sets.compact!
         else
           sets = aggregate.search_by_name(query, false)
         end
@@ -256,24 +258,13 @@ module Pod
         changed_spec_paths = {}
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            Dir.chdir(source.repo) do
-              begin
-                prev_commit_hash = (git! %w(rev-parse HEAD)).strip
-                output = git! %w(pull --ff-only)
-                changed_spec_paths[source] = (git! %W(diff --name-only #{prev_commit_hash}..HEAD)).strip.split("\n")
-                UI.puts output if show_output && !config.verbose?
-              rescue Informative
-                UI.warn 'CocoaPods was not able to update the ' \
-                  "`#{source.name}` repo. If this is an unexpected issue " \
-                  'and persists you can inspect it running ' \
-                  '`pod repo update --verbose`'
-              end
-            end
+            changed_spec_paths[source] = source.update(show_output && !config.verbose?)
             check_version_information(source.repo)
           end
         end
         # Perform search index update operation as a subprocess.
-        fork do
+        Process.fork do
+          Process.daemon
           update_search_index_if_needed(changed_spec_paths)
           exit
         end
