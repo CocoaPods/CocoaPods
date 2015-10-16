@@ -127,6 +127,8 @@ begin
     # to be run separately.
     #
     task :all => 'fixture_tarballs:unpack' do
+      # Forcing colored to be included on String before Term::ANSIColor, so that Inch will work correctly.
+      require 'colored'
       ENV['GENERATE_COVERAGE'] = 'true'
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
