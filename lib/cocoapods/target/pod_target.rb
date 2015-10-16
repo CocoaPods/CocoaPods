@@ -70,7 +70,7 @@ module Pod
           target.user_build_configurations = user_build_configurations
           target.native_target = native_target
           target.archs = archs
-          target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache)}.select { |pt| pt.target_definitions == [target_definition] }
+          target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
           cache[cash_key] = target
         end
       end
