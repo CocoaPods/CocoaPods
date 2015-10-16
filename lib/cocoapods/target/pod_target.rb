@@ -59,14 +59,19 @@ module Pod
 
     # @return [Array<PodTarget>] a scoped copy for each target definition.
     #
-    def scoped
+    def scoped(cache = {})
       target_definitions.map do |target_definition|
-        PodTarget.new(specs, [target_definition], sandbox, true).tap do |target|
+        cash_key = [specs, target_definition]
+        if cache[cash_key]
+          cache[cash_key]
+        else
+          target = PodTarget.new(specs, [target_definition], sandbox, true)
           target.file_accessors = file_accessors
           target.user_build_configurations = user_build_configurations
           target.native_target = native_target
           target.archs = archs
-          target.dependent_targets = dependent_targets.flat_map(&:scoped).select { |pt| pt.target_definitions == [target_definition] }
+          target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache)}.select { |pt| pt.target_definitions == [target_definition] }
+          cache[cash_key] = target
         end
       end
     end

@@ -277,6 +277,8 @@ module Pod
       #
       def generate_pod_targets(specs_by_target)
         if config.deduplicate_targets?
+          dedupe_cache = {}
+
           all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
             dependent_specs.group_by(&:root).map do |root_spec, specs|
               [root_spec, specs, target_definition]
@@ -294,7 +296,7 @@ module Pod
               # There are different sets of subspecs or the spec is used across different platforms
               targets_by_distinctors.flat_map do |distinctor, target_definitions|
                 specs, = *distinctor
-                generate_pod_target(target_definitions, specs).scoped
+                generate_pod_target(target_definitions, specs).scoped(dedupe_cache)
               end
             else
               (specs, _), target_definitions = targets_by_distinctors.first
@@ -308,7 +310,7 @@ module Pod
             dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
             target.dependent_targets = dependent_targets
             if dependent_targets.any?(&:scoped?)
-              target.scoped
+              target.scoped(dedupe_cache)
             else
               target
             end
@@ -317,7 +319,7 @@ module Pod
           pod_targets = specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by.group_by(&:root).values.uniq
             grouped_specs.flat_map do |pod_specs|
-              generate_pod_target([target_definition], pod_specs).scoped
+              generate_pod_target([target_definition], pod_specs).scoped(dedupe_cache)
             end
           end
           pod_targets.each do |target|
