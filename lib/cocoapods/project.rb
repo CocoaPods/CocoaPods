@@ -183,14 +183,7 @@ module Pod
         raise ArgumentError, "Paths must be absolute #{absolute_path}"
       end
 
-      if reflect_file_system_structure
-        relative_path = file_path_name.relative_path_from(group.real_path)
-        relative_dir = relative_path.dirname
-        relative_dir.each_filename do|name|
-          next if name == '.'
-          group = group[name] || group.new_group(name, name)
-        end
-      end
+      group = group_for_path_in_group(absolute_path, group, reflect_file_system_structure)
 
       if ref = reference_for_path(absolute_path)
         ref
@@ -271,6 +264,55 @@ module Pod
     #         by absolute path.
     #
     attr_reader :refs_by_absolute_path
+
+    # Returns the group for an absolute file path in another group.
+    # Creates subgroups to reflect the file system structure if
+    # reflect_file_system_structure is set to true.
+    # Makes a variant group if the path points to a localized file inside a
+    # *.lproj folder. The same variant group is returned for files with the
+    # same name, even if their file extensions differ.
+    #
+    # @param  [Pathname] absolute_pathname
+    #         The pathname of the file to get the group for.
+    #
+    # @param  [PBXGroup] group
+    #         The parent group used as the base of the relative path.
+    #
+    # @param  [Bool] reflect_file_system_structure
+    #         Whether group structure should reflect the file system structure.
+    #         If yes, where needed, intermediate groups are created, similar to
+    #         how mkdir -p operates.
+    #
+    # @return [PBXGroup] The appropriate group for the filepath.
+    #         Can be PBXVariantGroup, if the file is localized.
+    #
+    def group_for_path_in_group(absolute_pathname, group, reflect_file_system_structure)
+      unless absolute_pathname.absolute?
+        raise ArgumentError, "Paths must be absolute  #{absolute_path}"
+      end
+
+      relative_pathname = absolute_pathname.relative_path_from(group.real_path)
+      relative_dir = relative_pathname.dirname
+      lproj_regex = /\.lproj/
+
+      # Add subgroups for folders, but treat .lproj as a file
+      if reflect_file_system_structure
+        relative_dir.each_filename do|name|
+          break if name.to_s =~ lproj_regex
+          next if name == '.'
+          group = group[name] || group.new_group(name, name)
+        end
+      end
+
+      # Turn .lproj into a variant group
+      if relative_dir.basename.to_s =~ lproj_regex
+        filename = absolute_pathname.basename.sub_ext('').to_s
+        lproj_parent_dir = absolute_pathname.dirname.dirname
+        group = group[filename] || group.new_variant_group(filename, lproj_parent_dir)
+      end
+
+      group
+    end
 
     #-------------------------------------------------------------------------#
   end
