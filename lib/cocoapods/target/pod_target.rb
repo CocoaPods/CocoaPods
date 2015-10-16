@@ -57,13 +57,15 @@ module Pod
       @dependent_targets = []
     end
 
+    # @param [Hash{Array => PodTarget}] cache
+    #        the cached PodTarget for a previously scoped (specs, target_definition)
     # @return [Array<PodTarget>] a scoped copy for each target definition.
     #
     def scoped(cache = {})
       target_definitions.map do |target_definition|
-        cash_key = [specs, target_definition]
-        if cache[cash_key]
-          cache[cash_key]
+        cache_key = [specs, target_definition]
+        if cache[cache_key]
+          cache[cache_key]
         else
           target = PodTarget.new(specs, [target_definition], sandbox, true)
           target.file_accessors = file_accessors
@@ -71,7 +73,7 @@ module Pod
           target.native_target = native_target
           target.archs = archs
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
-          cache[cash_key] = target
+          cache[cache_key] = target
         end
       end
     end
