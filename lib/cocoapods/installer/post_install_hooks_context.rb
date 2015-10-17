@@ -8,6 +8,8 @@ module Pod
       #
       attr_accessor :sandbox_root
 
+      # @return [Project] The Pods Xcode project.
+      #
       attr_accessor :pods_project
 
       # @return [Array<UmbrellaTargetDescription>] The list of
@@ -50,6 +52,9 @@ module Pod
       # Pure data class which describes and umbrella target.
       #
       class UmbrellaTargetDescription
+        # @return [Xcodeproj::Project] The user project into which this target
+        #         is integrated.
+        #
         attr_accessor :user_project
 
         # @return [String] The path of the user project

@@ -54,6 +54,9 @@ module Pod
     #
     attr_accessor :client_root
 
+    # @return [Xcodeproj::Project] the user project that this target will
+    #         integrate as identified by the analyzer.
+    #
     attr_accessor :user_project
 
     # @return [Pathname] the path of the user project that this target will
@@ -72,9 +75,6 @@ module Pod
     attr_accessor :user_target_uuids
 
     # List all user targets that will be integrated by this #target.
-    #
-    # @param  [Xcodeproj::Project] project
-    #         The project to search for the user targets
     #
     # @return [Array<PBXNativeTarget>]
     #

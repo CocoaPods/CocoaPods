@@ -25,6 +25,8 @@ module Pod
 
         # Inspect the #target_definition
         #
+        # @raise If no `user_project` is set
+        #
         # @return [TargetInspectionResult]
         #
         def compute_results
@@ -74,6 +76,9 @@ module Pod
           path
         end
 
+        # @return [Xcodeproj::Project] the user's Xcode project, used for target
+        #         inspection
+        #
         attr_accessor :user_project
 
         #-----------------------------------------------------------------------#

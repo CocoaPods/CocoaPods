@@ -36,6 +36,8 @@ module Pod
         #
         attr_accessor :recommends_frameworks
 
+        # @return [Xcodeproj::Project] the user's Xcode project
+        #
         attr_accessor :project
       end
     end
