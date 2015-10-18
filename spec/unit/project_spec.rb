@@ -164,6 +164,7 @@ module Pod
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
           @nested_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/nested_file.m'
+          @localized_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/de.lproj/Foo.strings'
           @group = @project.group_for_spec('BananaLib')
         end
 
@@ -192,6 +193,18 @@ module Pod
           ref_2 = @project.add_file_reference(@file, @group)
           ref_1.uuid.should == ref_2.uuid
           @group.children.count.should == 1
+        end
+
+        it 'creates variant group for localized file' do
+          ref = @project.add_file_reference(@localized_file, @group)
+          ref.hierarchy_path.should == '/Pods/BananaLib/Foo/Foo.strings'
+          ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+        end
+
+        it 'creates variant group for localized file in subgroup' do
+          ref = @project.add_file_reference(@localized_file, @group, true)
+          ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo/Foo.strings'
+          ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
         end
 
         it 'raises if the given path is not absolute' do
