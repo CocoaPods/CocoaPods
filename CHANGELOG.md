@@ -6,6 +6,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Reduce the number of times the user's Xcode project is opened, speeding up
+  installation.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4374](https://github.com/CocoaPods/CocoaPods/issues/4374)
+
 ##### Bug Fixes
 
 * Fix a crash in dependency resolution when running Ruby 2.3.  

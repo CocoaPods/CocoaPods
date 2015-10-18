@@ -10,7 +10,7 @@ module Pod
       target_definition = Podfile::TargetDefinition.new('Pods', nil)
       target_definition.link_with_first_target = true
       @pod_bundle = AggregateTarget.new(target_definition, config.sandbox)
-      @pod_bundle.user_project_path = project_path
+      @pod_bundle.user_project = @project
       @pod_bundle.client_root = project_path.dirname
       @pod_bundle.user_target_uuids = [@target.uuid]
       configuration = Xcodeproj::Config.new(

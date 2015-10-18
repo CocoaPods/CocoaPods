@@ -25,26 +25,25 @@ module Pod
 
         # Inspect the #target_definition
         #
+        # @raise If no `user_project` is set
+        #
         # @return [TargetInspectionResult]
         #
         def compute_results
-          project_path = compute_project_path
-          user_project = Xcodeproj::Project.open(project_path)
+          raise ArgumentError, 'Cannot compute results without a user project set' unless user_project
+
           targets = compute_targets(user_project)
 
           result = TargetInspectionResult.new
           result.target_definition = target_definition
-          result.project_path = project_path
+          result.project_path = user_project.path
           result.project_target_uuids = targets.map(&:uuid)
           result.build_configurations = compute_build_configurations(targets)
           result.platform = compute_platform(targets)
           result.archs = compute_archs(targets)
+          result.project = user_project
           result
         end
-
-        #-----------------------------------------------------------------------#
-
-        private
 
         # Returns the path of the user project that the #target_definition
         # should integrate.
@@ -76,6 +75,15 @@ module Pod
           end
           path
         end
+
+        # @return [Xcodeproj::Project] the user's Xcode project, used for target
+        #         inspection
+        #
+        attr_accessor :user_project
+
+        #-----------------------------------------------------------------------#
+
+        private
 
         # Returns a list of the targets from the project of #target_definition
         # that needs to be integrated.

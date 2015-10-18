@@ -54,13 +54,17 @@ module Pod
     #
     attr_accessor :client_root
 
+    # @return [Xcodeproj::Project] the user project that this target will
+    #         integrate as identified by the analyzer.
+    #
+    attr_accessor :user_project
+
     # @return [Pathname] the path of the user project that this target will
     #         integrate as identified by the analyzer.
     #
-    # @note   The project instance is not stored to prevent editing different
-    #         instances.
-    #
-    attr_accessor :user_project_path
+    def user_project_path
+      user_project.path if user_project
+    end
 
     # @return [Array<String>] the list of the UUIDs of the user targets that
     #         will be integrated by this target as identified by the analyzer.
@@ -72,16 +76,12 @@ module Pod
 
     # List all user targets that will be integrated by this #target.
     #
-    # @param  [Xcodeproj::Project] project
-    #         The project to search for the user targets
-    #
     # @return [Array<PBXNativeTarget>]
     #
-    def user_targets(project = nil)
-      return [] unless user_project_path
-      project ||= Xcodeproj::Project.open(user_project_path)
+    def user_targets
+      return [] unless user_project
       user_target_uuids.map do |uuid|
-        native_target = project.objects_by_uuid[uuid]
+        native_target = user_project.objects_by_uuid[uuid]
         unless native_target
           raise Informative, '[Bug] Unable to find the target with ' \
             "the `#{uuid}` UUID for the `#{self}` integration library"

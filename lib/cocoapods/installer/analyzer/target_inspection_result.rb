@@ -35,6 +35,10 @@ module Pod
         #         due to the presence of Swift source in the user's targets
         #
         attr_accessor :recommends_frameworks
+
+        # @return [Xcodeproj::Project] the user's Xcode project
+        #
+        attr_accessor :project
       end
     end
   end
