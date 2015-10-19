@@ -20,6 +20,7 @@ module Pod
       super(path, skip_initialization, object_version)
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
+      @variant_groups_by_path_and_name = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
       self.symroot = LEGACY_BUILD_ROOT
@@ -265,6 +266,11 @@ module Pod
     #
     attr_reader :refs_by_absolute_path
 
+    # @return [Hash{[Pathname, String] => PBXVariantGroup}] The variant groups
+    #         grouped by absolute path of parent dir and name.
+    #
+    attr_reader :variant_groups_by_path_and_name
+
     # Returns the group for an absolute file path in another group.
     # Creates subgroups to reflect the file system structure if
     # reflect_file_system_structure is set to true.
@@ -308,7 +314,9 @@ module Pod
       if relative_dir.basename.to_s =~ lproj_regex
         filename = absolute_pathname.basename.sub_ext('').to_s
         lproj_parent_dir = absolute_pathname.dirname.dirname
-        group = group[filename] || group.new_variant_group(filename, lproj_parent_dir)
+        group = @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||
+          group.new_variant_group(filename, lproj_parent_dir)
+        @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] = group
       end
 
       group

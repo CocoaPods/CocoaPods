@@ -224,13 +224,15 @@ module Pod
       describe '#group_for_path_in_group' do
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
-          @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
-          subdir = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/'
+          poddir = config.sandbox.pod_dir('BananaLib')
+          subdir = poddir + 'Dir/SubDir/'
+          @file = poddir + 'file.m'
           @nested_file = subdir + 'nested_file.h'
           @nested_file2 = subdir + 'nested_file.m'
           @localized_base_foo = subdir + 'Base.lproj/Foo.storyboard'
           @localized_de_foo = subdir + 'de.lproj/Foo.strings'
           @localized_de_bar = subdir + 'de.lproj/Bar.strings'
+          @localized_different_foo = poddir + 'Base.lproj/Foo.jpg'
           @group = @project.group_for_spec('BananaLib')
         end
 
@@ -272,7 +274,7 @@ module Pod
           group.real_path.should == config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir'
         end
 
-        it "doesn't duplicate variant groups for same name" do
+        it "doesn't duplicate variant groups for same name and directory" do
           group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
           group_2 = @project.group_for_path_in_group(@localized_de_foo, @group, false)
           group_1.uuid.should == group_2.uuid
@@ -282,6 +284,13 @@ module Pod
         it 'makes separate variant groups for different names' do
           group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
           group_2 = @project.group_for_path_in_group(@localized_de_bar, @group, false)
+          group_1.uuid.should != group_2.uuid
+          @group.children.count.should == 2
+        end
+
+        it 'makes separate variant groups for different directory levels' do
+          group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
+          group_2 = @project.group_for_path_in_group(@localized_different_foo, @group, false)
           group_1.uuid.should != group_2.uuid
           @group.children.count.should == 2
         end
