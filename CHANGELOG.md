@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4374](https://github.com/CocoaPods/CocoaPods/issues/4374)
 
+* Improving the performance of Pod::Installer::Analyzer#generate_pod_targets
+  [Daniel Ribeiro](https://github.com/danielribeiro)
+  [#4399](https://github.com/CocoaPods/CocoaPods/pull/4399)
+
 ##### Bug Fixes
 
 * Fix a crash in dependency resolution when running Ruby 2.3.  
