@@ -312,7 +312,7 @@ module Pod
         lproj_parent_dir = absolute_pathname.dirname.dirname
         group = @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||
           group.new_variant_group(filename, lproj_parent_dir)
-        @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] = group
+        @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||= group
       end
 
       group
