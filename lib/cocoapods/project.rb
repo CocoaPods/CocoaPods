@@ -180,10 +180,6 @@ module Pod
     #
     def add_file_reference(absolute_path, group, reflect_file_system_structure = false)
       file_path_name = Pathname.new(absolute_path)
-      unless file_path_name.absolute?
-        raise ArgumentError, "Paths must be absolute #{absolute_path}"
-      end
-
       group = group_for_path_in_group(absolute_path, group, reflect_file_system_structure)
 
       if ref = reference_for_path(absolute_path)
@@ -299,7 +295,7 @@ module Pod
 
       relative_pathname = absolute_pathname.relative_path_from(group.real_path)
       relative_dir = relative_pathname.dirname
-      lproj_regex = /\.lproj/
+      lproj_regex = /\.lproj/i
 
       # Add subgroups for folders, but treat .lproj as a file
       if reflect_file_system_structure
@@ -314,8 +310,8 @@ module Pod
       if relative_dir.basename.to_s =~ lproj_regex
         filename = absolute_pathname.basename.sub_ext('').to_s
         lproj_parent_dir = absolute_pathname.dirname.dirname
-        group = @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||
-          group.new_variant_group(filename, lproj_parent_dir)
+        group = @variant_groups_by_path_and_name[[lproj_parent_dir, filename]]
+        group ||= group.new_variant_group(filename, lproj_parent_dir)
         @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] = group
       end
 
