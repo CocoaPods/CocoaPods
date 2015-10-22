@@ -531,4 +531,21 @@ module Pod
       end
     end
   end
+
+  class Source
+    extend Executable
+    executable :git
+
+    def update_git_repo(show_output = false)
+      begin
+        output = git! %w(pull --ff-only)
+        UI.puts output if show_output
+      rescue
+        UI.warn 'CocoaPods was not able to update the ' \
+                  "`#{name}` repo. If this is an unexpected issue " \
+                  'and persists you can inspect it running ' \
+                  '`pod repo update --verbose`'
+      end
+    end
+  end
 end
