@@ -114,15 +114,19 @@ module Pod
       #
       def search_by_name(query, full_text_search = false)
         if full_text_search
-          set_names = Set.new
-          query_regexp = /#{query}/i
+          query_word_regexps = query.split.map{ |word| /#{word}/i }
+          query_word_results_hash = {}
           updated_search_index.each_value do |word_spec_hash|
-            word_spec_hash.each_pair do |word, spec_names|
-              set_names.merge(spec_names) unless word !~ query_regexp
+            word_spec_hash.each_pair do |word, spec_symbols|
+              query_word_regexps.each do |query_word_regexp|
+                set = (query_word_results_hash[query_word_regexp] ||= Set.new)
+                set.merge(spec_symbols) if word =~ query_word_regexp
+              end
             end
           end
-          sets = set_names.map do |name|
-            aggregate.representative_set(name)
+          found_set_symbols = query_word_results_hash.values.reduce(:&)
+          sets = found_set_symbols.map do |symbol|
+            aggregate.representative_set(symbol.to_s)
           end
           # Remove nil values because representative_set return nil if no pod is found in any of the sources.
           sets.compact!
