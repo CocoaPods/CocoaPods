@@ -13,11 +13,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4374](https://github.com/CocoaPods/CocoaPods/issues/4374)
 
-* Improving the performance of Pod::Installer::Analyzer#generate_pod_targets
+* Improving the performance of Pod::Installer::Analyzer#generate_pod_targets  
   [Daniel Ribeiro](https://github.com/danielribeiro)
   [#4399](https://github.com/CocoaPods/CocoaPods/pull/4399)
 
 ##### Bug Fixes
+
+* Improve repo lint error message when no repo found with given name.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#4142](https://github.com/CocoaPods/CocoaPods/issues/4142)
 
 * Fix a crash in dependency resolution when running Ruby 2.3.  
   [Samuel Giddins](https://github.com/segiddins)
