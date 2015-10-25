@@ -372,12 +372,18 @@ module Pod
 
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       @installer.aggregate_targets.each do |target|
+        target.pod_targets.each do |pod_target|
+          pod_target.native_target.build_configuration_list.build_configurations.each do |build_configuration|
+            (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
+          end
+        end
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
             (deployment_target.nil? || Version.new(deployment_target).major < 8)
           uses_xctest = target.spec_consumers.any? { |c| (c.frameworks + c.weak_frameworks).include? 'XCTest' }
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
         end
       end
+      @installer.pods_project.save
     end
 
     def validate_vendored_dynamic_frameworks
