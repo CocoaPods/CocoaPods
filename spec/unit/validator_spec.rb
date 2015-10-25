@@ -412,6 +412,20 @@ module Pod
         validator.validate
       end
 
+      it 'sets the -Wincomplete-umbrella compiler flag for pod targets' do
+        validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+        validator.no_clean = true
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:validate_url)
+        validator.validate
+
+        pods_project = Xcodeproj::Project.open(validator.validation_dir + 'Pods/Pods.xcodeproj')
+
+        pods_project.native_targets.find { |nt| nt.name == 'JSONKit' }.resolved_build_setting('OTHER_CFLAGS').each do |_, value|
+          value.should == %w($(inherited) -Wincomplete-umbrella)
+        end
+      end
+
       it 'does filter InputFile errors completely' do
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)

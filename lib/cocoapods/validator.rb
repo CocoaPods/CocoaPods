@@ -383,6 +383,7 @@ module Pod
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
         end
       end
+      @installer.pods_project.save
     end
 
     def validate_vendored_dynamic_frameworks
