@@ -62,7 +62,7 @@ module Pod
           # use_frameworks!
         PLATFORM
 
-        project.targets.each do |target|
+        project.native_targets.each do |target|
           podfile << target_module(target)
         end
         podfile << "\n"
