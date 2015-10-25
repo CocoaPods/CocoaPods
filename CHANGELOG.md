@@ -25,6 +25,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   of their headers inside that directory.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Pods will be validated with the `-Wincomplete-umbrella` compiler flag to
+  ensure module maps are valid.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3428](https://github.com/CocoaPods/CocoaPods/issues/3428)
+
 ##### Bug Fixes
 
 * Improve repo lint error message when no repo found with given name.  
