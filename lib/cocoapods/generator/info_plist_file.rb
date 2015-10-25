@@ -39,7 +39,8 @@ module Pod
       #
       def target_version
         if target && target.respond_to?(:root_spec)
-          target.root_spec.version.to_s
+          version = target.root_spec.version
+          [version.major, version.minor, version.patch].join('.')
         else
           '1.0.0'
         end

@@ -7,6 +7,43 @@ describe Pod::Generator::InfoPlistFile do
       generator.target_version.should == '1.0.0'
     end
 
+    describe 'sanitization' do
+      before do
+        @root_spec = mock('RootSpec')
+        pod_target = stub('PodTarget', :root_spec => @root_spec)
+        @generator = Pod::Generator::InfoPlistFile.new(pod_target)
+      end
+
+      it 'handles when the version is HEAD' do
+        version = Pod::Version.new('0.2.0')
+        version.head = true
+        @root_spec.stubs(:version).returns(version)
+        @generator.target_version.should == '0.2.0'
+      end
+
+      it 'handles when the version is more than 3 numeric parts' do
+        version = Pod::Version.new('0.2.0.1')
+        @root_spec.stubs(:version).returns(version)
+        @generator.target_version.should == '0.2.0'
+      end
+
+      it 'handles when the version is less than 3 numeric parts' do
+        version = Pod::Version.new('0.2')
+        @root_spec.stubs(:version).returns(version)
+        @generator.target_version.should == '0.2.0'
+      end
+
+      it 'handles when the version is a pre-release' do
+        version = Pod::Version.new('1.0.0-beta.1')
+        @root_spec.stubs(:version).returns(version)
+        @generator.target_version.should == '1.0.0'
+
+        version = Pod::Version.new('1.0-beta.5')
+        @root_spec.stubs(:version).returns(version)
+        @generator.target_version.should == '1.0.0'
+      end
+    end
+
     it 'returns the specification\'s version for the pod target' do
       generator = Pod::Generator::InfoPlistFile.new(fixture_pod_target('orange-framework/OrangeFramework.podspec'))
       generator.target_version.should == '0.1.0'
