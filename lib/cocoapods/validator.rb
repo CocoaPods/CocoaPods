@@ -380,6 +380,14 @@ module Pod
     def add_app_project_import
       app_project = Xcodeproj::Project.open(validation_dir + 'App.xcodeproj')
       pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
+
+      source_file = write_app_import_source_file(pod_target)
+      source_file_ref = app_project.new_group('App', 'App').new_file(source_file)
+      app_project.targets.first.add_file_references([source_file_ref])
+      app_project.save
+    end
+
+    def write_app_import_source_file(pod_target)
       language = pod_target.uses_swift? ? :swift : :objc
 
       if language == :swift
@@ -402,10 +410,7 @@ module Pod
         end
         source_file.open('w') { |f| f << "@import Foundation;\n#{import_statement}int main() {}\n" }
       end
-
-      source_file_ref = app_project.new_group('App', 'App').new_file(source_file)
-      app_project.targets.first.add_file_references([source_file_ref])
-      app_project.save
+      source_file
     end
 
     # It creates a podfile in memory and builds a library containing the pod
