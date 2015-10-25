@@ -39,6 +39,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Tim Bodeit](https://github.com/timbodeit)
   [#2597](https://github.com/CocoaPods/CocoaPods/issues/2597)
 
+* Only include native targets when generating the Podfile in `pod init`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2169](https://github.com/CocoaPods/CocoaPods/issues/2169)
+
 
 ## 0.39.0 (2015-10-09)
 
