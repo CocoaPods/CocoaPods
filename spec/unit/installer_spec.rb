@@ -629,6 +629,20 @@ module Pod
           test_extension_target(:watch2_extension)
         end
 
+        it 'configures APPLICATION_EXTENSION_API_ONLY for targets where the user target has it set' do
+          mock_user_target = mock('UserTarget', :symbol_type => :application)
+          mock_user_target.expects(:common_resolved_build_setting).with('APPLICATION_EXTENSION_API_ONLY').returns('YES')
+          @target.stubs(:user_targets).returns([mock_user_target])
+
+          build_settings = {}
+          mock_configuration = mock('BuildConfiguration', :build_settings => build_settings)
+          @mock_target.stubs(:build_configurations).returns([mock_configuration])
+
+          @installer.send(:set_target_dependencies)
+
+          build_settings.should == { 'APPLICATION_EXTENSION_API_ONLY' => 'YES' }
+        end
+
         it 'does not try to set APPLICATION_EXTENSION_API_ONLY if there are no pod targets' do
           lambda do
             mock_user_target = mock('UserTarget', :symbol_type => :app_extension)
