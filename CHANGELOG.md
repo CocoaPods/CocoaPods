@@ -17,6 +17,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Daniel Ribeiro](https://github.com/danielribeiro)
   [#4399](https://github.com/CocoaPods/CocoaPods/pull/4399)
 
+* Framework pods that have a `header_mappings_dirs` set will now produce
+  frameworks with headers that respect the nesting.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The validator will now ensure that pods with a `header_mappings_dirs` have all
+  of their headers inside that directory.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Improve repo lint error message when no repo found with given name.  
