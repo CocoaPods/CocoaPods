@@ -48,6 +48,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#2169](https://github.com/CocoaPods/CocoaPods/issues/2169)
 
+* Ensure that generated `Info.plist` files have a `CFBundleShortVersionString`
+  that is precisely three dot-separated numbers.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4421](https://github.com/CocoaPods/CocoaPods/issues/4421)
+
 
 ## 0.39.0 (2015-10-09)
 
