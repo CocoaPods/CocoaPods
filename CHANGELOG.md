@@ -25,6 +25,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4421](https://github.com/CocoaPods/CocoaPods/issues/4421)
 
+* Set the `APPLICATION_EXTENSION_API_ONLY` build setting if integrating with a
+  tvOS extension target, or a target that has the setting set to `YES`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3644](https://github.com/CocoaPods/CocoaPods/issues/3644)
+  [#4393](https://github.com/CocoaPods/CocoaPods/issues/4393)
+
 
 ## 0.39.0 (2015-10-09)
 
