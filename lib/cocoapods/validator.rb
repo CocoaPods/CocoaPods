@@ -391,14 +391,14 @@ module Pod
         source_file = validation_dir.+('App/main.m')
         source_file.parent.mkpath
         import_statement = if use_frameworks
-          "@import #{pod_target.product_module_name};\n"
-        else
-          header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"
-          if pod_target.sandbox.public_headers.root.+(header_name).file?
-            "#import <#{header_name}>\n"
-          else
-            ''
-          end
+                             "@import #{pod_target.product_module_name};\n"
+                           else
+                             header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"
+                             if pod_target.sandbox.public_headers.root.+(header_name).file?
+                               "#import <#{header_name}>\n"
+                             else
+                               ''
+                             end
         end
         source_file.open('w') { |f| f << "@import Foundation;\n#{import_statement}int main() {}\n" }
       end
@@ -678,7 +678,7 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
-      command = %W(clean build -workspace App.xcworkspace -scheme App)
+      command = %w(clean build -workspace App.xcworkspace -scheme App)
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
@@ -706,7 +706,7 @@ module Pod
     #
     def _xcodebuild(command)
       UI.puts 'xcodebuild ' << command.join(' ') if config.verbose
-      Executable.capture_command('xcodebuild', command, capture: :merge)
+      Executable.capture_command('xcodebuild', command, :capture => :merge)
     end
 
     #-------------------------------------------------------------------------#
