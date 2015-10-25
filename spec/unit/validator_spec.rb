@@ -102,6 +102,7 @@ module Pod
           @validator.stubs(:download_pod)
           @validator.stubs(:check_file_patterns)
           @validator.stubs(:install_pod)
+          @validator.stubs(:add_app_project_import)
           @validator.stubs(:build_pod)
           @validator.stubs(:tear_down_validation_environment)
           WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
@@ -128,7 +129,7 @@ module Pod
             WebMock::API.stub_request(:head, /found/).to_return(:status => 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/redirect/')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
 
           it 'does not fail if the homepage does not support HEAD' do
@@ -136,7 +137,7 @@ module Pod
             WebMock::API.stub_request(:get, /page/).to_return(:status => 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
 
           it 'does not fail if the homepage errors on HEAD' do
@@ -144,7 +145,7 @@ module Pod
             WebMock::API.stub_request(:get, /page/).to_return(:status => 200)
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/page/')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
 
           it 'does not follow redirects infinitely' do
@@ -166,7 +167,7 @@ module Pod
             Specification.any_instance.stubs(:homepage).returns(
               'http://banana-corp.local/redirect')
             @validator.validate
-            @validator.results.length.should.equal 0
+            @validator.results.should.be.empty
           end
         end
 
@@ -300,8 +301,8 @@ module Pod
         validator.stubs(:validate_url)
         validator.stubs(:validate_screenshots)
         validator.stubs(:check_file_patterns)
-        validator.stubs(:check_file_patterns)
         validator.stubs(:install_pod)
+        validator.stubs(:add_app_project_import)
         %i(prepare resolve_dependencies download_dependencies).each do |m|
           Installer.any_instance.stubs(m)
         end
@@ -404,11 +405,11 @@ module Pod
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
-        command = 'xcodebuild clean build -target Pods'
-        validator.expects(:`).with("#{command} 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk appletvsimulator 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk iphonesimulator 2>&1").once.returns('')
-        validator.expects(:`).with("#{command} CODE_SIGN_IDENTITY=- -sdk watchsimulator 2>&1").once.returns('')
+        command = %w(clean build -workspace App.xcworkspace -scheme App)
+        Executable.expects(:capture_command).with('xcodebuild', command, :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
         validator.validate
       end
 
@@ -442,6 +443,113 @@ module Pod
         validator.stubs(:validate_url)
         validator.validate
         validator.results.count.should == 0
+      end
+
+      describe 'import validation' do
+        before do
+          @validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
+          @validator.stubs(:validate_url)
+          @consumer = Specification.from_file(podspec_path).consumer(:ios)
+          @validator.instance_variable_set(:@consumer, @consumer)
+          @validator.send(:setup_validation_environment)
+        end
+
+        after do
+          @validator.send(:tear_down_validation_environment)
+        end
+
+        it 'creates an empty app project & target to integrate into' do
+          @validator.send(:create_app_project)
+          project = Xcodeproj::Project.open(@validator.validation_dir + 'App.xcodeproj')
+
+          target = project.native_targets.find { |t| t.name == 'App' }
+          target.should.not.be.nil
+          target.symbol_type.should == :application
+          target.deployment_target.should.be.nil
+          target.platform_name.should == :ios
+
+          Xcodeproj::Project.schemes(project.path).should == %w(App)
+        end
+
+        describe 'creating the importing file' do
+          describe 'when linting as a framework' do
+            before do
+              @validator.stubs(:use_frameworks).returns(true)
+            end
+
+            it 'creates a swift import' do
+              pod_target = stub(:uses_swift? => true, :product_module_name => 'ModuleName')
+
+              file = @validator.send(:write_app_import_source_file, pod_target)
+              file.basename.to_s.should == 'main.swift'
+              file.read.should == <<-SWIFT.strip_heredoc
+                import ModuleName
+              SWIFT
+            end
+
+            it 'creates an objective-c import' do
+              pod_target = stub(:uses_swift? => false, :product_module_name => 'ModuleName')
+
+              file = @validator.send(:write_app_import_source_file, pod_target)
+              file.basename.to_s.should == 'main.m'
+              file.read.should == <<-OBJC.strip_heredoc
+                @import Foundation;
+                @import ModuleName;
+                int main() {}
+              OBJC
+            end
+          end
+
+          describe 'when linting as a static lib' do
+            before do
+              @validator.stubs(:use_frameworks).returns(false)
+              @sandbox = config.sandbox
+            end
+
+            it 'creates an objective-c import when a plausible umbrella header is found' do
+              pod_target = stub(:uses_swift? => false, :product_module_name => 'ModuleName', :sandbox => @sandbox)
+              header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"
+              umbrella = pod_target.sandbox.public_headers.root.+(header_name)
+              umbrella.dirname.mkpath
+              umbrella.open('w') {}
+
+              file = @validator.send(:write_app_import_source_file, pod_target)
+              file.basename.to_s.should == 'main.m'
+              file.read.should == <<-OBJC.strip_heredoc
+                @import Foundation;
+                #import <ModuleName/ModuleName.h>
+                int main() {}
+              OBJC
+            end
+
+            it 'does not create an objective-c import when no umbrella header is found' do
+              pod_target = stub(:uses_swift? => false, :product_module_name => 'ModuleName', :sandbox => @sandbox)
+
+              file = @validator.send(:write_app_import_source_file, pod_target)
+              file.basename.to_s.should == 'main.m'
+              file.read.should == <<-OBJC.strip_heredoc
+                @import Foundation;
+                int main() {}
+              OBJC
+            end
+          end
+        end
+
+        it 'adds the importing file to the app target' do
+          @validator.stubs(:use_frameworks).returns(true)
+          @validator.send(:create_app_project)
+          pod_target = stub(:uses_swift? => true, :pod_name => 'JSONKit', :product_module_name => 'ModuleName')
+          installer = stub(:pod_targets => [pod_target])
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:add_app_project_import)
+
+          project = Xcodeproj::Project.open(@validator.validation_dir + 'App.xcodeproj')
+          group = project['App']
+          file = group.find_file_by_path('main.swift')
+          file.should.not.be.nil
+          target = project.native_targets.find { |t| t.name == 'App' }
+          target.source_build_phase.files_references.should.include(file)
+        end
       end
 
       describe 'file pattern validation' do
@@ -538,6 +646,7 @@ module Pod
         @validator.stubs(:validate_screenshots)
         @validator.stubs(:check_file_patterns)
         @validator.stubs(:install_pod)
+        @validator.stubs(:add_app_project_import)
         %i(prepare resolve_dependencies download_dependencies).each do |m|
           Installer.any_instance.stubs(m)
         end

@@ -30,6 +30,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3428](https://github.com/CocoaPods/CocoaPods/issues/3428)
 
+* The validator will now attempt to build an app that imports the pod.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2095](https://github.com/CocoaPods/CocoaPods/issues/2095)
+  [#2134](https://github.com/CocoaPods/CocoaPods/issues/2134)
+
 ##### Bug Fixes
 
 * Improve repo lint error message when no repo found with given name.  

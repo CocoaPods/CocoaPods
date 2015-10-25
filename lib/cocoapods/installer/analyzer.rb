@@ -247,12 +247,12 @@ module Pod
         if config.integrate_targets?
           target_inspection = result.target_inspections[target_definition]
           target.user_project = target_inspection.project
-          target.client_root = target.user_project_path.dirname
+          target.client_root = target.user_project_path.dirname.realpath
           target.user_target_uuids = target_inspection.project_target_uuids
           target.user_build_configurations = target_inspection.build_configurations
           target.archs = target_inspection.archs
         else
-          target.client_root = config.installation_root
+          target.client_root = config.installation_root.realpath
           target.user_target_uuids = []
           target.user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
           if target_definition.platform && target_definition.platform.name == :osx

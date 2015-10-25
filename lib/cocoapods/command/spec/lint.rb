@@ -61,7 +61,7 @@ module Pod
             failure_reasons << validator.failure_reason
 
             unless @clean
-              UI.puts "Pods project available at `#{validator.validation_dir}/Pods/Pods.xcodeproj` for inspection."
+              UI.puts "Pods workspace available at `#{validator.validation_dir}/App.xcworkspace` for inspection."
               UI.puts
             end
           end

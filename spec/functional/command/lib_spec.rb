@@ -104,7 +104,7 @@ module Pod
           run_command('lib', 'lint', 'Broken.podspec', '--no-clean')
         end
         UI.output.should.include 'Missing required attribute'
-        UI.output.should.include 'Pods project available at'
+        UI.output.should.include 'Pods workspace available at'
       end
     end
 

@@ -130,6 +130,7 @@ module Pod
       Installer.any_instance.stubs(:aggregate_targets).returns([])
       Installer.any_instance.stubs(:pod_targets).returns([])
       Validator.any_instance.stubs(:install_pod)
+      Validator.any_instance.stubs(:add_app_project_import)
       Validator.any_instance.stubs(:check_file_patterns)
       Validator.any_instance.stubs(:validated?).returns(true)
       Validator.any_instance.stubs(:validate_url)
