@@ -1,6 +1,11 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
 module Pod
+  # Expose to unit test file
+  class Project
+    public :group_for_path_in_group
+  end
+
   describe Project do
     before do
       @project = Project.new(config.sandbox.project_path)
@@ -164,6 +169,7 @@ module Pod
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
           @nested_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/nested_file.m'
+          @localized_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/de.lproj/Foo.strings'
           @group = @project.group_for_spec('BananaLib')
         end
 
@@ -177,6 +183,16 @@ module Pod
           ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/nested_file.m'
         end
 
+        it 'does not add subgroups for a file reference if not requested' do
+          ref = @project.add_file_reference(@nested_file, @group)
+          ref.hierarchy_path.should == '/Pods/BananaLib/nested_file.m'
+        end
+
+        it 'does not add subgroups for a file reference if requested not to' do
+          ref = @project.add_file_reference(@nested_file, @group, false)
+          ref.hierarchy_path.should == '/Pods/BananaLib/nested_file.m'
+        end
+
         it "it doesn't duplicate file references for a single path" do
           ref_1 = @project.add_file_reference(@file, @group)
           ref_2 = @project.add_file_reference(@file, @group)
@@ -184,9 +200,107 @@ module Pod
           @group.children.count.should == 1
         end
 
+        it 'creates variant group for localized file' do
+          ref = @project.add_file_reference(@localized_file, @group)
+          ref.hierarchy_path.should == '/Pods/BananaLib/Foo/Foo.strings'
+          ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+        end
+
+        it 'creates variant group for localized file in subgroup' do
+          ref = @project.add_file_reference(@localized_file, @group, true)
+          ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo/Foo.strings'
+          ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+        end
+
         it 'raises if the given path is not absolute' do
           should.raise ArgumentError do
             @project.add_file_reference('relative/path/to/file.m', @group)
+          end.message.should.match /Paths must be absolute/
+        end
+      end
+
+      #----------------------------------------#
+
+      describe '#group_for_path_in_group' do
+        before do
+          @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
+          poddir = config.sandbox.pod_dir('BananaLib')
+          subdir = poddir + 'Dir/SubDir/'
+          @file = poddir + 'file.m'
+          @nested_file = subdir + 'nested_file.h'
+          @nested_file2 = subdir + 'nested_file.m'
+          @localized_base_foo = subdir + 'Base.lproj/Foo.storyboard'
+          @localized_de_foo = subdir + 'de.lproj/Foo.strings'
+          @localized_de_bar = subdir + 'de.lproj/Bar.strings'
+          @localized_different_foo = poddir + 'Base.lproj/Foo.jpg'
+          @group = @project.group_for_spec('BananaLib')
+        end
+
+        it 'returns parent group when file is in main group directory' do
+          group = @project.group_for_path_in_group(@file, @group, true)
+          group.uuid.should == @group.uuid
+        end
+
+        it 'returns parent group when not localized or reflecting structure' do
+          group = @project.group_for_path_in_group(@nested_file, @group, false)
+          group.uuid.should == @group.uuid
+        end
+
+        it 'adds subgroups if reflecting file system structure' do
+          group = @project.group_for_path_in_group(@nested_file, @group, true)
+          group.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir'
+        end
+
+        it "doesn't duplicate groups for a single directory path" do
+          group_1 = @project.group_for_path_in_group(@nested_file, @group, true)
+          group_2 = @project.group_for_path_in_group(@nested_file2, @group, true)
+          group_1.uuid.should == group_2.uuid
+        end
+
+        it 'creates variant group for localized file' do
+          group = @project.group_for_path_in_group(@localized_base_foo, @group, false)
+          group.hierarchy_path.should == '/Pods/BananaLib/Foo'
+          group.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+        end
+
+        it 'creates variant group for localized file when adding subgroups' do
+          group = @project.group_for_path_in_group(@localized_base_foo, @group, true)
+          group.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo'
+          group.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+        end
+
+        it 'sets variant group path to the folder that contains .lproj bundles' do
+          group = @project.group_for_path_in_group(@localized_base_foo, @group, false)
+          group.real_path.should == config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir'
+        end
+
+        it "doesn't duplicate variant groups for same name and directory" do
+          group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
+          group_2 = @project.group_for_path_in_group(@localized_de_foo, @group, false)
+          group_1.uuid.should == group_2.uuid
+          @group.children.count.should == 1
+        end
+
+        it 'makes separate variant groups for different names' do
+          group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
+          group_2 = @project.group_for_path_in_group(@localized_de_bar, @group, false)
+          group_1.uuid.should != group_2.uuid
+          @group.children.count.should == 2
+        end
+
+        it 'makes separate variant groups for different directory levels' do
+          group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
+          group_2 = @project.group_for_path_in_group(@localized_different_foo, @group, false)
+          group_1.uuid.should != group_2.uuid
+          @group.children.count.should == 2
+        end
+
+        it 'raises if the given path is not absolute' do
+          should.raise ArgumentError do
+            @project.add_file_reference('relative/path/to/file.m', @group, true)
+          end.message.should.match /Paths must be absolute/
+          should.raise ArgumentError do
+            @project.add_file_reference('relative/path/to/file.m', @group, false)
           end.message.should.match /Paths must be absolute/
         end
       end

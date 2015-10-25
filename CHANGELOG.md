@@ -27,6 +27,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4345](https://github.com/CocoaPods/CocoaPods/issues/4345)
 
+* Fix handling of localized files in Pods installed as frameworks.  
+  [Tim Bodeit](https://github.com/timbodeit)
+  [#2597](https://github.com/CocoaPods/CocoaPods/issues/2597)
+
 
 ## 0.39.0 (2015-10-09)
 

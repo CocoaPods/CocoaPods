@@ -20,6 +20,7 @@ module Pod
       super(path, skip_initialization, object_version)
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
+      @variant_groups_by_path_and_name = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
       self.symroot = LEGACY_BUILD_ROOT
@@ -179,18 +180,7 @@ module Pod
     #
     def add_file_reference(absolute_path, group, reflect_file_system_structure = false)
       file_path_name = Pathname.new(absolute_path)
-      unless file_path_name.absolute?
-        raise ArgumentError, "Paths must be absolute #{absolute_path}"
-      end
-
-      if reflect_file_system_structure
-        relative_path = file_path_name.relative_path_from(group.real_path)
-        relative_dir = relative_path.dirname
-        relative_dir.each_filename do|name|
-          next if name == '.'
-          group = group[name] || group.new_group(name, name)
-        end
-      end
+      group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure)
 
       if ref = reference_for_path(absolute_path)
         ref
@@ -271,6 +261,62 @@ module Pod
     #         by absolute path.
     #
     attr_reader :refs_by_absolute_path
+
+    # @return [Hash{[Pathname, String] => PBXVariantGroup}] The variant groups
+    #         grouped by absolute path of parent dir and name.
+    #
+    attr_reader :variant_groups_by_path_and_name
+
+    # Returns the group for an absolute file path in another group.
+    # Creates subgroups to reflect the file system structure if
+    # reflect_file_system_structure is set to true.
+    # Makes a variant group if the path points to a localized file inside a
+    # *.lproj folder. The same variant group is returned for files with the
+    # same name, even if their file extensions differ.
+    #
+    # @param  [Pathname] absolute_pathname
+    #         The pathname of the file to get the group for.
+    #
+    # @param  [PBXGroup] group
+    #         The parent group used as the base of the relative path.
+    #
+    # @param  [Bool] reflect_file_system_structure
+    #         Whether group structure should reflect the file system structure.
+    #         If yes, where needed, intermediate groups are created, similar to
+    #         how mkdir -p operates.
+    #
+    # @return [PBXGroup] The appropriate group for the filepath.
+    #         Can be PBXVariantGroup, if the file is localized.
+    #
+    def group_for_path_in_group(absolute_pathname, group, reflect_file_system_structure)
+      unless absolute_pathname.absolute?
+        raise ArgumentError, "Paths must be absolute #{absolute_pathname}"
+      end
+
+      relative_pathname = absolute_pathname.relative_path_from(group.real_path)
+      relative_dir = relative_pathname.dirname
+      lproj_regex = /\.lproj/i
+
+      # Add subgroups for folders, but treat .lproj as a file
+      if reflect_file_system_structure
+        relative_dir.each_filename do|name|
+          break if name.to_s =~ lproj_regex
+          next if name == '.'
+          group = group[name] || group.new_group(name, name)
+        end
+      end
+
+      # Turn .lproj into a variant group
+      if relative_dir.basename.to_s =~ lproj_regex
+        filename = absolute_pathname.basename.sub_ext('').to_s
+        lproj_parent_dir = absolute_pathname.dirname.dirname
+        group = @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||
+          group.new_variant_group(filename, lproj_parent_dir)
+        @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||= group
+      end
+
+      group
+    end
 
     #-------------------------------------------------------------------------#
   end
