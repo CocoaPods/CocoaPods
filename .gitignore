@@ -16,12 +16,13 @@ DerivedData
 /doc
 
 # Specs
-tmp
 spec/fixtures/banana-lib
+spec/fixtures/cache
 spec/fixtures/chameleon
 spec/fixtures/integration/Headers/
+spec/fixtures/snake
 spec/fixtures/vcr
-spec/fixtures/cache
+tmp
 
 # Examples
 examples/**/Podfile.lock
