@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Improve message when there is no spec in repos for dependency set in Podfile.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#4430](https://github.com/CocoaPods/CocoaPods/issues/4430)
+
 * Reduce the number of times the user's Xcode project is opened, speeding up
   installation.  
   [Samuel Giddins](https://github.com/segiddins)

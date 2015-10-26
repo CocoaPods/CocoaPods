@@ -405,6 +405,10 @@ module Pod
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`AFNetworking \(= 3.0.1\)` required by `Podfile`/)
+        e.message.should.match(/None of the spec sources contain a spec satisfying the `AFNetworking \(= 3.0.1\)` dependency./)
+        e.message.should.match(/You have either; mistyped the name or version,/)
+        e.message.should.match(/ not added the source repo that hosts the Podspec to your Podfile,/)
+        e.message.should.match(/ or not got the latest versions of your source repos./)
       end
 
       it 'takes into account locked dependencies' do
