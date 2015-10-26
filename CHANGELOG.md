@@ -6,6 +6,39 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Improve message when there is no spec in repos for dependency set in Podfile.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#4430](https://github.com/CocoaPods/CocoaPods/issues/4430)
+
+* Reduce the number of times the user's Xcode project is opened, speeding up
+  installation.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4374](https://github.com/CocoaPods/CocoaPods/issues/4374)
+
+* Improving the performance of Pod::Installer::Analyzer#generate_pod_targets  
+  [Daniel Ribeiro](https://github.com/danielribeiro)
+  [#4399](https://github.com/CocoaPods/CocoaPods/pull/4399)
+
+* Framework pods that have a `header_mappings_dirs` set will now produce
+  frameworks with headers that respect the nesting.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The validator will now ensure that pods with a `header_mappings_dirs` have all
+  of their headers inside that directory.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Pods will be validated with the `-Wincomplete-umbrella` compiler flag to
+  ensure module maps are valid.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3428](https://github.com/CocoaPods/CocoaPods/issues/3428)
+
+* The validator will now attempt to build an app that imports the pod.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#2095](https://github.com/CocoaPods/CocoaPods/issues/2095)
+  [#2134](https://github.com/CocoaPods/CocoaPods/issues/2134)
+
 ##### Bug Fixes
 
 * Fix a crash in dependency resolution when running Ruby 2.3.  

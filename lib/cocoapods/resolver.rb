@@ -400,7 +400,13 @@ module Pod
             message << "\nYou should explicitly specify the version in order to install a pre-release version"
           elsif !conflict.existing
             conflict.requirements.values.flatten.each do |r|
-              unless search_for(r).empty?
+              if search_for(r).empty?
+                # There is no existing specification inside any of the spec repos with given requirements.
+                message << "\n\nNone of the spec sources contain a spec satisfying the `#{r}` dependency." \
+                  "\nYou have either; mistyped the name or version," \
+                  ' not added the source repo that hosts the Podspec to your Podfile,' \
+                  ' or not got the latest versions of your source repos.'
+              else
                 message << "\n\nSpecs satisfying the `#{r}` dependency were found, " \
                   'but they required a higher minimum deployment target.'
               end
