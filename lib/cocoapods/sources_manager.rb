@@ -114,7 +114,7 @@ module Pod
       #
       def search_by_name(query, full_text_search = false)
         if full_text_search
-          query_word_regexps = query.split.map{ |word| /#{word}/i }
+          query_word_regexps = query.split.map { |word| /#{word}/i }
           query_word_results_hash = {}
           updated_search_index.each_value do |word_spec_hash|
             word_spec_hash.each_pair do |word, spec_symbols|
@@ -161,7 +161,7 @@ module Pod
           unless index[source_name]
             UI.print "Creating search index for spec repo '#{source_name}'.."
             index[source_name] = aggregate.generate_search_index_for_source(source)
-            UI.puts " Done!"
+            UI.puts ' Done!'
           end
         end
         save_search_index(index)
@@ -216,6 +216,7 @@ module Pod
       # Update is performed incrementally. Only the changed pods' search data is re-generated and updated.
       # @param  [Hash{Source => Array<String>}] changed_spec_paths
       #                  A hash containing changed specification paths for each source.
+      #
       def update_search_index_if_needed(changed_spec_paths)
         search_index = stored_search_index
         return unless search_index
@@ -242,6 +243,9 @@ module Pod
       end
 
       # Updates search index for changed pods in background
+      # @param  [Hash{Source => Array<String>}] changed_spec_paths
+      #                  A hash containing changed specification paths for each source.
+      #
       def update_search_index_if_needed_in_background(changed_spec_paths)
         Process.fork do
           Process.daemon
@@ -540,15 +544,13 @@ module Pod
     executable :git
 
     def update_git_repo(show_output = false)
-      begin
-        output = git! %w(pull --ff-only)
-        UI.puts output if show_output
-      rescue
-        UI.warn 'CocoaPods was not able to update the ' \
-                  "`#{name}` repo. If this is an unexpected issue " \
-                  'and persists you can inspect it running ' \
-                  '`pod repo update --verbose`'
-      end
+      output = git! %w(pull --ff-only)
+      UI.puts output if show_output
+    rescue
+      UI.warn 'CocoaPods was not able to update the ' \
+                "`#{name}` repo. If this is an unexpected issue " \
+                'and persists you can inspect it running ' \
+                '`pod repo update --verbose`'
     end
   end
 end

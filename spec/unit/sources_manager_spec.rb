@@ -244,14 +244,14 @@ module Pod
       end
 
       it 'updates search index for changed paths if source is updated' do
-        prev_index = {@test_source.name => {}}
+        prev_index = { @test_source.name => {} }
         SourcesManager.expects(:stored_search_index).returns(prev_index)
 
-        SourcesManager.expects(:save_search_index).with() { |value|
+        SourcesManager.expects(:save_search_index).with do |value|
           value[@test_source.name]['BananaLib'].should.include(:BananaLib)
           value[@test_source.name]['JSONKit'].should.include(:JSONKit)
-        }
-        changed_paths = {@test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec)}
+        end
+        changed_paths = { @test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec) }
         SourcesManager.update_search_index_if_needed(changed_paths)
       end
 
@@ -259,10 +259,10 @@ module Pod
         prev_index = {}
         SourcesManager.expects(:stored_search_index).returns(prev_index)
 
-        SourcesManager.expects(:save_search_index).with() { |value|
+        SourcesManager.expects(:save_search_index).with do |value|
           value[@test_source.name].should.be.nil
-        }
-        changed_paths = {@test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec)}
+        end
+        changed_paths = { @test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec) }
         SourcesManager.update_search_index_if_needed(changed_paths)
       end
 
