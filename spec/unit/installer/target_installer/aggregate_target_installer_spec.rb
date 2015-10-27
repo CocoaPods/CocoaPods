@@ -114,6 +114,13 @@ module Pod
         end
       end
 
+      it 'has a PRODUCT_BUNDLE_IDENTIFIER set' do
+        @installer.install!
+        @installer.target.native_target.build_configurations.each do |config|
+          config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+        end
+      end
+
       #--------------------------------------#
 
       it 'creates the xcconfig file' do

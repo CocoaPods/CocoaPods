@@ -99,6 +99,10 @@ module Pod
             @xcconfig.to_hash['SKIP_INSTALL'].should == 'YES'
           end
 
+          it 'sets PRODUCT_BUNDLE_IDENTIFIER' do
+            @xcconfig.to_hash['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+          end
+
           it 'saves the xcconfig' do
             path = temporary_directory + 'sample.xcconfig'
             @generator.save_as(path)

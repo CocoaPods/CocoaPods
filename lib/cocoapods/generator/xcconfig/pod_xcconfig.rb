@@ -50,7 +50,8 @@ module Pod
             'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'SKIP_INSTALL' => 'YES',
-            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) '
+            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
+            'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             # 'USE_HEADERMAP' => 'NO'
           }
 

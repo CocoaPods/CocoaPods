@@ -62,4 +62,22 @@ describe Pod::Generator::InfoPlistFile do
     `plutil -lint #{file}`
     $?.should.be.success
   end
+
+  it 'generates a correct Info.plist file' do
+    generator = Pod::Generator::InfoPlistFile.new(mock('Target'))
+    file = temporary_directory + 'Info.plist'
+    generator.save_as(file)
+    Xcodeproj::PlistHelper.read(file).should == {
+      'CFBundleDevelopmentRegion' => 'en',
+      'CFBundleExecutable' => '${EXECUTABLE_NAME}',
+      'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
+      'CFBundleInfoDictionaryVersion' => '6.0',
+      'CFBundleName' => '${PRODUCT_NAME}',
+      'CFBundlePackageType' => 'FMWK',
+      'CFBundleShortVersionString' => '1.0.0',
+      'CFBundleSignature' => '????',
+      'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
+      'NSPrincipalClass' => '',
+    }
+  end
 end
