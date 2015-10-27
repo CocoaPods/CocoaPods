@@ -225,8 +225,9 @@ module Pod
     describe 'Updating Sources' do
       extend SpecHelper::TemporaryRepos
 
-      it 'update source backed by a git repository' do
+      it 'updates source backed by a git repository' do
         set_up_test_repo_for_update
+        SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /is up to date/
       end
@@ -237,8 +238,32 @@ module Pod
         Dir.chdir(test_repo_path) do
           `git remote set-url origin file:///dev/null`
         end
+        SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.warnings.should.include('not able to update the `master` repo')
+      end
+
+      it 'updates search index for changed paths if source is updated' do
+        prev_index = {@test_source.name => {}}
+        SourcesManager.expects(:stored_search_index).returns(prev_index)
+
+        SourcesManager.expects(:save_search_index).with() { |value|
+          value[@test_source.name]['BananaLib'].should.include(:BananaLib)
+          value[@test_source.name]['JSONKit'].should.include(:JSONKit)
+        }
+        changed_paths = {@test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec)}
+        SourcesManager.update_search_index_if_needed(changed_paths)
+      end
+
+      it 'does not update search index if it does not contain source even if there are changes in source' do
+        prev_index = {}
+        SourcesManager.expects(:stored_search_index).returns(prev_index)
+
+        SourcesManager.expects(:save_search_index).with() { |value|
+          value[@test_source.name].should.be.nil
+        }
+        changed_paths = {@test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec)}
+        SourcesManager.update_search_index_if_needed(changed_paths)
       end
 
       it 'returns whether a source is backed by a git repo' do
