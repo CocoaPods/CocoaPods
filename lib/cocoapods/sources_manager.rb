@@ -190,8 +190,8 @@ module Pod
       def save_search_index(index)
         require 'json'
         @updated_search_index = index
-        File.open(search_index_path, 'w') do |file|
-          file.write(@updated_search_index.to_json)
+        search_index_path.open('w') do |io|
+          io.write(@updated_search_index.to_json)
         end
       end
 
@@ -239,6 +239,15 @@ module Pod
         save_search_index(search_index) if search_index
       end
 
+      # Updates search index for changed pods in background
+      def update_search_index_if_needed_in_background(changed_spec_paths)
+        Process.fork do
+          Process.daemon
+          update_search_index_if_needed(changed_spec_paths)
+          exit
+        end
+      end
+
       # Updates the local clone of the spec-repo with the given name or of all
       # the git repos if the name is omitted.
       #
@@ -262,12 +271,8 @@ module Pod
             check_version_information(source.repo)
           end
         end
-        # Perform search index update operation as a subprocess.
-        Process.fork do
-          Process.daemon
-          update_search_index_if_needed(changed_spec_paths)
-          exit
-        end
+        # Perform search index update operation in background.
+        update_search_index_if_needed_in_background(changed_spec_paths)
       end
 
       # Returns whether a source is a GIT repo.
