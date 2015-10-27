@@ -155,18 +155,16 @@ module Pod
       # @return [Hash{String => Hash{String => Array<String>}}] The up to date search data.
       #
       def updated_search_index
-        index = stored_search_index
-        unless index
-          # Create index from scratch
-          UI.puts 'Creating search index..'
-          index = {}
-          all.each do |source|
-            source_name = source.name
+        index = stored_search_index || {}
+        all.each do |source|
+          source_name = source.name
+          unless index[source_name]
+            UI.print "Creating search index for spec repo '#{source_name}'.."
             index[source_name] = aggregate.generate_search_index_for_source(source)
+            UI.puts " Done!"
           end
-          save_search_index(index)
-          UI.puts 'Search index creation done!'
         end
+        save_search_index(index)
         index
       end
 
@@ -219,28 +217,28 @@ module Pod
       # @param  [Hash{Source => Array<String>}] changed_spec_paths
       #                  A hash containing changed specification paths for each source.
       def update_search_index_if_needed(changed_spec_paths)
-        search_index = nil
+        search_index = stored_search_index
+        return unless search_index
         changed_spec_paths.each_pair do |source, spec_paths|
-          source_name = source.name
-          next unless spec_paths.length > 0
-          search_index = stored_search_index
+          index_for_source = search_index[source.name]
+          next unless index_for_source && spec_paths.length > 0
           updated_pods = source.pods_for_specification_paths(spec_paths)
+
           new_index = aggregate.generate_search_index_for_changes_in_source(source, spec_paths)
-          next unless search_index && search_index[source_name]
           # First traverse search_index and update existing words
           # Removed traversed words from new_index after adding to search_index,
           # so that only non existing words will remain in new_index after enumeration completes.
-          search_index[source_name].each_pair do |word, _|
+          index_for_source.each_pair do |word, _|
             if new_index[word]
-              search_index[source_name][word] |= new_index[word]
+              index_for_source[word] |= new_index[word]
             else
-              search_index[source_name][word] -= updated_pods
+              index_for_source[word] -= updated_pods
             end
           end
           # Now add non existing words remained in new_index to search_index
-          search_index[source_name].merge!(new_index)
+          index_for_source.merge!(new_index)
         end
-        save_search_index(search_index) if search_index
+        save_search_index(search_index)
       end
 
       # Updates search index for changed pods in background
@@ -271,7 +269,8 @@ module Pod
         changed_spec_paths = {}
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            changed_spec_paths[source] = source.update(show_output && !config.verbose?)
+            changed_source_paths = source.update(show_output && !config.verbose?)
+            changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
             check_version_information(source.repo)
           end
         end
