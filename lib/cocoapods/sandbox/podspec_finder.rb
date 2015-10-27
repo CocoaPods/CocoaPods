@@ -10,7 +10,7 @@ module Pod
       def podspecs
         return @specs_by_name if @specs_by_name
         @specs_by_name = {}
-        spec_files = Pathname.glob(root + '{,*,*/*}.podspec{,.json}')
+        spec_files = Pathname.glob(root + '{,*}.podspec{,.json}')
         spec_files.sort_by { |p| -p.to_path.split(File::SEPARATOR).size }.each do |file|
           begin
             spec = Specification.from_file(file)

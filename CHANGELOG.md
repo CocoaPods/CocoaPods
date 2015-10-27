@@ -64,6 +64,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#3644](https://github.com/CocoaPods/CocoaPods/issues/3644)
   [#4393](https://github.com/CocoaPods/CocoaPods/issues/4393)
 
+* Only the root directory of externally-sourced pods will be searched for
+  podspecs.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3683](https://github.com/CocoaPods/CocoaPods/issues/3683)
+
 
 ## 0.39.0 (2015-10-09)
 
