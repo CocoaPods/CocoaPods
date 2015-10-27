@@ -232,6 +232,13 @@ module Pod
         UI.output.should.match /is up to date/
       end
 
+      it 'uses the only fast forward git option' do
+        set_up_test_repo_for_update
+        Source.any_instance.expects(:git!).with { |options| options.should.include? '--ff-only' }
+        SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
+        SourcesManager.update(test_repo_path.basename.to_s, true)
+      end
+
       it 'prints a warning if the update failed' do
         UI.warnings = ''
         set_up_test_repo_for_update
