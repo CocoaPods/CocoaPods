@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Improve `pod search` performance while using _`--full`_ flag  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [cocoapods-search#8](https://github.com/CocoaPods/cocoapods-search/issues/8)
+  
 * Improve message when there is no spec in repos for dependency set in Podfile.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#4430](https://github.com/CocoaPods/CocoaPods/issues/4430)

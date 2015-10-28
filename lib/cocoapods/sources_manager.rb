@@ -110,27 +110,26 @@ module Pod
       #
       # @raise  If no source including the set can be found.
       #
-      # @note   Full text search requires to load the specification for each
-      #         pod, hence is considerably slower.
-      #
       # @return [Array<Set>]  The sets that contain the search term.
       #
       def search_by_name(query, full_text_search = false)
         if full_text_search
-          set_names = []
-          query_regexp = /#{query}/i
-          updated_search_index.each do |name, set_data|
-            texts = [name]
-            if full_text_search
-              texts << set_data['authors'].to_s if set_data['authors']
-              texts << set_data['summary']      if set_data['summary']
-              texts << set_data['description']  if set_data['description']
+          query_word_regexps = query.split.map { |word| /#{word}/i }
+          query_word_results_hash = {}
+          updated_search_index.each_value do |word_spec_hash|
+            word_spec_hash.each_pair do |word, spec_symbols|
+              query_word_regexps.each do |query_word_regexp|
+                set = (query_word_results_hash[query_word_regexp] ||= Set.new)
+                set.merge(spec_symbols) if word =~ query_word_regexp
+              end
             end
-            set_names << name unless texts.grep(query_regexp).empty?
           end
-          sets = set_names.sort.map do |name|
-            aggregate.representative_set(name)
+          found_set_symbols = query_word_results_hash.values.reduce(:&)
+          sets = found_set_symbols.map do |symbol|
+            aggregate.representative_set(symbol.to_s)
           end
+          # Remove nil values because representative_set return nil if no pod is found in any of the sources.
+          sets.compact!
         else
           sets = aggregate.search_by_name(query, false)
         end
@@ -142,39 +141,60 @@ module Pod
         sets
       end
 
-      # Creates or updates the search data and returns it. The search data
-      # groups by name the following information for each set:
+      # Returns the search data. If a saved search data exists, retrieves it from file and returns it.
+      # Else, creates the search data from scratch, saves it to file system, and returns it.
+      # Search data is grouped by source repos. For each source, it contains a hash where keys are words
+      # and values are the pod names containing corresponding word.
       #
+      # For each source, list of unique words are generated from the following spec information.
       #   - version
       #   - summary
       #   - description
       #   - authors
       #
-      # @note   This operation is fairly expensive, because of the YAML
-      #         conversion.
-      #
-      # @return [Hash{String => String}] The up to date search data.
+      # @return [Hash{String => Hash{String => Array<String>}}] The up to date search data.
       #
       def updated_search_index
+        index = stored_search_index || {}
+        all.each do |source|
+          source_name = source.name
+          unless index[source_name]
+            UI.print "Creating search index for spec repo '#{source_name}'.."
+            index[source_name] = aggregate.generate_search_index_for_source(source)
+            UI.puts ' Done!'
+          end
+        end
+        save_search_index(index)
+        index
+      end
+
+      # Returns the search data stored in the file system.
+      # If existing data in the file system is not valid, returns nil.
+      #
+      def stored_search_index
         unless @updated_search_index
           if search_index_path.exist?
-            require 'yaml'
-            stored_index = YAML.load(search_index_path.read)
-            if stored_index && stored_index.is_a?(Hash)
-              search_index = aggregate.update_search_index(stored_index)
-            else
-              search_index = aggregate.generate_search_index
+            require 'json'
+            index = JSON.parse(search_index_path.read)
+            if index && index.is_a?(Hash) # TODO: should we also check if hash has correct hierarchy?
+              return @updated_search_index = index
             end
-          else
-            search_index = aggregate.generate_search_index
           end
-
-          File.open(search_index_path, 'w') do |file|
-            file.write(search_index.to_yaml)
-          end
-          @updated_search_index = search_index
+          @updated_search_index = nil
         end
         @updated_search_index
+      end
+
+      # Stores given search data in the file system.
+      # @param [Hash] index
+      #        Index to be saved in file system
+      #
+      def save_search_index(index)
+        require 'json'
+        @updated_search_index = index
+        search_index_path.open('w') do |io|
+          io.write(@updated_search_index.to_json)
+        end
       end
 
       # Allows to clear the search index.
@@ -192,6 +212,48 @@ module Pod
       extend Executable
       executable :git
 
+      # Updates the stored search index if there are changes in spec repos while updating them.
+      # Update is performed incrementally. Only the changed pods' search data is re-generated and updated.
+      # @param  [Hash{Source => Array<String>}] changed_spec_paths
+      #                  A hash containing changed specification paths for each source.
+      #
+      def update_search_index_if_needed(changed_spec_paths)
+        search_index = stored_search_index
+        return unless search_index
+        changed_spec_paths.each_pair do |source, spec_paths|
+          index_for_source = search_index[source.name]
+          next unless index_for_source && spec_paths.length > 0
+          updated_pods = source.pods_for_specification_paths(spec_paths)
+
+          new_index = aggregate.generate_search_index_for_changes_in_source(source, spec_paths)
+          # First traverse search_index and update existing words
+          # Removed traversed words from new_index after adding to search_index,
+          # so that only non existing words will remain in new_index after enumeration completes.
+          index_for_source.each_pair do |word, _|
+            if new_index[word]
+              index_for_source[word] |= new_index[word]
+            else
+              index_for_source[word] -= updated_pods
+            end
+          end
+          # Now add non existing words remained in new_index to search_index
+          index_for_source.merge!(new_index)
+        end
+        save_search_index(search_index)
+      end
+
+      # Updates search index for changed pods in background
+      # @param  [Hash{Source => Array<String>}] changed_spec_paths
+      #                  A hash containing changed specification paths for each source.
+      #
+      def update_search_index_if_needed_in_background(changed_spec_paths)
+        Process.fork do
+          Process.daemon
+          update_search_index_if_needed(changed_spec_paths)
+          exit
+        end
+      end
+
       # Updates the local clone of the spec-repo with the given name or of all
       # the git repos if the name is omitted.
       #
@@ -208,22 +270,16 @@ module Pod
           sources =  git_sources
         end
 
+        changed_spec_paths = {}
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            Dir.chdir(source.repo) do
-              begin
-                output = git! %w(pull --ff-only)
-                UI.puts output if show_output && !config.verbose?
-              rescue Informative
-                UI.warn 'CocoaPods was not able to update the ' \
-                  "`#{source.name}` repo. If this is an unexpected issue " \
-                  'and persists you can inspect it running ' \
-                  '`pod repo update --verbose`'
-              end
-            end
+            changed_source_paths = source.update(show_output && !config.verbose?)
+            changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
             check_version_information(source.repo)
           end
         end
+        # Perform search index update operation in background.
+        update_search_index_if_needed_in_background(changed_spec_paths)
       end
 
       # Returns whether a source is a GIT repo.
@@ -480,6 +536,21 @@ module Pod
         end
         name
       end
+    end
+  end
+
+  class Source
+    extend Executable
+    executable :git
+
+    def update_git_repo(show_output = false)
+      output = git! %w(pull --ff-only)
+      UI.puts output if show_output
+    rescue
+      UI.warn 'CocoaPods was not able to update the ' \
+                "`#{name}` repo. If this is an unexpected issue " \
+                'and persists you can inspect it running ' \
+                '`pod repo update --verbose`'
     end
   end
 end

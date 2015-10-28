@@ -28,7 +28,7 @@ module Bacon
       SpecHelper.temporary_directory.mkpath
 
       # TODO
-      ::Pod::SourcesManager.stubs(:search_index_path).returns(temporary_directory + 'search_index.yaml')
+      ::Pod::SourcesManager.stubs(:search_index_path).returns(temporary_directory + 'search_index.json')
 
       old_run_requirement.bind(self).call(description, spec)
     end
