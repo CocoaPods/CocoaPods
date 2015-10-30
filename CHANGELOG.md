@@ -82,6 +82,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3683](https://github.com/CocoaPods/CocoaPods/issues/3683)
 
+* Remove the library name's extension when adding it in the "linker flags" build setting
+  to support dynamic libraries.
+  [Andrea Cremaschi](https://github.com/andreacremaschi)
+  [#4468][https://github.com/CocoaPods/CocoaPods/issues/4468]
 
 ## 0.39.0 (2015-10-09)
 
