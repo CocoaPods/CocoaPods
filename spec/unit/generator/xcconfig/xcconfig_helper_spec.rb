@@ -158,6 +158,15 @@ module Pod
             hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
             hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/MapBox/Proj4"'
           end
+
+          it 'adds dylib build settings to the given xcconfig' do
+            path = config.sandbox.root + 'MapBox/Proj4/libProj4.dylib'
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
+            hash_config = xcconfig.to_hash
+            hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
+            hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/MapBox/Proj4"'
+          end
         end
 
         #---------------------------------------------------------------------#
