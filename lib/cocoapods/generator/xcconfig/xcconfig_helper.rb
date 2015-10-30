@@ -153,7 +153,8 @@ module Pod
         #         The path retrieved from Sandbox#root.
         #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
-          name = File.basename(library_path, '.a').sub(/\Alib/, '')
+          extension = File.extname(library_path)
+          name = File.basename(library_path, extension).sub(/\Alib/, '')
           dirname = '${PODS_ROOT}/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'OTHER_LDFLAGS' => "-l#{name}",
