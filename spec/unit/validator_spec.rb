@@ -91,6 +91,36 @@ module Pod
         validator.validate
         validator.validation_dir.should.be == Pathname.new(Dir.tmpdir) + 'CocoaPods/Lint'
       end
+
+      describe '#only_subspec' do
+        before do
+          podspec = fixture('spec-repos') + 'master/Specs/RestKit/0.22.0/RestKit.podspec.json'
+          @validator = Validator.new(podspec, SourcesManager.master.map(&:url))
+          @validator.quick = true
+        end
+
+        it 'handles a relative subspec name' do
+          @validator.only_subspec = 'CoreData'
+          @validator.validate
+          @validator.send(:subspec_name).should == 'RestKit/CoreData'
+        end
+
+        it 'handles an absolute subspec name' do
+          @validator.only_subspec = 'RestKit/CoreData'
+          @validator.validate
+          @validator.send(:subspec_name).should == 'RestKit/CoreData'
+        end
+
+        it 'handles a missing subspec name' do
+          @validator.only_subspec = 'RestKit/Missing'
+          should.raise(Informative) { @validator.validate }.message.
+            should.include 'Unable to find a specification named `RestKit/Missing`'
+
+          @validator.only_subspec = 'Missing'
+          should.raise(Informative) { @validator.validate }.message.
+            should.include 'Unable to find a specification named `RestKit/Missing`'
+        end
+      end
     end
 
     #-------------------------------------------------------------------------#
