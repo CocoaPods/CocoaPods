@@ -43,6 +43,7 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: $(SRCROOT)
+          PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
@@ -59,6 +60,7 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: $(SRCROOT)
+          PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
