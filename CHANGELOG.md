@@ -43,6 +43,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#2095](https://github.com/CocoaPods/CocoaPods/issues/2095)
   [#2134](https://github.com/CocoaPods/CocoaPods/issues/2134)
 
+* The `Info.plist` file's `CFBundleIdentifier` is now set via the
+  `PRODUCT_BUNDLE_IDENTIFIER` build setting, consisten with Xcode 7.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4426](https://github.com/CocoaPods/CocoaPods/issues/4426)
+
 ##### Bug Fixes
 
 * Improve repo lint error message when no repo found with given name.  
