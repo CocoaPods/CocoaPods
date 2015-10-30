@@ -87,6 +87,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Andrea Cremaschi](https://github.com/andreacremaschi)
   [#4468](https://github.com/CocoaPods/CocoaPods/issues/4468)
 
+* Specifying relative subspec names to the linter is now supported.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1917](https://github.com/CocoaPods/CocoaPods/issues/1917)
+
 
 ## 0.39.0 (2015-10-09)
 
