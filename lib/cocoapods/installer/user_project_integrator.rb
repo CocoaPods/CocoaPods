@@ -91,7 +91,7 @@ module Pod
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           new_file_references = file_references - workspace.file_references
           unless new_file_references.empty?
-            workspace.file_references.concat(new_file_references)
+            new_file_references.each { |fr| workspace << fr }
             workspace.save_as(workspace_path)
           end
 
