@@ -276,6 +276,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
           PRODUCT_NAME: SamplePodWithResources
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
@@ -288,6 +289,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
           PRODUCT_NAME: SamplePodWithResources
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'

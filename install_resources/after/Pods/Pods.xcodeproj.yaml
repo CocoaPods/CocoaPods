@@ -137,6 +137,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
           PRODUCT_NAME: res
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
@@ -149,6 +150,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
           PRODUCT_NAME: res
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
