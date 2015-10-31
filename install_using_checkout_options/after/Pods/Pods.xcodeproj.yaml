@@ -277,7 +277,7 @@ Targets:
           ENABLE_TESTABILITY: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          IPHONEOS_DEPLOYMENT_TARGET: 5.1.1
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -295,7 +295,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RKValueTransformers/RKValueTransformers-prefix.pch
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          IPHONEOS_DEPLOYMENT_TARGET: 5.1.1
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -327,7 +327,7 @@ Targets:
           ENABLE_TESTABILITY: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -345,7 +345,7 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SEGModules/SEGModules-prefix.pch
-          IPHONEOS_DEPLOYMENT_TARGET: '6.0'
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''

@@ -227,7 +227,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/SamplePodWithResources/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
-          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: SamplePodWithResources
@@ -253,7 +253,7 @@ Targets:
           INFOPLIST_FILE: Target Support Files/SamplePodWithResources/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
-          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: SamplePodWithResources

@@ -215,7 +215,7 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/libPusher/libPusher-prefix.pch
           INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
-          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          IPHONEOS_DEPLOYMENT_TARGET: '5.0'
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/libPusher/libPusher.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -240,7 +240,7 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/libPusher/libPusher-prefix.pch
           INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
-          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          IPHONEOS_DEPLOYMENT_TARGET: '5.0'
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/libPusher/libPusher.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
@@ -364,7 +364,7 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/SocketRocket/SocketRocket-prefix.pch
           INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
-          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/SocketRocket/SocketRocket.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -389,7 +389,7 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/SocketRocket/SocketRocket-prefix.pch
           INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
-          IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/SocketRocket/SocketRocket.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'

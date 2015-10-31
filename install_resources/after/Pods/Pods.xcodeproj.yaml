@@ -96,7 +96,7 @@ Targets:
           EXECUTABLE_PREFIX: lib
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
-          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -114,7 +114,7 @@ Targets:
           EXECUTABLE_PREFIX: lib
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
-          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
