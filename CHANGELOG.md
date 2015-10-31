@@ -56,6 +56,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4354](https://github.com/CocoaPods/CocoaPods/issues/3454)
 
+* Set a deployment target for resource bundle targets.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3347](https://github.com/CocoaPods/CocoaPods/issues/3347)
+
 ##### Bug Fixes
 
 * Improve repo lint error message when no repo found with given name.  
