@@ -24,5 +24,9 @@
   },
   "osx": {
     "vendored_frameworks": "realm-swift-0.94.1/osx/swift-1.2/Realm.framework"
+  },
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9"
   }
 }

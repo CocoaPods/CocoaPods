@@ -4,6 +4,14 @@
   "source": {
     "http": "./PodTest.zip"
   },
+  "authors": [
+    "Fabio"
+  ],
+  "license": {
+    "type": "MIT"
+  },
+  "homepage": "http://example.com",
+  "summary": "A test pod.",
   "subspecs": [
     {
       "name": "subspec_1",

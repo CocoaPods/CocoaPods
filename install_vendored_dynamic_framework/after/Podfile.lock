@@ -4,12 +4,12 @@ PODS:
     - Realm (= 0.94.1)
 
 DEPENDENCIES:
-  - Realm (from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/eb75af97091affac5bb783ac8fd6d86dd659c2f3/Realm.podspec`)
+  - Realm (from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec`)
   - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, tag `v0.94.1`)
 
 EXTERNAL SOURCES:
   Realm:
-    :podspec: https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/eb75af97091affac5bb783ac8fd6d86dd659c2f3/Realm.podspec
+    :podspec: https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec
   RealmSwift:
     :git: https://github.com/realm/realm-cocoa.git
     :tag: v0.94.1
@@ -20,9 +20,9 @@ CHECKOUT OPTIONS:
     :tag: v0.94.1
 
 SPEC CHECKSUMS:
-  Realm: e2953d96309f2a8e250848dec6f6c81debdfbb49
+  Realm: cd22bdc3ac2f929b4b453d7402359aa2c731e86a
   RealmSwift: 1cfcf6f9bd4de8674797d000de346d9588ca2028
 
-PODFILE CHECKSUM: ab81fd269455e8cecab842aa9936d4b2ce553ab6
+PODFILE CHECKSUM: ed272e8b3a8a19f8d846541a947a24f37a94543d
 
 COCOAPODS: 0.39.0

@@ -7,7 +7,7 @@ Inspecting targets to integrate
   Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
--> Fetching podspec for `Realm` from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/eb75af97091affac5bb783ac8fd6d86dd659c2f3/Realm.podspec`
+-> Fetching podspec for `Realm` from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec`
 -> Pre-downloading: `RealmSwift` from `https://github.com/realm/realm-cocoa.git`, tag `v0.94.1`
  > Git download
  > Git download
