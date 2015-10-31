@@ -53,7 +53,11 @@ Targets:
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          ENABLE_TESTABILITY: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -68,7 +72,10 @@ Targets:
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MTL_ENABLE_DEBUG_INFO: 'NO'
@@ -90,7 +97,11 @@ Targets:
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          ENABLE_TESTABILITY: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -105,7 +116,10 @@ Targets:
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
           MTL_ENABLE_DEBUG_INFO: 'NO'
@@ -134,7 +148,11 @@ Targets:
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          ENABLE_TESTABILITY: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -149,7 +167,10 @@ Targets:
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MTL_ENABLE_DEBUG_INFO: 'NO'

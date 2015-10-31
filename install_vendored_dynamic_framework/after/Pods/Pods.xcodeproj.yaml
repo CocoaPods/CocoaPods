@@ -62,11 +62,14 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
+          DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          ENABLE_TESTABILITY: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
@@ -91,11 +94,13 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
@@ -141,11 +146,14 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
+          DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          ENABLE_TESTABILITY: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RealmSwift/RealmSwift-prefix.pch
           INFOPLIST_FILE: Target Support Files/RealmSwift/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
@@ -166,11 +174,13 @@ Targets:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/RealmSwift/RealmSwift-prefix.pch
           INFOPLIST_FILE: Target Support Files/RealmSwift/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks

@@ -35,8 +35,12 @@ Targets:
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY: '-'
+          DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          ENABLE_TESTABILITY: 'YES'
           EXECUTABLE_PREFIX: lib
+          GCC_NO_COMMON_BLOCKS: 'YES'
           MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.8'
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -51,9 +55,11 @@ Targets:
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY: '-'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           EXECUTABLE_PREFIX: lib
+          GCC_NO_COMMON_BLOCKS: 'YES'
           MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.8'
           MTL_ENABLE_DEBUG_INFO: 'NO'
@@ -74,8 +80,10 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY: '-'
           COMBINE_HIDPI_IMAGES: 'YES'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           SDKROOT: macosx
@@ -83,8 +91,10 @@ Targets:
           WRAPPER_EXTENSION: bundle
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY: '-'
           COMBINE_HIDPI_IMAGES: 'YES'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           PRODUCT_NAME: res
           SDKROOT: macosx
