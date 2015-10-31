@@ -271,7 +271,8 @@ module Pod
       end
 
       def create_umbrella_header
-        return super unless custom_module_map
+        inferred_umbrella_header = target.build_headers.root + "#{target.product_module_name}/#{target.product_module_name}.h"
+        return super unless custom_module_map || inferred_umbrella_header.file?
       end
 
       def custom_module_map
