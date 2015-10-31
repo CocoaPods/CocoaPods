@@ -310,6 +310,18 @@ module Pod
         end
       end
 
+      # The deployment target for the pod target, which is the maximum of all
+      # the deployment targets for the current platform of the target.
+      #
+      # @return [String] The deployment target.
+      #
+      def deployment_target
+        default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[target.platform.name]
+        target.specs.map do |spec|
+          Pod::Version.new(spec.deployment_target(target.platform.name) || default)
+        end.max.to_s
+      end
+
       #-----------------------------------------------------------------------#
     end
   end

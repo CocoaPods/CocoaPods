@@ -51,6 +51,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Externally-sourced pods will now have their specifications quickly linted.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Set the deployment target on pods to be that which is defined in the
+  podspec.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4354](https://github.com/CocoaPods/CocoaPods/issues/3454)
+
 ##### Bug Fixes
 
 * Improve repo lint error message when no repo found with given name.  
