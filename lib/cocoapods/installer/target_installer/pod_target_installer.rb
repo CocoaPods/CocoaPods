@@ -318,7 +318,7 @@ module Pod
       def deployment_target
         default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[target.platform.name]
         target.specs.map do |spec|
-          Pod::Version.new(spec.deployment_target(target.platform) || default)
+          Pod::Version.new(spec.deployment_target(target.platform.name) || default)
         end.max.to_s
       end
 
