@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 0e38ccdecd7b5cc6515465bf22cf30bb016ab17c
+  revision: 7a3d0c6520d995353b7ec09c4585aebf43e6c613
   branch: master
   specs:
     xcodeproj (0.28.2)
@@ -140,7 +140,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.8.1)
+    minitest (5.8.2)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
