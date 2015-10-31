@@ -154,8 +154,8 @@ module Pod
       end
 
       def validate_podspec(podspec)
-        validator                = Validator.new(podspec, [])
-        validator.quick          = true
+        validator = validator_for_podspec(podspec)
+        validator.quick = true
         validator.allow_warnings = true
         validator.ignore_public_only_results = true
         Config.instance.with_changes(:silent => true) do
@@ -164,6 +164,10 @@ module Pod
         unless validator.validated?
           raise Informative, "The `#{name}` pod failed to validate due to #{validator.failure_reason}:\n#{validator.results_message}"
         end
+      end
+
+      def validator_for_podspec(podspec)
+        Validator.new(podspec, [])
       end
     end
   end
