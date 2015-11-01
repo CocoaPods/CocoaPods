@@ -113,8 +113,8 @@ module Pod
       # @return [Array<Set>]  The sets that contain the search term.
       #
       def search_by_name(query, full_text_search = false)
+        query_word_regexps = query.split.map { |word| /#{word}/i }
         if full_text_search
-          query_word_regexps = query.split.map { |word| /#{word}/i }
           query_word_results_hash = {}
           updated_search_index.each_value do |word_spec_hash|
             word_spec_hash.each_pair do |word, spec_symbols|
@@ -138,6 +138,23 @@ module Pod
           raise Informative, "Unable to find a pod with name#{extra}" \
             "matching `#{query}`"
         end
+
+        # Sort sets
+        sets.sort_by! { |set|
+          pre_match_length = nil
+          found_query_index = nil
+          found_query_count = 0
+          query_word_regexps.each_with_index do |q, idx|
+            if (m = set.name.match(/#{q}/i))
+              pre_match_length ||=  (m.pre_match.length)
+              found_query_index ||= idx
+              found_query_count += 1
+            end
+          end
+          pre_match_length ||= 1000
+          found_query_index ||= 1000
+          [-found_query_count, pre_match_length, found_query_index, set.name.downcase]
+        }
         sets
       end
 
