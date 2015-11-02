@@ -49,7 +49,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 1dd4aba6378678ca45e364e58f96196937fd297b
+  revision: 4281e740769875ba4e48748b73c7ff832a8d336e
   branch: master
   specs:
     cocoapods-search (0.1.0)
