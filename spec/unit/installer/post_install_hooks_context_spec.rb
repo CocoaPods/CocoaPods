@@ -20,6 +20,7 @@ module Pod
       result.class.should == Installer::PostInstallHooksContext
       result.sandbox_root.should == '/path'
       result.pods_project.should == pods_project
+      result.sandbox.should == sandbox
       result.umbrella_targets.count.should == 1
       umbrella_target = result.umbrella_targets.first
       umbrella_target.user_target_uuids.should == ['UUID']

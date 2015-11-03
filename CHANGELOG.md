@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* `Pod::Installer::PostInstallHooksContext` now offers access to the `sandbox`
+  object.  
+  [Marcelo Fabri](https://github.com/marcelofabri)
+  [#4487](https://github.com/CocoaPods/CocoaPods/pull/4487)
+
 * Improve `pod search` performance while using _`--full`_ flag  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [cocoapods-search#8](https://github.com/CocoaPods/cocoapods-search/issues/8)
