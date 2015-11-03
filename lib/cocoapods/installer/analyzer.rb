@@ -614,13 +614,21 @@ module Pod
       def sources
         @sources ||= begin
           sources = podfile.sources
-          if sources.empty?
-            url = 'https://github.com/CocoaPods/Specs.git'
-            [SourcesManager.find_or_create_source_with_url(url)]
+
+          # Add any sources specified using the :source flag on individual dependencies.
+          dependency_sources = podfile.dependencies.map(&:podspec_repo).compact
+
+          all_dependencies_have_sources = dependency_sources.count == podfile.dependencies.count
+          if all_dependencies_have_sources
+            sources = dependency_sources
+          elsif sources.empty?
+            sources = ['https://github.com/CocoaPods/Specs.git']
           else
-            sources.map do |source_url|
-              SourcesManager.find_or_create_source_with_url(source_url)
-            end
+            sources += dependency_sources
+          end
+
+          sources.uniq.map do |source_url|
+            SourcesManager.find_or_create_source_with_url(source_url)
           end
         end
       end

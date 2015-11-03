@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support for specifying :source with a pod dependency.  
+  [Eric Firestone](https://github.com/efirestone)
+  [#4486](https://github.com/CocoaPods/CocoaPods/pull/4486)
+
 * Ask user to run `pod install` when a resource not found during in copy resources script.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
 
