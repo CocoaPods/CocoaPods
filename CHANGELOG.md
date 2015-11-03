@@ -14,6 +14,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#4487](https://github.com/CocoaPods/CocoaPods/pull/4487)
 
 * Improve `pod search` performance while using _`--full`_ flag  
+* Improve sorting algorithm for `pod search`.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [cocoapods-search#12](https://github.com/CocoaPods/cocoapods-search/issues/12)
+
+* Improve `pod search` performance while using _`--full`_ flag.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [cocoapods-search#8](https://github.com/CocoaPods/cocoapods-search/issues/8)
 

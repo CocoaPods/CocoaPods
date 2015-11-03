@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: d66fcb7160f060198c3808eb2ff3f51edf212687
+  revision: ce26e1eb797a6ad1f1d94b0304a50c491bc41237
   branch: master
   specs:
     cocoapods-core (0.39.0)
@@ -49,7 +49,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 4e7de92e477f47918d869a7c4819251633efca0d
+  revision: 4281e740769875ba4e48748b73c7ff832a8d336e
   branch: master
   specs:
     cocoapods-search (0.1.0)
