@@ -84,6 +84,57 @@ module Pod
         sets.any? { |s| s.name == 'BananaLib' }.should.be.true
       end
 
+      describe 'Sorting algorithm' do
+        before do
+          @test_search_results = %w(HockeyKit DLSuit VCLReachability NPReachability AVReachability PYNetwork
+                                    SCNetworkReachability AFNetworking Networking).map do |name|
+            Specification::Set.new(name)
+          end
+        end
+
+        it 'puts pod with exact match at the first index while sorting' do
+          regexps = [/networking/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets[0].name.should == 'Networking'
+        end
+
+        it 'puts pod with less prefix length before pods with more prefix length in search results' do
+          regexps = [/reachability/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets.index { |s| s.name == 'AVReachability' }.should.be < sets.index { |s| s.name == 'VCLReachability' }
+        end
+
+        it 'puts pod with more query word match before pods with less match in multi word query search results' do
+          regexps = [/network/i, /reachability/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets.index { |s| s.name == 'SCNetworkReachability' }.should.be < sets.index { |s| s.name == 'AVReachability' }
+        end
+
+        it 'puts pod matching first query word before pods matching later words in multi word query search results' do
+          regexps = [/network/i, /reachability/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets.index { |s| s.name == 'PYNetwork' }.should.be < sets.index { |s| s.name == 'AVReachability' }
+        end
+
+        it 'puts pod matching first query word before pods matching later words in multi word query search results' do
+          regexps = [/network/i, /reachability/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets.index { |s| s.name == 'PYNetwork' }.should.be < sets.index { |s| s.name == 'AVReachability' }
+        end
+
+        it 'alphabetically sorts pods having exact other conditions' do
+          regexps = [/reachability/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets.index { |s| s.name == 'AVReachability' }.should.be < sets.index { |s| s.name == 'NPReachability' }
+        end
+
+        it 'alphabetically sorts pods whose names does not match query' do
+          regexps = [/reachability/i]
+          sets = SourcesManager.sorted_sets(@test_search_results, regexps)
+          sets.index { |s| s.name == 'DLSuit' }.should.be < sets.index { |s| s.name == 'HockeyKit' }
+        end
+      end
+
       it "generates the search index before performing a search if it doesn't exits" do
         SourcesManager.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index_for_source).with(@test_source).returns('BananaLib' => ['BananaLib'])
