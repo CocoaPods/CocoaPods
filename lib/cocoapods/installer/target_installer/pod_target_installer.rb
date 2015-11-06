@@ -26,7 +26,13 @@ module Pod
               generator.private_headers += target.file_accessors.flat_map(&:private_headers).map(&:basename)
             end
             create_umbrella_header do |generator|
-              generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
+              if header_mappings_dir
+                generator.imports += target.file_accessors.flat_map(&:public_headers).map do |pathname|
+                  pathname.relative_path_from(header_mappings_dir)
+                end
+              else
+                generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
+              end
             end
           end
           create_prefix_header
