@@ -203,7 +203,7 @@ module Pod
           puts_indented "#{set.name} #{set.versions.first.version}"
         else
           pod = Specification::Set::Presenter.new(set)
-          title = "\n-> #{pod.name} (#{pod.version})"
+          title = "-> #{pod.name} (#{pod.version})"
           if pod.spec.deprecated?
             title += " #{pod.deprecation_description}"
             colored_title = title.red
