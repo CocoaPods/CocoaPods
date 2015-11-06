@@ -249,47 +249,65 @@ module Pod
 
       #--------------------------------------------------------------------------------#
 
-      it 'creates custom copy files phases for framework pods with header_mappings_dirs' do
-        @project.add_pod_group('snake', fixture('snake'))
+      describe 'concerning header_mappings_dirs' do
+        before do
+          @project.add_pod_group('snake', fixture('snake'))
 
-        @pod_target = fixture_pod_target('snake/snake.podspec', @target_definition)
-        @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-        @pod_target.stubs(:requires_frameworks? => true)
-        group = @project.group_for_spec('snake')
-        @pod_target.file_accessors.first.source_files.each do |file|
-          @project.add_file_reference(file, group)
+          @pod_target = fixture_pod_target('snake/snake.podspec', @target_definition)
+          @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+          @pod_target.stubs(:requires_frameworks? => true)
+          group = @project.group_for_spec('snake')
+          @pod_target.file_accessors.first.source_files.each do |file|
+            @project.add_file_reference(file, group)
+          end
+          @installer.stubs(:target).returns(@pod_target)
+          @installer.install!
         end
-        @installer.stubs(:target).returns(@pod_target)
-        @installer.install!
 
-        target = @project.native_targets.first
-        target.name.should == 'snake'
+        it 'creates custom copy files phases for framework pods' do
+          target = @project.native_targets.first
+          target.name.should == 'snake'
 
-        target.headers_build_phase.files.reject { |build_file| build_file.settings.nil? }.map(&:display_name).should == ['snake-umbrella.h']
+          target.headers_build_phase.files.reject { |build_file| build_file.settings.nil? }.map(&:display_name).should == ['snake-umbrella.h']
 
-        copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
-        copy_files_build_phases.map(&:name).should == [
-          'Copy . Public Headers',
-          'Copy A Public Headers',
-          'Copy B Public Headers',
-          'Copy C Public Headers',
-        ]
+          copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
+          copy_files_build_phases.map(&:name).should == [
+            'Copy . Public Headers',
+            'Copy A Public Headers',
+            'Copy B Public Headers',
+            'Copy C Public Headers',
+          ]
 
-        copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(4, :products_directory)
+          copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(4, :products_directory)
 
-        copy_files_build_phases.map(&:dst_path).should == [
-          '$(PUBLIC_HEADERS_FOLDER_PATH)/.',
-          '$(PUBLIC_HEADERS_FOLDER_PATH)/A',
-          '$(PUBLIC_HEADERS_FOLDER_PATH)/B',
-          '$(PUBLIC_HEADERS_FOLDER_PATH)/C',
-        ]
+          copy_files_build_phases.map(&:dst_path).should == [
+            '$(PUBLIC_HEADERS_FOLDER_PATH)/.',
+            '$(PUBLIC_HEADERS_FOLDER_PATH)/A',
+            '$(PUBLIC_HEADERS_FOLDER_PATH)/B',
+            '$(PUBLIC_HEADERS_FOLDER_PATH)/C',
+          ]
 
-        copy_files_build_phases.map { |phase| phase.files_references.map(&:path) }.should == [
-          ['Code/snake.h'],
-          ['Code/A/Boa.h', 'Code/A/Garden.h', 'Code/A/Rattle.h'],
-          ['Code/B/Boa.h', 'Code/B/Garden.h', 'Code/B/Rattle.h'],
-          ['Code/C/Boa.h', 'Code/C/Garden.h', 'Code/C/Rattle.h'],
-        ]
+          copy_files_build_phases.map { |phase| phase.files_references.map(&:path) }.should == [
+            ['Code/snake.h'],
+            ['Code/A/Boa.h', 'Code/A/Garden.h', 'Code/A/Rattle.h'],
+            ['Code/B/Boa.h', 'Code/B/Garden.h', 'Code/B/Rattle.h'],
+            ['Code/C/Boa.h', 'Code/C/Garden.h', 'Code/C/Rattle.h'],
+          ]
+        end
+
+        it 'uses relative file paths to generate umbrella header' do
+          content = @pod_target.umbrella_header_path.read
+
+          content.should =~ %r{"A/Boa.h"}
+          content.should =~ %r{"A/Garden.h"}
+          content.should =~ %r{"A/Rattle.h"}
+          content.should =~ %r{"B/Boa.h"}
+          content.should =~ %r{"B/Garden.h"}
+          content.should =~ %r{"B/Rattle.h"}
+          content.should =~ %r{"C/Boa.h"}
+          content.should =~ %r{"C/Garden.h"}
+          content.should =~ %r{"C/Rattle.h"}
+        end
       end
 
       #--------------------------------------------------------------------------------#
