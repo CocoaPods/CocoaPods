@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
 
 * Add support to track `.def` sources.
+* Add support to track `.def` files as headers.
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#4490](https://github.com/CocoaPods/CocoaPods/pull/4490)
+  [#338](https://github.com/CocoaPods/Xcodeproj/pull/338)
 
 * `Pod::Installer::PostInstallHooksContext` now offers access to the `sandbox`
   object.  
