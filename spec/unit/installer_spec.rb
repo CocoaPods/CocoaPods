@@ -165,6 +165,14 @@ module Pod
         UI.warnings.should.include 'deprecated in favor of AFNetworking'
         UI.warnings.should.include 'BlocksKit has been deprecated'
       end
+
+      it 'raises if command is run inside sandbox directory' do
+        Dir.chdir(@installer.sandbox.root) do
+          should.raise Informative do
+            @installer.install!
+          end.message.should.match %r{should.*run.*outside.*Pods directory.*Current directory.*/Pods}m
+        end
+      end
     end
 
     #-------------------------------------------------------------------------#
