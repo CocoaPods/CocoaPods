@@ -176,7 +176,7 @@ module Pod
         Dir.chdir(@installer.sandbox.root) do
           should.raise Informative do
             @installer.install!
-          end.message.should.match %r{should.*run.*outside.*Pods directory.*Current directory.*\.}m
+          end.message.should.match /should.*run.*outside.*Pods directory.*Current directory.*\./m
         end
       end
     end
