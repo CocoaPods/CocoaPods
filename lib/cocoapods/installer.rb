@@ -114,6 +114,12 @@ module Pod
     end
 
     def prepare
+      # Raise if pwd is inside Pods
+      if (Pathname.pwd <=> sandbox.root) >= 0
+        message = 'Command should be run from a directory outside Pods directory.'
+        message << "\n\n\tCurrent directory is '#{Pathname.pwd}'\n"
+        raise Informative, message
+      end
       UI.message 'Preparing' do
         sandbox.prepare
         ensure_plugins_are_installed!
