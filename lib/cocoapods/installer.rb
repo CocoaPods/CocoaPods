@@ -115,9 +115,9 @@ module Pod
 
     def prepare
       # Raise if pwd is inside Pods
-      if (Pathname.pwd <=> sandbox.root) >= 0
+      if Dir.pwd.start_with?(sandbox.root.to_path)
         message = 'Command should be run from a directory outside Pods directory.'
-        message << "\n\n\tCurrent directory is '#{Pathname.pwd}'\n"
+        message << "\n\n\tCurrent directory is #{UI.path(Pathname.pwd)}\n"
         raise Informative, message
       end
       UI.message 'Preparing' do
