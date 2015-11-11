@@ -16,6 +16,12 @@ realpath() {
 
 install_resource()
 {
+  if [ ! -e "${PODS_ROOT}/$1" ]; then
+    cat << EOM
+error: Resource "${PODS_ROOT}/$1" not found. Run 'pod install' to update the copy resources script.
+EOM
+    exit 1
+  fi
   case $1 in
     *.storyboard)
       echo "ibtool --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \"$1\" .storyboard`.storyboardc ${PODS_ROOT}/$1 --sdk ${SDKROOT}"
