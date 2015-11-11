@@ -8,6 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Ask user to run `pod install` when a resource not found during in copy resources script.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+
 * Add support to track `.def` sources.
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#4490](https://github.com/CocoaPods/CocoaPods/pull/4490)
