@@ -17,7 +17,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marcelo Fabri](https://github.com/marcelofabri)
   [#4487](https://github.com/CocoaPods/CocoaPods/pull/4487)
 
-* Improve `pod search` performance while using _`--full`_ flag  
 * Improve sorting algorithm for `pod search`.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [cocoapods-search#12](https://github.com/CocoaPods/cocoapods-search/issues/12)
@@ -76,6 +75,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent installer to be run from inside sandbox directory.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  
 * Improve repo lint error message when no repo found with given name.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#4142](https://github.com/CocoaPods/CocoaPods/issues/4142)
