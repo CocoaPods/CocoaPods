@@ -22,9 +22,7 @@ module Pod
           create_xcconfig_file
           if target.requires_frameworks?
             create_info_plist_file
-            create_module_map do |generator|
-              generator.private_headers += target.file_accessors.flat_map(&:private_headers).map(&:basename)
-            end
+            create_module_map
             create_umbrella_header do |generator|
               if header_mappings_dir
                 generator.imports += target.file_accessors.flat_map(&:public_headers).map do |pathname|

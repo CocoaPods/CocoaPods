@@ -81,7 +81,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Prevent installer to be run from inside sandbox directory.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
-  
+
 * Improve repo lint error message when no repo found with given name.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#4142](https://github.com/CocoaPods/CocoaPods/issues/4142)
@@ -122,6 +122,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Specifying relative subspec names to the linter is now supported.  
   [Samuel Giddins](https://github.com/segiddins)
   [#1917](https://github.com/CocoaPods/CocoaPods/issues/1917)
+
+* Headers used to build a pod will no longer be duplicated for frameworks.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4420](https://github.com/CocoaPods/CocoaPods/issues/4420)
 
 
 ## 0.39.0 (2015-10-09)

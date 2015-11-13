@@ -21,19 +21,5 @@ module Pod
         }
       EOS
     end
-
-    it 'correctly adds private headers' do
-      @gen.stubs(:private_headers).returns(['Private.h'])
-      @gen.generate.should == <<-EOS.strip_heredoc
-        framework module BananaLib {
-          umbrella header "BananaLib-umbrella.h"
-
-          export *
-          module * { export * }
-
-          private header "Private.h"
-        }
-      EOS
-    end
   end
 end
