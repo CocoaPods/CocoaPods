@@ -88,11 +88,29 @@ module Pod
       end
     end
 
-    # @return [Platform] the platform for this target.
+    # The deployment target for the pod target, which is the maximum of all
+    # the deployment targets for the current platform of the target.
+    #
+    # @return [String] The deployment target.
     #
     def platform
-      @platform ||= target_definitions.first.platform
+      @platform ||= begin
+        platform_name = target_definitions.first.platform.name
+        default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
+        deployment_target = specs.map do |spec|
+          version = Pod::Version.new(spec.deployment_target(platform_name) || default)
+          if platform_name == :ios && requires_frameworks?
+            minimum = Version.new('8.0')
+            version = [version, minimum].max
+          end
+          version
+        end.max
+        Platform.new(platform_name, deployment_target)
+      end
     end
+
+    # @visibility private
+    attr_writer :platform
 
     # @return [Podfile] The podfile which declares the dependency.
     #
