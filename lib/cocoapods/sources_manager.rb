@@ -11,7 +11,27 @@ module Pod
       def aggregate
         return Source::Aggregate.new([]) unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
-        Source::Aggregate.new(dirs)
+        aggregate_with_repos(dirs)
+      end
+
+      # @return [Source::Aggregate] The aggregate of the sources from repos.
+      #
+      # @param  [Dependency] dependency
+      #         The dependency for which to find or build the appropriate.
+      #         aggregate. If the dependency specifies a source podspec repo
+      #         then only that source will be used, otherwise all sources
+      #         will be used.
+      #
+      def aggregate_for_dependency(dependency)
+        if dependency.podspec_repo
+          source = source_with_url(dependency.podspec_repo)
+          raise StandardError, '[Bug] Failed to find known source with the URL ' \
+            "#{dependency.podspec_repo.inspect}" if source.nil?
+
+          aggregate_with_repos([source_dir(source.name)])
+        else
+          aggregate
+        end
       end
 
       # @return [Array<Source>] The list of the sources with the given names.
@@ -86,16 +106,16 @@ module Pod
         sources(['master'])
       end
 
-      # Search all the sources to match the set for the given dependency.
+      # Search the appropriate sources to match the set for the given dependency.
       #
       # @return [Set, nil] a set for a given dependency including all the
       #         {Source} that contain the Pod. If no sources containing the
       #         Pod where found it returns nil.
       #
-      # @raise  If no source including the set can be found.
+      # @raise  If no source can be found that includes the dependency.
       #
       def search(dependency)
-        aggregate.search(dependency)
+        aggregate_for_dependency(dependency).search(dependency)
       end
 
       # Search all the sources with the given search term.
@@ -447,6 +467,16 @@ module Pod
       end
 
       private
+
+      # @return [Source::Aggregate] The aggregate of the sources from repos.
+      #
+      # @param  [Array<Pathname>] repos
+      #         The local file paths to one or more podspec repo caches.
+      #
+      def aggregate_with_repos(repos)
+        @aggregates_by_repos ||= {}
+        @aggregates_by_repos[repos] ||= Source::Aggregate.new(repos)
+      end
 
       # @return [Bool] Whether the given path is writable by the current user.
       #

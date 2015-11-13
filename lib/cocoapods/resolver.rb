@@ -335,13 +335,17 @@ module Pod
     #         The dependency for which the set is needed.
     #
     def create_set_from_sources(dependency)
-      aggregate.search(dependency)
+      aggregate_for_dependency(dependency).search(dependency)
     end
 
     # @return [Source::Aggregate] The aggregate of the {#sources}.
     #
-    def aggregate
-      @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
+    def aggregate_for_dependency(dependency)
+      if dependency && dependency.podspec_repo
+        return SourcesManager.aggregate_for_dependency(dependency)
+      else
+        @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
+      end
     end
 
     # Ensures that a specification is compatible with the platform of a target.

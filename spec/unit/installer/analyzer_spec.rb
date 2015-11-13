@@ -62,6 +62,19 @@ module Pod
         @analyzer.update_repositories
       end
 
+      it 'does not update sources if there are no dependencies' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          # No dependencies specified
+        end
+        config.skip_repo_update = false
+        config.verbose = true
+
+        SourcesManager.expects(:update).never
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        analyzer.update_repositories
+      end
+
       it 'does not update non-git repositories' do
         tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
         FileUtils.mkdir_p(tmp_directory)
@@ -86,6 +99,28 @@ module Pod
         UI.output.should.match /Skipping `#{source.name}` update because the repository is not a git source repository./
 
         FileUtils.rm_rf(non_git_repo)
+      end
+
+      it 'updates sources specified with dependencies' do
+        repo_url = 'https://url/to/specs.git'
+        podfile = Podfile.new do
+          source 'repo_1'
+          pod 'BananaLib', '1.0', :source => repo_url
+          pod 'JSONKit', :source => repo_url
+        end
+        config.skip_repo_update = false
+        config.verbose = true
+
+        # Note that we are explicitly ignoring 'repo_1' since it isn't used.
+        source = mock
+        source.stubs(:name).returns('repo_2')
+        source.stubs(:repo).returns('/repo/cache/path')
+        SourcesManager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
+        SourcesManager.stubs(:git_repo?).with(source.repo).returns(true)
+        SourcesManager.expects(:update).once.with(source.name)
+
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        analyzer.update_repositories
       end
 
       #--------------------------------------#
@@ -370,7 +405,7 @@ module Pod
         @analyzer.send(:fetch_external_sources)
       end
 
-      xit 'it fetches the specification from either the sandbox or from the remote be default' do
+      xit 'it fetches the specification from either the sandbox or from the remote by default' do
         dependency = Dependency.new('Name', :git => 'www.example.com')
         ExternalSources::DownloaderSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
         @resolver.send(:set_from_external_source, dependency)
@@ -474,6 +509,7 @@ module Pod
             it 'raises if no specs repo with that URL could be added' do
               podfile = Podfile.new do
                 source 'not-a-git-repo'
+                pod 'JSONKit', '1.4'
               end
               @analyzer.instance_variable_set(:@podfile, podfile)
               should.raise Informative do
@@ -484,6 +520,7 @@ module Pod
             it 'fetches a specs repo that is specified by the podfile' do
               podfile = Podfile.new do
                 source 'https://github.com/artsy/Specs.git'
+                pod 'JSONKit', '1.4'
               end
               @analyzer.instance_variable_set(:@podfile, podfile)
               SourcesManager.expects(:find_or_create_source_with_url).once

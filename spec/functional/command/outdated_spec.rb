@@ -50,10 +50,11 @@ module Pod
     end
 
     it "updates the Podfile's sources by default" do
-      config.stubs(:podfile).returns Podfile.new do
+      podfile = Podfile.new do
         source 'https://github.com/CocoaPods/Specs.git'
         pod 'AFNetworking'
       end
+      config.stubs(:podfile).returns(podfile)
       config.stubs(:skip_repo_update?).returns(false)
       lockfile = mock
       lockfile.stubs(:version).returns(Version.new('1.0'))

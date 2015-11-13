@@ -53,6 +53,25 @@ module Pod
         SourcesManager.all.map(&:name).should == %w(master test_repo)
       end
 
+      it 'includes all sources in an aggregate for a dependency if no source is specified' do
+        dependency = Dependency.new('JSONKit', '1.4')
+        aggregate = SourcesManager.aggregate_for_dependency(dependency)
+        aggregate.sources.map(&:name).should == %w(master test_repo)
+      end
+
+      it 'includes only the one source in an aggregate for a dependency if a source is specified' do
+        repo_url = 'https://url/to/specs.git'
+        dependency = Dependency.new('JSONKit', '1.4', :source => repo_url)
+
+        source = mock
+        source.stubs(:name).returns('repo')
+
+        SourcesManager.expects(:source_with_url).with(repo_url).returns(source)
+
+        aggregate = SourcesManager.aggregate_for_dependency(dependency)
+        aggregate.sources.map(&:name).should == [source.name]
+      end
+
       it 'searches for the set of a dependency' do
         set = SourcesManager.search(Dependency.new('BananaLib'))
         set.class.should == Specification::Set
@@ -135,7 +154,7 @@ module Pod
         end
       end
 
-      it "generates the search index before performing a search if it doesn't exits" do
+      it "generates the search index before performing a search if it doesn't exist" do
         SourcesManager.stubs(:all).returns([@test_source])
         Source::Aggregate.any_instance.expects(:generate_search_index_for_source).with(@test_source).returns('BananaLib' => ['BananaLib'])
         SourcesManager.updated_search_index = nil

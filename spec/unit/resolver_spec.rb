@@ -70,7 +70,7 @@ module Pod
         ]
       end
 
-      it 'it resolves specifications from external sources' do
+      it 'resolves specifications from external sources' do
         podspec = fixture('integration/Reachability/Reachability.podspec')
         spec = Specification.from_file(podspec)
         config.sandbox.expects(:specification).with('Reachability').returns(spec)
@@ -441,46 +441,6 @@ module Pod
         e.message.should.match(/`pod update CocoaLumberjack`/)
       end
 
-      it 'consults all sources when finding a matching spec' do
-        podfile = Podfile.new do
-          platform :ios
-          pod 'JSONKit', '> 2'
-        end
-        file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
-        sources = SourcesManager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
-        spec.version.to_s.should == '999.999.999'
-        spec.defined_in_file.should == file
-
-        sources = SourcesManager.sources(%w(test_repo master))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
-        spec.version.to_s.should == '999.999.999'
-        resolver.resolve.values.flatten.first.defined_in_file.should == file
-      end
-
-      it 'warns and chooses the first source when multiple sources contain ' \
-         'a pod' do
-        podfile = Podfile.new do
-          platform :ios
-          pod 'JSONKit', '1.4'
-        end
-        sources = SourcesManager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
-        spec.version.to_s.should == '1.4'
-        spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.4/JSONKit.podspec.json')
-
-        sources = SourcesManager.sources(%w(test_repo master))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
-        spec.version.to_s.should == '1.4'
-        resolver.resolve.values.flatten.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
-
-        UI.warnings.should.match /multiple specifications/
-      end
-
       describe 'concerning dependencies that are scoped by consumer platform' do
         def resolve
           Resolver.new(config.sandbox, @podfile, empty_graph, SourcesManager.all).resolve
@@ -545,6 +505,152 @@ module Pod
           resolved[ios_target].map(&:to_s).should.not.include osx_dependency
           resolved[osx_target].map(&:to_s).should.include osx_dependency
         end
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe 'Multiple sources' do
+      it 'consults all sources when finding a matching spec' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '> 2'
+        end
+        file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
+        sources = SourcesManager.sources(%w(master test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '999.999.999'
+        spec.defined_in_file.should == file
+
+        sources = SourcesManager.sources(%w(test_repo master))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '999.999.999'
+        resolver.resolve.values.flatten.first.defined_in_file.should == file
+      end
+
+      it 'warns and chooses the first source when multiple sources contain ' \
+         'a pod' do
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '1.4'
+        end
+        sources = SourcesManager.sources(%w(master test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '1.4'
+        spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.4/JSONKit.podspec.json')
+
+        sources = SourcesManager.sources(%w(test_repo master))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '1.4'
+        resolver.resolve.values.flatten.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
+
+        UI.warnings.should.match /multiple specifications/
+      end
+
+      it 'does not warn when multiple sources contain a pod but a dependency ' \
+         'has an explicit source specified' do
+        test_repo_url = SourcesManager.source_with_name_or_url('test_repo').url
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '1.4', :source => test_repo_url
+        end
+
+        sources = SourcesManager.sources(%w(master test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver.resolve
+
+        UI.warnings.should.not.match /multiple specifications/
+      end
+
+      it 'fails to resolve a dependency with an explicit source even if it can be ' \
+         'resolved using the global sources' do
+        test_repo_url = SourcesManager.source_with_name_or_url('test_repo').url
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '1.5pre', :source => test_repo_url
+        end
+
+        sources = SourcesManager.sources(%w(master))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        e = lambda { resolver.resolve }.should.raise Informative
+        e.message.should.match(/None of the spec sources contain a spec satisfying/)
+        e.message.should.match(/JSONKit/)
+        e.message.should.match(/\= 1.5pre/)
+      end
+
+      it 'resolves a dependency with an explicit source even if it can\'t be ' \
+         'resolved using the global sources' do
+        master_repo_url = SourcesManager.source_with_name_or_url('master').url
+        podfile = Podfile.new do
+          platform :ios
+          pod 'JSONKit', '1.5pre', :source => master_repo_url
+        end
+
+        sources = SourcesManager.sources(%w(test_repo))
+        sources.map(&:url).should.not.include(master_repo_url)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        spec = resolver.resolve.values.flatten.first
+        spec.version.to_s.should == '1.5pre'
+        spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.5pre/JSONKit.podspec.json')
+      end
+
+      it 'uses explicit source repos for a dependency even when it\'s transitive' do
+        master_repo_url = SourcesManager.source_with_name_or_url('master').url
+        test_repo_url = SourcesManager.source_with_name_or_url('test_repo').url
+
+        podfile = Podfile.new do
+          platform :ios
+          # KeenClient has a dependency on JSONKit 1.4
+          pod 'KeenClient', '3.2.2', :source => master_repo_url
+          pod 'JSONKit', '1.4', :source => test_repo_url
+        end
+
+        sources = SourcesManager.sources(%w(master test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver.resolve
+
+        possible_specs = resolver.search_for(Dependency.new('JSONKit', '1.4'))
+
+        # JSONKit, v1.4 exists in both repos, but we should only ever be offered the test_repo version.
+        possible_specs.count.should == 1
+        possible_specs.first.version.to_s.should == '1.4'
+        possible_specs.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
+      end
+
+      it 'uses global source repos for resolving a transitive dependency even ' \
+         'if the root dependency has an explicit source' do
+        test_repo_url = SourcesManager.source_with_name_or_url('test_repo').url
+        podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'CrossRepoDependent', '1.0', :source => test_repo_url
+        end
+
+        # CrossRepoDependent depends on AFNetworking which is only available in the master repo.
+        sources = SourcesManager.sources(%w(master))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver.resolve
+
+        specs = resolver.resolve.values.flatten
+
+        specs.map(&:name).should ==
+          %w(AFNetworking AFNetworking/NSURLConnection AFNetworking/NSURLSession AFNetworking/Reachability) +
+            %w(AFNetworking/Security AFNetworking/Serialization AFNetworking/UIKit CrossRepoDependent)
+
+        afnetworking_spec = specs.find { |s| s.name == 'AFNetworking' }
+        afnetworking_spec.should.not.be.nil
+        afnetworking_spec.defined_in_file.should == fixture('spec-repos/master/Specs/AFNetworking/2.4.0/AFNetworking.podspec.json')
+
+        # Check that if the master source is not available the dependency cannot be resolved.
+        sources = SourcesManager.sources(%w(test_repo))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+
+        e = lambda { resolver.resolve }.should.raise Informative
+        e.message.should.match(/Unable to find a specification for/)
+        e.message.should.match(/`AFNetworking \(= 2.4.0\)`/)
       end
     end
 
