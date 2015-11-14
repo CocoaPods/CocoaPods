@@ -131,6 +131,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4420](https://github.com/CocoaPods/CocoaPods/issues/4420)
 
+* The `UIRequiredDeviceCapabilities` key is now specified in the `Info.plist`
+  file for tvOS pods built as frameworks.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4514](https://github.com/CocoaPods/CocoaPods/issues/4514)
+
 
 ## 0.39.0 (2015-10-09)
 
