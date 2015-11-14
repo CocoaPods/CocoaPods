@@ -38,34 +38,15 @@ module Pod
         #
         def integrate!
           UI.section(integration_message) do
-            # TODO: refactor into Xcodeproj https://github.com/CocoaPods/Xcodeproj/issues/202
-            project_is_dirty = [
-              XCConfigIntegrator.integrate(target, native_targets),
-              update_to_cocoapods_0_34,
-              update_to_cocoapods_0_37_1,
-              update_to_cocoapods_0_39,
-              unless native_targets_to_integrate.empty?
-                add_pods_library
-                add_embed_frameworks_script_phase
-                add_copy_resources_script_phase
-                add_check_manifest_lock_script_phase
-                true
-              end,
-            ].any?
+            XCConfigIntegrator.integrate(target, native_targets)
+            update_to_cocoapods_0_34
+            update_to_cocoapods_0_37_1
+            update_to_cocoapods_0_39
 
-            if project_is_dirty
-              user_project.save
-            else
-              # There is a bug in Xcode where the process of deleting and
-              # re-creating the xcconfig files used in the build
-              # configuration cause building the user project to fail until
-              # Xcode is relaunched.
-              #
-              # Touching/saving the project causes Xcode to reload these.
-              #
-              # https://github.com/CocoaPods/CocoaPods/issues/2665
-              FileUtils.touch(user_project.path + 'project.pbxproj')
-            end
+            add_pods_library
+            add_embed_frameworks_script_phase
+            add_copy_resources_script_phase
+            add_check_manifest_lock_script_phase
           end
         end
 
@@ -95,14 +76,11 @@ module Pod
 
           script_path = target.copy_resources_script_relative_path
           shell_script = %("#{script_path}"\n)
-          changes = false
           phases.each do |phase|
             unless phase.shell_script == shell_script
               phase.shell_script = shell_script
-              changes = true
             end
           end
-          changes
         end
 
         # Removes the embed frameworks phase for target types.
@@ -122,21 +100,15 @@ module Pod
 
         # Adds the embed frameworks script when integrating as a static library.
         #
-        # @return [Bool] whether any changes to the project were made.
-        #
         # @todo   This can be removed for CocoaPods 1.0
         #
         def update_to_cocoapods_0_39
           targets_to_embed = native_targets.select do |target|
             EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
           end
-          requires_update = targets_to_embed.any? do |target|
-            !target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
-          end
-          if requires_update
-            targets_to_embed.each do |native_target|
-              add_embed_frameworks_script_phase_to_target(native_target)
-            end
+
+          targets_to_embed.each do |native_target|
+            add_embed_frameworks_script_phase_to_target(native_target)
           end
 
           frameworks = user_project.frameworks_group
@@ -151,12 +123,9 @@ module Pod
                   build_file.settings['ATTRIBUTES'].is_a?(Array) &&
                   build_file.settings['ATTRIBUTES'].include?('Weak')
                 build_file.settings = nil
-                requires_update = true
               end
             end
           end
-
-          requires_update
         end
 
         # Adds spec product reference to the frameworks build phase of the
@@ -168,7 +137,7 @@ module Pod
         #
         def add_pods_library
           frameworks = user_project.frameworks_group
-          native_targets_to_integrate.each do |native_target|
+          native_targets.each do |native_target|
             build_phase = native_target.frameworks_build_phase
 
             # Find and delete possible reference for the other product type
@@ -209,13 +178,10 @@ module Pod
         #
         # @param [PBXNativeTarget] native_target
         #
-        # @return [Bool] whether any changes to the project were made.
-        #
         def remove_embed_frameworks_script_phase(native_target)
           embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
-          return false unless embed_build_phase.present?
+          return unless embed_build_phase.present?
           native_target.build_phases.delete(embed_build_phase)
-          true
         end
 
         # Adds a shell script build phase responsible to copy the resources
@@ -226,7 +192,7 @@ module Pod
         #
         def add_copy_resources_script_phase
           phase_name = 'Copy Pods Resources'
-          native_targets_to_integrate.each do |native_target|
+          native_targets.each do |native_target|
             phase = create_or_update_build_phase(native_target, phase_name)
             script_path = target.copy_resources_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
@@ -244,9 +210,9 @@ module Pod
         #
         def add_check_manifest_lock_script_phase
           phase_name = 'Check Pods Manifest.lock'
-          native_targets_to_integrate.each do |native_target|
+          native_targets.each do |native_target|
             phase = create_or_update_build_phase(native_target, phase_name)
-            native_target.build_phases.unshift(phase).uniq!
+            native_target.build_phases.unshift(phase).uniq! unless native_target.build_phases.first == phase
             phase.shell_script = <<-SH.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
               if [[ $? != 0 ]] ; then
@@ -259,9 +225,9 @@ module Pod
           end
         end
 
-        private
+        public
 
-        # @!group Private helpers
+        # @!group Helpers
         #---------------------------------------------------------------------#
 
         # @return [Array<PBXNativeTarget>] The list of all the targets that
@@ -276,27 +242,9 @@ module Pod
         #         directory / product bundle.
         #
         def native_targets_to_embed_in
-          native_targets_to_integrate.select do |target|
+          native_targets.select do |target|
             EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
           end
-        end
-
-        # @return [Array<PBXNativeTarget>] The list of the targets
-        #         that have not been integrated by past installations
-        #         of
-        #
-        def native_targets_to_integrate
-          unless @native_targets_to_integrate
-            @native_targets_to_integrate = native_targets.reject do |native_target|
-              native_target.frameworks_build_phase.files.any? do |build_file|
-                file_ref = build_file.file_ref
-                file_ref &&
-                  file_ref.isa == 'PBXFileReference' &&
-                  file_ref.display_name == target.product_name
-              end
-            end
-          end
-          @native_targets_to_integrate
         end
 
         # Read the project from the disk to ensure that it is up to date as
@@ -307,6 +255,11 @@ module Pod
         def user_project
           target.user_project
         end
+
+        private
+
+        # @!group Private Helpers
+        #---------------------------------------------------------------------#
 
         # @return [Specification::Consumer] the consumer for the specifications.
         #

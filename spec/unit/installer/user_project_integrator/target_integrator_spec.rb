@@ -36,7 +36,6 @@ module Pod
         end
 
         it 'allows the xcconfig integrator to edit already integrated targets if needed' do
-          @target_integrator.stubs(:native_targets_to_integrate).returns([])
           TargetIntegrator::XCConfigIntegrator.expects(:integrate).with(@pod_bundle, [@target])
           @target_integrator.integrate!
         end
@@ -123,11 +122,10 @@ module Pod
         it 'does not perform the integration if there are no targets to integrate' do
           Installer::UserProjectIntegrator::TargetIntegrator::XCConfigIntegrator.
             integrate(@pod_bundle, @target_integrator.send(:native_targets))
-          @target_integrator.stubs(:native_targets_to_integrate).returns([])
-          @target_integrator.expects(:add_pods_library).never
-          @target_integrator.expects(:add_copy_resources_script_phase).never
-          @target_integrator.send(:user_project).expects(:save).never
+          @target_integrator.stubs(:native_targets).returns([])
+          frameworks = @target_integrator.send(:user_project).frameworks_group.children
           @target_integrator.integrate!
+          @target_integrator.send(:user_project).frameworks_group.children.should == frameworks
         end
 
         it 'adds an embed frameworks build phase if frameworks are used' do
@@ -204,14 +202,7 @@ module Pod
 
       describe 'Private helpers' do
         it 'returns the native targets associated with the Pod bundle' do
-          @target_integrator.send(:native_targets).map(&:name).should == %w(          SampleProject          )
-        end
-
-        it 'returns the targets that need to be integrated' do
-          pods_library = @project.frameworks_group.new_product_ref_for_target('Pods', :static_library)
-          @target.frameworks_build_phase.add_file_reference(pods_library)
-          @project.save
-          @target_integrator.send(:native_targets_to_integrate).map(&:name).should.be.empty
+          @target_integrator.send(:native_targets).map(&:name).should == %w( SampleProject          )
         end
 
         it 'is robust against other types of references in the build files of the frameworks build phase' do
