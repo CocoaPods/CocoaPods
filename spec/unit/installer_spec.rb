@@ -99,7 +99,6 @@ module Pod
         config.skip_repo_update = true
         @installer.unstub(:resolve_dependencies)
         @installer.stubs(:validate_build_configurations)
-        @installer.stubs(:prepare_for_legacy_compatibility)
         @installer.stubs(:clean_sandbox)
         def @installer.run_source_provider_hooks
           @hook_called = true
@@ -125,7 +124,6 @@ module Pod
         @installer.podfile.stubs(:plugins).returns(plugins_hash)
         @installer.unstub(:resolve_dependencies)
         @installer.stubs(:validate_build_configurations)
-        @installer.stubs(:prepare_for_legacy_compatibility)
         @installer.stubs(:clean_sandbox)
         @installer.stubs(:ensure_plugins_are_installed!)
         @installer.stubs(:analyze)
