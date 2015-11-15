@@ -174,26 +174,31 @@ module Pod
         end
 
         it 'adds a file references to the given file' do
+          Pathname.any_instance.stubs(:realpath).returns(@file)
           ref = @project.add_file_reference(@file, @group)
           ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
 
         it 'adds subgroups for a file reference if requested' do
+          Pathname.any_instance.stubs(:realpath).returns(@nested_file)
           ref = @project.add_file_reference(@nested_file, @group, true)
           ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/nested_file.m'
         end
 
         it 'does not add subgroups for a file reference if not requested' do
+          Pathname.any_instance.stubs(:realpath).returns(@nested_file)
           ref = @project.add_file_reference(@nested_file, @group)
           ref.hierarchy_path.should == '/Pods/BananaLib/nested_file.m'
         end
 
         it 'does not add subgroups for a file reference if requested not to' do
+          Pathname.any_instance.stubs(:realpath).returns(@nested_file)
           ref = @project.add_file_reference(@nested_file, @group, false)
           ref.hierarchy_path.should == '/Pods/BananaLib/nested_file.m'
         end
 
         it "it doesn't duplicate file references for a single path" do
+          Pathname.any_instance.stubs(:realpath).returns(@file)
           ref_1 = @project.add_file_reference(@file, @group)
           ref_2 = @project.add_file_reference(@file, @group)
           ref_1.uuid.should == ref_2.uuid
@@ -201,12 +206,14 @@ module Pod
         end
 
         it 'creates variant group for localized file' do
+          Pathname.any_instance.stubs(:realpath).returns(@localized_file)
           ref = @project.add_file_reference(@localized_file, @group)
           ref.hierarchy_path.should == '/Pods/BananaLib/Foo/Foo.strings'
           ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
         end
 
         it 'creates variant group for localized file in subgroup' do
+          Pathname.any_instance.stubs(:realpath).returns(@localized_file)
           ref = @project.add_file_reference(@localized_file, @group, true)
           ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo/Foo.strings'
           ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
@@ -312,6 +319,7 @@ module Pod
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
           @group = @project.group_for_spec('BananaLib')
+          Pathname.any_instance.stubs(:realpath).returns(@file)
           @project.add_file_reference(@file, @group)
         end
 
