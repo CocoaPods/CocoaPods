@@ -224,6 +224,18 @@ module Pod
             @project.add_file_reference('relative/path/to/file.m', @group)
           end.message.should.match /Paths must be absolute/
         end
+
+        it 'uses realpath for resolving symlinks' do
+          file = Pathname.new(Dir.tmpdir) + 'file.m'
+          FileUtils.rm_f(file)
+          File.open(file, 'w') { |file| file.write('') }
+          sym_file = Pathname.new(Dir.tmpdir) + 'symlinked_file.m'
+          FileUtils.rm_f(sym_file)
+          File.symlink(file, sym_file)
+
+          ref = @project.add_file_reference(sym_file, @group)
+          ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
+        end
       end
 
       #----------------------------------------#
