@@ -136,6 +136,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4514](https://github.com/CocoaPods/CocoaPods/issues/4514)
 
+* Fix Swift code completion for Development Pods by using `realpath` for
+  symlinked source files.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#3777](https://github.com/CocoaPods/CocoaPods/issues/3777)
+
 
 ## 0.39.0 (2015-10-09)
 
