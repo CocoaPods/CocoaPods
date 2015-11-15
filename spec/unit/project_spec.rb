@@ -228,7 +228,7 @@ module Pod
         it 'uses realpath for resolving symlinks' do
           file = Pathname.new(Dir.tmpdir) + 'file.m'
           FileUtils.rm_f(file)
-          File.open(file, 'w') { |file| file.write('') }
+          File.open(file, 'w') { |f| f.write('') }
           sym_file = Pathname.new(Dir.tmpdir) + 'symlinked_file.m'
           FileUtils.rm_f(sym_file)
           File.symlink(file, sym_file)
