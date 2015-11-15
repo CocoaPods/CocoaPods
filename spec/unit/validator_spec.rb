@@ -729,9 +729,11 @@ module Pod
       def test_swiftpod
         podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
         file = write_podspec(podspec)
+        pathname = Pathname.new('/Foo.swift')
+        pathname.stubs(:realpath).returns(pathname)
 
         Podfile::TargetDefinition.any_instance.stubs(:uses_frameworks?).returns(true)
-        Pod::Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([Pathname.new('/Foo.swift')])
+        Pod::Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([pathname])
         validator = Validator.new(file, SourcesManager.master.map(&:url))
         validator.stubs(:build_pod)
         validator.stubs(:validate_url)
