@@ -141,6 +141,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#3777](https://github.com/CocoaPods/CocoaPods/issues/3777)
 
+* Avoid the duplicate UUID warning when a Pod is installed for multiple
+  platforms.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4521](https://github.com/CocoaPods/CocoaPods/issues/4521)
+
 
 ## 0.39.0 (2015-10-09)
 
