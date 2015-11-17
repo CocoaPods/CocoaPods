@@ -18,28 +18,9 @@ module Pod
 #{original_command}
 ```
 
-### Report
+#{report_instructions}
 
-* What did you do?
-
-* What did you expect to happen?
-
-* What happened instead?
-
-
-### Stack
-
-```
-   CocoaPods : #{Pod::VERSION}
-        Ruby : #{RUBY_DESCRIPTION}
-    RubyGems : #{Gem::VERSION}
-        Host : #{host_information}
-       Xcode : #{xcode_information}
-         Git : #{git_information}
-Ruby lib dir : #{RbConfig::CONFIG['libdir']}
-Repositories : #{repo_information.join("\n               ")}
-```
-
+#{stack}
 ### Plugins
 
 ```
@@ -71,16 +52,41 @@ Don't forget to anonymize any private data!
 EOS
         end
 
-        private
+        def report_instructions
+          <<-EOS
+### Report
 
-        def `(other)
-          super
-        rescue Errno::ENOENT => e
-          "Unable to find an executable (#{e})"
+* What did you do?
+
+* What did you expect to happen?
+
+* What happened instead?
+EOS
         end
 
-        def pathless_exception_message(message)
-          message.gsub(/- \(.*\):/, '-')
+        def stack
+          <<-EOS
+### Stack
+
+```
+   CocoaPods : #{Pod::VERSION}
+        Ruby : #{RUBY_DESCRIPTION}
+    RubyGems : #{Gem::VERSION}
+        Host : #{host_information}
+       Xcode : #{xcode_information}
+         Git : #{git_information}
+Ruby lib dir : #{RbConfig::CONFIG['libdir']}
+Repositories : #{repo_information.join("\n               ")}
+```
+EOS
+        end
+
+        def plugins_string
+          plugins = installed_plugins
+          max_name_length = plugins.keys.map(&:length).max
+          plugins.map do |name, version|
+            "#{name.ljust(max_name_length)} : #{version}"
+          end.sort.join("\n")
         end
 
         def markdown_podfile
@@ -93,6 +99,18 @@ EOS
 #{Config.instance.podfile_path.read.strip}
 ```
 EOS
+        end
+
+        private
+
+        def `(other)
+          super
+        rescue Errno::ENOENT => e
+          "Unable to find an executable (#{e})"
+        end
+
+        def pathless_exception_message(message)
+          message.gsub(/- \(.*\):/, '-')
         end
 
         def error_from_podfile(error)
@@ -128,14 +146,6 @@ EOS
         def installed_plugins
           CLAide::Command::PluginManager.specifications.
             reduce({}) { |hash, s| hash.tap { |h| h[s.name] = s.version.to_s } }
-        end
-
-        def plugins_string
-          plugins = installed_plugins
-          max_name_length = plugins.keys.map(&:length).max
-          plugins.map do |name, version|
-            "#{name.ljust(max_name_length)} : #{version}"
-          end.sort.join("\n")
         end
 
         def repo_information

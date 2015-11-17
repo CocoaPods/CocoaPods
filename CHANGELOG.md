@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Added support for `pod env` to print the pod environment without having to crash.  
+  [Hemal Shah](https://github.com/hemal)
+  [#3660](https://github.com/CocoaPods/CocoaPods/issues/3660)
+
 * Add support for specifying :source with a pod dependency.  
   [Eric Firestone](https://github.com/efirestone)
   [#4486](https://github.com/CocoaPods/CocoaPods/pull/4486)

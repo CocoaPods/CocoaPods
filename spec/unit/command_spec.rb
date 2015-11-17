@@ -16,6 +16,7 @@ module Pod
       Command.parse(%w(spec create  )).should.be.instance_of Command::Spec::Create
       Command.parse(%w(spec lint    )).should.be.instance_of Command::Spec::Lint
       Command.parse(%w(init         )).should.be.instance_of Command::Init
+      Command.parse(%w(env          )).should.be.instance_of Command::Env
     end
   end
 end
