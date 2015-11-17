@@ -114,50 +114,51 @@ realpath() {
 
 install_resource()
 {
-  if [ ! -e "${PODS_ROOT}/$1" ]; then
+  if [[ "$1" = /* ]] ; then
+    RESOURCE_PATH="$1"
+  else
+    RESOURCE_PATH="${PODS_ROOT}/$1"
+  fi
+  if [[ ! -e "$RESOURCE_PATH" ]] ; then
     cat << EOM
-error: Resource "${PODS_ROOT}/$1" not found. Run 'pod install' to update the copy resources script.
+error: Resource "$RESOURCE_PATH" not found. Run 'pod install' to update the copy resources script.
 EOM
     exit 1
   fi
-  case $1 in
+  case $RESOURCE_PATH in
     *\.storyboard)
-      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .storyboard`.storyboardc ${PODS_ROOT}/$1 --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .storyboard`.storyboardc" "${PODS_ROOT}/$1" --sdk "${SDKROOT}"
+      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc $RESOURCE_PATH --sdk ${SDKROOT}"
+      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc" "$RESOURCE_PATH" --sdk "${SDKROOT}"
       ;;
     *\.xib)
-      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .xib`.nib ${PODS_ROOT}/$1 --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$1\\" .xib`.nib" "${PODS_ROOT}/$1" --sdk "${SDKROOT}"
+      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib $RESOURCE_PATH --sdk ${SDKROOT}"
+      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib" "$RESOURCE_PATH" --sdk "${SDKROOT}"
       ;;
     *.framework)
       echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-      echo "rsync -av ${PODS_ROOT}/$1 ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
-      rsync -av "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+      echo "rsync -av $RESOURCE_PATH ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+      rsync -av "$RESOURCE_PATH" "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
       ;;
     *.xcdatamodel)
-      echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1"`.mom\\""
-      xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodel`.mom"
+      echo "xcrun momc \\"$RESOURCE_PATH\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$RESOURCE_PATH"`.mom\\""
+      xcrun momc "$RESOURCE_PATH" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$RESOURCE_PATH" .xcdatamodel`.mom"
       ;;
     *.xcdatamodeld)
-      echo "xcrun momc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd\\""
-      xcrun momc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcdatamodeld`.momd"
+      echo "xcrun momc \\"$RESOURCE_PATH\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$RESOURCE_PATH" .xcdatamodeld`.momd\\""
+      xcrun momc "$RESOURCE_PATH" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$RESOURCE_PATH" .xcdatamodeld`.momd"
       ;;
     *.xcmappingmodel)
-      echo "xcrun mapc \\"${PODS_ROOT}/$1\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcmappingmodel`.cdm\\""
-      xcrun mapc "${PODS_ROOT}/$1" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$1" .xcmappingmodel`.cdm"
+      echo "xcrun mapc \\"$RESOURCE_PATH\\" \\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$RESOURCE_PATH" .xcmappingmodel`.cdm\\""
+      xcrun mapc "$RESOURCE_PATH" "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename "$RESOURCE_PATH" .xcmappingmodel`.cdm"
       ;;
     *.xcassets)
-      ABSOLUTE_XCASSET_FILE=$(realpath "${PODS_ROOT}/$1")
+      ABSOLUTE_XCASSET_FILE=$(realpath "$RESOURCE_PATH")
       XCASSET_FILES+=("$ABSOLUTE_XCASSET_FILE")
       ;;
-    /*)
-      echo "$1"
-      echo "$1" >> "$RESOURCES_TO_COPY"
-      ;;
     *)
-      echo "${PODS_ROOT}/$1"
-      echo "${PODS_ROOT}/$1" >> "$RESOURCES_TO_COPY"
+      echo "$RESOURCE_PATH"
+      echo "$RESOURCE_PATH" >> "$RESOURCES_TO_COPY"
       ;;
   esac
 }
