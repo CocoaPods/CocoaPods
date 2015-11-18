@@ -20,6 +20,10 @@ module Pod
       attr_accessor :title_level
       attr_accessor :warnings
 
+      # @return [IO] IO object to which UI output will be directed.
+      #
+      attr_accessor :output_io
+
       # @return [Bool] Whether the wrapping of the strings to the width of the
       #         terminal should be disabled.
       #
@@ -322,7 +326,12 @@ module Pod
       #        The message to print.
       #
       def puts(message = '')
-        STDOUT.puts(message) unless config.silent?
+        return if config.silent?
+        begin
+          (output_io || STDOUT).puts(message)
+        rescue Errno::EPIPE
+          exit 0
+        end
       end
 
       # prints a message followed by a new line unless config is silent.
@@ -331,7 +340,12 @@ module Pod
       #        The message to print.
       #
       def print(message)
-        STDOUT.print(message) unless config.silent?
+        return if config.silent?
+        begin
+          (output_io || STDOUT).print(message)
+        rescue Errno::EPIPE
+          exit 0
+        end
       end
 
       # gets input from $stdin
