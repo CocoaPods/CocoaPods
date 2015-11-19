@@ -368,6 +368,21 @@ module Pod
         warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
       end
 
+      # Pipes all output inside given block to a pager.
+      #
+      # @yield Code block in which inputs to {#puts} and {#print} methods will be printed to the piper.
+      #
+      def with_pager
+        prev_handler = Signal.trap('INT', 'IGNORE')
+        IO.popen((ENV['PAGER'] || 'less -R'), 'w') do |io|
+          UI.output_io = io
+          yield
+        end
+      ensure
+        Signal.trap('INT', prev_handler)
+        UI.output_io = nil
+      end
+
       private
 
       # @!group Helpers
