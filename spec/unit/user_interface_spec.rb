@@ -26,6 +26,18 @@ module Pod
       # TODO
     end
 
+    describe '#with_pager' do
+      it 'sets output_io' do
+        fd = IO.sysopen('/dev/null', 'w')
+        io = IO.new(fd)
+        IO.stubs(:popen).yields(io)
+        UI.with_pager do
+          UI.output_io.should == io
+        end
+        UI.output_io.should.be.nil
+      end
+    end
+
     describe '#labeled' do
       it 'prints nothing if value is nil' do
         UI.labeled('label', nil)

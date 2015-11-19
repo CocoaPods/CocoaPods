@@ -370,12 +370,15 @@ module Pod
 
       # Pipes all output inside given block to a pager.
       #
+      # @yield Code block in which inputs to {#puts} and {#print} methods will be printed to the piper.
+      #
       def with_pager
         IO.popen((ENV['PAGER'] || 'less -R'), 'w') do |io|
-          Signal.trap('INT','IGNORE')
+          Signal.trap('INT', 'IGNORE')
           UI.output_io = io
           yield
         end
+        UI.output_io = nil
       end
 
       private
