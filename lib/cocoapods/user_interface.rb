@@ -368,6 +368,16 @@ module Pod
         warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
       end
 
+      # Pipes all output inside given block to a pager.
+      #
+      def with_pager
+        IO.popen((ENV['PAGER'] || 'less -R'), 'w') do |io|
+          Signal.trap('INT','IGNORE')
+          UI.output_io = io
+          yield
+        end
+      end
+
       private
 
       # @!group Helpers
