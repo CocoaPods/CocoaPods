@@ -116,6 +116,44 @@ module Pod
         spec.source.should == { :git => 'https://github.com/lukeredpath/libPusher.git', :commit => '5f482b0693ac2ac1ad85d1aabc27ec7547cc0bc7' }
       end
 
+      it 'correctly reuses version variable in source if matching tag is found on github' do
+        repo = {
+          'name' => 'libPusher',
+          'owner' => { 'login' => 'lukeredpath' },
+          'html_url' => 'https://github.com/lukeredpath/libPusher',
+          'description' => 'An Objective-C interface to Pusher (pusherapp.com)',
+          'clone_url' => 'https://github.com/lukeredpath/libPusher.git',
+        }
+        GitHub.expects(:repo).with('lukeredpath/libPusher').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/lukeredpath/libPusher').returns([{ 'name' => '1.4.0' }])
+        GitHub.expects(:user).with('lukeredpath').returns('name' => 'Luke Redpath', 'email' => 'luke@lukeredpath.co.uk')
+        run_command('spec', 'create', 'https://github.com/lukeredpath/libPusher.git')
+        path = temporary_directory + 'libPusher.podspec'
+        spec = Specification.from_file(path)
+        spec.version.should == Version.new('1.4.0')
+        spec.source.should == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => '1.4.0' }
+        File.open(path, 'r') { |f| f.read.should.include ':tag => "#{s.version}"' }
+      end
+
+      it 'correctly reuses version variable in source if matching tag with prefix is found on github' do
+        repo = {
+          'name' => 'libPusher',
+          'owner' => { 'login' => 'lukeredpath' },
+          'html_url' => 'https://github.com/lukeredpath/libPusher',
+          'description' => 'An Objective-C interface to Pusher (pusherapp.com)',
+          'clone_url' => 'https://github.com/lukeredpath/libPusher.git',
+        }
+        GitHub.expects(:repo).with('lukeredpath/libPusher').returns(repo)
+        GitHub.expects(:tags).with('https://github.com/lukeredpath/libPusher').returns([{ 'name' => 'v1.4.0' }])
+        GitHub.expects(:user).with('lukeredpath').returns('name' => 'Luke Redpath', 'email' => 'luke@lukeredpath.co.uk')
+        run_command('spec', 'create', 'https://github.com/lukeredpath/libPusher.git')
+        path = temporary_directory + 'libPusher.podspec'
+        spec = Specification.from_file(path)
+        spec.version.should == Version.new('1.4.0')
+        spec.source.should == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.4.0' }
+        File.open(path, 'r') { |f| f.read.should.include ':tag => "v#{s.version}"' }
+      end
+
       it "raises an informative message when the GitHub repository doesn't have any commits" do
         repo = {
           'name' => 'QueryKit',
