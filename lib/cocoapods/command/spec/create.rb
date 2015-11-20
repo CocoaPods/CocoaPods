@@ -101,6 +101,7 @@ module Pod
             data[:ref_type] = ':tag'
             data[:ref]      = versions_tags[version]
             data[:ref]      = '#{s.version}' if "#{version}" == versions_tags[version]
+            data[:ref]      = 'v#{s.version}' if "v#{version}" == versions_tags[version]
           end
           data
         end
