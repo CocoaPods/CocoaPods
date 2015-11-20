@@ -60,7 +60,7 @@ module Pod
           data[:author_email]  = `git config --get user.email`.strip
           data[:source_url]    = "http://EXAMPLE/#{name}.git"
           data[:ref_type]      = ':tag'
-          data[:ref]           = '0.0.1'
+          data[:ref]           = 's.version.to_s'
           data
         end
 
@@ -96,10 +96,10 @@ module Pod
             master          = branches.find { |branch| branch['name'] == master_name }
             raise Informative, "Unable to find any commits on the master branch for the repository `#{repo['html_url']}`" unless master
             data[:ref_type] = ':commit'
-            data[:ref]      = master['commit']['sha']
+            data[:ref]      = %("#{master['commit']['sha']}")
           else
             data[:ref_type] = ':tag'
-            data[:ref]      = versions_tags[version]
+            data[:ref]      = (versions_tags[version] == version) ? 's.version.to_s' : %("#{versions_tags[version]}")
           end
           data
         end
@@ -187,7 +187,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => "#{data[:ref]}" }
+  s.source       = { :git => "#{data[:source_url]}", #{data[:ref_type]} => #{data[:ref]} }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
