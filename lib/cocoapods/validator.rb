@@ -431,7 +431,8 @@ module Pod
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       @installer.aggregate_targets.each do |target|
         target.pod_targets.each do |pod_target|
-          pod_target.native_target.build_configuration_list.build_configurations.each do |build_configuration|
+          next unless native_target = pod_target.native_target
+          native_target.build_configuration_list.build_configurations.each do |build_configuration|
             (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
           end
         end
