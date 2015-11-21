@@ -60,7 +60,7 @@ module Pod
           data[:author_email]  = `git config --get user.email`.strip
           data[:source_url]    = "http://EXAMPLE/#{name}.git"
           data[:ref_type]      = ':tag'
-          data[:ref]           = '0.0.1'
+          data[:ref]           = '#{s.version}'
           data
         end
 
@@ -100,6 +100,8 @@ module Pod
           else
             data[:ref_type] = ':tag'
             data[:ref]      = versions_tags[version]
+            data[:ref]      = '#{s.version}' if "#{version}" == versions_tags[version]
+            data[:ref]      = 'v#{s.version}' if "v#{version}" == versions_tags[version]
           end
           data
         end
