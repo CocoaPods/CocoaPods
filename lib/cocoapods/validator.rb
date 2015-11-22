@@ -139,8 +139,8 @@ module Pod
         reasons << reason
       end
       if results.all?(&:public_only)
-        reasons << 'All results apply only to public specs, but you can use ' \
-                   '`--private` to ignore them if linting the specification for a private pod.'
+        reasons << 'all results apply only to public specs, but you can use ' \
+                   '`--private` to ignore them if linting the specification for a private pod'
       end
       reasons.to_sentence
     end
