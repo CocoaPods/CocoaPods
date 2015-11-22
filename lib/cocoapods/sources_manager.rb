@@ -381,7 +381,7 @@ module Pod
             ("Until we reach version 1.0 the features of CocoaPods can and will change.\n" \
              'We strongly recommend that you use the latest version at all times.'.yellow unless rc),
             '',
-            'For more information see http://blog.cocoapods.org'.green,
+            'For more information see https://blog.cocoapods.org'.green,
             'and the CHANGELOG for this version http://git.io/BaH8pQ.'.green,
             '',
           ].compact.join("\n")
@@ -443,7 +443,7 @@ module Pod
           YAMLHelper.load_file(yaml_file)
         rescue Informative
           raise Informative, "There was an error reading '#{yaml_file}'.\n" \
-            'Please consult http://blog.cocoapods.org/' \
+            'Please consult https://blog.cocoapods.org/' \
             'Repairing-Our-Broken-Specs-Repository/ ' \
             'for more information.'
         end
