@@ -29,7 +29,7 @@ module Pod
              'Multiple sources must be comma-delimited.'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
-            ['--message', 'Add custom commit message']
+            ['--message', 'Add custom commit message'],
           ].concat(super)
         end
 
@@ -76,11 +76,11 @@ module Pod
           File.chmod(0777, file.path)
           file.close
 
-          unless ENV['EDITOR'].nil?
+          if !ENV['EDITOR'].nil?
+            @message = nil
+          else
             system("#{ENV['EDITOR']} #{file.path}")
             @message = File.read file.path
-          else
-            @message = nil
           end
         end
 
