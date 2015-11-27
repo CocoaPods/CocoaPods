@@ -130,6 +130,9 @@ describe_cli 'pod' do
     s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
     s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
 
+    # This was changed in a very recent git version
+    s.replace_pattern /git checkout -b <new-branch-name>/, 'git checkout -b new_branch_name'
+
     s.replace_path %r{
       `[^`]*? # The opening backtick on a plugin path
       ([[[:alnum:]]_+-]+?) # The plugin name
