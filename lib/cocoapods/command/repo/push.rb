@@ -29,7 +29,8 @@ module Pod
              'Multiple sources must be comma-delimited.'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
-            ['--message', 'Add custom commit message'],
+            ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
+            'Opens default editor if no commit message is specified.'],
           ].concat(super)
         end
 
@@ -41,7 +42,8 @@ module Pod
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @private = argv.flag?('private', true)
-          @message = argv.flag?('message')
+          @message = argv.option('commit-message')
+          @commit_message = argv.flag?('commit-message', false)
           super
         end
 
@@ -51,7 +53,7 @@ module Pod
         end
 
         def run
-          open_editor if @message
+          open_editor if @commit_message && @message.nil?
           check_if_master_repo
           validate_podspec_files
           check_repo_status
@@ -72,16 +74,14 @@ module Pod
         # Open default editor to allow users to enter commit message
         #
         def open_editor
+          return if ENV['EDITOR'].nil?
+
           file = Tempfile.new('cocoapods')
           File.chmod(0777, file.path)
           file.close
 
-          if !ENV['EDITOR'].nil?
-            @message = nil
-          else
-            system("#{ENV['EDITOR']} #{file.path}")
-            @message = File.read file.path
-          end
+          system("#{ENV['EDITOR']} #{file.path}")
+          @message = File.read file.path
         end
 
         # Temporary check to ensure that users do not push accidentally private
