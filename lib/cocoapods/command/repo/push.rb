@@ -1,3 +1,4 @@
+require 'tempfile'
 require 'fileutils'
 require 'active_support/core_ext/string/inflections'
 
@@ -28,6 +29,8 @@ module Pod
              'Multiple sources must be comma-delimited.'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
+            ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
+            'Opens default editor if no commit message is specified.'],
           ].concat(super)
         end
 
@@ -39,6 +42,8 @@ module Pod
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @private = argv.flag?('private', true)
+          @message = argv.option('commit-message')
+          @commit_message = argv.flag?('commit-message', false)
           super
         end
 
@@ -48,6 +53,7 @@ module Pod
         end
 
         def run
+          open_editor if @commit_message && @message.nil?
           check_if_master_repo
           validate_podspec_files
           check_repo_status
@@ -64,6 +70,19 @@ module Pod
 
         extend Executable
         executable :git
+
+        # Open default editor to allow users to enter commit message
+        #
+        def open_editor
+          return if ENV['EDITOR'].nil?
+
+          file = Tempfile.new('cocoapods')
+          File.chmod(0777, file.path)
+          file.close
+
+          system("#{ENV['EDITOR']} #{file.path}")
+          @message = File.read file.path
+        end
 
         # Temporary check to ensure that users do not push accidentally private
         # specs to the master repo.
@@ -143,7 +162,9 @@ module Pod
           podspec_files.each do |spec_file|
             spec = Pod::Specification.from_file(spec_file)
             output_path = File.join(repo_dir, spec.name, spec.version.to_s)
-            if Pathname.new(output_path).exist?
+            if @message && !@message.empty?
+              message = @message
+            elsif Pathname.new(output_path).exist?
               message = "[Fix] #{spec}"
             elsif Pathname.new(File.join(repo_dir, spec.name)).exist?
               message = "[Update] #{spec}"

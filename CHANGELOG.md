@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add the ability to add a custom commit message when pushing a spec.
+  [Bart Jacobs](https://github.com/bartjacobs)
+  [#4583](https://github.com/CocoaPods/CocoaPods/issues/4583)
+
 * Added support for `pod env` to print the pod environment without having to crash.  
   [Hemal Shah](https://github.com/hemal)
   [#3660](https://github.com/CocoaPods/CocoaPods/issues/3660)
