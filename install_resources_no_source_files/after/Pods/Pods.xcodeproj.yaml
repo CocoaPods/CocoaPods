@@ -6,6 +6,8 @@ File References:
     - Resources:
       - 512_black.png
       - troll.png
+    - Support Files:
+      - ResourceBundle-res-Info.plist
 - Frameworks:
   - OS X:
     - Cocoa.framework
@@ -38,7 +40,6 @@ Targets:
           CODE_SIGN_IDENTITY: '-'
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           EXECUTABLE_PREFIX: lib
           GCC_NO_COMMON_BLOCKS: 'YES'
           MACH_O_TYPE: staticlib
@@ -84,6 +85,7 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
+          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           MACOSX_DEPLOYMENT_TARGET: '10.0'
           PRODUCT_NAME: res
@@ -96,6 +98,7 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
+          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           MACOSX_DEPLOYMENT_TARGET: '10.0'
           PRODUCT_NAME: res
@@ -123,6 +126,7 @@ Build Configurations:
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       COPY_PHASE_STRIP: 'NO'
+      ENABLE_TESTABILITY: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_DYNAMIC_NO_PIC: 'NO'
       GCC_OPTIMIZATION_LEVEL: '0'

@@ -9,6 +9,7 @@ File References:
       - troll.png
     - Support Files:
       - Info.plist
+      - ResourceBundle-SamplePodWithResources-Info.plist
       - SamplePodWithResources.modulemap
       - SamplePodWithResources.xcconfig
       - SamplePodWithResources-dummy.m
@@ -71,7 +72,6 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
@@ -143,7 +143,6 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-SampleAppTests/Info.plist
@@ -220,7 +219,6 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/SamplePodWithResources/SamplePodWithResources-prefix.pch
@@ -275,6 +273,7 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
+          INFOPLIST_FILE: Target Support Files/SamplePodWithResources/ResourceBundle-SamplePodWithResources-Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           PRODUCT_NAME: SamplePodWithResources
@@ -288,6 +287,7 @@ Targets:
           COMBINE_HIDPI_IMAGES: 'YES'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
+          INFOPLIST_FILE: Target Support Files/SamplePodWithResources/ResourceBundle-SamplePodWithResources-Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Bundles
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           PRODUCT_NAME: SamplePodWithResources
@@ -316,6 +316,7 @@ Build Configurations:
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       COPY_PHASE_STRIP: 'NO'
+      ENABLE_TESTABILITY: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_DYNAMIC_NO_PIC: 'NO'
       GCC_OPTIMIZATION_LEVEL: '0'

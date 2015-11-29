@@ -56,7 +56,6 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
@@ -100,7 +99,6 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -151,7 +149,6 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          ENABLE_TESTABILITY: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
@@ -203,6 +200,7 @@ Build Configurations:
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       COPY_PHASE_STRIP: 'NO'
+      ENABLE_TESTABILITY: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_DYNAMIC_NO_PIC: 'NO'
       GCC_OPTIMIZATION_LEVEL: '0'
