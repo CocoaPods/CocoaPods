@@ -137,8 +137,17 @@ module Pod
               end
             end
 
+            # Create Info.plist file for bundle
+            path = target.info_plist_path
+            info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
+            generator = Generator::InfoPlistFile.new(target)
+            generator.save_as(info_plist_path)
+            add_file_to_support_group(info_plist_path)
+
             bundle_target.build_configurations.each do |c|
               c.build_settings['PRODUCT_NAME'] = bundle_name
+              relative_info_plist_path = info_plist_path.relative_path_from(sandbox.root)
+              c.build_settings['INFOPLIST_FILE'] = relative_info_plist_path.to_s
               if target.requires_frameworks? && target.scoped?
                 c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
               end
