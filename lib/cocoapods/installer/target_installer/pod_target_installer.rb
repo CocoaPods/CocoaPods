@@ -139,6 +139,7 @@ module Pod
 
             # Create Info.plist file for bundle
             path = target.info_plist_path
+            path.dirname.mkdir unless path.dirname.exist?
             info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
             generator = Generator::InfoPlistFile.new(target)
             generator.save_as(info_plist_path)
