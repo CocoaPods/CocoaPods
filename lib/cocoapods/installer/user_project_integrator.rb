@@ -119,8 +119,8 @@ module Pod
 
         Config.instance.with_changes(:silent => true) do
           deintegrator = Deintegrator.new
-          all_project_targets = target_integrators.map(&:user_project).flat_map(&:native_targets).uniq
-          all_native_targets = target_integrators.flat_map(&:native_targets).uniq
+          all_project_targets = user_projects.flat_map(&:native_targets).uniq
+          all_native_targets = targets_to_integrate.flat_map(&:user_targets).uniq
           targets_to_deintegrate = all_project_targets - all_native_targets
           targets_to_deintegrate.each do |target|
             deintegrator.deintegrate_target(target)
@@ -130,6 +130,10 @@ module Pod
         target_integrators.each(&:integrate!)
       end
 
+      # Save all user projects.
+      #
+      # @return [void]
+      #
       def save_projects
         user_projects.each do |project|
           if project.dirty?

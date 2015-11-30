@@ -225,9 +225,9 @@ module Pod
           end
         end
 
-        public
+        private
 
-        # @!group Helpers
+        # @!group Private Helpers
         #---------------------------------------------------------------------#
 
         # @return [Array<PBXNativeTarget>] The list of all the targets that
@@ -255,11 +255,6 @@ module Pod
         def user_project
           target.user_project
         end
-
-        private
-
-        # @!group Private Helpers
-        #---------------------------------------------------------------------#
 
         # @return [Specification::Consumer] the consumer for the specifications.
         #
