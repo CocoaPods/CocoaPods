@@ -35,7 +35,7 @@ module Pod
       #         root with the `${PODS_ROOT}` variable.
       #
       def search_paths(platform)
-        platform_search_paths = @search_paths.select { |entry| entry[:platform] == platform }
+        platform_search_paths = @search_paths.select { |entry| entry[:platform] == platform.name }
 
         headers_dir = root.relative_path_from(sandbox.root).dirname
         ["${PODS_ROOT}/#{headers_dir}/#{@relative_path}"] + platform_search_paths.uniq.map { |entry| "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" }
@@ -117,7 +117,7 @@ module Pod
       # @return [void]
       #
       def add_search_path(path, platform)
-        @search_paths << { :platform => platform, :path => (Pathname.new(@relative_path) + path) }
+        @search_paths << { :platform => platform.name, :path => (Pathname.new(@relative_path) + path) }
       end
 
       #-----------------------------------------------------------------------#
