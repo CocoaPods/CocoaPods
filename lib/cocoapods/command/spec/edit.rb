@@ -58,8 +58,10 @@ module Pod
             'subl',
             # Find Textmate
             'mate',
-            # Find # BBEdit / TextWrangler
+            # Find BBEdit / TextWrangler
             'edit',
+            # Find Atom
+            'atom',
             # Default to vim
             'vim',
           ]
