@@ -48,32 +48,25 @@ module Pod
           raise Informative, "#{filepath} doesn't exist."
         end
 
-        # Looks up an executable in the search paths
-        #
-        # @note
-        # Thank you homebrew
-        #
-        # @param [String] cmd
-        #        the executable to look up
-        #
-        def which(cmd)
-          dir = ENV['PATH'].split(':').find { |p| File.executable? File.join(p, cmd) }
-          Pathname.new(File.join(dir, cmd)) unless dir.nil?
-        end
-
         def which_editor
           editor = ENV['EDITOR']
           # If an editor wasn't set, try to pick a sane default
           return editor unless editor.nil?
 
-          # Find Sublime Text 2
-          return 'subl' if which 'subl'
-          # Find Textmate
-          return 'mate' if which 'mate'
-          # Find # BBEdit / TextWrangler
-          return 'edit' if which 'edit'
-          # Default to vim
-          return 'vim' if which 'vim'
+          editors = [
+            # Find Sublime Text 2
+            'subl',
+            # Find Textmate
+            'mate',
+            # Find BBEdit / TextWrangler
+            'edit',
+            # Find Atom
+            'atom',
+            # Default to vim
+            'vim',
+          ]
+          editor = editors.find { |e| Pod::Executable.which(e) }
+          return editor if editor
 
           raise Informative, "Failed to open editor. Set your 'EDITOR' environment variable."
         end
