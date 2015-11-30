@@ -139,7 +139,7 @@ module Pod
     end
 
     it 'validates specs as frameworks by default' do
-      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, true).times(3)
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, '8.0', true).times(3)
       Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true).twice
       Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true).twice
       Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true).twice
