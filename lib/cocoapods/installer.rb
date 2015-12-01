@@ -380,6 +380,7 @@ module Pod
       aggregate_targets.each do |aggregate_target|
         aggregate_target.pod_targets.each do |pod_target|
           pod_target.host_requires_frameworks ||= aggregate_target.requires_frameworks?
+          pod_target.platform = nil # needs to be recomputed
         end
       end
     end

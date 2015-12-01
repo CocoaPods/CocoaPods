@@ -49,8 +49,17 @@ module Pod
         target.build_settings('Debug')['IPHONEOS_DEPLOYMENT_TARGET'].should == '4.3'
       end
 
+      it 'sets the platform and the deployment target for iOS targets that require frameworks' do
+        @pod_target.stubs(:requires_frameworks?).returns(true)
+        @installer.install!
+        target = @project.targets.first
+        target.platform_name.should == :ios
+        target.deployment_target.should == '8.0'
+        target.build_settings('Debug')['IPHONEOS_DEPLOYMENT_TARGET'].should == '8.0'
+      end
+
       it 'sets the platform and the deployment target for OS X targets' do
-        @pod_target.stubs(:platform).returns(Platform.new(:osx, '10.8'))
+        @pod_target.target_definitions.first.stubs(:platform).returns(Platform.new(:osx, '10.8'))
         @installer.install!
         target = @project.targets.first
         target.platform_name.should == :osx

@@ -690,7 +690,7 @@ module Pod
         setup_validator
 
         @validator.expects(:podfile_from_spec).with(:osx, nil, true).once
-        @validator.expects(:podfile_from_spec).with(:ios, nil, true).once
+        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true).once
         @validator.expects(:podfile_from_spec).with(:tvos, nil, true).once
         @validator.expects(:podfile_from_spec).with(:watchos, nil, true).once
         @validator.send(:perform_extensive_analysis, @validator.spec)

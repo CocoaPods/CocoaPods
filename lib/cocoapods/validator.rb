@@ -364,8 +364,16 @@ module Pod
       Config.instance = @original_config
     end
 
-    def download_pod
+    def deployment_target
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
+      if consumer.platform_name == :ios && use_frameworks
+        minimum = Version.new('8.0')
+        deployment_target = [Version.new(deployment_target), minimum].max.to_s
+      end
+      deployment_target
+    end
+
+    def download_pod
       podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
@@ -376,7 +384,6 @@ module Pod
 
     def create_app_project
       app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
-      deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       app_project.new_target(:application, 'App', consumer.platform_name, deployment_target)
       app_project.save
       app_project.recreate_user_schemes
