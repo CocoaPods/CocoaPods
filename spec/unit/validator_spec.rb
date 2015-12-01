@@ -435,7 +435,7 @@ module Pod
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
-        command = %w(clean build -workspace App.xcworkspace -scheme App)
+        command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
         Executable.expects(:capture_command).with('xcodebuild', command, :capture => :merge).once.returns(['', stub(:success? => true)])
         Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
         Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
