@@ -39,7 +39,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Reachability` iOS 6.0
+    - Installing target `Reachability` iOS 4.3
     - Installing target `Pods` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

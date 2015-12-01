@@ -41,7 +41,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `Reachability` iOS 6.0
+    - Installing target `Reachability` iOS 4.3
     - Installing target `Pods-SampleApp_1` iOS 6.0
     - Installing target `Pods-SampleApp_2` iOS 6.0
   - Running post install hooks

@@ -29,7 +29,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `SamplePodWithResources` OS X 10.10
+    - Installing target `SamplePodWithResources` OS X 10.6
       - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/Info.plist`
       - Generating module map file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-umbrella.h`

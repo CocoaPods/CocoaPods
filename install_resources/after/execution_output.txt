@@ -28,7 +28,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `res` OS X 10.8
+    - Installing target `res` OS X 10.0
     - Installing target `Pods-SampleApp` OS X 10.8
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

@@ -27,7 +27,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
-    - Installing target `BananaLib` iOS 8.2
+    - Installing target `BananaLib` iOS 8.0
       - Generating Info.plist file at `Pods/Target Support Files/BananaLib/Info.plist`
       - Copying module map file to `Pods/Target Support Files/BananaLib/BananaLib.modulemap`
     - Installing target `Pods` iOS 8.2
