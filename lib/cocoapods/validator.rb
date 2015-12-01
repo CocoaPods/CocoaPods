@@ -421,7 +421,12 @@ module Pod
                                ''
                              end
         end
-        source_file.open('w') { |f| f << "@import Foundation;\n#{import_statement}int main() {}\n" }
+        source_file.open('w') do |f|
+          f << "@import Foundation;\n"
+          f << "@import UIKit;\n" if consumer.platform_name == :ios || consumer.platform_name == :tvos
+          f << "@import Cocoa;\n" if consumer.platform_name == :osx
+          f << "#{import_statement}int main() {}\n"
+        end
       end
       source_file
     end

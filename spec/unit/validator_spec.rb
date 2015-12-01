@@ -524,6 +524,7 @@ module Pod
               file.basename.to_s.should == 'main.m'
               file.read.should == <<-OBJC.strip_heredoc
                 @import Foundation;
+                @import UIKit;
                 @import ModuleName;
                 int main() {}
               OBJC
@@ -547,6 +548,7 @@ module Pod
               file.basename.to_s.should == 'main.m'
               file.read.should == <<-OBJC.strip_heredoc
                 @import Foundation;
+                @import UIKit;
                 #import <ModuleName/ModuleName.h>
                 int main() {}
               OBJC
@@ -559,6 +561,7 @@ module Pod
               file.basename.to_s.should == 'main.m'
               file.read.should == <<-OBJC.strip_heredoc
                 @import Foundation;
+                @import UIKit;
                 int main() {}
               OBJC
             end
