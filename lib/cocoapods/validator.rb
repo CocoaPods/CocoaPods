@@ -697,7 +697,7 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
-      command = %w(clean build -workspace App.xcworkspace -scheme App)
+      command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
