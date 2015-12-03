@@ -31,6 +31,7 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
+    - Check Pods Manifest.lock: []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m

@@ -57,10 +57,12 @@ Integrating client projects
 Integrating target `Pods-SampleApp_1` (`SampleApp_1.xcodeproj` project)
   - Removing (Pods/Pods-SampleApp_1.xcconfig)
   Adding Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-SampleApp_2` (`SampleApp_2.xcodeproj` project)
   - Removing (Pods/Pods-SampleApp_2.xcconfig)
   Adding Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
   Pod installation complete! There are 2 dependencies from the Podfile and 1 total pod installed.
