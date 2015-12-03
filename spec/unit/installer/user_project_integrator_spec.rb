@@ -192,6 +192,30 @@ module Pod
           @integrator.targets.map(&:name).should == ['Pods', 'Pods-empty']
           @integrator.send(:targets_to_integrate).map(&:name).should == ['Pods']
         end
+
+        it 'skips saving projects that are not dirtied (but touches them instead)' do
+          project = mock('Project')
+          project.stubs(:path).returns(Pathname('project.xcodeproj'))
+          project.expects(:dirty?).returns(false)
+          project.expects(:save).never
+
+          @integrator.stubs(:user_projects).returns([project])
+          FileUtils.expects(:touch).with(project.path + 'project.pbxproj')
+
+          @integrator.send(:save_projects)
+        end
+
+        it 'saves projects that are dirty' do
+          project = mock('Project')
+          project.stubs(:path).returns(Pathname('project.xcodeproj'))
+          project.expects(:dirty?).returns(true)
+          project.expects(:save).once
+
+          @integrator.stubs(:user_projects).returns([project])
+          FileUtils.expects(:touch).never
+
+          @integrator.send(:save_projects)
+        end
       end
 
       #-----------------------------------------------------------------------#
