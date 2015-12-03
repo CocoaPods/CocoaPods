@@ -106,7 +106,7 @@ module Pod
       UI.warnings.should.not.match /not set.*base configuration/
     end
 
-    it 'handles when xcconfig is set to another sandox xcconfig' do
+    it 'handles when xcconfig is set to another sandbox xcconfig' do
       group = @project.new_group('Pods')
       old_config = group.new_file('../Pods/Target Support Files/Pods/SampleConfig.xcconfig')
       @target.build_configurations.each do |config|

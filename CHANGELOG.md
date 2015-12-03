@@ -89,7 +89,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3347](https://github.com/CocoaPods/CocoaPods/issues/3347)
 
-* Targets that are no longer integrated will CocoaPods will be properly
+* Targets that are no longer integrated with CocoaPods will be properly
   de-integrated when installation occurs.  
   [Samuel Giddins](https://github.com/segiddins)
 
