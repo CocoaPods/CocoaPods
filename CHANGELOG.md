@@ -89,6 +89,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#3347](https://github.com/CocoaPods/CocoaPods/issues/3347)
 
+* Targets that are no longer integrated will CocoaPods will be properly
+  de-integrated when installation occurs.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Targets that are integrated will be ensured that they have all
+  CocoaPods-related settings and phases properly installed.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Total de-integration will happen whenever the major version of CocoaPods
+  changes, ensuring backwards-incompatible changes are properly applied.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Fix compiling of asset catalog files inside resource bundles.  
@@ -157,6 +169,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   platforms.  
   [Samuel Giddins](https://github.com/segiddins)
   [#4521](https://github.com/CocoaPods/CocoaPods/issues/4521)
+
+* Changing the name of a target in a Podfile will no longer cause warnings about
+  being unable to set the base configuration XCConfig.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 
 ## 0.39.0 (2015-10-09)
