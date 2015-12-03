@@ -14,10 +14,10 @@ module Pod
           end
         end
         config.sandbox.project = Project.new(config.sandbox.project_path)
-        Xcodeproj::Project.new(config.sandbox.project_path).save
+        config.sandbox.project.save
         @target = AggregateTarget.new(@podfile.target_definitions['Pods'], config.sandbox)
         @target.client_root = sample_project_path.dirname
-        @target.user_project  = Xcodeproj::Project.open(@sample_project_path)
+        @target.user_project = Xcodeproj::Project.open(@sample_project_path)
         @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
         empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
         @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target, empty_library])
@@ -50,6 +50,19 @@ module Pod
           Podfile::TargetDefinition.any_instance.stubs(:empty?).returns(true)
           @integrator.integrate!
           UI.warnings.should.include?('The Podfile does not contain any dependencies')
+        end
+
+        it 'deintegrates targets that are not associated with the podfile' do
+          additional_project = Xcodeproj::Project.new('Project.xcodeproj')
+          Deintegrator.any_instance.expects(:deintegrate_target).with additional_project.new_target(:application, 'Other App', :ios)
+          user_project = @target.user_project
+          user_project.native_targets.each do |target|
+            next if target.name == 'SampleProject'
+            Deintegrator.any_instance.expects(:deintegrate_target).with(target)
+          end
+          @integrator.stubs(:user_projects).returns([additional_project, user_project])
+
+          @integrator.send(:integrate_user_targets)
         end
 
         describe '#warn_about_xcconfig_overrides' do
