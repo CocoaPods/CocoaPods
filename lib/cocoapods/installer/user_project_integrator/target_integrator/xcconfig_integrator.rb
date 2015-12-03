@@ -79,9 +79,14 @@ module Pod
             file_ref = group.files.find { |f| f.path == path }
             existing = config.base_configuration_reference
 
+            set_base_configuration_reference = ->() do
+              file_ref ||= group.new_file(path)
+              config.base_configuration_reference = file_ref
+            end
+
             if existing && existing != file_ref
               if existing.real_path.to_path.start_with?(pod_bundle.support_files_dir.to_path)
-                existing.path = path
+                set_base_configuration_reference.call
               elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
                 UI.warn 'CocoaPods did not set the base configuration of your ' \
                 'project because your project already has a custom ' \
@@ -91,8 +96,7 @@ module Pod
                 'build configuration.'
               end
             elsif config.base_configuration_reference.nil? || file_ref.nil?
-              file_ref ||= group.new_file(path)
-              config.base_configuration_reference = file_ref
+              set_base_configuration_reference.call
             end
           end
 
