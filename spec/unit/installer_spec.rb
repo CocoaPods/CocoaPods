@@ -4,12 +4,12 @@ require 'cocoapods_stats/sender'
 
 # @return [Lockfile]
 #
-def generate_lockfile
+def generate_lockfile(lockfile_version: Pod::VERSION)
   hash = {}
   hash['PODS'] = []
   hash['DEPENDENCIES'] = []
   hash['SPEC CHECKSUMS'] = []
-  hash['COCOAPODS'] = Pod::VERSION
+  hash['COCOAPODS'] = lockfile_version
   Pod::Lockfile.new(hash)
 end
 
@@ -175,6 +175,38 @@ module Pod
           should.raise Informative do
             @installer.install!
           end.message.should.match /should.*run.*outside.*Pods directory.*Current directory.*\./m
+        end
+      end
+
+      describe 'handling CocoaPods version updates' do
+        it 'does not deintegrate when there is no lockfile' do
+          installer = Pod::Installer.new(config.sandbox, generate_podfile, nil)
+          UI.expects(:section).never
+          installer.send(:deintegrate_if_different_major_version)
+        end
+
+        it 'does not deintegrate when the major version is the same' do
+          VERSION.stubs(:to_s).returns('1.1.0')
+          should_not_deintegrate = %w(1.0.0 1.0.1 1.1.0 1.2.2)
+          should_not_deintegrate.each do |version|
+            lockfile = generate_lockfile(:lockfile_version => version)
+            installer = Pod::Installer.new(config.sandbox, generate_podfile, lockfile)
+            Pathname.expects(:glob).never
+            installer.send(:deintegrate_if_different_major_version)
+          end
+        end
+
+        it 'does deintegrate when the major version is different' do
+          VERSION.stubs(:to_s).returns('1.1.0')
+          should_not_deintegrate = %w(0.39.0 2.0.0 10.0-beta)
+          should_not_deintegrate.each do |version|
+            lockfile = generate_lockfile(:lockfile_version => version)
+            installer = Pod::Installer.new(config.sandbox, generate_podfile, lockfile)
+            project = fixture('SampleProject/SampleProject.xcodeproj')
+            Pathname.expects(:glob).with(config.installation_root + '*.xcodeproj').returns([project])
+            Deintegrator.any_instance.expects(:deintegrate_project)
+            installer.send(:deintegrate_if_different_major_version)
+          end
         end
       end
     end

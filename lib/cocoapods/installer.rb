@@ -121,6 +121,7 @@ module Pod
         raise Informative, message
       end
       UI.message 'Preparing' do
+        deintegrate_if_different_major_version
         sandbox.prepare
         ensure_plugins_are_installed!
         Migrator.migrate(sandbox)
@@ -484,6 +485,25 @@ module Pod
       context = SourceProviderHooksContext.generate
       HooksManager.run(:source_provider, context, plugins)
       context.sources
+    end
+
+    # Run the deintegrator against all projects in the installation root if the
+    # current CocoaPods major version part is different than the one in the
+    # lockfile.
+    #
+    # @return [void]
+    #
+    def deintegrate_if_different_major_version
+      return unless lockfile
+      return if lockfile.cocoapods_version.major == Version.create(VERSION).major
+      UI.section('Fully deintegrating due to major version update') do
+        projects = Pathname.glob(config.installation_root + '*.xcodeproj').map { |path| Xcodeproj::Project.open(path) }
+        deintegrator = Deintegrator.new
+        projects.sort.each do |project|
+          deintegrator.deintegrate_project(project)
+          project.save if project.dirty?
+        end
+      end
     end
 
     # Ensures that all plugins specified in the {#podfile} are loaded.

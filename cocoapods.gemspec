@@ -27,16 +27,18 @@ Gem::Specification.new do |s|
   s.require_paths = %w{ lib }
 
   # Link with the version of CocoaPods-Core
-  s.add_runtime_dependency 'cocoapods-core',       "= #{Pod::VERSION}"
-  s.add_runtime_dependency 'claide',               '~> 0.9.1'
-  s.add_runtime_dependency 'xcodeproj',            '~> 0.28.2'
-  s.add_runtime_dependency 'cocoapods-downloader', '~> 0.9.3'
-  s.add_runtime_dependency 'cocoapods-plugins',    '~> 0.4.2'
-  s.add_runtime_dependency 'cocoapods-search',     '~> 0.1.0'
-  s.add_runtime_dependency 'cocoapods-stats',      '~> 0.6.2'
-  s.add_runtime_dependency 'cocoapods-try',        '~> 0.5.1'
-  s.add_runtime_dependency 'cocoapods-trunk',      '~> 0.6.4'
-  s.add_runtime_dependency 'molinillo',            '~> 0.4.0'
+  s.add_runtime_dependency 'cocoapods-core',        "= #{Pod::VERSION}"
+
+  s.add_runtime_dependency 'claide',                '~> 0.9.1'
+  s.add_runtime_dependency 'cocoapods-deintegrate', '~> 0.2.1'
+  s.add_runtime_dependency 'cocoapods-downloader',  '~> 0.9.3'
+  s.add_runtime_dependency 'cocoapods-plugins',     '~> 0.4.2'
+  s.add_runtime_dependency 'cocoapods-search',      '~> 0.1.0'
+  s.add_runtime_dependency 'cocoapods-stats',       '~> 0.6.2'
+  s.add_runtime_dependency 'cocoapods-trunk',       '~> 0.6.4'
+  s.add_runtime_dependency 'cocoapods-try',         '~> 0.5.1'
+  s.add_runtime_dependency 'molinillo',             '~> 0.4.0'
+  s.add_runtime_dependency 'xcodeproj',             '~> 0.28.2'
 
   s.add_runtime_dependency 'colored',       '~> 1.2'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
