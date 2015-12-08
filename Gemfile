@@ -35,11 +35,13 @@ group :development do
   gem 'mocha-on-bacon'
   gem 'prettybacon'
   gem 'webmock'
-  gem 'inch'
 
   # Integration tests
   gem 'diffy'
   gem 'clintegracon'
+
+  # Code Quality
+  gem 'inch_by_inch'
   gem 'rubocop'
 end
 

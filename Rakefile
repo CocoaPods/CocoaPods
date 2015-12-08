@@ -31,6 +31,7 @@ begin
   end
 
   require 'bundler/gem_tasks'
+  require 'bundler/setup'
 
   # Pre release
   #-----------------------------------------------------------------------------#
@@ -145,7 +146,7 @@ begin
       Rake::Task['rubocop'].invoke
 
       title 'Running Inch'
-      Rake::Task['inch:spec'].invoke
+      Rake::Task['inch'].invoke
     end
 
     namespace :fixture_tarballs do
@@ -302,57 +303,8 @@ begin
 
   #-- Inch -------------------------------------------------------------------#
 
-  namespace :inch do
-    desc 'Lint the completeness of the documentation with Inch'
-    task :spec do
-      require 'inch'
-      require 'inch/cli'
-
-      puts 'Parse docs …'
-      YARD::Parser::SourceParser.before_parse_file do |_|
-        print green('.') # Visualize progress
-      end
-
-      class ProgressEnumerable
-        include Enumerable
-
-        def initialize(array)
-          @array = array
-        end
-
-        def each
-          @array.each do |e|
-            print '.'
-            yield e
-          end
-        end
-      end
-
-      Inch::Codebase::Objects.class_eval do
-        alias_method :old_init, :initialize
-        def initialize(language, objects)
-          puts "\n\nEvaluating …"
-          old_init(language, ProgressEnumerable.new(objects))
-        end
-      end
-
-      codebase = Inch::Codebase.parse(Dir.pwd, Inch::Config.codebase)
-      context = Inch::API::List.new(codebase, {})
-      options = Inch::CLI::Command::Options::List.new
-      options.show_all = true
-      options.ui = Inch::Utils::UI.new
-      failing_grade_symbols = [:B, :C] # add :U for undocumented
-      failing_grade_list = context.grade_lists.select { |g| failing_grade_symbols.include?(g.to_sym) }
-      Inch::CLI::Command::Output::List.new(options, context.objects, failing_grade_list)
-      puts
-      if context.objects.any? { |o| failing_grade_symbols.include?(o.grade.to_sym) }
-        puts red('✗ Lint of Documentation failed: Please improve above suggestions.')
-        exit 1
-      else
-        puts green('✓ Nothing to improve detected.')
-      end
-    end
-  end
+  require 'inch_by_inch/rake_task'
+  InchByInch::RakeTask.new
 
 rescue LoadError, NameError => e
   $stderr.puts "\033[0;31m" \
