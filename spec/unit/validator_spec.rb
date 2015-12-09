@@ -321,7 +321,7 @@ module Pod
         validator.stubs(:validate_url)
         validator.stubs(:validate_screenshots)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        dependency = podfile.target_definitions['Pods'].dependencies.first
+        dependency = podfile.target_definitions['App'].dependencies.first
         dependency.external_source.key?(:podspec).should.be.true
       end
 
@@ -358,7 +358,7 @@ module Pod
 
         it 'configures the deployment target' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
-          target_definition = podfile.target_definitions['Pods']
+          target_definition = podfile.target_definitions['App']
           platform = target_definition.platform
           platform.symbolic_name.should == :ios
           platform.deployment_target.to_s.should == '5.0'
@@ -366,13 +366,13 @@ module Pod
 
         it 'includes the use_frameworks! directive' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0', true)
-          target_definition = podfile.target_definitions['Pods']
+          target_definition = podfile.target_definitions['App']
           target_definition.uses_frameworks?.should == true
         end
 
         it 'includes the use_frameworks!(false) directive' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0', false)
-          target_definition = podfile.target_definitions['Pods']
+          target_definition = podfile.target_definitions['App']
           # rubocop:disable Style/DoubleNegation
           (!!target_definition.uses_frameworks?).should == false
           # rubocop:enable Style/DoubleNegation

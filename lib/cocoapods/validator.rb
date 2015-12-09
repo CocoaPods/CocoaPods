@@ -665,13 +665,14 @@ module Pod
       urls     = source_urls
       Pod::Podfile.new do
         urls.each { |u| source(u) }
-        abstract!(false)
-        use_frameworks!(use_frameworks)
-        platform(platform_name, deployment_target)
-        if local
-          pod name, :path => podspec.dirname.to_s
-        else
-          pod name, :podspec => podspec.to_s
+        target 'App' do
+          use_frameworks!(use_frameworks)
+          platform(platform_name, deployment_target)
+          if local
+            pod name, :path => podspec.dirname.to_s
+          else
+            pod name, :podspec => podspec.to_s
+          end
         end
       end
     end

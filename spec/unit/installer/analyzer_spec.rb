@@ -206,8 +206,8 @@ module Pod
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-TestRunner/BananaLib
-            Pods-TestRunner/monkey
+            Pods-SampleProject-TestRunner/BananaLib
+            Pods-SampleProject-TestRunner/monkey
             Pods-SampleProject/BananaLib
             Pods-SampleProject/monkey
           ).sort
@@ -239,9 +239,9 @@ module Pod
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
             Pods-CLITool/Pods-CLITool-monkey
             Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
-            Pods-SampleProject-TestRunner/Pods-monkey
+            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-monkey
             Pods-SampleProject/Pods-SampleProject-BananaLib
-            Pods-SampleProject/Pods-monkey
+            Pods-SampleProject/Pods-SampleProject-monkey
           ).sort
         end
       end
