@@ -699,11 +699,11 @@ module Pod
       command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
       case consumer.platform_name
       when :ios
-        command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
+        command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + ['-destination', 'name=iPhone 4s']
       when :watchos
-        command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
+        command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + ['-destination', 'name=Apple Watch - 38mm']
       when :tvos
-        command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
+        command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + ['-destination', 'name=Apple TV 1080p']
       end
 
       output, status = Dir.chdir(validation_dir) { _xcodebuild(command) }
