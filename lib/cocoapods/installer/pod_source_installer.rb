@@ -17,14 +17,21 @@ module Pod
       #
       attr_reader :specs_by_platform
 
+      # @return [Boolean] Whether the installer is allowed to touch the cache.
+      #
+      attr_reader :can_cache
+      alias_method :can_cache?, :can_cache
+
       # Initialize a new instance
       #
       # @param [Sandbox] sandbox @see sandbox
       # @param [Hash{Symbol=>Array}] specs_by_platform @see specs_by_platform
+      # @param [Boolean] can_cache @see can_cache
       #
-      def initialize(sandbox, specs_by_platform)
+      def initialize(sandbox, specs_by_platform, can_cache: true)
         @sandbox = sandbox
         @specs_by_platform = specs_by_platform
+        @can_cache = can_cache
       end
 
       # @return [String] A string suitable for debugging.
@@ -110,7 +117,7 @@ module Pod
       # @return [void]
       #
       def download_source
-        download_result = Downloader.download(download_request, root)
+        download_result = Downloader.download(download_request, root, :can_cache => can_cache?)
 
         if (@specific_source = download_result.checkout_options) && specific_source != root_spec.source
           sandbox.store_checkout_source(root_spec.name, specific_source)

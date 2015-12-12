@@ -27,7 +27,8 @@ module Pod
     def self.download(
       request,
       target,
-      cache_path: !Config.instance.skip_download_cache && Config.instance.clean? && Config.instance.cache_root + 'Pods'
+      can_cache: true,
+      cache_path: can_cache && !Config.instance.skip_download_cache && Config.instance.cache_root + 'Pods'
     )
       if cache_path
         cache = Cache.new(cache_path)

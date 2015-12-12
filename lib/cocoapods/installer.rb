@@ -32,6 +32,7 @@ module Pod
     autoload :AggregateTargetInstaller,   'cocoapods/installer/target_installer/aggregate_target_installer'
     autoload :Analyzer,                   'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller,    'cocoapods/installer/file_references_installer'
+    autoload :InstallationOptions,        'cocoapods/installer/installation_options'
     autoload :PostInstallHooksContext,    'cocoapods/installer/post_install_hooks_context'
     autoload :PreInstallHooksContext,     'cocoapods/installer/pre_install_hooks_context'
     autoload :SourceProviderHooksContext, 'cocoapods/installer/source_provider_hooks_context'
@@ -44,6 +45,9 @@ module Pod
     autoload :UserProjectIntegrator,      'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
+    include InstallationOptions::Mixin
+
+    delegate_installation_options { podfile }
 
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
@@ -109,7 +113,7 @@ module Pod
       verify_no_static_framework_transitive_dependencies
       verify_framework_usage
       generate_pods_project
-      integrate_user_project if config.integrate_targets?
+      integrate_user_project if integrate_targets?
       perform_post_install_actions
     end
 
@@ -221,7 +225,9 @@ module Pod
     end
 
     def create_analyzer
-      Analyzer.new(sandbox, podfile, lockfile)
+      Analyzer.new(sandbox, podfile, lockfile).tap do |analyzer|
+        analyzer.installation_options = installation_options
+      end
     end
 
     # Ensures that the white-listed build configurations are known to prevent
@@ -318,7 +324,7 @@ module Pod
       end
 
       @pod_installers ||= []
-      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
+      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, can_cache: clean?)
       @pod_installers << pod_installer
       pod_installer
     end
@@ -340,7 +346,7 @@ module Pod
     # @todo Why the @pod_installers might be empty?
     #
     def clean_pod_sources
-      return unless config.clean?
+      return unless clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
     end
@@ -362,7 +368,7 @@ module Pod
     # @todo Why the @pod_installers might be empty?
     #
     def lock_pod_sources
-      return unless config.lock_pod_source?
+      return unless lock_pod_sources?
       return unless @pod_installers
       @pod_installers.each do |installer|
         pod_target = pod_targets.find { |target| target.pod_name == installer.name }
@@ -706,7 +712,7 @@ module Pod
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
         pods_project.sort(:groups_position => :below)
         pods_project.recreate_user_schemes(false)
-        if config.deterministic_uuids?
+        if deterministic_uuids?
           UI.message('- Generating deterministic UUIDs') { pods_project.predictabilize_uuids }
         end
         pods_project.save

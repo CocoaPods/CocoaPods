@@ -39,8 +39,6 @@ module Pod
       module Options
         def options
           [
-            ['--no-clean',       'Leave SCM dirs like `.git` and `.svn` intact after downloading'],
-            ['--no-integrate',   'Skip integration of the Pods libraries in the Xcode project(s)'],
             ['--no-repo-update', 'Skip running `pod repo update` before install'],
           ].concat(super)
         end
@@ -51,8 +49,6 @@ module Pod
       end
 
       def initialize(argv)
-        config.clean = argv.flag?('clean', config.clean)
-        config.integrate_targets = argv.flag?('integrate', config.integrate_targets)
         config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
         super
       end
