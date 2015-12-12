@@ -354,9 +354,7 @@ module Pod
       @original_config = Config.instance.clone
       config.installation_root   = validation_dir
       config.silent              = !config.verbose
-      config.integrate_targets   = true
       config.skip_repo_update    = true
-      config.deterministic_uuids = false
     end
 
     def tear_down_validation_environment
@@ -664,6 +662,7 @@ module Pod
       local    = local?
       urls     = source_urls
       Pod::Podfile.new do
+        install! 'cocoapods', :deterministic_uuids => false
         urls.each { |u| source(u) }
         target 'App' do
           use_frameworks!(use_frameworks)

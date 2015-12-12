@@ -51,8 +51,8 @@ module Pod
       CocoaPodsStats::Sender.any_instance.stubs(:send)
       podfile = generate_podfile
       lockfile = generate_lockfile
-      config.integrate_targets = false
       @installer = Installer.new(config.sandbox, podfile, lockfile)
+      @installer.integrate_targets = false
     end
 
     #-------------------------------------------------------------------------#
@@ -150,13 +150,13 @@ module Pod
       end
 
       it 'integrates the user targets if the corresponding config is set' do
-        config.integrate_targets = true
+        @installer.integrate_targets = true
         @installer.expects(:integrate_user_project)
         @installer.install!
       end
 
       it "doesn't integrates the user targets if the corresponding config is not set" do
-        config.integrate_targets = false
+        @installer.integrate_targets = false
         @installer.expects(:integrate_user_project).never
         @installer.install!
       end
@@ -243,9 +243,9 @@ module Pod
           end
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.integrate_targets = false
         @installer.install!
 
         target = @installer.aggregate_targets.first
@@ -274,9 +274,9 @@ module Pod
           target 'SampleProject'
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.integrate_targets = false
         should.raise(Informative) { @installer.install! }.message.should.match /conflict.*monkey/
       end
     end
@@ -287,8 +287,8 @@ module Pod
       before do
         fixture_path = ROOT + 'spec/fixtures'
         config.repos_dir = fixture_path + 'spec-repos'
-        config.integrate_targets = false
         @podfile = Pod::Podfile.new do
+          install! 'cocoapods', 'integrate_targets' => false
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           use_frameworks!
@@ -340,9 +340,9 @@ module Pod
           target 'SampleProject'
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.integrate_targets = false
         should.raise(Informative) { @installer.install! }.message.should.match /use_frameworks/
       end
     end
@@ -521,7 +521,7 @@ module Pod
 
         describe '#clean' do
           it 'it cleans only if the config instructs to do it' do
-            config.clean = false
+            @installer.clean = false
             @installer.send(:clean_pod_sources)
             Installer::PodSourceInstaller.any_instance.expects(:install!).never
           end
@@ -540,14 +540,14 @@ module Pod
         end
 
         it "creates build configurations for all of the user's targets" do
-          config.integrate_targets = true
+          @installer.integrate_targets = true
           @installer.send(:analyze)
           @installer.send(:prepare_pods_project)
           @installer.pods_project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
         end
 
         it 'sets STRIP_INSTALLED_PRODUCT to NO for all configurations for the whole project' do
-          config.integrate_targets = true
+          @installer.integrate_targets = true
           @installer.send(:analyze)
           @installer.send(:prepare_pods_project)
           @installer.pods_project.build_settings('Debug')['STRIP_INSTALLED_PRODUCT'].should == 'NO'
@@ -902,8 +902,8 @@ module Pod
         podfile = Pod::Podfile.new do
           platform :ios
         end
-        config.integrate_targets = false
         @installer = Installer.new(config.sandbox, podfile)
+        @installer.integrate_targets = false
       end
 
       it 'runs the pre install hooks' do

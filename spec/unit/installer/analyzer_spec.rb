@@ -247,7 +247,7 @@ module Pod
       end
 
       it 'generates the integration library appropriately if the installation will not integrate' do
-        config.integrate_targets = false
+        @analyzer.integrate_targets = false
         target = @analyzer.analyze.targets.first
 
         target.client_root.should == config.installation_root
@@ -262,11 +262,11 @@ module Pod
           aggregate = Pod::Source::Aggregate.new(repos)
           Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
           aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
-          config.integrate_targets = false
         end
 
         it 'does not require a platform for an empty target' do
           podfile = Pod::Podfile.new do
+            install! 'cocoapods', :integrate_targets => false
             source SpecHelper.test_repo_url
             xcodeproj 'SampleProject/SampleProject'
             target 'TestRunner' do
@@ -281,6 +281,7 @@ module Pod
 
         it 'does not raise if a target with dependencies inherits the platform from its parent' do
           podfile = Pod::Podfile.new do
+            install! 'cocoapods', :integrate_targets => false
             source SpecHelper.test_repo_url
             xcodeproj 'SampleProject/SampleProject'
             platform :osx
@@ -295,6 +296,7 @@ module Pod
 
         it 'raises if a target with dependencies does not have a platform' do
           podfile = Pod::Podfile.new do
+            install! 'cocoapods', :integrate_targets => false
             source SpecHelper.test_repo_url
             xcodeproj 'SampleProject/SampleProject'
             target 'TestRunner' do
@@ -659,6 +661,7 @@ module Pod
         ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
 
         downloader.expects(:fetch)
+        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -670,6 +673,7 @@ module Pod
         ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
 
         downloader.expects(:fetch)
+        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -680,6 +684,7 @@ module Pod
         ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
 
         downloader.expects(:fetch)
+        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -691,6 +696,7 @@ module Pod
         ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
 
         downloader.expects(:fetch)
+        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -702,6 +708,20 @@ module Pod
         ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
 
         downloader.expects(:fetch)
+        downloader.expects(:can_cache=).with(true).once
+        @analyzer.send(:fetch_external_sources)
+      end
+
+      it 'does not use the cache when the podfile instructs not to clean' do
+        @analyzer.result.podfile_state.unchanged << 'BananaLib'
+        @sandbox_manifest.send(:checkout_options_data).delete('BananaLib')
+
+        downloader = stub('DownloaderSource')
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
+
+        downloader.expects(:fetch)
+        downloader.expects(:can_cache=).with(false).once
+        @analyzer.clean = false
         @analyzer.send(:fetch_external_sources)
       end
 
