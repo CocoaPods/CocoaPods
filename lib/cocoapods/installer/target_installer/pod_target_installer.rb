@@ -64,6 +64,11 @@ module Pod
       # @note   The Frameworks are used only for presentation purposes as the
       #         xcconfig is the authoritative source about their information.
       #
+      # @note   Core Data model directories (.xcdatamodeld) defined in the `resources`
+      #         property are currently added to the `Copy Resources` build phase like
+      #         all other resources. The Xcode UI adds these to the `Compile Sources`
+      #         build phase, but they will compile correctly either way.
+      #
       # @return [void]
       #
       def add_files_to_build_phases
@@ -99,6 +104,10 @@ module Pod
             project.reference_for_path(res)
           end
 
+          # Some nested files are not directly present in the Xcode project, such as the contents
+          # of an .xcdatamodeld directory. These files will return nil file references.
+          resource_refs.compact!
+
           native_target.add_resources(resource_refs)
         end
       end
@@ -108,12 +117,31 @@ module Pod
       # @note   The source files are grouped by Pod and in turn by subspec
       #         (recursively) in the resources group.
       #
+      # @note   Core Data model directories (.xcdatamodeld) are currently added to the
+      #         `Copy Resources` build phase like all other resources. The Xcode UI adds
+      #         these to the `Compile Sources` build phase, but they will compile
+      #         correctly either way.
+      #
       # @return [void]
       #
       def add_resources_bundle_targets
         target.file_accessors.each do |file_accessor|
           file_accessor.resource_bundles.each do |bundle_name, paths|
-            file_references = paths.map { |sf| project.reference_for_path(sf) }
+            file_references = paths.map do |path|
+              ref = project.reference_for_path(path)
+
+              # Some nested files are not directly present in the Xcode project, such as the contents
+              # of an .xcdatamodeld directory. These files are implicitly included by including their
+              # parent directory.
+              next if ref.nil?
+
+              # For variant groups, the variant group itself is added, not its members.
+              next ref.parent if ref.parent.is_a?(Xcodeproj::Project::Object::PBXVariantGroup)
+
+              ref
+            end
+            file_references = file_references.uniq.compact
+
             label = target.resources_bundle_target_label(bundle_name)
             bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
             bundle_target.deployment_target = deployment_target

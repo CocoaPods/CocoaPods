@@ -40,11 +40,27 @@ module Pod
         file_ref.path.should == 'libBananalib.a'
       end
 
-      it 'adds the files references of the resources the Pods project' do
+      it 'adds files references for the resources of the Pods project' do
         @installer.install!
         file_ref = @installer.pods_project['Pods/BananaLib/Resources/logo-sidebar.png']
         file_ref.should.be.not.nil
         file_ref.path.should == 'Resources/logo-sidebar.png'
+      end
+
+      it "add file references for localization directories if glob doesn't include contained files" do
+        @installer.install!
+        file_ref = @installer.pods_project['Pods/BananaLib/Resources/en.lproj']
+        file_ref.should.be.not.nil
+      end
+
+      it 'adds file references for files within CoreData directories' do
+        @installer.install!
+        model_ref = @installer.pods_project['Pods/BananaLib/Resources/Sample.xcdatamodeld']
+        model_ref.should.be.not.nil
+
+        # Files within the .xcdatamodeld directory are added automatically by adding the .xcdatamodeld directory.
+        file_ref = @installer.pods_project['Pods/BananaLib/Resources/Sample.xcdatamodeld/Sample.xcdatamodel']
+        file_ref.should.be.not.nil
       end
 
       it 'links the headers required for building the pod target' do
@@ -85,6 +101,49 @@ module Pod
         banana_headers.each { |banana_header| banana_header.should.not.exist }
         monkey_header = headers_root + 'monkey/monkey.h'
         monkey_header.should.exist
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe 'Installation With Recursive Resources Glob' do
+      before do
+        spec = fixture_spec('banana-lib/BananaLib.podspec')
+        spec.resources = 'Resources/**/*'
+        @pod_target = fixture_pod_target(spec)
+        @file_accessor = @pod_target.file_accessors.first
+        @project = Project.new(config.sandbox.project_path)
+        @project.add_pod_group('BananaLib', fixture('banana-lib'))
+        @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+      end
+
+      it "doesn't add file references for localization directories themselves" \
+         'if glob includes contained files' do
+        @installer.install!
+        file_ref = @installer.pods_project['Pods/BananaLib/Resources/en.lproj']
+        file_ref.should.be.nil
+      end
+
+      it 'creates file system reference variant groups for nested localized resource directories' do
+        @installer.install!
+        ref = @installer.pods_project['Pods/BananaLib/Resources/nested']
+        ref.should.be.not.nil
+        ref.is_a?(Xcodeproj::Project::Object::PBXVariantGroup).should.be.true
+      end
+
+      it "doesn't add file references for nested localized resources" do
+        @installer.install!
+        file_ref = @installer.pods_project['Pods/BananaLib/Resources/en.lproj/nested/logo-nested.png']
+        file_ref.should.be.nil
+      end
+
+      it "doesn't add file references for files within Asset Catalogs" do
+        @installer.install!
+        catalog_ref = @installer.pods_project['Pods/BananaLib/Resources/Images.xcassets']
+        catalog_ref.should.be.not.nil
+
+        # The asset catalog should be a "PBXFileReference" and therefore doesn't have children.
+        catalog_ref.is_a?(Xcodeproj::Project::Object::PBXFileReference).should.be.true
       end
     end
 

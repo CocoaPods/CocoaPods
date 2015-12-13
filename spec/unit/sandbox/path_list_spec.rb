@@ -23,8 +23,16 @@ module Pod
           Classes/BananaPrivate.h
           Classes/BananaTrace.d
           README
+          Resources/Base.lproj/Main.storyboard
           Resources/Images.xcassets/Logo.imageset/Contents.json
           Resources/Images.xcassets/Logo.imageset/logo.png
+          Resources/Sample.xcdatamodeld/.xccurrentversion
+          Resources/Sample.xcdatamodeld/Sample\ 2.xcdatamodel/contents
+          Resources/Sample.xcdatamodeld/Sample.xcdatamodel/contents
+          Resources/de.lproj/logo-localized.png
+          Resources/en.lproj/Main.strings
+          Resources/en.lproj/logo-localized.png
+          Resources/en.lproj/nested/logo-nested.png
           Resources/logo-sidebar.png
           Resources/sub_dir/logo-sidebar.png
           framework/Source/MoreBanana.h
@@ -51,8 +59,15 @@ module Pod
           Bananalib.framework/Versions/Current
           Classes
           Resources
+          Resources/Base.lproj
           Resources/Images.xcassets
           Resources/Images.xcassets/Logo.imageset
+          Resources/Sample.xcdatamodeld
+          Resources/Sample.xcdatamodeld/Sample\ 2.xcdatamodel
+          Resources/Sample.xcdatamodeld/Sample.xcdatamodel
+          Resources/de.lproj
+          Resources/en.lproj
+          Resources/en.lproj/nested
           Resources/sub_dir
           framework
           framework/Source
@@ -137,7 +152,11 @@ module Pod
       it 'can optionally include the directories in the results' do
         paths = @path_list.relative_glob('Resources/*', :include_dirs => true).map(&:to_s)
         paths.sort.should == %w(
+          Resources/Base.lproj
           Resources/Images.xcassets
+          Resources/Sample.xcdatamodeld
+          Resources/de.lproj
+          Resources/en.lproj
           Resources/logo-sidebar.png
           Resources/sub_dir
         )

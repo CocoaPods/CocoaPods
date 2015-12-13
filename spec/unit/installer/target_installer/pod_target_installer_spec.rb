@@ -398,6 +398,61 @@ module Pod
           end
         end
       end
+
+      describe 'concerning resource bundles' do
+        before do
+          config.sandbox.prepare
+
+          @project = Project.new(config.sandbox.project_path)
+
+          config.sandbox.project = @project
+
+          @spec = fixture_spec('banana-lib/BananaLib.podspec')
+          @spec.resources = nil
+          @spec.resource_bundle = { 'banana_bundle' => ['Resources/**/*'] }
+          @project.add_pod_group('BananaLib', fixture('banana-lib'))
+
+          @pod_target = fixture_pod_target(@spec)
+          @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+          target_installer = Installer::PodTargetInstaller.new(config.sandbox, @pod_target)
+
+          # Use a file references installer to add the files so that the correct ones are added.
+          file_ref_installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+          file_ref_installer.install!
+
+          target_installer.install!
+
+          @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-banana_bundle' }
+          @bundle_target.should.be.not.nil
+        end
+
+        it 'adds variant groups directly to resources' do
+          # The variant group item should be present.
+          group_build_file = @bundle_target.resources_build_phase.files.find do |bf|
+            bf.file_ref.path == 'Resources' && bf.file_ref.name == 'Main.storyboard'
+          end
+          group_build_file.should.be.not.nil
+          group_build_file.file_ref.is_a?(Xcodeproj::Project::Object::PBXVariantGroup).should.be.true
+
+          # An item within the variant group should not be present.
+          strings_build_file = @bundle_target.resources_build_phase.files.find do |bf|
+            bf.file_ref.path == 'Resources/en.lproj/Main.strings'
+          end
+          strings_build_file.should.be.nil
+        end
+
+        it 'adds Core Data models directly to resources' do
+          # The model directory item should be present.
+          dir_build_file = @bundle_target.resources_build_phase.files.find { |bf| bf.file_ref.path == 'Resources/Sample.xcdatamodeld' }
+          dir_build_file.should.be.not.nil
+
+          # An item within the model directory should not be present.
+          version_build_file = @bundle_target.resources_build_phase.files.find do |bf|
+            bf.file_ref.path =~ %r{Resources/Sample.xcdatamodeld/Sample.xcdatamodel}i
+          end
+          version_build_file.should.be.nil
+        end
+      end
     end
   end
 end

@@ -208,14 +208,14 @@ module Pod
         it 'creates variant group for localized file' do
           Pathname.any_instance.stubs(:realpath).returns(@localized_file)
           ref = @project.add_file_reference(@localized_file, @group)
-          ref.hierarchy_path.should == '/Pods/BananaLib/Foo/Foo.strings'
+          ref.hierarchy_path.should == '/Pods/BananaLib/Foo.strings/Foo.strings'
           ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
         end
 
         it 'creates variant group for localized file in subgroup' do
           Pathname.any_instance.stubs(:realpath).returns(@localized_file)
           ref = @project.add_file_reference(@localized_file, @group, true)
-          ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo/Foo.strings'
+          ref.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo.strings/Foo.strings'
           ref.parent.class.should == Xcodeproj::Project::Object::PBXVariantGroup
         end
 
@@ -250,6 +250,7 @@ module Pod
           @nested_file2 = subdir + 'nested_file.m'
           @localized_base_foo = subdir + 'Base.lproj/Foo.storyboard'
           @localized_de_foo = subdir + 'de.lproj/Foo.strings'
+          @localized_de_foo_jpg = subdir + 'de.lproj/Foo.jpg'
           @localized_de_bar = subdir + 'de.lproj/Bar.strings'
           @localized_different_foo = poddir + 'Base.lproj/Foo.jpg'
           @group = @project.group_for_spec('BananaLib')
@@ -278,13 +279,13 @@ module Pod
 
         it 'creates variant group for localized file' do
           group = @project.group_for_path_in_group(@localized_base_foo, @group, false)
-          group.hierarchy_path.should == '/Pods/BananaLib/Foo'
+          group.hierarchy_path.should == '/Pods/BananaLib/Foo.storyboard'
           group.class.should == Xcodeproj::Project::Object::PBXVariantGroup
         end
 
         it 'creates variant group for localized file when adding subgroups' do
           group = @project.group_for_path_in_group(@localized_base_foo, @group, true)
-          group.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo'
+          group.hierarchy_path.should == '/Pods/BananaLib/Dir/SubDir/Foo.storyboard'
           group.class.should == Xcodeproj::Project::Object::PBXVariantGroup
         end
 
@@ -293,11 +294,24 @@ module Pod
           group.real_path.should == config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir'
         end
 
-        it "doesn't duplicate variant groups for same name and directory" do
+        it "doesn't duplicate variant groups for interface and strings files with " \
+           'same name and directory' do
+          Pathname.any_instance.stubs(:exist?).returns(false).then.returns(true)
+
           group_1 = @project.group_for_path_in_group(@localized_base_foo, @group, false)
           group_2 = @project.group_for_path_in_group(@localized_de_foo, @group, false)
+
           group_1.uuid.should == group_2.uuid
           @group.children.count.should == 1
+        end
+
+        it 'creates own variant groups for localized non-interface files with same name' do
+          # An image and a strings file should not be combined.
+          group_1 = @project.group_for_path_in_group(@localized_de_foo, @group, false)
+          group_2 = @project.group_for_path_in_group(@localized_de_foo_jpg, @group, false)
+
+          group_1.uuid.should != group_2.uuid
+          @group.children.count.should == 2
         end
 
         it 'makes separate variant groups for different names' do

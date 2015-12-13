@@ -103,6 +103,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix compiling of localized resources.
+  [Eric Firestone](https://github.com/efirestone)
+  [#1653](https://github.com/CocoaPods/CocoaPods/issues/1653)
+
 * Fix compiling of asset catalog files inside resource bundles.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#4501](https://github.com/CocoaPods/CocoaPods/issues/4501)

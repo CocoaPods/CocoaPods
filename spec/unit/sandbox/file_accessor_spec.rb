@@ -108,7 +108,11 @@ module Pod
 
       it 'returns the resources' do
         @accessor.resources.sort.should == [
+          @root + 'Resources/Base.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Sample.xcdatamodeld',
+          @root + 'Resources/de.lproj',
+          @root + 'Resources/en.lproj',
           @root + 'Resources/logo-sidebar.png',
           @root + 'Resources/sub_dir',
         ]
@@ -153,7 +157,11 @@ module Pod
         @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
           @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/Base.lproj',
+          @root + 'Resources/de.lproj',
+          @root + 'Resources/en.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/sub_dir',
         ]
         @accessor.resource_bundles.should == { 'BananaLib' => resource_paths }
@@ -163,7 +171,11 @@ module Pod
         @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
           @root + 'Resources/logo-sidebar.png',
+          @root + 'Resources/Base.lproj',
+          @root + 'Resources/de.lproj',
+          @root + 'Resources/en.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/sub_dir',
         ]
         @accessor.resource_bundle_files.should == resource_paths
@@ -173,7 +185,11 @@ module Pod
         @spec_consumer.stubs(:exclude_files).returns(['**/*.png'])
         @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
         resource_paths = [
+          @root + 'Resources/Base.lproj',
+          @root + 'Resources/de.lproj',
+          @root + 'Resources/en.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/sub_dir',
         ]
         @accessor.resource_bundles.should == { 'BananaLib' => resource_paths }

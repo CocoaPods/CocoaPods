@@ -271,8 +271,9 @@ module Pod
     # Creates subgroups to reflect the file system structure if
     # reflect_file_system_structure is set to true.
     # Makes a variant group if the path points to a localized file inside a
-    # *.lproj folder. The same variant group is returned for files with the
-    # same name, even if their file extensions differ.
+    # *.lproj directory. To support Apple Base Internationalization, the same
+    # variant group is returned for interface files and strings files with
+    # the same name.
     #
     # @param  [Pathname] absolute_pathname
     #         The pathname of the file to get the group for.
@@ -297,7 +298,7 @@ module Pod
       relative_dir = relative_pathname.dirname
       lproj_regex = /\.lproj/i
 
-      # Add subgroups for folders, but treat .lproj as a file
+      # Add subgroups for directories, but treat .lproj as a file
       if reflect_file_system_structure
         relative_dir.each_filename do|name|
           break if name.to_s =~ lproj_regex
@@ -306,16 +307,47 @@ module Pod
         end
       end
 
-      # Turn .lproj into a variant group
+      # Turn files inside .lproj directories into a variant group
       if relative_dir.basename.to_s =~ lproj_regex
-        filename = absolute_pathname.basename.sub_ext('').to_s
+        group_name = variant_group_name(absolute_pathname)
         lproj_parent_dir = absolute_pathname.dirname.dirname
-        group = @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||
-          group.new_variant_group(filename, lproj_parent_dir)
-        @variant_groups_by_path_and_name[[lproj_parent_dir, filename]] ||= group
+        group = @variant_groups_by_path_and_name[[lproj_parent_dir, group_name]] ||
+          group.new_variant_group(group_name, lproj_parent_dir)
+        @variant_groups_by_path_and_name[[lproj_parent_dir, group_name]] ||= group
       end
 
       group
+    end
+
+    # Returns the name to be used for a the variant group for a file at a given path.
+    # The path must be localized (within an *.lproj directory).
+    #
+    # @param  [Pathname] The localized path to get a variant group name for.
+    #
+    # @return [String] The variant group name.
+    #
+    def variant_group_name(path)
+      unless path.to_s.downcase.include?('.lproj/')
+        raise ArgumentError, 'Only localized resources can be added to variant groups.'
+      end
+
+      # When using Base Internationalization for XIBs and Storyboards a strings
+      # file is generated with the same name as the XIB/Storyboard in each .lproj
+      # directory:
+      #   Base.lproj/MyViewController.xib
+      #   fr.lproj/MyViewController.strings
+      #
+      # In this scenario we want the variant group to be the same as the XIB or Storyboard.
+      #
+      # Base Internationalization: https://developer.apple.com/library/ios/documentation/MacOSX/Conceptual/BPInternational/InternationalizingYourUserInterface/InternationalizingYourUserInterface.html
+      if path.extname.downcase == '.strings'
+        %w(.xib .storyboard).each do |extension|
+          possible_interface_file = path.dirname.dirname + 'Base.lproj' + path.basename.sub_ext(extension)
+          return possible_interface_file.basename.to_s if possible_interface_file.exist?
+        end
+      end
+
+      path.basename.to_s
     end
 
     #-------------------------------------------------------------------------#

@@ -18,38 +18,41 @@ module Pod
       # them from the comparison.
       paths_without_git = relative_paths.reject { |p| p.include? '.git/' }
 
-      paths_without_git.sort.should == [
-        '.git',
-        '.gitmodules',
-        'BananaLib.podspec',
-        'libPusher',
-        'sub-dir',
-        'sub-dir/sub-dir-2',
-        'sub-dir/sub-dir-2/somefile.txt',
-      ]
+      paths_without_git.sort.should == %w(
+        .git
+        .gitmodules
+        BananaLib.podspec
+        libPusher
+        sub-dir
+        sub-dir/sub-dir-2
+        sub-dir/sub-dir-2/somefile.txt
+      )
     end
 
     it 'returns the used files' do
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
-
-      relative_paths.sort.should == [
-        'Banana.modulemap',
-        'Bananalib.framework',
-        'Classes/Banana.h',
-        'Classes/Banana.m',
-        'Classes/BananaLib.pch',
-        'Classes/BananaPrivate.h',
-        'Classes/BananaTrace.d',
-        'LICENSE',
-        'README',
-        'Resources/Images.xcassets',
-        'Resources/logo-sidebar.png',
-        'Resources/sub_dir',
-        'framework/Source/MoreBanana.h',
-        'libBananalib.a',
-        'preserve_me.txt',
-      ]
+      relative_paths.sort.should == %w(
+        Banana.modulemap
+        Bananalib.framework
+        Classes/Banana.h
+        Classes/Banana.m
+        Classes/BananaLib.pch
+        Classes/BananaPrivate.h
+        Classes/BananaTrace.d
+        LICENSE
+        README
+        Resources/Base.lproj
+        Resources/Images.xcassets
+        Resources/Sample.xcdatamodeld
+        Resources/de.lproj
+        Resources/en.lproj
+        Resources/logo-sidebar.png
+        Resources/sub_dir
+        framework/Source/MoreBanana.h
+        libBananalib.a
+        preserve_me.txt
+      )
     end
 
     it 'handles Pods with multiple file accessors' do
@@ -64,21 +67,25 @@ module Pod
       @cleaner = Sandbox::PodDirCleaner.new(@root, specs_by_platform)
       paths = @cleaner.send(:used_files)
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
-      relative_paths.sort.should == [
-        'Banana.modulemap',
-        'Bananalib.framework',
-        'Classes/Banana.h',
-        'Classes/Banana.m',
-        'Classes/BananaLib.pch',
-        'Classes/BananaPrivate.h',
-        'LICENSE',
-        'README',
-        'Resources/Images.xcassets',
-        'Resources/logo-sidebar.png',
-        'Resources/sub_dir',
-        'libBananalib.a',
-        'preserve_me.txt',
-      ]
+      relative_paths.sort.should == %w(
+        Banana.modulemap
+        Bananalib.framework
+        Classes/Banana.h
+        Classes/Banana.m
+        Classes/BananaLib.pch
+        Classes/BananaPrivate.h
+        LICENSE
+        README
+        Resources/Base.lproj
+        Resources/Images.xcassets
+        Resources/Sample.xcdatamodeld
+        Resources/de.lproj
+        Resources/en.lproj
+        Resources/logo-sidebar.png
+        Resources/sub_dir
+        libBananalib.a
+        preserve_me.txt
+      )
     end
 
     it 'compacts the used files as nil would be converted to the empty string' do
