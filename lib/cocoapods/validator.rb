@@ -1,6 +1,5 @@
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/string/inflections'
-require 'cocoapods/simctl'
 
 module Pod
   # Validates a Specification.
