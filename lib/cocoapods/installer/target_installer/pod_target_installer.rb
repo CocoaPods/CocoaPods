@@ -144,7 +144,6 @@ module Pod
 
             label = target.resources_bundle_target_label(bundle_name)
             bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
-            bundle_target.deployment_target = deployment_target
             bundle_target.product_reference.tap do |bundle_product|
               bundle_file_name = "#{bundle_name}.bundle"
               bundle_product.name = bundle_file_name
@@ -155,6 +154,7 @@ module Pod
             target.user_build_configurations.each do |bc_name, type|
               bundle_target.add_build_configuration(bc_name, type)
             end
+            bundle_target.deployment_target = deployment_target
 
             target.resource_bundle_targets << bundle_target
 
