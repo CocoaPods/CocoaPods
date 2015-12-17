@@ -32,7 +32,10 @@ module Pod
 
     describe 'Subclasses helpers' do
       it 'pre-downloads the Pod and stores the relevant information in the sandbox' do
-        @subject.expects(:validate_podspec).with { |spec| spec.name.should == 'Reachability' }
+        @subject.expects(:validate_podspec).with do |spec|
+          spec.defined_in_file.should.be.nil
+          spec.name.should == 'Reachability'
+        end
         @subject.send(:pre_download, config.sandbox)
         path = config.sandbox.specifications_root + 'Reachability.podspec.json'
         path.should.exist?

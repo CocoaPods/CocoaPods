@@ -141,14 +141,19 @@ module Pod
       # @return [void]
       #
       def store_podspec(sandbox, spec, json = false)
-        case spec
-        when Pathname
-          spec = Specification.from_file(spec)
-        when String
-          path = "#{name}.podspec"
-          path << '.json' if json
-          spec = Specification.from_string(spec, path)
+        spec = case spec
+               when Pathname
+                 Specification.from_file(spec)
+               when String
+                 path = "#{name}.podspec"
+                 path << '.json' if json
+                 Specification.from_string(spec, path)
+               when Specification
+                 spec.dup
+               else
+                 raise "Unknown spec type: #{spec}"
         end
+        spec.defined_in_file = nil
         validate_podspec(spec)
         sandbox.store_podspec(name, spec.to_pretty_json, true, true)
       end
