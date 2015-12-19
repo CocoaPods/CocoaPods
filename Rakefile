@@ -201,26 +201,25 @@ begin
         exit 1
       end
       title 'Running Integration tests'
-      sh 'rm -rf spec/cocoapods-integration-specs/tmp'
+      rm_rf 'tmp'
       title 'Building all the fixtures'
       sh('bundle exec bacon spec/integration.rb') {}
       title 'Storing fixtures'
       # Copy the files to the files produced by the specs to the after folders
-      FileList['tmp/*'].each do |source|
-        destination = "spec/cocoapods-integration-specs/#{source.gsub('tmp/', '')}/after"
+      FileList['tmp/*/transformed'].each do |source|
+        name = source.match(%r{^tmp/(.+)/transformed$})[1]
+        destination = "spec/cocoapods-integration-specs/#{name}/after"
         if File.exist?(destination)
-          sh "rm -rf #{destination}"
-          sh "mv #{source} #{destination}"
+          rm_rf destination
+          mv source, destination
         end
       end
 
       # Remove files not used for the comparison
       # To keep the git diff clean
       files_to_delete = FileList['spec/cocoapods-integration-specs/*/after/{Podfile,*.podspec,**/*.xcodeproj,PodTest-hg-source}', '.DS_Store']
-      files_to_delete.exclude('/spec/cocoapods-integration-specs/init_single_platform/**/*.*')
-      files_to_delete.each do |file_to_delete|
-        sh "rm -rf #{file_to_delete}"
-      end
+      files_to_delete.exclude('spec/cocoapods-integration-specs/init_single_platform/**/*.*')
+      rm_rf files_to_delete
 
       puts
       puts 'Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule'

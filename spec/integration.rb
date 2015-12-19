@@ -66,6 +66,7 @@ CLIntegracon.configure do |c|
     # Creates a YAML representation of the Xcodeproj files
     # which should be used as a reference for comparison.
     xcodeproj = Xcodeproj::Project.open(path)
+    FileUtils.rm_rf(path)
     File.open("#{path}.yaml", 'w') do |file|
       file.write xcodeproj.to_yaml
     end
@@ -78,8 +79,8 @@ CLIntegracon.configure do |c|
   end
 
   # Register special handling for YAML files
-  paths = [/Podfile\.lock/, /Manifest\.lock$/, /xcodeproj\.yaml$/]
-  c.has_special_handling_for(*paths) do |path|
+  paths = [/Podfile\.lock/, /Manifest\.lock$/]
+  c.preprocess(*paths) do |path|
     # Remove CocoaPods version
     yaml = File.open(path) { |f| YAML.load(f) }
     yaml.delete('COCOAPODS')
@@ -87,7 +88,6 @@ CLIntegracon.configure do |c|
   end
 
   # So we don't need to compare them directly
-  c.ignores /\.xcodeproj\//
   c.ignores 'Podfile'
 
   # Ignore certain OSX files
@@ -120,6 +120,7 @@ describe_cli 'pod' do
       '--verbose',
       '--no-ansi',
     ]
+    s.replace_path %r{#{CLIntegracon.shared_config.temp_path}/\w+/transformed}, 'PROJECT'
     s.replace_path ROOT.to_s, 'ROOT'
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
