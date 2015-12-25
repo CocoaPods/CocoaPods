@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: banana-lib/BananaLib.podspec
 
 SPEC CHECKSUMS:
-  BananaLib: e9f027e0318c3bf4f9599bae18e0929c506ae3ef
+  BananaLib: 9f686c8959fb9c70fdbfd8d79a83f5813bbcf3d2
 
 PODFILE CHECKSUM: 4ee7fd629ab3f7e6a1f32cbb8f767d6a9c0381e5
 

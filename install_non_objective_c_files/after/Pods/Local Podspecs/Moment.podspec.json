@@ -14,5 +14,11 @@
     "parseIt.ym",
     "tokeIt.l"
   ],
-  "requires_arc": false
+  "requires_arc": false,
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  }
 }

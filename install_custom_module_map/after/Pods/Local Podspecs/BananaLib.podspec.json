@@ -22,5 +22,11 @@
   "source_files": "Classes/*.{h,m}",
   "public_header_files": "Classes/Banana.h",
   "private_header_files": "Classes/BananaPrivate.h",
-  "module_map": "BananaLib.modulemap"
+  "module_map": "BananaLib.modulemap",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  }
 }

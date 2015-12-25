@@ -13,5 +13,11 @@
   },
   "source_files": "Reachability.{h,m}",
   "frameworks": "SystemConfiguration",
-  "requires_arc": false
+  "requires_arc": false,
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  }
 }
