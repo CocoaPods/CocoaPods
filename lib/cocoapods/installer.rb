@@ -113,7 +113,7 @@ module Pod
       verify_no_static_framework_transitive_dependencies
       verify_framework_usage
       generate_pods_project
-      integrate_user_project if integrate_targets?
+      integrate_user_project if installation_options.integrate_targets?
       perform_post_install_actions
     end
 
@@ -324,7 +324,7 @@ module Pod
       end
 
       @pod_installers ||= []
-      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, can_cache: clean?)
+      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, can_cache: installation_options.clean?)
       @pod_installers << pod_installer
       pod_installer
     end
@@ -346,7 +346,7 @@ module Pod
     # @todo Why the @pod_installers might be empty?
     #
     def clean_pod_sources
-      return unless clean?
+      return unless installation_options.clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
     end
@@ -368,7 +368,7 @@ module Pod
     # @todo Why the @pod_installers might be empty?
     #
     def lock_pod_sources
-      return unless lock_pod_sources?
+      return unless installation_options.lock_pod_sources?
       return unless @pod_installers
       @pod_installers.each do |installer|
         pod_target = pod_targets.find { |target| target.pod_name == installer.name }
@@ -712,7 +712,7 @@ module Pod
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
         pods_project.sort(:groups_position => :below)
         pods_project.recreate_user_schemes(false)
-        if deterministic_uuids?
+        if installation_options.deterministic_uuids?
           UI.message('- Generating deterministic UUIDs') { pods_project.predictabilize_uuids }
         end
         pods_project.save

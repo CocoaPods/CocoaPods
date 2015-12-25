@@ -60,7 +60,7 @@ module Pod
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
-        if integrate_targets?
+        if installation_options.integrate_targets?
           @result.target_inspections = inspect_targets_to_integrate
         else
           verify_platforms_specified!
@@ -252,7 +252,7 @@ module Pod
         target = AggregateTarget.new(target_definition, sandbox)
         target.host_requires_frameworks |= target_definition.uses_frameworks?
 
-        if integrate_targets?
+        if installation_options.integrate_targets?
           target_inspection = result.target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
           target.user_project = target_inspection.project
@@ -285,7 +285,7 @@ module Pod
       # @return [Array<PodTarget>]
       #
       def generate_pod_targets(specs_by_target)
-        if deduplicate_targets?
+        if installation_options.deduplicate_targets?
           dedupe_cache = {}
 
           all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
@@ -380,7 +380,7 @@ module Pod
       def generate_pod_target(target_definitions, pod_specs)
         pod_target = PodTarget.new(pod_specs, target_definitions, sandbox)
 
-        if integrate_targets?
+        if installation_options.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
           pod_target.user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
           pod_target.archs = target_inspections.flat_map(&:archs).compact.uniq.sort
@@ -465,7 +465,7 @@ module Pod
         else
           source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
         end
-        source.can_cache = clean?
+        source.can_cache = installation_options.clean?
         source.fetch(sandbox)
       end
 
@@ -654,7 +654,7 @@ module Pod
       # @return [void]
       #
       def verify_platforms_specified!
-        unless integrate_targets?
+        unless installation_options.integrate_targets?
           podfile.target_definition_list.each do |target_definition|
             if !target_definition.empty? && target_definition.platform.nil?
               raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'

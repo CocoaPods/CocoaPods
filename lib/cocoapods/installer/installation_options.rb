@@ -14,7 +14,7 @@ module Pod
 
       def self.option(name, default, boolean: true)
         name = name.to_s
-        raise 'existing' if defaults.key?(name)
+        raise ArgumentError, "The #{name} option is already defined" if defaults.key?(name)
         defaults[name] = default
         attr_accessor name
         alias_method "#{name}?", name if boolean
@@ -47,22 +47,25 @@ module Pod
       module Mixin
         def Mixin.included(mod)
           mod.send(:attr_accessor, :installation_options)
+
           def mod.delegate_installation_options(&blk)
             define_method(:installation_options) do
               @installation_options ||= InstallationOptions.from_podfile(instance_eval(&blk))
             end
           end
-        end
 
-        def respond_to_missing?(name, *args)
-          installation_options.respond_to?(name, *args) || super
-        end
+          def mod.delegate_installation_option_attributes!
+            define_method(:respond_to_missing?) do |name, *args|
+              installation_options.respond_to?(name, *args) || super
+            end
 
-        def method_missing(name, *args, &blk)
-          if installation_options.respond_to?(name)
-            installation_options.send(name, *args, &blk)
-          else
-            super
+            define_method(:method_missing) do |name, *args, &blk|
+              if installation_options.respond_to?(name)
+                installation_options.send(name, *args, &blk)
+              else
+                super
+              end
+            end
           end
         end
       end

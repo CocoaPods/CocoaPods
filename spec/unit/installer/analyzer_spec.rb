@@ -247,7 +247,7 @@ module Pod
       end
 
       it 'generates the integration library appropriately if the installation will not integrate' do
-        @analyzer.integrate_targets = false
+        @analyzer.installation_options.integrate_targets = false
         target = @analyzer.analyze.targets.first
 
         target.client_root.should == config.installation_root
@@ -721,7 +721,7 @@ module Pod
 
         downloader.expects(:fetch)
         downloader.expects(:can_cache=).with(false).once
-        @analyzer.clean = false
+        @analyzer.installation_options.clean = false
         @analyzer.send(:fetch_external_sources)
       end
 
