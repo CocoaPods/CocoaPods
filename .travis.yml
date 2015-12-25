@@ -9,6 +9,7 @@ rvm:
   # OS X 10.9.0-10.9.2
   # TODO: currently unavailable: https://github.com/travis-ci/travis-ci/issues/2918
   # - 2.0.0-p247
+  - 2.3.1
 
 branches:
   only:
