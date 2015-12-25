@@ -646,13 +646,13 @@ module Pod
           @installer.send(:install_libraries)
         end
 
-        it 'skips empty pod targets' do
+        it 'does not skip empty pod targets' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
-          Installer::PodTargetInstaller.any_instance.expects(:install!).never
+          Installer::PodTargetInstaller.any_instance.expects(:install!).once
           @installer.send(:install_libraries)
         end
 
