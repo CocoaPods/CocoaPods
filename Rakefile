@@ -215,12 +215,6 @@ begin
         end
       end
 
-      # Remove files not used for the comparison
-      # To keep the git diff clean
-      files_to_delete = FileList['spec/cocoapods-integration-specs/*/after/{Podfile,*.podspec,**/*.xcodeproj,PodTest-hg-source}', '.DS_Store']
-      files_to_delete.exclude('spec/cocoapods-integration-specs/init_single_platform/**/*.*')
-      rm_rf files_to_delete
-
       puts
       puts 'Integration fixtures updated, commit and push in the `spec/cocoapods-integration-specs` submodule'
     end
