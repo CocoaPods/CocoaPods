@@ -12,6 +12,12 @@
   },
   "homepage": "http://example.com",
   "summary": "A test pod.",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  },
   "subspecs": [
     {
       "name": "subspec_1",

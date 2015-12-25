@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :podspec: Reachability.podspec
 
 SPEC CHECKSUMS:
-  Reachability: 2d009c61f5b193794f36a248723d5b5266e126d1
+  Reachability: ffc2f3aeee14f8163014be574d92774c474b6534
 
 PODFILE CHECKSUM: f2a6e233d6fae8403ca61756db0aa8ce812970b8
 
