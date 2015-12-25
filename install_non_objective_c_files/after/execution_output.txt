@@ -19,8 +19,8 @@ Downloading dependencies
 -> Installing Moment (0.0.1)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/kmussel/Moment.git ROOT/tmp/install_non_objective_c_files/Pods/Moment
-     Cloning into 'ROOT/tmp/install_non_objective_c_files/Pods/Moment'...
+     $ GIT_BIN clone https://github.com/kmussel/Moment.git PROJECT/Pods/Moment
+     Cloning into 'PROJECT/Pods/Moment'...
    $ GIT_BIN checkout --quiet 39f21fee0cef410c6d89c9fa94ff5638527ef7bc
   - Running pre install hooks
 

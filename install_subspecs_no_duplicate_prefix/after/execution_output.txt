@@ -19,8 +19,8 @@ Downloading dependencies
 -> Installing Test (0.0.1)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test --single-branch --depth 1
-     Cloning into 'ROOT/tmp/install_subspecs_no_duplicate_prefix/Pods/Test'...
+     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git PROJECT/Pods/Test --single-branch --depth 1
+     Cloning into 'PROJECT/Pods/Test'...
   - Running pre install hooks
 
 Generating Pods project
