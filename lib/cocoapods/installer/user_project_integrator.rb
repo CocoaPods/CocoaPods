@@ -234,7 +234,7 @@ module Pod
       end
 
       def targets_to_integrate
-        targets.reject { |target| target.target_definition.empty? }
+        targets.reject { |target| target.target_definition.abstract? }
       end
 
       # Prints a warning informing the user that a build configuration of

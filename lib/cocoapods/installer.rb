@@ -629,13 +629,13 @@ module Pod
     def install_libraries
       UI.message '- Installing targets' do
         pod_targets.sort_by(&:name).each do |pod_target|
-          next if pod_target.target_definitions.flat_map(&:dependencies).empty?
+          next if pod_target.target_definitions.all?(&:abstract?)
           target_installer = PodTargetInstaller.new(sandbox, pod_target)
           target_installer.install!
         end
 
         aggregate_targets.sort_by(&:name).each do |target|
-          next if target.target_definition.dependencies.empty?
+          next if target.target_definition.abstract?
           target_installer = AggregateTargetInstaller.new(sandbox, target)
           target_installer.install!
         end
