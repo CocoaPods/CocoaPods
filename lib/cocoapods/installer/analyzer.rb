@@ -160,6 +160,7 @@ module Pod
         unless validator.valid?
           raise Informative, validator.message
         end
+        validator.warnings.uniq.each { |w| UI.warn(w) }
       end
 
       # @!group Analysis steps

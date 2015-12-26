@@ -51,13 +51,6 @@ module Pod
           @integrator.integrate!
         end
 
-        it 'warns if the podfile does not contain any dependency' do
-          @podfile = Pod::Podfile.new
-          @integrator.stubs(:podfile).returns(@podfile)
-          @integrator.integrate!
-          UI.warnings.should.include?('The Podfile does not contain any dependencies')
-        end
-
         it 'deintegrates targets that are not associated with the podfile' do
           additional_project = Xcodeproj::Project.new('Project.xcodeproj')
           Deintegrator.any_instance.expects(:deintegrate_target).with additional_project.new_target(:application, 'Other App', :ios)
