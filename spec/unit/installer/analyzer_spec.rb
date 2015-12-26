@@ -608,6 +608,32 @@ module Pod
       end
     end
 
+    describe 'podfile validation' do
+      before do
+        @sandbox = stub('Sandbox')
+        @podfile = stub('Podfile')
+        @analyzer = Installer::Analyzer.new(@sandbox, @podfile)
+      end
+
+      it 'raises when validating errors' do
+        Installer::PodfileValidator.any_instance.expects(:validate)
+        Installer::PodfileValidator.any_instance.expects(:valid?).returns(false)
+        Installer::PodfileValidator.any_instance.stubs(:errors).returns(['ERROR'])
+
+        should.raise(Informative) { @analyzer.send(:validate_podfile!) }.
+          message.should.match /ERROR/
+      end
+
+      it 'warns when validating has warnings' do
+        Installer::PodfileValidator.any_instance.expects(:validate)
+        Installer::PodfileValidator.any_instance.expects(:valid?).returns(true)
+        Installer::PodfileValidator.any_instance.stubs(:warnings).returns(['The Podfile does not contain any dependencies.'])
+
+        @analyzer.send(:validate_podfile!)
+        UI.warnings.should == "The Podfile does not contain any dependencies.\n"
+      end
+    end
+
     describe 'using lockfile checkout options' do
       before do
         @podfile = Pod::Podfile.new do
