@@ -12,6 +12,11 @@ module Pod
       #
       attr_reader :errors
 
+      # @return [Array<String>] any warnings that have occured during the validation
+      #
+      attr_reader :warnings
+
+
       # Initialize a new instance
       # @param [Podfile] podfile
       #        The podfile to validate
@@ -19,6 +24,7 @@ module Pod
       def initialize(podfile)
         @podfile = podfile
         @errors = []
+        @warnings = []
         @validated = false
       end
 
@@ -28,6 +34,7 @@ module Pod
       def validate
         validate_pod_directives
         validate_no_abstract_only_pods!
+        validate_dependencies_are_present!
 
         @validated = true
       end
@@ -55,6 +62,10 @@ module Pod
         errors << error
       end
 
+      def add_warning(warning)
+        warnings << warning
+      end
+
       def validate_pod_directives
         dependencies = podfile.target_definitions.flat_map do |_, target|
           target.dependencies
@@ -80,6 +91,23 @@ module Pod
         if pod_spec_or_path && specified_downloaders.size > 0
           add_error "The dependency `#{dependency.name}` specifies `podspec` or `path` in combination with other" \
             ' download strategies. This is not allowed'
+        end
+      end
+
+      # Warns the user if the podfile is empty.
+      #
+      # @note   The workspace is created in any case and all the user projects
+      #         are added to it, however the projects are not integrated as
+      #         there is no way to discern between target definitions which are
+      #         empty and target definitions which just serve the purpose to
+      #         wrap other ones. This is not an issue because empty target
+      #         definitions generate empty libraries.
+      #
+      # @return [void]
+      #
+      def validate_dependencies_are_present!
+        if podfile.target_definitions.values.all?(&:empty?)
+          add_warning 'The Podfile does not contain any dependencies.'
         end
       end
 

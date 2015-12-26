@@ -61,7 +61,6 @@ module Pod
       def integrate!
         create_workspace
         integrate_user_targets
-        warn_about_empty_podfile
         warn_about_xcconfig_overrides
         save_projects
       end
@@ -149,23 +148,6 @@ module Pod
             # https://github.com/CocoaPods/CocoaPods/issues/2665
             FileUtils.touch(project.path + 'project.pbxproj')
           end
-        end
-      end
-
-      # Warns the user if the podfile is empty.
-      #
-      # @note   The workspace is created in any case and all the user projects
-      #         are added to it, however the projects are not integrated as
-      #         there is no way to discern between target definitions which are
-      #         empty and target definitions which just serve the purpose to
-      #         wrap other ones. This is not an issue because empty target
-      #         definitions generate empty libraries.
-      #
-      # @return [void]
-      #
-      def warn_about_empty_podfile
-        if podfile.target_definitions.values.all?(&:empty?)
-          UI.warn '[!] The Podfile does not contain any dependencies.'
         end
       end
 

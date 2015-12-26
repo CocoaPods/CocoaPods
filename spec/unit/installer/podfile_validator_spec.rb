@@ -62,5 +62,15 @@ module Pod
         validator.errors[0].should.match /The dependency `JSONKit` specifies more than one/
       end
     end
+
+    it 'warns if the podfile does not contain any dependency' do
+      podfile = Pod::Podfile.new
+      validator = Installer::PodfileValidator.new(podfile)
+      validator.validate
+
+      validator.should.be.valid
+      validator.errors.should.be.empty
+      validator.warnings.should == ['The Podfile does not contain any dependencies.']
+    end
   end
 end
