@@ -151,6 +151,22 @@ describe_cli 'pod' do
     # Test installation with no integration
     # Test subspecs inheritance
 
+    #--------------------------------------#
+
+    describe 'Pod init' do
+      describe 'Initializes a Podfile with a single platform' do
+        behaves_like cli_spec 'init_single_platform',
+                              'init'
+      end
+    end
+
+    #--------------------------------------#
+
+    describe 'Integrates a project with an empty Podfile with CocoaPods' do
+      behaves_like cli_spec 'install_no_dependencies',
+                            'install --no-repo-update'
+    end
+
     describe 'Integrates a project with CocoaPods' do
       behaves_like cli_spec 'install_new',
                             'install --no-repo-update'
@@ -294,15 +310,6 @@ describe_cli 'pod' do
     describe 'Lints a Pod' do
       behaves_like cli_spec 'spec_lint',
                             'spec lint --quick'
-    end
-  end
-
-  #--------------------------------------#
-
-  describe 'Pod init' do
-    describe 'Initializes a Podfile with a single platform' do
-      behaves_like cli_spec 'init_single_platform',
-                            'init'
     end
   end
 
