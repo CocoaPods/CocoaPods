@@ -4,17 +4,32 @@ module Pod
   class Installer
     class InstallationOptions
       def self.from_podfile(podfile)
-        name = podfile.installation_method['name']
+        name, options = podfile.installation_method
         unless name.downcase == 'cocoapods'
-          raise Informative "currently need to specify a cocoapods install, you chose #{name}"
+          raise Informative "Currently need to specify a `cocoapods` install, you chose `#{name}`."
         end
-        options = podfile.installation_method['options']
         new(options)
       end
 
+      # Defines a new installation option.
+      #
+      # @param  [#to_s] name the name of the option.
+      #
+      # @param  default the default value for the option.
+      #
+      # @param [Boolean] boolean whether the option has a boolean value.
+      #
+      # @return [void]
+      #
+      # @!macro [attach] option
+      #
+      #   @note this option defaults to $2.
+      #
+      #   @return the $1 $0 for installation.
+      #
       def self.option(name, default, boolean: true)
         name = name.to_s
-        raise ArgumentError, "The #{name} option is already defined" if defaults.key?(name)
+        raise ArgumentError, "The `#{name}` option is already defined" if defaults.key?(name)
         defaults[name] = default
         attr_accessor name
         alias_method "#{name}?", name if boolean
