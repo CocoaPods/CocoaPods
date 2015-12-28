@@ -6,7 +6,7 @@ module Pod
       end
 
       def save_as(path)
-        Xcodeproj::PlistHelper.write(plist, path)
+        Xcodeproj::Plist.write_to_path(plist, path)
       end
 
       def plist
