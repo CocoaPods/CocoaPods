@@ -69,7 +69,7 @@ module Pod
       generator = Generator::InfoPlistFile.new(mock('Target', :platform => stub(:name => :ios)))
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
-      Xcodeproj::PlistHelper.read(file).should == {
+      Xcodeproj::Plist.read_from_path(file).should == {
         'CFBundleDevelopmentRegion' => 'en',
         'CFBundleExecutable' => '${EXECUTABLE_NAME}',
         'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
@@ -89,7 +89,7 @@ module Pod
       generator = Generator::InfoPlistFile.new(pod_target)
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
-      Xcodeproj::PlistHelper.read(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
+      Xcodeproj::Plist.read_from_path(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
     end
   end
 end

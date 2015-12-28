@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 4ded02e52c34d5bbe5f6f031d917394286445aa6
+  revision: f16fb46831ae1ca77f0d1dc7e538a50044ee4951
   branch: master
   specs:
     claide (0.9.1)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: eea8f8d58eef635f2cc9121ee1af6a5478a2841c
+  revision: ffeadb7ca0edc5afafbac0304cf088c4e4b75ae5
   branch: master
   specs:
     xcodeproj (0.28.2)
