@@ -112,18 +112,11 @@ module Pod
       end
 
       def validate_no_abstract_only_pods!
-        abstract_pods = ->(target_definition) do
-          if !target_definition.abstract? || !target_definition.children.empty?
-            target_definition.children.flat_map do |td|
-              abstract_pods[td]
-            end
-          else
-            target_definition.dependencies
-          end
-        end
-        pods = podfile.root_target_definitions.flat_map(&abstract_pods).uniq
-        pods.each do |pod|
-          add_error "The dependency `#{pod}` is not used in any concrete target."
+        all_dependencies = podfile.dependencies
+        concrete_dependencies = podfile.target_definition_list.reject(&:abstract?).flat_map(&:dependencies).uniq
+        abstract_only_dependencies = all_dependencies - concrete_dependencies
+        abstract_only_dependencies.each do |dep|
+          add_error "The dependency `#{dep}` is not used in any concrete target."
         end
       end
     end
