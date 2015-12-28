@@ -111,6 +111,10 @@ module Pod
         end
       end
 
+      # Verifies that no dependencies in the Podfile will end up not being built
+      # at all. In other words, all dependencies _must_ belong to a non-abstract
+      # target, or be inherited by a target where `inheritance == complete`.
+      #
       def validate_no_abstract_only_pods!
         all_dependencies = podfile.dependencies
         concrete_dependencies = podfile.target_definition_list.reject(&:abstract?).flat_map(&:dependencies).uniq
