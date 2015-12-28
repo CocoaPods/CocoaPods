@@ -19,7 +19,7 @@ module Pod
       def self.from_podfile(podfile)
         name, options = podfile.installation_method
         unless name.downcase == 'cocoapods'
-          raise Informative "Currently need to specify a `cocoapods` install, you chose `#{name}`."
+          raise Informative, "Currently need to specify a `cocoapods` install, you chose `#{name}`."
         end
         new(options)
       end
@@ -68,10 +68,10 @@ module Pod
       #
       # @raise  [Informative] if `options` contains any unknown keys.
       #
-      def initialize(options)
+      def initialize(options = {})
         options = ActiveSupport::HashWithIndifferentAccess.new(options)
         unknown_keys = options.keys - self.class.all_options.map(&:to_s)
-        raise Informative, "Unknown installation options: #{unknown_keys.to_sentence}" unless unknown_keys.empty?
+        raise Informative, "Unknown installation options: #{unknown_keys.to_sentence}." unless unknown_keys.empty?
         self.class.defaults.each do |key, default|
           value = options.fetch(key, default)
           send("#{key}=", value)
@@ -89,6 +89,16 @@ module Pod
           hash[option] = value if include_defaults || value != default
           hash
         end
+      end
+
+      def ==(other)
+        other.is_a?(self.class) && to_h == other.to_h
+      end
+
+      alias_method :eql, :==
+
+      def hash
+        to_h.hash
       end
 
       option :clean, true
