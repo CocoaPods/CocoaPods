@@ -2,7 +2,20 @@ require 'active_support/hash_with_indifferent_access'
 
 module Pod
   class Installer
+    # Represents the installation options the user can customize via a
+    # `Podfile`.
+    #
     class InstallationOptions
+      # Parses installation options from a podfile.
+      #
+      # @param  [Podfile] podfile the podfile to parse installation options
+      #         from.
+      #
+      # @raise  [Informative] if `podfile` does not specify a `CocoaPods`
+      #         install.
+      #
+      # @return [Self]
+      #
       def self.from_podfile(podfile)
         name, options = podfile.installation_method
         unless name.downcase == 'cocoapods'
@@ -35,14 +48,26 @@ module Pod
         alias_method "#{name}?", name if boolean
       end
 
+      # @return [Hash<Symbol,Object>] all known installation options and their
+      #         default values.
+      #
       def self.defaults
         @defaults ||= {}
       end
 
+      # @return [Array<Symbol>] the names of all known installation options.
+      #
       def self.all_options
         defaults.keys
       end
 
+      # Initializes the installation options with a hash of options from a
+      # Podfile.
+      #
+      # @param  [Hash] options the options to parse.
+      #
+      # @raise  [Informative] if `options` contains any unknown keys.
+      #
       def initialize(options)
         options = ActiveSupport::HashWithIndifferentAccess.new(options)
         unknown_keys = options.keys - self.class.all_options.map(&:to_s)
@@ -53,6 +78,19 @@ module Pod
         end
       end
 
+      # @param  [Boolean] include_defaults whether values that match the default
+      #         for their option should be included. Defaults to `true`.
+      #
+      # @return [Hash] the options, keyed by option name.
+      #
+      def to_h(include_defaults: true)
+        self.class.defaults.reduce(ActiveSupport::HashWithIndifferentAccess.new) do |hash, (option, default)|
+          value = send(option)
+          hash[option] = value if include_defaults || value != default
+          hash
+        end
+      end
+
       option :clean, true
       option :deduplicate_targets, true
       option :deterministic_uuids, true
@@ -60,16 +98,20 @@ module Pod
       option :lock_pod_sources, true
 
       module Mixin
-        def Mixin.included(mod)
-          mod.send(:attr_accessor, :installation_options)
-
-          def mod.delegate_installation_options(&blk)
+        module ClassMethods
+          # Delegates the creation of {#installation_options} to the `Podfile`
+          # returned by the given block.
+          #
+          def delegate_installation_options(&blk)
             define_method(:installation_options) do
               @installation_options ||= InstallationOptions.from_podfile(instance_eval(&blk))
             end
           end
 
-          def mod.delegate_installation_option_attributes!
+          # Delegates the installation options attributes directly to
+          # {#installation_options}.
+          #
+          def delegate_installation_option_attributes!
             define_method(:respond_to_missing?) do |name, *args|
               installation_options.respond_to?(name, *args) || super
             end
@@ -82,6 +124,14 @@ module Pod
               end
             end
           end
+        end
+
+        # @return [InstallationOptions] The installation options.
+        #
+        attr_accessor :installation_options
+
+        def self.included(mod)
+          mod.extend(ClassMethods)
         end
       end
     end
