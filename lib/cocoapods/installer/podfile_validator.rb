@@ -16,7 +16,6 @@ module Pod
       #
       attr_reader :warnings
 
-
       # Initialize a new instance
       # @param [Podfile] podfile
       #        The podfile to validate
