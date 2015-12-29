@@ -89,6 +89,9 @@ module Pod
 
         protected
 
+        # @return [Hash<String, String>] the build settings necessary to import
+        #         the pod targets.
+        #
         def settings_to_import_pod_targets
           if target.requires_frameworks?
             framework_header_search_paths = pod_targets.select(&:should_build?).map do |target|
