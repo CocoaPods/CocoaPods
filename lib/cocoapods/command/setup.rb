@@ -34,8 +34,6 @@ module Pod
             set_master_repo_url
             set_master_repo_branch
             update_master_repo
-          elsif old_master_repo_dir.exist?
-            migrate_repos
           else
             add_master_repo
           end
@@ -47,22 +45,6 @@ module Pod
       #--------------------------------------#
 
       # @!group Setup steps
-
-      # Migrates any repos from the old directory structure to the new
-      # directory structure.
-      #
-      # @todo: Remove by 1.0
-      #
-      def migrate_repos
-        config.repos_dir.mkpath
-        Dir.foreach old_master_repo_dir.parent do |repo_dir|
-          source_repo_dir = old_master_repo_dir.parent + repo_dir
-          target_repo_dir = config.repos_dir + repo_dir
-          if repo_dir !~ /\.+/ && source_repo_dir != config.repos_dir
-            FileUtils.mv source_repo_dir, target_repo_dir
-          end
-        end
-      end
 
       # Sets the url of the master repo according to whether it is push.
       #
@@ -126,12 +108,6 @@ module Pod
       #
       def master_repo_dir
         SourcesManager.master_repo_dir
-      end
-
-      # @return [Pathname] the directory of the old master repo.
-      #
-      def old_master_repo_dir
-        Pathname.new('~/.cocoapods/master').expand_path
       end
     end
   end
