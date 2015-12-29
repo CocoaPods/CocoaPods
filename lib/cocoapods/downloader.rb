@@ -28,9 +28,11 @@ module Pod
       request,
       target,
       can_cache: true,
-      cache_path: can_cache && !Config.instance.skip_download_cache && Config.instance.cache_root + 'Pods'
+      cache_path: Config.instance.cache_root + 'Pods'
     )
-      if cache_path
+      can_cache &&= !Config.instance.skip_download_cache
+      if can_cache
+        raise ArgumentError, 'Must provide a `cache_path` when caching.' unless cache_path
         cache = Cache.new(cache_path)
         result = cache.download_pod(request)
       else
