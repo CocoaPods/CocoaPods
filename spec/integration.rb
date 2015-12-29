@@ -44,9 +44,12 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'rubygems'
 require 'bundler/setup'
+
 require 'pretty_bacon'
 require 'colored'
 require 'clintegracon'
+
+require 'cocoapods-core/yaml_helper'
 require 'fileutils'
 require 'integration/file_tree'
 require 'integration/xcodeproj_project_yaml'
@@ -78,11 +81,19 @@ CLIntegracon.configure do |c|
   end
 
   # Register special handling for YAML files
-  c.transform_produced '**/{Podfile,Manifest}.lock' do |path|
-    # Remove CocoaPods version
+  c.transform_produced %r{(^|/)(Podfile|Manifest).lock$} do |path|
+    # Remove CocoaPods version & Podfile checksum
     yaml = YAML.load(path.read)
     yaml.delete('COCOAPODS')
-    path.open('w') { |f| f << YAML.dump(yaml) }
+    yaml.delete('PODFILE CHECKSUM')
+    keys_hint = [
+      'PODS',
+      'DEPENDENCIES',
+      'EXTERNAL SOURCES',
+      'CHECKOUT OPTIONS',
+      'SPEC CHECKSUMS',
+    ]
+    path.open('w') { |f| f << Pod::YAMLHelper.convert_hash(yaml, keys_hint, "\n\n") }
   end
 
   # So we don't need to compare them directly
