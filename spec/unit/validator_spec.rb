@@ -399,7 +399,7 @@ module Pod
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
         Executable.stubs(:which).with(:xcrun)
-        Executable.expects(:which).with('xcodebuild').times(2).returns('/usr/bin/xcodebuild')
+        Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         status = mock
         status.stubs(:success?).returns(false)
         validator.stubs(:_xcodebuild).returns(['Output', status])
@@ -410,7 +410,7 @@ module Pod
       end
 
       it 'runs xcodebuild with correct arguments for code signing' do
-        SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
+        Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
@@ -421,9 +421,9 @@ module Pod
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
         Executable.expects(:capture_command).with('xcodebuild', command, :capture => :merge).once.returns(['', stub(:success? => true)])
-        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + SimControl.new.destination('Apple TV 1080p'), :capture => :merge).once.returns(['', stub(:success? => true)])
-        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + SimControl.new.destination('iPhone 4s'), :capture => :merge).once.returns(['', stub(:success? => true)])
-        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + SimControl.new.destination('Apple Watch - 38mm'), :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p'), :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s'), :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm'), :capture => :merge).once.returns(['', stub(:success? => true)])
         validator.validate
       end
 
