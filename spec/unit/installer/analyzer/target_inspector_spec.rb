@@ -77,6 +77,18 @@ module Pod
         e.message.should.match /Unable to find a target named `UserTarget`/
       end
 
+      it 'suggests project native target names if the target cannot be found' do
+        target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
+        user_project = Xcodeproj::Project.new('path')
+        user_project.new_target(:application, 'FirstTarget', :ios)
+        user_project.new_target(:application, 'SecondTarget', :ios)
+        user_project.new_target(:application, 'ThirdTarget', :ios)
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
+        e.message.should.include 'did find `FirstTarget`, `SecondTarget`, and `ThirdTarget`.'
+      end
+
       it 'returns the target with the same name of the target definition' do
         target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
         user_project = Xcodeproj::Project.new('path')

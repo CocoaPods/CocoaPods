@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array/conversions'
+
 module Pod
   class Installer
     class Analyzer
@@ -103,9 +105,11 @@ module Pod
         def compute_targets(user_project)
           native_targets = user_project.native_targets
           target = native_targets.find { |t| t.name == target_definition.name.to_s }
-          targets = [target].compact
-          raise Informative, "Unable to find a target named `#{target_definition.name}`" if targets.empty?
-          targets
+          unless target
+            found = native_targets.map { |t| "`#{t.name}`" }.to_sentence
+            raise Informative, "Unable to find a target named `#{target_definition.name}`, did find #{found}."
+          end
+          [target]
         end
 
         # @param  [Array<PBXNativeTarget] the user's targets of the project of
