@@ -178,6 +178,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   being unable to set the base configuration XCConfig.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Ensure that linking multiple times against the same framework does not trigger
+  the duplicate module name check for frameworks.  
+  [Boris Bügling](https://github.com/neonichu)
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4550](https://github.com/CocoaPods/CocoaPods/issues/4550)
+
 
 ## 0.39.0 (2015-10-09)
 
