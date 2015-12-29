@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: e5b64946f634fec8c99ed82a4da198f9ba1031fc
+  revision: bfcccd59d90bdc322df272af7b62e162f768905b
   branch: seg-podfile-refactor
   specs:
     cocoapods-core (0.39.0)

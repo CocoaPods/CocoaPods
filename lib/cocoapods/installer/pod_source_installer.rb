@@ -128,7 +128,6 @@ module Pod
         Downloader::Request.new(
           :spec => root_spec,
           :released => released?,
-          :head => head_pod?,
         )
       end
 
@@ -181,12 +180,8 @@ module Pod
         sandbox.local?(root_spec.name)
       end
 
-      def head_pod?
-        sandbox.head_pod?(root_spec.name)
-      end
-
       def released?
-        !local? && !head_pod? && !predownloaded? && sandbox.specification(root_spec.name) != root_spec
+        !local? && !predownloaded? && sandbox.specification(root_spec.name) != root_spec
       end
 
       def each_source_file(file_accessors, &blk)
