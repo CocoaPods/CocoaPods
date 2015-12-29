@@ -112,6 +112,11 @@ module Pod
           # Delegates the creation of {#installation_options} to the `Podfile`
           # returned by the given block.
           #
+          # @param  blk a block that returns the `Podfile` to create
+          #         installation options from.
+          #
+          # @return [Void]
+          #
           def delegate_installation_options(&blk)
             define_method(:installation_options) do
               @installation_options ||= InstallationOptions.from_podfile(instance_eval(&blk))
@@ -120,6 +125,8 @@ module Pod
 
           # Delegates the installation options attributes directly to
           # {#installation_options}.
+          #
+          # @return [Void]
           #
           def delegate_installation_option_attributes!
             define_method(:respond_to_missing?) do |name, *args|
