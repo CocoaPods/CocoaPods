@@ -46,10 +46,6 @@ module Pod
         PodspecSource
       elsif params.key?(:path)
         PathSource
-      elsif params.key?(:local)
-        UI.warn 'The `:local` option of the Podfile has been ' \
-          'renamed to `:path` and it is deprecated.'
-        PathSource
       elsif Downloader.strategy_from_options(params)
         DownloaderSource
       end

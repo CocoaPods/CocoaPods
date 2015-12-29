@@ -24,7 +24,7 @@ module Pod
       # @see  AbstractExternalSource#description
       #
       def description
-        "from `#{params[:path] || params[:local]}`"
+        "from `#{declared_path}`"
       end
 
       private
@@ -34,7 +34,7 @@ module Pod
       # @return [String] The path as declared by the user.
       #
       def declared_path
-        result = params[:path] || params[:local]
+        result = params[:path]
         result.to_s if result
       end
 
