@@ -44,7 +44,7 @@ module Pod
       #
       def initialize(name, plugin_name, block)
         raise ArgumentError, 'Missing name' unless name
-        raise ArgumentError, 'Missing plugin_name' unless name
+        raise ArgumentError, 'Missing plugin_name' unless plugin_name
         raise ArgumentError, 'Missing block' unless block
 
         @name = name
