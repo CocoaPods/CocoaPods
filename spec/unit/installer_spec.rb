@@ -402,7 +402,7 @@ module Pod
 
         it 'stores the targets created by the analyzer' do
           @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ["Pods-SampleProject", "Pods-SampleProjectTests"]
+          @installer.aggregate_targets.map(&:name).sort.should == ['Pods-SampleProject', 'Pods-SampleProjectTests']
           @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
 
@@ -410,7 +410,7 @@ module Pod
           @installer.update = true
           Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ["Pods-SampleProject", "Pods-SampleProjectTests"]
+          @installer.aggregate_targets.map(&:name).sort.should == ['Pods-SampleProject', 'Pods-SampleProjectTests']
           @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
       end
