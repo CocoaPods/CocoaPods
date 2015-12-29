@@ -104,6 +104,9 @@ module Pod
     #
     attr_accessor :pod_targets
 
+    # @return [Array<AggregateTarget>] The aggregate targets whose pods this
+    #         target must be able to import, but will not directly link against.
+    #
     attr_accessor :search_paths_aggregate_targets
 
     # @param  [String] build_configuration The build configuration for which the

@@ -20,9 +20,11 @@ module Pod
     #         the location to which this pod should be downloaded. If `nil`,
     #         then the pod will only be cached.
     #
+    # @param  [Boolean] can_cache
+    #         whether caching is allowed.
+    #
     # @param  [Pathname,Nil] cache_path
-    #         the path used to cache pod downloads. If `nil`, then no caching
-    #         will be done.
+    #         the path used to cache pod downloads.
     #
     def self.download(
       request,

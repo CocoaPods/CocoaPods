@@ -17,6 +17,8 @@ module Pod
       #
       attr_reader :podfile_path
 
+      # @return [Boolean] Whether the source is allowed to touch the cache.
+      #
       attr_accessor :can_cache
       alias_method :can_cache?, :can_cache
 
