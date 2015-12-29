@@ -16,13 +16,6 @@ module Pod
           @generator = Generator::InfoPlistFile.new(pod_target)
         end
 
-        it 'handles when the version is HEAD' do
-          version = Version.new('0.2.0')
-          version.head = true
-          @root_spec.stubs(:version).returns(version)
-          @generator.target_version.should == '0.2.0'
-        end
-
         it 'handles when the version is more than 3 numeric parts' do
           version = Version.new('0.2.0.1')
           @root_spec.stubs(:version).returns(version)

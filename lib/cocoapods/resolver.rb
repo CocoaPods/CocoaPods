@@ -60,11 +60,7 @@ module Pod
         end
       end
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
-      specs_by_target.tap do |specs_by_target|
-        specs_by_target.values.flatten.each do |spec|
-          sandbox.store_head_pod(spec.name) if spec.version.head?
-        end
-      end
+      specs_by_target
     rescue Molinillo::ResolverError => e
       handle_resolver_error(e)
     end
@@ -185,7 +181,7 @@ module Pod
         end
       requirement_satisfied && !(
         spec.version.prerelease? &&
-        existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source || r.head? }
+        existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source }
       ) && spec_is_platform_compatible?(activated, requirement, spec)
     end
 
@@ -304,9 +300,6 @@ module Pod
         else
           set = create_set_from_sources(dependency)
         end
-        if set && dependency.head?
-          set = Specification::Set::Head.new(set.specification)
-        end
         cached_sets[name] = set
         unless set
           raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
@@ -390,8 +383,7 @@ module Pod
           elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
               (conflict.requirement && !(
               conflict.requirement.prerelease? ||
-              conflict.requirement.external_source ||
-              conflict.requirement.head?)
+              conflict.requirement.external_source)
               )
             # Conflict was caused by not specifying an explicit version for the requirement #[name],
             # and there is no available stable version satisfying constraints for the requirement.

@@ -156,20 +156,6 @@ module Pod
 
       #--------------------------------------#
 
-      it 'stores the list of the names of the pre-downloaded pods' do
-        @sandbox.store_head_pod('BananaLib')
-        @sandbox.head_pods.should == ['BananaLib']
-      end
-
-      it 'returns whether a Pod has been pre-downloaded' do
-        @sandbox.head_pods << 'BananaLib'
-        @sandbox.head_pod?('BananaLib').should.be.true
-        @sandbox.head_pod?('BananaLib/Subspec').should.be.true
-        @sandbox.head_pod?('Monkey').should.be.false
-      end
-
-      #--------------------------------------#
-
       it 'returns the checkout sources of the Pods' do
         @sandbox.store_pre_downloaded_pod('BananaLib/Subspec')
         @sandbox.predownloaded_pods.should == ['BananaLib']
