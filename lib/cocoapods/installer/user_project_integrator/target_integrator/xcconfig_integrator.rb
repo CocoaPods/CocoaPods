@@ -85,7 +85,7 @@ module Pod
             end
 
             if existing && existing != file_ref
-              if existing.real_path.to_path.start_with?(pod_bundle.support_files_dir.to_path)
+              if existing.real_path.to_path.start_with?(pod_bundle.sandbox.root.to_path << '/')
                 set_base_configuration_reference.call
               elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
                 UI.warn 'CocoaPods did not set the base configuration of your ' \
@@ -93,7 +93,7 @@ module Pod
                 'config set. In order for CocoaPods integration to work at ' \
                 'all, please either set the base configurations of the target ' \
                 "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
-                'build configuration.'
+                "build configuration (#{UI.path(existing.real_path)})."
               end
             elsif config.base_configuration_reference.nil? || file_ref.nil?
               set_base_configuration_reference.call
