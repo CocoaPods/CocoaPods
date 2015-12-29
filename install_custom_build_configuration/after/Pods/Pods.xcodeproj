@@ -14,27 +14,27 @@ File References:
       - Reachability-dummy.m
       - Reachability-prefix.pch
 - Products:
-  - libPods.a
+  - libPods-SampleApp.a
   - libReachability.a
 - Targets Support Files:
-  - Pods:
-    - Pods-acknowledgements.markdown
-    - Pods-acknowledgements.plist
-    - Pods-dummy.m
-    - Pods-frameworks.sh
-    - Pods-resources.sh
-    - Pods.custom debug - missing some settings .xcconfig
-    - Pods.custom release.xcconfig
-    - Pods.debug.xcconfig
-    - Pods.release.xcconfig
+  - Pods-SampleApp:
+    - Pods-SampleApp-acknowledgements.markdown
+    - Pods-SampleApp-acknowledgements.plist
+    - Pods-SampleApp-dummy.m
+    - Pods-SampleApp-frameworks.sh
+    - Pods-SampleApp-resources.sh
+    - Pods-SampleApp.custom debug - missing some settings .xcconfig
+    - Pods-SampleApp.custom release.xcconfig
+    - Pods-SampleApp.debug.xcconfig
+    - Pods-SampleApp.release.xcconfig
 
 
 
 Targets:
-- Pods:
+- Pods-SampleApp:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-dummy.m
+      - Pods-SampleApp-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     Build Configurations:
@@ -55,7 +55,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.custom debug - missing some settings .xcconfig
+        Base Configuration: Pods-SampleApp.custom debug - missing some settings .xcconfig
     - Custom Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -73,7 +73,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.custom release.xcconfig
+        Base Configuration: Pods-SampleApp.custom release.xcconfig
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -91,7 +91,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -109,7 +109,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-SampleApp.release.xcconfig
 - Reachability:
     Build Phases:
     - SourcesBuildPhase:

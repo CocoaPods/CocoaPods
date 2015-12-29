@@ -1,5 +1,7 @@
-platform :ios, '6.0'
+target 'SampleApp' do
+  platform :ios, '6.0'
 
-pod 'AFNetworking', :git => 'https://github.com/AFNetworking/AFNetworking.git'
-pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
-pod 'RKValueTransformers', :git => 'https://github.com/RestKit/RKValueTransformers'
+  pod 'AFNetworking', :git => 'https://github.com/AFNetworking/AFNetworking.git'
+  pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
+  pod 'RKValueTransformers', :git => 'https://github.com/RestKit/RKValueTransformers'
+end

@@ -35,13 +35,13 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
-  - libPods.a
+  - libPods-iOS App.a
 - Products:
   - iOS App.app
   - OS X App.app
 - Pods:
-  - Pods.debug.xcconfig
-  - Pods.release.xcconfig
+  - Pods-iOS App.debug.xcconfig
+  - Pods-iOS App.release.xcconfig
 
 
 
@@ -56,7 +56,7 @@ Targets:
       - UIKit.framework
       - Foundation.framework
       - CoreGraphics.framework
-      - libPods.a
+      - libPods-iOS App.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Default.png
@@ -78,7 +78,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
@@ -94,7 +94,7 @@ Targets:
           SDKROOT: iphoneos
           VALIDATE_PRODUCT: 'YES'
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-iOS App.release.xcconfig
 - OS X App:
     Build Phases:
     - SourcesBuildPhase:

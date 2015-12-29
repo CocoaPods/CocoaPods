@@ -4,7 +4,7 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=
 Analyzing dependencies
 
 Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-iOS App`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
 -> Fetching podspec for `Test` from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`
@@ -32,7 +32,7 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Test` iOS 5.0
-    - Installing target `Pods` iOS 6.0
+    - Installing target `Pods-iOS App` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
@@ -43,7 +43,7 @@ Integrating client project
 
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
-Integrating target `Pods` (`SampleApp.xcodeproj` project)
+Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
@@ -51,6 +51,6 @@ Integrating target `Pods` (`SampleApp.xcodeproj` project)
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
   Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
 
-[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods/Pods.release.xcconfig'. This can lead to problems with the CocoaPods installation
+[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods-iOS App/Pods-iOS App.release.xcconfig'. This can lead to problems with the CocoaPods installation
     - Use the `$(inherited)` flag, or
     - Remove the build settings from the target.

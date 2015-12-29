@@ -22,17 +22,17 @@ File References:
       - Reachability-prefix.pch
 - Products:
   - libJSONKit.a
-  - libPods.a
+  - libPods-SampleApp.a
   - libReachability.a
 - Targets Support Files:
-  - Pods:
-    - Pods-acknowledgements.markdown
-    - Pods-acknowledgements.plist
-    - Pods-dummy.m
-    - Pods-frameworks.sh
-    - Pods-resources.sh
-    - Pods.debug.xcconfig
-    - Pods.release.xcconfig
+  - Pods-SampleApp:
+    - Pods-SampleApp-acknowledgements.markdown
+    - Pods-SampleApp-acknowledgements.plist
+    - Pods-SampleApp-dummy.m
+    - Pods-SampleApp-frameworks.sh
+    - Pods-SampleApp-resources.sh
+    - Pods-SampleApp.debug.xcconfig
+    - Pods-SampleApp.release.xcconfig
 
 
 
@@ -86,10 +86,10 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: JSONKit.xcconfig
-- Pods:
+- Pods-SampleApp:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-dummy.m
+      - Pods-SampleApp-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     Build Configurations:
@@ -110,7 +110,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -128,7 +128,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-SampleApp.release.xcconfig
 - Reachability:
     Build Phases:
     - SourcesBuildPhase:

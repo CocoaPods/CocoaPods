@@ -1,5 +1,7 @@
-source "https://github.com/CocoaPods/Specs.git"
+source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '6.0'
-pod "Reachability", "<= 3.1.1"
-pod "JSONKit", "<= 1.5"
+target 'SampleApp' do
+  platform :ios, '6.0'
+  pod 'Reachability', '<= 3.1.1'
+  pod 'JSONKit', '<= 1.5'
+end

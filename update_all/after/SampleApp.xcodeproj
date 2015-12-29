@@ -20,11 +20,12 @@ File References:
     - CoreData.framework
     - Foundation.framework
   - libPods.a
+  - libPods-SampleApp.a
 - Products:
   - SampleApp.app
 - Pods:
-  - Pods.debug.xcconfig
-  - Pods.release.xcconfig
+  - Pods-SampleApp.debug.xcconfig
+  - Pods-SampleApp.release.xcconfig
 
 
 
@@ -38,6 +39,7 @@ Targets:
     - FrameworksBuildPhase:
       - Cocoa.framework
       - libPods.a
+      - libPods-SampleApp.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
@@ -53,7 +55,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -62,7 +64,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-SampleApp.release.xcconfig
 
 
 

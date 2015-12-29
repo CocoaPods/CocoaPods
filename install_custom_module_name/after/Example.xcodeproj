@@ -8,10 +8,10 @@ File References:
 - Products:
   - Example.app
 - Pods:
-  - Pods.debug.xcconfig
-  - Pods.release.xcconfig
+  - Pods-Example.debug.xcconfig
+  - Pods-Example.release.xcconfig
 - Frameworks:
-  - Pods.framework
+  - Pods_Example.framework
 
 
 
@@ -23,7 +23,7 @@ Targets:
       - ViewController.swift
       - AppDelegate.swift
     - FrameworksBuildPhase:
-      - Pods.framework
+      - Pods_Example.framework
     - ResourcesBuildPhase: []
     - Embed Pods Frameworks: []
     - Copy Pods Resources: []
@@ -34,14 +34,14 @@ Targets:
           INFOPLIST_FILE: Example/Info.plist
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           PRODUCT_NAME: $(TARGET_NAME)
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-Example.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: Example/Info.plist
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           PRODUCT_NAME: $(TARGET_NAME)
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-Example.release.xcconfig
 
 
 

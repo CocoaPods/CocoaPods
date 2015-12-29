@@ -14,25 +14,25 @@ File References:
     - Foundation.framework
     - SystemConfiguration.framework
 - Products:
-  - libPods.a
+  - libPods-iOS App.a
   - libReachability.a
 - Targets Support Files:
-  - Pods:
-    - Pods-acknowledgements.markdown
-    - Pods-acknowledgements.plist
-    - Pods-dummy.m
-    - Pods-frameworks.sh
-    - Pods-resources.sh
-    - Pods.debug.xcconfig
-    - Pods.release.xcconfig
+  - Pods-iOS App:
+    - Pods-iOS App-acknowledgements.markdown
+    - Pods-iOS App-acknowledgements.plist
+    - Pods-iOS App-dummy.m
+    - Pods-iOS App-frameworks.sh
+    - Pods-iOS App-resources.sh
+    - Pods-iOS App.debug.xcconfig
+    - Pods-iOS App.release.xcconfig
 
 
 
 Targets:
-- Pods:
+- Pods-iOS App:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-dummy.m
+      - Pods-iOS App-dummy.m
     - FrameworksBuildPhase:
       - Foundation.framework
     Build Configurations:
@@ -53,7 +53,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -71,7 +71,7 @@ Targets:
           PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-iOS App.release.xcconfig
 - Reachability:
     Build Phases:
     - SourcesBuildPhase:
