@@ -4,7 +4,7 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=
 Analyzing dependencies
 
 Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Finding Podfile changes
   A JSONKit
@@ -53,7 +53,7 @@ Generating Pods project
   - Installing targets
     - Installing target `JSONKit` iOS 4.3
     - Installing target `Reachability` iOS 4.3
-    - Installing target `Pods` iOS 6.0
+    - Installing target `Pods-SampleApp` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
@@ -62,7 +62,7 @@ Generating Pods project
 
 Integrating client project
 
-Integrating target `Pods` (`SampleApp.xcodeproj` project)
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   - Removing (Pods/Pods.xcconfig)
   Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.

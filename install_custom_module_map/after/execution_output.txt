@@ -4,7 +4,7 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=
 Analyzing dependencies
 
 Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (``)
+  Using `ARCHS` setting to build architectures of target `Pods-Example`: (``)
 
 Fetching external sources
 -> Fetching podspec for `BananaLib` from `banana-lib/BananaLib.podspec`
@@ -30,10 +30,10 @@ Generating Pods project
     - Installing target `BananaLib` iOS 8.0
       - Generating Info.plist file at `Pods/Target Support Files/BananaLib/Info.plist`
       - Copying module map file to `Pods/Target Support Files/BananaLib/BananaLib.modulemap`
-    - Installing target `Pods` iOS 8.2
-      - Generating Info.plist file at `Pods/Target Support Files/Pods/Info.plist`
-      - Generating module map file at `Pods/Target Support Files/Pods/Pods.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Pods/Pods-umbrella.h`
+    - Installing target `Pods-Example` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-Example/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-Example/Pods-Example.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-Example/Pods-Example-umbrella.h`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
@@ -44,7 +44,7 @@ Integrating client project
 
 [!] Please close any current Xcode sessions and use `Example.xcworkspace` for this project from now on.
 
-Integrating target `Pods` (`Example.xcodeproj` project)
+Integrating target `Pods-Example` (`Example.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.

@@ -1,3 +1,4 @@
-use_frameworks!
-
-pod 'libPusher'
+target 'Example' do
+  use_frameworks!
+  pod 'libPusher'
+end

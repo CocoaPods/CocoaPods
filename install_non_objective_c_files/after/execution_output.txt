@@ -4,7 +4,7 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=
 Analyzing dependencies
 
 Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
 -> Fetching podspec for `Moment` from `Moment.podspec`
@@ -33,7 +33,7 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Moment` iOS 4.3
-    - Installing target `Pods` iOS 6.0
+    - Installing target `Pods-SampleApp` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
@@ -44,7 +44,7 @@ Integrating client project
 
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
-Integrating target `Pods` (`SampleApp.xcodeproj` project)
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.

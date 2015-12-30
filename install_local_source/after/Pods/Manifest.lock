@@ -6,11 +6,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Reachability:
-    :local: Reachability
+    :path: Reachability
 
 SPEC CHECKSUMS:
   Reachability: ffc2f3aeee14f8163014be574d92774c474b6534
-
-PODFILE CHECKSUM: 9925892bd32ac8b24df4b5d5709d8de4683e6382
-
-COCOAPODS: 0.39.0

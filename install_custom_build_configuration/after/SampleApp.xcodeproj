@@ -19,14 +19,14 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
-  - libPods.a
+  - libPods-SampleApp.a
 - Products:
   - SampleApp.app
 - Pods:
-  - Pods.debug.xcconfig
-  - Pods.custom debug - missing some settings .xcconfig
-  - Pods.release.xcconfig
-  - Pods.custom release.xcconfig
+  - Pods-SampleApp.debug.xcconfig
+  - Pods-SampleApp.custom debug - missing some settings .xcconfig
+  - Pods-SampleApp.release.xcconfig
+  - Pods-SampleApp.custom release.xcconfig
 
 
 
@@ -39,7 +39,7 @@ Targets:
       - CPAppDelegate.m
     - FrameworksBuildPhase:
       - Cocoa.framework
-      - libPods.a
+      - libPods-SampleApp.a
     - ResourcesBuildPhase:
       - InfoPlist.strings
       - Credits.rtf
@@ -55,7 +55,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.debug.xcconfig
+        Base Configuration: Pods-SampleApp.debug.xcconfig
     - 'Custom Debug - missing some settings ':
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -64,7 +64,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.custom debug - missing some settings .xcconfig
+        Base Configuration: Pods-SampleApp.custom debug - missing some settings .xcconfig
     - Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -73,7 +73,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.release.xcconfig
+        Base Configuration: Pods-SampleApp.release.xcconfig
     - Custom Release:
         Build Settings:
           COMBINE_HIDPI_IMAGES: 'YES'
@@ -82,7 +82,7 @@ Targets:
           INFOPLIST_FILE: SampleApp/SampleApp-Info.plist
           PRODUCT_NAME: $(TARGET_NAME)
           WRAPPER_EXTENSION: app
-        Base Configuration: Pods.custom release.xcconfig
+        Base Configuration: Pods-SampleApp.custom release.xcconfig
 
 
 

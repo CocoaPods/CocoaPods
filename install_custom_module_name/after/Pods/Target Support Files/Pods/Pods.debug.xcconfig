@@ -1,6 +1,0 @@
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 kPTPusherClientLibraryVersion=@\"1.5\"
-LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "$CONFIGURATION_BUILD_DIR/Pusher.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/SocketRocket.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "Pusher" -framework "SocketRocket"
-PODS_FRAMEWORK_BUILD_PATH = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods
-PODS_ROOT = ${SRCROOT}/Pods

@@ -1,4 +1,6 @@
-platform :ios, '8.0'
-use_frameworks!
-pod 'Realm', :podspec => 'https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec'
-pod 'RealmSwift', :git => 'https://github.com/realm/realm-cocoa.git', :tag => 'v0.94.1'
+target 'SampleApp' do
+  platform :ios, '8.0'
+  use_frameworks!
+  pod 'Realm', :podspec => 'https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec'
+  pod 'RealmSwift', :git => 'https://github.com/realm/realm-cocoa.git', :tag => 'v0.94.1'
+end

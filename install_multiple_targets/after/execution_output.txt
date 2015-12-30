@@ -4,9 +4,9 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=
 Analyzing dependencies
 
 Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
-  Using `ARCHS` setting to build architectures of target `Pods-test`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
   Using `ARCHS` setting to build architectures of target `Pods-SampleApp_2`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleAppTests`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Resolving dependencies of `Podfile`
 
@@ -61,9 +61,9 @@ Generating Pods project
   - Installing targets
     - Installing target `JSONKit` iOS 4.3
     - Installing target `Reachability` iOS 4.3
-    - Installing target `Pods` iOS 6.0
+    - Installing target `Pods-SampleApp` iOS 6.0
+    - Installing target `Pods-SampleAppTests` iOS 6.0
     - Installing target `Pods-SampleApp_2` iOS 6.0
-    - Installing target `Pods-test` iOS 6.0
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
@@ -74,17 +74,17 @@ Integrating client project
 
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
-Integrating target `Pods` (`SampleApp.xcodeproj` project)
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
+  Adding Build Phase 'Copy Pods Resources' to project.
+  Adding Build Phase 'Check Pods Manifest.lock' to project.
+
+Integrating target `Pods-SampleAppTests` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-SampleApp_2` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
-  Adding Build Phase 'Copy Pods Resources' to project.
-  Adding Build Phase 'Check Pods Manifest.lock' to project.
-
-Integrating target `Pods-test` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
   - Running post install hooks

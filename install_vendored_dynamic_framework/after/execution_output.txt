@@ -4,7 +4,7 @@ CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=
 Analyzing dependencies
 
 Inspecting targets to integrate
-  Using `ARCHS` setting to build architectures of target `Pods`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
 
 Fetching external sources
 -> Fetching podspec for `Realm` from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec`
@@ -1008,10 +1008,10 @@ Generating Pods project
       - Generating Info.plist file at `Pods/Target Support Files/RealmSwift/Info.plist`
       - Generating module map file at `Pods/Target Support Files/RealmSwift/RealmSwift.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/RealmSwift/RealmSwift-umbrella.h`
-    - Installing target `Pods` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/Pods/Info.plist`
-      - Generating module map file at `Pods/Target Support Files/Pods/Pods.modulemap`
-      - Generating umbrella header at `Pods/Target Support Files/Pods/Pods-umbrella.h`
+    - Installing target `Pods-SampleApp` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-umbrella.h`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
@@ -1022,7 +1022,7 @@ Integrating client project
 
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
-Integrating target `Pods` (`SampleApp.xcodeproj` project)
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   Adding Build Phase 'Embed Pods Frameworks' to project.
   Adding Build Phase 'Copy Pods Resources' to project.
   Adding Build Phase 'Check Pods Manifest.lock' to project.
