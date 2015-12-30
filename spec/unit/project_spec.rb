@@ -417,6 +417,14 @@ module Pod
             ['POD_CONFIGURATION_MY_AWESOME_CONFIGURATION=1', "$(inherited)"]
         end
 
+        it 'transforms camel-cased configuration names to snake case' do
+          configuration = @project.add_build_configuration(
+            'MyAwesomeConfiguration', :release)
+          settings = configuration.build_settings
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
+            ['POD_CONFIGURATION_MY_AWESOME_CONFIGURATION=1', "$(inherited)"]
+        end
+
         it 'adds DEBUG for configurations based upon :debug' do
           configuration = @project.add_build_configuration(
             'Config', :debug)
