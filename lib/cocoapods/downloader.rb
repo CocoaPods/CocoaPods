@@ -20,16 +20,21 @@ module Pod
     #         the location to which this pod should be downloaded. If `nil`,
     #         then the pod will only be cached.
     #
+    # @param  [Boolean] can_cache
+    #         whether caching is allowed.
+    #
     # @param  [Pathname,Nil] cache_path
-    #         the path used to cache pod downloads. If `nil`, then no caching
-    #         will be done.
+    #         the path used to cache pod downloads.
     #
     def self.download(
       request,
       target,
-      cache_path: !Config.instance.skip_download_cache && Config.instance.clean? && Config.instance.cache_root + 'Pods'
+      can_cache: true,
+      cache_path: Config.instance.cache_root + 'Pods'
     )
-      if cache_path
+      can_cache &&= !Config.instance.skip_download_cache
+      if can_cache
+        raise ArgumentError, 'Must provide a `cache_path` when caching.' unless cache_path
         cache = Cache.new(cache_path)
         result = cache.download_pod(request)
       else

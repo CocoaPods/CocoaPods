@@ -14,7 +14,7 @@ module Pod
       # - The version of the Pod changed.
       # - The SHA of the specification file changed.
       # - The specific installed (sub)specs of the same Pod changed.
-      # - The specification is in head mode or from an external source and the
+      # - The specification is from an external source and the
       #   installation process is in update mode.
       # - The directory of the Pod is empty.
       # - The Pod has been pre-downloaded.
@@ -135,7 +135,7 @@ module Pod
         # changed and thus should be reinstalled.
         #
         # @note   In update mode, as there is no way to know if a remote source
-        #         hash changed the Pods in head mode and the ones from external
+        #         hash changed the Pods from external
         #         sources are always marked as changed.
         #
         # @note   A Pod whose folder is empty is considered changed.
@@ -152,10 +152,6 @@ module Pod
           return true if resolved_spec_names(pod) != sandbox_spec_names(pod)
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
-          return true if sandbox.head_pod?(pod) != sandbox_head_version?(pod)
-          if update_mode
-            return true if sandbox.head_pod?(pod)
-          end
           false
         end
 
@@ -236,13 +232,6 @@ module Pod
         #
         def sandbox_checksum(pod)
           sandbox_manifest.checksum(pod)
-        end
-
-        # @return [Bool] Wether the Pod is installed in the sandbox is in head
-        #         mode.
-        #
-        def sandbox_head_version?(pod)
-          sandbox_version(pod).head? == true
         end
 
         #--------------------------------------#

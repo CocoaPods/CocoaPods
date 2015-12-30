@@ -176,22 +176,6 @@ module Pod
         @config.should.not.be.verbose
       end
 
-      it 'cleans SCM dirs in dependency checkouts' do
-        @config.should.clean
-      end
-
-      it 'locks pod source files' do
-        @config.should.lock_pod_source
-      end
-
-      it 'integrates a user target' do
-        @config.should.integrate_targets
-      end
-
-      it 'de-duplicates targets' do
-        @config.should.deduplicate_targets
-      end
-
       it 'returns the cache root' do
         @config.cache_root.should == Pathname.new(File.join(ENV['HOME'], 'Library/Caches/CocoaPods'))
       end

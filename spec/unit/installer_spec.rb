@@ -19,7 +19,12 @@ def generate_podfile(pods = ['JSONKit'])
   Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
-    pods.each { |name| pod name }
+    target 'SampleProject' do
+      pods.each { |name| pod name }
+      target 'SampleProjectTests' do
+        inherit! :search_paths
+      end
+    end
   end
 end
 
@@ -29,7 +34,12 @@ def generate_local_podfile
   Pod::Podfile.new do
     platform :ios
     xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
-    pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+    target 'SampleProject' do
+      pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+      target 'SampleProjectTests' do
+        inherit! :search_paths
+      end
+    end
   end
 end
 
@@ -41,8 +51,8 @@ module Pod
       CocoaPodsStats::Sender.any_instance.stubs(:send)
       podfile = generate_podfile
       lockfile = generate_lockfile
-      config.integrate_targets = false
       @installer = Installer.new(config.sandbox, podfile, lockfile)
+      @installer.installation_options.integrate_targets = false
     end
 
     #-------------------------------------------------------------------------#
@@ -140,13 +150,13 @@ module Pod
       end
 
       it 'integrates the user targets if the corresponding config is set' do
-        config.integrate_targets = true
+        @installer.installation_options.integrate_targets = true
         @installer.expects(:integrate_user_project)
         @installer.install!
       end
 
       it "doesn't integrates the user targets if the corresponding config is not set" do
-        config.integrate_targets = false
+        @installer.installation_options.integrate_targets = false
         @installer.expects(:integrate_user_project).never
         @installer.install!
       end
@@ -226,14 +236,16 @@ module Pod
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
 
-          target 'TestRunner', :exclusive => true do
+          target 'SampleProject'
+          target 'TestRunner' do
+            inherit! :search_paths
             pod 'monkey', :path => (fixture_path + 'monkey').to_s
           end
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.installation_options.integrate_targets = false
         @installer.install!
 
         target = @installer.aggregate_targets.first
@@ -262,11 +274,12 @@ module Pod
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          target 'SampleProject'
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.installation_options.integrate_targets = false
         should.raise(Informative) { @installer.install! }.message.should.match /conflict.*monkey/
       end
 
@@ -281,11 +294,12 @@ module Pod
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          target 'SampleProject'
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.installation_options.integrate_targets = false
         should.not.raise(Informative) { @installer.install! }
       end
     end
@@ -296,14 +310,15 @@ module Pod
       before do
         fixture_path = ROOT + 'spec/fixtures'
         config.repos_dir = fixture_path + 'spec-repos'
-        config.integrate_targets = false
         @podfile = Pod::Podfile.new do
+          install! 'cocoapods', 'integrate_targets' => false
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          target 'SampleProject'
         end
         @lockfile = generate_lockfile
 
@@ -345,11 +360,12 @@ module Pod
           platform :ios, '8.0'
           xcodeproj 'SampleProject/SampleProject'
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          target 'SampleProject'
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.installation_options.integrate_targets = false
         should.raise(Informative) { @installer.install! }.message.should.match /use_frameworks/
       end
     end
@@ -387,7 +403,7 @@ module Pod
 
         it 'stores the targets created by the analyzer' do
           @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
+          @installer.aggregate_targets.map(&:name).sort.should == ['Pods-SampleProject', 'Pods-SampleProjectTests']
           @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
 
@@ -395,7 +411,7 @@ module Pod
           @installer.update = true
           Installer::Analyzer.any_instance.expects(:update=).with(true)
           @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ['Pods']
+          @installer.aggregate_targets.map(&:name).sort.should == ['Pods-SampleProject', 'Pods-SampleProjectTests']
           @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
         end
       end
@@ -453,24 +469,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Downloading dependencies' do
-      it 'installs head pods' do
-        podfile = Podfile.new do
-          platform :osx, '10.10'
-          pod 'CargoBay', '2.1.0'
-          pod 'AFNetworking/NSURLSession', :head
-        end
-        @installer.stubs(:podfile).returns(podfile)
-        @installer.stubs(:lockfile).returns(nil)
-        Downloader::Git.any_instance.expects(:download).once
-        Downloader::Git.any_instance.expects(:download_head).once
-        Downloader::Git.any_instance.stubs(:checkout_options).returns({})
-        @installer.prepare
-        @installer.resolve_dependencies
-        @installer.send(:root_specs).sort_by(&:name).map(&:version).map(&:head?).should == [true, nil]
-        @installer.download_dependencies
-        UI.output.should.include 'HEAD based on 2.4.1'
-      end
-
       describe '#install_pod_sources' do
         it 'installs all the Pods which are marked as needing installation' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
@@ -527,7 +525,7 @@ module Pod
 
         describe '#clean' do
           it 'it cleans only if the config instructs to do it' do
-            config.clean = false
+            @installer.installation_options.clean = false
             @installer.send(:clean_pod_sources)
             Installer::PodSourceInstaller.any_instance.expects(:install!).never
           end
@@ -546,14 +544,14 @@ module Pod
         end
 
         it "creates build configurations for all of the user's targets" do
-          config.integrate_targets = true
+          @installer.installation_options.integrate_targets = true
           @installer.send(:analyze)
           @installer.send(:prepare_pods_project)
           @installer.pods_project.build_configurations.map(&:name).sort.should == ['App Store', 'Debug', 'Release', 'Test']
         end
 
         it 'sets STRIP_INSTALLED_PRODUCT to NO for all configurations for the whole project' do
-          config.integrate_targets = true
+          @installer.installation_options.integrate_targets = true
           @installer.send(:analyze)
           @installer.send(:prepare_pods_project)
           @installer.pods_project.build_settings('Debug')['STRIP_INSTALLED_PRODUCT'].should == 'NO'
@@ -630,13 +628,13 @@ module Pod
           @installer.send(:install_libraries)
         end
 
-        it 'skips empty pod targets' do
+        it 'does not skip empty pod targets' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           target_definition = Podfile::TargetDefinition.new(:default, nil)
           pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
           @installer.stubs(:aggregate_targets).returns([])
           @installer.stubs(:pod_targets).returns([pod_target])
-          Installer::PodTargetInstaller.any_instance.expects(:install!).never
+          Installer::PodTargetInstaller.any_instance.expects(:install!).once
           @installer.send(:install_libraries)
         end
 
@@ -908,8 +906,8 @@ module Pod
         podfile = Pod::Podfile.new do
           platform :ios
         end
-        config.integrate_targets = false
         @installer = Installer.new(config.sandbox, podfile)
+        @installer.installation_options.integrate_targets = false
       end
 
       it 'runs the pre install hooks' do

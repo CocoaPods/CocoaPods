@@ -44,10 +44,8 @@ module Pod
       #
       def initialize(name, plugin_name, block)
         raise ArgumentError, 'Missing name' unless name
+        raise ArgumentError, 'Missing plugin_name' unless plugin_name
         raise ArgumentError, 'Missing block' unless block
-
-        UI.warn '[Hooks] The use of hooks without specifying a `plugin_name` ' \
-                "has been deprecated (from file `#{block.binding.eval('File.expand_path __FILE__')}`)." unless plugin_name
 
         @name = name
         @plugin_name = plugin_name
@@ -72,13 +70,7 @@ module Pod
       # @param  [Proc] block
       #         The block.
       #
-      def register(plugin_name, hook_name = nil, &block)
-        # TODO: Backwards compatibility with nameless plugins from CP 0.34
-        if hook_name.nil?
-          hook_name = plugin_name
-          plugin_name = nil
-        end
-
+      def register(plugin_name, hook_name, &block)
         @registrations ||= {}
         @registrations[hook_name] ||= []
         @registrations[hook_name] << Hook.new(hook_name, plugin_name, block)
@@ -108,7 +100,7 @@ module Pod
             UI.message "- Running #{name.to_s.tr('_', ' ')} hooks" do
               hooks.each do |hook|
                 next if whitelisted_plugins && !whitelisted_plugins.key?(hook.plugin_name)
-                UI.message "- #{hook.plugin_name || 'unknown plugin'} from " \
+                UI.message "- #{hook.plugin_name} from " \
                            "`#{hook.block.source_location.first}`" do
                   block = hook.block
                   if block.arity > 1

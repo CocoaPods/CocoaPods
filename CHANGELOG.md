@@ -6,6 +6,40 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* The `link_with` Podfile DSL method has been removed in favor of target
+  inheritance.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The `:exclusive => true` Podfile DSL target option has been removed in favor
+  of the `inherit! :search_paths` directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The specification of `:head` dependencies has been removed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4673](https://github.com/CocoaPods/CocoaPods/issues/4673)
+
+* The deprecated `:local` dependency option has been removed in favor of the
+  equivalent `:path` option.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The deprecated `dependency` method in the Podfile DSL has been removed in
+  favor of the equivalent `pod` method.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The deprecated `preferred_dependency` method in the Specification DSL has been
+  removed in favor of the equivalent `default_subspecs` method.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+##### Highlighted Enhancements That Need Testing
+
+* The Podfile DSL has been cleaned up, with the removal of confusing options and
+  the introduction of abstract targets, search paths-only inheritance, the
+  specification of installation options, and the removal of head dependencies.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#840](https://github.com/CocoaPods/CocoaPods/issues/840)
+
 ##### Enhancements
 
 * Add the ability to add a custom commit message when pushing a spec.
@@ -101,6 +135,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   changes, ensuring backwards-incompatible changes are properly applied.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* The Podfile now allows specifying installation options via the `install!`
+  directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Core#151](https://github.com/CocoaPods/Core/issues/151)
+
+* The Podfile now allows marking targets as `abstract` and specifying the pod
+  inheritance mode via the `inherit!` directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
+  [#1626](https://github.com/CocoaPods/CocoaPods/issues/1626)
+  [#4001](https://github.com/CocoaPods/CocoaPods/issues/4001)
+
 ##### Bug Fixes
 
 * Fix compiling of localized resources.
@@ -183,6 +229,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [Samuel Giddins](https://github.com/segiddins)
   [#4550](https://github.com/CocoaPods/CocoaPods/issues/4550)
+
+* Empty podfiles / target blocks no longer break the user's Xcode project.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3617](https://github.com/CocoaPods/CocoaPods/issues/3617)
 
 
 ## 0.39.0 (2015-10-09)
