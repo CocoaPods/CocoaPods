@@ -383,25 +383,30 @@ module Pod
         it 'adds a preprocessor definition for build configurations' do
           configuration = @project.add_build_configuration('Release', :release)
           settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('RELEASE=1')
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should == ['POD_CONFIGURATION_RELEASE=1', '$(inherited)']
         end
 
         it "doesn't create invalid preprocessor definitions for configurations" do
           configuration = @project.add_build_configuration('1 Release-Foo.bar', :release)
           settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('_1_RELEASE_FOO_BAR=1')
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('POD_CONFIGURATION_1_RELEASE_FOO_BAR=1')
         end
 
         it "doesn't duplicate values" do
           original = @project.build_configuration_list['Debug']
           original_settings = original.build_settings
           original_settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
-            ['DEBUG=1', '$(inherited)']
+            ['POD_CONFIGURATION_DEBUG=1', 'DEBUG=1', '$(inherited)']
 
           configuration = @project.add_build_configuration('Debug', :debug)
           settings = configuration.build_settings
           settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
-            ['DEBUG=1', '$(inherited)']
+            ['POD_CONFIGURATION_DEBUG=1', 'DEBUG=1', '$(inherited)']
+
+          configuration = @project.add_build_configuration('Debug-Based', :debug)
+          settings = configuration.build_settings
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
+            ['POD_CONFIGURATION_DEBUG_BASED=1', 'DEBUG=1', '$(inherited)']
         end
 
         it 'normalizes the name of the configuration' do
@@ -409,7 +414,15 @@ module Pod
             'My Awesome Configuration', :release)
           settings = configuration.build_settings
           settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
-            ['MY_AWESOME_CONFIGURATION=1']
+            ['POD_CONFIGURATION_MY_AWESOME_CONFIGURATION=1', "$(inherited)"]
+        end
+
+        it 'adds DEBUG for configurations based upon :debug' do
+          configuration = @project.add_build_configuration(
+            'Config', :debug)
+          settings = configuration.build_settings
+          settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
+            ["POD_CONFIGURATION_CONFIG=1", "DEBUG=1", "$(inherited)"]
         end
       end
     end
