@@ -36,6 +36,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [Core#284](https://github.com/CocoaPods/Core/issues/284)
 
+* Build configuration names are no longer set as pre-processor defines, but
+  rather `POD_CONFIGURATION_$CONFIGURATION_NAME` is defined in order to lessen
+  conflicts with pod code.  
+  [#4143](https://github.com/CocoaPods/CocoaPods/issues/4143)
+
 ##### Highlighted Enhancements That Need Testing
 
 * The Podfile DSL has been cleaned up, with the removal of confusing options and
@@ -237,6 +242,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Empty podfiles / target blocks no longer break the user's Xcode project.  
   [Samuel Giddins](https://github.com/segiddins)
   [#3617](https://github.com/CocoaPods/CocoaPods/issues/3617)
+
+* The pre-processor define for `DEBUG` will be set for all debug-based build
+  configurations when building pods.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4148](https://github.com/CocoaPods/CocoaPods/issues/4148)
 
 
 ## 0.39.0 (2015-10-09)
