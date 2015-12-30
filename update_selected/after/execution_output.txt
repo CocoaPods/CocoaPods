@@ -1,24 +1,5 @@
 CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
   Preparing
-    Migrating to CocoaPods 0.34
-      - Deleting `Pods/Headers`
-      - Making path `Pods/Headers`
-      - Deleting `Pods/BuildHeaders`
-      - Deleting `Pods/Pods-acknowledgements.markdown`
-      - Deleting `Pods/Pods-acknowledgements.plist`
-      - Deleting `Pods/Pods-dummy.m`
-      - Deleting `Pods/Pods-environment.h`
-      - Deleting `Pods/Pods-JSONKit-dummy.m`
-      - Deleting `Pods/Pods-JSONKit-prefix.pch`
-      - Deleting `Pods/Pods-JSONKit-Private.xcconfig`
-      - Deleting `Pods/Pods-JSONKit.xcconfig`
-      - Deleting `Pods/Pods-Reachability-dummy.m`
-      - Deleting `Pods/Pods-Reachability-prefix.pch`
-      - Deleting `Pods/Pods-Reachability-Private.xcconfig`
-      - Deleting `Pods/Pods-Reachability.xcconfig`
-      - Deleting `Pods/Pods-resources.sh`
-      - Deleting `Pods/Pods.xcconfig`
-    Migrating to CocoaPods 0.36
 
 Analyzing dependencies
 
