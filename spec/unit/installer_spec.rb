@@ -196,7 +196,6 @@ module Pod
         end
 
         it 'does not deintegrate when the major version is the same' do
-          VERSION.stubs(:to_s).returns('1.1.0')
           should_not_deintegrate = %w(1.0.0 1.0.1 1.1.0 1.2.2)
           should_not_deintegrate.each do |version|
             lockfile = generate_lockfile(:lockfile_version => version)
@@ -207,7 +206,6 @@ module Pod
         end
 
         it 'does deintegrate when the major version is different' do
-          VERSION.stubs(:to_s).returns('1.1.0')
           should_not_deintegrate = %w(0.39.0 2.0.0 10.0-beta)
           should_not_deintegrate.each do |version|
             lockfile = generate_lockfile(:lockfile_version => version)
