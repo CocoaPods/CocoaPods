@@ -32,6 +32,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   removed in favor of the equivalent `default_subspecs` method.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* The `docset_url` Specification attribute has been removed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Core#284](https://github.com/CocoaPods/Core/issues/284)
+
 ##### Highlighted Enhancements That Need Testing
 
 * The Podfile DSL has been cleaned up, with the removal of confusing options and
