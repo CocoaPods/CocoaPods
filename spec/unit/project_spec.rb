@@ -376,42 +376,6 @@ module Pod
         f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
         f.path.should == '../Podfile'
       end
-
-      #----------------------------------------#
-
-      describe '#add_build_configuration' do
-        it 'adds a preprocessor definition for build configurations' do
-          configuration = @project.add_build_configuration('Release', :release)
-          settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('RELEASE=1')
-        end
-
-        it "doesn't create invalid preprocessor definitions for configurations" do
-          configuration = @project.add_build_configuration('1 Release-Foo.bar', :release)
-          settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should.include('_1_RELEASE_FOO_BAR=1')
-        end
-
-        it "doesn't duplicate values" do
-          original = @project.build_configuration_list['Debug']
-          original_settings = original.build_settings
-          original_settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
-            ['DEBUG=1', '$(inherited)']
-
-          configuration = @project.add_build_configuration('Debug', :debug)
-          settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
-            ['DEBUG=1', '$(inherited)']
-        end
-
-        it 'normalizes the name of the configuration' do
-          configuration = @project.add_build_configuration(
-            'My Awesome Configuration', :release)
-          settings = configuration.build_settings
-          settings['GCC_PREPROCESSOR_DEFINITIONS'].should ==
-            ['MY_AWESOME_CONFIGURATION=1']
-        end
-      end
     end
 
     #-------------------------------------------------------------------------#
