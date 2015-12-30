@@ -294,11 +294,12 @@ module Pod
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+          target 'SampleProject'
         end
         lockfile = generate_lockfile
-        config.integrate_targets = false
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.installation_options.integrate_targets = false
         should.not.raise(Informative) { @installer.install! }
       end
     end
