@@ -243,7 +243,7 @@ module Pod
       build_configuration = super
       settings = build_configuration.build_settings
       definitions = settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
-      defines = [define_for_build_configuration(name)]
+      defines = [defininition_for_build_configuration(name)]
       defines << 'DEBUG' if type == :debug
       defines.each do |define|
         value = "#{define}=1"
@@ -260,7 +260,7 @@ module Pod
     #
     # @return [String] The preprocessor definition to set for the configuration.
     #
-    def define_for_build_configuration(name)
+    def defininition_for_build_configuration(name)
       "POD_CONFIGURATION_#{name.underscore}".gsub(/[^a-zA-Z0-9_]/, '_').upcase
     end
 
