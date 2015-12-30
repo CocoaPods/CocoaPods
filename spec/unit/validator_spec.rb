@@ -265,25 +265,6 @@ module Pod
             @validator.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
           end
         end
-
-        describe 'docset URL validation' do
-          before do
-            @validator.stubs(:validate_homepage)
-          end
-
-          it 'checks if the docset URL is valid' do
-            Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/')
-            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
-            @validator.validate
-            @validator.results.should.be.empty?
-          end
-
-          it "should fail validation if it wasn't able to validate the URL" do
-            Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/not-found')
-            @validator.validate
-            @validator.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
-          end
-        end
       end
 
       it 'respects the no clean option' do

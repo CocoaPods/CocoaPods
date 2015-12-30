@@ -257,7 +257,6 @@ module Pod
       validate_screenshots(spec)
       validate_social_media_url(spec)
       validate_documentation_url(spec)
-      validate_docset_url(spec)
 
       valid = spec.available_platforms.send(fail_fast ? :all? : :each) do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -340,12 +339,6 @@ module Pod
     #
     def validate_documentation_url(spec)
       validate_url(spec.documentation_url) if spec.documentation_url
-    end
-
-    # Performs validations related to the `docset_url` attribute.
-    #
-    def validate_docset_url(spec)
-      validate_url(spec.docset_url) if spec.docset_url
     end
 
     def setup_validation_environment
