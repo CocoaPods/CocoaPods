@@ -1,6 +1,7 @@
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/string/inflections'
-require 'fourflusher'
+
+autoload :Fourflusher, 'fourflusher'
 
 module Pod
   # Validates a Specification.
@@ -700,11 +701,14 @@ module Pod
       command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
       case consumer.platform_name
       when :ios
-        command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s', deployment_target)
+        command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
+        command += Fourflusher::SimControl.new.destination('iPhone 4s', deployment_target)
       when :watchos
-        command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm', deployment_target)
+        command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
+        command += Fourflusher::SimControl.new.destination('Apple Watch - 38mm', deployment_target)
       when :tvos
-        command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p', deployment_target)
+        command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
+        command += Fourflusher::SimControl.new.destination('Apple TV 1080p', deployment_target)
       end
 
       output, status = Dir.chdir(validation_dir) { _xcodebuild(command) }

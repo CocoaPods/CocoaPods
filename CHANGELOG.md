@@ -238,6 +238,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [Samuel Giddins](https://github.com/segiddins)
   [#4550](https://github.com/CocoaPods/CocoaPods/issues/4550)
+
 * Fix lint in Xcode 7.2, it requires `-destination`.  
   [Boris Bügling](https://github.com/neonichu)
   [#4652](https://github.com/CocoaPods/CocoaPods/pull/4652)
