@@ -66,28 +66,26 @@ CLIntegracon.configure do |c|
     # Creates a YAML representation of the Xcodeproj files
     # which should be used as a reference for comparison.
     xcodeproj = Xcodeproj::Project.open(path)
-    File.open("#{path}.yaml", 'w') do |file|
-      file.write xcodeproj.to_yaml
-    end
+    yaml = xcodeproj.to_yaml
+    path.rmtree
+    path.open('w') { |f| f << yaml }
   end
 
   c.transform_produced '**/*.framework' do |path|
     tree = FileTree.to_tree(path)
-    FileUtils.rm_rf path
-    File.open(path, 'w') { |f| f << tree }
+    path.rmtree
+    path.open('w') { |f| f << tree }
   end
 
   # Register special handling for YAML files
-  paths = [/Podfile\.lock/, /Manifest\.lock$/, /xcodeproj\.yaml$/]
-  c.has_special_handling_for(*paths) do |path|
+  c.transform_produced '**/{Podfile,Manifest}.lock' do |path|
     # Remove CocoaPods version
-    yaml = File.open(path) { |f| YAML.load(f) }
+    yaml = YAML.load(path.read)
     yaml.delete('COCOAPODS')
-    YAML.dump(yaml)
+    path.open('w') { |f| f << YAML.dump(yaml) }
   end
 
   # So we don't need to compare them directly
-  c.ignores /\.xcodeproj\//
   c.ignores 'Podfile'
 
   # Ignore certain OSX files
@@ -98,7 +96,7 @@ CLIntegracon.configure do |c|
 
   # Needed for some test cases
   c.ignores '*.podspec'
-  c.ignores 'PodTest-hg-source/**'
+  c.ignores 'PodTest-hg-source/**/*'
 
   c.hook_into :bacon
 end
@@ -120,6 +118,7 @@ describe_cli 'pod' do
       '--verbose',
       '--no-ansi',
     ]
+    s.replace_path %r{#{CLIntegracon.shared_config.temp_path}/\w+/transformed}, 'PROJECT'
     s.replace_path ROOT.to_s, 'ROOT'
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
