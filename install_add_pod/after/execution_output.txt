@@ -21,15 +21,15 @@ Downloading dependencies
 -> Installing JSONKit (1.5pre)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git ROOT/tmp/install_add_pod/Pods/JSONKit
-     Cloning into 'ROOT/tmp/install_add_pod/Pods/JSONKit'...
+     $ GIT_BIN clone https://github.com/johnezang/JSONKit.git PROJECT/Pods/JSONKit
+     Cloning into 'PROJECT/Pods/JSONKit'...
    $ GIT_BIN checkout --quiet 0aff3deb5e1bb2bbc88a83fd71c8ad5550185cce
 
 -> Installing Reachability (3.1.0)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git ROOT/tmp/install_add_pod/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
-     Cloning into 'ROOT/tmp/install_add_pod/Pods/Reachability'...
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git PROJECT/Pods/Reachability --single-branch --depth 1 --branch v3.1.0
+     Cloning into 'PROJECT/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
      
      You are in 'detached HEAD' state. You can look around, make experimental

@@ -17,8 +17,8 @@ Downloading dependencies
 -> Installing SocketRocket (0.3.1-beta2)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/square/SocketRocket.git ROOT/tmp/install_custom_module_name/Pods/SocketRocket --single-branch --depth 1 --branch v0.3.1-beta2
-     Cloning into 'ROOT/tmp/install_custom_module_name/Pods/SocketRocket'...
+     $ GIT_BIN clone https://github.com/square/SocketRocket.git PROJECT/Pods/SocketRocket --single-branch --depth 1 --branch v0.3.1-beta2
+     Cloning into 'PROJECT/Pods/SocketRocket'...
      Note: checking out 'f61e3c3ae532bf72f0c75524c92e95d625283a13'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
@@ -34,8 +34,8 @@ Downloading dependencies
 -> Installing libPusher (1.5)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/lukeredpath/libPusher.git ROOT/tmp/install_custom_module_name/Pods/libPusher --single-branch --depth 1 --branch v1.5
-     Cloning into 'ROOT/tmp/install_custom_module_name/Pods/libPusher'...
+     $ GIT_BIN clone https://github.com/lukeredpath/libPusher.git PROJECT/Pods/libPusher --single-branch --depth 1 --branch v1.5
+     Cloning into 'PROJECT/Pods/libPusher'...
      Note: checking out 'ac87421f81c874ad0b5116d3523a3467dff28439'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
