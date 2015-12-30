@@ -49,6 +49,7 @@ require 'pretty_bacon'
 require 'colored'
 require 'clintegracon'
 
+require 'cocoapods-core/lockfile'
 require 'cocoapods-core/yaml_helper'
 require 'fileutils'
 require 'integration/file_tree'
@@ -84,15 +85,9 @@ CLIntegracon.configure do |c|
   c.transform_produced %r{(^|/)(Podfile|Manifest).lock$} do |path|
     # Remove CocoaPods version & Podfile checksum
     yaml = YAML.load(path.read)
-    yaml.delete('COCOAPODS')
-    yaml.delete('PODFILE CHECKSUM')
-    keys_hint = [
-      'PODS',
-      'DEPENDENCIES',
-      'EXTERNAL SOURCES',
-      'CHECKOUT OPTIONS',
-      'SPEC CHECKSUMS',
-    ]
+    deleted_keys = ['COCOAPODS', 'PODFILE CHECKSUM']
+    deleted_keys.each { |key| yaml.delete(key) }
+    keys_hint = Pod::Lockfile::HASH_KEY_ORDER - deleted_keys
     path.open('w') { |f| f << Pod::YAMLHelper.convert_hash(yaml, keys_hint, "\n\n") }
   end
 
