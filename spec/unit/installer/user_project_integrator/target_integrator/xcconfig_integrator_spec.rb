@@ -88,6 +88,20 @@ module Pod
       UI.warnings.should.not.match /not set.*base configuration/
     end
 
+    it 'does not log a warning if the existing xcconfig is identical to the Pods config' do
+      sample_config = @project.new_file('SampleConfig.xcconfig')
+      File.write(sample_config.real_path, 'sample config content.')
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference = sample_config
+      end
+      XCConfigIntegrator.integrate(@pod_bundle, [@target])
+      @target.build_configurations.each do |config|
+        config.base_configuration_reference.should == sample_config
+      end
+
+      UI.warnings.should.not.match /not set.*base configuration/
+    end
+
     it 'does not log a warning if the user has set a xcconfig of their own that includes the silence warnings string' do
       SILENCE_TOKEN = '// @COCOAPODS_SILENCE_WARNINGS@ //'
       sample_config = @project.new_file('SampleConfig.xcconfig')
