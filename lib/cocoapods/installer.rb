@@ -502,11 +502,11 @@ module Pod
     def deintegrate_if_different_major_version
       return unless lockfile
       return if lockfile.cocoapods_version.major == Version.create(VERSION).major
-      UI.section('Fully deintegrating due to major version update') do
+      UI.section('Re-creating CocoaPods due to major version update.') do
         projects = Pathname.glob(config.installation_root + '*.xcodeproj').map { |path| Xcodeproj::Project.open(path) }
         deintegrator = Deintegrator.new
         projects.sort.each do |project|
-          deintegrator.deintegrate_project(project)
+          config.with_changes(:silent => true) { deintegrator.deintegrate_project(project) }
           project.save if project.dirty?
         end
       end
