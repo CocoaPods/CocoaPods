@@ -52,6 +52,7 @@ module Pod
 
       def updates
         @updates ||= begin
+          ensure_external_podspecs_present!
           spec_sets.map do |set|
             spec = set.specification
             source_version = set.versions.first
@@ -109,6 +110,17 @@ module Pod
         @lockfile ||= begin
           verify_lockfile_exists!
           config.lockfile
+        end
+      end
+
+      def ensure_external_podspecs_present!
+        return unless config.podfile
+        config.podfile.dependencies.each do |dep|
+          next if dep.external_source.nil?
+          unless config.sandbox.specification(dep.root_name)
+            raise Informative, 'You must run `pod install` first to ensure that the ' \
+              "podspec for `#{dep.root_name}` has been fetched."
+          end
         end
       end
     end
