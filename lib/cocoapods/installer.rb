@@ -506,7 +506,7 @@ module Pod
         projects = Pathname.glob(config.installation_root + '*.xcodeproj').map { |path| Xcodeproj::Project.open(path) }
         deintegrator = Deintegrator.new
         projects.sort.each do |project|
-          config.with_changes(silent: true) { deintegrator.deintegrate_project(project) }
+          config.with_changes(silent => true) { deintegrator.deintegrate_project(project) }
           project.save if project.dirty?
         end
       end
