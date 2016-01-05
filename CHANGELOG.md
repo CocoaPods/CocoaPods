@@ -24,6 +24,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4717](https://github.com/CocoaPods/CocoaPods/issues/4717)
 
+* The `Info.plist` file will now be generated properly for resource bundles,
+  setting the proper `CFBundlePackageType` and omitting the `CFBundleExecutable`
+  key.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Xcodeproj#259](https://github.com/CocoaPods/Xcodeproj/issues/259)
+
 
 ## 1.0.0.beta.1 (2015-12-30)
 

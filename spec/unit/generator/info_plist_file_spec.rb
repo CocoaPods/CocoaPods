@@ -84,5 +84,38 @@ module Pod
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
     end
+
+    it 'properly formats serialized arrays' do
+      generator = Generator::InfoPlistFile.new(mock('Target'))
+      generator.send(:to_plist, 'array' => %w(a b)).should == <<-PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>array</key>
+  <array>
+    <string>a</string>
+    <string>b</string>
+  </array>
+</dict>
+</plist>
+      PLIST
+    end
+
+    it 'uses the specified bundle_package_type' do
+      target = mock('Target', :platform => stub(:name => :ios))
+      generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file)['CFBundlePackageType'].should == 'BNDL'
+    end
+
+    it 'does not include a CFBundleExecutable for bundles' do
+      target = mock('Target', :platform => stub(:name => :ios))
+      generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file).should.not.key('CFBundleExecutable')
+    end
   end
 end
