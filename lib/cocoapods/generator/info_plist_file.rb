@@ -88,7 +88,7 @@ module Pod
         when Array
           output << indent << "<array>\n"
           value.each { |v| serialize(v, output, indentation + 2) }
-          output << indent << '</array>'
+          output << indent << "</array>\n"
         when Hash
           output << indent << "<dict>\n"
           value.to_a.sort_by(&:first).each do |key, v|
