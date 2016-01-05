@@ -17,6 +17,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jed Lewison](https://github.com/jedlewison)
   [#4722](https://github.com/CocoaPods/CocoaPods/issues/4722)
 
+##### Bug Fixes
+
+* Always fetch a `:podspec` dependency's podspec when it is missing in the
+  `Pods` directory.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4717](https://github.com/CocoaPods/CocoaPods/issues/4717)
+
 
 ## 1.0.0.beta.1 (2015-12-30)
 

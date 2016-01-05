@@ -443,7 +443,7 @@ module Pod
         unless dependencies_to_fetch.empty?
           UI.section 'Fetching external sources' do
             dependencies_to_fetch.sort.each do |dependency|
-              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.name))
+              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.root_name))
             end
           end
         end
@@ -481,7 +481,7 @@ module Pod
             deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.name) }
             deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
             deps_to_fetch += deps_to_fetch_if_needed.select do |dep|
-              sandbox.specification(dep.name).nil? ||
+              sandbox.specification(dep.root_name).nil? ||
                 !dep.external_source[:path].nil? ||
                 !sandbox.pod_dir(dep.root_name).directory? ||
                 checkout_requires_update?(dep)
@@ -506,6 +506,9 @@ module Pod
           elsif update_mode == :all
             pods_to_fetch += result.podfile_state.unchanged + result.podfile_state.deleted
           end
+          pods_to_fetch += podfile.dependencies.
+            select { |dep| Hash(dep.external_source).key?(:podspec) && sandbox.specification_path(dep.root_name).nil? }.
+            map(&:root_name)
           pods_to_fetch
         end
       end
