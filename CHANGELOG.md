@@ -38,6 +38,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   multiple root-level Xcode projects.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Ensure the `sandbox_root` attribute is set on the pre-install hooks context.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.0.beta.1 (2015-12-30)
 
