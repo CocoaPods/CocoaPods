@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jed Lewison](https://github.com/jedlewison)
   [#4722](https://github.com/CocoaPods/CocoaPods/issues/4722)
 
+* Add `user_targets` method to the `UmbrellaTargetDescription` in the
+  post-install hooks context.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Always fetch a `:podspec` dependency's podspec when it is missing in the

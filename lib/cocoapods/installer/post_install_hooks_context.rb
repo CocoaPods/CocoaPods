@@ -38,7 +38,7 @@ module Pod
         aggregate_targets.each do |umbrella|
           desc = UmbrellaTargetDescription.new
           desc.user_project = umbrella.user_project
-          desc.user_target_uuids = umbrella.user_target_uuids
+          desc.user_targets = umbrella.user_targets
           desc.specs = umbrella.specs
           desc.platform_name = umbrella.platform.name
           desc.platform_deployment_target = umbrella.platform.deployment_target.to_s
@@ -69,6 +69,11 @@ module Pod
           user_project.path if user_project
         end
 
+        # @return [Array<PBXNativeTarget>]
+        #         The list of user targets integrated by this umbrella target.
+        #
+        attr_accessor :user_targets
+
         # @return [Array<String>] The list of the UUIDs of the
         #         user targets integrated by this umbrella
         #         target.  They can be used to find the
@@ -76,7 +81,9 @@ module Pod
         #         to find the targets opening the project with
         #         Xcodeproj.
         #
-        attr_accessor :user_target_uuids
+        def user_target_uuids
+          user_targets.map(&:uuid)
+        end
 
         # @return [Array<Specification>] The list of the
         #         specifications of the target.
