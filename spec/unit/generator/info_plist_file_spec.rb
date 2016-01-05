@@ -84,5 +84,21 @@ module Pod
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
     end
+
+    it 'uses the specified bundle_package_type' do
+      target = mock('Target', :platform => stub(:name => :ios))
+      generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file)['CFBundlePackageType'].should == 'BNDL'
+    end
+
+    it 'does not include a CFBundleExecutable for bundles' do
+      target = mock('Target', :platform => stub(:name => :ios))
+      generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file).should.not.key('CFBundleExecutable')
+    end
   end
 end

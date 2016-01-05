@@ -9,12 +9,20 @@ module Pod
       #
       attr_reader :target
 
+      # @return [Symbol] the CFBundlePackageType of the target this Info.plist
+      #         file is for.
+      #
+      attr_reader :bundle_package_type
+
       # Initialize a new instance
       #
       # @param  [Target] target @see target
       #
-      def initialize(target)
+      # @param  [Symbol] bundle_package_type @see bundle_package_type
+      #
+      def initialize(target, bundle_package_type: :fmwk)
         @target = target
+        @bundle_package_type = bundle_package_type
       end
 
       # Generates and saves the Info.plist to the given path.
@@ -51,7 +59,7 @@ module Pod
       # @return [String]
       #
       def generate
-        header + dict + footer
+        to_plist(info)
       end
 
       private
@@ -61,51 +69,56 @@ module Pod
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
         PLIST
       end
 
       def footer
         <<-PLIST
-</dict>
 </plist>
         PLIST
       end
 
-      def dict
-        dict = <<-PLIST
-  <key>CFBundleDevelopmentRegion</key>
-  <string>en</string>
-  <key>CFBundleExecutable</key>
-  <string>${EXECUTABLE_NAME}</string>
-  <key>CFBundleIdentifier</key>
-  <string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
-  <key>CFBundleInfoDictionaryVersion</key>
-  <string>6.0</string>
-  <key>CFBundleName</key>
-  <string>${PRODUCT_NAME}</string>
-  <key>CFBundlePackageType</key>
-  <string>FMWK</string>
-  <key>CFBundleShortVersionString</key>
-  <string>#{target_version}</string>
-  <key>CFBundleSignature</key>
-  <string>????</string>
-  <key>CFBundleVersion</key>
-  <string>${CURRENT_PROJECT_VERSION}</string>
-  <key>NSPrincipalClass</key>
-  <string></string>
-        PLIST
+      def to_plist(root)
+        serialize(root, header) << footer
+      end
 
-        if target.platform.name == :tvos
-          dict << <<-PLIST
-  <key>UIRequiredDeviceCapabilities</key>
-  <array>
-    <string>arm64</string>
-  </array>
-          PLIST
+      def serialize(value, output, indentation = 0)
+        indent = ' ' * indentation
+        case value
+        when Array
+          output << indent << "<array>\n"
+          value.each { |v| serialize(v, output, indentation + 2) }
+          output << indent << '</array>'
+        when Hash
+          output << indent << "<dict>\n"
+          value.to_a.sort_by(&:first).each do |key, v|
+            output << indent << '  ' << "<key>#{key}</key>\n"
+            serialize(v, output, indentation + 2)
+          end
+          output << indent << "</dict>\n"
+        when String
+          output << indent << "<string>#{value}</string>\n"
         end
+        output
+      end
 
-        dict
+      def info
+        info = {
+          'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
+          'CFBundleInfoDictionaryVersion' => '6.0',
+          'CFBundleName' => '${PRODUCT_NAME}',
+          'CFBundlePackageType' => bundle_package_type.to_s.upcase,
+          'CFBundleShortVersionString' => target_version,
+          'CFBundleSignature' => '????',
+          'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
+          'NSPrincipalClass' => '',
+          'CFBundleDevelopmentRegion' => 'en',
+        }
+
+        info['CFBundleExecutable'] = '${EXECUTABLE_NAME}' if bundle_package_type != :bndl
+        info['UIRequiredDeviceCapabilities'] = %w(arm64) if target.platform.name == :tvos
+
+        info
       end
     end
   end
