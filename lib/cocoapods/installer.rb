@@ -505,7 +505,7 @@ module Pod
       UI.section('Re-creating CocoaPods due to major version update.') do
         projects = Pathname.glob(config.installation_root + '*.xcodeproj').map { |path| Xcodeproj::Project.open(path) }
         deintegrator = Deintegrator.new
-        projects.sort.each do |project|
+        projects.each do |project|
           config.with_changes(:silent => true) { deintegrator.deintegrate_project(project) }
           project.save if project.dirty?
         end

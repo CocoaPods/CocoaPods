@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [Xcodeproj#259](https://github.com/CocoaPods/Xcodeproj/issues/259)
 
+* Fix crash when deintegrating due to major version change and there are
+  multiple root-level Xcode projects.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.0.beta.1 (2015-12-30)
 
