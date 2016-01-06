@@ -390,6 +390,16 @@ module Pod
         SourcesManager.send(:path_writable?, path).should.be.true
       end
 
+      it 'knows when sudo is needed' do
+        SourcesManager.stubs(:path_writable?).returns(false)
+        SourcesManager.send(:needs_sudo?).should.be.true
+      end
+
+      it 'knows when sudo is not needed' do
+        SourcesManager.stubs(:path_writable?).returns(true)
+        SourcesManager.send(:needs_sudo?).should.be.false
+      end
+
       it 'returns whether a repository is compatible' do
         SourcesManager.stubs(:version_information).returns('min' => '0.0.1')
         SourcesManager.repo_compatible?('stub').should.be.true
