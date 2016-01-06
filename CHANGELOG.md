@@ -103,6 +103,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix resource bundles only supporting iPhone for target device family
+  [Andy Rifken](https://github.com/arifken)
+
 * Fix compiling of localized resources.
   [Eric Firestone](https://github.com/efirestone)
   [#1653](https://github.com/CocoaPods/CocoaPods/issues/1653)
