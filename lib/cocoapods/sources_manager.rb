@@ -366,12 +366,10 @@ module Pod
             'Update CocoaPods, or checkout the appropriate tag in the repo.'
         end
 
-        needs_sudo = path_writable?(__FILE__)
-
         if config.new_version_message? && cocoapods_update?(versions)
           last = versions['last']
           rc = Gem::Version.new(last).prerelease?
-          install_message = needs_sudo ? 'sudo ' : ''
+          install_message = needs_sudo? ? 'sudo ' : ''
           install_message << 'gem install cocoapods'
           install_message << ' --pre' if rc
           message = [
@@ -485,6 +483,12 @@ module Pod
       #
       def path_writable?(path)
         Pathname(path).dirname.writable?
+      end
+
+      # @return [Bool] Whether `gem install` probably needs `sudo` to succeed.
+      #
+      def needs_sudo?
+        !path_writable?(__FILE__)
       end
 
       # @return [Source] The git source with the given name. If no git source
