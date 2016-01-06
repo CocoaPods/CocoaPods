@@ -265,25 +265,6 @@ module Pod
             @validator.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
           end
         end
-
-        describe 'docset URL validation' do
-          before do
-            @validator.stubs(:validate_homepage)
-          end
-
-          it 'checks if the docset URL is valid' do
-            Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/')
-            WebMock::API.stub_request(:head, /banana-corp.local/).to_return(:status => 200)
-            @validator.validate
-            @validator.results.should.be.empty?
-          end
-
-          it "should fail validation if it wasn't able to validate the URL" do
-            Specification.any_instance.stubs(:docset_url).returns('http://banana-corp.local/not-found')
-            @validator.validate
-            @validator.results.map(&:to_s).first.should.match /The URL (.*) is not reachable/
-          end
-        end
       end
 
       it 'respects the no clean option' do
@@ -321,7 +302,7 @@ module Pod
         validator.stubs(:validate_url)
         validator.stubs(:validate_screenshots)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        dependency = podfile.target_definitions['Pods'].dependencies.first
+        dependency = podfile.target_definitions['App'].dependencies.first
         dependency.external_source.key?(:podspec).should.be.true
       end
 
@@ -358,7 +339,7 @@ module Pod
 
         it 'configures the deployment target' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
-          target_definition = podfile.target_definitions['Pods']
+          target_definition = podfile.target_definitions['App']
           platform = target_definition.platform
           platform.symbolic_name.should == :ios
           platform.deployment_target.to_s.should == '5.0'
@@ -366,13 +347,13 @@ module Pod
 
         it 'includes the use_frameworks! directive' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0', true)
-          target_definition = podfile.target_definitions['Pods']
+          target_definition = podfile.target_definitions['App']
           target_definition.uses_frameworks?.should == true
         end
 
         it 'includes the use_frameworks!(false) directive' do
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0', false)
-          target_definition = podfile.target_definitions['Pods']
+          target_definition = podfile.target_definitions['App']
           # rubocop:disable Style/DoubleNegation
           (!!target_definition.uses_frameworks?).should == false
           # rubocop:enable Style/DoubleNegation
@@ -411,12 +392,14 @@ module Pod
       end
 
       it 'checks if xcodebuild returns a successful status code' do
+        Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
+        Executable.stubs(:which).with(:xcrun)
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         status = mock
         status.stubs(:success?).returns(false)
@@ -428,18 +411,23 @@ module Pod
       end
 
       it 'runs xcodebuild with correct arguments for code signing' do
+        Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(podspec_path, SourcesManager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
+        Executable.stubs(:which).with(:xcrun)
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
         Executable.expects(:capture_command).with('xcodebuild', command, :capture => :merge).once.returns(['', stub(:success? => true)])
-        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
-        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
-        Executable.expects(:capture_command).with('xcodebuild', command + %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator), :capture => :merge).once.returns(['', stub(:success? => true)])
+        args = %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p')
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
+        args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
         validator.validate
       end
 

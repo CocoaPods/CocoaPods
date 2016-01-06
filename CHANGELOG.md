@@ -4,7 +4,88 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
-## Master
+## 1.0.0.beta.2 (2016-01-05)
+
+##### Enhancements
+
+* Present a friendly error suggesting running `pod install` when there are
+  missing local podspecs when running `pod outdated`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4716](https://github.com/CocoaPods/CocoaPods/issues/4716)
+
+* Don't warn about setting base config when identical to current config.  
+  [Jed Lewison](https://github.com/jedlewison)
+  [#4722](https://github.com/CocoaPods/CocoaPods/issues/4722)
+
+* Add `user_targets` method to the `UmbrellaTargetDescription` in the
+  post-install hooks context.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+##### Bug Fixes
+
+* Always fetch a `:podspec` dependency's podspec when it is missing in the
+  `Pods` directory.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4717](https://github.com/CocoaPods/CocoaPods/issues/4717)
+
+* The `Info.plist` file will now be generated properly for resource bundles,
+  setting the proper `CFBundlePackageType` and omitting the `CFBundleExecutable`
+  key.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Xcodeproj#259](https://github.com/CocoaPods/Xcodeproj/issues/259)
+
+* Fix crash when deintegrating due to major version change and there are
+  multiple root-level Xcode projects.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Ensure the `sandbox_root` attribute is set on the pre-install hooks context.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
+## 1.0.0.beta.1 (2015-12-30)
+
+##### Breaking
+
+* The `link_with` Podfile DSL method has been removed in favor of target
+  inheritance.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The `:exclusive => true` Podfile DSL target option has been removed in favor
+  of the `inherit! :search_paths` directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The specification of `:head` dependencies has been removed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4673](https://github.com/CocoaPods/CocoaPods/issues/4673)
+
+* The deprecated `:local` dependency option has been removed in favor of the
+  equivalent `:path` option.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The deprecated `dependency` method in the Podfile DSL has been removed in
+  favor of the equivalent `pod` method.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The deprecated `preferred_dependency` method in the Specification DSL has been
+  removed in favor of the equivalent `default_subspecs` method.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* The `docset_url` Specification attribute has been removed.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Core#284](https://github.com/CocoaPods/Core/issues/284)
+
+* Build configuration names are no longer set as pre-processor defines, but
+  rather `POD_CONFIGURATION_$CONFIGURATION_NAME` is defined in order to lessen
+  conflicts with pod code.  
+  [#4143](https://github.com/CocoaPods/CocoaPods/issues/4143)
+
+##### Highlighted Enhancements That Need Testing
+
+* The Podfile DSL has been cleaned up, with the removal of confusing options and
+  the introduction of abstract targets, search paths-only inheritance, the
+  specification of installation options, and the removal of head dependencies.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#840](https://github.com/CocoaPods/CocoaPods/issues/840)
 
 ##### Enhancements
 
@@ -101,6 +182,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   changes, ensuring backwards-incompatible changes are properly applied.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* The Podfile now allows specifying installation options via the `install!`
+  directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Core#151](https://github.com/CocoaPods/Core/issues/151)
+
+* The Podfile now allows marking targets as `abstract` and specifying the pod
+  inheritance mode via the `inherit!` directive.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#1249](https://github.com/CocoaPods/CocoaPods/issues/1249)
+  [#1626](https://github.com/CocoaPods/CocoaPods/issues/1626)
+  [#4001](https://github.com/CocoaPods/CocoaPods/issues/4001)
+
 ##### Bug Fixes
 
 * Fix resource bundles only supporting iPhone for target device family
@@ -180,6 +273,25 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Changing the name of a target in a Podfile will no longer cause warnings about
   being unable to set the base configuration XCConfig.  
   [Samuel Giddins](https://github.com/segiddins)
+
+* Ensure that linking multiple times against the same framework does not trigger
+  the duplicate module name check for frameworks.  
+  [Boris Bügling](https://github.com/neonichu)
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4550](https://github.com/CocoaPods/CocoaPods/issues/4550)
+
+* Fix lint in Xcode 7.2, it requires `-destination`.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#4652](https://github.com/CocoaPods/CocoaPods/pull/4652)
+
+* Empty podfiles / target blocks no longer break the user's Xcode project.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#3617](https://github.com/CocoaPods/CocoaPods/issues/3617)
+
+* The pre-processor define for `DEBUG` will be set for all debug-based build
+  configurations when building pods.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4148](https://github.com/CocoaPods/CocoaPods/issues/4148)
 
 
 ## 0.39.0 (2015-10-09)

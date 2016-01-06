@@ -16,13 +16,6 @@ module Pod
           @generator = Generator::InfoPlistFile.new(pod_target)
         end
 
-        it 'handles when the version is HEAD' do
-          version = Version.new('0.2.0')
-          version.head = true
-          @root_spec.stubs(:version).returns(version)
-          @generator.target_version.should == '0.2.0'
-        end
-
         it 'handles when the version is more than 3 numeric parts' do
           version = Version.new('0.2.0.1')
           @root_spec.stubs(:version).returns(version)
@@ -69,7 +62,7 @@ module Pod
       generator = Generator::InfoPlistFile.new(mock('Target', :platform => stub(:name => :ios)))
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
-      Xcodeproj::PlistHelper.read(file).should == {
+      Xcodeproj::Plist.read_from_path(file).should == {
         'CFBundleDevelopmentRegion' => 'en',
         'CFBundleExecutable' => '${EXECUTABLE_NAME}',
         'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
@@ -89,7 +82,40 @@ module Pod
       generator = Generator::InfoPlistFile.new(pod_target)
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
-      Xcodeproj::PlistHelper.read(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
+      Xcodeproj::Plist.read_from_path(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
+    end
+
+    it 'properly formats serialized arrays' do
+      generator = Generator::InfoPlistFile.new(mock('Target'))
+      generator.send(:to_plist, 'array' => %w(a b)).should == <<-PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>array</key>
+  <array>
+    <string>a</string>
+    <string>b</string>
+  </array>
+</dict>
+</plist>
+      PLIST
+    end
+
+    it 'uses the specified bundle_package_type' do
+      target = mock('Target', :platform => stub(:name => :ios))
+      generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file)['CFBundlePackageType'].should == 'BNDL'
+    end
+
+    it 'does not include a CFBundleExecutable for bundles' do
+      target = mock('Target', :platform => stub(:name => :ios))
+      generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file).should.not.key('CFBundleExecutable')
     end
   end
 end

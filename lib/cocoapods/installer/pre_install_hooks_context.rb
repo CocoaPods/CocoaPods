@@ -33,6 +33,7 @@ module Pod
         result = new
         result.podfile = podfile
         result.sandbox = sandbox
+        result.sandbox_root = sandbox.root.to_s
         result.lockfile = lockfile
         result
       end

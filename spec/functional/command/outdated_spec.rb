@@ -78,5 +78,18 @@ module Pod
       SourcesManager.expects(:update).never
       run_command('outdated', '--no-repo-update')
     end
+
+    it 'tells the user to run `pod install` when external sources need to be fetched' do
+      lockfile = mock('Lockfile')
+      lockfile.stubs(:version).returns(Version.new('1.0'))
+      lockfile.stubs(:pod_names).returns(%w(AFNetworking))
+      config.stubs(:lockfile).returns(lockfile)
+      podfile = Podfile.new do
+        pod 'AFNetworking', :git => 'https://github.com/AFNetworking/AFNetworking.git'
+      end
+      config.stubs(:podfile).returns(podfile)
+      exception = lambda { run_command('outdated', '--no-repo-update') }.should.raise Informative
+      exception.message.should.include 'You must run `pod install` first to ensure that the podspec for `AFNetworking` has been fetched.'
+    end
   end
 end

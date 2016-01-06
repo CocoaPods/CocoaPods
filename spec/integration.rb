@@ -44,9 +44,13 @@ $:.unshift((ROOT + 'spec').to_s)
 
 require 'rubygems'
 require 'bundler/setup'
+
 require 'pretty_bacon'
 require 'colored'
 require 'clintegracon'
+
+require 'cocoapods-core/lockfile'
+require 'cocoapods-core/yaml_helper'
 require 'fileutils'
 require 'integration/file_tree'
 require 'integration/xcodeproj_project_yaml'
@@ -66,28 +70,28 @@ CLIntegracon.configure do |c|
     # Creates a YAML representation of the Xcodeproj files
     # which should be used as a reference for comparison.
     xcodeproj = Xcodeproj::Project.open(path)
-    File.open("#{path}.yaml", 'w') do |file|
-      file.write xcodeproj.to_yaml
-    end
+    yaml = xcodeproj.to_yaml
+    path.rmtree
+    path.open('w') { |f| f << yaml }
   end
 
   c.transform_produced '**/*.framework' do |path|
     tree = FileTree.to_tree(path)
-    FileUtils.rm_rf path
-    File.open(path, 'w') { |f| f << tree }
+    path.rmtree
+    path.open('w') { |f| f << tree }
   end
 
   # Register special handling for YAML files
-  paths = [/Podfile\.lock/, /Manifest\.lock$/, /xcodeproj\.yaml$/]
-  c.has_special_handling_for(*paths) do |path|
-    # Remove CocoaPods version
-    yaml = File.open(path) { |f| YAML.load(f) }
-    yaml.delete('COCOAPODS')
-    YAML.dump(yaml)
+  c.transform_produced %r{(^|/)(Podfile|Manifest).lock$} do |path|
+    # Remove CocoaPods version & Podfile checksum
+    yaml = YAML.load(path.read)
+    deleted_keys = ['COCOAPODS', 'PODFILE CHECKSUM']
+    deleted_keys.each { |key| yaml.delete(key) }
+    keys_hint = Pod::Lockfile::HASH_KEY_ORDER - deleted_keys
+    path.open('w') { |f| f << Pod::YAMLHelper.convert_hash(yaml, keys_hint, "\n\n") }
   end
 
   # So we don't need to compare them directly
-  c.ignores /\.xcodeproj\//
   c.ignores 'Podfile'
 
   # Ignore certain OSX files
@@ -98,7 +102,7 @@ CLIntegracon.configure do |c|
 
   # Needed for some test cases
   c.ignores '*.podspec'
-  c.ignores 'PodTest-hg-source/**'
+  c.ignores 'PodTest-hg-source/**/*'
 
   c.hook_into :bacon
 end
@@ -120,6 +124,7 @@ describe_cli 'pod' do
       '--verbose',
       '--no-ansi',
     ]
+    s.replace_path %r{#{CLIntegracon.shared_config.temp_path}/\w+/transformed}, 'PROJECT'
     s.replace_path ROOT.to_s, 'ROOT'
     s.replace_path `which git`.chomp, 'GIT_BIN'
     s.replace_path `which hg`.chomp, 'HG_BIN' if has_mercurial
@@ -151,6 +156,22 @@ describe_cli 'pod' do
   describe 'Pod install' do
     # Test installation with no integration
     # Test subspecs inheritance
+
+    #--------------------------------------#
+
+    describe 'Pod init' do
+      describe 'Initializes a Podfile with a single platform' do
+        behaves_like cli_spec 'init_single_platform',
+                              'init'
+      end
+    end
+
+    #--------------------------------------#
+
+    describe 'Integrates a project with an empty Podfile with CocoaPods' do
+      behaves_like cli_spec 'install_no_dependencies',
+                            'install --no-repo-update'
+    end
 
     describe 'Integrates a project with CocoaPods' do
       behaves_like cli_spec 'install_new',
@@ -295,15 +316,6 @@ describe_cli 'pod' do
     describe 'Lints a Pod' do
       behaves_like cli_spec 'spec_lint',
                             'spec lint --quick'
-    end
-  end
-
-  #--------------------------------------#
-
-  describe 'Pod init' do
-    describe 'Initializes a Podfile with a single platform' do
-      behaves_like cli_spec 'init_single_platform',
-                            'init'
     end
   end
 

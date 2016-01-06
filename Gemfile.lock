@@ -1,88 +1,88 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 4ded02e52c34d5bbe5f6f031d917394286445aa6
+  revision: d5a7ef8f3e730f195ecb3dfd2ec5891d1c6988d7
   branch: master
   specs:
-    claide (0.9.1)
+    claide (1.0.0.beta.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 6c2544496ed201104e712dd95793ec7bc6a171e8
+  revision: be7dc806886652539fdf4ce74ad481a3005b3d30
   branch: master
   specs:
-    cocoapods-core (0.39.0)
+    cocoapods-core (1.0.0.beta.2)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 3aa370af87ec94e316a57a79f3e4b5a7a616837e
+  revision: 86ea1979ec8151d285a0b34ca2b81e4903c8c57b
   branch: master
   specs:
-    molinillo (0.4.0)
+    molinillo (0.4.1)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: eea8f8d58eef635f2cc9121ee1af6a5478a2841c
+  revision: 9c1366b610393497a3fb3618b4b729e7dc622ca8
   branch: master
   specs:
-    xcodeproj (0.28.2)
+    xcodeproj (1.0.0.beta.2)
       activesupport (>= 3)
-      claide (~> 0.9.1)
+      claide (>= 1.0.0.beta.1, < 2.0)
       colored (~> 1.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: 7fa96ce9ccd9bda7e289a485111649f842189df6
+  revision: 970d9a930176e8a625ab5b20fbf5a0fa8a8c5869
   branch: master
   specs:
-    cocoapods-deintegrate (0.2.1)
+    cocoapods-deintegrate (1.0.0.beta.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: b35c7514683d8a5e3118d5333c15f941d40004fd
+  revision: bd1042962e34740f072577304db5bdf3745611f7
   branch: master
   specs:
-    cocoapods-downloader (0.9.3)
+    cocoapods-downloader (1.0.0.beta.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 220c609c625b5da2981b246a6847872a43598d69
+  revision: 7ae90262ab567fb8331f40dd17f0d79a3dc1551a
   branch: master
   specs:
-    cocoapods-plugins (0.4.2)
+    cocoapods-plugins (1.0.0.beta.1)
       nap
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 4281e740769875ba4e48748b73c7ff832a8d336e
+  revision: 02e3d06276776bbe59d54b2805d3290e115401dd
   branch: master
   specs:
-    cocoapods-search (0.1.0)
+    cocoapods-search (1.0.0.beta.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
-  revision: 2cd4641aaadea0590233f9449552e8adb2398f0c
+  revision: 18be4d3ae6b9fdc10046aaf5d5db06c817486db5
   branch: master
   specs:
-    cocoapods-stats (0.6.2)
+    cocoapods-stats (1.0.0.beta.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 82542cb68816691a35053dfd4b9333ede8158a0c
+  revision: 929d404c34c7b7e84e9442acb3a4380452cdd4cd
   branch: master
   specs:
-    cocoapods-trunk (0.6.4)
+    cocoapods-trunk (1.0.0.beta.1)
       nap (>= 0.8, < 2.0)
       netrc (= 0.7.8)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 44d0e4de7bce3054d60b70c2b6ce961956a74493
+  revision: a4d7f1274f0a22aa1c3700c72603228f41699e83
   branch: master
   specs:
-    cocoapods-try (0.5.1)
+    cocoapods-try (1.0.0.beta.2)
 
 GIT
   remote: https://github.com/segiddins/json.git
@@ -94,22 +94,23 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (0.39.0)
+    cocoapods (1.0.0.beta.2)
       activesupport (>= 4.0.2)
-      claide (~> 0.9.1)
-      cocoapods-core (= 0.39.0)
-      cocoapods-deintegrate (~> 0.2.1)
-      cocoapods-downloader (~> 0.9.3)
-      cocoapods-plugins (~> 0.4.2)
-      cocoapods-search (~> 0.1.0)
-      cocoapods-stats (~> 0.6.2)
-      cocoapods-trunk (~> 0.6.4)
-      cocoapods-try (~> 0.5.1)
+      claide (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-core (= 1.0.0.beta.2)
+      cocoapods-deintegrate (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-downloader (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-plugins (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-search (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-stats (>= 1.0.0.beta.2, < 2.0)
+      cocoapods-trunk (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-try (>= 1.0.0.beta.2, < 2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
-      molinillo (~> 0.4.0)
+      fourflusher (~> 0.3.0)
+      molinillo (~> 0.4.1)
       nap (~> 1.0)
-      xcodeproj (~> 0.28.2)
+      xcodeproj (>= 1.0.0.beta.1, < 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -126,7 +127,7 @@ GEM
       parser (~> 2.2)
     awesome_print (1.6.1)
     bacon (1.2.0)
-    clintegracon (0.6.1)
+    clintegracon (0.8.1)
       colored (~> 1.2)
       diffy
     cocoapods-dependencies (0.5.1)
@@ -135,9 +136,10 @@ GEM
     colored (1.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
-    diffy (3.0.7)
+    diffy (3.1.0)
     escape (0.0.4)
     ffi (1.9.6)
+    fourflusher (0.3.0)
     fuzzy_match (2.0.4)
     i18n (0.7.0)
     inch (0.7.0)
@@ -239,4 +241,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

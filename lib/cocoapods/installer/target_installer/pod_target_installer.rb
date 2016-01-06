@@ -169,7 +169,7 @@ module Pod
             path = target.info_plist_path
             path.dirname.mkdir unless path.dirname.exist?
             info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
-            generator = Generator::InfoPlistFile.new(target)
+            generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
             generator.save_as(info_plist_path)
             add_file_to_support_group(info_plist_path)
 

@@ -19,26 +19,26 @@ module Pod
 
       it 'raises if no name is given' do
         should.raise ArgumentError do
-          @hooks_manager.register(nil) {}
+          @hooks_manager.register('name', nil) {}
         end
       end
 
       it 'raises if no block is given' do
         should.raise ArgumentError do
-          @hooks_manager.register(:post_install)
+          @hooks_manager.register('name', :post_install)
         end
       end
 
-      it 'warns if no plugin name is given' do
-        @hooks_manager.register(:post_install) {}
-        UI.warnings.should.match /hooks without.*deprecated/
-        UI.warnings.should.match /#{__FILE__}/
+      it 'raises if no plugin name is given' do
+        should.raise ArgumentError do
+          @hooks_manager.register(nil, :post_install) {}
+        end
       end
     end
 
     describe 'run' do
       it 'invokes the hooks' do
-        @hooks_manager.register(:post_install) do |_options|
+        @hooks_manager.register('plugin', :post_install) do |_options|
           true.should.be.true
         end
         @hooks_manager.run(:post_install, Object.new)
@@ -51,7 +51,7 @@ module Pod
       end
 
       it 'handles the case that no listeners have registered for a name' do
-        @hooks_manager.register(:post_install) do |_options|
+        @hooks_manager.register('plugin', :post_install) do |_options|
           true.should.be.true
         end
         should.not.raise do
@@ -106,7 +106,7 @@ module Pod
 
       it 'prints a message in verbose mode when any hooks are run' do
         config.verbose = true
-        @hooks_manager.register(:post_install) {}
+        @hooks_manager.register('plugin', :post_install) {}
         @hooks_manager.run(:post_install, Object.new)
         UI.output.should.match /- Running post install hooks/
       end

@@ -32,6 +32,7 @@ module Pod
     autoload :AggregateTargetInstaller,   'cocoapods/installer/target_installer/aggregate_target_installer'
     autoload :Analyzer,                   'cocoapods/installer/analyzer'
     autoload :FileReferencesInstaller,    'cocoapods/installer/file_references_installer'
+    autoload :InstallationOptions,        'cocoapods/installer/installation_options'
     autoload :PostInstallHooksContext,    'cocoapods/installer/post_install_hooks_context'
     autoload :PreInstallHooksContext,     'cocoapods/installer/pre_install_hooks_context'
     autoload :SourceProviderHooksContext, 'cocoapods/installer/source_provider_hooks_context'
@@ -44,6 +45,9 @@ module Pod
     autoload :UserProjectIntegrator,      'cocoapods/installer/user_project_integrator'
 
     include Config::Mixin
+    include InstallationOptions::Mixin
+
+    delegate_installation_options { podfile }
 
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
@@ -109,7 +113,7 @@ module Pod
       verify_no_static_framework_transitive_dependencies
       verify_framework_usage
       generate_pods_project
-      integrate_user_project if config.integrate_targets?
+      integrate_user_project if installation_options.integrate_targets?
       perform_post_install_actions
     end
 
@@ -221,7 +225,9 @@ module Pod
     end
 
     def create_analyzer
-      Analyzer.new(sandbox, podfile, lockfile)
+      Analyzer.new(sandbox, podfile, lockfile).tap do |analyzer|
+        analyzer.installation_options = installation_options
+      end
     end
 
     # Ensures that the white-listed build configurations are known to prevent
@@ -318,7 +324,7 @@ module Pod
       end
 
       @pod_installers ||= []
-      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform)
+      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, :can_cache => installation_options.clean?)
       @pod_installers << pod_installer
       pod_installer
     end
@@ -340,7 +346,7 @@ module Pod
     # @todo Why the @pod_installers might be empty?
     #
     def clean_pod_sources
-      return unless config.clean?
+      return unless installation_options.clean?
       return unless @pod_installers
       @pod_installers.each(&:clean!)
     end
@@ -362,7 +368,7 @@ module Pod
     # @todo Why the @pod_installers might be empty?
     #
     def lock_pod_sources
-      return unless config.lock_pod_source?
+      return unless installation_options.lock_pod_sources?
       return unless @pod_installers
       @pod_installers.each do |installer|
         pod_target = pod_targets.find { |target| target.pod_name == installer.name }
@@ -390,7 +396,7 @@ module Pod
       aggregate_targets.each do |aggregate_target|
         aggregate_target.user_build_configurations.keys.each do |config|
           pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
-          vendored_frameworks = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks)
+          vendored_frameworks = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks).uniq
           frameworks = vendored_frameworks.map { |fw| fw.basename('.framework') }
           frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
 
@@ -496,11 +502,11 @@ module Pod
     def deintegrate_if_different_major_version
       return unless lockfile
       return if lockfile.cocoapods_version.major == Version.create(VERSION).major
-      UI.section('Fully deintegrating due to major version update') do
+      UI.section('Re-creating CocoaPods due to major version update.') do
         projects = Pathname.glob(config.installation_root + '*.xcodeproj').map { |path| Xcodeproj::Project.open(path) }
         deintegrator = Deintegrator.new
-        projects.sort.each do |project|
-          deintegrator.deintegrate_project(project)
+        projects.each do |project|
+          config.with_changes(:silent => true) { deintegrator.deintegrate_project(project) }
           project.save if project.dirty?
         end
       end
@@ -623,13 +629,13 @@ module Pod
     def install_libraries
       UI.message '- Installing targets' do
         pod_targets.sort_by(&:name).each do |pod_target|
-          next if pod_target.target_definitions.flat_map(&:dependencies).empty?
+          next if pod_target.target_definitions.all?(&:abstract?)
           target_installer = PodTargetInstaller.new(sandbox, pod_target)
           target_installer.install!
         end
 
         aggregate_targets.sort_by(&:name).each do |target|
-          next if target.target_definition.dependencies.empty?
+          next if target.target_definition.abstract?
           target_installer = AggregateTargetInstaller.new(sandbox, target)
           target_installer.install!
         end
@@ -706,7 +712,7 @@ module Pod
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
         pods_project.sort(:groups_position => :below)
         pods_project.recreate_user_schemes(false)
-        if config.deterministic_uuids?
+        if installation_options.deterministic_uuids?
           UI.message('- Generating deterministic UUIDs') { pods_project.predictabilize_uuids }
         end
         pods_project.save

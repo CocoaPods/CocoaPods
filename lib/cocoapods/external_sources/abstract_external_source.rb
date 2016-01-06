@@ -17,6 +17,11 @@ module Pod
       #
       attr_reader :podfile_path
 
+      # @return [Boolean] Whether the source is allowed to touch the cache.
+      #
+      attr_accessor :can_cache
+      alias_method :can_cache?, :can_cache
+
       # Initialize a new instance
       #
       # @param [String] name @see name
@@ -27,6 +32,7 @@ module Pod
         @name = name
         @params = params
         @podfile_path = podfile_path
+        @can_cache = true
       end
 
       # @return [Bool] whether an external source source is equal to another
@@ -105,7 +111,7 @@ module Pod
         title = "Pre-downloading: `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           target = sandbox.pod_dir(name)
-          download_result = Downloader.download(download_request, target)
+          download_result = Downloader.download(download_request, target, :can_cache => can_cache)
           spec = download_result.spec
 
           raise Informative, "Unable to find a specification for '#{name}'." unless spec

@@ -1,6 +1,8 @@
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/string/inflections'
 
+autoload :Fourflusher, 'fourflusher'
+
 module Pod
   # Validates a Specification.
   #
@@ -257,7 +259,6 @@ module Pod
       validate_screenshots(spec)
       validate_social_media_url(spec)
       validate_documentation_url(spec)
-      validate_docset_url(spec)
 
       valid = spec.available_platforms.send(fail_fast ? :all? : :each) do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -342,21 +343,13 @@ module Pod
       validate_url(spec.documentation_url) if spec.documentation_url
     end
 
-    # Performs validations related to the `docset_url` attribute.
-    #
-    def validate_docset_url(spec)
-      validate_url(spec.docset_url) if spec.docset_url
-    end
-
     def setup_validation_environment
       validation_dir.rmtree if validation_dir.exist?
       validation_dir.mkpath
       @original_config = Config.instance.clone
       config.installation_root   = validation_dir
       config.silent              = !config.verbose
-      config.integrate_targets   = true
       config.skip_repo_update    = true
-      config.deterministic_uuids = false
     end
 
     def tear_down_validation_environment
@@ -664,13 +657,16 @@ module Pod
       local    = local?
       urls     = source_urls
       Pod::Podfile.new do
+        install! 'cocoapods', :deterministic_uuids => false
         urls.each { |u| source(u) }
-        use_frameworks!(use_frameworks)
-        platform(platform_name, deployment_target)
-        if local
-          pod name, :path => podspec.dirname.to_s
-        else
-          pod name, :podspec => podspec.to_s
+        target 'App' do
+          use_frameworks!(use_frameworks)
+          platform(platform_name, deployment_target)
+          if local
+            pod name, :path => podspec.dirname.to_s
+          else
+            pod name, :podspec => podspec.to_s
+          end
         end
       end
     end
@@ -706,10 +702,13 @@ module Pod
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
+        command += Fourflusher::SimControl.new.destination('iPhone 4s', deployment_target)
       when :watchos
         command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
+        command += Fourflusher::SimControl.new.destination('Apple Watch - 38mm', deployment_target)
       when :tvos
         command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
+        command += Fourflusher::SimControl.new.destination('Apple TV 1080p', deployment_target)
       end
 
       output, status = Dir.chdir(validation_dir) { _xcodebuild(command) }

@@ -5,6 +5,9 @@ module Pod
     #
     class Analyzer
       include Config::Mixin
+      include InstallationOptions::Mixin
+
+      delegate_installation_options { podfile }
 
       autoload :AnalysisResult,            'cocoapods/installer/analyzer/analysis_result'
       autoload :SandboxAnalyzer,           'cocoapods/installer/analyzer/sandbox_analyzer'
@@ -57,7 +60,7 @@ module Pod
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
-        if config.integrate_targets?
+        if installation_options.integrate_targets?
           @result.target_inspections = inspect_targets_to_integrate
         else
           verify_platforms_specified!
@@ -157,6 +160,7 @@ module Pod
         unless validator.valid?
           raise Informative, validator.message
         end
+        validator.warnings.uniq.each { |w| UI.warn(w) }
       end
 
       # @!group Analysis steps
@@ -225,8 +229,13 @@ module Pod
       #
       def generate_targets
         pod_targets = generate_pod_targets(result.specs_by_target)
-        result.specs_by_target.map do |target_definition, _|
+        aggregate_targets = result.specs_by_target.keys.reject(&:abstract?).map do |target_definition|
           generate_target(target_definition, pod_targets)
+        end
+        aggregate_targets.each do |target|
+          target.search_paths_aggregate_targets = aggregate_targets.select do |aggregate_target|
+            target.target_definition.targets_to_inherit_search_paths.include?(aggregate_target.target_definition)
+          end
         end
       end
 
@@ -244,8 +253,9 @@ module Pod
         target = AggregateTarget.new(target_definition, sandbox)
         target.host_requires_frameworks |= target_definition.uses_frameworks?
 
-        if config.integrate_targets?
+        if installation_options.integrate_targets?
           target_inspection = result.target_inspections[target_definition]
+          raise "missing inspection: #{target_definition.name}" unless target_inspection
           target.user_project = target_inspection.project
           target.client_root = target.user_project_path.dirname.realpath
           target.user_target_uuids = target_inspection.project_target_uuids
@@ -276,7 +286,7 @@ module Pod
       # @return [Array<PodTarget>]
       #
       def generate_pod_targets(specs_by_target)
-        if config.deduplicate_targets?
+        if installation_options.deduplicate_targets?
           dedupe_cache = {}
 
           all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
@@ -371,7 +381,7 @@ module Pod
       def generate_pod_target(target_definitions, pod_specs)
         pod_target = PodTarget.new(pod_specs, target_definitions, sandbox)
 
-        if config.integrate_targets?
+        if installation_options.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
           pod_target.user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
           pod_target.archs = target_inspections.flat_map(&:archs).compact.uniq.sort
@@ -433,7 +443,7 @@ module Pod
         unless dependencies_to_fetch.empty?
           UI.section 'Fetching external sources' do
             dependencies_to_fetch.sort.each do |dependency|
-              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.name))
+              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.root_name))
             end
           end
         end
@@ -456,6 +466,7 @@ module Pod
         else
           source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
         end
+        source.can_cache = installation_options.clean?
         source.fetch(sandbox)
       end
 
@@ -470,8 +481,7 @@ module Pod
             deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.name) }
             deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
             deps_to_fetch += deps_to_fetch_if_needed.select do |dep|
-              sandbox.specification(dep.name).nil? ||
-                !dep.external_source[:local].nil? ||
+              sandbox.specification(dep.root_name).nil? ||
                 !dep.external_source[:path].nil? ||
                 !sandbox.pod_dir(dep.root_name).directory? ||
                 checkout_requires_update?(dep)
@@ -496,6 +506,9 @@ module Pod
           elsif update_mode == :all
             pods_to_fetch += result.podfile_state.unchanged + result.podfile_state.deleted
           end
+          pods_to_fetch += podfile.dependencies.
+            select { |dep| Hash(dep.external_source).key?(:podspec) && sandbox.specification_path(dep.root_name).nil? }.
+            map(&:root_name)
           pods_to_fetch
         end
       end
@@ -644,7 +657,7 @@ module Pod
       # @return [void]
       #
       def verify_platforms_specified!
-        unless config.integrate_targets?
+        unless installation_options.integrate_targets?
           podfile.target_definition_list.each do |target_definition|
             if !target_definition.empty? && target_definition.platform.nil?
               raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
@@ -665,8 +678,9 @@ module Pod
         inspection_result = {}
         UI.section 'Inspecting targets to integrate' do
           inspectors = podfile.target_definition_list.map do |target_definition|
+            next if target_definition.abstract?
             TargetInspector.new(target_definition, config.installation_root)
-          end
+          end.compact
           inspectors.group_by(&:compute_project_path).each do |project_path, target_inspectors|
             project = Xcodeproj::Project.open(project_path)
             target_inspectors.each do |inspector|

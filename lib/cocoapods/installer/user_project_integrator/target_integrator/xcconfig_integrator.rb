@@ -85,15 +85,17 @@ module Pod
             end
 
             if existing && existing != file_ref
-              if existing.real_path.to_path.start_with?(pod_bundle.support_files_dir.to_path)
+              if existing.real_path.to_path.start_with?(pod_bundle.sandbox.root.to_path << '/')
                 set_base_configuration_reference.call
               elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
-                UI.warn 'CocoaPods did not set the base configuration of your ' \
-                'project because your project already has a custom ' \
-                'config set. In order for CocoaPods integration to work at ' \
-                'all, please either set the base configurations of the target ' \
-                "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
-                'build configuration.'
+                unless existing_config_is_identical_to_pod_config?(existing.real_path, pod_bundle.xcconfig_path(config.name))
+                  UI.warn 'CocoaPods did not set the base configuration of your ' \
+                  'project because your project already has a custom ' \
+                  'config set. In order for CocoaPods integration to work at ' \
+                  'all, please either set the base configurations of the target ' \
+                  "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
+                  "build configuration (#{UI.path(existing.real_path)})."
+                end
               end
             elsif config.base_configuration_reference.nil? || file_ref.nil?
               set_base_configuration_reference.call
@@ -158,6 +160,16 @@ module Pod
               )
             /x
             base_config_ref.real_path.readlines.find { |line| line =~ regex }
+          end
+
+          # Checks to see if the config files at two paths exist and are identical
+          #
+          # @param  The existing config path
+          #
+          # @param  The pod config path
+          #
+          def self.existing_config_is_identical_to_pod_config?(existing_config_path, pod_config_path)
+            existing_config_path.file? && (!pod_config_path.file? || FileUtils.compare_file(existing_config_path, pod_config_path))
           end
         end
       end

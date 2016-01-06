@@ -39,9 +39,6 @@ module Pod
         def integrate!
           UI.section(integration_message) do
             XCConfigIntegrator.integrate(target, native_targets)
-            update_to_cocoapods_0_34
-            update_to_cocoapods_0_37_1
-            update_to_cocoapods_0_39
 
             add_pods_library
             add_embed_frameworks_script_phase
@@ -60,73 +57,6 @@ module Pod
 
         # @!group Integration steps
         #---------------------------------------------------------------------#
-
-        # Fixes the paths of the copy resource scripts.
-        #
-        # @return [Bool] whether any changes to the project were made.
-        #
-        # @todo   This can be removed for CocoaPods 1.0
-        #
-        def update_to_cocoapods_0_34
-          phases = native_targets.map do |target|
-            target.shell_script_build_phases.select do |bp|
-              bp.name == 'Copy Pods Resources'
-            end
-          end.flatten
-
-          script_path = target.copy_resources_script_relative_path
-          shell_script = %("#{script_path}"\n)
-          phases.each do |phase|
-            unless phase.shell_script == shell_script
-              phase.shell_script = shell_script
-            end
-          end
-        end
-
-        # Removes the embed frameworks phase for target types.
-        #
-        # @return [Bool] whether any changes to the project were made.
-        #
-        # @todo   This can be removed for CocoaPods 1.0
-        #
-        def update_to_cocoapods_0_37_1
-          targets_to_embed = native_targets.select do |target|
-            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
-          end
-          (native_targets - targets_to_embed).any? do |native_target|
-            remove_embed_frameworks_script_phase(native_target)
-          end
-        end
-
-        # Adds the embed frameworks script when integrating as a static library.
-        #
-        # @todo   This can be removed for CocoaPods 1.0
-        #
-        def update_to_cocoapods_0_39
-          targets_to_embed = native_targets.select do |target|
-            EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
-          end
-
-          targets_to_embed.each do |native_target|
-            add_embed_frameworks_script_phase_to_target(native_target)
-          end
-
-          frameworks = user_project.frameworks_group
-          native_targets.each do |native_target|
-            build_phase = native_target.frameworks_build_phase
-
-            product_ref = frameworks.files.find { |f| f.path == target.product_name }
-            if product_ref
-              build_file = build_phase.build_file(product_ref)
-              if build_file &&
-                  build_file.settings.is_a?(Hash) &&
-                  build_file.settings['ATTRIBUTES'].is_a?(Array) &&
-                  build_file.settings['ATTRIBUTES'].include?('Weak')
-                build_file.settings = nil
-              end
-            end
-          end
-        end
 
         # Adds spec product reference to the frameworks build phase of the
         # {TargetDefinition} integration libraries. Adds a file reference to

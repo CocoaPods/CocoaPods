@@ -12,65 +12,10 @@ module Pod
         #         The sandbox which should be migrated.
         #
         def migrate(sandbox)
-          if sandbox.manifest
-            migrate_to_0_34(sandbox) if installation_minor?('0.34', sandbox)
-            migrate_to_0_36(sandbox) if installation_minor?('0.36', sandbox)
-          end
+          return unless sandbox.manifest
         end
 
         # @!group Migration Steps
-
-        # Migrates from CocoaPods versions previous to 0.34.
-        #
-        # @param [Sandbox] sandbox
-        #
-        def migrate_to_0_34(sandbox)
-          UI.message('Migrating to CocoaPods 0.34') do
-            delete(sandbox.root + 'Headers')
-            make_path(sandbox.headers_root)
-
-            sandbox.root.children.each do |child|
-              relative = child.relative_path_from(sandbox.root)
-              case relative.to_s
-              when 'Manifest.lock', 'Pods.xcodeproj', 'Headers',
-                'Target Support Files', 'Local Podspecs'
-                next
-              when 'BuildHeaders', 'PublicHeaders'
-                delete(child)
-              else
-                if child.directory? && child.extname != '.xcodeproj'
-                  next
-                else
-                  delete(child)
-                end
-              end
-            end
-          end
-
-          delete(Pathname(File.join(ENV['HOME'], 'Library/Caches/CocoaPods/Git')))
-        end
-
-        # Migrates from CocoaPods versions prior to 0.36.
-        #
-        # @param [Sandbox] sandbox
-        #
-        def migrate_to_0_36(sandbox)
-          UI.message('Migrating to CocoaPods 0.36') do
-            move(sandbox.root + 'Headers/Build', sandbox.root + 'Headers/Private')
-
-            lockfile = sandbox.manifest.to_hash
-            sandbox.specifications_root.children.each do |child|
-              next unless child.basename.to_s =~ /\.podspec$/
-              spec = Specification.from_file(child)
-              child.delete
-              child = Pathname("#{child}.json")
-              File.open(child, 'w') { |f| f.write spec.to_pretty_json }
-              lockfile['SPEC CHECKSUMS'][spec.name] = Specification.from_file(child).checksum
-            end
-            sandbox.manifest = Lockfile.new(lockfile)
-            sandbox.manifest.write_to_disk(sandbox.manifest_path)
-          end
-        end
 
         # @!group Private helpers
 
