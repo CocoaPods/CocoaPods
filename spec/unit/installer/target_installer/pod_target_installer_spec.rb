@@ -171,6 +171,16 @@ module Pod
             bc.base_configuration_reference.real_path.should == file
           end
         end
+
+        it 'sets the correct targeted device family for the resource bundle targets' do
+          @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
+          @installer.install!
+          bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+
+          bundle_target.build_configurations.each do |bc|
+            bc.build_settings['TARGETED_DEVICE_FAMILY'].should == '1,2'
+          end
+        end
       end
 
       #--------------------------------------#
