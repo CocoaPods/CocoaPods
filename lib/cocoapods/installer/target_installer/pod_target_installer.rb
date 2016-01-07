@@ -182,14 +182,14 @@ module Pod
               end
 
               # Set the correct device family for this bundle, based on the platform
-              bundle_device_family_map = {
-                  :ios => '1,2',
-                  :tvos => '3',
-                  :watchos => '1,2' # The device family for watchOS is 4, but Xcode creates watchkit-compatible bundles as 1,2
+              device_family_by_platform = {
+                :ios => '1,2',
+                :tvos => '3',
+                :watchos => '1,2' # The device family for watchOS is 4, but Xcode creates watchkit-compatible bundles as 1,2
               }
 
-              if bundle_device_family_map.keys.include?(target.platform.name)
-                c.build_settings['TARGETED_DEVICE_FAMILY'] = bundle_device_family_map[target.platform.name]
+              if family = device_family_by_platform[target.platform.name]
+                c.build_settings['TARGETED_DEVICE_FAMILY'] = family
               end
             end
           end
