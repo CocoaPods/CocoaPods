@@ -180,6 +180,17 @@ module Pod
               if target.requires_frameworks? && target.scoped?
                 c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
               end
+
+              # Set the correct device family for this bundle, based on the platform
+              device_family_by_platform = {
+                :ios => '1,2',
+                :tvos => '3',
+                :watchos => '1,2' # The device family for watchOS is 4, but Xcode creates watchkit-compatible bundles as 1,2
+              }
+
+              if family = device_family_by_platform[target.platform.name]
+                c.build_settings['TARGETED_DEVICE_FAMILY'] = family
+              end
             end
           end
         end

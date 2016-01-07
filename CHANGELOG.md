@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix suggestion of sudo when it actually isn't needed.  
   [Marcel Jackwerth](https://github.com/sirlantis)
 
+* Set the `TARGET_DEVICE_FAMILY` to support both iPhone and iPad for iOS
+  resource bundle targets.  
+  [Andy Rifken](https://github.com/arifken)
+
 
 ## 1.0.0.beta.2 (2016-01-05)
 
