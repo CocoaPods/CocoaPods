@@ -10,6 +10,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Properly add resource files to resources build phase.
+  [Eric Firestone](https://github.com/efirestone)
+  [#4762](https://github.com/CocoaPods/CocoaPods/issues/4762)
+
 * Fix suggestion of sudo when it actually isn't needed.  
   [Marcel Jackwerth](https://github.com/sirlantis)
 

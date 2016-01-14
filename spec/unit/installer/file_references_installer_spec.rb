@@ -12,7 +12,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe 'Installation' do
+    describe 'Installation With Flat Resources Glob' do
       it 'adds the files references of the source files the Pods project' do
         @file_accessor.path_list.read_file_system
         @file_accessor.path_list.expects(:read_file_system)
@@ -47,20 +47,24 @@ module Pod
         file_ref.path.should == 'Resources/logo-sidebar.png'
       end
 
-      it "add file references for localization directories if glob doesn't include contained files" do
+      it "adds file references for localization directories if glob doesn't include contained files" do
         @installer.install!
         file_ref = @installer.pods_project['Pods/BananaLib/Resources/en.lproj']
         file_ref.should.be.not.nil
+        file_ref.path.should == 'Resources/en.lproj'
       end
 
       it 'adds file references for files within CoreData directories' do
         @installer.install!
         model_ref = @installer.pods_project['Pods/BananaLib/Resources/Sample.xcdatamodeld']
         model_ref.should.be.not.nil
+        model_ref.path.should == 'Resources/Sample.xcdatamodeld'
 
         # Files within the .xcdatamodeld directory are added automatically by adding the .xcdatamodeld directory.
         file_ref = @installer.pods_project['Pods/BananaLib/Resources/Sample.xcdatamodeld/Sample.xcdatamodel']
         file_ref.should.be.not.nil
+        file_ref.path.should == 'Sample.xcdatamodel'
+        file_ref.source_tree.should == '<group>'
       end
 
       it 'links the headers required for building the pod target' do

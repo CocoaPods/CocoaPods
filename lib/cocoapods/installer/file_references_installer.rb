@@ -199,29 +199,29 @@ module Pod
         lproj_paths = Set.new
         lproj_paths_with_files = Set.new
         allowable_paths = paths.select do |path|
-          path_str = path.to_s.downcase
+          path_str = path.to_s
 
           # We add the directory for a Core Data model, but not the items in it.
-          next if path_str =~ /.*\.xcdatamodeld\/.+/
+          next if path_str =~ /.*\.xcdatamodeld\/.+/i
 
           # We add the directory for an asset catalog, but not the items in it.
-          next if path_str =~ /.*\.xcassets\/.+/
+          next if path_str =~ /.*\.xcassets\/.+/i
 
-          if path_str =~ /\.lproj(\/|$)/
+          if path_str =~ /\.lproj(\/|$)/i
             # If the element is an .lproj directory then save it and potentially
             # add it later if we don't find any contained items.
-            if path_str.end_with?('.lproj') && path.directory?
-              lproj_paths << path_str
+            if path_str =~ /\.lproj$/i && path.directory?
+              lproj_paths << path
               next
             end
 
             # Collect the paths for the .lproj directories that contain files.
-            lproj_path = /(^.*\.lproj)\/.*/.match(path_str)[1]
-            lproj_paths_with_files << lproj_path
+            lproj_path = /(^.*\.lproj)\/.*/i.match(path_str)[1]
+            lproj_paths_with_files << Pathname(lproj_path)
 
             # Directories nested within an .lproj directory are added as file
             # system references so their contained items are not added directly.
-            next if path.dirname.dirname.to_s.downcase == lproj_path
+            next if path.dirname.dirname == lproj_path
           end
 
           true
