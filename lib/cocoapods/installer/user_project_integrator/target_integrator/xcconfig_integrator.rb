@@ -146,7 +146,7 @@ module Pod
           SILENCE_WARNINGS_STRING = '// @COCOAPODS_SILENCE_WARNINGS@ //'
           def self.xcconfig_includes_target_xcconfig?(base_config_ref, target_config_path)
             return unless base_config_ref && base_config_ref.real_path.file?
-            regex = /
+            regex = %r{
               ^(
                 (\s*                                  # Possible, but unlikely, space before include statement
                   \#include\s+                        # Include statement
@@ -158,7 +158,7 @@ module Pod
                 |
                 (#{Regexp.quote(SILENCE_WARNINGS_STRING)}) # Token to treat xcconfig as good and silence pod install warnings
               )
-            /x
+            }x
             base_config_ref.real_path.readlines.find { |line| line =~ regex }
           end
 
