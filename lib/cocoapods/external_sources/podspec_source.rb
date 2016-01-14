@@ -14,7 +14,7 @@ module Pod
           if podspec_path.exist?
             store_podspec(sandbox, podspec_path, is_json)
           else
-            require 'open-uri'
+            require 'cocoapods/open-uri'
             begin
               open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
             rescue OpenURI::HTTPError => e
