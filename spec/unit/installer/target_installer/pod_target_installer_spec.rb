@@ -124,6 +124,9 @@ module Pod
         resources.count.should > 0
         resource = resources.find { |res| res.file_ref.path.include?('logo-sidebar.png') }
         resource.should.be.not.nil
+
+        resource = resources.find { |res| res.file_ref.path.include?('en.lproj') }
+        resource.should.be.not.nil
       end
 
       #--------------------------------------#
