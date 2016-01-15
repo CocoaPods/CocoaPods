@@ -28,7 +28,7 @@ group :development do
   cp_gem 'molinillo',             'Molinillo'
   cp_gem 'xcodeproj',             'Xcodeproj'
 
-  gem 'cocoapods-dependencies'
+  gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 
   gem 'bacon'
   gem 'mocha'

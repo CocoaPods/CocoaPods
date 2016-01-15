@@ -130,7 +130,7 @@ GEM
     clintegracon (0.8.1)
       colored (~> 1.2)
       diffy
-    cocoapods-dependencies (0.5.1)
+    cocoapods-dependencies (1.0.0.beta.1)
       ruby-graphviz (~> 1.2)
     coderay (1.1.0)
     colored (1.2)
@@ -218,7 +218,7 @@ DEPENDENCIES
   cocoapods!
   cocoapods-core!
   cocoapods-deintegrate!
-  cocoapods-dependencies
+  cocoapods-dependencies (~> 1.0.beta.1)
   cocoapods-downloader!
   cocoapods-plugins!
   cocoapods-search!
