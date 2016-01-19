@@ -1,3 +1,5 @@
+# rubocop:disable Style/FileName
+
 require 'open-uri'
 
 # Allow OpenURI to follow http to https redirects.
