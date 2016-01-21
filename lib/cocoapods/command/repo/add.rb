@@ -2,7 +2,7 @@ module Pod
   class Command
     class Repo < Command
       class Add < Repo
-        self.summary = 'Add a spec repo.'
+        self.summary = 'Add a spec repo'
 
         self.description = <<-DESC
           Clones `URL` in the local spec-repos directory at `~/.cocoapods/repos/`. The

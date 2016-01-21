@@ -2,7 +2,7 @@ module Pod
   class Command
     class Repo < Command
       class Lint < Repo
-        self.summary = 'Validates all specs in a repo.'
+        self.summary = 'Validates all specs in a repo'
 
         self.description = <<-DESC
           Lints the spec-repo `NAME`. If a directory is provided it is assumed

@@ -2,7 +2,7 @@ module Pod
   class Command
     class Spec < Command
       class Cat < Spec
-        self.summary = 'Prints a spec file.'
+        self.summary = 'Prints a spec file'
 
         self.description = <<-DESC
           Prints the content of the podspec(s) whose name matches `QUERY` to standard output.
