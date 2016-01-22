@@ -2,7 +2,7 @@ module Pod
   class Command
     class Repo < Command
       class Update < Repo
-        self.summary = 'Update a spec repo.'
+        self.summary = 'Update a spec repo'
 
         self.description = <<-DESC
           Updates the local clone of the spec-repo `NAME`. If `NAME` is omitted

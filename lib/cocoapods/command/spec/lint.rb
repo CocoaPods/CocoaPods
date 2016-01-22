@@ -2,7 +2,7 @@ module Pod
   class Command
     class Spec < Command
       class Lint < Spec
-        self.summary = 'Validates a spec file.'
+        self.summary = 'Validates a spec file'
 
         self.description = <<-DESC
           Validates `NAME.podspec`. If a `DIRECTORY` is provided, it validates

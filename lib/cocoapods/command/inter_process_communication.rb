@@ -11,7 +11,7 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class Spec < IPC
-        self.summary = 'Converts a podspec to JSON.'
+        self.summary = 'Converts a podspec to JSON'
         self.description = 'Converts a podspec to JSON and prints it to STDOUT.'
         self.arguments = [
           CLAide::Argument.new('PATH', true),
@@ -37,7 +37,7 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class Podfile < IPC
-        self.summary = 'Converts a Podfile to YAML.'
+        self.summary = 'Converts a Podfile to YAML'
         self.description = 'Converts a Podfile to YAML and prints it to STDOUT.'
         self.arguments = [
           CLAide::Argument.new('PATH', true),
@@ -63,7 +63,7 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class List < IPC
-        self.summary = 'Lists the specifications known to CocoaPods.'
+        self.summary = 'Lists the specifications known to CocoaPods'
         self.description = <<-DESC
           Prints to STDOUT a YAML dictionary where the keys are the name of the
           specifications and each corresponding value is a dictionary with
@@ -101,7 +101,7 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class UpdateSearchIndex < IPC
-        self.summary = 'Updates the search index.'
+        self.summary = 'Updates the search index'
         self.description = <<-DESC
           Updates the search index and prints its path to standard output.
           The search index is a YAML encoded dictionary where the keys
@@ -125,7 +125,7 @@ module Pod
       class Repl < IPC
         END_OF_OUTPUT_SIGNAL = "\n\r"
 
-        self.summary = 'The repl listens to commands on standard input.'
+        self.summary = 'The repl listens to commands on standard input'
         self.description = <<-DESC
          The repl listens to commands on standard input and prints their
          result to standard output.

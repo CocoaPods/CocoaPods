@@ -2,7 +2,7 @@ module Pod
   class Command
     class Spec < Command
       class Which < Spec
-        self.summary = 'Prints the path of the given spec.'
+        self.summary = 'Prints the path of the given spec'
 
         self.description = <<-DESC
           Prints the path of the .podspec file(s) whose name matches `QUERY`

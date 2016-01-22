@@ -2,7 +2,7 @@ module Pod
   class Command
     class Spec < Command
       class Edit < Spec
-        self.summary = 'Edit a spec file.'
+        self.summary = 'Edit a spec file'
 
         self.description = <<-DESC
           Opens the podspec matching `QUERY` to be edited.

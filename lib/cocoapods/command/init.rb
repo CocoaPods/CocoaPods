@@ -4,7 +4,7 @@ require 'active_support/core_ext/string/strip'
 module Pod
   class Command
     class Init < Command
-      self.summary = 'Generate a Podfile for the current directory.'
+      self.summary = 'Generate a Podfile for the current directory'
       self.description = <<-DESC
         Creates a Podfile for the current directory if none currently exists. If
         an `XCODEPROJ` project file is specified or if there is only a single
