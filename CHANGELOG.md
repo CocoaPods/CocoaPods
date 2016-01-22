@@ -10,7 +10,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Properly add resource files to resources build phase.
+* Generate valid xcconfig when target name includes spaces.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#4783](https://github.com/CocoaPods/CocoaPods/issues/4783)
+
+* Properly add resource files to resources build phase.  
   [Eric Firestone](https://github.com/efirestone)
   [#4762](https://github.com/CocoaPods/CocoaPods/issues/4762)
 
