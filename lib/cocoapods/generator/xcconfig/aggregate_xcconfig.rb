@@ -102,7 +102,7 @@ module Pod
               end
             end
             build_settings = {
-              'PODS_FRAMEWORK_BUILD_PATH' => target.scoped_configuration_build_dir,
+              'PODS_FRAMEWORK_BUILD_PATH' =>  XCConfigHelper.quote([target.scoped_configuration_build_dir]),
               # Make framework headers discoverable by `import "…"`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
             }
@@ -113,7 +113,7 @@ module Pod
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
             end
             if pod_targets.any? { |t| t.should_build? && t.scoped? }
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = '"$PODS_FRAMEWORK_BUILD_PATH"'
+              build_settings['FRAMEWORK_SEARCH_PATHS'] = '$PODS_FRAMEWORK_BUILD_PATH'
             end
             build_settings
           else
