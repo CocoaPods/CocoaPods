@@ -110,6 +110,7 @@ module Pod
         @accessor.resources.sort.should == [
           @root + 'Resources/Base.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Migration.xcmappingmodel',
           @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/de.lproj',
           @root + 'Resources/en.lproj',
@@ -161,6 +162,7 @@ module Pod
           @root + 'Resources/de.lproj',
           @root + 'Resources/en.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Migration.xcmappingmodel',
           @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/sub_dir',
         ]
@@ -175,6 +177,7 @@ module Pod
           @root + 'Resources/de.lproj',
           @root + 'Resources/en.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Migration.xcmappingmodel',
           @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/sub_dir',
         ]
@@ -189,6 +192,7 @@ module Pod
           @root + 'Resources/de.lproj',
           @root + 'Resources/en.lproj',
           @root + 'Resources/Images.xcassets',
+          @root + 'Resources/Migration.xcmappingmodel',
           @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/sub_dir',
         ]

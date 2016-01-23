@@ -26,6 +26,7 @@ module Pod
           Resources/Base.lproj/Main.storyboard
           Resources/Images.xcassets/Logo.imageset/Contents.json
           Resources/Images.xcassets/Logo.imageset/logo.png
+          Resources/Migration.xcmappingmodel/xcmapping.xml
           Resources/Sample.xcdatamodeld/.xccurrentversion
           Resources/Sample.xcdatamodeld/Sample\ 2.xcdatamodel/contents
           Resources/Sample.xcdatamodeld/Sample.xcdatamodel/contents
@@ -62,6 +63,7 @@ module Pod
           Resources/Base.lproj
           Resources/Images.xcassets
           Resources/Images.xcassets/Logo.imageset
+          Resources/Migration.xcmappingmodel
           Resources/Sample.xcdatamodeld
           Resources/Sample.xcdatamodeld/Sample\ 2.xcdatamodel
           Resources/Sample.xcdatamodeld/Sample.xcdatamodel
@@ -154,6 +156,7 @@ module Pod
         paths.sort.should == %w(
           Resources/Base.lproj
           Resources/Images.xcassets
+          Resources/Migration.xcmappingmodel
           Resources/Sample.xcdatamodeld
           Resources/de.lproj
           Resources/en.lproj

@@ -204,6 +204,9 @@ module Pod
           # We add the directory for a Core Data model, but not the items in it.
           next if path_str =~ /.*\.xcdatamodeld\/.+/i
 
+          # We add the directory for a Core Data migration mapping, but not the items in it.
+          next if path_str =~ /.*\.xcmappingmodel\/.+/i
+
           # We add the directory for an asset catalog, but not the items in it.
           next if path_str =~ /.*\.xcassets\/.+/i
 

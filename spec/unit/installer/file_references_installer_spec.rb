@@ -143,11 +143,32 @@ module Pod
 
       it "doesn't add file references for files within Asset Catalogs" do
         @installer.install!
-        catalog_ref = @installer.pods_project['Pods/BananaLib/Resources/Images.xcassets']
-        catalog_ref.should.be.not.nil
+        resources_group_ref = @installer.pods_project['Pods/BananaLib/Resources']
+        catalog_path = 'Resources/Images.xcassets'
 
         # The asset catalog should be a "PBXFileReference" and therefore doesn't have children.
-        catalog_ref.is_a?(Xcodeproj::Project::Object::PBXFileReference).should.be.true
+        resources_group_ref.files.any? { |ref| ref.path == catalog_path }.should.be.true
+
+        # The asset catalog should not also be a "PBXGroup".
+        resources_group_ref.groups.any? { |ref| ref.path == catalog_path }.should.be.false
+
+        # None of the children of the catalog directory should be present directly.
+        resources_group_ref.files.any? { |ref| ref.path.start_with?(catalog_path + '/') }.should.be.false
+      end
+
+      it "doesn't add file references for files within CoreData migration mappings" do
+        @installer.install!
+        resources_group_ref = @installer.pods_project['Pods/BananaLib/Resources']
+        mapping_path = 'Resources/Migration.xcmappingmodel'
+
+        # The mapping model should be a "PBXFileReference" and therefore doesn't have children.
+        resources_group_ref.files.any? { |ref| ref.path == mapping_path }.should.be.true
+
+        # The mapping model should not also be a "PBXGroup".
+        resources_group_ref.groups.any? { |ref| ref.path == mapping_path }.should.be.false
+
+        # None of the children of the mapping model directory should be present directly.
+        resources_group_ref.files.any? { |ref| ref.path.start_with?(mapping_path + '/') }.should.be.false
       end
     end
 
