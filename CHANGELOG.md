@@ -10,6 +10,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Handle CoreData mapping models with recursive resource globs.
+  [Eric Firestone](https://github.com/efirestone)
+  [#4809](https://github.com/CocoaPods/CocoaPods/pull/4809)
+
 * Generate valid xcconfig when target name includes spaces.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#4783](https://github.com/CocoaPods/CocoaPods/issues/4783)

@@ -465,6 +465,18 @@ module Pod
           end
           version_build_file.should.be.nil
         end
+
+        it 'adds Core Data migration mapping models directly to resources' do
+          # The model directory item should be present.
+          dir_build_file = @bundle_target.resources_build_phase.files.find { |bf| bf.file_ref.path == 'Resources/Migration.xcmappingmodel' }
+          dir_build_file.should.be.not.nil
+
+          # An item within the model directory should not be present.
+          xml_file = @bundle_target.resources_build_phase.files.find do |bf|
+            bf.file_ref.path =~ %r{Resources/Migration\.xcmappingmodel/.*}i
+          end
+          xml_file.should.be.nil
+        end
       end
     end
   end
