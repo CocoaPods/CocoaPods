@@ -30,17 +30,17 @@ module Pod
 
       it 'returns its name' do
         @pod_target.name.should == 'BananaLib'
-        @pod_target.scoped.first.name.should == 'Pods-BananaLib'
+        @pod_target.scoped.first.name.should == 'BananaLib-Pods'
       end
 
       it 'returns its label' do
         @pod_target.label.should == 'BananaLib'
-        @pod_target.scoped.first.label.should == 'Pods-BananaLib'
+        @pod_target.scoped.first.label.should == 'BananaLib-Pods'
       end
 
       it 'returns the name of its product' do
         @pod_target.product_name.should == 'libBananaLib.a'
-        @pod_target.scoped.first.product_name.should == 'libPods-BananaLib.a'
+        @pod_target.scoped.first.product_name.should == 'libBananaLib-Pods.a'
       end
 
       it 'returns the spec consumers for the pod targets' do
@@ -57,7 +57,7 @@ module Pod
 
       it 'returns the name of the resources bundle target' do
         @pod_target.resources_bundle_target_label('Fruits').should == 'BananaLib-Fruits'
-        @pod_target.scoped.first.resources_bundle_target_label('Fruits').should == 'Pods-BananaLib-Fruits'
+        @pod_target.scoped.first.resources_bundle_target_label('Fruits').should == 'BananaLib-Pods-Fruits'
       end
 
       it 'returns the name of the Pods on which this target depends' do
@@ -109,7 +109,7 @@ module Pod
           'Pods/Target Support Files/BananaLib/BananaLib.release.xcconfig',
         )
         @pod_target.scoped.first.xcconfig_path('Release').to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.release.xcconfig',
+          'Pods/Target Support Files/BananaLib-Pods/BananaLib-Pods.release.xcconfig',
         )
       end
 
@@ -118,7 +118,7 @@ module Pod
           'Pods/Target Support Files/BananaLib/BananaLib.release-1.xcconfig',
         )
         @pod_target.scoped.first.xcconfig_path("Release#{File::SEPARATOR}1").to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib.release-1.xcconfig',
+          'Pods/Target Support Files/BananaLib-Pods/BananaLib-Pods.release-1.xcconfig',
         )
       end
 
@@ -127,7 +127,7 @@ module Pod
           'Pods/Target Support Files/BananaLib/BananaLib-prefix.pch',
         )
         @pod_target.scoped.first.prefix_header_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-prefix.pch',
+          'Pods/Target Support Files/BananaLib-Pods/BananaLib-Pods-prefix.pch',
         )
       end
 
@@ -142,7 +142,7 @@ module Pod
           'Pods/Target Support Files/BananaLib/Info.plist',
         )
         @pod_target.scoped.first.info_plist_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Info.plist',
+          'Pods/Target Support Files/BananaLib-Pods/Info.plist',
         )
       end
 
@@ -151,7 +151,7 @@ module Pod
           'Pods/Target Support Files/BananaLib/BananaLib-dummy.m',
         )
         @pod_target.scoped.first.dummy_source_path.to_s.should.include?(
-          'Pods/Target Support Files/Pods-BananaLib/Pods-BananaLib-dummy.m',
+          'Pods/Target Support Files/BananaLib-Pods/BananaLib-Pods-dummy.m',
         )
       end
 
@@ -192,7 +192,7 @@ module Pod
 
           it 'returns the library name' do
             @pod_target.static_library_name.should == 'libBananaLib.a'
-            @pod_target.scoped.first.static_library_name.should == 'libPods-BananaLib.a'
+            @pod_target.scoped.first.static_library_name.should == 'libBananaLib-Pods.a'
           end
 
           it 'returns :framework as product type' do
@@ -207,7 +207,7 @@ module Pod
         describe 'Host does not requires frameworks' do
           it 'returns the product name' do
             @pod_target.product_name.should == 'libBananaLib.a'
-            @pod_target.scoped.first.product_name.should == 'libPods-BananaLib.a'
+            @pod_target.scoped.first.product_name.should == 'libBananaLib-Pods.a'
           end
 
           it 'returns the framework name' do
@@ -216,7 +216,7 @@ module Pod
 
           it 'returns the library name' do
             @pod_target.static_library_name.should == 'libBananaLib.a'
-            @pod_target.scoped.first.static_library_name.should == 'libPods-BananaLib.a'
+            @pod_target.scoped.first.static_library_name.should == 'libBananaLib-Pods.a'
           end
 
           it 'returns :static_library as product type' do
@@ -253,7 +253,7 @@ module Pod
 
         it 'returns the library name' do
           @pod_target.static_library_name.should == 'libOrangeFramework.a'
-          @pod_target.scoped.first.static_library_name.should == 'libPods-OrangeFramework.a'
+          @pod_target.scoped.first.static_library_name.should == 'libOrangeFramework-Pods.a'
         end
 
         it 'returns :framework as product type' do

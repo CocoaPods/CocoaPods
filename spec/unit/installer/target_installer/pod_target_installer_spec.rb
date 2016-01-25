@@ -141,22 +141,22 @@ module Pod
           @installer.install!
           group = @project['Pods/BananaLib/Support Files']
           group.children.map(&:display_name).sort.should == [
-            'Pods-BananaLib-dummy.m',
-            'Pods-BananaLib-prefix.pch',
-            'Pods-BananaLib.xcconfig',
+            'BananaLib-Pods-dummy.m',
+            'BananaLib-Pods-prefix.pch',
+            'BananaLib-Pods.xcconfig',
           ]
         end
 
         it 'adds the target for the static library to the project' do
           @installer.install!
           @project.targets.count.should == 1
-          @project.targets.first.name.should == 'Pods-BananaLib'
+          @project.targets.first.name.should == 'BananaLib-Pods'
         end
 
         it 'adds the resource bundle targets' do
           @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
           @installer.install!
-          bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+          bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-banana_bundle' }
           bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
           bundle_target.product_reference.name.should == 'banana_bundle.bundle'
           bundle_target.product_reference.path.should == 'banana_bundle.bundle'
@@ -167,7 +167,7 @@ module Pod
         it 'adds the build configurations to the resources bundle targets' do
           @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
           @installer.install!
-          bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+          bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-banana_bundle' }
 
           file = config.sandbox.root + @pod_target.xcconfig_path
           bundle_target.build_configurations.each do |bc|
@@ -178,7 +178,7 @@ module Pod
         it 'sets the correct targeted device family for the resource bundle targets' do
           @pod_target.file_accessors.first.stubs(:resource_bundles).returns('banana_bundle' => [])
           @installer.install!
-          bundle_target = @project.targets.find { |t| t.name == 'Pods-BananaLib-banana_bundle' }
+          bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-banana_bundle' }
 
           bundle_target.build_configurations.each do |bc|
             bc.build_settings['TARGETED_DEVICE_FAMILY'].should == '1,2'
