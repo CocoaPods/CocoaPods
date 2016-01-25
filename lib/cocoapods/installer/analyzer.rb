@@ -286,9 +286,8 @@ module Pod
       # @return [Array<PodTarget>]
       #
       def generate_pod_targets(specs_by_target)
+        dedupe_cache = {}
         if installation_options.deduplicate_targets?
-          dedupe_cache = {}
-
           all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
             dependent_specs.group_by(&:root).map do |root_spec, specs|
               [root_spec, specs, target_definition]
