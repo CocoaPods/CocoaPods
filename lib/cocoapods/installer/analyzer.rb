@@ -303,7 +303,7 @@ module Pod
           pod_targets = distinct_targets.flat_map do |_, targets_by_distinctors|
             if targets_by_distinctors.count > 1
               # There are different sets of subspecs or the spec is used across different platforms
-              suffixes = scope_suffix_for_distinctor(targets_by_distinctors)
+              suffixes = scope_suffix_for_distinctor(targets_by_distinctors.keys)
               targets_by_distinctors.flat_map do |distinctor, target_definitions|
                 specs, = *distinctor
                 generate_pod_target(target_definitions, specs, :scope_suffix => suffixes[distinctor])
@@ -340,14 +340,14 @@ module Pod
 
       # Describes what makes pod targets configurations distinct among other.
       #
-      # @param [(Array<Specification>, Platform) => TargetDefinition] targets_by_distinctors
+      # @param [(Array<Specification>, Platform) => TargetDefinition] distinctors
       #
       # @return [(Array<Specification>, Platform) => String]
       #
-      def scope_suffix_for_distinctor(targets_by_distinctors)
+      def scope_suffix_for_distinctor(distinctors)
         result = nil
-        all_spec_variants = targets_by_distinctors.keys.map { |k| k[0] }
-        all_platform_variants = targets_by_distinctors.keys.map { |k| k[1] }
+        all_spec_variants = distinctors.map { |k| k[0] }
+        all_platform_variants = distinctors.map { |k| k[1] }
         all_platform_name_variants = all_platform_variants.map(&:name)
 
         platform_name_proc = nil
@@ -360,10 +360,10 @@ module Pod
         end
 
         if all_platform_variants.uniq.count == all_platform_variants.count
-          result = targets_by_distinctors.map { |d, _| [d, platform_name_proc.call(d[1])] }
+          result = distinctors.map { |d| [d, platform_name_proc.call(d[1])] }
         else
           common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
-          result = targets_by_distinctors.map do |distinctor, _|
+          result = distinctors.map do |distinctor|
             specs, = *distinctor
             specs -= common_specs
             subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
