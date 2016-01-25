@@ -244,6 +244,33 @@ module Pod
             Pods-SampleProject/Pods-SampleProject-monkey
           ).sort
         end
+
+        it "doesn't deduplicate targets when deduplication is disabled" do
+          podfile = Pod::Podfile.new do
+            install! 'cocoapods', :deduplicate_targets => false
+
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            xcodeproj 'SampleProject/SampleProject'
+
+            pod 'BananaLib'
+
+            target 'SampleProject' do
+              target 'TestRunner' do
+                pod 'BananaLib'
+              end
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.analyze
+
+          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
+            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-monkey
+            Pods-SampleProject/Pods-SampleProject-BananaLib
+            Pods-SampleProject/Pods-SampleProject-monkey
+          ).sort
+        end
       end
 
       it 'generates the integration library appropriately if the installation will not integrate' do
