@@ -130,6 +130,57 @@ module Pod
 
       #--------------------------------------#
 
+      describe '#scope_suffix_for_distinctor' do
+        before do
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, stub('Podfile'), nil)
+          @root_spec = stub(:name => 'Spec')
+          @target_definitions = 5.times.map { |i| stub(:name => "Target Definition #{i}", :root? => i == 0) }
+        end
+
+        it 'returns scopes by platform names if they qualify' do
+          specs = {
+            [[@root_spec], Platform.ios] => [@target_definitions[0]],
+            [[@root_spec], Platform.osx] => [@target_definitions[1]],
+          }
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == %w(ios osx)
+        end
+
+        it 'returns scopes by versioned platform names if they qualify' do
+          specs = {
+            [[@root_spec], Platform.ios] => [@target_definitions[0]],
+            [[@root_spec], Platform.new(:ios, '7.0')] => [@target_definitions[1]],
+          }
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == ['iOS', 'iOS 7.0']
+        end
+
+        it 'returns scopes by subspec names if they qualify' do
+          shared_subspec = stub(:name => 'Spec/Shared')
+          specs = {
+            [[@root_spec, shared_subspec], Platform.ios] => [@target_definitions[0]],
+            [[@root_spec, shared_subspec, stub(:name => 'Spec/Foo')], Platform.ios] => [@target_definitions[1]],
+            [[@root_spec, shared_subspec, stub(:name => 'Spec/Bar')], Platform.ios] => [@target_definitions[2]],
+          }
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [nil, 'Foo', 'Bar']
+        end
+
+        it 'returns scopes by target definition labels' do
+          specs = {
+            [[@root_spec], Platform.ios]                            => [@target_definitions[0]],
+            [[@root_spec, stub(:name => 'Spec/Foo')], Platform.ios] => [@target_definitions[1], @target_definitions[2]],
+            [[@root_spec], Platform.osx]                            => [@target_definitions[3]],
+            [[@root_spec, stub(:name => 'Spec/Bar')], Platform.osx] => [@target_definitions[4]],
+          }
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [
+            'Pods',
+            'Target Definition 1-Target Definition 2',
+            'Target Definition 3',
+            'Target Definition 4',
+          ]
+        end
+      end
+
+      #--------------------------------------#
+
       it 'generates the model to represent the target definitions' do
         target = @analyzer.analyze.targets.first
         target.pod_targets.map(&:name).sort.should == %w(
