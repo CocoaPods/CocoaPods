@@ -711,10 +711,10 @@ module Pod
         pods_project.pods.remove_from_project if pods_project.pods.empty?
         pods_project.development_pods.remove_from_project if pods_project.development_pods.empty?
         pods_project.sort(:groups_position => :below)
-        pods_project.recreate_user_schemes(false)
         if installation_options.deterministic_uuids?
           UI.message('- Generating deterministic UUIDs') { pods_project.predictabilize_uuids }
         end
+        pods_project.recreate_user_schemes(false)
         pods_project.save
       end
     end
