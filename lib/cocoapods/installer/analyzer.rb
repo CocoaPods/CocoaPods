@@ -348,32 +348,39 @@ module Pod
         result = nil
         all_spec_variants = targets_by_distinctors.keys.map { |k| k[0] }
         all_platform_variants = targets_by_distinctors.keys.map { |k| k[1] }
+        all_platform_name_variants = all_platform_variants.map(&:name)
+
+        platform_name_proc = nil
+        if all_platform_name_variants.uniq.count == all_platform_name_variants.count
+          # => Platform name
+          platform_name_proc = proc { |platform| Platform.string_name(platform.symbolic_name).tr(' ', '') }
+        else
+          # => Platform name + SDK version
+          platform_name_proc = proc { |platform| platform.to_s.tr(' ', '') }
+        end
 
         if all_platform_variants.uniq.count == all_platform_variants.count
-          all_platform_name_variants = all_platform_variants.map(&:name)
-          if all_platform_name_variants.uniq.count == all_platform_name_variants.count
-            # => Platform name
-            result = targets_by_distinctors.map { |d, _| [d, Platform.string_name(d[1].symbolic_name).tr(' ', '')] }
-          else
-            # => Platform name + SDK version
-            result = targets_by_distinctors.map { |d, _| [d, d[1].to_s.tr(' ', '')] }
-          end
-        elsif all_spec_variants.uniq.count == all_spec_variants.count
-          common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
-          result = targets_by_distinctors.map do |distinctor, _|
-            specs, = *distinctor
-            specs -= common_specs
-            subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
-            # => Subspecs names without common subspecs
-            [distinctor, subspec_names.empty? ? nil : subspec_names.join('-')]
-          end
+          result = targets_by_distinctors.map { |d, _| [d, platform_name_proc.call(d[1])] }
         else
-          result = targets_by_distinctors.map do |distinctor, target_definitions|
-            names = target_definitions.map do |target_definition|
-              target_definition.root? ? 'Pods' : target_definition.name
+          common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
+          if all_spec_variants.uniq.count == all_spec_variants.count
+            result = targets_by_distinctors.map do |distinctor, _|
+              specs, = *distinctor
+              specs -= common_specs
+              subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
+              # => Subspecs names without common subspecs
+              [distinctor, subspec_names.empty? ? nil : subspec_names.join('-')]
             end
-            # => *All* target definition names
-            [distinctor, names.join('-')]
+          else
+            result = targets_by_distinctors.map do |distinctor, _|
+              specs, platform = *distinctor
+              specs -= common_specs
+              subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
+              platform_name = platform_name_proc.call(platform)
+              name_parts = [platform_name] + subspec_names
+              # => Platform name (+ SDK version) + subspecs names without common subspecs
+              [distinctor, name_parts.join('-')]
+            end
           end
         end
 

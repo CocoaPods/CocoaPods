@@ -163,18 +163,33 @@ module Pod
           @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [nil, 'Foo', 'Bar']
         end
 
-        it 'returns scopes by target definition labels' do
+        it 'returns scopes by platform names and subspec names if they qualify' do
           specs = {
             [[@root_spec], Platform.ios]                            => [@target_definitions[0]],
-            [[@root_spec, stub(:name => 'Spec/Foo')], Platform.ios] => [@target_definitions[1], @target_definitions[2]],
-            [[@root_spec], Platform.osx]                            => [@target_definitions[3]],
-            [[@root_spec, stub(:name => 'Spec/Bar')], Platform.osx] => [@target_definitions[4]],
+            [[@root_spec, stub(:name => 'Spec/Foo')], Platform.ios] => [@target_definitions[1]],
+            [[@root_spec], Platform.osx]                            => [@target_definitions[2]],
+            [[@root_spec, stub(:name => 'Spec/Bar')], Platform.osx] => [@target_definitions[3]],
           }
           @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [
-            'Pods',
-            'Target Definition 1-Target Definition 2',
-            'Target Definition 3',
-            'Target Definition 4',
+            'iOS',
+            'iOS-Foo',
+            'OSX',
+            'OSX-Bar',
+          ]
+        end
+
+        it 'returns scopes by versioned platform names and subspec names if they qualify' do
+          specs = {
+            [[@root_spec], Platform.new(:ios, '7.0')]               => [@target_definitions[0]],
+            [[@root_spec, stub(:name => 'Spec/Foo')], Platform.ios] => [@target_definitions[1]],
+            [[@root_spec], Platform.osx]                            => [@target_definitions[2]],
+            [[@root_spec, stub(:name => 'Spec/Bar')], Platform.osx] => [@target_definitions[3]],
+          }
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [
+            'iOS7.0',
+            'iOS-Foo',
+            'OSX',
+            'OSX-Bar',
           ]
         end
       end
