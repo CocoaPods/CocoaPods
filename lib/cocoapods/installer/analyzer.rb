@@ -363,23 +363,19 @@ module Pod
           result = targets_by_distinctors.map { |d, _| [d, platform_name_proc.call(d[1])] }
         else
           common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
-          if all_spec_variants.uniq.count == all_spec_variants.count
-            result = targets_by_distinctors.map do |distinctor, _|
-              specs, = *distinctor
-              specs -= common_specs
-              subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
-              # => Subspecs names without common subspecs
-              [distinctor, subspec_names.empty? ? nil : subspec_names.join('-')]
-            end
-          else
-            result = targets_by_distinctors.map do |distinctor, _|
-              specs, platform = *distinctor
-              specs -= common_specs
-              subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
+          result = targets_by_distinctors.map do |distinctor, _|
+            specs, = *distinctor
+            specs -= common_specs
+            subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
+            # => Subspecs names without common subspecs
+            [distinctor, subspec_names.empty? ? nil : subspec_names.join('-')]
+          end
+          if all_spec_variants.count > all_spec_variants.uniq.count
+            result.map! do |distinctor, suffix|
+              _, platform = *distinctor
               platform_name = platform_name_proc.call(platform)
-              name_parts = [platform_name] + subspec_names
               # => Platform name (+ SDK version) + subspecs names without common subspecs
-              [distinctor, name_parts.join('-')]
+              [distinctor, [platform_name, suffix].compact.join('-')]
             end
           end
         end
