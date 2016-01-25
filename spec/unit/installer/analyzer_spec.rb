@@ -142,7 +142,7 @@ module Pod
             [[@root_spec], Platform.ios] => [@target_definitions[0]],
             [[@root_spec], Platform.osx] => [@target_definitions[1]],
           }
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == %w(ios osx)
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == %w(iOS OSX)
         end
 
         it 'returns scopes by versioned platform names if they qualify' do
@@ -150,7 +150,7 @@ module Pod
             [[@root_spec], Platform.ios] => [@target_definitions[0]],
             [[@root_spec], Platform.new(:ios, '7.0')] => [@target_definitions[1]],
           }
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == ['iOS', 'iOS 7.0']
+          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == ['iOS', 'iOS7.0']
         end
 
         it 'returns scopes by subspec names if they qualify' do
@@ -288,11 +288,11 @@ module Pod
           analyzer.analyze
 
           analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-CLITool/monkey-osx
+            Pods-CLITool/monkey-OSX
             Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
-            Pods-SampleProject-TestRunner/monkey-ios
+            Pods-SampleProject-TestRunner/monkey-iOS
             Pods-SampleProject/BananaLib-Pods-SampleProject
-            Pods-SampleProject/monkey-ios
+            Pods-SampleProject/monkey-iOS
           ).sort
         end
 

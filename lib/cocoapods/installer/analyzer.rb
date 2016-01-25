@@ -353,10 +353,10 @@ module Pod
           all_platform_name_variants = all_platform_variants.map(&:name)
           if all_platform_name_variants.uniq.count == all_platform_name_variants.count
             # => Platform name
-            result = targets_by_distinctors.map { |d, _| [d, d[1].name.to_s] }
+            result = targets_by_distinctors.map { |d, _| [d, Platform.string_name(d[1].symbolic_name).tr(' ', '')] }
           else
             # => Platform name + SDK version
-            result = targets_by_distinctors.map { |d, _| [d, d[1].to_s] }
+            result = targets_by_distinctors.map { |d, _| [d, d[1].to_s.tr(' ', '')] }
           end
         elsif all_spec_variants.uniq.count == all_spec_variants.count
           common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
