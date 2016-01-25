@@ -84,10 +84,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "Pods-Example/SocketRocket.framework"
-  install_framework "Pods-Example/Pusher.framework"
+  install_framework "SocketRocket/SocketRocket.framework"
+  install_framework "libPusher/Pusher.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "Pods-Example/SocketRocket.framework"
-  install_framework "Pods-Example/Pusher.framework"
+  install_framework "SocketRocket/SocketRocket.framework"
+  install_framework "libPusher/Pusher.framework"
 fi

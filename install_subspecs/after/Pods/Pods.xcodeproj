@@ -16,17 +16,17 @@ File References:
       - subspec_2.m
     - Support Files:
       - Info.plist
-      - Pods-iOS App-PodTest.xcconfig
-      - Pods-iOS App-PodTest-dummy.m
-      - Pods-iOS App-PodTest-prefix.pch
-      - Pods-OS X App-PodTest.modulemap
-      - Pods-OS X App-PodTest.xcconfig
-      - Pods-OS X App-PodTest-dummy.m
-      - Pods-OS X App-PodTest-prefix.pch
-      - Pods-OS X App-PodTest-umbrella.h
+      - PodTest-subspec_1.xcconfig
+      - PodTest-subspec_1-dummy.m
+      - PodTest-subspec_1-prefix.pch
+      - PodTest-subspec_2.modulemap
+      - PodTest-subspec_2.xcconfig
+      - PodTest-subspec_2-dummy.m
+      - PodTest-subspec_2-prefix.pch
+      - PodTest-subspec_2-umbrella.h
 - Products:
   - libPods-iOS App.a
-  - libPods-iOS App-PodTest.a
+  - libPodTest-subspec_1.a
   - Pods_OS_X_App.framework
   - PodTest.framework
 - Targets Support Files:
@@ -96,55 +96,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-iOS App.release.xcconfig
-- Pods-iOS App-PodTest:
-    Build Phases:
-    - SourcesBuildPhase:
-      - Pods-iOS App-PodTest-dummy.m
-      - subspec_1.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
-      - Foundation.framework
-    - HeadersBuildPhase:
-      - subspec_1.h:
-          ATTRIBUTES:
-          - Public
-    Build Configurations:
-    - Debug:
-        Build Settings:
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
-          DEBUG_INFORMATION_FORMAT: dwarf
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          GCC_NO_COMMON_BLOCKS: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-prefix.pch
-          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-          MTL_ENABLE_DEBUG_INFO: 'YES'
-          OTHER_LDFLAGS: ''
-          OTHER_LIBTOOLFLAGS: ''
-          PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          PUBLIC_HEADERS_FOLDER_PATH: ''
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-iOS App-PodTest.xcconfig
-    - Release:
-        Build Settings:
-          ARCHS: $(ARCHS_STANDARD_64_BIT)
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
-          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
-          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
-          GCC_NO_COMMON_BLOCKS: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-iOS App-PodTest/Pods-iOS App-PodTest-prefix.pch
-          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
-          MTL_ENABLE_DEBUG_INFO: 'NO'
-          OTHER_LDFLAGS: ''
-          OTHER_LIBTOOLFLAGS: ''
-          PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: $(TARGET_NAME)
-          PUBLIC_HEADERS_FOLDER_PATH: ''
-          SDKROOT: iphoneos
-          SKIP_INSTALL: 'YES'
-        Base Configuration: Pods-iOS App-PodTest.xcconfig
 - Pods-OS X App:
     Build Phases:
     - SourcesBuildPhase:
@@ -218,16 +169,65 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: Pods-OS X App.release.xcconfig
-- Pods-OS X App-PodTest:
+- PodTest-subspec_1:
     Build Phases:
     - SourcesBuildPhase:
-      - Pods-OS X App-PodTest-dummy.m
+      - PodTest-subspec_1-dummy.m
+      - subspec_1.m:
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+    - FrameworksBuildPhase:
+      - Foundation.framework
+    - HeadersBuildPhase:
+      - subspec_1.h:
+          ATTRIBUTES:
+          - Public
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_1/PodTest-subspec_1-prefix.pch
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MTL_ENABLE_DEBUG_INFO: 'YES'
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+        Base Configuration: PodTest-subspec_1.xcconfig
+    - Release:
+        Build Settings:
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+          ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+          GCC_NO_COMMON_BLOCKS: 'YES'
+          GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_1/PodTest-subspec_1-prefix.pch
+          IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MTL_ENABLE_DEBUG_INFO: 'NO'
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: $(TARGET_NAME)
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SKIP_INSTALL: 'YES'
+        Base Configuration: PodTest-subspec_1.xcconfig
+- PodTest-subspec_2:
+    Build Phases:
+    - SourcesBuildPhase:
+      - PodTest-subspec_2-dummy.m
       - subspec_2.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - FrameworksBuildPhase:
       - Cocoa.framework
     - HeadersBuildPhase:
-      - Pods-OS X App-PodTest-umbrella.h:
+      - PodTest-subspec_2-umbrella.h:
           ATTRIBUTES:
           - Public
       - subspec_2.h:
@@ -248,20 +248,19 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-OS X App-PodTest/Pods-OS X
-            App-PodTest-prefix.pch
-          INFOPLIST_FILE: Target Support Files/Pods-OS X App-PodTest/Info.plist
+          GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-prefix.pch
+          INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           MACOSX_DEPLOYMENT_TARGET: '10.6'
-          MODULEMAP_FILE: Target Support Files/Pods-OS X App-PodTest/Pods-OS X App-PodTest.modulemap
+          MODULEMAP_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: PodTest
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: Pods-OS X App-PodTest.xcconfig
+        Base Configuration: PodTest-subspec_2.xcconfig
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
@@ -276,20 +275,19 @@ Targets:
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
-          GCC_PREFIX_HEADER: Target Support Files/Pods-OS X App-PodTest/Pods-OS X
-            App-PodTest-prefix.pch
-          INFOPLIST_FILE: Target Support Files/Pods-OS X App-PodTest/Info.plist
+          GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-prefix.pch
+          INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/Info.plist
           INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           MACOSX_DEPLOYMENT_TARGET: '10.6'
-          MODULEMAP_FILE: Target Support Files/Pods-OS X App-PodTest/Pods-OS X App-PodTest.modulemap
+          MODULEMAP_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: PodTest
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: Pods-OS X App-PodTest.xcconfig
+        Base Configuration: PodTest-subspec_2.xcconfig
 
 
 
