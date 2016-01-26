@@ -496,7 +496,7 @@ module Pod
             end
 
             it 'creates a swift import' do
-              pod_target = stub(:uses_swift? => true, :product_module_name => 'ModuleName')
+              pod_target = stub(:uses_swift? => true, :should_build? => true, :product_module_name => 'ModuleName')
 
               file = @validator.send(:write_app_import_source_file, pod_target)
               file.basename.to_s.should == 'main.swift'
@@ -506,7 +506,7 @@ module Pod
             end
 
             it 'creates an objective-c import' do
-              pod_target = stub(:uses_swift? => false, :product_module_name => 'ModuleName')
+              pod_target = stub(:uses_swift? => false, :should_build? => true, :product_module_name => 'ModuleName')
 
               file = @validator.send(:write_app_import_source_file, pod_target)
               file.basename.to_s.should == 'main.m'
@@ -517,6 +517,14 @@ module Pod
                 int main() {}
               OBJC
             end
+
+            it 'creates no import when the pod target has no source files' do
+              pod_target = stub(:uses_swift? => true, :should_build? => false)
+
+              file = @validator.send(:write_app_import_source_file, pod_target)
+              file.basename.to_s.should == 'main.swift'
+              file.read.should == ''
+            end
           end
 
           describe 'when linting as a static lib' do
@@ -526,7 +534,7 @@ module Pod
             end
 
             it 'creates an objective-c import when a plausible umbrella header is found' do
-              pod_target = stub(:uses_swift? => false, :product_module_name => 'ModuleName', :sandbox => @sandbox)
+              pod_target = stub(:uses_swift? => false, :should_build? => true, :product_module_name => 'ModuleName', :sandbox => @sandbox)
               header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"
               umbrella = pod_target.sandbox.public_headers.root.+(header_name)
               umbrella.dirname.mkpath
@@ -543,7 +551,7 @@ module Pod
             end
 
             it 'does not create an objective-c import when no umbrella header is found' do
-              pod_target = stub(:uses_swift? => false, :product_module_name => 'ModuleName', :sandbox => @sandbox)
+              pod_target = stub(:uses_swift? => false, :should_build? => true, :product_module_name => 'ModuleName', :sandbox => @sandbox)
 
               file = @validator.send(:write_app_import_source_file, pod_target)
               file.basename.to_s.should == 'main.m'
@@ -559,7 +567,7 @@ module Pod
         it 'adds the importing file to the app target' do
           @validator.stubs(:use_frameworks).returns(true)
           @validator.send(:create_app_project)
-          pod_target = stub(:uses_swift? => true, :pod_name => 'JSONKit', :product_module_name => 'ModuleName')
+          pod_target = stub(:uses_swift? => true, :should_build? => true, :pod_name => 'JSONKit', :product_module_name => 'ModuleName')
           installer = stub(:pod_targets => [pod_target])
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)

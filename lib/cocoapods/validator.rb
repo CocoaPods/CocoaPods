@@ -399,12 +399,12 @@ module Pod
       if language == :swift
         source_file = validation_dir.+('App/main.swift')
         source_file.parent.mkpath
-        import_statement = use_frameworks ? "import #{pod_target.product_module_name}\n" : ''
+        import_statement = use_frameworks && pod_target.should_build? ? "import #{pod_target.product_module_name}\n" : ''
         source_file.open('w') { |f| f << import_statement }
       else
         source_file = validation_dir.+('App/main.m')
         source_file.parent.mkpath
-        import_statement = if use_frameworks
+        import_statement = if use_frameworks && pod_target.should_build?
                              "@import #{pod_target.product_module_name};\n"
                            else
                              header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"
