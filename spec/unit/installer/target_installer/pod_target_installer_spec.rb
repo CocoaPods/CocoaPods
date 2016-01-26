@@ -290,30 +290,35 @@ module Pod
           target = @project.native_targets.first
           target.name.should == 'snake'
 
-          target.headers_build_phase.files.reject { |build_file| build_file.settings.nil? }.map(&:display_name).should == ['snake-umbrella.h']
+          header_build_phase_file_refs = target.headers_build_phase.files.
+            reject { |build_file| build_file.settings.nil? }.
+            map { |build_file| build_file.file_ref.path }
+          header_build_phase_file_refs.should == %w(
+            Code/C/Boa.h
+            Code/C/Garden.h
+            Code/C/Rattle.h
+            snake-umbrella.h
+          )
 
           copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
           copy_files_build_phases.map(&:name).should == [
             'Copy . Public Headers',
             'Copy A Public Headers',
-            'Copy B Public Headers',
-            'Copy C Public Headers',
+            'Copy B Private Headers',
           ]
 
-          copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(4, :products_directory)
+          copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(3, :products_directory)
 
           copy_files_build_phases.map(&:dst_path).should == [
             '$(PUBLIC_HEADERS_FOLDER_PATH)/.',
             '$(PUBLIC_HEADERS_FOLDER_PATH)/A',
-            '$(PUBLIC_HEADERS_FOLDER_PATH)/B',
-            '$(PUBLIC_HEADERS_FOLDER_PATH)/C',
+            '$(PRIVATE_HEADERS_FOLDER_PATH)/B',
           ]
 
           copy_files_build_phases.map { |phase| phase.files_references.map(&:path) }.should == [
             ['Code/snake.h'],
             ['Code/A/Boa.h', 'Code/A/Garden.h', 'Code/A/Rattle.h'],
             ['Code/B/Boa.h', 'Code/B/Garden.h', 'Code/B/Rattle.h'],
-            ['Code/C/Boa.h', 'Code/C/Garden.h', 'Code/C/Rattle.h'],
           ]
         end
 
@@ -323,12 +328,6 @@ module Pod
           content.should =~ %r{"A/Boa.h"}
           content.should =~ %r{"A/Garden.h"}
           content.should =~ %r{"A/Rattle.h"}
-          content.should =~ %r{"B/Boa.h"}
-          content.should =~ %r{"B/Garden.h"}
-          content.should =~ %r{"B/Rattle.h"}
-          content.should =~ %r{"C/Boa.h"}
-          content.should =~ %r{"C/Garden.h"}
-          content.should =~ %r{"C/Rattle.h"}
         end
       end
 

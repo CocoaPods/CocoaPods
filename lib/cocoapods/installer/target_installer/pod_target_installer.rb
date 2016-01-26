@@ -349,7 +349,7 @@ module Pod
                 'Project'
               end
 
-        if target.requires_frameworks? && header_mappings_dir
+        if target.requires_frameworks? && header_mappings_dir && acl != 'Project'
           relative_path = file_ref.real_path.relative_path_from(header_mappings_dir)
           sub_dir = relative_path.dirname
           copy_phase_name = "Copy #{sub_dir} #{acl} Headers"
