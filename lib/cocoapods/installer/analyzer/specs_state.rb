@@ -10,6 +10,8 @@ module Pod
       #       subspecs are added instead of the name of the Pods.
       #
       class SpecsState
+        STATES = %i(added removed changed unchanged).freeze
+
         # Initialize a new instance
         #
         # @param  [Hash{Symbol=>String}] pods_by_state
@@ -23,10 +25,11 @@ module Pod
           @unchanged = []
 
           if pods_by_state
-            @added     = pods_by_state[:added] || []
-            @deleted   = pods_by_state[:removed] || []
-            @changed   = pods_by_state[:changed] || []
-            @unchanged = pods_by_state[:unchanged] || []
+            STATES.each do |state|
+              Array(pods_by_state[state]).each do |name|
+                add_name(name, state)
+              end
+            end
           end
         end
 
@@ -68,7 +71,7 @@ module Pod
         # @return [void]
         #
         def add_name(name, state)
-          send(state) << name
+          send(state) << Specification.root_name(name)
         end
       end
     end
