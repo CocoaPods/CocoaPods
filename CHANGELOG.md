@@ -10,6 +10,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Don't try to embed project headers into frameworks.
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4819](https://github.com/CocoaPods/CocoaPods/issues/4819)
+
 * Fix a crash in the analyzer when target deduplication is deactivated.
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4751](https://github.com/CocoaPods/CocoaPods/issues/4751)
