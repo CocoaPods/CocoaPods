@@ -52,7 +52,7 @@ module Pod
 
       it 'computes the state of the Podfile respect to the Lockfile' do
         state = @analyzer.analyze.podfile_state
-        state.added.should == %w(AFNetworking libextobjc/EXTKeyPathCoding libextobjc/EXTSynthesize)
+        state.added.should == %w(AFNetworking libextobjc libextobjc)
         state.changed.should == %w()
         state.unchanged.should == %w(JSONKit SVPullToRefresh)
         state.deleted.should == %w(NUI)

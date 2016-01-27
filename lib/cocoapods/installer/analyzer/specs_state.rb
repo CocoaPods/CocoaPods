@@ -10,8 +10,6 @@ module Pod
       #       subspecs are added instead of the name of the Pods.
       #
       class SpecsState
-        STATES = %i(added removed changed unchanged).freeze
-
         # Initialize a new instance
         #
         # @param  [Hash{Symbol=>String}] pods_by_state
@@ -25,9 +23,14 @@ module Pod
           @unchanged = []
 
           if pods_by_state
-            STATES.each do |state|
+            {
+              :added => :added,
+              :changed => :changed,
+              :removed => :deleted,
+              :unchanged => :unchanged,
+            }.each do |state, spec_state|
               Array(pods_by_state[state]).each do |name|
-                add_name(name, state)
+                add_name(name, spec_state)
               end
             end
           end
