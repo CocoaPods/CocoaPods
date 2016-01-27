@@ -8,6 +8,13 @@ module Pod
       # required by CocoaPods.
       #
       class PodXCConfig
+        # @return [String] Defined to hold the default Xcode build path, so
+        #         that when this is overridden per {PodTarget}, it is still
+        #         possible to reference other build products relative to the
+        #         original path.
+        #
+        SHARED_BUILD_DIR_VARIABLE = 'PODS_SHARED_BUILD_DIR'.freeze
+
         # @return [Target] the target represented by this xcconfig.
         #
         attr_reader :target
@@ -57,13 +64,16 @@ module Pod
 
           @xcconfig = Xcodeproj::Config.new(config)
 
-          if target.requires_frameworks? && target.scoped?
+          if target.requires_frameworks?
             build_settings = {
+              SHARED_BUILD_DIR_VARIABLE => '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)',
               'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
             }
             scoped_dependent_targets = target.dependent_targets.select { |t| t.should_build? && t.scoped? }
             unless scoped_dependent_targets.empty?
-              framework_search_paths = scoped_dependent_targets.map(&:relative_configuration_build_dir).uniq
+              framework_search_paths = scoped_dependent_targets.map do |target|
+                target.relative_configuration_build_dir("$#{SHARED_BUILD_DIR_VARIABLE}")
+              end
               build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths)
             end
             @xcconfig.merge!(build_settings)

@@ -259,15 +259,20 @@ module Pod
       end
     end
 
+    # @param  [String] dir
+    #         The directory (which might be a variable) relative to which
+    #         the returned path should be. This must be used if the
+    #         $CONFIGURATION_BUILD_DIR is modified.
+    #
     # @return [String] The configuration build dir, relative to the default
     #         configuration build dir, which is:
     #         '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
     #
-    def relative_configuration_build_dir
+    def relative_configuration_build_dir(dir = '$CONFIGURATION_BUILD_DIR')
       if scoped?
-        "$CONFIGURATION_BUILD_DIR/#{scope_suffix}"
+        "#{dir}/#{pod_name}/#{scope_suffix}"
       else
-        '$CONFIGURATION_BUILD_DIR'
+        "#{dir}/#{pod_name}"
       end
     end
 
