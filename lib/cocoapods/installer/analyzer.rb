@@ -286,7 +286,6 @@ module Pod
       # @return [Array<PodTarget>]
       #
       def generate_pod_targets(specs_by_target)
-        dedupe_cache = {}
         if installation_options.deduplicate_targets?
           all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
             dependent_specs.group_by(&:root).map do |root_spec, specs|
@@ -313,28 +312,17 @@ module Pod
               generate_pod_target(target_definitions, specs)
             end
           end
-
-          # A `PodTarget` can't be deduplicated if any of its
-          # transitive dependencies can't be deduplicated.
-          pod_targets.flat_map do |target|
-            dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
-            target.dependent_targets = dependent_targets
-            if dependent_targets.any?(&:scoped?)
-              target.scoped(dedupe_cache)
-            else
-              target
-            end
-          end
         else
+          dedupe_cache = {}
           pod_targets = specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by.group_by(&:root).values.uniq
             grouped_specs.flat_map do |pod_specs|
               generate_pod_target([target_definition], pod_specs).scoped(dedupe_cache)
             end
           end
-          pod_targets.each do |target|
-            target.dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
-          end
+        end
+        pod_targets.each do |target|
+          target.dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
         end
       end
 
