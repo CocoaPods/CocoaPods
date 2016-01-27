@@ -200,16 +200,16 @@ module Pod
               target_definition = fixture_target_definition(spec.name)
               target_definition.stubs(:parent).returns(@target_definition.podfile)
               fixture_pod_target(spec, [target_definition, @target_definition].uniq).tap do |pod_target|
-                pod_target.stubs(:scope_suffix).returns(target_definition.label)
+                pod_target.stubs(:scope_suffix).returns('iOS')
               end
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$CONFIGURATION_BUILD_DIR/Pods-BananaLib" "$CONFIGURATION_BUILD_DIR/Pods-OrangeFramework"'
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$CONFIGURATION_BUILD_DIR/BananaLib/iOS" "$CONFIGURATION_BUILD_DIR/OrangeFramework/iOS"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/Pods-BananaLib/BananaLib.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/Pods-OrangeFramework/OrangeFramework.framework/Headers"'
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/BananaLib/iOS/BananaLib.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework/iOS/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
           end
