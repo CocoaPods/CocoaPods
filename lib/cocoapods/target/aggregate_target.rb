@@ -205,13 +205,6 @@ module Pod
       "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
     end
 
-    # @return [String] The scoped configuration build dir, relevant if the
-    #         target is integrated as framework.
-    #
-    def scoped_configuration_build_dir
-      "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{target_definition.label}"
-    end
-
     private
 
     # @!group Private Helpers
