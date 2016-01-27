@@ -40,6 +40,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Share user schemes of `Pods.xcodeproj` after generating deterministic UUIDS.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Only attempt to `import` a framework during linting if the pod has source
+  files, and is thus being built by CocoaPods.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4823](https://github.com/CocoaPods/CocoaPods/issues/4823)
+
 
 ## 1.0.0.beta.2 (2016-01-05)
 
