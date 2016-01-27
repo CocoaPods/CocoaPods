@@ -345,12 +345,10 @@ module Pod
       # @return [(Array<Specification>, Platform) => String]
       #
       def scope_suffix_for_distinctor(distinctors)
-        result = nil
         all_spec_variants = distinctors.map { |k| k[0] }
         all_platform_variants = distinctors.map { |k| k[1] }
         all_platform_name_variants = all_platform_variants.map(&:name)
 
-        platform_name_proc = nil
         if all_platform_name_variants.uniq.count == all_platform_name_variants.count
           # => Platform name
           platform_name_proc = proc { |platform| Platform.string_name(platform.symbolic_name).tr(' ', '') }
