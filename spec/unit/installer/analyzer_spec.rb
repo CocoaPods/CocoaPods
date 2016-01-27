@@ -257,36 +257,11 @@ module Pod
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
             project 'SampleProject/SampleProject'
+
             target 'SampleProject' do
               pod 'BananaLib'
               pod 'monkey'
 
-              target 'TestRunner' do
-                pod 'BananaLib'
-                pod 'monkey'
-              end
-            end
-          end
-          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          result = analyzer.analyze
-
-          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-SampleProject-TestRunner/BananaLib
-            Pods-SampleProject-TestRunner/monkey
-            Pods-SampleProject/BananaLib
-            Pods-SampleProject/monkey
-          ).sort
-        end
-
-        it "doesn't deduplicate targets, where transitive dependencies can't be deduplicated" do
-          podfile = Pod::Podfile.new do
-            source SpecHelper.test_repo_url
-            platform :ios, '6.0'
-            project 'SampleProject/SampleProject'
-            pod 'BananaLib'
-            pod 'monkey'
-
-            target 'SampleProject' do
               target 'TestRunner' do
                 pod 'BananaLib'
                 pod 'monkey'
@@ -301,13 +276,12 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           result = analyzer.analyze
 
-          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-CLITool/monkey-OSX
-            Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
-            Pods-SampleProject-TestRunner/monkey-iOS
-            Pods-SampleProject/BananaLib-Pods-SampleProject
-            Pods-SampleProject/monkey-iOS
-          ).sort
+          pod_targets = result.targets.flat_map(&:pod_targets).uniq
+          Hash[pod_targets.map { |t| [t.label, t.target_definitions.map(&:label).sort] }.sort].should == {
+            'BananaLib'  => %w(Pods-SampleProject Pods-SampleProject-TestRunner),
+            'monkey-iOS' => %w(Pods-SampleProject Pods-SampleProject-TestRunner),
+            'monkey-OSX' => %w(Pods-CLITool),
+          }
         end
 
         it "doesn't deduplicate targets when deduplication is disabled" do
