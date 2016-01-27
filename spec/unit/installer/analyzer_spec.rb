@@ -268,9 +268,9 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          analyzer.analyze
+          result = analyzer.analyze
 
-          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
             Pods-SampleProject-TestRunner/BananaLib
             Pods-SampleProject-TestRunner/monkey
             Pods-SampleProject/BananaLib
@@ -299,9 +299,9 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          analyzer.analyze
+          result = analyzer.analyze
 
-          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
             Pods-CLITool/monkey-OSX
             Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
             Pods-SampleProject-TestRunner/monkey-iOS
@@ -327,9 +327,9 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          analyzer.analyze
+          result = analyzer.analyze
 
-          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
             Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
             Pods-SampleProject-TestRunner/monkey-Pods-SampleProject-TestRunner
             Pods-SampleProject/BananaLib-Pods-SampleProject
