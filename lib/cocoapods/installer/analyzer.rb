@@ -404,7 +404,7 @@ module Pod
       # @param  [TargetDefinitions] target_definitions
       #         the aggregate target
       #
-      # @param  [Array<Specification>] specs
+      # @param  [Array<Specification>] pod_specs
       #         the specifications of an equal root.
       #
       # @param  [String] scope_suffix
