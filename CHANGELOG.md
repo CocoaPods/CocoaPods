@@ -6,6 +6,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* Rename the `xcodeproj` Podfile directive to `project`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [Core#298](https://github.com/CocoaPods/Core/issues/298)
+
 ##### Enhancements
 
 ##### Bug Fixes
