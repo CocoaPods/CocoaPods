@@ -19,11 +19,11 @@ module Pod
     # @return [Bool] whether the target needs to be scoped by target definition,
     #         because the spec is used with different subspec sets across them.
     #
-    # @note   For frameworks the target products of {PodTarget}s are named
-    #         after their specs. The namespacing cannot directly happen in
-    #         the product name itself, because this must be equal to the module
-    #         name and this will be used in source code, which should stay
-    #         agnostic over the dependency manager.
+    # @note   The target products of {PodTarget}s are named after their specs.
+    #         The namespacing cannot directly happen in the product name itself,
+    #         because this must be equal to the module name and this will be
+    #         used in source code, which should stay agnostic over the
+    #         dependency manager.
     #         We need namespacing because multiple targets can exist for the
     #         same podspec and their products should not collide. This
     #         duplication is needed when multiple user targets have the same
