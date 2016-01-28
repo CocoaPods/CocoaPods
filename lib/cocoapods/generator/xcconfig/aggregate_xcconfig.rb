@@ -70,6 +70,7 @@ module Pod
           generate_settings_to_import_pod_targets
 
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
+          XCConfigHelper.add_settings_for_dependent_targets(target, pod_targets, @xcconfig)
 
           generate_vendored_build_settings
           generate_other_ld_flags
@@ -107,11 +108,6 @@ module Pod
               library_header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
               build_settings['HEADER_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(library_header_search_paths)
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
-            end
-            scoped_pod_targets = build_pod_targets.select(&:scoped?)
-            unless scoped_pod_targets.empty?
-              framework_search_paths = scoped_pod_targets.map(&:relative_configuration_build_dir).uniq
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths)
             end
             build_settings
           else

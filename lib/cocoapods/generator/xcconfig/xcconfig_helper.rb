@@ -4,6 +4,13 @@ module Pod
       # Stores the shared logic of the classes of the XCConfig module.
       #
       module XCConfigHelper
+        # @return [String] Defined to hold the default Xcode build path, so
+        #         that when this is overridden per {PodTarget}, it is still
+        #         possible to reference other build products relative to the
+        #         original path.
+        #
+        SHARED_BUILD_DIR_VARIABLE = 'PODS_SHARED_BUILD_DIR'.freeze
+
         # Converts an array of strings to a single string where the each string
         # is surrounded by double quotes and separated by a space. Used to
         # represent strings in a xcconfig file.
@@ -194,6 +201,47 @@ module Pod
             add_code_signing_settings(target, xcconfig)
           end
           add_language_specific_settings(target, xcconfig)
+        end
+
+        # Add the search paths for frameworks and libraries the given target
+        # depends on, so that it can be correctly built and linked.
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Array<PodTarget>] dependent_targets
+        #         The pod targets the given target depends on.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.add_settings_for_dependent_targets(target, dependent_targets, xcconfig)
+          dependent_targets = dependent_targets.select(&:should_build?)
+          has_configuration_build_dir = target.respond_to?(:configuration_build_dir)
+          if has_configuration_build_dir
+            build_settings = {
+              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
+              SHARED_BUILD_DIR_VARIABLE => '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)',
+            }
+            build_dir_var = "$#{SHARED_BUILD_DIR_VARIABLE}"
+          else
+            build_settings = {}
+            build_dir_var = '$CONFIGURATION_BUILD_DIR'
+          end
+          unless dependent_targets.empty?
+            framework_search_paths = []
+            library_search_paths = []
+            dependent_targets.each do |dependent_target|
+              if dependent_target.requires_frameworks?
+                framework_search_paths << dependent_target.relative_configuration_build_dir(build_dir_var)
+              else
+                library_search_paths << dependent_target.relative_configuration_build_dir(build_dir_var)
+              end
+            end
+            build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(framework_search_paths.uniq) unless framework_search_paths.empty?
+            build_settings['LIBRARY_SEARCH_PATHS']   = '$(inherited) ' + XCConfigHelper.quote(library_search_paths.uniq)   unless library_search_paths.empty?
+          end
+          xcconfig.merge!(build_settings)
         end
 
         # Checks if the given target requires language specific settings and
