@@ -202,7 +202,7 @@ module Pod
           pods_state
         else
           state = SpecsState.new
-          state.added.concat(podfile.dependencies.map(&:name).uniq)
+          state.added.merge(podfile.dependencies.map(&:root_name))
           state
         end
       end

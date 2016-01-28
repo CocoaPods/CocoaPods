@@ -1,3 +1,5 @@
+require 'set'
+
 module Pod
   class Installer
     class Analyzer
@@ -17,10 +19,10 @@ module Pod
         #         (`:added`, `:removed`, `:changed` or `:unchanged`).
         #
         def initialize(pods_by_state = nil)
-          @added     = []
-          @deleted   = []
-          @changed   = []
-          @unchanged = []
+          @added     = Set.new
+          @deleted   = Set.new
+          @changed   = Set.new
+          @unchanged = Set.new
 
           if pods_by_state
             {
@@ -36,19 +38,19 @@ module Pod
           end
         end
 
-        # @return [Array<String>] the names of the pods that were added.
+        # @return [Set<String>] the names of the pods that were added.
         #
         attr_accessor :added
 
-        # @return [Array<String>] the names of the pods that were changed.
+        # @return [Set<String>] the names of the pods that were changed.
         #
         attr_accessor :changed
 
-        # @return [Array<String>] the names of the pods that were deleted.
+        # @return [Set<String>] the names of the pods that were deleted.
         #
         attr_accessor :deleted
 
-        # @return [Array<String>] the names of the pods that were unchanged.
+        # @return [Set<String>] the names of the pods that were unchanged.
         #
         attr_accessor :unchanged
 

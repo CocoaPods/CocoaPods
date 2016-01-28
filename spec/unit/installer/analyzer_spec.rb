@@ -52,10 +52,10 @@ module Pod
 
       it 'computes the state of the Podfile respect to the Lockfile' do
         state = @analyzer.analyze.podfile_state
-        state.added.should == %w(AFNetworking libextobjc libextobjc)
-        state.changed.should == %w()
-        state.unchanged.should == %w(JSONKit SVPullToRefresh)
-        state.deleted.should == %w(NUI)
+        state.added.should == Set.new(%w(AFNetworking libextobjc libextobjc))
+        state.changed.should == Set.new(%w())
+        state.unchanged.should == Set.new(%w(JSONKit SVPullToRefresh))
+        state.deleted.should == Set.new(%w(NUI))
       end
 
       #--------------------------------------#

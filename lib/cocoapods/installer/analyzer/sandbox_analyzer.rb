@@ -78,7 +78,7 @@ module Pod
               state.add_name(name, pod_state(name))
             end
           else
-            state.added.concat(resolved_pods)
+            state.added.merge(resolved_pods)
           end
           state
         end
