@@ -18,7 +18,7 @@ end
 def generate_podfile(pods = ['JSONKit'])
   Pod::Podfile.new do
     platform :ios
-    xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
+    project SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     target 'SampleProject' do
       pods.each { |name| pod name }
       target 'SampleProjectTests' do
@@ -33,7 +33,7 @@ end
 def generate_local_podfile
   Pod::Podfile.new do
     platform :ios
-    xcodeproj SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
+    project SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     target 'SampleProject' do
       pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
       target 'SampleProjectTests' do
@@ -228,7 +228,7 @@ module Pod
         config.repos_dir = fixture_path + 'spec-repos'
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
@@ -268,7 +268,7 @@ module Pod
         config.repos_dir = fixture_path + 'spec-repos'
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
@@ -288,7 +288,7 @@ module Pod
         config.repos_dir = fixture_path + 'spec-repos'
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
@@ -311,7 +311,7 @@ module Pod
         @podfile = Pod::Podfile.new do
           install! 'cocoapods', 'integrate_targets' => false
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
@@ -356,7 +356,7 @@ module Pod
         config.repos_dir = fixture_path + 'spec-repos'
         podfile = Pod::Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
           target 'SampleProject'
         end

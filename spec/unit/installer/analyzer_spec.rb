@@ -6,7 +6,7 @@ module Pod
       before do
         @podfile = Pod::Podfile.new do
           platform :ios, '6.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
 
           target 'SampleProject' do
             pod 'JSONKit',                     '1.5pre'
@@ -88,7 +88,7 @@ module Pod
 
         podfile = Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           pod 'BananaLib', '1.0'
         end
         config.skip_repo_update = false
@@ -159,7 +159,7 @@ module Pod
       it 'generates the set of dependent pod targets' do
         @podfile = Pod::Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           pod 'RestKit', '~> 0.23.0'
           target 'TestRunner' do
             pod 'RestKit/Testing', '~> 0.23.0'
@@ -191,7 +191,7 @@ module Pod
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
-            xcodeproj 'SampleProject/SampleProject'
+            project 'SampleProject/SampleProject'
             target 'SampleProject' do
               pod 'BananaLib'
               pod 'monkey'
@@ -217,7 +217,7 @@ module Pod
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
-            xcodeproj 'SampleProject/SampleProject'
+            project 'SampleProject/SampleProject'
             pod 'BananaLib'
             pod 'monkey'
 
@@ -251,7 +251,7 @@ module Pod
 
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
-            xcodeproj 'SampleProject/SampleProject'
+            project 'SampleProject/SampleProject'
 
             pod 'BananaLib'
 
@@ -295,7 +295,7 @@ module Pod
           podfile = Pod::Podfile.new do
             install! 'cocoapods', :integrate_targets => false
             source SpecHelper.test_repo_url
-            xcodeproj 'SampleProject/SampleProject'
+            project 'SampleProject/SampleProject'
             target 'TestRunner' do
               platform :osx
               pod 'monkey'
@@ -310,7 +310,7 @@ module Pod
           podfile = Pod::Podfile.new do
             install! 'cocoapods', :integrate_targets => false
             source SpecHelper.test_repo_url
-            xcodeproj 'SampleProject/SampleProject'
+            project 'SampleProject/SampleProject'
             platform :osx
             target 'TestRunner' do
               pod 'monkey'
@@ -325,7 +325,7 @@ module Pod
           podfile = Pod::Podfile.new do
             install! 'cocoapods', :integrate_targets => false
             source SpecHelper.test_repo_url
-            xcodeproj 'SampleProject/SampleProject'
+            project 'SampleProject/SampleProject'
             target 'TestRunner' do
               pod 'monkey'
             end
@@ -372,7 +372,7 @@ module Pod
       it 'unlocks all dependencies with the same root name in update mode' do
         podfile = Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           target 'SampleProject' do
             pod 'AFNetworking'
             pod 'AFNetworkActivityLogger'
@@ -406,7 +406,7 @@ module Pod
       it 'takes into account locked implicit dependencies' do
         podfile = Podfile.new do
           platform :ios, '8.0'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           target 'SampleProject' do
             pod 'ARAnalytics/Mixpanel'
           end
@@ -506,7 +506,7 @@ module Pod
       it 'warns when a dependency is duplicated' do
         podfile = Podfile.new do
           source 'https://github.com/CocoaPods/Specs.git'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           platform :ios, '8.0'
           target 'SampleProject' do
             pod 'RestKit', '~> 0.23.0'
@@ -581,7 +581,7 @@ module Pod
         'external sources' do
         podfile = Podfile.new do
           source 'https://github.com/CocoaPods/Specs.git'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
             pod 'SEGModules', :git => 'https://github.com/segiddins/SEGModules.git'
@@ -600,7 +600,7 @@ module Pod
         'external sources' do
         podfile = Podfile.new do
           source 'https://github.com/CocoaPods/Specs.git'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
             pod 'RestKit/Core', :git => 'https://github.com/RestKit/RestKit.git'
@@ -619,7 +619,7 @@ module Pod
         'external sources with one being nil' do
         podfile = Podfile.new do
           source 'https://github.com/CocoaPods/Specs.git'
-          xcodeproj 'SampleProject/SampleProject'
+          project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
             pod 'RestKit', :git => 'https://github.com/RestKit/RestKit.git'
