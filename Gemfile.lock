@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: d3db81bb0dba19299767b31898e99483921d5194
-  branch: mr-dsl-project-directive
+  revision: 8c55fdc3e2bacca908c9cf12eff0e64e8ed036f5
+  branch: master
   specs:
     cocoapods-core (1.0.0.beta.2)
       activesupport (>= 4.0.2)
