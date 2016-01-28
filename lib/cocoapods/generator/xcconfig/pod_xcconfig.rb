@@ -8,13 +8,6 @@ module Pod
       # required by CocoaPods.
       #
       class PodXCConfig
-        # @return [String] Defined to hold the default Xcode build path, so
-        #         that when this is overridden per {PodTarget}, it is still
-        #         possible to reference other build products relative to the
-        #         original path.
-        #
-        SHARED_BUILD_DIR_VARIABLE = 'PODS_SHARED_BUILD_DIR'.freeze
-
         # @return [Target] the target represented by this xcconfig.
         #
         attr_reader :target
@@ -57,33 +50,18 @@ module Pod
             'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'SKIP_INSTALL' => 'YES',
-            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             # 'USE_HEADERMAP' => 'NO'
           }
 
           @xcconfig = Xcodeproj::Config.new(config)
 
-          if target.requires_frameworks?
-            build_settings = {
-              SHARED_BUILD_DIR_VARIABLE => '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)',
-              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
-            }
-            scoped_dependent_targets = target.dependent_targets.select { |t| t.should_build? && t.scoped? }
-            unless scoped_dependent_targets.empty?
-              framework_search_paths = scoped_dependent_targets.map do |target|
-                target.relative_configuration_build_dir("$#{SHARED_BUILD_DIR_VARIABLE}")
-              end
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths)
-            end
-            @xcconfig.merge!(build_settings)
-          end
-
           XCConfigHelper.add_settings_for_file_accessors_of_target(target, @xcconfig)
           target.file_accessors.each do |file_accessor|
             @xcconfig.merge!(file_accessor.spec_consumer.pod_target_xcconfig)
           end
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
+          XCConfigHelper.add_settings_for_dependent_targets(target, target.dependent_targets, @xcconfig)
           @xcconfig
         end
 

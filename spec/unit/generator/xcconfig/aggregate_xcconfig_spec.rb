@@ -171,7 +171,7 @@ module Pod
             end
 
             it 'includes the public header paths as system headers' do
-              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
               @generator.stubs(:pod_targets).returns([@pod_targets.first, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'), @target_definition)])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
@@ -216,11 +216,11 @@ module Pod
 
           describe 'with an unscoped pod target' do
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$CONFIGURATION_BUILD_DIR/OrangeFramework"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework.framework/Headers"'
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
           end
