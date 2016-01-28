@@ -118,7 +118,7 @@ check_resource_md5()
   if type md5 >/dev/null 2>&1 ; then
     md5_file_path="${PODS_ROOT}/resources-checksums/`basename \\"$1\\"`"
     md5_file_path="${md5_file_path%.*}"
-    current_md5=`md5 -q ${PODS_ROOT}/$1`
+    current_md5=`md5 -q $1`
     if [ -e $md5_file_path ]; then
       old_md5=`cat $md5_file_path`
       echo $current_md5 > "$md5_file_path"
