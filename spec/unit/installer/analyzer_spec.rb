@@ -286,6 +286,33 @@ module Pod
           }
         end
 
+        it "doesn't deduplicate targets across different integration modes" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            xcodeproj 'SampleProject/SampleProject'
+            target 'SampleProject' do
+              use_frameworks!
+              pod 'BananaLib'
+
+              target 'TestRunner' do
+                use_frameworks!(false)
+                pod 'BananaLib'
+              end
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          pod_targets = result.targets.flat_map(&:pod_targets).uniq.sort_by(&:name)
+          Hash[pod_targets.map { |t| [[t.label, t.requires_frameworks?], t.target_definitions.map(&:label)] }].should == {
+            ['BananaLib', false] => %w(Pods-SampleProject-TestRunner),
+            ['BananaLib', true]  => %w(Pods-SampleProject),
+            ['monkey', false]    => %w(Pods-SampleProject-TestRunner),
+            ['monkey', true]     => %w(Pods-SampleProject),
+          }
+        end
+
         it "doesn't deduplicate targets when deduplication is disabled" do
           podfile = Pod::Podfile.new do
             install! 'cocoapods', :deduplicate_targets => false
