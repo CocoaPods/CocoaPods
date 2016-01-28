@@ -55,6 +55,11 @@ module Pod
             XCConfigHelper.add_static_dependency_build_settings(target, xcconfig, file_accessor)
           end
           XCConfigHelper.add_dynamic_dependency_build_settings(target, xcconfig)
+          if target.requires_frameworks?
+            target.dependent_targets.each do |dependent_target|
+              XCConfigHelper.add_dynamic_dependency_build_settings(dependent_target, xcconfig)
+            end
+          end
         end
 
         # Adds build settings for static vendored frameworks and libraries.
@@ -86,12 +91,6 @@ module Pod
         #        The xcconfig to edit.
         #
         def self.add_dynamic_dependency_build_settings(target, xcconfig)
-          if target.requires_frameworks?
-            target.dependent_targets.each do |dependent_target|
-              XCConfigHelper.add_dynamic_dependency_build_settings(dependent_target, xcconfig)
-            end
-          end
-
           target.file_accessors.each do |file_accessor|
             file_accessor.vendored_dynamic_frameworks.each do |vendored_dynamic_framework|
               XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, target.sandbox.root)
