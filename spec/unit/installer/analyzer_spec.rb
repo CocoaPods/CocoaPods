@@ -130,46 +130,48 @@ module Pod
 
       #--------------------------------------#
 
-      describe '#scope_suffix_for_distinctor' do
+      describe '#scope_suffixes_for_variants' do
         before do
           @analyzer = Pod::Installer::Analyzer.new(config.sandbox, stub('Podfile'), nil)
           @root_spec = stub(:name => 'Spec')
         end
 
+        PodVariant = Pod::Installer::Analyzer::PodVariant.freeze
+
         it 'returns scopes by platform names if they qualify' do
-          specs = [
-            [[@root_spec], Platform.ios],
-            [[@root_spec], Platform.osx],
+          variants = [
+            PodVariant.new([@root_spec], Platform.ios),
+            PodVariant.new([@root_spec], Platform.osx),
           ]
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == %w(iOS OSX)
+          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == %w(iOS OSX)
         end
 
         it 'returns scopes by versioned platform names if they qualify' do
-          specs = [
-            [[@root_spec], Platform.ios],
-            [[@root_spec], Platform.new(:ios, '7.0')],
+          variants = [
+            PodVariant.new([@root_spec], Platform.ios),
+            PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
           ]
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == ['iOS', 'iOS7.0']
+          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == ['iOS', 'iOS7.0']
         end
 
         it 'returns scopes by subspec names if they qualify' do
           shared_subspec = stub(:name => 'Spec/Shared')
-          specs = [
-            [[@root_spec, shared_subspec], Platform.ios],
-            [[@root_spec, shared_subspec, stub(:name => 'Spec/Foo')], Platform.ios],
-            [[@root_spec, shared_subspec, stub(:name => 'Spec/Bar')], Platform.ios],
+          variants = [
+            PodVariant.new([@root_spec, shared_subspec], Platform.ios),
+            PodVariant.new([@root_spec, shared_subspec, stub(:name => 'Spec/Foo')], Platform.ios),
+            PodVariant.new([@root_spec, shared_subspec, stub(:name => 'Spec/Bar')], Platform.ios),
           ]
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [nil, 'Foo', 'Bar']
+          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == [nil, 'Foo', 'Bar']
         end
 
         it 'returns scopes by platform names and subspec names if they qualify' do
-          specs = [
-            [[@root_spec], Platform.ios],
-            [[@root_spec, stub(:name => 'Spec/Foo')], Platform.ios],
-            [[@root_spec], Platform.osx],
-            [[@root_spec, stub(:name => 'Spec/Bar')], Platform.osx],
+          variants = [
+            PodVariant.new([@root_spec], Platform.ios),
+            PodVariant.new([@root_spec, stub(:name => 'Spec/Foo')], Platform.ios),
+            PodVariant.new([@root_spec], Platform.osx),
+            PodVariant.new([@root_spec, stub(:name => 'Spec/Bar')], Platform.osx),
           ]
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [
+          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == [
             'iOS',
             'iOS-Foo',
             'OSX',
@@ -179,12 +181,12 @@ module Pod
 
         it 'returns scopes by versioned platform names and subspec names if they qualify' do
           specs = [
-            [[@root_spec], Platform.new(:ios, '7.0')],
-            [[@root_spec, stub(:name => 'Spec/Foo')], Platform.ios],
-            [[@root_spec], Platform.osx],
-            [[@root_spec, stub(:name => 'Spec/Bar')], Platform.osx],
+            PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
+            PodVariant.new([@root_spec, stub(:name => 'Spec/Foo')], Platform.ios),
+            PodVariant.new([@root_spec], Platform.osx),
+            PodVariant.new([@root_spec, stub(:name => 'Spec/Bar')], Platform.osx),
           ]
-          @analyzer.send(:scope_suffix_for_distinctor, specs).values.should == [
+          @analyzer.send(:scope_suffixes_for_variants, specs).values.should == [
             'iOS7.0',
             'iOS-Foo',
             'OSX',

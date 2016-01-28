@@ -13,6 +13,7 @@ module Pod
       autoload :SandboxAnalyzer,           'cocoapods/installer/analyzer/sandbox_analyzer'
       autoload :SpecsState,                'cocoapods/installer/analyzer/specs_state'
       autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
+      autoload :PodVariant,                'cocoapods/installer/analyzer/pod_variant'
       autoload :TargetInspectionResult,    'cocoapods/installer/analyzer/target_inspection_result'
       autoload :TargetInspector,           'cocoapods/installer/analyzer/target_inspector'
 
@@ -287,29 +288,25 @@ module Pod
       #
       def generate_pod_targets(specs_by_target)
         if installation_options.deduplicate_targets?
-          all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
-            dependent_specs.group_by(&:root).map do |root_spec, specs|
-              [root_spec, specs, target_definition]
+          distinct_targets = specs_by_target.each_with_object({}) do |dependency, hash|
+            target_definition, dependent_specs = *dependency
+            dependent_specs.group_by(&:root).each do |root_spec, specs|
+              pod_variant = PodVariant.new(specs, target_definition.platform)
+              hash[root_spec] ||= {}
+              (hash[root_spec][pod_variant] ||= []) << target_definition
             end
           end
 
-          distinct_targets = all_specs.each_with_object({}) do |dependency, hash|
-            root_spec, specs, target_definition = *dependency
-            hash[root_spec] ||= {}
-            (hash[root_spec][[specs, target_definition.platform]] ||= []) << target_definition
-          end
-
-          pod_targets = distinct_targets.flat_map do |_, targets_by_distinctors|
-            if targets_by_distinctors.count > 1
+          pod_targets = distinct_targets.flat_map do |_, target_definitions_by_variant|
+            if target_definitions_by_variant.count > 1
               # There are different sets of subspecs or the spec is used across different platforms
-              suffixes = scope_suffix_for_distinctor(targets_by_distinctors.keys)
-              targets_by_distinctors.flat_map do |distinctor, target_definitions|
-                specs, = *distinctor
-                generate_pod_target(target_definitions, specs, :scope_suffix => suffixes[distinctor])
+              suffixes = scope_suffixes_for_variants(target_definitions_by_variant.keys)
+              target_definitions_by_variant.flat_map do |variant, target_definitions|
+                generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
               end
             else
-              (specs, _), target_definitions = targets_by_distinctors.first
-              generate_pod_target(target_definitions, specs)
+              variant, target_definitions = *target_definitions_by_variant.first
+              generate_pod_target(target_definitions, variant.specs)
             end
           end
         else
@@ -328,13 +325,13 @@ module Pod
 
       # Describes what makes pod targets configurations distinct among other.
       #
-      # @param [(Array<Specification>, Platform) => TargetDefinition] distinctors
+      # @param [Array<PodVariant>] variants
       #
-      # @return [(Array<Specification>, Platform) => String]
+      # @return [Hash<PodVariant, String>]
       #
-      def scope_suffix_for_distinctor(distinctors)
-        all_spec_variants = distinctors.map { |k| k[0] }
-        all_platform_variants = distinctors.map { |k| k[1] }
+      def scope_suffixes_for_variants(variants)
+        all_spec_variants = variants.map(&:specs)
+        all_platform_variants = variants.map(&:platform)
         all_platform_name_variants = all_platform_variants.map(&:name)
 
         if all_platform_name_variants.uniq.count == all_platform_name_variants.count
@@ -346,27 +343,25 @@ module Pod
         end
 
         if all_platform_variants.uniq.count == all_platform_variants.count
-          result = distinctors.map { |d| [d, platform_name_proc.call(d[1])] }
+          result = variants.map { |v| [v, platform_name_proc.call(v.platform)] }
         else
           common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
-          result = distinctors.map do |distinctor|
-            specs, = *distinctor
-            specs -= common_specs
-            subspec_names = specs.map { |spec| spec.name.split('/')[1..-1].join('_') }
+          result = variants.map do |variant|
+            subspecs = variant.specs - common_specs
+            subspec_names = subspecs.map { |spec| spec.name.split('/')[1..-1].join('_') }
             # => Subspecs names without common subspecs
-            [distinctor, subspec_names.empty? ? nil : subspec_names.join('-')]
+            [variant, subspec_names.empty? ? nil : subspec_names.join('-')]
           end
           if all_spec_variants.count > all_spec_variants.uniq.count
-            result.map! do |distinctor, suffix|
-              _, platform = *distinctor
-              platform_name = platform_name_proc.call(platform)
+            result.map! do |variant, suffix|
+              platform_name = platform_name_proc.call(variant.platform)
               # => Platform name (+ SDK version) + subspecs names without common subspecs
-              [distinctor, [platform_name, suffix].compact.join('-')]
+              [variant, [platform_name, suffix].compact.join('-')]
             end
           end
         end
 
-        Hash[result.map { |d, name| [d, name && name.tr('/', '_')] }]
+        Hash[result.map { |v, name| [v, name && name.tr('/', '_')] }]
       end
 
       # Finds the names of the Pods upon which the given target _transitively_
