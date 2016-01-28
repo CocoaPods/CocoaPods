@@ -291,22 +291,26 @@ module Pod
           distinct_targets = specs_by_target.each_with_object({}) do |dependency, hash|
             target_definition, dependent_specs = *dependency
             dependent_specs.group_by(&:root).each do |root_spec, specs|
-              pod_variant = PodVariant.new(specs, target_definition.platform)
+              pod_variant = PodVariant.new(specs, target_definition.platform, target_definition.uses_frameworks?)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
             end
           end
 
-          pod_targets = distinct_targets.flat_map do |_, target_definitions_by_variant|
-            if target_definitions_by_variant.count > 1
-              # There are different sets of subspecs or the spec is used across different platforms
-              suffixes = scope_suffixes_for_variants(target_definitions_by_variant.keys)
-              target_definitions_by_variant.flat_map do |variant, target_definitions|
-                generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
+          pod_targets = distinct_targets.flat_map do |_root, target_definitions_by_variant|
+            # Frameworks and libraries can safely co-exist
+            target_definitions_by_variant.group_by { |k, _| k.requires_frameworks? }.flat_map do |_, array|
+              if array.count > 1
+                # There are different sets of subspecs or the spec is used across different platforms
+                hash = Hash[array]
+                suffixes = scope_suffixes_for_variants(hash.keys)
+                hash.flat_map do |variant, target_definitions|
+                  generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
+                end
+              else
+                variant, target_definitions = *array.first
+                generate_pod_target(target_definitions, variant.specs)
               end
-            else
-              variant, target_definitions = *target_definitions_by_variant.first
-              generate_pod_target(target_definitions, variant.specs)
             end
           end
         else

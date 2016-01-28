@@ -11,6 +11,11 @@ module Pod
         #
         attr_accessor :platform
 
+        # @return [Bool] whether this pod should be built as framework
+        #
+        attr_accessor :requires_frameworks
+        alias_method :requires_frameworks?, :requires_frameworks
+
         # @return [Specification] the root specification
         #
         def root_spec
@@ -19,10 +24,12 @@ module Pod
 
         # @param [Array<String>] specs       @see #specs
         # @param [Platform] platform         @see #platform
+        # @param [Bool] requires_frameworks  @see #requires_frameworks?
         #
-        def initialize(specs, platform)
+        def initialize(specs, platform, requires_frameworks = false)
           self.specs = specs
           self.platform = platform
+          self.requires_frameworks = requires_frameworks
         end
 
         # @return [Bool] whether the {PodVariant} is equal to another taking all
@@ -31,7 +38,8 @@ module Pod
         def ==(other)
           self.class == other.class &&
             specs == other.specs &&
-            platform == other.platform
+            platform == other.platform &&
+            requires_frameworks == other.requires_frameworks
         end
         alias_method :eql?, :==
 
@@ -41,7 +49,7 @@ module Pod
         #
         # @!visibility private
         def hash
-          [specs, platform].hash
+          [specs, platform, requires_frameworks].hash
         end
       end
     end
