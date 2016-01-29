@@ -61,7 +61,6 @@ module Pod
       before do
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
-        @installer.stubs(:determine_dependency_product_types)
         @installer.stubs(:verify_no_duplicate_framework_names)
         @installer.stubs(:verify_no_static_framework_transitive_dependencies)
         @installer.stubs(:verify_framework_usage)
