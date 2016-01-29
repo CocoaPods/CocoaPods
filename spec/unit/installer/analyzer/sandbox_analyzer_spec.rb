@@ -22,12 +22,12 @@ module Pod
         @analyzer.stubs(:sandbox_checksum).returns(@spec.checksum)
         state = @analyzer.analyze
         state.class.should == Installer::Analyzer::SpecsState
-        state.unchanged.should == ['BananaLib']
+        state.unchanged.should == Set.new(%w(BananaLib))
       end
 
       it 'marks all the pods as added if no sandbox manifest is available' do
         @sandbox.stubs(:manifest)
-        @analyzer.analyze.added.should == ['BananaLib']
+        @analyzer.analyze.added.should == Set.new(%w(BananaLib))
       end
     end
 

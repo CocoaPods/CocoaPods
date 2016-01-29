@@ -202,7 +202,7 @@ module Pod
           pods_state
         else
           state = SpecsState.new
-          state.added.concat(podfile.dependencies.map(&:name).uniq)
+          state.added.merge(podfile.dependencies.map(&:root_name))
           state
         end
       end
@@ -477,8 +477,8 @@ module Pod
           if update_mode == :all
             deps_to_fetch = deps_with_external_source
           else
-            deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.name) }
-            deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.name) }
+            deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
+            deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
             deps_to_fetch += deps_to_fetch_if_needed.select do |dep|
               sandbox.specification(dep.root_name).nil? ||
                 !dep.external_source[:path].nil? ||

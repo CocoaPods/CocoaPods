@@ -396,7 +396,7 @@ module Pod
 
         it 'analyzes the Podfile, the Lockfile and the Sandbox' do
           @installer.send(:analyze)
-          @installer.analysis_result.sandbox_state.added.should == ['JSONKit']
+          @installer.analysis_result.sandbox_state.added.should == Set.new(%w(JSONKit))
         end
 
         it 'stores the targets created by the analyzer' do

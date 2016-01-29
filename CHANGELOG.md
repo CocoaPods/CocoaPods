@@ -45,6 +45,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4823](https://github.com/CocoaPods/CocoaPods/issues/4823)
 
+* Determine whether an external source needs to be fetched when updating a
+  dependency regardless of subspec names.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4821](https://github.com/CocoaPods/CocoaPods/issues/4821)
+
 
 ## 1.0.0.beta.2 (2016-01-05)
 

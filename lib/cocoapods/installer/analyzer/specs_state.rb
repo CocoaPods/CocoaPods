@@ -1,3 +1,5 @@
+require 'set'
+
 module Pod
   class Installer
     class Analyzer
@@ -17,32 +19,38 @@ module Pod
         #         (`:added`, `:removed`, `:changed` or `:unchanged`).
         #
         def initialize(pods_by_state = nil)
-          @added     = []
-          @deleted   = []
-          @changed   = []
-          @unchanged = []
+          @added     = Set.new
+          @deleted   = Set.new
+          @changed   = Set.new
+          @unchanged = Set.new
 
           if pods_by_state
-            @added     = pods_by_state[:added] || []
-            @deleted   = pods_by_state[:removed] || []
-            @changed   = pods_by_state[:changed] || []
-            @unchanged = pods_by_state[:unchanged] || []
+            {
+              :added => :added,
+              :changed => :changed,
+              :removed => :deleted,
+              :unchanged => :unchanged,
+            }.each do |state, spec_state|
+              Array(pods_by_state[state]).each do |name|
+                add_name(name, spec_state)
+              end
+            end
           end
         end
 
-        # @return [Array<String>] the names of the pods that were added.
+        # @return [Set<String>] the names of the pods that were added.
         #
         attr_accessor :added
 
-        # @return [Array<String>] the names of the pods that were changed.
+        # @return [Set<String>] the names of the pods that were changed.
         #
         attr_accessor :changed
 
-        # @return [Array<String>] the names of the pods that were deleted.
+        # @return [Set<String>] the names of the pods that were deleted.
         #
         attr_accessor :deleted
 
-        # @return [Array<String>] the names of the pods that were unchanged.
+        # @return [Set<String>] the names of the pods that were unchanged.
         #
         attr_accessor :unchanged
 
@@ -68,7 +76,7 @@ module Pod
         # @return [void]
         #
         def add_name(name, state)
-          send(state) << name
+          send(state) << Specification.root_name(name)
         end
       end
     end
