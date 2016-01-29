@@ -437,7 +437,7 @@ module Pod
 
       it 'does not download the same source multiple times for different subspecs' do
         podfile_state = Installer::Analyzer::SpecsState.new
-        podfile_state.added << 'ARAnalytics/Mixpanel' << 'ARAnalytics/HockeyApp'
+        podfile_state.added << 'ARAnalytics'
         @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
         @podfile.stubs(:dependencies).returns([
           Dependency.new('ARAnalytics/Mixpanel', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
