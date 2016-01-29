@@ -7,7 +7,7 @@ module Pod
         config.sandbox.prepare
         @podfile = Podfile.new do
           platform :ios
-          xcodeproj 'dummy'
+          project 'dummy'
         end
         @target_definition = @podfile.target_definitions['Pods']
         @project = Project.new(config.sandbox.project_path)

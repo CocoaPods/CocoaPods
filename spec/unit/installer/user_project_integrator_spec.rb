@@ -8,7 +8,7 @@ module Pod
         sample_project_path = @sample_project_path
         @podfile = Podfile.new do
           platform :ios
-          xcodeproj sample_project_path
+          project sample_project_path
           target 'SampleProject' do
             pod 'JSONKit'
             target :empty do
