@@ -415,6 +415,7 @@ module Pod
       #
       def generate_pod_target(target_definitions, pod_specs, scope_suffix: nil)
         pod_target = PodTarget.new(pod_specs, target_definitions, sandbox, scope_suffix)
+        pod_target.host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
 
         if installation_options.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values

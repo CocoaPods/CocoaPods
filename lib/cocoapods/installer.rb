@@ -108,7 +108,6 @@ module Pod
       prepare
       resolve_dependencies
       download_dependencies
-      determine_dependency_product_types
       verify_no_duplicate_framework_names
       verify_no_static_framework_transitive_dependencies
       verify_framework_usage
@@ -373,22 +372,6 @@ module Pod
       @pod_installers.each do |installer|
         pod_target = pod_targets.find { |target| target.pod_name == installer.name }
         installer.lock_files!(pod_target.file_accessors)
-      end
-    end
-
-    # Determines if the dependencies need to be built as dynamic frameworks or
-    # if they can be built as static libraries by checking for the Swift source
-    # presence. Therefore it is important that the file accessors of the
-    # #pod_targets are created.
-    #
-    # @return [void]
-    #
-    def determine_dependency_product_types
-      aggregate_targets.each do |aggregate_target|
-        aggregate_target.pod_targets.each do |pod_target|
-          pod_target.host_requires_frameworks ||= aggregate_target.requires_frameworks?
-          pod_target.platform = nil # needs to be recomputed
-        end
       end
     end
 
