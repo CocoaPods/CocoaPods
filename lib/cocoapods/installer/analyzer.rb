@@ -352,7 +352,9 @@ module Pod
           common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
           result = variants.map do |variant|
             subspecs = variant.specs - common_specs
-            subspec_names = subspecs.map { |spec| spec.name.split('/')[1..-1].join('_') }
+            subspec_names = subspecs.map do |spec|
+              spec.root? ? 'root' : spec.name.split('/')[1..-1].join('_')
+            end.sort
             # => Subspecs names without common subspecs
             [variant, subspec_names.empty? ? nil : subspec_names.join('-')]
           end
