@@ -24,6 +24,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
 
+* Fix mixed integrations where static libraries are used along frameworks
+  from different target definitions in one Podfile.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
+
 ## 1.0.0.beta.3 (2016-02-03)
 
 ##### Breaking
