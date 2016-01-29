@@ -81,9 +81,9 @@ module Pod
 
         The Xcode project file should be specified in your `Podfile` like this:
 
-            xcodeproj 'path/to/XcodeProject'
+            project 'path/to/XcodeProject'
 
-        If no xcodeproj is specified, then a search for an Xcode project will
+        If no project is specified, then a search for an Xcode project will
         be made. If more than one Xcode project is found, the command will
         raise an error.
 
