@@ -6,8 +6,6 @@ module Pod
       # Generates dependencies that require the specific version of the Pods
       # that haven't changed in the {Lockfile}.
       module LockingDependencyAnalyzer
-        class << self; attr_accessor :pods_to_unlock; end
-
         # Generates dependencies that require the specific version of the Pods
         # that haven't changed in the {Lockfile}.
         #
@@ -20,7 +18,6 @@ module Pod
         #         a Pod.
         #
         def self.generate_version_locking_dependencies(lockfile, pods_to_update, pods_to_unlock = nil)
-          self.pods_to_unlock = pods_to_unlock
           dependency_graph = Molinillo::DependencyGraph.new
 
           if lockfile
@@ -32,7 +29,7 @@ module Pod
 
             pods = lockfile.to_hash['PODS'] || []
             pods.each do |pod|
-              add_to_dependency_graph(pod, [], dependency_graph)
+              add_to_dependency_graph(pod, [], dependency_graph, pods_to_unlock)
             end
 
             pods_to_update = pods_to_update.flat_map do |u|
@@ -59,23 +56,23 @@ module Pod
 
         private
 
-        def self.add_child_vertex_to_graph(dependency_string, parents, dependency_graph)
+        def self.add_child_vertex_to_graph(dependency_string, parents, dependency_graph, pods_to_unlock)
           dependency = Dependency.from_string(dependency_string)
-          if self.pods_to_unlock.any? { |name| dependency.root_name == name }
+          if pods_to_unlock.any? { |name| dependency.root_name == name }
             dependency = Dependency.new(dependency.name)
           end
           dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
           dependency
         end
 
-        def self.add_to_dependency_graph(object, parents, dependency_graph)
+        def self.add_to_dependency_graph(object, parents, dependency_graph, pods_to_unlock)
           case object
           when String
-            add_child_vertex_to_graph(object, parents, dependency_graph)
+            add_child_vertex_to_graph(object, parents, dependency_graph, pods_to_unlock)
           when Hash
             object.each do |key, value|
-              dependency = add_child_vertex_to_graph(key, parents, dependency_graph)
-              value.each { |v| add_to_dependency_graph(v, [dependency.name], dependency_graph) }
+              dependency = add_child_vertex_to_graph(key, parents, dependency_graph, pods_to_unlock)
+              value.each { |v| add_to_dependency_graph(v, [dependency.name], dependency_graph, pods_to_unlock) }
             end
           end
         end
