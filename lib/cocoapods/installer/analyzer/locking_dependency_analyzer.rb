@@ -58,7 +58,7 @@ module Pod
 
         def self.add_child_vertex_to_graph(dependency_string, parents, dependency_graph, pods_to_unlock)
           dependency = Dependency.from_string(dependency_string)
-          if pods_to_unlock.any? { |name| dependency.root_name == name }
+          if pods_to_unlock.include?(dependency.root_name)
             dependency = Dependency.new(dependency.name)
           end
           dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
