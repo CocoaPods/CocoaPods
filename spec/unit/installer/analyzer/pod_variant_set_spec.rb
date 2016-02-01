@@ -9,6 +9,11 @@ module Pod
 
       PodVariant = Pod::Installer::Analyzer::PodVariant.freeze
 
+      it 'returns an empty scope if there is only one variant' do
+        variants = PodVariantSet.new([PodVariant.new([@root_spec], Platform.ios)])
+        variants.scope_suffixes.values.should == [nil]
+      end
+
       it 'returns scopes by built types if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec], Platform.ios, true),
