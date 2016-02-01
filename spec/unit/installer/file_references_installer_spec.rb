@@ -78,6 +78,23 @@ module Pod
         framework_header.should.not.exist
       end
 
+      it 'links the headers required for building the pod target with frameworks and header_mapping_dir' do
+        @pod_target = fixture_pod_target('snake/snake.podspec')
+        @pod_target.host_requires_frameworks = true
+        @project = Project.new(config.sandbox.project_path)
+        @project.add_pod_group('snake', fixture('snake'))
+        @installer = Installer::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+        @installer.install!
+        headers_root = @pod_target.build_headers.root
+        private_headers = [
+          headers_root + 'snake/A/Boa.h',
+          headers_root + 'snake/B/Boa.h',
+          headers_root + 'snake/C/Boa.h',
+          headers_root + 'snake/snake.h',
+        ]
+        private_headers.each { |private_header| private_header.should.exist }
+      end
+
       it 'links the public headers meant for the user' do
         @installer.install!
         headers_root = config.sandbox.public_headers.root
