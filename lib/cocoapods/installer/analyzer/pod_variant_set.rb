@@ -7,6 +7,8 @@ module Pod
         #
         attr_accessor :variants
 
+        # Initialize a new instance.
+        #
         # @param [Array<PodVariant>] variants  @see #variants
         #
         def initialize(variants)
