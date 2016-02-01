@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Link build and private headers in the target support files but not in the
+  sandbox when integrating with frameworks.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4848](https://github.com/CocoaPods/CocoaPods/issues/4848)
+
 * Don't try to embed project headers into frameworks.
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4819](https://github.com/CocoaPods/CocoaPods/issues/4819)
