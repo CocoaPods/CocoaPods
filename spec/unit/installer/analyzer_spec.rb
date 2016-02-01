@@ -130,81 +130,6 @@ module Pod
 
       #--------------------------------------#
 
-      describe '#scope_suffixes_for_variants' do
-        before do
-          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, stub('Podfile'), nil)
-          @root_spec = stub(:name => 'Spec', :root? => true)
-        end
-
-        PodVariant = Pod::Installer::Analyzer::PodVariant.freeze
-
-        it 'returns scopes by platform names if they qualify' do
-          variants = [
-            PodVariant.new([@root_spec], Platform.ios),
-            PodVariant.new([@root_spec], Platform.osx),
-          ]
-          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == %w(iOS OSX)
-        end
-
-        it 'returns scopes by versioned platform names if they qualify' do
-          variants = [
-            PodVariant.new([@root_spec], Platform.ios),
-            PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
-          ]
-          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == ['iOS', 'iOS7.0']
-        end
-
-        it 'returns scopes by subspec names if they qualify' do
-          shared_subspec = stub(:name => 'Spec/Shared', :root? => false)
-          variants = [
-            PodVariant.new([@root_spec, shared_subspec], Platform.ios),
-            PodVariant.new([@root_spec, shared_subspec, stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
-            PodVariant.new([@root_spec, shared_subspec, stub(:name => 'Spec/Bar', :root? => false)], Platform.ios),
-          ]
-          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == [nil, 'Foo', 'Bar']
-        end
-
-        it 'returns scopes by subspec names if they qualify and handle partial root spec presence well' do
-          variants = [
-            PodVariant.new([stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
-            PodVariant.new([@root_spec, stub(:name => 'Spec/Bar', :root? => false)], Platform.ios),
-          ]
-          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == ['Foo', 'Bar-root']
-        end
-
-        it 'returns scopes by platform names and subspec names if they qualify' do
-          variants = [
-            PodVariant.new([@root_spec], Platform.ios),
-            PodVariant.new([@root_spec, stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
-            PodVariant.new([@root_spec], Platform.osx),
-            PodVariant.new([@root_spec, stub(:name => 'Spec/Bar', :root? => false)], Platform.osx),
-          ]
-          @analyzer.send(:scope_suffixes_for_variants, variants).values.should == [
-            'iOS',
-            'iOS-Foo',
-            'OSX',
-            'OSX-Bar',
-          ]
-        end
-
-        it 'returns scopes by versioned platform names and subspec names if they qualify' do
-          specs = [
-            PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
-            PodVariant.new([@root_spec, stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
-            PodVariant.new([@root_spec], Platform.osx),
-            PodVariant.new([@root_spec, stub(:name => 'Spec/Bar', :root? => false)], Platform.osx),
-          ]
-          @analyzer.send(:scope_suffixes_for_variants, specs).values.should == [
-            'iOS7.0',
-            'iOS-Foo',
-            'OSX',
-            'OSX-Bar',
-          ]
-        end
-      end
-
-      #--------------------------------------#
-
       it 'generates the model to represent the target definitions' do
         target = @analyzer.analyze.targets.first
         target.pod_targets.map(&:name).sort.should == %w(
@@ -313,11 +238,11 @@ module Pod
           result = analyzer.analyze
 
           pod_targets = result.targets.flat_map(&:pod_targets).uniq.sort_by(&:name)
-          Hash[pod_targets.map { |t| [[t.label, t.requires_frameworks?], t.target_definitions.map(&:label)] }].should == {
-            ['BananaLib', false] => %w(Pods-SampleProject-TestRunner),
-            ['BananaLib', true]  => %w(Pods-SampleProject),
-            ['monkey', false]    => %w(Pods-SampleProject-TestRunner),
-            ['monkey', true]     => %w(Pods-SampleProject),
+          Hash[pod_targets.map { |t| [t.label, t.target_definitions.map(&:label)] }].should == {
+            'BananaLib-library'   => %w(Pods-SampleProject-TestRunner),
+            'BananaLib-framework' => %w(Pods-SampleProject),
+            'monkey-library'      => %w(Pods-SampleProject-TestRunner),
+            'monkey-framework'    => %w(Pods-SampleProject),
           }
         end
 

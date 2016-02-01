@@ -14,6 +14,7 @@ module Pod
       autoload :SpecsState,                'cocoapods/installer/analyzer/specs_state'
       autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
       autoload :PodVariant,                'cocoapods/installer/analyzer/pod_variant'
+      autoload :PodVariantSet,             'cocoapods/installer/analyzer/pod_variant_set'
       autoload :TargetInspectionResult,    'cocoapods/installer/analyzer/target_inspection_result'
       autoload :TargetInspector,           'cocoapods/installer/analyzer/target_inspector'
 
@@ -298,19 +299,16 @@ module Pod
           end
 
           pod_targets = distinct_targets.flat_map do |_root, target_definitions_by_variant|
-            # Frameworks and libraries can safely co-exist
-            target_definitions_by_variant.group_by { |k, _| k.requires_frameworks? }.flat_map do |_, array|
-              if array.count > 1
-                # There are different sets of subspecs or the spec is used across different platforms
-                hash = Hash[array]
-                suffixes = scope_suffixes_for_variants(hash.keys)
-                hash.flat_map do |variant, target_definitions|
-                  generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
-                end
-              else
-                variant, target_definitions = *array.first
-                generate_pod_target(target_definitions, variant.specs)
+            if target_definitions_by_variant.count > 1
+              # There are different sets of subspecs or the spec is used across different platforms
+              hash = Hash[array]
+              suffixes = PodVariantSet.new(hash.keys).scope_suffixes
+              hash.flat_map do |variant, target_definitions|
+                generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
               end
+            else
+              variant, target_definitions = *array.first
+              generate_pod_target(target_definitions, variant.specs)
             end
           end
         else
@@ -325,49 +323,6 @@ module Pod
         pod_targets.each do |target|
           target.dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
         end
-      end
-
-      # Describes what makes pod targets configurations distinct among other.
-      #
-      # @param [Array<PodVariant>] variants
-      #
-      # @return [Hash<PodVariant, String>]
-      #
-      def scope_suffixes_for_variants(variants)
-        all_spec_variants = variants.map(&:specs)
-        all_platform_variants = variants.map(&:platform)
-        all_platform_name_variants = all_platform_variants.map(&:name)
-
-        if all_platform_name_variants.uniq.count == all_platform_name_variants.count
-          # => Platform name
-          platform_name_proc = proc { |platform| Platform.string_name(platform.symbolic_name).tr(' ', '') }
-        else
-          # => Platform name + SDK version
-          platform_name_proc = proc { |platform| platform.to_s.tr(' ', '') }
-        end
-
-        if all_platform_variants.uniq.count == all_platform_variants.count
-          result = variants.map { |v| [v, platform_name_proc.call(v.platform)] }
-        else
-          common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
-          result = variants.map do |variant|
-            subspecs = variant.specs - common_specs
-            subspec_names = subspecs.map do |spec|
-              spec.root? ? 'root' : spec.name.split('/')[1..-1].join('_')
-            end.sort
-            # => Subspecs names without common subspecs
-            [variant, subspec_names.empty? ? nil : subspec_names.join('-')]
-          end
-          if all_spec_variants.count > all_spec_variants.uniq.count
-            result.map! do |variant, suffix|
-              platform_name = platform_name_proc.call(variant.platform)
-              # => Platform name (+ SDK version) + subspecs names without common subspecs
-              [variant, [platform_name, suffix].compact.join('-')]
-            end
-          end
-        end
-
-        Hash[result.map { |v, name| [v, name && name.tr('/', '_')] }]
       end
 
       # Finds the names of the Pods upon which the given target _transitively_
