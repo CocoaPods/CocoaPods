@@ -22,6 +22,8 @@ module Pod
           specs.first.root
         end
 
+        # Initialize a new instance from its attributes.
+        #
         # @param [Array<String>] specs       @see #specs
         # @param [Platform] platform         @see #platform
         # @param [Bool] requires_frameworks  @see #requires_frameworks?
