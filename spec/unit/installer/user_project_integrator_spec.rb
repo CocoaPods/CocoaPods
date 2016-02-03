@@ -205,12 +205,6 @@ module Pod
           @integrator.send(:targets_to_integrate).map(&:name).should == ['Pods-SampleProject', 'Pods-SampleProject-empty']
         end
 
-        it 'does skip libraries with only abstract target definitions' do
-          @integrator.targets.map(&:name).should == ['Pods-SampleProject', 'Pods-SampleProject-empty']
-          @podfile.target_definition_list.each { |td| td.abstract = true }
-          @integrator.send(:targets_to_integrate).map(&:name).should == []
-        end
-
         it 'skips saving projects that are not dirtied (but touches them instead)' do
           project = mock('Project')
           project.stubs(:path).returns(Pathname('project.xcodeproj'))

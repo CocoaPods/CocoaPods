@@ -13,6 +13,7 @@ module Pod
     # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
+      raise "Can't initialize an AggregateTarget with an abstract TargetDefinition" if target_definition.abstract?
       super()
       @target_definition = target_definition
       @sandbox = sandbox

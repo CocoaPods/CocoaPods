@@ -230,8 +230,9 @@ module Pod
       # @return [Array<AggregateTarget>]
       #
       def generate_targets
-        pod_targets = generate_pod_targets(result.specs_by_target)
-        aggregate_targets = result.specs_by_target.keys.reject(&:abstract?).map do |target_definition|
+        specs_by_target = result.specs_by_target.reject { |td, _| td.abstract? }
+        pod_targets = generate_pod_targets(specs_by_target)
+        aggregate_targets = specs_by_target.keys.map do |target_definition|
           generate_target(target_definition, pod_targets)
         end
         aggregate_targets.each do |target|
