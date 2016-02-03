@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 929d404c34c7b7e84e9442acb3a4380452cdd4cd
+  revision: 5892bb297bff9180b4980dcf37502621cb6eaf97
   branch: master
   specs:
-    cocoapods-trunk (1.0.0.beta.1)
+    cocoapods-trunk (1.0.0.beta.2)
       nap (>= 0.8, < 2.0)
       netrc (= 0.7.8)
 
@@ -103,7 +103,7 @@ PATH
       cocoapods-plugins (>= 1.0.0.beta.1, < 2.0)
       cocoapods-search (>= 1.0.0.beta.1, < 2.0)
       cocoapods-stats (>= 1.0.0.beta.3, < 2.0)
-      cocoapods-trunk (>= 1.0.0.beta.1, < 2.0)
+      cocoapods-trunk (>= 1.0.0.beta.2, < 2.0)
       cocoapods-try (>= 1.0.0.beta.2, < 2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
@@ -164,7 +164,7 @@ GEM
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
       mocha (>= 0.13.0)
-    nap (1.0.0)
+    nap (1.1.0)
     netrc (0.7.8)
     notify (0.5.2)
     parser (2.3.0.2)
