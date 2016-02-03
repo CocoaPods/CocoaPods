@@ -5,9 +5,10 @@ module Pod
     before do
       @podfile = Podfile.new do
         platform :ios
-        project 'dummy'
+        project 'SampleProject/SampleProject'
+        target 'SampleProject'
       end
-      @target_definition = @podfile.target_definitions['Pods']
+      @target_definition = @podfile.target_definitions['SampleProject']
       @project = Project.new(config.sandbox.project_path)
 
       config.sandbox.project = @project

@@ -166,9 +166,9 @@ module Pod
           end
         end
         @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+        @analyzer.analyze.targets.count.should == 1
         target = @analyzer.analyze.targets.first
         restkit_target = target.pod_targets.find { |pt| pt.pod_name == 'RestKit' }
-        restkit_target.should.be.scoped
         restkit_target.dependent_targets.map(&:pod_name).sort.should == %w(
           AFNetworking
           ISO8601DateFormatterValueTransformer

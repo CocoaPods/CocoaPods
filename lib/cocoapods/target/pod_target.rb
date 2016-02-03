@@ -52,6 +52,7 @@ module Pod
     def initialize(specs, target_definitions, sandbox, scope_suffix = nil)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
+      raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
       super()
       @specs = specs
