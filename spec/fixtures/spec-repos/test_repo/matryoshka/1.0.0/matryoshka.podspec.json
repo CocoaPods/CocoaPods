@@ -1,0 +1,43 @@
+{
+  "name": "matryoshka",
+  "version": "1.0.0",
+  "authors": {
+    "Matryona Malyutin": "matryona@malyutin.local"
+  },
+  "summary": "👩‍👩‍👧",
+  "description": "Four levels: outmost (root), outer, inner",
+  "homepage": "http://httpbin.org/html",
+  "source": {
+    "git": "http://malyutin.local/matroyshka.git",
+    "tag": "1.0.0"
+  },
+  "license": "MIT",
+  "source_files": "Outmost.{h,m}",
+  "default_subspecs": "Outer",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  },
+  "subspecs": [
+    {
+      "name": "Outer",
+      "source_files": "Outer/Outer.{h,m}",
+      "subspecs": [
+        {
+          "name": "Inner",
+          "source_files": "Inner/Inner.{h,m}"
+        }
+      ]
+    },
+    {
+      "name": "Foo",
+      "source_files": "Foo/Foo.{h,m}"
+    },
+    {
+      "name": "Bar",
+      "source_files": "Bar/Bar.{h,m}"
+    }
+  ]
+}
