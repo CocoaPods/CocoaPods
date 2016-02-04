@@ -4,7 +4,10 @@ module Pod
   describe PodVariantSet = Installer::Analyzer::PodVariantSet do
     describe '#scope_suffixes' do
       before do
-        @root_spec = stub(:name => 'Spec', :root? => true)
+        @root_spec = fixture_spec('matryoshka/matryoshka.podspec')
+        @default_subspec = @root_spec.subspec_by_name('matryoshka/Outer')
+        @foo_subspec = @root_spec.subspec_by_name('matryoshka/Foo')
+        @bar_subspec = @root_spec.subspec_by_name('matryoshka/Bar')
       end
 
       PodVariant = Pod::Installer::Analyzer::PodVariant.freeze
@@ -39,19 +42,18 @@ module Pod
       end
 
       it 'returns scopes by subspec names if they qualify' do
-        shared_subspec = stub(:name => 'Spec/Shared', :root? => false)
         variants = PodVariantSet.new([
-          PodVariant.new([@root_spec, shared_subspec], Platform.ios),
-          PodVariant.new([@root_spec, shared_subspec, stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
-          PodVariant.new([@root_spec, shared_subspec, stub(:name => 'Spec/Bar', :root? => false)], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec, @bar_subspec], Platform.ios),
         ])
         variants.scope_suffixes.values.should == [nil, 'Foo', 'Bar']
       end
 
       it 'returns scopes by subspec names if they qualify and handle partial root spec presence well' do
         variants = PodVariantSet.new([
-          PodVariant.new([stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
-          PodVariant.new([@root_spec, stub(:name => 'Spec/Bar', :root? => false)], Platform.ios),
+          PodVariant.new([@foo_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @bar_subspec], Platform.ios),
         ])
         variants.scope_suffixes.values.should == ['Foo', 'Bar-root']
       end
@@ -59,9 +61,9 @@ module Pod
       it 'returns scopes by platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec], Platform.ios),
-          PodVariant.new([@root_spec, stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
+          PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx),
-          PodVariant.new([@root_spec, stub(:name => 'Spec/Bar', :root? => false)], Platform.osx),
+          PodVariant.new([@root_spec, @bar_subspec], Platform.osx),
         ])
         variants.scope_suffixes.values.should == [
           'iOS',
@@ -74,9 +76,9 @@ module Pod
       it 'returns scopes by versioned platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
-          PodVariant.new([@root_spec, stub(:name => 'Spec/Foo', :root? => false)], Platform.ios),
+          PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx),
-          PodVariant.new([@root_spec, stub(:name => 'Spec/Bar', :root? => false)], Platform.osx),
+          PodVariant.new([@root_spec, @bar_subspec], Platform.osx),
         ])
         variants.scope_suffixes.values.should == [
           'iOS7.0',
@@ -91,7 +93,7 @@ module Pod
           PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
           PodVariant.new([@root_spec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx, true),
-          PodVariant.new([@root_spec, stub(:name => 'Spec/Foo', :root? => false)], Platform.osx, true),
+          PodVariant.new([@root_spec, @foo_subspec], Platform.osx, true),
         ])
         variants.scope_suffixes.values.should == [
           'library-iOS7.0',
