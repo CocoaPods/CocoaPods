@@ -6,7 +6,7 @@ module Pod
       before do
         config.sandbox.prepare
         @podfile = Podfile.new do
-          platform :ios
+          platform :ios, '6.0'
           project 'SampleProject/SampleProject'
           target 'SampleProject'
         end
@@ -24,12 +24,10 @@ module Pod
         end
 
         @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @target.client_root = config.sandbox.root.dirname
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
 
         @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
-        @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @pod_target.user_build_configurations = @target.user_build_configurations
         @pod_target.file_accessors = [file_accessor]
 
