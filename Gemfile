@@ -1,9 +1,14 @@
 # Declares a dependency to the git repo of CocoaPods gem. This declaration is
 # compatible with the local git repos feature of Bundler.
 #
-def cp_gem(name, repo_name, branch = 'master')
-  url = "https://github.com/CocoaPods/#{repo_name}.git"
-  gem name, :git => url, :branch => branch
+def cp_gem(name, repo_name, branch = 'master', path: false)
+  opts = if path
+           { :path => "../#{repo_name}" }
+         else
+           url = "https://github.com/CocoaPods/#{repo_name}.git"
+           { :git => url, :branch => branch }
+         end
+  gem name, opts
 end
 
 source 'https://rubygems.org'
