@@ -257,7 +257,7 @@ module Pod
     # @return [String] The absolute path to the configuration build dir
     #
     def configuration_build_dir(dir = '$CONFIGURATION_BUILD_DIR')
-      "#{dir}/#{pod_name}#{scoped? ? "/#{scope_suffix}" :  ''}"
+      "#{dir}/#{label}"
     end
 
     private

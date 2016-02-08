@@ -205,11 +205,11 @@ module Pod
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$CONFIGURATION_BUILD_DIR/BananaLib/iOS" "$CONFIGURATION_BUILD_DIR/OrangeFramework/iOS"'
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$CONFIGURATION_BUILD_DIR/BananaLib-iOS" "$CONFIGURATION_BUILD_DIR/OrangeFramework-iOS"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/BananaLib/iOS/BananaLib.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework/iOS/OrangeFramework.framework/Headers"'
+              expected = '$(inherited) -iquote "$CONFIGURATION_BUILD_DIR/BananaLib-iOS/BananaLib.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/OrangeFramework-iOS/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
           end
