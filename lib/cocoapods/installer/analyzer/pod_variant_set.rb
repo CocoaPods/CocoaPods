@@ -21,7 +21,7 @@ module Pod
         #
         def scope_suffixes
           return { variants.first => nil } if variants.count == 1
-          scope_by_build_type
+          scope_by_specs
         end
 
         # Groups the collection by result of the block.
@@ -83,7 +83,7 @@ module Pod
             # => Platform name + SDK version
             platform_name_proc = proc { |v| v.platform.to_s.tr(' ', '') }
           end
-          scope_if_necessary(grouped_variants.map(&:scope_by_specs), &platform_name_proc)
+          scope_if_necessary(grouped_variants.map(&:scope_without_suffix), &platform_name_proc)
         end
 
         # @private
@@ -93,7 +93,7 @@ module Pod
           grouped_variants = group_by(&:specs)
           all_spec_variants = grouped_variants.map { |set| set.variants.first.specs }
           common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
-          scope_if_necessary(grouped_variants.map(&:scope_without_suffix)) do |variant|
+          scope_if_necessary(grouped_variants.map(&:scope_by_build_type)) do |variant|
             subspecs = variant.specs - common_specs
             subspec_names = subspecs.map do |spec|
               spec.root? ? 'root' : spec.name.split('/')[1..-1].join('_')
