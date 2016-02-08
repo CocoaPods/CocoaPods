@@ -249,32 +249,15 @@ module Pod
       end
     end
 
-    # @return [String] The configuration build dir, relevant if the target is
-    #         integrated as framework.
-    #
-    def configuration_build_dir
-      if scoped?
-        "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{scope_suffix}"
-      else
-        '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
-      end
-    end
-
     # @param  [String] dir
     #         The directory (which might be a variable) relative to which
     #         the returned path should be. This must be used if the
     #         $CONFIGURATION_BUILD_DIR is modified.
     #
-    # @return [String] The configuration build dir, relative to the default
-    #         configuration build dir, which is:
-    #         '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+    # @return [String] The absolute path to the configuration build dir
     #
-    def relative_configuration_build_dir(dir = '$CONFIGURATION_BUILD_DIR')
-      if scoped?
-        "#{dir}/#{pod_name}/#{scope_suffix}"
-      else
-        "#{dir}/#{pod_name}"
-      end
+    def configuration_build_dir(dir = '$CONFIGURATION_BUILD_DIR')
+      "#{dir}/#{pod_name}#{scoped? ? "/#{scope_suffix}" :  ''}"
     end
 
     private

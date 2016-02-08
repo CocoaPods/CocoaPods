@@ -219,23 +219,23 @@ module Pod
           dependent_targets = dependent_targets.select(&:should_build?)
           has_configuration_build_dir = target.respond_to?(:configuration_build_dir)
           if has_configuration_build_dir
+            build_dir_var = "$#{SHARED_BUILD_DIR_VARIABLE}"
             build_settings = {
-              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir,
+              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir(build_dir_var),
               SHARED_BUILD_DIR_VARIABLE => '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)',
             }
-            build_dir_var = "$#{SHARED_BUILD_DIR_VARIABLE}"
           else
-            build_settings = {}
             build_dir_var = '$CONFIGURATION_BUILD_DIR'
+            build_settings = {}
           end
           unless dependent_targets.empty?
             framework_search_paths = []
             library_search_paths = []
             dependent_targets.each do |dependent_target|
               if dependent_target.requires_frameworks?
-                framework_search_paths << dependent_target.relative_configuration_build_dir(build_dir_var)
+                framework_search_paths << dependent_target.configuration_build_dir(build_dir_var)
               else
-                library_search_paths << dependent_target.relative_configuration_build_dir(build_dir_var)
+                library_search_paths << dependent_target.configuration_build_dir(build_dir_var)
               end
             end
             build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(framework_search_paths.uniq) unless framework_search_paths.empty?
