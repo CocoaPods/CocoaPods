@@ -31,7 +31,7 @@ require 'cocoapods/config'
 require 'rbconfig'
 require 'erb'
 
-PROFILE_ERB_TEMPLATE = <<-EOS
+PROFILE_ERB_TEMPLATE = <<-'ERB'
 (version 1)
 (debug allow)
 
@@ -49,12 +49,12 @@ PROFILE_ERB_TEMPLATE = <<-EOS
 
 (allow process-exec
   (literal
-    "<%= pod_bin %>"
-    "<%= ruby_bin %>"
+    <%= pod_bin.dump %>
+    <%= ruby_bin.dump %>
   )
   (regex
 <% prefixes.each do |prefix| %>
-    #"^<%= prefix %>/*"
+    #<%= "^#{prefix}/*".dump %>
 <% end %>
   )
 )
@@ -78,12 +78,12 @@ PROFILE_ERB_TEMPLATE = <<-EOS
     #"^/usr/share/*"
     #"^/private/*"
     #"^/dev/*"
-    #"^<%= ruby_prefix %>"
-    #"^<%= pod_prefix %>"
-    #"^<%= xcode_app_path %>"
-    #"^<%= Pod::Config.instance.repos_dir %>"
+    #<%= "^#{ruby_prefix}".dump %>
+    #<%= "^#{pod_prefix}".dump %>
+    #<%= "^#{xcode_app_path}".dump %>
+    #<%= "^#{Pod::Config.instance.repos_dir}".dump %>
 <% prefixes.each do |prefix| %>
-    #"^<%= prefix %>/*"
+    #<%= "^#{prefix}/*".dump %>
 <% end %>
   )
 )
@@ -94,8 +94,8 @@ PROFILE_ERB_TEMPLATE = <<-EOS
     "/dev/null"
   )
   (regex
-    #"^<%= Pod::Config.instance.project_root %>"
-    #"^<%= Pod::Config.instance.repos_dir %>"
+    #<%= "^#{Pod::Config.instance.project_root}".dump %>
+    #<%= "^#{Pod::Config.instance.repos_dir}".dump %>
     #"^/Users/[^.]+/Library/Caches/CocoaPods/*"
     #"^/dev/tty"
     #"^/private/var"
@@ -103,7 +103,7 @@ PROFILE_ERB_TEMPLATE = <<-EOS
 )
 
 (deny default)
-EOS
+ERB
 
 class Profile
   def pod_bin
