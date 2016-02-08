@@ -162,8 +162,10 @@ module Pod
       end
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
-        @pod_target.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
-        @pod_target.scoped.first.configuration_build_dir.should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods'
+        @pod_target.configuration_build_dir.should == '$CONFIGURATION_BUILD_DIR/BananaLib'
+        @pod_target.scoped.first.configuration_build_dir.should == '$CONFIGURATION_BUILD_DIR/BananaLib/Pods'
+        @pod_target.configuration_build_dir('$PODS_SHARED_BUILD_DIR').should == '$PODS_SHARED_BUILD_DIR/BananaLib'
+        @pod_target.scoped.first.configuration_build_dir('$PODS_SHARED_BUILD_DIR').should == '$PODS_SHARED_BUILD_DIR/BananaLib/Pods'
       end
     end
 
