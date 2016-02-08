@@ -38,7 +38,7 @@ module Pod
           PodVariant.new([@root_spec], Platform.ios),
           PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
         ])
-        variants.scope_suffixes.values.should == ['iOS', 'iOS7.0']
+        variants.scope_suffixes.values.should == %w(iOS iOS7.0)
       end
 
       it 'returns scopes by subspec names if they qualify' do
@@ -55,7 +55,7 @@ module Pod
           PodVariant.new([@foo_subspec], Platform.ios),
           PodVariant.new([@root_spec, @bar_subspec], Platform.ios),
         ])
-        variants.scope_suffixes.values.should == ['Foo', 'Bar-root']
+        variants.scope_suffixes.values.should == %w(Foo Bar-root)
       end
 
       it 'returns scopes by platform names and subspec names if they qualify' do
@@ -65,12 +65,12 @@ module Pod
           PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec, @bar_subspec], Platform.osx),
         ])
-        variants.scope_suffixes.values.should == [
-          'iOS',
-          'OSX',
-          'Foo',
-          'Bar',
-        ]
+        variants.scope_suffixes.values.should == %w(
+          iOS
+          OSX
+          Foo
+          Bar
+        )
       end
 
       it 'returns scopes by versioned platform names and subspec names if they qualify' do
@@ -80,12 +80,12 @@ module Pod
           PodVariant.new([@root_spec], Platform.osx),
           PodVariant.new([@root_spec, @bar_subspec], Platform.osx),
         ])
-        variants.scope_suffixes.values.should == [
-          'iOS7.0',
-          'iOS',
-          'OSX',
-          'Bar',
-        ]
+        variants.scope_suffixes.values.should == %w(
+          iOS7.0
+          iOS
+          OSX
+          Bar
+        )
       end
 
       it 'returns scopes by built types, versioned platform names and subspec names' do
@@ -96,13 +96,13 @@ module Pod
           PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec, @foo_subspec], Platform.osx, true),
         ])
-        variants.scope_suffixes.values.should == [
-          'library-iOS7.0',
-          'library-iOS',
-          'framework',
-          'Foo-library',
-          'Foo-framework',
-        ]
+        variants.scope_suffixes.values.should == %w(
+          library-iOS7.0
+          library-iOS
+          framework
+          Foo-library
+          Foo-framework
+        )
       end
     end
   end
