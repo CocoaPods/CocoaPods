@@ -61,22 +61,22 @@ module Pod
       it 'returns scopes by platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec], Platform.ios),
-          PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx),
+          PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec, @bar_subspec], Platform.osx),
         ])
         variants.scope_suffixes.values.should == [
           'iOS',
-          'iOS-Foo',
           'OSX',
-          'OSX-Bar',
+          'Foo',
+          'Bar',
         ]
       end
 
       it 'returns scopes by versioned platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
-          PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
+          PodVariant.new([@root_spec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx),
           PodVariant.new([@root_spec, @bar_subspec], Platform.osx),
         ])
@@ -84,7 +84,7 @@ module Pod
           'iOS7.0',
           'iOS',
           'OSX',
-          'OSX-Bar',
+          'Bar',
         ]
       end
 
@@ -93,13 +93,15 @@ module Pod
           PodVariant.new([@root_spec], Platform.new(:ios, '7.0')),
           PodVariant.new([@root_spec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx, true),
+          PodVariant.new([@root_spec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec, @foo_subspec], Platform.osx, true),
         ])
         variants.scope_suffixes.values.should == [
           'library-iOS7.0',
           'library-iOS',
           'framework',
-          'framework-Foo',
+          'Foo-library',
+          'Foo-framework',
         ]
       end
     end
