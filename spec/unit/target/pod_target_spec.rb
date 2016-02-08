@@ -38,6 +38,13 @@ module Pod
         @pod_target.scoped.first.label.should == 'BananaLib-Pods'
       end
 
+      it 'returns its label' do
+        @pod_target.label.should == 'BananaLib'
+        @pod_target.scoped.first.label.should == 'BananaLib-Pods'
+        spec_scoped_pod_target = @pod_target.scoped.first.tap { |t| t.stubs(:scope_suffix).returns('.default-GreenBanana') }
+        spec_scoped_pod_target.label.should == 'BananaLib.default-GreenBanana'
+      end
+
       it 'returns the name of its product' do
         @pod_target.product_name.should == 'libBananaLib.a'
         @pod_target.scoped.first.product_name.should == 'libBananaLib-Pods.a'

@@ -90,7 +90,11 @@ module Pod
     #
     def label
       if scoped?
-        "#{root_spec.name}-#{scope_suffix}"
+        if scope_suffix[0] == '.'
+          "#{root_spec.name}#{scope_suffix}"
+        else
+          "#{root_spec.name}-#{scope_suffix}"
+        end
       else
         root_spec.name
       end
