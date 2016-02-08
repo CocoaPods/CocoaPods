@@ -131,11 +131,17 @@ module Pod
       #--------------------------------------#
 
       it 'generates the model to represent the target definitions' do
-        target = @analyzer.analyze.targets.first
+        result = @analyzer.analyze
+        target, test_target = result.targets
+
+        test_target.pod_targets.map(&:name).sort.should == %w(
+          libextobjc-EXTKeyPathCoding-EXTSynthesize
+        ).sort
+
         target.pod_targets.map(&:name).sort.should == %w(
           JSONKit
           AFNetworking
-          libextobjc
+          libextobjc-EXTKeyPathCoding
           SVPullToRefresh
         ).sort
         target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods-SampleProject')

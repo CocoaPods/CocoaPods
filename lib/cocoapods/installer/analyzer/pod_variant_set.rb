@@ -1,3 +1,5 @@
+require 'set'
+
 module Pod
   class Installer
     class Analyzer
@@ -90,15 +92,43 @@ module Pod
         # @return [Hash<PodVariant, String>]
         #
         def scope_by_specs
+          root_spec = variants.first.root_spec
+          default_specs = Set.new([root_spec] + root_spec.default_subspecs.map do |subspec_name|
+            root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
+          end)
           grouped_variants = group_by(&:specs)
           all_spec_variants = grouped_variants.map { |set| set.variants.first.specs }
-          common_specs = all_spec_variants.reduce(all_spec_variants.first, &:&)
+          common_specs = all_spec_variants.map(&:to_set).flatten.inject(&:&)
+          omit_common_specs = common_specs.any? && common_specs.proper_superset?(default_specs)
           scope_if_necessary(grouped_variants.map(&:scope_by_build_type)) do |variant|
-            subspecs = variant.specs - common_specs
-            subspec_names = subspecs.map do |spec|
-              spec.root? ? 'root' : spec.name.split('/')[1..-1].join('_')
+            specs = variant.specs.to_set
+
+            # The current variant contains all default specs
+            omit_default_specs = default_specs.any? && default_specs.subset?(specs)
+            if omit_default_specs
+              specs -= default_specs
+            end
+
+            # There are common specs, which are different from the default specs
+            if omit_common_specs
+              specs -= common_specs
+            end
+
+            spec_names = specs.map do |spec|
+              spec.root? ? '.root' : spec.name.split('/')[1..-1].join('_')
             end.sort
-            subspec_names.empty? ? nil : subspec_names.join('-')
+            if spec_names.empty?
+              omit_common_specs ? '.common' : nil
+            else
+              if omit_common_specs
+                spec_names.unshift('.common')
+              elsif omit_default_specs
+                spec_names.unshift('.default')
+              end
+              spec_names.reduce('') do |acc, name|
+                "#{acc}#{acc.empty? || name[0] == '.' ? '' : '-'}#{name}"
+              end
+            end
           end
         end
 
