@@ -93,9 +93,15 @@ module Pod
         #
         def scope_by_specs
           root_spec = variants.first.root_spec
-          default_specs = Set.new([root_spec] + root_spec.default_subspecs.map do |subspec_name|
-            root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
-          end)
+          specs = [root_spec]
+          if root_spec.default_subspecs.empty?
+            specs += root_spec.subspecs.compact
+          else
+            specs += root_spec.default_subspecs.map do |subspec_name|
+              root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
+            end
+          end
+          default_specs = Set.new(specs)
           grouped_variants = group_by(&:specs)
           all_spec_variants = grouped_variants.map { |set| set.variants.first.specs }
           common_specs = all_spec_variants.map(&:to_set).flatten.inject(&:&)
