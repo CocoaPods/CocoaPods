@@ -140,13 +140,13 @@ module Pod
         target, test_target = result.targets
 
         test_target.pod_targets.map(&:name).sort.should == %w(
-          libextobjc-EXTKeyPathCoding-EXTSynthesize
+          libextobjc-2
         ).sort
 
         target.pod_targets.map(&:name).sort.should == %w(
           JSONKit
           AFNetworking
-          libextobjc-EXTKeyPathCoding
+          libextobjc-1
           SVPullToRefresh
         ).sort
         target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods-SampleProject')

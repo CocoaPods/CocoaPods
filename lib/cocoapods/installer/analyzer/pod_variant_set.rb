@@ -1,5 +1,3 @@
-require 'set'
-
 module Pod
   class Installer
     class Analyzer
@@ -23,7 +21,7 @@ module Pod
         #
         def scope_suffixes
           return { variants.first => nil } if variants.count == 1
-          scope_by_specs
+          scope_by_build_type
         end
 
         # Groups the collection by result of the block.
@@ -85,56 +83,16 @@ module Pod
             # => Platform name + SDK version
             platform_name_proc = proc { |v| v.platform.to_s.tr(' ', '') }
           end
-          scope_if_necessary(grouped_variants.map(&:scope_without_suffix), &platform_name_proc)
+          scope_if_necessary(grouped_variants.map(&:scope_by_specs), &platform_name_proc)
         end
 
         # @private
         # @return [Hash<PodVariant, String>]
         #
         def scope_by_specs
-          root_spec = variants.first.root_spec
-          specs = [root_spec]
-          if root_spec.default_subspecs.empty?
-            specs += root_spec.subspecs.compact
-          else
-            specs += root_spec.default_subspecs.map do |subspec_name|
-              root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
-            end
-          end
-          default_specs = Set.new(specs)
-          grouped_variants = group_by(&:specs)
-          all_spec_variants = grouped_variants.map { |set| set.variants.first.specs }
-          common_specs = all_spec_variants.map(&:to_set).flatten.inject(&:&)
-          omit_common_specs = common_specs.any? && common_specs.proper_superset?(default_specs)
-          scope_if_necessary(grouped_variants.map(&:scope_by_build_type)) do |variant|
-            specs = variant.specs.to_set
-
-            # The current variant contains all default specs
-            omit_default_specs = default_specs.any? && default_specs.subset?(specs)
-            if omit_default_specs
-              specs -= default_specs
-            end
-
-            # There are common specs, which are different from the default specs
-            if omit_common_specs
-              specs -= common_specs
-            end
-
-            spec_names = specs.map do |spec|
-              spec.root? ? '.root' : spec.name.split('/')[1..-1].join('_')
-            end.sort
-            if spec_names.empty?
-              omit_common_specs ? '.common' : nil
-            else
-              if omit_common_specs
-                spec_names.unshift('.common')
-              elsif omit_default_specs
-                spec_names.unshift('.default')
-              end
-              spec_names.reduce('') do |acc, name|
-                "#{acc}#{acc.empty? || name[0] == '.' ? '' : '-'}#{name}"
-              end
-            end
+          i = 0
+          scope_if_necessary(group_by(&:specs).map(&:scope_without_suffix)) do
+            i += 1
           end
         end
 

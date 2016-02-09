@@ -47,75 +47,36 @@ module Pod
           PodVariant.new([@foo_subspec], Platform.ios),
           PodVariant.new([@bar_subspec], Platform.ios),
         ])
-        variants.scope_suffixes.values.should == %w(Foo Bar)
-      end
-
-      it 'returns scopes by subspec names if they qualify and handle partial root spec presence well' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@foo_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @bar_subspec], Platform.ios),
-        ])
-        variants.scope_suffixes.values.should == %w(Foo .root-Bar)
-      end
-
-      it 'allows to differentiate between an exclusive variant with a specific subspec and ' \
-        'an inclusive variant with the default subspecs plus a non-default subspec' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@foo_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.ios),
-        ])
-        variants.scope_suffixes.values.should == %w(Foo .default-Foo)
-      end
-
-      it 'omits default specs' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@root_spec, @default_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec, @bar_subspec], Platform.ios),
-        ])
-        variants.scope_suffixes.values.should == [nil, '.default-Foo', '.default-Bar']
-      end
-
-      it 'omits common specs' do
-        variants = PodVariantSet.new([
-          PodVariant.new([@root_spec, @default_subspec, @inner_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec, @inner_subspec, @foo_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec, @inner_subspec, @bar_subspec], Platform.ios),
-        ])
-        variants.scope_suffixes.values.should == %w(.common .common-Foo .common-Bar)
+        variants.scope_suffixes.values.should == %w(1 2)
       end
 
       it 'returns scopes by platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec, @default_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec], Platform.osx),
           PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec], Platform.osx),
           PodVariant.new([@root_spec, @default_subspec, @bar_subspec], Platform.osx),
         ])
         variants.scope_suffixes.values.should == %w(
-          iOS
-          OSX
-          .default-Foo
-          .default-Bar
+          iOS-1
+          iOS-2
+          OSX-1
+          OSX-2
         )
       end
 
       it 'returns scopes by versioned platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec, @default_subspec], Platform.new(:ios, '7.0')),
+          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.new(:ios, '7.0')),
           PodVariant.new([@root_spec, @default_subspec], Platform.ios),
           PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.ios),
-          PodVariant.new([@root_spec, @default_subspec], Platform.osx),
-          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.osx),
-          PodVariant.new([@root_spec, @default_subspec, @bar_subspec], Platform.osx),
         ])
         variants.scope_suffixes.values.should == %w(
-          iOS7.0
-          iOS
-          OSX
-          .default-Foo-iOS
-          .default-Foo-OSX
-          .default-Bar
+          iOS7.0-1
+          iOS7.0-2
+          iOS-1
+          iOS-2
         )
       end
 
@@ -123,14 +84,16 @@ module Pod
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec, @default_subspec], Platform.new(:ios, '7.0')),
           PodVariant.new([@root_spec, @default_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.ios),
           PodVariant.new([@root_spec, @default_subspec], Platform.osx, true),
           PodVariant.new([@root_spec, @default_subspec, @foo_subspec], Platform.osx, true),
         ])
         variants.scope_suffixes.values.should == %w(
           library-iOS7.0
-          library-iOS
-          framework
-          .default-Foo
+          library-iOS-1
+          library-iOS-2
+          framework-1
+          framework-2
         )
       end
     end
