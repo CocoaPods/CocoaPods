@@ -65,20 +65,31 @@ EOS
         end
 
         def stack
-          <<-EOS
+          parts = {
+            'CocoaPods' => Pod::VERSION,
+            'Ruby' => RUBY_DESCRIPTION,
+            'RubyGems' => Gem::VERSION,
+            'Host' => host_information,
+            'Xcode' => xcode_information,
+            'Git' => git_information,
+            'Ruby lib dir' => RbConfig::CONFIG['libdir'],
+            'Repositories' => repo_information,
+          }
+          justification = parts.keys.map(&:size).max
+
+          str = <<-EOS
 ### Stack
 
 ```
-   CocoaPods : #{Pod::VERSION}
-        Ruby : #{RUBY_DESCRIPTION}
-    RubyGems : #{Gem::VERSION}
-        Host : #{host_information}
-       Xcode : #{xcode_information}
-         Git : #{git_information}
-Ruby lib dir : #{RbConfig::CONFIG['libdir']}
-Repositories : #{repo_information.join("\n               ")}
-```
 EOS
+          parts.each do |name, value|
+            str << name.rjust(justification)
+            str << ' : '
+            str << Array(value).join("\n" << (' ' * (justification + 3)))
+            str << "\n"
+          end
+
+          str << "```\n"
         end
 
         def plugins_string
