@@ -305,48 +305,68 @@ module Pod
               generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
             end
           end
+
+          all_specs = specs_by_target.values.flatten.uniq
+          pod_targets_by_name = pod_targets.group_by(&:pod_name).each_with_object({}) do |(name, values), hash|
+            # Sort the target by the number of activated subspecs, so that
+            # we prefer a minimal target as transitive dependency.
+            hash[name] = values.sort_by { |pt| pt.specs.count }
+          end
+          pod_targets.each do |target|
+            dependencies = transitive_dependencies_for_specs(target.specs, target.platform, all_specs).group_by(&:root)
+            target.dependent_targets = dependencies.map do |root_spec, deps|
+              pod_targets_by_name[root_spec.name].find do |t|
+                next false if t.platform.symbolic_name != target.platform.symbolic_name ||
+                    t.requires_frameworks? != target.requires_frameworks?
+                spec_names = t.specs.map(&:name)
+                deps.all? { |dep| spec_names.include?(dep.name) }
+              end
+            end
+          end
         else
           dedupe_cache = {}
-          pod_targets = specs_by_target.flat_map do |target_definition, specs|
-            grouped_specs = specs.group_by.group_by(&:root).values.uniq
-            grouped_specs.flat_map do |pod_specs|
+          specs_by_target.flat_map do |target_definition, specs|
+            grouped_specs = specs.group_by(&:root).values.uniq
+            pod_targets = grouped_specs.flat_map do |pod_specs|
               generate_pod_target([target_definition], pod_specs).scoped(dedupe_cache)
+            end
+
+            pod_targets.each do |target|
+              dependencies = transitive_dependencies_for_specs(target.specs, target.platform, specs).group_by(&:root)
+              target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
             end
           end
         end
-        pod_targets.each do |target|
-          target.dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
-        end
       end
 
-      # Finds the names of the Pods upon which the given target _transitively_
-      # depends.
+      # Returns the specs upon which the given specs _transitively_ depend.
       #
       # @note: This is implemented in the analyzer, because we don't have to
       #        care about the requirements after dependency resolution.
       #
-      # @param  [PodTarget] pod_target
-      #         The pod target, whose dependencies should be returned.
+      # @param  [Array<Specification>] specs
+      #         The specs, whose dependencies should be returned.
       #
-      # @param  [Array<PodTarget>] targets
-      #         All pod targets, which are integrated alongside.
+      # @param  [Platform] platform
+      #         The platform for which the dependencies should be returned.
       #
-      # @return [Array<PodTarget>]
+      # @param  [Array<Specification>] all_specs
+      #         All specifications which are installed alongside.
       #
-      def transitive_dependencies_for_pod_target(pod_target, targets)
-        if targets.any?
-          dependent_targets = pod_target.dependencies.flat_map do |dep|
-            next [] if pod_target.pod_name == dep
-            targets.select { |t| t.pod_name == dep }
-          end
-          remaining_targets = targets - dependent_targets
-          dependent_targets += dependent_targets.flat_map do |target|
-            transitive_dependencies_for_pod_target(target, remaining_targets)
-          end
-          dependent_targets.uniq
-        else
-          []
-        end
+      # @return [Array<Specification>]
+      #
+      def transitive_dependencies_for_specs(specs, platform, all_specs)
+        return [] if specs.empty? || all_specs.empty?
+        dependent_specs = specs.flat_map do |spec|
+          spec.consumer(platform).dependencies.flat_map do |dependency|
+            all_specs.find do |s|
+              next false if specs.include?(s)
+              s.name == dependency.name
+            end
+          end.compact
+        end.uniq
+        remaining_specs = all_specs - dependent_specs
+        dependent_specs + transitive_dependencies_for_specs(dependent_specs, platform, remaining_specs)
       end
 
       # Create a target for each spec group

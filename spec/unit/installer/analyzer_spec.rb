@@ -4,6 +4,11 @@ module Pod
   describe Installer::Analyzer do
     describe 'Analysis' do
       before do
+        repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
+        aggregate = Pod::Source::Aggregate.new(repos)
+        Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
+        aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
+
         @podfile = Pod::Podfile.new do
           platform :ios, '6.0'
           project 'SampleProject/SampleProject'
@@ -162,37 +167,63 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
-      it 'generates the set of dependent pod targets' do
-        @podfile = Pod::Podfile.new do
-          platform :ios, '8.0'
-          project 'SampleProject/SampleProject'
-          pod 'RestKit', '~> 0.23.0'
-          target 'TestRunner' do
-            pod 'RestKit/Testing', '~> 0.23.0'
+      describe 'dependent pod targets' do
+        it 'picks transitive dependencies up' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            pod 'RestKit', '~> 0.23.0'
+            target 'TestRunner' do
+              pod 'RestKit/Testing', '~> 0.23.0'
+            end
           end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          result.targets.count.should == 1
+          target = result.targets.first
+          restkit_target = target.pod_targets.find { |pt| pt.pod_name == 'RestKit' }
+          restkit_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            AFNetworking
+            ISO8601DateFormatterValueTransformer
+            RKValueTransformers
+            SOCKit
+            TransitionKit
+          )
+          restkit_target.dependent_targets.all?(&:scoped).should.be.true
         end
-        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
-        @analyzer.analyze.targets.count.should == 1
-        target = @analyzer.analyze.targets.first
-        restkit_target = target.pod_targets.find { |pt| pt.pod_name == 'RestKit' }
-        restkit_target.dependent_targets.map(&:pod_name).sort.should == %w(
-          AFNetworking
-          ISO8601DateFormatterValueTransformer
-          RKValueTransformers
-          SOCKit
-          TransitionKit
-        )
-        restkit_target.dependent_targets.all?(&:scoped).should.be.true
+
+        it 'picks the right variants up when there are multiple' do
+          @podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            # The order of target definitions is important for this test.
+            target 'TestRunner' do
+              pod 'OrangeFramework'
+              pod 'matryoshka/Foo'
+            end
+
+            target 'SampleProject' do
+              pod 'OrangeFramework'
+            end
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+
+          result.targets.count.should == 2
+
+          pod_target = result.targets[0].pod_targets.find { |pt| pt.pod_name == 'OrangeFramework' }
+          pod_target.dependent_targets.count == 1
+          pod_target.dependent_targets.first.specs.map(&:name).should == %w(
+            matryoshka
+            matryoshka/Outer
+            matryoshka/Outer/Inner
+          )
+        end
       end
 
       describe 'deduplication' do
-        before do
-          repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
-          aggregate = Pod::Source::Aggregate.new(repos)
-          Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
-          aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
-        end
-
         it 'deduplicate targets if possible' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
