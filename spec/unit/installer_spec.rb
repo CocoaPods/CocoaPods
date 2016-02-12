@@ -231,6 +231,7 @@ module Pod
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
 
           target 'SampleProject'
@@ -250,6 +251,7 @@ module Pod
         target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == %w(
           BananaLib
           OrangeFramework
+          matryoshka
           monkey
         )
       end
@@ -270,6 +272,7 @@ module Pod
           project 'SampleProject/SampleProject'
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
           target 'SampleProject'
         end
@@ -314,6 +317,7 @@ module Pod
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
           target 'SampleProject'
         end
@@ -357,6 +361,7 @@ module Pod
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           target 'SampleProject'
         end
         lockfile = generate_lockfile
