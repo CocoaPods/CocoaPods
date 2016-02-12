@@ -660,23 +660,15 @@ module Pod
           aggregate_target.native_target.add_dependency(pod_target.native_target)
           configure_app_extension_api_only_for_target(pod_target) if is_app_extension
 
-          pod_target.dependencies.each do |dep|
-            unless dep == pod_target.pod_name
-              pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
-              # TODO: remove me
-              unless pod_dependency_target
-                puts "[BUG] DEP: #{dep}"
-              end
+          pod_target.dependent_targets.each do |pod_dependency_target|
+            next unless pod_dependency_target.should_build?
+            pod_target.native_target.add_dependency(pod_dependency_target.native_target)
+            configure_app_extension_api_only_for_target(pod_dependency_target) if is_app_extension
 
-              next unless pod_dependency_target.should_build?
-              pod_target.native_target.add_dependency(pod_dependency_target.native_target)
-              configure_app_extension_api_only_for_target(pod_dependency_target) if is_app_extension
-
-              if pod_target.requires_frameworks?
-                product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
-                  frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
-                pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref, true)
-              end
+            if pod_target.requires_frameworks?
+              product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
+                frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
+              pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref, true)
             end
           end
         end
