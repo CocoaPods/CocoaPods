@@ -238,8 +238,8 @@ module Pod
                 library_search_paths << dependent_target.configuration_build_dir(build_dir_var)
               end
             end
-            build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(framework_search_paths.uniq) unless framework_search_paths.empty?
-            build_settings['LIBRARY_SEARCH_PATHS']   = '$(inherited) ' + XCConfigHelper.quote(library_search_paths.uniq)   unless library_search_paths.empty?
+            build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(framework_search_paths.uniq)
+            build_settings['LIBRARY_SEARCH_PATHS']   = '$(inherited) ' + XCConfigHelper.quote(library_search_paths.uniq)
           end
           xcconfig.merge!(build_settings)
         end
