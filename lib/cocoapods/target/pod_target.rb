@@ -264,6 +264,15 @@ module Pod
       "#{dir}/#{label}"
     end
 
+    # @param  [String] dir
+    #         @see #configuration_build_dir
+    #
+    # @return [String] The absolute path to the build product
+    #
+    def build_product_path(dir = '$CONFIGURATION_BUILD_DIR')
+      "#{configuration_build_dir(dir)}/#{product_name}"
+    end
+
     private
 
     # @param  [TargetDefinition] target_definition
