@@ -84,10 +84,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "SocketRocket/SocketRocket.framework"
-  install_framework "libPusher/Pusher.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/SocketRocket/SocketRocket.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/libPusher/Pusher.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "SocketRocket/SocketRocket.framework"
-  install_framework "libPusher/Pusher.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/SocketRocket/SocketRocket.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/libPusher/Pusher.framework"
 fi

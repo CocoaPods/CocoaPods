@@ -84,8 +84,8 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "SamplePodWithResources/SamplePodWithResources.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/SamplePodWithResources/SamplePodWithResources.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "SamplePodWithResources/SamplePodWithResources.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/SamplePodWithResources/SamplePodWithResources.framework"
 fi

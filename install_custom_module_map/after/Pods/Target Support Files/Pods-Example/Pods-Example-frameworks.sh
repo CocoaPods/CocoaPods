@@ -84,8 +84,8 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "BananaLib/BananaLib.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/BananaLib/BananaLib.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "BananaLib/BananaLib.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/BananaLib/BananaLib.framework"
 fi

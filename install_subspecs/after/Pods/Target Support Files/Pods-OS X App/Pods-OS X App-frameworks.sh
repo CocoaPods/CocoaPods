@@ -84,8 +84,8 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "PodTest-subspec_2/PodTest.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/PodTest-subspec_2/PodTest.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "PodTest-subspec_2/PodTest.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/PodTest-subspec_2/PodTest.framework"
 fi
