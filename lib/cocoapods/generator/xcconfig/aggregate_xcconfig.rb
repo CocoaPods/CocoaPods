@@ -97,7 +97,7 @@ module Pod
           if target.requires_frameworks?
             build_pod_targets = pod_targets.select(&:should_build?)
             framework_header_search_paths = build_pod_targets.map do |target|
-              "#{target.configuration_build_dir}/#{target.product_name}/Headers"
+              "#{target.build_product_path}/Headers"
             end
             build_settings = {
               # Make framework headers discoverable by `import "…"`

@@ -174,6 +174,13 @@ module Pod
         @pod_target.configuration_build_dir('$PODS_SHARED_BUILD_DIR').should == '$PODS_SHARED_BUILD_DIR/BananaLib'
         @pod_target.scoped.first.configuration_build_dir('$PODS_SHARED_BUILD_DIR').should == '$PODS_SHARED_BUILD_DIR/BananaLib-Pods'
       end
+
+      it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
+        @pod_target.build_product_path.should == '$CONFIGURATION_BUILD_DIR/BananaLib/libBananaLib.a'
+        @pod_target.scoped.first.build_product_path.should == '$CONFIGURATION_BUILD_DIR/BananaLib-Pods/libBananaLib-Pods.a'
+        @pod_target.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib/libBananaLib.a'
+        @pod_target.scoped.first.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib-Pods/libBananaLib-Pods.a'
+      end
     end
 
     describe 'Product type dependent helpers' do
