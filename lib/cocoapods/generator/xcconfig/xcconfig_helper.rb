@@ -56,6 +56,8 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_settings_for_file_accessors_of_target(target, xcconfig)
           target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
@@ -80,6 +82,8 @@ module Pod
         # @param [Spec::FileAccessor] file_accessor
         #        The file accessor, which holds the list of static frameworks.
         #
+        # @return [void]
+        #
         def self.add_static_dependency_build_settings(target, xcconfig, file_accessor)
           file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
             XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, target.sandbox.root)
@@ -96,6 +100,8 @@ module Pod
         #
         # @param [Xcodeproj::Config] xcconfig
         #        The xcconfig to edit.
+        #
+        # @return [void]
         #
         def self.add_dynamic_dependency_build_settings(target, xcconfig)
           target.file_accessors.each do |file_accessor|
@@ -117,6 +123,8 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
           xcconfig.libraries.merge(consumer.libraries)
           xcconfig.frameworks.merge(consumer.frameworks)
@@ -135,6 +143,8 @@ module Pod
         #
         # @param  [Pathname] sandbox_root
         #         The path retrieved from Sandbox#root.
+        #
+        # @return [void]
         #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
           name = File.basename(framework_path, '.framework')
@@ -158,6 +168,8 @@ module Pod
         # @param  [Pathname] sandbox_root
         #         The path retrieved from Sandbox#root.
         #
+        # @return [void]
+        #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
           extension = File.extname(library_path)
           name = File.basename(library_path, extension).sub(/\Alib/, '')
@@ -179,6 +191,8 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_code_signing_settings(target, xcconfig)
           build_settings = {}
           if target.platform.to_sym == :osx
@@ -195,6 +209,8 @@ module Pod
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @return [void]
         #
         def self.add_target_specific_settings(target, xcconfig)
           if target.requires_frameworks?
@@ -214,6 +230,8 @@ module Pod
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @return [void]
         #
         def self.add_settings_for_dependent_targets(target, dependent_targets, xcconfig)
           dependent_targets = dependent_targets.select(&:should_build?)
@@ -252,6 +270,8 @@ module Pod
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @return [void]
         #
         def self.add_language_specific_settings(target, xcconfig)
           if target.uses_swift?
