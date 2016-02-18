@@ -219,7 +219,7 @@ module Pod
           add_language_specific_settings(target, xcconfig)
         end
 
-        # Add the search paths for frameworks and libraries the given target
+        # Returns the search paths for frameworks and libraries the given target
         # depends on, so that it can be correctly built and linked.
         #
         # @param  [Target] target
@@ -228,12 +228,9 @@ module Pod
         # @param  [Array<PodTarget>] dependent_targets
         #         The pod targets the given target depends on.
         #
-        # @param  [Xcodeproj::Config] xcconfig
-        #         The xcconfig to edit.
+        # @return [Hash<String, String>] the settings
         #
-        # @return [void]
-        #
-        def self.add_settings_for_dependent_targets(target, dependent_targets, xcconfig)
+        def self.settings_for_dependent_targets(target, dependent_targets)
           dependent_targets = dependent_targets.select(&:should_build?)
           has_configuration_build_dir = target.respond_to?(:configuration_build_dir)
           if has_configuration_build_dir
@@ -259,7 +256,7 @@ module Pod
             build_settings['FRAMEWORK_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(framework_search_paths.uniq)
             build_settings['LIBRARY_SEARCH_PATHS']   = '$(inherited) ' + XCConfigHelper.quote(library_search_paths.uniq)
           end
-          xcconfig.merge!(build_settings)
+          build_settings
         end
 
         # Checks if the given target requires language specific settings and
