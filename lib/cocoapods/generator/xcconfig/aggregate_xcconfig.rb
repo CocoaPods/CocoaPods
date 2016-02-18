@@ -70,7 +70,6 @@ module Pod
           generate_settings_to_import_pod_targets
 
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
-          XCConfigHelper.add_settings_for_dependent_targets(target, pod_targets, @xcconfig)
 
           generate_vendored_build_settings
           generate_other_ld_flags
@@ -131,9 +130,11 @@ module Pod
         #  - `@import …;` / `import …`
         #
         def generate_settings_to_import_pod_targets
+          @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, pod_targets)
           @xcconfig.merge!(settings_to_import_pod_targets)
           target.search_paths_aggregate_targets.each do |search_paths_target|
             generator = AggregateXCConfig.new(search_paths_target, configuration_name)
+            @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(nil, search_paths_target.pod_targets)
             @xcconfig.merge!(generator.settings_to_import_pod_targets)
           end
         end
