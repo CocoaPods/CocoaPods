@@ -19,7 +19,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Bug Fixes
 
 * Pods are built by default in another scoping level of the build products
-  directory identified by their name to exclude name clashes among
+  directory identified by their name to prevent name clashes among
   dependencies.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
