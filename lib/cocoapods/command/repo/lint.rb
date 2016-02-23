@@ -34,15 +34,15 @@ module Pod
         # @todo add UI.print and enable print statements again.
         #
         def run
-          if @name
-            if File.exist?(@name)
-              sources = [Pathname.new(@name)]
-            else
-              sources = SourcesManager.sources([@name]).map(&:repo)
-            end
-          else
-            sources = SourcesManager.aggregate.sources.map(&:repo)
-          end
+          sources = if @name
+                      if File.exist?(@name)
+                        [Pathname.new(@name)]
+                      else
+                        SourcesManager.sources([@name]).map(&:repo)
+                      end
+                    else
+                      SourcesManager.aggregate.sources.map(&:repo)
+                    end
 
           sources.each do |source|
             SourcesManager.check_version_information(source)
