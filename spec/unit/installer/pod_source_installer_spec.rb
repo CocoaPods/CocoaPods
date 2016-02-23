@@ -63,6 +63,13 @@ module Pod
           @spec.prepare_command = "[ \"$COCOAPODS_VERSION\" == \"#{Pod::VERSION}\" ] || exit 1"
           lambda { @installer.install! }.should.not.raise
         end
+
+        it 'doesn\'t leak the $COCOAPODS_VERSION environment variable' do
+          ENV['COCOAPODS_VERSION'] = nil
+          @spec.prepare_command = 'exit 1'
+          lambda { @installer.install! }.should.raise(Pod::Informative)
+          ENV['COCOAPODS_VERSION'].should.be.nil
+        end
       end
 
       #--------------------------------------#
