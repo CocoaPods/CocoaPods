@@ -8,6 +8,21 @@ RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 
 XCASSET_FILES=()
 
+case "${TARGETED_DEVICE_FAMILY}" in
+  1,2)
+    TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
+    ;;
+  1)
+    TARGET_DEVICE_ARGS="--target-device iphone"
+    ;;
+  2)
+    TARGET_DEVICE_ARGS="--target-device ipad"
+    ;;
+  *)
+    TARGET_DEVICE_ARGS="--target-device mac"
+    ;;
+esac
+
 realpath() {
   DIRECTORY="$(cd "${1%/*}" && pwd)"
   FILENAME="${1##*/}"
@@ -29,8 +44,8 @@ EOM
   fi
   case $RESOURCE_PATH in
     *.storyboard)
-      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \"$RESOURCE_PATH\" .storyboard`.storyboardc $RESOURCE_PATH --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \"$RESOURCE_PATH\" .storyboard`.storyboardc" "$RESOURCE_PATH" --sdk "${SDKROOT}"
+      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \"$RESOURCE_PATH\" .storyboard`.storyboardc $RESOURCE_PATH --sdk ${SDKROOT} ${TARGET_DEVICE_ARGS}"
+      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \"$RESOURCE_PATH\" .storyboard`.storyboardc" "$RESOURCE_PATH" --sdk "${SDKROOT} ${TARGET_DEVICE_ARGS}"
       ;;
     *.xib)
       echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \"$RESOURCE_PATH\" .xib`.nib $RESOURCE_PATH --sdk ${SDKROOT}"
@@ -75,21 +90,6 @@ rm -f "$RESOURCES_TO_COPY"
 
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "$XCASSET_FILES" ]
 then
-  case "${TARGETED_DEVICE_FAMILY}" in
-    1,2)
-      TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
-      ;;
-    1)
-      TARGET_DEVICE_ARGS="--target-device iphone"
-      ;;
-    2)
-      TARGET_DEVICE_ARGS="--target-device ipad"
-      ;;
-    *)
-      TARGET_DEVICE_ARGS="--target-device mac"
-      ;;
-  esac
-
   # Find all other xcassets (this unfortunately includes those of path pods and other targets).
   OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
   while read line; do
