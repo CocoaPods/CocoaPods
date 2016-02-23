@@ -1,5 +1,5 @@
 framework module PodTest {
-  umbrella header "Pods-OS X App-PodTest-umbrella.h"
+  umbrella header "PodTest-subspec_2-umbrella.h"
 
   export *
   module * { export * }

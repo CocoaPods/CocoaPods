@@ -85,9 +85,9 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_ROOT}/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework"
-  install_framework "Pods-SampleApp/RealmSwift.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/RealmSwift/RealmSwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${PODS_ROOT}/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework"
-  install_framework "Pods-SampleApp/RealmSwift.framework"
+  install_framework "$CONFIGURATION_BUILD_DIR/RealmSwift/RealmSwift.framework"
 fi
