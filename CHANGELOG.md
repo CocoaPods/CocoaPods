@@ -29,6 +29,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
 
+* Pass target device arguments to `ibtool` in the copy resources script, fixing
+  compilation of storyboards when targeting versions of iOS prior to iOS 8.  
+  [seaders](https://github.com/seaders)
+  [#4913](https://github.com/CocoaPods/CocoaPods/issues/4913)
+
 ## 1.0.0.beta.3 (2016-02-03)
 
 ##### Breaking
