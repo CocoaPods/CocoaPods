@@ -30,7 +30,7 @@ module Pod
 
     # Executes the given command displaying it if in verbose mode.
     #
-    # @param  [String] bin
+    # @param  [String] executable
     #         The binary to use.
     #
     # @param  [Array<#to_s>] command
