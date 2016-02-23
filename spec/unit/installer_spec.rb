@@ -61,7 +61,6 @@ module Pod
       before do
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
-        @installer.stubs(:determine_dependency_product_types)
         @installer.stubs(:verify_no_duplicate_framework_names)
         @installer.stubs(:verify_no_static_framework_transitive_dependencies)
         @installer.stubs(:verify_framework_usage)
@@ -232,6 +231,7 @@ module Pod
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
 
           target 'SampleProject'
@@ -251,6 +251,7 @@ module Pod
         target.pod_targets.select(&:requires_frameworks?).map(&:name).sort.should == %w(
           BananaLib
           OrangeFramework
+          matryoshka
           monkey
         )
       end
@@ -271,6 +272,7 @@ module Pod
           project 'SampleProject/SampleProject'
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
           target 'SampleProject'
         end
@@ -315,6 +317,7 @@ module Pod
           use_frameworks!
           pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           pod 'monkey',          :path => (fixture_path + 'monkey').to_s
           target 'SampleProject'
         end
@@ -358,6 +361,7 @@ module Pod
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+          pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
           target 'SampleProject'
         end
         lockfile = generate_lockfile
@@ -443,7 +447,7 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new
-          @pod_targets = [PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)]
+          @pod_targets = [PodTarget.new([stub('Spec')], [fixture_target_definition], config.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
         end
@@ -484,7 +488,7 @@ module Pod
 
         it 'correctly configures the Pod source installer' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], [stub('TargetDefinition')], config.sandbox)
+          pod_target = PodTarget.new([spec], [fixture_target_definition], config.sandbox)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -494,7 +498,7 @@ module Pod
 
         it 'maintains the list of the installed specs' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new([spec], [stub('TargetDefinition')], config.sandbox)
+          pod_target = PodTarget.new([spec], [fixture_target_definition], config.sandbox)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -583,15 +587,11 @@ module Pod
         end
 
         it 'sets the deployment target for the whole project' do
-          pod_target_ios = PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)
-          pod_target_osx = PodTarget.new([stub('Spec')], [stub('TargetDefinition')], config.sandbox)
-          pod_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-          pod_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
-          aggregate_target_ios = AggregateTarget.new(nil, config.sandbox)
-          aggregate_target_osx = AggregateTarget.new(nil, config.sandbox)
-          aggregate_target_ios.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-          aggregate_target_osx.stubs(:platform).returns(Platform.new(:osx, '10.8'))
-          @installer.stubs(:aggregate_targets).returns([aggregate_target_ios, aggregate_target_osx])
+          target_definition_osx = fixture_target_definition('OSX Target', Platform.new(:osx, '10.8'))
+          target_definition_ios = fixture_target_definition('iOS Target', Platform.new(:ios, '6.0'))
+          aggregate_target_osx = AggregateTarget.new(target_definition_osx, config.sandbox)
+          aggregate_target_ios = AggregateTarget.new(target_definition_ios, config.sandbox)
+          @installer.stubs(:aggregate_targets).returns([aggregate_target_osx, aggregate_target_ios])
           @installer.stubs(:pod_targets).returns([])
           @installer.send(:prepare_pods_project)
           build_settings = @installer.pods_project.build_configurations.map(&:build_settings)
@@ -779,9 +779,8 @@ module Pod
           proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 1)
           proj.save
 
-          aggregate_target = AggregateTarget.new(nil, config.sandbox)
-          aggregate_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-          aggregate_target.stubs(:user_project).returns(proj)
+          aggregate_target = AggregateTarget.new(fixture_target_definition, config.sandbox)
+          aggregate_target.user_project = proj
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
 
           @installer.send(:prepare_pods_project)
@@ -823,7 +822,7 @@ module Pod
 
     describe 'Integrating client projects' do
       it 'integrates the client projects' do
-        @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(nil, config.sandbox)])
+        @installer.stubs(:aggregate_targets).returns([AggregateTarget.new(fixture_target_definition, config.sandbox)])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)
       end

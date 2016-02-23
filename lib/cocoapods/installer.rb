@@ -108,7 +108,6 @@ module Pod
       prepare
       resolve_dependencies
       download_dependencies
-      determine_dependency_product_types
       verify_no_duplicate_framework_names
       verify_no_static_framework_transitive_dependencies
       verify_framework_usage
@@ -376,22 +375,6 @@ module Pod
       end
     end
 
-    # Determines if the dependencies need to be built as dynamic frameworks or
-    # if they can be built as static libraries by checking for the Swift source
-    # presence. Therefore it is important that the file accessors of the
-    # #pod_targets are created.
-    #
-    # @return [void]
-    #
-    def determine_dependency_product_types
-      aggregate_targets.each do |aggregate_target|
-        aggregate_target.pod_targets.each do |pod_target|
-          pod_target.host_requires_frameworks ||= aggregate_target.requires_frameworks?
-          pod_target.platform = nil # needs to be recomputed
-        end
-      end
-    end
-
     def verify_no_duplicate_framework_names
       aggregate_targets.each do |aggregate_target|
         aggregate_target.user_build_configurations.keys.each do |config|
@@ -629,13 +612,11 @@ module Pod
     def install_libraries
       UI.message '- Installing targets' do
         pod_targets.sort_by(&:name).each do |pod_target|
-          next if pod_target.target_definitions.all?(&:abstract?)
           target_installer = PodTargetInstaller.new(sandbox, pod_target)
           target_installer.install!
         end
 
         aggregate_targets.sort_by(&:name).each do |target|
-          next if target.target_definition.abstract?
           target_installer = AggregateTargetInstaller.new(sandbox, target)
           target_installer.install!
         end
@@ -679,23 +660,15 @@ module Pod
           aggregate_target.native_target.add_dependency(pod_target.native_target)
           configure_app_extension_api_only_for_target(pod_target) if is_app_extension
 
-          pod_target.dependencies.each do |dep|
-            unless dep == pod_target.pod_name
-              pod_dependency_target = aggregate_target.pod_targets.find { |target| target.pod_name == dep }
-              # TODO: remove me
-              unless pod_dependency_target
-                puts "[BUG] DEP: #{dep}"
-              end
+          pod_target.dependent_targets.each do |pod_dependency_target|
+            next unless pod_dependency_target.should_build?
+            pod_target.native_target.add_dependency(pod_dependency_target.native_target)
+            configure_app_extension_api_only_for_target(pod_dependency_target) if is_app_extension
 
-              next unless pod_dependency_target.should_build?
-              pod_target.native_target.add_dependency(pod_dependency_target.native_target)
-              configure_app_extension_api_only_for_target(pod_dependency_target) if is_app_extension
-
-              if pod_target.requires_frameworks?
-                product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
-                  frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
-                pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref, true)
-              end
+            if pod_target.requires_frameworks?
+              product_ref = frameworks_group.files.find { |f| f.path == pod_dependency_target.product_name } ||
+                frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
+              pod_target.native_target.frameworks_build_phase.add_file_reference(product_ref, true)
             end
           end
         end

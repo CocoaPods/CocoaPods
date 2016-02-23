@@ -21,8 +21,8 @@ module Pod
         #
         attr_accessor :sandbox_state
 
-        # @return [Array<Target>] The Podfile targets containing library
-        #         dependencies.
+        # @return [Array<AggregateTarget>] The aggregate targets created for each
+        #         {TargetDefinition} from the {Podfile}.
         #
         attr_accessor :targets
 

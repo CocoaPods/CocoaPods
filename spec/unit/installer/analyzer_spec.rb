@@ -4,6 +4,11 @@ module Pod
   describe Installer::Analyzer do
     describe 'Analysis' do
       before do
+        repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
+        aggregate = Pod::Source::Aggregate.new(repos)
+        Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
+        aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
+
         @podfile = Pod::Podfile.new do
           platform :ios, '6.0'
           project 'SampleProject/SampleProject'
@@ -131,13 +136,19 @@ module Pod
       #--------------------------------------#
 
       it 'generates the model to represent the target definitions' do
-        target = @analyzer.analyze.targets.first
-        target.pod_targets.map(&:name).sort.should == [
-          'JSONKit',
-          'AFNetworking',
-          'SVPullToRefresh',
-          'Pods-SampleProject-libextobjc',
-        ].sort
+        result = @analyzer.analyze
+        target, test_target = result.targets
+
+        test_target.pod_targets.map(&:name).sort.should == %w(
+          libextobjc-EXTKeyPathCoding-EXTSynthesize
+        ).sort
+
+        target.pod_targets.map(&:name).sort.should == %w(
+          JSONKit
+          AFNetworking
+          libextobjc-EXTKeyPathCoding
+          SVPullToRefresh
+        ).sort
         target.support_files_dir.should == config.sandbox.target_support_files_dir('Pods-SampleProject')
 
         target.pod_targets.map(&:archs).uniq.should == [[]]
@@ -156,72 +167,73 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
-      it 'generates the set of dependent pod targets' do
-        @podfile = Pod::Podfile.new do
-          platform :ios, '8.0'
-          project 'SampleProject/SampleProject'
-          pod 'RestKit', '~> 0.23.0'
-          target 'TestRunner' do
-            pod 'RestKit/Testing', '~> 0.23.0'
+      describe 'dependent pod targets' do
+        it 'picks transitive dependencies up' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            pod 'RestKit', '~> 0.23.0'
+            target 'TestRunner' do
+              pod 'RestKit/Testing', '~> 0.23.0'
+            end
           end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          result.targets.count.should == 1
+          target = result.targets.first
+          restkit_target = target.pod_targets.find { |pt| pt.pod_name == 'RestKit' }
+          restkit_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            AFNetworking
+            ISO8601DateFormatterValueTransformer
+            RKValueTransformers
+            SOCKit
+            TransitionKit
+          )
+          restkit_target.dependent_targets.all?(&:scoped).should.be.true
         end
-        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
-        target = @analyzer.analyze.targets.first
-        restkit_target = target.pod_targets.find { |pt| pt.pod_name == 'RestKit' }
-        restkit_target.should.be.scoped
-        restkit_target.dependent_targets.map(&:pod_name).sort.should == %w(
-          AFNetworking
-          ISO8601DateFormatterValueTransformer
-          RKValueTransformers
-          SOCKit
-          TransitionKit
-        )
-        restkit_target.dependent_targets.all?(&:scoped).should.be.true
+
+        it 'picks the right variants up when there are multiple' do
+          @podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            # The order of target definitions is important for this test.
+            target 'TestRunner' do
+              pod 'OrangeFramework'
+              pod 'matryoshka/Foo'
+            end
+
+            target 'SampleProject' do
+              pod 'OrangeFramework'
+            end
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+
+          result.targets.count.should == 2
+
+          pod_target = result.targets[0].pod_targets.find { |pt| pt.pod_name == 'OrangeFramework' }
+          pod_target.dependent_targets.count == 1
+          pod_target.dependent_targets.first.specs.map(&:name).should == %w(
+            matryoshka
+            matryoshka/Outer
+            matryoshka/Outer/Inner
+          )
+        end
       end
 
       describe 'deduplication' do
-        before do
-          repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
-          aggregate = Pod::Source::Aggregate.new(repos)
-          Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
-          aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
-        end
-
         it 'deduplicate targets if possible' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
             project 'SampleProject/SampleProject'
+
             target 'SampleProject' do
               pod 'BananaLib'
               pod 'monkey'
 
-              target 'TestRunner' do
-                pod 'BananaLib'
-                pod 'monkey'
-              end
-            end
-          end
-          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          analyzer.analyze
-
-          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-SampleProject-TestRunner/BananaLib
-            Pods-SampleProject-TestRunner/monkey
-            Pods-SampleProject/BananaLib
-            Pods-SampleProject/monkey
-          ).sort
-        end
-
-        it "doesn't deduplicate targets, where transitive dependencies can't be deduplicated" do
-          podfile = Pod::Podfile.new do
-            source SpecHelper.test_repo_url
-            platform :ios, '6.0'
-            project 'SampleProject/SampleProject'
-            pod 'BananaLib'
-            pod 'monkey'
-
-            target 'SampleProject' do
               target 'TestRunner' do
                 pod 'BananaLib'
                 pod 'monkey'
@@ -234,15 +246,41 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          analyzer.analyze
+          result = analyzer.analyze
 
-          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-CLITool/Pods-CLITool-monkey
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-monkey
-            Pods-SampleProject/Pods-SampleProject-BananaLib
-            Pods-SampleProject/Pods-SampleProject-monkey
-          ).sort
+          pod_targets = result.targets.flat_map(&:pod_targets).uniq
+          Hash[pod_targets.map { |t| [t.label, t.target_definitions.map(&:label).sort] }.sort].should == {
+            'BananaLib'  => %w(Pods-SampleProject Pods-SampleProject-TestRunner),
+            'monkey-iOS' => %w(Pods-SampleProject Pods-SampleProject-TestRunner),
+            'monkey-OSX' => %w(Pods-CLITool),
+          }
+        end
+
+        it "doesn't deduplicate targets across different integration modes" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            xcodeproj 'SampleProject/SampleProject'
+            target 'SampleProject' do
+              use_frameworks!
+              pod 'BananaLib'
+
+              target 'TestRunner' do
+                use_frameworks!(false)
+                pod 'BananaLib'
+              end
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          pod_targets = result.targets.flat_map(&:pod_targets).uniq.sort_by(&:name)
+          Hash[pod_targets.map { |t| [t.label, t.target_definitions.map(&:label)] }].should == {
+            'BananaLib-library'   => %w(Pods-SampleProject-TestRunner),
+            'BananaLib-framework' => %w(Pods-SampleProject),
+            'monkey-library'      => %w(Pods-SampleProject-TestRunner),
+            'monkey-framework'    => %w(Pods-SampleProject),
+          }
         end
 
         it "doesn't deduplicate targets when deduplication is disabled" do
@@ -262,13 +300,13 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          analyzer.analyze
+          result = analyzer.analyze
 
-          analyzer.analyze.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-BananaLib
-            Pods-SampleProject-TestRunner/Pods-SampleProject-TestRunner-monkey
-            Pods-SampleProject/Pods-SampleProject-BananaLib
-            Pods-SampleProject/Pods-SampleProject-monkey
+          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
+            Pods-SampleProject-TestRunner/BananaLib-Pods-SampleProject-TestRunner
+            Pods-SampleProject-TestRunner/monkey-Pods-SampleProject-TestRunner
+            Pods-SampleProject/BananaLib-Pods-SampleProject
+            Pods-SampleProject/monkey-Pods-SampleProject
           ).sort
         end
       end

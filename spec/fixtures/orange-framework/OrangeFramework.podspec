@@ -13,4 +13,6 @@ Pod::Spec.new do |s|
   s.source_files = 'Source/Juicer.swift'
 
   s.frameworks = 'UIKit'
+
+  s.dependency 'matryoshka'
 end

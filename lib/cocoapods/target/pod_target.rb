@@ -19,19 +19,25 @@ module Pod
     # @return [Bool] whether the target needs to be scoped by target definition,
     #         because the spec is used with different subspec sets across them.
     #
-    # @note   For frameworks the target products of {PodTarget}s are named
-    #         after their specs. The namespacing cannot directly happen in
-    #         the product name itself, because this must be equal to the module
-    #         name and this will be used in source code, which should stay
-    #         agnostic over the dependency manager.
+    # @note   The target products of {PodTarget}s are named after their specs.
+    #         The namespacing cannot directly happen in the product name itself,
+    #         because this must be equal to the module name and this will be
+    #         used in source code, which should stay agnostic over the
+    #         dependency manager.
     #         We need namespacing because multiple targets can exist for the
     #         same podspec and their products should not collide. This
     #         duplication is needed when multiple user targets have the same
     #         dependency, but they require different sets of subspecs or they
     #         are on different platforms.
     #
-    attr_reader :scoped
-    alias_method :scoped?, :scoped
+    def scoped?
+      !scope_suffix.nil?
+    end
+
+    # @return [String] used for the label and the directory name, which is used to
+    #         scope the build product in the default configuration build dir.
+    #
+    attr_reader :scope_suffix
 
     # @return [Array<PodTarget>] the targets that this target has a dependency
     #         upon.
@@ -41,16 +47,18 @@ module Pod
     # @param [Array<Specification>] @spec #see spec
     # @param [Array<TargetDefinition>] target_definitions @see target_definitions
     # @param [Sandbox] sandbox @see sandbox
-    # @param [Bool] scoped @see scoped
+    # @param [String] scope_suffix @see scope_suffix
     #
-    def initialize(specs, target_definitions, sandbox, scoped = false)
+    def initialize(specs, target_definitions, sandbox, scope_suffix = nil)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
+      raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
+      raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
       super()
       @specs = specs
       @target_definitions = target_definitions
       @sandbox = sandbox
-      @scoped = scoped
+      @scope_suffix = scope_suffix
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
@@ -67,7 +75,7 @@ module Pod
         if cache[cache_key]
           cache[cache_key]
         else
-          target = PodTarget.new(specs, [target_definition], sandbox, true)
+          target = PodTarget.new(specs, [target_definition], sandbox, target_definition.label)
           target.file_accessors = file_accessors
           target.user_build_configurations = user_build_configurations
           target.native_target = native_target
@@ -82,7 +90,11 @@ module Pod
     #
     def label
       if scoped?
-        "#{target_definitions.first.label}-#{root_spec.name}"
+        if scope_suffix[0] == '.'
+          "#{root_spec.name}#{scope_suffix}"
+        else
+          "#{root_spec.name}-#{scope_suffix}"
+        end
       else
         root_spec.name
       end
@@ -241,15 +253,24 @@ module Pod
       end
     end
 
-    # @return [String] The configuration build dir, relevant if the target is
-    #         integrated as framework.
+    # @param  [String] dir
+    #         The directory (which might be a variable) relative to which
+    #         the returned path should be. This must be used if the
+    #         $CONFIGURATION_BUILD_DIR is modified.
     #
-    def configuration_build_dir
-      if scoped?
-        "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{target_definitions.first.label}"
-      else
-        '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
-      end
+    # @return [String] The absolute path to the configuration build dir
+    #
+    def configuration_build_dir(dir = '$CONFIGURATION_BUILD_DIR')
+      "#{dir}/#{label}"
+    end
+
+    # @param  [String] dir
+    #         @see #configuration_build_dir
+    #
+    # @return [String] The absolute path to the build product
+    #
+    def build_product_path(dir = '$CONFIGURATION_BUILD_DIR')
+      "#{configuration_build_dir(dir)}/#{product_name}"
     end
 
     private
