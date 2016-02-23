@@ -100,6 +100,7 @@ module Pod
 set -e
 
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+mkdir -p "${PODS_ROOT}/resources-checksums"
 
 RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
 > "$RESOURCES_TO_COPY"
@@ -112,6 +113,24 @@ realpath() {
   echo "$DIRECTORY/$FILENAME"
 }
 
+check_resource_md5()
+{
+  if type md5 >/dev/null 2>&1 ; then
+    md5_file_path="${PODS_ROOT}/resources-checksums/`basename \\"$1\\"`"
+    md5_file_path="${md5_file_path%.*}"
+    current_md5=`md5 -q $1`
+    if [ -e $md5_file_path ]; then
+      old_md5=`cat $md5_file_path`
+      echo $current_md5 > "$md5_file_path"
+      if [ $current_md5 == $old_md5 ]; then
+        return 0
+      fi
+    else
+      echo $current_md5 > "$md5_file_path"
+    fi
+  fi
+  return 1
+}
 install_resource()
 {
   if [[ "$1" = /* ]] ; then
@@ -127,12 +146,20 @@ EOM
   fi
   case $RESOURCE_PATH in
     *\.storyboard)
-      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc $RESOURCE_PATH --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc" "$RESOURCE_PATH" --sdk "${SDKROOT}"
+      if [[ -e "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc" ]] && check_resource_md5 "$RESOURCE_PATH"; then
+        echo "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc"
+      else
+        echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc $RESOURCE_PATH --sdk ${SDKROOT}"
+        ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .storyboard`.storyboardc" "$RESOURCE_PATH" --sdk "${SDKROOT}"
+      fi
       ;;
     *\.xib)
-      echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib $RESOURCE_PATH --sdk ${SDKROOT}"
-      ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib" "$RESOURCE_PATH" --sdk "${SDKROOT}"
+      if [[ -e "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib" ]] && check_resource_md5 "$RESOURCE_PATH"; then
+        echo "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib"
+      else
+        echo "ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile ${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib $RESOURCE_PATH --sdk ${SDKROOT}"
+        ibtool --reference-external-strings-file --errors --warnings --notices --minimum-deployment-target ${!DEPLOYMENT_TARGET_SETTING_NAME} --output-format human-readable-text --compile "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/`basename \\"$RESOURCE_PATH\\" .xib`.nib" "$RESOURCE_PATH" --sdk "${SDKROOT}"
+      fi
       ;;
     *.framework)
       echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
