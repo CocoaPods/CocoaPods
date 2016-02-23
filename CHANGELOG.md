@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
 
+* Pass `COCOAPODS_VERSION` as environment variable to the `prepare_command`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4933](https://github.com/CocoaPods/CocoaPods/pull/4933)
+
 ##### Bug Fixes
 
 * Pods are built by default in another scoping level of the build products
