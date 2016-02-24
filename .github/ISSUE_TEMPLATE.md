@@ -25,7 +25,7 @@
 ## Podfile
 
 > ℹ Please paste the contents of your Podfile below.    
->  (e.g. via `cat Podfile | pbcopy`)  
+>  (e.g. via `cat Podfile | pbcopy`)  
 > You can remove this hint then.
 
 ```ruby
