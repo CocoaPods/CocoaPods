@@ -12,8 +12,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Move `${TARGET_DEVICE_ARGS}` out of the quotations for `--sdk` in `copy_resources_script.rb`.  
+  [seaders](https://github.com/seaders) [#4940](https://github.com/CocoaPods/CocoaPods/issues/4940)
 
 ## 1.0.0.beta.4 (2016-02-24)
 
