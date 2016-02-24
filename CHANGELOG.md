@@ -38,6 +38,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [seaders](https://github.com/seaders)
   [#4913](https://github.com/CocoaPods/CocoaPods/issues/4913)
 
+* Fix `repo lint` for path arguments.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#4883](https://github.com/CocoaPods/CocoaPods/issues/4883)
+
+
 ## 1.0.0.beta.3 (2016-02-03)
 
 ##### Breaking

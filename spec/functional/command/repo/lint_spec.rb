@@ -17,6 +17,12 @@ module Pod
       lambda { run_command('repo', 'lint', repo) }.should.not.raise
     end
 
+    it 'lints a repository by relative path' do
+      repo = fixture('spec-repos/test_repo')
+      repo = repo.relative_path_from(SpecHelper.temporary_directory).to_s
+      lambda { run_command('repo', 'lint', repo) }.should.not.raise
+    end
+
     it 'raises when there is no repository with given name' do
       repo = fixture('spec-repos/not_existing_repo').to_s
       e = lambda { run_command('repo', 'lint', repo) }.should.raise Informative
