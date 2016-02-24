@@ -11,17 +11,15 @@
     "git": "https://github.com/CocoaPods/res.git",
     "tag": "0.1.0"
   },
+  "platforms": {
+    "ios": "7.0",
+    "osx": "10.0"
+  },
   "source_files": "*.m",
   "resources": "troll.png",
   "resource_bundles": {
     "SamplePodWithResources": [
       "logo.png"
     ]
-  },
-  "platforms": {
-    "osx": null,
-    "ios": null,
-    "tvos": null,
-    "watchos": null
   }
 }

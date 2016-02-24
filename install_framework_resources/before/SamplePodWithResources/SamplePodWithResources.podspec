@@ -7,8 +7,8 @@ Pod::Spec.new do |s|
   s.author           = { "Marius Rackwitz" => "git@mariusrackwitz.de" }
   s.source           = { :git => "https://github.com/CocoaPods/res.git", :tag => s.version.to_s }
 
-  s.ios.platform = '7.0'
-  s.osx.platform = '10.0'
+  s.ios.deployment_target = '7.0'
+  s.osx.deployment_target = '10.0'
 
   s.source_files = '*.m'
   s.resources = 'troll.png'
