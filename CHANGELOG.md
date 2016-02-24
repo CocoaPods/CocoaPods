@@ -12,11 +12,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   different sets of subspecs across different platforms.
   This changes the general naming scheme scoped pod targets. They are
   suffixed now on base of what makes them different among others for the
-  same root spec instead of being prefixed by the dependant target.  
+  same root spec instead of being prefixed by the dependent target.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
 
-* Pass `COCOAPODS_VERSION` as environment variable to the `prepare_command`.  
+* Pass `COCOAPODS_VERSION` as environment variable when invoking the
+  `prepare_command`.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4933](https://github.com/CocoaPods/CocoaPods/pull/4933)
 
@@ -38,7 +39,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [seaders](https://github.com/seaders)
   [#4913](https://github.com/CocoaPods/CocoaPods/issues/4913)
 
-* Fix `repo lint` for path arguments.  
+* Fix `pod repo lint` when passed a path argument.  
   [Boris Bügling](https://github.com/neonichu)
   [#4883](https://github.com/CocoaPods/CocoaPods/issues/4883)
 
