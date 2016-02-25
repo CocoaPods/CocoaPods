@@ -132,6 +132,8 @@ GEM
       diffy
     cocoapods-dependencies (1.0.0.beta.1)
       ruby-graphviz (~> 1.2)
+    cocoapods_debug (0.1.0)
+      pry (= 0.10.3)
     coderay (1.1.0)
     colored (1.2)
     crack (0.4.2)
@@ -225,6 +227,7 @@ DEPENDENCIES
   cocoapods-stats!
   cocoapods-trunk!
   cocoapods-try!
+  cocoapods_debug
   diffy
   inch_by_inch
   json!
