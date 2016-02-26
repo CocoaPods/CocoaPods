@@ -107,15 +107,18 @@ module Pod
         library_targets = target.pod_targets.reject do |pod_target|
           pod_target.should_build? && pod_target.requires_frameworks?
         end
-        resources_by_config = {}
-        target.user_build_configurations.keys.each do |config|
-          file_accessors = library_targets.select { |t| t.include_in_build_config?(target_definition, config) }.flat_map(&:file_accessors)
-          resource_paths = file_accessors.flat_map { |accessor| accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) } }
-          resource_bundles = file_accessors.flat_map { |accessor| accessor.resource_bundles.keys.map { |name| "${BUILT_PRODUCTS_DIR}/#{name.shellescape}.bundle" } }
-          resources_by_config[config] = (resource_paths + resource_bundles).uniq
-          resources_by_config[config] << bridge_support_file if bridge_support_file
+        target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+          resources_by_config[config] = library_targets.flat_map do |library_target|
+            next [] unless library_target.include_in_build_config?(target_definition, config)
+            resource_paths = library_target.file_accessors.flat_map do |accessor|
+              accessor.resources.flat_map { |res| res.relative_path_from(project.path.dirname) }
+            end
+            resource_bundles = library_target.file_accessors.flat_map do |accessor|
+              accessor.resource_bundles.keys.map { |name| "#{library_target.configuration_build_dir}/#{name.shellescape}.bundle" }
+            end
+            (resource_paths + resource_bundles + [bridge_support_file].compact).uniq
+          end
         end
-        resources_by_config
       end
 
       # Creates a script that copies the resources to the bundle of the client

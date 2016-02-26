@@ -150,7 +150,16 @@ module Pod
         script.read.should.not.include?('logo-sidebar.png')
       end
 
-      xit 'adds the resources bundles to the copy resources script' do
+      it 'adds the resources bundles to the copy resources script' do
+        @pod_target.file_accessors.first.stubs(:resource_bundles).returns(
+          'Trees' => [Pathname('palm.jpg')],
+          'Leafs' => [Pathname('leaf.jpg')],
+        )
+        resources_by_config = @installer.send(:resources_by_config)
+        resources_by_config.each_value do |resources|
+          resources.should.include '$CONFIGURATION_BUILD_DIR/BananaLib/Trees.bundle'
+          resources.should.include '$CONFIGURATION_BUILD_DIR/BananaLib/Leafs.bundle'
+        end
       end
 
       it 'adds the bridge support file to the copy resources script, if one was created' do
