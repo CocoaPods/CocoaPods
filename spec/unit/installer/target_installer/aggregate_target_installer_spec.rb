@@ -153,7 +153,12 @@ module Pod
       xit 'adds the resources bundles to the copy resources script' do
       end
 
-      xit 'adds the bridge support file to the copy resources script, if one was created' do
+      it 'adds the bridge support file to the copy resources script, if one was created' do
+        @installer.stubs(:bridge_support_file).returns(@installer.target.bridge_support_path)
+        resources_by_config = @installer.send(:resources_by_config)
+        resources_by_config.each_value do |resources|
+          resources.should.include @installer.target.bridge_support_path
+        end
       end
 
       it 'does add pods to the embed frameworks script' do
