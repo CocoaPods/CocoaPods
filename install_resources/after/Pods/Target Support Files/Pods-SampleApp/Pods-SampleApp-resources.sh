@@ -81,11 +81,11 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "../res/troll.png"
-  install_resource "${BUILT_PRODUCTS_DIR}/res.bundle"
+  install_resource "$CONFIGURATION_BUILD_DIR/res/res.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "../res/troll.png"
-  install_resource "${BUILT_PRODUCTS_DIR}/res.bundle"
+  install_resource "$CONFIGURATION_BUILD_DIR/res/res.bundle"
 fi
 
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
