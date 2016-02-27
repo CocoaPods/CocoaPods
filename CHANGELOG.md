@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4954](https://github.com/CocoaPods/CocoaPods/pull/4954)
 
+* Fix saying the `master` specs repo exists when it has not been set up.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4955](https://github.com/CocoaPods/CocoaPods/issues/4955)
+
 
 ## 1.0.0.beta.4 (2016-02-24)
 

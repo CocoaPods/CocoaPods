@@ -103,7 +103,7 @@ module Pod
       # @return [Array<Source>] The CocoaPods Master Repo source.
       #
       def master
-        sources(['master'])
+        sources(['master']).select { |s| s.repo.directory? }
       end
 
       # Search the appropriate sources to match the set for the given dependency.
