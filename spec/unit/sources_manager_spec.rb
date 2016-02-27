@@ -431,6 +431,11 @@ module Pod
         SourcesManager.master_repo_dir.to_s.should.match %r{fixtures/spec-repos/master}
       end
 
+      it 'returns an empty array for master sources when the master repo has not been set up' do
+        Pathname.any_instance.stubs(:directory?).returns(false)
+        SourcesManager.master.should == []
+      end
+
       it 'returns whether the master repo is functional' do
         SourcesManager.master_repo_functional?.should.be.true
         config.repos_dir = SpecHelper.temporary_directory
