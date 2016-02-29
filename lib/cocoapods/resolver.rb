@@ -367,7 +367,7 @@ module Pod
     # @param  [Molinillo::ResolverError] error
     #
     def handle_resolver_error(error)
-      message = error.message
+      message = error.message.dup
       case error
       when Molinillo::VersionConflict
         error.conflicts.each do |name, conflict|
