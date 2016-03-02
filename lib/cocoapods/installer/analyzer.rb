@@ -72,7 +72,7 @@ module Pod
         store_existing_checkout_options
         fetch_external_sources if allow_fetches
 
-        @locked_dependencies = generate_version_locking_dependencies
+        @locked_dependencies    = generate_version_locking_dependencies
         @result.specs_by_target = validate_platforms(resolve_dependencies)
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
