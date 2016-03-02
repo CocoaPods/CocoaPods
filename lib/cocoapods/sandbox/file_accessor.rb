@@ -259,8 +259,8 @@ module Pod
       # @return [Pathname] The of the prefix header file of the specification.
       #
       def prefix_header
-        if spec_consumer.prefix_header_file
-          path_list.root + spec_consumer.prefix_header_file
+        if file = spec_consumer.prefix_header_file
+          path_list.root + file
         end
       end
 
@@ -274,8 +274,8 @@ module Pod
       #         specification or auto-detected.
       #
       def license
-        if spec_consumer.spec.root.license[:file]
-          path_list.root + spec_consumer.spec.root.license[:file]
+        if file = spec_consumer.license[:file]
+          path_list.root + file
         else
           path_list.glob([GLOB_PATTERNS[:license]]).first
         end
@@ -284,7 +284,7 @@ module Pod
       # @return [Pathname, Nil] The path of the custom module map file of the
       #         specification, if specified.
       def module_map
-        if module_map = spec_consumer.spec.root.module_map
+        if module_map = spec_consumer.module_map
           path_list.root + module_map
         end
       end

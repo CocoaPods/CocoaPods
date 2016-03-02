@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: cc77e5194b892786a698f67f272f13cefeca5f17
+  revision: 014afb20ee157ea25c53f55c7d50a9e3c6591766
   branch: master
   specs:
     cocoapods-core (1.0.0.beta.4)
@@ -115,7 +115,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.5.1)
+    activesupport (4.2.5.2)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
