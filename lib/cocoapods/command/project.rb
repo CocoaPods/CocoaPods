@@ -135,13 +135,13 @@ module Pod
             !lockfile_roots.include?(pod)
           end
 
-          if missing_pods.length > 0
-            if missing_pods.length > 1
-              message = "Pods `#{missing_pods.join('`, `')}` are not " \
-                'installed and cannot be updated'
-            else
-              message = "The `#{missing_pods.first}` Pod is not installed " \
-                'and cannot be updated'
+          unless missing_pods.empty?
+            message = if missing_pods.length > 1
+                        "Pods `#{missing_pods.join('`, `')}` are not " \
+                          'installed and cannot be updated'
+                      else
+                        "The `#{missing_pods.first}` Pod is not installed " \
+                          'and cannot be updated'
             end
             raise Informative, message
           end

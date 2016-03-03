@@ -218,12 +218,12 @@ module Pod
           build_phases.find { |phase| phase.name == prefixed_phase_name } ||
             build_phases.find { |phase| phase.name == phase_name }.tap { |p| p.name = prefixed_phase_name if p } ||
             target.project.new(phase_class).tap do |phase|
-            UI.message("Adding Build Phase '#{prefixed_phase_name}' to project.") do
-              phase.name = prefixed_phase_name
-              phase.show_env_vars_in_log = '0'
-              target.build_phases << phase
+              UI.message("Adding Build Phase '#{prefixed_phase_name}' to project.") do
+                phase.name = prefixed_phase_name
+                phase.show_env_vars_in_log = '0'
+                target.build_phases << phase
+              end
             end
-          end
         end
       end
     end

@@ -1,5 +1,3 @@
-# rubocop:disable LineLength
-
 module Pod
   module Generator
     class CopyResourcesScript

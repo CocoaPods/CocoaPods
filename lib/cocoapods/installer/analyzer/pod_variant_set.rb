@@ -94,12 +94,12 @@ module Pod
         def scope_by_specs
           root_spec = variants.first.root_spec
           specs = [root_spec]
-          if root_spec.default_subspecs.empty?
-            specs += root_spec.subspecs.compact
-          else
-            specs += root_spec.default_subspecs.map do |subspec_name|
-              root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
-            end
+          specs += if root_spec.default_subspecs.empty?
+                     root_spec.subspecs.compact
+                   else
+                     root_spec.default_subspecs.map do |subspec_name|
+                       root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
+                     end
           end
           default_specs = Set.new(specs)
           grouped_variants = group_by(&:specs)

@@ -49,7 +49,7 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script = %("${SRCROOT}/../Pods/Pods-resources.sh"\n)
           @target_integrator.integrate!
-          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh\""
+          phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
         end
 
         it 'adds references to the Pods static libraries to the Frameworks group' do
@@ -85,7 +85,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh\""
+          phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
         end
 
         it 'adds a Check Manifest.lock build phase to each target' do

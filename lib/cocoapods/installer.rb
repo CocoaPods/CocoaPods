@@ -552,12 +552,10 @@ module Pod
     #
     def prepare_pods_project
       UI.message '- Creating Pods project' do
-        object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
-
-        if object_version
-          @pods_project = Pod::Project.new(sandbox.project_path, false, object_version)
-        else
-          @pods_project = Pod::Project.new(sandbox.project_path)
+        @pods_project = if object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
+                          Pod::Project.new(sandbox.project_path, false, object_version)
+                        else
+                          Pod::Project.new(sandbox.project_path)
         end
 
         analysis_result.all_user_build_configurations.each do |name, type|

@@ -198,7 +198,7 @@ begin
 
     desc 'Rebuilds integration fixtures'
     task :rebuild_integration_fixtures do
-      if `which hg` && !$?.success?
+      unless system('which hg')
         puts red('[!] Mercurial (`hg`) must be installed to rebuild the integration fixtures.')
         exit 1
       end
