@@ -8,7 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Enable syntax highlighting on the Podfile in the generated
+  `Pods.xcodeproj`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4962](https://github.com/CocoaPods/CocoaPods/issues/4962)
 
 ##### Bug Fixes
 
