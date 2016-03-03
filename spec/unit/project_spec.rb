@@ -374,6 +374,7 @@ module Pod
         f = @project['Podfile']
         f.source_tree.should == 'SOURCE_ROOT'
         f.xc_language_specification_identifier.should == 'xcode.lang.ruby'
+        f.explicit_file_type.should == 'text.script.ruby'
         f.path.should == '../Podfile'
       end
 
