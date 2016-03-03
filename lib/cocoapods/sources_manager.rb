@@ -340,8 +340,9 @@ module Pod
       # @return [Bool] Whether the given source is a GIT repo.
       #
       def git_repo?(dir)
-        Dir.chdir(dir) { `git rev-parse >/dev/null 2>&1` }
-        $?.success?
+        Dir.chdir(dir) do
+          Executable.capture_command('git', %w(rev-parse), :capture => :none).success?
+        end
       end
 
       # Checks the version information of the source with the given directory.
