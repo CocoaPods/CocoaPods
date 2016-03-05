@@ -20,6 +20,16 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Development pods will no longer be implicitly unlocked. This makes CocoaPods
+  to respect constraints related to dependencies of development pods in the lockfile.
+
+  If you change constraints of a dependency of your development pod, and want to
+  override the locked version, you will have to use `pod update ${DEPENDENCY_NAME}` manually.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#4211](https://github.com/CocoaPods/CocoaPods/issues/4211)
+  [#4577](https://github.com/CocoaPods/CocoaPods/issues/4577)
+  [#4580](https://github.com/CocoaPods/CocoaPods/issues/4580)
+
 * Fixes paths passed for resources bundles in the copy resources script.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#4954](https://github.com/CocoaPods/CocoaPods/pull/4954)
