@@ -439,6 +439,57 @@ module Pod
           version.to_s.should == '2.4.1'
       end
 
+      it 'unlocks only local pod when specification checksum changes' do
+        sandbox = config.sandbox
+        local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.1', 'dependencies' => { 'Expecta' => ['~> 0.0'] })
+        sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          project 'SampleProject/SampleProject'
+          target 'SampleProject' do
+            pod 'LocalPod', :path => '../'
+          end
+        end
+        hash = {}
+        hash['PODS'] = ['Expecta (0.2.0)', { 'LocalPod (1.0)' => ['Expecta (~> 0.0)'] }]
+        hash['DEPENDENCIES'] = ['LocalPod (from `../`)']
+        hash['EXTERNAL SOURCES'] = { 'LocalPod' => { :path => '../' } }
+        hash['SPEC CHECKSUMS'] = { 'LocalPod' => 'DUMMY_CHECKSUM' }
+        hash['COCOAPODS'] = Pod::VERSION
+        lockfile = Pod::Lockfile.new(hash)
+        analyzer = Installer::Analyzer.new(sandbox, podfile, lockfile)
+        analyzer.analyze(false).specifications.
+          find { |s| s.name == 'LocalPod' }.
+          version.to_s.should == '1.1'
+        analyzer.analyze(false).specifications.
+          find { |s| s.name == 'Expecta' }.
+          version.to_s.should == '0.2.0'
+      end
+
+      it 'raises if change in local pod specification conflicts with lockfile' do
+        sandbox = config.sandbox
+        local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0', 'dependencies' => { 'Expecta' => ['0.2.2'] })
+        sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          project 'SampleProject/SampleProject'
+          target 'SampleProject' do
+            pod 'LocalPod', :path => '../'
+          end
+        end
+        hash = {}
+        hash['PODS'] = ['Expecta (0.2.0)', { 'LocalPod (1.0)' => ['Expecta (=0.2.0)'] }]
+        hash['DEPENDENCIES'] = ['LocalPod (from `../`)']
+        hash['EXTERNAL SOURCES'] = { 'LocalPod' => { :path => '../' } }
+        hash['SPEC CHECKSUMS'] = {}
+        hash['COCOAPODS'] = Pod::VERSION
+        lockfile = Pod::Lockfile.new(hash)
+        analyzer = Installer::Analyzer.new(sandbox, podfile, lockfile)
+        should.raise(Informative) do
+          analyzer.analyze(false)
+        end.message.should.match /You should run `pod update Expecta`/
+      end
+
       #--------------------------------------#
 
       it 'takes into account locked implicit dependencies' do
