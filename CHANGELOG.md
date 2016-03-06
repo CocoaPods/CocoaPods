@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add :package: emoji in front of CocoaPods Script Build Phases
+  to quickly and visually differentiate them from other phases.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#4985](https://github.com/CocoaPods/CocoaPods/issues/4985)
+
 * Enable syntax highlighting on the Podfile in the generated
   `Pods.xcodeproj`.  
   [Samuel Giddins](https://github.com/segiddins)
