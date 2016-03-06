@@ -9,6 +9,14 @@ module Pod
       class TargetIntegrator
         autoload :XCConfigIntegrator, 'cocoapods/installer/user_project_integrator/target_integrator/xcconfig_integrator'
 
+        # @return [String] the PACKAGE emoji to use as prefix for every build phase aded to the user project
+        #
+        BUILD_PHASE_PREFIX = "\u{1F4E6} ".freeze
+
+        # @return [String] the name of the check manifest phase
+        #
+        CHECK_MANIFEST_PHASE_NAME = 'Check Pods Manifest.lock'.freeze
+
         # @return [Array<Symbol>] the symbol types, which require that the pod
         # frameworks are embedded in the output directory / product bundle.
         #
@@ -18,9 +26,9 @@ module Pod
         #
         EMBED_FRAMEWORK_PHASE_NAME = 'Embed Pods Frameworks'.freeze
 
-        # @return [String] the PACKAGE emoji to use as prefix for every build phase aded to the user project
+        # @return [String] the name of the copy resources phase
         #
-        BUILD_PHASE_PREFIX = "\u{1F4E6} ".freeze
+        COPY_PODS_RESOURCES_PHASE_NAME = 'Copy Pods Resources'.freeze
 
         # @return [AggregateTarget] the target that should be integrated.
         #
@@ -125,7 +133,7 @@ module Pod
         # @return [void]
         #
         def add_copy_resources_script_phase
-          phase_name = 'Copy Pods Resources'
+          phase_name = COPY_PODS_RESOURCES_PHASE_NAME
           native_targets.each do |native_target|
             phase = create_or_update_build_phase(native_target, phase_name)
             script_path = target.copy_resources_script_relative_path
@@ -143,7 +151,7 @@ module Pod
         # @return [void]
         #
         def add_check_manifest_lock_script_phase
-          phase_name = 'Check Pods Manifest.lock'
+          phase_name = CHECK_MANIFEST_PHASE_NAME
           native_targets.each do |native_target|
             phase = create_or_update_build_phase(native_target, phase_name)
             native_target.build_phases.unshift(phase).uniq! unless native_target.build_phases.first == phase
