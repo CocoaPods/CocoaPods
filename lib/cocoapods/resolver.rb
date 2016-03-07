@@ -104,13 +104,7 @@ module Pod
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
-        requirement = Requirement.new(dependency.requirement.as_list << requirement_for_locked_pod_named(dependency.name))
-        find_cached_set(dependency).
-          all_specifications.
-          select { |s| requirement.satisfied_by? s.version }.
-          map { |s| s.subspec_by_name(dependency.name, false) }.
-          compact.
-          reverse
+        specifications_for_dependency(dependency, [requirement_for_locked_pod_named(dependency.name)])
       end
       @search[dependency].dup
     end
@@ -279,6 +273,27 @@ module Pod
 
     # @!group Private helpers
 
+    # Returns available specifications which satisfy requirements of given dependency
+    # and additional requirements.
+    #
+    # @param [Dependency] dependency
+    #        The dependency whose requirements will be satisfied.
+    #
+    # @param [Array<Requirement>] additional_requirements
+    #        List of additional requirements which should also be satisfied.
+    #
+    # @return [Array<Specification>] List of specifications satisfying given requirements.
+    #
+    def specifications_for_dependency(dependency, additional_requirements = [])
+      requirement = Requirement.new(dependency.requirement.as_list + additional_requirements)
+      find_cached_set(dependency).
+        all_specifications.
+        select { |s| requirement.satisfied_by? s.version }.
+        map { |s| s.subspec_by_name(dependency.name, false) }.
+        compact.
+        reverse
+    end
+
     # @return [Set] Loads or returns a previously initialized set for the Pod
     #               of the given dependency.
     #
@@ -371,7 +386,9 @@ module Pod
       case error
       when Molinillo::VersionConflict
         error.conflicts.each do |name, conflict|
+          local_pod_parent = conflict.requirement_trees.flatten.reverse.find(&:local?)
           lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
+
           if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
             message = 'Due to the previous naïve CocoaPods resolver, ' \
               "you were using a pre-release version of `#{name}`, " \
@@ -380,6 +397,12 @@ module Pod
               'version requirement to your Podfile ' \
               "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
               "or revert to a stable version by running `pod update #{name}`."
+          elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty?
+            # Conflict was caused by a requirement from a local dependency.
+            # Tell user to use `pod update`.
+            message << "\n\nIt seems like you've changed the constraints of dependency `#{name}` " \
+            "inside your development pod `#{local_pod_parent.name}`.\nYou should run `pod update #{name}` to apply " \
+            "changes you've made."
           elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
               (conflict.requirement && !(
               conflict.requirement.prerelease? ||

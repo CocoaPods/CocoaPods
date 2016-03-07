@@ -8,7 +8,7 @@ def generate_lockfile(lockfile_version: Pod::VERSION)
   hash = {}
   hash['PODS'] = []
   hash['DEPENDENCIES'] = []
-  hash['SPEC CHECKSUMS'] = []
+  hash['SPEC CHECKSUMS'] = {}
   hash['COCOAPODS'] = lockfile_version
   Pod::Lockfile.new(hash)
 end

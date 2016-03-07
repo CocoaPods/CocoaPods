@@ -68,10 +68,11 @@ module Pod
           verify_platforms_specified!
         end
         @result.podfile_state = generate_podfile_state
-        @locked_dependencies  = generate_version_locking_dependencies
 
         store_existing_checkout_options
         fetch_external_sources if allow_fetches
+
+        @locked_dependencies    = generate_version_locking_dependencies
         @result.specs_by_target = validate_platforms(resolve_dependencies)
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
@@ -417,8 +418,11 @@ module Pod
         else
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
-          pods_to_update += podfile.dependencies.select(&:local?).map(&:name)
-          LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update)
+          local_pod_names = podfile.dependencies.select(&:local?).map(&:root_name)
+          pods_to_unlock = local_pod_names.reject do |pod_name|
+            sandbox.specification(pod_name).checksum == lockfile.checksum(pod_name)
+          end
+          LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update, pods_to_unlock)
         end
       end
 
