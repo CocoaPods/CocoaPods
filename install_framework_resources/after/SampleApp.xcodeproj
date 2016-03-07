@@ -29,7 +29,7 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
-    - Check Pods Manifest.lock: []
+    - "\U0001F4E6 Check Pods Manifest.lock": []
     - SourcesBuildPhase:
       - ViewController.swift
       - AppDelegate.swift
@@ -38,8 +38,8 @@ Targets:
     - ResourcesBuildPhase:
       - Images.xcassets
       - Main.storyboard
-    - Embed Pods Frameworks: []
-    - Copy Pods Resources: []
+    - "\U0001F4E6 Embed Pods Frameworks": []
+    - "\U0001F4E6 Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -59,14 +59,14 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - SampleAppTests:
     Build Phases:
-    - Check Pods Manifest.lock: []
+    - "\U0001F4E6 Check Pods Manifest.lock": []
     - SourcesBuildPhase:
       - SampleAppTests.swift
     - FrameworksBuildPhase:
       - Pods_SampleAppTests.framework
     - ResourcesBuildPhase: []
-    - Embed Pods Frameworks: []
-    - Copy Pods Resources: []
+    - "\U0001F4E6 Embed Pods Frameworks": []
+    - "\U0001F4E6 Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
