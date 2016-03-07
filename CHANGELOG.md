@@ -32,6 +32,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `Copy Pods Resources` build phase.  
   [seaders](https://github.com/seaders) [#4940](https://github.com/CocoaPods/CocoaPods/issues/4940)
 
+* Handle when `$PATH` isn't set.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.0.beta.4 (2016-02-24)
 
