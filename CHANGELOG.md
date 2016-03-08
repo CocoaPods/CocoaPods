@@ -19,11 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Breaking
 
-* Development pods will no longer be implicitly unlocked. This makes CocoaPods
-  to respect constraints related to dependencies of development pods in the
-  lockfile.
+* Development pods will no longer be implicitly unlocked. This makes CocoaPods respect
+  constraints related to dependencies of development pods in the lockfile.
 
-  If you change constraints of a dependency of your development pod, and want to
+  If you change the constraints of a dependency of your development pod and want to
   override the locked version, you will have to use
   `pod update ${DEPENDENCY_NAME}` manually.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
