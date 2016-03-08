@@ -6,9 +6,23 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* Development pods will no longer be implicitly unlocked. This makes CocoaPods
+  to respect constraints related to dependencies of development pods in the
+  lockfile.
+
+  If you change constraints of a dependency of your development pod, and want to
+  override the locked version, you will have to use
+  `pod update ${DEPENDENCY_NAME}` manually.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#4211](https://github.com/CocoaPods/CocoaPods/issues/4211)
+  [#4577](https://github.com/CocoaPods/CocoaPods/issues/4577)
+  [#4580](https://github.com/CocoaPods/CocoaPods/issues/4580)
+
 ##### Enhancements
 
-* Add :package: emoji in front of CocoaPods Script Build Phases
+* Add the :package: emoji in front of CocoaPods Script Build Phases
   to quickly and visually differentiate them from other phases.  
   [Olivier Halligon](https://github.com/AliSoftware)
   [#4985](https://github.com/CocoaPods/CocoaPods/issues/4985)
@@ -19,16 +33,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#4962](https://github.com/CocoaPods/CocoaPods/issues/4962)
 
 ##### Bug Fixes
-
-* Development pods will no longer be implicitly unlocked. This makes CocoaPods
-  to respect constraints related to dependencies of development pods in the lockfile.
-
-  If you change constraints of a dependency of your development pod, and want to
-  override the locked version, you will have to use `pod update ${DEPENDENCY_NAME}` manually.  
-  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
-  [#4211](https://github.com/CocoaPods/CocoaPods/issues/4211)
-  [#4577](https://github.com/CocoaPods/CocoaPods/issues/4577)
-  [#4580](https://github.com/CocoaPods/CocoaPods/issues/4580)
 
 * Fixes paths passed for resources bundles in the copy resources script.  
   [Marius Rackwitz](https://github.com/mrackwitz)
