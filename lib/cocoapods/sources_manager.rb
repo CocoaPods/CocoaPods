@@ -41,7 +41,15 @@ module Pod
       #
       def sources(names)
         dirs = names.map { |name| source_dir(name) }
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map do |repo|
+          if Pathname(repo).basename == 'master'
+            source = MasterSource.new(repo)
+          else
+            source = Source.new(repo)
+          end
+
+          source
+        end
       end
 
       # Returns the source whose {Source#url} is equal to `url`, adding the repo
@@ -97,7 +105,15 @@ module Pod
       def all
         return [] unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map do |repo|
+          if Pathname(repo).basename == 'master'
+            source = MasterSource.new(repo)
+          else
+            source = Source.new(repo)
+          end
+
+          source
+        end
       end
 
       # @return [Array<Source>] The CocoaPods Master Repo source.
@@ -323,43 +339,13 @@ module Pod
         changed_spec_paths = {}
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            if requires_update(source)
-              changed_source_paths = source.update(show_output && !config.verbose?)
-              changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
-            end
+            changed_source_paths = source.update(show_output && !config.verbose?)
+            changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
             check_version_information(source.repo)
           end
         end
         # Perform search index update operation in background.
         update_search_index_if_needed_in_background(changed_spec_paths)
-      end
-
-      # Returns whether a source requires updating. 
-      #
-      # This will return true for all repos other than master, where we check 
-      # to see if there have been new commits via the API. 
-      #
-      # @param [Source] source
-      #        The source to check.
-      #
-      # @return [Bool] Whether the given source should be updated.
-      #
-      def requires_update(source)
-        return true unless source.name == 'master'
-        
-        Dir.chdir(source.repo) do
-          current_commit_hash = (`git rev-parse HEAD`).strip
-        end
-        url = URI.parse('https://api.github.com/repos/CocoaPods/Specs/commits/master')
-        req = Net::HTTP::Get.new(url.path)
-        req.add_field('Accept', 'application/vnd.github.chitauri-preview+sha')
-        req.add_field('If-None-Match', current_commit_hash)
-
-        res = Net::HTTP.new(url.host, url.port).start do |http|
-          http.request(req)
-        end
-
-        return res.code != 304 
       end
 
       # Returns whether a source is a GIT repo.

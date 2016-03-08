@@ -4,14 +4,13 @@ def set_up_test_repo_for_update
   set_up_test_repo
   upstream = SpecHelper.temporary_directory + 'upstream'
   FileUtils.cp_r(test_repo_path, upstream)
+  puts("#{test_repo_path} : #{upstream}")
   Dir.chdir(test_repo_path) do
     `git remote add origin #{upstream}`
     `git remote -v`
     `git fetch -q`
     `git branch --set-upstream-to=origin/master master`
     `git config branch.master.rebase true`
-    `git checkout HEAD~1`
-    `git clean -fd`
   end
   config.repos_dir = SpecHelper.tmp_repos_path
 end
