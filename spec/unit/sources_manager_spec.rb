@@ -10,6 +10,8 @@ def set_up_test_repo_for_update
     `git fetch -q`
     `git branch --set-upstream-to=origin/master master`
     `git config branch.master.rebase true`
+    `git checkout HEAD~1`
+    `git clean -fd`
   end
   config.repos_dir = SpecHelper.tmp_repos_path
 end
