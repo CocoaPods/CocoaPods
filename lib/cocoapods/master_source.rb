@@ -13,10 +13,10 @@ module Pod
     #
     def update(show_output)
       if requires_update
-        return super.update(show_output)
+        super
+      else
+        []
       end
-
-      return []
     end
 
     # Returns whether a source requires updating. 
@@ -30,19 +30,21 @@ module Pod
     # @return [Bool] Whether the given source should be updated.
     #
     def requires_update
+      current_commit_hash = ''
       Dir.chdir(repo) do
         current_commit_hash = (`git rev-parse HEAD`).strip
       end
-      url = URI.parse('https://api.github.com/repos/CocoaPods/Specs/commits/master')
-      req = Net::HTTP::Get.new(url.path)
-      req.add_field('Accept', 'application/vnd.github.chitauri-preview+sha')
-      req.add_field('If-None-Match', current_commit_hash)
+      uri = URI.parse('https://api.github.com/repos/CocoaPods/Specs/commits/master')
 
-      res = Net::HTTP.new(url.host, url.port).start do |http|
-        http.request(req)
-      end
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      headers = {
+        'Accept' => 'application/vnd.github.chitauri-preview+sha',
+        'If-None-Match' => current_commit_hash
+      }
+      code = http.head(uri.path, headers).code.to_i
 
-      return res.code != 304 
+      return code != 304
     end
   end
 end
