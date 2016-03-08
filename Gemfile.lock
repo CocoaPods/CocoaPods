@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 014afb20ee157ea25c53f55c7d50a9e3c6591766
+  revision: 10e44cb334f8b556ce86fda8e25873fc6a8bddf3
   branch: master
   specs:
-    cocoapods-core (1.0.0.beta.4)
+    cocoapods-core (1.0.0.beta.5)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: 970d9a930176e8a625ab5b20fbf5a0fa8a8c5869
+  revision: af644558b54c9d12c82ae41cf917d7bb9043d236
   branch: master
   specs:
     cocoapods-deintegrate (1.0.0.beta.1)
@@ -48,7 +48,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 7ae90262ab567fb8331f40dd17f0d79a3dc1551a
+  revision: b8c10c14071f4199be452926a961c565ca12d048
   branch: master
   specs:
     cocoapods-plugins (1.0.0.beta.1)
@@ -94,10 +94,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.0.0.beta.4)
+    cocoapods (1.0.0.beta.5)
       activesupport (>= 4.0.2)
       claide (>= 1.0.0.beta.2, < 2.0)
-      cocoapods-core (= 1.0.0.beta.4)
+      cocoapods-core (= 1.0.0.beta.5)
       cocoapods-deintegrate (>= 1.0.0.beta.1, < 2.0)
       cocoapods-downloader (>= 1.0.0.beta.1, < 2.0)
       cocoapods-plugins (>= 1.0.0.beta.1, < 2.0)
@@ -115,7 +115,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.5.2)
+    activesupport (4.2.6)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
