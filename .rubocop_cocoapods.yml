@@ -40,7 +40,10 @@ Encoding:
 
 # Having these make it easier to *not* forget to add one when adding a new
 # value and you can simply copy the previous line.
-TrailingComma:
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
 
 Style/MultilineOperationIndentation:
@@ -109,6 +112,10 @@ Style/SpecialGlobalVars:
 
 # Allow for `should.match /regexp/`.
 AmbiguousRegexpLiteral:
+  Exclude:
+    - spec/**/*
+
+Performance/RedundantMatch:
   Exclude:
     - spec/**/*
 

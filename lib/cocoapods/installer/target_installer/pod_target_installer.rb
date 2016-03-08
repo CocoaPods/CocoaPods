@@ -24,12 +24,12 @@ module Pod
             create_info_plist_file
             create_module_map
             create_umbrella_header do |generator|
-              if header_mappings_dir
-                generator.imports += target.file_accessors.flat_map(&:public_headers).map do |pathname|
-                  pathname.relative_path_from(header_mappings_dir)
-                end
-              else
-                generator.imports += target.file_accessors.flat_map(&:public_headers).map(&:basename)
+              generator.imports += if header_mappings_dir
+                                     target.file_accessors.flat_map(&:public_headers).map do |pathname|
+                                       pathname.relative_path_from(header_mappings_dir)
+                                     end
+                                   else
+                                     target.file_accessors.flat_map(&:public_headers).map(&:basename)
               end
             end
           end

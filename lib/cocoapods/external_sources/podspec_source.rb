@@ -43,7 +43,7 @@ module Pod
       #
       def podspec_uri
         declared_path = params[:podspec].to_s
-        if declared_path.match(%r{^.+://})
+        if declared_path =~ %r{^.+://}
           declared_path
         else
           normalized_podspec_path(declared_path)
