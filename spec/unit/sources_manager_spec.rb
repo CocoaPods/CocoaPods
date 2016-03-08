@@ -297,19 +297,37 @@ module Pod
 
       it 'updates source backed by a git repository' do
         set_up_test_repo_for_update
+
+        stub = WebMock::API.stub_request(:head, "https://api.github.com/repos/CocoaPods/Specs/commits/master")
+          .with(:headers => {'Accept'=>'application/vnd.github.chitauri-preview+sha'})
+          .to_return(:status => 200, :body => "", :headers => {})
+
         SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.output.should.match /is up to date/
+
+        WebMock::API.remove_request_stub(stub)
       end
 
       it 'uses the only fast forward git option' do
         set_up_test_repo_for_update
+
+        stub = WebMock::API.stub_request(:head, "https://api.github.com/repos/CocoaPods/Specs/commits/master")
+          .with(:headers => {'Accept'=>'application/vnd.github.chitauri-preview+sha'})
+          .to_return(:status => 200, :body => '', :headers => {})
+
         Source.any_instance.expects(:git!).with { |options| options.should.include? '--ff-only' }
         SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
+
+        WebMock::API.remove_request_stub(stub)
       end
 
-      it 'prints a warning if the update failed' do
+      it 'prints a warning if the update failed' do 
+        stub = WebMock::API.stub_request(:head, "https://api.github.com/repos/CocoaPods/Specs/commits/master")
+          .with(:headers => {'Accept'=>'application/vnd.github.chitauri-preview+sha'})
+          .to_return(:status => 200, :body => "", :headers => {})
+
         UI.warnings = ''
         set_up_test_repo_for_update
         Dir.chdir(test_repo_path) do
@@ -318,6 +336,8 @@ module Pod
         SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.warnings.should.include('not able to update the `master` repo')
+
+        WebMock::API.remove_request_stub(stub)
       end
 
       it 'updates search index for changed paths if source is updated' do
@@ -328,7 +348,7 @@ module Pod
           value[@test_source.name]['BananaLib'].should.include(:BananaLib)
           value[@test_source.name]['JSONKit'].should.include(:JSONKit)
         end
-        changed_paths = { @test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec) }
+        changed_paths = { @test_source => %w(BananaLib/1.0/BananaLibJSONKit.podspec) }
         SourcesManager.update_search_index_if_needed(changed_paths)
       end
 

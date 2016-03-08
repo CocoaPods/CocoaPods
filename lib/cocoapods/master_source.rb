@@ -30,9 +30,9 @@ module Pod
     # @return [Bool] Whether the given source should be updated.
     #
     def requires_update
-      current_commit_hash = ''
+      current_commit_hash = '""'
       Dir.chdir(repo) do
-        current_commit_hash = (`git rev-parse HEAD`).strip
+        current_commit_hash = "\"#{(`git rev-parse HEAD`).strip}\""
       end
       uri = URI.parse('https://api.github.com/repos/CocoaPods/Specs/commits/master')
 
