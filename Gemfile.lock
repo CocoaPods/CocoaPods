@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: d5a7ef8f3e730f195ecb3dfd2ec5891d1c6988d7
+  revision: 46c7f6ea573f15a14ec47924596ea5e59f94f9ac
   branch: master
   specs:
-    claide (1.0.0.beta.1)
+    claide (1.0.0.beta.2)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
@@ -96,7 +96,7 @@ PATH
   specs:
     cocoapods (1.0.0.beta.4)
       activesupport (>= 4.0.2)
-      claide (>= 1.0.0.beta.1, < 2.0)
+      claide (>= 1.0.0.beta.2, < 2.0)
       cocoapods-core (= 1.0.0.beta.4)
       cocoapods-deintegrate (>= 1.0.0.beta.1, < 2.0)
       cocoapods-downloader (>= 1.0.0.beta.1, < 2.0)
