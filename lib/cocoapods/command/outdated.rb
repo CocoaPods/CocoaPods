@@ -8,6 +8,17 @@ module Pod
         spec repos, not those from local/external sources or `:head` versions.
       DESC
 
+      def self.options
+        [
+          ['--no-repo-update', 'Skip running `pod repo update` before install'],
+        ].concat(super)
+      end
+
+      def initialize(argv)
+        config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
+        super
+      end
+
       # Run the command
       #
       # @todo the command report new dependencies added to the Podfile as

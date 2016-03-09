@@ -36,23 +36,6 @@ module Pod
     # commands.
     #
     module Project
-      module Options
-        def options
-          [
-            ['--no-repo-update', 'Skip running `pod repo update` before install'],
-          ].concat(super)
-        end
-      end
-
-      def self.included(base)
-        base.extend Options
-      end
-
-      def initialize(argv)
-        config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
-        super
-      end
-
       # Runs the installer.
       #
       # @param  [Hash, Boolean, nil] update
@@ -92,6 +75,17 @@ module Pod
         Pod resources.
       DESC
 
+      def self.options
+        [
+          ['--repo-update', 'Force running `pod repo update` before install'],
+        ].concat(super)
+      end
+
+      def initialize(argv)
+        config.skip_repo_update = !argv.flag?('repo-update', false)
+        super
+      end
+
       def run
         verify_podfile_exists!
         run_install_with_update(false)
@@ -118,7 +112,14 @@ module Pod
         CLAide::Argument.new('POD_NAMES', false, true),
       ]
 
+      def self.options
+        [
+          ['--no-repo-update', 'Skip running `pod repo update` before install'],
+        ].concat(super)
+      end
+
       def initialize(argv)
+        config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
         @pods = argv.arguments! unless argv.arguments.empty?
         super
       end
