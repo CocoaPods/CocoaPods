@@ -468,14 +468,25 @@ module Pod
 
       private
 
+      # @return [Source] The Source at a given path.
+      #
+      # @param [Pathname] path
+      #        The local file path to one podspec repo.
+      #
+      def source_from_path(path)
+        return Source.new(path) unless path.basename.to_s == 'master'
+        return MasterSource.new(path)
+      end
+
       # @return [Source::Aggregate] The aggregate of the sources from repos.
       #
       # @param  [Array<Pathname>] repos
       #         The local file paths to one or more podspec repo caches.
       #
       def aggregate_with_repos(repos)
+        sources = repos.map { |path| source_from_path(path) }
         @aggregates_by_repos ||= {}
-        @aggregates_by_repos[repos] ||= Source::Aggregate.new(repos)
+        @aggregates_by_repos[repos] ||= Source::Aggregate.new(sources)
       end
 
       # @return [Bool] Whether the given path is writable by the current user.
