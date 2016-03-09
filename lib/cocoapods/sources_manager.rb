@@ -41,7 +41,7 @@ module Pod
       #
       def sources(names)
         dirs = names.map { |name| source_dir(name) }
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map { |repo| source_from_path(repo) }
       end
 
       # Returns the source whose {Source#url} is equal to `url`, adding the repo
@@ -97,7 +97,7 @@ module Pod
       def all
         return [] unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map { |repo| source_from_path(repo) }
       end
 
       # @return [Array<Source>] The CocoaPods Master Repo source.
