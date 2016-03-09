@@ -52,6 +52,7 @@ module Pod
   autoload :SourcesManager,            'cocoapods/sources_manager'
   autoload :Target,                    'cocoapods/target'
   autoload :Validator,                 'cocoapods/validator'
+  autoload :MasterSource,              'cocoapods/master_source'
 
   module Generator
     autoload :Acknowledgements,        'cocoapods/generator/acknowledgements'

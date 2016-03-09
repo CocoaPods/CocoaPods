@@ -41,7 +41,23 @@ module Pod
       #
       def sources(names)
         dirs = names.map { |name| source_dir(name) }
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map { |repo| source_with_path(repo) }
+      end
+
+      # @return [Source] The source at the given path
+      #
+      # @param [String] path
+      #        The path to the sources.
+      #
+      def source_with_path(path)
+        pn = Pathname.new(path)
+        if pn.basename.to_s == 'master'
+          source = Pod::MasterSource.new(path)
+        else
+          source = Source.new(path)
+        end
+
+        source
       end
 
       # Returns the source whose {Source#url} is equal to `url`, adding the repo
@@ -97,7 +113,7 @@ module Pod
       def all
         return [] unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map { |repo| source_with_path(repo) }
       end
 
       # @return [Array<Source>] The CocoaPods Master Repo source.
@@ -507,7 +523,8 @@ module Pod
         unless git_repo?(specified_source.repo)
           raise Informative, "The `#{name}` repo is not a git repo."
         end
-        specified_source
+
+        source_with_path(specified_source.repo)
       end
 
       # @return [Source] The list of the git sources.
