@@ -1,18 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'webmock'
 
-module Bacon
-  class Context
-    alias_method :after_webmock, :after
-    def after(&block)
-      after_webmock do
-        block.call
-        WebMock.reset!
-      end
-    end
-  end
-end
-
 def set_up_test_repo_for_update
   set_up_test_repo
   upstream = SpecHelper.temporary_directory + 'upstream'
@@ -307,6 +295,10 @@ module Pod
 
     describe 'Updating Sources' do
       extend SpecHelper::TemporaryRepos
+      
+      after do
+        WebMock.reset!
+      end
 
       it 'updates source backed by a git repository' do
         set_up_test_repo_for_update

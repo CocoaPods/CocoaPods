@@ -1,4 +1,5 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
+require 'webmock'
 
 module Pod
   describe Command::Repo::Update do
@@ -8,6 +9,14 @@ module Pod
     before do
       set_up_test_repo
       config.repos_dir = SpecHelper.tmp_repos_path
+
+      WebMock::API.stub_request(:get, "https://api.github.com/repos/cocoapods/specs/commits/master")
+        .with(:headers => {'Accept'=>'application/vnd.github.chitauri-preview+sha'})
+        .to_return(:status => 200, :body => '', :headers => {})
+    end
+
+    after do
+      WebMock.reset!
     end
 
     it 'updates a repository' do
