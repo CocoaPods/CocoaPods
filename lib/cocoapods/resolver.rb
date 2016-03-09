@@ -352,7 +352,7 @@ module Pod
       if dependency && dependency.podspec_repo
         return SourcesManager.aggregate_for_dependency(dependency)
       else
-        @aggregate ||= Source::Aggregate.new(sources.map(&:repo))
+        @aggregate ||= Source::Aggregate.new(sources)
       end
     end
 
