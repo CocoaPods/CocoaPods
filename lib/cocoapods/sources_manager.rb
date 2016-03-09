@@ -475,7 +475,7 @@ module Pod
       #
       def source_from_path(path)
         return Source.new(path) unless path.basename.to_s == 'master'
-        return MasterSource.new(path)
+        MasterSource.new(path)
       end
 
       # @return [Source::Aggregate] The aggregate of the sources from repos.
