@@ -14,6 +14,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#5005](https://github.com/CocoaPods/CocoaPods/issues/5005)
   [#4989](https://github.com/CocoaPods/CocoaPods/issues/4989)
 
+* The master specs repo will no longer support shallow clones to reduce CPU load
+  on GitHub's servers. Pre-existing shallow clones will automatically be
+  upgraded to deep clones when the repo is updated.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5016](https://github.com/CocoaPods/CocoaPods/issues/5016)
+
 ##### Bug Fixes
 
 * None.  
