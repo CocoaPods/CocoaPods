@@ -15,14 +15,7 @@ module Pod
           CLAide::Argument.new('BRANCH', false),
         ]
 
-        def self.options
-          [
-            ['--shallow', 'Create a shallow clone (fast clone, but no push capabilities)'],
-          ].concat(super)
-        end
-
         def initialize(argv)
-          @shallow = argv.flag?('shallow', false)
           @name = argv.shift_argument
           @url = argv.shift_argument
           @branch = argv.shift_argument
@@ -41,8 +34,7 @@ module Pod
         end
 
         def run
-          prefix = @shallow ? 'Creating shallow clone of' : 'Cloning'
-          section = "#{prefix} spec repo `#{@name}` from `#{@url}`"
+          section = "Cloning spec repo `#{@name}` from `#{@url}`"
           section << " (branch `#{@branch}`)" if @branch
           UI.section(section) do
             create_repos_dir
@@ -76,7 +68,6 @@ module Pod
         def clone_repo
           Dir.chdir(config.repos_dir) do
             command = ['clone', @url, @name]
-            command << '--depth=1' if @shallow
             git!(command)
           end
         end
