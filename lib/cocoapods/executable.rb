@@ -137,9 +137,9 @@ module Pod
       case capture
       when :merge then Open3.capture2e(bin, *command)
       when :both then Open3.capture3(bin, *command)
-      when :out then Open3.capture2(bin, *command)
+      when :out then Open3.capture3(bin, *command).values_at(0, -1)
       when :err then Open3.capture3(bin, *command).drop(1)
-      when :none then Open3.capture2(bin, *command).last
+      when :none then Open3.capture3(bin, *command).last
       end
     end
 

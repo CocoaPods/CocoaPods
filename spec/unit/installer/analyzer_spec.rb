@@ -4,7 +4,7 @@ module Pod
   describe Installer::Analyzer do
     describe 'Analysis' do
       before do
-        repos = [fixture('spec-repos/test_repo'), fixture('spec-repos/master')]
+        repos = [Source.new(fixture('spec-repos/test_repo')), MasterSource.new(fixture('spec-repos/master'))]
         aggregate = Pod::Source::Aggregate.new(repos)
         Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
         aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
@@ -323,7 +323,7 @@ module Pod
 
       describe 'no-integrate platform validation' do
         before do
-          repos = [fixture('spec-repos/test_repo')]
+          repos = [Source.new(fixture('spec-repos/test_repo'))]
           aggregate = Pod::Source::Aggregate.new(repos)
           Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
           aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
