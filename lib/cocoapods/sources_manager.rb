@@ -61,9 +61,11 @@ module Pod
           previous_title_level = UI.title_level
           UI.title_level = 0
           begin
-            argv = [name, url]
-            argv << '--shallow' if name =~ /^master(-\d+)?$/
-            Command::Repo::Add.new(CLAide::ARGV.new(argv)).run
+            if name =~ /^master(-\d+)?$/
+              Command::Setup.parse([]).run
+            else
+              Command::Repo::Add.parse([name, url]).run
+            end
           rescue Informative
             raise Informative, "Unable to add a source with url `#{url}` " \
               "named `#{name}`.\nYou can try adding it manually in " \
@@ -625,6 +627,7 @@ module Pod
     end
 
     def update_git_repo(show_output = false)
+      ensure_in_repo!
       Config.instance.with_changes(:verbose => show_output) do
         git!(%w(pull --ff-only))
       end
@@ -633,6 +636,18 @@ module Pod
                 "`#{name}` repo. If this is an unexpected issue " \
                 'and persists you can inspect it running ' \
                 '`pod repo update --verbose`'
+    end
+  end
+
+  class MasterSource
+    def update_git_repo(show_output = false)
+      ensure_in_repo!
+      if repo.join('.git', 'shallow').file?
+        UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
+          git!(%w(fetch --unshallow))
+        end
+      end
+      super
     end
   end
 end

@@ -314,6 +314,17 @@ module Pod
         SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 
+      it 'unshallows if the git repo is shallow' do
+        set_up_test_repo_for_update
+        test_repo_path.join('.git', 'shallow').open('w') { |f| f << 'a' * 40 }
+        SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
+        MasterSource.any_instance.expects(:git!).with(%w(fetch --unshallow))
+        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only))
+        SourcesManager.update(test_repo_path.basename.to_s, true)
+
+        UI.output.should.match /deep fetch.+`master`.+improve future performance/
+      end
+
       it 'prints a warning if the update failed' do
         set_up_test_repo_for_update
         Source.any_instance.stubs(:git).with(%w(rev-parse HEAD)).returns('aabbccd')
