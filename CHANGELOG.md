@@ -26,6 +26,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   instead must be done via `pod setup`.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Print a friendly error message when the platform for a target cannot be
+  inferred.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4790](https://github.com/CocoaPods/CocoaPods/issues/4790)
+
 
 ## 1.0.0.beta.5 (2016-03-08)
 
