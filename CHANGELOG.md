@@ -22,7 +22,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* The master specs repository can no longer be added via `pod repo add`, but
+  instead must be done via `pod setup`.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 
 ## 1.0.0.beta.5 (2016-03-08)
