@@ -38,7 +38,9 @@ module Pod
 
         def run
           prefix = @shallow ? 'Creating shallow clone of' : 'Cloning'
-          UI.section("#{prefix} spec repo `#{@name}` from `#{@url}`#{" (branch `#{@branch}`)" if @branch}") do
+          section = "#{prefix} spec repo `#{@name}` from `#{@url}`"
+          section << " (branch `#{@branch}`)" if @branch
+          UI.section(section) do
             create_repos_dir
             clone_repo
             checkout_branch
