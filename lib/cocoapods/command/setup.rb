@@ -14,19 +14,8 @@ module Pod
         If the clone already exists, it will ensure that it is up-to-date.
       DESC
 
-      def self.options
-        [
-          ['--no-shallow', 'Clone full history so push will work'],
-        ].concat(super)
-      end
-
       extend Executable
       executable :git
-
-      def initialize(argv)
-        @shallow = argv.flag?('shallow', true)
-        super
-      end
 
       def run
         UI.section 'Setting up CocoaPods master repo' do
@@ -62,7 +51,6 @@ module Pod
       #
       def add_master_repo
         cmd = ['master', url, 'master']
-        cmd << '--shallow' if @shallow
         Repo::Add.parse(cmd).run
       end
 
