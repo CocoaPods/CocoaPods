@@ -418,6 +418,7 @@ module Pod
         validator.stubs(:validate_url)
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
+        Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
         Executable.stubs(:which).with(:xcrun)
         Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)

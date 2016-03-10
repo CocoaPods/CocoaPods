@@ -295,37 +295,36 @@ module Pod
 
     describe 'Updating Sources' do
       extend SpecHelper::TemporaryRepos
-      
-      before do
-        WebMock::API.stub_request(:get, "https://api.github.com/repos/cocoapods/specs/commits/master")
-          .with(:headers => {'Accept'=>'application/vnd.github.chitauri-preview+sha'})
-          .to_return(:status => 200, :body => '', :headers => {})
-      end
 
-      after do
-        WebMock.reset!
+      before do
+        MasterSource.any_instance.stubs(:requires_update?).returns(true)
       end
 
       it 'updates source backed by a git repository' do
         set_up_test_repo_for_update
         SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
+        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only))
         SourcesManager.update(test_repo_path.basename.to_s, true)
-        UI.output.should.match /is up to date/
       end
 
       it 'uses the only fast forward git option' do
         set_up_test_repo_for_update
-        Source.any_instance.expects(:git!).with { |options| options.should.include? '--ff-only' }
+        MasterSource.any_instance.expects(:git!).with { |options| options.should.include? '--ff-only' }
         SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
       end
 
       it 'prints a warning if the update failed' do
-        UI.warnings = ''
         set_up_test_repo_for_update
-        Dir.chdir(test_repo_path) do
-          `git remote set-url origin file:///dev/null`
-        end
+        Source.any_instance.stubs(:git).with(%w(rev-parse HEAD)).returns('aabbccd')
+        Source.any_instance.stubs(:git).with(%w(diff --name-only aabbccd..HEAD)).returns('')
+        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only)).raises(<<-EOS)
+fatal: '/dev/null' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+        EOS
         SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
         SourcesManager.update(test_repo_path.basename.to_s, true)
         UI.warnings.should.include('not able to update the `master` repo')

@@ -323,7 +323,7 @@ module Pod
         changed_spec_paths = {}
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            changed_source_paths = source.update(show_output && !config.verbose?)
+            changed_source_paths = source.update(show_output)
             changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
             check_version_information(source.repo)
           end
@@ -620,9 +620,14 @@ module Pod
     extend Executable
     executable :git
 
+    def git(args, include_error: false)
+      Executable.capture_command('git', args, :capture => include_error ? :merge : :out).first.strip
+    end
+
     def update_git_repo(show_output = false)
-      output = git! %w(pull --ff-only)
-      UI.puts output if show_output
+      Config.instance.with_changes(:verbose => show_output) do
+        git!(%w(pull --ff-only))
+      end
     rescue
       UI.warn 'CocoaPods was not able to update the ' \
                 "`#{name}` repo. If this is an unexpected issue " \
