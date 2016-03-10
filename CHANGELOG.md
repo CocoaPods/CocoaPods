@@ -9,7 +9,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Enhancements
 
 * The master specs repo will no longer perform 'no-op' git fetches. This should
-  help to reduce the load on GitHub's servers.
+  help to reduce the load on GitHub's servers.  
   [Daniel Tomlinson](https://github.com/DanielTomlinson)
   [#5005](https://github.com/CocoaPods/CocoaPods/issues/5005)
   [#4989](https://github.com/CocoaPods/CocoaPods/issues/4989)
