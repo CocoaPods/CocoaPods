@@ -560,11 +560,17 @@ module Pod
     # Ensures that a list of header files only contains header files.
     #
     def _validate_header_files(attr_name)
-      non_header_files = file_accessor.send(attr_name).
+      header_files = file_accessor.send(attr_name)
+      non_header_files = header_files.
         select { |f| !Sandbox::FileAccessor::HEADER_EXTENSIONS.include?(f.extname) }.
         map { |f| f.relative_path_from(file_accessor.root) }
       unless non_header_files.empty?
         error(attr_name, "The pattern matches non-header files (#{non_header_files.join(', ')}).")
+      end
+      non_source_files = header_files - file_accessor.source_files
+      unless non_source_files.empty?
+        error(attr_name, 'The pattern includes header files that are not listed' \
+          "in source_files (#{non_source_files.join(', ')}).")
       end
     end
 
