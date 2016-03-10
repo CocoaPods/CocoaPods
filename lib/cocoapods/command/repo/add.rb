@@ -34,6 +34,10 @@ module Pod
           unless @name && @url
             help! 'Adding a repo needs a `NAME` and a `URL`.'
           end
+          if @name == 'master' || @url =~ %r{github.com[:/]+cocoapods/specs}i
+            raise Informative,
+                  'To setup the master specs repo, please run `pod setup`.'
+          end
         end
 
         def run

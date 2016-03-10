@@ -47,5 +47,15 @@ module Pod
       e = lambda { run_command('repo', 'add', 'private', test_repo_path) }.should.raise Informative
       e.message.should.match /Could not create '#{tmp_repos_path}', the CocoaPods repo cache directory./
     end
+
+    it 'raises an informative error when attempting to add the master repo' do
+      master = command('repo', 'add', 'master', 'https://github.com/foo/bar.git')
+      should.raise(Informative) { master.validate! }.message.should.
+        include('To setup the master specs repo, please run `pod setup`')
+
+      master = command('repo', 'add', 'foo-bar', 'https://github.com/CocoaPods/Specs.git')
+      should.raise(Informative) { master.validate! }.message.should.
+        include('To setup the master specs repo, please run `pod setup`')
+    end
   end
 end
