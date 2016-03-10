@@ -625,6 +625,7 @@ module Pod
     end
 
     def update_git_repo(show_output = false)
+      ensure_in_repo!
       Config.instance.with_changes(:verbose => show_output) do
         git!(%w(pull --ff-only))
       end
@@ -633,6 +634,18 @@ module Pod
                 "`#{name}` repo. If this is an unexpected issue " \
                 'and persists you can inspect it running ' \
                 '`pod repo update --verbose`'
+    end
+  end
+
+  class MasterSource
+    def update_git_repo(show_output = false)
+      ensure_in_repo!
+      if repo.join('.git', 'shallow').file?
+        UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
+          git!(%w(fetch --unshallow))
+        end
+      end
+      super
     end
   end
 end
