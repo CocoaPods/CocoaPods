@@ -270,6 +270,19 @@ module Pod
         e = lambda { target_inspector.send(:compute_platform, user_targets) }.should.raise Informative
         e.message.should.match /Targets with different platforms/
       end
+
+      it 'raises if the platform cannot be inferred' do
+        user_project = Xcodeproj::Project.new('path')
+        target = user_project.new_target(:application, 'Target', :ios)
+        target.build_configuration_list.set_setting('SDKROOT', nil)
+
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
+        user_targets = [target]
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        should.raise(Informative) { target_inspector.send(:compute_platform, user_targets) }.
+          message.should.include('Unable to determine the platform for the `default` target.')
+      end
     end
   end
 end
