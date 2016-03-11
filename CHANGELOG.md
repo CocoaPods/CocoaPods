@@ -20,6 +20,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5016](https://github.com/CocoaPods/CocoaPods/issues/5016)
 
+* The validator will check that all `public_header_files` and
+  `private_header_files` are also present in `source_files`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4936](https://github.com/CocoaPods/CocoaPods/issues/4936)
+
 ##### Bug Fixes
 
 * The master specs repository can no longer be added via `pod repo add`, but
@@ -35,6 +40,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   embed frameworks build phase's script, so that UI test targets can be run.  
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#5022](https://github.com/CocoaPods/CocoaPods/issues/5022)
+
 
 ## 1.0.0.beta.5 (2016-03-08)
 
