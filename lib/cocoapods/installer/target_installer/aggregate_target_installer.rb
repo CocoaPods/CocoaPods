@@ -154,7 +154,7 @@ module Pod
           end
           frameworks_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
             frameworks = pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map { |fw| "${PODS_ROOT}/#{fw.relative_path_from(sandbox.root)}" }
-            frameworks << pod_target.build_product_path if pod_target.should_build? && pod_target.requires_frameworks?
+            frameworks << pod_target.build_product_path('$BUILT_PRODUCTS_DIR') if pod_target.should_build? && pod_target.requires_frameworks?
             frameworks
           end
         end

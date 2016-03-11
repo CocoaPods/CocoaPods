@@ -31,6 +31,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#4790](https://github.com/CocoaPods/CocoaPods/issues/4790)
 
+* Rely on `TARGET_BUILD_DIR` instead of `CONFIGURATION_BUILD_DIR` in the generated
+  embed frameworks build phase's script, so that UI test targets can be run.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5022](https://github.com/CocoaPods/CocoaPods/issues/5022)
 
 ## 1.0.0.beta.5 (2016-03-08)
 
