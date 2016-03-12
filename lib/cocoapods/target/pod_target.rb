@@ -28,10 +28,10 @@ module Pod
     #
     attr_accessor :dependent_targets
 
-    # @param [Array<Specification>] @spec #see spec
-    # @param [Array<TargetDefinition>] target_definitions @see target_definitions
-    # @param [Sandbox] sandbox @see sandbox
-    # @param [String] scope_suffix @see scope_suffix
+    # @param [Array<Specification>] specs @see #specs
+    # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
+    # @param [Sandbox] sandbox @see #sandbox
+    # @param [String] scope_suffix @see #scope_suffix
     #
     def initialize(specs, target_definitions, sandbox, scope_suffix = nil)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
