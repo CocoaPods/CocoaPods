@@ -182,5 +182,54 @@ module Pod
         validator.errors.should.be.empty
       end
     end
+
+    describe 'duplicated targets' do
+      it 'errors when the same target is declared twice' do
+        podfile = Pod::Podfile.new do
+          pod 'Alamofire'
+          target 'Target'
+          target 'Target'
+        end
+        validator = Installer::PodfileValidator.new(podfile)
+        validator.validate
+
+        validator.should.not.be.valid
+        validator.errors.should == ['The target `Target` is declared twice.']
+      end
+
+      it 'errors when the same target is declared twice when using a custom xcodeproj' do
+        podfile = Pod::Podfile.new do
+          pod 'Alamofire'
+          target 'Target' do
+            xcodeproj 'Project.xcodeproj'
+          end
+          target 'Target' do
+            xcodeproj 'Project.xcodeproj'
+          end
+        end
+        validator = Installer::PodfileValidator.new(podfile)
+        validator.validate
+
+        validator.should.not.be.valid
+        validator.errors.should == ['The target `Target` is declared twice for the project `Project.xcodeproj`.']
+      end
+
+      it 'does not error when the same target is declared twice for different projects' do
+        podfile = Pod::Podfile.new do
+          pod 'Alamofire'
+          target 'Target' do
+            xcodeproj 'Project.xcodeproj'
+          end
+          target 'Target' do
+            xcodeproj 'Project 1.xcodeproj'
+          end
+          target 'Target'
+        end
+        validator = Installer::PodfileValidator.new(podfile)
+        validator.validate
+
+        validator.should.be.valid
+      end
+    end
   end
 end
