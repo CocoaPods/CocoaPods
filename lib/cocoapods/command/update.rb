@@ -45,11 +45,10 @@ module Pod
       end
 
       def run
-        config.skip_repo_update = !repo_update?(:default => true)
-
         verify_podfile_exists!
 
         installer = installer_for_config
+        installer.repo_update = repo_update?(:default => true)
         if @pods
           verify_lockfile_exists!
           verify_pods_are_installed!

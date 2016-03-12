@@ -7,20 +7,6 @@ module Pod
       exception.message.should.include "No `Podfile' found in the project directory."
     end
 
-    it 'updates the spec repos by default' do
-      config.with_changes(:skip_repo_update => nil) do
-        Pod::Command.parse(['update'])
-        config.skip_repo_update.should.be.false
-      end
-    end
-
-    it "doesn't update the spec repos if that option was given" do
-      config.with_changes(:skip_repo_update => nil) do
-        Pod::Command.parse(['update', '--no-repo-update'])
-        config.skip_repo_update.should.be.true
-      end
-    end
-
     describe 'with Podfile' do
       extend SpecHelper::TemporaryRepos
 
@@ -29,6 +15,22 @@ module Pod
         File.open(file, 'w') do |f|
           f.puts('platform :ios')
           f.puts('pod "BananaLib", "1.0"')
+        end
+      end
+
+      describe 'updates of the spec repos' do
+        before do
+          Installer.any_instance.expects(:install!)
+        end
+
+        it 'updates the spec repos by default' do
+          Installer.any_instance.expects(:repo_update=).with(true)
+          run_command('update')
+        end
+
+        it "doesn't update the spec repos if that option was given" do
+          Installer.any_instance.expects(:repo_update=).with(false)
+          run_command('update', '--no-repo-update')
         end
       end
 

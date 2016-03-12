@@ -30,10 +30,9 @@ module Pod
       end
 
       def run
-        config.skip_repo_update = !repo_update?(:default => false)
-
         verify_podfile_exists!
         installer = installer_for_config
+        installer.repo_update = repo_update?(:default => false)
         installer.update = false
         installer.install!
       end

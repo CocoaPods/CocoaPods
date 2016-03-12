@@ -7,17 +7,24 @@ module Pod
       exception.message.should.include "No `Podfile' found in the project directory."
     end
 
-    it "doesn't update the spec repos by default" do
-      config.with_changes(:skip_repo_update => nil) do
-        Pod::Command.parse(['install'])
-        config.skip_repo_update.should.be.true
+    describe 'updates of the spec repos' do
+      before do
+        file = temporary_directory + 'Podfile'
+        File.open(file, 'w') do |f|
+          f.puts('platform :ios')
+          f.puts('pod "Reachability"')
+        end
+        Installer.any_instance.expects(:install!)
       end
-    end
 
-    it 'updates the spec repos if that option was given' do
-      config.with_changes(:skip_repo_update => nil) do
-        Pod::Command.parse(['install', '--repo-update'])
-        config.skip_repo_update.should.be.false
+      it "doesn't update the spec repos by default" do
+        Installer.any_instance.expects(:repo_update=).with(false)
+        run_command('install')
+      end
+
+      it 'updates the spec repos if that option was given' do
+        Installer.any_instance.expects(:repo_update=).with(true)
+        run_command('install', '--repo-update')
       end
     end
   end
