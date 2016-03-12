@@ -1,6 +1,7 @@
 module Pod
   class Command
     class Install < Command
+      include RepoUpdate
       include ProjectDirectory
 
       self.summary = 'Install project dependencies to Podfile.lock versions'
@@ -25,15 +26,12 @@ module Pod
       def self.options
         [
           ['--repo-update', 'Force running `pod repo update` before install'],
-        ].concat(super)
-      end
-
-      def initialize(argv)
-        config.skip_repo_update = !argv.flag?('repo-update', false)
-        super
+        ].concat(super).reject { |(name, _)| name == '--no-repo-update' }
       end
 
       def run
+        config.skip_repo_update = !repo_update?(:default => false)
+
         verify_podfile_exists!
         installer = installer_for_config
         installer.update = false

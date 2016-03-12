@@ -1,6 +1,7 @@
 module Pod
   class Command
     class Update < Command
+      include RepoUpdate
       include ProjectDirectory
 
       self.summary = 'Update outdated project dependencies and create new ' \
@@ -18,14 +19,7 @@ module Pod
         CLAide::Argument.new('POD_NAMES', false, true),
       ]
 
-      def self.options
-        [
-          ['--no-repo-update', 'Skip running `pod repo update` before install'],
-        ].concat(super)
-      end
-
       def initialize(argv)
-        config.skip_repo_update = !argv.flag?('repo-update', !config.skip_repo_update)
         @pods = argv.arguments! unless argv.arguments.empty?
         super
       end
@@ -51,6 +45,8 @@ module Pod
       end
 
       def run
+        config.skip_repo_update = !repo_update?(:default => true)
+
         verify_podfile_exists!
 
         installer = installer_for_config
