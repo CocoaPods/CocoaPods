@@ -16,8 +16,10 @@ module Pod
     #
     attr_reader :build_headers
 
-    # @return [String] used for the label and the directory name, which is used to
-    #         scope the build product in the default configuration build dir.
+    # @return [String] used as suffix in the label
+    #
+    # @note This affects the value returned by #configuration_build_dir
+    #       and accessors relying on this as #build_product_path.
     #
     attr_reader :scope_suffix
 
