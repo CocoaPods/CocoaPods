@@ -33,7 +33,6 @@ module Pod
     self.plugin_prefixes = %w(claide cocoapods)
 
     [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }
-    [Outdated].each { |c| c.send(:include, Project) }
 
     def self.options
       [
@@ -101,6 +100,14 @@ module Pod
     include Config::Mixin
 
     private
+
+    # Returns a new {Installer} parametrized from the {Config}.
+    #
+    # @return [Installer]
+    #
+    def installer_for_config
+      Installer.new(config.sandbox, config.podfile, config.lockfile)
+    end
 
     # Checks that the podfile exists.
     #

@@ -32,30 +32,9 @@ module Pod
       end
     end
 
-    # Provides support for the common behaviour of the `install` and `update`
-    # commands.
-    #
-    module Project
-      # Runs the installer.
-      #
-      # @param  [Hash, Boolean, nil] update
-      #         Pods that have been requested to be updated or true if all Pods
-      #         should be updated
-      #
-      # @return [void]
-      #
-      def run_install_with_update(update)
-        installer = Installer.new(config.sandbox, config.podfile, config.lockfile)
-        installer.update = update
-        installer.install!
-      end
-    end
-
     #-------------------------------------------------------------------------#
 
     class Install < Command
-      include Project
-
       self.summary = 'Install project dependencies to Podfile.lock versions'
 
       self.description = <<-DESC
@@ -88,15 +67,15 @@ module Pod
 
       def run
         verify_podfile_exists!
-        run_install_with_update(false)
+        installer = installer_for_config
+        installer.update = false
+        installer.install!
       end
     end
 
     #-------------------------------------------------------------------------#
 
     class Update < Command
-      include Project
-
       self.summary = 'Update outdated project dependencies and create new ' \
         'Podfile.lock'
 
@@ -127,6 +106,7 @@ module Pod
       def run
         verify_podfile_exists!
 
+        installer = installer_for_config
         if @pods
           verify_lockfile_exists!
 
@@ -147,11 +127,12 @@ module Pod
             raise Informative, message
           end
 
-          run_install_with_update(:pods => @pods)
+          installer.update = { :pods => @pods }
         else
           UI.puts 'Update all pods'.yellow unless @pods
-          run_install_with_update(true)
+          installer.update = true
         end
+        installer.install!
       end
     end
   end
