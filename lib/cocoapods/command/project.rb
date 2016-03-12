@@ -102,7 +102,7 @@ module Pod
           verify_pods_are_installed!
           installer.update = { :pods => @pods }
         else
-          UI.puts 'Update all pods'.yellow unless @pods
+          UI.puts 'Update all pods'.yellow
           installer.update = true
         end
         installer.install!
