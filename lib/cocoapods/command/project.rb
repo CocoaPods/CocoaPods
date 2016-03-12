@@ -73,30 +73,33 @@ module Pod
         super
       end
 
+      # Check if all given pods are installed
+      #
+      def verify_pods_are_installed!
+        lockfile_roots = config.lockfile.pod_names.map { |p| Specification.root_name(p) }
+        missing_pods = @pods.map { |p| Specification.root_name(p) }.select do |pod|
+          !lockfile_roots.include?(pod)
+        end
+
+        unless missing_pods.empty?
+          message = if missing_pods.length > 1
+                      "Pods `#{missing_pods.join('`, `')}` are not " \
+                          'installed and cannot be updated'
+                    else
+                      "The `#{missing_pods.first}` Pod is not installed " \
+                          'and cannot be updated'
+                    end
+          raise Informative, message
+        end
+      end
+
       def run
         verify_podfile_exists!
 
         installer = installer_for_config
         if @pods
           verify_lockfile_exists!
-
-          # Check if all given pods are installed
-          lockfile_roots = config.lockfile.pod_names.map { |p| Specification.root_name(p) }
-          missing_pods = @pods.map { |p| Specification.root_name(p) }.select do |pod|
-            !lockfile_roots.include?(pod)
-          end
-
-          unless missing_pods.empty?
-            message = if missing_pods.length > 1
-                        "Pods `#{missing_pods.join('`, `')}` are not " \
-                          'installed and cannot be updated'
-                      else
-                        "The `#{missing_pods.first}` Pod is not installed " \
-                          'and cannot be updated'
-            end
-            raise Informative, message
-          end
-
+          verify_pods_are_installed!
           installer.update = { :pods => @pods }
         else
           UI.puts 'Update all pods'.yellow unless @pods
