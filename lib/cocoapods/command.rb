@@ -14,6 +14,9 @@ module Pod
   end
 
   class Command < CLAide::Command
+    require 'cocoapods/command/options/project_directory'
+    include Options
+
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
@@ -31,8 +34,6 @@ module Pod
     self.version = VERSION
     self.description = 'CocoaPods, the Cocoa library package manager.'
     self.plugin_prefixes = %w(claide cocoapods)
-
-    [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }
 
     def self.options
       [

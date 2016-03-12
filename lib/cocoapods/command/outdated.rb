@@ -1,6 +1,8 @@
 module Pod
   class Command
     class Outdated < Command
+      include ProjectDirectory
+
       self.summary = 'Show outdated project dependencies'
 
       self.description = <<-DESC
