@@ -212,7 +212,7 @@ module Pod
 
       public
 
-      # Updates the git source repositories unless the config indicates to skip it.
+      # Updates the git source repositories.
       #
       def update_repositories
         sources.each do |source|
