@@ -17,14 +17,15 @@ module Pod
     require 'cocoapods/command/options/project_directory'
     include Options
 
+    require 'cocoapods/command/install'
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
-    require 'cocoapods/command/project'
     require 'cocoapods/command/repo'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
+    require 'cocoapods/command/update'
     require 'cocoapods/command/init'
     require 'cocoapods/command/cache'
     require 'cocoapods/command/env'
