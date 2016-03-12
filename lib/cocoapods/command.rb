@@ -17,6 +17,9 @@ module Pod
     require 'cocoapods/command/options/project_directory'
     include Options
 
+    require 'cocoapods/command/cache'
+    require 'cocoapods/command/env'
+    require 'cocoapods/command/init'
     require 'cocoapods/command/install'
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
@@ -26,9 +29,6 @@ module Pod
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
     require 'cocoapods/command/update'
-    require 'cocoapods/command/init'
-    require 'cocoapods/command/cache'
-    require 'cocoapods/command/env'
 
     self.abstract_command = true
     self.command = 'pod'
