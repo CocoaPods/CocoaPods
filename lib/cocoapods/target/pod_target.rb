@@ -16,24 +16,6 @@ module Pod
     #
     attr_reader :build_headers
 
-    # @return [Bool] whether the target needs to be scoped by target definition,
-    #         because the spec is used with different subspec sets across them.
-    #
-    # @note   The target products of {PodTarget}s are named after their specs.
-    #         The namespacing cannot directly happen in the product name itself,
-    #         because this must be equal to the module name and this will be
-    #         used in source code, which should stay agnostic over the
-    #         dependency manager.
-    #         We need namespacing because multiple targets can exist for the
-    #         same podspec and their products should not collide. This
-    #         duplication is needed when multiple user targets have the same
-    #         dependency, but they require different sets of subspecs or they
-    #         are on different platforms.
-    #
-    def scoped?
-      !scope_suffix.nil?
-    end
-
     # @return [String] used for the label and the directory name, which is used to
     #         scope the build product in the default configuration build dir.
     #
@@ -89,14 +71,10 @@ module Pod
     # @return [String] the label for the target.
     #
     def label
-      if scoped?
-        if scope_suffix[0] == '.'
-          "#{root_spec.name}#{scope_suffix}"
-        else
-          "#{root_spec.name}-#{scope_suffix}"
-        end
+      if scope_suffix.nil? || scope_suffix[0] == '.'
+        "#{root_spec.name}#{scope_suffix}"
       else
-        root_spec.name
+        "#{root_spec.name}-#{scope_suffix}"
       end
     end
 
