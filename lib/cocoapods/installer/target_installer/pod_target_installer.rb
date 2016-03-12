@@ -177,9 +177,7 @@ module Pod
               c.build_settings['PRODUCT_NAME'] = bundle_name
               relative_info_plist_path = info_plist_path.relative_path_from(sandbox.root)
               c.build_settings['INFOPLIST_FILE'] = relative_info_plist_path.to_s
-              if target.requires_frameworks? && target.scoped?
-                c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
-              end
+              c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir
 
               # Set the correct device family for this bundle, based on the platform
               device_family_by_platform = {
