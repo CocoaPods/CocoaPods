@@ -41,6 +41,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#5022](https://github.com/CocoaPods/CocoaPods/issues/5022)
 
+* Fixes build paths for resources bundles.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5028](https://github.com/CocoaPods/CocoaPods/pull/5028)
+
 * Validate that a Podfile does not declare the same target twice.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5029](https://github.com/CocoaPods/CocoaPods/issues/5029)
