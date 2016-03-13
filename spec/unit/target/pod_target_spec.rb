@@ -10,11 +10,11 @@ module Pod
     end
 
     describe 'Meta' do
-      describe '#scoped' do
+      describe '#scope_suffix' do
         it 'returns target copies per target definition, which are scoped' do
-          @pod_target.should.not.be.scoped
-          @pod_target.scoped.first.should.be.scoped
-          @pod_target.should.not.be.scoped
+          @pod_target.scope_suffix.should.be.nil
+          @pod_target.scoped.first.scope_suffix.should == 'Pods'
+          @pod_target.scope_suffix.should.be.nil
         end
       end
     end

@@ -176,6 +176,24 @@ module Pod
             end
           end
 
+          it 'sets the correct product name' do
+            @bundle_target.build_configurations.each do |bc|
+              bc.build_settings['PRODUCT_NAME'].should == 'banana_bundle'
+            end
+          end
+
+          it 'sets the correct Info.plist file path' do
+            @bundle_target.build_configurations.each do |bc|
+              bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/BananaLib-Pods-SampleProject/ResourceBundle-banana_bundle-Info.plist'
+            end
+          end
+
+          it 'sets the correct build dir' do
+            @bundle_target.build_configurations.each do |bc|
+              bc.build_settings['CONFIGURATION_BUILD_DIR'].should == '$CONFIGURATION_BUILD_DIR/BananaLib-Pods-SampleProject'
+            end
+          end
+
           it 'sets the correct targeted device family for the resource bundle targets' do
             @bundle_target.build_configurations.each do |bc|
               bc.build_settings['TARGETED_DEVICE_FAMILY'].should == '1,2'
