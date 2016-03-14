@@ -2,8 +2,6 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe Command::Update do
-    extend SpecHelper::TemporaryRepos
-
     it 'tells the user that no Podfile was found in the project dir' do
       exception = lambda { run_command('update', '--no-repo-update') }.should.raise Informative
       exception.message.should.include "No `Podfile' found in the project directory."
@@ -23,19 +21,7 @@ module Pod
       end
     end
 
-    it 'tells the user that no Lockfile was found in the project dir' do
-      file = temporary_directory + 'Podfile'
-      File.open(file, 'w') do |f|
-        f.puts('platform :ios')
-        f.puts('pod "Reachability"')
-      end
-      Dir.chdir(temporary_directory) do
-        exception = lambda { run_command('update', 'Reachability', '--no-repo-update') }.should.raise Informative
-        exception.message.should.include "No `Podfile.lock' found in the project directory"
-      end
-    end
-
-    describe 'tells the user that the Pods cannot be updated unless they are installed' do
+    describe 'with Podfile' do
       extend SpecHelper::TemporaryRepos
 
       before do
@@ -44,32 +30,39 @@ module Pod
           f.puts('platform :ios')
           f.puts('pod "BananaLib", "1.0"')
         end
-
-        podfile = Podfile.new do
-          platform :ios
-          pod 'BananaLib', '1.0'
-        end
-        specs = [
-          Specification.new do |s|
-            s.name = 'BananaLib'
-            s.version = '1.0'
-          end,
-        ]
-        external_sources = {}
-        Lockfile.generate(podfile, specs, external_sources).write_to_disk(temporary_directory + 'Podfile.lock')
       end
 
-      it 'for a single missing Pod' do
-        Dir.chdir(temporary_directory) do
+      it 'tells the user that no Lockfile was found in the project dir' do
+        exception = lambda { run_command('update', 'BananaLib', '--no-repo-update') }.should.raise Informative
+        exception.message.should.include "No `Podfile.lock' found in the project directory"
+      end
+
+      describe 'tells the user that the Pods cannot be updated unless they are installed' do
+        extend SpecHelper::TemporaryRepos
+
+        before do
+          podfile = Podfile.new do
+            platform :ios
+            pod 'BananaLib', '1.0'
+          end
+          specs = [
+            Specification.new do |s|
+              s.name = 'BananaLib'
+              s.version = '1.0'
+            end,
+          ]
+          external_sources = {}
+          Lockfile.generate(podfile, specs, external_sources).write_to_disk(temporary_directory + 'Podfile.lock')
+        end
+
+        it 'for a single missing Pod' do
           should.raise Informative do
             run_command('update', 'Reachability', '--no-repo-update')
           end.message.should.include 'The `Reachability` Pod is not ' \
-          'installed and cannot be updated'
+            'installed and cannot be updated'
         end
-      end
 
-      it 'for multiple missing Pods' do
-        Dir.chdir(temporary_directory) do
+        it 'for multiple missing Pods' do
           exception = lambda { run_command('update', 'Reachability', 'BananaLib2', '--no-repo-update') }.should.raise Informative
           exception.message.should.include 'Pods `Reachability`, `BananaLib2` are not installed and cannot be updated'
         end
