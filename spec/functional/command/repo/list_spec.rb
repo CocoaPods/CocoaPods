@@ -44,8 +44,6 @@ module Pod
     end
 
     describe 'with a git based spec repository with a remote' do
-      extend SpecHelper::TemporaryRepos
-
       before do
         config.repos_dir = tmp_repos_path
 

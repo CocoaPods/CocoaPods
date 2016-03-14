@@ -38,8 +38,6 @@ module Pod
       end
 
       describe 'tells the user that the Pods cannot be updated unless they are installed' do
-        extend SpecHelper::TemporaryRepos
-
         before do
           podfile = Podfile.new do
             platform :ios
