@@ -66,7 +66,6 @@ module Pod
       #--------------------------------------#
 
       it 'does not update unused sources' do
-        config.skip_repo_update = false
         @analyzer.stubs(:sources).returns(SourcesManager.master)
         SourcesManager.expects(:update).once.with('master')
         @analyzer.update_repositories
@@ -77,7 +76,6 @@ module Pod
           source 'https://github.com/CocoaPods/Specs.git'
           # No dependencies specified
         end
-        config.skip_repo_update = false
         config.verbose = true
 
         SourcesManager.expects(:update).never
@@ -96,7 +94,6 @@ module Pod
           project 'SampleProject/SampleProject'
           pod 'BananaLib', '1.0'
         end
-        config.skip_repo_update = false
         config.verbose = true
 
         source = Source.new(non_git_repo)
@@ -118,7 +115,6 @@ module Pod
           pod 'BananaLib', '1.0', :source => repo_url
           pod 'JSONKit', :source => repo_url
         end
-        config.skip_repo_update = false
         config.verbose = true
 
         # Note that we are explicitly ignoring 'repo_1' since it isn't used.

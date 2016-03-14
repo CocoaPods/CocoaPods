@@ -1,6 +1,9 @@
 module Pod
   class Command
     class Outdated < Command
+      include RepoUpdate
+      include ProjectDirectory
+
       self.summary = 'Show outdated project dependencies'
 
       self.description = <<-DESC
@@ -90,7 +93,7 @@ module Pod
 
       def spec_sets
         @spec_sets ||= begin
-          analyzer.send(:update_repositories) unless config.skip_repo_update?
+          analyzer.send(:update_repositories) if repo_update?(:default => true)
           aggregate = Source::Aggregate.new(analyzer.sources)
           installed_pods.map do |pod_name|
             aggregate.search(Dependency.new(pod_name))

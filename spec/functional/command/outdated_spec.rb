@@ -6,7 +6,6 @@ module Pod
 
     before do
       Command::Outdated.any_instance.stubs(:unlocked_pods).returns([])
-      config.stubs(:skip_repo_update?).returns(true)
     end
 
     it 'tells the user that no Podfile was found in the project dir' do
@@ -55,7 +54,6 @@ module Pod
         pod 'AFNetworking'
       end
       config.stubs(:podfile).returns(podfile)
-      config.stubs(:skip_repo_update?).returns(false)
       lockfile = mock
       lockfile.stubs(:version).returns(Version.new('1.0'))
       lockfile.stubs(:pod_names).returns(%w(AFNetworking))
@@ -69,8 +67,6 @@ module Pod
         source 'https://github.com/CocoaPods/Specs.git'
         pod 'AFNetworking'
       end
-      config.unstub(:skip_repo_update?)
-      config.skip_repo_update = false
       lockfile = mock
       lockfile.stubs(:version).returns(Version.new('1.0'))
       lockfile.stubs(:pod_names).returns(%w(AFNetworking))

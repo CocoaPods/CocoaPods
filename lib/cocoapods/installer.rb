@@ -84,6 +84,11 @@ module Pod
     #
     attr_accessor :update
 
+    # @return [Bool] Whether the spec repos should be updated.
+    #
+    attr_accessor :repo_update
+    alias_method :repo_update?, :repo_update
+
     # @return [Boolean] Whether default plugins should be used during
     #                   installation. Defaults to true.
     #
@@ -140,7 +145,7 @@ module Pod
 
       UI.section 'Updating local specs repositories' do
         analyzer.update_repositories
-      end unless config.skip_repo_update?
+      end if repo_update?
 
       UI.section 'Analyzing dependencies' do
         analyze(analyzer)

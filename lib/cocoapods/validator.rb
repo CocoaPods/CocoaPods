@@ -349,7 +349,6 @@ module Pod
       @original_config = Config.instance.clone
       config.installation_root   = validation_dir
       config.silent              = !config.verbose
-      config.skip_repo_update    = true
     end
 
     def tear_down_validation_environment

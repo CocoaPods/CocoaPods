@@ -6,6 +6,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* Running `pod install` doesn't imply an automatic spec repo update.  
+  The old behavior can be achieved by passing in the option `--repo-update`
+  or running `pod repo update`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5004](https://github.com/CocoaPods/CocoaPods/issues/5004)
+
+* Remove the configuration variable `skip_repo_update` as the default behavior
+  varies now between `pod install` and `pod (update|outdated)`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5017](https://github.com/CocoaPods/CocoaPods/issues/5017)
+
 ##### Enhancements
 
 * The master specs repo will no longer perform 'no-op' git fetches. This should

@@ -105,7 +105,6 @@ module Pod
       end
 
       it 'runs source provider hooks before analyzing' do
-        config.skip_repo_update = true
         @installer.unstub(:resolve_dependencies)
         @installer.stubs(:validate_build_configurations)
         @installer.stubs(:clean_sandbox)
@@ -136,7 +135,6 @@ module Pod
         @installer.stubs(:clean_sandbox)
         @installer.stubs(:ensure_plugins_are_installed!)
         @installer.stubs(:analyze)
-        config.skip_repo_update = true
 
         analyzer = Installer::Analyzer.new(config.sandbox, @installer.podfile, @installer.lockfile)
         analyzer.stubs(:analyze)
@@ -376,14 +374,13 @@ module Pod
 
     describe 'Dependencies Resolution' do
       describe 'updating spec repos' do
-        it 'does not updates the repositories if config indicates to skip them' do
-          config.skip_repo_update = true
+        it 'does not updates the repositories by default' do
           SourcesManager.expects(:update).never
           @installer.send(:resolve_dependencies)
         end
 
-        it 'updates the repositories by default' do
-          config.skip_repo_update = false
+        it 'updates the repositories if that was requested' do
+          @installer.repo_update = true
           SourcesManager.expects(:update).once
           @installer.send(:resolve_dependencies)
         end
