@@ -279,15 +279,17 @@ module Pod
 
           new_index = aggregate.generate_search_index_for_changes_in_source(source, spec_paths)
           # First traverse search_index and update existing words
-          # Removed traversed words from new_index after adding to search_index,
+          # Remove traversed words from new_index after adding to search_index,
           # so that only non existing words will remain in new_index after enumeration completes.
           index_for_source.each_pair do |word, _|
             if new_index[word]
               index_for_source[word] |= new_index[word]
+              new_index.delete(word)
             else
               index_for_source[word] -= updated_pods
             end
           end
+
           # Now add non existing words remained in new_index to search_index
           index_for_source.merge!(new_index)
         end
