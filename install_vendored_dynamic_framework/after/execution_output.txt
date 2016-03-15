@@ -11,7 +11,7 @@ Fetching external sources
 -> Pre-downloading: `RealmSwift` from `https://github.com/realm/realm-cocoa.git`, tag `v0.94.1`
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/realm/realm-cocoa.git PROJECT/Pods/RealmSwift --single-branch --depth 1 --branch v0.94.1
+     $ GIT_BIN clone https://github.com/realm/realm-cocoa.git PROJECT/Pods/RealmSwift --template= --single-branch --depth 1 --branch v0.94.1
      Cloning into 'PROJECT/Pods/RealmSwift'...
      Note: checking out '878d041b6b4356fa074f3d1b57fb8557b00dbec9'.
      

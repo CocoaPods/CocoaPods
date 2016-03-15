@@ -19,7 +19,7 @@ Downloading dependencies
 -> Installing Test (0.0.1)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git PROJECT/Pods/Test --single-branch --depth 1
+     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git PROJECT/Pods/Test --template= --single-branch --depth 1
      Cloning into 'PROJECT/Pods/Test'...
   - Running pre install hooks
 
