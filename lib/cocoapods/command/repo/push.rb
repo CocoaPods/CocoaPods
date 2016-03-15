@@ -38,6 +38,7 @@ module Pod
           @allow_warnings = argv.flag?('allow-warnings')
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
+          @source = SourcesManager.source_with_name_or_url(@repo)
           @source_urls = argv.option('sources', SourcesManager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
@@ -161,12 +162,12 @@ module Pod
           UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow
           podspec_files.each do |spec_file|
             spec = Pod::Specification.from_file(spec_file)
-            output_path = File.join(repo_dir, spec.name, spec.version.to_s)
+            output_path = @source.specs_dir + @source.send(:pod_path, name) + version.to_s
             if @message && !@message.empty?
               message = @message
-            elsif Pathname.new(output_path).exist?
+            elsif output_path.exist?
               message = "[Fix] #{spec}"
-            elsif Pathname.new(File.join(repo_dir, spec.name)).exist?
+            elsif output_path.dirname.directory?
               message = "[Update] #{spec}"
             else
               message = "[Add] #{spec}"
@@ -205,16 +206,7 @@ module Pod
         # @return [Pathname] The directory of the repository.
         #
         def repo_dir
-          specs_dir = Pathname.new(File.join(config.repos_dir, @repo, 'Specs'))
-          dir = config.repos_dir + @repo
-          if specs_dir.exist?
-            dir = specs_dir
-          elsif dir.exist?
-            dir
-          else
-            raise Informative, "`#{@repo}` repo not found either in #{specs_dir} or #{dir}"
-          end
-          dir
+          @source.specs_dir
         end
 
         # @return [Array<Pathname>] The path of the specifications to push.
