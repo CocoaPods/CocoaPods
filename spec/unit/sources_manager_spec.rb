@@ -342,12 +342,17 @@ and the repository exists.
       end
 
       it 'updates search index for changed paths if source is updated' do
-        prev_index = { @test_source.name => {} }
+        prev_index = { @test_source.name => { 'Banana' => %w(SOME_POD), 'NON_EXISTING_WORD' => %w(SOME_POD JSONKit BananaLib) } }
         SourcesManager.expects(:stored_search_index).returns(prev_index)
 
         SourcesManager.expects(:save_search_index).with do |value|
-          value[@test_source.name]['BananaLib'].should.include(:BananaLib)
-          value[@test_source.name]['JSONKit'].should.include(:JSONKit)
+          value[@test_source.name]['BananaLib'].should.include('BananaLib')
+          value[@test_source.name]['JSONKit'].should.include('JSONKit')
+          value[@test_source.name]['Banana'].should.include('SOME_POD')
+          value[@test_source.name]['Banana'].should.include('BananaLib')
+          value[@test_source.name]['NON_EXISTING_WORD'].should.not.include 'JSONKit'
+          value[@test_source.name]['NON_EXISTING_WORD'].should.not.include 'BananaLib'
+          value[@test_source.name]['NON_EXISTING_WORD'].should.include 'SOME_POD'
         end
         changed_paths = { @test_source => %w(BananaLib/1.0/BananaLib.podspec JSONKit/1.4/JSONKit.podspec) }
         SourcesManager.update_search_index_if_needed(changed_paths)
