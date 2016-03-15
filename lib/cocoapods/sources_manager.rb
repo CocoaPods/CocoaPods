@@ -139,17 +139,17 @@ module Pod
         if full_text_search
           query_word_results_hash = {}
           updated_search_index.each_value do |word_spec_hash|
-            word_spec_hash.each_pair do |word, spec_symbols|
+            word_spec_hash.each_pair do |word, spec_names|
               query_word_regexps.each do |query_word_regexp|
                 set = (query_word_results_hash[query_word_regexp] ||= Set.new)
-                set.merge(spec_symbols) if word =~ query_word_regexp
+                set.merge(spec_names) if word =~ query_word_regexp
               end
             end
           end
-          found_set_symbols = query_word_results_hash.values.reduce(:&)
-          found_set_symbols ||= []
-          sets = found_set_symbols.map do |symbol|
-            aggregate.representative_set(symbol.to_s)
+          found_set_names = query_word_results_hash.values.reduce(:&)
+          found_set_names ||= []
+          sets = found_set_names.map do |name|
+            aggregate.representative_set(name)
           end
           # Remove nil values because representative_set return nil if no pod is found in any of the sources.
           sets.compact!
