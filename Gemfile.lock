@@ -7,24 +7,24 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 66c7b3b40fde614bb3eb6e287c25da4dfc6529c1
+  revision: 33d5fbcfb956cfef621bfb1b03e0880d6de4a546
   branch: master
   specs:
-    cocoapods-core (1.0.0.beta.5)
+    cocoapods-core (1.0.0.beta.6)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 75a5c1272a68ea76581535a9441d8be64b7dd362
+  revision: 3fc883313a3a386403481e331af2b990bb9dba31
   branch: master
   specs:
     molinillo (0.4.4)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: c899268b9830af495d13654e01d2202cbdc42a49
+  revision: d033c21ca25fa9757b1f949a7be7e6bf830118d0
   branch: master
   specs:
     xcodeproj (1.0.0.beta.3)
@@ -48,7 +48,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: b8c10c14071f4199be452926a961c565ca12d048
+  revision: 053ec831e0df60b366ce08f397fb7ae40ade21f7
   branch: master
   specs:
     cocoapods-plugins (1.0.0.beta.1)
@@ -56,7 +56,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 02e3d06276776bbe59d54b2805d3290e115401dd
+  revision: 87ece1f12f131da8f988057d0b0db565ada9069a
   branch: master
   specs:
     cocoapods-search (1.0.0.beta.1)
@@ -94,10 +94,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.0.0.beta.5)
+    cocoapods (1.0.0.beta.6)
       activesupport (>= 4.0.2)
       claide (>= 1.0.0.beta.3, < 2.0)
-      cocoapods-core (= 1.0.0.beta.5)
+      cocoapods-core (= 1.0.0.beta.6)
       cocoapods-deintegrate (>= 1.0.0.beta.1, < 2.0)
       cocoapods-downloader (>= 1.0.0.beta.2, < 2.0)
       cocoapods-plugins (>= 1.0.0.beta.1, < 2.0)
