@@ -190,7 +190,7 @@ module Pod
 
           it 'sets the correct build dir' do
             @bundle_target.build_configurations.each do |bc|
-              bc.build_settings['CONFIGURATION_BUILD_DIR'].should == '$CONFIGURATION_BUILD_DIR/BananaLib-Pods-SampleProject'
+              bc.build_settings['CONFIGURATION_BUILD_DIR'].should == '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BananaLib-Pods-SampleProject'
             end
           end
 
