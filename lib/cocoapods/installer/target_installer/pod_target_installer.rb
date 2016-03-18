@@ -177,7 +177,7 @@ module Pod
               c.build_settings['PRODUCT_NAME'] = bundle_name
               relative_info_plist_path = info_plist_path.relative_path_from(sandbox.root)
               c.build_settings['INFOPLIST_FILE'] = relative_info_plist_path.to_s
-              c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
+              c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir("$#{Generator::XCConfig::XCConfigHelper::SHARED_BUILD_DIR_VARIABLE}")
 
               # Set the correct device family for this bundle, based on the platform
               device_family_by_platform = {
