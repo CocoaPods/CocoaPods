@@ -8,5 +8,6 @@ target 'Resource Bundle Example' do
   pod 'ResourceExample', :path =>  'Example Pods'
   pod 'ResourcesExample', :path =>  'Example Pods'
   pod 'ResourceAssetsExample', :path =>  'Example Pods'
+  pod 'ResourcesBundleExample', :path =>  'Example Pods'
 end
 
