@@ -67,7 +67,7 @@ module Pod
     #
     def self.download_request(request, target)
       result = Response.new
-      result.checkout_options = download_source(request.name, target, request.params, request.head?)
+      result.checkout_options = download_source(target, request.params)
       result.location = target
 
       if request.released_pod?
@@ -88,35 +88,22 @@ module Pod
 
     private
 
-    # Downloads a pod with the given `name` and `params` to `target`.
-    #
-    # @param  [String] name
+    # Downloads a pod with the given `params` to `target`.
     #
     # @param  [Pathname] target
     #
     # @param  [Hash<Symbol,String>] params
     #
-    # @param  [Boolean] head
-    #
     # @return [Hash] The checkout options required to re-download this exact
     #         same source.
     #
-    def self.download_source(name, target, params, head)
+    def self.download_source(target, params)
       FileUtils.rm_rf(target)
       downloader = Downloader.for_target(target, params)
-      if head
-        unless downloader.head_supported?
-          raise Informative, "The pod '#{name}' does not " \
-            "support the :head option, as it uses a #{downloader.name} " \
-            'source. Remove that option to use this pod.'
-        end
-        downloader.download_head
-      else
-        downloader.download
-      end
+      downloader.download
       target.mkpath
 
-      if downloader.options_specific? && !head
+      if downloader.options_specific?
         params
       else
         downloader.checkout_options
