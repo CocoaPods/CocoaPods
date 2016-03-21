@@ -266,7 +266,7 @@ begin
             project = Xcodeproj::Project.open(project_path)
             target = project.targets.first
 
-            case target
+            case target.platform_name
             when :osx
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
             when :ios
@@ -274,7 +274,7 @@ begin
               major_version = xcode_version.split('.').first.to_i
               # Specifically build against the simulator SDK so we don't have to deal with code signing.
               simulator_name = major_version > 5 ? 'iPhone 6' : 'iPhone Retina (4-inch)'
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}"
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}'"
             end
           end
         end

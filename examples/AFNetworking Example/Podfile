@@ -1,5 +1,5 @@
 ### Implicit target definition :-/
-xcodeproj "AFNetworking Mac Example.xcodeproj"
+project "AFNetworking Mac Example.xcodeproj"
 ####
 
 workspace 'Examples.xcworkspace'
