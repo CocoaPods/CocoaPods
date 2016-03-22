@@ -1,5 +1,4 @@
-os:
-  - osx
+osx_image: xcode7.2
 language: ruby
 cache: bundler
 rvm:
@@ -26,5 +25,5 @@ after_install:
 
 addons:
  code_climate:
-   repo_token: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55  
+   repo_token: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55
 
