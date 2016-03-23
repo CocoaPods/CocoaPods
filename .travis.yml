@@ -23,6 +23,8 @@ before_install:
 after_install:
   - ./bin/pod repo update --silent
 
+script: bundle exec rake
+
 addons:
  code_climate:
    repo_token: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55
