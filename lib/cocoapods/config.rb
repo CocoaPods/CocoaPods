@@ -14,7 +14,6 @@ module Pod
     DEFAULTS = {
       :verbose             => false,
       :silent              => false,
-      :skip_repo_update    => false,
       :skip_download_cache => !ENV['COCOAPODS_SKIP_CACHE'].nil?,
 
       :new_version_message => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
@@ -68,11 +67,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     # @!group Installation
-
-    # @return [Bool] Whether the installer should skip the repos update.
-    #
-    attr_accessor :skip_repo_update
-    alias_method :skip_repo_update?, :skip_repo_update
 
     # @return [Bool] Whether the installer should skip the download cache.
     #

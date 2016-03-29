@@ -59,6 +59,7 @@ module Pod
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
+            'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
           }
           if pod_targets.any?(&:uses_swift?)
             config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
@@ -94,15 +95,11 @@ module Pod
         #
         def settings_to_import_pod_targets
           if target.requires_frameworks?
-            framework_header_search_paths = pod_targets.select(&:should_build?).map do |target|
-              if target.scoped?
-                "$PODS_FRAMEWORK_BUILD_PATH/#{target.product_name}/Headers"
-              else
-                "$CONFIGURATION_BUILD_DIR/#{target.product_name}/Headers"
-              end
+            build_pod_targets = pod_targets.select(&:should_build?)
+            framework_header_search_paths = build_pod_targets.map do |target|
+              "#{target.build_product_path}/Headers"
             end
             build_settings = {
-              'PODS_FRAMEWORK_BUILD_PATH' => XCConfigHelper.quote([target.scoped_configuration_build_dir]),
               # Make framework headers discoverable by `import "…"`
               'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
             }
@@ -111,9 +108,6 @@ module Pod
               library_header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
               build_settings['HEADER_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(library_header_search_paths)
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
-            end
-            if pod_targets.any? { |t| t.should_build? && t.scoped? }
-              build_settings['FRAMEWORK_SEARCH_PATHS'] = '$PODS_FRAMEWORK_BUILD_PATH'
             end
             build_settings
           else
@@ -137,9 +131,11 @@ module Pod
         #  - `@import …;` / `import …`
         #
         def generate_settings_to_import_pod_targets
+          @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, pod_targets)
           @xcconfig.merge!(settings_to_import_pod_targets)
           target.search_paths_aggregate_targets.each do |search_paths_target|
             generator = AggregateXCConfig.new(search_paths_target, configuration_name)
+            @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(nil, search_paths_target.pod_targets)
             @xcconfig.merge!(generator.settings_to_import_pod_targets)
           end
         end

@@ -13,6 +13,8 @@ module Pod
       autoload :SandboxAnalyzer,           'cocoapods/installer/analyzer/sandbox_analyzer'
       autoload :SpecsState,                'cocoapods/installer/analyzer/specs_state'
       autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
+      autoload :PodVariant,                'cocoapods/installer/analyzer/pod_variant'
+      autoload :PodVariantSet,             'cocoapods/installer/analyzer/pod_variant_set'
       autoload :TargetInspectionResult,    'cocoapods/installer/analyzer/target_inspection_result'
       autoload :TargetInspector,           'cocoapods/installer/analyzer/target_inspector'
 
@@ -66,10 +68,11 @@ module Pod
           verify_platforms_specified!
         end
         @result.podfile_state = generate_podfile_state
-        @locked_dependencies  = generate_version_locking_dependencies
 
         store_existing_checkout_options
         fetch_external_sources if allow_fetches
+
+        @locked_dependencies    = generate_version_locking_dependencies
         @result.specs_by_target = validate_platforms(resolve_dependencies)
         @result.specifications  = generate_specifications
         @result.targets         = generate_targets
@@ -209,7 +212,7 @@ module Pod
 
       public
 
-      # Updates the git source repositories unless the config indicates to skip it.
+      # Updates the git source repositories.
       #
       def update_repositories
         sources.each do |source|
@@ -228,8 +231,9 @@ module Pod
       # @return [Array<AggregateTarget>]
       #
       def generate_targets
-        pod_targets = generate_pod_targets(result.specs_by_target)
-        aggregate_targets = result.specs_by_target.keys.reject(&:abstract?).map do |target_definition|
+        specs_by_target = result.specs_by_target.reject { |td, _| td.abstract? }
+        pod_targets = generate_pod_targets(specs_by_target)
+        aggregate_targets = specs_by_target.keys.map do |target_definition|
           generate_target(target_definition, pod_targets)
         end
         aggregate_targets.each do |target|
@@ -286,85 +290,84 @@ module Pod
       # @return [Array<PodTarget>]
       #
       def generate_pod_targets(specs_by_target)
-        dedupe_cache = {}
         if installation_options.deduplicate_targets?
-          all_specs = specs_by_target.flat_map do |target_definition, dependent_specs|
-            dependent_specs.group_by(&:root).map do |root_spec, specs|
-              [root_spec, specs, target_definition]
+          distinct_targets = specs_by_target.each_with_object({}) do |dependency, hash|
+            target_definition, dependent_specs = *dependency
+            dependent_specs.group_by(&:root).each do |root_spec, specs|
+              pod_variant = PodVariant.new(specs, target_definition.platform, target_definition.uses_frameworks?)
+              hash[root_spec] ||= {}
+              (hash[root_spec][pod_variant] ||= []) << target_definition
             end
           end
 
-          distinct_targets = all_specs.each_with_object({}) do |dependency, hash|
-            root_spec, specs, target_definition = *dependency
-            hash[root_spec] ||= {}
-            (hash[root_spec][[specs, target_definition.platform]] ||= []) << target_definition
+          pod_targets = distinct_targets.flat_map do |_root, target_definitions_by_variant|
+            suffixes = PodVariantSet.new(target_definitions_by_variant.keys).scope_suffixes
+            target_definitions_by_variant.flat_map do |variant, target_definitions|
+              generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
+            end
           end
 
-          pod_targets = distinct_targets.flat_map do |_, targets_by_distinctors|
-            if targets_by_distinctors.count > 1
-              # There are different sets of subspecs or the spec is used across different platforms
-              targets_by_distinctors.flat_map do |distinctor, target_definitions|
-                specs, = *distinctor
-                generate_pod_target(target_definitions, specs).scoped(dedupe_cache)
+          all_specs = specs_by_target.values.flatten.uniq
+          pod_targets_by_name = pod_targets.group_by(&:pod_name).each_with_object({}) do |(name, values), hash|
+            # Sort the target by the number of activated subspecs, so that
+            # we prefer a minimal target as transitive dependency.
+            hash[name] = values.sort_by { |pt| pt.specs.count }
+          end
+          pod_targets.each do |target|
+            dependencies = transitive_dependencies_for_specs(target.specs, target.platform, all_specs).group_by(&:root)
+            target.dependent_targets = dependencies.map do |root_spec, deps|
+              pod_targets_by_name[root_spec.name].find do |t|
+                next false if t.platform.symbolic_name != target.platform.symbolic_name ||
+                    t.requires_frameworks? != target.requires_frameworks?
+                spec_names = t.specs.map(&:name)
+                deps.all? { |dep| spec_names.include?(dep.name) }
               end
-            else
-              (specs, _), target_definitions = targets_by_distinctors.first
-              generate_pod_target(target_definitions, specs)
-            end
-          end
-
-          # A `PodTarget` can't be deduplicated if any of its
-          # transitive dependencies can't be deduplicated.
-          pod_targets.flat_map do |target|
-            dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
-            target.dependent_targets = dependent_targets
-            if dependent_targets.any?(&:scoped?)
-              target.scoped(dedupe_cache)
-            else
-              target
             end
           end
         else
-          pod_targets = specs_by_target.flat_map do |target_definition, specs|
-            grouped_specs = specs.group_by.group_by(&:root).values.uniq
-            grouped_specs.flat_map do |pod_specs|
+          dedupe_cache = {}
+          specs_by_target.flat_map do |target_definition, specs|
+            grouped_specs = specs.group_by(&:root).values.uniq
+            pod_targets = grouped_specs.flat_map do |pod_specs|
               generate_pod_target([target_definition], pod_specs).scoped(dedupe_cache)
             end
-          end
-          pod_targets.each do |target|
-            target.dependent_targets = transitive_dependencies_for_pod_target(target, pod_targets)
+
+            pod_targets.each do |target|
+              dependencies = transitive_dependencies_for_specs(target.specs, target.platform, specs).group_by(&:root)
+              target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
+            end
           end
         end
       end
 
-      # Finds the names of the Pods upon which the given target _transitively_
-      # depends.
+      # Returns the specs upon which the given specs _transitively_ depend.
       #
       # @note: This is implemented in the analyzer, because we don't have to
       #        care about the requirements after dependency resolution.
       #
-      # @param  [PodTarget] pod_target
-      #         The pod target, whose dependencies should be returned.
+      # @param  [Array<Specification>] specs
+      #         The specs, whose dependencies should be returned.
       #
-      # @param  [Array<PodTarget>] targets
-      #         All pod targets, which are integrated alongside.
+      # @param  [Platform] platform
+      #         The platform for which the dependencies should be returned.
       #
-      # @return [Array<PodTarget>]
+      # @param  [Array<Specification>] all_specs
+      #         All specifications which are installed alongside.
       #
-      def transitive_dependencies_for_pod_target(pod_target, targets)
-        if targets.any?
-          dependent_targets = pod_target.dependencies.flat_map do |dep|
-            next [] if pod_target.pod_name == dep
-            targets.select { |t| t.pod_name == dep }
-          end
-          remaining_targets = targets - dependent_targets
-          dependent_targets += dependent_targets.flat_map do |target|
-            transitive_dependencies_for_pod_target(target, remaining_targets)
-          end
-          dependent_targets.uniq
-        else
-          []
-        end
+      # @return [Array<Specification>]
+      #
+      def transitive_dependencies_for_specs(specs, platform, all_specs)
+        return [] if specs.empty? || all_specs.empty?
+        dependent_specs = specs.flat_map do |spec|
+          spec.consumer(platform).dependencies.flat_map do |dependency|
+            all_specs.find do |s|
+              next false if specs.include?(s)
+              s.name == dependency.name
+            end
+          end.compact
+        end.uniq
+        remaining_specs = all_specs - dependent_specs
+        dependent_specs + transitive_dependencies_for_specs(dependent_specs, platform, remaining_specs)
       end
 
       # Create a target for each spec group
@@ -372,13 +375,17 @@ module Pod
       # @param  [TargetDefinitions] target_definitions
       #         the aggregate target
       #
-      # @param  [Array<Specification>] specs
+      # @param  [Array<Specification>] pod_specs
       #         the specifications of an equal root.
+      #
+      # @param  [String] scope_suffix
+      #         @see PodTarget#scope_suffix
       #
       # @return [PodTarget]
       #
-      def generate_pod_target(target_definitions, pod_specs)
-        pod_target = PodTarget.new(pod_specs, target_definitions, sandbox)
+      def generate_pod_target(target_definitions, pod_specs, scope_suffix: nil)
+        pod_target = PodTarget.new(pod_specs, target_definitions, sandbox, scope_suffix)
+        pod_target.host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
 
         if installation_options.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
@@ -411,8 +418,11 @@ module Pod
         else
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
-          pods_to_update += podfile.dependencies.select(&:local?).map(&:name)
-          LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update)
+          local_pod_names = podfile.dependencies.select(&:local?).map(&:root_name)
+          pods_to_unlock = local_pod_names.reject do |pod_name|
+            sandbox.specification(pod_name).checksum == lockfile.checksum(pod_name)
+          end
+          LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update, pods_to_unlock)
         end
       end
 
@@ -460,10 +470,10 @@ module Pod
 
       def fetch_external_source(dependency, use_lockfile_options)
         checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name) if lockfile
-        if checkout_options && use_lockfile_options
-          source = ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file)
-        else
-          source = ExternalSources.from_dependency(dependency, podfile.defined_in_file)
+        source = if checkout_options && use_lockfile_options
+                   ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file)
+                 else
+                   ExternalSources.from_dependency(dependency, podfile.defined_in_file)
         end
         source.can_cache = installation_options.clean?
         source.fetch(sandbox)

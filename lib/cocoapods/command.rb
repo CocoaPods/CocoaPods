@@ -14,26 +14,28 @@ module Pod
   end
 
   class Command < CLAide::Command
+    require 'cocoapods/command/options/repo_update'
+    require 'cocoapods/command/options/project_directory'
+    include Options
+
+    require 'cocoapods/command/cache'
+    require 'cocoapods/command/env'
+    require 'cocoapods/command/init'
+    require 'cocoapods/command/install'
     require 'cocoapods/command/inter_process_communication'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
-    require 'cocoapods/command/project'
     require 'cocoapods/command/repo'
     require 'cocoapods/command/setup'
     require 'cocoapods/command/spec'
-    require 'cocoapods/command/init'
-    require 'cocoapods/command/cache'
-    require 'cocoapods/command/env'
+    require 'cocoapods/command/update'
 
     self.abstract_command = true
     self.command = 'pod'
     self.version = VERSION
     self.description = 'CocoaPods, the Cocoa library package manager.'
     self.plugin_prefixes = %w(claide cocoapods)
-
-    [Install, Update, Outdated, IPC::Podfile, IPC::Repl].each { |c| c.send(:include, ProjectDirectory) }
-    [Outdated].each { |c| c.send(:include, Project) }
 
     def self.options
       [
@@ -101,6 +103,14 @@ module Pod
     include Config::Mixin
 
     private
+
+    # Returns a new {Installer} parametrized from the {Config}.
+    #
+    # @return [Installer]
+    #
+    def installer_for_config
+      Installer.new(config.sandbox, config.podfile, config.lockfile)
+    end
 
     # Checks that the podfile exists.
     #

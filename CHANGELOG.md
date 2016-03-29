@@ -15,6 +15,156 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.0.0.beta.6 (2016-03-15)
+
+##### Breaking
+
+* Running `pod install` doesn't imply an automatic spec repo update.  
+  The old behavior can be achieved by passing in the option `--repo-update`
+  or running `pod repo update`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5004](https://github.com/CocoaPods/CocoaPods/issues/5004)
+
+* Remove the configuration variable `skip_repo_update` as the default behavior
+  varies now between `pod install` and `pod (update|outdated)`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5017](https://github.com/CocoaPods/CocoaPods/issues/5017)
+
+##### Enhancements
+
+* The master specs repo will no longer perform 'no-op' git fetches. This should
+  help to reduce the load on GitHub's servers.  
+  [Daniel Tomlinson](https://github.com/DanielTomlinson)
+  [#5005](https://github.com/CocoaPods/CocoaPods/issues/5005)
+  [#4989](https://github.com/CocoaPods/CocoaPods/issues/4989)
+
+* The specs repos will no longer support shallow clones to reduce CPU load
+  on git servers. Pre-existing shallow clones of the `master` repo will
+  automatically be upgraded to deep clones when the repo is updated.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5016](https://github.com/CocoaPods/CocoaPods/issues/5016)
+
+* The validator will check that all `public_header_files` and
+  `private_header_files` are also present in `source_files`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4936](https://github.com/CocoaPods/CocoaPods/issues/4936)
+
+##### Bug Fixes
+
+* The master specs repository can no longer be added via `pod repo add`, but
+  instead must be done via `pod setup`.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Print a friendly error message when the platform for a target cannot be
+  inferred.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4790](https://github.com/CocoaPods/CocoaPods/issues/4790)
+
+* Rely on `TARGET_BUILD_DIR` instead of `CONFIGURATION_BUILD_DIR` in the
+  generated embed frameworks build phase's script, so that UI test targets can
+  be run.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5022](https://github.com/CocoaPods/CocoaPods/issues/5022)
+
+* Fix build paths for resources bundles.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5028](https://github.com/CocoaPods/CocoaPods/pull/5028)
+
+* Validate that a Podfile does not declare the same target twice.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5029](https://github.com/CocoaPods/CocoaPods/issues/5029)
+
+
+## 1.0.0.beta.5 (2016-03-08)
+
+##### Breaking
+
+* Development pods will no longer be implicitly unlocked. This makes CocoaPods respect
+  constraints related to dependencies of development pods in the lockfile.
+
+  If you change the constraints of a dependency of your development pod and want to
+  override the locked version, you will have to use
+  `pod update ${DEPENDENCY_NAME}` manually.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#4211](https://github.com/CocoaPods/CocoaPods/issues/4211)
+  [#4577](https://github.com/CocoaPods/CocoaPods/issues/4577)
+  [#4580](https://github.com/CocoaPods/CocoaPods/issues/4580)
+
+##### Enhancements
+
+* Add the :package: emoji in front of CocoaPods Script Build Phases
+  to quickly and visually differentiate them from other phases.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#4985](https://github.com/CocoaPods/CocoaPods/issues/4985)
+
+* Enable syntax highlighting on the Podfile in the generated
+  `Pods.xcodeproj`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4962](https://github.com/CocoaPods/CocoaPods/issues/4962)
+
+##### Bug Fixes
+
+* Fixes paths passed for resources bundles in the copy resources script.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4954](https://github.com/CocoaPods/CocoaPods/pull/4954)
+
+* Fix saying the `master` specs repo exists when it has not been set up.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4955](https://github.com/CocoaPods/CocoaPods/issues/4955)
+
+* Move `${TARGET_DEVICE_ARGS}` out of the quotations for `--sdk` in the
+  `Copy Pods Resources` build phase.  
+  [seaders](https://github.com/seaders) [#4940](https://github.com/CocoaPods/CocoaPods/issues/4940)
+
+* Handle when `$PATH` isn't set.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Module maps that are set per-platform will be installed for the correct
+  platform.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4968](https://github.com/CocoaPods/CocoaPods/issues/4968)
+
+
+## 1.0.0.beta.4 (2016-02-24)
+
+##### Enhancements
+
+* Allow deduplication to take effect even when the same pod is used with
+  different sets of subspecs across different platforms.
+  This changes the general naming scheme scoped pod targets. They are
+  suffixed now on base of what makes them different among others for the
+  same root spec instead of being prefixed by the dependent target.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
+
+* Pass `COCOAPODS_VERSION` as environment variable when invoking the
+  `prepare_command`.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4933](https://github.com/CocoaPods/CocoaPods/pull/4933)
+
+##### Bug Fixes
+
+* Pods are built by default in another scoping level of the build products
+  directory identified by their name to prevent name clashes among
+  dependencies.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
+
+* Fix mixed integrations where static libraries are used along frameworks
+  from different target definitions in one Podfile.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#4146](https://github.com/CocoaPods/CocoaPods/pull/4146)
+
+* Pass target device arguments to `ibtool` in the copy resources script, fixing
+  compilation of storyboards when targeting versions of iOS prior to iOS 8.  
+  [seaders](https://github.com/seaders)
+  [#4913](https://github.com/CocoaPods/CocoaPods/issues/4913)
+
+* Fix `pod repo lint` when passed a path argument.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#4883](https://github.com/CocoaPods/CocoaPods/issues/4883)
+
+
 ## 1.0.0.beta.3 (2016-02-03)
 
 ##### Breaking

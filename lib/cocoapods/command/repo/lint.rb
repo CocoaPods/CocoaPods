@@ -34,17 +34,21 @@ module Pod
         # @todo add UI.print and enable print statements again.
         #
         def run
-          if @name
-            sources = SourcesManager.sources([@name])
-          else
-            sources = SourcesManager.aggregate.sources
-          end
+          sources = if @name
+                      if File.exist?(@name)
+                        [Pathname.new(@name)]
+                      else
+                        SourcesManager.sources([@name]).map(&:repo)
+                      end
+                    else
+                      SourcesManager.aggregate.sources.map(&:repo)
+                    end
 
           sources.each do |source|
-            SourcesManager.check_version_information(source.repo)
-            UI.puts "\nLinting spec repo `#{source.repo.basename}`\n".yellow
+            SourcesManager.check_version_information(source)
+            UI.puts "\nLinting spec repo `#{source.basename}`\n".yellow
 
-            validator = Source::HealthReporter.new(source.repo)
+            validator = Source::HealthReporter.new(source)
             validator.pre_check do |_name, _version|
               UI.print '.'
             end

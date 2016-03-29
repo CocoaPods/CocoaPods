@@ -194,8 +194,6 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'lint subcommand' do
-      extend SpecHelper::TemporaryRepos
-
       it "complains if it can't find any spec to lint" do
         Dir.chdir(temporary_directory) do
           lambda { command('spec', 'lint').run }.should.raise Informative

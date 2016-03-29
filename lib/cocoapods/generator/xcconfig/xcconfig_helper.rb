@@ -4,6 +4,13 @@ module Pod
       # Stores the shared logic of the classes of the XCConfig module.
       #
       module XCConfigHelper
+        # @return [String] Defined to hold the default Xcode build path, so
+        #         that when this is overridden per {PodTarget}, it is still
+        #         possible to reference other build products relative to the
+        #         original path.
+        #
+        SHARED_BUILD_DIR_VARIABLE = 'PODS_SHARED_BUILD_DIR'.freeze
+
         # Converts an array of strings to a single string where the each string
         # is surrounded by double quotes and separated by a space. Used to
         # represent strings in a xcconfig file.
@@ -49,6 +56,8 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_settings_for_file_accessors_of_target(target, xcconfig)
           target.file_accessors.each do |file_accessor|
             XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
@@ -73,6 +82,8 @@ module Pod
         # @param [Spec::FileAccessor] file_accessor
         #        The file accessor, which holds the list of static frameworks.
         #
+        # @return [void]
+        #
         def self.add_static_dependency_build_settings(target, xcconfig, file_accessor)
           file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
             XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, target.sandbox.root)
@@ -89,6 +100,8 @@ module Pod
         #
         # @param [Xcodeproj::Config] xcconfig
         #        The xcconfig to edit.
+        #
+        # @return [void]
         #
         def self.add_dynamic_dependency_build_settings(target, xcconfig)
           target.file_accessors.each do |file_accessor|
@@ -110,6 +123,8 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_spec_build_settings_to_xcconfig(consumer, xcconfig)
           xcconfig.libraries.merge(consumer.libraries)
           xcconfig.frameworks.merge(consumer.frameworks)
@@ -128,6 +143,8 @@ module Pod
         #
         # @param  [Pathname] sandbox_root
         #         The path retrieved from Sandbox#root.
+        #
+        # @return [void]
         #
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
           name = File.basename(framework_path, '.framework')
@@ -151,6 +168,8 @@ module Pod
         # @param  [Pathname] sandbox_root
         #         The path retrieved from Sandbox#root.
         #
+        # @return [void]
+        #
         def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
           extension = File.extname(library_path)
           name = File.basename(library_path, extension).sub(/\Alib/, '')
@@ -172,6 +191,8 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_code_signing_settings(target, xcconfig)
           build_settings = {}
           if target.platform.to_sym == :osx
@@ -189,11 +210,53 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @return [void]
+        #
         def self.add_target_specific_settings(target, xcconfig)
           if target.requires_frameworks?
             add_code_signing_settings(target, xcconfig)
           end
           add_language_specific_settings(target, xcconfig)
+        end
+
+        # Returns the search paths for frameworks and libraries the given target
+        # depends on, so that it can be correctly built and linked.
+        #
+        # @param  [Target] target
+        #         The target.
+        #
+        # @param  [Array<PodTarget>] dependent_targets
+        #         The pod targets the given target depends on.
+        #
+        # @return [Hash<String, String>] the settings
+        #
+        def self.settings_for_dependent_targets(target, dependent_targets)
+          dependent_targets = dependent_targets.select(&:should_build?)
+          has_configuration_build_dir = target.respond_to?(:configuration_build_dir)
+          if has_configuration_build_dir
+            build_dir_var = "$#{SHARED_BUILD_DIR_VARIABLE}"
+            build_settings = {
+              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir(build_dir_var),
+              SHARED_BUILD_DIR_VARIABLE => '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)',
+            }
+          else
+            build_dir_var = '$CONFIGURATION_BUILD_DIR'
+            build_settings = {}
+          end
+          unless dependent_targets.empty?
+            framework_search_paths = []
+            library_search_paths = []
+            dependent_targets.each do |dependent_target|
+              if dependent_target.requires_frameworks?
+                framework_search_paths << dependent_target.configuration_build_dir(build_dir_var)
+              else
+                library_search_paths << dependent_target.configuration_build_dir(build_dir_var)
+              end
+            end
+            build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths.uniq)
+            build_settings['LIBRARY_SEARCH_PATHS']   = XCConfigHelper.quote(library_search_paths.uniq)
+          end
+          build_settings
         end
 
         # Checks if the given target requires language specific settings and
@@ -204,6 +267,8 @@ module Pod
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @return [void]
         #
         def self.add_language_specific_settings(target, xcconfig)
           if target.uses_swift?

@@ -37,6 +37,8 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class Podfile < IPC
+        include ProjectDirectory
+
         self.summary = 'Converts a Podfile to YAML'
         self.description = 'Converts a Podfile to YAML and prints it to STDOUT.'
         self.arguments = [
@@ -123,6 +125,8 @@ module Pod
       #-----------------------------------------------------------------------#
 
       class Repl < IPC
+        include ProjectDirectory
+
         END_OF_OUTPUT_SIGNAL = "\n\r"
 
         self.summary = 'The repl listens to commands on standard input'

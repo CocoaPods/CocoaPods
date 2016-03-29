@@ -41,7 +41,7 @@ module Pod
       #
       def sources(names)
         dirs = names.map { |name| source_dir(name) }
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map { |repo| source_from_path(repo) }
       end
 
       # Returns the source whose {Source#url} is equal to `url`, adding the repo
@@ -61,9 +61,11 @@ module Pod
           previous_title_level = UI.title_level
           UI.title_level = 0
           begin
-            argv = [name, url]
-            argv << '--shallow' if name =~ /^master(-\d+)?$/
-            Command::Repo::Add.new(CLAide::ARGV.new(argv)).run
+            if name =~ /^master(-\d+)?$/
+              Command::Setup.parse([]).run
+            else
+              Command::Repo::Add.parse([name, url]).run
+            end
           rescue Informative
             raise Informative, "Unable to add a source with url `#{url}` " \
               "named `#{name}`.\nYou can try adding it manually in " \
@@ -97,13 +99,13 @@ module Pod
       def all
         return [] unless config.repos_dir.exist?
         dirs = config.repos_dir.children.select(&:directory?)
-        dirs.map { |repo| Source.new(repo) }
+        dirs.map { |repo| source_from_path(repo) }
       end
 
       # @return [Array<Source>] The CocoaPods Master Repo source.
       #
       def master
-        sources(['master'])
+        sources(['master']).select { |s| s.repo.directory? }
       end
 
       # Search the appropriate sources to match the set for the given dependency.
@@ -323,7 +325,7 @@ module Pod
         changed_spec_paths = {}
         sources.each do |source|
           UI.section "Updating spec repo `#{source.name}`" do
-            changed_source_paths = source.update(show_output && !config.verbose?)
+            changed_source_paths = source.update(show_output)
             changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
             check_version_information(source.repo)
           end
@@ -340,8 +342,9 @@ module Pod
       # @return [Bool] Whether the given source is a GIT repo.
       #
       def git_repo?(dir)
-        Dir.chdir(dir) { `git rev-parse >/dev/null 2>&1` }
-        $?.success?
+        Dir.chdir(dir) do
+          Executable.capture_command('git', %w(rev-parse), :capture => :none).success?
+        end
       end
 
       # Checks the version information of the source with the given directory.
@@ -467,14 +470,25 @@ module Pod
 
       private
 
+      # @return [Source] The Source at a given path.
+      #
+      # @param [Pathname] path
+      #        The local file path to one podspec repo.
+      #
+      def source_from_path(path)
+        return Source.new(path) unless path.basename.to_s == 'master'
+        MasterSource.new(path)
+      end
+
       # @return [Source::Aggregate] The aggregate of the sources from repos.
       #
       # @param  [Array<Pathname>] repos
       #         The local file paths to one or more podspec repo caches.
       #
       def aggregate_with_repos(repos)
+        sources = repos.map { |path| source_from_path(path) }
         @aggregates_by_repos ||= {}
-        @aggregates_by_repos[repos] ||= Source::Aggregate.new(repos)
+        @aggregates_by_repos[repos] ||= Source::Aggregate.new(sources)
       end
 
       # @return [Bool] Whether the given path is writable by the current user.
@@ -608,14 +622,32 @@ module Pod
     extend Executable
     executable :git
 
+    def git(args, include_error: false)
+      Executable.capture_command('git', args, :capture => include_error ? :merge : :out).first.strip
+    end
+
     def update_git_repo(show_output = false)
-      output = git! %w(pull --ff-only)
-      UI.puts output if show_output
+      ensure_in_repo!
+      Config.instance.with_changes(:verbose => show_output) do
+        git!(%w(pull --ff-only))
+      end
     rescue
       UI.warn 'CocoaPods was not able to update the ' \
                 "`#{name}` repo. If this is an unexpected issue " \
                 'and persists you can inspect it running ' \
                 '`pod repo update --verbose`'
+    end
+  end
+
+  class MasterSource
+    def update_git_repo(show_output = false)
+      ensure_in_repo!
+      if repo.join('.git', 'shallow').file?
+        UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
+          git!(%w(fetch --unshallow))
+        end
+      end
+      super
     end
   end
 end

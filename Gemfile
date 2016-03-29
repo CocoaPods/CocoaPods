@@ -51,6 +51,8 @@ group :development do
 end
 
 group :debugging do
+  gem 'cocoapods_debug'
+
   gem 'rb-fsevent'
   gem 'kicker'
   gem 'awesome_print'

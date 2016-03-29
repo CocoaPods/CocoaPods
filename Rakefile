@@ -152,19 +152,22 @@ begin
     namespace :fixture_tarballs do
       task :default => :unpack
 
+      tarballs = FileList['spec/fixtures/**/*.tar.gz']
+
       desc 'Check fixture tarballs for pending changes'
       task :check_for_pending_changes do
-        repo_dir = 'spec/fixtures/banana-lib'
-        if Dir.exist?(repo_dir) && !Dir.chdir(repo_dir) { `git status --porcelain`.empty? }
-          puts red("[!] There are unsaved changes in '#{repo_dir}'. " \
-            'Please commit everything and run `rake spec:fixture_tarballs:rebuild`.')
-          exit 1
+        tarballs.each do |tarball|
+          repo_dir = "#{File.dirname(tarball)}/#{File.basename(tarball, '.tar.gz')}"
+          if Dir.exist?(repo_dir) && Dir.exist?("#{repo_dir}/.git") && !Dir.chdir(repo_dir) { `git status --porcelain`.empty? }
+            puts red("[!] There are unsaved changes in '#{repo_dir}'. " \
+              'Please commit everything and run `rake spec:fixture_tarballs:rebuild`.')
+            exit 1
+          end
         end
       end
 
       desc 'Rebuild all the fixture tarballs'
       task :rebuild => :check_for_pending_changes do
-        tarballs = FileList['spec/fixtures/**/*.tar.gz']
         tarballs.each do |tarball|
           basename = File.basename(tarball)
           sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
@@ -179,7 +182,6 @@ begin
           exit 1 unless args[:force]
           puts 'Continue anyway because `force` was applied.'
         end
-        tarballs = FileList['spec/fixtures/**/*.tar.gz']
         tarballs.each do |tarball|
           basename = File.basename(tarball)
           Dir.chdir(File.dirname(tarball)) do
@@ -196,7 +198,7 @@ begin
 
     desc 'Rebuilds integration fixtures'
     task :rebuild_integration_fixtures do
-      if `which hg` && !$?.success?
+      unless system('which hg')
         puts red('[!] Mercurial (`hg`) must be installed to rebuild the integration fixtures.')
         exit 1
       end

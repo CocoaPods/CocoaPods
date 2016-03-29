@@ -30,7 +30,7 @@ module Pod
 
     # Executes the given command displaying it if in verbose mode.
     #
-    # @param  [String] bin
+    # @param  [String] executable
     #         The binary to use.
     #
     # @param  [Array<#to_s>] command
@@ -46,8 +46,7 @@ module Pod
     # @return [String] the output of the command (STDOUT and STDERR).
     #
     def self.execute_command(executable, command, raise_on_failure = true)
-      bin = which(executable)
-      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
+      bin = which!(executable)
 
       command = command.map(&:to_s)
       full_command = "#{bin} #{command.join(' ')}"
@@ -87,13 +86,30 @@ module Pod
     #
     def self.which(program)
       program = program.to_s
-      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+      paths = ENV.fetch('PATH') { '' }.split(File::PATH_SEPARATOR)
+      paths.unshift('./')
+      paths.uniq!
+      paths.each do |path|
         bin = File.expand_path(program, path)
         if File.file?(bin) && File.executable?(bin)
           return bin
         end
       end
       nil
+    end
+
+    # Returns the absolute path to the binary with the given name on the current
+    # `PATH`, or raises if none is found.
+    #
+    # @param  [String] program
+    #         The name of the program being searched for.
+    #
+    # @return [String] The absolute path to the given program.
+    #
+    def self.which!(program)
+      which(program).tap do |bin|
+        raise Informative, "Unable to locate the executable `#{executable}`" unless bin
+      end
     end
 
     # Runs the given command, capturing the desired output.
@@ -114,17 +130,16 @@ module Pod
     #         running the command.
     #
     def self.capture_command(executable, command, capture: :merge)
-      bin = which(executable)
-      raise Informative, "Unable to locate the executable `#{executable}`" unless bin
+      bin = which!(executable)
 
       require 'open3'
       command = command.map(&:to_s)
       case capture
       when :merge then Open3.capture2e(bin, *command)
       when :both then Open3.capture3(bin, *command)
-      when :out then Open3.capture2(bin, *command)
+      when :out then Open3.capture3(bin, *command).values_at(0, -1)
       when :err then Open3.capture3(bin, *command).drop(1)
-      when :none then Open3.capture2(bin, *command).last
+      when :none then Open3.capture3(bin, *command).last
       end
     end
 

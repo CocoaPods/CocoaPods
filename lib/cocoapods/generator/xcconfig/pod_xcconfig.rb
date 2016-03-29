@@ -45,32 +45,25 @@ module Pod
           search_paths = target_search_paths.concat(sandbox_search_paths).uniq
 
           config = {
+            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
+            'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
+            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
+            'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
             'PODS_ROOT' => '${SRCROOT}',
-            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
-            'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-            'SKIP_INSTALL' => 'YES',
-            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
+            'SKIP_INSTALL' => 'YES',
             # 'USE_HEADERMAP' => 'NO'
           }
 
           @xcconfig = Xcodeproj::Config.new(config)
-
-          if target.requires_frameworks? && target.scoped?
-            build_settings = {
-              'PODS_FRAMEWORK_BUILD_PATH' => XCConfigHelper.quote([target.configuration_build_dir]),
-              'FRAMEWORK_SEARCH_PATHS' => '$PODS_FRAMEWORK_BUILD_PATH',
-              'CONFIGURATION_BUILD_DIR' => '$PODS_FRAMEWORK_BUILD_PATH',
-            }
-            @xcconfig.merge!(build_settings)
-          end
 
           XCConfigHelper.add_settings_for_file_accessors_of_target(target, @xcconfig)
           target.file_accessors.each do |file_accessor|
             @xcconfig.merge!(file_accessor.spec_consumer.pod_target_xcconfig)
           end
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
+          @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, target.dependent_targets)
           @xcconfig
         end
 

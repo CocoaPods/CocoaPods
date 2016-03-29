@@ -153,6 +153,11 @@ module Pod
             end
           end
 
+          unless name
+            raise Informative,
+                  "Unable to determine the platform for the `#{target_definition.name}` target."
+          end
+
           target_definition.set_platform(name, deployment_target)
           Platform.new(name, deployment_target)
         end

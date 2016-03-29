@@ -34,6 +34,7 @@ module Pod
         validate_pod_directives
         validate_no_abstract_only_pods!
         validate_dependencies_are_present!
+        validate_no_duplicate_targets!
 
         @validated = true
       end
@@ -120,6 +121,16 @@ module Pod
         abstract_only_dependencies = all_dependencies - concrete_dependencies
         abstract_only_dependencies.each do |dep|
           add_error "The dependency `#{dep}` is not used in any concrete target."
+        end
+      end
+
+      def validate_no_duplicate_targets!
+        podfile.target_definition_list.group_by { |td| [td.name, td.user_project_path] }.
+          each do |(name, project), definitions|
+          next unless definitions.size > 1
+          error = "The target `#{name}` is declared twice"
+          error << " for the project `#{project}`" if project
+          add_error(error << '.')
         end
       end
     end

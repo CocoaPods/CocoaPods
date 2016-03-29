@@ -26,6 +26,9 @@ module Pod
         @target_integrator.private_methods.grep(/^update_to_cocoapods_/).each do |method|
           @target_integrator.stubs(method)
         end
+        @phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX
+        @embed_framework_phase_name = @phase_prefix +
+          Installer::UserProjectIntegrator::TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
       end
 
       describe '#integrate!' do
@@ -42,10 +45,11 @@ module Pod
         it 'fixes the copy resource scripts of legacy installations' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Copy Pods Resources' }
+          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+          phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script = %("${SRCROOT}/../Pods/Pods-resources.sh"\n)
           @target_integrator.integrate!
-          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh\""
+          phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
         end
 
         it 'adds references to the Pods static libraries to the Frameworks group' do
@@ -79,14 +83,16 @@ module Pod
         it 'adds a Copy Pods Resources build phase to each target' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Copy Pods Resources' }
-          phase.shell_script.strip.should == "\"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh\""
+          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+          phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
+          phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
         end
 
         it 'adds a Check Manifest.lock build phase to each target' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Check Pods Manifest.lock' }
+          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+          phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script.should == <<-EOS.strip_heredoc
           diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
           if [[ $? != 0 ]] ; then
@@ -102,7 +108,8 @@ module Pod
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           target.build_phases.first
-          phase = target.build_phases.find { |bp| bp.name == 'Check Pods Manifest.lock' }
+          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+          phase = target.build_phases.find { |bp| bp.name == phase_name }
           target.build_phases.first.should.equal? phase
         end
 
@@ -119,14 +126,14 @@ module Pod
           @pod_bundle.stubs(:requires_frameworks? => true)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
 
         it 'adds an embed frameworks build phase by default' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
 
@@ -135,7 +142,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:framework)
           @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == true
         end
 
@@ -144,7 +151,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:app_extension)
           @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
 
@@ -153,7 +160,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:watch_extension)
           @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
 
@@ -162,7 +169,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:watch2_extension)
           @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
 
@@ -172,7 +179,7 @@ module Pod
           @pod_bundle.stubs(:requires_frameworks? => false)
           target = @target_integrator.send(:native_targets).first
           @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.should.not.be.nil
         end
 
@@ -182,7 +189,7 @@ module Pod
           @pod_bundle.stubs(:requires_frameworks? => false)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase = target.shell_script_build_phases.find { |bp| bp.name == 'Embed Pods Frameworks' }
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
       end

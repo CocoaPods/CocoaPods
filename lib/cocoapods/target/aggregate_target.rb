@@ -13,6 +13,7 @@ module Pod
     # @param [Sandbox] sandbox @see sandbox
     #
     def initialize(target_definition, sandbox)
+      raise "Can't initialize an AggregateTarget with an abstract TargetDefinition" if target_definition.abstract?
       super()
       @target_definition = target_definition
       @sandbox = sandbox
@@ -203,13 +204,6 @@ module Pod
     #
     def embed_frameworks_script_relative_path
       "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
-    end
-
-    # @return [String] The scoped configuration build dir, relevant if the
-    #         target is integrated as framework.
-    #
-    def scoped_configuration_build_dir
-      "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/#{target_definition.label}"
     end
 
     private

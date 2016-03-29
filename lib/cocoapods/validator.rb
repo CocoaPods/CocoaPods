@@ -349,7 +349,6 @@ module Pod
       @original_config = Config.instance.clone
       config.installation_root   = validation_dir
       config.silent              = !config.verbose
-      config.skip_repo_update    = true
     end
 
     def tear_down_validation_environment
@@ -428,7 +427,7 @@ module Pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      %i(determine_dependency_product_types verify_no_duplicate_framework_names
+      %i(verify_no_duplicate_framework_names
          verify_no_static_framework_transitive_dependencies
          verify_framework_usage generate_pods_project integrate_user_project
          perform_post_install_actions).each { |m| @installer.send(m) }
@@ -560,11 +559,17 @@ module Pod
     # Ensures that a list of header files only contains header files.
     #
     def _validate_header_files(attr_name)
-      non_header_files = file_accessor.send(attr_name).
+      header_files = file_accessor.send(attr_name)
+      non_header_files = header_files.
         select { |f| !Sandbox::FileAccessor::HEADER_EXTENSIONS.include?(f.extname) }.
         map { |f| f.relative_path_from(file_accessor.root) }
       unless non_header_files.empty?
         error(attr_name, "The pattern matches non-header files (#{non_header_files.join(', ')}).")
+      end
+      non_source_files = header_files - file_accessor.source_files
+      unless non_source_files.empty?
+        error(attr_name, 'The pattern includes header files that are not listed' \
+          "in source_files (#{non_source_files.join(', ')}).")
       end
     end
 

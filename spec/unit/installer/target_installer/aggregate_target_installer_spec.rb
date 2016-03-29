@@ -6,10 +6,11 @@ module Pod
       before do
         config.sandbox.prepare
         @podfile = Podfile.new do
-          platform :ios
-          project 'dummy'
+          platform :ios, '6.0'
+          project 'SampleProject/SampleProject'
+          target 'SampleProject'
         end
-        @target_definition = @podfile.target_definitions['Pods']
+        @target_definition = @podfile.target_definitions['SampleProject']
         @project = Project.new(config.sandbox.project_path)
 
         config.sandbox.project = @project
@@ -23,12 +24,10 @@ module Pod
         end
 
         @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @target.client_root = config.sandbox.root.dirname
         @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
 
         @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
-        @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         @pod_target.user_build_configurations = @target.user_build_configurations
         @pod_target.file_accessors = [file_accessor]
 
@@ -41,17 +40,17 @@ module Pod
 
       it 'adds file references for the support files of the target' do
         @installer.install!
-        group = @project.support_files_group['Pods']
+        group = @project.support_files_group['Pods-SampleProject']
         group.children.map(&:display_name).sort.should == [
-          'Pods-acknowledgements.markdown',
-          'Pods-acknowledgements.plist',
-          'Pods-dummy.m',
-          'Pods-frameworks.sh',
-          'Pods-resources.sh',
-          'Pods.appstore.xcconfig',
-          'Pods.debug.xcconfig',
-          'Pods.release.xcconfig',
-          'Pods.test.xcconfig',
+          'Pods-SampleProject-acknowledgements.markdown',
+          'Pods-SampleProject-acknowledgements.plist',
+          'Pods-SampleProject-dummy.m',
+          'Pods-SampleProject-frameworks.sh',
+          'Pods-SampleProject-resources.sh',
+          'Pods-SampleProject.appstore.xcconfig',
+          'Pods-SampleProject.debug.xcconfig',
+          'Pods-SampleProject.release.xcconfig',
+          'Pods-SampleProject.test.xcconfig',
         ]
       end
 
@@ -138,31 +137,45 @@ module Pod
 
       it 'creates a create copy resources script' do
         @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        script = support_files_dir + 'Pods-resources.sh'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+        script = support_files_dir + 'Pods-SampleProject-resources.sh'
         script.read.should.include?('logo-sidebar.png')
       end
 
       it 'does not add framework resources to copy resources script' do
         @pod_target.stubs(:requires_frameworks? => true)
         @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        script = support_files_dir + 'Pods-resources.sh'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+        script = support_files_dir + 'Pods-SampleProject-resources.sh'
         script.read.should.not.include?('logo-sidebar.png')
       end
 
-      xit 'adds the resources bundles to the copy resources script' do
+      it 'adds the resources bundles to the copy resources script' do
+        @pod_target.file_accessors.first.stubs(:resource_bundles).returns(
+          'Trees' => [Pathname('palm.jpg')],
+          'Leafs' => [Pathname('leaf.jpg')],
+        )
+        resources_by_config = @installer.send(:resources_by_config)
+        resources_by_config.each_value do |resources|
+          resources.should.include '$CONFIGURATION_BUILD_DIR/BananaLib/Trees.bundle'
+          resources.should.include '$CONFIGURATION_BUILD_DIR/BananaLib/Leafs.bundle'
+        end
       end
 
-      xit 'adds the bridge support file to the copy resources script, if one was created' do
+      it 'adds the bridge support file to the copy resources script, if one was created' do
+        @installer.stubs(:bridge_support_file).returns(@installer.target.bridge_support_path)
+        resources_by_config = @installer.send(:resources_by_config)
+        resources_by_config.each_value do |resources|
+          resources.should.include @installer.target.bridge_support_path
+        end
       end
 
       it 'does add pods to the embed frameworks script' do
         @pod_target.stubs(:requires_frameworks? => true)
         @target.stubs(:requires_frameworks? => true)
         @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        script = support_files_dir + 'Pods-frameworks.sh'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+        script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
         script.read.should.include?('BananaLib.framework')
       end
 
@@ -186,28 +199,28 @@ module Pod
         @pod_target.stubs(:requires_frameworks? => true)
         @target.stubs(:requires_frameworks? => true)
         @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        script = support_files_dir + 'Pods-frameworks.sh'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+        script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
         script.read.should.not.include?('BananaLib.framework')
       end
 
       it 'creates the acknowledgements files ' do
         @installer.install!
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        markdown = support_files_dir + 'Pods-acknowledgements.markdown'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+        markdown = support_files_dir + 'Pods-SampleProject-acknowledgements.markdown'
         markdown.read.should.include?('Permission is hereby granted')
-        plist = support_files_dir + 'Pods-acknowledgements.plist'
+        plist = support_files_dir + 'Pods-SampleProject-acknowledgements.plist'
         plist.read.should.include?('Permission is hereby granted')
       end
 
       it 'creates a dummy source to ensure the creation of a single base library' do
         @installer.install!
         build_files = @installer.target.native_target.source_build_phase.files
-        build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-dummy.m') }
+        build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-dummy.m') }
         build_file.should.be.not.nil
-        build_file.file_ref.path.should == 'Pods-dummy.m'
-        support_files_dir = config.sandbox.target_support_files_dir('Pods')
-        dummy = support_files_dir + 'Pods-dummy.m'
+        build_file.file_ref.path.should == 'Pods-SampleProject-dummy.m'
+        support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+        dummy = support_files_dir + 'Pods-SampleProject-dummy.m'
         dummy.read.should.include?('@interface PodsDummy_Pods')
       end
     end
