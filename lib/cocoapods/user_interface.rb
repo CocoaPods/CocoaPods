@@ -424,6 +424,10 @@ module Pod
         UI.puts message
       end
 
+      def print(message)
+        UI.print(message)
+      end
+
       def warn(message)
         UI.warn message
       end

@@ -81,7 +81,7 @@ module Pod
 
         def run
           require 'yaml'
-          sets = SourcesManager.aggregate.all_sets
+          sets = config.sources_manager.aggregate.all_sets
           result = {}
           sets.each do |set|
             begin
@@ -117,8 +117,8 @@ module Pod
         DESC
 
         def run
-          SourcesManager.updated_search_index
-          output_pipe.puts(SourcesManager.search_index_path)
+          config.sources_manager.updated_search_index
+          output_pipe.puts(config.sources_manager.search_index_path)
         end
       end
 

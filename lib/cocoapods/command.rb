@@ -93,7 +93,7 @@ module Pod
     # @return [void]
     #
     def ensure_master_spec_repo_exists!
-      unless SourcesManager.master_repo_functional?
+      unless config.sources_manager.master_repo_functional?
         Setup.new(CLAide::ARGV.new([])).run
       end
     end

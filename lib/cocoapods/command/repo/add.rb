@@ -40,7 +40,7 @@ module Pod
             create_repos_dir
             clone_repo
             checkout_branch
-            SourcesManager.check_version_information(dir)
+            config.sources_manager.sources([dir.basename.to_s]).each(&:verify_compatibility!)
           end
         end
 

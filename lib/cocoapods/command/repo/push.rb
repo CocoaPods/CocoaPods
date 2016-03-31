@@ -38,8 +38,8 @@ module Pod
           @allow_warnings = argv.flag?('allow-warnings')
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
-          @source = SourcesManager.source_with_name_or_url(@repo)
-          @source_urls = argv.option('sources', SourcesManager.all.map(&:url).join(',')).split(',')
+          @source = config.sources_manager.source_with_name_or_url(@repo)
+          @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @private = argv.flag?('private', true)

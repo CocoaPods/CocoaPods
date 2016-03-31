@@ -22,12 +22,12 @@ gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7
 
 group :development do
   cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
+  cp_gem 'cocoapods-core',        'Core', 'seg-source-metadata'
   cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
   cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
   cp_gem 'cocoapods-search',      'cocoapods-search'
-  cp_gem 'cocoapods-stats',       'cocoapods-stats'
+  cp_gem 'cocoapods-stats',       'cocoapods-stats', 'seg-source-metadata'
   cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
   cp_gem 'cocoapods-try',         'cocoapods-try'
   cp_gem 'molinillo',             'Molinillo'

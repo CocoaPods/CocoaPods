@@ -6,7 +6,7 @@ module Pod
       before do
         repos = [Source.new(fixture('spec-repos/test_repo')), MasterSource.new(fixture('spec-repos/master'))]
         aggregate = Pod::Source::Aggregate.new(repos)
-        Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
+        config.sources_manager.stubs(:aggregate).returns(aggregate)
         aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
 
         @podfile = Pod::Podfile.new do
@@ -66,8 +66,8 @@ module Pod
       #--------------------------------------#
 
       it 'does not update unused sources' do
-        @analyzer.stubs(:sources).returns(SourcesManager.master)
-        SourcesManager.expects(:update).once.with('master')
+        @analyzer.stubs(:sources).returns(config.sources_manager.master)
+        config.sources_manager.expects(:update).once.with('master')
         @analyzer.update_repositories
       end
 
@@ -78,7 +78,7 @@ module Pod
         end
         config.verbose = true
 
-        SourcesManager.expects(:update).never
+        config.sources_manager.expects(:update).never
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.update_repositories
       end
@@ -98,7 +98,7 @@ module Pod
 
         source = Source.new(non_git_repo)
 
-        SourcesManager.expects(:update).never
+        config.sources_manager.expects(:update).never
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.stubs(:sources).returns([source])
         analyzer.update_repositories
@@ -121,9 +121,9 @@ module Pod
         source = mock
         source.stubs(:name).returns('repo_2')
         source.stubs(:repo).returns('/repo/cache/path')
-        SourcesManager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
-        SourcesManager.stubs(:git_repo?).with(source.repo).returns(true)
-        SourcesManager.expects(:update).once.with(source.name)
+        config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
+        source.stubs(:git?).returns(true)
+        config.sources_manager.expects(:update).once.with(source.name)
 
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.update_repositories
@@ -321,7 +321,7 @@ module Pod
         before do
           repos = [Source.new(fixture('spec-repos/test_repo'))]
           aggregate = Pod::Source::Aggregate.new(repos)
-          Pod::SourcesManager.stubs(:aggregate).returns(aggregate)
+          config.sources_manager.stubs(:aggregate).returns(aggregate)
           aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
         end
 
@@ -649,7 +649,7 @@ module Pod
                 pod 'JSONKit', '1.4'
               end
               @analyzer.instance_variable_set(:@podfile, podfile)
-              SourcesManager.expects(:find_or_create_source_with_url).once
+              config.sources_manager.expects(:find_or_create_source_with_url).once
               @analyzer.send(:sources)
             end
           end

@@ -59,7 +59,7 @@ module Pod
       # @return [void]
       #
       def update_master_repo
-        SourcesManager.update('master', true)
+        config.sources_manager.update('master', true)
       end
 
       # Sets the repo to the master branch.
@@ -95,7 +95,7 @@ module Pod
       # @return [Pathname] the directory of the master repo.
       #
       def master_repo_dir
-        SourcesManager.master_repo_dir
+        config.sources_manager.master_repo_dir
       end
     end
   end

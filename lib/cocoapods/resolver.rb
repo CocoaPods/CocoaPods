@@ -350,7 +350,7 @@ module Pod
     #
     def aggregate_for_dependency(dependency)
       if dependency && dependency.podspec_repo
-        return SourcesManager.aggregate_for_dependency(dependency)
+        return Config.instance.sources_manager.aggregate_for_dependency(dependency)
       else
         @aggregate ||= Source::Aggregate.new(sources)
       end

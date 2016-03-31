@@ -49,7 +49,6 @@ module Pod
   autoload :Project,                   'cocoapods/project'
   autoload :Resolver,                  'cocoapods/resolver'
   autoload :Sandbox,                   'cocoapods/sandbox'
-  autoload :SourcesManager,            'cocoapods/sources_manager'
   autoload :Target,                    'cocoapods/target'
   autoload :Validator,                 'cocoapods/validator'
 
@@ -68,4 +67,6 @@ module Pod
     autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
     autoload :XCConfig,                'cocoapods/generator/xcconfig'
   end
+
+  require 'cocoapods/core_overrides'
 end

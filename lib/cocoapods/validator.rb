@@ -30,7 +30,7 @@ module Pod
     #         the Source URLs to use in creating a {Podfile}.
     #
     def initialize(spec_or_path, source_urls)
-      @source_urls = source_urls.map { |url| SourcesManager.source_with_name_or_url(url) }.map(&:url)
+      @source_urls = source_urls.map { |url| config.sources_manager.source_with_name_or_url(url) }.map(&:url)
       @linter = Specification::Linter.new(spec_or_path)
     end
 

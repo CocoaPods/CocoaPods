@@ -160,7 +160,7 @@ EOS
         end
 
         def repo_information
-          SourcesManager.all.map do |source|
+          Config.instance.sources_manager.all.map do |source|
             next unless source.type == 'file system'
             repo = source.repo
             Dir.chdir(repo) do

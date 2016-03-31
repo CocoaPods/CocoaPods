@@ -130,6 +130,11 @@ module Pod
 
     attr_writer :repos_dir
 
+    def sources_manager
+      return @sources_manager if @sources_manager && @sources_manager.repos_dir == repos_dir
+      @sources_manager = Source::Manager.new(repos_dir)
+    end
+
     # @return [Pathname] the directory where the CocoaPods templates are stored.
     #
     def templates_dir
