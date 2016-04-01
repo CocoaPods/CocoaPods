@@ -277,7 +277,7 @@ begin
               simulator_name = major_version > 5 ? 'iPhone 6' : 'iPhone Retina (4-inch)'
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}'"
             else
-              fail "Unknown platform #{platform.to_s}"
+              raise "Unknown platform #{platform.to_s}"
             end
           end
         end
