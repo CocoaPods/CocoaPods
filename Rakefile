@@ -276,8 +276,6 @@ begin
               # Specifically build against the simulator SDK so we don't have to deal with code signing.
               simulator_name = major_version > 5 ? 'iPhone 6' : 'iPhone Retina (4-inch)'
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}'"
-            when :watchos
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=Apple Watch - 38mm'"
             else
               raise "Unknown platform #{platform}"
             end
