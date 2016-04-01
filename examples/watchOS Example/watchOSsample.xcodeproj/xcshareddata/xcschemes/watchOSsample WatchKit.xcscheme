@@ -14,6 +14,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A865B26D1CAF18FF0031EFC6"
+               BuildableName = "watchOSsample WatchKit.app"
+               BlueprintName = "watchOSsample WatchKit"
+               ReferencedContainer = "container:watchOSsample.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "A865B2791CAF18FF0031EFC6"
                BuildableName = "watchOSsample WatchKit Extension.appex"
                BlueprintName = "watchOSsample WatchKit Extension"
@@ -46,9 +60,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A129F8D11B2CA81600EBC1DD"
-            BuildableName = "watchOSsample WatchKit App.app"
-            BlueprintName = "watchOSsample WatchKit App"
+            BlueprintIdentifier = "A865B26D1CAF18FF0031EFC6"
+            BuildableName = "watchOSsample WatchKit.app"
+            BlueprintName = "watchOSsample WatchKit"
             ReferencedContainer = "container:watchOSsample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -68,21 +82,21 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.carousel"
-         RemotePath = "/watchOSsample WatchKit App">
+         RemotePath = "/watchOSsample">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A129F8D11B2CA81600EBC1DD"
-            BuildableName = "watchOSsample WatchKit App.app"
-            BlueprintName = "watchOSsample WatchKit App"
+            BlueprintIdentifier = "A865B26D1CAF18FF0031EFC6"
+            BuildableName = "watchOSsample WatchKit.app"
+            BlueprintName = "watchOSsample WatchKit"
             ReferencedContainer = "container:watchOSsample.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A129F8D11B2CA81600EBC1DD"
-            BuildableName = "watchOSsample WatchKit App.app"
-            BlueprintName = "watchOSsample WatchKit App"
+            BlueprintIdentifier = "A865B26D1CAF18FF0031EFC6"
+            BuildableName = "watchOSsample WatchKit.app"
+            BlueprintName = "watchOSsample WatchKit"
             ReferencedContainer = "container:watchOSsample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -98,21 +112,21 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.carousel"
-         RemotePath = "/watchOSsample WatchKit App">
+         RemotePath = "/watchOSsample">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A129F8D11B2CA81600EBC1DD"
-            BuildableName = "watchOSsample WatchKit App.app"
-            BlueprintName = "watchOSsample WatchKit App"
+            BlueprintIdentifier = "A865B26D1CAF18FF0031EFC6"
+            BuildableName = "watchOSsample WatchKit.app"
+            BlueprintName = "watchOSsample WatchKit"
             ReferencedContainer = "container:watchOSsample.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A129F8D11B2CA81600EBC1DD"
-            BuildableName = "watchOSsample WatchKit App.app"
-            BlueprintName = "watchOSsample WatchKit App"
+            BlueprintIdentifier = "A865B26D1CAF18FF0031EFC6"
+            BuildableName = "watchOSsample WatchKit.app"
+            BlueprintName = "watchOSsample WatchKit"
             ReferencedContainer = "container:watchOSsample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
