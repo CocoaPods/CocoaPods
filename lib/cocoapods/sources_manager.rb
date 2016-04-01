@@ -38,6 +38,8 @@ module Pod
           source = source_with_url(url)
         end
 
+        raise "Unable to create a source with URL #{url}" unless source
+
         source
       end
 
