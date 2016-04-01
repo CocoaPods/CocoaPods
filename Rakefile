@@ -271,11 +271,8 @@ begin
             when :osx
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
             when :ios
-              xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
-              major_version = xcode_version.split('.').first.to_i
-              # Specifically build against the simulator SDK so we don't have to deal with code signing.
-              simulator_name = major_version > 5 ? 'iPhone 6' : 'iPhone Retina (4-inch)'
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}'"
+              # Need to use the iPhone 6s, since this is the default simulator paired with a watch in Xcode 7.3
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 6s'"
             else
               raise "Unknown platform #{platform}"
             end
