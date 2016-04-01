@@ -2,8 +2,8 @@
 //  ExtensionDelegate.swift
 //  watchOSsample WatchKit Extension
 //
-//  Created by Boris Bügling on 13/06/15.
-//  Copyright © 2015 Boris Bügling. All rights reserved.
+//  Created by Ben Asher on 4/1/16.
+//  Copyright © 2016 Boris Bügling. All rights reserved.
 //
 
 import WatchKit
