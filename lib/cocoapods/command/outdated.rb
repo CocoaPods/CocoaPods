@@ -8,7 +8,7 @@ module Pod
 
       self.description = <<-DESC
         Shows the outdated pods in the current Podfile.lock, but only those from
-        spec repos, not those from local/external sources or `:head` versions.
+        spec repos, not those from local/external sources.
       DESC
 
       # Run the command
