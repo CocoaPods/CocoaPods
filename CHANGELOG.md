@@ -46,6 +46,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   be run.  
   [seaders](https://github.com/seaders)
   [#5133](https://github.com/CocoaPods/CocoaPods/issues/5133)
+* Ensure that a `CFBundleVersion` is set for resource bundles' Info.plist
+  files.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#4897](https://github.com/CocoaPods/CocoaPods/issues/4897)
 
 
 ## 1.0.0.beta.6 (2016-03-15)
