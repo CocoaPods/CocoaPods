@@ -38,7 +38,7 @@ module Pod
           @allow_warnings = argv.flag?('allow-warnings')
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
-          @source = config.sources_manager.source_with_name_or_url(@repo)
+          @source = config.sources_manager.sources([@repo]).first
           @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
@@ -49,8 +49,14 @@ module Pod
         end
 
         def validate!
-          super
           help! 'A spec-repo name is required.' unless @repo
+          unless @source.repo.directory?
+            raise Informative,
+                  "Unable to find the `#{@repo}` repo. " \
+                  'If it has not yet been cloned, add it via `pod repo add`.'
+          end
+
+          super
         end
 
         def run
@@ -162,7 +168,7 @@ module Pod
           UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow
           podspec_files.each do |spec_file|
             spec = Pod::Specification.from_file(spec_file)
-            output_path = @source.specs_dir + @source.send(:pod_path, name) + version.to_s
+            output_path = @source.pod_path(spec.name) + spec.version.to_s
             if @message && !@message.empty?
               message = @message
             elsif output_path.exist?

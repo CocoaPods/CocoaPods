@@ -12,10 +12,8 @@ module Pod
     it "complains if it can't find the repo" do
       Dir.chdir(fixture('banana-lib')) do
         cmd = command('repo', 'push', 'missing_repo')
-        cmd.expects(:check_if_master_repo)
-        cmd.expects(:validate_podspec_files).returns(true)
-        e = lambda { cmd.run }.should.raise Informative
-        e.message.should.match(/repo not found/)
+        e = lambda { cmd.validate! }.should.raise Informative
+        e.message.should.match(/Unable to find the `missing_repo` repo/)
       end
     end
 
