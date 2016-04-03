@@ -249,7 +249,9 @@ module Pod
 
       remainder = whitelisted_configs - all_user_configurations
       unless remainder.empty?
-        raise Informative, "Unknown #{'configuration'.pluralize(remainder.size)} whitelisted: #{remainder.sort.to_sentence}."
+        raise Informative,
+              "Unknown #{'configuration'.pluralize(remainder.size)} whitelisted: #{remainder.sort.to_sentence}. " \
+              "CocoaPods found #{all_user_configurations.sort.to_sentence}, did you mean one of these?"
       end
     end
 
