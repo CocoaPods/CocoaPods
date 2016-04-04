@@ -56,9 +56,8 @@ module Pod
 
           it 'handles repositories without a remote url' do # for #2965
             Command::Repo::Add.any_instance.stubs(:run).once
-            Source.any_instance.stubs(:url).returns(nil)
-            e = lambda { @sources_manager.find_or_create_source_with_url('url') }
-            e.should.not.raise
+            Source.any_instance.stubs(:url).returns(nil).then.returns('URL')
+            @sources_manager.find_or_create_source_with_url('URL').url.should == 'URL'
           end
         end
 
