@@ -34,8 +34,8 @@ module Pod
           help! "Xcode project at #{@project_path} does not exist" unless File.exist? @project_path
           project_path = @project_path
         else
-          raise Informative, 'No xcode project found, please specify one' unless @project_paths.length > 0
-          raise Informative, 'Multiple xcode projects found, please specify one' unless @project_paths.length == 1
+          raise Informative, 'No Xcode project found, please specify one' unless @project_paths.length > 0
+          raise Informative, 'Multiple Xcode projects found, please specify one' unless @project_paths.length == 1
           project_path = @project_paths.first
         end
         @xcode_project = Xcodeproj::Project.open(project_path)
@@ -54,10 +54,10 @@ module Pod
       #
       def podfile_template(project)
         podfile = ''
-        podfile << "xcodeproj '#{@project_path}'\n\n" if @project_path
+        podfile << "project '#{@project_path}'\n\n" if @project_path
         podfile << <<-PLATFORM.strip_heredoc
           # Uncomment this line to define a global platform for your project
-          # platform :ios, '8.0'
+          # platform :ios, '9.0'
           # Uncomment this line if you're using Swift
           # use_frameworks!
         PLATFORM
