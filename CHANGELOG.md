@@ -12,6 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   will suggest the build configurations found in the user project.  
   [Samuel Giddins](https://github.com/segiddins)
   [CocoaPods#5113](https://github.com/CocoaPods/CocoaPods/issues/5113)
+* Add analyze build action to CocoaPods linter xcodebuild command
+  [Renzo Crisóstomo](https://github.com/Ruenzuo)
+  [#5127](https://github.com/CocoaPods/CocoaPods/pull/5127)
 
 ##### Bug Fixes
 
