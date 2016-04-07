@@ -246,7 +246,6 @@ begin
       Bundler.require 'xcodeproj', :development
       Dir['examples/*'].each do |dir|
         Dir.chdir(dir) do
-          next if dir == 'examples/watchOS Example'
           puts "Example: #{dir}"
 
           puts '    Installing Pods'
@@ -261,20 +260,22 @@ begin
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
           workspace.schemes.each do |scheme_name, project_path|
             next if scheme_name == 'Pods'
+            next if project_path.end_with? 'Pods.xcodeproj'
             puts "    Building scheme: #{scheme_name}"
 
             project = Xcodeproj::Project.open(project_path)
             target = project.targets.first
 
-            case target
+            platform = target.platform_name
+            case platform
             when :osx
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
             when :ios
-              xcode_version = `xcodebuild -version`.scan(/Xcode (.*)\n/).first.first
-              major_version = xcode_version.split('.').first.to_i
               # Specifically build against the simulator SDK so we don't have to deal with code signing.
-              simulator_name = major_version > 5 ? 'iPhone 6' : 'iPhone Retina (4-inch)'
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=#{simulator_name}"
+              # Need to use the iPhone 6s, since this is the default simulator paired with a watch in Xcode 7.3
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 6s'"
+            else
+              raise "Unknown platform #{platform}"
             end
           end
         end

@@ -46,7 +46,7 @@ class DetailViewController: UITableViewController {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.refreshControl?.addTarget(self, action: "refresh", forControlEvents: .ValueChanged)
+        self.refreshControl?.addTarget(self, action: #selector(DetailViewController.refresh), forControlEvents: .ValueChanged)
 
     }
 
@@ -68,15 +68,21 @@ class DetailViewController: UITableViewController {
         self.refreshControl?.beginRefreshing()
 
         let start = CACurrentMediaTime()
-        self.request?.responseString { (request, response, body, error) in
+        self.request?.response
+        self.request?.responseString { response in
             let end = CACurrentMediaTime()
             self.elapsedTime = end - start
 
-            for (field, value) in response!.allHeaderFields {
+            response.response?.allHeaderFields.forEach { field, value in
                 self.headers["\(field)"] = "\(value)"
             }
 
-            self.body = body
+            switch response.result {
+            case let .Success(body):
+              self.body = body
+            default:
+              break
+            }
 
             self.tableView.reloadData()
             self.refreshControl?.endRefreshing()
@@ -100,18 +106,18 @@ class DetailViewController: UITableViewController {
 
         switch Sections(rawValue: indexPath.section)! {
         case .Headers:
-            let cell = self.tableView.dequeueReusableCellWithIdentifier("Header") as UITableViewCell
-            let field = self.headers.keys.array.sorted(<)[indexPath.row]
+            let cell = self.tableView.dequeueReusableCellWithIdentifier("Header")! as UITableViewCell
+            let field = Array(self.headers.keys).sort(<)[indexPath.row]
             let value = self.headers[field]
 
-            cell.textLabel.text = field
+            cell.textLabel!.text = field
             cell.detailTextLabel!.text = value
 
             return cell
         case .Body:
-            let cell = self.tableView.dequeueReusableCellWithIdentifier("Body") as UITableViewCell
+            let cell = self.tableView.dequeueReusableCellWithIdentifier("Body")! as UITableViewCell
 
-            cell.textLabel.text = self.body
+            cell.textLabel!.text = self.body
 
             return cell
         }

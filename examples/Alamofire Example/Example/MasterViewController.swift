@@ -43,14 +43,14 @@ class MasterViewController: UITableViewController {
 
         if let split = self.splitViewController {
             let controllers = split.viewControllers
-            self.detailViewController = controllers.last?.topViewController as? DetailViewController
+            self.detailViewController = (controllers.last as! UINavigationController).topViewController as? DetailViewController
         }
     }
 
     // MARK: - UIStoryboardSegue
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let detailViewController = segue.destinationViewController.topViewController as? DetailViewController {
+        if let detailViewController = (segue.destinationViewController as! UINavigationController).topViewController as? DetailViewController {
             func requestForSegue(segue: UIStoryboardSegue) -> Request? {
                 switch segue.identifier as String! {
                     case "GET":

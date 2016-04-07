@@ -1,6 +1,5 @@
-os:
-  - osx
-language: ruby
+osx_image: xcode7.3
+language: objective-c
 cache: bundler
 rvm:
   # OS X 10.9.5-10.10.0 (2.0.0-p481)
@@ -24,7 +23,9 @@ before_install:
 after_install:
   - ./bin/pod repo update --silent
 
+script: bundle exec rake
+
 addons:
  code_climate:
-   repo_token: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55  
+   repo_token: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55
 
