@@ -196,6 +196,10 @@ module Pod
     #
     attr_accessor :ignore_public_only_results
 
+    # @return [Boolean] Whether the analyze build action will be added to xcodebuild command.
+    #
+    attr_accessor :analyze
+
     #-------------------------------------------------------------------------#
 
     # !@group Lint results
@@ -703,7 +707,9 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
-      command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
+      command = %w(clean build)
+      command += %w(analyze) if analyze
+      command += %w(-workspace App.xcworkspace -scheme App -configuration Release)
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
