@@ -361,10 +361,12 @@ module Pod
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`AFNetworking \(= 3.0.1\)` required by `Podfile`/)
-        e.message.should.match(/None of the spec sources contain a spec satisfying the `AFNetworking \(= 3.0.1\)` dependency./)
-        e.message.should.match(/You have either; mistyped the name or version,/)
-        e.message.should.match(/ not added the source repo that hosts the Podspec to your Podfile,/)
-        e.message.should.match(/ or not got the latest versions of your source repos./)
+        e.message.should.match(/None of your spec sources contain a spec satisfying the dependency: `AFNetworking \(= 3.0.1\)`./)
+        e.message.should.match(/You have either:/)
+        e.message.should.match(/ * out-of-date source repos which you can update with `pod repo update`/)
+        e.message.should.match(/ * not added the source repo that hosts the Podspec to your Podfile./)
+        e.message.should.match(/ * out-of-date source repos which you can update with `pod repo update`/)
+        e.message.should.match(/Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default./)
       end
 
       it 'takes into account locked dependencies' do
@@ -533,7 +535,7 @@ module Pod
         sources = SourcesManager.sources(%w(master))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         e = lambda { resolver.resolve }.should.raise Informative
-        e.message.should.match(/None of the spec sources contain a spec satisfying/)
+        e.message.should.match(/None of your spec sources contain a spec/)
         e.message.should.match(/JSONKit/)
         e.message.should.match(/\= 1.5pre/)
       end

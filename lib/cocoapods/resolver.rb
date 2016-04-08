@@ -421,9 +421,9 @@ module Pod
             conflict.requirements.values.flatten.each do |r|
               if search_for(r).empty?
                 # There are no existing specification inside any of the spec repos with given requirements.
-                message << "\n\nNone of your spec sources contain a spec satisfying the  dependency: `#{r}`." \
+                message << "\n\nNone of your spec sources contain a spec satisfying the dependency: `#{r}`." \
                   "\n\nYou have either:" \
-                  "\n * out-of-date source repos which you can update with `pod repo update`."
+                  "\n * out-of-date source repos which you can update with `pod repo update`." \
                   "\n * mistyped the name or version." \
                   "\n * not added the source repo that hosts the Podspec to your Podfile." \
                   "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
