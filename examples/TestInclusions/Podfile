@@ -6,7 +6,5 @@ abstract_target 'TestInclusionsPods' do
     pod 'SwrveConversationSDK', '~> 4.3.0'
 
     target 'TestInclusions'
-    target 'TestInclusionsTests' do
-        pod 'OCHamcrest', '~> 5.0'
-    end
+    target 'TestInclusionsTests'
 end

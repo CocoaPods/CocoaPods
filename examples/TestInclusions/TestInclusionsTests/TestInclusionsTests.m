@@ -25,7 +25,6 @@
 
 
 #import <XCTest/XCTest.h>
-#import <OCHamcrest/OCHamcrest.h>
 
 @interface TestInclusionsTests : XCTestCase
 
@@ -49,7 +48,7 @@
     @catch (NSException *exception) {
         NSLog(@"Unable to load SwrveConversation storyboard. %@", exception);
     }
-    assertThat(storyboard, notNilValue());
+    XCTAssertNotNil(storyboard);
 }
 
 @end
