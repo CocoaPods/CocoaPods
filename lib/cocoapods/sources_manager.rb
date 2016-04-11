@@ -139,17 +139,17 @@ module Pod
         if full_text_search
           query_word_results_hash = {}
           updated_search_index.each_value do |word_spec_hash|
-            word_spec_hash.each_pair do |word, spec_symbols|
+            word_spec_hash.each_pair do |word, spec_names|
               query_word_regexps.each do |query_word_regexp|
                 set = (query_word_results_hash[query_word_regexp] ||= Set.new)
-                set.merge(spec_symbols) if word =~ query_word_regexp
+                set.merge(spec_names) if word =~ query_word_regexp
               end
             end
           end
-          found_set_symbols = query_word_results_hash.values.reduce(:&)
-          found_set_symbols ||= []
-          sets = found_set_symbols.map do |symbol|
-            aggregate.representative_set(symbol.to_s)
+          found_set_names = query_word_results_hash.values.reduce(:&)
+          found_set_names ||= []
+          sets = found_set_names.map do |name|
+            aggregate.representative_set(name)
           end
           # Remove nil values because representative_set return nil if no pod is found in any of the sources.
           sets.compact!
@@ -279,15 +279,17 @@ module Pod
 
           new_index = aggregate.generate_search_index_for_changes_in_source(source, spec_paths)
           # First traverse search_index and update existing words
-          # Removed traversed words from new_index after adding to search_index,
+          # Remove traversed words from new_index after adding to search_index,
           # so that only non existing words will remain in new_index after enumeration completes.
           index_for_source.each_pair do |word, _|
             if new_index[word]
               index_for_source[word] |= new_index[word]
+              new_index.delete(word)
             else
               index_for_source[word] -= updated_pods
             end
           end
+
           # Now add non existing words remained in new_index to search_index
           index_for_source.merge!(new_index)
         end

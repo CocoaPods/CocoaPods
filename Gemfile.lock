@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 33d5fbcfb956cfef621bfb1b03e0880d6de4a546
-  branch: master
+  revision: 705c12fd1041c53e366cdfabbd7846dc85d3bb0c
+  branch: manu/searchIndexUseString
   specs:
     cocoapods-core (1.0.0.beta.6)
       activesupport (>= 4.0.2)
