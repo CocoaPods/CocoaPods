@@ -49,7 +49,7 @@ module Pod
         end
         root_length  = root.to_s.length + 1
         escaped_root = escape_path_for_glob(root)
-        paths = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
+        paths = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH).sort_by(&:upcase)
         absolute_dirs  = paths.select { |path| File.directory?(path) }
         relative_dirs  = absolute_dirs.map  { |p| p[root_length..-1] }
         absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
