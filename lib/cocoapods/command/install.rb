@@ -4,7 +4,7 @@ module Pod
       include RepoUpdate
       include ProjectDirectory
 
-      self.summary = 'Install project dependencies to Podfile.lock versions'
+      self.summary = 'Install project dependencies according to versions from a Podfile.lock'
 
       self.description = <<-DESC
         Downloads all dependencies defined in `Podfile` and creates an Xcode
