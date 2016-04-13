@@ -25,7 +25,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Sort files from Dir.glob explicitly to produce same result on case sensitive
+  file system as result on case insensitive file system.  
+  [Soutaro Matsumoto](https://github.com/soutaro)
 
 
 ## 1.0.0.beta.6 (2016-03-15)

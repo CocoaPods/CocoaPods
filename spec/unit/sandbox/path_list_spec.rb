@@ -166,6 +166,20 @@ module Pod
       end
     end
 
+    describe 'Reading file system' do
+      it 'orders paths case insensitively' do
+        root = fixture('banana-lib')
+
+        # Let Dir.glob result be ordered case-sensitively
+        Dir.stubs(:glob).returns(["#{root}/Classes/NSFetchRequest+Banana.h",
+                                  "#{root}/Classes/NSFetchedResultsController+Banana.h"])
+        File.stubs(:directory?).returns(false)
+
+        path_list = Sandbox::PathList.new(fixture('banana-lib'))
+        path_list.files.should == %w(Classes/NSFetchedResultsController+Banana.h Classes/NSFetchRequest+Banana.h)
+      end
+    end
+
     #-------------------------------------------------------------------------#
 
     describe 'Private Helpers' do
