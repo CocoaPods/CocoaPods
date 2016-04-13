@@ -19,11 +19,12 @@ before_install:
   # There is a bug in travis. When using system ruby, bundler is not
   # installed and causes the default install action to fail.
   - sudo gem install bundler
-  - bundle install
-  - bundle exec pod repo update
 
 after_install:
   - ./bin/pod repo update --silent
+
+before_script:
+  - bundle exec pod repo update --silent
 
 script: bundle exec rake
 
