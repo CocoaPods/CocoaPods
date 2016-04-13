@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Orta Therox](https://github.com/orta)
   [#5135](https://github.com/CocoaPods/CocoaPods/issues/5135)
 
+* Add support for sharded specs directories.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5002](https://github.com/CocoaPods/CocoaPods/issues/5002)
+
 ##### Bug Fixes
 
 * None.  
