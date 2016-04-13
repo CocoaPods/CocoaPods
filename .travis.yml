@@ -23,6 +23,9 @@ before_install:
 after_install:
   - ./bin/pod repo update --silent
 
+before_script:
+  - bundle exec pod repo update --silent
+
 script: bundle exec rake
 
 addons:
