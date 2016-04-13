@@ -13,10 +13,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [CocoaPods#5113](https://github.com/CocoaPods/CocoaPods/issues/5113)
 
-* Improved error messages, around the 1.0 changes when we cannot find a dependency 
-  in local sources, noting that CP > 1 doesnt run `pod repo update`
+* Improved the error message when a matching spec cannot be found,
+  mentioning that now `pod repo update` is not implicit when running `pod   
+  install`.  
   [Orta Therox](https://github.com/orta)
-  [CocoaPods#5135](https://github.com/CocoaPods/CocoaPods/issues/5135)
+  [#5135](https://github.com/CocoaPods/CocoaPods/issues/5135)
 
 ##### Bug Fixes
 
