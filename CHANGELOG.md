@@ -15,11 +15,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
-
-## 1.0.0.beta.7
-
 * Rely on `TARGET_BUILD_DIR` instead of `CONFIGURATION_BUILD_DIR` in the
   generated embed resources build phase's script, so that UI test targets can
   be run.  
