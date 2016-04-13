@@ -106,6 +106,14 @@ module Pod
         monkey_header = headers_root + 'monkey/monkey.h'
         monkey_header.should.exist
       end
+
+      it "doesn't link public headers from vendored framework, when frameworks required" do
+        Target.any_instance.stubs(:requires_frameworks?).returns(true)
+        @installer.install!
+        headers_root = config.sandbox.public_headers.root
+        framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
+        framework_header.should.not.exist
+      end
     end
 
     #-------------------------------------------------------------------------#

@@ -12,8 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Headers from vendored frameworks no longer end up in the HEADER_SEARCH_PATH when 
+  using frameworks. They are assumed to be already present as modular headers in the
+  framework itself.  
+  [Mark Spanbroek](https://github.com/markspanbroek)
+  [#5146](https://github.com/CocoaPods/CocoaPods/pull/5146)
 
 ## 1.0.0.beta.7 (2016-04-15)
 
