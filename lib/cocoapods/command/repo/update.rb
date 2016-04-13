@@ -19,7 +19,7 @@ module Pod
         end
 
         def run
-          SourcesManager.update(@name, true)
+          config.sources_manager.update(@name, true)
         end
       end
     end

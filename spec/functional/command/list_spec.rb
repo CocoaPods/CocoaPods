@@ -18,7 +18,7 @@ module Pod
     end
 
     it 'presents the known pods with versions' do
-      sets = SourcesManager.aggregate.all_sets
+      sets = config.sources_manager.aggregate.all_sets
       jsonkit_set = sets.find { |s| s.name == 'JSONKit' }
 
       out = run_command('list')

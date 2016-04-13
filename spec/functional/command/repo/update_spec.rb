@@ -29,7 +29,7 @@ module Pod
         `git fetch -q`
         `git branch --set-upstream-to=origin/master master`
       end
-      SourcesManager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
+      config.sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
       lambda { command('repo', 'update').run }.should.not.raise
     end
 
@@ -38,7 +38,7 @@ module Pod
       repo2 = repo_clone('repo1', 'repo2')
       repo_make_readme_change(repo1, 'Updated')
       Dir.chdir(repo1) { `git commit -a -m "Update"` }
-      SourcesManager.expects(:update_search_index_if_needed_in_background).with do |value|
+      config.sources_manager.expects(:update_search_index_if_needed_in_background).with do |value|
         value.each_pair do |source, paths|
           source.name.should == 'repo2'
           paths.should == ['README']

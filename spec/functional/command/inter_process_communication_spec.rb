@@ -51,9 +51,9 @@ module Pod
 
     describe Command::IPC::UpdateSearchIndex do
       it 'updates the search index and prints its path to STDOUT' do
-        SourcesManager.expects(:updated_search_index)
+        config.sources_manager.expects(:updated_search_index)
         out = run_command('ipc', 'update-search-index')
-        out.should.include(SourcesManager.search_index_path.to_s)
+        out.should.include(config.sources_manager.search_index_path.to_s)
       end
     end
 

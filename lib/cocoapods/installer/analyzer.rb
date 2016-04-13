@@ -216,8 +216,8 @@ module Pod
       #
       def update_repositories
         sources.each do |source|
-          if SourcesManager.git_repo?(source.repo)
-            SourcesManager.update(source.name)
+          if source.git?
+            config.sources_manager.update(source.name)
           else
             UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
           end
@@ -628,7 +628,7 @@ module Pod
       #
       # When no explicit Podfile sources are defined, this defaults to the
       # master spec repository.
-      # available sources ({SourcesManager.all}).
+      # available sources ({config.sources_manager.all}).
       #
       # @return [Array<Source>] the sources to be used in finding
       #         specifications, as specified by the {#podfile} or all sources.
@@ -650,7 +650,7 @@ module Pod
           end
 
           sources.uniq.map do |source_url|
-            SourcesManager.find_or_create_source_with_url(source_url)
+            config.sources_manager.find_or_create_source_with_url(source_url)
           end
         end
       end

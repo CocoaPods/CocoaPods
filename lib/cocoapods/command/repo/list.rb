@@ -30,7 +30,7 @@ module Pod
         #          - path: /Users/lascorbe/.cocoapods/repos/test
         #
         def run
-          sources = SourcesManager.all
+          sources = config.sources_manager.all
           print_sources(sources) unless @count_only
           print_count_of_sources(sources)
         end
@@ -45,7 +45,7 @@ module Pod
         # @return [void]
         #
         def print_source(source)
-          if SourcesManager.git_repo?(source.repo)
+          if source.git?
             Dir.chdir(source.repo) do
               branch_name = `git name-rev --name-only HEAD 2>/dev/null`.strip
               branch_name = 'unknown' if branch_name.empty?

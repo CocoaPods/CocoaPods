@@ -36,19 +36,19 @@ module Pod
         def run
           sources = if @name
                       if File.exist?(@name)
-                        [Pathname.new(@name)]
+                        [Source.new(Pathname(@name))]
                       else
-                        SourcesManager.sources([@name]).map(&:repo)
+                        config.sources_manager.sources([@name])
                       end
                     else
-                      SourcesManager.aggregate.sources.map(&:repo)
+                      config.sources_manager.all
                     end
 
           sources.each do |source|
-            SourcesManager.check_version_information(source)
-            UI.puts "\nLinting spec repo `#{source.basename}`\n".yellow
+            source.verify_compatibility!
+            UI.puts "\nLinting spec repo `#{source.name}`\n".yellow
 
-            validator = Source::HealthReporter.new(source)
+            validator = Source::HealthReporter.new(source.repo)
             validator.pre_check do |_name, _version|
               UI.print '.'
             end

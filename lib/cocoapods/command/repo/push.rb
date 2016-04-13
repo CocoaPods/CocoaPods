@@ -38,7 +38,8 @@ module Pod
           @allow_warnings = argv.flag?('allow-warnings')
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
-          @source_urls = argv.option('sources', SourcesManager.all.map(&:url).join(',')).split(',')
+          @source = config.sources_manager.sources([@repo]).first
+          @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @private = argv.flag?('private', true)
@@ -48,8 +49,14 @@ module Pod
         end
 
         def validate!
-          super
           help! 'A spec-repo name is required.' unless @repo
+          unless @source.repo.directory?
+            raise Informative,
+                  "Unable to find the `#{@repo}` repo. " \
+                  'If it has not yet been cloned, add it via `pod repo add`.'
+          end
+
+          super
         end
 
         def run
@@ -161,12 +168,12 @@ module Pod
           UI.puts "\nAdding the #{'spec'.pluralize(count)} to the `#{@repo}' repo\n".yellow
           podspec_files.each do |spec_file|
             spec = Pod::Specification.from_file(spec_file)
-            output_path = File.join(repo_dir, spec.name, spec.version.to_s)
+            output_path = @source.pod_path(spec.name) + spec.version.to_s
             if @message && !@message.empty?
               message = @message
-            elsif Pathname.new(output_path).exist?
+            elsif output_path.exist?
               message = "[Fix] #{spec}"
-            elsif Pathname.new(File.join(repo_dir, spec.name)).exist?
+            elsif output_path.dirname.directory?
               message = "[Update] #{spec}"
             else
               message = "[Add] #{spec}"
@@ -205,16 +212,7 @@ module Pod
         # @return [Pathname] The directory of the repository.
         #
         def repo_dir
-          specs_dir = Pathname.new(File.join(config.repos_dir, @repo, 'Specs'))
-          dir = config.repos_dir + @repo
-          if specs_dir.exist?
-            dir = specs_dir
-          elsif dir.exist?
-            dir
-          else
-            raise Informative, "`#{@repo}` repo not found either in #{specs_dir} or #{dir}"
-          end
-          dir
+          @source.specs_dir
         end
 
         # @return [Array<Pathname>] The path of the specifications to push.
