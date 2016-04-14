@@ -116,6 +116,7 @@ module Pod
         }
 
         info['CFBundleExecutable'] = '${EXECUTABLE_NAME}' if bundle_package_type != :bndl
+        info['CFBundleVersion'] = '1' if bundle_package_type == :bndl
         info['UIRequiredDeviceCapabilities'] = %w(arm64) if target.platform.name == :tvos
 
         info
