@@ -23,6 +23,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5002](https://github.com/CocoaPods/CocoaPods/issues/5002)
 
+* Pass the build setting `OTHER_CODE_SIGN_FLAGS` to codesign for the generated
+  embed frameworks build phase's script, as Xcode does when signing natively.  
+  [Václav Slavík](https://github.com/vslavik)
+  [#5087](https://github.com/CocoaPods/CocoaPods/pull/5087)
+
 ##### Bug Fixes
 
 * Sort files from Dir.glob explicitly to produce same result on case sensitive
