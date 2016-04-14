@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 83d171f2b42b22bc84b6b3d1512aa99213ad163d
+  revision: 0345e24b1d606598b85bc654ed3727db5c951c0b
   branch: master
   specs:
     cocoapods-core (1.0.0.beta.6)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: d033c21ca25fa9757b1f949a7be7e6bf830118d0
+  revision: e3ba66acbfc8a639c2286ebf888a14570d804016
   branch: master
   specs:
     xcodeproj (1.0.0.beta.3)
@@ -34,21 +34,21 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: af644558b54c9d12c82ae41cf917d7bb9043d236
+  revision: a2465022b0a355632bcc7f686cea38d151a8a156
   branch: master
   specs:
     cocoapods-deintegrate (1.0.0.beta.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 199da86455636a7a2f908301abf43441d6aecb03
+  revision: 0b43ef413ee076490a226e165d4eb2e4e9e2d6ee
   branch: master
   specs:
-    cocoapods-downloader (1.0.0.beta.2)
+    cocoapods-downloader (1.0.0.beta.3)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 053ec831e0df60b366ce08f397fb7ae40ade21f7
+  revision: f8a08747e466d58f0a8af58df55a613094185928
   branch: master
   specs:
     cocoapods-plugins (1.0.0.beta.1)
@@ -56,24 +56,24 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 87ece1f12f131da8f988057d0b0db565ada9069a
+  revision: 26290a1b3416a81a1a7cd142a6d3b196b7d173ed
   branch: master
   specs:
     cocoapods-search (1.0.0.beta.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
-  revision: fda6a8950aa49e10033002c9792da9f7fcd0e511
+  revision: 91ec23f8c9a278ce0b56a75eb03ef21a101651e5
   branch: master
   specs:
-    cocoapods-stats (1.0.0.beta.3)
+    cocoapods-stats (1.0.0.beta.4)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 5892bb297bff9180b4980dcf37502621cb6eaf97
+  revision: 61716f0277a3f9b1e00bbeed4cff3156a8fc5052
   branch: master
   specs:
-    cocoapods-trunk (1.0.0.beta.2)
+    cocoapods-trunk (1.0.0.beta.3)
       nap (>= 0.8, < 2.0)
       netrc (= 0.7.8)
 
@@ -99,7 +99,7 @@ PATH
       claide (>= 1.0.0.beta.3, < 2.0)
       cocoapods-core (= 1.0.0.beta.6)
       cocoapods-deintegrate (>= 1.0.0.beta.1, < 2.0)
-      cocoapods-downloader (>= 1.0.0.beta.2, < 2.0)
+      cocoapods-downloader (= 1.0.0.beta.3)
       cocoapods-plugins (>= 1.0.0.beta.1, < 2.0)
       cocoapods-search (>= 1.0.0.beta.1, < 2.0)
       cocoapods-stats (>= 1.0.0.beta.3, < 2.0)
