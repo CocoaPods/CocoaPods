@@ -29,6 +29,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   file system as result on case insensitive file system.  
   [Soutaro Matsumoto](https://github.com/soutaro)
 
+* Fix build path for resource bundles.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5034](https://github.com/CocoaPods/CocoaPods/issues/5034)
+
 
 ## 1.0.0.beta.7
 
