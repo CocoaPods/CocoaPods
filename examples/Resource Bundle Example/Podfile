@@ -1,0 +1,13 @@
+platform :ios, '8.0'
+use_frameworks!
+
+workspace 'Examples.xcworkspace'
+project 'Resource Bundle Example.xcodeproj'
+
+target 'Resource Bundle Example' do
+  pod 'ResourceExample', :path =>  'Example Pods'
+  pod 'ResourcesExample', :path =>  'Example Pods'
+  pod 'ResourceAssetsExample', :path =>  'Example Pods'
+  pod 'ResourcesBundleExample', :path =>  'Example Pods'
+end
+
