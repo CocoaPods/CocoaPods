@@ -19,7 +19,8 @@ module Pod
         end
 
         def run
-          config.sources_manager.update(@name, true)
+          show_output = !config.silent?
+          config.sources_manager.update(@name, show_output)
         end
       end
     end

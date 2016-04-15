@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `Pod::Config.instance.sources_manager` in some manner as soon as possible.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Running `pod repo update --silent` will now properly silence git output while
+  updating the repository.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.0.beta.7 (2016-04-15)
 
