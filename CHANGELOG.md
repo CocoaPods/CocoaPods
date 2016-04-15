@@ -12,11 +12,21 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Headers from vendored frameworks no longer end up in the HEADER_SEARCH_PATH when 
-  using frameworks. They are assumed to be already present as modular headers in the
-  framework itself.  
+* Headers from vendored frameworks no longer end up in the `HEADER_SEARCH_PATH`
+  when using frameworks. They are now assumed to be already present as modular
+  headers in the framework itself.  
   [Mark Spanbroek](https://github.com/markspanbroek)
   [#5146](https://github.com/CocoaPods/CocoaPods/pull/5146)
+
+* Access to the `Pod::SourcesManager` constant has been restored, though its use
+  is considered deprecated and subject to removal at any time. Migrate to use
+  `Pod::Config.instance.sources_manager` in some manner as soon as possible.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Running `pod repo update --silent` will now properly silence git output while
+  updating the repository.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.0.beta.7 (2016-04-15)
 
