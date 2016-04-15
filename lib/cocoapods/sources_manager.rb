@@ -161,6 +161,8 @@ module Pod
     # Warn about deprecated use of `Pod::SourcesManager` and return the config's
     # Source::Manager
     #
+    # @param  [#to_sym] const the missing constant
+    #
     # @return [Pod::Source::Manager]
     #
     def const_missing(const)
