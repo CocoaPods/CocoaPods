@@ -70,7 +70,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 61716f0277a3f9b1e00bbeed4cff3156a8fc5052
+  revision: 55a3146f6e28f1f7ae8a045916120c4019c42f01
   branch: master
   specs:
     cocoapods-trunk (1.0.0.beta.3)
@@ -79,10 +79,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 470d70e4493f204b4d131686ee0b4cba960ad0a5
+  revision: 8c84799b6df46649c4430e222d1a9b25344ef1c8
   branch: master
   specs:
-    cocoapods-try (1.0.0.beta.3)
+    cocoapods-try (1.0.0.beta.4)
 
 GIT
   remote: https://github.com/segiddins/json.git
@@ -104,7 +104,7 @@ PATH
       cocoapods-search (= 1.0.0.beta.2)
       cocoapods-stats (= 1.0.0.beta.4)
       cocoapods-trunk (= 1.0.0.beta.3)
-      cocoapods-try (>= 1.0.0.beta.3, < 2.0)
+      cocoapods-try (= 1.0.0.beta.4)
       colored (~> 1.2)
       escape (~> 0.0.4)
       fourflusher (~> 0.3.0)
