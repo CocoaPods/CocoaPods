@@ -1,0 +1,10 @@
+platform :ios, '8.0'
+use_frameworks!
+
+workspace 'Examples.xcworkspace'
+project 'Vendored Framework Example.xcodeproj'
+
+target 'Vendored Framework Example' do
+  pod 'VendoredFrameworkExample', :podspec =>  'Example Pods/VendoredFrameworkExample.podspec'
+end
+
