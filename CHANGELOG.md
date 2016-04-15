@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Mark Spanbroek](https://github.com/markspanbroek)
   [#5146](https://github.com/CocoaPods/CocoaPods/pull/5146)
 
+* Access to the `Pod::SourcesManager` constant has been restored, though its use
+  is considered deprecated and subject to removal at any time. Migrate to use
+  `Pod::Config.instance.sources_manager` in some manner as soon as possible.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.0.beta.7 (2016-04-15)
 
