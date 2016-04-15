@@ -153,4 +153,37 @@ module Pod
       UI.puts(message)
     end
   end
+
+  # @!visibility private
+  SOURCES_MANAGER_CONSTANT_WARNINGS = Set.new
+
+  # @!visibility private
+  #
+  # Warn about deprecated use of `Pod::SourcesManager` and return the config's
+  # Source::Manager
+  #
+  # @return [Pod::Source::Manager]
+  #
+  def self.sources_manager_constant
+    calling_line = caller[1]
+    if SOURCES_MANAGER_CONSTANT_WARNINGS.add?(calling_line)
+      warn 'Usage of the constant `Pod::SourcesManager` is deprecated, ' \
+           'use `Pod::Config.instance.sources_manager` instead ' \
+           "(called from #{calling_line})"
+    end
+    Config.instance.sources_manager
+  end
+end
+
+def Pod.const_missing(const)
+  return super unless const.to_sym == :SourcesManager
+  ::Pod.sources_manager_constant
+end
+
+def Object.const_missing(const)
+  unless const.to_sym == :SourcesManager &&
+      ancestors.any? { |a| a == ::Pod || a.name.start_with?('Pod::') }
+    return super
+  end
+  ::Pod.sources_manager_constant
 end
