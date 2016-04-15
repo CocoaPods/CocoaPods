@@ -11,10 +11,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * When an unknown build configuration is mentioned in the Podfile, CocoaPods
   will suggest the build configurations found in the user project.  
   [Samuel Giddins](https://github.com/segiddins)
-  [CocoaPods#5113](https://github.com/CocoaPods/CocoaPods/issues/5113)
+  [#5113](https://github.com/CocoaPods/CocoaPods/issues/5113)
 
 * Improved the error message when a matching spec cannot be found,
-  mentioning that now `pod repo update` is not implicit when running `pod   
+  mentioning that now `pod repo update` is not implicit when running `pod
   install`.  
   [Orta Therox](https://github.com/orta)
   [#5135](https://github.com/CocoaPods/CocoaPods/issues/5135)
@@ -30,7 +30,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Sort files from Dir.glob explicitly to produce same result on case sensitive
+* Sort files from `Dir.glob` explicitly to produce same result on case sensitive
   file system as result on case insensitive file system.  
   [Soutaro Matsumoto](https://github.com/soutaro)
 
