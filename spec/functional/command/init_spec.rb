@@ -95,6 +95,7 @@ module Pod
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
+        project.new_target(:application, 'App', :ios)
         project.new_target(:application, 'AppTests', :ios)
         project.save
 
