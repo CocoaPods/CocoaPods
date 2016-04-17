@@ -27,8 +27,8 @@ before_script:
   - bundle exec pod repo update --silent
 
 script:
-  bundle exec rake
-  bundle exec danger
+  - bundle exec rake
+  - bundle exec danger
 
 addons:
  code_climate:
