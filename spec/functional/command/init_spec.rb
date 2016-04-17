@@ -86,6 +86,44 @@ module Pod
       end
     end
 
+    fit 'handles hooking up mulitple test targets based on an xcodeproj project' do
+      Dir.chdir(temporary_directory) do
+        project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
+        project.new_target(:application, 'App', :ios)
+        project.new_target(:application, 'AppTests', :ios)
+        project.new_target(:application, "AppFeatureTests", :ios)
+        project.save
+
+        run_command('init')
+
+        podfile_text = File.read(temporary_directory + "Podfile")
+        podfile_exact = <<-PODFILE.strip_heredoc
+        # Uncomment this line to define a global platform for your project
+        # platform :ios, '9.0'
+        # Uncomment this line if you're using Swift
+        # use_frameworks!
+
+        target 'App' do
+          # Pods for App
+
+          target 'AppTests' do
+            inherit! :search_paths
+            # Pods for testing
+          end
+
+          target 'AppFeatureTests' do
+            inherit! :search_paths
+            # Pods for testing
+          end
+
+        end
+        PODFILE
+
+        podfile_text.should == podfile_exact
+      end
+    end
+
+
     it 'includes default test pods in test targets in a Podfile' do
       Dir.chdir(temporary_directory) do
         tmp_templates_dir = Pathname.pwd + 'templates_dir'

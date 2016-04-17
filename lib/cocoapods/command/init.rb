@@ -68,31 +68,32 @@ module Pod
 
         # Create an array of [app, (optional)test] target pairs
         app_test_pairs = all_app_targets.map do |target|
-          test = all_tests_targets.find { |t| t.name.start_with? target.name }
-          [target, test].compact
+          test = all_tests_targets.select { |t| t.name.start_with? target.name }
+          [target, *test].compact
         end
 
         app_test_pairs.each do |target_pair|
           podfile << target_module(target_pair)
         end
+
+        podfile
       end
 
       # @param  [[Xcodeproj::PBXTarget]] targets
       #         An array which always has a target as it's first item
-      #         and may optionally contain a second target as its test target
+      #         and may optionally contain related test targets
       #
       # @return [String] the text for the target module
       #
       def target_module(targets)
         app = targets.first
         target_module = "\ntarget '#{app.name.gsub(/'/, "\\\\\'")}' do\n"
-        target_module << template_contents(config.default_podfile_path, "  ")
+        target_module << template_contents(config.default_podfile_path, "  ", "Pods for #{app.name}\n")
 
-        test = targets[1]
-        if test
+        targets[1..-1].each do |test|
           target_module << "\n  target '#{test.name.gsub(/'/, "\\\\\'")}' do\n"
-          target_module << "        inherit! :search_paths\n"
-          target_module << template_contents(config.default_test_podfile_path, "    ")
+          target_module << "    inherit! :search_paths\n"
+          target_module << template_contents(config.default_test_podfile_path, "    ", "Pods for testing")
           target_module << "\n  end\n"
         end
 
@@ -105,11 +106,11 @@ module Pod
       #
       # @return [String] the text for the target module
       #
-      def template_contents(path, prefix)
+      def template_contents(path, prefix, fallback)
         if path.exist?
           path.read.chomp.lines.map { |line| "#{prefix}#{line}" }.join("\n")
         else
-          ''
+           "#{prefix}# #{fallback}"
         end
       end
     end
