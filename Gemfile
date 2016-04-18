@@ -48,6 +48,8 @@ group :development do
   # Code Quality
   gem 'inch_by_inch'
   gem 'rubocop'
+
+  gem 'danger'
 end
 
 group :debugging do
