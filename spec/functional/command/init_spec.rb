@@ -96,30 +96,29 @@ module Pod
 
         run_command('init')
 
-        podfile_text = File.read(temporary_directory + "Podfile")
-        podfile_exact = <<-PODFILE.strip_heredoc
-        # Uncomment this line to define a global platform for your project
-        # platform :ios, '9.0'
-        # Uncomment this line if you're using Swift
-        # use_frameworks!
+        expected_podfile = <<-RUBY.strip_heredoc
+          # Uncomment this line to define a global platform for your project
+          # platform :ios, '9.0'
+          # Uncomment this line if you're using Swift
+          # use_frameworks!
 
-        target 'App' do
-          # Pods for App
+          target 'App' do
+            # Pods for App
 
-          target 'AppTests' do
-            inherit! :search_paths
-            # Pods for testing
+            target 'AppTests' do
+              inherit! :search_paths
+              # Pods for testing
+            end
+
+            target 'AppFeatureTests' do
+              inherit! :search_paths
+              # Pods for testing
+            end
+
           end
+        RUBY
 
-          target 'AppFeatureTests' do
-            inherit! :search_paths
-            # Pods for testing
-          end
-
-        end
-        PODFILE
-
-        podfile_text.should == podfile_exact
+        File.read('Podfile').should == expected_podfile
       end
     end
 
