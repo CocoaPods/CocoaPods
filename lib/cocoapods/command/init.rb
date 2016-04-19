@@ -58,12 +58,12 @@ module Pod
         podfile << <<-PLATFORM.strip_heredoc
           # Uncomment this line to define a global platform for your project
           # platform :ios, '9.0'
-          # Uncomment this line if you're using Swift
-          # use_frameworks!
         PLATFORM
 
         # Split out the targets into app and test targets
-        test_targets, app_targets = project.native_targets.partition { |t| t.name =~ /test/i }
+        test_targets, app_targets = project.native_targets.
+                              sort_by { |t| t.name.downcase }.
+                              partition { |t| t.name =~ /test/i }
 
         app_targets.each do |app_target|
           test_targets_for_app = test_targets.select do |target|
@@ -83,12 +83,27 @@ module Pod
       #
       def target_module(app, tests)
         target_module = "\ntarget '#{app.name.gsub(/'/, "\\\\\'")}' do\n"
-        target_module << template_contents(config.default_podfile_path, "  ", "Pods for #{app.name}\n")
+
+        target_module << if app.resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').values.any?
+                           <<-RUBY
+  # Comment this line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+         RUBY
+                         else
+                           <<-RUBY
+  # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+         RUBY
+        end
+
+        target_module << template_contents(config.default_podfile_path, '  ', "Pods for #{app.name}\n")
 
         tests.each do |test|
           target_module << "\n  target '#{test.name.gsub(/'/, "\\\\\'")}' do\n"
           target_module << "    inherit! :search_paths\n"
-          target_module << template_contents(config.default_test_podfile_path, "    ", "Pods for testing")
+          target_module << template_contents(config.default_test_podfile_path, '    ', 'Pods for testing')
           target_module << "\n  end\n"
         end
 
@@ -105,7 +120,7 @@ module Pod
         if path.exist?
           path.read.chomp.lines.map { |line| "#{prefix}#{line}" }.join("\n")
         else
-           "#{prefix}# #{fallback}"
+          "#{prefix}# #{fallback}"
         end
       end
     end

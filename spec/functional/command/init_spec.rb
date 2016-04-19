@@ -91,7 +91,8 @@ module Pod
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'App', :ios)
         project.new_target(:application, 'AppTests', :ios)
-        project.new_target(:application, "AppFeatureTests", :ios)
+        project.new_target(:application, 'AppFeatureTests', :ios)
+        project.new_target(:application, 'Swifty App', :osx, nil, nil, :swift)
         project.save
 
         run_command('init')
@@ -99,21 +100,30 @@ module Pod
         expected_podfile = <<-RUBY.strip_heredoc
           # Uncomment this line to define a global platform for your project
           # platform :ios, '9.0'
-          # Uncomment this line if you're using Swift
-          # use_frameworks!
 
           target 'App' do
+            # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+            # use_frameworks!
+
             # Pods for App
+
+            target 'AppFeatureTests' do
+              inherit! :search_paths
+              # Pods for testing
+            end
 
             target 'AppTests' do
               inherit! :search_paths
               # Pods for testing
             end
 
-            target 'AppFeatureTests' do
-              inherit! :search_paths
-              # Pods for testing
-            end
+          end
+
+          target 'Swifty App' do
+            # Comment this line if you're not using Swift and don't want to use dynamic frameworks
+            use_frameworks!
+
+            # Pods for Swifty App
 
           end
         RUBY
@@ -121,7 +131,6 @@ module Pod
         File.read('Podfile').should == expected_podfile
       end
     end
-
 
     it 'includes default test pods in test targets in a Podfile' do
       Dir.chdir(temporary_directory) do
