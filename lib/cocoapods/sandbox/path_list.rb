@@ -10,6 +10,10 @@ module Pod
     #         {#read_file_system}
     #
     class PathList
+      # Global cache of file system globbing. Keys are root path objects, values are
+      # Hash including "files" and "dirs".
+      @@file_system_cache = {}
+
       # @return [Pathname] The root of the list whose files and directories
       #         are used to perform the matching operations.
       #
@@ -47,6 +51,12 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
+        if @@file_system_cache.key?(root)
+          @files = @@file_system_cache[root]['files']
+          @dirs = @@file_system_cache[root]['dirs']
+          @glob_cache = {}
+          return
+        end
         root_length  = root.to_s.length + 1
         escaped_root = escape_path_for_glob(root)
         paths = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH).sort_by(&:upcase)
@@ -57,6 +67,8 @@ module Pod
         @files = relative_paths - relative_dirs
         @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/, '') }.reject { |d| d == '.' || d == '..' } .uniq
         @glob_cache = {}
+
+        @@file_system_cache[root] = { 'files' => @files, 'dirs' => @dirs }
       end
 
       #-----------------------------------------------------------------------#
