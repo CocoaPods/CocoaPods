@@ -58,37 +58,69 @@ module Pod
         podfile << <<-PLATFORM.strip_heredoc
           # Uncomment this line to define a global platform for your project
           # platform :ios, '9.0'
-          # Uncomment this line if you're using Swift
-          # use_frameworks!
         PLATFORM
 
-        project.native_targets.each do |target|
-          podfile << target_module(target)
+        # Split out the targets into app and test targets
+        test_targets, app_targets = project.native_targets.
+                              sort_by { |t| t.name.downcase }.
+                              partition { |t| t.name =~ /test/i }
+
+        app_targets.each do |app_target|
+          test_targets_for_app = test_targets.select do |target|
+            target.name.downcase.start_with?(app_target.name.downcase)
+          end
+          podfile << target_module(app_target, test_targets_for_app)
         end
-        podfile << "\n"
+
+        podfile
       end
 
-      # @param  [Xcodeproj::PBXTarget] target
-      #         A target to generate a Podfile target module for.
+      # @param  [[Xcodeproj::PBXTarget]] targets
+      #         An array which always has a target as it's first item
+      #         and may optionally contain related test targets
       #
       # @return [String] the text for the target module
       #
-      def target_module(target)
-        target_module = "\ntarget '#{target.name.gsub(/'/, "\\\\\'")}' do\n"
+      def target_module(app, tests)
+        target_module = "\ntarget '#{app.name.gsub(/'/, "\\\\\'")}' do\n"
 
-        if target.name =~ /tests?/i
-          target_module << template_contents(config.default_test_podfile_path)
-        else
-          target_module << template_contents(config.default_podfile_path)
+        target_module << if app.resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').values.any?
+                           <<-RUBY
+  # Comment this line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+         RUBY
+                         else
+                           <<-RUBY
+  # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+         RUBY
         end
+
+        target_module << template_contents(config.default_podfile_path, '  ', "Pods for #{app.name}\n")
+
+        tests.each do |test|
+          target_module << "\n  target '#{test.name.gsub(/'/, "\\\\\'")}' do\n"
+          target_module << "    inherit! :search_paths\n"
+          target_module << template_contents(config.default_test_podfile_path, '    ', 'Pods for testing')
+          target_module << "\n  end\n"
+        end
+
         target_module << "\nend\n"
       end
 
-      def template_contents(path)
+      # @param  [[Xcodeproj::PBXTarget]] targets
+      #         An array which always has a target as it's first item
+      #         and may optionally contain a second target as its test target
+      #
+      # @return [String] the text for the target module
+      #
+      def template_contents(path, prefix, fallback)
         if path.exist?
-          path.read.chomp.lines.map { |line| "  #{line}" }.join("\n")
+          path.read.chomp.lines.map { |line| "#{prefix}#{line}" }.join("\n")
         else
-          ''
+          "#{prefix}# #{fallback}"
         end
       end
     end

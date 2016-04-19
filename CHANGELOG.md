@@ -8,7 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* The `pod init` command now uses target inheritance for test targets
+  in the generated Podfile.  
+  [Orta Therox](https://github.com/orta)
+  [#4714](https://github.com/CocoaPods/CocoaPods/issue/4714)
 
 ##### Bug Fixes
 

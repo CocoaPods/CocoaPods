@@ -86,6 +86,52 @@ module Pod
       end
     end
 
+    it 'handles hooking up mulitple test targets based on an xcodeproj project' do
+      Dir.chdir(temporary_directory) do
+        project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
+        project.new_target(:application, 'App', :ios)
+        project.new_target(:application, 'AppTests', :ios)
+        project.new_target(:application, 'AppFeatureTests', :ios)
+        project.new_target(:application, 'Swifty App', :osx, nil, nil, :swift)
+        project.save
+
+        run_command('init')
+
+        expected_podfile = <<-RUBY.strip_heredoc
+          # Uncomment this line to define a global platform for your project
+          # platform :ios, '9.0'
+
+          target 'App' do
+            # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+            # use_frameworks!
+
+            # Pods for App
+
+            target 'AppFeatureTests' do
+              inherit! :search_paths
+              # Pods for testing
+            end
+
+            target 'AppTests' do
+              inherit! :search_paths
+              # Pods for testing
+            end
+
+          end
+
+          target 'Swifty App' do
+            # Comment this line if you're not using Swift and don't want to use dynamic frameworks
+            use_frameworks!
+
+            # Pods for Swifty App
+
+          end
+        RUBY
+
+        File.read('Podfile').should == expected_podfile
+      end
+    end
+
     it 'includes default test pods in test targets in a Podfile' do
       Dir.chdir(temporary_directory) do
         tmp_templates_dir = Pathname.pwd + 'templates_dir'
@@ -95,6 +141,7 @@ module Pod
         open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
 
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
+        project.new_target(:application, 'App', :ios)
         project.new_target(:application, 'AppTests', :ios)
         project.save
 
