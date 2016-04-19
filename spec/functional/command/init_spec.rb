@@ -86,7 +86,7 @@ module Pod
       end
     end
 
-    fit 'handles hooking up mulitple test targets based on an xcodeproj project' do
+    it 'handles hooking up mulitple test targets based on an xcodeproj project' do
       Dir.chdir(temporary_directory) do
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'App', :ios)
