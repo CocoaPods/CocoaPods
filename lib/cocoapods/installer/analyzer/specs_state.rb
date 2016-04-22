@@ -78,6 +78,10 @@ module Pod
         def add_name(name, state)
           send(state) << Specification.root_name(name)
         end
+
+        def unchanged?
+          [added, deleted, changed].all?(&:empty?)
+        end
       end
     end
   end

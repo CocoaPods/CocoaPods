@@ -47,6 +47,25 @@ module Pod
         @allow_pre_downloads = true
       end
 
+      def needs_spec_repo_update?
+        raise 'Called without @result' unless @result
+        return true if !lockfile || !@result.podfile_state.unchanged?
+        resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
+        dependencies = podfile.dependencies.group_by(&:root_name)
+        lockfile.pod_names.none? do |name|
+          version = lockfile.version(name)
+          deps = dependencies[name] || [Dependency.new(name, version)]
+          deps.all? do |dep|
+            set = resolver.send(:find_cached_set, dep)
+            return true unless spec_file = set.specification_paths_for_version(version).first
+            return true unless spec = Specification.from_file(spec_file)
+            spec.checksum == lockfile.checksum(name)
+          end
+        end
+      rescue
+        true
+      end
+
       # Performs the analysis.
       #
       # The Podfile and the Lockfile provide the information necessary to
@@ -59,6 +78,12 @@ module Pod
       # @return [AnalysisResult]
       #
       def analyze(allow_fetches = true)
+        pre_analysis_fetching(allow_fetches)
+
+        analyze_after_fetch
+      end
+
+      def pre_analysis_fetching(allow_fetches = true)
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
@@ -71,7 +96,9 @@ module Pod
 
         store_existing_checkout_options
         fetch_external_sources if allow_fetches
+      end
 
+      def analyze_after_fetch
         @locked_dependencies    = generate_version_locking_dependencies
         @result.specs_by_target = validate_platforms(resolve_dependencies)
         @result.specifications  = generate_specifications

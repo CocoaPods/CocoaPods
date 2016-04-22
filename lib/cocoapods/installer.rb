@@ -143,12 +143,16 @@ module Pod
       plugin_sources = run_source_provider_hooks
       analyzer.sources.insert(0, *plugin_sources)
 
+      analyzer.pre_analysis_fetching
+
       UI.section 'Updating local specs repositories' do
         analyzer.update_repositories
-      end if repo_update?
+      end if repo_update? || (repo_update.nil? && analyzer.needs_spec_repo_update?)
 
       UI.section 'Analyzing dependencies' do
-        analyze(analyzer)
+        analyzer.update = update
+        @analysis_result = analyzer.analyze_after_fetch
+        @aggregate_targets = @analysis_result.targets
         validate_build_configurations
         clean_sandbox
       end

@@ -32,7 +32,7 @@ module Pod
       def run
         verify_podfile_exists!
         installer = installer_for_config
-        installer.repo_update = repo_update?(:default => false)
+        installer.repo_update = repo_update?(:default => nil)
         installer.update = false
         installer.install!
       end
