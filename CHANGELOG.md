@@ -15,7 +15,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* The warning for not having utf-8 set as the default encoding for a
+  terminal now properly respects the `--no-ansi` argument.  
+  [Joshua Kalpin](https://github.com/Kapin)
+  [#5199](https://github.com/CocoaPods/CocoaPods/pull/5199)
 
 
 ## 1.0.0.beta.8 (2016-04-15)

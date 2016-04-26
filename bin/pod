@@ -1,13 +1,24 @@
 #!/usr/bin/env ruby
 
 if Encoding.default_external != Encoding::UTF_8
-  STDERR.puts <<-DOC
-\e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-Consider adding the following to ~/.profile:
 
-export LANG=en_US.UTF-8
-\e[0m
-DOC
+  if ARGV.include? '--no-ansi'
+    STDERR.puts <<-DOC
+    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+
+    export LANG=en_US.UTF-8
+    DOC
+  else
+    STDERR.puts <<-DOC
+    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+
+    export LANG=en_US.UTF-8
+    \e[0m
+    DOC
+  end
+
 end
 
 if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
