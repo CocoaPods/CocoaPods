@@ -13,7 +13,7 @@ module Pod
 
       # Run the command
       #
-      # @todo the command report new dependencies added to the Podfile as
+      # @todo the command reports new dependencies added to the Podfile as
       #       updates.
       #
       # @todo fix.
