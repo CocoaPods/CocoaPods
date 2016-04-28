@@ -15,6 +15,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix for `pod repo push --help` throwing an error.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5214](https://github.com/CocoaPods/CocoaPods/pull/5199)
+
 * The warning for not having utf-8 set as the default encoding for a
   terminal now properly respects the `--no-ansi` argument.  
   [Joshua Kalpin](https://github.com/Kapin)
