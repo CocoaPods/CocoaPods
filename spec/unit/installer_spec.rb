@@ -723,15 +723,6 @@ module Pod
             @installer.send(:set_target_dependencies)
           end.should.not.raise NoMethodError
         end
-
-        xit 'sets the pod targets as dependencies of the aggregate target' do
-        end
-
-        xit 'sets the dependecies of the pod targets' do
-        end
-
-        xit 'is robusts against subspecs' do
-        end
       end
 
       #--------------------------------------#
