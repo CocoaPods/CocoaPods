@@ -240,7 +240,7 @@ module Pod
     #
     # @return [String] The absolute path to the configuration build dir
     #
-    def configuration_build_dir(dir = '$CONFIGURATION_BUILD_DIR')
+    def configuration_build_dir(dir = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE)
       "#{dir}/#{label}"
     end
 
@@ -249,7 +249,7 @@ module Pod
     #
     # @return [String] The absolute path to the build product
     #
-    def build_product_path(dir = '$CONFIGURATION_BUILD_DIR')
+    def build_product_path(dir = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE)
       "#{configuration_build_dir(dir)}/#{product_name}"
     end
 
