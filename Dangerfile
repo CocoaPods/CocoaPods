@@ -3,7 +3,7 @@
 (modified_files + added_files - %w(Dangerfile)).each do |file|
   contents = File.read(file)
   if file.start_with?('spec')
-    fail("`fit` left in tests (#{file})") if contents =~ /fit/
-    fail("`fdescribe` left in tests (#{file})") if contents =~ /fdescribe/
+    fail("`fit` left in tests (#{file})") if contents =~ /^\w*fit/
+    fail("`fdescribe` left in tests (#{file})") if contents =~ /^\w*fdescribe/
   end
 end
