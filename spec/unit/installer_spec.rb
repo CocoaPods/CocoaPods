@@ -633,10 +633,10 @@ module Pod
           @installer.send(:install_libraries)
         end
 
-        xit 'adds the frameworks required by to the pod to the project for informative purposes' do
+        it 'adds the frameworks required by to the pod to the project for informative purposes' do
           Specification::Consumer.any_instance.stubs(:frameworks).returns(['QuartzCore'])
           @installer.install!
-          names = @installer.sandbox.project['Frameworks'].children.map(&:name)
+          names = @installer.sandbox.project['Frameworks']['iOS'].children.map(&:name)
           names.sort.should == ['Foundation.framework', 'QuartzCore.framework']
         end
       end
