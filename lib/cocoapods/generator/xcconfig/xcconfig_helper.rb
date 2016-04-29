@@ -4,12 +4,21 @@ module Pod
       # Stores the shared logic of the classes of the XCConfig module.
       #
       module XCConfigHelper
-        # @return [String] Defined to hold the default Xcode build path, so
-        #         that when this is overridden per {PodTarget}, it is still
-        #         possible to reference other build products relative to the
-        #         original path.
+        # @return [String] Used as alias for BUILD_DIR, so that when this
+        #         is overridden in the user target, the user can override
+        #         this variable to point to the standard directory, which
+        #         will be used by CocoaPods.
         #
-        SHARED_BUILD_DIR_VARIABLE = 'PODS_SHARED_BUILD_DIR'.freeze
+        BUILD_DIR_VARIABLE = '$PODS_BUILD_DIR'.freeze
+
+        # @return [String] Used as alias for CONFIGURATION_BUILD_DIR, so that
+        #         when this is overridden per {PodTarget}, it is still possible
+        #         to reference other build products relative to the original
+        #         path. Furthermore if it was overridden in the user target,
+        #         the user can override this variable to point to the standard
+        #         directory, which will be used by CocoaPods.
+        #
+        CONFIGURATION_BUILD_DIR_VARIABLE = '$PODS_CONFIGURATION_BUILD_DIR'.freeze
 
         # Converts an array of strings to a single string where the each string
         # is surrounded by double quotes and separated by a space. Used to
@@ -232,25 +241,27 @@ module Pod
         #
         def self.settings_for_dependent_targets(target, dependent_targets)
           dependent_targets = dependent_targets.select(&:should_build?)
-          has_configuration_build_dir = target.respond_to?(:configuration_build_dir)
-          if has_configuration_build_dir
-            build_dir_var = "$#{SHARED_BUILD_DIR_VARIABLE}"
-            build_settings = {
-              'CONFIGURATION_BUILD_DIR' => target.configuration_build_dir(build_dir_var),
-              SHARED_BUILD_DIR_VARIABLE => '$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)',
-            }
-          else
-            build_dir_var = '$CONFIGURATION_BUILD_DIR'
-            build_settings = {}
+
+          # Alias build dirs to avoid recursive definitions for pod targets and depending
+          # on build settings which could be overwritten in the user target.
+          build_settings = {
+            BUILD_DIR_VARIABLE[1..-1] => '$BUILD_DIR',
+            CONFIGURATION_BUILD_DIR_VARIABLE[1..-1] => "#{BUILD_DIR_VARIABLE}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+          }
+
+          # Scope pod targets
+          if target.respond_to?(:configuration_build_dir)
+            build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
           end
+
           unless dependent_targets.empty?
             framework_search_paths = []
             library_search_paths = []
             dependent_targets.each do |dependent_target|
               if dependent_target.requires_frameworks?
-                framework_search_paths << dependent_target.configuration_build_dir(build_dir_var)
+                framework_search_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
               else
-                library_search_paths << dependent_target.configuration_build_dir(build_dir_var)
+                library_search_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
               end
             end
             build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths.uniq)

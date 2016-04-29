@@ -95,6 +95,14 @@ module Pod
             @xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}'
           end
 
+          it 'sets the PODS_BUILD_DIR build variable' do
+            @xcconfig.to_hash['PODS_BUILD_DIR'].should == '$BUILD_DIR'
+          end
+
+          it 'sets the PODS_CONFIGURATION_BUILD_DIR build variable' do
+            @xcconfig.to_hash['PODS_CONFIGURATION_BUILD_DIR'].should == '$PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+          end
+
           it 'will be skipped when installing' do
             @xcconfig.to_hash['SKIP_INSTALL'].should == 'YES'
           end

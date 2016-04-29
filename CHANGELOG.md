@@ -13,6 +13,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Orta Therox](https://github.com/orta)
   [#4714](https://github.com/CocoaPods/CocoaPods/issue/4714)
 
+* Support customized build directories by letting user xcconfig definitions
+  rely on the new overridable alias build variable `PODS_BUILD_DIR`.  
+  [Marius Rackwitz(https://github.com/mrackwitz]
+  [#5217](https://github.com/CocoaPods/CocoaPods/issue/5217)
+
 ##### Bug Fixes
 
 * Fix for `pod repo push --help` throwing an error.  
