@@ -214,15 +214,6 @@ module Pod
         end
       end
 
-      # @todo VCR is required in CocoaPods only for this test.
-      xit 'lints a remote podspec' do
-        Dir.chdir(fixture('spec-repos') + 'master/Specs/JSONKit/1.4/') do
-          cmd = command('spec', 'lint', '--quick', '--allow-warnings', '--silent', 'https://github.com/CocoaPods/Specs/raw/master/A2DynamicDelegate/2.0.1/A2DynamicDelegate.podspec')
-          # VCR.use_cassette('linter', :record => :new_episodes) {  }
-          lambda { cmd.run }.should.not.raise
-        end
-      end
-
       before do
         text = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
         text.gsub!(/.*license.*/, '"license": { "file": "LICENSE" },')

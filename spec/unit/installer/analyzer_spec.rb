@@ -564,15 +564,6 @@ module Pod
         ]
       end
 
-      xit 'removes the specifications of the changed pods to prevent confusion in the resolution process' do
-        @analyzer.allow_pre_downloads = true
-        podspec = @analyzer.sandbox.root + 'Local Podspecs/JSONKit.podspec'
-        podspec.dirname.mkpath
-        File.open(podspec, 'w') { |f| f.puts('test') }
-        @analyzer.analyze
-        podspec.should.not.exist?
-      end
-
       it 'adds the specifications to the correspondent libraries' do
         @analyzer.analyze.targets[0].pod_targets.map(&:specs).flatten.map(&:to_s).should == [
           'AFNetworking (1.0.1)',
