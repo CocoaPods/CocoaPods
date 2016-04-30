@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 62896152c8f884ddb062afb2cb0ff7a4fd0a9a65
+  revision: 3da283de4bf714950cbd044631b344b41fc146bc
   branch: master
   specs:
-    claide (1.0.0.beta.3)
+    claide (1.0.0.rc.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 0b62945dd2c603176dd24df0fe434e11acecbcb5
+  revision: aaa636d74d1cd0c6f83860b321ece4fdac5ab426
   branch: master
   specs:
     cocoapods-core (1.0.0.beta.8)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 3fc883313a3a386403481e331af2b990bb9dba31
+  revision: 80a6052b9c8ea36605c306b95e93374dae9ead66
   branch: master
   specs:
     molinillo (0.4.4)
@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: a2465022b0a355632bcc7f686cea38d151a8a156
+  revision: b5607c3bae8beb0d5bc4fa17e558af094c59a9ba
   branch: master
   specs:
     cocoapods-deintegrate (1.0.0.beta.1)
@@ -70,7 +70,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 5da75008f911263183520f98755d27dd3d6b11c6
+  revision: 17d5ed13d2d72d89ef6ff3992161584e1dce5ccf
   branch: master
   specs:
     cocoapods-trunk (1.0.0.beta.4)
@@ -96,7 +96,7 @@ PATH
   specs:
     cocoapods (1.0.0.beta.8)
       activesupport (>= 4.0.2)
-      claide (>= 1.0.0.beta.3, < 2.0)
+      claide (= 1.0.0.rc.1)
       cocoapods-core (= 1.0.0.beta.8)
       cocoapods-deintegrate (>= 1.0.0.beta.1, < 2.0)
       cocoapods-downloader (= 1.0.0.beta.3)

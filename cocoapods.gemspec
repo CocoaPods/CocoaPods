@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   # Link with the version of CocoaPods-Core
   s.add_runtime_dependency 'cocoapods-core',        "= #{Pod::VERSION}"
 
-  s.add_runtime_dependency 'claide',                '>= 1.0.0.beta.3', '< 2.0'
+  s.add_runtime_dependency 'claide',                '1.0.0.rc.1'
   s.add_runtime_dependency 'cocoapods-deintegrate', '>= 1.0.0.beta.1', '< 2.0'
   s.add_runtime_dependency 'cocoapods-downloader',  '1.0.0.beta.3'
   s.add_runtime_dependency 'cocoapods-plugins',     '>= 1.0.0.beta.1', '< 2.0'
