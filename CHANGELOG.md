@@ -26,7 +26,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Support customized build directories by letting user xcconfig definitions
   rely on the new overridable alias build variable `PODS_BUILD_DIR`.  
-  [Marius Rackwitz(https://github.com/mrackwitz]
+  [Marius Rackwitz](https://github.com/mrackwitz)
   [#5217](https://github.com/CocoaPods/CocoaPods/issue/5217)
 
 ##### Bug Fixes
