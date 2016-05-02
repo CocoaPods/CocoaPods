@@ -577,7 +577,8 @@ module Pod
       def validate_platforms(specs_by_target)
         specs_by_target.each do |target, specs|
           specs.each do |spec|
-            unless spec.available_platforms.any? { |p| target.platform.supports?(p) }
+            next unless target_platform = target.platform
+            unless spec.available_platforms.any? { |p| target_platform.supports?(p) }
               UI.warn "The platform of the target `#{target.name}` "     \
                 "(#{target.platform}) may not be compatible with `#{spec}` which has "  \
                 "a minimum requirement of #{spec.available_platforms.join(' - ')}."

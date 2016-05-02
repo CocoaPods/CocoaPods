@@ -163,6 +163,33 @@ module Pod
         target.platform.to_s.should == 'iOS 6.0'
       end
 
+      describe 'abstract targets' do
+        it 'resolves' do
+          @podfile = Pod::Podfile.new do
+            project 'SampleProject/SampleProject'
+            use_frameworks!
+            abstract_target 'Alpha' do
+              pod 'libextobjc'
+              target 'SampleProject' do
+                pod 'libextobjc/RuntimeExtensions'
+              end
+
+              target 'TestRunner' do
+              end
+            end
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          sample_project_target, test_runner_target = result.targets.sort_by(&:name)
+
+          sample_project_target.pod_targets.map(&:name).should == %w(libextobjc)
+          test_runner_target.pod_targets.map(&:name).should.be.empty
+
+          sample_project_target.user_targets.map(&:name).should == %w(SampleProject)
+          test_runner_target.user_targets.map(&:name).should == %w(TestRunner)
+        end
+      end
+
       describe 'dependent pod targets' do
         it 'picks transitive dependencies up' do
           @podfile = Pod::Podfile.new do

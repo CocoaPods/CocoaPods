@@ -56,7 +56,7 @@ module Pod
     def resolve
       dependencies = podfile.target_definition_list.flat_map do |target|
         target.dependencies.each do |dep|
-          @platforms_by_dependency[dep].push(target.platform).uniq!
+          @platforms_by_dependency[dep].push(target.platform).uniq! if target.platform
         end
       end
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
@@ -363,7 +363,8 @@ module Pod
     # @return [void]
     #
     def validate_platform(spec, target)
-      unless spec.available_platforms.any? { |p| target.platform.to_sym == p.to_sym }
+      return unless target_platform = target.platform
+      unless spec.available_platforms.any? { |p| target_platform.to_sym == p.to_sym }
         raise Informative, "The platform of the target `#{target.name}` "     \
           "(#{target.platform}) is not compatible with `#{spec}`, which does "  \
           "not support `#{target.platform.name}`."
@@ -418,7 +419,7 @@ module Pod
             end
             message << "\nYou should explicitly specify the version in order to install a pre-release version"
           elsif !conflict.existing
-            conflict.requirements.values.flatten.each do |r|
+            conflict.requirements.values.flatten.uniq.each do |r|
               if search_for(r).empty?
                 # There are no existing specification inside any of the spec repos with given requirements.
                 message << "\n\nNone of your spec sources contain a spec satisfying the dependency: `#{r}`." \
