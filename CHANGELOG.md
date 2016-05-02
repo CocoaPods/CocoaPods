@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Handle when an abstract target has no declared platform without crashing.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5236](https://github.com/CocoaPods/CocoaPods/issues/5236)
 
 
 ## 1.0.0.rc.1 (2016-04-30)
