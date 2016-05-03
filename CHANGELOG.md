@@ -24,12 +24,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * The `pod init` command now uses target inheritance for test targets
   in the generated Podfile.  
   [Orta Therox](https://github.com/orta)
-  [#4714](https://github.com/CocoaPods/CocoaPods/issue/4714)
+  [#4714](https://github.com/CocoaPods/CocoaPods/issues/4714)
 
 * Support customized build directories by letting user xcconfig definitions
   rely on the new overridable alias build variable `PODS_BUILD_DIR`.  
   [Marius Rackwitz](https://github.com/mrackwitz)
-  [#5217](https://github.com/CocoaPods/CocoaPods/issue/5217)
+  [#5217](https://github.com/CocoaPods/CocoaPods/issues/5217)
 
 ##### Bug Fixes
 
