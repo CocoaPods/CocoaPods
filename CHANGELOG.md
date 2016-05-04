@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5236](https://github.com/CocoaPods/CocoaPods/issues/5236)
 
+* Don't recurse into child directories to find podspecs when running
+  `pod spec lint`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5244](https://github.com/CocoaPods/CocoaPods/issues/5244)
+
 
 ## 1.0.0.rc.1 (2016-04-30)
 
