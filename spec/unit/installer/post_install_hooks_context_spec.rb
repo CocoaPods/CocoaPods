@@ -9,7 +9,7 @@ module Pod
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       user_project = Xcodeproj::Project.open(SpecHelper.create_sample_app_copy_from_fixture('SampleProject'))
       user_target = user_project.native_targets.find { |np| np.name == 'SampleProject' }
-      target_definition = Podfile::TargetDefinition.new('Pods', nil)
+      target_definition = fixture_target_definition
       pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
       umbrella = AggregateTarget.new(target_definition, config.sandbox)
       umbrella.user_project = user_project

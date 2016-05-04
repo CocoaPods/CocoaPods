@@ -117,7 +117,11 @@ end
 
 def fixture_target_definition(name = 'Pods', platform = Pod::Platform.ios)
   platform_hash = { platform.symbolic_name => platform.deployment_target }
-  Pod::Podfile::TargetDefinition.new(name, Pod::Podfile.new, 'name' => name, 'platform' => platform_hash)
+  parent = Pod::Podfile.new
+  Pod::Podfile::TargetDefinition.new(name, parent,
+                                     'abstract' => false,
+                                     'name' => name,
+                                     'platform' => platform_hash)
 end
 
 def fixture_pod_target(spec_or_name, target_definitions = [])

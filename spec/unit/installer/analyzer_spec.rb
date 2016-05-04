@@ -182,8 +182,8 @@ module Pod
           result = @analyzer.analyze
           sample_project_target, test_runner_target = result.targets.sort_by(&:name)
 
-          sample_project_target.pod_targets.map(&:name).should == %w(libextobjc)
-          test_runner_target.pod_targets.map(&:name).should.be.empty
+          sample_project_target.pod_targets.map(&:name).should == %w(libextobjc-iOS5.0)
+          test_runner_target.pod_targets.map(&:name).should == %w(libextobjc-iOS5.1)
 
           sample_project_target.user_targets.map(&:name).should == %w(SampleProject)
           test_runner_target.user_targets.map(&:name).should == %w(TestRunner)

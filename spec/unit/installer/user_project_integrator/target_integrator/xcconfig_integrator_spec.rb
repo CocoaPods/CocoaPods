@@ -8,6 +8,7 @@ module Pod
       Project.new(config.sandbox.project_path).save
       @target = @project.targets.first
       target_definition = Podfile::TargetDefinition.new('Pods', nil)
+      target_definition.abstract = false
       @pod_bundle = AggregateTarget.new(target_definition, config.sandbox)
       @pod_bundle.user_project = @project
       @pod_bundle.client_root = project_path.dirname

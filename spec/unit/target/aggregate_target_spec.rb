@@ -5,6 +5,7 @@ module Pod
     describe 'In general' do
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @target_definition.abstract = false
         @target = AggregateTarget.new(@target_definition, config.sandbox)
       end
 
@@ -41,6 +42,7 @@ module Pod
     describe 'Support files' do
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @target_definition.abstract = false
         @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.client_root = config.sandbox.root.dirname
       end
@@ -86,6 +88,7 @@ module Pod
       before do
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @target_definition.abstract = false
         @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
         @target = AggregateTarget.new(@target_definition, config.sandbox)
         @target.stubs(:platform).returns(:ios)

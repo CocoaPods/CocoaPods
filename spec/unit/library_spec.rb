@@ -4,7 +4,7 @@ module Pod
   describe Pod::AggregateTarget do
     describe 'In general' do
       before do
-        @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @target_definition = fixture_target_definition
         @lib = AggregateTarget.new(@target_definition, config.sandbox)
       end
 
@@ -27,7 +27,7 @@ module Pod
 
     describe 'Support files' do
       before do
-        @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+        @target_definition = fixture_target_definition
         @lib = AggregateTarget.new(@target_definition, config.sandbox)
         @lib.client_root = config.sandbox.root.dirname
       end
