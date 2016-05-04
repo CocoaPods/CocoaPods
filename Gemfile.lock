@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 99b3a7eeb7c9f550fd187c9131be333f7ed86f1e
+  revision: 7b66b7aaa354aadf1edc69d98eb469fecd6b36ec
   branch: master
   specs:
     cocoapods-core (1.0.0.rc.1)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 8962e4fbb1257354f1cfb7d1b822a622abe14454
+  revision: af55a8b0aef0079c0f90b0f409d71cecf734f1d6
   branch: master
   specs:
     xcodeproj (1.0.0.rc.1)
@@ -34,10 +34,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: 62eee1e93a68bd9d8125e93ca78ccb49e5324fdc
+  revision: 8fd68d22115893b6f9c5810c7a0be0dd481c30a6
   branch: master
   specs:
-    cocoapods-deintegrate (1.0.0.rc.1)
+    cocoapods-deintegrate (1.0.0.rc.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
@@ -70,7 +70,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 77a5ccaaeaa2dc80eb7ad2fda38b124f3ddd47f6
+  revision: c4f19484fd5117cccff90eb381aa2366b413e162
   branch: master
   specs:
     cocoapods-trunk (1.0.0.rc.1)
@@ -79,7 +79,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: e118e8cad154146ab9c63295f43a0d3751b7ba0f
+  revision: adb1070300e068fa1eaf1da8b8c2bc910e27e19c
   branch: master
   specs:
     cocoapods-try (1.0.0.rc.1)
@@ -98,7 +98,7 @@ PATH
       activesupport (>= 4.0.2)
       claide (= 1.0.0.rc.1)
       cocoapods-core (= 1.0.0.rc.1)
-      cocoapods-deintegrate (= 1.0.0.rc.1)
+      cocoapods-deintegrate (= 1.0.0.rc.2)
       cocoapods-downloader (= 1.0.0.rc.1)
       cocoapods-plugins (= 1.0.0.rc.1)
       cocoapods-search (= 1.0.0.rc.1)
