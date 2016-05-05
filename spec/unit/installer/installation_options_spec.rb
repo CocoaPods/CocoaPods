@@ -62,6 +62,7 @@ module Pod
           'deterministic_uuids' => false,
           'integrate_targets' => true,
           'lock_pod_sources' => true,
+          'share_schemes_for_development_pods' => true,
         }
       end
 

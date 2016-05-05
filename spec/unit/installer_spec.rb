@@ -749,18 +749,83 @@ module Pod
           @installer.send(:write_pod_project)
         end
 
-        it 'shares schemes of development pods' do
-          spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = fixture_pod_target(spec)
+        describe 'sharing schemes of development pods' do
+          before do
+            spec = fixture_spec('banana-lib/BananaLib.podspec')
+            pod_target = fixture_pod_target(spec)
 
-          @installer.stubs(:pod_targets).returns([pod_target])
-          @installer.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
+            @installer.stubs(:pod_targets).returns([pod_target])
+            @installer.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
+          end
 
-          Xcodeproj::XCScheme.expects(:share_scheme).with(
-            @installer.pods_project.path,
-            'BananaLib')
+          it 'shares by default' do
+            Xcodeproj::XCScheme.expects(:share_scheme).with(
+              @installer.pods_project.path,
+              'BananaLib')
+            @installer.send(:share_development_pod_schemes)
+          end
 
-          @installer.send(:share_development_pod_schemes)
+          it 'allows opting out' do
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns(false)
+
+            Xcodeproj::XCScheme.expects(:share_scheme).never
+            @installer.send(:share_development_pod_schemes)
+
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns(nil)
+
+            Xcodeproj::XCScheme.expects(:share_scheme).never
+            @installer.send(:share_development_pod_schemes)
+          end
+
+          it 'allows specifying strings of pods to share' do
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns(%w(BananaLib))
+
+            Xcodeproj::XCScheme.expects(:share_scheme).with(
+              @installer.pods_project.path,
+              'BananaLib')
+            @installer.send(:share_development_pod_schemes)
+
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns(%w(orange-framework))
+
+            Xcodeproj::XCScheme.expects(:share_scheme).never
+            @installer.send(:share_development_pod_schemes)
+          end
+
+          it 'allows specifying regular expressions of pods to share' do
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns([/bAnaNalIb/i, /B*/])
+
+            Xcodeproj::XCScheme.expects(:share_scheme).with(
+              @installer.pods_project.path,
+              'BananaLib')
+            @installer.send(:share_development_pod_schemes)
+
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns([/banana$/, /[^\A]BananaLib/])
+
+            Xcodeproj::XCScheme.expects(:share_scheme).never
+            @installer.send(:share_development_pod_schemes)
+          end
+
+          it 'raises when an invalid type is set' do
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns(Pathname('foo'))
+
+            Xcodeproj::XCScheme.expects(:share_scheme).never
+            e = should.raise(Informative) { @installer.send(:share_development_pod_schemes) }
+            e.message.should.match /share_schemes_for_development_pods.*set it to true, false, or an array of pods to share schemes for/
+          end
         end
 
         it "uses the user project's object version for the pods project" do
