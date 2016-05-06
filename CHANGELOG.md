@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5218](https://github.com/CocoaPods/CocoaPods/issues/5218)
 
+* Improvements to the error messaging around missing dependencies.  
+  [Orta Therox](https://github.com/orta)
+  [#5260](https://github.com/CocoaPods/CocoaPods/issues/5260)
+
 ##### Bug Fixes
 
 * None.  

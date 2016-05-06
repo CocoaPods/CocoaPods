@@ -419,20 +419,22 @@ module Pod
             end
             message << "\nYou should explicitly specify the version in order to install a pre-release version"
           elsif !conflict.existing
-            conflict.requirements.values.flatten.uniq.each do |r|
-              if search_for(r).empty?
-                # There are no existing specification inside any of the spec repos with given requirements.
-                message << "\n\nNone of your spec sources contain a spec satisfying the dependency: `#{r}`." \
-                  "\n\nYou have either:" \
-                  "\n * out-of-date source repos which you can update with `pod repo update`." \
-                  "\n * mistyped the name or version." \
-                  "\n * not added the source repo that hosts the Podspec to your Podfile." \
-                  "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
+            conflicts = conflict.requirements.values.flatten.uniq
+            found_conflicted_specs = conflicts.reject { |c| search_for(c).empty? }
+            if found_conflicted_specs.empty?
+              # There are no existing specification inside any of the spec repos with given requirements.
+              dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'
+              message << "\n\nNone of your spec sources contain a spec satisfying "\
+                "the #{dependencies}: `#{conflicts.join(', ')}`." \
+                "\n\nYou have either:" \
+                "\n * out-of-date source repos which you can update with `pod repo update`." \
+                "\n * mistyped the name or version." \
+                "\n * not added the source repo that hosts the Podspec to your Podfile." \
+                "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
 
-              else
-                message << "\n\nSpecs satisfying the `#{r}` dependency were found, " \
-                  'but they required a higher minimum deployment target.'
-              end
+            else
+              message << "\n\nSpecs satisfying the `#{conflicts.join(', ')}` dependency were found, " \
+                'but they required a higher minimum deployment target.'
             end
           end
         end
