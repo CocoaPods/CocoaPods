@@ -184,6 +184,15 @@ module Pod
       end.uniq
     end
 
+    # @return [Array<PodTarget>] the recursive targets that this target has a
+    #         dependency upon.
+    #
+    def recursive_dependent_targets
+      targets = dependent_targets + dependent_targets.flat_map(&:dependent_targets)
+      targets.uniq!
+      targets
+    end
+
     # Checks if the target should be included in the build configuration with
     # the given name of a given target definition.
     #

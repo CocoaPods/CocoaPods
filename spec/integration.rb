@@ -286,6 +286,11 @@ describe_cli 'pod' do
       behaves_like cli_spec 'install_using_checkout_options',
                             'install --no-repo-update'
     end
+
+    describe 'Integrates a pod with search paths inheritance' do
+      behaves_like cli_spec 'install_search_paths_inheritance',
+                            'install --no-repo-update'
+    end
   end
 
   #--------------------------------------#
