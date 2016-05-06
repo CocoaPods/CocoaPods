@@ -642,6 +642,23 @@ module Pod
           validator.results.map(&:to_s).first.should.match /Unexpected file extension for modulemap file \(JSONKit\.m\)/
           validator.result_type.should == :error
         end
+
+        it 'checks resource bundles have resources' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, <<-JSON))
+            "source_files": "JSONKit.*",
+            "resource_bundles": {
+              "bundle1": ["CHANGELOG.md", "*.md"],
+              "bundle2": "foo.bar*"
+            },
+          JSON
+
+          validator = Validator.new(file, config.sources_manager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.include 'The `resource_bundles` pattern for `bundle2` did not match any file'
+          validator.result_type.should == :error
+        end
       end
 
       it 'validates a podspec with dependencies' do

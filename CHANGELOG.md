@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Validate that resource bundles declared in the podspec contain resources.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5218](https://github.com/CocoaPods/CocoaPods/issues/5218)
 
 ##### Bug Fixes
 

@@ -556,6 +556,13 @@ module Pod
       end
     end
 
+    def _validate_resource_bundles
+      file_accessor.resource_bundles.each do |bundle, resource_paths|
+        next unless resource_paths.empty?
+        error('file patterns', "The `resource_bundles` pattern for `#{bundle}` did not match any file.")
+      end
+    end
+
     # Ensures that a list of header files only contains header files.
     #
     def _validate_header_files(attr_name)
