@@ -9,6 +9,7 @@ module Pod
         'deterministic_uuids' => true,
         'integrate_targets' => true,
         'lock_pod_sources' => true,
+        'share_schemes_for_development_pods' => false,
       }.each do |option, default|
         it "includes `#{option}` defaulting to `#{default}`" do
           Installer::InstallationOptions.defaults.fetch(option).should == default
@@ -62,7 +63,7 @@ module Pod
           'deterministic_uuids' => false,
           'integrate_targets' => true,
           'lock_pod_sources' => true,
-          'share_schemes_for_development_pods' => true,
+          'share_schemes_for_development_pods' => false,
         }
       end
 

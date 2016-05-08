@@ -106,7 +106,7 @@ module Pod
       option :deterministic_uuids, true
       option :integrate_targets, true
       option :lock_pod_sources, true
-      option :share_schemes_for_development_pods, true
+      option :share_schemes_for_development_pods, false
 
       module Mixin
         module ClassMethods

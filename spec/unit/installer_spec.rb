@@ -758,7 +758,16 @@ module Pod
             @installer.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
           end
 
-          it 'shares by default' do
+          it 'does not share by default' do
+            Xcodeproj::XCScheme.expects(:share_scheme).never
+            @installer.send(:share_development_pod_schemes)
+          end
+
+          it 'can share all schemes' do
+            @installer.installation_options.
+              stubs(:share_schemes_for_development_pods).
+              returns(true)
+
             Xcodeproj::XCScheme.expects(:share_scheme).with(
               @installer.pods_project.path,
               'BananaLib')
