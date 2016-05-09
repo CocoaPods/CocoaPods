@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Orta Therox](https://github.com/orta)
   [#5260](https://github.com/CocoaPods/CocoaPods/issues/5260)
 
+* Make sharing schemes for development pods an installation option
+  (`share_schemes_for_development_pods`) and disable sharing schemes
+  by default.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * None.  
