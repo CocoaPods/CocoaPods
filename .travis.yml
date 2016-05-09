@@ -19,9 +19,8 @@ before_install:
   # There is a bug in travis. When using system ruby, bundler is not
   # installed and causes the default install action to fail.
   - sudo gem install bundler
-
-after_install:
-  - ./bin/pod repo update --silent
+  # RubyGems 2.0.14 isn't a fun time on 2.0.0p645
+  - if [ "$(ruby -v | cut -d ' ' -f2)" = "2.0.0p645" ]; then sudo gem update --system; fi
 
 before_script:
   - bundle exec pod repo update --silent
@@ -33,4 +32,3 @@ script:
 addons:
  code_climate:
    repo_token: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55
-
