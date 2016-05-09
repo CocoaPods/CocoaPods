@@ -703,7 +703,26 @@ module Pod
     #
     def share_development_pod_schemes
       development_pod_targets.select(&:should_build?).each do |pod_target|
+        next unless share_scheme_for_development_pod?(pod_target.pod_name)
         Xcodeproj::XCScheme.share_scheme(pods_project.path, pod_target.label)
+      end
+    end
+
+    # @param  [String] pod The root name of the development pod.
+    #
+    # @return [Bool] whether the scheme for the given development pod should be
+    #         shared.
+    #
+    def share_scheme_for_development_pod?(pod)
+      case dev_pods_to_share = installation_options.share_schemes_for_development_pods
+      when TrueClass, FalseClass, NilClass
+        dev_pods_to_share
+      when Array
+        dev_pods_to_share.any? { |dev_pod| dev_pod === pod } # rubocop:disable Style/CaseEquality
+      else
+        raise Informative, 'Unable to handle share_schemes_for_development_pods ' \
+          "being set to #{dev_pods_to_share.inspect} -- please set it to true, " \
+          'false, or an array of pods to share schemes for.'
       end
     end
 
