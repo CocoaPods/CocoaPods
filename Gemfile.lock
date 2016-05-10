@@ -34,10 +34,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: 8fd68d22115893b6f9c5810c7a0be0dd481c30a6
+  revision: c5e0698f7043b440a0d9d2db89f2145171ae6593
   branch: master
   specs:
-    cocoapods-deintegrate (1.0.0.rc.2)
+    cocoapods-deintegrate (1.0.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
@@ -98,7 +98,7 @@ PATH
       activesupport (>= 4.0.2)
       claide (>= 1.0.0, < 2.0)
       cocoapods-core (= 1.0.0.rc.2)
-      cocoapods-deintegrate (= 1.0.0.rc.2)
+      cocoapods-deintegrate (>= 1.0.0, < 2.0)
       cocoapods-downloader (= 1.0.0.rc.1)
       cocoapods-plugins (= 1.0.0.rc.1)
       cocoapods-search (= 1.0.0.rc.1)
