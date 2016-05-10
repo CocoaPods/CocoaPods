@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 3da283de4bf714950cbd044631b344b41fc146bc
+  revision: e76d82aadde8f36b6b4511b869ea800f4118b5d1
   branch: master
   specs:
-    claide (1.0.0.rc.1)
+    claide (1.0.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
@@ -24,12 +24,12 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 7095e61c1b273474594885c6eea3d42fc7fa0238
+  revision: d5335e0fec58785e265003d7c70eb83a989347b1
   branch: master
   specs:
     xcodeproj (1.0.0.rc.2)
       activesupport (>= 3)
-      claide (= 1.0.0.rc.1)
+      claide (>= 1.0.0, < 2.0)
       colored (~> 1.2)
 
 GIT
@@ -56,7 +56,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 0ec900fca33c6cc053af61bba6b357566c20a7da
+  revision: 7474df5d060c804db5004c5e7dc2925e006f2ad4
   branch: master
   specs:
     cocoapods-search (1.0.0.rc.1)
@@ -70,7 +70,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: c4f19484fd5117cccff90eb381aa2366b413e162
+  revision: 5a232b7188dfddcec82fdeff14606dbc7c12bedd
   branch: master
   specs:
     cocoapods-trunk (1.0.0.rc.1)
@@ -96,7 +96,7 @@ PATH
   specs:
     cocoapods (1.0.0.rc.2)
       activesupport (>= 4.0.2)
-      claide (= 1.0.0.rc.1)
+      claide (>= 1.0.0, < 2.0)
       cocoapods-core (= 1.0.0.rc.2)
       cocoapods-deintegrate (= 1.0.0.rc.2)
       cocoapods-downloader (= 1.0.0.rc.1)
