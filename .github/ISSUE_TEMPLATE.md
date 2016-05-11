@@ -22,12 +22,14 @@
 > ℹ Please replace this with of what happened instead.  
 > e.g. Pod A is missing the subspec B for target C.
 
-## Podfile
+## CocoaPods Environment
 
-> ℹ Please paste the contents of your Podfile below.    
->  (e.g. via `cat Podfile | pbcopy`)  
+> ℹ Please replace this with the output of `pod env`.
+> (e.g. via `pod env | pbcopy`)  
 > You can remove this hint then.
 
-```ruby
-# Paste your Podfile contents HERE.
-```
+## Project that demonstrates the issue
+
+> ℹ Please link to a project we can download that reproduces the issue.
+> You can delete this section if your issue is unrelated to build problems,
+> i.e. it's only an issue with CocoaPods the tool.
