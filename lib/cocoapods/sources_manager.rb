@@ -1,4 +1,5 @@
 require 'cocoapods-core/source'
+require 'set'
 
 module Pod
   class Source
