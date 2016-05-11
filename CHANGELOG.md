@@ -24,6 +24,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jan Berkel](https://github.com/jberkel)
   [#5319](https://github.com/CocoaPods/CocoaPods/pull/5319)
 
+* Avoid removing all files when root directory contains unicode characters.  
+  [Marc Boquet](https://github.com/marcboquet)
+  [#5294](https://github.com/CocoaPods/CocoaPods/issues/5294)
+
+
 ## 1.0.0 (2016-05-10)
 
 ##### Enhancements
