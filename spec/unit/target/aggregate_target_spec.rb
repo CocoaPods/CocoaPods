@@ -193,6 +193,50 @@ module Pod
             @target.requires_frameworks?.should == false
           end
         end
+
+        describe 'Target might require a host target' do
+          before do
+            target_definition = Podfile::TargetDefinition.new('Pods', nil)
+            target_definition.abstract = false
+            @target = AggregateTarget.new(target_definition, config.sandbox)
+            project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
+            @target.user_project = Xcodeproj::Project.open(project_path)
+            @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
+          end
+
+          it 'requires a host target for app extension targets' do
+            @target.user_targets.first.stubs(:symbol_type).returns(:app_extension)
+            @target.requires_host_target?.should == true
+          end
+
+          it 'requires a host target for watch extension targets' do
+            @target.user_targets.first.stubs(:symbol_type).returns(:watch_extension)
+            @target.requires_host_target?.should == true
+          end
+
+          it 'does not require a host target for watch 2 extension targets' do
+            @target.user_targets.first.stubs(:symbol_type).returns(:watch2_extension)
+            @target.requires_host_target?.should == false
+          end
+
+          it 'does not require a host target for application targets' do
+            @target.user_targets.first.stubs(:symbol_type).returns(:application)
+            @target.requires_host_target?.should == false
+          end
+
+          it 'does not require a host target, if there is no user project (manual integration)' do
+            @target.user_project = nil
+            @target.user_target_uuids = []
+            @target.requires_host_target?.should == false
+          end
+
+          it 'raises an exception if more than one user_target is found' do
+            @target.user_target_uuids += @target.user_target_uuids
+            should.raise ArgumentError do
+              @target.requires_host_target?
+            end.message.should.equal 'Expected single user_target for Pods'
+          end
+        end
       end
 
       describe 'With frameworks' do

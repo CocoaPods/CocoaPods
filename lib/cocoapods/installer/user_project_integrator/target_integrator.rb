@@ -20,7 +20,10 @@ module Pod
         # @return [Array<Symbol>] the symbol types, which require that the pod
         # frameworks are embedded in the output directory / product bundle.
         #
-        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :ui_test_bundle, :app_extension, :watch_extension, :watch2_extension].freeze
+        # @note This does not include :app_extension or :watch_extension because
+        # these types must have their frameworks embedded in their host targets
+        #
+        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :ui_test_bundle, :watch2_extension].freeze
 
         # @return [String] the name of the embed frameworks phase
         #
@@ -54,6 +57,7 @@ module Pod
 
             add_pods_library
             add_embed_frameworks_script_phase
+            remove_embed_frameworks_script_phase_from_app_extensions
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
           end
@@ -110,6 +114,21 @@ module Pod
           end
         end
 
+        # Removes the embed frameworks build phase from app extension targets
+        #
+        # @note Older versions of CocoaPods would add this build phase to app
+        #       extension targets. They should be removed on upgrade because app
+        #       extension targets will have their frameworks embedded in their host
+        #       apps.
+        #
+        def remove_embed_frameworks_script_phase_from_app_extensions
+          native_targets.each do |native_target|
+            if AggregateTarget::EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include? native_target.symbol_type
+              remove_embed_frameworks_script_phase(native_target)
+            end
+          end
+        end
+
         def add_embed_frameworks_script_phase_to_target(native_target)
           phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
           script_path = target.embed_frameworks_script_relative_path
@@ -121,7 +140,7 @@ module Pod
         # @param [PBXNativeTarget] native_target
         #
         def remove_embed_frameworks_script_phase(native_target)
-          embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name == EMBED_FRAMEWORK_PHASE_NAME }
+          embed_build_phase = native_target.shell_script_build_phases.find { |bp| bp.name && bp.name.end_with?(EMBED_FRAMEWORK_PHASE_NAME) }
           return unless embed_build_phase.present?
           native_target.build_phases.delete(embed_build_phase)
         end

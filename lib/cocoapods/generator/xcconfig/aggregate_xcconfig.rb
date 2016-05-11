@@ -4,7 +4,7 @@ module Pod
       # Generates the xcconfigs for the aggregate targets.
       #
       class AggregateXCConfig
-        # @return [Target] the target represented by this xcconfig.
+        # @return [AggregateTarget] the target represented by this xcconfig.
         #
         attr_reader :target
 
@@ -61,7 +61,14 @@ module Pod
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
           }
-          if pod_targets.any?(&:uses_swift?)
+          # Because app extensions live in their host app, CocoaPods
+          # copies all of the app extension's pod_targets to the host
+          # app. Therefore, this check will properly require the Swift
+          # libs in the host app, if the app extension has any pod targets
+          # that use swift. Setting this for the app extension target would
+          # cause an App Store rejection because frameworks cannot be embedded
+          # in app extensions.
+          if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
             config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
           end
           @xcconfig = Xcodeproj::Config.new(config)

@@ -7,6 +7,9 @@ module Pod
     #         generated this target.
     attr_reader :target_definition
 
+    # Product types where the product's frameworks must be embedded in a host target
+    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :watch_extension].freeze
+
     # Initialize a new instance
     #
     # @param [TargetDefinition] target_definition @see target_definition
@@ -21,6 +24,21 @@ module Pod
       @search_paths_aggregate_targets = []
       @file_accessors = []
       @xcconfigs = {}
+    end
+
+    # @return True if the user_target's pods are
+    # for an extension and must be embedded in a host,
+    # target, otherwise false.
+    #
+    def requires_host_target?
+      # If we don't have a user_project, then we can't
+      # glean any info about how this target is going to
+      # be integrated, so return false since we can't know
+      # for sure that this target refers to an extension
+      # target that would require a host target
+      return false if user_project.nil?
+      raise ArgumentError, "Expected single user_target for #{name}" unless user_targets.count == 1
+      EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include? user_targets[0].symbol_type
     end
 
     # @return [String] the label for the target.
