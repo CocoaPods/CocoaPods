@@ -24,6 +24,7 @@ before_install:
 
 before_script:
   - bundle exec pod repo update --silent
+  - bundle exec pod env
 
 script:
   - bundle exec rake
