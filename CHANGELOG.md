@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Removed a message informing users that until CocoaPods 1.0, features of
+  CocoaPods will frequently change while being informed about future versions.  
+  [Kyle Fuller](https://github.com/kylef)
 
 
 ## 1.0.0 (2016-05-10)
