@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5287](https://github.com/CocoaPods/CocoaPods/issues/5287)
 
+* Add --target-device to ibtool invocation for XIBs
+  [Juan Civile](https://github.com/champo)
+  [#5282](https://github.com/CocoaPods/CocoaPods/issues/5282)
+
 
 ## 1.0.0 (2016-05-10)
 
