@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Ensure `Set` is defined before using it.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5287](https://github.com/CocoaPods/CocoaPods/issues/5287)
 
 
 ## 1.0.0 (2016-05-10)
