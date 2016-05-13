@@ -139,7 +139,7 @@ describe_cli 'pod' do
     s.replace_pattern /git checkout -b <new-branch-name>/, 'git checkout -b new_branch_name'
 
     # git sometimes prints this, but not always ¯\_(ツ)_/¯
-    s.replace_pattern /^\s*Checking out files.*done\.[\n]?/, ''
+    s.replace_pattern /^\s*Checking out files.*done\./, ''
 
     s.replace_path %r{
       `[^`]*? # The opening backtick on a plugin path
