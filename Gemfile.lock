@@ -121,7 +121,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.3.6)
+    addressable (2.4.0)
     ast (2.2.0)
     awesome_print (1.6.1)
     bacon (1.2.0)
@@ -136,7 +136,7 @@ GEM
     colored (1.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
-    danger (0.7.2)
+    danger (0.7.4)
       claide
       colored (~> 1.2)
       faraday
@@ -263,4 +263,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.11.2
+   1.12.1

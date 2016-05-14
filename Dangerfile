@@ -8,3 +8,7 @@
     fail("`fdescribe` left in tests (#{file})") if contents =~ /^\w*fdescribe/
   end
 end
+
+if commits.any? { |c| c.message =~ /^Merge branch '#{branch_for_merge}'/ }
+  fail("Please rebase to get rid of the merge commits in this PR")
+end
