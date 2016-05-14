@@ -73,6 +73,13 @@ module Pod
       io.should == " 0\n 1\n 2\n"
     end
 
+    it 'shows the name in the error message when the command was not found' do
+      e = lambda do
+        Executable.execute_command('___notfound___', [], true)
+      end.should.raise Informative
+      e.message.should.match /___notfound___/
+    end
+
     describe Executable::Indenter do
       it 'indents any appended strings' do
         UI.indentation_level = 4

@@ -20,6 +20,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Juan Civile](https://github.com/champo)
   [#5282](https://github.com/CocoaPods/CocoaPods/issues/5282)
 
+* Fix error when executables cannot be found.
+  [Jan Berkel](https://github.com/jberkel)
+  [#5319](https://github.com/CocoaPods/CocoaPods/pull/5319)
 
 ## 1.0.0 (2016-05-10)
 
