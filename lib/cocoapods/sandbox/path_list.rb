@@ -1,3 +1,5 @@
+require 'active_support/multibyte/unicode'
+
 module Pod
   class Sandbox
     # The PathList class is designed to perform multiple glob matches against
@@ -20,7 +22,8 @@ module Pod
       # @param  [Pathname] root The root of the PathList.
       #
       def initialize(root)
-        @root = root
+        root_dir = ActiveSupport::Multibyte::Unicode.normalize(root.to_s)
+        @root = Pathname.new(root_dir)
         @glob_cache = {}
       end
 

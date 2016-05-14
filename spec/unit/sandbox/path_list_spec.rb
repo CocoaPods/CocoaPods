@@ -178,6 +178,13 @@ module Pod
         path_list = Sandbox::PathList.new(fixture('banana-lib'))
         path_list.files.should == %w(Classes/NSFetchedResultsController+Banana.h Classes/NSFetchRequest+Banana.h)
       end
+
+      it 'supports unicode paths' do
+        # Load fixture("ü") with chars ["u", "̈"] instead of ["ü"]
+        unicode_name = [117, 776].pack('U*')
+        path_list = Sandbox::PathList.new(fixture(unicode_name))
+        path_list.files.should == ['README']
+      end
     end
 
     #-------------------------------------------------------------------------#
