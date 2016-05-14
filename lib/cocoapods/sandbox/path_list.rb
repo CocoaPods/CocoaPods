@@ -50,15 +50,20 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
-        root_length  = root.to_s.length + 1
+        files = []
+        dirs = []
         escaped_root = escape_path_for_glob(root)
-        paths = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH).sort_by(&:upcase)
-        absolute_dirs  = paths.select { |path| File.directory?(path) }
-        relative_dirs  = absolute_dirs.map  { |p| p[root_length..-1] }
-        absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
-        relative_paths = absolute_paths.map { |p| p[root_length..-1] }
-        @files = relative_paths - relative_dirs
-        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/, '') }.reject { |d| d == '.' || d == '..' } .uniq
+        paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH) do |path|
+          next if path.basename.to_s.match /\.\.?$/
+          relative_path = path.relative_path_from(root)
+          if path.directory?
+            dirs << relative_path.to_s
+          else
+            files << relative_path.to_s
+          end
+        end
+        @files = files.sort_by(&:upcase)
+        @dirs  = dirs.sort_by(&:upcase)
         @glob_cache = {}
       end
 
