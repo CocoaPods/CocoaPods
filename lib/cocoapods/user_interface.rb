@@ -7,7 +7,7 @@ module Pod
   module UserInterface
     require 'colored'
 
-    @title_colors      =  %w( yellow green    )
+    @title_colors      =  %w( yellow green )
     @title_level       =  0
     @indentation_level =  2
     @treat_titles_as_messages = false
@@ -116,9 +116,6 @@ module Pod
         self.indentation_level -= relative_indentation
         self.title_level -= 1
       end
-
-      # def title(title, verbose_prefix = '', relative_indentation = 2)
-      # end
 
       # Prints a verbose message taking an optional verbose prefix and
       # a relative indentation valid for the UI action in the passed
