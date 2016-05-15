@@ -22,7 +22,7 @@ module Pod
     require 'cocoapods/command/env'
     require 'cocoapods/command/init'
     require 'cocoapods/command/install'
-    require 'cocoapods/command/inter_process_communication'
+    require 'cocoapods/command/ipc'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
     require 'cocoapods/command/outdated'
