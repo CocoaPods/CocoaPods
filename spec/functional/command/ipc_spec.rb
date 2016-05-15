@@ -69,7 +69,7 @@ module Pod
         out.should.match /version: '#{Pod::VERSION}'/
       end
 
-      it 'converts forwards the commands to the other ipc subcommands prints the result to STDOUT' do
+      it 'forwards the commands to the other ipc subcommands and prints the result to STDOUT' do
         command = Command::IPC::Repl.new(CLAide::ARGV.new([]))
         command.execute_repl_command("podfile #{fixture('Podfile')}")
 

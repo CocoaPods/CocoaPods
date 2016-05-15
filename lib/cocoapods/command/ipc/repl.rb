@@ -4,7 +4,7 @@ module Pod
       class Repl < IPC
         include ProjectDirectory
 
-        END_OF_OUTPUT_SIGNAL = '\n\r'.freeze
+        END_OF_OUTPUT_SIGNAL = "\n\r".freeze
 
         self.summary = 'The repl listens to commands on standard input'
         self.description = <<-DESC
