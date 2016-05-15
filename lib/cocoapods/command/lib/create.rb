@@ -51,9 +51,9 @@ module Pod
         extend Executable
         executable :git
 
-        TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'
-        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'
-        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'
+        TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
 
         # Clones the template from the remote in the working directory using
         # the name of the Pod.

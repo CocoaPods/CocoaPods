@@ -4,7 +4,7 @@ module Pod
       class Repl < IPC
         include ProjectDirectory
 
-        END_OF_OUTPUT_SIGNAL = "\n\r"
+        END_OF_OUTPUT_SIGNAL = '\n\r'.freeze
 
         self.summary = 'The repl listens to commands on standard input'
         self.description = <<-DESC
@@ -36,7 +36,7 @@ module Pod
         end
 
         def execute_repl_command(repl_command)
-          if (repl_command != "\n")
+          unless repl_command == '\n'
             repl_commands = repl_command.split
             subcommand = repl_commands.shift.capitalize
             arguments = repl_commands
