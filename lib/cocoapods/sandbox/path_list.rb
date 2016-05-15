@@ -53,9 +53,9 @@ module Pod
         escaped_root = escape_path_for_glob(root)
         absolute_paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
         dirs_and_files = absolute_paths.reject { |path| path.basename.to_s =~ /^\.\.?$/ }
-        dirs, files = dirs_and_files.partition(&:directory?)
-        @dirs  = dirs.map { |dir| dir.relative_path_from(root).to_s }.sort_by(&:upcase)
-        @files = files.map { |file| file.relative_path_from(root).to_s }.sort_by(&:upcase)
+        relative_paths = dirs_and_files.map { |path| path.relative_path_from(root) }
+        sorted_paths = relative_paths.map(&:to_s).sort_by(&:upcase)
+        @dirs, @files = sorted_paths.partition { |path| File.directory?(root + path) }
         @glob_cache = {}
       end
 
