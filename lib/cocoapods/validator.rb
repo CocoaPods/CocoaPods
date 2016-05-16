@@ -575,7 +575,7 @@ module Pod
       end
       non_source_files = header_files - file_accessor.source_files
       unless non_source_files.empty?
-        error(attr_name, 'The pattern includes header files that are not listed' \
+        error(attr_name, 'The pattern includes header files that are not listed ' \
           "in source_files (#{non_source_files.join(', ')}).")
       end
     end
