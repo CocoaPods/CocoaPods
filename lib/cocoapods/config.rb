@@ -1,3 +1,5 @@
+require 'active_support/multibyte/unicode'
+
 module Pod
   # Stores the global configuration of CocoaPods.
   #
@@ -145,7 +147,8 @@ module Pod
     #         Podfile is located.
     #
     def installation_root
-      current_path = Pathname.pwd
+      current_dir = ActiveSupport::Multibyte::Unicode.normalize(Dir.pwd)
+      current_path = Pathname.new(current_dir)
       unless @installation_root
         until current_path.root?
           if podfile_path_in_dir(current_path)

@@ -112,6 +112,15 @@ module Pod
         end
       end
 
+      it 'returns the working directory correctly when it includes unicode characters' do
+        unicode_directory = temporary_directory + "ü"
+        FileUtils.mkdir(unicode_directory)
+        Dir.chdir(unicode_directory) do
+          File.open('Podfile', 'w') {}
+          @config.installation_root.to_s.should == unicode_directory.to_s
+        end
+      end
+
       before do
         @config.installation_root = temporary_directory
       end
