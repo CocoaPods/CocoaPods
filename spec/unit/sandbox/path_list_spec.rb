@@ -168,15 +168,22 @@ module Pod
 
     describe 'Reading file system' do
       it 'orders paths case insensitively' do
-        root = fixture('banana-lib')
+        root = fixture('banana-unordered')
 
-        # Let Dir.glob result be ordered case-sensitively
-        Dir.stubs(:glob).returns(["#{root}/Classes/NSFetchRequest+Banana.h",
-                                  "#{root}/Classes/NSFetchedResultsController+Banana.h"])
+        # Let Pathname.glob result be ordered case-sensitively
+        Pathname.stubs(:glob).returns([Pathname.new("#{root}/Classes/NSFetchRequest+Banana.h"),
+                                       Pathname.new("#{root}/Classes/NSFetchedResultsController+Banana.h")])
         File.stubs(:directory?).returns(false)
 
-        path_list = Sandbox::PathList.new(fixture('banana-lib'))
+        path_list = Sandbox::PathList.new(root)
         path_list.files.should == %w(Classes/NSFetchedResultsController+Banana.h Classes/NSFetchRequest+Banana.h)
+      end
+
+      it 'supports unicode paths' do
+        # Load fixture("ü") with chars ["u", "̈"] instead of ["ü"]
+        unicode_name = [117, 776].pack('U*')
+        path_list = Sandbox::PathList.new(fixture(unicode_name))
+        path_list.files.should == ['README']
       end
     end
 
