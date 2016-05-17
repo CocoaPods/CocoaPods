@@ -300,10 +300,11 @@ module Pod
             @project.add_file_reference(file, group)
           end
           @installer.stubs(:target).returns(@pod_target)
-          @installer.install!
         end
 
         it 'creates custom copy files phases for framework pods' do
+          @installer.install!
+
           target = @project.native_targets.first
           target.name.should == 'snake'
 
@@ -340,12 +341,34 @@ module Pod
         end
 
         it 'uses relative file paths to generate umbrella header' do
-          content = @pod_target.umbrella_header_path.read
+          @installer.install!
 
+          content = @pod_target.umbrella_header_path.read
           content.should =~ %r{"A/Boa.h"}
           content.should =~ %r{"A/Garden.h"}
           content.should =~ %r{"A/Rattle.h"}
         end
+
+        it 'creates a build phase to symlink header folders on OS X' do
+          @pod_target.stubs(:platform).returns(Platform.osx)
+
+          @installer.install!
+
+          target = @project.native_targets.first
+          build_phase = target.shell_script_build_phases.find do |bp|
+            bp.name == 'Create Symlinks to Header Folders'
+          end
+          build_phase.should.not.be.nil
+        end
+      end
+
+      it "doesn't create a build phase to symlink header folders by default on OS X" do
+        @pod_target.stubs(:platform).returns(Platform.osx)
+
+        @installer.install!
+
+        target = @project.native_targets.first
+        target.shell_script_build_phases.should == []
       end
 
       #--------------------------------------------------------------------------------#

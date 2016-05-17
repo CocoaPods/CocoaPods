@@ -32,6 +32,7 @@ module Pod
                                      target.file_accessors.flat_map(&:public_headers).map(&:basename)
               end
             end
+            create_build_phase_to_symlink_header_folders
           end
           create_prefix_header
           create_dummy_source
@@ -214,6 +215,26 @@ module Pod
             rsrc_bc.base_configuration_reference = xcconfig_file_ref
           end
         end
+      end
+
+      # Creates a build phase which links the versioned header folders
+      # of the OS X into the framework bundle's root root directory.
+      # This is only necessary because the way how headers are copied
+      # via custom copy file build phases in combination with
+      # header_mappings_dir interferes with xcodebuild's expectations
+      # about the existence of private or public headers.
+      #
+      # @return [void]
+      #
+      def create_build_phase_to_symlink_header_folders
+        return unless target.platform.name == :osx && header_mappings_dir
+
+        build_phase = native_target.new_shell_script_build_phase('Create Symlinks to Header Folders')
+        build_phase.shell_script = <<-eos.strip_heredoc
+          cd $CONFIGURATION_BUILD_DIR/$WRAPPER_NAME
+          ln -fs ${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/} ${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}
+          ln -fs ${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/} ${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}
+        eos
       end
 
       # Creates a prefix header file which imports `UIKit` or `Cocoa` according
