@@ -12,6 +12,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Symlink the header folders in the framework bundle's root directory
+  by a new shell script build phase if `header_mappings_dir` is used
+  with frameworks.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5313](https://github.com/CocoaPods/CocoaPods/issues/5313)
+
 * Ensure `Set` is defined before using it.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5287](https://github.com/CocoaPods/CocoaPods/issues/5287)
