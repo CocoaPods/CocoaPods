@@ -54,6 +54,7 @@ module SpecHelper
       origin = ROOT + 'spec/fixtures/spec-repos/test_repo/.'
       destination = tmp_repos_path + 'master'
       FileUtils.cp_r(origin, destination)
+      FileUtils.rm_r(destination + './.git')
       repo_make('master')
     end
 
@@ -70,6 +71,7 @@ module SpecHelper
       origin = ROOT + 'spec/fixtures/spec-repos/test_repo/.'
       destination = tmp_repos_path + '../master'
       FileUtils.cp_r(origin, destination)
+      FileUtils.rm_r(destination + './.git')
       repo_make('../master')
     end
 
