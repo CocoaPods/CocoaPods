@@ -49,14 +49,13 @@ module Pod
         end
 
         def validate!
+          super
           help! 'A spec-repo name is required.' unless @repo
           unless @source.repo.directory?
             raise Informative,
                   "Unable to find the `#{@repo}` repo. " \
                   'If it has not yet been cloned, add it via `pod repo add`.'
           end
-
-          super
         end
 
         def run
