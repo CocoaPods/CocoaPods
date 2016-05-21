@@ -11,7 +11,7 @@ module Pod
 
         # @return [String] the PACKAGE emoji to use as prefix for every build phase aded to the user project
         #
-        BUILD_PHASE_PREFIX = "\u{1F4E6} ".freeze
+        BUILD_PHASE_PREFIX = '[CP] '.freeze
 
         # @return [String] the name of the check manifest phase
         #
@@ -215,8 +215,7 @@ module Pod
         def create_or_update_build_phase(target, phase_name, phase_class = Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
           prefixed_phase_name = BUILD_PHASE_PREFIX + phase_name
           build_phases = target.build_phases.grep(phase_class)
-          build_phases.find { |phase| phase.name == prefixed_phase_name } ||
-            build_phases.find { |phase| phase.name == phase_name }.tap { |p| p.name = prefixed_phase_name if p } ||
+          build_phases.find { |phase| phase.name && phase.name.end_with?(phase_name) }.tap { |p| p.name = prefixed_phase_name if p } ||
             target.project.new(phase_class).tap do |phase|
               UI.message("Adding Build Phase '#{prefixed_phase_name}' to project.") do
                 phase.name = prefixed_phase_name
