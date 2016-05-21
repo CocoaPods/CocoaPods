@@ -32,7 +32,7 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
-    - "\U0001F4E6 Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
@@ -43,8 +43,8 @@ Targets:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
-    - "\U0001F4E6 Embed Pods Frameworks": []
-    - "\U0001F4E6 Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:

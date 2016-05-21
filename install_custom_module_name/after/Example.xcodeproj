@@ -18,15 +18,15 @@ File References:
 Targets:
 - Example:
     Build Phases:
-    - "\U0001F4E6 Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - SourcesBuildPhase:
       - ViewController.swift
       - AppDelegate.swift
     - FrameworksBuildPhase:
       - Pods_Example.framework
     - ResourcesBuildPhase: []
-    - "\U0001F4E6 Embed Pods Frameworks": []
-    - "\U0001F4E6 Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:

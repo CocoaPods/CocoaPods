@@ -62,8 +62,8 @@ Generating Pods project
 Integrating client project
 
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
-  Adding Build Phase '📦 Embed Pods Frameworks' to project.
-  Adding Build Phase '📦 Check Pods Manifest.lock' to project.
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
   Pod installation complete! There are 3 dependencies from the Podfile and 3 total pods installed.

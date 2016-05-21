@@ -80,9 +80,9 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `Example.xcworkspace` for this project from now on.
 
 Integrating target `Pods-Example` (`Example.xcodeproj` project)
-  Adding Build Phase '📦 Embed Pods Frameworks' to project.
-  Adding Build Phase '📦 Copy Pods Resources' to project.
-  Adding Build Phase '📦 Check Pods Manifest.lock' to project.
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Copy Pods Resources' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
   Pod installation complete! There is 1 dependency from the Podfile and 2 total pods installed.

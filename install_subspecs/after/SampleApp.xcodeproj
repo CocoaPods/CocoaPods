@@ -51,7 +51,7 @@ File References:
 Targets:
 - iOS App:
     Build Phases:
-    - "\U0001F4E6 Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
@@ -65,8 +65,8 @@ Targets:
       - Default.png
       - Default@2x.png
       - Default-568h@2x.png
-    - "\U0001F4E6 Embed Pods Frameworks": []
-    - "\U0001F4E6 Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -100,7 +100,7 @@ Targets:
         Base Configuration: Pods-iOS App.release.xcconfig
 - OS X App:
     Build Phases:
-    - "\U0001F4E6 Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - SourcesBuildPhase:
       - main.m
       - CPAppDelegate.m
@@ -111,8 +111,8 @@ Targets:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
-    - "\U0001F4E6 Embed Pods Frameworks": []
-    - "\U0001F4E6 Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:

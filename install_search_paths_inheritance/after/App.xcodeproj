@@ -33,7 +33,7 @@ File References:
 Targets:
 - App:
     Build Phases:
-    - "\U0001F4E6 Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - SourcesBuildPhase:
       - ViewController.m
       - AppDelegate.m
@@ -44,8 +44,8 @@ Targets:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard
-    - "\U0001F4E6 Embed Pods Frameworks": []
-    - "\U0001F4E6 Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -65,14 +65,14 @@ Targets:
         Base Configuration: Pods-App.release.xcconfig
 - Test:
     Build Phases:
-    - "\U0001F4E6 Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - SourcesBuildPhase:
       - Test.m
     - FrameworksBuildPhase:
       - Pods_Test.framework
     - ResourcesBuildPhase: []
-    - "\U0001F4E6 Embed Pods Frameworks": []
-    - "\U0001F4E6 Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
