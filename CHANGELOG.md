@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marius Rackwitz](https://github.com/mrackwitz)
   [#5313](https://github.com/CocoaPods/CocoaPods/issues/5313)
 
+* Removed emojis in Build Phases names — as it seems that some third party tools have trouble with them.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#5382](https://github.com/CocoaPods/CocoaPods/pull/5382)
+
 * Ensure `Set` is defined before using it.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5287](https://github.com/CocoaPods/CocoaPods/issues/5287)

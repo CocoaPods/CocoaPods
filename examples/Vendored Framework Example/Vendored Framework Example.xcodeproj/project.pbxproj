@@ -95,12 +95,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5CAF4FFA1CC1125900B44520 /* Build configuration list for PBXNativeTarget "Vendored Framework Example" */;
 			buildPhases = (
-				25E42247833F1966ABF463BE /* 📦 Check Pods Manifest.lock */,
+				25E42247833F1966ABF463BE /* [CP] Check Pods Manifest.lock */,
 				5CAF4FE41CC1125900B44520 /* Sources */,
 				5CAF4FE51CC1125900B44520 /* Frameworks */,
 				5CAF4FE61CC1125900B44520 /* Resources */,
-				4697BF2DD055B93C3DE0E375 /* 📦 Embed Pods Frameworks */,
-				9C2933733E94154FB1F30218 /* 📦 Copy Pods Resources */,
+				4697BF2DD055B93C3DE0E375 /* [CP] Embed Pods Frameworks */,
+				9C2933733E94154FB1F30218 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -158,14 +158,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		25E42247833F1966ABF463BE /* 📦 Check Pods Manifest.lock */ = {
+		25E42247833F1966ABF463BE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = '[CP] Check Pods Manifest.lock';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,14 +173,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		4697BF2DD055B93C3DE0E375 /* 📦 Embed Pods Frameworks */ = {
+		4697BF2DD055B93C3DE0E375 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = '[CP] Embed Pods Frameworks';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,14 +188,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vendored Framework Example/Pods-Vendored Framework Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9C2933733E94154FB1F30218 /* 📦 Copy Pods Resources */ = {
+		9C2933733E94154FB1F30218 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = '[CP] Copy Pods Resources';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
