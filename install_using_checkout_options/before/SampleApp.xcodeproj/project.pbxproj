@@ -128,7 +128,7 @@
 				E575589716C5943000DC1500 /* Sources */,
 				E575589816C5943000DC1500 /* Frameworks */,
 				E575589916C5943000DC1500 /* Resources */,
-				26E99B1E26B641169EE1B5F6 /* 📦 Copy Pods Resources */,
+				26E99B1E26B641169EE1B5F6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -180,14 +180,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		26E99B1E26B641169EE1B5F6 /* 📦 Copy Pods Resources */ = {
+		26E99B1E26B641169EE1B5F6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = '[CP] Copy Pods Resources';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

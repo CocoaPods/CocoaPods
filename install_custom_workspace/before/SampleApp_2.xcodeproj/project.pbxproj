@@ -118,8 +118,8 @@
 				E575589716C5943000DC1500 /* Sources */,
 				E575589816C5943000DC1500 /* Frameworks */,
 				E575589916C5943000DC1500 /* Resources */,
-				22EA345846024C4DB585CBDE /* 📦 Copy Pods Resources */,
-				0BFE3134EDA2438BB51CA41B /* 📦 Copy Pods Resources */,
+				22EA345846024C4DB585CBDE /* [CP] Copy Pods Resources */,
+				0BFE3134EDA2438BB51CA41B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -171,28 +171,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0BFE3134EDA2438BB51CA41B /* 📦 Copy Pods Resources */ = {
+		0BFE3134EDA2438BB51CA41B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = '[CP] Copy Pods Resources';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Pods-SampleApp_2-resources.sh\"\n";
 		};
-		22EA345846024C4DB585CBDE /* 📦 Copy Pods Resources */ = {
+		22EA345846024C4DB585CBDE /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = '[CP] Copy Pods Resources';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
