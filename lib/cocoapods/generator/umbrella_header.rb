@@ -32,10 +32,12 @@ module Pod
 
         result << "\n"
 
+        result << "#ifdef __OBJC__\n"
         result << <<-eos.strip_heredoc
         FOUNDATION_EXPORT double #{target.product_module_name}VersionNumber;
         FOUNDATION_EXPORT const unsigned char #{target.product_module_name}VersionString[];
         eos
+        result << "#endif\n"
 
         result << "\n"
 
