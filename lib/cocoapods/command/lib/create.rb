@@ -33,6 +33,7 @@ module Pod
           super
           help! 'A name for the Pod is required.' unless @name
           help! 'The Pod name cannot contain spaces.' if @name =~ /\s/
+          help! 'The Pod name cannot contain plusses.' if @name =~ /\+/
           help! "The Pod name cannot begin with a '.'" if @name[0, 1] == '.'
         end
 

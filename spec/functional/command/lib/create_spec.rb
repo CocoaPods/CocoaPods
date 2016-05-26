@@ -14,6 +14,10 @@ module Pod
       lambda { run_command('lib', 'create', 'Pod Name With Spaces') }.should.raise CLAide::Help
     end
 
+    it 'complains if pod name contains plusses' do
+      lambda { run_command('lib', 'create', 'Pod+Name+With+Plusses') }.should.raise CLAide::Help
+    end
+
     it 'complains if pod name begins with a period' do
       lambda { run_command('lib', 'create', '.HiddenPod') }.should.raise CLAide::Help
     end
