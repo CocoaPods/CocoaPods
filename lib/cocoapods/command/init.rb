@@ -63,7 +63,7 @@ module Pod
         # Split out the targets into app and test targets
         test_targets, app_targets = project.native_targets.
                               sort_by { |t| t.name.downcase }.
-                              partition { |t| t.name =~ /test/i }
+                              partition(&:test_target_type?)
 
         app_targets.each do |app_target|
           test_targets_for_app = test_targets.select do |target|

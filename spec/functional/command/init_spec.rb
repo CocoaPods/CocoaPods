@@ -90,8 +90,8 @@ module Pod
       Dir.chdir(temporary_directory) do
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'App', :ios)
-        project.new_target(:application, 'AppTests', :ios)
-        project.new_target(:application, 'AppFeatureTests', :ios)
+        project.new_target(:unit_test_bundle, 'AppTests', :ios)
+        project.new_target(:ui_test_bundle, 'AppFeatureTests', :ios)
         project.new_target(:application, 'Swifty App', :osx, nil, nil, :swift)
         project.save
 
@@ -142,13 +142,33 @@ module Pod
 
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'App', :ios)
-        project.new_target(:application, 'AppTests', :ios)
+        project.new_target(:unit_test_bundle, 'AppTests', :ios)
         project.save
 
         run_command('init')
 
         dependencies = config.podfile.target_definitions['AppTests'].dependencies
         dependencies.map(&:name).should == ['Kiwi']
+      end
+    end
+
+    it 'does not treat non-test targets as test targets' do
+      Dir.chdir(temporary_directory) do
+        tmp_templates_dir = Pathname.pwd + 'templates_dir'
+        tmp_templates_dir.mkpath
+        config.stubs(:templates_dir).returns(tmp_templates_dir)
+
+        open(config.default_test_podfile_path, 'w') { |f| f << "pod 'Kiwi'" }
+
+        project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
+        project.new_target(:application, 'Test', :ios)
+        project.new_target(:application, 'Test Test Test', :ios)
+        project.save
+
+        run_command('init')
+
+        config.podfile.target_definitions['Test'].dependencies.should.be.empty
+        config.podfile.target_definitions['Test Test Test'].dependencies.should.be.empty
       end
     end
 
