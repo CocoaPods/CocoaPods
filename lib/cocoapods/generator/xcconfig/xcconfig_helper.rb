@@ -287,7 +287,7 @@ module Pod
               'OTHER_SWIFT_FLAGS' => [
                 '$(inherited)',
                 quote(%w(-D COCOAPODS)),
-                (quote(["-suppress-warnings"]) if target.try(:inhibit_warnings?) || false),
+                (quote(%w(-suppress-warnings)) if target.try(:inhibit_warnings?) || false),
               ].compact.join(' '),
             }
             xcconfig.merge!(build_settings)
