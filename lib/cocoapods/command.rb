@@ -62,6 +62,7 @@ module Pod
       else
         if ENV['COCOA_PODS_ENV'] != 'development'
           puts UI::ErrorReport.report(exception)
+          UI::ErrorReport.search_for_exceptions(exception)
           exit 1
         else
           raise exception

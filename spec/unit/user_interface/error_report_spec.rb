@@ -110,6 +110,37 @@ EOS
         message = remove_color(message)
         message.should == '[!] at -'
       end
+    
+      it "handles inspector_successfully_recieved_report" do
+        time = Time.new(2016, 5, 13)
+        Time.stubs(:now).returns(time)
+        
+        url = 'https://api.github.com/search/issues?q=Testing+repo:cocoapods/cocoapods'
+        fixture_json_text = File.read SpecHelper.fixture("github_search_response.json")
+        GhInspector::Sidekick.any_instance.expects(:get_api_results).with(url).returns(JSON.parse(fixture_json_text))
+        
+        error = NameError.new("Testing", "orta")
+        @report.search_for_exceptions error
+        result = <<-EOS
+Looking for related issues on cocoapods/cocoapods...
+ - Travis CI with Ruby 1.9.x fails for recent pull requests
+   https://github.com/CocoaPods/CocoaPods/issues/646 [closed] [8 comments]
+   14 Nov 2012
+
+ - pod search --full chokes on cocos2d.podspec:14
+   https://github.com/CocoaPods/CocoaPods/issues/657 [closed] [1 comment]
+   20 Nov 2012
+
+ - about pod
+   https://github.com/CocoaPods/CocoaPods/issues/4345 [closed] [21 comments]
+   2 weeks ago
+
+and 30 more at:
+https://github.com/cocoapods/cocoapods/search?q=Testing&type=Issues&utf8=✓
+EOS
+        UI.output.should == result
+      end
+      
     end
   end
 end

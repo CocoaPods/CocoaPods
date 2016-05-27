@@ -1,4 +1,5 @@
 require 'cocoapods/user_interface/error_report'
+require 'cocoapods/user_interface/inspector_reporter'
 
 module Pod
   # Provides support for UI output. It provides support for nested sections of
