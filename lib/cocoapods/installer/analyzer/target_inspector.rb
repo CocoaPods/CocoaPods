@@ -72,7 +72,7 @@ module Pod
             else
               raise Informative, 'Could not automatically select an Xcode project. ' \
                 "Specify one in your Podfile like so:\n\n" \
-                "    xcodeproj 'path/to/Project.xcodeproj'\n"
+                "    project 'path/to/Project.xcodeproj'\n"
             end
           end
           path

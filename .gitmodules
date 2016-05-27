@@ -10,3 +10,6 @@
 [submodule "spec/cocoapods-integration-specs"]
 	path = spec/cocoapods-integration-specs
 	url = https://github.com/CocoaPods/cocoapods-integration-specs.git
+[submodule "spec/fixtures/spec-repos/test_repo"]
+	path = spec/fixtures/spec-repos/test_repo
+	url = https://github.com/CocoaPods/cocoapods-test-specs.git

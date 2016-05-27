@@ -13,6 +13,35 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Bug Fixes
 
 * None.  
+* Symlink the header folders in the framework bundle's root directory
+  by a new shell script build phase if `header_mappings_dir` is used
+  with frameworks.  
+  [Marius Rackwitz](https://github.com/mrackwitz)
+  [#5313](https://github.com/CocoaPods/CocoaPods/issues/5313)
+
+* Removed emojis in Build Phases names — as it seems that some third party tools have trouble with them.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#5382](https://github.com/CocoaPods/CocoaPods/pull/5382)
+
+* Ensure `Set` is defined before using it.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5287](https://github.com/CocoaPods/CocoaPods/issues/5287)
+
+* Add --target-device to ibtool invocation for XIBs
+  [Juan Civile](https://github.com/champo)
+  [#5282](https://github.com/CocoaPods/CocoaPods/issues/5282)
+
+* Fix error when executables cannot be found.
+  [Jan Berkel](https://github.com/jberkel)
+  [#5319](https://github.com/CocoaPods/CocoaPods/pull/5319)
+
+* Avoid removing all files when root directory contains unicode characters.  
+  [Marc Boquet](https://github.com/marcboquet)
+  [#5294](https://github.com/CocoaPods/CocoaPods/issues/5294)
+
+* Guarding from crash if pod lib create has a + character in the name.
+  [William Entriken](https://github.com/fulldecent)
+  [CocoaPods/pod-template#69](https://github.com/CocoaPods/pod-template/issues/69)
 
 
 ## 1.0.0 (2016-05-10)

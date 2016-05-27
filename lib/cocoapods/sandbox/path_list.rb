@@ -1,3 +1,5 @@
+require 'active_support/multibyte/unicode'
+
 module Pod
   class Sandbox
     # The PathList class is designed to perform multiple glob matches against
@@ -20,7 +22,8 @@ module Pod
       # @param  [Pathname] root The root of the PathList.
       #
       def initialize(root)
-        @root = root
+        root_dir = ActiveSupport::Multibyte::Unicode.normalize(root.to_s)
+        @root = Pathname.new(root_dir)
         @glob_cache = {}
       end
 
@@ -47,15 +50,12 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
-        root_length  = root.to_s.length + 1
         escaped_root = escape_path_for_glob(root)
-        paths = Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH).sort_by(&:upcase)
-        absolute_dirs  = paths.select { |path| File.directory?(path) }
-        relative_dirs  = absolute_dirs.map  { |p| p[root_length..-1] }
-        absolute_paths = paths.reject { |p| p == "#{root}/." || p == "#{root}/.." }
-        relative_paths = absolute_paths.map { |p| p[root_length..-1] }
-        @files = relative_paths - relative_dirs
-        @dirs  = relative_dirs.map { |d| d.gsub(/\/\.\.?$/, '') }.reject { |d| d == '.' || d == '..' } .uniq
+        absolute_paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
+        dirs_and_files = absolute_paths.reject { |path| path.basename.to_s =~ /^\.\.?$/ }
+        relative_paths = dirs_and_files.map { |path| path.relative_path_from(root) }
+        sorted_paths = relative_paths.map(&:to_s).sort_by(&:upcase)
+        @dirs, @files = sorted_paths.partition { |path| File.directory?(root + path) }
         @glob_cache = {}
       end
 

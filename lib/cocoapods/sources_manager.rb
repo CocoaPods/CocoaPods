@@ -1,4 +1,5 @@
 require 'cocoapods-core/source'
+require 'set'
 
 module Pod
   class Source
@@ -141,8 +142,6 @@ module Pod
         "CocoaPods #{latest_cocoapods_version} is available.".green,
         "To update use: `#{install_message}`".green,
         ("[!] This is a test version we'd love you to try.".yellow if rc),
-        ("Until we reach version 1.0 the features of CocoaPods can and will change.\n" \
-         'We strongly recommend that you use the latest version at all times.'.yellow unless rc),
         '',
         'For more information, see https://blog.cocoapods.org ' \
         'and the CHANGELOG for this version at ' \

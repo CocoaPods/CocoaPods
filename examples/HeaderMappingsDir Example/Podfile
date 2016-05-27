@@ -1,0 +1,9 @@
+platform :osx, '10.9'
+use_frameworks!
+
+workspace 'Examples.xcworkspace'
+project 'HeaderMappingsDir Example.xcodeproj'
+
+target 'App' do
+  pod 'HeaderMappingsDirPod', :path => 'HeaderMappingsDirPod'
+end

@@ -200,13 +200,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A129F8F71B2CA81700EBC1DD /* Build configuration list for PBXNativeTarget "watchOSsample" */;
 			buildPhases = (
-				1E8987D060C89B71B6F2E504 /* 📦 Check Pods Manifest.lock */,
+				1E8987D060C89B71B6F2E504 /* [CP] Check Pods Manifest.lock */,
 				A129F8BC1B2CA81600EBC1DD /* Sources */,
 				A129F8BD1B2CA81600EBC1DD /* Frameworks */,
 				A129F8BE1B2CA81600EBC1DD /* Resources */,
 				A129F8F61B2CA81700EBC1DD /* Embed Watch Content */,
-				B55D105F75FDCEAD4A12BE64 /* 📦 Embed Pods Frameworks */,
-				1E232F64274BFFA8F587E155 /* 📦 Copy Pods Resources */,
+				B55D105F75FDCEAD4A12BE64 /* [CP] Embed Pods Frameworks */,
+				1E232F64274BFFA8F587E155 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -240,12 +240,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A865B2891CAF18FF0031EFC6 /* Build configuration list for PBXNativeTarget "watchOSsample WatchKit Extension" */;
 			buildPhases = (
-				80D5F6FDF4441AF84D902FA8 /* 📦 Check Pods Manifest.lock */,
+				80D5F6FDF4441AF84D902FA8 /* [CP] Check Pods Manifest.lock */,
 				A865B2761CAF18FF0031EFC6 /* Sources */,
 				A865B2771CAF18FF0031EFC6 /* Frameworks */,
 				A865B2781CAF18FF0031EFC6 /* Resources */,
-				766BB1279F3F20E30F8D82AC /* 📦 Embed Pods Frameworks */,
-				9404B5E651690A16E40B8F95 /* 📦 Copy Pods Resources */,
+				766BB1279F3F20E30F8D82AC /* [CP] Embed Pods Frameworks */,
+				9404B5E651690A16E40B8F95 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -328,14 +328,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1E232F64274BFFA8F587E155 /* 📦 Copy Pods Resources */ = {
+		1E232F64274BFFA8F587E155 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = '[CP] Copy Pods Resources';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,14 +343,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1E8987D060C89B71B6F2E504 /* 📦 Check Pods Manifest.lock */ = {
+		1E8987D060C89B71B6F2E504 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = '[CP] Check Pods Manifest.lock';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,14 +358,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		766BB1279F3F20E30F8D82AC /* 📦 Embed Pods Frameworks */ = {
+		766BB1279F3F20E30F8D82AC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = '[CP] Embed Pods Frameworks';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,14 +373,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		80D5F6FDF4441AF84D902FA8 /* 📦 Check Pods Manifest.lock */ = {
+		80D5F6FDF4441AF84D902FA8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = '[CP] Check Pods Manifest.lock';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -388,14 +388,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		9404B5E651690A16E40B8F95 /* 📦 Copy Pods Resources */ = {
+		9404B5E651690A16E40B8F95 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = '[CP] Copy Pods Resources';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,14 +403,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B55D105F75FDCEAD4A12BE64 /* 📦 Embed Pods Frameworks */ = {
+		B55D105F75FDCEAD4A12BE64 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = '[CP] Embed Pods Frameworks';
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,0 +1,10 @@
+framework module HeaderMappingsDirPod {
+    umbrella header "Foo.h"
+
+    export *
+    module * { export * }
+
+    explicit module Private {
+        header "Bar/Bar_Private.h"
+    }
+}

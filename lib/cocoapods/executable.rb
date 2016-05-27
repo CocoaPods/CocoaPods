@@ -108,7 +108,7 @@ module Pod
     #
     def self.which!(program)
       which(program).tap do |bin|
-        raise Informative, "Unable to locate the executable `#{executable}`" unless bin
+        raise Informative, "Unable to locate the executable `#{program}`" unless bin
       end
     end
 
