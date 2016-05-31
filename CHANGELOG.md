@@ -39,9 +39,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Marc Boquet](https://github.com/marcboquet)
   [#5294](https://github.com/CocoaPods/CocoaPods/issues/5294)
 
-* Guarding from crash if pod lib create has a + character in the name.
+* Guarding from crash if pod lib create has a + character in the name.  
   [William Entriken](https://github.com/fulldecent)
   [CocoaPods/pod-template#69](https://github.com/CocoaPods/pod-template/issues/69)
+
+* Use target product types to determine whether a target is a test target when
+  running `pod init`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5378](https://github.com/CocoaPods/CocoaPods/issues/5378)
 
 
 ## 1.0.0 (2016-05-10)
