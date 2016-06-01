@@ -37,6 +37,7 @@ module Pod
             :Type => 'PSGroupSpecifier',
             :Title => sanitize_encoding(spec.name),
             :FooterText => sanitize_encoding(license),
+            :License => spec.license[:type],
           }
         end
       end
