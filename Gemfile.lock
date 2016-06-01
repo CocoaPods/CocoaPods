@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 4398d6f71991e849d5c11f95f6035de5d3cfe812
-  branch: master
+  revision: 603bb3c15bf4ee08584305e3a45776daf40b95db
+  branch: 1-0-stable
   specs:
     cocoapods-core (1.0.0)
       activesupport (>= 4.0.2)
@@ -263,4 +263,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.12.1
+   1.12.5
