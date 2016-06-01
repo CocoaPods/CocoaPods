@@ -19,7 +19,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `git ls-remote` to skip full clones for branch dependencies.  
   [Juan Civile](https://github.com/champo)
   [#5376](https://github.com/CocoaPods/CocoaPods/issues/5376)
-  
+
 * [repo/push] --use-json to convert podspecs to JSON format when pushing  
   [Mark Schall](https://github.com/maschall)
   [#5568](https://github.com/CocoaPods/CocoaPods/pull/5568)
@@ -48,6 +48,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   and framework targets  
   [benasher44](https://github.com/benasher44)
   [#4203](https://github.com/CocoaPods/CocoaPods/issues/4203)
+
+* Add a license type to generated acknowledgements file in plist.  
+  [Naoto Kaneko](https://github.com/naoty)
+  [#5436](https://github.com/CocoaPods/CocoaPods/pull/5436)
 
 ##### Bug Fixes
 
