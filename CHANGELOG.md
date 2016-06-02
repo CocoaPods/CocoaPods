@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#5445](https://github.com/CocoaPods/CocoaPods/issues/5445)
 
+* Resolve cyclic dependencies when creating pod targets.  
+  [Juan Civile](https://github.com/champo)
+  [#5362](https://github.com/CocoaPods/CocoaPods/issues/5362)
+
 
 ## 1.0.1 (2016-06-02)
 

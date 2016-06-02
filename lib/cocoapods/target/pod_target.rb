@@ -189,8 +189,14 @@ module Pod
     #         dependency upon.
     #
     def recursive_dependent_targets
-      targets = dependent_targets + dependent_targets.flat_map(&:recursive_dependent_targets)
-      targets.uniq!
+      targets = dependent_targets.clone
+
+      targets.each do |target|
+        target.dependent_targets.each do |t|
+          targets.push(t) unless t == self || targets.include?(t)
+        end
+      end
+
       targets
     end
 
