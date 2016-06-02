@@ -8,10 +8,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.0.0)
+    cocoapods (1.0.1)
       activesupport (>= 4.0.2)
       claide (>= 1.0.0, < 2.0)
-      cocoapods-core (= 1.0.0)
+      cocoapods-core (= 1.0.1)
       cocoapods-deintegrate (>= 1.0.0, < 2.0)
       cocoapods-downloader (>= 1.0.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -43,7 +43,7 @@ GEM
     clintegracon (0.8.1)
       colored (~> 1.2)
       diffy
-    cocoapods-core (1.0.0)
+    cocoapods-core (1.0.1)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
