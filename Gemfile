@@ -1,7 +1,10 @@
+SKIP_UNRELEASED_VERSIONS = false
+
 # Declares a dependency to the git repo of CocoaPods gem. This declaration is
 # compatible with the local git repos feature of Bundler.
 #
 def cp_gem(name, repo_name, branch = 'master', path: false)
+  return gem name if SKIP_UNRELEASED_VERSIONS
   opts = if path
            { :path => "../#{repo_name}" }
          else
