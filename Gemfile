@@ -1,4 +1,4 @@
-SKIP_UNRELEASED_VERSIONS = false
+SKIP_UNRELEASED_VERSIONS = true
 
 # Declares a dependency to the git repo of CocoaPods gem. This declaration is
 # compatible with the local git repos feature of Bundler.
