@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add a license type to generated acknowledgements file in plist.  
+  [Naoto Kaneko](https://github.com/naoty)
+  [#5436](https://github.com/CocoaPods/CocoaPods/pull/5436)
 
 ##### Bug Fixes
 
