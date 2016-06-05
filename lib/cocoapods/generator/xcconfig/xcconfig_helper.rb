@@ -283,9 +283,9 @@ module Pod
         #
         def self.add_language_specific_settings(target, xcconfig)
           if target.uses_swift?
-            build_settings = {
-              'OTHER_SWIFT_FLAGS' => '$(inherited) ' + quote(%w(-D COCOAPODS)),
-            }
+            other_swift_flags = ['$(inherited)', quote(%w(-D COCOAPODS))]
+            other_swift_flags << quote(%w(-suppress-warnings)) if target.try(:inhibit_warnings?)
+            build_settings = { 'OTHER_SWIFT_FLAGS' => other_swift_flags.join(' ') }
             xcconfig.merge!(build_settings)
           end
         end

@@ -194,6 +194,34 @@ module Pod
         end
 
         #---------------------------------------------------------------------#
+
+        describe '::add_language_specific_settings' do
+          it 'does not add OTHER_SWIFT_FLAGS to the xcconfig if the target does not use swift' do
+            target = stub(:uses_swift? => false)
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_language_specific_settings(target, xcconfig)
+            other_swift_flags = xcconfig.to_hash['OTHER_SWIFT_FLAGS']
+            other_swift_flags.should.nil?
+          end
+
+          it 'does not add the -suppress-warnings flag to the xcconfig if the target uses swift, but does not inhibit warnings' do
+            target = stub(:uses_swift? => true, :inhibit_warnings? => false)
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_language_specific_settings(target, xcconfig)
+            other_swift_flags = xcconfig.to_hash['OTHER_SWIFT_FLAGS']
+            other_swift_flags.should.not.include?('-suppress-warnings')
+          end
+
+          it 'adds the -suppress-warnings flag to the xcconfig if the target uses swift and inhibits warnings' do
+            target = stub(:uses_swift? => true, :inhibit_warnings? => true)
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_language_specific_settings(target, xcconfig)
+            other_swift_flags = xcconfig.to_hash['OTHER_SWIFT_FLAGS']
+            other_swift_flags.should.include?('-suppress-warnings')
+          end
+        end
+
+        #---------------------------------------------------------------------#
       end
     end
   end
