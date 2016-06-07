@@ -394,7 +394,7 @@ module Pod
       aggregate_targets.each do |aggregate_target|
         aggregate_target.user_build_configurations.keys.each do |config|
           pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
-          vendored_frameworks = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks)
+          vendored_frameworks = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks).uniq
           frameworks = vendored_frameworks.map { |fw| fw.basename('.framework') }
           frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
 
