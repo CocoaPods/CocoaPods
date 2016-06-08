@@ -30,6 +30,14 @@ begin
     title 'Building the gem'
   end
 
+  task :check_submodules do
+    title 'Ensuring submodules are initialized'
+    submodule_help_msg = 'Run git submodule update --init --recursive to ensure submodules are initialized'
+    raise submodule_help_msg if `git submodule status`.split("\n").any? do |line|
+      line.start_with? '-'
+    end
+  end
+
   require 'bundler/gem_tasks'
   require 'bundler/setup'
 
@@ -287,7 +295,7 @@ begin
   #-----------------------------------------------------------------------------#
 
   desc 'Run all specs'
-  task :spec => 'spec:all'
+  task :spec => [:check_submodules, 'spec:all']
 
   task :default => :spec
 
