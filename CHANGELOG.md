@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix installing pods with `use_frameworks` when deduplication is disabled.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5481](https://github.com/CocoaPods/CocoaPods/issues/5481)
 
 
 ## 1.0.1 (2016-06-02)

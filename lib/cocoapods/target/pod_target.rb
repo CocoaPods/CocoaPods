@@ -65,6 +65,7 @@ module Pod
           target.native_target = native_target
           target.archs = archs
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
+          target.host_requires_frameworks = host_requires_frameworks
           cache[cache_key] = target
         end
       end
