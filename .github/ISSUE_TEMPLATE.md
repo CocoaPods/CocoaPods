@@ -12,7 +12,7 @@
 ℹ Please replace this with what you did.  
 e.g. Run `pod install`
 
-## What did you expected to happen?
+## What did you expect to happen?
 
 ℹ Please replace this with what you expected to happen.  
 e.g. Install all pod dependencies correctly.
