@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Move Pods Project generation to an `Xcode` Namespace.  
+  [Daniel Tomlinson](https://github.com/dantoml)
+  [#5480](https://github.com/CocoaPods/CocoaPods/pull/5480)
+
 * Add the ability to inhibit swift warnings.
   [Peter Ryszkiewicz](https://github.com/pRizz)
   [#5414](https://github.com/CocoaPods/CocoaPods/pull/5414)

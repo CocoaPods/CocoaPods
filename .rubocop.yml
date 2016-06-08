@@ -4,9 +4,6 @@ inherit_from:
 
 #- CocoaPods ------------------------------------------------------------------
 
-ParameterLists:
-  CountKeywordArgs: false
-
 AllCops:
   Include:
     - Dangerfile
