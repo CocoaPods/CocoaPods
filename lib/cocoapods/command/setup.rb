@@ -59,7 +59,8 @@ module Pod
       # @return [void]
       #
       def update_master_repo
-        config.sources_manager.update('master', true)
+        show_output = !config.silent?
+        config.sources_manager.update('master', show_output)
       end
 
       # Sets the repo to the master branch.

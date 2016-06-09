@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5481](https://github.com/CocoaPods/CocoaPods/issues/5481)
 
+* Running `pod setup --silent` will now properly silence git output while
+  updating the repository.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.0.1 (2016-06-02)
 
