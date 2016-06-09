@@ -22,7 +22,7 @@ if !modified_files.include?("CHANGELOG.md") && has_app_changes
 Here's an example of your CHANGELOG entry:
 
 ```markdown
-* #{pr.title}#{' '}
+* #{pr_title}#{' '}
   [#{pr_author}](https://github.com/#{pr_author})
   [#issue_number](https://github.com/CocoaPods/CocoaPods/issues/issue_number)
 ```
