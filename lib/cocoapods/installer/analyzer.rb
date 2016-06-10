@@ -245,7 +245,7 @@ module Pod
         return if extension_uuids.empty?
         extension_aggregate_targets.each do |extension_target|
           next unless extension_uuids.include? extension_target.user_targets[0].uuid
-          raise "#{aggregate_target.name} must use_frameworks! because it is hosting an extension." unless aggregate_target.requires_frameworks?
+          raise Informative, "#{aggregate_target.name} must call use_frameworks! because it is hosting an extension that calls use_frameworks!." unless aggregate_target.requires_frameworks?
           pod_target_names = aggregate_target.pod_targets.map(&:name)
           # This extension target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
           aggregate_target.pod_targets = aggregate_target.pod_targets + extension_target.pod_targets.select do |pod_target|

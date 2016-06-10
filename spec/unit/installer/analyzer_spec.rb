@@ -711,7 +711,7 @@ module Pod
           ].sort
         end
 
-        it "raises exception when unable to find an extension's host target" do
+        it "raises when unable to find an extension's host target" do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             use_frameworks!
@@ -726,6 +726,27 @@ module Pod
           should.raise Informative do
             analyzer.analyze
           end.message.should.match /Unable to find host target for Pods-Today Extension. Please add the host targets for the extensions to the Podfile/
+        end
+
+        it "raises when the extension calls use_frameworks!, but the host target does not" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            project 'Sample Extensions Project/Sample Extensions Project'
+
+            target 'Sample Extensions Project' do
+              pod 'JSONKit', '1.4'
+            end
+
+            target 'Today Extension' do
+              use_frameworks!
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          should.raise Informative do
+            analyzer.analyze
+          end.message.should.match /Pods-Sample Extensions Project must call use_frameworks! because it is hosting an extension that calls use_frameworks!/
         end
       end
 
