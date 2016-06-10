@@ -275,7 +275,7 @@ module Pod
           end
         end
         unless extension_targets_missing_hosts.empty?
-          raise Informative, "Unable to find host target for #{extension_targets_missing_hosts.map(&:name).join(', ')}. Please add the extension's host targets to the Podfile."
+          raise Informative, "Unable to find host target for #{extension_targets_missing_hosts.map(&:name).join(', ')}. Please add the host targets for the extensions to the Podfile."
         end
       end
 

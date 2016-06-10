@@ -711,7 +711,7 @@ module Pod
           ].sort
         end
 
-        it 'raises exception when unable' do
+        it "raises exception when unable to find an extension's host target" do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             use_frameworks!
@@ -725,7 +725,7 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           should.raise Informative do
             analyzer.analyze
-          end.message.should.equal "Unable to find host target for Pods-Today Extension. Please add the extension's host targets to the Podfile."
+          end.message.should.match /Unable to find host target for Pods-Today Extension. Please add the host targets for the extensions to the Podfile/
         end
       end
 
