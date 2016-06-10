@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   updating the repository.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fix linting pods that depend upon `XCTest`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#5321](https://github.com/CocoaPods/CocoaPods/issues/5321)
+
 
 ## 1.0.1 (2016-06-02)
 
