@@ -723,7 +723,7 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-          should.raise ArgumentError do
+          should.raise Informative do
             analyzer.analyze
           end.message.should.equal "Unable to find host target for Pods-Today Extension. Please add the extension's host targets to the Podfile."
         end
