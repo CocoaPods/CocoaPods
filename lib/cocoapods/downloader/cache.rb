@@ -124,6 +124,7 @@ module Pod
       def cached_pod(request)
         cached_spec = cached_spec(request)
         path = path_for_pod(request)
+
         return unless cached_spec && path.directory?
         spec = request.spec || cached_spec
         Response.new(path, spec, request.params)

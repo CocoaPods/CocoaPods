@@ -33,11 +33,16 @@ module Pod
       cache_path: Config.instance.cache_root + 'Pods'
     )
       can_cache &&= !Config.instance.skip_download_cache
+
+      request = preprocess_request(request)
+
       if can_cache
         raise ArgumentError, 'Must provide a `cache_path` when caching.' unless cache_path
         cache = Cache.new(cache_path)
         result = cache.download_pod(request)
       else
+        raise ArgumentError, 'Must provide a `target` when caching is disabled.' unless target
+
         require 'cocoapods/installer/pod_source_preparer'
         result, = download_request(request, target)
         Installer::PodSourcePreparer.new(result.spec, result.location).prepare!
@@ -108,6 +113,21 @@ module Pod
       else
         downloader.checkout_options
       end
+    end
+
+    # Return a new request after preprocessing by the downloader
+    #
+    # @param  [Request] request
+    #         the request that needs preprocessing
+    #
+    # @return [Request] the preprocessed request
+    #
+    def self.preprocess_request(request)
+      Request.new(
+        :spec => request.spec,
+        :released => request.released_pod?,
+        :name => request.name,
+        :params => Downloader.preprocess_options(request.params))
     end
 
     public
