@@ -47,6 +47,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Juan Civile](https://github.com/champo)
   [#5362](https://github.com/CocoaPods/CocoaPods/issues/5362)
 
+* Fix embedding frameworks in UI Testing bundles.  
+  [Daniel Tomlinson](https://github.com/dantoml)
+  [#5250](https://github.com/CocoaPods/CocoaPods/issues/5250)
+
 
 ## 1.0.1 (2016-06-02)
 
