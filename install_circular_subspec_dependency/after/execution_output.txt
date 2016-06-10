@@ -1,0 +1,55 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SubSpecCircular`: (``)
+
+Fetching external sources
+-> Fetching podspec for `Pod1` from `./DeveloperPods/Pod1`
+-> Fetching podspec for `Pod2` from `./DeveloperPods/Pod2`
+-> Fetching podspec for `Pod3` from `./DeveloperPods/Pod3`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A Pod1
+  A Pod2
+  A Pod3
+
+Downloading dependencies
+
+-> Installing Pod1 (1.0)
+
+-> Installing Pod2 (1.0)
+
+-> Installing Pod3 (1.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `Pod1` iOS 8.0
+    - Installing target `Pod2` iOS 8.0
+    - Installing target `Pod3` iOS 8.0
+    - Installing target `Pods-SubSpecCircular` iOS 9.3
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+    - Generating deterministic UUIDs
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SubSpecCircular.xcworkspace` for this project from now on.
+
+Integrating target `Pods-SubSpecCircular` (`SubSpecCircular.xcodeproj` project)
+  - Running post install hooks
+    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+  Pod installation complete! There are 3 dependencies from the Podfile and 3 total pods installed.
