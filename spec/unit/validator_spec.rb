@@ -568,7 +568,8 @@ module Pod
         it 'adds the importing file to the app target' do
           @validator.stubs(:use_frameworks).returns(true)
           @validator.send(:create_app_project)
-          pod_target = stub(:uses_swift? => true, :should_build? => true, :pod_name => 'JSONKit', :product_module_name => 'ModuleName')
+          pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
           installer = stub(:pod_targets => [pod_target])
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)
@@ -579,6 +580,21 @@ module Pod
           file.should.not.be.nil
           target = project.native_targets.find { |t| t.name == 'App' }
           target.source_build_phase.files_references.should.include(file)
+        end
+
+        it 'adds developer framework paths when the pod depends on XCTest' do
+          @validator.send(:create_app_project)
+          pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
+          installer = stub(:pod_targets => [pod_target])
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:add_app_project_import)
+
+          project = Xcodeproj::Project.open(@validator.validation_dir + 'App.xcodeproj')
+          project.native_targets.first.build_configurations.map do |bc|
+            bc.build_settings['FRAMEWORK_SEARCH_PATHS']
+          end.uniq.should == [%w($(inherited) "$(PLATFORM_DIR)/Developer/Library/Frameworks")]
         end
       end
 
