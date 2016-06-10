@@ -238,8 +238,10 @@ module Pod
       #
       def copy_extension_pod_targets_to_host(aggregate_target, extension_aggregate_targets)
         return if aggregate_target.requires_host_target?
-        # Get the uuids of the aggregate_target's user_target's extension targets if any
-        extension_uuids = aggregate_target.user_project.extensions_for_native_target(aggregate_target.user_targets[0]).map(&:uuid)
+        # Get the uuids of the aggregate_target's user_targets' extension targets if any
+        extension_uuids = aggregate_target.user_targets.map do |target|
+          aggregate_target.user_project.extensions_for_native_target(target).map(&:uuid)
+        end.flatten
         return if extension_uuids.empty?
         extension_aggregate_targets.each do |extension_target|
           next unless extension_uuids.include? extension_target.user_targets[0].uuid

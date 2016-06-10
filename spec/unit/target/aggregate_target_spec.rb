@@ -230,11 +230,13 @@ module Pod
             @target.requires_host_target?.should == false
           end
 
-          it 'raises an exception if more than one user_target is found' do
-            @target.user_target_uuids += @target.user_target_uuids
+          it 'raises an exception if more than one kind of user_target is found' do
+            @target.user_target_uuids << '51075D491521D0C100E39B41'
+            @target.user_targets.first.stubs(:symbol_type).returns(:app_extension)
+            @target.user_targets.last.stubs(:symbol_type).returns(:watch_extension)
             should.raise ArgumentError do
               @target.requires_host_target?
-            end.message.should.equal 'Expected single user_target for Pods'
+            end.message.should.equal 'Expected single kind of user_target for Pods. Found app_extension, watch_extension.'
           end
         end
       end

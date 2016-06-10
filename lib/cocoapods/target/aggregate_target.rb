@@ -37,8 +37,9 @@ module Pod
       # for sure that this target refers to an extension
       # target that would require a host target
       return false if user_project.nil?
-      raise ArgumentError, "Expected single user_target for #{name}" unless user_targets.count == 1
-      EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include? user_targets[0].symbol_type
+      symbol_types = user_targets.map(&:symbol_type).uniq
+      raise ArgumentError, "Expected single kind of user_target for #{name}. Found #{symbol_types.join(', ')}." unless symbol_types.count == 1
+      EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include? symbol_types[0]
     end
 
     # @return [String] the label for the target.
