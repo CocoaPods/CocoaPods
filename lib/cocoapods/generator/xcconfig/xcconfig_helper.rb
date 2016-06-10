@@ -314,7 +314,6 @@ module Pod
                 search_paths << search_path
               end
             end
-            search_paths
           end
         end
 

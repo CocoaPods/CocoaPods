@@ -388,8 +388,17 @@ module Pod
 
       source_file = write_app_import_source_file(pod_target)
       source_file_ref = app_project.new_group('App', 'App').new_file(source_file)
-      app_project.targets.first.add_file_references([source_file_ref])
+      app_target = app_project.targets.first
+      app_target.add_file_references([source_file_ref])
+      add_xctest(app_target) if @installer.pod_targets.any? { |pt| pt.spec_consumers.any? { |c| c.frameworks.include?('XCTest') } }
       app_project.save
+    end
+
+    def add_xctest(app_target)
+      app_target.build_configurations.each do |configuration|
+        search_paths = configuration.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= '$(inherited)'
+        search_paths << ' "$(PLATFORM_DIR)/Developer/Library/Frameworks"'
+      end
     end
 
     def write_app_import_source_file(pod_target)
