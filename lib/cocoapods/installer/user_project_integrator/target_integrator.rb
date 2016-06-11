@@ -57,7 +57,7 @@ module Pod
 
             add_pods_library
             add_embed_frameworks_script_phase
-            remove_embed_frameworks_script_phase_from_app_extensions
+            remove_embed_frameworks_script_phase_from_embedded_targets
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
           end
@@ -114,13 +114,13 @@ module Pod
           end
         end
 
-        # Removes the embed frameworks build phase from app extension targets
+        # Removes the embed frameworks build phase from embedded targets
         #
         # @note Older versions of CocoaPods would add this build phase to embedded
         #       targets. They should be removed on upgrade because embedded targets
         #       will have their frameworks embedded in their host targets.
         #
-        def remove_embed_frameworks_script_phase_from_app_extensions
+        def remove_embed_frameworks_script_phase_from_embedded_targets
           native_targets.each do |native_target|
             if AggregateTarget::EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include? native_target.symbol_type
               remove_embed_frameworks_script_phase(native_target)

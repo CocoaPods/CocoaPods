@@ -202,6 +202,42 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
+
+        it 'removes embed frameworks build phases from app extension targets' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+          target.stubs(:symbol_type).returns(:app_extension)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
+        end
+
+        it 'removes embed frameworks build phases from watch extension targets' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+          target.stubs(:symbol_type).returns(:watch_extension)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
+        end
+
+        it 'removes embed frameworks build phases from framework targets' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+          target.stubs(:symbol_type).returns(:framework)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
+        end
       end
 
       describe 'Private helpers' do
