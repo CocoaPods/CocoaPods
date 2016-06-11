@@ -434,7 +434,7 @@ module Pod
     # for all available platforms with xcodebuild.
     #
     def install_pod
-      %i(verify_no_duplicate_framework_names
+      %i(verify_no_duplicate_framework_and_library_names
          verify_no_static_framework_transitive_dependencies
          verify_framework_usage generate_pods_project integrate_user_project
          perform_post_install_actions).each { |m| @installer.send(m) }
