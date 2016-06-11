@@ -1,8 +1,6 @@
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/string/inflections'
 
-autoload :Fourflusher, 'fourflusher'
-
 module Pod
   # Validates a Specification.
   #
@@ -719,6 +717,7 @@ module Pod
     #         returns its output (both STDOUT and STDERR).
     #
     def xcodebuild
+      require 'fourflusher'
       command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
       case consumer.platform_name
       when :ios

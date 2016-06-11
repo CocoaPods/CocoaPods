@@ -392,6 +392,7 @@ module Pod
       end
 
       it 'checks if xcodebuild returns a successful status code' do
+        require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
@@ -411,6 +412,7 @@ module Pod
       end
 
       it 'runs xcodebuild with correct arguments for code signing' do
+        require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
