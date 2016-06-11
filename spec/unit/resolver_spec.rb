@@ -225,6 +225,21 @@ module Pod
         message.should.match /required a higher minimum deployment target/
       end
 
+      it 'raises an informative error when version conflict is caused by platform incompatibilities for local pods' do
+        sandbox = config.sandbox
+        local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0', 'platforms' => { 'ios' => '8.0' })
+        sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
+        @podfile = Podfile.new do
+          target 'SampleProject' do
+            platform :ios, '7.0'
+            pod 'LocalPod', :path => '../'
+          end
+        end
+        @resolver.stubs(:podfile).returns(@podfile)
+        message = should.raise(Informative) { @resolver.resolve }.message
+        message.should.match /required a higher minimum deployment target/
+      end
+
       it 'raises if unable to find a specification' do
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
         message = should.raise Informative do

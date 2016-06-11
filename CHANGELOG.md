@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix local pod platform conflict error message.  
+  [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
+  [#5052](https://github.com/CocoaPods/CocoaPods/issues/5052)
+  
 * Fix installing pods with `use_frameworks` when deduplication is disabled.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5481](https://github.com/CocoaPods/CocoaPods/issues/5481)
