@@ -26,6 +26,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5321](https://github.com/CocoaPods/CocoaPods/issues/5321)
 
+* Use `require` instead of `autoload` to solve an issue with loading `fourflusher`.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5445](https://github.com/CocoaPods/CocoaPods/issues/5445)
+
 
 ## 1.0.1 (2016-06-02)
 
