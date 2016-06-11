@@ -226,56 +226,58 @@ module Pod
 
       private
 
-      # Copies the pod_targets of any of the app extension aggregate targets into
+      # Copies the pod_targets of any of the app embedded aggregate targets into
       # their potential host aggregate target, if that potential host aggregate target's
-      # user_target hosts any of the app extension aggregate targets' user_targets
+      # user_target hosts any of the app embedded aggregate targets' user_targets
       #
       # @param  [AggregateTarget] aggregate_target the aggregate target whose user_target
-      #         might host one or more of the app extension aggregate targets' user_targets
+      #         might host one or more of the embedded aggregate targets' user_targets
       #
-      # @param  [Array<AggregateTarget>] extension_aggregate_targets the aggregate targets
-      #         representing the app extension targets to be integrated
+      # @param  [Array<AggregateTarget>] embedded_aggregate_targets the aggregate targets
+      #         representing the embedded targets to be integrated
       #
-      def copy_extension_pod_targets_to_host(aggregate_target, extension_aggregate_targets)
+      def copy_embedded_target_pod_targets_to_host(aggregate_target, embedded_aggregate_targets)
         return if aggregate_target.requires_host_target?
-        # Get the uuids of the aggregate_target's user_targets' extension targets if any
-        extension_uuids = aggregate_target.user_targets.map do |target|
-          aggregate_target.user_project.extensions_for_native_target(target).map(&:uuid)
-        end.flatten
-        return if extension_uuids.empty?
-        extension_aggregate_targets.each do |extension_target|
-          next unless extension_uuids.include? extension_target.user_targets[0].uuid
-          raise Informative, "#{aggregate_target.name} must call use_frameworks! because it is hosting an extension that calls use_frameworks!." unless aggregate_target.requires_frameworks?
+        # Get the uuids of the aggregate_target's user_targets' embedded targets if any
+        embedded_uuids = Set.new(aggregate_target.user_targets.map do |target|
+          aggregate_target.user_project.embedded_targets_in_native_target(target).map(&:uuid)
+        end.flatten)
+        return if embedded_uuids.empty?
+        embedded_aggregate_targets.each do |embedded_target|
+          next unless embedded_target.user_targets.map(&:uuid).any? do |embedded_uuid|
+            embedded_uuids.include? embedded_uuid
+          end
+          raise Informative, "#{aggregate_target.name} must call use_frameworks! because it is hosting an embedded target that calls use_frameworks!." unless aggregate_target.requires_frameworks?
           pod_target_names = aggregate_target.pod_targets.map(&:name)
-          # This extension target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
-          aggregate_target.pod_targets = aggregate_target.pod_targets + extension_target.pod_targets.select do |pod_target|
+          # This embedded target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
+          aggregate_target.pod_targets = aggregate_target.pod_targets + embedded_target.pod_targets.select do |pod_target|
             !pod_target_names.include? pod_target.name
           end
         end
       end
 
-      # Raises an error if there are extension targets in the Podfile, but
+      # Raises an error if there are embedded targets in the Podfile, but
       # their host targets have not been declared in the Podfile
       #
       # @param  [Array<AggregateTarget>] aggregate_targets the generated
       #         aggregate targets
       #
-      # @param  [Array<AggregateTarget>] extension_aggregate_targets the aggregate targets
-      #         representing the app extension targets to be integrated
+      # @param  [Array<AggregateTarget>] embedded_aggregate_targets the aggregate targets
+      #         representing the embedded targets to be integrated
       #
-      def verify_host_targets_in_podfile(aggregate_targets, extension_aggregate_targets)
+      def verify_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
         aggregate_target_uuids = Set.new aggregate_targets.map(&:user_targets).flatten.map(&:uuid)
-        extension_targets_missing_hosts = []
-        extension_aggregate_targets.each do |target|
+        embedded_targets_missing_hosts = []
+        embedded_aggregate_targets.each do |target|
           host_uuids = target.user_targets.map do |user_target|
-            target.user_project.host_targets_for_extension_target(user_target).map(&:uuid)
+            target.user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
           end.flatten
-          extension_targets_missing_hosts << target unless host_uuids.any? do |uuid|
+          embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
             aggregate_target_uuids.include? uuid
           end
         end
-        unless extension_targets_missing_hosts.empty?
-          raise Informative, "Unable to find host target for #{extension_targets_missing_hosts.map(&:name).join(', ')}. Please add the host targets for the extensions to the Podfile."
+        unless embedded_targets_missing_hosts.empty?
+          raise Informative, "Unable to find host target for #{embedded_targets_missing_hosts.map(&:name).join(', ')}. Please add the host targets for the embedded targets to the Podfile."
         end
       end
 
@@ -290,11 +292,11 @@ module Pod
           generate_target(target_definition, pod_targets)
         end
         if installation_options.integrate_targets?
-          # Copy extension target pods that cannot have their pods embedded as frameworks to their host targets
-          extension_targets = aggregate_targets.select(&:requires_host_target?).select(&:requires_frameworks?)
-          verify_host_targets_in_podfile(aggregate_targets, extension_targets)
+          # Copy embedded target pods that cannot have their pods embedded as frameworks to their host targets
+          embedded_targets = aggregate_targets.select(&:requires_host_target?).select(&:requires_frameworks?)
+          verify_host_targets_in_podfile(aggregate_targets, embedded_targets)
           aggregate_targets.each do |target|
-            copy_extension_pod_targets_to_host(target, extension_targets)
+            copy_embedded_target_pod_targets_to_host(target, embedded_targets)
           end
         end
         aggregate_targets.each do |target|

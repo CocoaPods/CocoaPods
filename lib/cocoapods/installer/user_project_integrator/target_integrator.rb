@@ -116,10 +116,9 @@ module Pod
 
         # Removes the embed frameworks build phase from app extension targets
         #
-        # @note Older versions of CocoaPods would add this build phase to app
-        #       extension targets. They should be removed on upgrade because app
-        #       extension targets will have their frameworks embedded in their host
-        #       apps.
+        # @note Older versions of CocoaPods would add this build phase to embedded
+        #       targets. They should be removed on upgrade because embedded targets
+        #       will have their frameworks embedded in their host targets.
         #
         def remove_embed_frameworks_script_phase_from_app_extensions
           native_targets.each do |native_target|

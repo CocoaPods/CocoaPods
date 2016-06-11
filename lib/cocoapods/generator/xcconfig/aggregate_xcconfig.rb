@@ -61,13 +61,13 @@ module Pod
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
           }
-          # Because app extensions live in their host app, CocoaPods
-          # copies all of the app extension's pod_targets to the host
-          # app. Therefore, this check will properly require the Swift
-          # libs in the host app, if the app extension has any pod targets
-          # that use swift. Setting this for the app extension target would
+          # For embedded targets, which live in a host target, CocoaPods
+          # copies all of the embedded target's pod_targets its host
+          # target. Therefore, this check will properly require the Swift
+          # libs in the host target, if the embedded target has any pod targets
+          # that use Swift. Setting this for the embedded target would
           # cause an App Store rejection because frameworks cannot be embedded
-          # in app extensions.
+          # in embedded targets.
           if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
             config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
           end

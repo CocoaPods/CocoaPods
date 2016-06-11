@@ -8,7 +8,7 @@ module Pod
     attr_reader :target_definition
 
     # Product types where the product's frameworks must be embedded in a host target
-    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :watch_extension].freeze
+    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :watch_extension, :framework].freeze
 
     # Initialize a new instance
     #

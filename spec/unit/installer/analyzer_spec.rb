@@ -725,7 +725,7 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           should.raise Informative do
             analyzer.analyze
-          end.message.should.match /Unable to find host target for Pods-Today Extension. Please add the host targets for the extensions to the Podfile/
+          end.message.should.match /Unable to find host target for Pods-Today Extension. Please add the host targets for the embedded targets to the Podfile/
         end
 
         it 'raises when the extension calls use_frameworks!, but the host target does not' do
@@ -746,7 +746,7 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           should.raise Informative do
             analyzer.analyze
-          end.message.should.match /Pods-Sample Extensions Project must call use_frameworks! because it is hosting an extension that calls use_frameworks!/
+          end.message.should.match /Pods-Sample Extensions Project must call use_frameworks! because it is hosting an embedded target that calls use_frameworks!/
         end
       end
 
