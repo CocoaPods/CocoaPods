@@ -389,7 +389,6 @@ module Pod
         error.conflicts.each do |name, conflict|
           local_pod_parent = conflict.requirement_trees.flatten.reverse.find(&:local?)
           lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
-
           if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
             message = 'Due to the previous naïve CocoaPods resolver, ' \
               "you were using a pre-release version of `#{name}`, " \
@@ -398,7 +397,7 @@ module Pod
               'version requirement to your Podfile ' \
               "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
               "or revert to a stable version by running `pod update #{name}`."
-          elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty?
+          elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility
             # Conflict was caused by a requirement from a local dependency.
             # Tell user to use `pod update`.
             message << "\n\nIt seems like you've changed the constraints of dependency `#{name}` " \
