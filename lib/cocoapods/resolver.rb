@@ -485,14 +485,14 @@ module Pod
         edge_is_valid_for_target?(edge, target)
       end.map(&:destination)
 
-      dependency_nodes + dependency_nodes.flat_map { |n| 
+      dependency_nodes + dependency_nodes.flat_map do |node| 
 
-        node_result = valid_dependencies_for_target_from_node(target, cached_dependencys, n)
+        node_result = valid_dependencies_for_target_from_node(target, cached_dependencys, node)
 
         cached_dependencys[node.name] = node_result
 
         node_result
-      }
+      end
     end
 
     # Whether the given `edge` should be followed to find dependencies for the
