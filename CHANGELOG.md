@@ -47,6 +47,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix framework support for frameworks in sub-projects.  
   [Ben Asher](https://github.com/benasher44)
   [#6123](https://github.com/CocoaPods/CocoaPods/issues/6123)
+* Add aggregated search paths targets to vendored build settings  
+  [Chris Ortman](https://github.com/chrisortman)
+  [Johannes Plunien](https://github.com/plu)
+  [#5512](https://github.com/CocoaPods/CocoaPods/issues/5512)
 
 
 ## 1.2.0.beta.1 (2016-10-28)
