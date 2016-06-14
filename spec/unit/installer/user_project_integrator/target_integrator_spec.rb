@@ -174,6 +174,15 @@ module Pod
           phase.nil?.should == false
         end
 
+        it 'adds an embed frameworks build phase if the target to integrate is a UI Test bundle' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          target = @target_integrator.send(:native_targets).first
+          target.stubs(:symbol_type).returns(:ui_test_bundle)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+        end
+
         it 'does not remove existing embed frameworks build phases from integrated framework targets' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           @target_integrator.integrate!
