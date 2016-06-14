@@ -281,6 +281,29 @@ module Pod
           @pod_target.requires_frameworks?.should == true
         end
       end
+
+      describe 'With dependencies' do
+        before do
+          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+          @pod_target.dependent_targets = [@pod_dependency]
+        end
+
+        it 'resolves simple dependencies' do
+          @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+        end
+
+        describe 'With cyclic dependencies' do
+          before do
+            @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+            @pod_dependency.dependent_targets = [@pod_target]
+            @pod_target.dependent_targets = [@pod_dependency]
+          end
+
+          it 'resolves the cycle' do
+            @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+          end
+        end
+      end
     end
   end
 end
