@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Peter Ryszkiewicz](https://github.com/pRizz)
   [#5414](https://github.com/CocoaPods/CocoaPods/pull/5414)
 
+* Use `git ls-remote` to skip full clones for branch dependencies.  
+  [Juan Civile](https://github.com/champo)
+  [#5376](https://github.com/CocoaPods/CocoaPods/issues/5376)
+
+
 ##### Bug Fixes
 
 * Fix local pod platform conflict error message.  
