@@ -91,6 +91,18 @@ CLIntegracon.configure do |c|
     path.open('w') { |f| f << Pod::YAMLHelper.convert_hash(yaml, keys_hint, "\n\n") }
   end
 
+  c.preprocess('**/*.xcodeproj', %r{(^|/)(Podfile|Manifest).lock$}) do |path|
+    keys_hint = if path.extname == '.lock'
+                  Pod::Lockfile::HASH_KEY_ORDER
+                end
+    contents = path.read
+    if contents.strip.empty?
+      contents
+    else
+      Pod::YAMLHelper.convert_hash(YAML.load(contents), keys_hint, "\n\n")
+    end
+  end
+
   # So we don't need to compare them directly
   c.ignores 'Podfile'
 
@@ -292,6 +304,11 @@ describe_cli 'pod' do
 
     describe 'Integrates a pod with search paths inheritance' do
       behaves_like cli_spec 'install_search_paths_inheritance',
+                            'install --no-repo-update'
+    end
+
+    describe 'Integrates a Pod with circular subspec dependencies' do
+      behaves_like cli_spec 'install_circular_subspec_dependency',
                             'install --no-repo-update'
     end
   end

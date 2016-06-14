@@ -14,6 +14,9 @@ Documentation:
 
 #- CocoaPods -----------------------------------------------------------------#
 
+ParameterLists:
+  CountKeywordArgs: false
+
 # We adopted raise instead of fail.
 SignalException:
   EnforcedStyle: only_raise

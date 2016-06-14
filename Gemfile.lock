@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 47857d569b7121c354ad15c426be04bc90c5f7c7
+  revision: 74a51d486dd7a12ee798d015385714c13146946d
   branch: master
   specs:
     claide (1.0.0)
@@ -17,14 +17,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 07b0a09b82839ca562076ba3b2094c14cbdfb7a2
+  revision: d429ddf3daa7894990e2de99a75d2cc007b20598
   branch: master
   specs:
-    molinillo (0.4.5)
+    molinillo (0.5.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 55af40b1fee835039947db9635c8b098bd03fe90
+  revision: 1b15f4c79303843e8f370afa9dd74b8ad0329785
   branch: master
   specs:
     xcodeproj (1.1.0)
@@ -41,7 +41,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 272c56dbde497a48a7310098989ed25d0cc0bc6d
+  revision: 0803d2280c14347e03cc5753efdca04e3697552c
   branch: master
   specs:
     cocoapods-downloader (1.0.0)
@@ -108,7 +108,7 @@ PATH
       colored (~> 1.2)
       escape (~> 0.0.4)
       fourflusher (~> 0.3.0)
-      molinillo (~> 0.4.5)
+      molinillo (~> 0.5.0)
       nap (~> 1.0)
       xcodeproj (>= 1.1.0, < 2.0)
 

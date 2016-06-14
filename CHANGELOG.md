@@ -8,9 +8,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Move Pods Project generation to an `Xcode` Namespace.  
+  [Daniel Tomlinson](https://github.com/dantoml)
+  [#5480](https://github.com/CocoaPods/CocoaPods/pull/5480)
+
 * Add the ability to inhibit swift warnings.
   [Peter Ryszkiewicz](https://github.com/pRizz)
   [#5414](https://github.com/CocoaPods/CocoaPods/pull/5414)
+
+* Use `git ls-remote` to skip full clones for branch dependencies.  
+  [Juan Civile](https://github.com/champo)
+  [#5376](https://github.com/CocoaPods/CocoaPods/issues/5376)
+
 
 ##### Bug Fixes
 
@@ -33,6 +42,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `require` instead of `autoload` to solve an issue with loading `fourflusher`.  
   [Boris Bügling](https://github.com/neonichu)
   [#5445](https://github.com/CocoaPods/CocoaPods/issues/5445)
+
+* Resolve cyclic dependencies when creating pod targets.  
+  [Juan Civile](https://github.com/champo)
+  [#5362](https://github.com/CocoaPods/CocoaPods/issues/5362)
 
 
 ## 1.0.1 (2016-06-02)
