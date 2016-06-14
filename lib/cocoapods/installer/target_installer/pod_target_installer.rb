@@ -91,7 +91,11 @@ module Pod
             native_target.add_file_references(regular_file_refs, flags)
           end
 
-          header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
+          header_file_refs = headers.map do |sf|
+           project.reference_for_path(sf).tap do |ref|
+              raise "unable to find ref for #{sf}" unless ref
+            end
+          end
           native_target.add_file_references(header_file_refs) do |build_file|
             add_header(build_file, public_headers, private_headers)
           end

@@ -184,6 +184,7 @@ module Pod
       group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure)
 
       if ref = reference_for_path(file_path_name.realpath)
+        @refs_by_absolute_path[absolute_path.to_s] = ref
         ref
       else
         ref = group.new_file(file_path_name.realpath)

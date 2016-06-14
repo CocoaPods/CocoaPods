@@ -146,6 +146,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Joshua Kalpin](https://github.com/Kapin)
   [#5199](https://github.com/CocoaPods/CocoaPods/pull/5199)
 
+  * Raise an exception if is unable to find a reference for a path
+    [Dennis Zelada](https://github.com/denniszelada)
+    [#5427](https://github.com/CocoaPods/CocoaPods/issues/5427)
 
 ## 1.0.0.beta.8 (2016-04-15)
 
