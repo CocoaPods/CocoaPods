@@ -16,6 +16,10 @@ module Pod
         attr_accessor :requires_frameworks
         alias_method :requires_frameworks?, :requires_frameworks
 
+        # @return [String] the Swift version
+        #
+        attr_accessor :swift_version
+
         # @return [Specification] the root specification
         #
         def root_spec
@@ -28,10 +32,11 @@ module Pod
         # @param [Platform] platform         @see #platform
         # @param [Bool] requires_frameworks  @see #requires_frameworks?
         #
-        def initialize(specs, platform, requires_frameworks = false)
+        def initialize(specs, platform, requires_frameworks = false, swift_version = nil)
           self.specs = specs
           self.platform = platform
           self.requires_frameworks = requires_frameworks
+          self.swift_version = swift_version
         end
 
         # @return [Bool] whether the {PodVariant} is equal to another taking all
@@ -41,7 +46,8 @@ module Pod
           self.class == other.class &&
             specs == other.specs &&
             platform == other.platform &&
-            requires_frameworks == other.requires_frameworks
+            requires_frameworks == other.requires_frameworks &&
+            swift_version == other.swift_version
         end
         alias_method :eql?, :==
 
@@ -51,7 +57,7 @@ module Pod
         #
         # @!visibility private
         def hash
-          [specs, platform, requires_frameworks].hash
+          [specs, platform, requires_frameworks, swift_version].hash
         end
       end
     end

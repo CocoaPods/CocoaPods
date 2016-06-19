@@ -32,6 +32,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Mark Schall](https://github.com/maschall)
   [#5572](https://github.com/CocoaPods/CocoaPods/pull/5572)
 
+* [Installer] Set the SWIFT_VERSION for CocoaPods generated targets.  
+  [Danielle Tomlinson](https://github.com/DanToml)
+  [#5540](https://github.com/CocoaPods/CocoaPods/pulls/5540)
+
+
 ##### Bug Fixes
 
 * Fix local pod platform conflict error message.  

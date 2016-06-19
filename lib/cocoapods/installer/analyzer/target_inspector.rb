@@ -44,6 +44,7 @@ module Pod
           result.platform = compute_platform(targets)
           result.archs = compute_archs(targets)
           result.project = user_project
+          result.target_definition.swift_version = compute_swift_version_from_targets(targets)
           result
         end
 
@@ -203,6 +204,29 @@ module Pod
             target.source_build_phase.files.any? do |build_file|
               file_predicate.call(build_file.file_ref)
             end
+          end
+        end
+
+        # Compute the Swift version for the target build configurations. If more
+        # than one Swift version is defined for a given target, then it will raise.
+        #
+        # @param  [Array<PBXNativeTarget>] targets
+        #         the targets that are checked for Swift versions.
+        #
+        # @return [String] the targets Swift version or nil
+        #
+        def compute_swift_version_from_targets(targets)
+          versions = targets.flat_map(&:build_configurations).
+            flat_map { |config| config.build_settings['SWIFT_VERSION'] }.
+            compact.
+            uniq
+          case versions.count
+          when 0
+            nil
+          when 1
+            versions.first
+          else
+            raise Informative, 'There may only be up to 1 unique SWIFT_VERSION per target.'
           end
         end
       end

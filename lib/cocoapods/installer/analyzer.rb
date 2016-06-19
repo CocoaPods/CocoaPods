@@ -294,7 +294,7 @@ module Pod
           distinct_targets = specs_by_target.each_with_object({}) do |dependency, hash|
             target_definition, dependent_specs = *dependency
             dependent_specs.group_by(&:root).each do |root_spec, specs|
-              pod_variant = PodVariant.new(specs, target_definition.platform, target_definition.uses_frameworks?)
+              pod_variant = PodVariant.new(specs, target_definition.platform, target_definition.uses_frameworks?, target_definition.swift_version)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
             end
