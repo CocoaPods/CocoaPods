@@ -26,7 +26,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix local pod platform conflict error message.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#5052](https://github.com/CocoaPods/CocoaPods/issues/5052)
-  
+
 * Fix installing pods with `use_frameworks` when deduplication is disabled.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5481](https://github.com/CocoaPods/CocoaPods/issues/5481)
@@ -50,6 +50,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix embedding frameworks in UI Testing bundles.  
   [Daniel Tomlinson](https://github.com/dantoml)
   [#5250](https://github.com/CocoaPods/CocoaPods/issues/5250)
+
+* Ensure attempting to print a path in the error report doesn't itself error.  
+  [Samuel Giddins](https://github.com/)
+  [#5541](https://github.com/CocoaPods/CocoaPods/issues/5541)
 
 
 ## 1.0.1 (2016-06-02)

@@ -184,7 +184,11 @@ module Pod
         if pathname
           from_path = config.podfile_path.dirname if config.podfile_path
           from_path ||= Pathname.pwd
-          path = Pathname(pathname).relative_path_from(from_path)
+          path = begin
+                   Pathname(pathname).relative_path_from(from_path)
+                 rescue
+                   pathname
+                 end
           "`#{path}`"
         else
           ''
