@@ -26,9 +26,9 @@ module Pod
       @xcconfigs = {}
     end
 
-    # @return True if the user_target's pods are
-    # for an extension and must be embedded in a host,
-    # target, otherwise false.
+    # @return [Boolean] True if the user_target's pods are
+    #         for an extension and must be embedded in a host,
+    #         target, otherwise false.
     #
     def requires_host_target?
       # If we don't have a user_project, then we can't
