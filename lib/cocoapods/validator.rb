@@ -722,13 +722,13 @@ module Pod
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
-        command += Fourflusher::SimControl.new.destination('iPhone 5', deployment_target)
+        command += Fourflusher::SimControl.new.destination(:oldest, 'iOS', deployment_target)
       when :watchos
         command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
-        command += Fourflusher::SimControl.new.destination('Apple Watch - 38mm', deployment_target)
+        command += Fourflusher::SimControl.new.destination(:oldest, 'watchOS', deployment_target)
       when :tvos
         command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
-        command += Fourflusher::SimControl.new.destination('Apple TV 1080p', deployment_target)
+        command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
       end
 
       output, status = Dir.chdir(validation_dir) { _xcodebuild(command) }

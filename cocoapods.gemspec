@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', '>= 4.0.2'
   s.add_runtime_dependency 'colored',       '~> 1.2'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
-  s.add_runtime_dependency 'fourflusher',   '~> 0.3.2'
+  s.add_runtime_dependency 'fourflusher',   '~> 1.0.1'
   s.add_runtime_dependency 'nap',           '~> 1.0'
 
   s.add_development_dependency 'bacon', '~> 1.1'
