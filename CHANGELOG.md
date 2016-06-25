@@ -55,6 +55,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/)
   [#5541](https://github.com/CocoaPods/CocoaPods/issues/5541)
 
+* Fix linting with Xcode 8.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5529](https://github.com/CocoaPods/CocoaPods/issues/5529)
+
 
 ## 1.0.1 (2016-06-02)
 
