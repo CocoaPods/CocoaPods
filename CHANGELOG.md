@@ -40,6 +40,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5517](https://github.com/CocoaPods/CocoaPods/issues/5517)
 
+* Show GitHub Issues that could be related to exceptions.  
+  [Orta Therox](https://github.com/orta)
+  [#4817](https://github.com/CocoaPods/CocoaPods/issues/4817)
+
 * Improve handling of app extensions, watch os 1 extensions
   and framework targets  
   [benasher44](https://github.com/benasher44)
