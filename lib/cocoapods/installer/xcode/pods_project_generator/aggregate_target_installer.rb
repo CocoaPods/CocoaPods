@@ -45,12 +45,13 @@ module Pod
           #
           def custom_build_settings
             settings = {
-              'MACH_O_TYPE'               => 'staticlib',
-              'OTHER_LDFLAGS'             => '',
-              'OTHER_LIBTOOLFLAGS'        => '',
-              'PODS_ROOT'                 => '$(SRCROOT)',
-              'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
-              'SKIP_INSTALL'              => 'YES',
+              'CODE_SIGN_IDENTITY[sdk=iphoneos*]' => '',
+              'MACH_O_TYPE'                       => 'staticlib',
+              'OTHER_LDFLAGS'                     => '',
+              'OTHER_LIBTOOLFLAGS'                => '',
+              'PODS_ROOT'                         => '$(SRCROOT)',
+              'PRODUCT_BUNDLE_IDENTIFIER'         => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
+              'SKIP_INSTALL'                      => 'YES',
             }
             super.merge(settings)
           end
