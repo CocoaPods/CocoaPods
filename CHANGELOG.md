@@ -24,6 +24,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Mark Schall](https://github.com/maschall)
   [#5568](https://github.com/CocoaPods/CocoaPods/pull/5568)
 
+* Set 'Allow app extension API only' for Messages extensions.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5558](https://github.com/CocoaPods/CocoaPods/issues/5558)
+
+
 ##### Bug Fixes
 
 * Fix local pod platform conflict error message.  
