@@ -31,6 +31,7 @@ module Pod
             ['--no-private', 'Lint includes checks that apply only to public repos'],
             ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
             'Opens default editor if no commit message is specified.'],
+            ['--use-json', 'Push JSON spec to repo'],
           ].concat(super)
         end
 
@@ -45,6 +46,7 @@ module Pod
           @private = argv.flag?('private', true)
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
+          @use_json = argv.flag?('use-json')
           super
         end
 
@@ -177,9 +179,16 @@ module Pod
             else
               message = "[Add] #{spec}"
             end
-
             FileUtils.mkdir_p(output_path)
-            FileUtils.cp(spec_file, output_path)
+            
+            if @use_json
+              json_file_name = "#{spec.name}.podspec.json"
+              json_file = File.join(output_path, json_file_name)
+              File.open(json_file, 'w') { |file| file.write(spec.to_pretty_json) }
+            else
+              FileUtils.cp(spec_file, output_path)
+            end
+            
             Dir.chdir(repo_dir) do
               # only commit if modified
               if git!('status', '--porcelain').include?(spec.name)
