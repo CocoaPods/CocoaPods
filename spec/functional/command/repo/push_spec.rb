@@ -16,7 +16,7 @@ module Pod
         e.message.should.match(/Unable to find the `missing_repo` repo/)
       end
     end
-    
+
     it "complains if it can't get repo url" do
       Dir.chdir(fixture('banana-lib')) do
         Command::Repo::Add.any_instance.stubs(:clone_repo)
@@ -126,7 +126,7 @@ module Pod
       Dir.chdir(@upstream) { `git checkout master -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
-    
+
     it 'successfully pushes a spec to URL' do
       cmd = command('repo', 'push', @upstream)
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
