@@ -180,7 +180,7 @@ module Pod
               message = "[Add] #{spec}"
             end
             FileUtils.mkdir_p(output_path)
-            
+
             if @use_json
               json_file_name = "#{spec.name}.podspec.json"
               json_file = File.join(output_path, json_file_name)
@@ -188,7 +188,7 @@ module Pod
             else
               FileUtils.cp(spec_file, output_path)
             end
-            
+
             Dir.chdir(repo_dir) do
               # only commit if modified
               if git!('status', '--porcelain').include?(spec.name)

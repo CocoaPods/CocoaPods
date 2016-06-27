@@ -98,7 +98,7 @@ module Pod
       e.message.should.match(/repo.*not clean/)
       (@upstream + 'PushTest/1.4/PushTest.podspec').should.not.exist?
     end
-    
+
     it 'generate a message for commit' do
       cmd = command('repo', 'push', 'master')
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
@@ -117,7 +117,7 @@ module Pod
       Dir.chdir(@upstream) { `git checkout master -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
-    
+
     it 'successfully pushes converted JSON podspec' do
       cmd = command('repo', 'push', 'master', '--use-json')
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
