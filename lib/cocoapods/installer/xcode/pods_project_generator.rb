@@ -138,6 +138,7 @@ module Pod
               build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
               build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
               build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
+              build_configuration.build_settings['SWIFT_VERSION'] = '2.3'
             end
           end
         end
