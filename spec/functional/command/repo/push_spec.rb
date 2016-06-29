@@ -99,7 +99,7 @@ module Pod
       (@upstream + 'PushTest/1.4/PushTest.podspec').should.not.exist?
     end
 
-    it 'successfully pushes a spec' do
+    it 'generate a message for commit' do
       cmd = command('repo', 'push', 'master')
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)
@@ -107,8 +107,24 @@ module Pod
       Pod::UI.output.should.include('[Add] PushTest (1.4)')
       Pod::UI.output.should.include('[Fix] JSONKit (1.4)')
       Pod::UI.output.should.include('[No change] BananaLib (1.0)')
+    end
+
+    it 'successfully pushes a spec' do
+      cmd = command('repo', 'push', 'master')
+      Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
+      cmd.expects(:validate_podspec_files).returns(true)
+      Dir.chdir(temporary_directory) { cmd.run }
       Dir.chdir(@upstream) { `git checkout master -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
+    end
+
+    it 'successfully pushes converted JSON podspec' do
+      cmd = command('repo', 'push', 'master', '--use-json')
+      Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
+      cmd.expects(:validate_podspec_files).returns(true)
+      Dir.chdir(temporary_directory) { cmd.run }
+      Dir.chdir(@upstream) { `git checkout master -q` }
+      (@upstream + 'PushTest/1.4/PushTest.podspec.json').read.should.include('PushTest')
     end
 
     it 'initializes with default sources if no custom sources specified' do

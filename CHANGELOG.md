@@ -19,14 +19,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `git ls-remote` to skip full clones for branch dependencies.  
   [Juan Civile](https://github.com/champo)
   [#5376](https://github.com/CocoaPods/CocoaPods/issues/5376)
-
+  
+* [repo/push] --use-json to convert podspecs to JSON format when pushing  
+  [Mark Schall](https://github.com/maschall)
+  [#5568](https://github.com/CocoaPods/CocoaPods/pull/5568)
 
 ##### Bug Fixes
 
 * Fix local pod platform conflict error message.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#5052](https://github.com/CocoaPods/CocoaPods/issues/5052)
-  
+
 * Fix installing pods with `use_frameworks` when deduplication is disabled.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5481](https://github.com/CocoaPods/CocoaPods/issues/5481)
@@ -46,6 +49,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Resolve cyclic dependencies when creating pod targets.  
   [Juan Civile](https://github.com/champo)
   [#5362](https://github.com/CocoaPods/CocoaPods/issues/5362)
+
+* Fix embedding frameworks in UI Testing bundles.  
+  [Daniel Tomlinson](https://github.com/dantoml)
+  [#5250](https://github.com/CocoaPods/CocoaPods/issues/5250)
+
+* Ensure attempting to print a path in the error report doesn't itself error.  
+  [Samuel Giddins](https://github.com/)
+  [#5541](https://github.com/CocoaPods/CocoaPods/issues/5541)
+
+* Fix linting with Xcode 8.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5529](https://github.com/CocoaPods/CocoaPods/issues/5529)
 
 
 ## 1.0.1 (2016-06-02)
