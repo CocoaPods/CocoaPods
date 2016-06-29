@@ -36,6 +36,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * [repo/push] --use-json to convert podspecs to JSON format when pushing.  
   [Mark Schall](https://github.com/maschall)
   [#5568](https://github.com/CocoaPods/CocoaPods/pull/5568)
+  
+* Improve the performance of resolve dependency.
+  [yanzhiwei147](https://github.com/yanzhiwei147)
+  [#5510](https://github.com/CocoaPods/CocoaPods/pull/5510)
 
 * Set 'Allow app extension API only' for Messages extensions.  
   [Boris Bügling](https://github.com/neonichu)
