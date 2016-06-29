@@ -185,7 +185,7 @@ module Pod
           frameworks_group = project.frameworks_group
           aggregate_targets.each do |aggregate_target|
             is_app_extension = !(aggregate_target.user_targets.map(&:symbol_type) &
-                                 [:app_extension, :watch_extension, :watch2_extension, :tv_extension]).empty?
+                                 [:app_extension, :watch_extension, :watch2_extension, :tv_extension, :messages_extension]).empty?
             is_app_extension ||= aggregate_target.user_targets.any? { |ut| ut.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY') == 'YES' }
 
             aggregate_target.pod_targets.each do |pod_target|
