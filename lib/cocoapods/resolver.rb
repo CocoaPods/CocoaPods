@@ -473,7 +473,6 @@ module Pod
     #         dependencies for `target`.
     #
     def valid_dependencies_for_target_from_node(target, cached_dependencys, node)
-
       cache_dependency = cached_dependencys[node.name]
 
       if cache_dependency
@@ -485,11 +484,10 @@ module Pod
         edge_is_valid_for_target?(edge, target)
       end.map(&:destination)
 
-      dependency_nodes + dependency_nodes.flat_map do |node| 
+      dependency_nodes + dependency_nodes.flat_map do |item|
+        node_result = valid_dependencies_for_target_from_node(target, cached_dependencys, item)
 
-        node_result = valid_dependencies_for_target_from_node(target, cached_dependencys, node)
-
-        cached_dependencys[node.name] = node_result
+        cached_dependencys[item.name] = node_result
 
         node_result
       end
