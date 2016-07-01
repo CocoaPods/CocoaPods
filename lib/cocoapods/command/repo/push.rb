@@ -39,7 +39,7 @@ module Pod
           @allow_warnings = argv.flag?('allow-warnings')
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
-          @source = config.sources_manager.sources([@repo]).first unless @repo.nil?
+          @source = source_for_repo
           @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
@@ -52,8 +52,8 @@ module Pod
 
         def validate!
           super
-          help! 'A spec-repo name is required.' unless @repo
-          unless @source.repo.directory?
+          help! 'A spec-repo name or url is required.' unless @repo
+          unless @source && @source.repo.directory?
             raise Informative,
                   "Unable to find the `#{@repo}` repo. " \
                   'If it has not yet been cloned, add it via `pod repo add`.'
@@ -241,6 +241,18 @@ module Pod
         #
         def count
           podspec_files.count
+        end
+
+        # Returns source for @repo
+        #
+        # @note If URL is invalid or repo doesn't exist, validate! will throw the error
+        #
+        # @return [Source]
+        #
+        def source_for_repo
+          config.sources_manager.source_with_name_or_url(@repo) unless @repo.nil?
+        rescue
+          nil
         end
 
         #---------------------------------------------------------------------#

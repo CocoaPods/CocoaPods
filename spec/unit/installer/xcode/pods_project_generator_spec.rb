@@ -209,6 +209,10 @@ module Pod
               test_extension_target(:tv_extension)
             end
 
+            it 'configures APPLICATION_EXTENSION_API_ONLY for Messages extension targets' do
+              test_extension_target(:messages_extension)
+            end
+
             it 'configures APPLICATION_EXTENSION_API_ONLY for targets where the user target has it set' do
               mock_user_target = mock('UserTarget', :symbol_type => :application)
               mock_user_target.expects(:common_resolved_build_setting).with('APPLICATION_EXTENSION_API_ONLY').returns('YES')
