@@ -157,6 +157,7 @@ module Pod
         @installer.installation_options.integrate_targets = false
         @installer.expects(:integrate_user_project).never
         @installer.install!
+        UI.output.should.include 'Skipping User Project Integration'
       end
 
       it 'prints a list of deprecated pods' do

@@ -36,6 +36,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/DanToml)
   [#5540](https://github.com/CocoaPods/CocoaPods/pulls/5540)
 
+* Print message when skipping user project integration.
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5517](https://github.com/CocoaPods/CocoaPods/issues/5517)
 
 ##### Bug Fixes
 
