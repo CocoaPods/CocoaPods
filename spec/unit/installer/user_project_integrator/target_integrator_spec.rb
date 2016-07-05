@@ -96,7 +96,7 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script.should == <<-EOS.strip_heredoc
           diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-          if [[ $? != 0 ]] ; then
+          if [ $? != 0 ] ; then
               cat << EOM
           error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
           EOM
