@@ -108,7 +108,6 @@ module Pod
         def prepare
           UI.message '- Creating Pods project' do
             @project = create_project
-
             analysis_result.all_user_build_configurations.each do |name, type|
               @project.add_build_configuration(name, type)
             end

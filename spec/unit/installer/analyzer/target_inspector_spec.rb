@@ -284,5 +284,48 @@ module Pod
           message.should.include('Unable to determine the platform for the `default` target.')
       end
     end
+
+    #--------------------------------------#
+
+    describe '#compute_swift_version_from_targets' do
+      it 'returns the user defined SWIFT_VERSION if only one unique version is defined' do
+        user_project = Xcodeproj::Project.new('path')
+        target = user_project.new_target(:application, 'Target', :ios)
+        target.build_configuration_list.set_setting('SWIFT_VERSION', '2.3')
+
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
+        user_targets = [target]
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        target_inspector.send(:compute_swift_version_from_targets, user_targets).should.equal '2.3'
+      end
+
+      it 'returns nil if the version is not defined' do
+        user_project = Xcodeproj::Project.new('path')
+        target = user_project.new_target(:application, 'Target', :ios)
+        target.build_configuration_list.set_setting('SWIFT_VERSION', nil)
+
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
+        user_targets = [target]
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        target_inspector.send(:compute_swift_version_from_targets, user_targets).should.equal nil
+      end
+
+      it 'raises if the user defined SWIFT_VERSION contains multiple unique versions are defined' do
+        user_project = Xcodeproj::Project.new('path')
+        target = user_project.new_target(:application, 'Target', :ios)
+        target.build_configuration_list.build_configurations.first.build_settings['SWIFT_VERSION'] = '2.3'
+        target.build_configuration_list.build_configurations.last.build_settings['SWIFT_VERSION'] = '3.0'
+
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
+        user_targets = [target]
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        should.raise(Informative) do
+          target_inspector.send(:compute_swift_version_from_targets, user_targets)
+        end.message.should.include 'There may only be up to 1 unique SWIFT_VERSION per target.'
+      end
+    end
   end
 end

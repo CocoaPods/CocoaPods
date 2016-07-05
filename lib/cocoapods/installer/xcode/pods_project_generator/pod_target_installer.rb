@@ -55,6 +55,9 @@ module Pod
               settings['PUBLIC_HEADERS_FOLDER_PATH'] = ''
             end
             settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'] = ''
+            if target.swift_version
+              settings['SWIFT_VERSION'] = target.swift_version
+            end
             settings
           end
 

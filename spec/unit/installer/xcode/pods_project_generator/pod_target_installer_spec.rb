@@ -113,6 +113,25 @@ module Pod
 
             #--------------------------------------#
 
+            describe 'setting the SWIFT_VERSION' do
+              it 'does not set the version if not included by the target definition' do
+                @installer.install!
+                @project.targets.first.build_configurations.each do |config|
+                  config.build_settings.should.not.include?('SWIFT_VERSION')
+                end
+              end
+
+              it 'sets the version to the one specified in the target definition' do
+                @target_definition.swift_version = '3.0'
+                @installer.install!
+                @project.targets.first.build_configurations.each do |config|
+                  config.build_settings['SWIFT_VERSION'].should == '3.0'
+                end
+              end
+            end
+
+            #--------------------------------------#
+
             it 'adds the source files of each pod to the target of the Pod library' do
               @installer.install!
               names = @installer.target.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
