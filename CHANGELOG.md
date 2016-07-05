@@ -34,9 +34,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Improve handling of app extensions, watch os 1 extensions
+  and framework targets  
+  [benasher44](https://github.com/benasher44)
+  [#4203](https://github.com/CocoaPods/CocoaPods/issues/4203)
+
 * Fix local pod platform conflict error message.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#5052](https://github.com/CocoaPods/CocoaPods/issues/5052)
+
+
+##### Bug Fixes
 
 * Fix installing pods with `use_frameworks` when deduplication is disabled.  
   [Samuel Giddins](https://github.com/segiddins)

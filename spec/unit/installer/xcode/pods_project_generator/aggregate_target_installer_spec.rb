@@ -226,6 +226,25 @@ module Pod
               dummy = support_files_dir + 'Pods-SampleProject-dummy.m'
               dummy.read.should.include?('@interface PodsDummy_Pods')
             end
+
+            it 'creates an embed frameworks script, if the target does not require a host target' do
+              @pod_target.stubs(:requires_frameworks? => true)
+              @target.stubs(:requires_frameworks? => true)
+              @installer.install!
+              support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+              script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
+              File.exist?(script).should == true
+            end
+
+            it 'does not create an embed frameworks script, if the target requires a host target' do
+              @pod_target.stubs(:requires_frameworks? => true)
+              @target.stubs(:requires_frameworks? => true)
+              @target.stubs(:requires_host_target? => true)
+              @installer.install!
+              support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+              script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
+              File.exist?(script).should == false
+            end
           end
         end
       end

@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 1b15f4c79303843e8f370afa9dd74b8ad0329785
+  revision: 796dec1d5abcdfc02ca1b5b8748d91c3f3e943b0
   branch: master
   specs:
     xcodeproj (1.1.0)
@@ -86,7 +86,7 @@ GIT
 
 GIT
   remote: https://github.com/segiddins/json.git
-  revision: d4011cabfaa80e9b0da81947b5e9b38dd47359db
+  revision: a9588bc4334c2f5bf985f255b61c05eafdcd8907
   branch: seg-1.7.7-ruby-2.2
   specs:
     json (1.7.7)
