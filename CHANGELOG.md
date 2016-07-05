@@ -12,7 +12,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Daniel Tomlinson](https://github.com/dantoml)
   [#5480](https://github.com/CocoaPods/CocoaPods/pull/5480)
 
-* Add the ability to inhibit swift warnings.
+* Add the ability to inhibit swift warnings.  
   [Peter Ryszkiewicz](https://github.com/pRizz)
   [#5414](https://github.com/CocoaPods/CocoaPods/pull/5414)
 
@@ -74,6 +74,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#5528](https://github.com/CocoaPods/CocoaPods/issues/5528)
 
+* Error during install when there are duplicate library names.  
+  [Daniel Tomlinson](https://github.com/dantoml)
+  [#4014](https://github.com/CocoaPods/CocoaPods/issues/4014)
 
 ## 1.0.1 (2016-06-02)
 
