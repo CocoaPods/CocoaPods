@@ -91,6 +91,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Daniel Tomlinson](https://github.com/dantoml)
   [#4014](https://github.com/CocoaPods/CocoaPods/issues/4014)
 
+* Update script '📦 Check Pods Manifest.lock': Write error message to STDERR; make POSIX compatible  
+  [Simon Warta](https://github.com/webmaster128)
+  [#5595](https://github.com/CocoaPods/CocoaPods/pull/5595)
+
 ## 1.0.1 (2016-06-02)
 
 ##### Enhancements
