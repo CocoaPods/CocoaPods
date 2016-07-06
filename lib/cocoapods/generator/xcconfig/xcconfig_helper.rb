@@ -1,3 +1,5 @@
+require 'active_support/core_ext/object/try'
+
 module Pod
   module Generator
     module XCConfig
