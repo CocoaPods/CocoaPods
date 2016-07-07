@@ -40,7 +40,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'molinillo',             '~> 0.5.0'
   s.add_runtime_dependency 'xcodeproj',             '>= 1.1.0', '< 2.0'
 
-  s.add_runtime_dependency 'activesupport', '>= 4.0.2'
+  ## Version 5 needs Ruby 2.2, so we specify an upper bound to stay compatible with system ruby
+  s.add_runtime_dependency 'activesupport', '>= 4.0.2', '< 5'
   s.add_runtime_dependency 'colored',       '~> 1.2'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
   s.add_runtime_dependency 'fourflusher',   '~> 1.0.1'
