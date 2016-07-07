@@ -175,10 +175,9 @@ module Pod
             native_target.build_phases.unshift(phase).uniq! unless native_target.build_phases.first == phase
             phase.shell_script = <<-SH.strip_heredoc
               diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-              if [[ $? != 0 ]] ; then
-                  cat << EOM
-              error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-              EOM
+              if [ $? != 0 ] ; then
+                  # print error to STDERR
+                  echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
                   exit 1
               fi
             SH
