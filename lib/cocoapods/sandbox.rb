@@ -386,5 +386,28 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Pods Helpers
+
+    # Creates the file accessors for the given Pod Targets.
+    #
+    # @param [Array<PodTarget>] pod_targets
+    #                           The Pod Targets to create file accessors for.
+    #
+    def create_file_accessors(pod_targets)
+      pod_targets.each do |pod_target|
+        pod_root = pod_dir(pod_target.root_spec.name)
+        path_list = PathList.new(pod_root)
+        file_accessors = pod_target.specs.map do |spec|
+          FileAccessor.new(path_list, spec.consumer(pod_target.platform))
+        end
+        pod_target.file_accessors ||= []
+        pod_target.file_accessors.concat(file_accessors)
+      end
+    end
+
+    #-------------------------------------------------------------------------#
   end
 end
