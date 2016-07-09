@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Hash scope suffixes if they are over 50 characters to prevent file paths from being too long. 
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5491](https://github.com/CocoaPods/CocoaPods/issues/5491)
 
 
 ## 1.1.0.beta.1 (2016-07-11)
