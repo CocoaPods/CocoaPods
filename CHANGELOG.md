@@ -51,6 +51,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#5052](https://github.com/CocoaPods/CocoaPods/issues/5052)
 
+* Avoid use of `activesupport` version 5 to stay compatible with macOS system Ruby.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5602](https://github.com/CocoaPods/CocoaPods/issues/5602)
+
 * Fix installing pods with `use_frameworks` when deduplication is disabled.  
   [Samuel Giddins](https://github.com/segiddins)
   [#5481](https://github.com/CocoaPods/CocoaPods/issues/5481)
