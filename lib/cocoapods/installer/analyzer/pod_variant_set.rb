@@ -23,7 +23,11 @@ module Pod
         #
         def scope_suffixes
           return { variants.first => nil } if variants.count == 1
-          scope_by_specs
+          Hash[scope_by_specs.map do |variant, scope|
+            require 'digest'
+            scope = Digest::MD5.hexdigest(scope)[0..7] if !scope.nil? && scope.length >= 50
+            [variant, scope]
+          end]
         end
 
         # Groups the collection by result of the block.
