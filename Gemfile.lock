@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 56a87a1597533b33e7467f92429a0aded4f32ef0
+  revision: b00a9022d705e222e82892978c49e8df0fce5633
   branch: master
   specs:
     cocoapods-core (1.0.1)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 796dec1d5abcdfc02ca1b5b8748d91c3f3e943b0
+  revision: fe71b7d4a7ba2b285fa49476e30d289f2a80b206
   branch: master
   specs:
     xcodeproj (1.1.0)
@@ -41,14 +41,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 0803d2280c14347e03cc5753efdca04e3697552c
+  revision: 5d85a154e91d0bdfe40ab6faa8a27df31013b6b9
   branch: master
   specs:
-    cocoapods-downloader (1.0.0)
+    cocoapods-downloader (1.0.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 6f7c1c99c6494795e49127bb1fef12f04e0f405f
+  revision: 710a63c7247e6c55aa62436e2cc659adebc01cef
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -79,10 +79,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 590fb5aeeda3871861d2c4c3580eee65463a225f
+  revision: 2c0840a6ba64056931622abc1d11479ffcc4a31b
   branch: master
   specs:
-    cocoapods-try (1.0.0)
+    cocoapods-try (1.1.0)
 
 GIT
   remote: https://github.com/segiddins/json.git
@@ -104,7 +104,7 @@ PATH
       cocoapods-search (>= 1.0.0, < 2.0)
       cocoapods-stats (>= 1.0.0, < 2.0)
       cocoapods-trunk (>= 1.0.0, < 2.0)
-      cocoapods-try (>= 1.0.0, < 2.0)
+      cocoapods-try (>= 1.1.0, < 2.0)
       colored (~> 1.2)
       escape (~> 0.0.4)
       fourflusher (~> 1.0.1)
