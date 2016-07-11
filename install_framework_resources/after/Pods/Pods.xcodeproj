@@ -64,6 +64,7 @@ Targets:
     - Debug:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
@@ -94,6 +95,7 @@ Targets:
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
@@ -135,6 +137,7 @@ Targets:
     - Debug:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
@@ -165,6 +168,7 @@ Targets:
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
@@ -211,6 +215,7 @@ Targets:
     - Debug:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
@@ -237,6 +242,7 @@ Targets:
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
@@ -318,6 +324,7 @@ Build Configurations:
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CODE_SIGNING_REQUIRED: 'NO'
       COPY_PHASE_STRIP: 'NO'
       ENABLE_TESTABILITY: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
@@ -336,6 +343,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       MACOSX_DEPLOYMENT_TARGET: '10.10'
       ONLY_ACTIVE_ARCH: 'YES'
+      PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: ${SRCROOT}/../build
 - Release:
@@ -355,6 +363,7 @@ Build Configurations:
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CODE_SIGNING_REQUIRED: 'NO'
       COPY_PHASE_STRIP: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'
       GCC_C_LANGUAGE_STANDARD: gnu99
@@ -368,6 +377,7 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       MACOSX_DEPLOYMENT_TARGET: '10.10'
+      PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: ${SRCROOT}/../build
       VALIDATE_PRODUCT: 'YES'

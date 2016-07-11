@@ -62,7 +62,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -79,7 +79,7 @@ Targets:
         Base Configuration: Pod1.xcconfig
     - Release:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -108,7 +108,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -125,7 +125,7 @@ Targets:
         Base Configuration: Pod2.xcconfig
     - Release:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -154,7 +154,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -171,7 +171,7 @@ Targets:
         Base Configuration: Pod3.xcconfig
     - Release:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -195,7 +195,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -212,7 +212,7 @@ Targets:
         Base Configuration: Pods-SubSpecCircular.debug.xcconfig
     - Release:
         Build Settings:
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -248,6 +248,7 @@ Build Configurations:
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CODE_SIGNING_REQUIRED: 'NO'
       COPY_PHASE_STRIP: 'NO'
       ENABLE_TESTABILITY: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
@@ -266,6 +267,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '9.3'
       ONLY_ACTIVE_ARCH: 'YES'
+      PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: ${SRCROOT}/../build
 - Release:
@@ -285,6 +287,7 @@ Build Configurations:
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CODE_SIGNING_REQUIRED: 'NO'
       COPY_PHASE_STRIP: 'YES'
       ENABLE_NS_ASSERTIONS: 'NO'
       GCC_C_LANGUAGE_STANDARD: gnu99
@@ -298,6 +301,7 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '9.3'
+      PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: ${SRCROOT}/../build
       VALIDATE_PRODUCT: 'YES'
