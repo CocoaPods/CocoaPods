@@ -73,9 +73,10 @@ module Pod
     def specs_by_target
       @specs_by_target ||= {}.tap do |specs_by_target|
         podfile.target_definition_list.each do |target|
+          cached_dependencys = {}
           specs = target.dependencies.map(&:name).flat_map do |name|
             node = @activated.vertex_named(name)
-            valid_dependencies_for_target_from_node(target, node) << node
+            valid_dependencies_for_target_from_node(target, cached_dependencys, node) << node
           end
 
           specs_by_target[target] = specs.
@@ -471,13 +472,27 @@ module Pod
     #         An array of target-appropriate nodes whose `payload`s are
     #         dependencies for `target`.
     #
-    def valid_dependencies_for_target_from_node(target, node)
+    def valid_dependencies_for_target_from_node(target, cached_dependencys, node)
+
+      cache_dependency = cached_dependencys[node.name]
+
+      if cache_dependency
+        return cache_dependency
+      end
+
       validate_platform(node.payload, target)
       dependency_nodes = node.outgoing_edges.select do |edge|
         edge_is_valid_for_target?(edge, target)
       end.map(&:destination)
 
-      dependency_nodes + dependency_nodes.flat_map { |n| valid_dependencies_for_target_from_node(target, n) }
+      dependency_nodes + dependency_nodes.flat_map do |node| 
+
+        node_result = valid_dependencies_for_target_from_node(target, cached_dependencys, node)
+
+        cached_dependencys[node.name] = node_result
+
+        node_result
+      end
     end
 
     # Whether the given `edge` should be followed to find dependencies for the
