@@ -15,6 +15,8 @@
 		<dict>
 			<key>FooterText</key>
 			<string>Permission is hereby granted ...</string>
+			<key>License</key>
+			<string>MIT</string>
 			<key>Title</key>
 			<string>BananaLib</string>
 			<key>Type</key>

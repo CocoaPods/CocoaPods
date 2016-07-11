@@ -284,6 +284,8 @@ organization on or affiliated with the Department of Commerce lists of Denied
 Persons, Unverified Parties or Restricted Entities, or otherwise in violation of any
 such restrictions or regulations.
 </string>
+			<key>License</key>
+			<string>Apache 2.0</string>
 			<key>Title</key>
 			<string>Realm</string>
 			<key>Type</key>
@@ -561,6 +563,8 @@ organization on or affiliated with the Department of Commerce lists of Denied
 Persons, Unverified Parties or Restricted Entities, or otherwise in violation of any
 such restrictions or regulations.
 </string>
+			<key>License</key>
+			<string>Apache 2.0</string>
 			<key>Title</key>
 			<string>RealmSwift</string>
 			<key>Type</key>

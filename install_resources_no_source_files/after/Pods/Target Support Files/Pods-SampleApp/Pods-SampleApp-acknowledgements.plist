@@ -15,6 +15,8 @@
 		<dict>
 			<key>FooterText</key>
 			<string></string>
+			<key>License</key>
+			<string>MIT</string>
 			<key>Title</key>
 			<string>res</string>
 			<key>Type</key>
