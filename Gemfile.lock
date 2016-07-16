@@ -23,16 +23,6 @@ GIT
     molinillo (0.5.0)
 
 GIT
-  remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: d3b9b2a2f99fab532c46c1a1fa753edcdc7334c3
-  branch: master
-  specs:
-    xcodeproj (1.2.0)
-      activesupport (>= 3)
-      claide (>= 1.0.0, < 2.0)
-      colored (~> 1.2)
-
-GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
   revision: c5e0698f7043b440a0d9d2db89f2145171ae6593
   branch: master
@@ -83,6 +73,16 @@ GIT
   branch: master
   specs:
     cocoapods-try (1.1.0)
+
+GIT
+  remote: https://github.com/benasher44/Xcodeproj
+  revision: 74669928c2bce1d160b913bc6c9469643f2cd1e1
+  ref: 74669928c2bce1d160b913bc6c9469643f2cd1e1
+  specs:
+    xcodeproj (1.2.0)
+      activesupport (>= 3)
+      claide (>= 1.0.0, < 2.0)
+      colored (~> 1.2)
 
 GIT
   remote: https://github.com/segiddins/json.git

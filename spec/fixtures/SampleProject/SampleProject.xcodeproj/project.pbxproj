@@ -38,6 +38,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		137F16201D3AFC7B00029696 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 137F16131D3AFC2900029696;
+			remoteInfo = "Sample Framework";
+		};
+		13C6236F1D3B00F900EFB98B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 137F16121D3AFC2900029696;
+			remoteInfo = "Sample Framework";
+		};
 		51E94E27164472200035348C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
@@ -164,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				51E94E28164472200035348C /* libSample Lib.a */,
+				137F16211D3AFC7B00029696 /* Sample Framework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -280,6 +295,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				13C623701D3B00F900EFB98B /* PBXTargetDependency */,
 			);
 			name = SampleProject;
 			productName = SampleProject;
@@ -351,6 +367,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		137F16211D3AFC7B00029696 /* Sample Framework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "Sample Framework.framework";
+			remoteRef = 137F16201D3AFC7B00029696 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		51E94E28164472200035348C /* libSample Lib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -424,6 +447,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		13C623701D3B00F900EFB98B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Sample Framework";
+			targetProxy = 13C6236F1D3B00F900EFB98B /* PBXContainerItemProxy */;
+		};
 		C0C495391B9E5C47004F9854 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A346496C14F9BE9A0080D870 /* SampleProject */;
@@ -959,6 +987,7 @@
 				C0C4953E1B9E5C47004F9854 /* App Store */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

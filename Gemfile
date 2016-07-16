@@ -34,7 +34,7 @@ group :development do
   cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
   cp_gem 'cocoapods-try',         'cocoapods-try'
   cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
+  gem 'xcodeproj', :git => 'https://github.com/benasher44/Xcodeproj', :ref => '74669928c2bce1d160b913bc6c9469643f2cd1e1'
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 

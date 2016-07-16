@@ -267,10 +267,11 @@ module Pod
       #
       def verify_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
         aggregate_target_uuids = Set.new aggregate_targets.map(&:user_targets).flatten.map(&:uuid)
+        aggregate_target_user_projects = aggregate_targets.map(&:user_project)
         embedded_targets_missing_hosts = []
         embedded_aggregate_targets.each do |target|
-          host_uuids = target.user_targets.map do |user_target|
-            target.user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
+          host_uuids = aggregate_target_user_projects.product(target.user_targets).map do |user_project, user_target|
+            user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
           end.flatten
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
             aggregate_target_uuids.include? uuid
