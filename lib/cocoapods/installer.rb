@@ -34,7 +34,6 @@ module Pod
     autoload :PostInstallHooksContext,    'cocoapods/installer/post_install_hooks_context'
     autoload :PreInstallHooksContext,     'cocoapods/installer/pre_install_hooks_context'
     autoload :SourceProviderHooksContext, 'cocoapods/installer/source_provider_hooks_context'
-    autoload :Migrator,                   'cocoapods/installer/migrator'
     autoload :PodfileValidator,           'cocoapods/installer/podfile_validator'
     autoload :PodSourceInstaller,         'cocoapods/installer/pod_source_installer'
     autoload :PodSourcePreparer,          'cocoapods/installer/pod_source_preparer'
@@ -133,7 +132,6 @@ module Pod
         deintegrate_if_different_major_version
         sandbox.prepare
         ensure_plugins_are_installed!
-        Migrator.migrate(sandbox)
         run_plugins_pre_install_hooks
       end
     end
