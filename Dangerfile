@@ -1,6 +1,6 @@
-# Don't let testing shortcuts get into master by accident
-
-(modified_files + added_files - %w(Dangerfile)).each do |file|
+# Don't let testing shortcuts get into master by accident, 
+# ensuring that we don't get green builds based on a subset of tests
+(git.modified_files + git.added_files - %w(Dangerfile)).each do |file|
   next unless File.file?(file)
   contents = File.read(file)
   if file.start_with?('spec')
@@ -10,14 +10,14 @@
 end
 
 # Ensure a clean commits history
-if commits.any? { |c| c.message =~ /^Merge branch '#{branch_for_merge}'/ }
+if git.commits.any? { |c| c.message =~ /^Merge branch '#{github.branch_for_base}'/ }
   fail('Please rebase to get rid of the merge commits in this PR')
 end
 
 # Request a CHANGELOG entry, and give an example
-has_app_changes = !modified_files.grep(/lib/).empty?
-if !modified_files.include?('CHANGELOG.md') && has_app_changes
-  fail('Please include a CHANGELOG entry to credit yourself! \nYou can find it at [CHANGELOG.md](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md).', :sticky => false)
+has_app_changes = !git.modified_files.grep(/lib/).empty?
+if !git.modified_files.include?('CHANGELOG.md') && has_app_changes
+  fail("Please include a CHANGELOG entry to credit yourself! \nYou can find it at [CHANGELOG.md](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md).", :sticky => false)
   markdown <<-MARKDOWN
 Here's an example of your CHANGELOG entry:
 
