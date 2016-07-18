@@ -76,8 +76,8 @@ GIT
 
 GIT
   remote: https://github.com/benasher44/Xcodeproj
-  revision: 74669928c2bce1d160b913bc6c9469643f2cd1e1
-  ref: 74669928c2bce1d160b913bc6c9469643f2cd1e1
+  revision: 5a24a3992e84c41e6c75f104b35817bcaec7b11a
+  ref: 5a24a3992e84c41e6c75f104b35817bcaec7b11a
   specs:
     xcodeproj (1.2.0)
       activesupport (>= 3)

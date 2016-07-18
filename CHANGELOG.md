@@ -139,7 +139,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Enhancements
 
 * Improve host target detection for embedded targets
-  in sub-projects
+  in sub-projects.  
   [Ben Asher](https://github.com/benasher44)
   [#5622](https://github.com/CocoaPods/CocoaPods/issues/5622)
 
