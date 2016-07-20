@@ -30,6 +30,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Remove the `const_missing` hack for `Pod::SourcesManager`.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fixed code signing issue causing lint failure on macOS.  
+  [Paul Cantrell](https://github.com/pcantrell)
+  [#5645](https://github.com/CocoaPods/CocoaPods/issues/5645)
 
 ## 1.2.0.beta.1 (2016-10-28)
 
