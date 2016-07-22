@@ -100,6 +100,22 @@ module Pod
         )
       end
 
+      it 'hashes scopes that are longer than 50 characters' do
+        @bar_subspec.name = 'matryoshka/ThisIsAReallyLongSubspecName'
+        variants = PodVariantSet.new([
+          PodVariant.new([@root_spec, @default_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec], Platform.osx),
+          PodVariant.new([@root_spec, @default_subspec, @foo_subspec, @bar_subspec], Platform.ios),
+          PodVariant.new([@root_spec, @default_subspec, @bar_subspec], Platform.osx),
+        ])
+        variants.scope_suffixes.values.should == %w(
+          iOS
+          OSX
+          c4ca5113
+          .default-matryoshka_ThisIsAReallyLongSubspecName
+        )
+      end
+
       it 'returns scopes by versioned platform names and subspec names if they qualify' do
         variants = PodVariantSet.new([
           PodVariant.new([@root_spec, @default_subspec], Platform.new(:ios, '7.0')),
