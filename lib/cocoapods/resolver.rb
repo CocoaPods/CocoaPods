@@ -73,10 +73,10 @@ module Pod
     def specs_by_target
       @specs_by_target ||= {}.tap do |specs_by_target|
         podfile.target_definition_list.each do |target|
-          cached_dependencys = {}
+          dependencies = {}
           specs = target.dependencies.map(&:name).flat_map do |name|
             node = @activated.vertex_named(name)
-            valid_dependencies_for_target_from_node(target, cached_dependencys, node) << node
+            valid_dependencies_for_target_from_node(target, dependencies, node) << node
           end
 
           specs_by_target[target] = specs.
@@ -472,8 +472,8 @@ module Pod
     #         An array of target-appropriate nodes whose `payload`s are
     #         dependencies for `target`.
     #
-    def valid_dependencies_for_target_from_node(target, cached_dependencys, node)
-      cache_dependency = cached_dependencys[node.name]
+    def valid_dependencies_for_target_from_node(target, dependencies, node)
+      cache_dependency = dependencies[node.name]
 
       if cache_dependency
         return cache_dependency
@@ -485,9 +485,9 @@ module Pod
       end.map(&:destination)
 
       dependency_nodes + dependency_nodes.flat_map do |item|
-        node_result = valid_dependencies_for_target_from_node(target, cached_dependencys, item)
+        node_result = valid_dependencies_for_target_from_node(target, dependencies, item)
 
-        cached_dependencys[item.name] = node_result
+        dependencies[item.name] = node_result
 
         node_result
       end
