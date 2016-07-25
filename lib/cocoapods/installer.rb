@@ -34,7 +34,6 @@ module Pod
     autoload :PostInstallHooksContext,    'cocoapods/installer/post_install_hooks_context'
     autoload :PreInstallHooksContext,     'cocoapods/installer/pre_install_hooks_context'
     autoload :SourceProviderHooksContext, 'cocoapods/installer/source_provider_hooks_context'
-    autoload :Migrator,                   'cocoapods/installer/migrator'
     autoload :PodfileValidator,           'cocoapods/installer/podfile_validator'
     autoload :PodSourceInstaller,         'cocoapods/installer/pod_source_installer'
     autoload :PodSourcePreparer,          'cocoapods/installer/pod_source_preparer'
@@ -110,11 +109,15 @@ module Pod
       prepare
       resolve_dependencies
       download_dependencies
-      verify_no_duplicate_framework_names
+      verify_no_duplicate_framework_and_library_names
       verify_no_static_framework_transitive_dependencies
       verify_framework_usage
       generate_pods_project
-      integrate_user_project if installation_options.integrate_targets?
+      if installation_options.integrate_targets?
+        integrate_user_project
+      else
+        UI.section 'Skipping User Project Integration'
+      end
       perform_post_install_actions
     end
 
@@ -129,7 +132,6 @@ module Pod
         deintegrate_if_different_major_version
         sandbox.prepare
         ensure_plugins_are_installed!
-        Migrator.migrate(sandbox)
         run_plugins_pre_install_hooks
       end
     end
@@ -389,20 +391,29 @@ module Pod
       end
     end
 
-    def verify_no_duplicate_framework_names
+    def verify_no_duplicate_framework_and_library_names
       aggregate_targets.each do |aggregate_target|
         aggregate_target.user_build_configurations.keys.each do |config|
           pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
-          vendored_frameworks = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_frameworks).uniq
-          frameworks = vendored_frameworks.map { |fw| fw.basename('.framework') }
-          frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
+          file_accessors = pod_targets.flat_map(&:file_accessors)
 
-          duplicates = frameworks.group_by { |f| f }.select { |_, v| v.size > 1 }.keys
-          unless duplicates.empty?
-            raise Informative, "The '#{aggregate_target.label}' target has " \
-              "frameworks with conflicting names: #{duplicates.to_sentence}."
-          end
+          frameworks = file_accessors.flat_map(&:vendored_frameworks).uniq.map(&:basename)
+          frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
+          verify_no_duplicate_names(frameworks, aggregate_target.label, 'frameworks')
+
+          libraries = file_accessors.flat_map(&:vendored_libraries).uniq.map(&:basename)
+          libraries += pod_targets.select { |pt| pt.should_build? && !pt.requires_frameworks? }.map(&:product_name)
+          verify_no_duplicate_names(libraries, aggregate_target.label, 'libraries')
         end
+      end
+    end
+
+    def verify_no_duplicate_names(names, label, type)
+      duplicates = names.map { |n| n.to_s.downcase }.group_by { |f| f }.select { |_, v| v.size > 1 }.keys
+
+      unless duplicates.empty?
+        raise Informative, "The '#{label}' target has " \
+          "#{type} with conflicting names: #{duplicates.to_sentence}."
       end
     end
 

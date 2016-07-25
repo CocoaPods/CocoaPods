@@ -21,7 +21,13 @@ module Pod
                 create_module_map
                 create_umbrella_header
               end
-              create_embed_frameworks_script
+              # Because embedded targets live in their host target, CocoaPods
+              # copies all of the embedded target's pod_targets to its host
+              # targets. Having this script for the embedded target would
+              # cause an App Store rejection because frameworks cannot be
+              # embedded in embedded targets.
+              #
+              create_embed_frameworks_script unless target.requires_host_target?
               create_bridge_support_file
               create_copy_resources_script
               create_acknowledgements
@@ -45,12 +51,13 @@ module Pod
           #
           def custom_build_settings
             settings = {
-              'MACH_O_TYPE'               => 'staticlib',
-              'OTHER_LDFLAGS'             => '',
-              'OTHER_LIBTOOLFLAGS'        => '',
-              'PODS_ROOT'                 => '$(SRCROOT)',
-              'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
-              'SKIP_INSTALL'              => 'YES',
+              'CODE_SIGN_IDENTITY[sdk=iphoneos*]' => '',
+              'MACH_O_TYPE'                       => 'staticlib',
+              'OTHER_LDFLAGS'                     => '',
+              'OTHER_LIBTOOLFLAGS'                => '',
+              'PODS_ROOT'                         => '$(SRCROOT)',
+              'PRODUCT_BUNDLE_IDENTIFIER'         => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
+              'SKIP_INSTALL'                      => 'YES',
             }
             super.merge(settings)
           end

@@ -61,7 +61,7 @@ module Pod
       before do
         @installer.stubs(:resolve_dependencies)
         @installer.stubs(:download_dependencies)
-        @installer.stubs(:verify_no_duplicate_framework_names)
+        @installer.stubs(:verify_no_duplicate_framework_and_library_names)
         @installer.stubs(:verify_no_static_framework_transitive_dependencies)
         @installer.stubs(:verify_framework_usage)
         @installer.stubs(:generate_pods_project)
@@ -157,6 +157,7 @@ module Pod
         @installer.installation_options.integrate_targets = false
         @installer.expects(:integrate_user_project).never
         @installer.install!
+        UI.output.should.include 'Skipping User Project Integration'
       end
 
       it 'prints a list of deprecated pods' do
@@ -258,7 +259,25 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe '#verify_no_duplicate_framework_names' do
+    describe '#verify_no_duplicate_framework_and_library_names' do
+      it 'detects duplicate library names' do
+        Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('a/libBananalib.a')])
+        Pod::Specification.any_instance.stubs(:dependencies).returns([])
+        fixture_path = ROOT + 'spec/fixtures'
+        config.repos_dir = fixture_path + 'spec-repos'
+        podfile = Pod::Podfile.new do
+          platform :ios, '8.0'
+          project 'SampleProject/SampleProject'
+          pod 'BananaLib', :path => (fixture_path + 'banana-lib').to_s
+          target 'SampleProject'
+        end
+        lockfile = generate_lockfile
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.installation_options.integrate_targets = false
+        should.raise(Informative) { @installer.install! }.message.should.match /conflict.*bananalib/
+      end
+
       it 'detects duplicate framework names' do
         Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks).
           returns([Pathname('a/monkey.framework')]).then.

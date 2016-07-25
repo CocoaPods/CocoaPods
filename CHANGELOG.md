@@ -8,19 +8,34 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Remove references to the pre-1.0 Migrator.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5635](https://github.com/CocoaPods/CocoaPods/pull/5635)
+
+##### Bug Fixes
+
+* Hash scope suffixes if they are over 50 characters to prevent file paths from being too long. 
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5491](https://github.com/CocoaPods/CocoaPods/issues/5491)
+
+
+## 1.1.0.beta.1 (2016-07-11)
+
+##### Enhancements
+
 * Move Pods Project generation to an `Xcode` Namespace.  
   [Daniel Tomlinson](https://github.com/dantoml)
   [#5480](https://github.com/CocoaPods/CocoaPods/pull/5480)
 
-* Add the ability to inhibit swift warnings.
+* Add the ability to inhibit swift warnings.  
   [Peter Ryszkiewicz](https://github.com/pRizz)
   [#5414](https://github.com/CocoaPods/CocoaPods/pull/5414)
 
 * Use `git ls-remote` to skip full clones for branch dependencies.  
   [Juan Civile](https://github.com/champo)
   [#5376](https://github.com/CocoaPods/CocoaPods/issues/5376)
-  
-* [repo/push] --use-json to convert podspecs to JSON format when pushing  
+
+* [repo/push] --use-json to convert podspecs to JSON format when pushing.  
   [Mark Schall](https://github.com/maschall)
   [#5568](https://github.com/CocoaPods/CocoaPods/pull/5568)
   
@@ -32,15 +47,41 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Boris Bügling](https://github.com/neonichu)
   [#5558](https://github.com/CocoaPods/CocoaPods/issues/5558)
 
-* Accept `pod repo push` with URL instead of only repo name  
+* Accept `pod repo push` with URL instead of only repo name.  
   [Mark Schall](https://github.com/maschall)
   [#5572](https://github.com/CocoaPods/CocoaPods/pull/5572)
+
+* [Installer] Set the SWIFT_VERSION for CocoaPods generated targets.  
+  [Danielle Tomlinson](https://github.com/DanToml)
+  [#5540](https://github.com/CocoaPods/CocoaPods/pulls/5540)
+
+* Print message when skipping user project integration.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5517](https://github.com/CocoaPods/CocoaPods/issues/5517)
+
+* Show GitHub Issues that could be related to exceptions.  
+  [Orta Therox](https://github.com/orta)
+  [#4817](https://github.com/CocoaPods/CocoaPods/issues/4817)
+
+* Improve handling of app extensions, watch os 1 extensions
+  and framework targets.  
+  [benasher44](https://github.com/benasher44)
+  [#4203](https://github.com/CocoaPods/CocoaPods/issues/4203)
+
+* Add a license type to generated acknowledgements file in plist.  
+  [Naoto Kaneko](https://github.com/naoty)
+  [#5436](https://github.com/CocoaPods/CocoaPods/pull/5436)
 
 ##### Bug Fixes
 
 * Fix local pod platform conflict error message.  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#5052](https://github.com/CocoaPods/CocoaPods/issues/5052)
+
+* Avoid use of `activesupport` version 5 to stay compatible with macOS system
+  Ruby.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5602](https://github.com/CocoaPods/CocoaPods/issues/5602)
 
 * Fix installing pods with `use_frameworks` when deduplication is disabled.  
   [Samuel Giddins](https://github.com/segiddins)
@@ -54,7 +95,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#5321](https://github.com/CocoaPods/CocoaPods/issues/5321)
 
-* Use `require` instead of `autoload` to solve an issue with loading `fourflusher`.  
+* Use `require` instead of `autoload` to solve an issue with loading
+  `fourflusher`.  
   [Boris Bügling](https://github.com/neonichu)
   [#5445](https://github.com/CocoaPods/CocoaPods/issues/5445)
 
@@ -73,6 +115,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix linting with Xcode 8.  
   [Boris Bügling](https://github.com/neonichu)
   [#5529](https://github.com/CocoaPods/CocoaPods/issues/5529)
+
+* Fix linting with Xcode 8 by disabling it entirely.  
+  [Boris Bügling](https://github.com/neonichu)
+  [#5528](https://github.com/CocoaPods/CocoaPods/issues/5528)
+
+* Error during install when there are duplicate library names.  
+  [Daniel Tomlinson](https://github.com/dantoml)
+  [#4014](https://github.com/CocoaPods/CocoaPods/issues/4014)
+
+* Make the `Check Pods Manifest.lock` script write errors to STDERR and improve
+  POSIX shell compatibility.  
+  [Simon Warta](https://github.com/webmaster128)
+  [#5595](https://github.com/CocoaPods/CocoaPods/pull/5595)
 
 
 ## 1.0.1 (2016-06-02)

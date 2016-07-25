@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Command::Install do
     it 'tells the user that no Podfile or podspec was found in the project dir' do
-      exception = lambda { run_command('install', '--no-repo-update') }.should.raise Informative
+      exception = lambda { run_command('install') }.should.raise Informative
       exception.message.should.include "No `Podfile' found in the project directory."
     end
 

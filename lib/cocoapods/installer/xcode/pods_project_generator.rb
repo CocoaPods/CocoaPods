@@ -108,7 +108,6 @@ module Pod
         def prepare
           UI.message '- Creating Pods project' do
             @project = create_project
-
             analysis_result.all_user_build_configurations.each do |name, type|
               @project.add_build_configuration(name, type)
             end
@@ -138,6 +137,8 @@ module Pod
               build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
               build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
               build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
+              build_configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+              build_configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = 'NO_SIGNING/' # a bogus provisioning profile ID assumed to be invalid
             end
           end
         end

@@ -12,6 +12,7 @@ module Pod
       variant.specs.should == @specs
       variant.platform.should == @platform
       variant.requires_frameworks.should == false
+      variant.swift_version.should.nil?
     end
 
     it 'can be initialized with specs, platform and whether it requires frameworks' do
@@ -19,6 +20,15 @@ module Pod
       variant.specs.should == @specs
       variant.platform.should == @platform
       variant.requires_frameworks.should == true
+      variant.swift_version.should.nil?
+    end
+
+    it 'can be initialized with specs, platform, whether it requires frameworks, and a Swift version' do
+      variant = PodVariant.new(@specs, @platform, true, '2.3')
+      variant.specs.should == @specs
+      variant.platform.should == @platform
+      variant.requires_frameworks.should == true
+      variant.swift_version.should == '2.3'
     end
 
     it 'can return the root spec' do
@@ -27,11 +37,12 @@ module Pod
       variant.root_spec.should == spec
     end
 
-    it 'can be compared for equality with another variant with the same specs, platform and value for whether it requires frameworks' do
-      spec = PodVariant.new(@specs, @platform, false)
-      spec.should == PodVariant.new(@specs, @platform, false)
+    it 'can be compared for equality with another variant with the same specs, platform, value for whether it requires frameworks and Swift version' do
+      spec = PodVariant.new(@specs, @platform, false, '2.3')
+      spec.should == PodVariant.new(@specs, @platform, false, '2.3')
+      spec.should.not == PodVariant.new(@specs, @platform, false, '3.0')
       spec.should.not == PodVariant.new([@specs.first], @platform, false)
-      spec.should.not == PodVariant.new(@specs, Platform.osx, false)
+      spec.should.not == PodVariant.new(@specs, Platform.osx, false, '2.3')
       spec.should.not == PodVariant.new(@specs, @platform, true)
     end
 

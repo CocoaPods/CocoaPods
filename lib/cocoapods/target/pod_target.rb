@@ -81,6 +81,12 @@ module Pod
       end
     end
 
+    # @return [String] the Swift version for the target.
+    #
+    def swift_version
+      target_definitions.map(&:swift_version).compact.uniq.first
+    end
+
     # @note   The deployment target for the pod target is the maximum of all
     #         the deployment targets for the current platform of the target
     #         (or the minimum required to support the current installation

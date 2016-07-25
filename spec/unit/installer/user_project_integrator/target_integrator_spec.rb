@@ -96,10 +96,9 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script.should == <<-EOS.strip_heredoc
           diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-          if [[ $? != 0 ]] ; then
-              cat << EOM
-          error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-          EOM
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
               exit 1
           fi
           EOS
@@ -147,22 +146,22 @@ module Pod
           phase.nil?.should == true
         end
 
-        it 'adds an embed frameworks build phase if the target to integrate is an app extension' do
+        it 'does not add an embed frameworks build phase if the target to integrate is an app extension' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:app_extension)
           @target_integrator.integrate!
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
-          phase.nil?.should == false
+          phase.nil?.should == true
         end
 
-        it 'adds an embed frameworks build phase if the target to integrate is a watch extension' do
+        it 'does not add an embed frameworks build phase if the target to integrate is a watch extension' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:watch_extension)
           @target_integrator.integrate!
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
-          phase.nil?.should == false
+          phase.nil?.should == true
         end
 
         it 'adds an embed frameworks build phase if the target to integrate is a watchOS 2 extension' do
@@ -201,6 +200,42 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
+        end
+
+        it 'removes embed frameworks build phases from app extension targets' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+          target.stubs(:symbol_type).returns(:app_extension)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
+        end
+
+        it 'removes embed frameworks build phases from watch extension targets' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+          target.stubs(:symbol_type).returns(:watch_extension)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
+        end
+
+        it 'removes embed frameworks build phases from framework targets' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+          target.stubs(:symbol_type).returns(:framework)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == true
         end
       end
 

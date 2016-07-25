@@ -8,6 +8,7 @@ describe Pod::Generator::Plist do
     @spec = @file_accessor.spec
     @generator = Pod::Generator::Plist.new([@file_accessor])
     @spec.stubs(:name).returns('POD_NAME')
+    @spec.stubs(:license).returns(:type => 'MIT')
     @generator.stubs(:license_text).returns('LICENSE_TEXT')
   end
 
@@ -24,6 +25,7 @@ describe Pod::Generator::Plist do
       :Type => 'PSGroupSpecifier',
       :Title => 'POD_NAME',
       :FooterText => 'LICENSE_TEXT',
+      :License => 'MIT',
     }
   end
 
@@ -34,6 +36,7 @@ describe Pod::Generator::Plist do
       :Type => 'PSGroupSpecifier',
       :Title => 'POD_NAME',
       :FooterText => license_text,
+      :License => 'MIT',
     }
   end
 
