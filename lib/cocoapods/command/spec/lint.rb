@@ -27,6 +27,7 @@ module Pod
              '(defaults to https://github.com/CocoaPods/Specs.git). ' \
              'Multiple sources must be comma-delimited.'],
             ['--private', 'Lint skips checks that apply only to public specs'],
+            ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
           ].concat(super)
         end
 
@@ -40,6 +41,7 @@ module Pod
           @use_frameworks  = !argv.flag?('use-libraries')
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
           @private         = argv.flag?('private', false)
+          @skip_import_validation = argv.flag?('skip-import-validation', false)
           @podspecs_paths  = argv.arguments!
           super
         end
@@ -57,6 +59,7 @@ module Pod
             validator.only_subspec   = @only_subspec
             validator.use_frameworks = @use_frameworks
             validator.ignore_public_only_results = @private
+            validator.skip_import_validation = @skip_import_validation
             validator.validate
             failure_reasons << validator.failure_reason
 
