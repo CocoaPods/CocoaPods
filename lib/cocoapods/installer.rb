@@ -80,7 +80,7 @@ module Pod
     #
     attr_accessor :update
 
-    # @return [Bool] Whether the spec repos should be updated.
+    # @return [Boolean] Whether the spec repos should be updated.
     #
     attr_accessor :repo_update
     alias_method :repo_update?, :repo_update
@@ -632,7 +632,7 @@ module Pod
     #
     # @raise  Raises an informative if the hooks raises.
     #
-    # @return [Bool] Whether the hook was run.
+    # @return [Boolean] Whether the hook was run.
     #
     def run_podfile_pre_install_hook
       podfile.pre_install!(self)
@@ -660,7 +660,7 @@ module Pod
     #
     # @raise  Raises an informative if the hooks raises.
     #
-    # @return [Bool] Whether the hook was run.
+    # @return [Boolean] Whether the hook was run.
     #
     def run_podfile_post_install_hook
       podfile.post_install!(self)
