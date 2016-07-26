@@ -12,7 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Add `--skip-import-validation` to skip linking a pod during lint.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5670](https://github.com/CocoaPods/CocoaPods/issues/5670)
 
 
 ## 1.2.0.rc.1 (2017-01-13)
