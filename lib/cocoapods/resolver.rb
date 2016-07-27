@@ -473,24 +473,20 @@ module Pod
     #         dependencies for `target`.
     #
     def valid_dependencies_for_target_from_node(target, dependencies, node)
-      cache_dependency = dependencies[node.name]
+      dependencies[node.name] ||= begin
+        validate_platform(node.payload, target)
+        dependency_nodes = node.outgoing_edges.select do |edge|
+          edge_is_valid_for_target?(edge, target)
+        end.map(&:destination)
 
-      if cache_dependency
-        return cache_dependency
+        dependency_nodes + dependency_nodes.flat_map do |item|
+          node_result = valid_dependencies_for_target_from_node(target, dependencies, item)
+
+          node_result
+        end
       end
 
-      validate_platform(node.payload, target)
-      dependency_nodes = node.outgoing_edges.select do |edge|
-        edge_is_valid_for_target?(edge, target)
-      end.map(&:destination)
-
-      dependency_nodes + dependency_nodes.flat_map do |item|
-        node_result = valid_dependencies_for_target_from_node(target, dependencies, item)
-
-        dependencies[item.name] = node_result
-
-        node_result
-      end
+      dependencies[node.name]      
     end
 
     # Whether the given `edge` should be followed to find dependencies for the
