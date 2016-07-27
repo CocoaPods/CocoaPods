@@ -486,7 +486,7 @@ module Pod
         end
       end
 
-      dependencies[node.name]      
+      dependencies[node.name]
     end
 
     # Whether the given `edge` should be followed to find dependencies for the
