@@ -10,7 +10,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Remove references to the pre-1.0 Migrator.  
   [Danielle Tomlinson](https://github.com/dantoml)
-  [#5635](https://github.com/CocoaPods/CocoaPods/pull/5635)
+  [#5635](https://github.com/CocoaPods/CocoaPods/pull/5635)  
+  
+* Improve performance of dependency resolution.
+  [yanzhiwei147](https://github.com/yanzhiwei147)
+  [#5510](https://github.com/CocoaPods/CocoaPods/pull/5510)
 
 ##### Bug Fixes
 
