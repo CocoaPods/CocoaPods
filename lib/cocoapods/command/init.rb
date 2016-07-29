@@ -76,7 +76,7 @@ module Pod
       end
 
       # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as it's first item
+      #         An array which always has a target as its first item
       #         and may optionally contain related test targets
       #
       # @return [String] the text for the target module
@@ -111,7 +111,7 @@ module Pod
       end
 
       # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as it's first item
+      #         An array which always has a target as its first item
       #         and may optionally contain a second target as its test target
       #
       # @return [String] the text for the target module
