@@ -56,7 +56,7 @@ module Pod
         podfile = ''
         podfile << "project '#{@project_path}'\n\n" if @project_path
         podfile << <<-PLATFORM.strip_heredoc
-          # Uncomment this line to define a global platform for your project
+          # Uncomment the next line to define a global platform for your project
           # platform :ios, '9.0'
         PLATFORM
 
@@ -76,7 +76,7 @@ module Pod
       end
 
       # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as it's first item
+      #         An array which always has a target as its first item
       #         and may optionally contain related test targets
       #
       # @return [String] the text for the target module
@@ -86,13 +86,13 @@ module Pod
 
         target_module << if app.resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').values.any?
                            <<-RUBY
-  # Comment this line if you're not using Swift and don't want to use dynamic frameworks
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
          RUBY
                          else
                            <<-RUBY
-  # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
 
          RUBY
@@ -111,7 +111,7 @@ module Pod
       end
 
       # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as it's first item
+      #         An array which always has a target as its first item
       #         and may optionally contain a second target as its test target
       #
       # @return [String] the text for the target module
