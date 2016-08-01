@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5491](https://github.com/CocoaPods/CocoaPods/issues/5491)
 
+* Fix codesigning identity on watchOS and tvOS targets.    
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5686](https://github.com/CocoaPods/CocoaPods/issues/5686)
+
 
 ## 1.1.0.beta.1 (2016-07-11)
 
