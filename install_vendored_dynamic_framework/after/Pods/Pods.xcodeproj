@@ -60,7 +60,9 @@ Targets:
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -91,7 +93,9 @@ Targets:
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -143,7 +147,9 @@ Targets:
     - Debug:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -170,7 +176,9 @@ Targets:
     - Release:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
