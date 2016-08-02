@@ -57,7 +57,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * [Installer] Set the SWIFT_VERSION for CocoaPods generated targets.  
   [Danielle Tomlinson](https://github.com/DanToml)
-  [#5540](https://github.com/CocoaPods/CocoaPods/pulls/5540)
+  [#5540](https://github.com/CocoaPods/CocoaPods/pull/5540)
 
 * Print message when skipping user project integration.  
   [Danielle Tomlinson](https://github.com/dantoml)
