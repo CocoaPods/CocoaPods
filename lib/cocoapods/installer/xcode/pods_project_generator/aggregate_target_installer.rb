@@ -51,9 +51,9 @@ module Pod
           #
           def custom_build_settings
             settings = {
+              'CODE_SIGN_IDENTITY[sdk=appletvos*]' => '',
               'CODE_SIGN_IDENTITY[sdk=iphoneos*]'  => '',
               'CODE_SIGN_IDENTITY[sdk=watchos*]'   => '',
-              'CODE_SIGN_IDENTITY[sdk=appletvos*]' => '',
               'MACH_O_TYPE'                        => 'staticlib',
               'OTHER_LDFLAGS'                      => '',
               'OTHER_LIBTOOLFLAGS'                 => '',
