@@ -38,7 +38,9 @@ Targets:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           EXECUTABLE_PREFIX: lib
@@ -58,7 +60,9 @@ Targets:
         Build Settings:
           ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           EXECUTABLE_PREFIX: lib

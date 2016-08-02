@@ -64,7 +64,9 @@ Targets:
     - Debug:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
@@ -95,7 +97,9 @@ Targets:
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
@@ -137,7 +141,9 @@ Targets:
     - Debug:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
@@ -168,7 +174,9 @@ Targets:
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
@@ -215,7 +223,9 @@ Targets:
     - Debug:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
@@ -242,7 +252,9 @@ Targets:
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: '-'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           COMBINE_HIDPI_IMAGES: 'YES'
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym

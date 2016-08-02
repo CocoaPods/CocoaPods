@@ -62,7 +62,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -79,7 +81,9 @@ Targets:
         Base Configuration: Pod1.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -108,7 +112,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -125,7 +131,9 @@ Targets:
         Base Configuration: Pod2.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -154,7 +162,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -171,7 +181,9 @@ Targets:
         Base Configuration: Pod3.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -195,7 +207,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
@@ -212,7 +226,9 @@ Targets:
         Base Configuration: Pods-SubSpecCircular.debug.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'

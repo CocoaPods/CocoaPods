@@ -154,7 +154,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -179,7 +181,9 @@ Targets:
         Base Configuration: asserts.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -266,7 +270,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -291,7 +297,9 @@ Targets:
         Base Configuration: CocoaLumberjack.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -333,7 +341,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -358,7 +368,9 @@ Targets:
         Base Configuration: logger.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -394,7 +406,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -423,7 +437,9 @@ Targets:
         Base Configuration: Pods-App.debug.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -463,7 +479,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -492,7 +510,9 @@ Targets:
         Base Configuration: Pods-Test.debug.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -539,7 +559,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -564,7 +586,9 @@ Targets:
         Base Configuration: sharedlib-Core.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -608,7 +632,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -633,7 +659,9 @@ Targets:
         Base Configuration: sharedlib-Testing.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
@@ -677,7 +705,9 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf
           DEFINES_MODULE: 'YES'
@@ -702,7 +732,9 @@ Targets:
         Base Configuration: testkit.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
           DEFINES_MODULE: 'YES'
