@@ -257,7 +257,8 @@ module Pod
       end
 
       # Raises an error if there are embedded targets in the Podfile, but
-      # their host targets have not been declared in the Podfile
+      # their host targets have not been declared in the Podfile. As it
+      # finds host targets, it collection information on host target types.
       #
       # @param  [Array<AggregateTarget>] aggregate_targets the generated
       #         aggregate targets
@@ -265,14 +266,19 @@ module Pod
       # @param  [Array<AggregateTarget>] embedded_aggregate_targets the aggregate targets
       #         representing the embedded targets to be integrated
       #
-      def verify_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
+      def analyze_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
         aggregate_target_uuids = Set.new aggregate_targets.map(&:user_targets).flatten.map(&:uuid)
         aggregate_target_user_projects = aggregate_targets.map(&:user_project)
         embedded_targets_missing_hosts = []
         embedded_aggregate_targets.each do |target|
-          host_uuids = aggregate_target_user_projects.product(target.user_targets).map do |user_project, user_target|
-            user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
-          end.flatten
+          host_uuids = []
+          aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
+            host_targets = user_project.host_targets_for_embedded_target(user_target)
+            host_targets.map(&:product_type).each do |product_type|
+              target.add_host_target_product_type(product_type)
+            end
+            host_uuids += host_targets.map(&:uuid)
+          end
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
             aggregate_target_uuids.include? uuid
           end
@@ -295,7 +301,7 @@ module Pod
         if installation_options.integrate_targets?
           # Copy embedded target pods that cannot have their pods embedded as frameworks to their host targets
           embedded_targets = aggregate_targets.select(&:requires_host_target?).select(&:requires_frameworks?)
-          verify_host_targets_in_podfile(aggregate_targets, embedded_targets)
+          analyze_host_targets_in_podfile(aggregate_targets, embedded_targets)
           aggregate_targets.each do |target|
             copy_embedded_target_pod_targets_to_host(target, embedded_targets)
           end
