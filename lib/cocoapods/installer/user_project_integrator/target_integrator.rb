@@ -21,9 +21,11 @@ module Pod
         # frameworks are embedded in the output directory / product bundle.
         #
         # @note This does not include :app_extension or :watch_extension because
-        # these types must have their frameworks embedded in their host targets
+        # these types must have their frameworks embedded in their host targets.
+        # For messages extensions, this only applies if it's embedded in a messages
+        # application.
         #
-        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :ui_test_bundle, :watch2_extension].freeze
+        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :ui_test_bundle, :watch2_extension, :messages_extension].freeze
 
         # @return [String] the name of the embed frameworks phase
         #
@@ -121,6 +123,7 @@ module Pod
         #       will have their frameworks embedded in their host targets.
         #
         def remove_embed_frameworks_script_phase_from_embedded_targets
+          return unless target.requires_host_target?
           native_targets.each do |native_target|
             if AggregateTarget::EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include? native_target.symbol_type
               remove_embed_frameworks_script_phase(native_target)
@@ -201,6 +204,7 @@ module Pod
         #         directory / product bundle.
         #
         def native_targets_to_embed_in
+          return [] if target.requires_host_target?
           native_targets.select do |target|
             EMBED_FRAMEWORK_TARGET_TYPES.include?(target.symbol_type)
           end

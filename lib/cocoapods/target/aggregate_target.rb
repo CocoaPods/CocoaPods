@@ -8,6 +8,9 @@ module Pod
     attr_reader :target_definition
 
     # Product types where the product's frameworks must be embedded in a host target
+    #
+    # @note :messages_extension only applies when it is embedded in an app (as opposed to a messages app)
+    #
     EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :messages_extension, :watch_extension].freeze
 
     # Initialize a new instance
@@ -24,7 +27,7 @@ module Pod
       @search_paths_aggregate_targets = []
       @file_accessors = []
       @xcconfigs = {}
-      @host_target_types = [] # Product types of the host target, if this target is embedded
+      @host_target_types = Set.new # Product types of the host target, if this target is embedded
     end
 
     # Adds product type to the list of product types for the host

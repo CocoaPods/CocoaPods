@@ -274,7 +274,7 @@ module Pod
           host_uuids = []
           aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
             host_targets = user_project.host_targets_for_embedded_target(user_target)
-            host_targets.map(&:product_type).each do |product_type|
+            host_targets.map(&:symbol_type).each do |product_type|
               target.add_host_target_product_type(product_type)
             end
             host_uuids += host_targets.map(&:uuid)
