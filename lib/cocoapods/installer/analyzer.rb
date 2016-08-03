@@ -345,7 +345,7 @@ module Pod
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting
-      # targets by grouping by grouping by platform and subspec by their root
+      # targets by grouping by platform and subspec by their root
       # to create a {PodTarget} for each spec.
       #
       # @param  [Hash{Podfile::TargetDefinition => Array<Specification>}] specs_by_target
