@@ -90,6 +90,15 @@ module Pod
               end
             end
 
+            it 'sets an empty codesigning identity for iOS/tvOS/watchOS' do
+              @installer.install!
+              @project.targets.first.build_configurations.each do |config|
+                config.build_settings['CODE_SIGN_IDENTITY[sdk=appletvos*]'].should == ''
+                config.build_settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'].should == ''
+                config.build_settings['CODE_SIGN_IDENTITY[sdk=watchos*]'].should == ''
+              end
+            end
+
             #--------------------------------------#
 
             describe 'headers folder paths' do
