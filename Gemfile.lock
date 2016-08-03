@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 74a51d486dd7a12ee798d015385714c13146946d
+  revision: 61071679fc965083b6d43fdc1aa042afbaf172d1
   branch: master
   specs:
     claide (1.0.0)
@@ -21,6 +21,16 @@ GIT
   branch: master
   specs:
     molinillo (0.5.0)
+
+GIT
+  remote: https://github.com/CocoaPods/Xcodeproj.git
+  revision: 2f8cc93e82df9cb207eca789cdadded02ac9e7a9
+  branch: master
+  specs:
+    xcodeproj (1.2.0)
+      activesupport (>= 3)
+      claide (>= 1.0.0, < 2.0)
+      colored (~> 1.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
@@ -75,16 +85,6 @@ GIT
     cocoapods-try (1.1.0)
 
 GIT
-  remote: https://github.com/benasher44/Xcodeproj
-  revision: 346a751bee9f0ebd223bb80458c3c4d55c4c7f84
-  ref: 346a751bee9f0ebd223bb80458c3c4d55c4c7f84
-  specs:
-    xcodeproj (1.2.0)
-      activesupport (>= 3)
-      claide (>= 1.0.0, < 2.0)
-      colored (~> 1.2)
-
-GIT
   remote: https://github.com/segiddins/json.git
   revision: a9588bc4334c2f5bf985f255b61c05eafdcd8907
   branch: seg-1.7.7-ruby-2.2
@@ -116,7 +116,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.6)
+    activesupport (4.2.7)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
