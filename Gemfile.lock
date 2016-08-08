@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 74a51d486dd7a12ee798d015385714c13146946d
+  revision: 61071679fc965083b6d43fdc1aa042afbaf172d1
   branch: master
   specs:
     claide (1.0.0)
@@ -24,7 +24,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: d3b9b2a2f99fab532c46c1a1fa753edcdc7334c3
+  revision: 2f8cc93e82df9cb207eca789cdadded02ac9e7a9
   branch: master
   specs:
     xcodeproj (1.2.0)
@@ -116,7 +116,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.6)
+    activesupport (4.2.7)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)

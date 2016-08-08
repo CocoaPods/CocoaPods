@@ -711,11 +711,33 @@ module Pod
           ].sort
         end
 
+        it "copy a framework's pod target, when the framework is in a sub project" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            use_frameworks!
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            target 'SampleProject'
+
+            target 'Sample Framework' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
+            'Pods-Sample Framework/monkey',
+          ].sort
+        end
+
         it "raises when unable to find an extension's host target" do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             use_frameworks!
-            platform :ios, '6.0'
+            platform :ios, '8.0'
             project 'Sample Extensions Project/Sample Extensions Project'
 
             target 'Today Extension' do
@@ -731,7 +753,7 @@ module Pod
         it 'raises when the extension calls use_frameworks!, but the host target does not' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
-            platform :ios, '6.0'
+            platform :ios, '8.0'
             project 'Sample Extensions Project/Sample Extensions Project'
 
             target 'Sample Extensions Project' do
