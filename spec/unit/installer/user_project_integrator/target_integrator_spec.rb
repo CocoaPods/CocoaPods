@@ -172,7 +172,7 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == false
         end
-        
+
         it 'does not add an embed frameworks build phase if the target to integrate is a messages extension for an iOS app' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           target = @target_integrator.send(:native_targets).first
