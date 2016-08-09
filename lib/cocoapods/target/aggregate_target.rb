@@ -33,8 +33,8 @@ module Pod
     # Adds product type to the list of product types for the host
     # targets, in which this target will be embedded
     #
-    # @param [Symbol] Product type of a host, in which this target
-    #        will be embedded
+    # @param [Symbol] product_type Product type (symbol representation)
+    #        of a host, in which this target will be embedded
     #
     # @note This is important for messages extensions, since a messages
     #       extension has its frameworks embedded in its host when
