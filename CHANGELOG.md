@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [yanzhiwei147](https://github.com/yanzhiwei147)
   [#5510](https://github.com/CocoaPods/CocoaPods/pull/5510)
 
+* Add support for messages applications.  
+  [benasher44](https://github.com/benasher44)
+  [#5726](https://github.com/CocoaPods/CocoaPods/pull/5726)
+
 ##### Bug Fixes
 
 * Hash scope suffixes if they are over 50 characters to prevent file paths from being too long. 
