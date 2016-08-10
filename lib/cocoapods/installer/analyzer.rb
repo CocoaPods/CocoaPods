@@ -284,7 +284,26 @@ module Pod
           end
         end
         unless embedded_targets_missing_hosts.empty?
-          raise Informative, "Unable to find host target for #{embedded_targets_missing_hosts.map(&:name).join(', ')}. Please add the host targets for the embedded targets to the Podfile."
+          embedded_targets_missing_hosts_product_types = embedded_targets_missing_hosts.map(&:user_targets).flatten.map(&:symbol_type).uniq
+          #  If the targets missing hosts are only frameworks, then this is likely
+          #  a project for doing framework development. In that case, just warn that
+          #  the frameworks that these targets depend on won't be integrated anywhere
+          if embedded_targets_missing_hosts_product_types == [:framework]
+            UI.warn 'The Podfile contains framework targets, for which the Podfile does not contain host targets (where these frameworks would be installed).' \
+              "\n" \
+              'If this project is for doing framework development, you can ignore this message or add a test target that embeds these frameworks to make this message go away. Otherwise, please add the frameworks\' host targets to the Podfile.'
+          else
+            target_names = embedded_targets_missing_hosts.map do |target|
+              target.name.sub('Pods-', '') # Make the target names more recognizable to the user
+            end.join ', '
+            raise Informative, "Unable to find host target(s) for #{target_names}. Please add the host targets for the embedded targets to the Podfile." \
+                                "\n" \
+                                'Certain kinds of targets require a host target, in which to be embedded. These are example types of targets that need a host target:' \
+                                "\n- Framework" \
+                                "\n- App Extension" \
+                                "\n- Watch OS 1 Extension" \
+                                "\n- Messages Extension (except when used with a Messages Application)"
+          end
         end
       end
 
