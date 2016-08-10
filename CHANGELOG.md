@@ -24,6 +24,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   Improved support for framework-only projects.  
   [benasher44](https://github.com/benasher44)
   [#5733](https://github.com/CocoaPods/CocoaPods/pull/5733)
+* Set ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when appropriate.  
+  [benasher44](https://github.com/benasher44)
+  [#5732](https://github.com/CocoaPods/CocoaPods/pull/5732)
 
 ##### Bug Fixes
 
