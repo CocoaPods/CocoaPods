@@ -20,6 +20,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [benasher44](https://github.com/benasher44)
   [#5726](https://github.com/CocoaPods/CocoaPods/pull/5726)
 
+* Improved messaging when missing host targets for embedded targets.
+  Improved support for framework-only projects.  
+  [benasher44](https://github.com/benasher44)
+  [#5733](https://github.com/CocoaPods/CocoaPods/pull/5733)
+
 ##### Bug Fixes
 
 * Hash scope suffixes if they are over 50 characters to prevent file paths from being too long. 
