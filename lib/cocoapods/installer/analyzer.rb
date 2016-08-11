@@ -289,16 +289,16 @@ module Pod
           #  a project for doing framework development. In that case, just warn that
           #  the frameworks that these targets depend on won't be integrated anywhere
           if embedded_targets_missing_hosts_product_types == [:framework]
-            UI.warn 'The Podfile contains framework targets, for which the Podfile does not contain host targets (where these frameworks would be installed).' \
+            UI.warn 'The Podfile contains framework targets, for which the Podfile does not contain host targets (targets which embed the framework).' \
               "\n" \
-              'If this project is for doing framework development, you can ignore this message or add a test target that embeds these frameworks to make this message go away. Otherwise, please add the frameworks\' host targets to the Podfile.'
+              'If this project is for doing framework development, you can ignore this message. Otherwise, add a target to the Podfile that embeds these frameworks to make this message go away (e.g. a test target).'
           else
             target_names = embedded_targets_missing_hosts.map do |target|
               target.name.sub('Pods-', '') # Make the target names more recognizable to the user
             end.join ', '
             raise Informative, "Unable to find host target(s) for #{target_names}. Please add the host targets for the embedded targets to the Podfile." \
                                 "\n" \
-                                'Certain kinds of targets require a host target, in which to be embedded. These are example types of targets that need a host target:' \
+                                'Certain kinds of targets require a host target. A host target is a "parent" target which embeds a "child" target. These are example types of targets that need a host target:' \
                                 "\n- Framework" \
                                 "\n- App Extension" \
                                 "\n- Watch OS 1 Extension" \

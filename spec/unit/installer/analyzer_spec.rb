@@ -747,7 +747,7 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           should.raise Informative do
             analyzer.analyze
-          end.message.should.match /Unable to find host target\(s\) for Today Extension. Please add the host targets for the embedded targets to the Podfile/
+          end.message.should.match /Unable to find host target\(s\) for Today Extension. Please add the host targets for the embedded targets to the Podfile\./
         end
 
         it 'warns when using a Podfile for framework-only projects' do
@@ -762,7 +762,7 @@ module Pod
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           analyzer.analyze
-          UI.warnings.should.match /The Podfile contains framework targets, for which the Podfile does not contain host targets \(where these frameworks would be installed\)\./
+          UI.warnings.should.match /The Podfile contains framework targets, for which the Podfile does not contain host targets \(targets which embed the framework\)\./
         end
 
         it 'raises when the extension calls use_frameworks!, but the host target does not' do
