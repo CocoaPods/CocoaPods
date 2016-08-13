@@ -267,9 +267,15 @@ module Pod
       #         representing the embedded targets to be integrated
       #
       def analyze_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
-        aggregate_target_uuids = Set.new aggregate_targets.map(&:user_targets).flatten.map(&:uuid)
+        target_definitions_by_uuid = {}
+        aggregate_targets.each do |target|
+          target.user_targets.map(&:uuid).each do |uuid|
+            target_definitions_by_uuid[uuid] = target.target_definition
+          end
+        end
         aggregate_target_user_projects = aggregate_targets.map(&:user_project)
         embedded_targets_missing_hosts = []
+        host_uuid_to_embedded_target_definitions = {}
         embedded_aggregate_targets.each do |target|
           host_uuids = []
           aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
@@ -279,10 +285,14 @@ module Pod
             end
             host_uuids += host_targets.map(&:uuid)
           end
+          host_uuids.each do |uuid|
+            (host_uuid_to_embedded_target_definitions[uuid] ||= []) << target.target_definition
+          end
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
-            aggregate_target_uuids.include? uuid
+            target_definitions_by_uuid.key? uuid
           end
         end
+
         unless embedded_targets_missing_hosts.empty?
           embedded_targets_missing_hosts_product_types = embedded_targets_missing_hosts.map(&:user_targets).flatten.map(&:symbol_type).uniq
           #  If the targets missing hosts are only frameworks, then this is likely
@@ -304,6 +314,27 @@ module Pod
                                 "\n- Watch OS 1 Extension" \
                                 "\n- Messages Extension (except when used with a Messages Application)"
           end
+        end
+
+        target_mismatches = []
+        host_uuid_to_embedded_target_definitions.each do |uuid, target_definitions|
+          host_target_definition = target_definitions_by_uuid[uuid]
+          target_definitions.each do |target_definition|
+            if target_definition.platform != host_target_definition.platform
+              target_mismatches << "- #{target_definition.name} (#{target_definition.platform}) and #{host_target_definition.name} (#{host_target_definition.platform}) do not use the same platform."
+            end
+            if target_definition.uses_frameworks? != host_target_definition.uses_frameworks?
+              target_mismatches << "- #{target_definition.name} (#{target_definition.uses_framworks?}) and #{host_target_definition.name} (#{host_target_definition.uses_frameworks?}) do not both set use_frameworks!."
+            end
+            if target_definition.swift_version != host_target_definition.swift_version
+              target_mismatches << "- #{target_definition.name} (#{target_definition.swift_version}) and #{host_target_definition.name} (#{host_target_definition.swift_version}) do not both use the same Swift version."
+            end
+          end
+        end
+
+        unless target_mismatches.empty?
+          heading = 'Unable to integrate the following embedded targets with their respective host targets (a host target is a "parent" target which embeds a "child" target like a framework or extension):'
+          raise Informative, heading + "\n\n" + target_mismatches.sort.uniq.join("\n")
         end
       end
 
