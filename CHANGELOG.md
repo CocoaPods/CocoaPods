@@ -38,6 +38,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5686](https://github.com/CocoaPods/CocoaPods/issues/5686)
 
+* Fix SWIFT_VERSION not being read when only defined at the project level.    
+  [Ben Asher](https://github.com/benasher44)
+  [#5700](https://github.com/CocoaPods/CocoaPods/issues/5700) and [#5737](https://github.com/CocoaPods/CocoaPods/issues/5737)
+
 
 ## 1.1.0.beta.1 (2016-07-11)
 
