@@ -216,10 +216,9 @@ module Pod
         # @return [String] the targets Swift version or nil
         #
         def compute_swift_version_from_targets(targets)
-          versions = targets.flat_map(&:build_configurations).
-            flat_map { |config| config.build_settings['SWIFT_VERSION'] }.
-            compact.
-            uniq
+          versions = targets.flat_map do |target|
+            target.resolved_build_setting('SWIFT_VERSION').values
+          end.flatten.compact.uniq
           case versions.count
           when 0
             nil

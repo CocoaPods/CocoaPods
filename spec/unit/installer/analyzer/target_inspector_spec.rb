@@ -326,6 +326,17 @@ module Pod
           target_inspector.send(:compute_swift_version_from_targets, user_targets)
         end.message.should.include 'There may only be up to 1 unique SWIFT_VERSION per target.'
       end
+
+      it 'returns the project-level SWIFT_VERSION if the target-level SWIFT_VERSION is not defined' do
+        user_project = Xcodeproj::Project.new('path')
+        user_project.build_configuration_list.set_setting('SWIFT_VERSION', '2.3')
+        target = user_project.new_target(:application, 'Target', :ios)
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
+        user_targets = [target]
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        target_inspector.send(:compute_swift_version_from_targets, user_targets).should.equal '2.3'
+      end
     end
   end
 end
