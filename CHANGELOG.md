@@ -16,7 +16,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [yanzhiwei147](https://github.com/yanzhiwei147)
   [#5510](https://github.com/CocoaPods/CocoaPods/pull/5510)
 
-* Add support for messages applications.  
+* Add support for building Messages applications.  
   [benasher44](https://github.com/benasher44)
   [#5726](https://github.com/CocoaPods/CocoaPods/pull/5726)
 
