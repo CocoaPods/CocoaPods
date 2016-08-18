@@ -247,7 +247,6 @@ module Pod
           next unless embedded_target.user_targets.map(&:uuid).any? do |embedded_uuid|
             embedded_uuids.include? embedded_uuid
           end
-          raise Informative, "#{aggregate_target.name} must call use_frameworks! because it is hosting an embedded target that calls use_frameworks!." unless aggregate_target.requires_frameworks?
           pod_target_names = aggregate_target.pod_targets.map(&:name)
           # This embedded target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
           aggregate_target.pod_targets = aggregate_target.pod_targets + embedded_target.pod_targets.select do |pod_target|
@@ -267,9 +266,15 @@ module Pod
       #         representing the embedded targets to be integrated
       #
       def analyze_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
-        aggregate_target_uuids = Set.new aggregate_targets.map(&:user_targets).flatten.map(&:uuid)
+        target_definitions_by_uuid = {}
+        aggregate_targets.each do |target|
+          target.user_targets.map(&:uuid).each do |uuid|
+            target_definitions_by_uuid[uuid] = target.target_definition
+          end
+        end
         aggregate_target_user_projects = aggregate_targets.map(&:user_project)
         embedded_targets_missing_hosts = []
+        host_uuid_to_embedded_target_definitions = {}
         embedded_aggregate_targets.each do |target|
           host_uuids = []
           aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
@@ -279,10 +284,14 @@ module Pod
             end
             host_uuids += host_targets.map(&:uuid)
           end
+          host_uuids.each do |uuid|
+            (host_uuid_to_embedded_target_definitions[uuid] ||= []) << target.target_definition
+          end
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
-            aggregate_target_uuids.include? uuid
+            target_definitions_by_uuid.key? uuid
           end
         end
+
         unless embedded_targets_missing_hosts.empty?
           embedded_targets_missing_hosts_product_types = embedded_targets_missing_hosts.map(&:user_targets).flatten.map(&:symbol_type).uniq
           #  If the targets missing hosts are only frameworks, then this is likely
@@ -304,6 +313,28 @@ module Pod
                                 "\n- Watch OS 1 Extension" \
                                 "\n- Messages Extension (except when used with a Messages Application)"
           end
+        end
+
+        target_mismatches = []
+        check_prop = lambda do |target_definition1, target_definition2, attr, msg|
+          attr1 = target_definition1.send(attr)
+          attr2 = target_definition2.send(attr)
+          if attr1 != attr2
+            target_mismatches << "- #{target_definition1.name} (#{attr1}) and #{target_definition2.name} (#{attr2}) #{msg}."
+          end
+        end
+        host_uuid_to_embedded_target_definitions.each do |uuid, target_definitions|
+          host_target_definition = target_definitions_by_uuid[uuid]
+          target_definitions.each do |target_definition|
+            check_prop.call(host_target_definition, target_definition, :platform, 'do not use the same platform')
+            check_prop.call(host_target_definition, target_definition, :uses_frameworks?, 'do not both set use_frameworks!')
+            check_prop.call(host_target_definition, target_definition, :swift_version, 'do not use the same Swift version')
+          end
+        end
+
+        unless target_mismatches.empty?
+          heading = 'Unable to integrate the following embedded targets with their respective host targets (a host target is a "parent" target which embeds a "child" target like a framework or extension):'
+          raise Informative, heading + "\n\n" + target_mismatches.sort.uniq.join("\n")
         end
       end
 

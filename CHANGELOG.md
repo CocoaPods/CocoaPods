@@ -11,7 +11,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Remove references to the pre-1.0 Migrator.  
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5635](https://github.com/CocoaPods/CocoaPods/pull/5635)  
-  
+
 * Improve performance of dependency resolution.
   [yanzhiwei147](https://github.com/yanzhiwei147)
   [#5510](https://github.com/CocoaPods/CocoaPods/pull/5510)
@@ -24,9 +24,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   Improved support for framework-only projects.  
   [benasher44](https://github.com/benasher44)
   [#5733](https://github.com/CocoaPods/CocoaPods/pull/5733)
+
 * Set ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when appropriate.  
   [benasher44](https://github.com/benasher44)
   [#5732](https://github.com/CocoaPods/CocoaPods/pull/5732)
+
+* Verify that embedded target platform and swift version matches the host.  
+  [benasher44](https://github.com/benasher44)
+  [#5747](https://github.com/CocoaPods/CocoaPods/pull/5747)
 
 ##### Bug Fixes
 

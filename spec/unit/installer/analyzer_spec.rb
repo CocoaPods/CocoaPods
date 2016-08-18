@@ -783,7 +783,52 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           should.raise Informative do
             analyzer.analyze
-          end.message.should.match /Pods-Sample Extensions Project must call use_frameworks! because it is hosting an embedded target that calls use_frameworks!/
+          end.message.should.match /Sample Extensions Project \(false\) and Today Extension \(true\) do not both set use_frameworks!\./
+        end
+
+        it 'raises when the extension and host target use different swift versions' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            use_frameworks!
+            project 'Sample Extensions Project/Sample Extensions Project'
+
+            target 'Sample Extensions Project' do
+              pod 'JSONKit', '1.4'
+            end
+
+            target 'Today Extension' do
+              pod 'monkey'
+            end
+          end
+          podfile.target_definitions['Sample Extensions Project'].stubs(:swift_version).returns('2.3')
+          podfile.target_definitions['Today Extension'].stubs(:swift_version).returns('3.0')
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          should.raise Informative do
+            analyzer.analyze
+          end.message.should.match /Sample Extensions Project \(2\.3\) and Today Extension \(3\.0\) do not use the same Swift version\./
+        end
+
+        it 'raises when the extension and host target use different platforms' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            use_frameworks!
+            project 'Sample Extensions Project/Sample Extensions Project'
+
+            target 'Sample Extensions Project' do
+              pod 'JSONKit', '1.4'
+            end
+
+            target 'Today Extension' do
+              pod 'monkey'
+            end
+          end
+          podfile.target_definitions['Sample Extensions Project'].stubs(:platform).returns(Platform.new(:osx, '10.6'))
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          should.raise Informative do
+            analyzer.analyze
+          end.message.should.match /Sample Extensions Project \(OS X 10\.6\) and Today Extension \(iOS 8\.0\) do not use the same platform\./
         end
       end
 
