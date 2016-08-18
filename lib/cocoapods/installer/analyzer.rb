@@ -328,7 +328,7 @@ module Pod
           target_definitions.each do |target_definition|
             check_prop.call(host_target_definition, target_definition, :platform, 'do not use the same platform')
             check_prop.call(host_target_definition, target_definition, :uses_frameworks?, 'do not both set use_frameworks!')
-            check_prop.call(host_target_definition, target_definition, :swift_version, 'do not both use the same Swift version')
+            check_prop.call(host_target_definition, target_definition, :swift_version, 'do not use the same Swift version')
           end
         end
 
