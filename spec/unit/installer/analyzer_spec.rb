@@ -783,7 +783,7 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           should.raise Informative do
             analyzer.analyze
-          end.message.should.match /Pods-Sample Extensions Project must call use_frameworks! because it is hosting an embedded target that calls use_frameworks!/
+          end.message.should.match /Sample Extensions Project \(false\) and Today Extension \(true\) do not both set use_frameworks!\./
         end
       end
 

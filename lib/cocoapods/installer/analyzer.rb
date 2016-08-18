@@ -247,7 +247,6 @@ module Pod
           next unless embedded_target.user_targets.map(&:uuid).any? do |embedded_uuid|
             embedded_uuids.include? embedded_uuid
           end
-          raise Informative, "#{aggregate_target.name} must call use_frameworks! because it is hosting an embedded target that calls use_frameworks!." unless aggregate_target.requires_frameworks?
           pod_target_names = aggregate_target.pod_targets.map(&:name)
           # This embedded target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
           aggregate_target.pod_targets = aggregate_target.pod_targets + embedded_target.pod_targets.select do |pod_target|
@@ -317,18 +316,19 @@ module Pod
         end
 
         target_mismatches = []
+        check_prop = lambda do |target_definition1, target_definition2, attr, msg|
+          attr1 = target_definition1.send(attr)
+          attr2 = target_definition2.send(attr)
+          if attr1 != attr2
+            target_mismatches << "- #{target_definition1.name} (#{attr1}) and #{target_definition2.name} (#{attr2}) #{msg}."
+          end
+        end
         host_uuid_to_embedded_target_definitions.each do |uuid, target_definitions|
           host_target_definition = target_definitions_by_uuid[uuid]
           target_definitions.each do |target_definition|
-            if target_definition.platform != host_target_definition.platform
-              target_mismatches << "- #{target_definition.name} (#{target_definition.platform}) and #{host_target_definition.name} (#{host_target_definition.platform}) do not use the same platform."
-            end
-            if target_definition.uses_frameworks? != host_target_definition.uses_frameworks?
-              target_mismatches << "- #{target_definition.name} (#{target_definition.uses_framworks?}) and #{host_target_definition.name} (#{host_target_definition.uses_frameworks?}) do not both set use_frameworks!."
-            end
-            if target_definition.swift_version != host_target_definition.swift_version
-              target_mismatches << "- #{target_definition.name} (#{target_definition.swift_version}) and #{host_target_definition.name} (#{host_target_definition.swift_version}) do not both use the same Swift version."
-            end
+            check_prop.call(host_target_definition, target_definition, :platform, 'do not use the same platform')
+            check_prop.call(host_target_definition, target_definition, :uses_frameworks?, 'do not both set use_frameworks!')
+            check_prop.call(host_target_definition, target_definition, :swift_version, 'do not both use the same Swift version')
           end
         end
 
