@@ -395,7 +395,7 @@ module Pod
 
     def add_swift_version(app_target)
       app_target.build_configurations.each do |configuration|
-        configuration.build_settings['SWIFT_VERSION'] = '2.3'
+        configuration.build_settings['SWIFT_VERSION'] = swift_version
       end
     end
 
@@ -452,7 +452,7 @@ module Pod
           next unless native_target = pod_target.native_target
           native_target.build_configuration_list.build_configurations.each do |build_configuration|
             (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-            build_configuration.build_settings['SWIFT_VERSION'] = '2.3' if pod_target.uses_swift?
+            build_configuration.build_settings['SWIFT_VERSION'] = swift_version if pod_target.uses_swift?
           end
         end
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
@@ -655,6 +655,19 @@ module Pod
     private
 
     # !@group Helpers
+
+    # @return [String] the SWIFT_VERSION to use for validation.
+    #
+    def swift_version
+      dot_swift_version || '2.3'
+    end
+
+    # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
+    #
+    def dot_swift_version
+      swift_version_path = file.dirname + '.swift-version'
+      File.read(swift_version_path) if File.exists?(swift_version_path)
+    end
 
     # @return [Array<String>] an array of source URLs used to create the
     #         {Podfile} used in the linting process

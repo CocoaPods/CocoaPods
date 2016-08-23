@@ -784,6 +784,7 @@ module Pod
         validator = Validator.new(file, config.sources_manager.master.map(&:url))
         validator.stubs(:build_pod)
         validator.stubs(:validate_url)
+        validator.stubs(:swift_version).returns('2.3')
         validator.validate
         validator
       end
@@ -808,6 +809,10 @@ module Pod
         validator = test_swiftpod
 
         validator.results.count.should == 0
+      end
+
+      it 'defaults to Swift 2.3' do
+        validator = test_swiftpod
       end
     end
     #-------------------------------------------------------------------------#
