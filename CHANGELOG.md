@@ -33,6 +33,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [benasher44](https://github.com/benasher44)
   [#5747](https://github.com/CocoaPods/CocoaPods/pull/5747)
 
+* Pass the version of CocoaPods to `pod lib create`'s configure script.  
+  [orta](https://github.com/orta)
+  [#5787](https://github.com/CocoaPods/CocoaPods/pull/5787)
+
 ##### Bug Fixes
 
 * Hash scope suffixes if they are over 50 characters to prevent file paths from being too long. 
