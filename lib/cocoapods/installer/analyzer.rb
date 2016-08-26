@@ -269,7 +269,6 @@ module Pod
         target_definitions_by_uuid = {}
         aggregate_targets.each do |target|
           target.user_targets.map(&:uuid).each do |uuid|
-            raise Informative, "Missing target definition for target: #{target.name}" if target.target_definition.nil?
             target_definitions_by_uuid[uuid] = target.target_definition
           end
         end
@@ -286,7 +285,7 @@ module Pod
             host_uuids += host_targets.map(&:uuid)
           end
           host_uuids.each do |uuid|
-            (host_uuid_to_embedded_target_definitions[uuid] ||= []) << target.target_definition
+            (host_uuid_to_embedded_target_definitions[uuid] ||= []) << target.target_definition if target_definitions_by_uuid.key? uuid
           end
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
             target_definitions_by_uuid.key? uuid
@@ -326,7 +325,6 @@ module Pod
         end
         host_uuid_to_embedded_target_definitions.each do |uuid, target_definitions|
           host_target_definition = target_definitions_by_uuid[uuid]
-          raise Informative, "Missing target definition for host uuid: #{uuid}" if host_target_definition.nil?
           target_definitions.each do |target_definition|
             check_prop.call(host_target_definition, target_definition, :platform, 'do not use the same platform')
             check_prop.call(host_target_definition, target_definition, :uses_frameworks?, 'do not both set use_frameworks!')
