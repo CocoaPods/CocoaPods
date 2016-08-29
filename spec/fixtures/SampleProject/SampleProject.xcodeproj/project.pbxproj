@@ -38,6 +38,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		130F34EB1D73B132009D968D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 137F16121D3AFC2900029696;
+			remoteInfo = "Sample Framework";
+		};
 		137F16201D3AFC7B00029696 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
@@ -278,6 +285,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				130F34EC1D73B132009D968D /* PBXTargetDependency */,
 			);
 			name = TestRunner;
 			productName = TestRunner;
@@ -447,6 +455,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		130F34EC1D73B132009D968D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Sample Framework";
+			targetProxy = 130F34EB1D73B132009D968D /* PBXContainerItemProxy */;
+		};
 		13C623701D3B00F900EFB98B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Sample Framework";
