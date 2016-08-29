@@ -267,6 +267,8 @@ module Pod
       #
       def analyze_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
         target_definitions_by_uuid = {}
+        # Collect aggregate target definitions by uuid to later lookup host target
+        # definitions and verify their compatiblity with their embedded targets
         aggregate_targets.each do |target|
           target.user_targets.map(&:uuid).each do |uuid|
             target_definitions_by_uuid[uuid] = target.target_definition
@@ -275,6 +277,7 @@ module Pod
         aggregate_target_user_projects = aggregate_targets.map(&:user_project)
         embedded_targets_missing_hosts = []
         host_uuid_to_embedded_target_definitions = {}
+        # Search all of the known user projects for each embedded target's hosts
         embedded_aggregate_targets.each do |target|
           host_uuids = []
           aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
@@ -284,9 +287,15 @@ module Pod
             end
             host_uuids += host_targets.map(&:uuid)
           end
+          # For each host, keep track of its embedded target definitions
+          # to later verify each embedded target's compatiblity with its host,
+          # ignoring the hosts that aren't known to CocoaPods (no target
+          # definitions in the Podfile)
           host_uuids.each do |uuid|
-            (host_uuid_to_embedded_target_definitions[uuid] ||= []) << target.target_definition
+            (host_uuid_to_embedded_target_definitions[uuid] ||= []) << target.target_definition if target_definitions_by_uuid.key? uuid
           end
+          # If none of the hosts are known to CocoaPods (no target definitions
+          # in the Podfile), add it to the list of targets missing hosts
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
             target_definitions_by_uuid.key? uuid
           end

@@ -47,6 +47,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5700](https://github.com/CocoaPods/CocoaPods/issues/5700) and [#5737](https://github.com/CocoaPods/CocoaPods/issues/5737)
 
+* Fix analyzer checking the compatibility of an embedded target with a host that has not been added the Podfile.  
+  [Ben Asher](https://github.com/benasher44)
+  [#5783](https://github.com/CocoaPods/CocoaPods/issues/5783)
 
 ## 1.1.0.beta.1 (2016-07-11)
 
