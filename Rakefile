@@ -255,11 +255,11 @@ begin
   namespace :examples do
     desc 'Open all example workspaces in Xcode, which recreates the schemes.'
     task :recreate_workspace_schemes do
-      examples.each do |example|
+      Dir['examples/*'].each do |example|
         Dir.chdir(example.to_s) do
           # TODO: we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
           # The schemes do not seem to survive a SCM round-trip.
-          sh "open '#{example.basename}.xcworkspace'"
+          sh "open *.xcworkspace"
           sleep 5
         end
       end
