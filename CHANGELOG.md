@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Prevent crash when generating acknowledgements when license type is not specified.  
+  [Marcelo Fabri](https://github.com/marcelofabri)
+  [#5826](https://github.com/CocoaPods/CocoaPods/issues/5826)  
 
 
 ## 1.1.0.beta.2 (2016-09-03)
