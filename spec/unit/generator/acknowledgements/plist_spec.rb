@@ -29,6 +29,15 @@ describe Pod::Generator::Plist do
     }
   end
 
+  it 'skips license type in hash when it is nil' do
+    @spec.stubs(:license).returns(:type => nil)
+    @generator.hash_for_spec(@spec).should == {
+      :Type => 'PSGroupSpecifier',
+      :Title => 'POD_NAME',
+      :FooterText => 'LICENSE_TEXT',
+    }
+  end
+
   it 'returns a correctly sanitized license hash for each pod' do
     license_text = 'Copyright © 2013–2014 Boris Bügling'
     @generator.stubs(:license_text).returns(license_text)
