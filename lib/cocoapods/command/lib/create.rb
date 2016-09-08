@@ -75,7 +75,7 @@ module Pod
           UI.section("Configuring #{@name} template.") do
             Dir.chdir(@name) do
               if File.exist?('configure')
-                system('./configure', @name, *@additional_args)
+                system({ 'COCOAPODS_VERSION' => Pod::Version }, './configure', @name, *@additional_args)
               else
                 UI.warn 'Template does not have a configure file.'
               end
