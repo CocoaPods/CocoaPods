@@ -33,12 +33,14 @@ module Pod
 
       def hash_for_spec(spec)
         if (license = license_text(spec))
-          {
+          hash =  {
             :Type => 'PSGroupSpecifier',
             :Title => sanitize_encoding(spec.name),
             :FooterText => sanitize_encoding(license),
-            :License => sanitize_encoding(spec.license[:type]),
           }
+          hash[:License] = sanitize_encoding(spec.license[:type]) if spec.license[:type]
+
+          hash
         end
       end
 
