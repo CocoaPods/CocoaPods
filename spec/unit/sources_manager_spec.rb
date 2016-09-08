@@ -90,7 +90,9 @@ module Pod
       it 'updates source backed by a git repository' do
         set_up_test_repo_for_update
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only))
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ').should.equal %W(-C #{test_repo_path} pull --ff-only).join(' ')
+        end
         @sources_manager.update(test_repo_path.basename.to_s, true)
       end
 
@@ -105,8 +107,12 @@ module Pod
         set_up_test_repo_for_update
         test_repo_path.join('.git', 'shallow').open('w') { |f| f << 'a' * 40 }
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        MasterSource.any_instance.expects(:git!).with(%w(fetch --unshallow))
-        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only))
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ').should.equal %W(-C #{test_repo_path} fetch --unshallow).join(' ')
+        end
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ').should.equal %W(-C #{test_repo_path} pull --ff-only).join(' ')
+        end
         @sources_manager.update(test_repo_path.basename.to_s, true)
 
         UI.output.should.match /deep fetch.+`master`.+improve future performance/

@@ -718,7 +718,7 @@ module Pod
     #
     def xcodebuild
       require 'fourflusher'
-      command = %W(clean build -workspace #{validation_dir}/App.xcworkspace -scheme App -configuration Release)
+      command = ['clean', 'build', '-workspace', File.join(validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release']
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
