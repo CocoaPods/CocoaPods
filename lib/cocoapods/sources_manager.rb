@@ -118,7 +118,7 @@ module Pod
     def update_git_repo(show_output = false)
       if repo.join('.git', 'shallow').file?
         UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
-          git!(['-C', repo, 'pull', 'fetch', '--unshallow'])
+          git!(['-C', repo, 'fetch', '--unshallow'])
         end
       end
       super
