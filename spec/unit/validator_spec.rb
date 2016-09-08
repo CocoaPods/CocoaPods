@@ -135,11 +135,23 @@ module Pod
           @validator.stubs(:add_app_project_import)
           @validator.stubs(:build_pod)
           @validator.stubs(:tear_down_validation_environment)
+          @validator.stubs(:perform_linting)
+          @validator.stubs(:validate_homepage)
+          @validator.stubs(:validate_screenshots)
+          @validator.stubs(:validate_social_media_url)
+          @validator.stubs(:validate_documentation_url)
+          @validator.stubs(:perform_extensive_subspec_analysis)
+          Specification.any_instance.stubs(:available_platforms).returns([])
+
           WebMock::API.stub_request(:head, /not-found/).to_return(:status => 404)
           WebMock::API.stub_request(:get, /not-found/).to_return(:status => 404)
         end
 
         describe 'Homepage validation' do
+          before do
+            @validator.unstub(:validate_homepage)
+          end
+
           it 'checks if the homepage is valid' do
             Specification.any_instance.stubs(:homepage).returns('http://banana-corp.local/not-found/')
             @validator.validate
@@ -203,7 +215,7 @@ module Pod
 
         describe 'Screenshot validation' do
           before do
-            @validator.stubs(:validate_homepage)
+            @validator.unstub(:validate_screenshots)
             WebMock::API.
               stub_request(:head, 'banana-corp.local/valid-image.png').
               to_return(
@@ -229,7 +241,7 @@ module Pod
 
         describe 'social media URL validation' do
           before do
-            @validator.stubs(:validate_homepage)
+            @validator.unstub(:validate_social_media_url)
           end
 
           it 'checks if the social media URL is valid' do
@@ -249,7 +261,7 @@ module Pod
 
         describe 'documentation URL validation' do
           before do
-            @validator.stubs(:validate_homepage)
+            @validator.unstub(:validate_documentation_url)
           end
 
           it 'checks if the documentation URL is valid' do
