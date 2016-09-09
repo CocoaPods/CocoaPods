@@ -218,7 +218,7 @@ module Pod
         # @return result of calling the git! with args in repo_dir
         #
         def repo_git(*args)
-          git!(["-C", repo_dir] + args)
+          git!(['-C', repo_dir] + args)
         end
 
         # @return [Pathname] The directory of the repository.
