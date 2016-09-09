@@ -298,7 +298,7 @@ begin
               require 'fourflusher'
               # Specifically build against the simulator SDK so we don't have to deal with code signing.
               test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
-              destination = Fourflusher::SimControl.new.destination(:oldest, 'iOS', target.deployment_target).join(" ")
+              destination = Fourflusher::SimControl.new.destination(:oldest, platform, target.deployment_target).join(" ")
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO #{destination}"
             else
               raise "Unknown platform #{platform}"
