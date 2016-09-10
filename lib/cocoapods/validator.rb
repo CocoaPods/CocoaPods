@@ -194,6 +194,9 @@ module Pod
     #
     attr_accessor :ignore_public_only_results
 
+    attr_accessor :skip_import_validation
+    alias_method :skip_import_validation?, :skip_import_validation
+
     #-------------------------------------------------------------------------#
 
     # !@group Lint results
@@ -377,7 +380,6 @@ module Pod
       app_project.new_target(:application, 'App', consumer.platform_name, deployment_target)
       app_project.save
       app_project.recreate_user_schemes
-      Xcodeproj::XCScheme.share_scheme(app_project.path, 'App')
     end
 
     def add_app_project_import
@@ -390,6 +392,8 @@ module Pod
       app_target.add_file_references([source_file_ref])
       add_xctest(app_target) if @installer.pod_targets.any? { |pt| pt.spec_consumers.any? { |c| c.frameworks.include?('XCTest') } }
       app_project.save
+      Xcodeproj::XCScheme.share_scheme(app_project.path, 'App')
+      Xcodeproj::XCScheme.share_scheme(@installer.pods_project.path, pod_target.label)
     end
 
     def add_xctest(app_target)
@@ -424,7 +428,7 @@ module Pod
           f << "@import Foundation;\n"
           f << "@import UIKit;\n" if consumer.platform_name == :ios || consumer.platform_name == :tvos
           f << "@import Cocoa;\n" if consumer.platform_name == :osx
-          f << "#{import_statement}int main() {}\n"
+          f << import_statement
         end
       end
       source_file
@@ -718,7 +722,12 @@ module Pod
     #
     def xcodebuild
       require 'fourflusher'
-      command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
+      scheme = if skip_import_validation?
+        @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }.label
+      else
+        'App'
+      end
+      command = %W(clean build -workspace App.xcworkspace -scheme #{scheme} -configuration Release)
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)

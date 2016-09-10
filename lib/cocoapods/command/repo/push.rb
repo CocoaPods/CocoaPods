@@ -29,6 +29,7 @@ module Pod
              'Multiple sources must be comma-delimited.'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
+            ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
             'Opens default editor if no commit message is specified.'],
             ['--use-json', 'Push JSON spec to repo'],
@@ -47,6 +48,7 @@ module Pod
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
           @use_json = argv.flag?('use-json')
+          @skip_import_validation = argv.flag?('skip-import-validation', false)
           super
         end
 
@@ -123,6 +125,7 @@ module Pod
             validator.allow_warnings = @allow_warnings
             validator.use_frameworks = @use_frameworks
             validator.ignore_public_only_results = @private
+            validator.skip_import_validation = @skip_import_validation
             begin
               validator.validate
             rescue => e
