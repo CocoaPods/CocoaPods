@@ -8,7 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Cache result of uses_swift and should_build to speed up pod install.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5837](https://github.com/CocoaPods/CocoaPods/pull/5837)
+
 
 ##### Bug Fixes
 
