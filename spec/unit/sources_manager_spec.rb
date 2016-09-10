@@ -90,7 +90,9 @@ module Pod
       it 'updates source backed by a git repository' do
         set_up_test_repo_for_update
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only))
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ') == %W(-C #{test_repo_path} pull --ff-only).join(' ')
+        end
         @sources_manager.update(test_repo_path.basename.to_s, true)
       end
 
@@ -105,8 +107,12 @@ module Pod
         set_up_test_repo_for_update
         test_repo_path.join('.git', 'shallow').open('w') { |f| f << 'a' * 40 }
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        MasterSource.any_instance.expects(:git!).with(%w(fetch --unshallow))
-        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only))
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ') == %W(-C #{test_repo_path} fetch --unshallow).join(' ')
+        end
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ') == %W(-C #{test_repo_path} pull --ff-only).join(' ')
+        end
         @sources_manager.update(test_repo_path.basename.to_s, true)
 
         UI.output.should.match /deep fetch.+`master`.+improve future performance/
@@ -114,9 +120,15 @@ module Pod
 
       it 'prints a warning if the update failed' do
         set_up_test_repo_for_update
-        Source.any_instance.stubs(:git).with(%w(rev-parse HEAD)).returns('aabbccd')
-        Source.any_instance.stubs(:git).with(%w(diff --name-only aabbccd..HEAD)).returns('')
-        MasterSource.any_instance.expects(:git!).with(%w(pull --ff-only)).raises(<<-EOS)
+        Source.any_instance.stubs(:git).with do |options|
+          options.join(' ') == %W(-C #{test_repo_path} rev-parse HEAD).join(' ')
+        end.returns('aabbccd')
+        Source.any_instance.stubs(:git).with do |options|
+          options.join(' ') == %W(-C #{test_repo_path} diff --name-only aabbccd..HEAD).join(' ')
+        end.returns('')
+        MasterSource.any_instance.expects(:git!).with do |options|
+          options.join(' ') == %W(-C #{test_repo_path} pull --ff-only).join(' ')
+        end.raises(<<-EOS)
 fatal: '/dev/null' does not appear to be a git repository
 fatal: Could not read from remote repository.
 

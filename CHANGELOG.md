@@ -14,7 +14,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Prevent crash when generating acknowledgements when license type is not specified.  
   [Marcelo Fabri](https://github.com/marcelofabri)
-  [#5826](https://github.com/CocoaPods/CocoaPods/issues/5826)  
+  [#5826](https://github.com/CocoaPods/CocoaPods/issues/5826)
+
+* Pass full path to App.xcworkspace for spec validation, and use `git -C` for `pod repo push` git ops.  
+  [Ben Asher](https://github.com/benasher44)
+  [#5805](https://github.com/CocoaPods/CocoaPods/issues/5805)
 
 
 ## 1.1.0.beta.2 (2016-09-03)

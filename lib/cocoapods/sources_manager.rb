@@ -103,9 +103,8 @@ module Pod
     end
 
     def update_git_repo(show_output = false)
-      ensure_in_repo!
       Config.instance.with_changes(:verbose => show_output) do
-        git!(%w(pull --ff-only))
+        git!(['-C', repo, 'pull', '--ff-only'])
       end
     rescue
       UI.warn 'CocoaPods was not able to update the ' \
@@ -117,10 +116,9 @@ module Pod
 
   class MasterSource
     def update_git_repo(show_output = false)
-      ensure_in_repo!
       if repo.join('.git', 'shallow').file?
         UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
-          git!(%w(fetch --unshallow))
+          git!(['-C', repo, 'fetch', '--unshallow'])
         end
       end
       super

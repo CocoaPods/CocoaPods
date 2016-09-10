@@ -718,7 +718,7 @@ module Pod
     #
     def xcodebuild
       require 'fourflusher'
-      command = %w(clean build -workspace App.xcworkspace -scheme App -configuration Release)
+      command = ['clean', 'build', '-workspace', File.join(validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release']
       case consumer.platform_name
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
@@ -731,7 +731,7 @@ module Pod
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
       end
 
-      output, status = Dir.chdir(validation_dir) { _xcodebuild(command) }
+      output, status = _xcodebuild(command)
 
       unless status.success?
         message = 'Returned an unsuccessful exit code.'
