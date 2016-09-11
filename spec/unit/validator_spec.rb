@@ -835,18 +835,14 @@ module Pod
       describe '#dot_swift_version' do
         it 'looks for a .swift-version file' do
           validator = test_swiftpod
-          File.expects(:exist?).with do |arg|
-            arg.basename.to_s == '.swift-version'
-          end
+          Pathname.any_instance.expects(:exist?)
           validator.dot_swift_version
         end
 
         it 'uses the .swift-version file if present' do
           validator = test_swiftpod
-          File.stubs(:exist?).returns(true)
-          File.expects(:read).with do |arg|
-            arg.basename.to_s == '.swift-version'
-          end.returns('1.0')
+          Pathname.any_instance.stubs(:exist?).returns(true)
+          Pathname.any_instance.expects(:read).returns('1.0')
           validator.dot_swift_version.should == '1.0'
         end
       end

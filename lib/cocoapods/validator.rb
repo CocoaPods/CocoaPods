@@ -247,7 +247,7 @@ module Pod
     #
     def dot_swift_version
       swift_version_path = file.dirname + '.swift-version'
-      File.read(swift_version_path) if File.exist?(swift_version_path)
+      swift_version_path.read if swift_version_path.exist?
     end
 
     #-------------------------------------------------------------------------#
