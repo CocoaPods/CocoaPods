@@ -237,6 +237,19 @@ module Pod
       Pathname(Dir.tmpdir) + 'CocoaPods/Lint'
     end
 
+    # @return [String] the SWIFT_VERSION to use for validation.
+    #
+    def swift_version
+      @swift_version ||= dot_swift_version || '2.3'
+    end
+
+    # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
+    #
+    def dot_swift_version
+      swift_version_path = file.dirname + '.swift-version'
+      swift_version_path.read if swift_version_path.exist?
+    end
+
     #-------------------------------------------------------------------------#
 
     private
@@ -388,8 +401,15 @@ module Pod
       source_file_ref = app_project.new_group('App', 'App').new_file(source_file)
       app_target = app_project.targets.first
       app_target.add_file_references([source_file_ref])
+      add_swift_version(app_target)
       add_xctest(app_target) if @installer.pod_targets.any? { |pt| pt.spec_consumers.any? { |c| c.frameworks.include?('XCTest') } }
       app_project.save
+    end
+
+    def add_swift_version(app_target)
+      app_target.build_configurations.each do |configuration|
+        configuration.build_settings['SWIFT_VERSION'] = swift_version
+      end
     end
 
     def add_xctest(app_target)
@@ -445,6 +465,7 @@ module Pod
           next unless native_target = pod_target.native_target
           native_target.build_configuration_list.build_configurations.each do |build_configuration|
             (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
+            build_configuration.build_settings['SWIFT_VERSION'] = swift_version if pod_target.uses_swift?
           end
         end
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&

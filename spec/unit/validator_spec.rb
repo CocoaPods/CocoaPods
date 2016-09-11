@@ -784,12 +784,12 @@ module Pod
         validator = Validator.new(file, config.sources_manager.master.map(&:url))
         validator.stubs(:build_pod)
         validator.stubs(:validate_url)
-        validator.validate
         validator
       end
 
       it 'fails on deployment target < iOS 8 for Swift Pods' do
         validator = test_swiftpod
+        validator.validate
 
         validator.results.map(&:to_s).first.should.match /dynamic frameworks.*iOS > 8/
         validator.result_type.should == :error
@@ -799,6 +799,7 @@ module Pod
         Specification::Consumer.any_instance.stubs(:frameworks).returns(%w(XCTest))
 
         validator = test_swiftpod
+        validator.validate
         validator.results.count.should == 0
       end
 
@@ -806,8 +807,44 @@ module Pod
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
         validator = test_swiftpod
+        validator.validate
 
         validator.results.count.should == 0
+      end
+
+      describe '#swift_version' do
+        it 'defaults to Swift 2.3' do
+          validator = test_swiftpod
+          validator.stubs(:dot_swift_version).returns(nil)
+          validator.swift_version.should == '2.3'
+        end
+
+        it 'checks for dot_swift_version' do
+          validator = test_swiftpod
+          validator.expects(:dot_swift_version)
+          validator.swift_version
+        end
+
+        it 'uses the result of dot_swift_version if not nil' do
+          validator = test_swiftpod
+          validator.stubs(:dot_swift_version).returns('1.0')
+          validator.swift_version.should == '1.0'
+        end
+      end
+
+      describe '#dot_swift_version' do
+        it 'looks for a .swift-version file' do
+          validator = test_swiftpod
+          Pathname.any_instance.expects(:exist?)
+          validator.dot_swift_version
+        end
+
+        it 'uses the .swift-version file if present' do
+          validator = test_swiftpod
+          Pathname.any_instance.stubs(:exist?).returns(true)
+          Pathname.any_instance.expects(:read).returns('1.0')
+          validator.dot_swift_version.should == '1.0'
+        end
       end
     end
     #-------------------------------------------------------------------------#
