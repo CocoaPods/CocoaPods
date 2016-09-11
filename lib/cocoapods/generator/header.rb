@@ -40,8 +40,9 @@ module Pod
       #
       def generate
         result = ''
+        result << "#ifdef __OBJC__\n"
         result << generate_platform_import_header
-
+        result << "#endif\n"
         result << "\n"
 
         imports.each do |import|

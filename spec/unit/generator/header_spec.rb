@@ -9,7 +9,9 @@ module Pod
     it 'includes the imports' do
       @gen.imports << 'header.h'
       @gen.generate.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #endif
 
       #import "header.h"
       EOS
@@ -18,7 +20,9 @@ module Pod
     it 'includes the module imports' do
       @gen.module_imports << 'Module'
       @gen.generate.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #endif
 
 
       @import Module
@@ -49,7 +53,9 @@ module Pod
       path = temporary_directory + 'Test.h'
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
+      #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #endif
 
       EOS
     end
