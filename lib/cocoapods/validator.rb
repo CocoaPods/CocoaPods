@@ -237,6 +237,19 @@ module Pod
       Pathname(Dir.tmpdir) + 'CocoaPods/Lint'
     end
 
+    # @return [String] the SWIFT_VERSION to use for validation.
+    #
+    def swift_version
+      @swift_version ||= dot_swift_version || '2.3'
+    end
+
+    # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
+    #
+    def dot_swift_version
+      swift_version_path = file.dirname + '.swift-version'
+      File.read(swift_version_path) if File.exist?(swift_version_path)
+    end
+
     #-------------------------------------------------------------------------#
 
     private
@@ -655,19 +668,6 @@ module Pod
     private
 
     # !@group Helpers
-
-    # @return [String] the SWIFT_VERSION to use for validation.
-    #
-    def swift_version
-      dot_swift_version || '2.3'
-    end
-
-    # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
-    #
-    def dot_swift_version
-      swift_version_path = file.dirname + '.swift-version'
-      File.read(swift_version_path) if File.exists?(swift_version_path)
-    end
 
     # @return [Array<String>] an array of source URLs used to create the
     #         {Podfile} used in the linting process
