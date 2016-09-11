@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Passes in the version string, rather than the version class to `pod lib create`.  
+  [orta](https://github.com/orta)
+  [#5841](https://github.com/CocoaPods/CocoaPods/pull/5841)  
 
 
 ## 1.1.0.rc.1 (2016-09-10)

@@ -34,7 +34,7 @@ module Pod
       dir = SpecHelper.temporary_directory + 'TestPod'
       dir.mkpath
       File.stubs(:exist?).with('configure').returns(true)
-      @sut.any_instance.expects(:system).with({ 'COCOAPODS_VERSION' => Pod::Version }, './configure', 'TestPod', 'foo').once
+      @sut.any_instance.expects(:system).with({ 'COCOAPODS_VERSION' => Pod::VERSION }, './configure', 'TestPod', 'foo').once
       run_command('lib', 'create', 'TestPod', 'foo', '--verbose')
     end
 
