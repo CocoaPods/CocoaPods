@@ -19,7 +19,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Use the SWIFT_VERSION when linting pods.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5841](https://github.com/CocoaPods/CocoaPods/issues/5841)
 
 ##### Bug Fixes
 
