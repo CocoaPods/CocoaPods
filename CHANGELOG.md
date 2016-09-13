@@ -48,6 +48,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [codymoorhouse](https://github.com/codymoorhouse)
   [#5732](https://github.com/CocoaPods/CocoaPods/issues/5732)
 
+* Disable verify transitive dependencies check with manual integration.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5851](https://github.com/CocoaPods/CocoaPods/issues/5851)
+
 ##### Bug Fixes
 
 * Remove special handling for messages apps  

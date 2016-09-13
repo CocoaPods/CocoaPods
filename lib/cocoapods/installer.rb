@@ -110,7 +110,11 @@ module Pod
       resolve_dependencies
       download_dependencies
       verify_no_duplicate_framework_and_library_names
-      verify_no_static_framework_transitive_dependencies
+      if installation_options.integrate_targets?
+        verify_no_static_framework_transitive_dependencies
+      else
+        UI.warn 'Skipping Verifying Framework Transitive Dependencies Check'
+      end
       verify_framework_usage
       generate_pods_project
       if installation_options.integrate_targets?
