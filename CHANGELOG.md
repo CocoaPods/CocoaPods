@@ -8,26 +8,24 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
-
-##### Bug Fixes
-
-* None.  
-
-
-## 1.1.0.rc.1 (2016-09-10)
-
-##### Enhancements
-
 * Use the SWIFT_VERSION when linting pods.  
   [Danielle Tomlinson](https://github.com/dantoml)
-  [#5841](https://github.com/CocoaPods/CocoaPods/issues/5841)
+  [#5841](https://github.com/CocoaPods/CocoaPods/pull/5841)
 
 ##### Bug Fixes
 
 * Correctly pass Pod:VERSION in `pod lib create`.  
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5840](https://github.com/CocoaPods/CocoaPods/issues/5840)
+
+
+## 1.1.0.rc.1 (2016-09-10)
+
+##### Enhancements
+
+*  
+
+##### Bug Fixes
 
 * Prevent crash when generating acknowledgements when license type is not specified.  
   [Marcelo Fabri](https://github.com/marcelofabri)
