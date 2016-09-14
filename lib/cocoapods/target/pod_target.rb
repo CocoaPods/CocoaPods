@@ -141,9 +141,12 @@ module Pod
     # A target should not be build if it has no source files.
     #
     def should_build?
-      source_files = file_accessors.flat_map(&:source_files)
-      source_files -= file_accessors.flat_map(&:headers)
-      !source_files.empty?
+      return @should_build if defined? @should_build
+      @should_build = begin
+        source_files = file_accessors.flat_map(&:source_files)
+        source_files -= file_accessors.flat_map(&:headers)
+        !source_files.empty?
+      end
     end
 
     # @return [Array<Specification::Consumer>] the specification consumers for
@@ -156,8 +159,11 @@ module Pod
     # @return [Boolean] Whether the target uses Swift code
     #
     def uses_swift?
-      file_accessors.any? do |file_accessor|
-        file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
+      return @uses_swift if defined? @uses_swift
+      @uses_swift = begin
+        file_accessors.any? do |file_accessor|
+          file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
+        end
       end
     end
 
