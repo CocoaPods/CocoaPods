@@ -349,6 +349,7 @@ module Pod
       #
       def generate_targets
         specs_by_target = result.specs_by_target.reject { |td, _| td.abstract? }
+        check_pod_target_swift_versions(specs_by_target)
         pod_targets = generate_pod_targets(specs_by_target)
         aggregate_targets = specs_by_target.keys.map do |target_definition|
           generate_target(target_definition, pod_targets)
@@ -404,6 +405,37 @@ module Pod
         end
 
         target
+      end
+
+      # Verify that targets using a pod have the same swift version
+      #
+      # @param  [Hash{Podfile::TargetDefinition => Array<Specification>}] specs_by_target
+      #         the resolved specifications grouped by target.
+      #
+      # @note raises Informative if targets using a pod do not have
+      #       the same swift version
+      #
+      def check_pod_target_swift_versions(specs_by_target)
+        targets_by_spec = {}
+        specs_by_target.each do |target, specs|
+          specs.each do |spec|
+            (targets_by_spec[spec] ||= []) << target
+          end
+        end
+
+        target_msg = lambda do |target|
+          if target.swift_version.nil?
+            "#{target.name} (Swift version missing)"
+          else
+            "#{target.name} (Swift #{target.swift_version})"
+          end
+        end
+
+        error_messages = []
+        targets_by_spec.each do |spec, targets|
+          error_messages << "#{spec.name} required by #{targets.map(&target_msg).join(', ')}" unless targets.uniq(&:swift_version).count == 1
+        end
+        raise Informative, "The following pods are integrated into targets that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting
