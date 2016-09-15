@@ -22,7 +22,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Use the SWIFT_VERSION when linting pods.  
+* Use the SWIFT_VERSION when linting pods. To lint with Swift 3.0
+  add a Swift Version file. `echo "3.0" >> .swift_version`.   
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5841](https://github.com/CocoaPods/CocoaPods/pull/5841)
 
