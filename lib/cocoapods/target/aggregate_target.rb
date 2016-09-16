@@ -27,21 +27,6 @@ module Pod
       @search_paths_aggregate_targets = []
       @file_accessors = []
       @xcconfigs = {}
-      @host_target_types = Set.new # Product types of the host target, if this target is embedded
-    end
-
-    # Adds product type to the list of product types for the host
-    # targets, in which this target will be embedded
-    #
-    # @param [Symbol] product_type Product type (symbol representation)
-    #        of a host, in which this target will be embedded
-    #
-    # @note This is important for messages extensions, since a messages
-    #       extension has its frameworks embedded in its host when
-    #       its host is an app but not when it's a messages app
-    #
-    def add_host_target_product_type(product_type)
-      @host_target_types << product_type
     end
 
     # @return [Boolean] True if the user_target's pods are

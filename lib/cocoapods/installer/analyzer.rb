@@ -281,11 +281,7 @@ module Pod
         embedded_aggregate_targets.each do |target|
           host_uuids = []
           aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
-            host_targets = user_project.host_targets_for_embedded_target(user_target)
-            host_targets.map(&:symbol_type).each do |product_type|
-              target.add_host_target_product_type(product_type)
-            end
-            host_uuids += host_targets.map(&:uuid)
+            host_uuids += user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
           end
           # For each host, keep track of its embedded target definitions
           # to later verify each embedded target's compatiblity with its host,
