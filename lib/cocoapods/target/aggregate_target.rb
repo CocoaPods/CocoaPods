@@ -9,8 +9,6 @@ module Pod
 
     # Product types where the product's frameworks must be embedded in a host target
     #
-    # @note :messages_extension only applies when it is embedded in an app (as opposed to a messages app)
-    #
     EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :messages_extension, :watch_extension].freeze
 
     # Initialize a new instance
