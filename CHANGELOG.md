@@ -15,8 +15,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Remove special handling for messages apps  
+  [Ben Asher](https://github.com/benasher44)
+  [#5860](https://github.com/CocoaPods/CocoaPods/issues/5860)
 
 ## 1.1.0.rc.2 (2016-09-13)
 

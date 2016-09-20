@@ -9,8 +9,6 @@ module Pod
 
     # Product types where the product's frameworks must be embedded in a host target
     #
-    # @note :messages_extension only applies when it is embedded in an app (as opposed to a messages app)
-    #
     EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :messages_extension, :watch_extension].freeze
 
     # Initialize a new instance
@@ -27,21 +25,6 @@ module Pod
       @search_paths_aggregate_targets = []
       @file_accessors = []
       @xcconfigs = {}
-      @host_target_types = Set.new # Product types of the host target, if this target is embedded
-    end
-
-    # Adds product type to the list of product types for the host
-    # targets, in which this target will be embedded
-    #
-    # @param [Symbol] product_type Product type (symbol representation)
-    #        of a host, in which this target will be embedded
-    #
-    # @note This is important for messages extensions, since a messages
-    #       extension has its frameworks embedded in its host when
-    #       its host is an app but not when it's a messages app
-    #
-    def add_host_target_product_type(product_type)
-      @host_target_types << product_type
     end
 
     # @return [Boolean] True if the user_target's pods are
@@ -57,7 +40,7 @@ module Pod
       return false if user_project.nil?
       symbol_types = user_targets.map(&:symbol_type).uniq
       raise ArgumentError, "Expected single kind of user_target for #{name}. Found #{symbol_types.join(', ')}." unless symbol_types.count == 1
-      EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include?(symbol_types[0]) && !@host_target_types.include?(:messages_application)
+      EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include?(symbol_types[0])
     end
 
     # @return [String] the label for the target.
