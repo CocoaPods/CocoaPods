@@ -28,6 +28,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Remove uses of `cd` in generated scripts  
   [Ben Asher](https://github.com/benasher44)
   [#5959](https://github.com/CocoaPods/CocoaPods/pull/5959)
+* GitHub issue inspection will now happen for any StandardError in a pod install  
+  [Orta Therox](https://github.com/orta)
+  [#5950](https://github.com/CocoaPods/CocoaPods/pull/5950)
+* Error with helpful message when integrating a pod into targets that have mismatched Swift versions.  
+  [Ben Asher](https://github.com/benasher44)
+  [#5917](https://github.com/CocoaPods/CocoaPods/pull/5917)
 
 ##### Bug Fixes
 
