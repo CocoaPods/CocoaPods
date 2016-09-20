@@ -662,6 +662,59 @@ module Pod
         should.raise(Informative) { analyzer.analyze }
       end
 
+      it 'raises when targets integrate the same pod but have different swift versions' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          project 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          pod 'RestKit', '~> 0.23.0'
+          target 'SampleProject'
+          target 'TestRunner'
+        end
+        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+        podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+        should.raise Informative do
+          analyzer.analyze
+        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+      end
+
+      it 'raises when targets integrate the same pod but have different swift versions (swift version unset at the project level, but set in one target)' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          project 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          pod 'RestKit', '~> 0.23.0'
+          target 'SampleProject'
+          target 'TestRunner'
+        end
+        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+        # when the swift version is unset at the project level, but set in one target, swift_version is nil
+        podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+        should.raise Informative do
+          analyzer.analyze
+        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+      end
+
+      it 'raises when targets integrate the same pod but have different swift versions (swift version set at the project level, but unset in one target)' do
+        podfile = Podfile.new do
+          source 'https://github.com/CocoaPods/Specs.git'
+          project 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          pod 'RestKit', '~> 0.23.0'
+          target 'SampleProject'
+          target 'TestRunner'
+        end
+        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+        # when the swift version is set at the project level, but unset in one target, swift_version is empty
+        podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('')
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+        should.raise Informative do
+          analyzer.analyze
+        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+      end
+
       #--------------------------------------#
 
       it 'computes the state of the Sandbox respect to the resolved dependencies' do
