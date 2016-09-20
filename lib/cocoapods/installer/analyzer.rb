@@ -433,7 +433,7 @@ module Pod
 
         error_messages = []
         targets_by_spec.each do |spec, targets|
-          error_messages << "#{spec.name} required by #{targets.map(&target_msg).join(', ')}" unless targets.uniq(&:swift_version).count == 1
+          error_messages << "- #{spec.name} required by #{targets.map(&target_msg).join(', ')}" unless targets.uniq(&:swift_version).count == 1
         end
         raise Informative, "The following pods are integrated into targets that do not have the same Swift version:\n\n#{error_messages.join("\n")}" unless error_messages.empty?
       end
