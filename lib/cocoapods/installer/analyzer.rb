@@ -424,7 +424,7 @@ module Pod
         end
 
         target_msg = lambda do |target|
-          if target.swift_version.nil?
+          if target.swift_version.nil? or target.swift_version.empty?
             "#{target.name} (Swift version missing)"
           else
             "#{target.name} (Swift #{target.swift_version})"
