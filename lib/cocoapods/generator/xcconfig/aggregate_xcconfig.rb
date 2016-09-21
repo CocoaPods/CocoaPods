@@ -69,7 +69,6 @@ module Pod
           # cause an App Store rejection because frameworks cannot be embedded
           # in embedded targets.
           if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-            config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
             config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
           else
             config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'

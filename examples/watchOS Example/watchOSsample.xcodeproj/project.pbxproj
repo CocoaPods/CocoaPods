@@ -624,7 +624,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				IBSC_MODULE = watchOSsample_WatchKit_Extension;
 				INFOPLIST_FILE = "watchOSsample WatchKit/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = org.vu0.watchOSsample.watchkitapp;
@@ -641,7 +641,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+		    		ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				IBSC_MODULE = watchOSsample_WatchKit_Extension;
 				INFOPLIST_FILE = "watchOSsample WatchKit/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = org.vu0.watchOSsample.watchkitapp;
