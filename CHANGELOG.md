@@ -101,6 +101,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5732](https://github.com/CocoaPods/CocoaPods/pull/5732)
 
+* Update EMBEDDED_CONTENT_CONTAINS_SWIFT flag behaviour based on xcode version.
+  [codymoorhouse](https://github.com/codymoorhouse)
+  [#5732](https://github.com/CocoaPods/CocoaPods/issues/5732)
+
 * Verify that embedded target platform and swift version matches the host.  
   [Ben Asher](https://github.com/benasher44)
   [#5747](https://github.com/CocoaPods/CocoaPods/pull/5747)

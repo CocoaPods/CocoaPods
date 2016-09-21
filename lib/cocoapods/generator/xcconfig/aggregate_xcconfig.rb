@@ -68,11 +68,25 @@ module Pod
           # that use Swift. Setting this for the embedded target would
           # cause an App Store rejection because frameworks cannot be embedded
           # in embedded targets.
-          if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-            config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
+
+	  # Extract xcodeversion number
+	  @xcodeversion = 'xcodebuild -version | cut -f 2 -d ' ' | head -n 1`
+
+	  # Check if xcodeversion is prior to v8.0
+	  if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
+	    if @xcodeversion < 8.0
+              config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'          
+            else
+              config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
+            end
           else
-            config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
+	    if @xcodeversion < 8.0
+              config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'NO'
+            else
+              config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
+            end
           end
+
           @xcconfig = Xcodeproj::Config.new(config)
 
           @xcconfig.merge!(merged_user_target_xcconfigs)
