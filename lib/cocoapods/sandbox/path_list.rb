@@ -57,13 +57,13 @@ module Pod
         dirs, files = dirs_and_files.partition { |path| File.directory?(path) }
 
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
-        relative_sorted = lambda { |paths|
-          relative_paths = paths.lazy.map { |path| 
+        relative_sorted = lambda do |paths|
+          relative_paths = paths.lazy.map do |path|
             path_string = path.to_s
-            path_string.slice(root_length, path_string.length - root_length) 
-          }
+            path_string.slice(root_length, path_string.length - root_length)
+          end
           relative_paths.sort_by(&:upcase)
-        }
+        end
 
         @dirs = relative_sorted.call(dirs)
         @files = relative_sorted.call(files)
