@@ -69,18 +69,18 @@ module Pod
           # cause an App Store rejection because frameworks cannot be embedded
           # in embedded targets.
 
-	  # Extract xcodeversion number
-	  @xcodeversion = 'xcodebuild -version | cut -f 2 -d ' ' | head -n 1`
+	  # Extract swift_version number
+	  @swift_version = target.build_configurations.build_settings['SWIFT_VERSION']
 
-	  # Check if xcodeversion is prior to v8.0
+	  # Check if swift_version is prior to v3.0
 	  if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-	    if @xcodeversion < 8.0
+	    if @swift_version < 3.0
               config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'          
             else
               config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
             end
           else
-	    if @xcodeversion < 8.0
+	    if @swift_version < 8.0
               config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'NO'
             else
               config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
