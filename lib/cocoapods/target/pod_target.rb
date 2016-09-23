@@ -47,6 +47,7 @@ module Pod
       @file_accessors = []
       @resource_bundle_targets = []
       @dependent_targets = []
+      @build_config_cache = {}
     end
 
     # @param [Hash{Array => PodTarget}] cache
@@ -222,13 +223,20 @@ module Pod
     #         The name of the build configuration.
     #
     def include_in_build_config?(target_definition, configuration_name)
+      key = [target_definition.label, configuration_name]
+      if @build_config_cache.key?(key)
+        return @build_config_cache[key]
+      end
+
       whitelists = target_definition_dependencies(target_definition).map do |dependency|
         target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
       end.uniq
 
       if whitelists.empty?
+        @build_config_cache[key] = true
         return true
       elsif whitelists.count == 1
+        @build_config_cache[key] = whitelists.first
         whitelists.first
       else
         raise Informative, "The subspecs of `#{pod_name}` are linked to " \
@@ -243,13 +251,16 @@ module Pod
     # @return [Bool]
     #
     def inhibit_warnings?
+      return @inhibit_warnings if defined? @inhibit_warnings
       whitelists = target_definitions.map do |target_definition|
         target_definition.inhibits_warnings_for_pod?(root_spec.name)
       end.uniq
 
       if whitelists.empty?
+        @inhibit_warnings = false
         return false
       elsif whitelists.count == 1
+        @inhibit_warnings = whitelists.first
         whitelists.first
       else
         UI.warn "The pod `#{pod_name}` is linked to different targets " \
