@@ -24,6 +24,7 @@ module Pod
         @sandbox       = sandbox
         @relative_path = relative_path
         @search_paths  = []
+        @cache = {}
       end
 
       # @param  [Platform] platform
@@ -39,6 +40,21 @@ module Pod
 
         headers_dir = root.relative_path_from(sandbox.root).dirname
         ["${PODS_ROOT}/#{headers_dir}/#{@relative_path}"] + platform_search_paths.uniq.map { |entry| "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" }
+      end
+
+      def search_paths_for_target(platform, target)
+        key = [platform, target.name]
+        if @cache.key?(key)
+          return @cache[key]
+        end
+        platform_search_paths = @search_paths.select do |entry|
+          entry[:platform] == platform.name and entry[:path].basename.to_s == target.name
+        end
+
+        headers_dir = root.relative_path_from(sandbox.root).dirname
+        result = platform_search_paths.uniq.map { |entry| "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" }
+        @cache[key] = result
+        result
       end
 
       # Removes the directory as it is regenerated from scratch during each

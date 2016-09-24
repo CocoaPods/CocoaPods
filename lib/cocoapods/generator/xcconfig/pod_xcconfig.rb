@@ -40,14 +40,10 @@ module Pod
         # @return [Xcodeproj::Config]
         #
         def generate
-          target_search_paths = target.build_headers.search_paths(target.platform)
-          sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-          search_paths = target_search_paths.concat(sandbox_search_paths).uniq
-
           config = {
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
+            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.target_header_search_paths),
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
             'PODS_ROOT' => '${SRCROOT}',
