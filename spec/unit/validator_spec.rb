@@ -812,6 +812,19 @@ module Pod
         validator.results.count.should == 0
       end
 
+      it 'tells users about the .swift-version file if the validation fails' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod
+        validator.stubs(:validated?).returns(false)
+        result = Validator::Result.new(:error, 'attribute', 'message') 
+        validator.stubs(:results).returns([result])
+
+        validator.failure_reason.should == "1 error.\n[!] If you are trying" \
+          ' to validate a Swift 3.0 Pod, you need to have a `.swift-version` ' \
+          'file. e.g `echo "3.0" > .swift-version`'
+      end
+
       describe '#swift_version' do
         it 'defaults to Swift 2.3' do
           validator = test_swiftpod
