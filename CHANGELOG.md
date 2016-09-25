@@ -16,6 +16,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5837](https://github.com/CocoaPods/CocoaPods/pull/5837)
 
+* GitHub issue inspection will now happen for any StandardError in a pod install  
+  [Orta Therox](https://github.com/orta)
+  [#5950](https://github.com/CocoaPods/CocoaPods/pull/5950)
 
 ##### Bug Fixes
 
