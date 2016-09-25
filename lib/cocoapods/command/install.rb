@@ -1,3 +1,5 @@
+require 'gh_inspector'
+
 module Pod
   class Command
     class Install < Command
@@ -35,6 +37,15 @@ module Pod
         installer.repo_update = repo_update?(:default => false)
         installer.update = false
         installer.install!
+      rescue StandardError => e
+        search_for_exceptions(e)
+        raise e
+      end
+
+      def search_for_exceptions(exception)
+        inspector = GhInspector::Inspector.new 'cocoapods', 'cocoapods'
+        message_delegate = UserInterface::InspectorReporter.new
+        inspector.search_exception exception, message_delegate
       end
     end
   end
