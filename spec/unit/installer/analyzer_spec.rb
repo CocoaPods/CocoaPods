@@ -662,12 +662,12 @@ module Pod
         should.raise(Informative) { analyzer.analyze }
       end
 
-      it 'raises when targets integrate the same pod but have different swift versions' do
+      it 'raises when targets integrate the same swift pod but have different swift versions' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source SpecHelper.test_repo_url
           project 'SampleProject/SampleProject'
           platform :ios, '8.0'
-          pod 'RestKit', '~> 0.23.0'
+          pod 'OrangeFramework'
           target 'SampleProject'
           target 'TestRunner'
         end
@@ -676,15 +676,15 @@ module Pod
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
         should.raise Informative do
           analyzer.analyze
-        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+        end.message.should.match /The following pods are integrated into Swift targets that do not have the same Swift version:/
       end
 
-      it 'raises when targets integrate the same pod but have different swift versions (swift version unset at the project level, but set in one target)' do
+      it 'does not raise when targets integrate the same pod but only one of the targets is a swift target' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source SpecHelper.test_repo_url
           project 'SampleProject/SampleProject'
           platform :ios, '8.0'
-          pod 'RestKit', '~> 0.23.0'
+          pod 'OrangeFramework'
           target 'SampleProject'
           target 'TestRunner'
         end
@@ -692,17 +692,15 @@ module Pod
         # when the swift version is unset at the project level, but set in one target, swift_version is nil
         podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-        should.raise Informative do
-          analyzer.analyze
-        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+        lambda { analyzer.analyze }.should.not.raise
       end
 
-      it 'raises when targets integrate the same pod but have different swift versions (swift version set at the project level, but unset in one target)' do
+      it 'does not raise when swift targets with different swift versions integrate a non-swift pod' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source SpecHelper.test_repo_url
           project 'SampleProject/SampleProject'
           platform :ios, '8.0'
-          pod 'RestKit', '~> 0.23.0'
+          pod 'JSONKit'
           target 'SampleProject'
           target 'TestRunner'
         end
@@ -710,9 +708,7 @@ module Pod
         # when the swift version is set at the project level, but unset in one target, swift_version is empty
         podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('')
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-        should.raise Informative do
-          analyzer.analyze
-        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+        lambda { analyzer.analyze }.should.not.raise
       end
 
       #--------------------------------------#

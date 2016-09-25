@@ -417,25 +417,32 @@ module Pod
       #
       def check_pod_target_swift_versions(specs_by_target)
         targets_by_spec = {}
+        swift_specs = Set.new
         specs_by_target.each do |target, specs|
           specs.each do |spec|
             (targets_by_spec[spec] ||= []) << target
           end
+          swift_specs.merge specs.select do |spec|
+            spec.consumer(target.platform).source_files.any? do |source_file|
+              source_file.end_with? '.swift'
+            end
+          end
         end
 
         target_msg = lambda do |target|
-          if target.swift_version.nil? || target.swift_version.empty?
-            "#{target.name} (Swift version missing)"
-          else
-            "#{target.name} (Swift #{target.swift_version})"
-          end
+          "#{target.name} (Swift #{target.swift_version})"
         end
 
         error_messages = []
         targets_by_spec.each do |spec, targets|
-          error_messages << "- #{spec.name} required by #{targets.map(&target_msg).join(', ')}" unless targets.uniq(&:swift_version).count == 1
+          swift_targets = targets.reject do |target|
+            # We don't care about targets that don't have a Swift version set, since they most not contain Swift (Xcode will error if it would require a Swift version)
+            target.swift_version.nil? || target.swift_version.empty?
+          end
+          next if swift_targets.empty?
+          error_messages << "- #{spec.name} required by #{swift_targets.map(&target_msg).join(', ')}" unless swift_targets.uniq(&:swift_version).count == 1 || !swift_specs.include?(spec) # Targets either need to have the same Swift version or not share a Swift pod
         end
-        raise Informative, "The following pods are integrated into targets that do not have the same Swift version:\n\n#{error_messages.join("\n")}" unless error_messages.empty?
+        raise Informative, "The following pods are integrated into Swift targets that do not have the same Swift version:\n\n#{error_messages.join("\n")}" unless error_messages.empty?
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting
