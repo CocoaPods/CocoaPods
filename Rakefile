@@ -178,7 +178,8 @@ begin
       task :rebuild => :check_for_pending_changes do
         tarballs.each do |tarball|
           basename = File.basename(tarball)
-          sh "cd #{File.dirname(tarball)} && rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{basename[0..-8]}"
+          untarred_path = File.join(File.dirname(tarball), basename[0..-8])
+          sh "rm #{tarball} && env COPYFILE_DISABLE=1 tar -zcf #{tarball} #{untarred_path}"
         end
       end
 
