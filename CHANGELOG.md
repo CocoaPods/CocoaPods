@@ -26,6 +26,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5860](https://github.com/CocoaPods/CocoaPods/issues/5860)
 
+* Ensure messages apps have an embed frameworks build phase  
+  [Ben Asher](https://github.com/benasher44)
+  [#5860](https://github.com/CocoaPods/CocoaPods/issues/5860)
+
 ## 1.1.0.rc.2 (2016-09-13)
 
 ##### Enhancements
