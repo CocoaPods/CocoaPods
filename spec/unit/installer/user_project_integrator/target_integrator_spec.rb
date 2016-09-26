@@ -137,6 +137,15 @@ module Pod
           phase.nil?.should == false
         end
 
+        it 'adds an embed frameworks build phase if the target to integrate is a messages application' do
+          @pod_bundle.stubs(:requires_frameworks? => true)
+          target = @target_integrator.send(:native_targets).first
+          target.stubs(:symbol_type).returns(:messages_application)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+        end
+
         it 'does not add an embed frameworks build phase if the target to integrate is a framework' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           target = @target_integrator.send(:native_targets).first
@@ -173,23 +182,13 @@ module Pod
           phase.nil?.should == false
         end
 
-        it 'does not add an embed frameworks build phase if the target to integrate is a messages extension for an iOS app' do
+        it 'does not add an embed frameworks build phase if the target to integrate is a messages extension' do
           @pod_bundle.stubs(:requires_frameworks? => true)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:messages_extension)
           @target_integrator.integrate!
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == true
-        end
-
-        it 'adds an embed frameworks build phase if the target to integrate is a messages extension for a messages application' do
-          @pod_bundle.stubs(:requires_frameworks? => true)
-          @pod_bundle.stubs(:requires_host_target? => false) # Messages extensions for messages applications do not require a host target
-          target = @target_integrator.send(:native_targets).first
-          target.stubs(:symbol_type).returns(:messages_extension)
-          @target_integrator.integrate!
-          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
-          phase.nil?.should == false
         end
 
         it 'adds an embed frameworks build phase if the target to integrate is a UI Test bundle' do
