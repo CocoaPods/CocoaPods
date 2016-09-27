@@ -11,7 +11,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Cache result of inhibit_warnings and include_in_build_config to speed up pod install.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5934](https://github.com/CocoaPods/CocoaPods/pull/5934)
-  
+
 * Improve performance of PathList.read_file_system 
   [Heath Borders](https://github.com/hborders)
   [#5890](https://github.com/CocoaPods/CocoaPods/issues/5890)
@@ -19,10 +19,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Cache result of uses_swift and should_build to speed up pod install.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5837](https://github.com/CocoaPods/CocoaPods/pull/5837)
-
-* GitHub issue inspection will now happen for any StandardError in a pod install  
-  [Orta Therox](https://github.com/orta)
-  [#5950](https://github.com/CocoaPods/CocoaPods/pull/5950)
 
 * Remove uses of `cd` in generated scripts  
   [Ben Asher](https://github.com/benasher44)
@@ -37,10 +33,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Ensure messages apps have an embed frameworks build phase  
   [Ben Asher](https://github.com/benasher44)
   [#5860](https://github.com/CocoaPods/CocoaPods/issues/5860)
-
-* Remove uses of shell `cd` to fix working directory issues  
-  [Ben Asher](https://github.com/benasher44)
-  [#5891](https://github.com/CocoaPods/CocoaPods/issues/5891)
 
 ## 1.1.0.rc.2 (2016-09-13)
 
