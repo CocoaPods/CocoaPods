@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Cache result of inhibit_warnings and include_in_build_config to speed up pod install.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5934](https://github.com/CocoaPods/CocoaPods/pull/5934)
+  
 * Improve performance of PathList.read_file_system 
   [Heath Borders](https://github.com/hborders)
   [#5890](https://github.com/CocoaPods/CocoaPods/issues/5890)
