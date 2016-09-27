@@ -25,7 +25,7 @@ module Pod
         # For messages extensions, this only applies if it's embedded in a messages
         # application.
         #
-        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :ui_test_bundle, :watch2_extension, :messages_extension].freeze
+        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :unit_test_bundle, :ui_test_bundle, :watch2_extension, :messages_application].freeze
 
         # @return [String] the name of the embed frameworks phase
         #
