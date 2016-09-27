@@ -817,12 +817,14 @@ module Pod
 
         validator = test_swiftpod
         validator.stubs(:validated?).returns(false)
-        result = Validator::Result.new(:error, 'attribute', 'message') 
+        result = Validator::Result.new(:error, 'attribute', 'message')
         validator.stubs(:results).returns([result])
 
-        validator.failure_reason.should == "1 error.\n[!] If you are trying" \
-          ' to validate a Swift 3.0 Pod, you need to have a `.swift-version` ' \
-          'file. e.g `echo "3.0" > .swift-version`'
+        validator.failure_reason.should == "1 error.\n[!] The validator for " \
+          'Swift projects uses Swift 2.3 by default, if you are using a ' \
+          'different version of swift you can use a `.swift-version` file ' \
+          'to set the version for your Pod. For example to use Swift 3.0, ' \
+          "run: \n    `echo \"3.0\" > .swift-version`"
       end
 
       describe '#swift_version' do
