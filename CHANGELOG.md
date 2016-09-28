@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5837](https://github.com/CocoaPods/CocoaPods/pull/5837)
 
+* Greenify pod install success message  
+  [Stephen Hayes](https://github.com/schayes04)
+  [#5713](https://github.com/CocoaPods/CocoaPods/issues/5713)
+
 ##### Bug Fixes
 
 * Remove special handling for messages apps  
