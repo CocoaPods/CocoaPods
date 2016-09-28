@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5860](https://github.com/CocoaPods/CocoaPods/issues/5860)
 
+* Fix linting of private pods when using libraries.  
+  [Stefan Pühringer](https://github.com/b-ray)
+  [#5891](https://github.com/CocoaPods/CocoaPods/issues/5891)
+
 ## 1.1.0.rc.2 (2016-09-13)
 
 ##### Enhancements
