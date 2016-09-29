@@ -88,6 +88,7 @@ module Pod
         FileUtils.mkdir_p(tmp_directory)
         FileUtils.cp_r(ROOT + 'spec/fixtures/spec-repos/test_repo/', tmp_directory)
         non_git_repo = tmp_directory + 'test_repo'
+        FileUtils.rm(non_git_repo + '.git')
 
         podfile = Podfile.new do
           platform :ios, '8.0'
