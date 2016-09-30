@@ -4,6 +4,11 @@ module Pod
       # Generates the xcconfigs for the aggregate targets.
       #
       class AggregateXCConfig
+
+        # Defines the version of swift that will be checked to determine
+        # which flag to generate in the build
+        SWIFT_VERSION_CHECK = 3.0
+
         # @return [AggregateTarget] the target represented by this xcconfig.
         #
         attr_reader :target
@@ -70,20 +75,14 @@ module Pod
           # in embedded targets.
 
 	  # Extract swift_version number
-	  @swift_version = target.build_configurations.build_settings['SWIFT_VERSION']
+	  @swift_version = target.resolved_build_setting('SWIFT_VERSION').values.compact.uniq
 
-	  # Check if swift_version is prior to v3.0
+	  # Check if swift_version is prior to SWIFT_VERSION_CHECK
 	  if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-	    if @swift_version < 3.0
+	    if @swift_version < SWIFT_VERSION_CHECK
               config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'          
             else
               config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-            end
-          else
-	    if @swift_version < 8.0
-              config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'NO'
-            else
-              config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
             end
           end
 

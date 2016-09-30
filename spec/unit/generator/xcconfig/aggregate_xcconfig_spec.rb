@@ -243,18 +243,18 @@ module Pod
 
           it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when there is swift' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_LIBRARIES'].should == 'YES'
+            @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should == 'YES'
           end
 
-          it 'does not set ALWAYS_EMBED_STANDARD_LIBRARIES when there is no swift' do
+          it 'does not set ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when there is no swift' do
             @generator.send(:pod_targets).each { |pt| pt.stubs(:uses_swift?).returns(false) }
-            @generator.generate.to_hash['ALWAYS_EMBED_STANDARD_LIBRARIES'].should.be.nil
+            @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should.be.nil
           end
 
-          it 'does not set ALWAYS_EMBED_STANDARD_LIBRARIES when there is swift, but the target is an extension' do
+          it 'does not set ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when there is swift, but the target is an extension' do
             @target.stubs(:requires_host_target?).returns(true)
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.generate.to_hash['ALWAYS_EMBED_STANDARD_LIBRARIES'].should.be.nil
+            @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should.be.nil
           end
 
           it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES to YES when there is swift' do
@@ -271,6 +271,38 @@ module Pod
             @target.stubs(:requires_host_target?).returns(true)
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should == 'NO'
+          end
+
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift' do
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
+          end
+
+          it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is no swift' do
+            @generator.send(:pod_targets).each { |pt| pt.stubs(:uses_swift?).returns(false) }
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
+          end
+
+          it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift, but the target is an extension' do
+            @target.stubs(:requires_host_target?).returns(true)
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
+          end
+
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT to YES when there is swift' do
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
+          end
+
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT to NO when there is no swift' do
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(false)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'NO'
+          end
+
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT to NO when there is swift, but the target is an extension' do
+            @target.stubs(:requires_host_target?).returns(true)
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'NO'
           end
         end
 
