@@ -142,7 +142,15 @@ module Pod
         reasons << 'all results apply only to public specs, but you can use ' \
                    '`--private` to ignore them if linting the specification for a private pod'
       end
-      reasons.to_sentence
+      if dot_swift_version.nil?
+        reasons.to_sentence + ".\n[!] The validator for Swift projects uses " \
+          'Swift 2.3 by default, if you are using a different version of ' \
+          'swift you can use a `.swift-version` file to set the version for ' \
+          "your Pod. For example to use Swift 3.0, run: \n" \
+          '    `echo "3.0" > .swift-version`'
+      else
+        reasons.to_sentence
+      end
     end
 
     #-------------------------------------------------------------------------#
