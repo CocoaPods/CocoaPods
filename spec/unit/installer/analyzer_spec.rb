@@ -674,9 +674,10 @@ module Pod
         podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
         podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+        
         should.raise Informative do
           analyzer.analyze
-        end.message.should.match /The following pods are integrated into Swift targets that do not have the same Swift version:/
+        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
       end
 
       it 'does not raise when targets integrate the same pod but only one of the targets is a swift target' do
@@ -691,22 +692,6 @@ module Pod
         podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
         # when the swift version is unset at the project level, but set in one target, swift_version is nil
         podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
-        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-        lambda { analyzer.analyze }.should.not.raise
-      end
-
-      it 'does not raise when swift targets with different swift versions integrate a non-swift pod' do
-        podfile = Podfile.new do
-          source SpecHelper.test_repo_url
-          project 'SampleProject/SampleProject'
-          platform :ios, '8.0'
-          pod 'JSONKit'
-          target 'SampleProject'
-          target 'TestRunner'
-        end
-        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
-        # when the swift version is set at the project level, but unset in one target, swift_version is empty
-        podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('')
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
         lambda { analyzer.analyze }.should.not.raise
       end

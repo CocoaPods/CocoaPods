@@ -428,7 +428,7 @@ module Pod
         end
 
         error_messages = targets_by_spec.map do |spec, targets|
-          swift_targets = targets.reject { |target| target.blank? }
+          swift_targets = targets.reject { |target| target.swift_version.blank? }
           next if swift_targets.empty? || swift_targets.uniq(&:swift_version).count == 1
           target_errors = swift_targets.map(&error_message_for_target).join(', ')
           "- #{spec.name} required by #{target_errors}"
