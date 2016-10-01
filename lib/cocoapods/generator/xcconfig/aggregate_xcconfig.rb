@@ -4,6 +4,11 @@ module Pod
       # Generates the xcconfigs for the aggregate targets.
       #
       class AggregateXCConfig
+
+        # Defines the version of swift that will be checked to determine
+        # which flag to generate in the build
+        SWIFT_VERSION_CHECK = 2.3
+
         # @return [AggregateTarget] the target represented by this xcconfig.
         #
         attr_reader :target
@@ -68,12 +73,23 @@ module Pod
           # that use Swift. Setting this for the embedded target would
           # cause an App Store rejection because frameworks cannot be embedded
           # in embedded targets.
-          if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-            config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
-            config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-          else
-            config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
+
+	  # Extract swift_version number
+	  @swift_version = target.resolved_build_setting('SWIFT_VERSION').values.compact.uniq
+	  embed_default_value = 'NO'
+
+	  # Check if swift_version is prior to SWIFT_VERSION_CHECK
+	  if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
+	    embed_default_value = 'YES'
+	    if @swift_version < SWIFT_VERSION_CHECK
+	      embedded_swift_key = 'EMBEDDED_CONTENT_CONTAINS_SWIFT'
+            else
+	      embedded_swift_key = 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'
+            end
           end
+
+	  config[embedded_swift_key] = embed_default_value
+
           @xcconfig = Xcodeproj::Config.new(config)
 
           @xcconfig.merge!(merged_user_target_xcconfigs)
