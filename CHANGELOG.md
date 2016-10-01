@@ -24,6 +24,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5959](https://github.com/CocoaPods/CocoaPods/pull/5959)
 
+* Error with helpful message when integrating a pod into targets that have mismatched Swift versions.  
+  [Ben Asher](https://github.com/benasher44)
+  [#5984](https://github.com/CocoaPods/CocoaPods/pull/5984)
+
+* Allow users to share pods between Objective-C and Swift targets.
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5984](https://github.com/CocoaPods/CocoaPods/pull/5984)
+
 ##### Bug Fixes
 
 * Remove special handling for messages apps  
@@ -37,6 +45,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix linting of private pods when using libraries.  
   [Stefan Pühringer](https://github.com/b-ray)
   [#5891](https://github.com/CocoaPods/CocoaPods/issues/5891)
+
 
 ## 1.1.0.rc.2 (2016-09-13)
 
