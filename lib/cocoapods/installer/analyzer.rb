@@ -423,19 +423,21 @@ module Pod
           end
         end
 
-        target_msg = lambda do |target|
-          if target.swift_version.nil?
-            "#{target.name} (Swift version missing)"
-          else
-            "#{target.name} (Swift #{target.swift_version})"
-          end
+        error_message_for_target = lambda do |target|
+          "#{target.name} (Swift #{target.swift_version})"
         end
 
-        error_messages = []
-        targets_by_spec.each do |spec, targets|
-          error_messages << "#{spec.name} required by #{targets.map(&target_msg).join(', ')}" unless targets.uniq(&:swift_version).count == 1
+        error_messages = targets_by_spec.map do |spec, targets|
+          swift_targets = targets.reject { |target| target.blank? }
+          next if swift_targets.empty? || swift_targets.uniq(&:swift_version).count == 1
+          target_errors = swift_targets.map(&error_message_for_target).join(', ')
+          "- #{spec.name} required by #{target_errors}"
+        end.compact
+
+        unless error_messages.empty?
+          raise Informative, 'The following pods are integrated into targets ' \
+            "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
         end
-        raise Informative, "The following pods are integrated into targets that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting
