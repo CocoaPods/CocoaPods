@@ -674,7 +674,7 @@ module Pod
         podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
         podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
-        
+
         should.raise Informative do
           analyzer.analyze
         end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
