@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5959](https://github.com/CocoaPods/CocoaPods/pull/5959)
 
+* Error with helpful message when integrating a pod into targets that have mismatched Swift versions.  
+  [Ben Asher](https://github.com/benasher44)
+  [#5917](https://github.com/CocoaPods/CocoaPods/pull/5917)
+
 ##### Bug Fixes
 
 * Remove special handling for messages apps  
