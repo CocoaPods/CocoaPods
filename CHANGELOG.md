@@ -12,7 +12,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5934](https://github.com/CocoaPods/CocoaPods/pull/5934)
 
-* Improve performance of PathList.read_file_system 
 * Tell users about the .swift-version file on validation failures.  
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5951](https://github.com/CocoaPods/CocoaPods/pull/5951)
