@@ -349,6 +349,7 @@ module Pod
       #
       def generate_targets
         specs_by_target = result.specs_by_target.reject { |td, _| td.abstract? }
+        check_pod_target_swift_versions(specs_by_target)
         pod_targets = generate_pod_targets(specs_by_target)
         aggregate_targets = specs_by_target.keys.map do |target_definition|
           generate_target(target_definition, pod_targets)
@@ -406,6 +407,39 @@ module Pod
         target
       end
 
+      # Verify that targets using a pod have the same swift version
+      #
+      # @param  [Hash{Podfile::TargetDefinition => Array<Specification>}] specs_by_target
+      #         the resolved specifications grouped by target.
+      #
+      # @note raises Informative if targets using a pod do not have
+      #       the same swift version
+      #
+      def check_pod_target_swift_versions(specs_by_target)
+        targets_by_spec = {}
+        specs_by_target.each do |target, specs|
+          specs.each do |spec|
+            (targets_by_spec[spec] ||= []) << target
+          end
+        end
+
+        error_message_for_target = lambda do |target|
+          "#{target.name} (Swift #{target.swift_version})"
+        end
+
+        error_messages = targets_by_spec.map do |spec, targets|
+          swift_targets = targets.reject { |target| target.swift_version.blank? }
+          next if swift_targets.empty? || swift_targets.uniq(&:swift_version).count == 1
+          target_errors = swift_targets.map(&error_message_for_target).join(', ')
+          "- #{spec.name} required by #{target_errors}"
+        end.compact
+
+        unless error_messages.empty?
+          raise Informative, 'The following pods are integrated into targets ' \
+            "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
+        end
+      end
+
       # Setup the pod targets for an aggregate target. Deduplicates resulting
       # targets by grouping by platform and subspec by their root
       # to create a {PodTarget} for each spec.
@@ -420,7 +454,7 @@ module Pod
           distinct_targets = specs_by_target.each_with_object({}) do |dependency, hash|
             target_definition, dependent_specs = *dependency
             dependent_specs.group_by(&:root).each do |root_spec, specs|
-              pod_variant = PodVariant.new(specs, target_definition.platform, target_definition.uses_frameworks?, target_definition.swift_version)
+              pod_variant = PodVariant.new(specs, target_definition.platform, target_definition.uses_frameworks?)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
             end
