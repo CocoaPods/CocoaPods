@@ -834,6 +834,13 @@ module Pod
           validator.swift_version.should == '2.3'
         end
 
+        it 'allows the user to set the version' do
+          validator = test_swiftpod
+          validator.stubs(:dot_swift_version).returns('3.0')
+          validator.swift_version = '4.0'
+          validator.swift_version.should == '4.0'
+        end
+
         it 'checks for dot_swift_version' do
           validator = test_swiftpod
           validator.expects(:dot_swift_version)

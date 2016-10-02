@@ -251,6 +251,10 @@ module Pod
       @swift_version ||= dot_swift_version || '2.3'
     end
 
+    # Set the SWIFT_VERSION that should be used to validate the pod.
+    #
+    attr_writer :swift_version
+
     # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
     #
     def dot_swift_version
