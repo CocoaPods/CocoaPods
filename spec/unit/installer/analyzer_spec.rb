@@ -88,6 +88,7 @@ module Pod
         FileUtils.mkdir_p(tmp_directory)
         FileUtils.cp_r(ROOT + 'spec/fixtures/spec-repos/test_repo/', tmp_directory)
         non_git_repo = tmp_directory + 'test_repo'
+        FileUtils.rm(non_git_repo + '.git')
 
         podfile = Podfile.new do
           platform :ios, '8.0'
@@ -659,6 +660,40 @@ module Pod
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
         Specification.any_instance.stubs(:cocoapods_version).returns(Requirement.create '= 0.1.0')
         should.raise(Informative) { analyzer.analyze }
+      end
+
+      it 'raises when targets integrate the same swift pod but have different swift versions' do
+        podfile = Podfile.new do
+          source SpecHelper.test_repo_url
+          project 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          pod 'OrangeFramework'
+          target 'SampleProject'
+          target 'TestRunner'
+        end
+        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+        podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+
+        should.raise Informative do
+          analyzer.analyze
+        end.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+      end
+
+      it 'does not raise when targets integrate the same pod but only one of the targets is a swift target' do
+        podfile = Podfile.new do
+          source SpecHelper.test_repo_url
+          project 'SampleProject/SampleProject'
+          platform :ios, '8.0'
+          pod 'OrangeFramework'
+          target 'SampleProject'
+          target 'TestRunner'
+        end
+        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+        # when the swift version is unset at the project level, but set in one target, swift_version is nil
+        podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+        lambda { analyzer.analyze }.should.not.raise
       end
 
       #--------------------------------------#

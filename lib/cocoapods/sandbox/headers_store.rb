@@ -72,11 +72,11 @@ module Pod
       #
       def add_files(namespace, relative_header_paths)
         relative_header_paths.map do |relative_header_path|
-          add_file(namespace, relative_header_path, relative_header_path.basename)
+          add_file(namespace, relative_header_path)
         end
       end
 
-      # Adds a header to the directory under different name.
+      # Adds a header to the directory.
       #
       # @param  [Pathname] namespace
       #         the path where the header file should be stored relative to the
@@ -86,23 +86,17 @@ module Pod
       #         the path of the header file relative to the Pods project
       #         (`PODS_ROOT` variable of the xcconfigs).
       #
-      # @param  [String] final_name
-      #         the name under which the file should be available in the
-      #         headers directory.
-      #
       # @note   This method does _not_ add the file to the search paths.
       #
       # @return [Pathname]
       #
-      def add_file(namespace, relative_header_path, final_name)
+      def add_file(namespace, relative_header_path)
         namespaced_path = root + namespace
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
         absolute_source = (sandbox.root + relative_header_path)
         source = absolute_source.relative_path_from(namespaced_path)
-        Dir.chdir(namespaced_path) do
-          FileUtils.ln_sf(source, final_name)
-        end
+        FileUtils.ln_sf(source, namespaced_path)
         namespaced_path + relative_header_path.basename
       end
 

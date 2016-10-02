@@ -11,8 +11,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Cache result of inhibit_warnings and include_in_build_config to speed up pod install.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5934](https://github.com/CocoaPods/CocoaPods/pull/5934)
-  
-* Improve performance of PathList.read_file_system 
+
+* Tell users about the .swift-version file on validation failures.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5951](https://github.com/CocoaPods/CocoaPods/pull/5951)
+
+* Improve performance of PathList.read_file_system  
   [Heath Borders](https://github.com/hborders)
   [#5890](https://github.com/CocoaPods/CocoaPods/issues/5890)
 
@@ -23,6 +27,21 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Greenify pod install success message  
   [Stephen Hayes](https://github.com/schayes04)
   [#5713](https://github.com/CocoaPods/CocoaPods/issues/5713)
+* Remove uses of `cd` in generated scripts  
+  [Ben Asher](https://github.com/benasher44)
+  [#5959](https://github.com/CocoaPods/CocoaPods/pull/5959)
+
+* Error with helpful message when integrating a pod into targets that have mismatched Swift versions.  
+  [Ben Asher](https://github.com/benasher44)
+  [#5984](https://github.com/CocoaPods/CocoaPods/pull/5984)
+
+* Allow users to share pods between Objective-C and Swift targets.
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5984](https://github.com/CocoaPods/CocoaPods/pull/5984)
+
+* Allow setting the linting Swift version via `--swift-version=VERSION`  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5989](https://github.com/CocoaPods/CocoaPods/pull/5989)
 
 ##### Bug Fixes
 
@@ -33,6 +52,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Ensure messages apps have an embed frameworks build phase  
   [Ben Asher](https://github.com/benasher44)
   [#5860](https://github.com/CocoaPods/CocoaPods/issues/5860)
+
+* Fix linting of private pods when using libraries.  
+  [Stefan Pühringer](https://github.com/b-ray)
+  [#5891](https://github.com/CocoaPods/CocoaPods/issues/5891)
+
 
 ## 1.1.0.rc.2 (2016-09-13)
 

@@ -812,11 +812,33 @@ module Pod
         validator.results.count.should == 0
       end
 
+      it 'tells users about the .swift-version file if the validation fails' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod
+        validator.stubs(:validated?).returns(false)
+        result = Validator::Result.new(:error, 'attribute', 'message')
+        validator.stubs(:results).returns([result])
+
+        validator.failure_reason.should == "1 error.\n[!] The validator for " \
+          'Swift projects uses Swift 2.3 by default, if you are using a ' \
+          'different version of swift you can use a `.swift-version` file ' \
+          'to set the version for your Pod. For example to use Swift 3.0, ' \
+          "run: \n    `echo \"3.0\" > .swift-version`"
+      end
+
       describe '#swift_version' do
         it 'defaults to Swift 2.3' do
           validator = test_swiftpod
           validator.stubs(:dot_swift_version).returns(nil)
           validator.swift_version.should == '2.3'
+        end
+
+        it 'allows the user to set the version' do
+          validator = test_swiftpod
+          validator.stubs(:dot_swift_version).returns('3.0')
+          validator.swift_version = '4.0'
+          validator.swift_version.should == '4.0'
         end
 
         it 'checks for dot_swift_version' do
