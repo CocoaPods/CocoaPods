@@ -27,7 +27,8 @@ module Pod
              '(defaults to https://github.com/CocoaPods/Specs.git). ' \
              'Multiple sources must be comma-delimited.'],
             ['--private', 'Lint skips checks that apply only to public specs'],
-            ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec'],
+            ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
+             'This takes precedence over a .swift-version file.'],
           ].concat(super)
         end
 
