@@ -21,6 +21,8 @@ module Pod
              '(defaults to https://github.com/CocoaPods/Specs.git). ' \
              'Multiple sources must be comma-delimited.'],
             ['--private', 'Lint skips checks that apply only to public specs'],
+            ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
+             'This takes precedence over a .swift-version file.'],
           ].concat(super)
         end
 
@@ -34,6 +36,7 @@ module Pod
           @use_frameworks  = !argv.flag?('use-libraries')
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
           @private         = argv.flag?('private', false)
+          @swift_version   = argv.option('swift-version', nil)
           @podspecs_paths  = argv.arguments!
           super
         end
@@ -55,6 +58,7 @@ module Pod
             validator.only_subspec   = @only_subspec
             validator.use_frameworks = @use_frameworks
             validator.ignore_public_only_results = @private
+            validator.swift_version = @swift_version
             validator.validate
 
             unless @clean
