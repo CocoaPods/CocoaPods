@@ -75,13 +75,13 @@ module Pod
           # in embedded targets.
 
 	  # Extract swift_version number
-	  @swift_version = target.resolved_build_setting('SWIFT_VERSION').values.compact.uniq
+	  @swift_version = target.resolved_build_setting('SWIFT_VERSION').values.compact.uniq.to_f
 	  embed_default_value = 'NO'
 
 	  # Check if swift_version is prior to SWIFT_VERSION_CHECK
 	  if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
 	    embed_default_value = 'YES'
-	    if @swift_version < SWIFT_VERSION_CHECK
+	    if @swift_version <= SWIFT_VERSION_CHECK
 	      embedded_swift_key = 'EMBEDDED_CONTENT_CONTAINS_SWIFT'
             else
 	      embedded_swift_key = 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'
