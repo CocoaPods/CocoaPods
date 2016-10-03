@@ -31,7 +31,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Update EMBEDDED_CONTENT_CONTAINS_SWIFT flag behaviour based on xcode version.
   [codymoorhouse](https://github.com/codymoorhouse)
-  [Ben Asher](https://github.com/benasher44)
   [#5732](https://github.com/CocoaPods/CocoaPods/issues/5732)
 
 ##### Bug Fixes
@@ -48,6 +47,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Stefan Pühringer](https://github.com/b-ray)
   [#5891](https://github.com/CocoaPods/CocoaPods/issues/5891)
 
+
 ## 1.1.0.rc.2 (2016-09-13)
 
 ##### Enhancements
@@ -62,6 +62,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Correctly pass Pod:VERSION in `pod lib create`.  
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5840](https://github.com/CocoaPods/CocoaPods/issues/5840)
+
 
 ## 1.1.0.rc.1 (2016-09-10)
 
@@ -135,6 +136,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix analyzer checking the compatibility of an embedded target with a host that has not been added the Podfile.  
   [Ben Asher](https://github.com/benasher44)
   [#5783](https://github.com/CocoaPods/CocoaPods/issues/5783)
+
 
 ## 1.1.0.beta.1 (2016-07-11)
 
