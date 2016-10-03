@@ -480,10 +480,10 @@ module Pod
       pods_installed = root_specs.size
       title_options = { :verbose_prefix => '-> '.green }
       UI.titled_section('Pod installation complete! ' \
-              "There #{podfile_dependencies == 1 ? 'is' : 'are'} #{podfile_dependencies} " \
-              "#{'dependency'.pluralize(podfile_dependencies)} from the Podfile " \
-              "and #{pods_installed} total #{'pod'.pluralize(pods_installed)} installed.".green, 
-              title_options)
+                        "There #{podfile_dependencies == 1 ? 'is' : 'are'} #{podfile_dependencies} " \
+                        "#{'dependency'.pluralize(podfile_dependencies)} from the Podfile " \
+                        "and #{pods_installed} total #{'pod'.pluralize(pods_installed)} installed.".green,
+                        title_options)
     end
 
     # Runs the registered callbacks for the plugins post install hooks.

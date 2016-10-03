@@ -275,6 +275,3 @@ DEPENDENCIES
   ruby-prof
   webmock
   xcodeproj!
-
-BUNDLED WITH
-   1.12.5
