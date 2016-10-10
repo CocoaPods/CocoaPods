@@ -60,20 +60,8 @@ module Pod
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
-          }
-          # For embedded targets, which live in a host target, CocoaPods
-          # copies all of the embedded target's pod_targets its host
-          # target. Therefore, this check will properly require the Swift
-          # libs in the host target, if the embedded target has any pod targets
-          # that use Swift. Setting this for the embedded target would
-          # cause an App Store rejection because frameworks cannot be embedded
-          # in embedded targets.
-          if !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-            config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
-            config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-          else
-            config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
-          end
+          }.merge(embedded_content_settings)
+
           @xcconfig = Xcodeproj::Config.new(config)
 
           @xcconfig.merge!(merged_user_target_xcconfigs)
@@ -99,6 +87,41 @@ module Pod
         #---------------------------------------------------------------------#
 
         protected
+
+        def target_swift_version
+          settings = target.native_target.resolved_build_setting('SWIFT_VERSION') unless target.native_target.nil?
+          settings.values.compact.uniq.first unless settings.nil?
+        end
+
+        EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION = Gem::Version.new('2.3')
+
+        # @return [Hash<String, String>] the build settings necessary for Swift
+        #  targets to be correctly embedded in their host.
+        #
+        def embedded_content_settings
+          # For embedded targets, which live in a host target, CocoaPods
+          # copies all of the embedded target's pod_targets its host
+          # target. Therefore, this check will properly require the Swift
+          # libs in the host target, if the embedded target has any pod targets
+          # that use Swift. Setting this for the embedded target would
+          # cause an App Store rejection because frameworks cannot be embedded
+          # in embedded targets.
+
+          swift_version = Gem::Version.new(target_swift_version)
+          should_embed = !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
+          embed_value = should_embed ? 'YES' : 'NO'
+
+          config = {
+            'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' => embed_value,
+            'EMBEDDED_CONTENT_CONTAINS_SWIFT' => embed_value,
+          }
+
+          if swift_version >= EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION || !should_embed
+            config.delete('EMBEDDED_CONTENT_CONTAINS_SWIFT')
+          end
+
+          config
+        end
 
         # @return [Hash<String, String>] the build settings necessary to import
         #         the pod targets.
