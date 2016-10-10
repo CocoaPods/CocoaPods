@@ -241,36 +241,54 @@ module Pod
             @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) "-D" "COCOAPODS"'
           end
 
-          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift' do
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when the target_swift_version is < 2.3' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.stubs(:target_swift_version).returns('2.2')
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
           end
 
           it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is no swift' do
             @generator.send(:pod_targets).each { |pt| pt.stubs(:uses_swift?).returns(false) }
+            @generator.stubs(:target_swift_version).returns('2.2')
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
           end
 
           it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift, but the target is an extension' do
             @target.stubs(:requires_host_target?).returns(true)
+            @generator.stubs(:target_swift_version).returns('2.2')
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
           end
 
-          it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES to YES when there is swift' do
+          it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when the target_swift_version is nil' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.stubs(:target_swift_version).returns(nil)
+            @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
+          end
+
+          it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES to YES when there is swift >= 2.3' do
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.stubs(:target_swift_version).returns('2.3')
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should == 'YES'
           end
 
           it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES to NO when there is no swift' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(false)
+            @generator.stubs(:target_swift_version).returns(nil)
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should == 'NO'
           end
 
           it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES to NO when there is swift, but the target is an extension' do
             @target.stubs(:requires_host_target?).returns(true)
+            @generator.stubs(:target_swift_version).returns('2.3')
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should == 'NO'
+          end
+
+          it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift 2.3 or higher' do
+            @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
+            @generator.stubs(:target_swift_version).returns('2.3')
+            @generator.generate.to_hash.key?('EMBEDDED_CONTENT_CONTAINS_SWIFT').should == false
           end
         end
 
