@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Stephen Hayes](https://github.com/schayes04)
   [#5713](https://github.com/CocoaPods/CocoaPods/issues/5713)
 
+* Update EMBEDDED_CONTENT_CONTAINS_SWIFT flag behaviour based on xcode version.  
+  [codymoorhouse](https://github.com/codymoorhouse)
+  [#5732](https://github.com/CocoaPods/CocoaPods/issues/5732)
+
 ##### Bug Fixes
 
 * Remove special handling for messages apps  
