@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 8106d0d779ae1c9f571404a9f38950905ad5c803
+  revision: 8a8f26fb5d6e2b0d604bdb3c2cca14fab4f80adc
   branch: master
   specs:
-    claide (1.0.0)
+    claide (1.0.1)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
@@ -24,12 +24,12 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 4020ac913be863bdc4925fbb132aa94af71850f4
+  revision: 215b27fa0c428f2f55ed5e8bc4f2639b1dc918c6
   branch: master
   specs:
     xcodeproj (1.3.1)
       activesupport (>= 3)
-      claide (>= 1.0.0, < 2.0)
+      claide (>= 1.0.1, < 2.0)
       colored (~> 1.2)
 
 GIT
@@ -70,7 +70,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 837ae069b25b7d9149bcc6485694dbcd50f53847
+  revision: bbc726e4ce966769e4fb5d6c7edfd998c5bbae5f
   branch: master
   specs:
     cocoapods-trunk (1.0.0)
@@ -96,7 +96,7 @@ PATH
   specs:
     cocoapods (1.1.0.rc.2)
       activesupport (>= 4.0.2, < 5)
-      claide (>= 1.0.0, < 2.0)
+      claide (>= 1.0.1, < 2.0)
       cocoapods-core (= 1.1.0.rc.2)
       cocoapods-deintegrate (>= 1.0.1, < 2.0)
       cocoapods-downloader (>= 1.1.1, < 2.0)
@@ -183,7 +183,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.9.0)
+    minitest (5.9.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.2)
