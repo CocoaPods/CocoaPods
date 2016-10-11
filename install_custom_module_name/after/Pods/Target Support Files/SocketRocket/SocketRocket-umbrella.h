@@ -1,4 +1,6 @@
+#ifdef __OBJC__
 #import <UIKit/UIKit.h>
+#endif
 
 #import "base64.h"
 #import "NSData+SRB64Additions.h"
