@@ -87,6 +87,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Wrap generated import headers with __OBJC__ to fix C only pods.   
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5291](https://github.com/CocoaPods/CocoaPods/issues/5291)
+
 * Prevent crash when generating acknowledgements when license type is not specified.  
   [Marcelo Fabri](https://github.com/marcelofabri)
   [#5826](https://github.com/CocoaPods/CocoaPods/issues/5826)

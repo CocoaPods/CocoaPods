@@ -55,18 +55,6 @@ module Pod
 
         result
       end
-
-      protected
-
-      # Generates the contents of the header according to the platform.
-      #
-      # @return [String]
-      #
-      def generate_platform_import_header
-        result =  "#ifdef __OBJC__\n"
-        result << super
-        result << "#endif\n"
-      end
     end
   end
 end
