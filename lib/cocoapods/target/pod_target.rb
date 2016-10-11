@@ -292,6 +292,19 @@ module Pod
       "#{configuration_build_dir(dir)}/#{product_name}"
     end
 
+    def target_header_search_paths
+      do_target_header_search_paths
+    end
+
+    def do_target_header_search_paths(header_search_paths = [], include_private_headers = true)
+      header_search_paths.concat(build_headers.search_paths(platform)) if include_private_headers
+      header_search_paths.concat(sandbox.public_headers.search_paths_for_target(platform, self))
+      dependent_targets.each do |dependent_target|
+        dependent_target.do_target_header_search_paths(header_search_paths, false)
+      end
+      header_search_paths.uniq
+    end
+
     private
 
     # @param  [TargetDefinition] target_definition
