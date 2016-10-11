@@ -14,6 +14,14 @@ module Pod
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import "BlocksKit.h"
@@ -30,6 +38,14 @@ module Pod
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import "BlocksKit.h"
@@ -51,6 +67,14 @@ module Pod
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import "BlocksKit.h"
@@ -61,6 +85,14 @@ module Pod
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import <BananaTree/BananaTree.h>
@@ -80,6 +112,14 @@ module Pod
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import <BananaTree/BananaTree.h>
@@ -91,6 +131,14 @@ module Pod
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import "header.h"
@@ -104,6 +152,14 @@ module Pod
       path.read.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
       #import <UIKit/UIKit.h>
+      #else
+      #ifndef FOUNDATION_EXPORT
+      #if defined(__cplusplus)
+      #define FOUNDATION_EXPORT extern "C"
+      #else
+      #define FOUNDATION_EXPORT extern
+      #endif
+      #endif
       #endif
 
       #import <BananaTree/BananaTree.h>
