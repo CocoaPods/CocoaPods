@@ -224,6 +224,11 @@ module Pod
             @target.requires_host_target?.should == true
           end
 
+          it 'requires a host target for XPC service targets' do
+            @target.user_targets.first.stubs(:symbol_type).returns(:xpc_service)
+            @target.requires_host_target?.should == true
+          end
+
           it 'does not require a host target for watch 2 extension targets' do
             @target.user_targets.first.stubs(:symbol_type).returns(:watch2_extension)
             @target.requires_host_target?.should == false

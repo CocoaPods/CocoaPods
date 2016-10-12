@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Use host target for frameworks of XPC services.
+  [Ingmar Stein](https://github.com/IngmarStein)
+  [#6029](https://github.com/CocoaPods/CocoaPods/pull/6029)
 
 ##### Bug Fixes
 
