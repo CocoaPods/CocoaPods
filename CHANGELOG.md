@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Generate `PODS_TARGET_SRCROOT` build setting for each pod target.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5375](https://github.com/CocoaPods/CocoaPods/issues/5375)
+
 * Add support for running CocoaPods on Linux.  
   [Samuel Giddins](https://github.com/segiddins)
 

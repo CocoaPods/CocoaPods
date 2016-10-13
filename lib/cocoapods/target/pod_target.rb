@@ -292,6 +292,12 @@ module Pod
       "#{configuration_build_dir(dir)}/#{product_name}"
     end
 
+    # @return [String] The source path of the root for this target relative to `$(PODS_ROOT)`
+    #
+    def pod_target_srcroot
+      "${PODS_ROOT}/#{sandbox.pod_dir(pod_name).relative_path_from(sandbox.root)}"
+    end
+
     private
 
     # @param  [TargetDefinition] target_definition

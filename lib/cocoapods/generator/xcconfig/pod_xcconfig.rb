@@ -51,6 +51,7 @@ module Pod
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
             'PODS_ROOT' => '${SRCROOT}',
+            'PODS_TARGET_SRCROOT' => target.pod_target_srcroot,
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             'SKIP_INSTALL' => 'YES',
             # 'USE_HEADERMAP' => 'NO'
