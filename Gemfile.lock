@@ -85,6 +85,13 @@ GIT
     cocoapods-try (1.1.0)
 
 GIT
+  remote: https://github.com/CocoaPods/fourflusher.git
+  revision: bd3f2447d6a5dbef5807a4dfca02fe3dcd74b891
+  branch: master
+  specs:
+    fourflusher (2.0.0)
+
+GIT
   remote: https://github.com/segiddins/json.git
   revision: a9588bc4334c2f5bf985f255b61c05eafdcd8907
   branch: seg-1.7.7-ruby-2.2
@@ -161,7 +168,6 @@ GEM
     faraday-http-cache (1.3.0)
       faraday (~> 0.8)
     ffi (1.9.6)
-    fourflusher (2.0.0)
     fuzzy_match (2.0.4)
     gh_inspector (1.0.2)
     git (1.3.0)
@@ -262,6 +268,7 @@ DEPENDENCIES
   cocoapods_debug
   danger
   diffy
+  fourflusher!
   inch_by_inch
   json!
   kicker
@@ -277,4 +284,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.12.5
+   1.13.1
