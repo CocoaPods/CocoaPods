@@ -35,6 +35,7 @@ group :development do
   cp_gem 'cocoapods-try',         'cocoapods-try'
   cp_gem 'molinillo',             'Molinillo'
   cp_gem 'xcodeproj',             'Xcodeproj'
+  cp_gem 'fourflusher',           'fourflusher'
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 
