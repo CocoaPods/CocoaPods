@@ -107,10 +107,10 @@ module Pod
         git!(['-C', repo, 'pull', '--ff-only'])
       end
     rescue
-      UI.warn 'CocoaPods was not able to update the ' \
-                "`#{name}` repo. If this is an unexpected issue " \
-                'and persists you can inspect it running ' \
-                '`pod repo update --verbose`'
+      raise Informative, 'CocoaPods was not able to update the ' \
+        "`#{name}` repo. If this is an unexpected issue " \
+        'and persists you can inspect it running ' \
+        '`pod repo update --verbose`'
     end
   end
 
