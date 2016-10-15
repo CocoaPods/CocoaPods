@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ingmar Stein](https://github.com/IngmarStein)
   [#6029](https://github.com/CocoaPods/CocoaPods/pull/6029)
 
+* Use Swift 3.0 by default during validation.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#6042](https://github.com/CocoaPods/CocoaPods/pull/6042)
+
 ##### Bug Fixes
 
 * None.  
