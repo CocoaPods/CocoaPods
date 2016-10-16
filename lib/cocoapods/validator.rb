@@ -144,10 +144,10 @@ module Pod
       end
       if dot_swift_version.nil?
         reasons.to_sentence + ".\n[!] The validator for Swift projects uses " \
-          'Swift 2.3 by default, if you are using a different version of ' \
+          'Swift 3.0 by default, if you are using a different version of ' \
           'swift you can use a `.swift-version` file to set the version for ' \
-          "your Pod. For example to use Swift 3.0, run: \n" \
-          '    `echo "3.0" > .swift-version`'
+          "your Pod. For example to use Swift 2.3, run: \n" \
+          '    `echo "2.3" > .swift-version`'
       else
         reasons.to_sentence
       end
@@ -248,7 +248,7 @@ module Pod
     # @return [String] the SWIFT_VERSION to use for validation.
     #
     def swift_version
-      @swift_version ||= dot_swift_version || '2.3'
+      @swift_version ||= dot_swift_version || '3.0'
     end
 
     # Set the SWIFT_VERSION that should be used to validate the pod.

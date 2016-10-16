@@ -821,17 +821,17 @@ module Pod
         validator.stubs(:results).returns([result])
 
         validator.failure_reason.should == "1 error.\n[!] The validator for " \
-          'Swift projects uses Swift 2.3 by default, if you are using a ' \
+          'Swift projects uses Swift 3.0 by default, if you are using a ' \
           'different version of swift you can use a `.swift-version` file ' \
-          'to set the version for your Pod. For example to use Swift 3.0, ' \
-          "run: \n    `echo \"3.0\" > .swift-version`"
+          'to set the version for your Pod. For example to use Swift 2.3, ' \
+          "run: \n    `echo \"2.3\" > .swift-version`"
       end
 
       describe '#swift_version' do
-        it 'defaults to Swift 2.3' do
+        it 'defaults to Swift 3.0' do
           validator = test_swiftpod
           validator.stubs(:dot_swift_version).returns(nil)
-          validator.swift_version.should == '2.3'
+          validator.swift_version.should == '3.0'
         end
 
         it 'allows the user to set the version' do
