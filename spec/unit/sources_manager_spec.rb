@@ -135,9 +135,8 @@ fatal: Could not read from remote repository.
 Please make sure you have the correct access rights
 and the repository exists.
         EOS
-        @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        @sources_manager.update(test_repo_path.basename.to_s, true)
-        UI.warnings.should.include('not able to update the `master` repo')
+        e = lambda { @sources_manager.update(test_repo_path.basename.to_s, true) }.should.raise Pod::Informative
+        e.message.should.include('not able to update the `master` repo')
       end
 
       it 'informs the user if there is an update for CocoaPods' do

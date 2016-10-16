@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#6042](https://github.com/CocoaPods/CocoaPods/pull/6042)
 
+* Exit with non-zero exit status if pod repo update fails
+  [Uku Loskit](https://github.com/UkuLoskit)
+  [#6037](https://github.com/CocoaPods/CocoaPods/issues/6037)
+
+
 ##### Bug Fixes
 
 * None.  
