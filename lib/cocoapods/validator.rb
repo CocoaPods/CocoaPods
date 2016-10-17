@@ -262,6 +262,13 @@ module Pod
       swift_version_path.read if swift_version_path.exist?
     end
 
+    # @return [String] A string representing the Swift version used during linting
+    #                  or nil, if Swift was not used.
+    #
+    def used_swift_version
+      swift_version if @installer.pod_targets.any?(&:uses_swift?)
+    end
+
     #-------------------------------------------------------------------------#
 
     private
