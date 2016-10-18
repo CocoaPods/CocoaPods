@@ -868,7 +868,29 @@ module Pod
           validator.dot_swift_version.should == '1.0'
         end
       end
+
+      describe 'Getting the Swift value used by the validator' do
+        it 'passes nil when no targets have used Swift' do
+          validator = test_swiftpod
+          pod_target = stub(:uses_swift? => true)
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+
+          validator.stubs(:dot_swift_version).returns('1.2.3')
+          validator.used_swift_version.should == '1.2.3'
+        end
+
+        it 'returns the swift_version when a target has used Swift' do
+          validator = test_swiftpod
+          pod_target = stub(:uses_swift? => false)
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+
+          validator.used_swift_version.should.nil?
+        end
+      end
     end
+
     #-------------------------------------------------------------------------#
   end
 end
