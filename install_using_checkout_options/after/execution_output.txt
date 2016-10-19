@@ -17,13 +17,13 @@ Fetching external sources
  > Git download
      $ GIT_BIN clone https://github.com/AFNetworking/AFNetworking.git PROJECT/Pods/AFNetworking --template=
      Cloning into 'PROJECT/Pods/AFNetworking'...
-   $ GIT_BIN checkout --quiet ba7b6e541fd18bdf48da6d4845670e3e6b990637
+   $ GIT_BIN -C PROJECT/Pods/AFNetworking checkout --quiet ba7b6e541fd18bdf48da6d4845670e3e6b990637
 -> Pre-downloading: `RKValueTransformers` from `https://github.com/RestKit/RKValueTransformers`, commit `d76a00894b8c3c9331e36d91ab952681426a49df`
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/RestKit/RKValueTransformers PROJECT/Pods/RKValueTransformers --template=
      Cloning into 'PROJECT/Pods/RKValueTransformers'...
-   $ GIT_BIN checkout --quiet d76a00894b8c3c9331e36d91ab952681426a49df
+   $ GIT_BIN -C PROJECT/Pods/RKValueTransformers checkout --quiet d76a00894b8c3c9331e36d91ab952681426a49df
 
 Resolving dependencies of `Podfile`
 
