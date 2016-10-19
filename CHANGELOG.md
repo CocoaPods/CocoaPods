@@ -16,11 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#6042](https://github.com/CocoaPods/CocoaPods/pull/6042)
 
-* Exit with non-zero exit status if pod repo update fails
+* Exit with non-zero exit status if pod repo update fails  
   [Uku Loskit](https://github.com/UkuLoskit)
   [#6037](https://github.com/CocoaPods/CocoaPods/issues/6037)
 
-* The validator has an API for accessing which version of Swift was used.    
+* The validator has an API for accessing which version of Swift was used.  
   [Orta Therox](https://github.com/orta)
   [#6049](https://github.com/CocoaPods/CocoaPods/pull/6049)
 
@@ -58,7 +58,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#5984](https://github.com/CocoaPods/CocoaPods/pull/5984)
 
-* Allow users to share pods between Objective-C and Swift targets.
+* Allow users to share pods between Objective-C and Swift targets.  
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5984](https://github.com/CocoaPods/CocoaPods/pull/5984)
 
