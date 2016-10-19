@@ -867,6 +867,13 @@ module Pod
           Pathname.any_instance.expects(:read).returns('1.0')
           validator.dot_swift_version.should == '1.0'
         end
+
+        it 'strips newlines from .swift-version files' do
+          validator = test_swiftpod
+          Pathname.any_instance.stubs(:exist?).returns(true)
+          Pathname.any_instance.stubs(:read).returns("2.1\n")
+          validator.swift_version.should == '2.1'
+        end
       end
 
       describe 'Getting the Swift value used by the validator' do
