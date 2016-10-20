@@ -28,10 +28,10 @@
 #
 # - Have a way to track precisely the evolution of the artifacts (and of the
 #   UI) produced by CocoaPods (git diff of the after folders).
-# - Allow uses to submit pull requests with the environment necessary to
+# - Allow users to submit pull requests with the environment necessary to
 #   reproduce an issue.
 # - Have robust tests which don't depend on the programmatic interface of
-#   CocoaPods. These tests depend only the binary and its arguments an thus are
+#   CocoaPods. These tests depend only the binary and its arguments and thus are
 #   suitable for testing CP regardless of the implementation (they could even
 #   work for an Objective-C one)
 
