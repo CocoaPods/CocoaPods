@@ -259,7 +259,7 @@ module Pod
     #
     def dot_swift_version
       swift_version_path = file.dirname + '.swift-version'
-      swift_version_path.read if swift_version_path.exist?
+      swift_version_path.read.strip if swift_version_path.exist?
     end
 
     # @return [String] A string representing the Swift version used during linting
