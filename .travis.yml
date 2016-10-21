@@ -1,15 +1,28 @@
-osx_image: xcode7.3
-language: objective-c
 cache: bundler
+
+matrix:
+  include:
+  - rvm: system
+    env: COCOAPODS_CI_TASKS=EXAMPLES
+    osx_image: xcode7.3
+    language: objective-c
+  - rvm: 2.3.1
+    env: COCOAPODS_CI_TASKS=LINT
+    git:
+      submodules: false
+
 rvm:
   # OS X 10.9.5-10.10.0 (2.0.0-p481)
-  - system
+  - 2.0.0-p481
   # OS X 10.9.3-10.9.4
   - 2.0.0-p451
   # OS X 10.9.0-10.9.2
   # TODO: currently unavailable: https://github.com/travis-ci/travis-ci/issues/2918
   # - 2.0.0-p247
   - 2.3.1
+
+env:
+  - COCOAPODS_CI_TASKS=SPECS
 
 branches:
   only:
@@ -19,16 +32,15 @@ branches:
 before_install:
   # There is a bug in travis. When using system ruby, bundler is not
   # installed and causes the default install action to fail.
-  - sudo gem install bundler
+  - if [ "$TRAVIS_RUBY_VERSION" = "system" ]; then sudo gem install "bundler:~> 1.13"; else gem install "bundler:~> 1.13"; fi
   # RubyGems 2.0.14 isn't a fun time on 2.0.0p648
-  - if [ "$(ruby -v | cut -d ' ' -f2)" = "2.0.0p648" ]; then sudo gem update --system; fi
+  - if [ "$TRAVIS_RUBY_VERSION" = "system" ]; then sudo gem update --system; fi
 
 before_script:
-  - bundle exec pod repo update --silent
   - bundle exec pod env
 
 script:
-  - bundle exec rake
+  - bundle exec rake spec:all
   - bundle exec danger
 
 addons:
