@@ -550,7 +550,7 @@ module Pod
     end
 
     def xcodebuild_available?
-      !Executable.which('xcodebuild').nil?
+      !Executable.which('xcodebuild').nil? && ENV['COCOAPODS_VALIDATOR_SKIP_XCODEBUILD'].nil?
     end
 
     FILE_PATTERNS = %i(source_files resources preserve_paths vendored_libraries
