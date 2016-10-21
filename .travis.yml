@@ -1,3 +1,4 @@
+language: ruby
 cache: bundler
 
 matrix:
@@ -37,6 +38,8 @@ before_install:
   - if [ "$TRAVIS_RUBY_VERSION" = "system" ]; then sudo gem update --system; fi
 
 before_script:
+  - git config --global user.email "tests@cocoapods.org"
+  - git config --global user.name "CocoaPods Tests"
   - bundle exec pod env
 
 script:

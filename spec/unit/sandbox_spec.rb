@@ -84,7 +84,7 @@ module Pod
 
       it 'handles symlinks in /tmp' do
         tmp_sandbox = Pod::Sandbox.new('/tmp/CocoaPods')
-        tmp_sandbox.root.should.be == Pathname.new('/private/tmp/CocoaPods')
+        tmp_sandbox.root.should.be == Pathname.new('/tmp/CocoaPods').realpath
         require 'fileutils'
         FileUtils.rm_rf(tmp_sandbox.root)
       end

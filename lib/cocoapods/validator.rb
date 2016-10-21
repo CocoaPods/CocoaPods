@@ -518,7 +518,7 @@ module Pod
     # @return [void]
     #
     def build_pod
-      if Executable.which('xcodebuild').nil?
+      if !xcodebuild_available?
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
@@ -547,6 +547,10 @@ module Pod
           end
         end
       end
+    end
+
+    def xcodebuild_available?
+      !Executable.which('xcodebuild').nil?
     end
 
     FILE_PATTERNS = %i(source_files resources preserve_paths vendored_libraries
