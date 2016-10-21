@@ -62,7 +62,7 @@ before_script:
 
 script:
   - bundle exec rake spec:all
-  - bundle exec danger
+  - if [ "$COCOAPODS_CI_TASKS" = "LINT" ]; then bundle exec danger; fi
 
 addons:
  code_climate:
