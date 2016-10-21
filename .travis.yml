@@ -1,5 +1,10 @@
 language: ruby
-cache: bundler
+cache:
+  bundler: true
+
+git:
+  # we do these manually to just download a tarball of the master submodule
+  submodules: false
 
 matrix:
   include:
@@ -31,6 +36,19 @@ branches:
     - /.+-stable$/
 
 before_install:
+  - |
+      if [ "$COCOAPODS_CI_TASKS" != "LINT" ]; then
+        master_sha="$(ruby -e "puts '`git submodule status spec/fixtures/spec-repos/master`'.strip.sub(/^-/, '').split(/\s/, 2).first")"
+        curl -ssL "https://github.com/CocoaPods/Specs/archive/$master_sha.tar.gz" | tar xz -C spec/fixtures/spec-repos
+        git rm spec/fixtures/spec-repos/master
+        mv "spec/fixtures/spec-repos/Specs-$master_sha" spec/fixtures/spec-repos/master
+        (
+          cd spec/fixtures/spec-repos/master
+          git init
+          git remote add origin https://github.com/CocoaPods/Specs.git
+        )
+        git submodule update --init
+      fi
   # There is a bug in travis. When using system ruby, bundler is not
   # installed and causes the default install action to fail.
   - if [ "$TRAVIS_RUBY_VERSION" = "system" ]; then sudo gem install "bundler:~> 1.13"; else gem install "bundler:~> 1.13"; fi
