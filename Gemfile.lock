@@ -23,23 +23,23 @@ GIT
     molinillo (0.5.1)
 
 GIT
+  remote: https://github.com/CocoaPods/Nanaimo.git
+  revision: 58e84fe93a1c16788e9ab67a85b5a1e9d58dbd6f
+  branch: master
+  specs:
+    nanaimo (0.1.0)
+
+GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 6110ca18d0be1590d093dbfdc896900903855e49
+  revision: be928b7f09a29009a8e34e0e6047faf815796be1
   branch: seg-ascii-plist
   specs:
     xcodeproj (1.3.3)
       CFPropertyList (~> 2.3.3)
       activesupport (>= 3)
-      ascii_plist (~> 0.1.0)
       claide (>= 1.0.1, < 2.0)
       colored (~> 1.2)
-
-GIT
-  remote: https://github.com/CocoaPods/ascii_plist.git
-  revision: 5a06628eb3585c390c298cb90227a53e695de31d
-  branch: master
-  specs:
-    ascii_plist (0.1.0)
+      nanaimo (~> 0.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
@@ -254,7 +254,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ascii_plist!
   awesome_print
   bacon
   bundler (~> 1.3)
@@ -279,6 +278,7 @@ DEPENDENCIES
   mocha
   mocha-on-bacon
   molinillo!
+  nanaimo!
   prettybacon
   rake (~> 10.0)
   rb-fsevent

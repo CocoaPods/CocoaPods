@@ -24,7 +24,6 @@ gemspec
 gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
 
 group :development do
-  cp_gem 'ascii_plist',           'ascii_plist'
   cp_gem 'claide',                'CLAide'
   cp_gem 'cocoapods-core',        'Core'
   cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
@@ -35,6 +34,7 @@ group :development do
   cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
   cp_gem 'cocoapods-try',         'cocoapods-try'
   cp_gem 'molinillo',             'Molinillo'
+  cp_gem 'nanaimo',               'Nanaimo'
   cp_gem 'xcodeproj',             'Xcodeproj', 'seg-ascii-plist'
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
