@@ -47,7 +47,7 @@ require 'bundler/setup'
 
 require 'pretty_bacon'
 require 'colored'
-require 'clintegracon'
+require 'CLIntegracon'
 
 require 'cocoapods-core/lockfile'
 require 'cocoapods-core/yaml_helper'
