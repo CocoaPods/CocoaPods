@@ -34,13 +34,13 @@ Targets:
 - App:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - ViewController.m
       - AppDelegate.m
       - main.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Pods_App.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard
@@ -66,11 +66,11 @@ Targets:
 - Test:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - Test.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Pods_Test.framework
-    - ResourcesBuildPhase: []
+    - Resources: []
     - '[CP] Embed Pods Frameworks': []
     - '[CP] Copy Pods Resources': []
     Build Configurations:

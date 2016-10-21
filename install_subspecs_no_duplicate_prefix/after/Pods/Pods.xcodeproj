@@ -33,9 +33,9 @@ File References:
 Targets:
 - Pods-iOS App:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-iOS App-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:
@@ -80,15 +80,15 @@ Targets:
         Base Configuration: Pods-iOS App.release.xcconfig
 - Test:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - AFRaptureXMLRequestOperation.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - Foo.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - Test-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - AFRaptureXMLRequestOperation.h:
           ATTRIBUTES:
           - Public

@@ -21,9 +21,9 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
     Build Configurations:
     - Debug:

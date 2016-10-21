@@ -39,13 +39,13 @@ File References:
 Targets:
 - JSONKit:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - JSONKit-dummy.m
       - JSONKit.m:
           COMPILER_FLAGS: -fno-objc-arc
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - JSONKit.h:
           ATTRIBUTES:
           - Public
@@ -92,9 +92,9 @@ Targets:
         Base Configuration: JSONKit.xcconfig
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:
@@ -139,14 +139,14 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - Reachability:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
       - SystemConfiguration.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Reachability.h:
           ATTRIBUTES:
           - Public

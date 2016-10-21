@@ -75,13 +75,13 @@ Targets:
 - SampleApp:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
       - libPods-SampleApp.a
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
@@ -109,15 +109,15 @@ Targets:
 - SampleAppTests:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - SampleAppTests.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - SenTestingKit.framework
       - Cocoa.framework
       - libPods-SampleAppTests.a
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
-    - ShellScriptBuildPhase: []
+    - ShellScript: []
     - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
@@ -147,13 +147,13 @@ Targets:
 - SampleApp_2:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
       - libPods-SampleApp_2.a
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
@@ -180,12 +180,12 @@ Targets:
         Base Configuration: Pods-SampleApp_2.release.xcconfig
 - NonIntegrated:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib

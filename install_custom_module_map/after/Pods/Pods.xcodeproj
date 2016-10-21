@@ -38,13 +38,13 @@ File References:
 Targets:
 - BananaLib:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Banana.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - BananaLib-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Banana.h:
           ATTRIBUTES:
           - Public
@@ -111,11 +111,11 @@ Targets:
         Base Configuration: BananaLib.xcconfig
 - Pods-Example:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-Example-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-Example-umbrella.h:
           ATTRIBUTES:
           - Public

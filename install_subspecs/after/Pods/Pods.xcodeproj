@@ -55,9 +55,9 @@ File References:
 Targets:
 - Pods-iOS App:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-iOS App-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:
@@ -102,11 +102,11 @@ Targets:
         Base Configuration: Pods-iOS App.release.xcconfig
 - Pods-OS X App:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-OS X App-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-OS X App-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -181,13 +181,13 @@ Targets:
         Base Configuration: Pods-OS X App.release.xcconfig
 - PodTest-subspec_1:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - PodTest-subspec_1-dummy.m
       - subspec_1.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - subspec_1.h:
           ATTRIBUTES:
           - Public
@@ -234,13 +234,13 @@ Targets:
         Base Configuration: PodTest-subspec_1.xcconfig
 - PodTest-subspec_2:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - PodTest-subspec_2-dummy.m
       - subspec_2.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - HeadersBuildPhase:
+    - Headers:
       - PodTest-subspec_2-umbrella.h:
           ATTRIBUTES:
           - Public

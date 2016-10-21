@@ -48,15 +48,15 @@ Targets:
 - iOS App:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - UIKit.framework
       - Foundation.framework
       - CoreGraphics.framework
       - libPods-iOS App.a
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Default.png
       - Default@2x.png

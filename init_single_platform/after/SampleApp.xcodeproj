@@ -28,12 +28,12 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
@@ -56,12 +56,12 @@ Targets:
           WRAPPER_EXTENSION: app
 - SampleApp copy:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib

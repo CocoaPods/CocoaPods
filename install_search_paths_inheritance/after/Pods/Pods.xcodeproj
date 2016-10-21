@@ -137,14 +137,14 @@ File References:
 Targets:
 - asserts:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - asserts-dummy.m
       - Asserts.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
       - logger.framework
-    - HeadersBuildPhase:
+    - Headers:
       - asserts-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -208,7 +208,7 @@ Targets:
         Base Configuration: asserts.xcconfig
 - CocoaLumberjack:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - CocoaLumberjack-dummy.m
       - DDAbstractDatabaseLogger.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
@@ -228,9 +228,9 @@ Targets:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDTTYLogger.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - CocoaLumberjack-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -324,14 +324,14 @@ Targets:
         Base Configuration: CocoaLumberjack.xcconfig
 - logger:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - logger-dummy.m
       - Logger.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - CocoaLumberjack.framework
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - logger-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -395,11 +395,11 @@ Targets:
         Base Configuration: logger.xcconfig
 - Pods-App:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-App-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-App-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -468,11 +468,11 @@ Targets:
         Base Configuration: Pods-App.release.xcconfig
 - Pods-Test:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-Test-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-Test-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -541,15 +541,15 @@ Targets:
         Base Configuration: Pods-Test.release.xcconfig
 - sharedlib-Core:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - AmazingModel.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - sharedlib-Core-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - asserts.framework
       - Foundation.framework
       - logger.framework
-    - HeadersBuildPhase:
+    - Headers:
       - AmazingModel.h:
           ATTRIBUTES:
           - Public
@@ -613,16 +613,16 @@ Targets:
         Base Configuration: sharedlib-Core.xcconfig
 - sharedlib-Testing:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - AmazingTestHelper.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - sharedlib-Testing-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - asserts.framework
       - Foundation.framework
       - logger.framework
       - testkit.framework
-    - HeadersBuildPhase:
+    - Headers:
       - AmazingTestHelper.h:
           ATTRIBUTES:
           - Public
@@ -686,16 +686,16 @@ Targets:
         Base Configuration: sharedlib-Testing.xcconfig
 - testkit:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - TestCase.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - testkit-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - asserts.framework
       - Foundation.framework
       - logger.framework
       - XCTest.framework
-    - HeadersBuildPhase:
+    - Headers:
       - TestCase.h:
           ATTRIBUTES:
           - Public

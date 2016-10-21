@@ -30,12 +30,12 @@ Targets:
 - SampleApp:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - ViewController.swift
       - AppDelegate.swift
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Pods_SampleApp.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - Images.xcassets
       - Main.storyboard
     - '[CP] Embed Pods Frameworks': []
@@ -60,11 +60,11 @@ Targets:
 - SampleAppTests:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - SampleAppTests.swift
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Pods_SampleAppTests.framework
-    - ResourcesBuildPhase: []
+    - Resources: []
     - '[CP] Embed Pods Frameworks': []
     - '[CP] Copy Pods Resources': []
     Build Configurations:

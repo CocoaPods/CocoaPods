@@ -52,11 +52,11 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-SampleApp-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -129,11 +129,11 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - Pods-SampleAppTests:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleAppTests-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-SampleAppTests-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -206,16 +206,16 @@ Targets:
         Base Configuration: Pods-SampleAppTests.release.xcconfig
 - SamplePodWithResources:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Foo.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - SamplePodWithResources-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - SamplePodWithResources.bundle
       - troll.png
-    - HeadersBuildPhase:
+    - Headers:
       - SamplePodWithResources-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -280,9 +280,9 @@ Targets:
         Base Configuration: SamplePodWithResources.xcconfig
 - SamplePodWithResources-SamplePodWithResources:
     Build Phases:
-    - SourcesBuildPhase: []
-    - FrameworksBuildPhase: []
-    - ResourcesBuildPhase:
+    - Sources: []
+    - Frameworks: []
+    - Resources:
       - logo.png
     Build Configurations:
     - Debug:
