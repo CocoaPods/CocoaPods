@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Add target-device tvOS in copy_resources generator.    
+[Konrad Feiler](https://github.com/Bersaelor)
+[#6052](https://github.com/CocoaPods/CocoaPods/issues/6052)
 
 
 ## 1.1.1 (2016-10-20)
@@ -47,7 +49,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * The validator has an API for accessing which version of Swift was used.  
   [Orta Therox](https://github.com/orta)
   [#6049](https://github.com/CocoaPods/CocoaPods/pull/6049)
-
 
 ##### Bug Fixes
 
