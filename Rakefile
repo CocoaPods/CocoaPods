@@ -147,8 +147,10 @@ begin
       title 'Running Integration tests'
       sh 'bundle exec bacon spec/integration.rb'
 
-      title 'Running examples'
-      Rake::Task['examples:build'].invoke
+      unless ENV['TRAVIS'] && ENV['TRAVIS_RUBY_VERSION'] == 'system'
+        title 'Running examples'
+        Rake::Task['examples:build'].invoke
+      end
 
       title 'Running RuboCop'
       Rake::Task['rubocop'].invoke
