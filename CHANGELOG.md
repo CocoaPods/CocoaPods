@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Add target-device tvOS in copy_resources generator.    
+[Konrad Feiler](https://github.com/Bersaelor)
+[#6052](https://github.com/CocoaPods/CocoaPods/issues/6052)
 
 
 ## 1.1.1 (2016-10-20)
@@ -50,9 +52,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Add target-device tvOS in copy_resources generator.    
-[Konrad Feiler](https://github.com/Bersaelor)
-[#6052](https://github.com/CocoaPods/CocoaPods/issues/6052)
+* None.  
 
 ## 1.1.0.rc.3 (2016-10-11)
 
