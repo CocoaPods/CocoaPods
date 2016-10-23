@@ -1,3 +1,5 @@
+autoload :MachO, 'macho'
+
 module Pod
   class Sandbox
     # Resolves the file patterns of a specification against its root directory,
@@ -371,8 +373,9 @@ module Pod
       #
       def dynamic_binary?(binary)
         return unless binary.file?
-        output, status = Executable.capture_command('file', [binary], :capture => :out)
-        status.success? && output =~ /dynamically linked/
+        MachO.open(binary).dylib?
+      rescue MachO::MachOError
+        false
       end
 
       #-----------------------------------------------------------------------#
