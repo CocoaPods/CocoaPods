@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#6067](https://github.com/CocoaPods/CocoaPods/issues/6067)
 
+* Don't explicitly set `ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES` to NO
+  [Ben Asher](https://github.com/benasher44)
+  [#6064](https://github.com/CocoaPods/CocoaPods/issues/6064)
+
 
 ## 1.1.1 (2016-10-20)
 
