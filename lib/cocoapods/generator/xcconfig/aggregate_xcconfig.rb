@@ -88,9 +88,10 @@ module Pod
 
         protected
 
+        # @return String the SWIFT_VERSION of the target being integrated
+        #
         def target_swift_version
-          settings = target.native_target.resolved_build_setting('SWIFT_VERSION') unless target.native_target.nil?
-          settings.values.compact.uniq.first unless settings.nil?
+          target.target_definition.swift_version unless target.target_definition.swift_version.blank?
         end
 
         EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION = Gem::Version.new('2.3')

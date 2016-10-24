@@ -241,6 +241,11 @@ module Pod
             @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) "-D" "COCOAPODS"'
           end
 
+          it 'uses the target definition swift version' do
+            @target_definition.stubs(:swift_version).returns('0.1')
+            @generator.send(:target_swift_version).should == '0.1'
+          end
+
           it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when the target_swift_version is < 2.3' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @generator.stubs(:target_swift_version).returns('2.2')
