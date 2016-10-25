@@ -31,8 +31,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: be928b7f09a29009a8e34e0e6047faf815796be1
-  branch: seg-ascii-plist
+  revision: 1e00e5991cd61d7e175943d0adafe527f6b2b253
+  branch: master
   specs:
     xcodeproj (1.3.3)
       CFPropertyList (~> 2.3.3)
