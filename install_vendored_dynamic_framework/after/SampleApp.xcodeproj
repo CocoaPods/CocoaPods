@@ -32,13 +32,13 @@ Targets:
 - SampleApp:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - main.m
       - CPAppDelegate.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
       - Pods_SampleApp.framework
-    - ResourcesBuildPhase:
+    - Resources:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib

@@ -91,7 +91,7 @@ File References:
 Targets:
 - libPusher:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - libPusher-dummy.m
       - NSDictionary+QueryString.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
@@ -123,10 +123,10 @@ Targets:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - PTURLRequestOperation.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
       - SocketRocket.framework
-    - HeadersBuildPhase:
+    - Headers:
       - libPusher-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -256,11 +256,11 @@ Targets:
         Base Configuration: libPusher.xcconfig
 - Pods-Example:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-Example-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-Example-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -329,7 +329,7 @@ Targets:
         Base Configuration: Pods-Example.release.xcconfig
 - SocketRocket:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - base64.c:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - NSData+SRB64Additions.m:
@@ -337,11 +337,11 @@ Targets:
       - SocketRocket-dummy.m
       - SRWebSocket.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - CFNetwork.framework
       - Foundation.framework
       - Security.framework
-    - HeadersBuildPhase:
+    - Headers:
       - base64.h:
           ATTRIBUTES:
           - Public

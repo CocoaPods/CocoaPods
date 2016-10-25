@@ -29,9 +29,9 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Cocoa.framework
     Build Configurations:
     - Debug:
@@ -80,9 +80,9 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - res-res:
     Build Phases:
-    - SourcesBuildPhase: []
-    - FrameworksBuildPhase: []
-    - ResourcesBuildPhase:
+    - Sources: []
+    - Frameworks: []
+    - Resources:
       - 512_black.png
     Build Configurations:
     - Debug:

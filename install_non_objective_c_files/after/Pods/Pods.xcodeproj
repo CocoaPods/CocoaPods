@@ -32,15 +32,15 @@ File References:
 Targets:
 - Moment:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Moment-dummy.m
       - parseIt.ym
       - TimeParser.c:
           COMPILER_FLAGS: -fno-objc-arc
       - tokeIt.l
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - TimeParser.h:
           ATTRIBUTES:
           - Public
@@ -87,9 +87,9 @@ Targets:
         Base Configuration: Moment.xcconfig
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:

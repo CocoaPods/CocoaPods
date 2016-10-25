@@ -90,7 +90,7 @@ File References:
 Targets:
 - AFNetworking:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - AFHTTPRequestOperation.m
       - AFHTTPRequestOperationManager.m
       - AFHTTPSessionManager.m
@@ -109,13 +109,13 @@ Targets:
       - UIProgressView+AFNetworking.m
       - UIRefreshControl+AFNetworking.m
       - UIWebView+AFNetworking.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - CoreGraphics.framework
       - Foundation.framework
       - MobileCoreServices.framework
       - Security.framework
       - SystemConfiguration.framework
-    - HeadersBuildPhase:
+    - Headers:
       - AFHTTPRequestOperation.h:
           ATTRIBUTES:
           - Public
@@ -216,9 +216,9 @@ Targets:
         Base Configuration: AFNetworking.xcconfig
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:
@@ -263,13 +263,13 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - RKValueTransformers:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - RKValueTransformers-dummy.m
       - RKValueTransformers.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - RKValueTransformers.h:
           ATTRIBUTES:
           - Public
@@ -316,13 +316,13 @@ Targets:
         Base Configuration: RKValueTransformers.xcconfig
 - SEGModules:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - SEGModule.m:
           COMPILER_FLAGS: -fno-objc-arc
       - SEGModules-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - SEGModule.h:
           ATTRIBUTES:
           - Public

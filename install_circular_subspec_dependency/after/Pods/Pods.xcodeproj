@@ -50,12 +50,12 @@ File References:
 Targets:
 - Pod1:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pod1-dummy.m
       - Pod1.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pod1.h:
           ATTRIBUTES:
           - Public
@@ -100,12 +100,12 @@ Targets:
         Base Configuration: Pod1.xcconfig
 - Pod2:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pod2-dummy.m
       - Pod2.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pod2.h:
           ATTRIBUTES:
           - Public
@@ -150,12 +150,12 @@ Targets:
         Base Configuration: Pod2.xcconfig
 - Pod3:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pod3-dummy.m
       - Pod3.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pod3.h:
           ATTRIBUTES:
           - Public
@@ -200,9 +200,9 @@ Targets:
         Base Configuration: Pod3.xcconfig
 - Pods-SubSpecCircular:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SubSpecCircular-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:

@@ -31,9 +31,9 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:
@@ -78,14 +78,14 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - Reachability:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: -fno-objc-arc
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
       - SystemConfiguration.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Reachability.h:
           ATTRIBUTES:
           - Public

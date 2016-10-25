@@ -33,13 +33,13 @@ Targets:
 - SubSpecCircular:
     Build Phases:
     - '[CP] Check Pods Manifest.lock': []
-    - SourcesBuildPhase:
+    - Sources:
       - ViewController.m
       - AppDelegate.m
       - main.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - libPods-SubSpecCircular.a
-    - ResourcesBuildPhase:
+    - Resources:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard

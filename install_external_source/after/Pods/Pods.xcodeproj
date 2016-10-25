@@ -34,9 +34,9 @@ File References:
 Targets:
 - Pods-iOS App:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-iOS App-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
     Build Configurations:
     - Debug:
@@ -81,15 +81,15 @@ Targets:
         Base Configuration: Pods-iOS App.release.xcconfig
 - PodTest:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - PodTest-dummy.m
       - subspec_1.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - subspec_2.m:
           COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - subspec_1.h:
           ATTRIBUTES:
           - Public

@@ -1,4 +1,4 @@
-CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos XCODEPROJ_DISABLE_XCPROJ=TRUE ruby ROOT/bin/pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby ROOT/bin/pod update Reachability --no-repo-update --verbose --no-ansi 2>&1
   Preparing
 
 Analyzing dependencies

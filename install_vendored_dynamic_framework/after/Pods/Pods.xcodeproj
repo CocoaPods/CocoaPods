@@ -48,11 +48,11 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Pods-SampleApp-dummy.m
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - Pods-SampleApp-umbrella.h:
           ATTRIBUTES:
           - Public
@@ -124,7 +124,7 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - RealmSwift:
     Build Phases:
-    - SourcesBuildPhase:
+    - Sources:
       - Aliases.swift
       - List.swift
       - Migration.swift
@@ -137,9 +137,9 @@ Targets:
       - Schema.swift
       - SortDescriptor.swift
       - Util.swift
-    - FrameworksBuildPhase:
+    - Frameworks:
       - Foundation.framework
-    - HeadersBuildPhase:
+    - Headers:
       - RealmSwift-umbrella.h:
           ATTRIBUTES:
           - Public
