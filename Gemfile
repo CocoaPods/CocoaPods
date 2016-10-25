@@ -34,7 +34,8 @@ group :development do
   cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
   cp_gem 'cocoapods-try',         'cocoapods-try'
   cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
+  cp_gem 'nanaimo',               'Nanaimo'
+  cp_gem 'xcodeproj',             'Xcodeproj', 'seg-ascii-plist'
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 

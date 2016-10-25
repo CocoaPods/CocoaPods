@@ -5,7 +5,7 @@ module FileTree
     path = Pathname(path)
     indentation = ' ' * depth * 2
     tree = indentation << path.to_path << "\n"
-    path.children.each do |child|
+    path.children.sort_by { |p| p.to_s.downcase }.each do |child|
       tree << to_tree(child, depth + 1)
     end if path.directory?
     tree

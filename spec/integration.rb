@@ -47,7 +47,7 @@ require 'bundler/setup'
 
 require 'pretty_bacon'
 require 'colored'
-require 'clintegracon'
+require 'CLIntegracon'
 
 require 'cocoapods-core/lockfile'
 require 'cocoapods-core/yaml_helper'
@@ -126,11 +126,11 @@ describe_cli 'pod' do
   subject do |s|
     s.executable = "ruby #{ROOT + 'bin/pod'}"
     s.environment_vars = {
-      'CP_REPOS_DIR'             => ROOT + 'spec/fixtures/spec-repos',
-      'COCOAPODS_SKIP_CACHE'     => 'TRUE',
-      'XCODEPROJ_DISABLE_XCPROJ' => 'TRUE',
-      'CLAIDE_DISABLE_AUTO_WRAP' => 'TRUE',
-      'COCOAPODS_DISABLE_STATS'  => 'TRUE',
+      'CLAIDE_DISABLE_AUTO_WRAP'            => 'TRUE',
+      'COCOAPODS_DISABLE_STATS'             => 'TRUE',
+      'COCOAPODS_SKIP_CACHE'                => 'TRUE',
+      'COCOAPODS_VALIDATOR_SKIP_XCODEBUILD' => 'TRUE',
+      'CP_REPOS_DIR'                        => ROOT + 'spec/fixtures/spec-repos',
     }
     s.default_args = [
       '--verbose',

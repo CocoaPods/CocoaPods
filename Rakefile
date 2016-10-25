@@ -136,25 +136,40 @@ begin
     # to be run separately.
     #
     task :all => 'fixture_tarballs:unpack' do
+      tasks = ENV.fetch('COCOAPODS_CI_TASKS') { 'ALL' }.upcase.split(/\s+/)
+      if %w(ALL SPECS EXAMPLES LINT).&(tasks).empty?
+        raise "Unknown tasks #{tasks} -- supported options for COCOAPODS_CI_TASKS are " \
+              'ALL, SPECS, EXAMPLES, LINT'
+      end
+      specs = %w(ALL SPECS).&(tasks).any?
+      examples = %w(ALL EXAMPLES).&(tasks).any?
+      lint = %w(ALL LINT).&(tasks).any?
+
       # Forcing colored to be included on String before Term::ANSIColor, so that Inch will work correctly.
       require 'colored'
       ENV['GENERATE_COVERAGE'] = 'true'
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
-      title 'Running the specs'
-      sh "bundle exec bacon #{specs('**/*')}"
+      if specs
+        title 'Running the specs'
+        sh "bundle exec bacon #{specs('**/*')}"
 
-      title 'Running Integration tests'
-      sh 'bundle exec bacon spec/integration.rb'
+        title 'Running Integration tests'
+        sh 'bundle exec bacon spec/integration.rb'
+      end
 
-      title 'Running examples'
-      Rake::Task['examples:build'].invoke
+      if examples
+        title 'Running examples'
+        Rake::Task['examples:build'].invoke
+      end
 
-      title 'Running RuboCop'
-      Rake::Task['rubocop'].invoke
+      if lint
+        title 'Running RuboCop'
+        Rake::Task['rubocop'].invoke
 
-      title 'Running Inch'
-      Rake::Task['inch'].invoke
+        title 'Running Inch'
+        Rake::Task['inch'].invoke
+      end
     end
 
     namespace :fixture_tarballs do

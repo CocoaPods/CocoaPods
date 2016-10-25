@@ -56,7 +56,7 @@ module Pod
       generator.save_as(file)
       `plutil -lint #{file}`
       $?.should.be.success
-    end
+    end if Executable.which('plutil')
 
     it 'generates a correct Info.plist file' do
       generator = Generator::InfoPlistFile.new(mock('Target', :platform => stub(:name => :ios)))

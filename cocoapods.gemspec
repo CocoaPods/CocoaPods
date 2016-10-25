@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'fourflusher',   '~> 2.0.1'
   s.add_runtime_dependency 'gh_inspector',  '~> 1.0'
   s.add_runtime_dependency 'nap',           '~> 1.0'
+  s.add_runtime_dependency 'ruby-macho',    '~> 0.2.5'
 
   s.add_development_dependency 'bacon', '~> 1.1'
   s.add_development_dependency 'bundler', '~> 1.3'

@@ -258,8 +258,10 @@ module Pod
     # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
     #
     def dot_swift_version
+      return unless file
       swift_version_path = file.dirname + '.swift-version'
-      swift_version_path.read.strip if swift_version_path.exist?
+      return unless swift_version_path.exist?
+      swift_version_path.read.strip
     end
 
     # @return [String] A string representing the Swift version used during linting
@@ -518,7 +520,7 @@ module Pod
     # @return [void]
     #
     def build_pod
-      if Executable.which('xcodebuild').nil?
+      if !xcodebuild_available?
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
@@ -547,6 +549,10 @@ module Pod
           end
         end
       end
+    end
+
+    def xcodebuild_available?
+      !Executable.which('xcodebuild').nil? && ENV['COCOAPODS_VALIDATOR_SKIP_XCODEBUILD'].nil?
     end
 
     FILE_PATTERNS = %i(source_files resources preserve_paths vendored_libraries

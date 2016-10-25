@@ -17,6 +17,7 @@ module Pod
   describe Validator do
     before do
       Validator.any_instance.stubs(:xcodebuild).returns('')
+      Validator.any_instance.stubs(:xcodebuild_available?).returns(true)
     end
 
     # @return [void]
@@ -413,7 +414,6 @@ module Pod
         git = Executable.which(:git)
         Executable.stubs(:which).with('git').returns(git)
         Executable.stubs(:which).with(:xcrun)
-        Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         status = mock
         status.stubs(:success?).returns(false)
         validator.stubs(:_xcodebuild).returns(['Output', status])
@@ -434,7 +434,6 @@ module Pod
         Executable.stubs(:which).with('git').returns(git)
         Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
         Executable.stubs(:which).with(:xcrun)
-        Executable.expects(:which).with('xcodebuild').times(4).returns('/usr/bin/xcodebuild')
         command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release']
         Executable.expects(:capture_command).with('xcodebuild', command, :capture => :merge).once.returns(['', stub(:success? => true)])
         args = %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p')
