@@ -35,7 +35,7 @@ module Pod
       #
       def script
         codesign_bg = ''
-        parallel_codesign = ENV['PARALLEL_CODE_SIGN'] == 'true'
+        parallel_codesign = ENV['COCOAPODS_PARALLEL_CODE_SIGN'] == 'true'
         if parallel_codesign
           codesign_bg = ' &'
         end

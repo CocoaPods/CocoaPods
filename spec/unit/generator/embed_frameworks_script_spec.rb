@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Generator::EmbedFrameworksScript do
     before do
-      ENV.delete('PARALLEL_CODE_SIGN')
+      ENV.delete('COCOAPODS_PARALLEL_CODE_SIGN')
       frameworks = {
         'Debug'   => %w(Pods/Loopback.framework Reveal.framework),
         'Release' => %w(CrashlyticsFramework.framework),
@@ -24,8 +24,8 @@ module Pod
       SH
     end
 
-    it 'runs codesigning in the background when PARALLEL_CODE_SIGN is set to true' do
-      ENV['PARALLEL_CODE_SIGN'] = 'true'
+    it 'runs codesigning in the background when COCOAPODS_PARALLEL_CODE_SIGN is set to true' do
+      ENV['COCOAPODS_PARALLEL_CODE_SIGN'] = 'true'
       @generator.send(:script).should.include <<-SH.strip_heredoc
         /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS} --preserve-metadata=identifier,entitlements "$1" &
       SH
@@ -34,7 +34,7 @@ module Pod
       SH
     end
 
-    it 'does not run codesigning in the background when PARALLEL_CODE_SIGN is set to true' do
+    it 'does not run codesigning in the background when COCOAPODS_PARALLEL_CODE_SIGN is set to true' do
       @generator.send(:script).should.include <<-SH.strip_heredoc
         /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS} --preserve-metadata=identifier,entitlements "$1"
       SH

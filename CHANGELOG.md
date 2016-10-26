@@ -19,6 +19,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   on FFI, Xcode, and macOS.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Run codesigning in parallel in the embed frameworks build phase when
+ `COCOAPODS_PARALLEL_CODE_SIGN` is set to `true`  
+  [Ben Asher](https://github.com/benasher44)
+  [#6088](https://github.com/CocoaPods/CocoaPods/pull/6088)
+
 ##### Bug Fixes
 
 * Add target-device tvOS in copy_resources generator.  
