@@ -42,6 +42,14 @@ module Pod
         result = ''
         result << "#ifdef __OBJC__\n"
         result << generate_platform_import_header
+        result << "#else\n"
+        result << "#ifndef FOUNDATION_EXPORT\n"
+        result << "#if defined(__cplusplus)\n"
+        result << "#define FOUNDATION_EXPORT extern \"C\"\n"
+        result << "#else\n"
+        result << "#define FOUNDATION_EXPORT extern\n"
+        result << "#endif\n"
+        result << "#endif\n"
         result << "#endif\n"
         result << "\n"
 

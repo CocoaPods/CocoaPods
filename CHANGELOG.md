@@ -29,6 +29,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#6064](https://github.com/CocoaPods/CocoaPods/issues/6064)
 
+* Redefine FOUNDATION_EXPORT for C-only pods in umbrella header 
+  [Chris Ballinger](https://github.com/chrisballinger)
+  [#6024](https://github.com/CocoaPods/CocoaPods/issues/6024)
+
 
 ## 1.1.1 (2016-10-20)
 
@@ -67,6 +71,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * None.  
 
+* Redefine FOUNDATION_EXPORT for C-only pods in umbrella header 
+  [Chris Ballinger](https://github.com/chrisballinger)
+  [#6024](https://github.com/CocoaPods/CocoaPods/issues/6024)
 
 ## 1.1.0.rc.3 (2016-10-11)
 
