@@ -79,6 +79,16 @@ module Pod
             @xcconfig.to_hash['PODS_ROOT'].should.not.nil?
           end
 
+          it 'sets the PODS_TARGET_SRCROOT build variable for non local pod' do
+            @xcconfig.to_hash['PODS_TARGET_SRCROOT'].should == '${PODS_ROOT}/BananaLib'
+          end
+
+          it 'sets the PODS_TARGET_SRCROOT build variable for local pod' do
+            @pod_target.sandbox.store_local_path(@pod_target.pod_name, @spec.defined_in_file)
+            @xcconfig = @generator.generate
+            @xcconfig.to_hash['PODS_TARGET_SRCROOT'].should == '${PODS_ROOT}/../../spec/fixtures/banana-lib/BananaLib.podspec'
+          end
+
           it 'adds the library build headers and public headers search paths to the xcconfig, with quotes' do
             private_headers = "\"#{@pod_target.build_headers.search_paths(:ios).join('" "')}\""
             public_headers = "\"#{config.sandbox.public_headers.search_paths(:ios).join('" "')}\""
