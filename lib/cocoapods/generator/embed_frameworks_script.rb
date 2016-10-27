@@ -34,11 +34,6 @@ module Pod
       # @return [String] The contents of the embed frameworks script.
       #
       def script
-        codesign_bg = ''
-        parallel_codesign = ENV['COCOAPODS_PARALLEL_CODE_SIGN'] == 'true'
-        if parallel_codesign
-          codesign_bg = ' &'
-        end
         script = <<-SH.strip_heredoc
           #!/bin/sh
           set -e
@@ -101,8 +96,13 @@ module Pod
             if [ -n "${EXPANDED_CODE_SIGN_IDENTITY}" -a "${CODE_SIGNING_REQUIRED}" != "NO" -a "${CODE_SIGNING_ALLOWED}" != "NO" ]; then
               # Use the current code_sign_identitiy
               echo "Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}"
-              echo "/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS} --preserve-metadata=identifier,entitlements \\"$1\\"#{codesign_bg}"
-              /usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS} --preserve-metadata=identifier,entitlements "$1"#{codesign_bg}
+              local code_sign_cmd="/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS} --preserve-metadata=identifier,entitlements \"$1\""
+
+              if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
+                code_sign_cmd="$code_sign_cmd &"
+              fi
+              echo "$code_sign_cmd"
+              eval "$code_sign_cmd"
             fi
           }
 
@@ -135,7 +135,11 @@ module Pod
             script << "fi\n"
           end
         end
-        script << "wait\n" unless frameworks_by_config.values.all?(&:empty?) || !parallel_codesign
+        script << <<-SH.strip_heredoc
+        if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
+          wait
+        fi
+        SH
         script
       end
     end
