@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/segiddins/mocha-on-bacon.git
+  revision: 06b2937bf4926ec66df74318f5d21cf0f6295796
+  ref: seg-set-backtrace
+  specs:
+    mocha-on-bacon (0.2.2)
+      mocha (>= 0.13.0)
+
+GIT
   remote: https://github.com/CocoaPods/CLAide.git
   revision: 8a8f26fb5d6e2b0d604bdb3c2cca14fab4f80adc
   branch: master
@@ -195,10 +203,8 @@ GEM
     metaclass (0.0.4)
     method_source (0.8.2)
     minitest (5.9.1)
-    mocha (1.1.0)
+    mocha (1.2.1)
       metaclass (~> 0.0.1)
-    mocha-on-bacon (0.2.2)
-      mocha (>= 0.13.0)
     multipart-post (2.0.0)
     nap (1.1.0)
     netrc (0.7.8)
@@ -278,7 +284,7 @@ DEPENDENCIES
   json!
   kicker
   mocha
-  mocha-on-bacon
+  mocha-on-bacon!
   molinillo!
   nanaimo!
   prettybacon
