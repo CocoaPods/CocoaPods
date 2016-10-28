@@ -20,7 +20,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 * Run codesigning in parallel in the embed frameworks build phase when
- `COCOAPODS_PARALLEL_CODE_SIGN` is set to `true`  
+ `COCOAPODS_PARALLEL_CODE_SIGN` is set to `true`.  
   [Ben Asher](https://github.com/benasher44)
   [#6088](https://github.com/CocoaPods/CocoaPods/pull/6088)
 
@@ -30,15 +30,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Konrad Feiler](https://github.com/Bersaelor)
   [#6052](https://github.com/CocoaPods/CocoaPods/issues/6052)
 
-* Read the correct `SWIFT_VERSION` when generating target XCConfigs
+* Read the correct `SWIFT_VERSION` when generating target XCConfigs.  
   [Ben Asher](https://github.com/benasher44)
   [#6067](https://github.com/CocoaPods/CocoaPods/issues/6067)
 
-* Don't explicitly set `ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES` to NO
+* Don't explicitly set `ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES` to NO.  
   [Ben Asher](https://github.com/benasher44)
   [#6064](https://github.com/CocoaPods/CocoaPods/issues/6064)
 
-* Redefine FOUNDATION_EXPORT for C-only pods in umbrella header 
+* Redefine FOUNDATION_EXPORT for C-only pods in umbrella header.  
   [Chris Ballinger](https://github.com/chrisballinger)
   [#6024](https://github.com/CocoaPods/CocoaPods/issues/6024)
 
