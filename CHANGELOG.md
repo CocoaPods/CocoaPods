@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Re-escaped backslashes in embed_frameworks generator  
+  [Harlan Haskins](https://github.com/harlanhaskins)
+  [#6121](https://github.com/CocoaPods/CocoaPods/issues/6121)
 
 
 ## 1.2.0.beta.1 (2016-10-28)
