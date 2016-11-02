@@ -32,22 +32,22 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 58e84fe93a1c16788e9ab67a85b5a1e9d58dbd6f
+  revision: 3a92a5daa9f5d7bf877a95e61486b6517ab78e33
   branch: master
   specs:
-    nanaimo (0.1.0)
+    nanaimo (0.2.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 2920db2b76b5b7faf8f975f19b5224fab5ee9b2a
+  revision: 04dc5d6e987b363fd74d889ad97fa15c4765db1e
   branch: master
   specs:
-    xcodeproj (1.4.0)
+    xcodeproj (1.4.1)
       CFPropertyList (~> 2.3.3)
       activesupport (>= 3)
       claide (>= 1.0.1, < 2.0)
       colored (~> 1.2)
-      nanaimo (~> 0.1.0)
+      nanaimo (~> 0.2.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
@@ -129,7 +129,7 @@ PATH
       molinillo (~> 0.5.3)
       nap (~> 1.0)
       ruby-macho (~> 0.2.5)
-      xcodeproj (>= 1.4.0, < 2.0)
+      xcodeproj (>= 1.4.1, < 2.0)
 
 GEM
   remote: https://rubygems.org/
