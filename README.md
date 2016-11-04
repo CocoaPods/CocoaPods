@@ -15,7 +15,7 @@ workspace to build your project.
 
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](http://guides.cocoapods.org/using/getting-started.html#installation) and the
-[Getting started guide](https://guides.cocoapods.org/using/getting-started.html).
+[Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
 
 ## Project Goals
 
@@ -77,4 +77,4 @@ CocoaPods is composed of the following projects:
 | [![Build Status](http://img.shields.io/travis/CocoaPods/CLAide/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CLAide) | [CLAide](https://github.com/CocoaPods/CLAide) | A small command-line interface framework.  | [docs](http://docs.cocoapods.org/claide/index.html)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/Molinillo/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Molinillo) | [Molinillo](https://github.com/CocoaPods/Molinillo) | A powerful generic dependency resolver.  | [docs](http://www.rubydoc.info/gems/molinillo)
 | [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods-app/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods-app) | [CocoaPods.app](https://github.com/CocoaPods/CocoaPods-app) | A full-featured and standalone installation of CocoaPods.  | [info](https://cocoapods.org/app)
-|  | [Master Repo ](https://github.com/CocoaPods/Specs) | Master repository of specifications. | [guide](http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html)
+|  | [Master Repo ](https://github.com/CocoaPods/Specs) | Master repository of specifications. | [guides](http://docs.cocoapods.org/guides/contributing_to_the_master_repo.html)
