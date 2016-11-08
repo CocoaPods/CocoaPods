@@ -242,8 +242,8 @@ module Pod
             build_phase = native_target.new_shell_script_build_phase('Create Symlinks to Header Folders')
             build_phase.shell_script = <<-eos.strip_heredoc
           base="$CONFIGURATION_BUILD_DIR/$WRAPPER_NAME"
-          ln -fs $base/${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/} $base/${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}
-          ln -fs $base/${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/} $base/${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}
+          ln -fs "$base/${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/}" "$base/${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
+          ln -fs "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/}" "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
             eos
           end
 
