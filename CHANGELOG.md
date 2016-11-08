@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Raise an exception if unable to find a reference for a path and handle symlink references.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5427](https://github.com/CocoaPods/CocoaPods/issues/5427)
+
 * Re-escaped backslashes in embed_frameworks generator  
   [Harlan Haskins](https://github.com/harlanhaskins)
   [#6121](https://github.com/CocoaPods/CocoaPods/issues/6121)

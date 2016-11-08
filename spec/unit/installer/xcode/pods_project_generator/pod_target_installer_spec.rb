@@ -147,6 +147,61 @@ module Pod
               names.should.include('Banana.m')
             end
 
+            describe 'deals with invalid source file references' do
+              before do
+                file_accessor = @pod_target.file_accessors.first
+                @first_header_file = file_accessor.source_files.find { |sf| sf.extname == '.h' }
+                @first_source_file = file_accessor.source_files.find { |sf| sf.extname == '.m' }
+                @header_symlink_file = @first_header_file.dirname + "SymLinkOf-#{@first_header_file.basename}"
+                @source_symlink_file = @first_source_file.dirname + "SymLinkOf-#{@first_source_file.basename}"
+                FileUtils.rm_f(@header_symlink_file.to_s)
+                FileUtils.rm_f(@source_symlink_file.to_s)
+              end
+
+              after do
+                FileUtils.rm_f(@header_symlink_file.to_s)
+                FileUtils.rm_f(@source_symlink_file.to_s)
+              end
+
+              it 'raises when source file reference is not found' do
+                File.symlink(@first_source_file, @source_symlink_file)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+                @pod_target.file_accessors = [file_accessor]
+                exception = lambda { @installer.install! }.should.raise Informative
+                exception.message.should.include "Unable to find source ref for #{@source_symlink_file} for target BananaLib."
+              end
+
+              it 'raises when header file reference is not found' do
+                File.symlink(@first_header_file, @header_symlink_file)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+                @pod_target.file_accessors = [file_accessor]
+                exception = lambda { @installer.install! }.should.raise Informative
+                exception.message.should.include "Unable to find header ref for #{@header_symlink_file} for target BananaLib."
+              end
+
+              it 'does not raise when header file reference is found' do
+                File.symlink(@first_header_file, @header_symlink_file)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+                @pod_target.file_accessors = [file_accessor]
+                group = @project.group_for_spec('BananaLib')
+                @project.add_file_reference(@header_symlink_file.to_s, group)
+                lambda { @installer.install! }.should.not.raise
+              end
+
+              it 'does not raise when source file reference is found' do
+                File.symlink(@first_source_file, @source_symlink_file)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+                @pod_target.file_accessors = [file_accessor]
+                group = @project.group_for_spec('BananaLib')
+                @project.add_file_reference(@source_symlink_file.to_s, group)
+                lambda { @installer.install! }.should.not.raise
+              end
+            end
+
             #--------------------------------------#
 
             it 'adds framework resources to the framework target' do
