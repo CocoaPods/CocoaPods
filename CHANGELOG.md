@@ -16,6 +16,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Harlan Haskins](https://github.com/harlanhaskins)
   [#6121](https://github.com/CocoaPods/CocoaPods/issues/6121)
 
+* Escape spaces in CONFIGURATION_BUILD_DIR when creating header folders symlink  
+  [Dmitry Obukhov](https://github.com/stel)
+  [#6146](https://github.com/CocoaPods/CocoaPods/pull/6146)
 
 ## 1.2.0.beta.1 (2016-10-28)
 
