@@ -766,6 +766,8 @@ module Pod
       require 'fourflusher'
       command = ['clean', 'build', '-workspace', File.join(validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release']
       case consumer.platform_name
+      when :osx, :macos
+        command += %w(CODE_SIGN_IDENTITY=)
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'iOS', deployment_target)
