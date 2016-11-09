@@ -97,11 +97,11 @@ module Pod
               }.each do |arc, files|
                 files = files - headers - other_source_files
                 flags = compiler_flags_for_consumer(consumer, arc)
-                regular_file_refs = files.map { |sf| project.reference_for_path(sf) }
+                regular_file_refs = project_file_references_array(files, 'source')
                 native_target.add_file_references(regular_file_refs, flags)
               end
 
-              header_file_refs = headers.map { |sf| project.reference_for_path(sf) }
+              header_file_refs = project_file_references_array(headers, 'header')
               native_target.add_file_references(header_file_refs) do |build_file|
                 add_header(build_file, public_headers, private_headers)
               end
@@ -358,6 +358,14 @@ module Pod
 
           def custom_module_map
             @custom_module_map ||= target.file_accessors.first.module_map
+          end
+
+          def project_file_references_array(files, file_type)
+            files.map do |sf|
+              project.reference_for_path(sf).tap do |ref|
+                raise Informative, "Unable to find #{file_type} ref for #{sf} for target #{target.name}." unless ref
+              end
+            end
           end
 
           def header_mappings_dir
