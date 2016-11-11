@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dmitry Obukhov](https://github.com/stel)
   [#6146](https://github.com/CocoaPods/CocoaPods/pull/6146)
 
+* Fail gracefully when downloading a podspec in `pod spec lint` fails.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 1.2.0.beta.1 (2016-10-28)
 
 ##### Enhancements
@@ -100,7 +104,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * None.  
 
-* Redefine FOUNDATION_EXPORT for C-only pods in umbrella header 
+* Redefine FOUNDATION_EXPORT for C-only pods in umbrella header.  
   [Chris Ballinger](https://github.com/chrisballinger)
   [#6024](https://github.com/CocoaPods/CocoaPods/issues/6024)
 
