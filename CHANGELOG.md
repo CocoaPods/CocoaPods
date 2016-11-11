@@ -27,6 +27,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fail gracefully when downloading a podspec in `pod spec lint` fails.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Remove the `const_missing` hack for `Pod::SourcesManager`.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.2.0.beta.1 (2016-10-28)
 
