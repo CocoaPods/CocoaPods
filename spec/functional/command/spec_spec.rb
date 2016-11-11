@@ -193,7 +193,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    describe 'lint subcommand' do
+    describe Command::Spec::Lint do
       it "complains if it can't find any spec to lint" do
         Dir.chdir(temporary_directory) do
           lambda { command('spec', 'lint').run }.should.raise Informative
@@ -212,6 +212,10 @@ module Pod
           cmd.run
           UI.output.should.include 'passed validation'
         end
+      end
+
+      it 'fails with an informative error when downloading the podspec 404s' do
+        lambda { run_command('spec', 'lint', 'https://no.such.domain/404') }.should.raise Informative
       end
 
       before do
