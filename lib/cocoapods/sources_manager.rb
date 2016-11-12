@@ -150,35 +150,4 @@ module Pod
       UI.puts(message)
     end
   end
-
-  # @!visibility private
-  module SourcesManagerMissingConstant
-    SOURCES_MANAGER_CONSTANT_WARNINGS = Set.new
-
-    # Warn about deprecated use of `Pod::SourcesManager` and return the config's
-    # Source::Manager
-    #
-    # @param  [#to_sym] const the missing constant
-    #
-    # @return [Pod::Source::Manager]
-    #
-    def const_missing(const)
-      unless const.to_sym == :SourcesManager &&
-          ancestors.any? { |a| a == ::Pod || a.name.start_with?('Pod::') }
-        return super
-      end
-
-      calling_line = caller.first
-      if Pod::SourcesManagerMissingConstant::SOURCES_MANAGER_CONSTANT_WARNINGS.add?(calling_line)
-        warn 'Usage of the constant `Pod::SourcesManager` is deprecated, ' \
-             'use `Pod::Config.instance.sources_manager` instead ' \
-             "(called from #{calling_line})"
-      end
-
-      Config.instance.sources_manager
-    end
-  end
-
-  extend SourcesManagerMissingConstant
-  ::Object.send(:extend, SourcesManagerMissingConstant)
 end
