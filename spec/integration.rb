@@ -344,7 +344,7 @@ describe_cli 'pod' do
     end
 
     describe 'Lints a remote Pod' do
-      spec_url = 'https://github.com/CocoaPods/Specs/raw/master/Specs/A2DynamicDelegate/2.0.2/A2DynamicDelegate.podspec.json'
+      spec_url = 'https://github.com/CocoaPods/Specs/raw/2d939ca0abb4172b9ef087d784b43e0696109e7c/Specs/A2DynamicDelegate/2.0.2/A2DynamicDelegate.podspec.json'
       behaves_like cli_spec 'spec_lint_remote',
                             "spec lint --quick --allow-warnings --silent #{spec_url}"
     end
