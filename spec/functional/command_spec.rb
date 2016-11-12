@@ -10,7 +10,7 @@ module Pod
 
     it 'reports the location of the AFNetworking spec' do
       lambda { Pod::Command.run(%w(spec which AFNetworking)) }.should.not.raise
-      UI.output.should.include 'spec/fixtures/spec-repos/master/Specs/AFNetworking'
+      UI.output.should.include 'spec/fixtures/spec-repos/master/Specs/a/7/5/AFNetworking'
     end
 
     it "doesn't let you run as root" do

@@ -31,7 +31,7 @@ module Pod
     # @return [String]
     #
     def stub_podspec(pattern = nil, replacement = nil)
-      spec = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
+      spec = podspec_path.read
       spec.gsub!(/.*license.*$/, '"license": "Public Domain",')
       spec.gsub!(%r{https://github\.com/johnezang/JSONKit\.git}, fixture('integration/JSONKit').to_s)
       spec.gsub!(pattern, replacement) if pattern && replacement
@@ -40,8 +40,8 @@ module Pod
 
     # @return [Pathname]
     #
-    def podspec_path
-      fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json'
+    def podspec_path(name = 'JSONKit', version = '1.4')
+      Config.instance.sources_manager.master.first.pod_path(name).join("#{version}/#{name}.podspec.json")
     end
 
     #-------------------------------------------------------------------------#
@@ -95,7 +95,7 @@ module Pod
 
       describe '#only_subspec' do
         before do
-          podspec = fixture('spec-repos') + 'master/Specs/RestKit/0.22.0/RestKit.podspec.json'
+          podspec = podspec_path('RestKit', '0.22.0')
           @validator = Validator.new(podspec, config.sources_manager.master.map(&:url))
           @validator.quick = true
         end

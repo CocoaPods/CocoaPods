@@ -143,20 +143,20 @@ module Pod
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
         specs = resolver.resolve.values.flatten.map(&:to_s).sort
         specs.should == ['AFAmazonS3Client (1.0.1)', 'AFNetworking (1.3.4)',
-                         'AFOAuth2Client (0.1.2)', 'CargoBay (1.0.0)']
+                         'AFOAuth2Client (1.0.0)', 'CargoBay (1.0.0)']
       end
 
       it 'uses a Podfile requirement even when a previously declared ' \
         'dependency has a different requirement' do
           @podfile = Podfile.new do
             platform :ios, '7.0'
-            pod 'InstagramKit' # latest version (3.5.0) requires 'AFNetworking', '~> 2.0'
+            pod 'InstagramKit' # latest version (3.7) requires 'AFNetworking', '~> 2.0'
             pod 'AFNetworking', '2.0.1'
           end
 
           resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
           specs = resolver.resolve.values.flatten.map(&:root).map(&:to_s).uniq.sort
-          specs.should == ['AFNetworking (2.0.1)', 'InstagramKit (3.5.0)']
+          specs.should == ['AFNetworking (2.0.1)', 'InstagramKit (3.7)']
         end
 
       it 'holds the context state, such as cached specification sets' do
@@ -370,13 +370,13 @@ module Pod
       it 'raises if no such version of a dependency exists' do
         podfile = Podfile.new do
           platform :ios
-          pod 'AFNetworking', '3.0.1'
+          pod 'AFNetworking', '999.999.999'
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to satisfy the following requirements/)
-        e.message.should.match(/`AFNetworking \(= 3.0.1\)` required by `Podfile`/)
-        e.message.should.match(/None of your spec sources contain a spec satisfying the dependency: `AFNetworking \(= 3.0.1\)`./)
+        e.message.should.match(/`AFNetworking \(= 999\.999\.999\)` required by `Podfile`/)
+        e.message.should.match(/None of your spec sources contain a spec satisfying the dependency: `AFNetworking \(= 999\.999\.999\)`./)
         e.message.should.match(/You have either:/)
         e.message.should.match(/ * out-of-date source repos which you can update with `pod repo update`/)
         e.message.should.match(/ * not added the source repo that hosts the Podspec to your Podfile./)
@@ -479,16 +479,16 @@ module Pod
         end
 
         it 'includes dependencies in the target for the requested platform only' do
-          osx_dependency = 'ARAnalytics/CoreMac (2.8.0)'
-          ios_dependency = 'ARAnalytics/CoreIOS (2.8.0)'
+          osx_dependency = 'ARAnalytics/CoreMac (4.0.1)'
+          ios_dependency = 'ARAnalytics/CoreIOS (4.0.1)'
           @podfile = Podfile.new do
             target 'iOS' do
               platform :ios, '8'
-              pod 'ARAnalytics', '2.8.0'
+              pod 'ARAnalytics', '4.0.1'
             end
             target 'OSX' do
               platform :osx, '10.10'
-              pod 'ARAnalytics', '2.8.0'
+              pod 'ARAnalytics', '4.0.1'
             end
           end
           resolved = resolve
@@ -534,7 +534,7 @@ module Pod
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         spec = resolver.resolve.values.flatten.first
         spec.version.to_s.should == '1.4'
-        spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.4/JSONKit.podspec.json')
+        spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json')
 
         sources = config.sources_manager.sources(%w(test_repo master))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
@@ -589,7 +589,7 @@ module Pod
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         spec = resolver.resolve.values.flatten.first
         spec.version.to_s.should == '1.5pre'
-        spec.defined_in_file.should == fixture('spec-repos/master/Specs/JSONKit/1.5pre/JSONKit.podspec.json')
+        spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.5pre/JSONKit.podspec.json')
       end
 
       it 'uses explicit source repos for a dependency even when it\'s transitive' do
@@ -636,7 +636,7 @@ module Pod
 
         afnetworking_spec = specs.find { |s| s.name == 'AFNetworking' }
         afnetworking_spec.should.not.be.nil
-        afnetworking_spec.defined_in_file.should == fixture('spec-repos/master/Specs/AFNetworking/2.4.0/AFNetworking.podspec.json')
+        afnetworking_spec.defined_in_file.should == fixture('spec-repos/master/Specs/a/7/5/AFNetworking/2.4.0/AFNetworking.podspec.json')
 
         # Check that if the master source is not available the dependency cannot be resolved.
         sources = config.sources_manager.sources(%w(test_repo))

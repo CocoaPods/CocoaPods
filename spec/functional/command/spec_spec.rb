@@ -207,7 +207,7 @@ module Pod
       end
 
       it 'lints the current working directory' do
-        Dir.chdir(fixture('spec-repos') + 'master/Specs/JSONKit/1.4/') do
+        Dir.chdir(fixture('spec-repos') + 'master/Specs/1/3/f/JSONKit/1.4/') do
           cmd = command('spec', 'lint', '--quick', '--allow-warnings')
           cmd.run
           UI.output.should.include 'passed validation'
@@ -221,7 +221,7 @@ module Pod
       end
 
       before do
-        text = (fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json').read
+        text = (fixture('spec-repos') + 'master/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json').read
         text.gsub!(/.*license.*/, '"license": { "file": "LICENSE" },')
         file = temporary_directory + 'JSONKit.podspec.json'
         File.open(file, 'w') { |f| f.write(text) }
@@ -327,13 +327,13 @@ module Pod
 
       it 'cats the given podspec' do
         lambda { command('spec', 'cat', 'AFNetworking').run }.should.not.raise
-        UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
+        UI.output.should.include fixture('spec-repos/master/Specs/a/7/5/AFNetworking/3.1.0/AFNetworking.podspec.json').read
       end
 
       it 'cats the first podspec from all podspecs' do
         UI.next_input = "1\n"
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
-        UI.output.should.include fixture('spec-repos/master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json').read
+        UI.output.should.include fixture('spec-repos/master/Specs/a/7/5/AFNetworking/3.1.0/AFNetworking.podspec.json').read
       end
 
       describe_regex_support('cat')
@@ -357,7 +357,7 @@ module Pod
         ENV['EDITOR'] = 'podspeceditor'
         lambda { command('spec', 'edit', 'AFNetworking').run }.should.raise SystemExit
         UI.output.should.include '/bin/sh -i -c podspeceditor "$@" --'
-        UI.output.should.include 'fixtures/spec-repos/master/Specs/AFNetworking'
+        UI.output.should.include 'fixtures/spec-repos/master/Specs/a/7/5/AFNetworking'
       end
 
       it 'will raise if no editor is found' do
@@ -371,7 +371,7 @@ module Pod
         UI.next_input = "1\n"
         lambda { command('spec', 'edit', '--show-all', 'AFNetworking').run }.should.raise SystemExit
         UI.output.should.include '/bin/sh -i -c podspeceditor "$@" --'
-        UI.output.should.include 'fixtures/spec-repos/master/Specs/AFNetworking/1.2.0/AFNetworking.podspec'
+        UI.output.should.include 'fixtures/spec-repos/master/Specs/a/7/5/AFNetworking/1.2.0/AFNetworking.podspec'
       end
 
       it "complains if it can't find a spec file for the given spec" do
@@ -394,7 +394,7 @@ module Pod
       describe '#get_path_of_spec' do
         it 'returns the path of the specification with the given name' do
           path = @command.send(:get_path_of_spec, 'AFNetworking')
-          path.should == fixture('spec-repos') + 'master/Specs/AFNetworking/2.4.1/AFNetworking.podspec.json'
+          path.should == fixture('spec-repos') + 'master/Specs/a/7/5/AFNetworking/3.1.0/AFNetworking.podspec.json'
         end
       end
     end

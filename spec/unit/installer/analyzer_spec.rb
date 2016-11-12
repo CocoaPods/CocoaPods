@@ -491,7 +491,7 @@ module Pod
         analyzer.update = { :pods => %w(AFNetworking) }
         analyzer.analyze.specifications.
           find { |s| s.name == 'AFNetworking' }.
-          version.to_s.should == '2.4.1'
+          version.to_s.should == '2.6.3'
       end
 
       it 'unlocks only local pod when specification checksum changes' do
