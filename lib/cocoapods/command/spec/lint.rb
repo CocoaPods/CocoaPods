@@ -98,8 +98,12 @@ module Pod
                 require 'cocoapods/open-uri'
                 output_path = podspecs_tmp_dir + File.basename(path)
                 output_path.dirname.mkpath
-                open(path) do |io|
-                  output_path.open('w') { |f| f << io.read }
+                begin
+                  open(path) do |io|
+                    output_path.open('w') { |f| f << io.read }
+                  end
+                rescue => e
+                  raise Informative, "Downloading a podspec from `#{path}` failed: #{e}"
                 end
                 files << output_path
               elsif (pathname = Pathname.new(path)).directory?

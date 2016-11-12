@@ -44,6 +44,7 @@ require 'spec_helper/temporary_repos' # Allows to create and modify temporary sp
 require 'spec_helper/temporary_cache' # Allows to create temporary cache directory.
 require 'spec_helper/user_interface'  # Redirects UI to UI.output & UI.warnings.
 require 'spec_helper/pre_flight'      # Cleans the temporary directory, the config & the UI.output before every test.
+require 'spec_helper/webmock'         # Cleans up mocks after each spec
 
 #-----------------------------------------------------------------------------#
 

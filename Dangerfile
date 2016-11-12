@@ -1,4 +1,4 @@
-# Don't let testing shortcuts get into master by accident, 
+# Don't let testing shortcuts get into master by accident,
 # ensuring that we don't get green builds based on a subset of tests
 (git.modified_files + git.added_files - %w(Dangerfile)).each do |file|
   next unless File.file?(file)
