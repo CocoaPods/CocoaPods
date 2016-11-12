@@ -215,7 +215,9 @@ module Pod
       end
 
       it 'fails with an informative error when downloading the podspec 404s' do
-        lambda { run_command('spec', 'lint', 'https://no.such.domain/404') }.should.raise Informative
+        WebMock.stub_request(:get, 'https://no.such.domain/404').
+          to_return(:status => 404, :body => '', :headers => {})
+        lambda { run_command('spec', 'lint', 'https://no.such.domain/404') }.should.raise Informative, /404/
       end
 
       before do
