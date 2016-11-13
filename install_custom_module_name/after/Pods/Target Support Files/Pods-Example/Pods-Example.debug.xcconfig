@@ -1,5 +1,5 @@
 FRAMEWORK_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/SocketRocket" "$PODS_CONFIGURATION_BUILD_DIR/libPusher"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 kPTPusherClientLibraryVersion=@\"1.5\"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 kPTPusherClientLibraryVersion=@\"1.6.2\"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 OTHER_CFLAGS = $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/SocketRocket/SocketRocket.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/libPusher/Pusher.framework/Headers"
 OTHER_LDFLAGS = $(inherited) -framework "Pusher" -framework "SocketRocket"

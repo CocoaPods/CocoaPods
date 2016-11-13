@@ -48,5 +48,5 @@ If you are upgrading, libPusher no longer uses the JSONKit library and the stati
 By default, libPusher now uses NSJSONSerialization which is available on iOS 5.0 or OSX 10.7 and later. If you require support for older platforms, libPusher still has support for JSONKit as a fallback option, but you are required to link JSONKit to your app separately.
 
 For more information, see:
-https://github.com/lukeredpath/libPusher/wiki/Adding-libPusher-to-your-project
+https://github.com/pusher/libPusher/wiki/Adding-libPusher-to-your-project
 

@@ -17,16 +17,41 @@
 #import <Foundation/Foundation.h>
 #import <Security/SecCertificate.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, SRReadyState) {
     SR_CONNECTING   = 0,
     SR_OPEN         = 1,
     SR_CLOSING      = 2,
     SR_CLOSED       = 3,
-} SRReadyState;
+};
+
+typedef enum SRStatusCode : NSInteger {
+    // 0–999: Reserved and not used.
+    SRStatusCodeNormal = 1000,
+    SRStatusCodeGoingAway = 1001,
+    SRStatusCodeProtocolError = 1002,
+    SRStatusCodeUnhandledType = 1003,
+    // 1004 reserved.
+    SRStatusNoStatusReceived = 1005,
+    SRStatusCodeAbnormal = 1006,
+    SRStatusCodeInvalidUTF8 = 1007,
+    SRStatusCodePolicyViolated = 1008,
+    SRStatusCodeMessageTooBig = 1009,
+    SRStatusCodeMissingExtension = 1010,
+    SRStatusCodeInternalError = 1011,
+    SRStatusCodeServiceRestart = 1012,
+    SRStatusCodeTryAgainLater = 1013,
+    // 1014: Reserved for future use by the WebSocket standard.
+    SRStatusCodeTLSHandshake = 1015,
+    // 1016–1999: Reserved for future use by the WebSocket standard.
+    // 2000–2999: Reserved for use by WebSocket extensions.
+    // 3000–3999: Available for use by libraries and frameworks. May not be used by applications. Available for registration at the IANA via first-come, first-serve.
+    // 4000–4999: Available for use by applications.
+} SRStatusCode;
 
 @class SRWebSocket;
 
 extern NSString *const SRWebSocketErrorDomain;
+extern NSString *const SRHTTPResponseErrorKey;
 
 #pragma mark - SRWebSocketDelegate
 
@@ -36,20 +61,28 @@ extern NSString *const SRWebSocketErrorDomain;
 
 @interface SRWebSocket : NSObject <NSStreamDelegate>
 
-@property (nonatomic, assign) id <SRWebSocketDelegate> delegate;
+@property (nonatomic, weak) id <SRWebSocketDelegate> delegate;
 
 @property (nonatomic, readonly) SRReadyState readyState;
 @property (nonatomic, readonly, retain) NSURL *url;
+
+
+@property (nonatomic, readonly) CFHTTPMessageRef receivedHTTPHeaders;
+
+// Optional array of cookies (NSHTTPCookie objects) to apply to the connections
+@property (nonatomic, readwrite) NSArray * requestCookies;
 
 // This returns the negotiated protocol.
 // It will be nil until after the handshake completes.
 @property (nonatomic, readonly, copy) NSString *protocol;
 
 // Protocols should be an array of strings that turn into Sec-WebSocket-Protocol.
+- (id)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols allowsUntrustedSSLCertificates:(BOOL)allowsUntrustedSSLCertificates;
 - (id)initWithURLRequest:(NSURLRequest *)request protocols:(NSArray *)protocols;
 - (id)initWithURLRequest:(NSURLRequest *)request;
 
 // Some helper constructors.
+- (id)initWithURL:(NSURL *)url protocols:(NSArray *)protocols allowsUntrustedSSLCertificates:(BOOL)allowsUntrustedSSLCertificates;
 - (id)initWithURL:(NSURL *)url protocols:(NSArray *)protocols;
 - (id)initWithURL:(NSURL *)url;
 
@@ -71,6 +104,9 @@ extern NSString *const SRWebSocketErrorDomain;
 // Send a UTF8 String or Data.
 - (void)send:(id)data;
 
+// Send Data (can be nil) in a ping message.
+- (void)sendPing:(NSData *)data;
+
 @end
 
 #pragma mark - SRWebSocketDelegate
@@ -86,20 +122,24 @@ extern NSString *const SRWebSocketErrorDomain;
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+- (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)pongPayload;
+
+// Return YES to convert messages sent as Text to an NSString. Return NO to skip NSData -> NSString conversion for Text messages. Defaults to YES.
+- (BOOL)webSocketShouldConvertTextFrameToString:(SRWebSocket *)webSocket;
 
 @end
 
-#pragma mark - NSURLRequest (CertificateAdditions)
+#pragma mark - NSURLRequest (SRCertificateAdditions)
 
-@interface NSURLRequest (CertificateAdditions)
+@interface NSURLRequest (SRCertificateAdditions)
 
 @property (nonatomic, retain, readonly) NSArray *SR_SSLPinnedCertificates;
 
 @end
 
-#pragma mark - NSMutableURLRequest (CertificateAdditions)
+#pragma mark - NSMutableURLRequest (SRCertificateAdditions)
 
-@interface NSMutableURLRequest (CertificateAdditions)
+@interface NSMutableURLRequest (SRCertificateAdditions)
 
 @property (nonatomic, retain) NSArray *SR_SSLPinnedCertificates;
 

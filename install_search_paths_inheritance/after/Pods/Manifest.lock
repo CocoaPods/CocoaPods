@@ -1,11 +1,14 @@
 PODS:
   - asserts (0.0.1):
     - logger
-  - CocoaLumberjack (1.9.2):
-    - CocoaLumberjack/Extensions (= 1.9.2)
-  - CocoaLumberjack/Core (1.9.2)
-  - CocoaLumberjack/Extensions (1.9.2):
+  - CocoaLumberjack (3.0.0):
+    - CocoaLumberjack/Default (= 3.0.0)
+    - CocoaLumberjack/Extensions (= 3.0.0)
+  - CocoaLumberjack/Core (3.0.0)
+  - CocoaLumberjack/Default (3.0.0):
     - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (3.0.0):
+    - CocoaLumberjack/Default
   - logger (0.0.1):
     - logger/Core (= 0.0.1)
   - logger/Core (0.0.1):
@@ -37,7 +40,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   asserts: cdb8f1318ddf6d68ae8ddc0bb9b506d8df6d556e
-  CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
   logger: a83dfb27371c8fba24104a1d156bb2a8c9336087
   sharedlib: 96a90f21e91e9a25c9f47c3a8f65cd06883cab94
   testkit: 994a8781f993b6dc13c40c4cf43fa67f3678453e

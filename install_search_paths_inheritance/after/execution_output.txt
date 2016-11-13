@@ -24,12 +24,12 @@ Comparing resolved specification to the sandbox manifest
 
 Downloading dependencies
 
--> Installing CocoaLumberjack (1.9.2)
+-> Installing CocoaLumberjack (3.0.0)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/CocoaLumberjack/CocoaLumberjack.git PROJECT/Pods/CocoaLumberjack --template= --single-branch --depth 1 --branch 1.9.2
+     $ GIT_BIN clone https://github.com/CocoaLumberjack/CocoaLumberjack.git PROJECT/Pods/CocoaLumberjack --template= --single-branch --depth 1 --branch 3.0.0
      Cloning into 'PROJECT/Pods/CocoaLumberjack'...
-     Note: checking out '09b65ed376419c00a05cf60cbf13b0fa72124d60'.
+     Note: checking out '96f5978ea6339f17069d74c4652c79dee8f760b7'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this

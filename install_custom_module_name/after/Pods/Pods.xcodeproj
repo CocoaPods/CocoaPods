@@ -12,6 +12,8 @@ File References:
     - Core:
       - NSDictionary+QueryString.h
       - NSDictionary+QueryString.m
+      - NSDictionary+StringValue.h
+      - NSDictionary+StringValue.m
       - NSString+Hashing.h
       - NSString+Hashing.m
       - PTBlockEventListener.h
@@ -21,15 +23,14 @@ File References:
       - PTJSON.m
       - PTPusher.h
       - PTPusher.m
-      - PTPusher+Testing.h
-      - PTPusher+Testing.m
       - PTPusherAPI.h
       - PTPusherAPI.m
       - PTPusherChannel.h
       - PTPusherChannel.m
       - PTPusherChannel_Private.h
-      - PTPusherChannelAuthorizationOperation.h
-      - PTPusherChannelAuthorizationOperation.m
+      - PTPusherChannelAuthorizationDelegate.h
+      - PTPusherChannelServerBasedAuthorization.h
+      - PTPusherChannelServerBasedAuthorization.m
       - PTPusherConnection.h
       - PTPusherConnection.m
       - PTPusherDelegate.h
@@ -56,10 +57,7 @@ File References:
       - libPusher-prefix.pch
       - libPusher-umbrella.h
   - SocketRocket:
-    - base64.c
-    - base64.h
-    - NSData+SRB64Additions.h
-    - NSData+SRB64Additions.m
+    - SocketRocket.h
     - SRWebSocket.h
     - SRWebSocket.m
     - Support Files:
@@ -93,36 +91,21 @@ Targets:
     Build Phases:
     - Sources:
       - libPusher-dummy.m
-      - NSDictionary+QueryString.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - NSString+Hashing.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTBlockEventListener.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTJSON.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusher+Testing.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusher.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherAPI.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherChannel.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherChannelAuthorizationOperation.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherConnection.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherEvent.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherEventDispatcher.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTPusherMockConnection.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTTargetActionEventListener.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - PTURLRequestOperation.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - NSDictionary+QueryString.m
+      - NSDictionary+StringValue.m
+      - NSString+Hashing.m
+      - PTBlockEventListener.m
+      - PTJSON.m
+      - PTPusher.m
+      - PTPusherAPI.m
+      - PTPusherChannel.m
+      - PTPusherChannelServerBasedAuthorization.m
+      - PTPusherConnection.m
+      - PTPusherEvent.m
+      - PTPusherEventDispatcher.m
+      - PTPusherMockConnection.m
+      - PTTargetActionEventListener.m
+      - PTURLRequestOperation.m
     - Frameworks:
       - Foundation.framework
       - SocketRocket.framework
@@ -131,6 +114,9 @@ Targets:
           ATTRIBUTES:
           - Public
       - NSDictionary+QueryString.h:
+          ATTRIBUTES:
+          - Private
+      - NSDictionary+StringValue.h:
           ATTRIBUTES:
           - Private
       - NSString+Hashing.h:
@@ -145,9 +131,6 @@ Targets:
       - PTJSON.h:
           ATTRIBUTES:
           - Private
-      - PTPusher+Testing.h:
-          ATTRIBUTES:
-          - Public
       - PTPusher.h:
           ATTRIBUTES:
           - Public
@@ -160,9 +143,12 @@ Targets:
       - PTPusherChannel_Private.h:
           ATTRIBUTES:
           - Private
-      - PTPusherChannelAuthorizationOperation.h:
+      - PTPusherChannelAuthorizationDelegate.h:
           ATTRIBUTES:
-          - Private
+          - Public
+      - PTPusherChannelServerBasedAuthorization.h:
+          ATTRIBUTES:
+          - Public
       - PTPusherConnection.h:
           ATTRIBUTES:
           - Public
@@ -195,7 +181,7 @@ Targets:
           - Private
       - PTURLRequestOperation.h:
           ATTRIBUTES:
-          - Private
+          - Public
       - Pusher.h:
           ATTRIBUTES:
           - Public
@@ -330,25 +316,17 @@ Targets:
 - SocketRocket:
     Build Phases:
     - Sources:
-      - base64.c:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
-      - NSData+SRB64Additions.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - SocketRocket-dummy.m
-      - SRWebSocket.m:
-          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
+      - SRWebSocket.m
     - Frameworks:
       - CFNetwork.framework
       - Foundation.framework
       - Security.framework
     - Headers:
-      - base64.h:
-          ATTRIBUTES:
-          - Public
-      - NSData+SRB64Additions.h:
-          ATTRIBUTES:
-          - Public
       - SocketRocket-umbrella.h:
+          ATTRIBUTES:
+          - Public
+      - SocketRocket.h:
           ATTRIBUTES:
           - Public
       - SRWebSocket.h:

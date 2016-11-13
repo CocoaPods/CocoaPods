@@ -10,7 +10,7 @@
 #import "PTPusherMacros.h"
 
 @interface PTNSJSONParser : NSObject <PTJSONParser>
-+ (id)NSJSONParser;
++ (instancetype)NSJSONParser;
 @end
 
 @implementation PTJSON
@@ -24,7 +24,7 @@
 
 @implementation PTNSJSONParser 
 
-+ (id)NSJSONParser
++ (instancetype)NSJSONParser
 {
   PT_DEFINE_SHARED_INSTANCE_USING_BLOCK(^{
     return [[self alloc] init];

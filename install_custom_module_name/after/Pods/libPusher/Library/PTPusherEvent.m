@@ -15,7 +15,7 @@ NSString *const PTPusherChannelKey = @"channel";
 
 @implementation PTPusherEvent
 
-+ (id)eventFromMessageDictionary:(NSDictionary *)dictionary
++ (instancetype)eventFromMessageDictionary:(NSDictionary *)dictionary
 {
   if ([dictionary[PTPusherEventKey] isEqualToString:@"pusher:error"]) {
     return [[PTPusherErrorEvent alloc] initWithEventName:dictionary[PTPusherEventKey] channel:nil data:dictionary[PTPusherDataKey]];

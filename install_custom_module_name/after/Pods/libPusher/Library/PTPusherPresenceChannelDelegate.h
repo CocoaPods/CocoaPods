@@ -39,24 +39,4 @@
  */
 - (void)presenceChannel:(PTPusherPresenceChannel *)channel memberRemoved:(PTPusherChannelMember *)member;
 
-#pragma mark - Deprecated methods
-
-@optional
-
-/** Notifies the delegate that the presence channel subscribed successfully.
- @deprecated Use presenceChannelDidSubscribe: and access the members property.
- */
-- (void)presenceChannel:(PTPusherPresenceChannel *)channel didSubscribeWithMemberList:(NSArray *)members __PUSHER_DEPRECATED__;
-
-/** Notifies the delegate that a member has joined the channel.
- @deprecated Use presenceChannel:memberAdded:
- */
-
-- (void)presenceChannel:(PTPusherPresenceChannel *)channel memberAddedWithID:(NSString *)memberID memberInfo:(NSDictionary *)memberInfo __PUSHER_DEPRECATED__;
-
-/** Notifies the delegate that a member subscribed to the presence channel has unsubscribed.
- @deprecated Use presenceChannel:memberRemoved:
- */
-- (void)presenceChannel:(PTPusherPresenceChannel *)channel memberRemovedWithID:(NSString *)memberID atIndex:(NSInteger)index __PUSHER_DEPRECATED__;
-
 @end

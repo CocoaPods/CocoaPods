@@ -16,7 +16,7 @@ NSString *const PTPusherConnectionEstablishedEvent = @"pusher:connection_establi
 NSString *const PTPusherConnectionPingEvent        = @"pusher:ping";
 NSString *const PTPusherConnectionPongEvent        = @"pusher:pong";
 
-@interface PTPusherConnection ()
+@interface PTPusherConnection () <SRWebSocketDelegate>
 @property (nonatomic, copy) NSString *socketID;
 @property (nonatomic, assign) PTPusherConnectionState state;
 @property (nonatomic, strong) NSTimer *pingTimer;
@@ -26,11 +26,6 @@ NSString *const PTPusherConnectionPongEvent        = @"pusher:pong";
 @implementation PTPusherConnection {
   SRWebSocket *socket;
   NSURLRequest *request;
-}
-
-- (id)initWithURL:(NSURL *)aURL secure:(BOOL)secure
-{
-  return [self initWithURL:aURL secure:NO];
 }
 
 - (id)initWithURL:(NSURL *)aURL

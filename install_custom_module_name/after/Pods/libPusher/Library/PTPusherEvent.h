@@ -43,7 +43,7 @@ extern NSString *const PTPusherChannelKey;
 @property (nonatomic, readonly, strong) NSDate *timeReceived;
 
 - (id)initWithEventName:(NSString *)name channel:(NSString *)channel data:(id)data;
-+ (id)eventFromMessageDictionary:(NSDictionary *)dictionary;
++ (instancetype)eventFromMessageDictionary:(NSDictionary *)dictionary;
 
 @end
 

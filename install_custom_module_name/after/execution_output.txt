@@ -14,12 +14,12 @@ Comparing resolved specification to the sandbox manifest
 
 Downloading dependencies
 
--> Installing SocketRocket (0.3.1-beta2)
+-> Installing SocketRocket (0.5.1)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/square/SocketRocket.git PROJECT/Pods/SocketRocket --template= --single-branch --depth 1 --branch v0.3.1-beta2
+     $ GIT_BIN clone https://github.com/square/SocketRocket.git PROJECT/Pods/SocketRocket --template= --single-branch --depth 1 --branch 0.5.1
      Cloning into 'PROJECT/Pods/SocketRocket'...
-     Note: checking out 'f61e3c3ae532bf72f0c75524c92e95d625283a13'.
+     Note: checking out '36e68c11ab131747c401728e79b110e98d98a70f'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this
@@ -31,12 +31,12 @@ Downloading dependencies
        git checkout -b new_branch_name
      
 
--> Installing libPusher (1.5)
+-> Installing libPusher (1.6.2)
  > Git download
  > Git download
-     $ GIT_BIN clone https://github.com/lukeredpath/libPusher.git PROJECT/Pods/libPusher --template= --single-branch --depth 1 --branch v1.5
+     $ GIT_BIN clone https://github.com/pusher/libPusher.git PROJECT/Pods/libPusher --template= --single-branch --depth 1 --branch v1.6.2
      Cloning into 'PROJECT/Pods/libPusher'...
-     Note: checking out 'ac87421f81c874ad0b5116d3523a3467dff28439'.
+     Note: checking out '1775fdb8fe97a821489dd35f7f49cbf6ebc2750c'.
      
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this
