@@ -50,7 +50,7 @@ module Pod
 
       describe 'podspec validation' do
         before do
-          @podspec = Pod::Specification.from_file(fixture('spec-repos') + 'master/Specs/JSONKit/1.4/JSONKit.podspec.json')
+          @podspec = Pod::Specification.from_file(fixture('spec-repos') + 'master/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json')
         end
 
         it 'returns a validator for the given podspec' do
