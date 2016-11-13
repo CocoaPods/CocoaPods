@@ -41,7 +41,7 @@ group :development do
 
   gem 'bacon'
   gem 'mocha'
-  gem 'mocha-on-bacon', github: 'segiddins/mocha-on-bacon', ref: 'seg-set-backtrace'
+  gem 'mocha-on-bacon'
   gem 'prettybacon'
   gem 'webmock'
 
