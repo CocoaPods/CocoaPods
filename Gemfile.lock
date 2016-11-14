@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: cd86271156be6f69f22c3acabe4446bff0ab5bda
+  revision: 5bdbcac31c09a534b2cbe33633de768cc927bcf0
   branch: master
   specs:
     cocoapods-core (1.2.0.beta.1)
@@ -17,21 +17,21 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: ba0506c9d6d5e98ce9bf7901599e5e64b0a7555b
+  revision: cf6b05b045abd584e48a4480e742092335e29e87
   branch: master
   specs:
-    molinillo (0.5.3)
+    molinillo (0.5.4)
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 3a92a5daa9f5d7bf877a95e61486b6517ab78e33
+  revision: 97368f76f7a52f26a2d73bd2a1dd7267418624d8
   branch: master
   specs:
-    nanaimo (0.2.0)
+    nanaimo (0.2.2)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 04dc5d6e987b363fd74d889ad97fa15c4765db1e
+  revision: bd9933ef64c52985f3ade697048add55a3658974
   branch: master
   specs:
     xcodeproj (1.4.1)
@@ -39,7 +39,7 @@ GIT
       activesupport (>= 3)
       claide (>= 1.0.1, < 2.0)
       colored (~> 1.2)
-      nanaimo (~> 0.2.0)
+      nanaimo (~> 0.2.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
@@ -118,7 +118,7 @@ PATH
       escape (~> 0.0.4)
       fourflusher (~> 2.0.1)
       gh_inspector (~> 1.0)
-      molinillo (~> 0.5.3)
+      molinillo (~> 0.5.4)
       nap (~> 1.0)
       ruby-macho (~> 0.2.5)
       xcodeproj (>= 1.4.1, < 2.0)
@@ -230,7 +230,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 0.3)
     ruby-graphviz (1.2.2)
-    ruby-macho (0.2.5)
+    ruby-macho (0.2.6)
     ruby-prof (0.15.2)
     ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
