@@ -45,6 +45,8 @@ module Pod
 
     def self.run(argv)
       help! 'You cannot run CocoaPods as root.' if Process.uid == 0
+
+      verify_minimum_git_version!
       verify_xcode_license_approved!
 
       super(argv)
@@ -104,6 +106,28 @@ module Pod
     include Config::Mixin
 
     private
+
+    # Returns a new {Gem::Version} based on the systems `git` version.
+    #
+    # @return [Gem::Version]
+    #
+    def self.git_version
+      raw_version = Executable.capture_command('git', ['--version']).first
+      match = raw_version.scan(/\d+\.\d+\.\d+/).first
+      Gem::Version.new(match)
+    end
+
+    # Checks that the git version is at least 1.8.5
+    #
+    # @raise If the git version is older than 1.8.5
+    #
+    # @return [void]
+    #
+    def self.verify_minimum_git_version!
+      if git_version < Gem::Version.new('1.8.5')
+        raise Informative, 'You need at least git version 1.8.5 to use CocoaPods'
+      end
+    end
 
     # Returns a new {Installer} parametrized from the {Config}.
     #
