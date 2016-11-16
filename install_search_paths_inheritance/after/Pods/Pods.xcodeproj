@@ -77,14 +77,18 @@ File References:
       - DDASLLogCapture.m
       - DDASLLogger.h
       - DDASLLogger.m
-      - DDAssert.h
+      - DDAssertMacros.h
       - DDFileLogger.h
       - DDFileLogger.m
+      - DDLegacyMacros.h
       - DDLog.h
       - DDLog.m
       - DDLog+LOGV.h
+      - DDLogMacros.h
       - DDTTYLogger.h
       - DDTTYLogger.m
+    - Default:
+      - CocoaLumberjack.h
     - Extensions:
       - DDContextFilterLogFormatter.h
       - DDContextFilterLogFormatter.m
@@ -234,6 +238,9 @@ Targets:
       - CocoaLumberjack-umbrella.h:
           ATTRIBUTES:
           - Public
+      - CocoaLumberjack.h:
+          ATTRIBUTES:
+          - Public
       - DDAbstractDatabaseLogger.h:
           ATTRIBUTES:
           - Public
@@ -243,7 +250,7 @@ Targets:
       - DDASLLogger.h:
           ATTRIBUTES:
           - Public
-      - DDAssert.h:
+      - DDAssertMacros.h:
           ATTRIBUTES:
           - Public
       - DDContextFilterLogFormatter.h:
@@ -255,10 +262,16 @@ Targets:
       - DDFileLogger.h:
           ATTRIBUTES:
           - Public
+      - DDLegacyMacros.h:
+          ATTRIBUTES:
+          - Public
       - DDLog+LOGV.h:
           ATTRIBUTES:
           - Public
       - DDLog.h:
+          ATTRIBUTES:
+          - Public
+      - DDLogMacros.h:
           ATTRIBUTES:
           - Public
       - DDMultiFormatter.h:

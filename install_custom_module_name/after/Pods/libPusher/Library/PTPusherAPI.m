@@ -42,7 +42,7 @@
   
   queryParameters[@"body_md5"] = [[bodyString MD5Hash] lowercaseString];
   queryParameters[@"auth_key"] = key;
-  queryParameters[@"auth_timestamp"] = @((double)time(NULL));
+  queryParameters[@"auth_timestamp"] = @([[NSDate date] timeIntervalSince1970]);
   queryParameters[@"auth_version"] = @"1.0";
   queryParameters[@"name"] = eventName;
   
@@ -54,7 +54,7 @@
   
   queryParameters[@"auth_signature"] = [signatureString HMACDigestUsingSecretKey:secretKey];
   
-  NSString *URLString = [NSString stringWithFormat:@"http://%@%@?%@", kPUSHER_API_DEFAULT_HOST, path, [queryParameters sortedQueryString]];
+  NSString *URLString = [NSString stringWithFormat:@"https://%@%@?%@", kPUSHER_API_DEFAULT_HOST, path, [queryParameters sortedQueryString]];
   
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:URLString]];
   [request setHTTPBody:bodyData];

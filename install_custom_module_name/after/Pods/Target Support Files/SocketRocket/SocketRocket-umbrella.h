@@ -10,8 +10,7 @@
 #endif
 #endif
 
-#import "base64.h"
-#import "NSData+SRB64Additions.h"
+#import "SocketRocket.h"
 #import "SRWebSocket.h"
 
 FOUNDATION_EXPORT double SocketRocketVersionNumber;

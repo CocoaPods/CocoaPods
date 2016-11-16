@@ -9,6 +9,10 @@
 #import "PTPusherMockConnection.h"
 #import "PTJSON.h"
 #import "PTPusherEvent.h"
+#import "SRWebSocket.h"
+
+@interface PTPusherConnection () <SRWebSocketDelegate>
+@end
 
 @implementation PTPusherMockConnection {
   NSMutableArray *sentClientEvents;

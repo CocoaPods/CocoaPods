@@ -3,12 +3,12 @@ SocketRocket Objective-C WebSocket Client (beta)
 A conforming WebSocket (`RFC 6455 <http://tools.ietf.org/html/rfc6455>`_)
 client library.
 
-`Test results for SocketRocket here <http://square.github.com/SocketRocket/results/>`_.
+`Test results for SocketRocket here <http://square.github.io/SocketRocket/results/>`_.
 You can compare to what `modern browsers look like here
-<http://www.tavendo.de/autobahn/testsuite/report/clients/index.html>`_.
+<http://tavendo.com/autobahn/testsuite/report/clients/index.html>`_.
 
 SocketRocket currently conforms to all ~300 of `Autobahn
-<http://www.tavendo.de/autobahn/testsuite.html>`_'s fuzzing tests (aside from
+<http://autobahn.ws/testsuite/>`_'s fuzzing tests (aside from
 two UTF-8 ones where it is merely *non-strict*. tests 6.4.2 and 6.4.4)
 
 Features/Design
@@ -56,7 +56,7 @@ There's a few options. Choose one, or just figure it out
 
 
 Depending on how you configure your project you may need to ``#import`` either
-``<SocketRocket/SRSocketRocket.h>`` or ``"SRSocketRocket.h"``
+``<SocketRocket/SRWebSocket.h>`` or ``"SRWebSocket.h"``
 
 Framework Dependencies
 ``````````````````````
@@ -73,7 +73,7 @@ SocketRocket now has (64-bit only) OS X support.  ``SocketRocket.framework``
 inside Xcode project is for OS X only.  It should be identical in function aside
 from the unicode validation.  ICU isn't shipped with OS X which is what the
 original implementation used for unicode validation.  The workaround is much
-more rhudimentary and less robust.
+more rudimentary and less robust.
 
 1. Add SocketRocket.xcodeproj as either a subproject of your app or in your workspace.
 2. Add ``SocketRocket.framework`` to the link libraries
@@ -192,11 +192,11 @@ SocketRocket root directory and type::
 
   make test
 
-This will set up your `virtualenv <http://pypi.python.org/pypi/virtualenv>`_.
+This will set up your `virtualenv <https://pypi.python.org/pypi/virtualenv>`_.
 Now, in your terminal::
 
   source .env/bin/activate
-  pip install git+https://github.com/facebook/tornado.git
+  pip install git+https://github.com/tornadoweb/tornado.git
 
 In the same terminal session, start the chatroom server::
 
@@ -209,7 +209,7 @@ There's also a Go implementation (with the latest weekly) where you can::
 
 Chatting
 ````````
-Now, start TestChat.app (just run the target in the XCode project).  If you had
+Now, start TestChat.app (just run the target in the Xcode project).  If you had
 it started already you can hit the refresh button to reconnect.  It should say
 "Connected!" on top.
 
@@ -222,10 +222,8 @@ WebSocket Server Implementation Recommendations
 SocketRocket has been used with the following libraries:
 
 - `Tornado <https://github.com/facebook/tornado>`_
-- Go's `weekly build <http://weekly.golang.org>`_ (the official release has an
-  outdated protocol, so you may have to use weekly until `Go 1
-  <http://blog.golang.org/2011/10/preview-of-go-version-1.html>`_ is released)
-- `Autobahn <http://www.tavendo.de/autobahn/testsuite.html>`_ (using its fuzzing
+- Go's `WebSocket package <https://godoc.org/golang.org/x/net/websocket>`_ or Gorilla's `version <http://www.gorillatoolkit.org/pkg/websocket>`_
+- `Autobahn <http://tavendo.com/autobahn/testsuite.html>`_ (using its fuzzing
   client)
 
 The Tornado one is dirt simple and works like a charm.  (`IPython notebook
@@ -239,19 +237,10 @@ It could use some more control over things such as pings, etc., but I
 am sure it will come in time.
 
 Autobahn is a great test suite.  The Python server code is good, and conforms
-well (obviously).  Hovever, for me, twisted would be a deal-breaker for writing
+well (obviously).  However for me, twisted would be a deal-breaker for writing
 something new.  I find it a bit too complex and heavy for a simple service. If
 you are already using twisted though, Autobahn is probably for you.
 
 Contributing
 ------------
-Any contributors to the master SocketRocket repository must sign the `Individual
-Contributor License Agreement
-(CLA)
-<https://spreadsheets.google.com/spreadsheet/viewform?formkey=dDViT2xzUHAwRkI3X3k5Z0lQM091OGc6MQ&ndplr=1>`_.
-It's a short form that covers our bases and makes sure you're eligible to
-contribute.
-
-When you have a change you'd like to see in the master repository, `send a pull
-request <https://github.com/square/SocketRocket/pulls>`_. Before we merge your
-request, we'll make sure you're in the list of people who have signed a CLA.
+We’re glad you’re interested in SocketRocket, and we’d love to see where you take it. Please read our `contributing guidelines <https://github.com/square/SocketRocket/blob/master/Contributing.md>`_ prior to submitting a Pull Request.
