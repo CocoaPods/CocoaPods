@@ -49,7 +49,7 @@ extension String: URLStringConvertible {
 
 extension NSURL: URLStringConvertible {
     public var URLString: String {
-        return absoluteString
+        return absoluteString!
     }
 }
 
