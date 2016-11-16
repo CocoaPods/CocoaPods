@@ -132,7 +132,6 @@ module Pod
             it 'links the pod targets with the aggregate target' do
               @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib-Pods"'
             end
-
           end
 
           describe 'with an unscoped pod target' do
@@ -408,7 +407,6 @@ module Pod
         end
 
         describe 'an empty pod target' do
-
           before do
             @blank_target = fixture_aggregate_target
             @generator = AggregateXCConfig.new(@blank_target, 'Release')
@@ -420,14 +418,12 @@ module Pod
           end
 
           describe 'with inherited targets' do
-
             it 'should include inherited search paths' do
               # It's the responsibility of the analyzer to
               # populate this when the file is loaded.
               @blank_target.search_paths_aggregate_targets = [@target]
               @xcconfig = @generator.generate
               @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.be.nil
-
             end
           end
         end
