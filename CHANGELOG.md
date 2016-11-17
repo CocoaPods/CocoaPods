@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix codesigning issues when targets have spaces.   
+  [Sam Gammon](https://github.com/sgammon)
+  [#6153](https://github.com/CocoaPods/CocoaPods/issues/6153)
+
 * Raise an exception if unable to find a reference for a path and handle symlink references.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5427](https://github.com/CocoaPods/CocoaPods/issues/5427)
