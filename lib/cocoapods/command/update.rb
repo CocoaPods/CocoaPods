@@ -19,8 +19,29 @@ module Pod
         CLAide::Argument.new('POD_NAMES', false, true),
       ]
 
+      def self.options
+        [
+          ['--sources=https://github.com/artsy/Specs', 'The sources from which to only update dependent pods ' \
+           'Multiple sources must be comma-delimited.'],
+        ].concat(super)
+      end
+
       def initialize(argv)
         @pods = argv.arguments! unless argv.arguments.empty?
+
+        source_urls = argv.option('sources', '').split(',')
+        unless source_urls.empty?
+          source_pods = source_urls.flat_map { |url| config.sources_manager.source_with_name_or_url(url).pods }
+          unless source_pods.empty?
+            source_pods = source_pods.select { |pod| config.lockfile.pod_names.include?(pod) }
+            if @pods
+              @pods += source_pods
+            else
+              @pods = source_pods unless source_pods.empty?
+            end
+          end
+        end
+
         super
       end
 

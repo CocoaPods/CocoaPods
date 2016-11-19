@@ -18,6 +18,21 @@ module Pod
         end
       end
 
+      def generate_lockfile
+        podfile = Podfile.new do
+          platform :ios
+          pod 'BananaLib', '1.0'
+        end
+        specs = [
+          Specification.new do |s|
+            s.name = 'BananaLib'
+            s.version = '1.0'
+          end,
+        ]
+        external_sources = {}
+        Lockfile.generate(podfile, specs, external_sources).write_to_disk(temporary_directory + 'Podfile.lock')
+      end
+
       describe 'updates of the spec repos' do
         before do
           Installer.any_instance.expects(:install!)
@@ -34,6 +49,49 @@ module Pod
         end
       end
 
+      describe 'installs the updates' do
+        before do
+          Installer.any_instance.expects(:install!)
+        end
+
+        describe 'all pods' do
+          it 'updates all pods' do
+            Installer.any_instance.expects(:update=).with(true)
+            run_command('update')
+          end
+        end
+
+        describe 'selected pods' do
+          before do
+            generate_lockfile
+          end
+
+          it 'updates selected pods' do
+            Installer.any_instance.expects(:update=).with(:pods => ['BananaLib'])
+            run_command('update', 'BananaLib')
+          end
+        end
+
+        describe 'selected repo' do
+          before do
+            generate_lockfile
+            set_up_test_repo
+            config.repos_dir = SpecHelper.tmp_repos_path
+
+            spec1 = (fixture('spec-repos') + 'test_repo/JSONKit/1.4/JSONKit.podspec').read
+            spec2 = (fixture('spec-repos') + 'test_repo/BananaLib/1.0/BananaLib.podspec').read
+
+            File.open(temporary_directory + 'JSONKit.podspec', 'w') { |f| f.write(spec1) }
+            File.open(temporary_directory + 'BananaLib.podspec', 'w') { |f| f.write(spec2) }
+          end
+
+          it 'updates pods in repo and in lockfile' do
+            Installer.any_instance.expects(:update=).with(:pods => ['BananaLib'])
+            run_command('update', '--sources=master')
+          end
+        end
+      end
+
       it 'tells the user that no Lockfile was found in the project dir' do
         exception = lambda { run_command('update', 'BananaLib', '--no-repo-update') }.should.raise Informative
         exception.message.should.include "No `Podfile.lock' found in the project directory"
@@ -41,18 +99,7 @@ module Pod
 
       describe 'tells the user that the Pods cannot be updated unless they are installed' do
         before do
-          podfile = Podfile.new do
-            platform :ios
-            pod 'BananaLib', '1.0'
-          end
-          specs = [
-            Specification.new do |s|
-              s.name = 'BananaLib'
-              s.version = '1.0'
-            end,
-          ]
-          external_sources = {}
-          Lockfile.generate(podfile, specs, external_sources).write_to_disk(temporary_directory + 'Podfile.lock')
+          generate_lockfile
         end
 
         it 'for a single missing Pod' do

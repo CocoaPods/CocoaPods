@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* [update] adding --sources to specify to only update pods from a repo  
+  [Mark Schall](https://github.com/maschall)
+  [#5809](https://github.com/CocoaPods/CocoaPods/pull/5809)
 
 ##### Bug Fixes
 
