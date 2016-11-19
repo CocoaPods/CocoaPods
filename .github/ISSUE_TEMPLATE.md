@@ -3,12 +3,14 @@
 > what info we expect.  
 > Please remove this line and all above before submitting.
 
-> Before you start, are you using the CocoaPods beta release?
-> a lot has changed with Xcode 8 that is not backwards compatible.
+> Before you start, are you using the latest CocoaPods release?
+> A lot changes with Xcode releases that are not backwards compatible.
 >
-> Xcode 8 Status: Only works with CocoaPods 1.1.0
-> Swift 3: You need to add a `.swift-version` file, see the CHANGELOG
-> China: Use https://gems.ruby-china.org/ instead of https://gems.ruby-china.org/ for the RC see #5910
+> Xcode 8 Status: Only works with CocoaPods 1.1.0+
+> Pushing a Swift 2.3 Pod: You need to add a `.swift-version` file or the argument `--swift-version=VERSION`, see the CHANGELOG
+> Not an issue about the CocoaPods command line app? Please file an issue in the appropriate repo - https://github.com/CocoaPods
+> Issues are for feature requests, and bugs; questions should go to Stack Overflow
+> Using CocoaPods <= 0.39: http://blog.cocoapods.org/Sharding/
 
 * [ ] I've read and understood the [*CONTRIBUTING guidelines and have done my best effort to follow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).
 
