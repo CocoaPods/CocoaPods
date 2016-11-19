@@ -90,16 +90,24 @@ module Pod
       it 'updates source backed by a git repository' do
         set_up_test_repo_for_update
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        MasterSource.any_instance.expects(:git!).with do |options|
-          options.join(' ') == %W(-C #{test_repo_path} pull --ff-only).join(' ')
-        end
-        @sources_manager.update(test_repo_path.basename.to_s, true)
-      end
 
-      it 'uses the only fast forward git option' do
-        set_up_test_repo_for_update
-        MasterSource.any_instance.expects(:git!).with { |options| options.should.include? '--ff-only' }
-        @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
+        repo_update = sequence('repo update')
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} fetch origin)).
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
+          returns("my-special-branch\n").
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} reset --hard origin/my-special-branch)).
+          in_sequence(repo_update)
+
         @sources_manager.update(test_repo_path.basename.to_s, true)
       end
 
@@ -107,12 +115,29 @@ module Pod
         set_up_test_repo_for_update
         test_repo_path.join('.git', 'shallow').open('w') { |f| f << 'a' * 40 }
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-        MasterSource.any_instance.expects(:git!).with do |options|
-          options.join(' ') == %W(-C #{test_repo_path} fetch --unshallow).join(' ')
-        end
-        MasterSource.any_instance.expects(:git!).with do |options|
-          options.join(' ') == %W(-C #{test_repo_path} pull --ff-only).join(' ')
-        end
+
+        repo_update = sequence('repo update')
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} fetch --unshallow)).
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} fetch origin)).
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
+          returns("master\n").
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} reset --hard origin/master)).
+          in_sequence(repo_update)
+
         @sources_manager.update(test_repo_path.basename.to_s, true)
 
         UI.output.should.match /deep fetch.+`master`.+improve future performance/
@@ -126,9 +151,7 @@ module Pod
         Source.any_instance.stubs(:git).with do |options|
           options.join(' ') == %W(-C #{test_repo_path} diff --name-only aabbccd..HEAD).join(' ')
         end.returns('')
-        MasterSource.any_instance.expects(:git!).with do |options|
-          options.join(' ') == %W(-C #{test_repo_path} pull --ff-only).join(' ')
-        end.raises(<<-EOS)
+        MasterSource.any_instance.expects(:git!).with(%W(-C #{test_repo_path} fetch origin)).raises(<<-EOS)
 fatal: '/dev/null' does not appear to be a git repository
 fatal: Could not read from remote repository.
 
