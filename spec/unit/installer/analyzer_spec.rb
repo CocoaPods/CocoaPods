@@ -753,7 +753,9 @@ module Pod
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
 
-            target 'SampleProject'
+            target 'SampleProject' do
+              pod 'JSONKit'
+            end
 
             target 'Sample Framework' do
               project 'SampleProject/Sample Lib/Sample Lib'
@@ -763,8 +765,9 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           result = analyzer.analyze
 
-          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
-            'Pods-Sample Framework/monkey',
+          result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map { |pt| "#{pt.name}" }.sort.uniq.should == [
+            'JSONKit',
+            'monkey',
           ].sort
         end
 
