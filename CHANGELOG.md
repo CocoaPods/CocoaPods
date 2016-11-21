@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#6078](https://github.com/CocoaPods/CocoaPods/issues/6078)
 
+* Fix framework support for frameworks in sub-projects.  
+  [Ben Asher](https://github.com/benasher44)
+  [#6123](https://github.com/CocoaPods/CocoaPods/issues/6123)
+
 
 ## 1.2.0.beta.1 (2016-10-28)
 
