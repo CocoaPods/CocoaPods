@@ -765,10 +765,10 @@ module Pod
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           result = analyzer.analyze
 
-          result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map { |pt| "#{pt.name}" }.sort.uniq.should == [
-            'JSONKit',
-            'monkey',
-          ].sort
+          result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
+            JSONKit
+            monkey
+          ).sort
         end
 
         it "raises when unable to find an extension's host target" do
