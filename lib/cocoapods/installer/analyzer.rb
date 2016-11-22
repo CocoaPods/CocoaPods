@@ -238,7 +238,7 @@ module Pod
       #
       def copy_embedded_target_pod_targets_to_host(aggregate_target, embedded_aggregate_targets)
         return if aggregate_target.requires_host_target?
-        pod_target_names = aggregate_target.pod_targets.map(&:name)
+        pod_target_names = Set.new aggregate_target.pod_targets.map(&:name)
         aggregate_user_target_uuids = Set.new aggregate_target.user_targets.map(&:uuid)
         embedded_aggregate_targets.each do |embedded_aggregate_target|
           next unless embedded_aggregate_target.user_targets.any? do |embedded_user_target|
