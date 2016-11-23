@@ -238,17 +238,18 @@ module Pod
       #
       def copy_embedded_target_pod_targets_to_host(aggregate_target, embedded_aggregate_targets)
         return if aggregate_target.requires_host_target?
-        pod_target_names = Set.new aggregate_target.pod_targets.map(&:name)
-        aggregate_user_target_uuids = Set.new aggregate_target.user_targets.map(&:uuid)
+        pod_target_names = Set.new(aggregate_target.pod_targets.map(&:name))
+        aggregate_user_target_uuids = Set.new(aggregate_target.user_targets.map(&:uuid))
         embedded_aggregate_targets.each do |embedded_aggregate_target|
           next unless embedded_aggregate_target.user_targets.any? do |embedded_user_target|
             # You have to ask the host target's project for the host targets of
             # the embedded target, as opposed to asking user_project for the
             # embedded targets of the host target. The latter doesn't work when
-            # the embedded target lives in a sub-project. The line below gets
+            # the embedded target lives in a sub-project. The lines below get
             # the host target uuids for the embedded target and checks to see if
             # those match to any of the user_target uuids in the aggregate_target.
-            !aggregate_user_target_uuids.intersection(Set.new(aggregate_target.user_project.host_targets_for_embedded_target(embedded_user_target).map(&:uuid))).empty?
+            host_target_uuids = Set.new(aggregate_target.user_project.host_targets_for_embedded_target(embedded_user_target).map(&:uuid))
+            !aggregate_user_target_uuids.intersection(host_target_uuids).empty?
           end
           # This embedded target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
           aggregate_target.pod_targets = aggregate_target.pod_targets + embedded_aggregate_target.pod_targets.select do |pod_target|
