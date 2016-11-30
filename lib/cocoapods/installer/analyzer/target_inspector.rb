@@ -216,16 +216,34 @@ module Pod
         # @return [String] the targets Swift version or nil
         #
         def compute_swift_version_from_targets(targets)
-          versions = targets.flat_map do |target|
-            target.resolved_build_setting('SWIFT_VERSION').values
-          end.flatten.compact.uniq
-          case versions.count
+          versions_to_targets = targets.inject({}) do |memo, target|
+            versions = target.resolved_build_setting('SWIFT_VERSION').values
+            versions.each do |version|
+              memo[version] = [] if memo[version].nil?
+              memo[version] << target.name unless memo[version].include? target.name
+            end
+            memo
+          end
+
+          case versions_to_targets.count
           when 0
             nil
           when 1
-            versions.first
+            versions_to_targets.keys.first
           else
-            raise Informative, 'There may only be up to 1 unique SWIFT_VERSION per target.'
+            target_version_pairs = versions_to_targets.map do |version_names, target_names|
+              target_names.map { |target_name| [target_name, version_names] }
+            end
+
+            sorted_pairs = target_version_pairs.flat_map { |i| i }.sort_by do |target_name, version_name|
+              "#{target_name} #{version_name}"
+            end
+
+            formatted_output = sorted_pairs.map do |target, version_name|
+              "#{target}: Swift #{version_name}"
+            end.join("\n")
+
+            raise Informative, "There may only be up to 1 unique SWIFT_VERSION per target. Found target(s) with multiple Swift versions:\n#{formatted_output}"
           end
         end
       end
