@@ -21,8 +21,8 @@ module Pod
 
       def self.options
         [
-          ['--sources=https://github.com/artsy/Specs', 'The sources from which to only update dependent pods ' \
-           'Multiple sources must be comma-delimited.'],
+          ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to update dependent pods. ' \
+           'Multiple sources must be comma-delimited. The master repo will not be included by default with this option.'],
         ].concat(super)
       end
 
