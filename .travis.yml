@@ -8,10 +8,6 @@ git:
 
 matrix:
   include:
-  - rvm: system
-    env: COCOAPODS_CI_TASKS=EXAMPLES
-    osx_image: xcode7.3
-    language: objective-c
   - rvm: 2.4.0
     env: COCOAPODS_CI_TASKS=LINT
     git:
