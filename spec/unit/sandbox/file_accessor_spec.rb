@@ -139,10 +139,10 @@ module Pod
       end
 
       it 'returns the paths of the framework headers' do
-        @accessor.vendored_frameworks_headers.should == [
+        @accessor.vendored_frameworks_headers.sort.should == [
           @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
           @root + 'Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h',
-        ]
+        ].sort
       end
 
       it 'handles when the framework headers directory does not exist' do
