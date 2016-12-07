@@ -322,9 +322,32 @@ module Pod
         user_targets = [target]
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
+
+        expected_versions_string = "Target: Swift 2.3\nTarget: Swift 3.0"
+
         should.raise(Informative) do
           target_inspector.send(:compute_swift_version_from_targets, user_targets)
-        end.message.should.include 'There may only be up to 1 unique SWIFT_VERSION per target.'
+        end.message.should.include "There may only be up to 1 unique SWIFT_VERSION per target. Found target(s) with multiple Swift versions:\n#{expected_versions_string}"
+      end
+
+      it 'raises if the user defined SWIFT_VERSION contains multiple unique versions are defined on different targets' do
+        user_project = Xcodeproj::Project.new('path')
+        target = user_project.new_target(:application, 'Target', :ios)
+        target.build_configuration_list.set_setting('SWIFT_VERSION', '2.3')
+
+        target2 = user_project.new_target(:application, 'Target2', :ios)
+        target2.build_configuration_list.set_setting('SWIFT_VERSION', '3.0')
+
+        target_definition = Podfile::TargetDefinition.new(:default, nil)
+        user_targets = [target, target2]
+
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+
+        expected_versions_string = "Target: Swift 2.3\nTarget2: Swift 3.0"
+
+        should.raise(Informative) do
+          target_inspector.send(:compute_swift_version_from_targets, user_targets)
+        end.message.should.include "There may only be up to 1 unique SWIFT_VERSION per target. Found target(s) with multiple Swift versions:\n#{expected_versions_string}"
       end
 
       it 'returns the project-level SWIFT_VERSION if the target-level SWIFT_VERSION is not defined' do
