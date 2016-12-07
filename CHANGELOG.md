@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix default LD_RUNPATH_SEARCH_PATHS for host targets.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6006](https://github.com/CocoaPods/CocoaPods/issues/6006)
+
 * Fix codesigning issues when targets have spaces.   
   [Sam Gammon](https://github.com/sgammon)
   [#6153](https://github.com/CocoaPods/CocoaPods/issues/6153)

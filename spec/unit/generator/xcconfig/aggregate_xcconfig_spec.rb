@@ -241,6 +241,16 @@ module Pod
             @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) "-D" "COCOAPODS"'
           end
 
+          it 'includes default runpath search path list for a non host target' do
+            @target.stubs(:requires_host_target?).returns(false)
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
+          end
+
+          it 'includes default runpath search path list for a host target' do
+            @target.stubs(:requires_host_target?).returns(true)
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' '@executable_path/../../Frameworks'"
+          end
+
           it 'uses the target definition swift version' do
             @target_definition.stubs(:swift_version).returns('0.1')
             @generator.send(:target_swift_version).should == '0.1'
