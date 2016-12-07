@@ -226,6 +226,7 @@ module Pod
               "'@executable_path/Frameworks'",
               "'@loader_path/Frameworks'",
             ]
+            ld_runpath_search_paths << "'@executable_path/../../Frameworks'" if target.requires_host_target?
           end
           @xcconfig.merge!('LD_RUNPATH_SEARCH_PATHS' => ld_runpath_search_paths.join(' '))
         end
