@@ -16,6 +16,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Mark Schall](https://github.com/maschall)
   [#5809](https://github.com/CocoaPods/CocoaPods/pull/5809)
 
+* Add aggregated search paths targets to vendored build settings  
+  [Chris Ortman](https://github.com/chrisortman)
+  [Johannes Plunien](https://github.com/plu)
+  [#5512](https://github.com/CocoaPods/CocoaPods/issues/5512)
+
 ##### Bug Fixes
 
 * Fix default LD_RUNPATH_SEARCH_PATHS for host targets.  

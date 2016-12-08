@@ -181,7 +181,9 @@ module Pod
         #   user target.
         #
         def generate_vendored_build_settings
-          pod_targets.each do |pod_target|
+          targets = pod_targets + target.search_paths_aggregate_targets.flat_map(&:pod_targets)
+
+          targets.each do |pod_target|
             unless pod_target.should_build? && pod_target.requires_frameworks?
               XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
             end

@@ -15,11 +15,13 @@ module Pod
         before do
           @target_definition = fixture_target_definition
           @specs = specs
-          @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
-          @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
+          @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' } unless @specs.empty?
+          @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
           @target = fixture_aggregate_target(@pod_targets, @target_definition)
-          @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
+          unless @specs.empty?
+            @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
+          end
           @generator = AggregateXCConfig.new(@target, 'Release')
         end
 
@@ -410,6 +412,28 @@ module Pod
               UI.warnings.should.include 'Can\'t merge user_target_xcconfig for pod targets: ' \
                 '["BananaLib", "OrangeFramework"]. Singular build setting '\
                 'STRIP_STYLE has different values.'
+            end
+          end
+        end
+
+        describe 'an empty pod target' do
+          before do
+            @blank_target = fixture_aggregate_target
+            @generator = AggregateXCConfig.new(@blank_target, 'Release')
+          end
+
+          it 'it should not have any framework search paths' do
+            @xcconfig = @generator.generate
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.be.nil
+          end
+
+          describe 'with inherited targets' do
+            it 'should include inherited search paths' do
+              # It's the responsibility of the analyzer to
+              # populate this when the file is loaded.
+              @blank_target.search_paths_aggregate_targets = [@target]
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.be.nil
             end
           end
         end
