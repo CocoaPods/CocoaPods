@@ -32,6 +32,8 @@ module Pod
             ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
             'Opens default editor if no commit message is specified.'],
             ['--use-json', 'Push JSON spec to repo'],
+            ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used when linting the spec. ' \
+             'This takes precedence over a .swift-version file.'],
           ].concat(super)
         end
 
@@ -47,6 +49,7 @@ module Pod
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
           @use_json = argv.flag?('use-json')
+          @swift_version = argv.option('swift-version', nil)
           super
         end
 
@@ -123,6 +126,7 @@ module Pod
             validator.allow_warnings = @allow_warnings
             validator.use_frameworks = @use_frameworks
             validator.ignore_public_only_results = @private
+            validator.swift_version = @swift_version
             begin
               validator.validate
             rescue => e

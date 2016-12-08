@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* `pod repo push` now accepts the `--swift-version` argument.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6217](https://github.com/CocoaPods/CocoaPods/issues/6217)
+
 * Output Swift targets when multiple versions of Swift are detected.  
   [Justin Martin](https://github.com/justinseanmartin) & [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6191](https://github.com/CocoaPods/CocoaPods/issues/6191)
