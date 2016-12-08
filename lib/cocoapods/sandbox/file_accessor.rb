@@ -9,7 +9,7 @@ module Pod
     # @note The FileAccessor always returns absolute paths.
     #
     class FileAccessor
-      HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
+      HEADER_EXTENSIONS = (%w(.inl .msg) + Xcodeproj::Constants::HEADER_FILES_EXTENSIONS)
       SOURCE_FILE_EXTENSIONS = (%w(.m .mm .i .c .cc .cxx .cpp .c++ .swift) + HEADER_EXTENSIONS).uniq.freeze
 
       GLOB_PATTERNS = {
