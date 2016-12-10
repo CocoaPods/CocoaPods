@@ -104,7 +104,9 @@ module Pod
 
     def update_git_repo(show_output = false)
       Config.instance.with_changes(:verbose => show_output) do
-        git!(['-C', repo, 'pull', '--ff-only'])
+        git!(%W(-C #{repo} fetch origin))
+        current_branch = git!(%W(-C #{repo} rev-parse --abbrev-ref HEAD)).strip
+        git!(%W(-C #{repo} reset --hard origin/#{current_branch}))
       end
     rescue
       raise Informative, 'CocoaPods was not able to update the ' \
@@ -118,7 +120,7 @@ module Pod
     def update_git_repo(show_output = false)
       if repo.join('.git', 'shallow').file?
         UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
-          git!(['-C', repo, 'fetch', '--unshallow'])
+          git!(%W(-C #{repo} fetch --unshallow))
         end
       end
       super
