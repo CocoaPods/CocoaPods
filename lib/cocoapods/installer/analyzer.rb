@@ -324,19 +324,12 @@ module Pod
         end
 
         target_mismatches = []
-        check_prop = lambda do |target_definition1, target_definition2, attr, msg|
-          attr1 = target_definition1.send(attr)
-          attr2 = target_definition2.send(attr)
-          if attr1 != attr2
-            target_mismatches << "- #{target_definition1.name} (#{attr1}) and #{target_definition2.name} (#{attr2}) #{msg}."
-          end
-        end
         host_uuid_to_embedded_target_definitions.each do |uuid, target_definitions|
           host_target_definition = target_definitions_by_uuid[uuid]
           target_definitions.each do |target_definition|
-            check_prop.call(host_target_definition, target_definition, :platform, 'do not use the same platform')
-            check_prop.call(host_target_definition, target_definition, :uses_frameworks?, 'do not both set use_frameworks!')
-            check_prop.call(host_target_definition, target_definition, :swift_version, 'do not use the same Swift version')
+            unless host_target_definition.uses_frameworks? == target_definition.uses_frameworks?
+              target_mismatches << "- #{host_target_definition.name} (#{host_target_definition.uses_frameworks?}) and #{target_definition.name} (#{target_definition.uses_frameworks?}) do not both set use_frameworks!."
+            end
           end
         end
 

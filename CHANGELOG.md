@@ -69,6 +69,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#6123](https://github.com/CocoaPods/CocoaPods/issues/6123)
 
+* Remove errors that prevent host/extension target mismatches, which Xcode will warn about.
+  [Ben Asher](https://github.com/benasher44)
+  [#6173](https://github.com/CocoaPods/CocoaPods/issues/6173)
+
 
 ## 1.2.0.beta.1 (2016-10-28)
 
