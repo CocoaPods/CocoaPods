@@ -12,7 +12,7 @@ matrix:
     env: COCOAPODS_CI_TASKS=EXAMPLES
     osx_image: xcode7.3
     language: objective-c
-  - rvm: 2.3.1
+  - rvm: 2.4.0
     env: COCOAPODS_CI_TASKS=LINT
     git:
       submodules: false
@@ -25,7 +25,7 @@ rvm:
   # OS X 10.9.0-10.9.2
   # TODO: currently unavailable: https://github.com/travis-ci/travis-ci/issues/2918
   # - 2.0.0-p247
-  - 2.3.1
+  - 2.4.0
 
 env:
   - COCOAPODS_CI_TASKS=SPECS
