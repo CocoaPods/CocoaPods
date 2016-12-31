@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Show git progress when downloading the CocoaPods Specs repo.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5937](https://github.com/CocoaPods/CocoaPods/issues/5937)
 
 ##### Bug Fixes
 
