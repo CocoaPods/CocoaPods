@@ -17,7 +17,7 @@ module Pod
 
         def self.options
           [
-            ['--progress', 'Show the progress of cloning the spec repository']
+            ['--progress', 'Show the progress of cloning the spec repository'],
           ].concat(super)
         end
 
@@ -74,9 +74,9 @@ module Pod
         #
         def clone_repo
           changes = if @progress
-            { verbose: true }
-          else
-            {}
+                      { :verbose => true }
+                    else
+                      {}
           end
 
           config.with_changes(changes) do
