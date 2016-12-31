@@ -6,11 +6,18 @@
 > Before you start, are you using the latest CocoaPods release?
 > A lot changes with Xcode releases that are not backwards compatible.
 >
-> Xcode 8 Status: Only works with CocoaPods 1.1.0+
-> Pushing a Swift 2.3 Pod: You need to add a `.swift-version` file or the argument `--swift-version=VERSION`, see the CHANGELOG
 > Not an issue about the CocoaPods command line app? Please file an issue in the appropriate repo - https://github.com/CocoaPods
 > Issues are for feature requests, and bugs; questions should go to Stack Overflow
+>
 > Using CocoaPods <= 0.39: http://blog.cocoapods.org/Sharding/
+>
+> Using Xcode 8: Requires CocoaPods 1.1.0 or above.
+>
+> Issue with Nanaimo not loading:
+> Please run `[sudo] gem uninstall nanaimo` and remove all but the latest version.
+>
+> Linting a Swift 2.3 Pod: You need to add a .swift-version file or the 
+> argument --swift-version=VERSION, see the CHANGELOG.
 
 * [ ] I've read and understood the [*CONTRIBUTING guidelines and have done my best effort to follow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).
 
