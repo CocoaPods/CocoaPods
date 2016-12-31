@@ -50,7 +50,7 @@ module Pod
       # @return [void]
       #
       def add_master_repo
-        cmd = ['master', url, 'master']
+        cmd = ['master', url, 'master', '--progress']
         Repo::Add.parse(cmd).run
       end
 
