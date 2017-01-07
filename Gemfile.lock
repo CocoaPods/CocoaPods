@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: fdf75dce86b175c4321811c3305f76df6e01c898
+  revision: a2d64f61bf88c0a06eb49ec9c8afffca8cd2e828
   branch: master
   specs:
     cocoapods-core (1.2.0.beta.3)
@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 7ef98da605b87aa4e27468379b9f87441cf4be2c
+  revision: 026c0600e92090a463e2e23c3e59c6423ac5c939
   branch: master
   specs:
-    molinillo (0.5.4)
+    molinillo (0.5.5)
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
@@ -118,7 +118,7 @@ PATH
       escape (~> 0.0.4)
       fourflusher (~> 2.0.1)
       gh_inspector (~> 1.0)
-      molinillo (~> 0.5.4)
+      molinillo (~> 0.5.5)
       nap (~> 1.0)
       ruby-macho (~> 0.2.5)
       xcodeproj (>= 1.4.1, < 2.0)
