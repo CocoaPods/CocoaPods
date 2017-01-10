@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix build phase resource references to point at PBXVariantGroups where relevant
+  [Wes Campaigne](https://github.com/Westacular)
+  [#6373](https://github.com/CocoaPods/CocoaPods/issues/6373)
 
 
 ## 1.2.0.beta.3 (2016-12-28)
