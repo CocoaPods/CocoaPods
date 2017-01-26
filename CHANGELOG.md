@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Do not link static frameworks to targets that use `inherit! search_paths`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6065](https://github.com/CocoaPods/CocoaPods/issues/6065)
 
 
 ## 1.2.0.rc.1 (2017-01-13)

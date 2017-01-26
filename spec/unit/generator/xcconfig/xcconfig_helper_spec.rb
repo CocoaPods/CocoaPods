@@ -222,6 +222,43 @@ module Pod
         end
 
         #---------------------------------------------------------------------#
+
+        describe 'for proper other ld flags' do
+          before do
+            @root = fixture('banana-lib')
+            @path_list = Sandbox::PathList.new(@root)
+            @spec = fixture_spec('banana-lib/BananaLib.podspec')
+            @spec_consumer = @spec.consumer(:ios)
+            @accessor = Pod::Sandbox::FileAccessor.new(@path_list, @spec_consumer)
+          end
+
+          it 'should not include static framework other ld flags when inheriting search paths' do
+            target_definition = stub(:inheritance => 'search_paths')
+            aggregate_target = stub(:target_definition => target_definition)
+            pod_target = stub(:sandbox => config.sandbox)
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib"'
+          end
+
+          it 'should include static framework other ld flags when not inheriting search paths' do
+            target_definition = stub(:inheritance => 'complete')
+            aggregate_target = stub(:target_definition => target_definition)
+            pod_target = stub(:sandbox => config.sandbox)
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
+          end
+
+          it 'should include static framework for pod targets' do
+            pod_target = stub(:sandbox => config.sandbox)
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_static_dependency_build_settings(nil, pod_target, xcconfig, @accessor)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
+          end
+        end
+
+        #---------------------------------------------------------------------#
       end
     end
   end
