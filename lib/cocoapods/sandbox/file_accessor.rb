@@ -372,10 +372,13 @@ module Pod
       # @return [Boolean] Whether `binary` can be dynamically linked.
       #
       def dynamic_binary?(binary)
-        return unless binary.file?
-        MachO.open(binary).dylib?
+        @cached_dynamic_binary_results ||= {}
+        return @cached_dynamic_binary_results[binary] unless @cached_dynamic_binary_results[binary].nil?
+        return false unless binary.file?
+
+        @cached_dynamic_binary_results[binary] = MachO.open(binary).dylib?
       rescue MachO::MachOError
-        false
+        @cached_dynamic_binary_results[binary] = false
       end
 
       #-----------------------------------------------------------------------#
