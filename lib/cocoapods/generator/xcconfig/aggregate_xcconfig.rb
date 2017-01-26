@@ -217,8 +217,9 @@ module Pod
           ld_runpath_search_paths = ['$(inherited)']
           if target.platform.symbolic_name == :osx
             ld_runpath_search_paths << "'@executable_path/../Frameworks'"
+            symbol_type = target.user_targets.map(&:symbol_type).uniq.first
             ld_runpath_search_paths << \
-              if target.native_target.symbol_type == :unit_test_bundle
+              if symbol_type == :unit_test_bundle
                 "'@loader_path/../Frameworks'"
               else
                 "'@loader_path/Frameworks'"
