@@ -126,7 +126,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (2.3.4)
+    CFPropertyList (2.3.5)
     activesupport (4.2.7.1)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -292,4 +292,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.13.6
+   1.14.3
