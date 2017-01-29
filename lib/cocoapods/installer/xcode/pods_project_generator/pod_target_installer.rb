@@ -112,12 +112,20 @@ module Pod
               next unless target.requires_frameworks?
 
               resource_refs = file_accessor.resources.flatten.map do |res|
-                project.reference_for_path(res)
+                ref = project.reference_for_path(res)
+
+                # Some nested files are not directly present in the Xcode project, such as the contents
+                # of an .xcdatamodeld directory. These files are implicitly included by including their
+                # parent directory.
+                next if ref.nil?
+
+                # For variant groups, the variant group itself is added, not its members.
+                next ref.parent if ref.parent.is_a?(Xcodeproj::Project::Object::PBXVariantGroup)
+
+                ref
               end
 
-              # Some nested files are not directly present in the Xcode project, such as the contents
-              # of an .xcdatamodeld directory. These files will return nil file references.
-              resource_refs.compact!
+              resource_refs = resource_refs.uniq.compact
 
               native_target.add_resources(resource_refs)
             end
