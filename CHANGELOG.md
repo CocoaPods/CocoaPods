@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix build phase resource references to point at PBXVariantGroups where relevant.  
+  [Wes Campaigne](https://github.com/Westacular)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6373](https://github.com/CocoaPods/CocoaPods/issues/6373)
+
 * Add `--skip-import-validation` to skip linking a pod during lint.  
   [Samuel Giddins](https://github.com/segiddins)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)

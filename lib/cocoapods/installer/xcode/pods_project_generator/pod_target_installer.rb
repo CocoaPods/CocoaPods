@@ -65,6 +65,31 @@ module Pod
             settings
           end
 
+          # Filters the given resource file references discarding empty paths which are
+          # added by their parent directory. This will also include references to the parent [PBXVariantGroup]
+          # for all resources underneath it.
+          #
+          # @param  Array[<Pathname>] resource_file_references
+          #         The array of all resource file references to filter.
+
+          # @return [Array<Pathname>] The filtered resource file references.
+          #
+          def filter_resource_file_references(resource_file_references)
+            resource_file_references.map do |resource_file_reference|
+              ref = project.reference_for_path(resource_file_reference)
+
+              # Some nested files are not directly present in the Xcode project, such as the contents
+              # of an .xcdatamodeld directory. These files are implicitly included by including their
+              # parent directory.
+              next if ref.nil?
+
+              # For variant groups, the variant group itself is added, not its members.
+              next ref.parent if ref.parent.is_a?(Xcodeproj::Project::Object::PBXVariantGroup)
+
+              ref
+            end
+          end
+
           #-----------------------------------------------------------------------#
 
           SOURCE_FILE_EXTENSIONS = Sandbox::FileAccessor::SOURCE_FILE_EXTENSIONS
@@ -111,13 +136,7 @@ module Pod
 
               next unless target.requires_frameworks?
 
-              resource_refs = file_accessor.resources.flatten.map do |res|
-                project.reference_for_path(res)
-              end
-
-              # Some nested files are not directly present in the Xcode project, such as the contents
-              # of an .xcdatamodeld directory. These files will return nil file references.
-              resource_refs.compact!
+              resource_refs = filter_resource_file_references(file_accessor.resources.flatten).compact
 
               native_target.add_resources(resource_refs)
             end
@@ -138,19 +157,7 @@ module Pod
           def add_resources_bundle_targets
             target.file_accessors.each do |file_accessor|
               file_accessor.resource_bundles.each do |bundle_name, paths|
-                file_references = paths.map do |path|
-                  ref = project.reference_for_path(path)
-
-                  # Some nested files are not directly present in the Xcode project, such as the contents
-                  # of an .xcdatamodeld directory. These files are implicitly included by including their
-                  # parent directory.
-                  next if ref.nil?
-
-                  # For variant groups, the variant group itself is added, not its members.
-                  next ref.parent if ref.parent.is_a?(Xcodeproj::Project::Object::PBXVariantGroup)
-
-                  ref
-                end
+                file_references = filter_resource_file_references(paths)
                 file_references = file_references.uniq.compact
 
                 label = target.resources_bundle_target_label(bundle_name)
