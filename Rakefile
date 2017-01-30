@@ -146,7 +146,7 @@ begin
       lint = %w(ALL LINT).&(tasks).any?
 
       # Forcing colored to be included on String before Term::ANSIColor, so that Inch will work correctly.
-      require 'colored'
+      require 'colored2'
       ENV['GENERATE_COVERAGE'] = 'true'
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 

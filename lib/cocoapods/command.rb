@@ -1,4 +1,4 @@
-require 'colored'
+require 'colored2'
 require 'claide'
 require 'molinillo/errors'
 
