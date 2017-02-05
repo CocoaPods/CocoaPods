@@ -59,7 +59,7 @@ module Pod
     end if Executable.which('plutil')
 
     it 'generates a correct Info.plist file' do
-      generator = Generator::InfoPlistFile.new(mock('Target', :platform => stub(:name => :ios)))
+      generator = Generator::InfoPlistFile.new(mock('Target'))
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file).should == {
@@ -74,15 +74,6 @@ module Pod
         'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
         'NSPrincipalClass' => '',
       }
-    end
-
-    it 'adds UIRequiredDeviceCapabilities for tvOS targets' do
-      pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
-      pod_target.stubs(:platform).returns(Platform.new(:tvos, '9.0'))
-      generator = Generator::InfoPlistFile.new(pod_target)
-      file = temporary_directory + 'Info.plist'
-      generator.save_as(file)
-      Xcodeproj::Plist.read_from_path(file)['UIRequiredDeviceCapabilities'].should == %w(arm64)
     end
 
     it 'properly formats serialized arrays' do
@@ -103,7 +94,7 @@ module Pod
     end
 
     it 'uses the specified bundle_package_type' do
-      target = mock('Target', :platform => stub(:name => :ios))
+      target = mock('Target')
       generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
@@ -111,7 +102,7 @@ module Pod
     end
 
     it 'does not include a CFBundleExecutable for bundles' do
-      target = mock('Target', :platform => stub(:name => :ios))
+      target = mock('Target')
       generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
