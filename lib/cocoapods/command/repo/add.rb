@@ -15,10 +15,17 @@ module Pod
           CLAide::Argument.new('BRANCH', false),
         ]
 
+        def self.options
+          [
+            ['--progress', 'Show the progress of cloning the spec repository'],
+          ].concat(super)
+        end
+
         def initialize(argv)
           @name = argv.shift_argument
           @url = argv.shift_argument
           @branch = argv.shift_argument
+          @progress = argv.flag?('progress')
           super
         end
 
@@ -66,9 +73,20 @@ module Pod
         # @return [void]
         #
         def clone_repo
-          Dir.chdir(config.repos_dir) do
-            command = ['clone', @url, @name]
-            git!(command)
+          changes = if @progress
+                      { :verbose => true }
+                    else
+                      {}
+          end
+
+          config.with_changes(changes) do
+            Dir.chdir(config.repos_dir) do
+              command = ['clone', @url, @name]
+              if @progress
+                command << '--progress'
+              end
+              git!(command)
+            end
           end
         end
 

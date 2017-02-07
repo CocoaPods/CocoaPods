@@ -185,7 +185,7 @@ module Pod
 
           targets.each do |pod_target|
             unless pod_target.should_build? && pod_target.requires_frameworks?
-              XCConfigHelper.add_settings_for_file_accessors_of_target(pod_target, @xcconfig)
+              XCConfigHelper.add_settings_for_file_accessors_of_target(target, pod_target, @xcconfig)
             end
           end
         end

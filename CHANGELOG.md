@@ -4,6 +4,46 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Add `--skip-import-validation` to skip linking a pod during lint.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5670](https://github.com/CocoaPods/CocoaPods/issues/5670)
+
+
+## 1.2.0 (2017-01-28)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Do not link static frameworks to targets that use `inherit! search_paths`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6065](https://github.com/CocoaPods/CocoaPods/issues/6065)
+
+
+## 1.2.0.rc.1 (2017-01-13)
+
+##### Enhancements
+
+* Show git progress when downloading the CocoaPods Specs repo.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#5937](https://github.com/CocoaPods/CocoaPods/issues/5937)
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 1.2.0.beta.3 (2016-12-28)
 
 ##### Enhancements

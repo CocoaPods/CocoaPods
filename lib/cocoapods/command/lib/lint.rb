@@ -23,6 +23,7 @@ module Pod
             ['--private', 'Lint skips checks that apply only to public specs'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
              'This takes precedence over a .swift-version file.'],
+            ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
           ].concat(super)
         end
 
@@ -37,7 +38,8 @@ module Pod
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
           @private         = argv.flag?('private', false)
           @swift_version   = argv.option('swift-version', nil)
-          @podspecs_paths  = argv.arguments!
+          @skip_import_validation = argv.flag?('skip-import-validation', false)
+          @podspecs_paths = argv.arguments!
           super
         end
 
@@ -59,6 +61,7 @@ module Pod
             validator.use_frameworks = @use_frameworks
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
+            validator.skip_import_validation = @skip_import_validation
             validator.validate
 
             unless @clean

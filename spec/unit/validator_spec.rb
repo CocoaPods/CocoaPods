@@ -1,20 +1,18 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'webmock'
 
-module Bacon
-  class Context
-    alias_method :after_webmock, :after
-    def after(&block)
-      after_webmock do
-        block.call
-        WebMock.reset!
-      end
-    end
-  end
-end
-
 module Pod
   describe Validator do
+    before do
+      WebMock.enable!
+      WebMock.disable_net_connect!
+    end
+
+    after do
+      WebMock.reset!
+      WebMock.disable!
+    end
+
     before do
       Validator.any_instance.stubs(:xcodebuild).returns('')
       Validator.any_instance.stubs(:xcodebuild_available?).returns(true)
@@ -295,6 +293,7 @@ module Pod
         validator.stubs(:validate_url)
         validator.expects(:install_pod).times(4)
         validator.expects(:build_pod).times(4)
+        validator.expects(:add_app_project_import).times(4)
         validator.expects(:check_file_patterns).times(4)
         validator.validate
       end
@@ -421,6 +420,31 @@ module Pod
         first = validator.results.map(&:to_s).first
         first.should.include '[xcodebuild] Returned an unsuccessful exit code'
         validator.result_type.should == :error
+      end
+
+      it 'runs xcodebuild with correct arguments when skipping import validation' do
+        require 'fourflusher'
+        Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:validate_url)
+        validator.skip_import_validation = true
+        git = Executable.which(:git)
+        Executable.stubs(:which).with('git').returns(git)
+        Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
+        Executable.stubs(:which).with(:xcrun)
+        # Command should include the pod target 'JSONKit' instead of the 'App' target.
+        command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'JSONKit', '-configuration', 'Release']
+        args = %w(CODE_SIGN_IDENTITY=)
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
+        args = %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p')
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
+        args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
+        Executable.expects(:capture_command).with('xcodebuild', command + args, :capture => :merge).once.returns(['', stub(:success? => true)])
+        validator.validate
       end
 
       it 'runs xcodebuild with correct arguments for code signing' do
@@ -582,9 +606,14 @@ module Pod
         it 'adds the importing file to the app target' do
           @validator.stubs(:use_frameworks).returns(true)
           @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          app_project_path = @validator.validation_dir + 'App.xcodeproj'
           pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
           pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
           installer = stub(:pod_targets => [pod_target])
+          installer.stubs(:pods_project).returns(pods_project)
+          Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
+          Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)
 
@@ -598,15 +627,20 @@ module Pod
 
         it 'adds developer framework paths when the pod depends on XCTest' do
           @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          app_project_path = @validator.validation_dir + 'App.xcodeproj'
           pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
           pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
           pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
           installer = stub(:pod_targets => [pod_target])
+          installer.stubs(:pods_project).returns(pods_project)
+          Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
+          Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)
 
-          project = Xcodeproj::Project.open(@validator.validation_dir + 'App.xcodeproj')
-          project.native_targets.first.build_configurations.map do |bc|
+          app_project = Xcodeproj::Project.open(app_project_path)
+          app_project.native_targets.first.build_configurations.map do |bc|
             bc.build_settings['FRAMEWORK_SEARCH_PATHS']
           end.uniq.should == [%w($(inherited) "$(PLATFORM_DIR)/Developer/Library/Frameworks")]
         end
