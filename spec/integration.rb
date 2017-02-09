@@ -46,8 +46,8 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'pretty_bacon'
-require 'colored'
 require 'CLIntegracon'
+require 'colored2'
 
 require 'cocoapods-core/lockfile'
 require 'cocoapods-core/yaml_helper'

@@ -6,7 +6,7 @@ module Pod
   # information and for a verbose mode.
   #
   module UserInterface
-    require 'colored'
+    require 'colored2'
 
     @title_colors      =  %w( yellow green )
     @title_level       =  0

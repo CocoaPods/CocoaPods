@@ -1,4 +1,4 @@
-require 'colored'
+require 'colored2'
 require 'claide'
 require 'molinillo/errors'
 
@@ -87,6 +87,7 @@ module Pod
       config.silent = argv.flag?('silent', config.silent)
       config.verbose = self.verbose? unless verbose.nil?
       unless self.ansi_output?
+        Colored2.disable!
         String.send(:define_method, :colorize) { |string, _| string }
       end
     end
