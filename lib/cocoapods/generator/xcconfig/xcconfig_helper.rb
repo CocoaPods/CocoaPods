@@ -103,13 +103,34 @@ module Pod
         #
         def self.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
           file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
-            if aggregate_target.nil? || aggregate_target.target_definition.inheritance != 'search_paths'
-              XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, pod_target.sandbox.root)
-            end
+            adds_other_ldflags = XCConfigHelper.links_static_dependency?(aggregate_target, pod_target)
+            XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
           end
           file_accessor.vendored_static_libraries.each do |vendored_static_library|
-            XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, pod_target.sandbox.root)
+            adds_other_ldflags = XCConfigHelper.links_static_dependency?(aggregate_target, pod_target)
+            XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
           end
+        end
+
+        # @param  [AggregateTarget] aggregate_target
+        #         The aggregate target, may be nil.
+        #
+        # @param  [PodTarget] pod_target
+        #         The pod target to link or not.
+        #
+        # @return [Boolean] Whether static dependency should be added to the 'OTHER_LDFLAGS'
+        #         of the aggregate target. Aggregate targets that inherit search paths will only link
+        #         if the target has explicitly declared the pod dependency.
+        #
+        def self.links_static_dependency?(aggregate_target, pod_target)
+          return true if aggregate_target.nil? || aggregate_target.target_definition.inheritance != 'search_paths'
+          # Only link this static  dependency if its explicitly defined for this target.
+          aggregate_target.target_definition.non_inherited_dependencies.each do |d|
+            if d.name == pod_target.name
+              return true
+            end
+          end
+          false
         end
 
         # Adds build settings for dynamic vendored frameworks and libraries.
@@ -165,13 +186,13 @@ module Pod
         #
         # @return [void]
         #
-        def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root)
+        def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root, include_other_ldflags = true)
           name = File.basename(framework_path, '.framework')
           dirname = '${PODS_ROOT}/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
-            'OTHER_LDFLAGS' => "-framework #{name}",
             'FRAMEWORK_SEARCH_PATHS' => quote([dirname]),
           }
+          build_settings['OTHER_LDFLAGS'] = "-framework #{name}" if include_other_ldflags
           xcconfig.merge!(build_settings)
         end
 
@@ -189,14 +210,14 @@ module Pod
         #
         # @return [void]
         #
-        def self.add_library_build_settings(library_path, xcconfig, sandbox_root)
+        def self.add_library_build_settings(library_path, xcconfig, sandbox_root, include_other_ldflags = true)
           extension = File.extname(library_path)
           name = File.basename(library_path, extension).sub(/\Alib/, '')
           dirname = '${PODS_ROOT}/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
-            'OTHER_LDFLAGS' => "-l#{name}",
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ' + quote([dirname]),
           }
+          build_settings['OTHER_LDFLAGS'] = "-l#{name}" if include_other_ldflags
           xcconfig.merge!(build_settings)
         end
 
