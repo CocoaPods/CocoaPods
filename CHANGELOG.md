@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix integration with vendored static frameworks and libraries.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6477](https://github.com/CocoaPods/CocoaPods/pull/6477)
+
 * Use `${SRCROOT}` rather than `${PODS_ROOT}` in the generated manifest lock script phase.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5499](https://github.com/CocoaPods/CocoaPods/issues/5499)

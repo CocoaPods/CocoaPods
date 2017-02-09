@@ -233,12 +233,26 @@ module Pod
           end
 
           it 'should not include static framework other ld flags when inheriting search paths' do
-            target_definition = stub(:inheritance => 'search_paths')
-            aggregate_target = stub(:target_definition => target_definition)
+            target_definition = stub(:inheritance => 'search_paths', :non_inherited_dependencies => [])
+            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [])
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
+          end
+
+          it 'should include static framework other ld flags when inheriting search paths but explicitly declared' do
+            dependency = stub(:name => 'BananaLib')
+            target_definition = stub(:inheritance => 'search_paths', :non_inherited_dependencies => [dependency])
+            pod_target = stub(:name => 'BananaLib', :sandbox => config.sandbox)
+            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [pod_target])
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
           end
 
           it 'should include static framework other ld flags when not inheriting search paths' do
@@ -247,6 +261,8 @@ module Pod
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
           end
 
@@ -254,6 +270,8 @@ module Pod
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(nil, pod_target, xcconfig, @accessor)
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
           end
         end
