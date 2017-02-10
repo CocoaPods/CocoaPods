@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not generate `UIRequiredDeviceCapabilities` for `tvOS` Info.plists.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6193](https://github.com/CocoaPods/CocoaPods/issues/6193)
+
 * Fix integration with vendored static frameworks and libraries.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6477](https://github.com/CocoaPods/CocoaPods/pull/6477)
