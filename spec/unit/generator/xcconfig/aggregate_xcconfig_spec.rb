@@ -253,6 +253,20 @@ module Pod
             @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' '@executable_path/../../Frameworks'"
           end
 
+          it 'includes correct default runpath search path list for OSX unit test bundle user target' do
+            @target.stubs(:platform).returns(Platform.new(:osx, '10.10'))
+            mock_user_target = mock('usertarget', :symbol_type => :unit_test_bundle)
+            @target.stubs(:user_targets).returns([mock_user_target])
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks'"
+          end
+
+          it 'includes correct default runpath search path list for OSX application user target' do
+            @target.stubs(:platform).returns(Platform.new(:osx, '10.10'))
+            mock_user_target = mock('usertarget', :symbol_type => :application)
+            @target.stubs(:user_targets).returns([mock_user_target])
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/Frameworks'"
+          end
+
           it 'uses the target definition swift version' do
             @target_definition.stubs(:swift_version).returns('0.1')
             @generator.send(:target_swift_version).should == '0.1'
