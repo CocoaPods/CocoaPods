@@ -233,8 +233,8 @@ module Pod
           end
 
           it 'should not include static framework other ld flags when inheriting search paths' do
-            target_definition = stub(:inheritance => 'search_paths', :non_inherited_dependencies => [])
-            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [])
+            target_definition = stub(:inheritance => 'search_paths')
+            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [], :search_paths_aggregate_targets => [])
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
@@ -244,10 +244,9 @@ module Pod
           end
 
           it 'should include static framework other ld flags when inheriting search paths but explicitly declared' do
-            dependency = stub(:name => 'BananaLib')
-            target_definition = stub(:inheritance => 'search_paths', :non_inherited_dependencies => [dependency])
+            target_definition = stub(:inheritance => 'search_paths')
             pod_target = stub(:name => 'BananaLib', :sandbox => config.sandbox)
-            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [pod_target])
+            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [pod_target], :search_paths_aggregate_targets => [])
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
@@ -273,6 +272,60 @@ module Pod
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
+          end
+
+          it 'should link static dependency for pod targets' do
+            pod_target = stub(:name => 'BananaLib', :sandbox => config.sandbox)
+            @sut.links_dependency?(nil, pod_target).should.be.true
+          end
+
+          it 'should link static dependency when target explicitly specifies it' do
+            target_definition = stub(:inheritance => 'complete')
+            pod_target = stub(:name => 'BananaLib', :sandbox => config.sandbox)
+            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [pod_target], :search_paths_aggregate_targets => [])
+            @sut.links_dependency?(aggregate_target, pod_target).should.be.true
+          end
+
+          it 'should link static dependency when target explicitly specifies it even with search paths' do
+            target_definition = stub(:inheritance => 'search_paths')
+            pod_target = stub(:name => 'BananaLib', :sandbox => config.sandbox)
+            aggregate_target = stub(:target_definition => target_definition, :pod_targets => [pod_target], :search_paths_aggregate_targets => [])
+            @sut.links_dependency?(aggregate_target, pod_target).should.be.true
+          end
+
+          it 'should not link static dependency when inheriting search paths and parent includes dependency' do
+            parent_target_definition = stub
+            child_target_definition = stub(:inheritance => 'search_paths')
+            pod_target = stub(:name => 'BananaLib', :sandbox => config.sandbox)
+            parent_aggregate_target = stub(:target_definition => parent_target_definition, :pod_targets => [pod_target], :search_paths_aggregate_targets => [])
+            child_aggregate_target = stub(:target_definition => child_target_definition, :pod_targets => [], :search_paths_aggregate_targets => [parent_aggregate_target])
+            @sut.links_dependency?(child_aggregate_target, pod_target).should.be.false
+          end
+
+          it 'should link static transitive dependencies if the parent does not link them' do
+            child_pod_target = stub(:name => 'ChildPod', :sandbox => config.sandbox)
+            parent_pod_target = stub(:name => 'ParentPod', :sandbox => config.sandbox, :dependent_targets => [child_pod_target])
+
+            parent_target_definition = stub
+            child_target_definition = stub(:inheritance => 'search_paths')
+
+            parent_aggregate_target = stub(:target_definition => parent_target_definition, :pod_targets => [], :search_paths_aggregate_targets => [])
+            child_aggregate_target = stub(:target_definition => child_target_definition, :pod_targets => [parent_pod_target, child_pod_target], :search_paths_aggregate_targets => [parent_aggregate_target])
+            @sut.links_dependency?(child_aggregate_target, child_pod_target).should.be.true
+            @sut.links_dependency?(child_aggregate_target, parent_pod_target).should.be.true
+          end
+
+          it 'should link static only transitive dependencies that the parent does not link' do
+            child_pod_target = stub(:name => 'ChildPod', :sandbox => config.sandbox)
+            parent_pod_target = stub(:name => 'ParentPod', :sandbox => config.sandbox, :dependent_targets => [child_pod_target])
+
+            parent_target_definition = stub
+            child_target_definition = stub(:inheritance => 'search_paths')
+
+            parent_aggregate_target = stub(:target_definition => parent_target_definition, :pod_targets => [child_pod_target], :search_paths_aggregate_targets => [])
+            child_aggregate_target = stub(:target_definition => child_target_definition, :pod_targets => [parent_pod_target, child_pod_target], :search_paths_aggregate_targets => [parent_aggregate_target])
+            @sut.links_dependency?(child_aggregate_target, child_pod_target).should.be.false
+            @sut.links_dependency?(child_aggregate_target, parent_pod_target).should.be.true
           end
         end
 

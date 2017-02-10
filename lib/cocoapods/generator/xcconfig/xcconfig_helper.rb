@@ -103,11 +103,11 @@ module Pod
         #
         def self.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
           file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
-            adds_other_ldflags = XCConfigHelper.links_static_dependency?(aggregate_target, pod_target)
+            adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
             XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
           end
           file_accessor.vendored_static_libraries.each do |vendored_static_library|
-            adds_other_ldflags = XCConfigHelper.links_static_dependency?(aggregate_target, pod_target)
+            adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
             XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
           end
         end
@@ -122,15 +122,10 @@ module Pod
         #         of the aggregate target. Aggregate targets that inherit search paths will only link
         #         if the target has explicitly declared the pod dependency.
         #
-        def self.links_static_dependency?(aggregate_target, pod_target)
-          return true if aggregate_target.nil? || aggregate_target.target_definition.inheritance != 'search_paths'
-          # Only link this static  dependency if its explicitly defined for this target.
-          aggregate_target.target_definition.non_inherited_dependencies.each do |d|
-            if d.name == pod_target.name
-              return true
-            end
-          end
-          false
+        def self.links_dependency?(aggregate_target, pod_target)
+          return true if aggregate_target.nil? || aggregate_target.target_definition.inheritance == 'complete'
+          targets = aggregate_target.pod_targets - aggregate_target.search_paths_aggregate_targets.flat_map(&:pod_targets)
+          targets.include?(pod_target)
         end
 
         # Adds build settings for dynamic vendored frameworks and libraries.
