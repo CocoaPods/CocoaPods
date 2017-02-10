@@ -95,7 +95,7 @@ module Pod
           phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script.should == <<-EOS.strip_heredoc
-          diff "${SRCROOT}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
           if [ $? != 0 ] ; then
               # print error to STDERR
               echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
