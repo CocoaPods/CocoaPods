@@ -198,11 +198,11 @@ module Pod
             if pod_target.requires_frameworks?
               %(-framework "#{pod_target.product_basename}")
             else
-              %(-l "#{pod_target.product_basename}")
+              %(-l "#{pod_target.product_basename}") if XCConfigHelper.links_dependency?(target, pod_target)
             end
           end
 
-          @xcconfig.merge!('OTHER_LDFLAGS' => other_ld_flags.join(' '))
+          @xcconfig.merge!('OTHER_LDFLAGS' => other_ld_flags.compact.join(' '))
         end
 
         # Ensure to add the default linker run path search paths as they could

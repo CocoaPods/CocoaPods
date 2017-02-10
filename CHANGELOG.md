@@ -14,6 +14,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Correctly handle `OTHER_LDFLAGS` for targets with inherit search paths and source pods.  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6481](https://github.com/CocoaPods/CocoaPods/pull/6481)
+
 * Do not generate `UIRequiredDeviceCapabilities` for `tvOS` Info.plists.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6193](https://github.com/CocoaPods/CocoaPods/issues/6193)
