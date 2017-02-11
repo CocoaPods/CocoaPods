@@ -56,6 +56,7 @@ module Pod
           includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_static_artifacts.empty? }
           config = {
             'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target, includes_static_libs),
+            'PODS_PODFILE_DIR_PATH' => target.podfile_dir_relative_path,
             'PODS_ROOT' => target.relative_pods_root,
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',

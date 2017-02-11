@@ -204,6 +204,16 @@ module Pod
       "${SRCROOT}/#{sandbox.root.relative_path_from(client_root)}"
     end
 
+    # @return [String] The path of the Podfile directory relative to the
+    #         root of the user project.
+    #
+    def podfile_dir_relative_path
+      podfile_path = target_definition.podfile.defined_in_file
+      return "${SRCROOT}/#{podfile_path.relative_path_from(client_root).dirname}" unless podfile_path.nil?
+      # Fallback to the standard path if the Podfile is not represented by a file.
+      '${PODS_ROOT}/..'
+    end
+
     # @param  [String] config_name The build configuration name to get the xcconfig for
     # @return [String] The path of the xcconfig file relative to the root of
     #         the user project.
