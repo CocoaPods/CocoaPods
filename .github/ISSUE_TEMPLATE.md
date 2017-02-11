@@ -16,8 +16,7 @@
 > Issue with Nanaimo not loading:
 > Please run `[sudo] gem uninstall nanaimo` and remove all but the latest version.
 >
-> Linting a Swift 2.3 Pod: You need to add a .swift-version file or the 
-> argument --swift-version=VERSION, see the CHANGELOG.
+> Issues with `pod search`? Try deleting your cache `rm -rf ~/Library/Caches/CocoaPods`first.
 
 * [ ] I've read and understood the [*CONTRIBUTING guidelines and have done my best effort to follow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).
 
