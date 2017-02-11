@@ -30,6 +30,28 @@ module Pod
             @generator.target.relative_pods_root.should == '${SRCROOT}/Pods'
           end
 
+          it 'returns the path of the podfile directory relative to the standard user project' do
+            podfile = @target.target_definition.podfile
+            podfile.stubs(:defined_in_file).returns(Pathname.new(@target.client_root) + 'Podfile')
+            @target.target_definition.stubs(:podfile).returns(podfile)
+            @generator.target.podfile_dir_relative_path.should == '${SRCROOT}/.'
+          end
+
+          it 'returns the path of the podfile directory relative to a nested user project' do
+            podfile = @target.target_definition.podfile
+            podfile.stubs(:defined_in_file).returns(Pathname.new(@target.client_root) + 'Podfile')
+            @target.target_definition.stubs(:podfile).returns(podfile)
+            @target.client_root = Pathname.new(@target.client_root) + 'NestedFolder'
+            @generator.target.podfile_dir_relative_path.should == '${SRCROOT}/..'
+          end
+
+          it 'returns the standard path if the podfile is not defined in file' do
+            podfile = @target.target_definition.podfile
+            podfile.stubs(:defined_in_file).returns(nil)
+            @target.target_definition.stubs(:podfile).returns(podfile)
+            @generator.target.podfile_dir_relative_path.should == '${PODS_ROOT}/..'
+          end
+
           #--------------------------------------------------------------------#
 
           before do
