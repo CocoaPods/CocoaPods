@@ -4,6 +4,8 @@ module Pod
   class Installer
     class Analyzer
       class TargetInspector
+        PLATFORM_INFO_URL = 'https://guides.cocoapods.org/syntax/podfile.html#platform'.freeze
+
         # @return [TargetDefinition] the target definition to inspect
         #
         attr_accessor :target_definition
@@ -158,6 +160,10 @@ module Pod
             raise Informative,
                   "Unable to determine the platform for the `#{target_definition.name}` target."
           end
+
+          UI.warn "Automatically assigning platform #{name} with version #{deployment_target} " \
+            "on target #{target_definition.name} because no platform was specified. " \
+            "Please specify a platform for this target in your Podfile. See `#{PLATFORM_INFO_URL}`."
 
           target_definition.set_platform(name, deployment_target)
           Platform.new(name, deployment_target)

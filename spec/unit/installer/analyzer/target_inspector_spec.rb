@@ -232,6 +232,9 @@ module Pod
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
         platforms = target_inspector.send(:compute_platform, user_targets)
         platforms.should == Platform.new(:ios, '4.0')
+        UI.warnings.should.include 'Automatically assigning platform ios with version 4.0 on target default because no ' \
+          'platform was specified. Please specify a platform for this target in your Podfile. ' \
+          'See `https://guides.cocoapods.org/syntax/podfile.html#platform`.'
       end
 
       it 'uses the lowest deployment target of the user targets if inferring the platform' do
