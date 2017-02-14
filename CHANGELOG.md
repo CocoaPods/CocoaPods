@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Orta Therox](https://github.com/orta)
   [xcodeproj#463](https://github.com/CocoaPods/Xcodeproj/pull/463)
 
+* Cache results of dynamic_binary?  
+  [Ken Wigginton](https://github.com/hailstorm350)
+  [#6434](https://github.com/CocoaPods/CocoaPods/pull/6434)
+
 ##### Bug Fixes
 
 * Correctly handle `OTHER_LDFLAGS` for targets with inherit search paths and source pods.  
