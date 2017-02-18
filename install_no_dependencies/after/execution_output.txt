@@ -42,3 +42,5 @@ Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
 -> Pod installation complete! There are 0 dependencies from the Podfile and 0 total pods installed.
 
 [!] The Podfile does not contain any dependencies.
+
+[!] Automatically assigning platform osx with version 10.8 on target SampleApp because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
