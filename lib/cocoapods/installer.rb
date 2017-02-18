@@ -338,6 +338,8 @@ module Pod
         end
       end
 
+      raise Informative, "Could not install '#{pod_name}' pod. There is no target that supports it." if specs_by_platform.empty?
+
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, :can_cache => installation_options.clean?)
       @pod_installers << pod_installer

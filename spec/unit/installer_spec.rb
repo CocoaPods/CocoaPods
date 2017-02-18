@@ -540,6 +540,16 @@ module Pod
           UI.output.should.include 'was 1.0'
         end
 
+        it 'raises when it attempts to install pod source with no target supporting it' do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          pod_target = PodTarget.new([spec], [fixture_target_definition], config.sandbox)
+          pod_target.stubs(:platform).returns(:ios)
+          @installer.stubs(:pod_targets).returns([pod_target])
+          should.raise Informative do
+            @installer.send(:create_pod_installer, 'RandomPod')
+          end.message.should.include 'Could not install \'RandomPod\' pod. There is no target that supports it.'
+        end
+
         #--------------------------------------#
 
         describe '#clean' do

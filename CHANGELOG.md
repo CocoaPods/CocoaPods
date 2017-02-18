@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not crash when attempting to install pod with no supported targets.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6465](https://github.com/CocoaPods/CocoaPods/issues/6465)
+
 * Correctly handle `OTHER_LDFLAGS` for targets with inherit search paths and source pods.  
   [Justin Martin](https://github.com/justinseanmartin)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
