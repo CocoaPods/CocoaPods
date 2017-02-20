@@ -6,6 +6,10 @@ module Pod
   # by target for a given Podfile.
   #
   class Resolver
+    include Pod::Installer::InstallationOptions::Mixin
+
+    delegate_installation_options { podfile }
+
     # @return [Sandbox] the Sandbox used by the resolver to find external
     #         dependencies.
     #
@@ -288,7 +292,7 @@ module Pod
     def specifications_for_dependency(dependency, additional_requirements = [])
       requirement = Requirement.new(dependency.requirement.as_list + additional_requirements)
       find_cached_set(dependency).
-        all_specifications.
+        all_specifications(installation_options.warn_for_multiple_pod_sources).
         select { |s| requirement.satisfied_by? s.version }.
         map { |s| s.subspec_by_name(dependency.name, false) }.
         compact.
