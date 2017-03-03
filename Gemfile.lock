@@ -150,7 +150,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.0)
     colored (1.2)
-    colored2 (3.1.1)
+    colored2 (3.1.2)
     cork (0.1.0)
       colored (~> 1.2)
     crack (0.4.3)
@@ -293,4 +293,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.14.3
+   1.14.5
