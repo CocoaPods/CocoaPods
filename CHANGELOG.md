@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Use red text when pod installation fails 
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6534](https://github.com/CocoaPods/CocoaPods/issues/6534)
+  
 * Use the colored2 gem instead of colored.  
   [Orta Therox](https://github.com/orta)
   [xcodeproj#463](https://github.com/CocoaPods/Xcodeproj/pull/463)

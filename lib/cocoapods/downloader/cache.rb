@@ -34,7 +34,7 @@ module Pod
       rescue Informative
         raise
       rescue
-        UI.notice("Error installing #{request.name}")
+        UI.puts("\n[!] Error installing #{request.name}".red)
         raise
       end
 
