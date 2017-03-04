@@ -57,6 +57,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5670](https://github.com/CocoaPods/CocoaPods/issues/5670)
 
+* Updated the colored2 gem (previous version removed from rubygems.org).  
+  [Ben Asher](https://github.com/benasher44)
+  [#6533](https://github.com/CocoaPods/CocoaPods/pull/6533)
 
 ## 1.2.0 (2017-01-28)
 
