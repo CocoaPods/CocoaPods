@@ -100,8 +100,18 @@ module Pod
         root + request.slug(slug_opts)
       end
 
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
+      # @param  [Hash<Symbol,String>] slug_opts
+      #         the download options that should be used in constructing the
+      #         cache slug for this request.
+      #
+      # @return [string] The lock file path for the Pod downloaded from the given
+      #         `request`.
+      #
       def lock_path_for_pod(request, slug_opts = {})
-        path_for_pod(request, slug_opts).to_s + ".lock"
+        path_for_pod(request, slug_opts).to_s + '.lock'
       end
 
       # @param  [Request] request
@@ -165,11 +175,8 @@ module Pod
             destination.parent.mkpath
             lock_file_path = lock_path_for_pod(request, :name => name, :params => result.checkout_options)
 
-            File.new(lock_file_path, File::CREAT) if !File.exist? lock_file_path
-            File.open(lock_file_path) { |file|
-              file.flock(File::LOCK_EX)   
-              copy_and_clean(target, destination, spec)           
-            }            
+            File.new(lock_file_path, File::CREAT) unless File.exist? lock_file_path
+            File.open(lock_file_path) { |file| file.flock(File::LOCK_EX) && copy_and_clean(target, destination, spec) }
 
             write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
             if request.name == name
