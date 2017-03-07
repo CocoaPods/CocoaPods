@@ -91,6 +91,15 @@ module Pod
             fi
           }
 
+          # Copies the dSYM of a vendored framework
+          install_dsym() {
+            local source="$1"
+            if [ -r "$source" ]; then
+              echo "rsync -av --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${DWARF_DSYM_FOLDER_PATH}\\""
+              rsync -av --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${DWARF_DSYM_FOLDER_PATH}"
+            fi
+          }
+
           # Signs a framework with the provided identity
           code_sign_if_enabled() {
             if [ -n "${EXPANDED_CODE_SIGN_IDENTITY}" -a "${CODE_SIGNING_REQUIRED}" != "NO" -a "${CODE_SIGNING_ALLOWED}" != "NO" ]; then
@@ -126,11 +135,14 @@ module Pod
 
         SH
         script << "\n" unless frameworks_by_config.values.all?(&:empty?)
-        frameworks_by_config.each do |config, frameworks|
-          unless frameworks.empty?
+        frameworks_by_config.each do |config, frameworks_with_dsyms|
+          unless frameworks_with_dsyms.empty?
             script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
-            frameworks.each do |framework|
-              script << %(  install_framework "#{framework}"\n)
+            frameworks_with_dsyms.each do |framework_with_dsym|
+              script << %(  install_framework "#{framework_with_dsym[:framework]}"\n)
+              # Vendored frameworks might have a dSYM file next to them so ensure its copied. Frameworks built from
+              # sources will have their dSYM generated and copied by Xcode.
+              script << %(  install_dsym "#{framework_with_dsym[:dSYM]}"\n) unless framework_with_dsym[:dSYM].nil?
             end
             script << "fi\n"
           end
