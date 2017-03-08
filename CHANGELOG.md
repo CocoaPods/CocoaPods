@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6534](https://github.com/CocoaPods/CocoaPods/issues/6534)
   
+* Provide installation option to disable multiple pod sources warnings.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6497](https://github.com/CocoaPods/CocoaPods/pull/6497)
+
 * Use the colored2 gem instead of colored.  
   [Orta Therox](https://github.com/orta)
   [xcodeproj#463](https://github.com/CocoaPods/Xcodeproj/pull/463)
