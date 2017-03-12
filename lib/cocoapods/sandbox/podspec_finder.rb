@@ -12,13 +12,9 @@ module Pod
         @specs_by_name = {}
         spec_files = Pathname.glob(root + '{,*}.podspec{,.json}')
         spec_files.sort_by { |p| -p.to_path.split(File::SEPARATOR).size }.each do |file|
-          begin
-            spec = Specification.from_file(file)
-            spec.validate_cocoapods_version
-            @specs_by_name[spec.name] = spec
-          rescue => e
-            UI.warn "Unable to load a podspec from `#{file.basename}`, skipping:\n\n#{e}"
-          end
+          spec = Specification.from_file(file)
+          spec.validate_cocoapods_version
+          @specs_by_name[spec.name] = spec
         end
         @specs_by_name
       end
