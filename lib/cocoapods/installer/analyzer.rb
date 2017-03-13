@@ -217,7 +217,7 @@ module Pod
       def update_repositories
         sources.each do |source|
           if source.git?
-            config.sources_manager.update(source.name)
+            config.sources_manager.update(source.name, true)
           else
             UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
           end
