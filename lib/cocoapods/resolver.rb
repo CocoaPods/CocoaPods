@@ -2,6 +2,12 @@ require 'molinillo'
 require 'cocoapods/resolver/lazy_specification'
 
 module Pod
+  class NoSpecFoundError < Informative
+    def exit_status
+      @exit_status ||= 31
+    end
+  end
+
   # The resolver is responsible of generating a list of specifications grouped
   # by target for a given Podfile.
   #
@@ -389,6 +395,7 @@ module Pod
     #
     def handle_resolver_error(error)
       message = error.message.dup
+      type = Informative
       case error
       when Molinillo::VersionConflict
         error.conflicts.each do |name, conflict|
@@ -427,6 +434,7 @@ module Pod
             found_conflicted_specs = conflicts.reject { |c| search_for(c).empty? }
             if found_conflicted_specs.empty?
               # There are no existing specification inside any of the spec repos with given requirements.
+              type = NoSpecFoundError
               dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'
               message << "\n\nNone of your spec sources contain a spec satisfying "\
                 "the #{dependencies}: `#{conflicts.join(', ')}`." \
@@ -443,7 +451,7 @@ module Pod
           end
         end
       end
-      raise Informative, message
+      raise type, message
     end
 
     # Returns whether the given spec is platform-compatible with the dependency
