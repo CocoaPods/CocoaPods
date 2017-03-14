@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Only share pod target xcscheme if present during validation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6558](https://github.com/CocoaPods/CocoaPods/pull/6558)
+
 * Properly compile storyboard for watch device family.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6516](https://github.com/CocoaPods/CocoaPods/issues/6516)
