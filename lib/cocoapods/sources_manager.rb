@@ -104,7 +104,7 @@ module Pod
 
     def update_git_repo(show_output = false)
       Config.instance.with_changes(:verbose => show_output) do
-        git!(%W(-C #{repo} fetch origin))
+        git!(%W(-C #{repo} fetch origin #{show_output ? '--progress' : ''}))
         current_branch = git!(%W(-C #{repo} rev-parse --abbrev-ref HEAD)).strip
         git!(%W(-C #{repo} reset --hard origin/#{current_branch}))
       end

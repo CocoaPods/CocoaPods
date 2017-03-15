@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6516](https://github.com/CocoaPods/CocoaPods/issues/6516)
 
+* Support git progress for `pod repo update` and `pod install --repo-update`  
+  [Alfredo Delli Bovi](https://github.com/adellibovi)
+  [#6525](https://github.com/CocoaPods/CocoaPods/issues/6525)
+
 
 ## 1.2.1.beta.1 (2017-03-08)
 

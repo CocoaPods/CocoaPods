@@ -94,7 +94,7 @@ module Pod
         repo_update = sequence('repo update')
         MasterSource.any_instance.
           expects(:git!).
-          with(%W(-C #{test_repo_path} fetch origin)).
+          with(%W(-C #{test_repo_path} fetch origin --progress)).
           in_sequence(repo_update)
 
         MasterSource.any_instance.
@@ -124,7 +124,7 @@ module Pod
 
         MasterSource.any_instance.
           expects(:git!).
-          with(%W(-C #{test_repo_path} fetch origin)).
+          with(%W(-C #{test_repo_path} fetch origin --progress)).
           in_sequence(repo_update)
 
         MasterSource.any_instance.
@@ -151,7 +151,7 @@ module Pod
         Source.any_instance.stubs(:git).with do |options|
           options.join(' ') == %W(-C #{test_repo_path} diff --name-only aabbccd..HEAD).join(' ')
         end.returns('')
-        MasterSource.any_instance.expects(:git!).with(%W(-C #{test_repo_path} fetch origin)).raises(<<-EOS)
+        MasterSource.any_instance.expects(:git!).with(%W(-C #{test_repo_path} fetch origin --progress)).raises(<<-EOS)
 fatal: '/dev/null' does not appear to be a git repository
 fatal: Could not read from remote repository.
 
