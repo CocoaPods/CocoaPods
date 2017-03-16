@@ -21,6 +21,10 @@ module Pod
         This will configure the project to reference the Pods static library,
         add a build configuration file, and add a post build script to copy
         Pod resources.
+
+        This may return one of several error codes if it encounters problems.
+        * `1` Generic error code
+        * `31` Spec not found (i.e out-of-date source repos, mistyped Pod name etc...)
       DESC
 
       def self.options
