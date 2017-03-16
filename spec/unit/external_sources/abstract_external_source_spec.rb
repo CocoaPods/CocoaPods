@@ -26,6 +26,36 @@ module Pod
         @subject.fetch(config.sandbox)
         config.sandbox.specification('Reachability').name.should == 'Reachability'
       end
+
+      it 'raises appropriate error if a DSLError was raised' do
+        Downloader.stubs(:download).raises(Pod::DSLError.new('Invalid `Reachability.podspec` file:', 'some/path/to/podspec', Exception.new('Error Message')))
+        should.raise(Informative) do
+          e = @subject.send(:pre_download, config.sandbox)
+          e.message.should.include "Failed to load 'Reachability' podspec:"
+          e.message.should.include 'Invalid `Reachability.podspec` file:'
+        end
+      end
+
+      it 'raises appropriate error if a DSLError when storing a podspec from string' do
+        podspec = 'Pod::Spec.new do |s|; error; end'
+        should.raise(Informative) { @subject.send(:store_podspec, config.sandbox, podspec) }.
+            message.should.include "Invalid `Reachability.podspec` file: undefined local variable or method `error'"
+      end
+
+      it 'raises appropriate error if a DSLError when storing a podspec from file' do
+        podspec = 'Pod::Spec.new do |s|; error; end'
+        path = SpecHelper.temporary_directory + 'BananaLib.podspec'
+        File.open(path, 'w') { |f| f.write(podspec) }
+        should.raise(Informative) { @subject.send(:store_podspec, config.sandbox, path) }.
+            message.should.include "Invalid `BananaLib.podspec` file: undefined local variable or method `error'"
+      end
+
+      it 'raises a generic error if a podspec was not found' do
+        Downloader.stubs(:download).raises(Pod::Downloader::DownloaderError.new('Some generic exception'))
+        should.raise(Informative) do
+          @subject.send(:pre_download, config.sandbox).message.should == "Unable to find a specification for 'Reachability'."
+        end
+      end
     end
 
     #--------------------------------------#

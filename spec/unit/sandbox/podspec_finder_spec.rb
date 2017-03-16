@@ -15,12 +15,6 @@ module Pod
       @finder.podspecs.should.be.empty
     end
 
-    it "warns when a found podspec can't be parsed" do
-      @root.+('RestKit.podspec.json').open('w') { |f| f << '{]' }
-      @finder.podspecs.should.be.empty
-      UI.warnings.should.include "Unable to load a podspec from `RestKit.podspec.json`, skipping:\n\n"
-    end
-
     it 'ignores podspecs not in the root' do
       path = @root + 'Dir/RestKit.podspec.json'
       path.parent.mkpath
