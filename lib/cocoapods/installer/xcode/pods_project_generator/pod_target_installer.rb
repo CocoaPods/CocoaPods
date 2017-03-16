@@ -80,7 +80,7 @@ module Pod
           #
           # @note   Core Data model directories (.xcdatamodeld) used to be added to the
           #         `Copy Resources` build phase like all other resources, since they would
-          #         compile correctly in either the resources or compile phaes. In recent
+          #         compile correctly in either the resources or compile phase. In recent
           #         versions of xcode, there's an exception for data models that generate
           #         headers. These need to be added to the compile sources phase of a real
           #         target for the headers to be built in time for code in the target to
@@ -101,7 +101,7 @@ module Pod
 
               ref
             end.compact.uniq
-            compile_phase_matcher = lambda {|ref| !(ref.path =~ /.*\.xcdatamodeld/i).nil? }
+            compile_phase_matcher = lambda { |ref| !(ref.path =~ /.*\.xcdatamodeld/i).nil? }
             resources_phase_refs = file_references.reject(&compile_phase_matcher)
             compile_phase_refs = file_references.select(&compile_phase_matcher)
             yield resources_phase_refs, compile_phase_refs
@@ -170,7 +170,6 @@ module Pod
           def add_resources_bundle_targets
             target.file_accessors.each do |file_accessor|
               file_accessor.resource_bundles.each do |bundle_name, paths|
-
                 label = target.resources_bundle_target_label(bundle_name)
                 bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
                 bundle_target.product_reference.tap do |bundle_product|
