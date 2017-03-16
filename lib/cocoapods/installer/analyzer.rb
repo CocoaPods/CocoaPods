@@ -156,6 +156,11 @@ module Pod
 
       private
 
+      # @return [Bool] Whether the analysis has updated sources repositories.
+      #
+      attr_accessor :specs_updated
+      alias_method :specs_updated?, :specs_updated
+
       def validate_podfile!
         validator = Installer::PodfileValidator.new(podfile)
         validator.validate
@@ -222,6 +227,7 @@ module Pod
             UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
           end
         end
+        @specs_updated = true
       end
 
       private
@@ -716,6 +722,7 @@ module Pod
         specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path(podfile.defined_in_file) || 'Podfile'}" do
           resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
+          resolver.specs_updated = specs_updated?
           specs_by_target = resolver.resolve
           specs_by_target.values.flatten(1).each(&:validate_cocoapods_version)
         end

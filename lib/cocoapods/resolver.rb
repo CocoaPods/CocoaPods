@@ -35,6 +35,11 @@ module Pod
     #
     attr_accessor :sources
 
+    # @return [Bool] Whether the resolver has sources repositories up-to-date.
+    #
+    attr_accessor :specs_updated
+    alias specs_updated? specs_updated
+
     # Init a new Resolver
     #
     # @param  [Sandbox] sandbox @see sandbox
@@ -438,9 +443,11 @@ module Pod
               dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'
               message << "\n\nNone of your spec sources contain a spec satisfying "\
                 "the #{dependencies}: `#{conflicts.join(', ')}`." \
-                "\n\nYou have either:" \
-                "\n * out-of-date source repos which you can update with `pod repo update`." \
-                "\n * mistyped the name or version." \
+                "\n\nYou have either:"
+              unless specs_updated?
+                message << "\n * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`."
+              end
+              message << "\n * mistyped the name or version." \
                 "\n * not added the source repo that hosts the Podspec to your Podfile." \
                 "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
 

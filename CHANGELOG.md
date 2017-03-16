@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Alfredo Delli Bovi](https://github.com/adellibovi)
   [#6033](https://github.com/CocoaPods/CocoaPods/issues/6033)
 
+* Provide better error message when spec not found  
+  [Alfredo Delli Bovi](https://github.com/adellibovi)
+  [#6033](https://github.com/CocoaPods/CocoaPods/issues/6033)
+
 
 ## 1.2.1.beta.1 (2017-03-08)
 
