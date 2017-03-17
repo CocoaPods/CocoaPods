@@ -171,7 +171,6 @@ module Pod
           podspecs.each do |name, spec|
             destination = path_for_pod(request, :name => name, :params => result.checkout_options)
 
-            # add file lock
             destination.parent.mkpath
             lock_file_path = lock_path_for_pod(request, :name => name, :params => result.checkout_options)
 
@@ -190,13 +189,13 @@ module Pod
         end
       end
 
-      # @param  [file] file
+      # @param  [File] file
       #         should be locked file.
       #
       # @param  [mode] mode
       #         the file lock mode.
       #
-      # @return [boolean] The result of lock specific file and mode.
+      # @return [Boolean] The result of lock specific file and mode.
       #
       def flock(file, mode)
         success = file.flock(mode)
