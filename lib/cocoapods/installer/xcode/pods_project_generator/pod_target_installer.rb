@@ -69,13 +69,26 @@ module Pod
           # added by their parent directory. This will also include references to the parent [PBXVariantGroup]
           # for all resources underneath it.
           #
-          # @param  Array[<Pathname>] resource_file_references
+          # @param  [Array<Pathname>] resource_file_references
           #         The array of all resource file references to filter.
-
-          # @return [Array<Pathname>] The filtered resource file references.
+          #
+          # @yield_param  [Array<PBXFileReference>} The filtered resource file references to be installed
+          #               in the copy resources phase.
+          #
+          # @yield_param  [Array<PBXFileReference>} The filtered resource file references to be installed
+          #               in the compile sources phase.
+          #
+          # @note   Core Data model directories (.xcdatamodeld) used to be added to the
+          #         `Copy Resources` build phase like all other resources, since they would
+          #         compile correctly in either the resources or compile phase. In recent
+          #         versions of xcode, there's an exception for data models that generate
+          #         headers. These need to be added to the compile sources phase of a real
+          #         target for the headers to be built in time for code in the target to
+          #         use them. These kinds of models generally break when added to resource
+          #         bundles.
           #
           def filter_resource_file_references(resource_file_references)
-            resource_file_references.map do |resource_file_reference|
+            file_references = resource_file_references.map do |resource_file_reference|
               ref = project.reference_for_path(resource_file_reference)
 
               # Some nested files are not directly present in the Xcode project, such as the contents
@@ -87,7 +100,11 @@ module Pod
               next ref.parent if ref.parent.is_a?(Xcodeproj::Project::Object::PBXVariantGroup)
 
               ref
-            end
+            end.compact.uniq
+            compile_phase_matcher = lambda { |ref| !(ref.path =~ /.*\.xcdatamodeld/i).nil? }
+            resources_phase_refs = file_references.reject(&compile_phase_matcher)
+            compile_phase_refs = file_references.select(&compile_phase_matcher)
+            yield resources_phase_refs, compile_phase_refs
           end
 
           #-----------------------------------------------------------------------#
@@ -136,9 +153,10 @@ module Pod
 
               next unless target.requires_frameworks?
 
-              resource_refs = filter_resource_file_references(file_accessor.resources.flatten).compact
-
-              native_target.add_resources(resource_refs)
+              filter_resource_file_references(file_accessor.resources.flatten) do |resource_phase_refs, compile_phase_refs|
+                native_target.add_file_references(compile_phase_refs, nil)
+                native_target.add_resources(resource_phase_refs)
+              end
             end
           end
 
@@ -147,19 +165,11 @@ module Pod
           # @note   The source files are grouped by Pod and in turn by subspec
           #         (recursively) in the resources group.
           #
-          # @note   Core Data model directories (.xcdatamodeld) are currently added to the
-          #         `Copy Resources` build phase like all other resources. The Xcode UI adds
-          #         these to the `Compile Sources` build phase, but they will compile
-          #         correctly either way.
-          #
           # @return [void]
           #
           def add_resources_bundle_targets
             target.file_accessors.each do |file_accessor|
               file_accessor.resource_bundles.each do |bundle_name, paths|
-                file_references = filter_resource_file_references(paths)
-                file_references = file_references.uniq.compact
-
                 label = target.resources_bundle_target_label(bundle_name)
                 bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
                 bundle_target.product_reference.tap do |bundle_product|
@@ -167,7 +177,12 @@ module Pod
                   bundle_product.name = bundle_file_name
                   bundle_product.path = bundle_file_name
                 end
-                bundle_target.add_resources(file_references)
+
+                filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|
+                  # Resource bundles are only meant to have resources, so install everything
+                  # into the resources phase. See note in filter_resource_file_references.
+                  bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
+                end
 
                 target.user_build_configurations.each do |bc_name, type|
                   bundle_target.add_build_configuration(bc_name, type)

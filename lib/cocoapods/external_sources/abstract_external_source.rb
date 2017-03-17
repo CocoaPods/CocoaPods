@@ -111,10 +111,14 @@ module Pod
         title = "Pre-downloading: `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           target = sandbox.pod_dir(name)
-          download_result = Downloader.download(download_request, target, :can_cache => can_cache)
+          begin
+            download_result = Downloader.download(download_request, target, :can_cache => can_cache)
+          rescue Pod::DSLError => e
+            raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
+          rescue => _
+            raise Informative, "Unable to find a specification for '#{name}'."
+          end
           spec = download_result.spec
-
-          raise Informative, "Unable to find a specification for '#{name}'." unless spec
 
           store_podspec(sandbox, spec)
           sandbox.store_pre_downloaded_pod(name)
@@ -147,17 +151,21 @@ module Pod
       # @return [void]
       #
       def store_podspec(sandbox, spec, json = false)
-        spec = case spec
-               when Pathname
-                 Specification.from_file(spec)
-               when String
-                 path = "#{name}.podspec"
-                 path << '.json' if json
-                 Specification.from_string(spec, path)
-               when Specification
-                 spec.dup
-               else
-                 raise "Unknown spec type: #{spec}"
+        begin
+          spec = case spec
+                 when Pathname
+                   Specification.from_file(spec)
+                 when String
+                   path = "#{name}.podspec"
+                   path << '.json' if json
+                   Specification.from_string(spec, path)
+                 when Specification
+                   spec.dup
+                 else
+                   raise "Unknown spec type: #{spec}"
+                 end
+        rescue Pod::DSLError => e
+          raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
         end
         spec.defined_in_file = nil
         validate_podspec(spec)

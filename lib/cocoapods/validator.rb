@@ -428,7 +428,8 @@ module Pod
       add_xctest(app_target) if @installer.pod_targets.any? { |pt| pt.spec_consumers.any? { |c| c.frameworks.include?('XCTest') } }
       app_project.save
       Xcodeproj::XCScheme.share_scheme(app_project.path, 'App')
-      Xcodeproj::XCScheme.share_scheme(@installer.pods_project.path, pod_target.label)
+      # Share the pods xcscheme only if it exists. For pre-built vendored pods there is no xcscheme generated.
+      Xcodeproj::XCScheme.share_scheme(@installer.pods_project.path, pod_target.label) if shares_pod_target_xcscheme?(pod_target)
     end
 
     def add_swift_version(app_target)
@@ -667,6 +668,10 @@ module Pod
 
     def note(*args)
       add_result(:note, *args)
+    end
+
+    def shares_pod_target_xcscheme?(pod_target)
+      Pathname.new(@installer.pods_project.path + pod_target.label).exist?
     end
 
     def add_result(type, attribute_name, message, public_only = false)

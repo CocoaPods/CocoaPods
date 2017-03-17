@@ -67,7 +67,7 @@ module Pod
 
       it 'does not update unused sources' do
         @analyzer.stubs(:sources).returns(config.sources_manager.master)
-        config.sources_manager.expects(:update).once.with('master')
+        config.sources_manager.expects(:update).once.with('master', true)
         @analyzer.update_repositories
       end
 
@@ -124,7 +124,7 @@ module Pod
         source.stubs(:repo).returns('/repo/cache/path')
         config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
         source.stubs(:git?).returns(true)
-        config.sources_manager.expects(:update).once.with(source.name)
+        config.sources_manager.expects(:update).once.with(source.name, true)
 
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.update_repositories

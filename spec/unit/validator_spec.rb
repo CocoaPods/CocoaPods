@@ -614,6 +614,7 @@ module Pod
           installer.stubs(:pods_project).returns(pods_project)
           Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
           Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
+          @validator.stubs(:shares_pod_target_xcscheme?).returns(true)
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)
 
@@ -636,6 +637,7 @@ module Pod
           installer.stubs(:pods_project).returns(pods_project)
           Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
           Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
+          @validator.stubs(:shares_pod_target_xcscheme?).returns(true)
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)
 
@@ -643,6 +645,22 @@ module Pod
           app_project.native_targets.first.build_configurations.map do |bc|
             bc.build_settings['FRAMEWORK_SEARCH_PATHS']
           end.uniq.should == [%w($(inherited) "$(PLATFORM_DIR)/Developer/Library/Frameworks")]
+        end
+
+        it 'does not share xcscheme for pod target if there isnt one' do
+          @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          app_project_path = @validator.validation_dir + 'App.xcodeproj'
+          pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
+          installer = stub(:pod_targets => [pod_target])
+          installer.stubs(:pods_project).returns(pods_project)
+          Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
+          Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').never
+          @validator.stubs(:shares_pod_target_xcscheme?).returns(false)
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:add_app_project_import)
         end
       end
 

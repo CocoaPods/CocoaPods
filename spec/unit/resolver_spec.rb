@@ -373,7 +373,7 @@ module Pod
           pod 'AFNetworking', '999.999.999'
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
-        e = lambda { resolver.resolve }.should.raise Informative
+        e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`AFNetworking \(= 999\.999\.999\)` required by `Podfile`/)
         e.message.should.match(/None of your spec sources contain a spec satisfying the dependency: `AFNetworking \(= 999\.999\.999\)`./)
@@ -382,6 +382,7 @@ module Pod
         e.message.should.match(/ * not added the source repo that hosts the Podspec to your Podfile./)
         e.message.should.match(/ * out-of-date source repos which you can update with `pod repo update`/)
         e.message.should.match(/Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default./)
+        e.exit_status.should.equal(31)
       end
 
       it 'raises with a list of dependencies if there are many dependencies but no versions of a dependency exists' do
@@ -392,7 +393,7 @@ module Pod
         locked_deps = dependency_graph_from_array([Dependency.new('AFNetworking', '= 1.4')])
 
         resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
-        e = lambda { resolver.resolve }.should.raise Informative
+        e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.match(/Unable to satisfy the following requirements/)
         e.message.should.match(/`AFNetworking \(= 3.0.1\)` required by `Podfile`/)
         e.message.should.match(/`AFNetworking \(= 1.4\)` required by `Podfile.lock`/)
@@ -403,6 +404,7 @@ module Pod
         e.message.should.match(/ * not added the source repo that hosts the Podspec to your Podfile./)
         e.message.should.match(/ * out-of-date source repos which you can update with `pod repo update`/)
         e.message.should.match(/Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default./)
+        e.exit_status.should.equal(31)
       end
 
       it 'takes into account locked dependencies' do

@@ -8,10 +8,43 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* Provide a better error message if a podspec is found but cannot be parsed.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6457](https://github.com/CocoaPods/CocoaPods/issues/6457)
+
+* Only share pod target xcscheme if present during validation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6558](https://github.com/CocoaPods/CocoaPods/pull/6558)
+
+* Properly compile storyboard for watch device family.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6516](https://github.com/CocoaPods/CocoaPods/issues/6516)
+
+* Support git progress for `pod repo update` and `pod install --repo-update`  
+  [Alfredo Delli Bovi](https://github.com/adellibovi)
+  [#6525](https://github.com/CocoaPods/CocoaPods/issues/6525)
+
+* Return new exit code (31) when spec not found  
+  [Alfredo Delli Bovi](https://github.com/adellibovi)
+  [#6033](https://github.com/CocoaPods/CocoaPods/issues/6033)
+
+
+## 1.2.1.beta.1 (2017-03-08)
+
+##### Enhancements
+
 * Use red text when pod installation fails 
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6534](https://github.com/CocoaPods/CocoaPods/issues/6534)
   
+* Provide installation option to disable multiple pod sources warnings.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6497](https://github.com/CocoaPods/CocoaPods/pull/6497)
+
 * Use the colored2 gem instead of colored.  
   [Orta Therox](https://github.com/orta)
   [xcodeproj#463](https://github.com/CocoaPods/Xcodeproj/pull/463)
@@ -21,6 +54,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#6434](https://github.com/CocoaPods/CocoaPods/pull/6434)
 
 ##### Bug Fixes
+
+* Ensure Core Data models get added to the compile sources phase for header generation.  
+  [Ben Asher](https://github.com/benasher44)
+  [#6259](https://github.com/CocoaPods/CocoaPods/issues/6259)
 
 * Do not crash when attempting to install pod with no supported targets.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
