@@ -55,6 +55,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Ensure Core Data models get added to the compile sources phase for header generation.  
+  [Ben Asher](https://github.com/benasher44)
+  [#6259](https://github.com/CocoaPods/CocoaPods/issues/6259)
+
 * Do not crash when attempting to install pod with no supported targets.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6465](https://github.com/CocoaPods/CocoaPods/issues/6465)

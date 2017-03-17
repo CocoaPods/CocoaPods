@@ -587,6 +587,22 @@ module Pod
                 end
                 strings_build_file.should.be.nil
               end
+
+              it 'adds Core Data models to the compile sources phase (non-bundles only)' do
+                native_target = @project.targets.first
+
+                # The data model should not be in the resources phase.
+                core_data_resources_file = native_target.resources_build_phase.files.find do |bf|
+                  bf.file_ref.path == 'Resources/Sample.xcdatamodeld'
+                end
+                core_data_resources_file.should.be.nil
+
+                # The data model should not be in the resources phase.
+                core_data_sources_file = native_target.source_build_phase.files.find do |bf|
+                  bf.file_ref.path == 'Resources/Sample.xcdatamodeld'
+                end
+                core_data_sources_file.should.be.not.nil
+              end
             end
 
             describe 'concerning resource bundles' do
