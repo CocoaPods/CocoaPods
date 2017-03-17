@@ -177,7 +177,7 @@ module Pod
 
             File.new(lock_file_path, File::CREAT) unless File.exist? lock_file_path
             File.open(lock_file_path) do |file|
-              flock(file, File::LOCK_EX) { |f| copy_and_clean(target, destination, spec) }
+              flock(file, File::LOCK_EX) { copy_and_clean(target, destination, spec) }
             end
 
             write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
@@ -203,11 +203,11 @@ module Pod
         if success
           begin
             yield file
-          ensure 
+          ensure
             file.flock(File::LOCK_UN)
-          end          
+          end
         end
-        return success
+        success
       end
 
       def download(request, target)
