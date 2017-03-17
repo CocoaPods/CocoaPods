@@ -107,7 +107,7 @@ module Pod
       #         the download options that should be used in constructing the
       #         cache slug for this request.
       #
-      # @return [string] The lock file path for the Pod downloaded from the given
+      # @return [String] The lock file path for the Pod downloaded from the given
       #         `request`.
       #
       def lock_path_for_pod(request, slug_opts = {})
