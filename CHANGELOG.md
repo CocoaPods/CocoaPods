@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix regression from #6457 to ensure a correct error message is given when a spec is not found.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6457](https://github.com/CocoaPods/CocoaPods/issues/6457)
+
 * Provide a better error message if a podspec is found but cannot be parsed.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6457](https://github.com/CocoaPods/CocoaPods/issues/6457)
