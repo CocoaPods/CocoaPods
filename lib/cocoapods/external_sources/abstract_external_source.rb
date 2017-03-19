@@ -116,9 +116,11 @@ module Pod
           rescue Pod::DSLError => e
             raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
           rescue => _
-            raise Informative, "Unable to find a specification for '#{name}'."
+            raise Informative, "Failed to download '#{name}'."
           end
           spec = download_result.spec
+
+          raise Informative, "Unable to find a specification for '#{name}'." unless spec
 
           store_podspec(sandbox, spec)
           sandbox.store_pre_downloaded_pod(name)

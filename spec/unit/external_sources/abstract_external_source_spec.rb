@@ -36,6 +36,12 @@ module Pod
         end
       end
 
+      it 'raises a generic error if pre download fails' do
+        Downloader.stubs(:download).raises(Pod::Downloader::DownloaderError.new('Some generic exception'))
+        exception = lambda { @subject.send(:pre_download, config.sandbox) }.should.raise Informative
+        exception.message.should.include "Failed to download 'Reachability'"
+      end
+
       it 'raises appropriate error if a DSLError when storing a podspec from string' do
         podspec = 'Pod::Spec.new do |s|; error; end'
         should.raise(Informative) { @subject.send(:store_podspec, config.sandbox, podspec) }.
@@ -51,10 +57,10 @@ module Pod
       end
 
       it 'raises a generic error if a podspec was not found' do
-        Downloader.stubs(:download).raises(Pod::Downloader::DownloaderError.new('Some generic exception'))
-        should.raise(Informative) do
-          @subject.send(:pre_download, config.sandbox).message.should == "Unable to find a specification for 'Reachability'."
-        end
+        download_result = stub(:spec => nil)
+        Downloader.stubs(:download).returns(download_result)
+        exception = lambda { @subject.send(:pre_download, config.sandbox) }.should.raise Informative
+        exception.message.should.include "Unable to find a specification for 'Reachability'."
       end
     end
 
