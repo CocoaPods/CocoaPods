@@ -242,11 +242,17 @@ module Pod
       # @param  [Array<AggregateTarget>] embedded_aggregate_targets the aggregate targets
       #         representing the embedded targets to be integrated
       #
-      def copy_embedded_target_pod_targets_to_host(aggregate_target, embedded_aggregate_targets)
+      # @param  [Boolean] libraries_only if true, only library-type embedded
+      #         targets are considered, otherwise, all other types are have
+      #         their pods copied to their host targets as well (extensions, etc.)
+      #
+      def copy_embedded_target_pod_targets_to_host(aggregate_target, embedded_aggregate_targets, libraries_only)
         return if aggregate_target.requires_host_target?
         pod_target_names = Set.new(aggregate_target.pod_targets.map(&:name))
         aggregate_user_target_uuids = Set.new(aggregate_target.user_targets.map(&:uuid))
         embedded_aggregate_targets.each do |embedded_aggregate_target|
+          # Skip non libraries in library-only mode
+          next if libraries_only && !embedded_aggregate_target.library?
           next unless embedded_aggregate_target.user_targets.any? do |embedded_user_target|
             # You have to ask the host target's project for the host targets of
             # the embedded target, as opposed to asking user_project for the
@@ -357,11 +363,21 @@ module Pod
           generate_target(target_definition, pod_targets)
         end
         if installation_options.integrate_targets?
-          # Copy embedded target pods that cannot have their pods embedded as frameworks to their host targets
-          embedded_targets = aggregate_targets.select(&:requires_host_target?).select(&:requires_frameworks?)
+          # Copy embedded target pods that cannot have their pods embedded as frameworks to
+          # their host targets, and ensure we properly link library pods to their host targets
+          embedded_targets = aggregate_targets.select(&:requires_host_target?)
           analyze_host_targets_in_podfile(aggregate_targets, embedded_targets)
+
+          use_frameworks_embedded_targets = embedded_targets.select(&:requires_frameworks?)
+          non_use_frameworks_embedded_targets = embedded_targets.reject(&:requires_frameworks?)
           aggregate_targets.each do |target|
-            copy_embedded_target_pod_targets_to_host(target, embedded_targets)
+            # For targets that require frameworks, we always have to copy their pods to their
+            # host targets because those frameworks will all be loaded from the host target's bundle
+            copy_embedded_target_pod_targets_to_host(target, use_frameworks_embedded_targets, false)
+
+            # For targets that don't require frameworks, we only have to consider library-type
+            # targets because their host targets will still need to link their pods
+            copy_embedded_target_pod_targets_to_host(target, non_use_frameworks_embedded_targets, true)
           end
         end
         aggregate_targets.each do |target|

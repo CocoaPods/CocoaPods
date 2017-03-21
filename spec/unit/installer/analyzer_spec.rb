@@ -757,7 +757,31 @@ module Pod
               pod 'JSONKit'
             end
 
-            target 'Sample Framework' do
+            target 'SampleFramework' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
+            JSONKit
+            monkey
+          ).sort
+        end
+
+        it "copy a static library's pod target, when the static library is in a sub project" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            target 'SampleProject' do
+              pod 'JSONKit'
+            end
+
+            target 'SampleLib' do
               project 'SampleProject/Sample Lib/Sample Lib'
               pod 'monkey'
             end
@@ -793,7 +817,7 @@ module Pod
             source SpecHelper.test_repo_url
             use_frameworks!
             platform :ios, '8.0'
-            target 'Sample Framework' do
+            target 'SampleFramework' do
               project 'SampleProject/Sample Lib/Sample Lib'
               pod 'monkey'
             end

@@ -256,6 +256,42 @@ module Pod
         end
       end
 
+      describe 'Target might be a library target' do
+        before do
+          target_definition = Podfile::TargetDefinition.new('Pods', nil)
+          target_definition.abstract = false
+          @target = AggregateTarget.new(target_definition, config.sandbox)
+          project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
+          @target.user_project = Xcodeproj::Project.open(project_path)
+          @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
+        end
+
+        it 'is a library target if the user_target is a framework' do
+          @target.user_targets.first.stubs(:symbol_type).returns(:framework)
+          @target.library?.should == true
+        end
+
+        it 'is a library target if the user_target is a static library' do
+          @target.user_targets.first.stubs(:symbol_type).returns(:static_library)
+          @target.library?.should == true
+        end
+
+        it 'is a library target if the user_target is a dynamic library' do
+          @target.user_targets.first.stubs(:symbol_type).returns(:dynamic_library)
+          @target.library?.should == true
+        end
+
+        it 'is not a library target if the user_target is an application' do
+          @target.user_targets.first.stubs(:symbol_type).returns(:application)
+          @target.library?.should == false
+        end
+
+        it 'is not a library target if the user_target is an app extension' do
+          @target.user_targets.first.stubs(:symbol_type).returns(:app_extension)
+          @target.library?.should == false
+        end
+      end
+
       describe 'With frameworks' do
         before do
           @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', [fixture_target_definition('iOS Example')])
