@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix building with static lib subprojects (previously only supported framework subprojects).  
+  [Ben Asher](https://github.com/benasher44)
+  [#5830](https://github.com/CocoaPods/CocoaPods/issues/5830)
+  [#6306](https://github.com/CocoaPods/CocoaPods/issues/6306)
+
 * Fix regression from #6457 to ensure a correct error message is given when a spec is not found.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6457](https://github.com/CocoaPods/CocoaPods/issues/6457)
