@@ -28,11 +28,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		137F16131D3AFC2900029696 /* Sample Framework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Sample Framework.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		137F16131D3AFC2900029696 /* SampleFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SampleFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		137F16151D3AFC2900029696 /* Sample Framework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample Framework.h"; sourceTree = "<group>"; };
 		137F16171D3AFC2900029696 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		137F161B1D3AFC6700029696 /* Sample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sample.m; sourceTree = "<group>"; };
-		51E94E0F164472080035348C /* libSample Lib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSample Lib.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		51E94E0F164472080035348C /* libSampleLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSampleLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E94E12164472080035348C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		51E94E16164472090035348C /* Sample Lib-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sample Lib-Prefix.pch"; sourceTree = "<group>"; };
 		51E94E17164472090035348C /* Sample_Lib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sample_Lib.h; sourceTree = "<group>"; };
@@ -81,8 +81,8 @@
 		51E94E10164472080035348C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				51E94E0F164472080035348C /* libSample Lib.a */,
-				137F16131D3AFC2900029696 /* Sample Framework.framework */,
+				51E94E0F164472080035348C /* libSampleLib.a */,
+				137F16131D3AFC2900029696 /* SampleFramework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,9 +127,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		137F16121D3AFC2900029696 /* Sample Framework */ = {
+		137F16121D3AFC2900029696 /* SampleFramework */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 137F161A1D3AFC2900029696 /* Build configuration list for PBXNativeTarget "Sample Framework" */;
+			buildConfigurationList = 137F161A1D3AFC2900029696 /* Build configuration list for PBXNativeTarget "SampleFramework" */;
 			buildPhases = (
 				137F160E1D3AFC2900029696 /* Sources */,
 				137F160F1D3AFC2900029696 /* Frameworks */,
@@ -140,14 +140,14 @@
 			);
 			dependencies = (
 			);
-			name = "Sample Framework";
+			name = SampleFramework;
 			productName = "Sample Framework";
-			productReference = 137F16131D3AFC2900029696 /* Sample Framework.framework */;
+			productReference = 137F16131D3AFC2900029696 /* SampleFramework.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		51E94E0E164472080035348C /* Sample Lib */ = {
+		51E94E0E164472080035348C /* SampleLib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 51E94E1D164472090035348C /* Build configuration list for PBXNativeTarget "Sample Lib" */;
+			buildConfigurationList = 51E94E1D164472090035348C /* Build configuration list for PBXNativeTarget "SampleLib" */;
 			buildPhases = (
 				51E94E0B164472080035348C /* Sources */,
 				51E94E0C164472080035348C /* Frameworks */,
@@ -157,9 +157,9 @@
 			);
 			dependencies = (
 			);
-			name = "Sample Lib";
+			name = SampleLib;
 			productName = "Sample Lib";
-			productReference = 51E94E0F164472080035348C /* libSample Lib.a */;
+			productReference = 51E94E0F164472080035348C /* libSampleLib.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -188,8 +188,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				51E94E0E164472080035348C /* Sample Lib */,
-				137F16121D3AFC2900029696 /* Sample Framework */,
+				51E94E0E164472080035348C /* SampleLib */,
+				137F16121D3AFC2900029696 /* SampleFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -381,13 +381,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		137F161A1D3AFC2900029696 /* Build configuration list for PBXNativeTarget "Sample Framework" */ = {
+		137F161A1D3AFC2900029696 /* Build configuration list for PBXNativeTarget "SampleFramework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				137F16181D3AFC2900029696 /* Debug */,
 				137F16191D3AFC2900029696 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		51E94E09164472080035348C /* Build configuration list for PBXProject "Sample Lib" */ = {
 			isa = XCConfigurationList;
@@ -398,7 +399,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		51E94E1D164472090035348C /* Build configuration list for PBXNativeTarget "Sample Lib" */ = {
+		51E94E1D164472090035348C /* Build configuration list for PBXNativeTarget "SampleLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				51E94E1E164472090035348C /* Debug */,

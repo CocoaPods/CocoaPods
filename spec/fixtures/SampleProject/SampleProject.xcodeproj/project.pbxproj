@@ -52,6 +52,13 @@
 			remoteGlobalIDString = 137F16131D3AFC2900029696;
 			remoteInfo = "Sample Framework";
 		};
+		13C5653F1E816CB40059B3C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 51E94E0E164472080035348C;
+			remoteInfo = "Sample Lib";
+		};
 		13C6236F1D3B00F900EFB98B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 51E94E201644721F0035348C /* Sample Lib.xcodeproj */;
@@ -303,6 +310,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				13C565401E816CB40059B3C3 /* PBXTargetDependency */,
 				13C623701D3B00F900EFB98B /* PBXTargetDependency */,
 			);
 			name = SampleProject;
@@ -459,6 +467,11 @@
 			isa = PBXTargetDependency;
 			name = "Sample Framework";
 			targetProxy = 130F34EB1D73B132009D968D /* PBXContainerItemProxy */;
+		};
+		13C565401E816CB40059B3C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Sample Lib";
+			targetProxy = 13C5653F1E816CB40059B3C3 /* PBXContainerItemProxy */;
 		};
 		13C623701D3B00F900EFB98B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
