@@ -66,6 +66,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ken Wigginton](https://github.com/hailstorm350)
   [#6434](https://github.com/CocoaPods/CocoaPods/pull/6434)
 
+* Created `NOMENCLATURE.md` to keep a glossary of the most common terms used in cocoapods.
+  [Rob Contreras](https://github.com/robcontreras)
+  [#2379](https://github.com/CocoaPods/CocoaPods/pull/2379)
+
 ##### Bug Fixes
 
 * Ensure Core Data models get added to the compile sources phase for header generation.  
