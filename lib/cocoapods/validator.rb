@@ -28,8 +28,12 @@ module Pod
     #         the Source URLs to use in creating a {Podfile}.
     #
     def initialize(spec_or_path, source_urls)
-      @source_urls = source_urls.map { |url| config.sources_manager.source_with_name_or_url(url) }.map(&:url)
       @linter = Specification::Linter.new(spec_or_path)
+      @source_urls = if @linter.spec && @linter.spec.dependencies.empty?
+                       []
+                     else
+                       source_urls.map { |url| config.sources_manager.source_with_name_or_url(url) }.map(&:url)
+                     end
     end
 
     #-------------------------------------------------------------------------#
@@ -405,6 +409,7 @@ module Pod
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
+      @installer.has_dependencies = !spec.dependencies.empty?
       %i(prepare resolve_dependencies download_dependencies).each { |m| @installer.send(m) }
       @file_accessor = @installer.pod_targets.flat_map(&:file_accessors).find { |fa| fa.spec.name == consumer.spec.name }
     end

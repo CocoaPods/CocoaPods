@@ -372,13 +372,44 @@ module Pod
         end
       end
 
-      it 'repects the source_urls parameter' do
+      it 'empties sources when no dependencies' do
         sources = %w(master https://github.com/CocoaPods/Specs.git)
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(podspec_path, sources)
         validator.stubs(:validate_url)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
+        podfile.sources.should == %w()
+      end
+
+      it 'repects the source_urls parameter when there are dependencies' do
+        podspec = stub_podspec(/.*name.*/, '"name": "SBJson",').gsub(/.*version.*/, '"version": "3.2",')
+        file = write_podspec(podspec, 'SBJson.podspec.json')
+        spec = Specification.from_file(file)
+        set = mock
+        set.stubs(:all_specifications).returns([spec])
+        Source::Aggregate.any_instance.stubs(:search).with(Dependency.new('SBJson', '~> 3.2')).returns(set)
+
+        podspec = stub_podspec(/.*name.*/, '"name": "ZKit",')
+        podspec.gsub!(/.*requires_arc.*/, '"dependencies": { "SBJson": [ "~> 3.2" ] }, "requires_arc": false')
+        file = write_podspec(podspec, 'ZKit.podspec.json')
+
+        spec = Specification.from_file(file)
+
+        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        Command::Repo::Add.any_instance.stubs(:run)
+        validator = Validator.new(spec, sources)
+        validator.stubs(:validate_url)
+        podfile = validator.send(:podfile_from_spec, :ios, '5.0')
         podfile.sources.should == %w(https://github.com/CocoaPods/Specs.git)
+      end
+
+      it 'avoids creation of sources when no dependencies' do
+        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        config.sources_manager.expects(:find_or_create_source_with_url).never
+        Command::Repo::Add.any_instance.stubs(:run)
+        validator = Validator.new(podspec_path, sources)
+        validator.stubs(:validate_url)
+        validator.validate
       end
 
       it 'uses xcodebuild to generate warnings' do
