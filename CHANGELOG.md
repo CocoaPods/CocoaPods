@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix generating `LD_RUNPATH_SEARCH_PATHS` without `use_frameworks!` but consuming a vendored dynamic artifact.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6596](https://github.com/CocoaPods/CocoaPods/issues/6596)
+
 * Fix building with static lib subprojects (previously only supported framework subprojects).  
   [Ben Asher](https://github.com/benasher44)
   [#5830](https://github.com/CocoaPods/CocoaPods/issues/5830)

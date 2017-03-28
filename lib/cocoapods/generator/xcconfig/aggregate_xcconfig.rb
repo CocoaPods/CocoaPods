@@ -80,7 +80,11 @@ module Pod
           # See https://github.com/CocoaPods/CocoaPods/issues/1216
           @xcconfig.attributes.delete('USE_HEADERMAP')
 
-          generate_ld_runpath_search_paths if target.requires_frameworks?
+          # If any of the aggregate target dependencies bring in any vendored dynamic artifacts we should ensure to
+          # update the runpath search paths.
+          vendored_dynamic_artifacts = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_dynamic_artifacts)
+
+          generate_ld_runpath_search_paths if target.requires_frameworks? || vendored_dynamic_artifacts.count > 0
 
           @xcconfig
         end
