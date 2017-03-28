@@ -218,6 +218,11 @@ module Pod
               expected = '$(inherited)'
               @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include expected
             end
+
+            it 'includes default runpath search path list when not using frameworks but links a vendored dynamic framework' do
+              @target.stubs(:requires_frameworks?).returns(false)
+              @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
+            end
           end
 
           describe 'with a scoped pod target' do
