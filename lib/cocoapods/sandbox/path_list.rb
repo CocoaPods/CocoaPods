@@ -52,8 +52,9 @@ module Pod
         end
         escaped_root = escape_path_for_glob(root)
 
-        absolute_paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH).lazy
+        absolute_paths = Pathname.glob(escaped_root + '**{,/*/**}/*', File::FNM_DOTMATCH).lazy
         dirs_and_files = absolute_paths.reject { |path| path.basename.to_s =~ /^\.\.?$/ }
+        dirs_and_files = dirs_and_files.reject { |path| path.to_s =~ /^#{escaped_root}\/\.\/.*?$/ }
         dirs, files = dirs_and_files.partition { |path| File.directory?(path) }
 
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
