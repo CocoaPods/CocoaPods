@@ -31,10 +31,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 48d7e22cda5a7451b17def3b182e1fcf19cdb2e2
+  revision: 9adec2958904f1db1f499c8f06513d29c4970bba
   branch: master
   specs:
-    xcodeproj (1.4.2)
+    xcodeproj (1.4.3)
       CFPropertyList (~> 2.3.3)
       activesupport (>= 3)
       claide (>= 1.0.1, < 2.0)
@@ -121,7 +121,7 @@ PATH
       molinillo (~> 0.5.7)
       nap (~> 1.0)
       ruby-macho (~> 0.2.5)
-      xcodeproj (>= 1.4.1, < 2.0)
+      xcodeproj (>= 1.4.3, < 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -245,7 +245,7 @@ GEM
     terminal-table (1.6.0)
     thread_safe (0.3.6)
     tins (1.8.1)
-    tzinfo (1.2.2)
+    tzinfo (1.2.3)
       thread_safe (~> 0.1)
     unicode-display_width (0.3.1)
     webmock (2.3.1)
