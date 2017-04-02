@@ -54,7 +54,7 @@ module Pod
             @pod_target.stubs(:uses_swift?).returns(true)
             @installer.send(:add_target)
             @installer.send(:native_target).resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').should == {
-              'Release' => nil,
+              'Release' => '-Owholemodule',
               'Debug' => '-Onone',
               'Test' => nil,
               'AppStore' => nil,
