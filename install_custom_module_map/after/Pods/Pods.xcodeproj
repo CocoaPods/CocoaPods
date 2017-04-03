@@ -57,6 +57,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -84,6 +85,7 @@ Targets:
         Base Configuration: BananaLib.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -122,6 +124,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -153,6 +156,7 @@ Targets:
         Base Configuration: Pods-Example.debug.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -190,6 +194,7 @@ Build Configurations:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_ANALYZER_NONNULL: 'YES'
+      CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
       CLANG_ENABLE_MODULES: 'YES'
@@ -197,10 +202,13 @@ Build Configurations:
       CLANG_WARN_BOOL_CONVERSION: 'YES'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      CLANG_WARN_DOCUMENTATION_COMMENTS: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INFINITE_RECURSION: 'YES'
       CLANG_WARN_INT_CONVERSION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       CODE_SIGNING_REQUIRED: 'NO'
@@ -229,6 +237,7 @@ Build Configurations:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
       CLANG_ANALYZER_NONNULL: 'YES'
+      CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: 'YES'
       CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
       CLANG_CXX_LIBRARY: libc++
       CLANG_ENABLE_MODULES: 'YES'
@@ -236,10 +245,13 @@ Build Configurations:
       CLANG_WARN_BOOL_CONVERSION: 'YES'
       CLANG_WARN_CONSTANT_CONVERSION: 'YES'
       CLANG_WARN_DIRECT_OBJC_ISA_USAGE: 'YES'
+      CLANG_WARN_DOCUMENTATION_COMMENTS: 'YES'
       CLANG_WARN_EMPTY_BODY: 'YES'
       CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INFINITE_RECURSION: 'YES'
       CLANG_WARN_INT_CONVERSION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: 'YES'
+      CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
       CODE_SIGNING_REQUIRED: 'NO'
