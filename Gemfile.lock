@@ -120,7 +120,7 @@ PATH
       gh_inspector (~> 1.0)
       molinillo (~> 0.5.7)
       nap (~> 1.0)
-      ruby-macho (~> 0.2.5)
+      ruby-macho (~> 1.1)
       xcodeproj (>= 1.4.3, < 2.0)
 
 GEM
@@ -231,7 +231,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 0.3)
     ruby-graphviz (1.2.2)
-    ruby-macho (0.2.6)
+    ruby-macho (1.1.0)
     ruby-prof (0.15.2)
     ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
@@ -292,4 +292,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.14.5
+   1.14.6
