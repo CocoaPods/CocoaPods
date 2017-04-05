@@ -33,7 +33,7 @@ File References:
 Targets:
 - App:
     Build Phases:
-    - '[CP] Check Pods Manifest.lock': []
+    - "[CP] Check Pods Manifest.lock": []
     - Sources:
       - ViewController.m
       - AppDelegate.m
@@ -44,53 +44,53 @@ Targets:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard
-    - '[CP] Embed Pods Frameworks': []
-    - '[CP] Copy Pods Resources': []
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: App/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
           PRODUCT_BUNDLE_IDENTIFIER: bug.App
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods-App.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: App/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
           PRODUCT_BUNDLE_IDENTIFIER: bug.App
-          PRODUCT_NAME: $(TARGET_NAME)
+          PRODUCT_NAME: "$(TARGET_NAME)"
         Base Configuration: Pods-App.release.xcconfig
 - Test:
     Build Phases:
-    - '[CP] Check Pods Manifest.lock': []
+    - "[CP] Check Pods Manifest.lock": []
     - Sources:
       - Test.m
     - Frameworks:
       - Pods_Test.framework
     - Resources: []
-    - '[CP] Embed Pods Frameworks': []
-    - '[CP] Copy Pods Resources': []
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
-          BUNDLE_LOADER: $(TEST_HOST)
+          BUNDLE_LOADER: "$(TEST_HOST)"
           INFOPLIST_FILE: Test/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           PRODUCT_BUNDLE_IDENTIFIER: bug.Test
-          PRODUCT_NAME: $(TARGET_NAME)
-          TEST_HOST: $(BUILT_PRODUCTS_DIR)/App.app/App
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App.app/App"
         Base Configuration: Pods-Test.debug.xcconfig
     - Release:
         Build Settings:
-          BUNDLE_LOADER: $(TEST_HOST)
+          BUNDLE_LOADER: "$(TEST_HOST)"
           INFOPLIST_FILE: Test/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           PRODUCT_BUNDLE_IDENTIFIER: bug.Test
-          PRODUCT_NAME: $(TARGET_NAME)
-          TEST_HOST: $(BUILT_PRODUCTS_DIR)/App.app/App
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App.app/App"
         Base Configuration: Pods-Test.release.xcconfig
 
 
@@ -124,7 +124,7 @@ Build Configurations:
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - $(inherited)
+      - "$(inherited)"
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
