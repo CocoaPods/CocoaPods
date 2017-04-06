@@ -254,6 +254,11 @@ module Pod
         end
       end
       settings['GCC_PREPROCESSOR_DEFINITIONS'] = definitions
+
+      if type == :debug
+        settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = 'DEBUG'
+      end
+
       build_configuration
     end
 
