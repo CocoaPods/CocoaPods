@@ -144,7 +144,7 @@ Targets:
     - Sources:
       - asserts-dummy.m
       - Asserts.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - Frameworks:
       - Foundation.framework
       - logger.framework
@@ -167,14 +167,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/asserts/asserts-prefix.pch
           INFOPLIST_FILE: Target Support Files/asserts/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/asserts/asserts.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: asserts
@@ -195,14 +195,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/asserts/asserts-prefix.pch
           INFOPLIST_FILE: Target Support Files/asserts/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/asserts/asserts.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: asserts
@@ -217,23 +217,23 @@ Targets:
     - Sources:
       - CocoaLumberjack-dummy.m
       - DDAbstractDatabaseLogger.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDASLLogCapture.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDASLLogger.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDContextFilterLogFormatter.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDDispatchQueueLogFormatter.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDFileLogger.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDLog.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDMultiFormatter.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - DDTTYLogger.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - Frameworks:
       - Foundation.framework
     - Headers:
@@ -294,14 +294,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch
           INFOPLIST_FILE: Target Support Files/CocoaLumberjack/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: CocoaLumberjack
@@ -322,14 +322,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch
           INFOPLIST_FILE: Target Support Files/CocoaLumberjack/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: CocoaLumberjack
@@ -344,7 +344,7 @@ Targets:
     - Sources:
       - logger-dummy.m
       - Logger.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - Frameworks:
       - CocoaLumberjack.framework
       - Foundation.framework
@@ -367,14 +367,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/logger/logger-prefix.pch
           INFOPLIST_FILE: Target Support Files/logger/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/logger/logger.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: logger
@@ -395,14 +395,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/logger/logger-prefix.pch
           INFOPLIST_FILE: Target Support Files/logger/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/logger/logger.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: logger
@@ -434,19 +434,19 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-App/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MACH_O_TYPE: staticlib
           MODULEMAP_FILE: Target Support Files/Pods-App/Pods-App.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: Pods_App
           SDKROOT: iphoneos
@@ -466,19 +466,19 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-App/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MACH_O_TYPE: staticlib
           MODULEMAP_FILE: Target Support Files/Pods-App/Pods-App.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: Pods_App
           SDKROOT: iphoneos
@@ -509,19 +509,19 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-Test/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MACH_O_TYPE: staticlib
           MODULEMAP_FILE: Target Support Files/Pods-Test/Pods-Test.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: Pods_Test
           SDKROOT: iphoneos
@@ -541,19 +541,19 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-Test/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MACH_O_TYPE: staticlib
           MODULEMAP_FILE: Target Support Files/Pods-Test/Pods-Test.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: Pods_Test
           SDKROOT: iphoneos
@@ -566,7 +566,7 @@ Targets:
     Build Phases:
     - Sources:
       - AmazingModel.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - sharedlib-Core-dummy.m
     - Frameworks:
       - asserts.framework
@@ -591,14 +591,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Core/sharedlib-Core-prefix.pch
           INFOPLIST_FILE: Target Support Files/sharedlib-Core/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/sharedlib-Core/sharedlib-Core.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: sharedlib
@@ -619,14 +619,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Core/sharedlib-Core-prefix.pch
           INFOPLIST_FILE: Target Support Files/sharedlib-Core/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/sharedlib-Core/sharedlib-Core.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: sharedlib
@@ -640,7 +640,7 @@ Targets:
     Build Phases:
     - Sources:
       - AmazingTestHelper.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - sharedlib-Testing-dummy.m
     - Frameworks:
       - asserts.framework
@@ -666,14 +666,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Testing/sharedlib-Testing-prefix.pch
           INFOPLIST_FILE: Target Support Files/sharedlib-Testing/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/sharedlib-Testing/sharedlib-Testing.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: sharedlib
@@ -694,14 +694,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Testing/sharedlib-Testing-prefix.pch
           INFOPLIST_FILE: Target Support Files/sharedlib-Testing/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/sharedlib-Testing/sharedlib-Testing.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: sharedlib
@@ -715,7 +715,7 @@ Targets:
     Build Phases:
     - Sources:
       - TestCase.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
       - testkit-dummy.m
     - Frameworks:
       - asserts.framework
@@ -741,14 +741,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/testkit/testkit-prefix.pch
           INFOPLIST_FILE: Target Support Files/testkit/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/testkit/testkit.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           PRODUCT_NAME: testkit
@@ -769,14 +769,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/testkit/testkit-prefix.pch
           INFOPLIST_FILE: Target Support Files/testkit/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
           MODULEMAP_FILE: Target Support Files/testkit/testkit.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           PRODUCT_NAME: testkit
@@ -820,7 +820,7 @@ Build Configurations:
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_DEBUG=1
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
@@ -832,7 +832,7 @@ Build Configurations:
       ONLY_ACTIVE_ARCH: 'YES'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
-      SYMROOT: "${SRCROOT}/../build"
+      SYMROOT: ${SRCROOT}/../build
 - Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -860,7 +860,7 @@ Build Configurations:
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_RELEASE=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
@@ -870,5 +870,5 @@ Build Configurations:
       IPHONEOS_DEPLOYMENT_TARGET: '8.0'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
-      SYMROOT: "${SRCROOT}/../build"
+      SYMROOT: ${SRCROOT}/../build
       VALIDATE_PRODUCT: 'YES'

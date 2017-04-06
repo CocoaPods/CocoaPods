@@ -29,7 +29,7 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - Sources:
       - ViewController.swift
       - AppDelegate.swift
@@ -38,62 +38,62 @@ Targets:
     - Resources:
       - Images.xcassets
       - Main.storyboard
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           COMBINE_HIDPI_IMAGES: 'YES'
           INFOPLIST_FILE: SampleApp/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks
+          PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           COMBINE_HIDPI_IMAGES: 'YES'
           INFOPLIST_FILE: SampleApp/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks
+          PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-SampleApp.release.xcconfig
 - SampleAppTests:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - Sources:
       - SampleAppTests.swift
     - Frameworks:
       - Pods_SampleAppTests.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
-          BUNDLE_LOADER: "$(TEST_HOST)"
+          BUNDLE_LOADER: $(TEST_HOST)
           COMBINE_HIDPI_IMAGES: 'YES'
           FRAMEWORK_SEARCH_PATHS:
-          - "$(DEVELOPER_FRAMEWORKS_DIR)"
-          - "$(inherited)"
+          - $(DEVELOPER_FRAMEWORKS_DIR)
+          - $(inherited)
           GCC_PREPROCESSOR_DEFINITIONS:
           - DEBUG=1
-          - "$(inherited)"
+          - $(inherited)
           INFOPLIST_FILE: SampleAppTests/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks"
-          PRODUCT_NAME: "$(TARGET_NAME)"
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/../Frameworks
+          PRODUCT_NAME: $(TARGET_NAME)
+          TEST_HOST: $(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp
         Base Configuration: Pods-SampleAppTests.debug.xcconfig
     - Release:
         Build Settings:
-          BUNDLE_LOADER: "$(TEST_HOST)"
+          BUNDLE_LOADER: $(TEST_HOST)
           COMBINE_HIDPI_IMAGES: 'YES'
           FRAMEWORK_SEARCH_PATHS:
-          - "$(DEVELOPER_FRAMEWORKS_DIR)"
-          - "$(inherited)"
+          - $(DEVELOPER_FRAMEWORKS_DIR)
+          - $(inherited)
           INFOPLIST_FILE: SampleAppTests/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks"
-          PRODUCT_NAME: "$(TARGET_NAME)"
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/../Frameworks
+          PRODUCT_NAME: $(TARGET_NAME)
+          TEST_HOST: $(BUILT_PRODUCTS_DIR)/SampleApp.app/Contents/MacOS/SampleApp
         Base Configuration: Pods-SampleAppTests.release.xcconfig
 
 
@@ -115,7 +115,7 @@ Build Configurations:
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
-      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGN_IDENTITY: '-'
       COPY_PHASE_STRIP: 'NO'
       ENABLE_STRICT_OBJC_MSGSEND: 'YES'
       GCC_C_LANGUAGE_STANDARD: gnu99
@@ -123,7 +123,7 @@ Build Configurations:
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
@@ -135,7 +135,7 @@ Build Configurations:
       MTL_ENABLE_DEBUG_INFO: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       SDKROOT: macosx
-      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+      SWIFT_OPTIMIZATION_LEVEL: -Onone
 - Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -152,7 +152,7 @@ Build Configurations:
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
       CLANG_WARN_UNREACHABLE_CODE: 'YES'
       CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
-      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGN_IDENTITY: '-'
       COPY_PHASE_STRIP: 'YES'
       DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
       ENABLE_NS_ASSERTIONS: 'NO'

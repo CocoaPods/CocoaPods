@@ -32,7 +32,7 @@ File References:
 Targets:
 - SubSpecCircular:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - Sources:
       - ViewController.m
       - AppDelegate.m
@@ -43,24 +43,24 @@ Targets:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: SubSpecCircular/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           PRODUCT_BUNDLE_IDENTIFIER: net.wiesnerpeter.SubSpecCircular
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-SubSpecCircular.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: SubSpecCircular/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
           PRODUCT_BUNDLE_IDENTIFIER: net.wiesnerpeter.SubSpecCircular
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-SubSpecCircular.release.xcconfig
 
 
@@ -94,7 +94,7 @@ Build Configurations:
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'

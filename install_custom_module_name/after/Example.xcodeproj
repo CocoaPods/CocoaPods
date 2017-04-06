@@ -18,29 +18,29 @@ File References:
 Targets:
 - Example:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - '[CP] Check Pods Manifest.lock': []
     - Sources:
       - ViewController.swift
       - AppDelegate.swift
     - Frameworks:
       - Pods_Example.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - '[CP] Embed Pods Frameworks': []
+    - '[CP] Copy Pods Resources': []
     Build Configurations:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: Example/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+          PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-Example.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           INFOPLIST_FILE: Example/Info.plist
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+          PRODUCT_NAME: $(TARGET_NAME)
         Base Configuration: Pods-Example.release.xcconfig
 
 
@@ -70,7 +70,7 @@ Build Configurations:
       GCC_OPTIMIZATION_LEVEL: '0'
       GCC_PREPROCESSOR_DEFINITIONS:
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
@@ -82,7 +82,7 @@ Build Configurations:
       MTL_ENABLE_DEBUG_INFO: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       SDKROOT: iphoneos
-      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+      SWIFT_OPTIMIZATION_LEVEL: -Onone
       TARGETED_DEVICE_FAMILY: '1,2'
 - Release:
     Build Settings:

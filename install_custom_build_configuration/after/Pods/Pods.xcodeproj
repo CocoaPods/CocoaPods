@@ -40,7 +40,7 @@ Targets:
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -52,15 +52,15 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-SampleApp.custom debug - missing some settings .xcconfig
     - Custom Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -72,15 +72,15 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-SampleApp.custom release.xcconfig
     - Debug:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -92,15 +92,15 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -112,9 +112,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-SampleApp.release.xcconfig
@@ -123,7 +123,7 @@ Targets:
     - Sources:
       - Reachability-dummy.m
       - Reachability.m:
-          COMPILER_FLAGS: "-fno-objc-arc"
+          COMPILER_FLAGS: -fno-objc-arc
     - Frameworks:
       - Foundation.framework
       - SystemConfiguration.framework
@@ -134,7 +134,7 @@ Targets:
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -147,14 +147,14 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Reachability.xcconfig
     - Custom Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -167,14 +167,14 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Reachability.xcconfig
     - Debug:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -187,14 +187,14 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Reachability.xcconfig
     - Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -207,7 +207,7 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -243,7 +243,7 @@ Build Configurations:
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_CUSTOM_DEBUG___MISSING_SOME_SETTINGS_=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
@@ -281,7 +281,7 @@ Build Configurations:
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_CUSTOM_RELEASE=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
@@ -322,7 +322,7 @@ Build Configurations:
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_DEBUG=1
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
@@ -334,7 +334,7 @@ Build Configurations:
       ONLY_ACTIVE_ARCH: 'YES'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
-      SYMROOT: "${SRCROOT}/../build"
+      SYMROOT: ${SRCROOT}/../build
 - Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -362,7 +362,7 @@ Build Configurations:
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_RELEASE=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
@@ -372,5 +372,5 @@ Build Configurations:
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
-      SYMROOT: "${SRCROOT}/../build"
+      SYMROOT: ${SRCROOT}/../build
       VALIDATE_PRODUCT: 'YES'

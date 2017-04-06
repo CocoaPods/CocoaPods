@@ -62,7 +62,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -74,15 +74,15 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -94,9 +94,9 @@ Targets:
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-iOS App.release.xcconfig
@@ -113,8 +113,8 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-          CODE_SIGN_IDENTITY: "-"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY: '-'
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -124,20 +124,20 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-OS X App/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/Pods-OS X App/Pods-OS X App.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: Pods_OS_X_App
           SDKROOT: macosx
@@ -147,8 +147,8 @@ Targets:
         Base Configuration: Pods-OS X App.debug.xcconfig
     - Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-          CODE_SIGN_IDENTITY: "-"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY: '-'
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -158,20 +158,20 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-OS X App/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/Pods-OS X App/Pods-OS X App.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
-          PODS_ROOT: "$(SRCROOT)"
+          PODS_ROOT: $(SRCROOT)
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           PRODUCT_NAME: Pods_OS_X_App
           SDKROOT: macosx
@@ -184,7 +184,7 @@ Targets:
     - Sources:
       - PodTest-subspec_1-dummy.m
       - subspec_1.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - Frameworks:
       - Foundation.framework
     - Headers:
@@ -194,7 +194,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -207,14 +207,14 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
         Base Configuration: PodTest-subspec_1.xcconfig
     - Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -227,7 +227,7 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
-          PRODUCT_NAME: "$(TARGET_NAME)"
+          PRODUCT_NAME: $(TARGET_NAME)
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -237,7 +237,7 @@ Targets:
     - Sources:
       - PodTest-subspec_2-dummy.m
       - subspec_2.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+          COMPILER_FLAGS: -DOS_OBJECT_USE_OBJC=0
     - Frameworks:
       - Cocoa.framework
     - Headers:
@@ -250,8 +250,8 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-          CODE_SIGN_IDENTITY: "-"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY: '-'
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -261,14 +261,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-prefix.pch
           INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap
           MTL_ENABLE_DEBUG_INFO: 'YES'
@@ -280,8 +280,8 @@ Targets:
         Base Configuration: PodTest-subspec_2.xcconfig
     - Release:
         Build Settings:
-          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-          CODE_SIGN_IDENTITY: "-"
+          ARCHS: $(ARCHS_STANDARD_64_BIT)
+          CODE_SIGN_IDENTITY: '-'
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -291,14 +291,14 @@ Targets:
           DEFINES_MODULE: 'YES'
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
-          DYLIB_INSTALL_NAME_BASE: "@rpath"
+          DYLIB_INSTALL_NAME_BASE: '@rpath'
           ENABLE_STRICT_OBJC_MSGSEND: 'YES'
           FRAMEWORK_VERSION: A
           GCC_NO_COMMON_BLOCKS: 'YES'
           GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-prefix.pch
           INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/Info.plist
-          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
-          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
+          INSTALL_PATH: $(LOCAL_LIBRARY_DIR)/Frameworks
+          LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks @loader_path/Frameworks
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap
           MTL_ENABLE_DEBUG_INFO: 'NO'
@@ -342,7 +342,7 @@ Build Configurations:
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_DEBUG=1
       - DEBUG=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
@@ -355,7 +355,7 @@ Build Configurations:
       ONLY_ACTIVE_ARCH: 'YES'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
-      SYMROOT: "${SRCROOT}/../build"
+      SYMROOT: ${SRCROOT}/../build
 - Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -383,7 +383,7 @@ Build Configurations:
       GCC_C_LANGUAGE_STANDARD: gnu99
       GCC_PREPROCESSOR_DEFINITIONS:
       - POD_CONFIGURATION_RELEASE=1
-      - "$(inherited)"
+      - $(inherited)
       GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
       GCC_WARN_ABOUT_RETURN_TYPE: 'YES'
       GCC_WARN_UNDECLARED_SELECTOR: 'YES'
@@ -394,5 +394,5 @@ Build Configurations:
       MACOSX_DEPLOYMENT_TARGET: '10.6'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
-      SYMROOT: "${SRCROOT}/../build"
+      SYMROOT: ${SRCROOT}/../build
       VALIDATE_PRODUCT: 'YES'

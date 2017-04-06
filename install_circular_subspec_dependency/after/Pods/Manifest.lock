@@ -21,11 +21,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Pod1:
-    :path: "./DeveloperPods/Pod1"
+    :path: ./DeveloperPods/Pod1
   Pod2:
-    :path: "./DeveloperPods/Pod2"
+    :path: ./DeveloperPods/Pod2
   Pod3:
-    :path: "./DeveloperPods/Pod3"
+    :path: ./DeveloperPods/Pod3
 
 SPEC CHECKSUMS:
   Pod1: 94fcc2b419412321eb22c5abaf3949fdf7eda51c
