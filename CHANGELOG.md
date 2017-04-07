@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Make copy resources echoes always return true to work around issue where Xcode stops handling build script output greater than ~440 characters (rdar://30607704).  
+  [postmechanical](https://github.com/postmechanical)
+  [#6595](https://github.com/CocoaPods/CocoaPods/issues/6595)
 
 
 ## 1.2.1 (2017-04-11)
