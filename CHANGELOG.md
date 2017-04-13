@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Copy dSYM for vendored frameworks.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#1698](https://github.com/CocoaPods/CocoaPods/issues/1698) 
 
 ##### Bug Fixes
 

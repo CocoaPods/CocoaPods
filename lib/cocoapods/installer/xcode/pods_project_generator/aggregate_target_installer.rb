@@ -158,18 +158,24 @@ module Pod
           #
           def create_embed_frameworks_script
             path = target.embed_frameworks_script_path
-            frameworks_by_config = {}
+            frameworks_and_dsyms_by_config = {}
             target.user_build_configurations.keys.each do |config|
               relevant_pod_targets = target.pod_targets.select do |pod_target|
                 pod_target.include_in_build_config?(target_definition, config)
               end
-              frameworks_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
-                frameworks = pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map { |fw| "${PODS_ROOT}/#{fw.relative_path_from(sandbox.root)}" }
-                frameworks << pod_target.build_product_path('$BUILT_PRODUCTS_DIR') if pod_target.should_build? && pod_target.requires_frameworks?
+              frameworks_and_dsyms_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
+                frameworks = pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |fw|
+                  path_to_framework = "${PODS_ROOT}/#{fw.relative_path_from(sandbox.root)}"
+                  # Until this can be configured, assume the dSYM file uses the file name as the framework.
+                  # See https://github.com/CocoaPods/CocoaPods/issues/1698
+                  { :framework => path_to_framework, :dSYM => "#{path_to_framework}.dSYM" }
+                end
+                # For non vendored frameworks Xcode will generate the dSYM and copy it instead.
+                frameworks << { :framework => pod_target.build_product_path('$BUILT_PRODUCTS_DIR'), :dSYM => nil } if pod_target.should_build? && pod_target.requires_frameworks?
                 frameworks
               end
             end
-            generator = Generator::EmbedFrameworksScript.new(frameworks_by_config)
+            generator = Generator::EmbedFrameworksScript.new(frameworks_and_dsyms_by_config)
             generator.save_as(path)
             add_file_to_support_group(path)
           end
