@@ -79,6 +79,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
         Base Configuration: Pod1.xcconfig
     - Release:
         Build Settings:
@@ -99,6 +100,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
         Base Configuration: Pod1.xcconfig
 - Pod2:
     Build Phases:
@@ -131,6 +133,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
         Base Configuration: Pod2.xcconfig
     - Release:
         Build Settings:
@@ -151,6 +154,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
         Base Configuration: Pod2.xcconfig
 - Pod3:
     Build Phases:
@@ -183,6 +187,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
         Base Configuration: Pod3.xcconfig
     - Release:
         Build Settings:
@@ -203,6 +208,7 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
         Base Configuration: Pod3.xcconfig
 - Pods-SubSpecCircular:
     Build Phases:
@@ -297,6 +303,7 @@ Build Configurations:
       ONLY_ACTIVE_ARCH: 'YES'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
       SYMROOT: ${SRCROOT}/../build
 - Release:
     Build Settings:

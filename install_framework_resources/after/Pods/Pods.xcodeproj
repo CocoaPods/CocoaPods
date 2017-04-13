@@ -246,6 +246,7 @@ Targets:
           PRODUCT_NAME: SamplePodWithResources
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: SamplePodWithResources.xcconfig
@@ -275,6 +276,7 @@ Targets:
           PRODUCT_NAME: SamplePodWithResources
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: SamplePodWithResources.xcconfig
@@ -361,6 +363,7 @@ Build Configurations:
       ONLY_ACTIVE_ARCH: 'YES'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
       SYMROOT: ${SRCROOT}/../build
 - Release:
     Build Settings:

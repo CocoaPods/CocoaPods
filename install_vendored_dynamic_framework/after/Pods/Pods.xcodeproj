@@ -175,7 +175,7 @@ Targets:
           PRODUCT_NAME: RealmSwift
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_OPTIMIZATION_LEVEL: -Onone
           SWIFT_VERSION: '3.0'
           TARGETED_DEVICE_FAMILY: '1,2'
@@ -207,6 +207,7 @@ Targets:
           PRODUCT_NAME: RealmSwift
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
           SWIFT_VERSION: '3.0'
           TARGETED_DEVICE_FAMILY: '1,2'
@@ -259,6 +260,7 @@ Build Configurations:
       ONLY_ACTIVE_ARCH: 'YES'
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
       SYMROOT: ${SRCROOT}/../build
 - Release:
     Build Settings:
