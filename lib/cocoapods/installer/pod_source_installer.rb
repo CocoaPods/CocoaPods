@@ -58,7 +58,7 @@ module Pod
       #
       def install!
         download_source unless predownloaded? || local?
-        PodSourcePreparer.new(root_spec, root).prepare! if local?
+        PodSourcePreparer.new(root_spec, root, specs.first.name).prepare! if local?
       end
 
       # Cleans the installations if appropriate.

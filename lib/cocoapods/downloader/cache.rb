@@ -29,8 +29,8 @@ module Pod
       #
       # @return [Response] the response from downloading `request`
       #
-      def download_pod(request)
-        cached_pod(request) || uncached_pod(request)
+      def download_pod(request, spec_name = nil)
+        cached_pod(request) || uncached_pod(request, spec_name)
       rescue Informative
         raise
       rescue
@@ -149,14 +149,14 @@ module Pod
       # @return [Response] The download response for the given `request` that
       #         was not found in the download cache.
       #
-      def uncached_pod(request)
+      def uncached_pod(request, spec_name = nil)
         in_tmpdir do |target|
           result, podspecs = download(request, target)
           result.location = nil
 
           podspecs.each do |name, spec|
             destination = path_for_pod(request, :name => name, :params => result.checkout_options)
-            copy_and_clean(target, destination, spec)
+            copy_and_clean(target, destination, spec, spec_name)
             write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
             if request.name == name
               result.location = destination
@@ -194,12 +194,12 @@ module Pod
       #
       # @return [Void]
       #
-      def copy_and_clean(source, destination, spec)
+      def copy_and_clean(source, destination, spec, spec_name = nil)
         specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
         FileUtils.rm_rf(destination)
         FileUtils.cp_r(source, destination)
-        Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
+        Pod::Installer::PodSourcePreparer.new(spec, destination, spec_name).prepare!
         Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
       end
 

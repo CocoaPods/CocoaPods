@@ -630,7 +630,7 @@ module Pod
         unless dependencies_to_fetch.empty?
           UI.section 'Fetching external sources' do
             dependencies_to_fetch.sort.each do |dependency|
-              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.root_name))
+              fetch_external_source(dependency, !pods_to_fetch.include?(dependency.root_name), dependency.name)
             end
           end
         end
@@ -646,7 +646,7 @@ module Pod
         end
       end
 
-      def fetch_external_source(dependency, use_lockfile_options)
+      def fetch_external_source(dependency, use_lockfile_options, spec_name = nil)
         checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name) if lockfile
         source = if checkout_options && use_lockfile_options
                    ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file)
@@ -654,7 +654,7 @@ module Pod
                    ExternalSources.from_dependency(dependency, podfile.defined_in_file)
         end
         source.can_cache = installation_options.clean?
-        source.fetch(sandbox)
+        source.fetch(sandbox, spec_name)
       end
 
       def dependencies_to_fetch

@@ -12,15 +12,20 @@ module Pod
       #
       attr_reader :path
 
+      # @return [String] the name of the specification (root or not) of the Pod.
+      attr_reader :spec_name
+
       # Initialize a new instance
       #
       # @param [Specification] spec the root specification of the Pod.
       # @param [Pathname] path the folder where the source of the Pod is located.
+      # @param [String] spec_name the name of the specification of the Pod.
       #
-      def initialize(spec, path)
+      def initialize(spec, path, spec_name = nil)
         raise "Given spec isn't a root spec, but must be." unless spec.root?
         @spec = spec
         @path = path
+        @spec_name = spec_name || spec.name
       end
 
       #-----------------------------------------------------------------------#
@@ -61,11 +66,13 @@ module Pod
             begin
               ENV.delete('CDPATH')
               ENV['COCOAPODS_VERSION'] = Pod::VERSION
+              ENV['COCOAPODS_SPEC'] = spec_name
               prepare_command = spec.prepare_command.strip_heredoc.chomp
               full_command = "\nset -e\n" + prepare_command
               bash!('-c', full_command)
             ensure
               ENV.delete('COCOAPODS_VERSION')
+              ENV.delete('COCOAPODS_SPEC')
             end
           end
         end
