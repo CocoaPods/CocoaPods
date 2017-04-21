@@ -18,7 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [postmechanical](https://github.com/postmechanical)
   [#6595](https://github.com/CocoaPods/CocoaPods/issues/6595)
 
-
+* Inherit pod defined values for `SWIFT_ACTIVE_COMPILATION_CONDITIONS`.    
+  [Louis D'hauwe](https://github.com/louisdh)
+  [#6629](https://github.com/CocoaPods/CocoaPods/pull/6629)
+  
 ## 1.2.1 (2017-04-11)
 
 ##### Enhancements

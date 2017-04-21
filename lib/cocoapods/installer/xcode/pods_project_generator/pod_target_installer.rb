@@ -59,6 +59,8 @@ module Pod
             settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'] = ''
             settings['CODE_SIGN_IDENTITY[sdk=watchos*]'] = ''
 
+            settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = '$(inherited) '
+
             if target.swift_version
               settings['SWIFT_VERSION'] = target.swift_version
             end

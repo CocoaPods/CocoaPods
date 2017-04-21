@@ -54,6 +54,7 @@ module Pod
             'PODS_TARGET_SRCROOT' => target.pod_target_srcroot,
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             'SKIP_INSTALL' => 'YES',
+            'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) ',
             # 'USE_HEADERMAP' => 'NO'
           }
 
