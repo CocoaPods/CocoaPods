@@ -147,6 +147,19 @@ module Pod
         names.should.include(source.name)
       end
 
+      it 'performs framework transitive dependencies check if corresponding config is set' do
+        @installer.installation_options.integrate_targets = true
+        @installer.expects(:verify_no_static_framework_transitive_dependencies)
+        @installer.install!
+      end
+
+      it 'skips framework transitive dependencies check if corresponding config is not set' do
+        @installer.installation_options.integrate_targets = false
+        @installer.expects(:verify_no_static_framework_transitive_dependencies).never
+        @installer.install!
+        UI.warnings.should.include 'Skipping Verifying Framework Transitive Dependencies Check'
+      end
+
       it 'integrates the user targets if the corresponding config is set' do
         @installer.installation_options.integrate_targets = true
         @installer.expects(:integrate_user_project)
@@ -351,6 +364,7 @@ module Pod
       it 'detects transitive static dependencies which are linked directly to the user target' do
         Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
         @installer = Installer.new(config.sandbox, @podfile, @lockfile)
+        @installer.installation_options.integrate_targets = true
         should.raise(Informative) { @installer.install! }.message.should.match /transitive.*libThing/
       end
 
@@ -358,6 +372,7 @@ module Pod
         Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([@file])
         Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
         @installer = Installer.new(config.sandbox, @podfile, @lockfile)
+        @installer.installation_options.integrate_targets = true
         should.not.raise(Informative) { @installer.install! }
       end
 
@@ -365,6 +380,7 @@ module Pod
         PodTarget.any_instance.stubs(:should_build? => false)
         Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
         @installer = Installer.new(config.sandbox, @podfile, @lockfile)
+        @installer.installation_options.integrate_targets = true
         should.not.raise(Informative) { @installer.install! }
       end
     end
