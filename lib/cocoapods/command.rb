@@ -25,6 +25,7 @@ module Pod
     require 'cocoapods/command/ipc'
     require 'cocoapods/command/lib'
     require 'cocoapods/command/list'
+    require 'cocoapods/command/open'
     require 'cocoapods/command/outdated'
     require 'cocoapods/command/repo'
     require 'cocoapods/command/setup'
