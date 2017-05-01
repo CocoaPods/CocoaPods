@@ -16,8 +16,12 @@ module Pod
         #
         # @param  [Target] target @see target
         #
-        def initialize(target)
+        # @param  [Boolean] test_xcconfig
+        #         whether this is an xcconfig for a test native target.
+        #
+        def initialize(target, test_xcconfig = false)
           @target = target
+          @test_xcconfig = test_xcconfig
         end
 
         # @return [Xcodeproj::Config] The generated xcconfig.
@@ -49,7 +53,7 @@ module Pod
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
-            'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target),
+            'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target, @test_xcconfig),
             'PODS_ROOT' => '${SRCROOT}',
             'PODS_TARGET_SRCROOT' => target.pod_target_srcroot,
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
@@ -66,6 +70,11 @@ module Pod
           end
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
           @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, target.recursive_dependent_targets)
+          if @test_xcconfig
+            @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, target.test_dependent_targets)
+            XCConfigHelper.generate_vendored_build_settings(nil, target.test_dependent_targets, @xcconfig)
+            XCConfigHelper.generate_other_ld_flags(nil, target.test_dependent_targets, @xcconfig)
+          end
           @xcconfig
         end
 

@@ -28,6 +28,16 @@ module Pod
     #
     attr_accessor :dependent_targets
 
+    # @return [Array<PodTarget>] the targets that this target has a test dependency
+    #         upon.
+    #
+    attr_accessor :test_dependent_targets
+
+    # return [Array<PBXNativeTarget>] the test target generated in the Pods project for
+    #         this library or `nil` if there is no test target created.
+    #
+    attr_accessor :test_native_targets
+
     # @param [Array<Specification>] specs @see #specs
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
     # @param [Sandbox] sandbox @see #sandbox
@@ -46,7 +56,9 @@ module Pod
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
+      @test_native_targets = []
       @dependent_targets = []
+      @test_dependent_targets = []
       @build_config_cache = {}
     end
 
@@ -133,7 +145,7 @@ module Pod
     #
     attr_accessor :file_accessors
 
-    # @return [Array<PBXTarget>] the resource bundle targets belonging
+    # @return [Array<PBXNativeTarget>] the resource bundle targets belonging
     #         to this target.
     attr_reader :resource_bundle_targets
 
@@ -157,7 +169,7 @@ module Pod
       specs.map { |spec| spec.consumer(platform) }
     end
 
-    # @return [Boolean] Whether the target uses Swift code
+    # @return [Boolean] Whether the target uses Swift code.
     #
     def uses_swift?
       return @uses_swift if defined? @uses_swift
@@ -166,6 +178,18 @@ module Pod
           file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
         end
       end
+    end
+
+    # @return [Boolean] Whether the target has any tests specifications.
+    #
+    def contains_test_specifications?
+      specs.any?(&:test_specification?)
+    end
+
+    # @return [Array<Symbol>] All of the test supported types within this target.
+    #
+    def supported_test_types
+      specs.select(&:test_specification?).map(&:test_type).uniq
     end
 
     # @return [Specification] The root specification for the target.
@@ -187,6 +211,15 @@ module Pod
     #
     def resources_bundle_target_label(bundle_name)
       "#{label}-#{bundle_name}"
+    end
+
+    # @param  [Symbol] test_type
+    #         The test type to use for producing the test label.
+    #
+    # @return [String] The derived name of the test target.
+    #
+    def test_target_label(test_type)
+      "#{label}-#{test_type.capitalize}-Tests"
     end
 
     # @return [Array<String>] The names of the Pods on which this target
@@ -234,7 +267,7 @@ module Pod
 
       if whitelists.empty?
         @build_config_cache[key] = true
-        return true
+        true
       elsif whitelists.count == 1
         @build_config_cache[key] = whitelists.first
         whitelists.first
@@ -258,7 +291,7 @@ module Pod
 
       if whitelists.empty?
         @inhibit_warnings = false
-        return false
+        false
       elsif whitelists.count == 1
         @inhibit_warnings = whitelists.first
         whitelists.first
@@ -268,7 +301,7 @@ module Pod
           'settings to inhibit warnings. CocoaPods does not currently ' \
           'support different settings and will fall back to your preference ' \
           'set in the root target definition.'
-        return podfile.root_target_definitions.first.inhibits_warnings_for_pod?(root_spec.name)
+        podfile.root_target_definitions.first.inhibits_warnings_for_pod?(root_spec.name)
       end
     end
 

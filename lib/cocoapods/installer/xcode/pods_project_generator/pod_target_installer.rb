@@ -18,20 +18,24 @@ module Pod
 
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
               add_target
+              add_test_targets if target.contains_test_specifications?
               create_support_files_dir
               add_resources_bundle_targets
               add_files_to_build_phases
               create_xcconfig_file
+              create_test_xcconfig_files if target.contains_test_specifications?
               if target.requires_frameworks?
                 create_info_plist_file
                 create_module_map
                 create_umbrella_header do |generator|
+                  file_accessors = target.file_accessors
+                  file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
                   generator.imports += if header_mappings_dir
-                                         target.file_accessors.flat_map(&:public_headers).map do |pathname|
+                                         file_accessors.flat_map(&:public_headers).map do |pathname|
                                            pathname.relative_path_from(header_mappings_dir)
                                          end
                                        else
-                                         target.file_accessors.flat_map(&:public_headers).map(&:basename)
+                                         file_accessors.flat_map(&:public_headers).map(&:basename)
                                        end
                 end
                 create_build_phase_to_symlink_header_folders
@@ -130,6 +134,7 @@ module Pod
             target.file_accessors.each do |file_accessor|
               consumer = file_accessor.spec_consumer
 
+              native_target = native_target_for_consumer(consumer)
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers
               private_headers = file_accessor.private_headers
@@ -147,7 +152,7 @@ module Pod
 
               header_file_refs = project_file_references_array(headers, 'header')
               native_target.add_file_references(header_file_refs) do |build_file|
-                add_header(build_file, public_headers, private_headers)
+                add_header(build_file, public_headers, private_headers, native_target)
               end
 
               other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
@@ -159,6 +164,72 @@ module Pod
                 native_target.add_file_references(compile_phase_refs, nil)
                 native_target.add_resources(resource_phase_refs)
               end
+            end
+          end
+
+          # Returns the corresponding native target to use based on the provided consumer.
+          # This is used to figure out whether to add a source file into the library native target or any of the
+          # test native targets.
+          #
+          # @param  [Consumer] consumer
+          #         The consumer to base from in order to find the native target.
+          #
+          # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
+          #
+          def native_target_for_consumer(consumer)
+            return native_target unless consumer.spec.test_specification?
+            target.test_native_targets.find do |native_target|
+              native_target.symbol_type == product_type_for_test_type(consumer.spec.test_type)
+            end
+          end
+
+          # Returns the corresponding native product type to use given the test type.
+          # This is primarily used when creating the native targets in order to produce the correct test bundle target
+          # based on the type of tests included.
+          #
+          # @param  [Symbol] test_type
+          #         The test type to map to provided by the test specification DSL.
+          #
+          # @return [Symbol] The native product type to use.
+          #
+          def product_type_for_test_type(test_type)
+            case test_type
+            when :unit
+              :unit_test_bundle
+            else
+              raise Informative, "Unknown test type passed `#{test_type}`."
+            end
+          end
+
+          # Adds the test targets for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @return [void]
+          #
+          def add_test_targets
+            target.supported_test_types.each do |test_type|
+              product_type = product_type_for_test_type(test_type)
+              name = target.test_target_label(test_type)
+              platform = target.platform.name
+              language = target.uses_swift? ? :swift : :objc
+              native_test_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
+
+              product_name = target.product_name
+              product = native_test_target.product_reference
+              product.name = product_name
+
+              target.user_build_configurations.each do |bc_name, type|
+                native_test_target.add_build_configuration(bc_name, type)
+              end
+
+              native_test_target.build_configurations.each do |configuration|
+                configuration.build_settings.merge!(custom_build_settings)
+                # target_installer will automatically add an empth `OTHER_LDFLAGS`. For test
+                # targets those are set via a test xcconfig file instead.
+                configuration.build_settings.delete('OTHER_LDFLAGS')
+              end
+
+              target.test_native_targets << native_test_target
             end
           end
 
@@ -186,6 +257,7 @@ module Pod
                   bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
                 end
 
+                native_target = native_target_for_consumer(file_accessor.spec_consumer)
                 target.user_build_configurations.each do |bc_name, type|
                   bundle_target.add_build_configuration(bc_name, type)
                 end
@@ -221,7 +293,7 @@ module Pod
                     :watchos => '1,2' # The device family for watchOS is 4, but Xcode creates watchkit-compatible bundles as 1,2
                   }
 
-                  if family = device_family_by_platform[target.platform.name]
+                  if (family = device_family_by_platform[target.platform.name])
                     c.build_settings['TARGETED_DEVICE_FAMILY'] = family
                   end
                 end
@@ -247,6 +319,25 @@ module Pod
             target.resource_bundle_targets.each do |rsrc_target|
               rsrc_target.build_configurations.each do |rsrc_bc|
                 rsrc_bc.base_configuration_reference = xcconfig_file_ref
+              end
+            end
+          end
+
+          # Generates the contents of the xcconfig file used for each test target type and saves it to disk.
+          #
+          # @return [void]
+          #
+          def create_test_xcconfig_files
+            target.supported_test_types.each do |test_type|
+              path = target.xcconfig_path(test_type.to_s)
+              xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target, true)
+              xcconfig_gen.save_as(path)
+              xcconfig_file_ref = add_file_to_support_group(path)
+
+              target.test_native_targets.each do |test_target|
+                test_target.build_configurations.each do |test_target_bc|
+                  test_target_bc.base_configuration_reference = xcconfig_file_ref
+                end
               end
             end
           end
@@ -400,7 +491,7 @@ module Pod
                                    end
           end
 
-          def add_header(build_file, public_headers, private_headers)
+          def add_header(build_file, public_headers, private_headers, native_target)
             file_ref = build_file.file_ref
             acl = if public_headers.include?(file_ref.real_path)
                     'Public'

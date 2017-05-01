@@ -492,15 +492,12 @@ module Pod
             hash[name] = values.sort_by { |pt| pt.specs.count }
           end
           pod_targets.each do |target|
-            dependencies = transitive_dependencies_for_specs(target.specs, target.platform, all_specs).group_by(&:root)
-            target.dependent_targets = dependencies.map do |root_spec, deps|
-              pod_targets_by_name[root_spec.name].find do |t|
-                next false if t.platform.symbolic_name != target.platform.symbolic_name ||
-                    t.requires_frameworks? != target.requires_frameworks?
-                spec_names = t.specs.map(&:name)
-                deps.all? { |dep| spec_names.include?(dep.name) }
-              end
-            end
+            dependencies = transitive_dependencies_for_specs(target.specs.reject(&:test_specification?), target.platform, all_specs).group_by(&:root)
+            test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
+            target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
+            target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+            # Test dependendent targets include our own target as a test dependency.
+            target.test_dependent_targets << target
           end
         else
           dedupe_cache = {}
@@ -512,8 +509,23 @@ module Pod
 
             pod_targets.each do |target|
               dependencies = transitive_dependencies_for_specs(target.specs, target.platform, specs).group_by(&:root)
+              test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
+              target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
+              # Test dependendent targets include our own target as a test dependency.
+              target.test_dependent_targets << target
             end
+          end
+        end
+      end
+
+      def filter_dependencies(dependencies, pod_targets_by_name, target)
+        dependencies.map do |root_spec, deps|
+          pod_targets_by_name[root_spec.name].find do |t|
+            next false if t.platform.symbolic_name != target.platform.symbolic_name ||
+                t.requires_frameworks? != target.requires_frameworks?
+            spec_names = t.specs.map(&:name)
+            deps.all? { |dep| spec_names.include?(dep.name) }
           end
         end
       end
