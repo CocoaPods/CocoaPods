@@ -18,6 +18,8 @@ If anyone engages in harassing behavior, including maintainers, we may take appr
 
 If you are being harassed, notice that someone else is being harassed, or have any other concerns, please contact a member of [the core team](https://cocoapods.org/about) or [email the core team](mailto:info@cocoapods.org) immediately.
 
+Critical examination of beliefs, including critical commentary on another person’s views, does not, by itself, constitute hostile conduct or harassment. One of the underlying rationales of this Code of Conduct is to promote the free exchange of ideas, not to inhibit it.
+
 We expect everyone to follow these rules anywhere in the CocoaPods project’s codebases, issue trackers, IRC channel, group chat, and mailing lists.
 
 This code of conduct applies both within project spaces and in public spaces when an individual is actively representing the project or its community. Due to their strong association with the project, core contributors are always seen as actively representing it.
