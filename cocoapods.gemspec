@@ -26,6 +26,8 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod sandbox-pod }
   s.require_paths = %w{ lib }
 
+  # Installing cocoapods on Mavericks system ruby fails without Rake.
+  s.add_runtime_dependency 'rake'
   # Link with the version of CocoaPods-Core
   s.add_runtime_dependency 'cocoapods-core',        "= #{Pod::VERSION}"
 
