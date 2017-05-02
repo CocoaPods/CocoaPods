@@ -20,7 +20,10 @@ module Pod
       #         @see platform
       #
       def initialize(resources_by_config, platform)
-        @resources_by_config = resources_by_config
+        @resources_by_config = {}
+        resources_by_config.each do |config, resources|
+          @resources_by_config[config] = resources.uniq
+        end
         @platform = platform
       end
 

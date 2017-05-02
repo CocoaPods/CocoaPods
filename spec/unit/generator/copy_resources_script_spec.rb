@@ -39,5 +39,13 @@ module Pod
         fi
       eos
     end
+
+    it 'uniques resources by group' do
+      duplicated_resources = { 'Release' => ['path/to/resource.png', 'path/to/resource.png'] }
+      uniqued_resources = { 'Release' => ['path/to/resource.png'] }
+
+      generator = Pod::Generator::CopyResourcesScript.new(duplicated_resources, Platform.new(:ios, '6.0'))
+      generator.send(:resources_by_config).should.equal uniqued_resources
+    end
   end
 end
