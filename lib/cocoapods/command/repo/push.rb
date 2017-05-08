@@ -213,7 +213,7 @@ module Pod
         #
         def push_repo
           UI.puts "\nPushing the `#{@repo}' repo\n".yellow
-          UI.puts `git -C "#{repo_dir}" push origin master 2>&1`
+          repo_git('-C', repo_dir, 'push', 'origin', 'master')
         end
 
         #---------------------------------------------------------------------#

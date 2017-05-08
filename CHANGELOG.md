@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Use `git!` when executing `push` command in order to raise informative and set exit code.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6700](https://github.com/CocoaPods/CocoaPods/pull/6700) 
+
 * Make copy resources echoes always return true to work around issue where Xcode stops handling build script output greater than ~440 characters (rdar://30607704).  
   [postmechanical](https://github.com/postmechanical)
   [#6595](https://github.com/CocoaPods/CocoaPods/issues/6595)
