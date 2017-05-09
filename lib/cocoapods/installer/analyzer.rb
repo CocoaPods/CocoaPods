@@ -664,6 +664,7 @@ module Pod
 
           if update_mode == :all
             deps_to_fetch = deps_with_external_source
+            deps_to_fetch -= deps_to_fetch.select{ |dep| !dep.external_source[:commit].nil? && !checkout_requires_update?(dep) }
           else
             deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
             deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
