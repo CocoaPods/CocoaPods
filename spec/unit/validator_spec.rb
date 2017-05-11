@@ -335,11 +335,11 @@ module Pod
           s.ios.deployment_target = '7.0'
         end
         validator.spec.stubs(:subspecs).returns([subspec])
-        validator.expects(:podfile_from_spec).with(:osx, nil, nil).once
-        validator.expects(:podfile_from_spec).with(:ios, nil, nil).once
-        validator.expects(:podfile_from_spec).with(:ios, '7.0', nil).once
-        validator.expects(:podfile_from_spec).with(:tvos, nil, nil).once
-        validator.expects(:podfile_from_spec).with(:watchos, nil, nil).once
+        validator.expects(:podfile_from_spec).with(:osx, nil, nil, []).once
+        validator.expects(:podfile_from_spec).with(:ios, nil, nil, []).once
+        validator.expects(:podfile_from_spec).with(:ios, '7.0', nil, []).once
+        validator.expects(:podfile_from_spec).with(:tvos, nil, nil, []).once
+        validator.expects(:podfile_from_spec).with(:watchos, nil, nil, []).once
         validator.send(:perform_extensive_analysis, validator.spec)
       end
 
@@ -819,10 +819,10 @@ module Pod
 
         setup_validator
 
-        @validator.expects(:podfile_from_spec).with(:osx, nil, true).once
-        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true).once
-        @validator.expects(:podfile_from_spec).with(:tvos, nil, true).once
-        @validator.expects(:podfile_from_spec).with(:watchos, nil, true).once
+        @validator.expects(:podfile_from_spec).with(:osx, nil, true, []).once
+        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true, []).once
+        @validator.expects(:podfile_from_spec).with(:tvos, nil, true, []).once
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, true, []).once
         @validator.send(:perform_extensive_analysis, @validator.spec)
       end
 
@@ -831,11 +831,19 @@ module Pod
 
         setup_validator
 
-        @validator.expects(:podfile_from_spec).with(:osx, nil, false).once
-        @validator.expects(:podfile_from_spec).with(:ios, nil, false).once
-        @validator.expects(:podfile_from_spec).with(:tvos, nil, false).once
-        @validator.expects(:podfile_from_spec).with(:watchos, nil, false).once
+        @validator.expects(:podfile_from_spec).with(:osx, nil, false, []).once
+        @validator.expects(:podfile_from_spec).with(:ios, nil, false, []).once
+        @validator.expects(:podfile_from_spec).with(:tvos, nil, false, []).once
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, false, []).once
         @validator.send(:perform_extensive_analysis, @validator.spec)
+      end
+
+      it 'shows an error when performing extensive analysis on a test spec' do
+        setup_validator
+        subspec = Specification.new(@validator.spec, 'Tests', true)
+        @validator.send(:perform_extensive_analysis, subspec)
+        @validator.results.map(&:to_s).first.should.include 'Validating a test spec (`JSONKit/Tests`) is not supported.'
+        @validator.result_type.should == :error
       end
     end
 

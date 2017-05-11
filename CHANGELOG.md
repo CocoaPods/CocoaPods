@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add validator support to run test specs during lint  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6753](https://github.com/CocoaPods/CocoaPods/pull/6753)
+
 * Fix to include proper runtime search paths for test native targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6727](https://github.com/CocoaPods/CocoaPods/pull/6727)

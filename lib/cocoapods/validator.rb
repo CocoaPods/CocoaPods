@@ -72,7 +72,7 @@ module Pod
       a_spec = spec
       if spec && @only_subspec
         subspec_name = @only_subspec.start_with?(spec.root.name) ? @only_subspec : "#{spec.root.name}/#{@only_subspec}"
-        a_spec = spec.subspec_by_name(subspec_name)
+        a_spec = spec.subspec_by_name(subspec_name, true, true)
         @subspec_name = a_spec.name
       end
 
@@ -186,9 +186,13 @@ module Pod
     #
     attr_accessor :only_subspec
 
-    # @return [Bool] Whether the validator should validate all subspecs
+    # @return [Bool] Whether the validator should validate all subspecs.
     #
     attr_accessor :no_subspecs
+
+    # @return [Bool] Whether the validator should skip building and running tests.
+    #
+    attr_accessor :skip_tests
 
     # @return [Bool] Whether frameworks should be used for the installation.
     #
@@ -287,6 +291,10 @@ module Pod
     # Perform analysis for a given spec (or subspec)
     #
     def perform_extensive_analysis(spec)
+      if spec.test_specification?
+        error('spec', "Validating a test spec (`#{spec.name}`) is not supported.")
+        return false
+      end
       validate_homepage(spec)
       validate_screenshots(spec)
       validate_social_media_url(spec)
@@ -305,6 +313,7 @@ module Pod
           add_app_project_import
           validate_vendored_dynamic_frameworks
           build_pod
+          test_pod unless skip_tests
         ensure
           tear_down_validation_environment
         end
@@ -322,7 +331,7 @@ module Pod
     # Recursively perform the extensive analysis on all subspecs
     #
     def perform_extensive_subspec_analysis(spec)
-      spec.subspecs.send(fail_fast ? :all? : :each) do |subspec|
+      spec.subspecs.reject(&:test_specification?).send(fail_fast ? :all? : :each) do |subspec|
         @subspec_name = subspec.name
         perform_extensive_analysis(subspec)
       end
@@ -410,7 +419,7 @@ module Pod
     end
 
     def download_pod
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks)
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, consumer.spec.test_specs.map(&:name))
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
@@ -496,7 +505,7 @@ module Pod
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       @installer.aggregate_targets.each do |target|
         target.pod_targets.each do |pod_target|
-          next unless native_target = pod_target.native_target
+          next unless (native_target = pod_target.native_target)
           native_target.build_configuration_list.build_configurations.each do |build_configuration|
             (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
             build_configuration.build_settings['SWIFT_VERSION'] = swift_version if pod_target.uses_swift?
@@ -537,28 +546,38 @@ module Pod
         UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
       else
         UI.message "\nBuilding with xcodebuild.\n".yellow do
-          output = xcodebuild
+          scheme = if skip_import_validation?
+                     @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }.label
+                   else
+                     'App'
+                   end
+          output = xcodebuild('build', scheme, 'Release')
           UI.puts output
           parsed_output = parse_xcodebuild_output(output)
-          parsed_output.each do |message|
-            # Checking the error for `InputFile` is to work around an Xcode
-            # issue where linting would fail even though `xcodebuild` actually
-            # succeeds. Xcode.app also doesn't fail when this issue occurs, so
-            # it's safe for us to do the same.
-            #
-            # For more details see https://github.com/CocoaPods/CocoaPods/issues/2394#issuecomment-56658587
-            #
-            if message.include?("'InputFile' should have")
-              next
-            end
+          translate_output_to_linter_messages(parsed_output)
+        end
+      end
+    end
 
-            if message =~ /\S+:\d+:\d+: error:/
-              error('xcodebuild', message)
-            elsif message =~ /\S+:\d+:\d+: warning:/
-              warning('xcodebuild', message)
-            else
-              note('xcodebuild', message)
-            end
+    # Builds and runs all test sources associated with the current specification being validated.
+    #
+    # @note   Xcode warnings are treaded as notes because the spec maintainer
+    #         might not be the author of the library
+    #
+    # @return [void]
+    #
+    def test_pod
+      if !xcodebuild_available?
+        UI.warn "Skipping test validation with `xcodebuild' because it can't be found.\n".yellow
+      else
+        UI.message "\nTesting with xcodebuild.\n".yellow do
+          pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
+          consumer.spec.test_specs.each do |test_spec|
+            scheme = pod_target.native_target_for_spec(test_spec)
+            output = xcodebuild('test', scheme, 'Debug')
+            UI.puts output
+            parsed_output = parse_xcodebuild_output(output)
+            translate_output_to_linter_messages(parsed_output)
           end
         end
       end
@@ -678,6 +697,29 @@ module Pod
       add_result(:note, *args)
     end
 
+    def translate_output_to_linter_messages(parsed_output)
+      parsed_output.each do |message|
+        # Checking the error for `InputFile` is to work around an Xcode
+        # issue where linting would fail even though `xcodebuild` actually
+        # succeeds. Xcode.app also doesn't fail when this issue occurs, so
+        # it's safe for us to do the same.
+        #
+        # For more details see https://github.com/CocoaPods/CocoaPods/issues/2394#issuecomment-56658587
+        #
+        if message.include?("'InputFile' should have")
+          next
+        end
+
+        if message =~ /\S+:\d+:\d+: error:/
+          error('xcodebuild', message)
+        elsif message =~ /\S+:\d+:\d+: warning:/
+          warning('xcodebuild', message)
+        else
+          note('xcodebuild', message)
+        end
+      end
+    end
+
     def shares_pod_target_xcscheme?(pod_target)
       Pathname.new(@installer.pods_project.path + pod_target.label).exist?
     end
@@ -727,13 +769,16 @@ module Pod
     # @param  [Bool] use_frameworks
     #         whether frameworks should be used for the installation
     #
+    # @param [Array<String>] test_spec_names
+    #         the test spec names to include in the podfile.
+    #
     # @return [Podfile] a podfile that requires the specification on the
     #         current platform.
     #
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true)
+    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [])
       name     = subspec_name || spec.name
       podspec  = file.realpath
       local    = local?
@@ -748,6 +793,13 @@ module Pod
             pod name, :path => podspec.dirname.to_s
           else
             pod name, :podspec => podspec.to_s
+          end
+          test_spec_names.each do |test_spec_name|
+            if local
+              pod test_spec_name, :path => podspec.dirname.to_s
+            else
+              pod test_spec_name, :podspec => podspec.to_s
+            end
           end
         end
       end
@@ -779,14 +831,9 @@ module Pod
     # @return [String] Executes xcodebuild in the current working directory and
     #         returns its output (both STDOUT and STDERR).
     #
-    def xcodebuild
+    def xcodebuild(action, scheme, configuration)
       require 'fourflusher'
-      scheme = if skip_import_validation?
-                 @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }.label
-               else
-                 'App'
-      end
-      command = %W(clean build -workspace #{File.join(validation_dir, 'App.xcworkspace')} -scheme #{scheme} -configuration Release)
+      command = %W(clean #{action} -workspace #{File.join(validation_dir, 'App.xcworkspace')} -scheme #{scheme} -configuration #{configuration})
       case consumer.platform_name
       when :osx, :macos
         command += %w(CODE_SIGN_IDENTITY=)
