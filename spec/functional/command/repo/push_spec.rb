@@ -177,7 +177,11 @@ module Pod
       Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true).twice
 
       cmd = command('repo', 'push', 'master')
-      Dir.chdir(temporary_directory) { cmd.run }
+      # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
+      # tests so the exception is swallowed.
+      lambda do
+        Dir.chdir(temporary_directory) { cmd.run }
+      end.should.raise Informative
     end
 
     it 'validates specs as libraries if requested' do
@@ -187,7 +191,19 @@ module Pod
       Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false).twice
 
       cmd = command('repo', 'push', 'master', '--use-libraries')
-      Dir.chdir(temporary_directory) { cmd.run }
+      # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
+      # tests so the exception is swallowed.
+      lambda do
+        Dir.chdir(temporary_directory) { cmd.run }
+      end.should.raise Informative
+    end
+
+    it 'raises error and exit code when push fails' do
+      cmd = command('repo', 'push', 'master')
+      e = lambda do
+        Dir.chdir(temporary_directory) { cmd.run }
+      end.should.raise Informative
+      e.exit_status.should.equal(1)
     end
   end
 end
