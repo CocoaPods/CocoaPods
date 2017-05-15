@@ -20,4 +20,5 @@ test:
   override:
     - bundle exec rake spec:all:
         environment:
+          VERBOSE: true
           COCOAPODS_CI_TASKS: EXAMPLES
