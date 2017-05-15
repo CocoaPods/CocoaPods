@@ -71,8 +71,9 @@ module Pod
 
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
 
-          generate_vendored_build_settings
-          generate_other_ld_flags
+          targets = pod_targets + target.search_paths_aggregate_targets.flat_map(&:pod_targets)
+          XCConfigHelper.generate_vendored_build_settings(target, targets, @xcconfig)
+          XCConfigHelper.generate_other_ld_flags(target, pod_targets, @xcconfig)
 
           # TODO: Need to decide how we are going to ensure settings like these
           # are always excluded from the user's project.
@@ -174,40 +175,6 @@ module Pod
             @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(nil, search_paths_target.pod_targets)
             @xcconfig.merge!(generator.settings_to_import_pod_targets)
           end
-        end
-
-        # Add custom build settings and required build settings to link to
-        # vendored libraries and frameworks.
-        #
-        # @note
-        #   In case of generated pod targets, which require frameworks, the
-        #   vendored frameworks and libraries are already linked statically
-        #   into the framework binary and must not be linked again to the
-        #   user target.
-        #
-        def generate_vendored_build_settings
-          targets = pod_targets + target.search_paths_aggregate_targets.flat_map(&:pod_targets)
-
-          targets.each do |pod_target|
-            unless pod_target.should_build? && pod_target.requires_frameworks?
-              XCConfigHelper.add_settings_for_file_accessors_of_target(target, pod_target, @xcconfig)
-            end
-          end
-        end
-
-        # Add pod target to list of frameworks / libraries that are linked
-        # with the user’s project.
-        #
-        def generate_other_ld_flags
-          other_ld_flags = pod_targets.select(&:should_build?).map do |pod_target|
-            if pod_target.requires_frameworks?
-              %(-framework "#{pod_target.product_basename}")
-            else
-              %(-l "#{pod_target.product_basename}") if XCConfigHelper.links_dependency?(target, pod_target)
-            end
-          end
-
-          @xcconfig.merge!('OTHER_LDFLAGS' => other_ld_flags.compact.join(' '))
         end
 
         # Ensure to add the default linker run path search paths as they could

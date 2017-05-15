@@ -45,13 +45,15 @@ module Pod
         #         the target, which is used to check if the ARC compatibility
         #         flag is required.
         #
-        # @return [String] the default linker flags. `-ObjC` is always included
-        #         while `-fobjc-arc` is included only if requested in the
-        #         Podfile.
+        # @param  [Boolean] include_objc_flag
+        #         whether to include `-ObjC` in the other linker flags
         #
-        def self.default_ld_flags(target, includes_static_libraries = false)
+        # @return [String] the default linker flags. `-ObjC` is optionally included depending
+        #         on the target while `-fobjc-arc` is included only if requested in the Podfile.
+        #
+        def self.default_ld_flags(target, include_objc_flag = false)
           ld_flags = ''
-          ld_flags << '-ObjC' if includes_static_libraries
+          ld_flags << '-ObjC' if include_objc_flag
           if target.podfile.set_arc_compatibility_flag? &&
               target.spec_consumers.any?(&:requires_arc?)
             ld_flags << ' -fobjc-arc'
@@ -294,6 +296,57 @@ module Pod
             build_settings['LIBRARY_SEARCH_PATHS']   = XCConfigHelper.quote(library_search_paths.uniq)
           end
           build_settings
+        end
+
+        # Add custom build settings and required build settings to link to
+        # vendored libraries and frameworks.
+        #
+        # @param  [AggregateTarget] aggregate_target
+        #         The aggregate target, may be nil.
+        #
+        # @param  [Array<PodTarget] pod_targets
+        #         The pod targets to add the vendored build settings for.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        # @note
+        #   In case of generated pod targets, which require frameworks, the
+        #   vendored frameworks and libraries are already linked statically
+        #   into the framework binary and must not be linked again to the
+        #   user target.
+        #
+        def self.generate_vendored_build_settings(aggregate_target, pod_targets, xcconfig)
+          pod_targets.each do |pod_target|
+            unless pod_target.should_build? && pod_target.requires_frameworks?
+              XCConfigHelper.add_settings_for_file_accessors_of_target(aggregate_target, pod_target, xcconfig)
+            end
+          end
+        end
+
+        # Add pod target to list of frameworks / libraries that are linked
+        # with the user’s project.
+        #
+        # @param  [AggregateTarget] aggregate_target
+        #         The aggregate target, may be nil.
+        #
+        # @param  [Array<PodTarget] pod_targets
+        #         The pod targets to add the vendored build settings for.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        # @return [void]
+        #
+        def self.generate_other_ld_flags(aggregate_target, pod_targets, xcconfig)
+          other_ld_flags = pod_targets.select(&:should_build?).map do |pod_target|
+            if pod_target.requires_frameworks?
+              %(-framework "#{pod_target.product_basename}")
+            elsif XCConfigHelper.links_dependency?(aggregate_target, pod_target)
+              %(-l "#{pod_target.product_basename}")
+            end
+          end
+          xcconfig.merge!('OTHER_LDFLAGS' => other_ld_flags.compact.join(' '))
         end
 
         # Checks if the given target requires language specific settings and

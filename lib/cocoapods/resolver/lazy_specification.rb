@@ -18,11 +18,11 @@ module Pod
           specification.respond_to?(method, include_all)
         end
 
-        def subspec_by_name(name = nil, raise_if_missing = true)
+        def subspec_by_name(name = nil, raise_if_missing = true, include_test_specifications = false)
           if !name || name == self.name
             self
           else
-            specification.subspec_by_name(name, raise_if_missing)
+            specification.subspec_by_name(name, raise_if_missing, include_test_specifications)
           end
         end
 

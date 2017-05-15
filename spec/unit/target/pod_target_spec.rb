@@ -219,6 +219,10 @@ module Pod
           it 'returns that it requires being built as framework' do
             @pod_target.requires_frameworks?.should == true
           end
+
+          it 'returns that it has no test specifications' do
+            @pod_target.contains_test_specifications?.should == false
+          end
         end
 
         describe 'Host does not requires frameworks' do
@@ -302,6 +306,28 @@ module Pod
           it 'resolves the cycle' do
             @pod_target.recursive_dependent_targets.should == [@pod_dependency]
           end
+        end
+      end
+
+      describe 'test spec support' do
+        before do
+          spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          @test_spec_target_definition = Podfile::TargetDefinition.new('Pods', nil)
+          @test_spec_target_definition.abstract = false
+          @test_pod_target = PodTarget.new([spec, *spec.recursive_subspecs], [@test_spec_target_definition], config.sandbox)
+          @test_pod_target.stubs(:platform).returns(:ios)
+        end
+
+        it 'returns that it has test specifications' do
+          @test_pod_target.contains_test_specifications?.should == true
+        end
+
+        it 'returns supported test types' do
+          @test_pod_target.supported_test_types.should == [:unit]
+        end
+
+        it 'returns test label based on test type' do
+          @test_pod_target.test_target_label(:unit).should == 'CoconutLib-Unit-Tests'
         end
       end
     end

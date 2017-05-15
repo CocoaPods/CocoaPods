@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support for test target creation in the pods project generator  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6703](https://github.com/CocoaPods/CocoaPods/pull/6703) 
+
 * Copy dSYM for vendored frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#1698](https://github.com/CocoaPods/CocoaPods/issues/1698) 
