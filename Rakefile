@@ -259,7 +259,7 @@ begin
         Dir.chdir(example.to_s) do
           # TODO: we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
           # The schemes do not seem to survive a SCM round-trip.
-          sh "open *.xcworkspace"
+          sh 'open *.xcworkspace'
           sleep 5
         end
       end
@@ -296,7 +296,6 @@ begin
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
             when :ios
               test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
-              watch_project = scheme_name.start_with? 'watchOS'
 
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 7'"
             else
