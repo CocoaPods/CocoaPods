@@ -1,0 +1,23 @@
+machine:
+  ruby:
+    version: system
+  xcode:
+    version: "8.2"
+
+dependencies:
+  override:
+    - sudo gem update --system
+    - bundle check || bundle install --path .bundle
+    - .circle-scripts/fetch-cocoapods-repo-from-s3.sh
+  cache_directories:
+    - .bundle
+
+test:
+  pre:
+    - git config --global user.email "tests@cocoapods.org"
+    - git config --global user.name "CocoaPods Tests"
+    - bundle exec pod env
+  override:
+    - bundle exec rake spec:all:
+        environment:
+          COCOAPODS_CI_TASKS: EXAMPLES

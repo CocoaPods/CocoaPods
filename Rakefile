@@ -255,11 +255,11 @@ begin
   namespace :examples do
     desc 'Open all example workspaces in Xcode, which recreates the schemes.'
     task :recreate_workspace_schemes do
-      examples.each do |example|
+      Dir['examples/*'].each do |example|
         Dir.chdir(example.to_s) do
           # TODO: we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
           # The schemes do not seem to survive a SCM round-trip.
-          sh "open '#{example.basename}.xcworkspace'"
+          sh 'open *.xcworkspace'
           sleep 5
         end
       end
@@ -295,10 +295,9 @@ begin
             when :osx
               execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
             when :ios
-              # Specifically build against the simulator SDK so we don't have to deal with code signing.
-              # Need to use the iPhone 6s, since this is the default simulator paired with a watch in Xcode 7.3
               test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 6s'"
+
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 7'"
             else
               raise "Unknown platform #{platform}"
             end
