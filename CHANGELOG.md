@@ -185,6 +185,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5937](https://github.com/CocoaPods/CocoaPods/issues/5937)
 
+* Move Installer target verification into the Xcode namespace 
+  [Danielle Tomlinson](https://github.com/DanToml)
+  [#5607](https://github.com/CocoaPods/CocoaPods/pull/5607)
+
 ##### Bug Fixes
 
 * None.  
