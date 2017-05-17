@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix pod install error from 1.2.1 when working with static lib-only projects.  
+  [Ben Asher](https://github.com/benasher44)
+  [#6673](https://github.com/CocoaPods/CocoaPods/issues/6673)
+
 * Use `git!` when executing `push` command in order to raise informative and set exit code.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6700](https://github.com/CocoaPods/CocoaPods/pull/6700) 
