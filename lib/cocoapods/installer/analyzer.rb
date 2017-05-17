@@ -317,7 +317,7 @@ module Pod
           #  If the targets missing hosts are only frameworks, then this is likely
           #  a project for doing framework development. In that case, just warn that
           #  the frameworks that these targets depend on won't be integrated anywhere
-          if embedded_targets_missing_hosts_product_types.subset?(Set.new [:framework, :static_library])
+          if embedded_targets_missing_hosts_product_types.subset?(Set.new([:framework, :static_library]))
             UI.warn 'The Podfile contains framework or static library targets, for which the Podfile does not contain host targets (targets which embed the framework).' \
               "\n" \
               'If this project is for doing framework development, you can ignore this message. Otherwise, add a target to the Podfile that embeds these frameworks to make this message go away (e.g. a test target).'
