@@ -817,6 +817,21 @@ module Pod
             source SpecHelper.test_repo_url
             use_frameworks!
             platform :ios, '8.0'
+            target 'SampleLib' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.analyze
+          UI.warnings.should.match /The Podfile contains framework or static library targets, for which the Podfile does not contain host targets \(targets which embed the framework\)\./
+        end
+
+        it 'warns when using a Podfile for framework-only projects' do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            use_frameworks!
+            platform :ios, '8.0'
             target 'SampleFramework' do
               project 'SampleProject/Sample Lib/Sample Lib'
               pod 'monkey'
@@ -824,7 +839,7 @@ module Pod
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           analyzer.analyze
-          UI.warnings.should.match /The Podfile contains framework targets, for which the Podfile does not contain host targets \(targets which embed the framework\)\./
+          UI.warnings.should.match /The Podfile contains framework or static library targets, for which the Podfile does not contain host targets \(targets which embed the framework\)\./
         end
 
         it 'raises when the extension calls use_frameworks!, but the host target does not' do
