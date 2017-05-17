@@ -45,6 +45,7 @@ module Pod
 
         @update = false
         @allow_pre_downloads = true
+        @has_dependencies = true
       end
 
       # Performs the analysis.
@@ -151,6 +152,15 @@ module Pod
       #
       attr_accessor :allow_pre_downloads
       alias_method :allow_pre_downloads?, :allow_pre_downloads
+
+      # @return [Bool] Whether the analysis has dependencies and thus
+      #         sources must be configured.
+      #
+      # @note   This is used by the `pod lib lint` command to prevent
+      #         update of specs when not needed.
+      #
+      attr_accessor :has_dependencies
+      alias_method :has_dependencies?, :has_dependencies
 
       #-----------------------------------------------------------------------#
 
@@ -831,11 +841,11 @@ module Pod
 
           # Add any sources specified using the :source flag on individual dependencies.
           dependency_sources = podfile.dependencies.map(&:podspec_repo).compact
-
           all_dependencies_have_sources = dependency_sources.count == podfile.dependencies.count
+
           if all_dependencies_have_sources
             sources = dependency_sources
-          elsif sources.empty?
+          elsif has_dependencies? && sources.empty?
             sources = ['https://github.com/CocoaPods/Specs.git']
           else
             sources += dependency_sources

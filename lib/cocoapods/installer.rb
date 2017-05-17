@@ -71,6 +71,7 @@ module Pod
       @lockfile = lockfile
 
       @use_default_plugins = true
+      @has_dependencies = true
     end
 
     # @return [Hash, Boolean, nil] Pods that have been requested to be
@@ -79,6 +80,11 @@ module Pod
     #         not taken into account for deciding what Pods to install.
     #
     attr_accessor :update
+
+    # @return [Boolean] Whether it has dependencies. Defaults to true.
+    #
+    attr_accessor :has_dependencies
+    alias_method :has_dependencies?, :has_dependencies
 
     # @return [Boolean] Whether the spec repos should be updated.
     #
@@ -238,6 +244,7 @@ module Pod
     def create_analyzer
       Analyzer.new(sandbox, podfile, lockfile).tap do |analyzer|
         analyzer.installation_options = installation_options
+        analyzer.has_dependencies = has_dependencies?
       end
     end
 

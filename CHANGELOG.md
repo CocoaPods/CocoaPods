@@ -46,7 +46,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* No master specs cloning when not needed for `pod lib lint`.  
+  [Alfredo Delli Bovi](https://github.com/adellibovi)
+  [#6154](https://github.com/CocoaPods/CocoaPods/issues/6154)
 
 
 ## 1.2.1.rc.1 (2017-04-05)
