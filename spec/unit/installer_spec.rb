@@ -158,6 +158,23 @@ module Pod
         UI.output.should.include 'Skipping User Project Integration'
       end
 
+      it 'includes pod targets from test dependent targets' do
+        pod_target_one = stub(:test_dependent_targets => [])
+        pod_target_three = stub(:test_dependent_targets => [])
+        pod_target_two = stub(:test_dependent_targets => [pod_target_three])
+        aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
+
+        result = stub(:targets => [aggregate_target])
+
+        analyzer = Installer::Analyzer.new(config.sandbox, @installer.podfile, @installer.lockfile)
+        analyzer.stubs(:analyze).returns(result)
+        analyzer.stubs(:result).returns(result)
+
+        @installer.stubs(:create_analyzer).returns(analyzer)
+        @installer.send(:analyze)
+        @installer.pod_targets.should == [pod_target_one, pod_target_two, pod_target_three]
+      end
+
       it 'prints a list of deprecated pods' do
         spec = Spec.new
         spec.name = 'RestKit'

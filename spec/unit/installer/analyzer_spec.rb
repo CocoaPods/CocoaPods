@@ -672,6 +672,21 @@ module Pod
 
       #-------------------------------------------------------------------------#
 
+      it 'handles test only pod targets' do
+        pod_target_one = stub(:name => 'Pod1', :dependent_targets => [], :test_dependent_targets => [])
+        pod_target_two = stub(:name => 'Pod2', :dependent_targets => [], :test_dependent_targets => [])
+        pod_target_three = stub(:name => 'Pod3', :dependent_targets => [pod_target_one, pod_target_two], :test_dependent_targets => [])
+        pod_target_four = stub(:name => 'Pod4', :dependent_targets => [], :test_dependent_targets => [pod_target_three])
+
+        all_pod_targets = [pod_target_one, pod_target_two, pod_target_three, pod_target_four]
+        @analyzer.send(:pod_target_test_only?, pod_target_one, all_pod_targets).should.be.false
+        @analyzer.send(:pod_target_test_only?, pod_target_two, all_pod_targets).should.be.false
+        @analyzer.send(:pod_target_test_only?, pod_target_three, all_pod_targets).should.be.true
+        @analyzer.send(:pod_target_test_only?, pod_target_four, all_pod_targets).should.be.false
+      end
+
+      #-------------------------------------------------------------------------#
+
       describe 'extension targets' do
         before do
           SpecHelper.create_sample_app_copy_from_fixture('Sample Extensions Project')
