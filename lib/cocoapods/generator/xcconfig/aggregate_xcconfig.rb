@@ -85,7 +85,9 @@ module Pod
           # update the runpath search paths.
           vendored_dynamic_artifacts = pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_dynamic_artifacts)
 
-          generate_ld_runpath_search_paths if target.requires_frameworks? || vendored_dynamic_artifacts.count > 0
+          symbol_type = target.user_targets.map(&:symbol_type).uniq.first
+          test_bundle = symbol_type == :octest_bundle || symbol_type == :unit_test_bundle || symbol_type == :ui_test_bundle
+          XCConfigHelper.generate_ld_runpath_search_paths(target, target.requires_host_target?, test_bundle, @xcconfig) if target.requires_frameworks? || vendored_dynamic_artifacts.count > 0
 
           @xcconfig
         end
@@ -175,35 +177,6 @@ module Pod
             @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(nil, search_paths_target.pod_targets)
             @xcconfig.merge!(generator.settings_to_import_pod_targets)
           end
-        end
-
-        # Ensure to add the default linker run path search paths as they could
-        # be not present due to being historically absent in the project or
-        # target template or just being removed by being superficial when
-        # linking third-party dependencies exclusively statically. This is not
-        # something a project needs specifically for the integration with
-        # CocoaPods, but makes sure that it is self-contained for the given
-        # constraints.
-        #
-        def generate_ld_runpath_search_paths
-          ld_runpath_search_paths = ['$(inherited)']
-          if target.platform.symbolic_name == :osx
-            ld_runpath_search_paths << "'@executable_path/../Frameworks'"
-            symbol_type = target.user_targets.map(&:symbol_type).uniq.first
-            ld_runpath_search_paths << \
-              if symbol_type == :unit_test_bundle
-                "'@loader_path/../Frameworks'"
-              else
-                "'@loader_path/Frameworks'"
-              end
-          else
-            ld_runpath_search_paths << [
-              "'@executable_path/Frameworks'",
-              "'@loader_path/Frameworks'",
-            ]
-            ld_runpath_search_paths << "'@executable_path/../../Frameworks'" if target.requires_host_target?
-          end
-          @xcconfig.merge!('LD_RUNPATH_SEARCH_PATHS' => ld_runpath_search_paths.join(' '))
         end
 
         private

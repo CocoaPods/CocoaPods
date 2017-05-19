@@ -324,6 +324,49 @@ module Pod
           end
         end
 
+        # Ensure to add the default linker run path search paths as they could
+        # be not present due to being historically absent in the project or
+        # target template or just being removed by being superficial when
+        # linking third-party dependencies exclusively statically. This is not
+        # something a project needs specifically for the integration with
+        # CocoaPods, but makes sure that it is self-contained for the given
+        # constraints.
+        #
+        # @param [Target] target
+        #        The target, this can be an aggregate target or a pod target.
+        #
+        # @param [Boolean] requires_host_target
+        #        If this target requires a host target
+        #
+        # @param [Boolean] test_bundle
+        #        Whether this is a test bundle or not. This has an effect when the platform is `osx` and changes
+        #        the runtime search paths accordingly.
+        #
+        # @param [Xcodeproj::Config] xcconfig
+        #        The xcconfig to edit.
+        #
+        # @return [void]
+        #
+        def self.generate_ld_runpath_search_paths(target, requires_host_target, test_bundle, xcconfig)
+          ld_runpath_search_paths = ['$(inherited)']
+          if target.platform.symbolic_name == :osx
+            ld_runpath_search_paths << "'@executable_path/../Frameworks'"
+            ld_runpath_search_paths << \
+              if test_bundle
+                "'@loader_path/../Frameworks'"
+              else
+                "'@loader_path/Frameworks'"
+              end
+          else
+            ld_runpath_search_paths << [
+              "'@executable_path/Frameworks'",
+              "'@loader_path/Frameworks'",
+            ]
+            ld_runpath_search_paths << "'@executable_path/../../Frameworks'" if requires_host_target
+          end
+          xcconfig.merge!('LD_RUNPATH_SEARCH_PATHS' => ld_runpath_search_paths.join(' '))
+        end
+
         # Add pod target to list of frameworks / libraries that are linked
         # with the user’s project.
         #
