@@ -87,6 +87,9 @@ module Pod
     attr_accessor :cache_root
 
     def cache_root
+      if !ENV['COCOAPODS_CACHE_ROOT'].nil?
+        @cache_root = Pathname.new(ENV['COCOAPODS_CACHE_ROOT'])
+      end
       @cache_root.mkpath unless @cache_root.exist?
       @cache_root
     end
