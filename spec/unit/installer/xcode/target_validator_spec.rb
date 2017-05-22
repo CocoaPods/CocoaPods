@@ -143,6 +143,86 @@ module Pod
 
         #-------------------------------------------------------------------------#
 
+        describe '#verify_no_pods_used_with_multiple_swift_versions' do
+          it 'raises when targets integrate the same swift pod but have different swift versions' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              platform :ios, '8.0'
+              use_frameworks!
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+
+            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
+
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+
+            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            e = should.raise Informative do
+              @validator.validate!
+            end
+            e.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
+            e.message.should.include 'OrangeFramework required by SampleProject (Swift 3.0), TestRunner (Swift 2.3)'
+            e.message.should.not.include 'matryoshka required by SampleProject (Swift 3.0), TestRunner (Swift 2.3)'
+          end
+
+          it 'does not raise when targets integrate the same pod but only one of the targets is a swift target' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              use_frameworks!
+              platform :ios, '8.0'
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+
+            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+            # when the swift version is unset at the project level, but set in one target, swift_version is nil
+            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
+
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+
+            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            lambda { @validator.validate! }.should.not.raise
+          end
+
+          it 'does not raise when targets integrate the same pod but none of the pod targets use swift' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              use_frameworks!
+              platform :ios, '8.0'
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+
+            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
+
+            # Pretend none of the pod targets use swift, even if the target definitions they are linked with do have different Swift versions.
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+
+            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            lambda { @validator.validate! }.should.not.raise
+          end
+        end
+
+        #-------------------------------------------------------------------------#
+
         describe '#verify_framework_usage' do
           it 'raises when Swift pods are used without explicit `use_frameworks!`' do
             fixture_path = ROOT + 'spec/fixtures'

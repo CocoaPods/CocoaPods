@@ -34,6 +34,7 @@ module Pod
         def validate!
           verify_no_duplicate_framework_and_library_names
           verify_no_static_framework_transitive_dependencies
+          verify_no_pods_used_with_multiple_swift_versions
           verify_framework_usage
         end
 
@@ -81,6 +82,24 @@ module Pod
                   "transitive dependencies that include static binaries: (#{static_libs.to_sentence})"
               end
             end
+          end
+        end
+
+        def verify_no_pods_used_with_multiple_swift_versions
+          error_message_for_target = lambda do |target|
+            "#{target.name} (Swift #{target.swift_version})"
+          end
+          swift_pod_targets = pod_targets.select(&:uses_swift?)
+          error_messages = swift_pod_targets.map do |pod_target|
+            swift_target_definitions = pod_target.target_definitions.reject { |target| target.swift_version.blank? }
+            next if swift_target_definitions.empty? || swift_target_definitions.uniq(&:swift_version).count == 1
+            target_errors = swift_target_definitions.map(&error_message_for_target).join(', ')
+            "- #{pod_target.name} required by #{target_errors}"
+          end.compact
+
+          unless error_messages.empty?
+            raise Informative, 'The following pods are integrated into targets ' \
+            "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
           end
         end
 
