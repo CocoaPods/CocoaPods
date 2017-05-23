@@ -54,6 +54,8 @@ before_install:
 before_script:
   - git config --global user.email "tests@cocoapods.org"
   - git config --global user.name "CocoaPods Tests"
+  # Disable bundler version check mechanism, as it crashes, possibly due to https://github.com/bundler/bundler/commit/1e05d24050b4177e9a8001b7c1083d713b474faf
+  - bundle config disable_version_check true
   - bundle exec pod env
 
 script:
