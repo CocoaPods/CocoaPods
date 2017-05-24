@@ -870,8 +870,14 @@ module Pod
         validator
       end
 
-      it 'fails on deployment target < iOS 8 for Swift Pods' do
+      def test_swiftpod_with_dot_swift_version(version = '3.1.0')
         validator = test_swiftpod
+        validator.stubs(:dot_swift_version).returns(version)
+        validator
+      end
+
+      it 'fails on deployment target < iOS 8 for Swift Pods' do
+        validator = test_swiftpod_with_dot_swift_version
         validator.validate
 
         validator.results.map(&:to_s).first.should.match /dynamic frameworks.*iOS > 8/
@@ -881,7 +887,7 @@ module Pod
       it 'succeeds on deployment target < iOS 8 for Swift Pods using XCTest' do
         Specification::Consumer.any_instance.stubs(:frameworks).returns(%w(XCTest))
 
-        validator = test_swiftpod
+        validator = test_swiftpod_with_dot_swift_version
         validator.validate
         validator.results.count.should == 0
       end
@@ -889,25 +895,34 @@ module Pod
       it 'succeeds on deployment targets >= iOS 8 for Swift Pods' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod
+        validator = test_swiftpod_with_dot_swift_version
         validator.validate
 
         validator.results.count.should == 0
       end
 
-      it 'tells users about the .swift-version file if the validation fails' do
+      it 'fails without the presence of a .swift-version file for Swift Pods' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
         validator = test_swiftpod
-        validator.stubs(:validated?).returns(false)
-        result = Validator::Result.new(:error, 'attribute', 'message')
-        validator.stubs(:results).returns([result])
+        validator.validate
+        validator.results.count.should == 1
 
-        validator.failure_reason.should == "1 error.\n[!] The validator for " \
+        result = validator.results.first
+        result.type.should == :warning
+        result.message.should == 'The validator for ' \
           'Swift projects uses Swift 3.0 by default, if you are using a ' \
           'different version of swift you can use a `.swift-version` file ' \
           'to set the version for your Pod. For example to use Swift 2.3, ' \
           "run: \n    `echo \"2.3\" > .swift-version`"
+      end
+
+      it 'succeeds with the presence of a .swift-version file for Swift Pods' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod_with_dot_swift_version
+        validator.validate
+        validator.results.count.should == 0
       end
 
       describe '#swift_version' do

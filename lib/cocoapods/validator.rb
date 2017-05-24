@@ -146,15 +146,8 @@ module Pod
         reasons << 'all results apply only to public specs, but you can use ' \
                    '`--private` to ignore them if linting the specification for a private pod'
       end
-      if dot_swift_version.nil?
-        reasons.to_sentence + ".\n[!] The validator for Swift projects uses " \
-          'Swift 3.0 by default, if you are using a different version of ' \
-          'swift you can use a `.swift-version` file to set the version for ' \
-          "your Pod. For example to use Swift 2.3, run: \n" \
-          '    `echo "2.3" > .swift-version`'
-      else
-        reasons.to_sentence
-      end
+
+      reasons.to_sentence
     end
 
     #-------------------------------------------------------------------------#
@@ -308,6 +301,7 @@ module Pod
           download_pod
           check_file_patterns
           install_pod
+          validate_dot_swift_version
           add_app_project_import
           validate_vendored_dynamic_frameworks
           build_pod
@@ -380,6 +374,17 @@ module Pod
     #
     def validate_documentation_url(spec)
       validate_url(spec.documentation_url) if spec.documentation_url
+    end
+
+    def validate_dot_swift_version
+      if !used_swift_version.nil? && dot_swift_version.nil?
+        warning(:swift_version,
+                'The validator for Swift projects uses ' \
+                'Swift 3.0 by default, if you are using a different version of ' \
+                'swift you can use a `.swift-version` file to set the version for ' \
+                "your Pod. For example to use Swift 2.3, run: \n" \
+                '    `echo "2.3" > .swift-version`')
+      end
     end
 
     def setup_validation_environment
