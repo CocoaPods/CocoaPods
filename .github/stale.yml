@@ -8,7 +8,7 @@ daysUntilClose: 7
 
 # Issues or Pull Requests with these labels will never be considered stale
 exemptLabels:
-  - "t1: enhancement"
+  - "t1:enhancement"
 
 # Label to use when marking as stale
 staleLabel: "s1:awaiting input"
