@@ -49,6 +49,7 @@ module Pod
       raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
       super()
+      puts "Hello"
       @specs = specs
       @target_definitions = target_definitions
       @sandbox = sandbox
