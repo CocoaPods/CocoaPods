@@ -57,10 +57,11 @@ module Pod
         absolute_paths = absolute_paths.map do |path|
           if File.symlink?(path)
             realpath = path.realpath
-            children = Pathname.glob(realpath + '**/*', File::FNM_DOTMATCH)
-            children = children.map { |child_path| path + child_path.relative_path_from(realpath) }
-            children = children.reject { |child_path| child_path.basename.to_s =~ /^\.\.?$/ }
-            children = children.reject { |child_path| child_path == path}
+            children = Pathname.glob(realpath + '**/*', File::FNM_DOTMATCH).
+              map { |child_path| path + child_path.relative_path_from(realpath) }.
+              reject { |child_path| child_path.basename.to_s =~ /^\.\.?$/ }.
+              reject { |child_path| child_path == path }
+            children
           else
             [path]
           end
