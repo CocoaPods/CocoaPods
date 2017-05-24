@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#1698](https://github.com/CocoaPods/CocoaPods/issues/1698) 
 
+* Prevents need for .swift-version file in Objective-C pods  
+  [Austin Emmons](https://github.com/atreat)
+  [#6742](https://github.com/CocoaPods/CocoaPods/issues/6742) 
+
 ##### Bug Fixes
 
 * Fix pod install error from 1.2.1 when working with static lib-only projects.  
