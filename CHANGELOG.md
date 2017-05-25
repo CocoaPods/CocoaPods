@@ -39,6 +39,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [David Airapetyan](https://github.com/davidair)
   [#4887](https://github.com/CocoaPods/CocoaPods/issues/4887)
 
+* Select unique module_name(s) across host target's and embedded targets' pod targets  
+  [Anand Biligiri](https://github.com/abiligiri)
+  [#6711](https://github.com/CocoaPods/CocoaPods/issues/6711)
+
 ## 1.3.0.beta.2 (2017-06-22)
 
 ##### Enhancements

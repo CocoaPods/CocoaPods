@@ -47,7 +47,7 @@ module Pod
               file_accessors = pod_targets.flat_map(&:file_accessors)
 
               frameworks = file_accessors.flat_map(&:vendored_frameworks).uniq.map(&:basename)
-              frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name)
+              frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name).uniq
               verify_no_duplicate_names(frameworks, aggregate_target.label, 'frameworks')
 
               libraries = file_accessors.flat_map(&:vendored_libraries).uniq.map(&:basename)

@@ -17,9 +17,9 @@ module Pod
 
         # @return [AnalysisResult]
         #
-        def create_validator(sandbox, podfile, lockfile)
+        def create_validator(sandbox, podfile, lockfile, integrate_targets = false)
           installation_options = Installer::InstallationOptions.new.tap do |options|
-            options.integrate_targets = false
+            options.integrate_targets = integrate_targets
           end
 
           @analyzer = Analyzer.new(config.sandbox, podfile, lockfile).tap do |analyzer|
@@ -35,6 +35,10 @@ module Pod
         end
 
         describe '#verify_no_duplicate_framework_and_library_names' do
+          before do
+            SpecHelper.create_sample_app_copy_from_fixture('Sample Extensions Project')
+          end
+
           it 'detects duplicate library names' do
             Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('a/libBananalib.a')])
             Pod::Specification.any_instance.stubs(:dependencies).returns([])
@@ -90,6 +94,29 @@ module Pod
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
+            should.not.raise(Informative) { @validator.validate! }
+          end
+
+          it 'including multiple subspecs from the same pod in a target does not result in duplicate frameworks' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Pod::Podfile.new do
+              platform :ios, '9.3'
+              project 'Sample Extensions Project/Sample Extensions Project'
+              use_frameworks!
+
+              target 'Sample Extensions Project' do
+                pod 'matryoshka/Foo',       :path => (fixture_path + 'matryoshka').to_s
+                pod 'matryoshka',           :path => (fixture_path + 'matryoshka').to_s
+              end
+
+              target 'Today Extension' do
+                pod 'matryoshka/Foo',       :path => (fixture_path + 'matryoshka').to_s
+              end
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile, true)
             should.not.raise(Informative) { @validator.validate! }
           end
         end
