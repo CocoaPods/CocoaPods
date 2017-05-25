@@ -211,7 +211,7 @@ module Pod
               add_dependent_targets_to_native_target(pod_target.dependent_targets, pod_target.native_target, is_app_extension, pod_target.requires_frameworks?, frameworks_group)
 
               pod_target.test_native_targets.each do |test_native_target|
-                add_dependent_targets_to_native_target(pod_target.test_dependent_targets, test_native_target, false, pod_target.requires_frameworks?, frameworks_group)
+                add_dependent_targets_to_native_target([pod_target, *pod_target.test_dependent_targets], test_native_target, false, pod_target.requires_frameworks?, frameworks_group)
               end
             end
           end

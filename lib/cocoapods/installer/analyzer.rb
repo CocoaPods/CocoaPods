@@ -428,10 +428,30 @@ module Pod
         end
 
         target.pod_targets = pod_targets.select do |pod_target|
-          pod_target.target_definitions.include?(target_definition)
+          target_definition_included = pod_target.target_definitions.include?(target_definition)
+          explicitly_defined_in_target_definition = target_definition.non_inherited_dependencies.map(&:name).include?(pod_target.name)
+          test_pod_target_only = pod_target_test_only?(pod_target, pod_targets)
+          target_definition_included && (explicitly_defined_in_target_definition || !test_pod_target_only)
         end
 
         target
+      end
+
+      # Returns true if a pod target is only used by other pod targets as a test dependency and therefore should
+      # not be included as part of the aggregate target.
+      #
+      # @param [PodTarget] pod_target
+      #        the pod target being queried
+      #
+      # @param [Array<PodTarget>] pod_targets
+      #        the array of pod targets to check against
+      #
+      # @return [Boolean] if the pod target is only referenced from test dependencies.
+      #
+      def pod_target_test_only?(pod_target, pod_targets)
+        source = pod_targets.any? { |pt| pt.dependent_targets.map(&:name).include?(pod_target.name) }
+        test = pod_targets.any? { |pt| pt.test_dependent_targets.map(&:name).include?(pod_target.name) }
+        !source && test
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting
@@ -472,8 +492,6 @@ module Pod
             test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
-            # Test dependendent targets include our own target as a test dependency.
-            target.test_dependent_targets << target
           end
         else
           dedupe_cache = {}
@@ -488,8 +506,6 @@ module Pod
               test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
-              # Test dependendent targets include our own target as a test dependency.
-              target.test_dependent_targets << target
             end
           end
         end

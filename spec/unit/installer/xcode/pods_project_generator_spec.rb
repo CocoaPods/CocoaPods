@@ -264,8 +264,11 @@ module Pod
               mock_native_target = mock('CoconutLib')
               mock_test_native_target = mock('CoconutLib-Unit-Tests')
 
-              dependent_target = mock('dependent-target', :should_build? => true, :native_target => 'DependentNativeTarget')
-              test_dependent_target = mock('dependent-test-target', :should_build? => true, :native_target => 'TestDependentNativeTarget')
+              dependent_native_target = mock('DependentNativeTarget')
+              test_dependent_native_target = mock('TestDependentNativeTarget')
+
+              dependent_target = mock('dependent-target', :should_build? => true, :native_target => dependent_native_target)
+              test_dependent_target = mock('dependent-test-target', :should_build? => true, :native_target => test_dependent_native_target)
 
               @pod_target.stubs(:native_target).returns(mock_native_target)
               @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
@@ -274,11 +277,13 @@ module Pod
               @pod_target.stubs(:should_build? => true)
               @mock_target.expects(:add_dependency).with(mock_native_target)
 
-              mock_native_target.expects(:add_dependency).with('DependentNativeTarget')
-              mock_native_target.expects(:add_dependency).with('TestDependentNativeTarget').never
+              mock_native_target.expects(:add_dependency).with(dependent_native_target)
+              mock_native_target.expects(:add_dependency).with(test_dependent_native_target).never
+              mock_native_target.expects(:add_dependency).with(mock_native_target).never
 
-              mock_test_native_target.expects(:add_dependency).with('DependentNativeTarget').never
-              mock_test_native_target.expects(:add_dependency).with('TestDependentNativeTarget')
+              mock_test_native_target.expects(:add_dependency).with(dependent_native_target).never
+              mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)
+              mock_test_native_target.expects(:add_dependency).with(mock_native_target)
 
               @generator.send(:set_target_dependencies)
             end
