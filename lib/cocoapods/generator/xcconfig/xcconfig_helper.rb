@@ -212,7 +212,7 @@ module Pod
           name = File.basename(library_path, extension).sub(/\Alib/, '')
           dirname = '${PODS_ROOT}/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
-            'LIBRARY_SEARCH_PATHS' => '$(inherited) ' + quote([dirname]),
+            'LIBRARY_SEARCH_PATHS' => quote([dirname]),
           }
           build_settings['OTHER_LDFLAGS'] = "-l#{name}" if include_other_ldflags
           xcconfig.merge!(build_settings)

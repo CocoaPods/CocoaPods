@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5117](https://github.com/CocoaPods/CocoaPods/issues/5117)
 
+* Stop adding `$(inherited)` for every static library linked  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6756](https://github.com/CocoaPods/CocoaPods/pull/6756)
+
 * Only check for valid Swift version for pod targets that use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6733](https://github.com/CocoaPods/CocoaPods/pull/6733) 
