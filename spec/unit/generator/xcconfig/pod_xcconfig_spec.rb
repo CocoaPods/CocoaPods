@@ -169,6 +169,19 @@ module Pod
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should.be.nil
             xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
+
+          it 'includes default runpath search path list for test xcconfigs' do
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
+          end
+
+          it 'includes default runpath search path list for test xcconfigs for test bundle' do
+            @coconut_pod_target.stubs(:platform).returns(Platform.new(:osx, '10.10'))
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks'"
+          end
         end
       end
     end

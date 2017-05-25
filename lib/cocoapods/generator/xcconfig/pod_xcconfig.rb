@@ -74,6 +74,7 @@ module Pod
             @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, target.test_dependent_targets)
             XCConfigHelper.generate_vendored_build_settings(nil, target.test_dependent_targets, @xcconfig)
             XCConfigHelper.generate_other_ld_flags(nil, target.test_dependent_targets, @xcconfig)
+            XCConfigHelper.generate_ld_runpath_search_paths(target, false, true, @xcconfig)
           end
           @xcconfig
         end

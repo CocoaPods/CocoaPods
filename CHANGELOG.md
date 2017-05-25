@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Fix to include proper runtime search paths for test native targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6727](https://github.com/CocoaPods/CocoaPods/pull/6727)
+
 * Add support for test target creation in the pods project generator  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6703](https://github.com/CocoaPods/CocoaPods/pull/6703) 
