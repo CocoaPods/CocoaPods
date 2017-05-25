@@ -159,7 +159,7 @@ module Pod
             @coconut_pod_target.test_dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BananaLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BananaLib" "$PODS_CONFIGURATION_BUILD_DIR/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
           end
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do
