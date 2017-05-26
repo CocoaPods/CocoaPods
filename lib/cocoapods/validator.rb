@@ -242,7 +242,7 @@ module Pod
     # @return [Pathname] the temporary directory used by the linter.
     #
     def validation_dir
-      Pathname(Dir.tmpdir) + 'CocoaPods/Lint'
+      @validation_dir ||= Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{spec.name}"]))
     end
 
     # @return [String] the SWIFT_VERSION to use for validation.

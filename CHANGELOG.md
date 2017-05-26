@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Use unique temp folder during lint for parallel execuition    
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5117](https://github.com/CocoaPods/CocoaPods/issues/5117)
+
 * Only check for valid Swift version for pod targets that use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6733](https://github.com/CocoaPods/CocoaPods/pull/6733) 

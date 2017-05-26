@@ -88,7 +88,7 @@ module Pod
         validator.quick = true
         validator.stubs(:validate_url)
         validator.validate
-        validator.validation_dir.should.be == Pathname.new(Dir.tmpdir) + 'CocoaPods/Lint'
+        validator.validated?.should.be.true
       end
 
       describe '#only_subspec' do
