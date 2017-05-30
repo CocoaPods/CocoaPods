@@ -187,6 +187,7 @@ module Pod
                 @project.targets.first.name.should == 'CoconutLib'
                 native_test_target = @project.targets[1]
                 native_test_target.name.should == 'CoconutLib-Unit-Tests'
+                native_test_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
                 native_test_target.symbol_type.should == :unit_test_bundle
                 @coconut_pod_target.test_native_targets.count.should == 1
               end
@@ -225,8 +226,10 @@ module Pod
                 @installer.install!
                 native_target = @installer.send(:native_target_for_consumer, @coconut_spec.consumer(:ios))
                 native_target.name.should == 'CoconutLib'
+                native_target.product_reference.name.should == 'libCoconutLib.a'
                 test_native_target = @installer.send(:native_target_for_consumer, @coconut_spec.test_specs.first.consumer(:ios))
                 test_native_target.name.should == 'CoconutLib-Unit-Tests'
+                test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
               end
 
               it 'returns the correct product type for test type' do
