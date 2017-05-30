@@ -42,6 +42,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6756](https://github.com/CocoaPods/CocoaPods/pull/6756)
 
+* Settings for dependent targets should include the parent target for test xcconfigs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6755](https://github.com/CocoaPods/CocoaPods/pull/6755)
+
 * Only check for valid Swift version for pod targets that use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6733](https://github.com/CocoaPods/CocoaPods/pull/6733) 
