@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not use the same product name for test targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6762](https://github.com/CocoaPods/CocoaPods/pull/6762)
+
 * Use unique temp folder during lint for parallel execuition    
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5117](https://github.com/CocoaPods/CocoaPods/issues/5117)
