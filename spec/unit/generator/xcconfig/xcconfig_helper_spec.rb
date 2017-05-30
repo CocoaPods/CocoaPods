@@ -156,7 +156,7 @@ module Pod
             @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
-            hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/MapBox/Proj4"'
+            hash_config['LIBRARY_SEARCH_PATHS'].should == '"${PODS_ROOT}/MapBox/Proj4"'
           end
 
           it 'adds dylib build settings to the given xcconfig' do
@@ -165,7 +165,7 @@ module Pod
             @sut.add_library_build_settings(path, xcconfig, config.sandbox.root)
             hash_config = xcconfig.to_hash
             hash_config['OTHER_LDFLAGS'].should == '-l"Proj4"'
-            hash_config['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/MapBox/Proj4"'
+            hash_config['LIBRARY_SEARCH_PATHS'].should == '"${PODS_ROOT}/MapBox/Proj4"'
           end
         end
 
@@ -238,7 +238,7 @@ module Pod
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
@@ -249,7 +249,7 @@ module Pod
             aggregate_target = stub(:target_definition => target_definition, :pod_targets => [pod_target], :search_paths_aggregate_targets => [])
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
           end
@@ -260,7 +260,7 @@ module Pod
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, @accessor)
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
           end
@@ -269,7 +269,7 @@ module Pod
             pod_target = stub(:sandbox => config.sandbox)
             xcconfig = Xcodeproj::Config.new
             @sut.add_static_dependency_build_settings(nil, pod_target, xcconfig, @accessor)
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"Bananalib" -framework "Bananalib"'
           end
