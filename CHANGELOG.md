@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Ensure product name for tests is not overridden by custom build settings  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6766](https://github.com/CocoaPods/CocoaPods/pull/6766)
+
 * Do not use the same product name for test targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6762](https://github.com/CocoaPods/CocoaPods/pull/6762)

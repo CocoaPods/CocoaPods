@@ -179,10 +179,7 @@ module Pod
               platform = target.platform.name
               language = target.uses_swift? ? :swift : :objc
               native_test_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
-
-              product_name = name
-              product = native_test_target.product_reference
-              product.name = product_name
+              native_test_target.product_reference.name = name
 
               target.user_build_configurations.each do |bc_name, type|
                 native_test_target.add_build_configuration(bc_name, type)
@@ -190,9 +187,13 @@ module Pod
 
               native_test_target.build_configurations.each do |configuration|
                 configuration.build_settings.merge!(custom_build_settings)
-                # target_installer will automatically add an empth `OTHER_LDFLAGS`. For test
+                # target_installer will automatically add an empty `OTHER_LDFLAGS`. For test
                 # targets those are set via a test xcconfig file instead.
                 configuration.build_settings.delete('OTHER_LDFLAGS')
+                # target_installer will automatically set the product name to the module name if the target
+                # requires frameworks. For tests we always use the test target name as the product name
+                # irrelevant to whether we use frameworks or not.
+                configuration.build_settings['PRODUCT_NAME'] = name
               end
 
               target.test_native_targets << native_test_target
