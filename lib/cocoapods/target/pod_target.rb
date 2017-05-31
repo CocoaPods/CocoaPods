@@ -192,6 +192,40 @@ module Pod
       specs.select(&:test_specification?).map(&:test_type).uniq
     end
 
+    # Returns the corresponding native target to use based on the provided specification.
+    # This is used to figure out whether to add a source file into the library native target or any of the
+    # test native targets.
+    #
+    # @param  [Specification] spec
+    #         The specifcation to base from in order to find the native target.
+    #
+    # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
+    #
+    def native_target_for_spec(spec)
+      return native_target unless spec.test_specification?
+      test_native_targets.find do |native_target|
+        native_target.symbol_type == product_type_for_test_type(spec.test_type)
+      end
+    end
+
+    # Returns the corresponding native product type to use given the test type.
+    # This is primarily used when creating the native targets in order to produce the correct test bundle target
+    # based on the type of tests included.
+    #
+    # @param  [Symbol] test_type
+    #         The test type to map to provided by the test specification DSL.
+    #
+    # @return [Symbol] The native product type to use.
+    #
+    def product_type_for_test_type(test_type)
+      case test_type
+      when :unit
+        :unit_test_bundle
+      else
+        raise Informative, "Unknown test type `#{test_type}`."
+      end
+    end
+
     # @return [Specification] The root specification for the target.
     #
     def root_spec

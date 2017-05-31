@@ -30,6 +30,7 @@ module Pod
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
              'This takes precedence over a .swift-version file.'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
+            ['--skip-tests', 'Lint skips building and running tests during validation'],
           ].concat(super)
         end
 
@@ -45,6 +46,7 @@ module Pod
           @private         = argv.flag?('private', false)
           @swift_version   = argv.option('swift-version', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
+          @skip_tests = argv.flag?('skip-tests', false)
           @podspecs_paths = argv.arguments!
           super
         end
@@ -64,6 +66,7 @@ module Pod
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
+            validator.skip_tests = @skip_tests
             validator.validate
             failure_reasons << validator.failure_reason
 

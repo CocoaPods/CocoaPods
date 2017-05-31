@@ -221,25 +221,6 @@ module Pod
                 content = @coconut_pod_target.umbrella_header_path.read
                 content.should.not =~ /"CoconutTestHeader.h"/
               end
-
-              it 'returns the correct native target based on the consumer provided' do
-                @installer.install!
-                native_target = @installer.send(:native_target_for_consumer, @coconut_spec.consumer(:ios))
-                native_target.name.should == 'CoconutLib'
-                native_target.product_reference.name.should == 'libCoconutLib.a'
-                test_native_target = @installer.send(:native_target_for_consumer, @coconut_spec.test_specs.first.consumer(:ios))
-                test_native_target.name.should == 'CoconutLib-Unit-Tests'
-                test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
-              end
-
-              it 'returns the correct product type for test type' do
-                @installer.send(:product_type_for_test_type, :unit).should == :unit_test_bundle
-              end
-
-              it 'raises for unknown test type' do
-                exception = lambda { @installer.send(:product_type_for_test_type, :weird_test_type) }.should.raise Informative
-                exception.message.should.include 'Unknown test type passed `weird_test_type`.'
-              end
             end
 
             #--------------------------------------#

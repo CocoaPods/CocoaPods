@@ -171,10 +171,10 @@ module Pod
     end
 
     it 'validates specs as frameworks by default' do
-      Validator.any_instance.expects(:podfile_from_spec).with(:ios, '8.0', true).times(3)
-      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true).twice
-      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true).twice
-      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, '8.0', true, []).times(3)
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true, []).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true, []).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true, []).twice
 
       cmd = command('repo', 'push', 'master')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
@@ -185,10 +185,10 @@ module Pod
     end
 
     it 'validates specs as libraries if requested' do
-      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false).times(3)
-      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false).twice
-      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false).twice
-      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false, []).times(3)
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, []).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, []).twice
+      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, []).twice
 
       cmd = command('repo', 'push', 'master', '--use-libraries')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator

@@ -134,7 +134,7 @@ module Pod
             target.file_accessors.each do |file_accessor|
               consumer = file_accessor.spec_consumer
 
-              native_target = native_target_for_consumer(consumer)
+              native_target = target.native_target_for_spec(consumer.spec)
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers
               private_headers = file_accessor.private_headers
@@ -167,40 +167,6 @@ module Pod
             end
           end
 
-          # Returns the corresponding native target to use based on the provided consumer.
-          # This is used to figure out whether to add a source file into the library native target or any of the
-          # test native targets.
-          #
-          # @param  [Consumer] consumer
-          #         The consumer to base from in order to find the native target.
-          #
-          # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
-          #
-          def native_target_for_consumer(consumer)
-            return native_target unless consumer.spec.test_specification?
-            target.test_native_targets.find do |native_target|
-              native_target.symbol_type == product_type_for_test_type(consumer.spec.test_type)
-            end
-          end
-
-          # Returns the corresponding native product type to use given the test type.
-          # This is primarily used when creating the native targets in order to produce the correct test bundle target
-          # based on the type of tests included.
-          #
-          # @param  [Symbol] test_type
-          #         The test type to map to provided by the test specification DSL.
-          #
-          # @return [Symbol] The native product type to use.
-          #
-          def product_type_for_test_type(test_type)
-            case test_type
-            when :unit
-              :unit_test_bundle
-            else
-              raise Informative, "Unknown test type passed `#{test_type}`."
-            end
-          end
-
           # Adds the test targets for the library to the Pods project with the
           # appropriate build configurations.
           #
@@ -208,7 +174,7 @@ module Pod
           #
           def add_test_targets
             target.supported_test_types.each do |test_type|
-              product_type = product_type_for_test_type(test_type)
+              product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_type)
               platform = target.platform.name
               language = target.uses_swift? ? :swift : :objc
@@ -257,7 +223,7 @@ module Pod
                   bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
                 end
 
-                native_target = native_target_for_consumer(file_accessor.spec_consumer)
+                native_target = target.native_target_for_spec(file_accessor.spec_consumer.spec)
                 target.user_build_configurations.each do |bc_name, type|
                   bundle_target.add_build_configuration(bc_name, type)
                 end
