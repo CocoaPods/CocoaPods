@@ -303,10 +303,23 @@ module Pod
 
               target.test_native_targets.each do |test_target|
                 test_target.build_configurations.each do |test_target_bc|
+                  test_target_swift_debug_hack(test_target_bc)
                   test_target_bc.base_configuration_reference = xcconfig_file_ref
                 end
               end
             end
+          end
+
+          # Manually add `libswiftSwiftOnoneSupport.dylib` as it seems there is an issue with tests that do not include it for Debug configurations.
+          # Possibly related to Swift module optimization.
+          #
+          # @return [void]
+          #
+          def test_target_swift_debug_hack(test_target_bc)
+            return unless test_target_bc.debug?
+            return unless [target, *target.recursive_dependent_targets].any?(&:uses_swift?)
+            ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
+            ldflags << ' -lswiftSwiftOnoneSupport'
           end
 
           # Creates a build phase which links the versioned header folders

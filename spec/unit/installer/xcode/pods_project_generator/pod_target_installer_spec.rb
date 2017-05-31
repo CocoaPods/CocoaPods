@@ -195,6 +195,19 @@ module Pod
                 @coconut_pod_target.test_native_targets.count.should == 1
               end
 
+              it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
+                @coconut_pod_target.stubs(:uses_swift?).returns(true)
+                @installer.install!
+                native_test_target = @project.targets[1]
+                debug_configuration = native_test_target.build_configurations.find(&:debug?)
+                debug_configuration.build_settings['OTHER_LDFLAGS'].sort.should == [
+                  '$(inherited)',
+                  '-lswiftSwiftOnoneSupport',
+                ]
+                release_configuration = native_test_target.build_configurations.find { |bc| bc.type == :release }
+                release_configuration.build_settings['OTHER_LDFLAGS'].should.be.nil
+              end
+
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
                 @project.targets.count.should == 2

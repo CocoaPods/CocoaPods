@@ -148,11 +148,24 @@ module Pod
             @coconut_pod_target.stubs(:file_accessors).returns(file_accessors)
           end
 
+          it 'includes correct other ld flags' do
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib"'
+          end
+
+          it 'includes correct other ld flags when requires frameworks' do
+            @coconut_pod_target.stubs(:requires_frameworks?).returns(true)
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -framework "CoconutLib"'
+          end
+
           it 'includes other ld flags for test dependent targets' do
             @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"monkey" -framework "dynamic-monkey"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
           end
 
           it 'adds settings for test dependent targets' do
