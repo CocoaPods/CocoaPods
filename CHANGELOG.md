@@ -70,7 +70,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Louis D'hauwe](https://github.com/louisdh)
   [#6629](https://github.com/CocoaPods/CocoaPods/pull/6629)
   
-* Delete extraneous files in rsync destination 
+* Delete extraneous files in rsync destination.  
   [jgavris](https://github.com/jgavris)
   [#6694](https://github.com/CocoaPods/CocoaPods/pull/6694)
   
