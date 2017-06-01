@@ -38,6 +38,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6767](https://github.com/CocoaPods/CocoaPods/pull/6767)
 
+* Link `swiftSwiftOnoneSupport` for test xcconfigs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6769](https://github.com/CocoaPods/CocoaPods/pull/6769)
+
 * Ensure product name for tests is not overridden by custom build settings  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6766](https://github.com/CocoaPods/CocoaPods/pull/6766)
