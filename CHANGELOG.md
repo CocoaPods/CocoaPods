@@ -51,6 +51,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6787](https://github.com/CocoaPods/CocoaPods/pull/6787)
 
+* `VALID_ARCHS` does not include the right archs to strip for a framework so use `ARCHS` instead  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6774](https://github.com/CocoaPods/CocoaPods/issues/6774)
+
 * Do not double add search paths to test xcconfig from parent  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6767](https://github.com/CocoaPods/CocoaPods/pull/6767)
