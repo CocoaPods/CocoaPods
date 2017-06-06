@@ -54,12 +54,10 @@ Integrating client projects
 [!] Please close any current Xcode sessions and use `Workspace.xcworkspace` for this project from now on.
 
 Integrating target `Pods-SampleApp_1` (`SampleApp_1.xcodeproj` project)
-  - Removing (Pods/Pods-SampleApp_1.xcconfig)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-SampleApp_2` (`SampleApp_2.xcodeproj` project)
-  - Removing (Pods/Pods-SampleApp_2.xcconfig)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks

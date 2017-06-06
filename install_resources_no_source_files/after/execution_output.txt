@@ -37,7 +37,6 @@ Generating Pods project
 Integrating client project
 
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
-  - Removing (Pods/Pods.xcconfig)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
