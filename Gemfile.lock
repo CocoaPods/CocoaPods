@@ -1,17 +1,17 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 53dd2108348012cd9494aa12d3ef79ea4dfff412
+  revision: 7f26d3d016efeea728ed0e608357e910d4c6e8f9
   branch: master
   specs:
-    claide (1.0.1)
+    claide (1.0.2)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 5574572de5dd607f7dbc29025f7cf9f7c5d12cec
+  revision: 3729e73dbc330d2c5dddd6ce022324eb8808270e
   branch: master
   specs:
     cocoapods-core (1.2.1)
-      activesupport (>= 4.0.2, < 5)
+      activesupport (>= 4.0.2, < 6)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
@@ -31,12 +31,12 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 76932aa3dce97408361b0cd485deff9a77e3bcb4
+  revision: d5e6a26a2cc0efaa5993b777c5ac1ab43c4a13fa
   branch: master
   specs:
     xcodeproj (1.4.4)
       CFPropertyList (~> 2.3.3)
-      claide (>= 1.0.1, < 2.0)
+      claide (>= 1.0.2, < 2.0)
       colored2 (~> 3.1)
       nanaimo (~> 0.2.3)
 
@@ -78,7 +78,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 61c9e5a3d535e52032bd832c3f69effa181fa73c
+  revision: 649ccab360b36435d97cfae44fdec14cc67e2cf8
   branch: master
   specs:
     cocoapods-trunk (1.2.0)
@@ -104,7 +104,7 @@ PATH
   specs:
     cocoapods (1.2.1)
       activesupport (>= 4.0.2, < 5)
-      claide (>= 1.0.1, < 2.0)
+      claide (>= 1.0.2, < 2.0)
       cocoapods-core (= 1.2.1)
       cocoapods-deintegrate (>= 1.0.1, < 2.0)
       cocoapods-downloader (>= 1.1.3, < 2.0)
@@ -176,7 +176,7 @@ GEM
     gh_inspector (1.0.3)
     git (1.3.0)
     hashdiff (0.3.1)
-    i18n (0.8.1)
+    i18n (0.8.4)
     inch (0.7.0)
       pry
       sparkr (>= 0.2.0)
@@ -194,7 +194,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.10.1)
+    minitest (5.10.2)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
