@@ -84,7 +84,7 @@ module Pod
       extend SpecHelper::TemporaryRepos
 
       before do
-        MasterSource.any_instance.stubs(:requires_update?).returns(true)
+        MasterSource.any_instance.stubs(:unchanged_github_repo?).returns(false)
       end
 
       it 'updates source backed by a git repository' do
