@@ -276,7 +276,7 @@ module Pod
           Hash[pod_targets.map { |t| [t.label, t.target_definitions.map(&:label).sort] }.sort].should == {
             'BananaLib'  => %w(Pods-SampleProject Pods-SampleProject-TestRunner),
             'monkey-iOS' => %w(Pods-SampleProject Pods-SampleProject-TestRunner),
-            'monkey-OSX' => %w(Pods-CLITool),
+            'monkey-macOS' => %w(Pods-CLITool),
           }
         end
 

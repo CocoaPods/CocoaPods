@@ -31,7 +31,7 @@ module Pod
           PodVariant.new([@root_spec], Platform.ios),
           PodVariant.new([@root_spec], Platform.osx),
         ])
-        variants.scope_suffixes.values.should == %w(iOS OSX)
+        variants.scope_suffixes.values.should == %w(iOS macOS)
       end
 
       it 'returns scopes by versioned platform names if they qualify' do
@@ -94,7 +94,7 @@ module Pod
         ])
         variants.scope_suffixes.values.should == %w(
           iOS
-          OSX
+          macOS
           .default-Foo
           .default-Bar
         )
@@ -110,7 +110,7 @@ module Pod
         ])
         variants.scope_suffixes.values.should == %w(
           iOS
-          OSX
+          macOS
           c4ca5113
           .default-matryoshka_ThisIsAReallyLongSubspecName
         )
@@ -128,9 +128,9 @@ module Pod
         variants.scope_suffixes.values.should == %w(
           iOS7.0
           iOS
-          OSX
+          macOS
           .default-Foo-iOS
-          .default-Foo-OSX
+          .default-Foo-macOS
           .default-Bar
         )
       end
