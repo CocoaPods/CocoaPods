@@ -19,6 +19,7 @@ module Pod
 
       def run
         UI.section 'Setting up CocoaPods master repo' do
+          UI.puts 'This may take a while'.yellow
           if master_repo_dir.exist?
             set_master_repo_url
             set_master_repo_branch
