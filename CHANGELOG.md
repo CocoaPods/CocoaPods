@@ -32,6 +32,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Austin Emmons](https://github.com/atreat)
   [#6742](https://github.com/CocoaPods/CocoaPods/issues/6742) 
 
+* Add ipc command `podfile_json` converts a Podfile to JSON  
+  [Dacaiguoguo](https://github.com/dacaiguoguogmail)
+  [#6779](https://github.com/CocoaPods/CocoaPods/pull/6779)
+
 ##### Bug Fixes
 
 * Do not double add search paths to test xcconfig from parent  
