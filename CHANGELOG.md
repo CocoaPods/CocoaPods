@@ -45,6 +45,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Use a cache when figuring out if a pod target is test only  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6787](https://github.com/CocoaPods/CocoaPods/pull/6787)
+
 * Do not double add search paths to test xcconfig from parent  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6767](https://github.com/CocoaPods/CocoaPods/pull/6767)
