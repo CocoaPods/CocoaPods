@@ -17,9 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6347E58BFF84419A8C990401 /* Pods-SampleApp_2.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SampleApp_2.xcconfig"; path = "Pods/Pods-SampleApp_2.xcconfig"; sourceTree = SOURCE_ROOT; };
 		C42AA5650B0C4CCFBE8437DE /* libPods-SampleApp_2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SampleApp_2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E575589B16C5943000DC1500 /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = SampleApp.app; path = SampleApp_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E575589B16C5943000DC1500 /* SampleApp_2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E575589E16C5943000DC1500 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E57558A116C5943000DC1500 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		E57558A216C5943000DC1500 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -53,14 +52,13 @@
 				E57558A416C5943000DC1500 /* SampleApp */,
 				E575589D16C5943000DC1500 /* Frameworks */,
 				E575589C16C5943000DC1500 /* Products */,
-				6347E58BFF84419A8C990401 /* Pods-SampleApp_2.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
 		E575589C16C5943000DC1500 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E575589B16C5943000DC1500 /* SampleApp.app */,
+				E575589B16C5943000DC1500 /* SampleApp_2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +125,7 @@
 			);
 			name = SampleApp_2;
 			productName = SampleApp;
-			productReference = E575589B16C5943000DC1500 /* SampleApp.app */;
+			productReference = E575589B16C5943000DC1500 /* SampleApp_2.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -300,7 +298,6 @@
 		};
 		E57558B916C5943100DC1500 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6347E58BFF84419A8C990401 /* Pods-SampleApp_2.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -313,7 +310,6 @@
 		};
 		E57558BA16C5943100DC1500 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6347E58BFF84419A8C990401 /* Pods-SampleApp_2.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
