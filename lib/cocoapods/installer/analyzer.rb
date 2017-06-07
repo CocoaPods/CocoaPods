@@ -46,6 +46,8 @@ module Pod
         @update = false
         @allow_pre_downloads = true
         @has_dependencies = true
+        @test_pod_target_analyzer_cache = {}
+        @test_pod_target_key = Struct.new(:name, :pod_targets)
       end
 
       # Performs the analysis.
@@ -430,8 +432,9 @@ module Pod
         target.pod_targets = pod_targets.select do |pod_target|
           target_definition_included = pod_target.target_definitions.include?(target_definition)
           explicitly_defined_in_target_definition = target_definition.non_inherited_dependencies.map(&:name).include?(pod_target.name)
-          test_pod_target_only = pod_target_test_only?(pod_target, pod_targets)
-          target_definition_included && (explicitly_defined_in_target_definition || !test_pod_target_only)
+          next false unless target_definition_included
+          next true if explicitly_defined_in_target_definition
+          !pod_target_test_only?(pod_target, pod_targets)
         end
 
         target
@@ -449,9 +452,14 @@ module Pod
       # @return [Boolean] if the pod target is only referenced from test dependencies.
       #
       def pod_target_test_only?(pod_target, pod_targets)
-        source = pod_targets.any? { |pt| pt.dependent_targets.map(&:name).include?(pod_target.name) }
-        test = pod_targets.any? { |pt| pt.test_dependent_targets.map(&:name).include?(pod_target.name) }
-        !source && test
+        name = pod_target.name
+        key = @test_pod_target_key.new(name, pod_targets)
+        if @test_pod_target_analyzer_cache.key?(key)
+          return @test_pod_target_analyzer_cache[key]
+        end
+        source = pod_targets.any? { |pt| pt.dependent_targets.map(&:name).include?(name) }
+        test = pod_targets.any? { |pt| pt.test_dependent_targets.map(&:name).include?(name) }
+        @test_pod_target_analyzer_cache[key] = !source && test
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting
