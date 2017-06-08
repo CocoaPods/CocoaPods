@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Remove 0.34 migration for a small boost in `pod install` time  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6783](hhttps://github.com/CocoaPods/CocoaPods/pull/6783)
 
 
 ## 1.3.0.beta.1 (2017-06-06)
