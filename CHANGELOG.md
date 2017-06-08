@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Set direct and transitive dependency header search paths for pod targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7116](https://github.com/CocoaPods/CocoaPods/pull/7116)
 
 ##### Bug Fixes
 
