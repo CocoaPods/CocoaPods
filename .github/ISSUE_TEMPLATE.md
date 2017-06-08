@@ -1,7 +1,10 @@
-> ℹ Please fill out this template when filing an issue.
-> All lines beginning with an ℹ symbol instruct you with
-> what info we expect.  
-> Please remove this line and all above before submitting.
+<details><summary>
+ℹ Please fill out this template when filing an issue.
+</summary>
+All lines beginning with an ℹ symbol instruct you with
+what info we expect.  
+Please remove this line and all above before submitting.
+</details>
 
 > Before you start, are you using the latest CocoaPods release?
 > A lot changes with Xcode releases that are not backwards compatible.
@@ -24,23 +27,31 @@
 
 ## What did you do?
 
+<details open>
 ℹ Please replace this with what you did.  
 e.g. Run `pod install`
+</details>
 
 ## What did you expect to happen?
 
+<details open>
 ℹ Please replace this with what you expected to happen.  
 e.g. Install all pod dependencies correctly.
+</details>
 
 ## What happened instead?
 
+<details open>
 ℹ Please replace this with of what happened instead.  
 e.g. Pod A is missing the subspec B for target C.
+</details>
 
 ## CocoaPods Environment
 
+<details open>
 ℹ Please replace this with the output of `pod env`.
 e.g. via `pod env | pbcopy`
+</details>
 
 ## Project that demonstrates the issue
 
