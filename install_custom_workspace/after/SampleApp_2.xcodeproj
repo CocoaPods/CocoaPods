@@ -21,7 +21,7 @@ File References:
     - Foundation.framework
   - libPods-SampleApp_2.a
 - Products:
-  - SampleApp.app
+  - SampleApp_2.app
 - Pods:
   - Pods-SampleApp_2.debug.xcconfig
   - Pods-SampleApp_2.release.xcconfig
