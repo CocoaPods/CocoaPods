@@ -44,14 +44,10 @@ module Pod
         # @return [Xcodeproj::Config]
         #
         def generate
-          target_search_paths = target.build_headers.search_paths(target.platform)
-          sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-          search_paths = target_search_paths.concat(sandbox_search_paths).uniq
-
           config = {
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
+            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.header_search_paths(@test_xcconfig)),
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target, @test_xcconfig),
             'PODS_ROOT' => '${SRCROOT}',
@@ -59,7 +55,7 @@ module Pod
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             'SKIP_INSTALL' => 'YES',
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) ',
-            # 'USE_HEADERMAP' => 'NO'
+            'USE_HEADERMAP' => 'NO'
           }
 
           @xcconfig = Xcodeproj::Config.new(config)

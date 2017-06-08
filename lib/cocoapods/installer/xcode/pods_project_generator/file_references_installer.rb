@@ -133,7 +133,7 @@ module Pod
                     end
 
                     header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
-                      sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp })
+                      sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp }, true)
                     end
                   end
 

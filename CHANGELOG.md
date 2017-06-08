@@ -335,6 +335,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6733](https://github.com/CocoaPods/CocoaPods/pull/6733) 
 
+* Correctly set direct and transitive dependency header search paths for pod targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#5941](https://github.com/CocoaPods/CocoaPods/issues/5941) 
+
 * Fix pod install error from 1.2.1 when working with static lib-only projects.  
   [Ben Asher](https://github.com/benasher44)
   [#6673](https://github.com/CocoaPods/CocoaPods/issues/6673)

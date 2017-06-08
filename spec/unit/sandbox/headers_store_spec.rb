@@ -38,20 +38,29 @@ module Pod
       relative_header_paths.each do |path|
         File.open(@sandbox.root + path, 'w') { |file| file.write('hello') }
       end
+      fake_platform = mock(:name => 'fake_platform')
       @header_dir.add_files(namespace_path, relative_header_paths)
-      @header_dir.search_paths(:fake_platform).should.not.include('${PODS_ROOT}/Headers/Public/ExampleLib')
-    end
-
-    it 'always adds the Headers root to the header search paths' do
-      @header_dir.search_paths(:fake_platform).should.include('${PODS_ROOT}/Headers/Public')
+      @header_dir.search_paths(fake_platform).should.not.include('${PODS_ROOT}/Headers/Public/ExampleLib')
     end
 
     it 'only exposes header search paths for the given platform' do
       @header_dir.add_search_path('iOS Search Path', Platform.ios)
       @header_dir.add_search_path('OS X Search Path', Platform.osx)
       @header_dir.search_paths(Platform.ios).sort.should == [
-        '${PODS_ROOT}/Headers/Public',
         '${PODS_ROOT}/Headers/Public/iOS Search Path',
+      ]
+    end
+
+    it 'returns the correct header search paths given platform and target' do
+      ios_target = stub('ios-target', :name => 'ios-target')
+      osx_target = stub('osx-target', :name => 'osx-target')
+      @header_dir.add_search_path('ios-target', Platform.ios)
+      @header_dir.add_search_path('osx-target', Platform.osx)
+      @header_dir.search_paths(Platform.ios, ios_target).sort.should == [
+        '${PODS_ROOT}/Headers/Public/ios-target',
+      ]
+      @header_dir.search_paths(Platform.osx, osx_target).sort.should == [
+        '${PODS_ROOT}/Headers/Public/osx-target',
       ]
     end
   end

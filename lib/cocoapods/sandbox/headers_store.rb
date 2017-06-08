@@ -24,21 +24,36 @@ module Pod
         @sandbox       = sandbox
         @relative_path = relative_path
         @search_paths  = []
+        @search_paths_cache = {}
+        @search_paths_key = Struct.new(:platform_name, :target_name)
       end
 
       # @param  [Platform] platform
       #         the platform for which the header search paths should be
       #         returned
       #
+      # @param  [Target] target
+      #         the target for which the header search paths should be
+      #         returned, may be `nil`.
+      #
       # @return [Array<String>] All the search paths of the header directory in
       #         xcconfig format. The paths are specified relative to the pods
       #         root with the `${PODS_ROOT}` variable.
       #
-      def search_paths(platform)
-        platform_search_paths = @search_paths.select { |entry| entry[:platform] == platform.name }
-
+      def search_paths(platform, target = nil)
+        target_name = nil
+        target_name = target.name unless target.nil?
+        key = @search_paths_key.new(platform.name, target_name)
+        if @search_paths_cache.key?(key)
+          return @search_paths_cache[key]
+        end
+        platform_search_paths = @search_paths.select do |entry|
+          matches_platform = entry[:platform] == platform.name
+          next matches_platform if target.nil?
+          matches_platform && entry[:path].basename.to_s == target.name
+        end
         headers_dir = root.relative_path_from(sandbox.root).dirname
-        ["${PODS_ROOT}/#{headers_dir}/#{@relative_path}"] + platform_search_paths.uniq.map { |entry| "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" }
+        @search_paths_cache[key] = platform_search_paths.uniq.map { |entry| "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" }
       end
 
       # Removes the directory as it is regenerated from scratch during each
@@ -66,13 +81,16 @@ module Pod
       #         the path of the header file relative to the Pods project
       #         (`PODS_ROOT` variable of the xcconfigs).
       #
+      # @param  [Boolean] public_header
+      #          whether this header is a public header or not
+      #
       # @note   This method does _not_ add the files to the search paths.
       #
       # @return [Array<Pathname>]
       #
-      def add_files(namespace, relative_header_paths)
+      def add_files(namespace, relative_header_paths, public_header = false)
         relative_header_paths.map do |relative_header_path|
-          add_file(namespace, relative_header_path)
+          add_file(namespace, relative_header_path, public_header)
         end
       end
 
@@ -86,12 +104,18 @@ module Pod
       #         the path of the header file relative to the Pods project
       #         (`PODS_ROOT` variable of the xcconfigs).
       #
+      # @param  [Boolean] public_header
+      #          whether this header is a public header or not
+      #
       # @note   This method does _not_ add the file to the search paths.
       #
       # @return [Pathname]
       #
-      def add_file(namespace, relative_header_path)
+      def add_file(namespace, relative_header_path, public_header = false)
         namespaced_path = root + namespace
+        # If this is a public header add another subfolder for '<>' imports to work.
+        # e.g `./Pods/Headers/Public/SampleLibrary/SampleLibrary/SampleLibrary.h`
+        namespaced_path += namespace if public_header
         namespaced_path.mkpath unless File.exist?(namespaced_path)
 
         absolute_source = (sandbox.root + relative_header_path)
