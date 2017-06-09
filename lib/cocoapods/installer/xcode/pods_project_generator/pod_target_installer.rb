@@ -317,7 +317,7 @@ module Pod
           #
           def test_target_swift_debug_hack(test_target_bc)
             return unless test_target_bc.debug?
-            return unless [target, *target.recursive_dependent_targets].any?(&:uses_swift?)
+            return unless [target, *target.dependent_targets].any?(&:uses_swift?)
             ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
             ldflags << ' -lswiftSwiftOnoneSupport'
           end

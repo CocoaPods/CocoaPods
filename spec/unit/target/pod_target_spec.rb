@@ -293,7 +293,7 @@ module Pod
         end
 
         it 'resolves simple dependencies' do
-          @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+          @pod_target.dependent_targets.should == [@pod_dependency]
         end
 
         describe 'With cyclic dependencies' do
@@ -304,7 +304,7 @@ module Pod
           end
 
           it 'resolves the cycle' do
-            @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+            @pod_target.dependent_targets.should == [@pod_dependency]
           end
         end
       end
