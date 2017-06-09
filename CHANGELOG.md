@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Remove redundant `recursive_dependent_targets` method from `pod_target`
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6789](https://github.com/CocoaPods/CocoaPods/pull/6789)
+
 * Remove 0.34 migration for a small boost in `pod install` time  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6783](hhttps://github.com/CocoaPods/CocoaPods/pull/6783)
