@@ -122,7 +122,7 @@ module Pod
             archs="$(lipo -info "$binary" | rev | cut -d ':' -f1 | rev)"
             stripped=""
             for arch in $archs; do
-              if ! [[ "${VALID_ARCHS}" == *"$arch"* ]]; then
+              if ! [[ "${ARCHS}" == *"$arch"* ]]; then
                 # Strip non-valid architectures in-place
                 lipo -remove "$arch" -output "$binary" "$binary" || exit 1
                 stripped="$stripped $arch"
