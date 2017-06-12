@@ -16,6 +16,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6783](hhttps://github.com/CocoaPods/CocoaPods/pull/6783)
 
+* Use a cache when figuring out if a pod target is test only  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6787](https://github.com/CocoaPods/CocoaPods/pull/6787)
 
 ## 1.3.0.beta.1 (2017-06-06)
 
@@ -51,21 +54,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Use a cache when figuring out if a pod target is test only  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6787](https://github.com/CocoaPods/CocoaPods/pull/6787)
-
-* `VALID_ARCHS` does not include the right archs to strip for a framework so use `ARCHS` instead  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6774](https://github.com/CocoaPods/CocoaPods/issues/6774)
-
-* Do not double add search paths to test xcconfig from parent  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6767](https://github.com/CocoaPods/CocoaPods/pull/6767)
-
 * Link `swiftSwiftOnoneSupport` for test xcconfigs  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6769](https://github.com/CocoaPods/CocoaPods/pull/6769)
+
+* Do not double add search paths to test xcconfig from parent  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6768](https://github.com/CocoaPods/CocoaPods/pull/6768)
 
 * Ensure product name for tests is not overridden by custom build settings  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
