@@ -74,9 +74,9 @@ module Pod
               pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
 
               dependencies = pod_targets.select(&:should_build?).flat_map(&:dependencies)
-              dependended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
+              depended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
 
-              static_libs = dependended_upon_targets.flat_map(&:file_accessors).flat_map(&:vendored_static_artifacts)
+              static_libs = depended_upon_targets.flat_map(&:file_accessors).flat_map(&:vendored_static_artifacts)
               unless static_libs.empty?
                 raise Informative, "The '#{aggregate_target.label}' target has " \
                   "transitive dependencies that include static binaries: (#{static_libs.to_sentence})"

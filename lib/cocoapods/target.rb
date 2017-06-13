@@ -2,7 +2,7 @@ module Pod
   # Model class which describes a Pods target.
   #
   # The Target class stores and provides the information necessary for
-  # working with a target in the Podfile and it's dependent libraries.
+  # working with a target in the Podfile and its dependent libraries.
   # This class is used to represent both the targets and their libraries.
   #
   class Target
