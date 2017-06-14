@@ -22,8 +22,8 @@ if !git.modified_files.include?('CHANGELOG.md') && has_app_changes
 Here's an example of your CHANGELOG entry:
 
 ```markdown
-* #{pr_title}#{' '}
-  [#{pr_author}](https://github.com/#{pr_author})
+* #{github.pr_title}\s\s
+  [#{github.pr_author}](https://github.com/#{github.pr_author})
   [#issue_number](https://github.com/CocoaPods/CocoaPods/issues/issue_number)
 ```
 
