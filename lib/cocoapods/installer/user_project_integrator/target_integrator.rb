@@ -135,6 +135,11 @@ module Pod
           phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
           script_path = target.embed_frameworks_script_relative_path
           phase.shell_script = %("#{script_path}"\n)
+          frameworks_by_config = target.frameworks_by_config.values.flatten.uniq
+          unless frameworks_by_config.empty?
+            phase.input_paths = [target.embed_frameworks_script_relative_path, *frameworks_by_config.map { |fw| [fw[:framework], fw[:dsym]] }.flatten.compact]
+            phase.output_paths = frameworks_by_config.map { |fw| [fw[:install_path], fw[:dsym_install_path]] }.flatten.compact
+          end
         end
 
         # Delete a 'Embed Pods Frameworks' Copy Files Build Phase if present
@@ -159,6 +164,7 @@ module Pod
             phase = create_or_update_build_phase(native_target, phase_name)
             script_path = target.copy_resources_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
+            # TODO: Add input and output paths for the copy resources script phase.
           end
         end
 
@@ -183,7 +189,11 @@ module Pod
                   echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
                   exit 1
               fi
+              # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+              echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
             SH
+            phase.input_paths = %w(${PODS_PODFILE_DIR_PATH}/Podfile.lock ${PODS_ROOT}/Manifest.lock)
+            phase.output_paths = [target.check_manifest_lock_script_output_file_path]
           end
         end
 

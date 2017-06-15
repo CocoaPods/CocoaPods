@@ -142,7 +142,7 @@ module Pod
               script << %(  install_framework "#{framework_with_dsym[:framework]}"\n)
               # Vendored frameworks might have a dSYM file next to them so ensure its copied. Frameworks built from
               # sources will have their dSYM generated and copied by Xcode.
-              script << %(  install_dsym "#{framework_with_dsym[:dSYM]}"\n) unless framework_with_dsym[:dSYM].nil?
+              script << %(  install_dsym "#{framework_with_dsym[:dsym]}"\n) unless framework_with_dsym[:dsym].nil?
             end
             script << "fi\n"
           end

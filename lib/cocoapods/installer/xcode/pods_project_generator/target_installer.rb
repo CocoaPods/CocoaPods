@@ -7,17 +7,20 @@ module Pod
         # by the target.
         #
         class TargetInstaller
-          # @return [Sandbox] sandbox the sandbox where the support files should
-          #         be generated.
+          # @return [Sandbox] sandbox
+          #         The sandbox where the support files should be generated.
           #
           attr_reader :sandbox
 
-          # @return [Target] The library whose target needs to be generated.
+          # @return [Target] target
+          #         The library whose target needs to be generated.
           #
           attr_reader :target
 
-          # @param  [Project] project @see project
-          # @param  [Target]  target  @see target
+          # Initialize a new instance
+          #
+          # @param [Sandbox] sandbox @see sandbox
+          # @param [Target] target  @see target
           #
           def initialize(sandbox, target)
             @sandbox = sandbox

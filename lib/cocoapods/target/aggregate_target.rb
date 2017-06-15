@@ -184,6 +184,69 @@ module Pod
       pod_targets.any?(&:uses_swift?)
     end
 
+    # @return [Hash{ Hash{ Symbol => String}}] The vendored dynamic artifacts and framework targets grouped by config
+    #
+    def frameworks_by_config
+      frameworks_by_config = {}
+      user_build_configurations.keys.each do |config|
+        relevant_pod_targets = pod_targets.select do |pod_target|
+          pod_target.include_in_build_config?(target_definition, config)
+        end
+        frameworks_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
+          frameworks = pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |fw|
+            relative_path_to_sandbox = fw.relative_path_from(sandbox.root)
+            relative_path_to_pods_root = "${PODS_ROOT}/#{relative_path_to_sandbox}"
+            install_path = "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{fw.basename}"
+            result = {
+              :framework => relative_path_to_pods_root,
+              :install_path => install_path,
+            }
+            # Until this can be configured, assume the dSYM file uses the file name as the framework.
+            # See https://github.com/CocoaPods/CocoaPods/issues/1698
+            dsym_path = Pathname.new("#{fw.dirname}/#{fw.basename}.dSYM")
+            if dsym_path.exist?
+              result[:dsym] = "#{relative_path_to_pods_root}.dSYM"
+              result[:dsym_install_path] = "${DWARF_DSYM_FOLDER_PATH}/#{fw.basename}.dSYM"
+            end
+            result
+          end
+          # For non vendored frameworks Xcode will generate the dSYM and copy it instead.
+          if pod_target.should_build? && pod_target.requires_frameworks?
+            frameworks << { :framework => pod_target.build_product_path('${BUILT_PRODUCTS_DIR}'), :install_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{pod_target.product_name}" }
+          end
+          frameworks
+        end
+      end
+      frameworks_by_config
+    end
+
+    # @return [Hash{ Symbol => Array<Pathname> }] Uniqued Resources grouped by config
+    #
+    def resources_by_config
+      library_targets = pod_targets.reject do |pod_target|
+        pod_target.should_build? && pod_target.requires_frameworks?
+      end
+      user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+        resources_by_config[config] = library_targets.flat_map do |library_target|
+          next [] unless library_target.include_in_build_config?(target_definition, config)
+          resource_paths = library_target.file_accessors.flat_map do |accessor|
+            accessor.resources.flat_map { |res| res.relative_path_from(sandbox.project.path.dirname) }
+          end
+          resource_bundles = library_target.file_accessors.flat_map do |accessor|
+            accessor.resource_bundles.keys.map { |name| "#{library_target.configuration_build_dir}/#{name.shellescape}.bundle" }
+          end
+          (resource_paths + resource_bundles + [bridge_support_file].compact).uniq
+        end
+      end
+    end
+
+    # @return [Pathname] the path of the bridge support file relative to the
+    #         sandbox or `nil` if bridge support is disabled.
+    #
+    def bridge_support_file
+      bridge_support_path.relative_path_from(sandbox.root) if podfile.generate_bridge_support?
+    end
+
     #-------------------------------------------------------------------------#
 
     # @!group Support files
@@ -207,6 +270,12 @@ module Pod
     #
     def embed_frameworks_script_path
       support_files_dir + "#{label}-frameworks.sh"
+    end
+
+    # @return [String] The output file path fo the check manifest lock script.
+    #
+    def check_manifest_lock_script_output_file_path
+      "$(DERIVED_FILE_DIR)/#{label}-checkManifestLockResult.txt"
     end
 
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
