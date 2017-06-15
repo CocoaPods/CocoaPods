@@ -99,13 +99,11 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_ROOT}/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework"
-  install_dsym "${PODS_ROOT}/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework.dSYM"
-  install_framework "$BUILT_PRODUCTS_DIR/RealmSwift/RealmSwift.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${PODS_ROOT}/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework"
-  install_dsym "${PODS_ROOT}/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework.dSYM"
-  install_framework "$BUILT_PRODUCTS_DIR/RealmSwift/RealmSwift.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
