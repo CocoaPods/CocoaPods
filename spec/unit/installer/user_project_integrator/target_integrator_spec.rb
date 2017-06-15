@@ -285,7 +285,7 @@ module Pod
         end
 
         it 'does not add embed frameworks build phase input output paths with no frameworks' do
-          @pod_bundle.stubs(:frameworks_by_config => {})
+          @pod_bundle.stubs(:framework_paths_by_config => {})
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
@@ -294,24 +294,29 @@ module Pod
         end
 
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks' do
-          debug_vendored_framework = { :framework => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
-                                       :dsym => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM',
-                                       :install_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework',
-                                       :dsym_install_path => '${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM' }
+          debug_vendored_framework = { :name => 'DebugVendoredFramework.framework',
+                                       :input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
+                                       :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework',
+                                       :dsym_name => 'DebugVendoredFramework.framework.dSYM',
+                                       :dsym_input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM',
+                                       :dsym_output_path => '${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM' }
 
-          debug_non_vendored_framework = { :framework => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
-                                           :install_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
+          debug_non_vendored_framework = { :name => 'DebugCompiledFramework.framework',
+                                           :input_path => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
+                                           :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
 
-          release_vendored_framework = { :framework => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
-                                         :dsym => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM',
-                                         :install_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework',
-                                         :dsym_install_path => '${DWARF_DSYM_FOLDER_PATH}/ReleaseVendoredFramework.framework.dSYM' }
+          release_vendored_framework = { :name => 'ReleaseVendoredFramework.framework',
+                                         :input_path => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
+                                         :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework',
+                                         :dsym_name => 'ReleaseVendoredFramework.framework.dSYM',
+                                         :dsym_input_path => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM',
+                                         :dsym_output_path => '${DWARF_DSYM_FOLDER_PATH}/ReleaseVendoredFramework.framework.dSYM' }
 
-          frameworks_by_config = {
+          framework_paths_by_config = {
             'Debug' => [debug_vendored_framework, debug_non_vendored_framework],
             'Release' => [release_vendored_framework],
           }
-          @pod_bundle.stubs(:frameworks_by_config => frameworks_by_config)
+          @pod_bundle.stubs(:framework_paths_by_config => framework_paths_by_config)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }

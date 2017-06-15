@@ -135,7 +135,7 @@ module Pod
           #
           def create_embed_frameworks_script
             path = target.embed_frameworks_script_path
-            generator = Generator::EmbedFrameworksScript.new(target.frameworks_by_config)
+            generator = Generator::EmbedFrameworksScript.new(target.framework_paths_by_config)
             generator.save_as(path)
             add_file_to_support_group(path)
           end

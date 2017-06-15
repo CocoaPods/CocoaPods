@@ -135,10 +135,10 @@ module Pod
           phase = create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
           script_path = target.embed_frameworks_script_relative_path
           phase.shell_script = %("#{script_path}"\n)
-          frameworks_by_config = target.frameworks_by_config.values.flatten.uniq
-          unless frameworks_by_config.empty?
-            phase.input_paths = [target.embed_frameworks_script_relative_path, *frameworks_by_config.map { |fw| [fw[:framework], fw[:dsym]] }.flatten.compact]
-            phase.output_paths = frameworks_by_config.map { |fw| [fw[:install_path], fw[:dsym_install_path]] }.flatten.compact
+          framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
+          unless framework_paths_by_config.empty?
+            phase.input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
+            phase.output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact
           end
         end
 
