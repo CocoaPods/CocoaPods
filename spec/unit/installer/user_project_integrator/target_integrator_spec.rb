@@ -16,6 +16,7 @@ module Pod
         target_definition.abstract = false
         @pod_bundle = AggregateTarget.new(target_definition, config.sandbox)
         @pod_bundle.user_project = @project
+        @pod_bundle.user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
         @pod_bundle.client_root = project_path.dirname
         @pod_bundle.user_target_uuids = [@target.uuid]
         configuration = Xcodeproj::Config.new(
@@ -101,6 +102,8 @@ module Pod
               echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
               exit 1
           fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
           EOS
         end
 
@@ -279,6 +282,54 @@ module Pod
           @target_integrator.integrate!
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.nil?.should == true
+        end
+
+        it 'does not add embed frameworks build phase input output paths with no frameworks' do
+          @pod_bundle.stubs(:frameworks_by_config => {})
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.input_paths.should.be.empty
+          phase.output_paths.should.be.empty
+        end
+
+        it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks' do
+          debug_vendored_framework = { :framework => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
+                                       :dsym => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM',
+                                       :install_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework',
+                                       :dsym_install_path => '${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM' }
+
+          debug_non_vendored_framework = { :framework => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
+                                           :install_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
+
+          release_vendored_framework = { :framework => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
+                                         :dsym => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM',
+                                         :install_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework',
+                                         :dsym_install_path => '${DWARF_DSYM_FOLDER_PATH}/ReleaseVendoredFramework.framework.dSYM' }
+
+          frameworks_by_config = {
+            'Debug' => [debug_vendored_framework, debug_non_vendored_framework],
+            'Release' => [release_vendored_framework],
+          }
+          @pod_bundle.stubs(:frameworks_by_config => frameworks_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.input_paths.sort.should == %w(
+            ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework
+            ${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework
+            ${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM
+            ${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework
+            ${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM
+            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-frameworks.sh
+          )
+          phase.output_paths.sort.should == %w(
+            ${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM
+            ${DWARF_DSYM_FOLDER_PATH}/ReleaseVendoredFramework.framework.dSYM
+            ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework
+            ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework
+            ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework
+          )
         end
       end
 

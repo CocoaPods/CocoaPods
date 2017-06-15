@@ -82,6 +82,10 @@ module Pod
       it 'returns the path of the xcconfig file relative to the user project' do
         @target.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
       end
+
+      it 'returns the path of output file for the check pod manifest file  script' do
+        @target.check_manifest_lock_script_output_file_path.should == '$(DERIVED_FILE_DIR)/Pods-checkManifestLockResult.txt'
+      end
     end
 
     describe 'Pod targets' do

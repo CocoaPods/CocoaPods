@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add inputs and outputs to check manifest lock and embed framework script phases  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6797](https://github.com/CocoaPods/CocoaPods/issues/6797)
 
 ##### Bug Fixes
 
