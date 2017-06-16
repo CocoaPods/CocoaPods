@@ -124,6 +124,100 @@ module Pod
         end
       end
 
+      describe 'frameworks by config and input output paths' do
+        before do
+          @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          @pod_target_release = PodTarget.new([@coconut_spec], [@target_definition], config.sandbox)
+          @target.pod_targets = [@pod_target]
+          @target.user_build_configurations = {
+            'Debug' => :debug,
+            'Release' => :release,
+          }
+        end
+
+        it 'returns non vendored framework input and output paths by config' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @target.framework_paths_by_config['Debug'].should == [
+            { :name => 'BananaLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+          ]
+          @target.framework_paths_by_config['Release'].should == [
+            { :name => 'BananaLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+          ]
+        end
+
+        it 'returns non vendored frameworks by config with different release and debug targets' do
+          @pod_target_release.stubs(:should_build?).returns(true)
+          @pod_target_release.stubs(:requires_frameworks?).returns(true)
+          @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Debug').returns(false)
+          @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @target.pod_targets = [@pod_target, @pod_target_release]
+          framework_paths_by_config = @target.framework_paths_by_config
+          framework_paths_by_config['Debug'].should == [
+            { :name => 'BananaLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+          ]
+          framework_paths_by_config['Release'].should == [
+            { :name => 'BananaLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+            { :name => 'CoconutLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoconutLib.framework' },
+          ]
+        end
+
+        it 'returns vendored frameworks by config' do
+          path_list = Sandbox::PathList.new(fixture('banana-lib'))
+          file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+          @pod_target.file_accessors = [file_accessor]
+          @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
+            [Pathname('/some/absolute/path/to/FrameworkA.framework')],
+          )
+          @target.framework_paths_by_config['Debug'].should == [
+            { :name => 'FrameworkA.framework',
+              :input_path => '${PODS_ROOT}/../../../../../../../some/absolute/path/to/FrameworkA.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
+          ]
+        end
+
+        it 'returns correct input and output paths for non vendored frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @target.framework_paths_by_config['Debug'].should == [
+            { :name => 'BananaLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+          ]
+          @target.framework_paths_by_config['Release'].should == [
+            { :name => 'BananaLib.framework',
+              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+          ]
+        end
+
+        it 'returns correct input and output paths for vendored frameworks' do
+          path_list = Sandbox::PathList.new(fixture('banana-lib'))
+          file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+          @pod_target.file_accessors = [file_accessor]
+          @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
+            [Pathname('/absolute/path/to/FrameworkA.framework')],
+          )
+          @target.framework_paths_by_config['Debug'].should == [
+            { :name => 'FrameworkA.framework',
+              :input_path => '${PODS_ROOT}/../../../../../../../absolute/path/to/FrameworkA.framework',
+              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
+          ]
+        end
+      end
+
       it 'returns the specs of the Pods used by this aggregate target' do
         @target.specs.map(&:name).should == ['BananaLib']
       end

@@ -184,40 +184,42 @@ module Pod
       pod_targets.any?(&:uses_swift?)
     end
 
-    # @return [Hash{ Hash{ Symbol => String}}] The vendored dynamic artifacts and framework targets grouped by config
+    # @return [Hash{String => Array<Hash{Symbol => [String]}>] The vendored dynamic artifacts and framework target
+    #         input and output paths grouped by config
     #
-    def frameworks_by_config
-      frameworks_by_config = {}
+    def framework_paths_by_config
+      framework_paths_by_config = {}
       user_build_configurations.keys.each do |config|
         relevant_pod_targets = pod_targets.select do |pod_target|
           pod_target.include_in_build_config?(target_definition, config)
         end
-        frameworks_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
-          frameworks = pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |fw|
-            relative_path_to_sandbox = fw.relative_path_from(sandbox.root)
-            relative_path_to_pods_root = "${PODS_ROOT}/#{relative_path_to_sandbox}"
-            install_path = "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{fw.basename}"
-            result = {
-              :framework => relative_path_to_pods_root,
-              :install_path => install_path,
-            }
+        framework_paths_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
+          frameworks = []
+          pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
+            relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
+            framework = { :name => framework_path.basename.to_s,
+                          :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
+                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
             # Until this can be configured, assume the dSYM file uses the file name as the framework.
             # See https://github.com/CocoaPods/CocoaPods/issues/1698
-            dsym_path = Pathname.new("#{fw.dirname}/#{fw.basename}.dSYM")
+            dsym_name = "#{framework_path.basename}.dSYM"
+            dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
             if dsym_path.exist?
-              result[:dsym] = "#{relative_path_to_pods_root}.dSYM"
-              result[:dsym_install_path] = "${DWARF_DSYM_FOLDER_PATH}/#{fw.basename}.dSYM"
+              framework[:dsym_name] = dsym_name
+              framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
+              framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
             end
-            result
+            frameworks << framework
           end
-          # For non vendored frameworks Xcode will generate the dSYM and copy it instead.
           if pod_target.should_build? && pod_target.requires_frameworks?
-            frameworks << { :framework => pod_target.build_product_path('${BUILT_PRODUCTS_DIR}'), :install_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{pod_target.product_name}" }
+            frameworks << { :name => pod_target.product_name,
+                            :input_path => pod_target.build_product_path('${BUILT_PRODUCTS_DIR}'),
+                            :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{pod_target.product_name}" }
           end
           frameworks
         end
       end
-      frameworks_by_config
+      framework_paths_by_config
     end
 
     # @return [Hash{ Symbol => Array<Pathname> }] Uniqued Resources grouped by config

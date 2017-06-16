@@ -139,10 +139,10 @@ module Pod
           unless frameworks_with_dsyms.empty?
             script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
             frameworks_with_dsyms.each do |framework_with_dsym|
-              script << %(  install_framework "#{framework_with_dsym[:framework]}"\n)
+              script << %(  install_framework "#{framework_with_dsym[:input_path]}"\n)
               # Vendored frameworks might have a dSYM file next to them so ensure its copied. Frameworks built from
               # sources will have their dSYM generated and copied by Xcode.
-              script << %(  install_dsym "#{framework_with_dsym[:dsym]}"\n) unless framework_with_dsym[:dsym].nil?
+              script << %(  install_dsym "#{framework_with_dsym[:dsym_input_path]}"\n) unless framework_with_dsym[:dsym_input_path].nil?
             end
             script << "fi\n"
           end
