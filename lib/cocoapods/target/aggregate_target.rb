@@ -222,9 +222,9 @@ module Pod
       framework_paths_by_config
     end
 
-    # @return [Hash{ Symbol => Array<Pathname> }] Uniqued Resources grouped by config
+    # @return [Hash{ String => Array<String> }] Uniqued Resources grouped by config
     #
-    def resources_by_config
+    def resource_paths_by_config
       library_targets = pod_targets.reject do |pod_target|
         pod_target.should_build? && pod_target.requires_frameworks?
       end
@@ -232,7 +232,7 @@ module Pod
         resources_by_config[config] = library_targets.flat_map do |library_target|
           next [] unless library_target.include_in_build_config?(target_definition, config)
           resource_paths = library_target.file_accessors.flat_map do |accessor|
-            accessor.resources.flat_map { |res| res.relative_path_from(sandbox.project.path.dirname) }
+            accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
           end
           resource_bundles = library_target.file_accessors.flat_map do |accessor|
             accessor.resource_bundles.keys.map { |name| "#{library_target.configuration_build_dir}/#{name.shellescape}.bundle" }

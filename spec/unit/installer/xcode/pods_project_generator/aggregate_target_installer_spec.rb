@@ -158,7 +158,7 @@ module Pod
                 'Trees' => [Pathname('palm.jpg')],
                 'Leafs' => [Pathname('leaf.jpg')],
               )
-              resources_by_config = @target.resources_by_config
+              resources_by_config = @target.resource_paths_by_config
               resources_by_config.each_value do |resources|
                 resources.should.include '$PODS_CONFIGURATION_BUILD_DIR/BananaLib/Trees.bundle'
                 resources.should.include '$PODS_CONFIGURATION_BUILD_DIR/BananaLib/Leafs.bundle'
@@ -167,7 +167,7 @@ module Pod
 
             it 'adds the bridge support file to the copy resources script, if one was created' do
               Podfile.any_instance.stubs(:generate_bridge_support? => true)
-              resources_by_config = @target.resources_by_config
+              resources_by_config = @target.resource_paths_by_config
               resources_by_config.each_value do |resources|
                 resources.should.include @installer.target.bridge_support_file
               end
@@ -190,10 +190,10 @@ module Pod
                   accessor.stubs(:resources => duplicated_paths)
                 end
               end
-              resources_by_config = @target.resources_by_config
+              resources_by_config = @target.resource_paths_by_config
               resources_by_config.each_value do |resources|
                 resources.length.should == 1
-                resources[0].basename.should == a_path.basename
+                Pathname.new(resources[0]).basename.should == a_path.basename
               end
             end
 
