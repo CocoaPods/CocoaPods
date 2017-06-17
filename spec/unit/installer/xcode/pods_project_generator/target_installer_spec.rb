@@ -60,6 +60,18 @@ module Pod
               'AppStore' => nil,
             }
           end
+
+          it 'verify header path for a static library framework' do
+            @pod_target.stubs(:requires_frameworks?).returns(true)
+            @pod_target.stubs(:static_framework?).returns(true)
+            @installer.send(:add_target)
+            @installer.send(:native_target).resolved_build_setting('PUBLIC_HEADERS_FOLDER_PATH').should == {
+              'Release' => 'BananaLib.framework/Headers',
+              'Debug' => 'BananaLib.framework/Headers',
+              'Test' => 'BananaLib.framework/Headers',
+              'AppStore' => 'BananaLib.framework/Headers',
+            }
+          end
         end
       end
     end

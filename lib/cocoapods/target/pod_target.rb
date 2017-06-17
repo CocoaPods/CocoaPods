@@ -219,7 +219,7 @@ module Pod
           end
           frameworks << framework
         end
-        if should_build? && requires_frameworks?
+        if should_build? && requires_frameworks? && !static_framework?
           frameworks << { :name => product_name,
                           :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
                           :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }

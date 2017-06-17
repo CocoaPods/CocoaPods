@@ -603,6 +603,18 @@ module Pod
                 end
                 build_phase.should.not.be.nil
               end
+
+              it 'creates a build phase to set up a static library framework' do
+                @pod_target.stubs(:static_framework?).returns(true)
+
+                @installer.install!
+
+                target = @project.native_targets.first
+                build_phase = target.shell_script_build_phases.find do |bp|
+                  bp.name == 'Setup Static Framework Archive'
+                end
+                build_phase.should.not.be.nil
+              end
             end
 
             it "doesn't create a build phase to symlink header folders by default on OS X" do
