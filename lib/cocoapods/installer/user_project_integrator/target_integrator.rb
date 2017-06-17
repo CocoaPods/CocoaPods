@@ -136,7 +136,7 @@ module Pod
           script_path = target.embed_frameworks_script_relative_path
           phase.shell_script = %("#{script_path}"\n)
           framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
-          unless framework_paths_by_config.empty?
+          unless framework_paths_by_config.all?(&:empty?)
             phase.input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
             phase.output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact
           end
@@ -164,7 +164,11 @@ module Pod
             phase = create_or_update_build_phase(native_target, phase_name)
             script_path = target.copy_resources_script_relative_path
             phase.shell_script = %("#{script_path}"\n)
-            # TODO: Add input and output paths for the copy resources script phase.
+            resource_paths_by_config = target.resource_paths_by_config
+            unless resource_paths_by_config.values.all?(&:empty?)
+              phase.input_paths = [target.copy_resources_script_relative_path, *resource_paths_by_config.values.flatten.uniq]
+              phase.output_paths = ['${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}']
+            end
           end
         end
 

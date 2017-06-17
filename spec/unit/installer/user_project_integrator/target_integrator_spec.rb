@@ -31,6 +31,10 @@ module Pod
         @phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX
         @embed_framework_phase_name = @phase_prefix +
           Installer::UserProjectIntegrator::TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
+        @copy_pods_resources_phase_name = @phase_prefix +
+            Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+        @check_manifest_phase_name = @phase_prefix +
+            Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
       end
 
       describe '#integrate!' do
@@ -47,7 +51,7 @@ module Pod
         it 'fixes the copy resource scripts of legacy installations' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+          phase_name = @copy_pods_resources_phase_name
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script = %("${SRCROOT}/../Pods/Pods-resources.sh"\n)
           @target_integrator.integrate!
@@ -85,7 +89,7 @@ module Pod
         it 'adds a Copy Pods Resources build phase to each target' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+          phase_name = @copy_pods_resources_phase_name
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
         end
@@ -93,7 +97,7 @@ module Pod
         it 'adds a Check Manifest.lock build phase to each target' do
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
-          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+          phase_name = @check_manifest_phase_name
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
           phase.shell_script.should == <<-EOS.strip_heredoc
           diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
@@ -111,7 +115,7 @@ module Pod
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           target.build_phases.first
-          phase_name = @phase_prefix + Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+          phase_name = @check_manifest_phase_name
           phase = target.build_phases.find { |bp| bp.name == phase_name }
           target.build_phases.first.should.equal? phase
         end
@@ -284,8 +288,34 @@ module Pod
           phase.nil?.should == true
         end
 
+        it 'does not add copy pods resources input and output paths with no resources' do
+          @pod_bundle.stubs(:resource_paths_by_config => { 'Debug' => [], 'Release' => [] })
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
+          phase.input_paths.should.be.empty
+          phase.output_paths.should.be.empty
+        end
+
+        it 'adds copy pods resources input and output paths' do
+          resource_paths_by_config = {
+            'Debug' => ['$PODS_CONFIGURATION_BUILD_DIR/DebugLib/DebugLib.bundle'],
+            'Release' => ['$PODS_CONFIGURATION_BUILD_DIR/ReleaseLib/ReleaseLib.bundle'],
+          }
+          @pod_bundle.stubs(:resource_paths_by_config => resource_paths_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
+          phase.input_paths.sort.should == %w(
+            $PODS_CONFIGURATION_BUILD_DIR/DebugLib/DebugLib.bundle
+            $PODS_CONFIGURATION_BUILD_DIR/ReleaseLib/ReleaseLib.bundle
+            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
+          )
+          phase.output_paths.sort.should == %w(${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH})
+        end
+
         it 'does not add embed frameworks build phase input output paths with no frameworks' do
-          @pod_bundle.stubs(:framework_paths_by_config => {})
+          @pod_bundle.stubs(:framework_paths_by_config => { 'Debug' => {}, 'Release' => {} })
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }

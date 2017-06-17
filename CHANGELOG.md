@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add inputs and outputs for resources script phase  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6806](https://github.com/CocoaPods/CocoaPods/pull/6806)
+
 * Simplify logic around framework input and output paths  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6803](https://github.com/CocoaPods/CocoaPods/pull/6803)
