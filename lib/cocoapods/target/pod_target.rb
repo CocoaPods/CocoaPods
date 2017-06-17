@@ -290,7 +290,7 @@ module Pod
     #         The name of the build configuration.
     #
     def include_in_build_config?(target_definition, configuration_name)
-      key = [target_definition.label, configuration_name]
+      key = [target_definition, configuration_name]
       if @build_config_cache.key?(key)
         return @build_config_cache[key]
       end
