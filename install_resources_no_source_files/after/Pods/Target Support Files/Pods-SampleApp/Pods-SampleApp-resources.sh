@@ -80,11 +80,11 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "../res/troll.png"
+  install_resource "${PODS_ROOT}/../res/troll.png"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/res/res.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "../res/troll.png"
+  install_resource "${PODS_ROOT}/../res/troll.png"
   install_resource "$PODS_CONFIGURATION_BUILD_DIR/res/res.bundle"
 fi
 
