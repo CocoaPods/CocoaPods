@@ -3,11 +3,10 @@ File References:
 - Podfile
 - Development Pods:
   - BananaLib:
-    - Classes:
-      - Banana.h
-      - Banana.m
-      - BananaPrivate.h
-      - BananaProject.h
+    - Banana.h
+    - Banana.m
+    - BananaPrivate.h
+    - BananaProject.h
     - Support Files:
       - BananaLib.modulemap
       - BananaLib.xcconfig

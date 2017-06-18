@@ -3,9 +3,8 @@ File References:
 - Podfile
 - Development Pods:
   - asserts:
-    - Classes:
-      - Asserts.h
-      - Asserts.m
+    - Asserts.h
+    - Asserts.m
     - Support Files:
       - asserts.modulemap
       - asserts.xcconfig
@@ -15,9 +14,8 @@ File References:
       - Info.plist
   - logger:
     - Core:
-      - Classes:
-        - Logger.h
-        - Logger.m
+      - Logger.h
+      - Logger.m
     - Support Files:
       - Info.plist
       - logger.modulemap
@@ -27,10 +25,8 @@ File References:
       - logger-umbrella.h
   - sharedlib:
     - Core:
-      - Classes:
-        - Core:
-          - AmazingModel.h
-          - AmazingModel.m
+      - AmazingModel.h
+      - AmazingModel.m
     - Support Files:
       - Info.plist
       - Info.plist
@@ -45,14 +41,11 @@ File References:
       - sharedlib-Testing-prefix.pch
       - sharedlib-Testing-umbrella.h
     - Testing:
-      - Classes:
-        - Testing:
-          - AmazingTestHelper.h
-          - AmazingTestHelper.m
+      - AmazingTestHelper.h
+      - AmazingTestHelper.m
   - testkit:
-    - Classes:
-      - TestCase.h
-      - TestCase.m
+    - TestCase.h
+    - TestCase.m
     - Support Files:
       - Info.plist
       - testkit.modulemap
