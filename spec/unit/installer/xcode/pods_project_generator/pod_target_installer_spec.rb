@@ -445,7 +445,7 @@ module Pod
               generated = @pod_target.prefix_header_path.read
               expected = <<-EOS.strip_heredoc
           #ifdef __OBJC__
-          #import <UIKit/UIKit.h>
+          #import <Foundation/Foundation.h>
           #else
           #ifndef FOUNDATION_EXPORT
           #if defined(__cplusplus)

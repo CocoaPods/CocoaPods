@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Generator: prevent header from importing UIKit on iOS & tvOS 
+  [Romain Bertozzi](https://github.com/r-mckay)
+  [#6816](https://github.com/CocoaPods/CocoaPods/pull/6816)
+
 * Add inputs and outputs for resources script phase  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6806](https://github.com/CocoaPods/CocoaPods/pull/6806)

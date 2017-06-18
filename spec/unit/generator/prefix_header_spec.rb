@@ -13,7 +13,7 @@ module Pod
       @spec.prefix_header_file = nil
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -37,7 +37,7 @@ module Pod
       end
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -66,7 +66,7 @@ module Pod
 
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -84,7 +84,7 @@ module Pod
     it "includes the contents of the specification's prefix header file" do
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -111,7 +111,7 @@ module Pod
 
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -130,7 +130,7 @@ module Pod
       @gen.imports << 'header.h'
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -151,7 +151,7 @@ module Pod
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)

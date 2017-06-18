@@ -10,7 +10,7 @@ module Pod
       @gen.imports << 'header.h'
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -29,7 +29,7 @@ module Pod
       @gen.module_imports << 'Module'
       @gen.generate.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
@@ -47,7 +47,7 @@ module Pod
 
     it 'imports UIKit in iOS platforms' do
       @gen.stubs(:platform).returns(Pod::Platform.ios)
-      @gen.generate.should.include?('#import <UIKit/UIKit.h>')
+      @gen.generate.should.include?('#import <Foundation/Foundation.h>')
     end
 
     it 'imports Cocoa for OS X platforms' do
@@ -62,7 +62,7 @@ module Pod
 
     it 'imports Foundation for tvOS platforms' do
       @gen.stubs(:platform).returns(Pod::Platform.tvos)
-      @gen.generate.should.include?('#import <UIKit/UIKit.h>')
+      @gen.generate.should.include?('#import <Foundation/Foundation.h>')
     end
 
     it 'writes the header file to the disk' do
@@ -70,7 +70,7 @@ module Pod
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
       #ifdef __OBJC__
-      #import <UIKit/UIKit.h>
+      #import <Foundation/Foundation.h>
       #else
       #ifndef FOUNDATION_EXPORT
       #if defined(__cplusplus)
