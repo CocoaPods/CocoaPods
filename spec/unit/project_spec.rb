@@ -168,6 +168,7 @@ module Pod
         before do
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
+          @pod_dir = config.sandbox.pod_dir('BananaLib')
           @nested_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/nested_file.m'
           @localized_file = config.sandbox.pod_dir('BananaLib') + 'Dir/SubDir/de.lproj/Foo.strings'
           @group = @project.group_for_spec('BananaLib')
@@ -195,6 +196,15 @@ module Pod
           Pathname.any_instance.stubs(:realpath).returns(@nested_file)
           ref = @project.add_file_reference(@nested_file, @group, false)
           ref.hierarchy_path.should == '/Pods/BananaLib/nested_file.m'
+        end
+
+        it 'adds subgroups relative to shared base if requested' do
+          base_path = @pod_dir + 'Dir'
+          Pathname.any_instance.stubs(:realdirpath).returns(@pod_dir + 'Dir')
+          Pathname.any_instance.stubs(:realpath).returns(@nested_file)
+          ref = @project.add_file_reference(@nested_file, @group, true, base_path)
+          ref.hierarchy_path.should == '/Pods/BananaLib/SubDir/nested_file.m'
+          ref.parent.path.should == 'Dir/SubDir'
         end
 
         it "it doesn't duplicate file references for a single path" do

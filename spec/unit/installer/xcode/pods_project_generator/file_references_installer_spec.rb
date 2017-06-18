@@ -239,6 +239,47 @@ module Pod
               end
             end
 
+            describe '#common_path' do
+              it 'calculates the correct common path' do
+                paths = [
+                  '/Base/Sub/A/1.txt',
+                  '/Base/Sub/A/2.txt',
+                  '/Base/Sub/A/B/1.txt',
+                  '/Base/Sub/A/B/2.txt',
+                  '/Base/Sub/A/D/E/1.txt',
+                ].map { |p| Pathname.new(p) }
+                result = @installer.send(:common_path, paths)
+                result.should == Pathname.new('/Base/Sub/A')
+              end
+
+              it 'should not consider root \'/\' a common path' do
+                paths = [
+                  '/A/B/C',
+                  '/D/E/F',
+                  '/G/H/I',
+                ].map { |p| Pathname.new(p) }
+                result = @installer.send(:common_path, paths)
+                result.should.be.nil
+              end
+
+              it 'raises when given a relative path' do
+                paths = [
+                  '/A/B/C',
+                  '/D/E/F',
+                  'bad/path',
+                ].map { |p| Pathname.new(p) }
+                should.raise ArgumentError do
+                  @installer.send(:common_path, paths)
+                end
+              end
+
+              it 'returns nil when given an empty path list' do
+                paths = []
+                result = @installer.send(:common_path, paths)
+                result.should.be.nil
+              end
+            end
+
             describe '#vendored_frameworks_header_mappings' do
               it 'returns the vendored frameworks header mappings' do
                 headers_sandbox = Pathname.new('BananaLib')
