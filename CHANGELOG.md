@@ -22,9 +22,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not use target definition label for key caching  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6810](https://github.com/CocoaPods/CocoaPods/pull/6810)
+
 * Remove 0.34 migration for a small boost in `pod install` time  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6783](hhttps://github.com/CocoaPods/CocoaPods/pull/6783)
+  [#6783](https://github.com/CocoaPods/CocoaPods/pull/6783)
 
 * Use a cache when figuring out if a pod target is test only  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
