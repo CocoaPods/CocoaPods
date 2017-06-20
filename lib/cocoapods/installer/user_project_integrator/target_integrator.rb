@@ -9,9 +9,14 @@ module Pod
       class TargetIntegrator
         autoload :XCConfigIntegrator, 'cocoapods/installer/user_project_integrator/target_integrator/xcconfig_integrator'
 
-        # @return [String] the PACKAGE emoji to use as prefix for every build phase added to the user project
+        # @return [String] the string to use as prefix for every build phase added to the user project
         #
         BUILD_PHASE_PREFIX = '[CP] '.freeze
+
+        # @return [String] the string to use as prefix for every build phase declared by the user within a podfile
+        #         or podspec.
+        #
+        USER_BUILD_PHASE_PREFIX = '[CP-User] '.freeze
 
         # @return [String] the name of the check manifest phase
         #
@@ -67,7 +72,7 @@ module Pod
           # @return [void]
           #
           def add_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
-            phase = TargetIntegrator.create_or_update_build_phase(native_target, EMBED_FRAMEWORK_PHASE_NAME)
+            phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + EMBED_FRAMEWORK_PHASE_NAME)
             phase.shell_script = %("#{script_path}"\n)
             unless input_paths.empty?
               phase.input_paths = input_paths
@@ -108,7 +113,7 @@ module Pod
           #
           def add_copy_resources_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
             phase_name = COPY_PODS_RESOURCES_PHASE_NAME
-            phase = TargetIntegrator.create_or_update_build_phase(native_target, phase_name)
+            phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             phase.shell_script = %("#{script_path}"\n)
             unless input_paths.empty?
               phase.input_paths = input_paths
@@ -132,12 +137,11 @@ module Pod
           # @return [void]
           #
           def create_or_update_build_phase(native_target, phase_name, phase_class = Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
-            prefixed_phase_name = BUILD_PHASE_PREFIX + phase_name
             build_phases = native_target.build_phases.grep(phase_class)
-            build_phases.find { |phase| phase.name && phase.name.end_with?(phase_name) }.tap { |p| p.name = prefixed_phase_name if p } ||
+            build_phases.find { |phase| phase.name && phase.name.end_with?(phase_name) }.tap { |p| p.name = phase_name if p } ||
               native_target.project.new(phase_class).tap do |phase|
-                UI.message("Adding Build Phase '#{prefixed_phase_name}' to project.") do
-                  phase.name = prefixed_phase_name
+                UI.message("Adding Build Phase '#{phase_name}' to project.") do
+                  phase.name = phase_name
                   phase.show_env_vars_in_log = '0'
                   native_target.build_phases << phase
                 end
@@ -160,6 +164,7 @@ module Pod
             remove_embed_frameworks_script_phase_from_embedded_targets
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
+            update_target_script_phases
           end
         end
 
@@ -255,6 +260,46 @@ module Pod
           end
         end
 
+        # Updates all target script phases for the current target, including creating or updating, deleting
+        # and re-ordering.
+        #
+        # @return [void]
+        #
+        def update_target_script_phases
+          target_definition_script_phases = target.target_definition.script_phases
+          target_definition_script_phase_names = target_definition_script_phases.map { |k| k[:name] }
+          native_targets.each do |native_target|
+            # Delete script phases no longer present in the target definition.
+            native_target_script_phases = native_target.shell_script_build_phases.select { |bp| !bp.name.nil? && bp.name.start_with?(USER_BUILD_PHASE_PREFIX) }
+            native_target_script_phases.each do |script_phase|
+              script_phase_name_without_prefix = script_phase.name.sub(USER_BUILD_PHASE_PREFIX, '')
+              unless target_definition_script_phase_names.include?(script_phase_name_without_prefix)
+                native_target.build_phases.delete(script_phase)
+              end
+            end
+
+            # Create or update the ones that are expected to be.
+            target_definition_script_phases.each do |td_script_phase|
+              phase = TargetIntegrator.create_or_update_build_phase(native_target, USER_BUILD_PHASE_PREFIX + td_script_phase[:name])
+              phase.shell_script = td_script_phase[:script]
+              phase.shell_path = td_script_phase[:shell_path] if td_script_phase.key?(:shell_path)
+              phase.input_paths = td_script_phase[:input_files] if td_script_phase.key?(:input_files)
+              phase.output_paths = td_script_phase[:output_files] if td_script_phase.key?(:output_files)
+              phase.show_env_vars_in_log = td_script_phase[:show_env_vars_in_log] ? '1' : '0' if td_script_phase.key?(:show_env_vars_in_log)
+            end
+
+            # Move script phases to their correct index if the order has changed.
+            offset = native_target.build_phases.count - target_definition_script_phases.count
+            target_definition_script_phases.each_with_index do |td_script_phase, index|
+              current_index = native_target.build_phases.index do |bp|
+                bp.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && bp.name.sub(USER_BUILD_PHASE_PREFIX, '') == td_script_phase[:name]
+              end
+              expected_index = offset + index
+              native_target.build_phases.insert(expected_index, native_target.build_phases.delete_at(current_index)) if current_index != expected_index
+            end
+          end
+        end
+
         # Adds a shell script build phase responsible for checking if the Pods
         # locked in the Pods/Manifest.lock file are in sync with the Pods defined
         # in the Podfile.lock.
@@ -267,7 +312,7 @@ module Pod
         def add_check_manifest_lock_script_phase
           phase_name = CHECK_MANIFEST_PHASE_NAME
           native_targets.each do |native_target|
-            phase = TargetIntegrator.create_or_update_build_phase(native_target, phase_name)
+            phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             native_target.build_phases.unshift(phase).uniq! unless native_target.build_phases.first == phase
             phase.shell_script = <<-SH.strip_heredoc
               diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
