@@ -279,9 +279,17 @@ module Pod
     #
     def clean_sandbox
       sandbox.public_headers.implode!
+      target_support_dirs = sandbox.target_support_files_root.children.select(&:directory?)
       pod_targets.each do |pod_target|
         pod_target.build_headers.implode!
+        target_support_dirs.delete(pod_target.support_files_dir)
       end
+
+      aggregate_targets.each do |aggregate_target|
+        target_support_dirs.delete(aggregate_target.support_files_dir)
+      end
+
+      target_support_dirs.each { |dir| FileUtils.rm_rf(dir) }
 
       unless sandbox_state.deleted.empty?
         title_options = { :verbose_prefix => '-> '.red }

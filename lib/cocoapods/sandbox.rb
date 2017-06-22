@@ -89,8 +89,8 @@ module Pod
         path = pod_dir(name)
         path.rmtree if path.exist?
       end
-      podspe_path = specification_path(name)
-      podspe_path.rmtree if podspe_path
+      podspec_path = specification_path(name)
+      podspec_path.rmtree if podspec_path
     end
 
     # Prepares the sandbox for a new installation removing any file that will
@@ -98,7 +98,6 @@ module Pod
     #
     def prepare
       FileUtils.rm_rf(headers_root)
-      FileUtils.rm_rf(target_support_files_root)
 
       FileUtils.mkdir_p(headers_root)
       FileUtils.mkdir_p(sources_root)
