@@ -184,7 +184,7 @@ module Pod
       pod_targets.any?(&:uses_swift?)
     end
 
-    # @return [Hash{String => Array<Hash{Symbol => [String]}>] The vendored dynamic artifacts and framework target
+    # @return [Hash{String => Array<Hash{Symbol => [String]}>}] The vendored dynamic artifacts and framework target
     #         input and output paths grouped by config
     #
     def framework_paths_by_config
@@ -193,51 +193,21 @@ module Pod
         relevant_pod_targets = pod_targets.select do |pod_target|
           pod_target.include_in_build_config?(target_definition, config)
         end
-        framework_paths_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
-          frameworks = []
-          pod_target.file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
-            relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
-            framework = { :name => framework_path.basename.to_s,
-                          :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
-                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
-            # Until this can be configured, assume the dSYM file uses the file name as the framework.
-            # See https://github.com/CocoaPods/CocoaPods/issues/1698
-            dsym_name = "#{framework_path.basename}.dSYM"
-            dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
-            if dsym_path.exist?
-              framework[:dsym_name] = dsym_name
-              framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
-              framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
-            end
-            frameworks << framework
-          end
-          if pod_target.should_build? && pod_target.requires_frameworks?
-            frameworks << { :name => pod_target.product_name,
-                            :input_path => pod_target.build_product_path('${BUILT_PRODUCTS_DIR}'),
-                            :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{pod_target.product_name}" }
-          end
-          frameworks
-        end
+        framework_paths_by_config[config] = relevant_pod_targets.flat_map(&:framework_paths)
       end
       framework_paths_by_config
     end
 
-    # @return [Hash{ String => Array<String> }] Uniqued Resources grouped by config
+    # @return [Hash{String => Array<String>}] Uniqued Resources grouped by config
     #
     def resource_paths_by_config
-      library_targets = pod_targets.reject do |pod_target|
+      relevant_pod_targets = pod_targets.reject do |pod_target|
         pod_target.should_build? && pod_target.requires_frameworks?
       end
       user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
-        resources_by_config[config] = library_targets.flat_map do |library_target|
-          next [] unless library_target.include_in_build_config?(target_definition, config)
-          resource_paths = library_target.file_accessors.flat_map do |accessor|
-            accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
-          end
-          resource_bundles = library_target.file_accessors.flat_map do |accessor|
-            accessor.resource_bundles.keys.map { |name| "#{library_target.configuration_build_dir}/#{name.shellescape}.bundle" }
-          end
-          (resource_paths + resource_bundles + [bridge_support_file].compact).uniq
+        resources_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
+          next [] unless pod_target.include_in_build_config?(target_definition, config)
+          (pod_target.resource_paths + [bridge_support_file].compact).uniq
         end
       end
     end

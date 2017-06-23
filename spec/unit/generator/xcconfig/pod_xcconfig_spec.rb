@@ -113,6 +113,10 @@ module Pod
             @xcconfig.to_hash['PODS_CONFIGURATION_BUILD_DIR'].should == '$PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
           end
 
+          it 'sets the CONFIGURATION_BUILD_DIR build variable' do
+            @xcconfig.to_hash['CONFIGURATION_BUILD_DIR'].should.be == '$PODS_CONFIGURATION_BUILD_DIR/BananaLib'
+          end
+
           it 'will be skipped when installing' do
             @xcconfig.to_hash['SKIP_INSTALL'].should == 'YES'
           end
@@ -204,6 +208,12 @@ module Pod
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks'"
+          end
+
+          it 'does not set configuration build dir for test xcconfigs' do
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['CONFIGURATION_BUILD_DIR'].should.be.nil
           end
         end
       end

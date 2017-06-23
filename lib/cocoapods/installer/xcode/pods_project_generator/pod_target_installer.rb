@@ -18,8 +18,8 @@ module Pod
 
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
               add_target
-              add_test_targets if target.contains_test_specifications?
               create_support_files_dir
+              add_test_targets if target.contains_test_specifications?
               add_resources_bundle_targets
               add_files_to_build_phases
               create_xcconfig_file
@@ -176,9 +176,9 @@ module Pod
             target.supported_test_types.each do |test_type|
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_type)
-              platform = target.platform.name
+              platform_name = target.platform.name
               language = target.uses_swift? ? :swift : :objc
-              native_test_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
+              native_test_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
               native_test_target.product_reference.name = name
 
               target.user_build_configurations.each do |bc_name, type|
@@ -195,6 +195,10 @@ module Pod
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
               end
+
+              # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
+              create_test_target_embed_frameworks_script(test_type)
+              create_test_target_copy_resources_script(test_type)
 
               target.test_native_targets << native_test_target
             end
@@ -308,6 +312,38 @@ module Pod
                 end
               end
             end
+          end
+
+          # Creates a script that copies the resources to the bundle of the test target.
+          #
+          # @param [Symbol] test_type
+          #        The test type to create the script for.
+          #
+          # @return [void]
+          #
+          def create_test_target_copy_resources_script(test_type)
+            path = target.copy_resources_script_path_for_test_type(test_type)
+            pod_targets = [target, *target.test_dependent_targets]
+            resource_paths_by_config = { 'Debug' => pod_targets.flat_map(&:resource_paths) }
+            generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
+            generator.save_as(path)
+            add_file_to_support_group(path)
+          end
+
+          # Creates a script that embeds the frameworks to the bundle of the test target.
+          #
+          # @param [Symbol] test_type
+          #        The test type to create the script for.
+          #
+          # @return [void]
+          #
+          def create_test_target_embed_frameworks_script(test_type)
+            path = target.embed_frameworks_script_path_for_test_type(test_type)
+            pod_targets = [target, *target.test_dependent_targets]
+            framework_paths_by_config = { 'Debug' => pod_targets.flat_map(&:framework_paths) }
+            generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+            generator.save_as(path)
+            add_file_to_support_group(path)
           end
 
           # Manually add `libswiftSwiftOnoneSupport.dylib` as it seems there is an issue with tests that do not include it for Debug configurations.
