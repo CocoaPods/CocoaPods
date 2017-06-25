@@ -269,6 +269,7 @@ module Pod
 
               dependent_target = mock('dependent-target', :should_build? => true, :native_target => dependent_native_target)
               test_dependent_target = mock('dependent-test-target', :should_build? => true, :native_target => test_dependent_native_target)
+              test_dependent_target.expects(:should_build?).returns(true)
 
               @pod_target.stubs(:native_target).returns(mock_native_target)
               @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
@@ -284,6 +285,35 @@ module Pod
               mock_test_native_target.expects(:add_dependency).with(dependent_native_target).never
               mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)
               mock_test_native_target.expects(:add_dependency).with(mock_native_target)
+
+              @generator.send(:set_target_dependencies)
+            end
+
+            it 'adds test dependencies to test native targets for a pod target that should not be built' do
+              mock_test_native_target = mock('CoconutLib-Unit-Tests')
+              test_dependent_native_target = mock('TestDependentNativeTarget')
+              test_dependent_target = mock('dependent-test-target', :should_build? => true, :native_target => test_dependent_native_target)
+              test_dependent_target.expects(:should_build?).returns(true)
+
+              @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
+              @pod_target.stubs(:test_dependent_targets).returns([test_dependent_target])
+              @pod_target.stubs(:should_build? => false)
+
+              mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)
+
+              @generator.send(:set_target_dependencies)
+            end
+
+            it 'sets resource bundles for not build pods as target dependencies of the test target' do
+              mock_test_native_target = mock('CoconutLib-Unit-Tests')
+
+              @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
+              @pod_target.stubs(:test_dependent_targets).returns([])
+              @pod_target.stubs(:should_build? => false)
+              @pod_target.stubs(:resource_bundle_targets).returns(['dummy'])
+
+              @mock_target.expects(:add_dependency).with('dummy')
+              mock_test_native_target.expects(:add_dependency).with('dummy')
 
               @generator.send(:set_target_dependencies)
             end

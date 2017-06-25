@@ -198,10 +198,8 @@ module Pod
               configure_app_extension_api_only_for_target(aggregate_target) if is_app_extension
 
               unless pod_target.should_build?
-                pod_target.resource_bundle_targets.each do |resource_bundle_target|
-                  aggregate_target.native_target.add_dependency(resource_bundle_target)
-                end
-
+                add_resource_bundles_to_native_target(pod_target, aggregate_target.native_target)
+                add_pod_target_test_dependencies(pod_target, frameworks_group)
                 next
               end
 
@@ -210,9 +208,7 @@ module Pod
 
               add_dependent_targets_to_native_target(pod_target.dependent_targets, pod_target.native_target, is_app_extension, pod_target.requires_frameworks?, frameworks_group)
 
-              pod_target.test_native_targets.each do |test_native_target|
-                add_dependent_targets_to_native_target([pod_target, *pod_target.test_dependent_targets], test_native_target, false, pod_target.requires_frameworks?, frameworks_group)
-              end
+              add_pod_target_test_dependencies(pod_target, frameworks_group)
             end
           end
         end
@@ -250,6 +246,16 @@ module Pod
 
         private
 
+        def add_pod_target_test_dependencies(pod_target, frameworks_group)
+          test_dependent_targets = [pod_target, *pod_target.test_dependent_targets]
+          pod_target.test_native_targets.each do |test_native_target|
+            test_dependent_targets.reject(&:should_build?).each do |test_dependent_target|
+              add_resource_bundles_to_native_target(test_dependent_target, test_native_target)
+            end
+            add_dependent_targets_to_native_target(test_dependent_targets, test_native_target, false, pod_target.requires_frameworks?, frameworks_group)
+          end
+        end
+
         def add_dependent_targets_to_native_target(dependent_targets, native_target, is_app_extension, requires_frameworks, frameworks_group)
           dependent_targets.each do |pod_dependency_target|
             next unless pod_dependency_target.should_build?
@@ -261,6 +267,12 @@ module Pod
                   frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
               native_target.frameworks_build_phase.add_file_reference(product_ref, true)
             end
+          end
+        end
+
+        def add_resource_bundles_to_native_target(dependent_target, native_target)
+          dependent_target.resource_bundle_targets.each do |resource_bundle_target|
+            native_target.add_dependency(resource_bundle_target)
           end
         end
 
