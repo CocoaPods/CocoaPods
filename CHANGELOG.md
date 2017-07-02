@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Ensure resource bundle and test dependencies are set for test native targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6829](https://github.com/CocoaPods/CocoaPods/pull/6829)
 
 ## 1.3.0.beta.2 (2017-06-22)
 
