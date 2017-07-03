@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Include test schemes within library schemes  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6765](https://github.com/CocoaPods/CocoaPods/issues/6765)
 
 ##### Bug Fixes
 

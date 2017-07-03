@@ -73,7 +73,13 @@ module Pod
             if installation_options.deterministic_uuids?
               UI.message('- Generating deterministic UUIDs') { project.predictabilize_uuids }
             end
-            project.recreate_user_schemes(false)
+            library_product_types = [:framework, :dynamic_library, :static_library]
+            project.recreate_user_schemes(false) do |scheme, target|
+              next unless library_product_types.include? target.symbol_type
+              pod_target = pod_targets.find { |pt| pt.native_target == target }
+              next if pod_target.nil? || pod_target.test_native_targets.empty?
+              pod_target.test_native_targets.each { |test_native_target| scheme.add_test_target(test_native_target) }
+            end
             project.save
           end
         end
