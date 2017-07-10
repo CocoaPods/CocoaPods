@@ -36,6 +36,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Truncate extra groups in Development Pods when they are parents of all files
+  [Eric Amorde](https://github.com/amorde)
+  [#6814](https://github.com/CocoaPods/CocoaPods/pull/6814)
+
 * Remove 0.34 migration for a small boost in `pod install` time  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6783](hhttps://github.com/CocoaPods/CocoaPods/pull/6783)

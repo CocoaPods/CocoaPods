@@ -177,12 +177,15 @@ module Pod
     #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.
     #
+    # @param  [Pathname] base_path
+    #         The base path for newly created groups when reflect_file_system_structure is true.
+    #         If nil, the provided group's real_path is used.
+    #
     # @return [PBXFileReference] The new file reference.
     #
-    def add_file_reference(absolute_path, group, reflect_file_system_structure = false)
+    def add_file_reference(absolute_path, group, reflect_file_system_structure = false, base_path = nil)
       file_path_name = absolute_path.is_a?(Pathname) ? absolute_path : Pathname.new(absolute_path)
-      group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure)
-
+      group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure, base_path)
       if ref = reference_for_path(file_path_name.realpath)
         @refs_by_absolute_path[absolute_path.to_s] = ref
         ref
@@ -305,24 +308,35 @@ module Pod
     #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.
     #
+    # @param  [Pathname] base_path
+    #         The base path for the newly created group. If nil, the provided group's real_path is used.
+    #
     # @return [PBXGroup] The appropriate group for the filepath.
     #         Can be PBXVariantGroup, if the file is localized.
     #
-    def group_for_path_in_group(absolute_pathname, group, reflect_file_system_structure)
+    def group_for_path_in_group(absolute_pathname, group, reflect_file_system_structure, base_path = nil)
       unless absolute_pathname.absolute?
         raise ArgumentError, "Paths must be absolute #{absolute_pathname}"
       end
+      unless base_path.nil? || base_path.absolute?
+        raise ArgumentError, "Paths must be absolute #{base_path}"
+      end
 
-      relative_pathname = absolute_pathname.relative_path_from(group.real_path)
+      relative_base = base_path.nil? ? group.real_path : base_path.realdirpath
+      relative_pathname = absolute_pathname.relative_path_from(relative_base)
       relative_dir = relative_pathname.dirname
       lproj_regex = /\.lproj/i
 
       # Add subgroups for directories, but treat .lproj as a file
       if reflect_file_system_structure
-        relative_dir.each_filename do|name|
+        path = relative_base
+        relative_dir.each_filename do |name|
           break if name.to_s =~ lproj_regex
           next if name == '.'
-          group = group[name] || group.new_group(name, name)
+          # Make sure groups have the correct absolute path set, as intermittent
+          # directories may not be included in the group structure
+          path += name
+          group = group[name] || group.new_group(name, path)
         end
       end
 

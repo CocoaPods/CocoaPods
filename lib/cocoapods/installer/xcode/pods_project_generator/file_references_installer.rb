@@ -182,9 +182,10 @@ module Pod
               local = sandbox.local?(pod_name)
               paths = file_accessor.send(file_accessor_key)
               paths = allowable_project_paths(paths)
+              base_path = local ? common_path(paths) : nil
               paths.each do |path|
                 group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
-                pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development)
+                pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development, base_path)
               end
             end
           end
@@ -238,6 +239,29 @@ module Pod
             # within them added as well. This generally happens if the glob within the
             # resources directory was not a recursive glob.
             allowable_paths + lproj_paths.subtract(lproj_paths_with_files).to_a
+          end
+
+          # Returns a Pathname of the nearest parent from which all the given paths descend.
+          # Converts each Pathname to a string and finds the longest common prefix
+          #
+          # @param  [Array<Pathname>] paths
+          #         The paths to files or directories on disk. Must be absolute paths
+          #
+          # @return [Pathname] Pathname of the nearest parent shared by paths, or nil if none exists
+          #
+          def common_path(paths)
+            return nil if paths.empty?
+            strs = paths.map do |path|
+              unless path.absolute?
+                raise ArgumentError, "Paths must be absolute #{path}"
+              end
+              path.dirname.to_s
+            end
+            min, max = strs.minmax
+            idx = min.size.times { |i| break i if min[i] != max[i] }
+            result = Pathname.new(min[0...idx])
+            # Don't consider "/" a common path
+            return result unless result.to_s == '/'
           end
 
           # Computes the destination sub-directory in the sandbox
