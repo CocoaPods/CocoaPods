@@ -7,7 +7,7 @@ module Pod
     #
     attr_reader :specs
 
-    # @return [Array<PBXNativeTarget>] the target definitions of the Podfile
+    # @return [Array<TargetDefinition>] the target definitions of the Podfile
     #         that generated this target.
     #
     attr_reader :target_definitions
