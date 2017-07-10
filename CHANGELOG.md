@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6765](https://github.com/CocoaPods/CocoaPods/issues/6765)
 
+* Truncate extra groups in Development Pods when they are parents of all files  
+  [Eric Amorde](https://github.com/amorde)
+  [#6814](https://github.com/CocoaPods/CocoaPods/pull/6814)
+
 ##### Bug Fixes
 
 * Ensure resource bundle and test dependencies are set for test native targets  
@@ -35,10 +39,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#6797](https://github.com/CocoaPods/CocoaPods/issues/6797)
 
 ##### Bug Fixes
-
-* Truncate extra groups in Development Pods when they are parents of all files
-  [Eric Amorde](https://github.com/amorde)
-  [#6814](https://github.com/CocoaPods/CocoaPods/pull/6814)
 
 * Remove 0.34 migration for a small boost in `pod install` time  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
