@@ -45,6 +45,15 @@ module Pod
 
           install_framework()
           {
+            if [ -e "$1" ]; then
+              version=$(defaults read "${PODS_ROOT}/Target Support Files/$(basename -s .framework "$1")/Info.plist" CFBundleShortVersionString)
+              current_version=$(defaults read "$1/Info.plist" CFBundleShortVersionString)
+              
+              if [ ${version} == ${current_version} ] ; then
+                return 0
+              fi
+            fi
+            
             if [ -r "${BUILT_PRODUCTS_DIR}/$1" ]; then
               local source="${BUILT_PRODUCTS_DIR}/$1"
             elif [ -r "${BUILT_PRODUCTS_DIR}/$(basename "$1")" ]; then
