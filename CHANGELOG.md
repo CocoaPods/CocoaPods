@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#6814](https://github.com/CocoaPods/CocoaPods/pull/6814)
 
+* Added condition to install framework only when necessary
+	[Aizat Omar](https://github.com/aizatomar)
+  [#6870](https://github.com/CocoaPods/CocoaPods/pull/6870)
+
 ##### Bug Fixes
 
 * Ensure resource bundle and test dependencies are set for test native targets  
