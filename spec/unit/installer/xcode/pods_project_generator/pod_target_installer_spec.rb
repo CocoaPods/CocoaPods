@@ -471,13 +471,58 @@ module Pod
               build_file.file_ref.path.should == dummy_source_basename
               @pod_target.dummy_source_path.read.should.include?('@interface PodsDummy_BananaLib')
             end
-
             #--------------------------------------------------------------------------------#
 
-            it 'does not create a target if the specification does not define source files' do
-              @pod_target.file_accessors.first.stubs(:source_files).returns([])
-              @installer.install!
-              @project.targets.should == []
+            describe 'only resave changed pod configure file' do
+              before do
+                @installer.install!
+                diff_string = "different content"
+                xcconfig_path = config.sandbox.root + @pod_target.xcconfig_path
+                xcconfig = File.new(xcconfig_path, "w")
+                prefix_header = File.new(@pod_target.prefix_header_path, "w")
+                dummy = File.new(@pod_target.dummy_source_path, "w")
+                xcconfig_path.puts diff_string
+                prefix_header.puts diff_string
+                dummy.puts diff_string
+
+              end
+
+              it 'should rewrite when xcconfig file change' do
+                @installer.install!
+                file = config.sandbox.root + @pod_target.xcconfig_path
+                xcconfig = Xcodeproj::Config.new(file)
+                xcconfig.to_hash['PODS_ROOT'].should == '${SRCROOT}'
+              end
+              it "should rewrite when prefix header file change'" do
+                @installer.install!
+                generated = @pod_target.prefix_header_path.read
+                expected = <<-EOS.strip_heredoc
+          #ifdef __OBJC__
+          #import <UIKit/UIKit.h>
+          #else
+          #ifndef FOUNDATION_EXPORT
+          #if defined(__cplusplus)
+          #define FOUNDATION_EXPORT extern "C"
+          #else
+          #define FOUNDATION_EXPORT extern
+          #endif
+          #endif
+          #endif
+
+          #import <BananaTree/BananaTree.h>
+                EOS
+                generated.should == expected
+              end
+
+              it 'should rewrite when dummy file change' do
+                @installer.install!
+                dummy_source_basename = @pod_target.dummy_source_path.basename.to_s
+                build_files = @installer.target.native_target.source_build_phase.files
+                build_file = build_files.find { |bf| bf.file_ref.display_name == dummy_source_basename }
+                build_file.should.be.not.nil
+                build_file.file_ref.path.should == dummy_source_basename
+                @pod_target.dummy_source_path.read.should.include?('@interface PodsDummy_BananaLib')
+              end
             end
 
             #--------------------------------------------------------------------------------#

@@ -98,7 +98,6 @@ module Pod
     #
     def prepare
       FileUtils.rm_rf(headers_root)
-      FileUtils.rm_rf(target_support_files_root)
 
       FileUtils.mkdir_p(headers_root)
       FileUtils.mkdir_p(sources_root)

@@ -62,6 +62,36 @@ module Pod
             target.native_target = @native_target
           end
 
+          # Remove temp file whose store .prefix/config/dummy file.
+          #
+          def clean_tempfile
+            FileUtils.rm(target_configure_tempfile_path)
+          end
+
+          # @return [String] The temp file path whose store .prefix/config/dummy file.
+          #
+          def target_configure_tempfile_path
+            sandbox.target_support_files_dir('target_configure_tempfile')
+          end
+
+          # @param  [Content] Content to be save.
+          # @param  [Path]  Path to save Content.
+          #
+          # Resave Content when Content is different to exist file in Path.
+          # Do nothing when Content is same as exist file in Path.
+          #
+          # @return [Void]
+          #
+          def update_changed_file(content, path)
+            content.save_as(target_configure_tempfile_path)
+            if File.exist?(path)
+              content.save_as(path) unless FileUtils.cmp(target_configure_tempfile_path, path)
+            else
+              content.save_as(path)
+            end
+            clean_tempfile if File.exist?(target_configure_tempfile_path)
+          end
+
           # @return [String] The deployment target.
           #
           def deployment_target
@@ -92,7 +122,7 @@ module Pod
           # Creates the directory where to store the support files of the target.
           #
           def create_support_files_dir
-            target.support_files_dir.mkdir
+            target.support_files_dir.mkpath
           end
 
           # Creates the Info.plist file which sets public framework attributes
@@ -169,7 +199,7 @@ module Pod
           def create_dummy_source
             path = target.dummy_source_path
             generator = Generator::DummySource.new(target.label)
-            generator.save_as(path)
+            update_changed_file(generator, path)
             file_reference = add_file_to_support_group(path)
             native_target.source_build_phase.add_file_reference(file_reference)
           end

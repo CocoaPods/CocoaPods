@@ -225,6 +225,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Rob Contreras](https://github.com/robcontreras)
   [#2379](https://github.com/CocoaPods/CocoaPods/pull/2379)
 
+  
+* Only resave changed pod configure file to impove compile speed after pod intall.
+  [dingjingpisces2015](https://github.com/dingjingpisces2015)
+  [#1](https://github.com/dingjingpisces2015/CocoaPods/pull/1)
+  
 ##### Bug Fixes
 
 * Ensure Core Data models get added to the compile sources phase for header generation.  
