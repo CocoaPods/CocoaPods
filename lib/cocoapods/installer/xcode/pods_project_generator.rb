@@ -4,6 +4,7 @@ module Pod
       # The {PodsProjectGenerator} handles generation of the 'Pods/Pods.xcodeproj'
       #
       class PodsProjectGenerator
+        require 'cocoapods/installer/pods_project_integrator/pod_target_integrator'
         require 'cocoapods/installer/xcode/pods_project_generator/target_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/pod_target_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/file_references_installer'
@@ -62,6 +63,7 @@ module Pod
           prepare
           install_file_references
           install_libraries
+          integrate_test_targets
           set_target_dependencies
         end
 
@@ -172,6 +174,17 @@ module Pod
             end
 
             add_system_framework_dependencies
+          end
+        end
+
+        def integrate_test_targets
+          pod_targets_with_test_targets = pod_targets.reject { |pt| pt.test_native_targets.empty? }
+          unless pod_targets_with_test_targets.empty?
+            UI.message '- Integrating test targets' do
+              pod_targets_with_test_targets.each do |pod_target|
+                Pod::Installer::PodTargetIntegrator.new(pod_target).integrate!
+              end
+            end
           end
         end
 

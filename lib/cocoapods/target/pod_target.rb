@@ -192,6 +192,51 @@ module Pod
       specs.select(&:test_specification?).map(&:test_type).uniq
     end
 
+    # @return [Array<Hash{Symbol => [String]}>] The vendored and non vendored framework paths
+    #         this target depends upon.
+    #
+    def framework_paths
+      @framework_paths ||= begin
+        frameworks = []
+        file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
+          relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
+          framework = { :name => framework_path.basename.to_s,
+                        :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
+                        :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
+          # Until this can be configured, assume the dSYM file uses the file name as the framework.
+          # See https://github.com/CocoaPods/CocoaPods/issues/1698
+          dsym_name = "#{framework_path.basename}.dSYM"
+          dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
+          if dsym_path.exist?
+            framework[:dsym_name] = dsym_name
+            framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
+            framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
+          end
+          frameworks << framework
+        end
+        if should_build? && requires_frameworks?
+          frameworks << { :name => product_name,
+                          :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
+                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }
+        end
+        frameworks
+      end
+    end
+
+    # @return [Array<String>] The resource and resource bundle paths this target depends upon.
+    #
+    def resource_paths
+      @resource_paths ||= begin
+        resource_paths = file_accessors.flat_map do |accessor|
+          accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
+        end
+        resource_bundles = file_accessors.flat_map do |accessor|
+          accessor.resource_bundles.keys.map { |name| "#{configuration_build_dir}/#{name.shellescape}.bundle" }
+        end
+        resource_paths + resource_bundles
+      end
+    end
+
     # Returns the corresponding native target to use based on the provided specification.
     # This is used to figure out whether to add a source file into the library native target or any of the
     # test native targets.
@@ -226,6 +271,22 @@ module Pod
       end
     end
 
+    # Returns the corresponding test type given the product type.
+    #
+    # @param  [Symbol] product_type
+    #         The product type to map to a test type.
+    #
+    # @return [Symbol] The native product type to use.
+    #
+    def test_type_for_product_type(product_type)
+      case product_type
+      when :unit_test_bundle
+        :unit
+      else
+        raise Informative, "Unknown product type `#{product_type}`."
+      end
+    end
+
     # @return [Specification] The root specification for the target.
     #
     def root_spec
@@ -254,6 +315,24 @@ module Pod
     #
     def test_target_label(test_type)
       "#{label}-#{test_type.capitalize}-Tests"
+    end
+
+    # @param  [Symbol] test_type
+    #         The test type this embed frameworks script path is for.
+    #
+    # @return [Pathname] The absolute path of the copy resources script for the given test type.
+    #
+    def copy_resources_script_path_for_test_type(test_type)
+      support_files_dir + "#{test_target_label(test_type)}-resources.sh"
+    end
+
+    # @param  [Symbol] test_type
+    #         The test type this embed frameworks script path is for.
+    #
+    # @return [Pathname] The absolute path of the embed frameworks script for the given test type.
+    #
+    def embed_frameworks_script_path_for_test_type(test_type)
+      support_files_dir + "#{test_target_label(test_type)}-frameworks.sh"
     end
 
     # @return [Array<String>] The names of the Pods on which this target

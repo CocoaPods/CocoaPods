@@ -265,9 +265,12 @@ module Pod
         # @param  [Array<PodTarget>] dependent_targets
         #         The pod targets the given target depends on.
         #
+        # @param  [Boolean] test_xcconfig
+        #         Whether the settings for dependent targets are being generated for a test xcconfig or not.
+        #
         # @return [Hash<String, String>] the settings
         #
-        def self.settings_for_dependent_targets(target, dependent_targets)
+        def self.settings_for_dependent_targets(target, dependent_targets, test_xcconfig = false)
           dependent_targets = dependent_targets.select(&:should_build?)
 
           # Alias build dirs to avoid recursive definitions for pod targets and depending
@@ -278,7 +281,7 @@ module Pod
           }
 
           # Scope pod targets
-          if target.respond_to?(:configuration_build_dir)
+          if !test_xcconfig && target.respond_to?(:configuration_build_dir)
             build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
           end
 
