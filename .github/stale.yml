@@ -11,7 +11,7 @@ exemptLabels:
   - "t1:enhancement"
 
 # Label to use when marking as stale
-staleLabel: "s1:awaiting input"
+staleLabel: "s1:awaiting_input"
 
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
