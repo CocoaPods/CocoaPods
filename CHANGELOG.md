@@ -26,6 +26,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6829](https://github.com/CocoaPods/CocoaPods/pull/6829)
 
+* Provide a better error message when references are missing for non-source files
+  [David Airapetyan](https://github.com/davidair)
+  [#4887](https://github.com/CocoaPods/CocoaPods/issues/4887)
+
 ## 1.3.0.beta.2 (2017-06-22)
 
 ##### Enhancements

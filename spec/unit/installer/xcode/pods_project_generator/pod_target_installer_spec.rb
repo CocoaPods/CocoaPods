@@ -239,6 +239,43 @@ module Pod
               end
             end
 
+            describe 'test other files under sources' do
+              before do
+                config.sandbox.prepare
+                @podfile = Podfile.new do
+                  platform :ios, '6.0'
+                  project 'SampleProject/SampleProject'
+                  target 'SampleProject'
+                end
+                @target_definition = @podfile.target_definitions['SampleProject']
+                @project = Project.new(config.sandbox.project_path)
+                config.sandbox.project = @project
+
+                @minions_spec = fixture_spec('minions-lib/MinionsLib.podspec')
+
+                # Add sources to the project.
+                file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('minions-lib')), @minions_spec.consumer(:ios))
+                @project.add_pod_group('MinionsLib', fixture('minions-lib'))
+                group = @project.group_for_spec('MinionsLib')
+                file_accessor.source_files.each do |file|
+                  @project.add_file_reference(file, group) if file.fnmatch?('*.m') || file.fnmatch?('*.h')
+                end
+
+                @minions_pod_target = PodTarget.new([@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], config.sandbox)
+                @minions_pod_target.file_accessors = [file_accessor]
+                @minions_pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @installer = PodTargetInstaller.new(config.sandbox, @minions_pod_target)
+
+                @first_json_file = file_accessor.source_files.find { |sf| sf.extname == '.json' }
+              end
+
+              it 'raises when references are missing for non-source files' do
+                @minions_pod_target.stubs(:requires_frameworks?).returns(true)
+                exception = lambda { @installer.install! }.should.raise Informative
+                exception.message.should.include "Unable to find other source ref for #{@first_json_file} for target MinionsLib."
+              end
+            end
+
             #--------------------------------------#
 
             it 'adds the source files of each pod to the target of the Pod library' do
