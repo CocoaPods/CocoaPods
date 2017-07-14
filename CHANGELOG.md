@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Protect rsync tmp files from being deleted if two targets sync at the same time  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#6873](https://github.com/CocoaPods/CocoaPods/pull/6873)
+
 * Include test schemes within library schemes  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6765](https://github.com/CocoaPods/CocoaPods/issues/6765)
