@@ -248,7 +248,7 @@ module Pod
                 path.dirname.mkdir unless path.dirname.exist?
                 info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
                 generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
-                generator.save_as(info_plist_path)
+                update_changed_file(generator, info_plist_path)
                 add_file_to_support_group(info_plist_path)
 
                 bundle_target.build_configurations.each do |c|
@@ -279,7 +279,7 @@ module Pod
           def create_xcconfig_file
             path = target.xcconfig_path
             xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target)
-            xcconfig_gen.save_as(path)
+            update_changed_file(xcconfig_gen, path)
             xcconfig_file_ref = add_file_to_support_group(path)
 
             native_target.build_configurations.each do |c|
@@ -302,7 +302,7 @@ module Pod
             target.supported_test_types.each do |test_type|
               path = target.xcconfig_path(test_type.to_s)
               xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target, true)
-              xcconfig_gen.save_as(path)
+              update_changed_file(xcconfig_gen, path)
               xcconfig_file_ref = add_file_to_support_group(path)
 
               target.test_native_targets.each do |test_target|
@@ -326,7 +326,7 @@ module Pod
             pod_targets = [target, *target.test_dependent_targets]
             resource_paths_by_config = { 'Debug' => pod_targets.flat_map(&:resource_paths) }
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
-            generator.save_as(path)
+            update_changed_file(generator, path)
             add_file_to_support_group(path)
           end
 
@@ -342,7 +342,7 @@ module Pod
             pod_targets = [target, *target.test_dependent_targets]
             framework_paths_by_config = { 'Debug' => pod_targets.flat_map(&:framework_paths) }
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
-            generator.save_as(path)
+            update_changed_file(generator, path)
             add_file_to_support_group(path)
           end
 
@@ -387,7 +387,7 @@ module Pod
           def create_prefix_header
             path = target.prefix_header_path
             generator = Generator::PrefixHeader.new(target.file_accessors, target.platform)
-            generator.save_as(path)
+            update_changed_file(generator, path)
             add_file_to_support_group(path)
 
             native_target.build_configurations.each do |c|
@@ -473,7 +473,9 @@ module Pod
             return super unless custom_module_map
             path = target.module_map_path
             UI.message "- Copying module map file to #{UI.path(path)}" do
-              FileUtils.cp(custom_module_map, path)
+              unless path.exist? && FileUtils.identical?(custom_module_map, path)
+                FileUtils.cp(custom_module_map, path)
+              end
               add_file_to_support_group(path)
 
               native_target.build_configurations.each do |c|

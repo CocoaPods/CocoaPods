@@ -84,7 +84,7 @@ module Pod
             native_target.build_configurations.each do |configuration|
               path = target.xcconfig_path(configuration.name)
               gen = Generator::XCConfig::AggregateXCConfig.new(target, configuration.name)
-              gen.save_as(path)
+              update_changed_file(gen, path)
               target.xcconfigs[configuration.name] = gen.xcconfig
               xcconfig_file_ref = add_file_to_support_group(path)
               configuration.base_configuration_reference = xcconfig_file_ref
@@ -104,7 +104,7 @@ module Pod
               path = target.bridge_support_path
               headers = native_target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }
               generator = Generator::BridgeSupport.new(headers)
-              generator.save_as(path)
+              update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
           end
@@ -120,7 +120,7 @@ module Pod
           def create_copy_resources_script
             path = target.copy_resources_script_path
             generator = Generator::CopyResourcesScript.new(target.resource_paths_by_config, target.platform)
-            generator.save_as(path)
+            update_changed_file(generator, path)
             add_file_to_support_group(path)
           end
 
@@ -136,7 +136,7 @@ module Pod
           def create_embed_frameworks_script
             path = target.embed_frameworks_script_path
             generator = Generator::EmbedFrameworksScript.new(target.framework_paths_by_config)
-            generator.save_as(path)
+            update_changed_file(generator, path)
             add_file_to_support_group(path)
           end
 
@@ -150,7 +150,7 @@ module Pod
               path = generator_class.path_from_basepath(basepath)
               file_accessors = target.pod_targets.map(&:file_accessors).flatten
               generator = generator_class.new(file_accessors)
-              generator.save_as(path)
+              update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
           end
