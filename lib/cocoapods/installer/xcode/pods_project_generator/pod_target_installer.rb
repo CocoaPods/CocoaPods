@@ -155,7 +155,7 @@ module Pod
                 add_header(build_file, public_headers, private_headers, native_target)
               end
 
-              other_file_refs = other_source_files.map { |sf| project.reference_for_path(sf) }
+              other_file_refs = project_file_references_array(other_source_files, 'other source')
               native_target.add_file_references(other_file_refs, nil)
 
               next unless target.requires_frameworks?
