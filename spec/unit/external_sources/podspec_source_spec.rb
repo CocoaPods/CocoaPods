@@ -57,6 +57,7 @@ module Pod
     describe 'http source' do
       it 'raises an Informative error if the specified url fails to load' do
         @subject.stubs(:params).returns(:podspec => 'https://github.com/username/TSMessages/TSMessages.podspec')
+        WebMock.enable!
         WebMock::API.stub_request(:get, 'https://github.com/username/TSMessages/TSMessages.podspec').
           to_return(:status => 404)
 
