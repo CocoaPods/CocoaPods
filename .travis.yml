@@ -59,7 +59,7 @@ before_script:
   - bundle exec pod env
 
 script:
-  - unshare -n bundle exec rake spec:all
+  - sudo unshare -n bundle exec rake spec:all
   - if [ "$COCOAPODS_CI_TASKS" = "LINT" ]; then bundle exec danger; fi
 
 addons:
