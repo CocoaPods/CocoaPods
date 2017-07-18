@@ -56,6 +56,7 @@ module Pod
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
+      @test_resource_bundle_targets = []
       @test_native_targets = []
       @dependent_targets = []
       @test_dependent_targets = []
@@ -149,6 +150,10 @@ module Pod
     #         to this target.
     attr_reader :resource_bundle_targets
 
+    # @return [Array<PBXNativeTarget>] the resource bundle test targets belonging
+    #         to this target.
+    attr_reader :test_resource_bundle_targets
+
     # @return [Bool] Whether or not this target should be build.
     #
     # A target should not be build if it has no source files.
@@ -231,7 +236,9 @@ module Pod
           accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
         end
         resource_bundles = file_accessors.flat_map do |accessor|
-          accessor.resource_bundles.keys.map { |name| "#{configuration_build_dir}/#{name.shellescape}.bundle" }
+          prefix = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE
+          prefix = configuration_build_dir unless accessor.spec.test_specification?
+          accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
         end
         resource_paths + resource_bundles
       end

@@ -27,6 +27,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set the test xcconfig file to resource bundles used only by tests  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6886](https://github.com/CocoaPods/CocoaPods/pull/6886)
+
 * Integrate test targets to embed frameworks and resources  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6828](https://github.com/CocoaPods/CocoaPods/pull/6828)

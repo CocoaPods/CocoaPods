@@ -237,6 +237,18 @@ module Pod
                 content = @coconut_pod_target.umbrella_header_path.read
                 content.should.not =~ /"CoconutTestHeader.h"/
               end
+
+              it 'adds test xcconfig file reference for test resource bundle targets' do
+                @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Model.xcdatamodeld'] }
+                @installer.install!
+                @coconut_pod_target.resource_bundle_targets.count.should == 0
+                @coconut_pod_target.test_resource_bundle_targets.count.should == 1
+                test_resource_bundle_target = @project.targets.find { |t| t.name == 'CoconutLib-CoconutLibTestResources' }
+                test_resource_bundle_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'CoconutLib.unit.xcconfig'
+                  bc.build_settings['CONFIGURATION_BUILD_DIR'].should.be.nil
+                end
+              end
             end
 
             describe 'test other files under sources' do

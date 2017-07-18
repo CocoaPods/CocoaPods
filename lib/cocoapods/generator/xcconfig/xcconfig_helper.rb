@@ -280,7 +280,7 @@ module Pod
             CONFIGURATION_BUILD_DIR_VARIABLE[1..-1] => "#{BUILD_DIR_VARIABLE}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
           }
 
-          # Scope pod targets
+          # Scope pod targets as long as they are not test targets.
           if !test_xcconfig && target.respond_to?(:configuration_build_dir)
             build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
           end

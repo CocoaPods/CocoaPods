@@ -234,7 +234,13 @@ module Pod
                 end
                 bundle_target.deployment_target = deployment_target
 
-                target.resource_bundle_targets << bundle_target
+                test_specification = file_accessor.spec.test_specification?
+
+                if test_specification
+                  target.test_resource_bundle_targets << bundle_target
+                else
+                  target.resource_bundle_targets << bundle_target
+                end
 
                 if target.should_build?
                   native_target.add_dependency(bundle_target)
@@ -255,7 +261,12 @@ module Pod
                   c.build_settings['PRODUCT_NAME'] = bundle_name
                   relative_info_plist_path = info_plist_path.relative_path_from(sandbox.root)
                   c.build_settings['INFOPLIST_FILE'] = relative_info_plist_path.to_s
-                  c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
+                  # Do not set the CONFIGURATION_BUILD_DIR for resource bundles that are only meant for test targets.
+                  # This is because the test target itself also does not set this configuration build dir and it expects
+                  # all bundles to be copied from the default path.
+                  unless test_specification
+                    c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
+                  end
 
                   # Set the correct device family for this bundle, based on the platform
                   device_family_by_platform = {
@@ -286,12 +297,8 @@ module Pod
               c.base_configuration_reference = xcconfig_file_ref
             end
 
-            # also apply the private config to resource targets
-            target.resource_bundle_targets.each do |rsrc_target|
-              rsrc_target.build_configurations.each do |rsrc_bc|
-                rsrc_bc.base_configuration_reference = xcconfig_file_ref
-              end
-            end
+            # also apply the private config to resource bundle targets.
+            apply_xcconfig_file_ref_to_resource_bundle_targets(target.resource_bundle_targets, xcconfig_file_ref)
           end
 
           # Generates the contents of the xcconfig file used for each test target type and saves it to disk.
@@ -311,6 +318,9 @@ module Pod
                   test_target_bc.base_configuration_reference = xcconfig_file_ref
                 end
               end
+
+              # also apply the private config to resource bundle test targets.
+              apply_xcconfig_file_ref_to_resource_bundle_targets(target.test_resource_bundle_targets, xcconfig_file_ref)
             end
           end
 
@@ -467,6 +477,14 @@ module Pod
             dir = target.support_files_dir
             group = project.pod_support_files_group(pod_name, dir)
             group.new_file(path)
+          end
+
+          def apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
+            resource_bundle_targets.each do |rsrc_target|
+              rsrc_target.build_configurations.each do |rsrc_bc|
+                rsrc_bc.base_configuration_reference = xcconfig_file_ref
+              end
+            end
           end
 
           def create_module_map
