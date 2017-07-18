@@ -179,21 +179,33 @@ module Pod
     # @param  [Specification] spec the specification in question.
     #
     def requirement_satisfied_by?(requirement, activated, spec)
-      existing_vertices = activated.vertices.values.select do |v|
-        Specification.root_name(v.name) == requirement.root_name
-      end
-      existing = existing_vertices.map(&:payload).compact.first
-      requirement_satisfied =
-        if existing
-          existing.version == spec.version && requirement.requirement.satisfied_by?(spec.version)
-        else
-          requirement.requirement.satisfied_by? spec.version
-        end
-      requirement_satisfied && !(
-        spec.version.prerelease? &&
-        existing_vertices.flat_map(&:requirements).none? { |r| r.prerelease? || r.external_source }
-      ) && spec_is_platform_compatible?(activated, requirement, spec)
+      version = spec.version
+      return false unless requirement.requirement.satisfied_by?(version)
+      shared_possibility_versions, prerelease_requirement = possibility_versions_for_root_name(requirement, activated)
+      return false if !shared_possibility_versions.empty? && !shared_possibility_versions.include?(version)
+      return false if version.prerelease? && !prerelease_requirement
+      return false unless spec_is_platform_compatible?(activated, requirement, spec)
+      true
     end
+
+    def possibility_versions_for_root_name(requirement, activated)
+      prerelease_requirement = requirement.prerelease? || requirement.external_source
+      existing = activated.vertices.values.flat_map do |vertex|
+        next unless vertex.payload
+        next unless Specification.root_name(vertex.name) == requirement.root_name
+
+        prerelease_requirement ||= vertex.requirements.any? { |r| r.prerelease? || r.external_source }
+
+        if vertex.payload.respond_to?(:possibilities)
+          vertex.payload.possibilities.map(&:version)
+        else
+          vertex.payload.version
+        end
+      end.compact
+
+      [existing, prerelease_requirement]
+    end
+    private :possibility_versions_for_root_name
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
     # Easiest to resolve is (usually) defined by:
@@ -414,7 +426,7 @@ module Pod
               'version requirement to your Podfile ' \
               "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
               "or revert to a stable version by running `pod update #{name}`."
-          elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility
+          elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility && conflict.locked_requirement
             # Conflict was caused by a requirement from a local dependency.
             # Tell user to use `pod update`.
             message << "\n\nIt seems like you've changed the constraints of dependency `#{name}` " \
