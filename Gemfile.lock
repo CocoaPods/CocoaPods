@@ -16,6 +16,13 @@ GIT
       nap (~> 1.0)
 
 GIT
+  remote: https://github.com/CocoaPods/Molinillo.git
+  revision: 04dd4c8789823654bde00569d28b189a79926c9f
+  branch: master
+  specs:
+    molinillo (0.5.7)
+
+GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
   revision: c9b1cf5734523cf523497fd6de11f7240fd18944
   branch: master
@@ -91,11 +98,6 @@ GIT
   branch: seg-1.7.7-ruby-2.2
   specs:
     json (1.7.7)
-
-PATH
-  remote: ../Molinillo
-  specs:
-    molinillo (0.5.7)
 
 PATH
   remote: .
@@ -291,4 +293,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.15.2
+   1.15.3

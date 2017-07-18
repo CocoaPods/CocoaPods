@@ -411,64 +411,69 @@ module Pod
     # @param  [Molinillo::ResolverError] error
     #
     def handle_resolver_error(error)
-      message = error.message.dup
+      message = error.message
       type = Informative
       case error
       when Molinillo::VersionConflict
-        error.conflicts.each do |name, conflict|
-          local_pod_parent = conflict.requirement_trees.flatten.reverse.find(&:local?)
-          lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
-          if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
-            message = 'Due to the previous naïve CocoaPods resolver, ' \
-              "you were using a pre-release version of `#{name}`, " \
-              'without explicitly asking for a pre-release version, which now leads to a conflict. ' \
-              'Please decide to either use that pre-release version by adding the ' \
-              'version requirement to your Podfile ' \
-              "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
-              "or revert to a stable version by running `pod update #{name}`."
-          elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility && conflict.locked_requirement
-            # Conflict was caused by a requirement from a local dependency.
-            # Tell user to use `pod update`.
-            message << "\n\nIt seems like you've changed the constraints of dependency `#{name}` " \
-            "inside your development pod `#{local_pod_parent.name}`.\nYou should run `pod update #{name}` to apply " \
-            "changes you've made."
-          elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
-              (conflict.requirement && !(
-              conflict.requirement.prerelease? ||
-              conflict.requirement.external_source)
-              )
-            # Conflict was caused by not specifying an explicit version for the requirement #[name],
-            # and there is no available stable version satisfying constraints for the requirement.
-            message = "There are only pre-release versions available satisfying the following requirements:\n"
-            conflict.requirements.values.flatten.each do |r|
-              unless search_for(r).empty?
-                message << "\n\t'#{name}', '#{r.requirement}'\n"
+        message = error.message_with_trees(
+          :solver_name => 'CocoaPods',
+          :possibility_type => 'pod',
+          :version_for_spec => lambda(&:version),
+          :additional_message_for_conflict => lambda do |o, name, conflict|
+            local_pod_parent = conflict.requirement_trees.flatten.reverse.find(&:local?)
+            lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
+            if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
+              o << "\nDue to the previous naïve CocoaPods resolver, " \
+                "you were using a pre-release version of `#{name}`, " \
+                'without explicitly asking for a pre-release version, which now leads to a conflict. ' \
+                'Please decide to either use that pre-release version by adding the ' \
+                'version requirement to your Podfile ' \
+                "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
+                "or revert to a stable version by running `pod update #{name}`."
+            elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility && conflict.locked_requirement
+              # Conflict was caused by a requirement from a local dependency.
+              # Tell user to use `pod update`.
+              o << "\nIt seems like you've changed the constraints of dependency `#{name}` " \
+              "inside your development pod `#{local_pod_parent.name}`.\nYou should run `pod update #{name}` to apply " \
+              "changes you've made."
+            elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
+                (conflict.requirement && !(
+                conflict.requirement.prerelease? ||
+                conflict.requirement.external_source)
+                )
+              # Conflict was caused by not specifying an explicit version for the requirement #[name],
+              # and there is no available stable version satisfying constraints for the requirement.
+              o << "\nThere are only pre-release versions available satisfying the following requirements:\n"
+              conflict.requirements.values.flatten.each do |r|
+                unless search_for(r).empty?
+                  o << "\n\t'#{name}', '#{r.requirement}'\n"
+                end
               end
-            end
-            message << "\nYou should explicitly specify the version in order to install a pre-release version"
-          elsif !conflict.existing
-            conflicts = conflict.requirements.values.flatten.uniq
-            found_conflicted_specs = conflicts.reject { |c| search_for(c).empty? }
-            if found_conflicted_specs.empty?
-              # There are no existing specification inside any of the spec repos with given requirements.
-              type = NoSpecFoundError
-              dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'
-              message << "\n\nNone of your spec sources contain a spec satisfying "\
-                "the #{dependencies}: `#{conflicts.join(', ')}`." \
-                "\n\nYou have either:"
-              unless specs_updated?
-                message << "\n * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`."
-              end
-              message << "\n * mistyped the name or version." \
-                "\n * not added the source repo that hosts the Podspec to your Podfile." \
-                "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
+              o << "\nYou should explicitly specify the version in order to install a pre-release version"
+            elsif !conflict.existing
+              conflicts = conflict.requirements.values.flatten.uniq
+              found_conflicted_specs = conflicts.reject { |c| search_for(c).empty? }
+              if found_conflicted_specs.empty?
+                # There are no existing specification inside any of the spec repos with given requirements.
+                type = NoSpecFoundError
+                dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'
+                o << "\nNone of your spec sources contain a spec satisfying "\
+                  "the #{dependencies}: `#{conflicts.join(', ')}`." \
+                  "\n\nYou have either:"
+                unless specs_updated?
+                  o << "\n * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`."
+                end
+                o << "\n * mistyped the name or version." \
+                  "\n * not added the source repo that hosts the Podspec to your Podfile." \
+                  "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
 
-            else
-              message << "\n\nSpecs satisfying the `#{conflicts.join(', ')}` dependency were found, " \
-                'but they required a higher minimum deployment target.'
+              else
+                o << "\nSpecs satisfying the `#{conflicts.join(', ')}` dependency were found, " \
+                  'but they required a higher minimum deployment target.'
+              end
             end
-          end
-        end
+          end,
+        )
       end
       raise type, message
     end
