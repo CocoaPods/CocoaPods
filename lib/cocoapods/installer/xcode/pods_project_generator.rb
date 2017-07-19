@@ -290,7 +290,8 @@ module Pod
         end
 
         def add_resource_bundles_to_native_target(dependent_target, native_target)
-          dependent_target.resource_bundle_targets.each do |resource_bundle_target|
+          resource_bundle_targets = dependent_target.resource_bundle_targets + dependent_target.test_resource_bundle_targets
+          resource_bundle_targets.each do |resource_bundle_target|
             native_target.add_dependency(resource_bundle_target)
           end
         end

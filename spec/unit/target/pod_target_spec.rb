@@ -366,6 +366,15 @@ module Pod
         it 'returns correct embed frameworks script path for test unit test type' do
           @test_pod_target.embed_frameworks_script_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks.sh'
         end
+
+        it 'returns the correct resource path for test resource bundles' do
+          fa = Sandbox::FileAccessor.new(nil, @test_pod_target)
+          fa.stubs(:resource_bundles).returns('TestResourceBundle' => [Pathname.new('Model.xcdatamodeld')])
+          fa.stubs(:resources).returns([])
+          fa.stubs(:spec).returns(stub(:test_specification? => true))
+          @test_pod_target.stubs(:file_accessors).returns([fa])
+          @test_pod_target.resource_paths.should == ['$PODS_CONFIGURATION_BUILD_DIR/TestResourceBundle.bundle']
+        end
       end
     end
   end
