@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Ensure source urls are set when spec has subspecs with dependencies  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6888](https://github.com/CocoaPods/CocoaPods/pull/6888)
 
 ## 1.3.0.beta.3 (2017-07-19)
 
