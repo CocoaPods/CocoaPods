@@ -29,7 +29,7 @@ module Pod
     #
     def initialize(spec_or_path, source_urls)
       @linter = Specification::Linter.new(spec_or_path)
-      @source_urls = if @linter.spec && @linter.spec.dependencies.empty?
+      @source_urls = if @linter.spec && @linter.spec.dependencies.empty? && @linter.spec.recursive_subspecs.all? { |s| s.dependencies.empty? }
                        []
                      else
                        source_urls.map { |url| config.sources_manager.source_with_name_or_url(url) }.map(&:url)
