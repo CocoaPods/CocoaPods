@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Cache result of resource and framework paths  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6893](https://github.com/CocoaPods/CocoaPods/pull/6893)
+
 * Ensure source urls are set when spec has subspecs with dependencies  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6888](https://github.com/CocoaPods/CocoaPods/pull/6888)
