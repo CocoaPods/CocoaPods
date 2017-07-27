@@ -349,12 +349,12 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         e = lambda { resolver.resolve }.should.raise Informative
-        e.message.should == <<-EOS.strip
-\e[31m[!] CocoaPods could not find compatible versions for pod "JSONKit":
+        e.message.should.include <<-EOS.strip
+[!] CocoaPods could not find compatible versions for pod "JSONKit":
   In Podfile:
     JSONKit (= 1.4)
 
-    JSONKit (= 1.5pre)\e[0m
+    JSONKit (= 1.5pre)
         EOS
       end
 
@@ -366,15 +366,15 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         e = lambda { resolver.resolve }.should.raise Informative
-        e.message.should == <<-EOS.strip
-\e[31m[!] CocoaPods could not find compatible versions for pod "AFNetworking":
+        e.message.should.include <<-EOS.strip
+[!] CocoaPods could not find compatible versions for pod "AFNetworking":
   In Podfile:
     AFNetworking (> 2)
 
     RestKit (= 0.23.3) was resolved to 0.23.3, which depends on
       RestKit/Core (= 0.23.3) was resolved to 0.23.3, which depends on
         RestKit/Network (= 0.23.3) was resolved to 0.23.3, which depends on
-          AFNetworking (~> 1.3.0)\e[0m
+          AFNetworking (~> 1.3.0)
         EOS
       end
 
@@ -385,8 +385,8 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
-        e.message.should == <<-EOS.strip
-\e[31m[!] CocoaPods could not find compatible versions for pod "AFNetworking":
+        e.message.should.include <<-EOS.strip
+[!] CocoaPods could not find compatible versions for pod "AFNetworking":
   In Podfile:
     AFNetworking (= 999.999.999)
 
@@ -397,7 +397,7 @@ You have either:
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
 
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.\e[0m
+Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
         e.exit_status.should.equal(31)
       end
@@ -410,8 +410,8 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         resolver.specs_updated = true
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
-        e.message.should == <<-EOS.strip
-\e[31m[!] CocoaPods could not find compatible versions for pod "AFNetworking":
+        e.message.should.include <<-EOS.strip
+[!] CocoaPods could not find compatible versions for pod "AFNetworking":
   In Podfile:
     AFNetworking (= 999.999.999)
 
@@ -421,7 +421,7 @@ You have either:
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
 
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.\e[0m
+Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
         e.exit_status.should.equal(31)
       end
@@ -435,8 +435,8 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
 
         resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
-        e.message.should == <<-EOS.strip
-\e[31m[!] CocoaPods could not find compatible versions for pod "AFNetworking":
+        e.message.should.include <<-EOS.strip
+[!] CocoaPods could not find compatible versions for pod "AFNetworking":
   In snapshot (Podfile.lock):
     AFNetworking (= 1.4)
 
@@ -450,7 +450,7 @@ You have either:
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
 
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.\e[0m
+Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
         e.exit_status.should.equal(31)
       end
