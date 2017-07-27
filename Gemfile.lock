@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 04dd4c8789823654bde00569d28b189a79926c9f
+  revision: b17c754d2b93680e627b5a555ffe93c4ce4fc67c
   branch: master
   specs:
-    molinillo (0.5.7)
+    molinillo (0.6.0)
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
@@ -117,7 +117,7 @@ PATH
       escape (~> 0.0.4)
       fourflusher (~> 2.0.1)
       gh_inspector (~> 1.0)
-      molinillo (~> 0.5.7)
+      molinillo (~> 0.6.0)
       nap (~> 1.0)
       ruby-macho (~> 1.1)
       xcodeproj (>= 1.5.1, < 2.0)
