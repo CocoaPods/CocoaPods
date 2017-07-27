@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Show full requirement trees when a version conflict is encountered during
+  dependency resolution.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ##### Bug Fixes
 
