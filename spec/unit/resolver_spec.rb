@@ -349,7 +349,7 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         e = lambda { resolver.resolve }.should.raise Informative
-                e.message.should == <<-EOS.strip
+        e.message.should == <<-EOS.strip
 \e[31m[!] CocoaPods could not find compatible versions for pod "JSONKit":
   In Podfile:
     JSONKit (= 1.4)
