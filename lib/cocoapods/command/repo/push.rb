@@ -30,6 +30,7 @@ module Pod
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
+            ['--skip-tests', 'Lint skips building and running tests during validation'],
             ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
             'Opens default editor if no commit message is specified.'],
             ['--use-json', 'Push JSON spec to repo'],
@@ -52,6 +53,7 @@ module Pod
           @use_json = argv.flag?('use-json')
           @swift_version = argv.option('swift-version', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
+          @skip_tests = argv.flag?('skip-tests', false)
           super
         end
 
@@ -130,6 +132,7 @@ module Pod
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
+            validator.skip_tests = @skip_tests
             begin
               validator.validate
             rescue => e
