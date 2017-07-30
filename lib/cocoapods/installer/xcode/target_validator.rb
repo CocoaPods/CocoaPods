@@ -35,7 +35,6 @@ module Pod
           verify_no_duplicate_framework_and_library_names
           verify_no_static_framework_transitive_dependencies
           verify_no_pods_used_with_multiple_swift_versions
-          verify_framework_usage
         end
 
         private
@@ -106,25 +105,7 @@ module Pod
 
           unless error_messages.empty?
             raise Informative, 'The following pods are integrated into targets ' \
-            "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
-          end
-        end
-
-        def verify_framework_usage
-          aggregate_targets.each do |aggregate_target|
-            next if aggregate_target.requires_frameworks?
-
-            aggregate_target.user_build_configurations.keys.each do |config|
-              pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
-
-              swift_pods = pod_targets.select(&:uses_swift?)
-              unless swift_pods.empty?
-                raise Informative, 'Pods written in Swift can only be integrated as frameworks; ' \
-                  'add `use_frameworks!` to your Podfile or target to opt into using it. ' \
-                  "The Swift #{swift_pods.size == 1 ? 'Pod being used is' : 'Pods being used are'}: " +
-                  swift_pods.map(&:name).to_sentence
-              end
-            end
+              "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
           end
         end
       end
