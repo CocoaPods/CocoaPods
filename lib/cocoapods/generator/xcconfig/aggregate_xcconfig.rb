@@ -152,7 +152,9 @@ module Pod
           else
             # Make headers discoverable from $PODS_ROOT/Headers directory
             header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+            swift_search_paths = pod_targets.select(&:should_build?).select(&:uses_swift?).map(&:configuration_build_dir)
             {
+              'SWIFT_INCLUDE_PATHS' => '$(inherited) ' + XCConfigHelper.quote(swift_search_paths),
               # by `#import "…"`
               'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`
