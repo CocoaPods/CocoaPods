@@ -685,7 +685,72 @@ module Pod
         @analyzer.send(:pod_target_test_only?, pod_target_four, all_pod_targets).should.be.false
       end
 
-      #-------------------------------------------------------------------------#
+      it 'handles test only pod targets that depend on themselves as tests' do
+        pod_target_one = stub(:name => 'Pod1', :dependent_targets => [])
+        pod_target_one.stubs(:test_dependent_targets => [pod_target_one])
+        all_pod_targets = [pod_target_one]
+        @analyzer.send(:pod_target_test_only?, pod_target_one, all_pod_targets).should.be.false
+      end
+
+      it 'handles test only pod targets that depend on themselves as tests but are also dependent as sources' do
+        pod_target_one = stub(:name => 'Pod1', :dependent_targets => [])
+        pod_target_one.stubs(:test_dependent_targets => [pod_target_one])
+        pod_target_two = stub(:name => 'Pod2', :dependent_targets => [pod_target_one], :test_dependent_targets => [])
+        all_pod_targets = [pod_target_one, pod_target_two]
+        @analyzer.send(:pod_target_test_only?, pod_target_one, all_pod_targets).should.be.false
+      end
+
+      it 'includes pod target when declared in the target definition and is not test only' do
+        target_definition = stub
+        pod_target = stub(:name => 'Pod1', :dependent_targets => [], :test_dependent_targets => [], :target_definitions => [target_definition])
+        all_pod_targets = [pod_target]
+        @analyzer.stubs(:pod_target_test_only?).with(pod_target, all_pod_targets).returns(false)
+        @analyzer.send(:filter_pod_targets_for_target_definition, all_pod_targets, target_definition).should == [pod_target]
+      end
+
+      it 'includes pod target when declared in the pod target definition but has a test dependency on itself' do
+        target_definition = stub
+        pod_target = stub(:name => 'Pod1', :dependent_targets => [], :target_definitions => [target_definition])
+        pod_target.stubs(:test_dependent_targets => [pod_target])
+        all_pod_targets = [pod_target]
+        @analyzer.send(:filter_pod_targets_for_target_definition, all_pod_targets, target_definition).should == [pod_target]
+      end
+
+      it 'does not include pod target if declared within pod target definition and is a test only target' do
+        target_definition = stub
+        pod_target = stub(:name => 'Pod1', :dependent_targets => [], :test_dependent_targets => [], :target_definitions => [target_definition])
+        all_pod_targets = [pod_target]
+        @analyzer.stubs(:pod_target_test_only?).with(pod_target, all_pod_targets).returns(true)
+        @analyzer.send(:filter_pod_targets_for_target_definition, all_pod_targets, target_definition).should.be.empty
+      end
+
+      it 'does not include pod target if not within target definition' do
+        target_definition = stub
+        pod_target = stub(:name => 'Pod1', :dependent_targets => [], :test_dependent_targets => [], :target_definitions => [])
+        all_pod_targets = [pod_target]
+        @analyzer.send(:filter_pod_targets_for_target_definition, all_pod_targets, target_definition).should.be.empty
+      end
+
+      it 'handles complicated scenario of pod target dependencies' do
+        target_definition_one = stub
+        target_definition_two = stub
+        pod_target_one = stub(:name => 'Pod1', :dependent_targets => [], :test_dependent_targets => [], :target_definitions => [target_definition_one, target_definition_two])
+        pod_target_two = stub(:name => 'Pod2', :dependent_targets => [], :test_dependent_targets => [], :target_definitions => [target_definition_one])
+        pod_target_three = stub(:name => 'Pod3', :dependent_targets => [], :target_definitions => [target_definition_two])
+        pod_target_three.stubs(:test_dependent_targets => [pod_target_three])
+        pod_target_four = stub(:name => 'Pod4', :dependent_targets => [pod_target_one], :test_dependent_targets => [], :target_definitions => [target_definition_one])
+        pod_target_five = stub(:name => 'Pod5', :dependent_targets => [pod_target_one], :test_dependent_targets => [pod_target_three], :target_definitions => [target_definition_two])
+        all_pod_targets = [pod_target_one, pod_target_two, pod_target_three, pod_target_four, pod_target_five]
+        @analyzer.send(:filter_pod_targets_for_target_definition, all_pod_targets, target_definition_one).should == [
+          pod_target_one,
+          pod_target_two,
+          pod_target_four,
+        ]
+        @analyzer.send(:filter_pod_targets_for_target_definition, all_pod_targets, target_definition_two).should == [
+          pod_target_one,
+          pod_target_five,
+        ]
+      end
 
       describe 'extension targets' do
         before do

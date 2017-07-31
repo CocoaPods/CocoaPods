@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6917](https://github.com/CocoaPods/CocoaPods/pull/6917)
 
+* Properly install pod targets with test specs within subspecs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6915](https://github.com/CocoaPods/CocoaPods/pull/6915)
+
 * Add `--skip-tests` support `push` to push command  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6893](https://github.com/CocoaPods/CocoaPods/pull/6893)
