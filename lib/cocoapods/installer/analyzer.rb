@@ -429,15 +429,26 @@ module Pod
           end
         end
 
-        target.pod_targets = pod_targets.select do |pod_target|
-          target_definition_included = pod_target.target_definitions.include?(target_definition)
-          explicitly_defined_in_target_definition = target_definition.non_inherited_dependencies.map(&:name).include?(pod_target.name)
-          next false unless target_definition_included
-          next true if explicitly_defined_in_target_definition
-          !pod_target_test_only?(pod_target, pod_targets)
-        end
+        target.pod_targets = filter_pod_targets_for_target_definition(pod_targets, target_definition)
 
         target
+      end
+
+      # Returns a filtered list of pod targets that should or should not be part of the target definition. Pod targets
+      # used by tests only are filtered.
+      #
+      # @param [Array<PodTarget>] pod_targets
+      #        the array of pod targets to check against
+      #
+      # @param [TargetDefinition] target_definition
+      #        the target definition to use as the base for filtering
+      #
+      # @return [Array<PodTarget>] the filtered list of pod targets.
+      #
+      def filter_pod_targets_for_target_definition(pod_targets, target_definition)
+        pod_targets.select do |pod_target|
+          pod_target.target_definitions.include?(target_definition) && !pod_target_test_only?(pod_target, pod_targets)
+        end
       end
 
       # Returns true if a pod target is only used by other pod targets as a test dependency and therefore should
@@ -457,8 +468,12 @@ module Pod
         if @test_pod_target_analyzer_cache.key?(key)
           return @test_pod_target_analyzer_cache[key]
         end
-        source = pod_targets.any? { |pt| pt.dependent_targets.map(&:name).include?(name) }
-        test = pod_targets.any? { |pt| pt.test_dependent_targets.map(&:name).include?(name) }
+        source = pod_targets.any? do |pt|
+          pt.dependent_targets.map(&:name).include?(name)
+        end
+        test = pod_targets.any? do |pt|
+          pt.test_dependent_targets.reject { |dpt| dpt.name == pt.name }.map(&:name).include?(name)
+        end
         @test_pod_target_analyzer_cache[key] = !source && test
       end
 
