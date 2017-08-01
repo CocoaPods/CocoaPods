@@ -165,6 +165,13 @@ module Pod
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -framework "CoconutLib"'
           end
 
+          it 'includes other ld flags for transitive dependent targets' do
+            @coconut_pod_target.dependent_targets = [@monkey_pod_target]
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
+          end
+
           it 'includes other ld flags for test dependent targets' do
             @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)

@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Ensure transitive dependencies are linked to test targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6917](https://github.com/CocoaPods/CocoaPods/pull/6917)
+
 * Add `--skip-tests` support `push` to push command  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6893](https://github.com/CocoaPods/CocoaPods/pull/6893)

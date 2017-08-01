@@ -355,15 +355,41 @@ module Pod
     #         dependency upon.
     #
     def recursive_dependent_targets
-      targets = dependent_targets.clone
+      @recursive_dependent_targets ||= begin
+        targets = dependent_targets.clone
 
-      targets.each do |target|
-        target.dependent_targets.each do |t|
-          targets.push(t) unless t == self || targets.include?(t)
+        targets.each do |target|
+          target.dependent_targets.each do |t|
+            targets.push(t) unless t == self || targets.include?(t)
+          end
         end
-      end
 
-      targets
+        targets
+      end
+    end
+
+    # @return [Array<PodTarget>] the recursive targets that this target has a
+    #         test dependency upon.
+    #
+    def recursive_test_dependent_targets
+      @recursive_test_dependent_targets ||= begin
+        targets = test_dependent_targets.clone
+
+        targets.each do |target|
+          target.test_dependent_targets.each do |t|
+            targets.push(t) unless t == self || targets.include?(t)
+          end
+        end
+
+        targets
+      end
+    end
+
+    # @return [Array<PodTarget>] the canonical list of test dependent targets this target has a dependency upon.
+    #         This includes the parent target as well as its transitive dependencies.
+    #
+    def all_test_dependent_targets
+      [self, *recursive_dependent_targets, *recursive_test_dependent_targets].uniq
     end
 
     # Checks if the target should be included in the build configuration with
