@@ -498,6 +498,7 @@ module Pod
           pod_targets.each do |target|
             dependencies = transitive_dependencies_for_specs(target.specs.reject(&:test_specification?), target.platform, all_specs).group_by(&:root)
             test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
+            test_dependencies.delete_if { |k| dependencies.key? k }
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
           end
@@ -512,6 +513,7 @@ module Pod
             pod_targets.each do |target|
               dependencies = transitive_dependencies_for_specs(target.specs, target.platform, specs).group_by(&:root)
               test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
+              test_dependencies.delete_if { |k| dependencies.key? k }
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
             end

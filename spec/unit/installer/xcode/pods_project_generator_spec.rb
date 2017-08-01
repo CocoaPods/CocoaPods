@@ -260,16 +260,18 @@ module Pod
               @generator.stubs(:aggregate_targets).returns([@target])
             end
 
-            it 'adds test dependent targets to test native targets' do
+            it 'adds all test dependent targets to test native targets' do
               mock_native_target = mock('CoconutLib')
               mock_test_native_target = mock('CoconutLib-Unit-Tests')
 
               dependent_native_target = mock('DependentNativeTarget')
               test_dependent_native_target = mock('TestDependentNativeTarget')
 
-              dependent_target = mock('dependent-target', :should_build? => true, :native_target => dependent_native_target)
-              test_dependent_target = mock('dependent-test-target', :should_build? => true, :native_target => test_dependent_native_target)
-              test_dependent_target.expects(:should_build?).returns(true)
+              dependent_target = mock('dependent-target', :dependent_targets => [])
+              dependent_target.stubs(:should_build?).returns(true)
+              dependent_target.stubs(:native_target).returns(dependent_native_target)
+              test_dependent_target = mock('dependent-test-target', :native_target => test_dependent_native_target, :test_dependent_targets => [])
+              test_dependent_target.stubs(:should_build?).returns(true)
 
               @pod_target.stubs(:native_target).returns(mock_native_target)
               @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
@@ -282,7 +284,7 @@ module Pod
               mock_native_target.expects(:add_dependency).with(test_dependent_native_target).never
               mock_native_target.expects(:add_dependency).with(mock_native_target).never
 
-              mock_test_native_target.expects(:add_dependency).with(dependent_native_target).never
+              mock_test_native_target.expects(:add_dependency).with(dependent_native_target)
               mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)
               mock_test_native_target.expects(:add_dependency).with(mock_native_target)
 
@@ -296,7 +298,7 @@ module Pod
               test_dependent_target.expects(:should_build?).returns(true)
 
               @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
-              @pod_target.stubs(:test_dependent_targets).returns([test_dependent_target])
+              @pod_target.stubs(:all_test_dependent_targets).returns([test_dependent_target])
               @pod_target.stubs(:should_build? => false)
 
               mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)

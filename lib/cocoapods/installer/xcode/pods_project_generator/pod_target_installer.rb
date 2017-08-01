@@ -333,7 +333,7 @@ module Pod
           #
           def create_test_target_copy_resources_script(test_type)
             path = target.copy_resources_script_path_for_test_type(test_type)
-            pod_targets = [target, *target.test_dependent_targets]
+            pod_targets = target.all_test_dependent_targets
             resource_paths_by_config = { 'Debug' => pod_targets.flat_map(&:resource_paths) }
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
             update_changed_file(generator, path)
@@ -349,7 +349,7 @@ module Pod
           #
           def create_test_target_embed_frameworks_script(test_type)
             path = target.embed_frameworks_script_path_for_test_type(test_type)
-            pod_targets = [target, *target.test_dependent_targets]
+            pod_targets = target.all_test_dependent_targets
             framework_paths_by_config = { 'Debug' => pod_targets.flat_map(&:framework_paths) }
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
             update_changed_file(generator, path)

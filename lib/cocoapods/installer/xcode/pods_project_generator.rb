@@ -266,7 +266,7 @@ module Pod
         private
 
         def add_pod_target_test_dependencies(pod_target, frameworks_group)
-          test_dependent_targets = [pod_target, *pod_target.test_dependent_targets]
+          test_dependent_targets = pod_target.all_test_dependent_targets
           pod_target.test_native_targets.each do |test_native_target|
             test_dependent_targets.reject(&:should_build?).each do |test_dependent_target|
               add_resource_bundles_to_native_target(test_dependent_target, test_native_target)
