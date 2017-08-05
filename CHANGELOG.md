@@ -4,6 +4,20 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Show full requirement trees when a version conflict is encountered during
+  dependency resolution.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+##### Bug Fixes
+
+* Do not use `--delete` when copying resources to app target folder  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6927](https://github.com/CocoaPods/CocoaPods/issues/6927)
+
 ## 1.3.0 (2017-08-02)
 
 ##### Enhancements
