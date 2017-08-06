@@ -4,6 +4,19 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Show full requirement trees when a version conflict is encountered during 
+  dependency resolution.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+##### Bug Fixes
+
+* None.
+
+
 ## 1.3.1 (2017-08-02)
 
 ##### Enhancements
