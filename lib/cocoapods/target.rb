@@ -72,7 +72,7 @@ module Pod
     #         #requires_frameworks?.
     #
     def product_type
-      requires_frameworks? ? :framework : :static_library
+      requires_frameworks? && !static_framework? ? :framework : :static_library
     end
 
     # @return [String] A string suitable for debugging.
@@ -88,6 +88,12 @@ module Pod
     #
     def requires_frameworks?
       host_requires_frameworks? || false
+    end
+
+    # @return [Boolean] Whether the target should build a static framework.
+    #
+    def static_framework?
+      !is_a?(Pod::AggregateTarget) && specs.any? && specs.all?(&:static_framework)
     end
 
     #-------------------------------------------------------------------------#

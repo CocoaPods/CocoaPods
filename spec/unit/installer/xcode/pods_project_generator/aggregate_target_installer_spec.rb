@@ -207,6 +207,16 @@ module Pod
               script.read.should.not.include?('BananaLib.framework')
             end
 
+            it 'does not add pods to the embed frameworks script if they are static' do
+              @pod_target.stubs(:static_framework? => true)
+              @pod_target.stubs(:requires_frameworks? => true)
+              @target.stubs(:requires_frameworks? => true)
+              @installer.install!
+              support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+              script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
+              script.read.should.not.include?('BananaLib.framework')
+            end
+
             it 'creates the acknowledgements files ' do
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')

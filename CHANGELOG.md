@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   dependency resolution.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Add support for source static library frameworks
+  [Paul Beusterien](https://github.com/paulb777)
+  [#6811](https://github.com/CocoaPods/CocoaPods/pull/6811)
+
 ##### Bug Fixes
 
 * None.
@@ -111,7 +115,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ## 1.3.0.beta.2 (2017-06-22)
 
 ##### Enhancements
-
 * Add inputs and outputs for resources script phase  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6806](https://github.com/CocoaPods/CocoaPods/pull/6806)

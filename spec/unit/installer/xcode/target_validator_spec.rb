@@ -133,6 +133,7 @@ module Pod
               project 'SampleProject/SampleProject'
               use_frameworks!
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
+              pod 'CoconutLib',      :path => (fixture_path + 'coconut-lib').to_s
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
               pod 'monkey',          :path => (fixture_path + 'monkey').to_s
@@ -148,6 +149,11 @@ module Pod
           end
 
           it 'detects transitive static dependencies which are linked directly to the user target' do
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.raise(Informative) { @validator.validate! }.message.should.match /transitive.*monkey.a/
+          end
+
+          it 'detects transitive static dependencies which are linked directly to the user target with stubbing' do
             Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
             @validator = create_validator(config.sandbox, @podfile, @lockfile)
             should.raise(Informative) { @validator.validate! }.message.should.match /transitive.*libThing/
@@ -162,6 +168,13 @@ module Pod
 
           it 'allows transitive static dependencies when both dependencies are linked against the user target' do
             PodTarget.any_instance.stubs(:should_build? => false)
+            Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.not.raise(Informative) { @validator.validate! }
+          end
+
+          it 'allows transitive static dependencies when building a static framework' do
+            PodTarget.any_instance.stubs(:static_framework? => true)
             Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
             @validator = create_validator(config.sandbox, @podfile, @lockfile)
             should.not.raise(Informative) { @validator.validate! }

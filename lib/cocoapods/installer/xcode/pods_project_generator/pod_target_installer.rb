@@ -25,7 +25,9 @@ module Pod
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
               if target.requires_frameworks?
-                create_info_plist_file
+                unless target.static_framework?
+                  create_info_plist_file
+                end
                 create_module_map
                 create_umbrella_header do |generator|
                   file_accessors = target.file_accessors
@@ -39,6 +41,9 @@ module Pod
                                        end
                 end
                 create_build_phase_to_symlink_header_folders
+                if target.static_framework?
+                  create_build_phase_to_move_static_framework_archive
+                end
               end
               create_prefix_header
               create_dummy_source
@@ -385,6 +390,22 @@ module Pod
           base="$CONFIGURATION_BUILD_DIR/$WRAPPER_NAME"
           ln -fs "$base/${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/}" "$base/${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
           ln -fs "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/}" "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
+            eos
+          end
+
+          # Creates a build phase to put the static framework archive in the appropriate framework location
+          # Since Xcode does not provide template support for static library frameworks, we've built a static library
+          # of the form lib{LibraryName}.a. We need to move that to the framework location -
+          # {LibraryName}.framework/{LibraryName}.
+          #
+          # @return [void]
+          #
+          def create_build_phase_to_move_static_framework_archive
+            build_phase = native_target.new_shell_script_build_phase('Setup Static Framework Archive')
+            build_phase.shell_script = <<-eos.strip_heredoc
+          mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules"
+          cp "${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
+          cp "${MODULEMAP_FILE}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/module.modulemap"
             eos
           end
 

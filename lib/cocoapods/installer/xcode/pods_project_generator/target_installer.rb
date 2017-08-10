@@ -81,7 +81,11 @@ module Pod
             end
 
             if target.requires_frameworks?
-              settings['PRODUCT_NAME'] = target.product_module_name
+              framework_name = target.product_module_name
+              settings['PRODUCT_NAME'] = framework_name
+              if target.static_framework?
+                settings['PUBLIC_HEADERS_FOLDER_PATH'] = framework_name + '.framework' + '/Headers'
+              end
             else
               settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
             end
