@@ -291,6 +291,27 @@ module Pod
               @generator.send(:set_target_dependencies)
             end
 
+            it 'adds dependencies to pod targets that are not part of any aggregate target' do
+              @target.stubs(:pod_targets).returns([])
+              @generator.expects(:pod_targets).returns([@pod_target])
+              mock_native_target = mock('CoconutLib')
+
+              dependent_native_target = mock('DependentNativeTarget')
+              dependent_target = mock('dependent-target', :dependent_targets => [])
+              dependent_target.stubs(:should_build?).returns(true)
+              dependent_target.stubs(:native_target).returns(dependent_native_target)
+
+              @pod_target.stubs(:native_target).returns(mock_native_target)
+              @pod_target.stubs(:test_native_targets).returns([])
+              @pod_target.stubs(:dependent_targets).returns([dependent_target])
+              @pod_target.stubs(:test_dependent_targets).returns([])
+              @pod_target.stubs(:should_build? => true)
+
+              mock_native_target.expects(:add_dependency).with(dependent_native_target)
+
+              @generator.send(:set_target_dependencies)
+            end
+
             it 'adds test dependencies to test native targets for a pod target that should not be built' do
               mock_test_native_target = mock('CoconutLib-Unit-Tests')
               test_dependent_native_target = mock('TestDependentNativeTarget')

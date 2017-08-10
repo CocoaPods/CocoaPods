@@ -18,8 +18,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.
-
+* Wire dependencies for pod targets not part of any aggregate target  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6948](https://github.com/CocoaPods/CocoaPods/pull/6948)
 
 ## 1.3.1 (2017-08-02)
 
