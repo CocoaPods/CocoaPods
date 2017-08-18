@@ -88,6 +88,9 @@ module Pod
                 settings['PRIVATE_HEADERS_FOLDER_PATH'] = framework_name + '.framework' + '/PrivateHeaders'
               end
             else
+              # if target.uses_swift?
+              #   settings['PRODUCT_NAME'] = target.product_module_name
+              # end
               settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
             end
 
@@ -169,16 +172,12 @@ module Pod
           # Creates the module map file which ensures that the umbrella header is
           # recognized with a customized path
           #
-          # @yield_param [Generator::ModuleMap]
-          #              yielded once to configure the private headers
-          #
           # @return [void]
           #
           def create_module_map
             path = target.module_map_path
             UI.message "- Generating module map file at #{UI.path(path)}" do
               generator = Generator::ModuleMap.new(target)
-              yield generator if block_given?
               update_changed_file(generator, path)
               add_file_to_support_group(path)
 

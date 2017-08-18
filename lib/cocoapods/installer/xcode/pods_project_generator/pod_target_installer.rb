@@ -27,26 +27,25 @@ module Pod
               add_files_to_build_phases
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
-              if target.requires_frameworks?
-                unless target.static_framework?
-                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
-                end
-                create_module_map
-                create_umbrella_header do |generator|
-                  file_accessors = target.file_accessors
-                  file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
-                  generator.imports += if header_mappings_dir
-                                         file_accessors.flat_map(&:public_headers).map do |pathname|
-                                           pathname.relative_path_from(header_mappings_dir)
-                                         end
-                                       else
-                                         file_accessors.flat_map(&:public_headers).map(&:basename)
+              create_module_map
+              create_umbrella_header do |generator|
+                file_accessors = target.file_accessors
+                file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
+                generator.imports += if header_mappings_dir
+                                       file_accessors.flat_map(&:public_headers).map do |pathname|
+                                         pathname.relative_path_from(header_mappings_dir)
                                        end
-                end
-                create_build_phase_to_symlink_header_folders
+                                     else
+                                       file_accessors.flat_map(&:public_headers).map(&:basename)
+                                     end
+              end
+              if target.requires_frameworks?
                 if target.static_framework?
                   create_build_phase_to_move_static_framework_archive
                 end
+                create_build_phase_to_symlink_header_folders
+              else
+                add_copy_module_map_build_phase
               end
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
@@ -661,9 +660,35 @@ module Pod
               copy_phase.symbol_dst_subfolder_spec = :products_directory
               copy_phase.dst_path = "$(#{acl.upcase}_HEADERS_FOLDER_PATH)/#{sub_dir}"
               copy_phase.add_file_reference(file_ref, true)
+            elsif acl != 'Project'
+              relative_path = file_ref.real_path.basename
+              copy_phase_name = "Copy #{acl} Headers"
+              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
+                native_target.new_copy_files_build_phase(copy_phase_name)
+              copy_phase.symbol_dst_subfolder_spec = :products_directory
+              copy_phase.dst_path = 'Headers/'
+              copy_phase.add_file_reference(file_ref, true)
             else
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = [acl]
+            end
+          end
+
+          def support_files_group
+              pod_name = target.pod_name
+              dir = target.support_files_dir
+              project.pod_support_files_group(pod_name, dir)
+          end
+
+          def add_copy_module_map_build_phase(path = target.module_map_path.relative_path_from(target.support_files_dir))
+            if !target.requires_frameworks? && !target.uses_swift?
+              file_ref = support_files_group.find_file_by_path(path.to_s)
+              copy_phase_name = 'Copy modulemap'
+              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
+                native_target.new_copy_files_build_phase(copy_phase_name)
+              copy_phase.symbol_dst_subfolder_spec = :products_directory
+              copy_phase.dst_path = 'Headers/'
+              copy_phase.add_file_reference(file_ref, false)
             end
           end
 
