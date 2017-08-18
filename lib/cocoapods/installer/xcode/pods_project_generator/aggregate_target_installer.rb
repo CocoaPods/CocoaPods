@@ -20,6 +20,9 @@ module Pod
                 create_info_plist_file
                 create_module_map
                 create_umbrella_header
+              elsif target.uses_swift?
+                create_module_map
+                create_umbrella_header
               end
               # Because embedded targets live in their host target, CocoaPods
               # copies all of the embedded target's pod_targets to its host

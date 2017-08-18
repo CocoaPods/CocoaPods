@@ -153,7 +153,7 @@ module Pod
     #         defines the module structure for the compiler.
     #
     def module_map_path
-      support_files_dir + "#{label}.modulemap"
+      support_files_dir + 'module.modulemap'
     end
 
     # @return [Pathname] the absolute path of the prefix header file.
