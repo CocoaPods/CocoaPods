@@ -40,10 +40,13 @@ module Pod
                                      end
               end
               if target.requires_frameworks?
+                unless target.static_framework?
+                  create_info_plist_file
+                end
+                create_build_phase_to_symlink_header_folders
                 if target.static_framework?
                   create_build_phase_to_move_static_framework_archive
                 end
-                create_build_phase_to_symlink_header_folders
               else
                 add_copy_module_map_build_phase
                 add_copy_umbrella_header_build_phase
