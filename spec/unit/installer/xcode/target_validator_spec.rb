@@ -359,26 +359,6 @@ module Pod
             lambda { @validator.validate! }.should.not.raise
           end
         end
-
-        #-------------------------------------------------------------------------#
-
-        describe '#verify_framework_usage' do
-          it 'raises when Swift pods are used without explicit `use_frameworks!`' do
-            fixture_path = ROOT + 'spec/fixtures'
-            config.repos_dir = fixture_path + 'spec-repos'
-            podfile = Pod::Podfile.new do
-              platform :ios, '8.0'
-              project 'SampleProject/SampleProject'
-              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
-              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject'
-            end
-            lockfile = generate_lockfile
-
-            @validator = create_validator(config.sandbox, podfile, lockfile)
-            should.raise(Informative) { @validator.validate! }.message.should.match /use_frameworks/
-          end
-        end
       end
     end
   end
