@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Wrap platform warning message with quotes  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6968](https://github.com/CocoaPods/CocoaPods/pull/6968)
+
 * Wire dependencies for pod targets not part of any aggregate target  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6948](https://github.com/CocoaPods/CocoaPods/pull/6948)
