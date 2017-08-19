@@ -55,7 +55,7 @@ module Pod
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             'SKIP_INSTALL' => 'YES',
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) ',
-            'SWIFT_INCLUDE_PATHS' => '$(inherited) ${PODS_CONFIGURATION_BUILD_DIR}/' + target.name,
+            'SWIFT_INCLUDE_PATHS' => '$(inherited) ${LIBRARY_SEARCH_PATHS}',
             # 'USE_HEADERMAP' => 'NO'
           }
 
