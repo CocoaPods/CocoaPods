@@ -46,6 +46,7 @@ module Pod
                 create_build_phase_to_symlink_header_folders
               else
                 add_copy_module_map_build_phase
+                add_copy_umbrella_header_build_phase
               end
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
@@ -684,6 +685,18 @@ module Pod
             if !target.requires_frameworks? && !target.uses_swift?
               file_ref = support_files_group.find_file_by_path(path.to_s)
               copy_phase_name = 'Copy modulemap'
+              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
+                native_target.new_copy_files_build_phase(copy_phase_name)
+              copy_phase.symbol_dst_subfolder_spec = :products_directory
+              copy_phase.add_file_reference(file_ref, false)
+            end
+          end
+
+          # FIXME: Umbrella header should be copied as part of copy public headers?
+          def add_copy_umbrella_header_build_phase(path = target.umbrella_header_path.relative_path_from(target.support_files_dir))
+            if !target.requires_frameworks? && !target.uses_swift?
+              file_ref = support_files_group.find_file_by_path(path.to_s)
+              copy_phase_name = 'Copy umbrella header'
               copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
                 native_target.new_copy_files_build_phase(copy_phase_name)
               copy_phase.symbol_dst_subfolder_spec = :products_directory
