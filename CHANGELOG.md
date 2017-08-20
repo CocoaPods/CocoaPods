@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#6811](https://github.com/CocoaPods/CocoaPods/pull/6811)
 
+* Add Private Header support to static frameworks
+  [paulb777](https://github.com/paulb777)
+  [#6969](https://github.com/CocoaPods/CocoaPods/issues/6969)
+
 ##### Bug Fixes
 
 * Wrap platform warning message with quotes  
