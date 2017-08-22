@@ -208,12 +208,14 @@ module Pod
         #
         def set_target_dependencies
           frameworks_group = project.frameworks_group
+          test_only_pod_targets = pod_targets.dup
           aggregate_targets.each do |aggregate_target|
             is_app_extension = !(aggregate_target.user_targets.map(&:symbol_type) &
                                  [:app_extension, :watch_extension, :watch2_extension, :tv_extension, :messages_extension]).empty?
             is_app_extension ||= aggregate_target.user_targets.any? { |ut| ut.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY') == 'YES' }
 
             aggregate_target.pod_targets.each do |pod_target|
+              test_only_pod_targets.delete(pod_target)
               configure_app_extension_api_only_for_target(aggregate_target) if is_app_extension
 
               unless pod_target.should_build?
@@ -226,9 +228,24 @@ module Pod
               configure_app_extension_api_only_for_target(pod_target) if is_app_extension
 
               unless pod_target.static_framework?
-                add_dependent_targets_to_native_target(pod_target.dependent_targets, pod_target.native_target, is_app_extension, pod_target.requires_frameworks?, frameworks_group)
+                add_dependent_targets_to_native_target(pod_target.dependent_targets,
+                                                       pod_target.native_target, is_app_extension,
+                                                       pod_target.requires_frameworks?, frameworks_group)
                 add_pod_target_test_dependencies(pod_target, frameworks_group)
               end
+            end
+          end
+          # Wire up remaining pod targets used only by tests and are not used by any aggregate target.
+          test_only_pod_targets.each do |pod_target|
+            unless pod_target.should_build?
+              add_pod_target_test_dependencies(pod_target, frameworks_group)
+              next
+            end
+            unless pod_target.static_framework?
+              add_dependent_targets_to_native_target(pod_target.dependent_targets,
+                                                     pod_target.native_target, false,
+                                                     pod_target.requires_frameworks?, frameworks_group)
+              add_pod_target_test_dependencies(pod_target, frameworks_group)
             end
           end
         end
