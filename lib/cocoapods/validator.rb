@@ -14,6 +14,10 @@ module Pod
   class Validator
     include Config::Mixin
 
+    # The default version of Swift to use when linting pods
+    #
+    DEFAULT_SWIFT_VERSION = '3.0'
+
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.
     #
@@ -252,7 +256,12 @@ module Pod
     # @return [String] the SWIFT_VERSION to use for validation.
     #
     def swift_version
-      @swift_version ||= dot_swift_version || '3.0'
+      return @swift_version if defined?(@swift_version)
+      if version = dot_swift_version
+        @swift_version = version
+      else
+        DEFAULT_SWIFT_VERSION
+      end
     end
 
     # Set the SWIFT_VERSION that should be used to validate the pod.
@@ -386,7 +395,7 @@ module Pod
     end
 
     def validate_dot_swift_version
-      if !used_swift_version.nil? && dot_swift_version.nil?
+      if !used_swift_version.nil? && @swift_version.nil?
         warning(:swift_version,
                 'The validator for Swift projects uses ' \
                 'Swift 3.0 by default, if you are using a different version of ' \

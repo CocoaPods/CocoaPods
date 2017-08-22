@@ -931,28 +931,41 @@ module Pod
         validator.results.count.should == 0
       end
 
-      it 'fails without the presence of a .swift-version file for Swift Pods' do
-        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+      describe 'with a user provided swift-version' do
+        it 'succeeds with a --swift-version provided value' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod
-        validator.validate
-        validator.results.count.should == 1
+          validator = test_swiftpod
+          validator.swift_version = '3.1.0'
+          validator.validate
+          validator.results.count.should == 0
+        end
 
-        result = validator.results.first
-        result.type.should == :warning
-        result.message.should == 'The validator for ' \
-          'Swift projects uses Swift 3.0 by default, if you are using a ' \
-          'different version of swift you can use a `.swift-version` file ' \
-          'to set the version for your Pod. For example to use Swift 2.3, ' \
-          "run: \n    `echo \"2.3\" > .swift-version`"
+        it 'succeeds with a .swift-version file' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+          validator = test_swiftpod_with_dot_swift_version
+          validator.validate
+          validator.results.count.should == 0
+        end
       end
 
-      it 'succeeds with the presence of a .swift-version file for Swift Pods' do
-        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+      describe 'wihout a user provided swift version' do
+        it 'warns for Swift Pods' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod_with_dot_swift_version
-        validator.validate
-        validator.results.count.should == 0
+          validator = test_swiftpod
+          validator.validate
+          validator.results.count.should == 1
+
+          result = validator.results.first
+          result.type.should == :warning
+          result.message.should == 'The validator for ' \
+            'Swift projects uses Swift 3.0 by default, if you are using a ' \
+            'different version of swift you can use a `.swift-version` file ' \
+            'to set the version for your Pod. For example to use Swift 2.3, ' \
+            "run: \n    `echo \"2.3\" > .swift-version`"
+        end
       end
 
       describe '#swift_version' do
