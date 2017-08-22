@@ -53,4 +53,4 @@ Integrating target `Pods-Example` (`Example.xcodeproj` project)
 
 -> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
 
-[!] Automatically assigning platform ios with version 8.2 on target Example because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
+[!] Automatically assigning platform `ios` with version `8.2` on target `Example` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.

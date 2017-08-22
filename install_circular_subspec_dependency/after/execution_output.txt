@@ -55,4 +55,4 @@ Integrating target `Pods-SubSpecCircular` (`SubSpecCircular.xcodeproj` project)
 
 -> Pod installation complete! There are 3 dependencies from the Podfile and 3 total pods installed.
 
-[!] Automatically assigning platform ios with version 9.3 on target SubSpecCircular because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
+[!] Automatically assigning platform `ios` with version `9.3` on target `SubSpecCircular` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
