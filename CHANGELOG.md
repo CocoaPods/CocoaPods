@@ -26,6 +26,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6948](https://github.com/CocoaPods/CocoaPods/pull/6948)
 
+* Fix validation warnings when using --swift-version  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [#6971](https://github.com/CocoaPods/CocoaPods/issue/6971)
+
+
 ## 1.3.1 (2017-08-02)
 
 ##### Enhancements
