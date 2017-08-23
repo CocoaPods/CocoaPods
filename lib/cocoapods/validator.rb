@@ -16,7 +16,7 @@ module Pod
 
     # The default version of Swift to use when linting pods
     #
-    DEFAULT_SWIFT_VERSION = '3.0'
+    DEFAULT_SWIFT_VERSION = '3.0'.freeze
 
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.
