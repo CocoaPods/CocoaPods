@@ -72,6 +72,18 @@ module Pod
               'AppStore' => 'BananaLib.framework/Headers',
             }
           end
+
+          it 'verify private header path for a static library framework' do
+            @pod_target.stubs(:requires_frameworks?).returns(true)
+            @pod_target.stubs(:static_framework?).returns(true)
+            @installer.send(:add_target)
+            @installer.send(:native_target).resolved_build_setting('PRIVATE_HEADERS_FOLDER_PATH').should == {
+              'Release' => 'BananaLib.framework/PrivateHeaders',
+              'Debug' => 'BananaLib.framework/PrivateHeaders',
+              'Test' => 'BananaLib.framework/PrivateHeaders',
+              'AppStore' => 'BananaLib.framework/PrivateHeaders',
+            }
+          end
         end
       end
     end
