@@ -178,9 +178,10 @@ module Pod
           # @return [void]
           #
           def add_test_targets
-            target.supported_test_types.each do |test_type|
+            target.test_specifications.each do |test_spec|
+              test_type = test_spec.test_type
               product_type = target.product_type_for_test_type(test_type)
-              name = target.test_target_label(test_type)
+              name = target.test_target_label(test_spec)
               platform_name = target.platform.name
               language = target.uses_swift? ? :swift : :objc
               native_test_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
@@ -202,8 +203,8 @@ module Pod
               end
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
-              create_test_target_embed_frameworks_script(test_type)
-              create_test_target_copy_resources_script(test_type)
+              create_test_target_embed_frameworks_script(test_spec)
+              create_test_target_copy_resources_script(test_spec)
 
               target.test_native_targets << native_test_target
             end
@@ -242,7 +243,8 @@ module Pod
                 test_specification = file_accessor.spec.test_specification?
 
                 if test_specification
-                  target.test_resource_bundle_targets << bundle_target
+                  target.test_resource_bundle_targets_by_spec_name[file_accessor.spec_consumer.spec.name] ||= []
+                  target.test_resource_bundle_targets_by_spec_name[file_accessor.spec_consumer.spec.name] << bundle_target
                 else
                   target.resource_bundle_targets << bundle_target
                 end
@@ -311,34 +313,34 @@ module Pod
           # @return [void]
           #
           def create_test_xcconfig_files
-            target.supported_test_types.each do |test_type|
-              path = target.xcconfig_path(test_type.to_s)
-              xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target, true)
+            target.test_specifications.each do |test_spec|
+              test_type = test_spec.test_type
+              path = target.xcconfig_path("#{test_type.capitalize}-#{test_spec.base_name}")
+              xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target, test_spec)
               update_changed_file(xcconfig_gen, path)
               xcconfig_file_ref = add_file_to_support_group(path)
 
-              target.test_native_targets.each do |test_target|
-                test_target.build_configurations.each do |test_target_bc|
-                  test_target_swift_debug_hack(test_target_bc)
-                  test_target_bc.base_configuration_reference = xcconfig_file_ref
-                end
+              test_native_target = target.native_target_for_spec(test_spec)
+              test_native_target.build_configurations.each do |test_target_bc|
+                test_target_swift_debug_hack(test_target_bc)
+                test_target_bc.base_configuration_reference = xcconfig_file_ref
               end
 
               # also apply the private config to resource bundle test targets.
-              apply_xcconfig_file_ref_to_resource_bundle_targets(target.test_resource_bundle_targets, xcconfig_file_ref)
+              apply_xcconfig_file_ref_to_resource_bundle_targets(target.test_resource_bundle_targets_for_test_spec(test_spec), xcconfig_file_ref)
             end
           end
 
           # Creates a script that copies the resources to the bundle of the test target.
           #
-          # @param [Symbol] test_type
-          #        The test type to create the script for.
+          # @param [Specification] test_spec
+          #        The test spec to create the script for.
           #
           # @return [void]
           #
-          def create_test_target_copy_resources_script(test_type)
-            path = target.copy_resources_script_path_for_test_type(test_type)
-            pod_targets = target.all_test_dependent_targets
+          def create_test_target_copy_resources_script(test_spec)
+            path = target.copy_resources_script_path_for_test_spec(test_spec)
+            pod_targets = target.test_dependent_targets_for_test_spec(test_spec)
             resource_paths_by_config = { 'Debug' => pod_targets.flat_map(&:resource_paths) }
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
             update_changed_file(generator, path)
@@ -347,14 +349,14 @@ module Pod
 
           # Creates a script that embeds the frameworks to the bundle of the test target.
           #
-          # @param [Symbol] test_type
-          #        The test type to create the script for.
+          # @param [Specification] test_spec
+          #        The test spec to create the script for.
           #
           # @return [void]
           #
-          def create_test_target_embed_frameworks_script(test_type)
-            path = target.embed_frameworks_script_path_for_test_type(test_type)
-            pod_targets = target.all_test_dependent_targets
+          def create_test_target_embed_frameworks_script(test_spec)
+            path = target.embed_frameworks_script_path_for_test_spec(test_spec)
+            pod_targets = target.test_dependent_targets_for_test_spec(test_spec)
             framework_paths_by_config = { 'Debug' => pod_targets.flat_map(&:framework_paths) }
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
             update_changed_file(generator, path)

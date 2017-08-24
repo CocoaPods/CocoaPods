@@ -512,10 +512,14 @@ module Pod
           end
           pod_targets.each do |target|
             dependencies = transitive_dependencies_for_specs(target.specs.reject(&:test_specification?), target.platform, all_specs).group_by(&:root)
-            test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
-            test_dependencies.delete_if { |k| dependencies.key? k }
+            test_dependent_targets_by_spec_name = target.specs.select(&:test_specification?).each_with_object({}) do |test_spec, hash|
+              test_dependencies = transitive_dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
+              test_dependencies.delete_if { |k| dependencies.key? k }
+              hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+            end
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
-            target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+            target.test_dependent_targets = test_dependent_targets_by_spec_name.values.flatten.uniq
+            target.test_dependent_targets_by_spec_name = test_dependent_targets_by_spec_name
           end
         else
           dedupe_cache = {}
@@ -524,13 +528,16 @@ module Pod
             pod_targets = grouped_specs.flat_map do |pod_specs|
               generate_pod_target([target_definition], pod_specs).scoped(dedupe_cache)
             end
-
             pod_targets.each do |target|
               dependencies = transitive_dependencies_for_specs(target.specs, target.platform, specs).group_by(&:root)
-              test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?), target.platform, all_specs).group_by(&:root)
-              test_dependencies.delete_if { |k| dependencies.key? k }
+              test_dependent_targets_by_spec_name = target.specs.select(&:test_specification?).each_with_object({}) do |test_spec, hash|
+                test_dependencies = transitive_dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
+                test_dependencies.delete_if { |k| dependencies.key? k }
+                hash[test_spec.name] = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
+              end
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
-              target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
+              target.test_dependent_targets = test_dependent_targets_by_spec_name.values.flatten.uniq
+              target.test_dependent_targets_by_spec_name = test_dependent_targets_by_spec_name
             end
           end
         end

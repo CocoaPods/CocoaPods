@@ -16,12 +16,12 @@ module Pod
         #
         # @param  [Target] target @see target
         #
-        # @param  [Boolean] test_xcconfig
-        #         whether this is an xcconfig for a test native target.
+        # @param  [Specification] test_spec
+        #         If not `nil` then this xcconfig is for a test specification.
         #
-        def initialize(target, test_xcconfig = false)
+        def initialize(target, test_spec = nil)
           @target = target
-          @test_xcconfig = test_xcconfig
+          @test_spec = test_spec
         end
 
         # @return [Xcodeproj::Config] The generated xcconfig.
@@ -53,7 +53,7 @@ module Pod
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
             'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(search_paths),
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
-            'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target, @test_xcconfig),
+            'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target, !@test_spec.nil?),
             'PODS_ROOT' => '${SRCROOT}',
             'PODS_TARGET_SRCROOT' => target.pod_target_srcroot,
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
@@ -70,12 +70,12 @@ module Pod
           end
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
           recursive_dependent_targets = target.recursive_dependent_targets
-          @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, recursive_dependent_targets, @test_xcconfig)
-          if @test_xcconfig
-            test_dependent_targets = [target, *target.recursive_test_dependent_targets].uniq
-            @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, test_dependent_targets - recursive_dependent_targets, @test_xcconfig)
-            XCConfigHelper.generate_vendored_build_settings(nil, target.all_test_dependent_targets, @xcconfig)
-            XCConfigHelper.generate_other_ld_flags(nil, target.all_test_dependent_targets, @xcconfig)
+          @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, recursive_dependent_targets, !@test_spec.nil?)
+          unless @test_spec.nil?
+            test_dependent_targets = target.test_dependent_targets_for_test_spec(@test_spec)
+            @xcconfig.merge! XCConfigHelper.settings_for_dependent_targets(target, test_dependent_targets - recursive_dependent_targets, !@test_spec.nil?)
+            XCConfigHelper.generate_vendored_build_settings(nil, test_dependent_targets, @xcconfig)
+            XCConfigHelper.generate_other_ld_flags(nil, test_dependent_targets, @xcconfig)
             XCConfigHelper.generate_ld_runpath_search_paths(target, false, true, @xcconfig)
           end
           @xcconfig
