@@ -8,20 +8,15 @@ git:
 
 matrix:
   include:
-  - rvm: 2.4.0
+  - rvm: 2.4.1
     env: COCOAPODS_CI_TASKS=LINT
     git:
       submodules: false
 
 rvm:
-  # OS X 10.9.5-10.10.0 (2.0.0-p481)
-  - 2.0.0-p481
-  # OS X 10.9.3-10.9.4
-  - 2.0.0-p451
-  # OS X 10.9.0-10.9.2
-  # TODO: currently unavailable: https://github.com/travis-ci/travis-ci/issues/2918
-  # - 2.0.0-p247
-  - 2.4.0
+  - 2.0.0-p647
+  - 2.3.4
+  - 2.4.1
 
 env:
   - COCOAPODS_CI_TASKS=SPECS
