@@ -22,9 +22,10 @@ module Pod
       #
       def integrate!
         UI.section(integration_message) do
-          target.test_native_targets.each do |native_target|
-            add_embed_frameworks_script_phase(native_target)
-            add_copy_resources_script_phase(native_target)
+          target.test_specifications.each do |test_spec|
+            native_target = target.native_target_for_spec(test_spec)
+            add_embed_frameworks_script_phase(native_target, test_spec)
+            add_copy_resources_script_phase(native_target, test_spec)
           end
         end
       end
@@ -44,10 +45,9 @@ module Pod
       #
       # @return [void]
       #
-      def add_copy_resources_script_phase(native_target)
-        test_type = target.test_type_for_product_type(native_target.symbol_type)
-        script_path = "${PODS_ROOT}/#{target.copy_resources_script_path_for_test_type(test_type).relative_path_from(target.sandbox.root)}"
-        resource_paths = target.all_test_dependent_targets.flat_map(&:resource_paths)
+      def add_copy_resources_script_phase(native_target, test_spec)
+        script_path = "${PODS_ROOT}/#{target.copy_resources_script_path_for_test_spec(test_spec).relative_path_from(target.sandbox.root)}"
+        resource_paths = target.test_dependent_targets_for_test_spec(test_spec).flat_map { |pt| pt.resource_paths(test_spec) }
         input_paths = []
         output_paths = []
         unless resource_paths.empty?
@@ -61,10 +61,9 @@ module Pod
       #
       # @return [void]
       #
-      def add_embed_frameworks_script_phase(native_target)
-        test_type = target.test_type_for_product_type(native_target.symbol_type)
-        script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_test_type(test_type).relative_path_from(target.sandbox.root)}"
-        framework_paths = target.all_test_dependent_targets.flat_map(&:framework_paths)
+      def add_embed_frameworks_script_phase(native_target, test_spec)
+        script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_test_spec(test_spec).relative_path_from(target.sandbox.root)}"
+        framework_paths = target.test_dependent_targets_for_test_spec(test_spec).flat_map { |pt| pt.framework_paths(test_spec) }
         input_paths = []
         output_paths = []
         unless framework_paths.empty?

@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Create native test targets for each test spec instead of grouping by test type  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6981](https://github.com/CocoaPods/CocoaPods/pull/6981)
+
 * Show full requirement trees when a version conflict is encountered during 
   dependency resolution.  
   [Samuel Giddins](https://github.com/segiddins)

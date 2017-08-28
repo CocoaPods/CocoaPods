@@ -95,8 +95,8 @@ module Pod
             next unless share_scheme_for_development_pod?(pod_target.pod_name)
             Xcodeproj::XCScheme.share_scheme(project.path, pod_target.label)
             if pod_target.contains_test_specifications?
-              pod_target.supported_test_types.each do |test_type|
-                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_type))
+              pod_target.test_specifications.each do |test_spec|
+                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_spec))
               end
             end
           end
@@ -284,10 +284,11 @@ module Pod
         private
 
         def add_pod_target_test_dependencies(pod_target, frameworks_group)
-          test_dependent_targets = pod_target.all_test_dependent_targets
-          pod_target.test_native_targets.each do |test_native_target|
+          pod_target.test_specifications.each do |test_spec|
+            test_native_target = pod_target.native_target_for_spec(test_spec)
+            test_dependent_targets = pod_target.test_dependent_targets_for_test_spec(test_spec)
             test_dependent_targets.reject(&:should_build?).each do |test_dependent_target|
-              add_resource_bundles_to_native_target(test_dependent_target, test_native_target)
+              add_resource_bundles_to_native_target(test_dependent_target, test_native_target, pod_target.test_resource_bundle_targets_for_test_spec(test_spec))
             end
             add_dependent_targets_to_native_target(test_dependent_targets, test_native_target, false, pod_target.requires_frameworks?, frameworks_group)
           end
@@ -307,8 +308,8 @@ module Pod
           end
         end
 
-        def add_resource_bundles_to_native_target(dependent_target, native_target)
-          resource_bundle_targets = dependent_target.resource_bundle_targets + dependent_target.test_resource_bundle_targets
+        def add_resource_bundles_to_native_target(dependent_target, native_target, test_resource_bundle_targets = [])
+          resource_bundle_targets = dependent_target.resource_bundle_targets + test_resource_bundle_targets
           resource_bundle_targets.each do |resource_bundle_target|
             native_target.add_dependency(resource_bundle_target)
           end

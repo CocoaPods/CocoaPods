@@ -33,6 +33,10 @@ module Pod
     #
     attr_accessor :test_dependent_targets
 
+    # @return [Hash{String => PodTarget}] all target dependencies by test specification.
+    #
+    attr_accessor :test_dependent_targets_by_spec_name
+
     # return [Array<PBXNativeTarget>] the test target generated in the Pods project for
     #         this library or `nil` if there is no test target created.
     #
@@ -56,10 +60,11 @@ module Pod
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
       @file_accessors = []
       @resource_bundle_targets = []
-      @test_resource_bundle_targets = []
+      @test_resource_bundle_targets_by_spec_name = {}
       @test_native_targets = []
       @dependent_targets = []
       @test_dependent_targets = []
+      @test_dependent_targets_by_spec_name = {}
       @build_config_cache = {}
     end
 
@@ -150,9 +155,9 @@ module Pod
     #         to this target.
     attr_reader :resource_bundle_targets
 
-    # @return [Array<PBXNativeTarget>] the resource bundle test targets belonging
-    #         to this target.
-    attr_reader :test_resource_bundle_targets
+    # TODO
+    #
+    attr_reader :test_resource_bundle_targets_by_spec_name
 
     # @return [Bool] Whether or not this target should be build.
     #
@@ -191,57 +196,55 @@ module Pod
       specs.any?(&:test_specification?)
     end
 
-    # @return [Array<Symbol>] All of the test supported types within this target.
+    # @return [Array<Specification>] All test specifications within this target.
     #
-    def supported_test_types
-      specs.select(&:test_specification?).map(&:test_type).uniq
+    def test_specifications
+      specs.select(&:test_specification?)
     end
 
     # @return [Array<Hash{Symbol => [String]}>] The vendored and non vendored framework paths
     #         this target depends upon.
     #
-    def framework_paths
-      @framework_paths ||= begin
-        frameworks = []
-        file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
-          relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
-          framework = { :name => framework_path.basename.to_s,
-                        :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
-                        :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
-          # Until this can be configured, assume the dSYM file uses the file name as the framework.
-          # See https://github.com/CocoaPods/CocoaPods/issues/1698
-          dsym_name = "#{framework_path.basename}.dSYM"
-          dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
-          if dsym_path.exist?
-            framework[:dsym_name] = dsym_name
-            framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
-            framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
-          end
-          frameworks << framework
+    def framework_paths(spec = nil)
+      frameworks = []
+      file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
+        next if !spec.nil? && spec.name != accessor.spec.name
+        relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
+        framework = { :name => framework_path.basename.to_s,
+                      :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
+                      :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
+        # Until this can be configured, assume the dSYM file uses the file name as the framework.
+        # See https://github.com/CocoaPods/CocoaPods/issues/1698
+        dsym_name = "#{framework_path.basename}.dSYM"
+        dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
+        if dsym_path.exist?
+          framework[:dsym_name] = dsym_name
+          framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
+          framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
         end
-        if should_build? && requires_frameworks? && !static_framework?
-          frameworks << { :name => product_name,
-                          :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
-                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }
-        end
-        frameworks
+        frameworks << framework
       end
+      if should_build? && requires_frameworks? && !static_framework?
+        frameworks << { :name => product_name,
+                        :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
+                        :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }
+      end
+      frameworks.compact
     end
 
     # @return [Array<String>] The resource and resource bundle paths this target depends upon.
     #
-    def resource_paths
-      @resource_paths ||= begin
-        resource_paths = file_accessors.flat_map do |accessor|
-          accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
-        end
-        resource_bundles = file_accessors.flat_map do |accessor|
-          prefix = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE
-          prefix = configuration_build_dir unless accessor.spec.test_specification?
-          accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
-        end
-        resource_paths + resource_bundles
+    def resource_paths(spec = nil)
+      resource_paths = file_accessors.flat_map do |accessor|
+        accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
       end
+      resource_bundles = file_accessors.flat_map do |accessor|
+        next if !spec.nil? && spec.name != accessor.spec.name
+        prefix = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE
+        prefix = configuration_build_dir unless accessor.spec.test_specification?
+        accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
+      end
+      (resource_paths + resource_bundles).compact
     end
 
     # Returns the corresponding native target to use based on the provided specification.
@@ -249,14 +252,14 @@ module Pod
     # test native targets.
     #
     # @param  [Specification] spec
-    #         The specifcation to base from in order to find the native target.
+    #         The specification to base from in order to find the native target.
     #
     # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
     #
     def native_target_for_spec(spec)
       return native_target unless spec.test_specification?
       test_native_targets.find do |native_target|
-        native_target.symbol_type == product_type_for_test_type(spec.test_type)
+        native_target.name == test_target_label(spec)
       end
     end
 
@@ -275,22 +278,6 @@ module Pod
         :unit_test_bundle
       else
         raise Informative, "Unknown test type `#{test_type}`."
-      end
-    end
-
-    # Returns the corresponding test type given the product type.
-    #
-    # @param  [Symbol] product_type
-    #         The product type to map to a test type.
-    #
-    # @return [Symbol] The native product type to use.
-    #
-    def test_type_for_product_type(product_type)
-      case product_type
-      when :unit_test_bundle
-        :unit
-      else
-        raise Informative, "Unknown product type `#{product_type}`."
       end
     end
 
@@ -315,31 +302,34 @@ module Pod
       "#{label}-#{bundle_name}"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type to use for producing the test label.
+    # @param  [Specification] test_spec
+    #         The test spec to use for producing the test label.
     #
     # @return [String] The derived name of the test target.
     #
-    def test_target_label(test_type)
-      "#{label}-#{test_type.capitalize}-Tests"
+    def test_target_label(test_spec)
+      raise "Can't generate test target label with a non test specification!" unless test_spec.test_specification?
+      "#{label}-#{test_spec.test_type.capitalize}-#{test_spec.base_name}"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type this embed frameworks script path is for.
+    # @param  [Specification] test_spec
+    #         The test spec this embed frameworks script path is for.
     #
-    # @return [Pathname] The absolute path of the copy resources script for the given test type.
+    # @return [Pathname] The absolute path of the copy resources script for the given test spec.
     #
-    def copy_resources_script_path_for_test_type(test_type)
-      support_files_dir + "#{test_target_label(test_type)}-resources.sh"
+    def copy_resources_script_path_for_test_spec(test_spec)
+      raise "Can't generate copy resources script path for a non test specification!" unless test_spec.test_specification?
+      support_files_dir + "#{test_target_label(test_spec)}-resources.sh"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type this embed frameworks script path is for.
+    # @param  [Specification] test_spec
+    #         The test spec this embed frameworks script path is for.
     #
-    # @return [Pathname] The absolute path of the embed frameworks script for the given test type.
+    # @return [Pathname] The absolute path of the embed frameworks script for the given test spec.
     #
-    def embed_frameworks_script_path_for_test_type(test_type)
-      support_files_dir + "#{test_target_label(test_type)}-frameworks.sh"
+    def embed_frameworks_script_path_for_test_spec(test_spec)
+      raise "Can't generate embed frameworks script path for a non test specification!" unless test_spec.test_specification?
+      support_files_dir + "#{test_target_label(test_spec)}-frameworks.sh"
     end
 
     # @return [Array<String>] The names of the Pods on which this target
@@ -368,28 +358,17 @@ module Pod
       end
     end
 
-    # @return [Array<PodTarget>] the recursive targets that this target has a
-    #         test dependency upon.
-    #
-    def recursive_test_dependent_targets
-      @recursive_test_dependent_targets ||= begin
-        targets = test_dependent_targets.clone
-
-        targets.each do |target|
-          target.test_dependent_targets.each do |t|
-            targets.push(t) unless t == self || targets.include?(t)
-          end
-        end
-
-        targets
-      end
-    end
-
-    # @return [Array<PodTarget>] the canonical list of test dependent targets this target has a dependency upon.
+    # @return [Array<PodTarget>] the canonical list of test dependent targets the given test spec has a dependency upon.
     #         This includes the parent target as well as its transitive dependencies.
     #
-    def all_test_dependent_targets
-      [self, *recursive_dependent_targets, *recursive_test_dependent_targets].uniq
+    def test_dependent_targets_for_test_spec(test_spec)
+      [self, *recursive_dependent_targets, *test_dependent_targets_by_spec_name[test_spec.name]].uniq
+    end
+
+    # TODO
+    #
+    def test_resource_bundle_targets_for_test_spec(test_spec)
+      test_resource_bundle_targets_by_spec_name[test_spec.name] || []
     end
 
     # Checks if the target should be included in the build configuration with
