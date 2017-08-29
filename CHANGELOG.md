@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add custom shell script integration from Podfile  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6820](https://github.com/CocoaPods/CocoaPods/pull/6820)
+
 * Show full requirement trees when a version conflict is encountered during 
   dependency resolution.  
   [Samuel Giddins](https://github.com/segiddins)

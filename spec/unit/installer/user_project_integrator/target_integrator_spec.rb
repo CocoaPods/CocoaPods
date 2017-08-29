@@ -29,12 +29,14 @@ module Pod
           @target_integrator.stubs(method)
         end
         @phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX
+        @user_phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::USER_BUILD_PHASE_PREFIX
         @embed_framework_phase_name = @phase_prefix +
           Installer::UserProjectIntegrator::TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
         @copy_pods_resources_phase_name = @phase_prefix +
             Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
         @check_manifest_phase_name = @phase_prefix +
             Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+        @user_script_phase_name = @user_phase_prefix + 'Custom Script'
       end
 
       describe '#integrate!' do
@@ -365,6 +367,105 @@ module Pod
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework
           )
+        end
+
+        it 'adds a custom shell script phase' do
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"'])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+          phase.name.should == '[CP-User] Custom Script'
+          phase.shell_script.should == 'echo "Hello World"'
+        end
+
+        it 'removes outdated custom shell script phases' do
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"'])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }.should.not.be.nil
+          @pod_bundle.target_definition.stubs(:script_phases).returns([])
+          @target_integrator.integrate!
+          target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }.should.be.nil
+        end
+
+        it 'moves custom shell scripts to their correct index' do
+          shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"' }
+          shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
+          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          target.shell_script_build_phases.map(&:name).should == [
+            '[CP] Check Pods Manifest.lock',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+            '[CP-User] Custom Script',
+            '[CP-User] Custom Script 2',
+          ]
+          shell_script_one_uuid = target.shell_script_build_phases[3].uuid
+          shell_script_two_uuid = target.shell_script_build_phases[4].uuid
+          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_two, shell_script_one])
+          @target_integrator.integrate!
+          target.shell_script_build_phases.map(&:name).should == [
+            '[CP] Check Pods Manifest.lock',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+            '[CP-User] Custom Script 2',
+            '[CP-User] Custom Script',
+          ]
+          target.shell_script_build_phases[3].uuid.should == shell_script_two_uuid
+          target.shell_script_build_phases[4].uuid.should == shell_script_one_uuid
+        end
+
+        it 'adds, removes and moves custom shell script phases' do
+          shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"' }
+          shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
+          shell_script_three = { :name => 'Custom Script 3', :script => 'echo "Hello Universe"' }
+          shell_script_four = { :name => 'Custom Script 4', :script => 'echo "Ran out of Hellos"' }
+          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two, shell_script_three])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          target.shell_script_build_phases.map(&:name).should == [
+            '[CP] Check Pods Manifest.lock',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+            '[CP-User] Custom Script',
+            '[CP-User] Custom Script 2',
+            '[CP-User] Custom Script 3',
+          ]
+          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_two, shell_script_four])
+          @target_integrator.integrate!
+          target.shell_script_build_phases.map(&:name).should == [
+            '[CP] Check Pods Manifest.lock',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+            '[CP-User] Custom Script 2',
+            '[CP-User] Custom Script 4',
+          ]
+        end
+
+        it 'does not touch non cocoapods shell script phases' do
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"'])
+          target = @target_integrator.send(:native_targets).first
+          target.new_shell_script_build_phase('User Script Phase 1')
+          target.new_shell_script_build_phase('User Script Phase 2')
+          @target_integrator.integrate!
+          target.shell_script_build_phases.map(&:name).should == [
+            '[CP] Check Pods Manifest.lock',
+            'User Script Phase 1',
+            'User Script Phase 2',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+            '[CP-User] Custom Script',
+          ]
+          @pod_bundle.target_definition.stubs(:script_phases).returns([])
+          @target_integrator.integrate!
+          target.shell_script_build_phases.map(&:name).should == [
+            '[CP] Check Pods Manifest.lock',
+            'User Script Phase 1',
+            'User Script Phase 2',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+          ]
         end
       end
 
