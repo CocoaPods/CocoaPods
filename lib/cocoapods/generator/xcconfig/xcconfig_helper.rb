@@ -270,7 +270,7 @@ module Pod
         #
         # @return [Hash<String, String>] the settings
         #
-        def self.settings_for_dependent_targets(target, dependent_targets, test_xcconfig = false)
+        def self.search_paths_for_dependent_targets(target, dependent_targets, test_xcconfig = false)
           dependent_targets = dependent_targets.select(&:should_build?)
 
           # Filter out dependent targets that are subsets of another target.
@@ -332,7 +332,7 @@ module Pod
         #
         def self.generate_vendored_build_settings(aggregate_target, pod_targets, xcconfig)
           pod_targets.each do |pod_target|
-            unless pod_target.should_build? && pod_target.requires_frameworks?
+            unless pod_target.should_build? && pod_target.requires_frameworks? && !pod_target.static_framework?
               XCConfigHelper.add_settings_for_file_accessors_of_target(aggregate_target, pod_target, xcconfig)
             end
           end
@@ -396,6 +396,16 @@ module Pod
         # @return [void]
         #
         def self.generate_other_ld_flags(aggregate_target, pod_targets, xcconfig)
+          # Make sure -framework option gets added for the search paths when static_frameworks are involved.
+          # Otherwise test targets won't link in their primary target's dependencies.
+          unless aggregate_target.nil?
+            dependent_targets = aggregate_target.search_paths_aggregate_targets
+            dependent_targets.each do |dependent_target|
+              if dependent_target.pod_targets.any?(&:static_framework?)
+                generate_other_ld_flags(dependent_target, dependent_target.pod_targets, xcconfig)
+              end
+            end
+          end
           other_ld_flags = pod_targets.select(&:should_build?).map do |pod_target|
             if pod_target.requires_frameworks?
               %(-framework "#{pod_target.product_basename}")

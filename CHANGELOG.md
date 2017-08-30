@@ -16,13 +16,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   dependency resolution.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Add support for source static library frameworks
+* Add support for source static library frameworks  
   [Paul Beusterien](https://github.com/paulb777)
   [#6811](https://github.com/CocoaPods/CocoaPods/pull/6811)
 
-* Add Private Header support to static frameworks
+* Add Private Header support to static frameworks  
   [Paul Beusterien](https://github.com/paulb777)
   [#6969](https://github.com/CocoaPods/CocoaPods/pull/6969)
+
+* For source static frameworks, include frameworks from dependent targets and libraries in OTHER_LDFLAGS  
+  [paulb777](https://github.com/paulb777)
+  [#6988](https://github.com/CocoaPods/CocoaPods/pull/6988)
 
 ##### Bug Fixes
 

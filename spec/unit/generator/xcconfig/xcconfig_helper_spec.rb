@@ -77,8 +77,86 @@ module Pod
               :configuration_build_dir => 'B',
             )
             dependent_targets = [target1, target2]
-            build_settings = @sut.settings_for_dependent_targets(nil, dependent_targets)
+            build_settings = @sut.search_paths_for_dependent_targets(nil, dependent_targets)
             build_settings['FRAMEWORK_SEARCH_PATHS'].should == '"AB"'
+          end
+
+          it 'adds the libraries of the xcconfig for a static framework' do
+            target_definition = stub(:inheritance => 'search_paths')
+            consumer = stub(
+              :pod_target_xcconfig => {},
+              :libraries => ['xml2'],
+              :frameworks => [],
+              :weak_frameworks => [],
+              :platform_name => :ios,
+            )
+            file_accessor = stub(
+              :spec_consumer => consumer,
+              :vendored_static_frameworks => [],
+              :vendored_dynamic_frameworks => [],
+              :vendored_static_libraries => [],
+              :vendored_dynamic_libraries => [],
+            )
+            pod_target = stub(
+              :name => 'BananaLib',
+              :sandbox => config.sandbox,
+              :should_build? => true,
+              :requires_frameworks? => true,
+              :static_framework? => true,
+              :dependent_targets => [],
+              :file_accessors => [file_accessor],
+            )
+            pod_targets = [pod_target]
+            aggregate_target = stub(
+              :target_definition => target_definition,
+              :pod_targets => pod_targets,
+              :search_paths_aggregate_targets => [],
+            )
+            xcconfig = Xcodeproj::Config.new
+            @sut.generate_vendored_build_settings(aggregate_target, pod_targets, xcconfig)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"xml2"'
+          end
+
+          it 'makes sure setting from search_paths get propagated for static frameworks' do
+            target_definition = stub(:inheritance => 'search_paths')
+            consumer = stub(
+              :pod_target_xcconfig => {},
+              :libraries => ['xml2'],
+              :frameworks => ['Foo'],
+              :weak_frameworks => [],
+              :platform_name => :ios,
+            )
+            file_accessor = stub(
+              :spec_consumer => consumer,
+              :vendored_static_frameworks => [],
+              :vendored_dynamic_frameworks => [],
+              :vendored_static_libraries => [],
+              :vendored_dynamic_libraries => [],
+            )
+            pod_target = stub(
+              :name => 'BananaLib',
+              :sandbox => config.sandbox,
+              :should_build? => true,
+              :requires_frameworks? => true,
+              :static_framework? => true,
+              :dependent_targets => [],
+              :file_accessors => [file_accessor],
+              :product_basename => 'Foo',
+            )
+            pod_targets = [pod_target]
+            aggregate_target = stub(
+              :target_definition => target_definition,
+              :pod_targets => pod_targets,
+              :search_paths_aggregate_targets => [],
+            )
+            test_aggregate_target = stub(
+              :target_definition => target_definition,
+              :pod_targets => [],
+              :search_paths_aggregate_targets => [aggregate_target],
+            )
+            xcconfig = Xcodeproj::Config.new
+            @sut.generate_other_ld_flags(test_aggregate_target, [], xcconfig)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "Foo"'
           end
 
           it 'adds the frameworks of the xcconfig' do
