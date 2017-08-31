@@ -12,6 +12,39 @@ module Pod
   # by target for a given Podfile.
   #
   class Resolver
+    # A small container that wraps a resolved specification for a given target definition. Additional metadata
+    # is included here such as if the specification is only used by tests.
+    #
+    class ResolverSpecification
+      # @return [Specification] the specification that was resolved
+      #
+      attr_reader :spec
+
+      # @return [Bool] whether this resolved specification is only used by tests.
+      #
+      attr_reader :used_by_tests_only
+      alias used_by_tests_only? used_by_tests_only
+
+      def initialize(spec, used_by_tests_only)
+        @spec = spec
+        @used_by_tests_only = used_by_tests_only
+      end
+
+      def name
+        spec.name
+      end
+
+      def root
+        spec.root
+      end
+
+      def ==(other)
+        self.class == other &&
+          spec == other.spec &&
+          used_by_tests_only == other.test_only
+      end
+    end
+
     include Pod::Installer::InstallationOptions::Mixin
 
     delegate_installation_options { podfile }
@@ -64,8 +97,8 @@ module Pod
 
     # Identifies the specifications that should be installed.
     #
-    # @return [Hash{TargetDefinition => Array<Specification>}] specs_by_target
-    #         the specifications that need to be installed grouped by target
+    # @return [Hash{TargetDefinition => Array<ResolverSpecification>}] resolver_specs_by_target
+    #         the resolved specifications that need to be installed grouped by target
     #         definition.
     #
     def resolve
@@ -75,28 +108,28 @@ module Pod
         end
       end
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
-      specs_by_target
+      resolver_specs_by_target
     rescue Molinillo::ResolverError => e
       handle_resolver_error(e)
     end
 
-    # @return [Hash{Podfile::TargetDefinition => Array<Specification>}]
+    # @return [Hash{Podfile::TargetDefinition => Array<ResolverSpecification>}]
     #         returns the resolved specifications grouped by target.
     #
     # @note   The returned specifications can be subspecs.
     #
-    def specs_by_target
-      @specs_by_target ||= {}.tap do |specs_by_target|
+    def resolver_specs_by_target
+      @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
         podfile.target_definition_list.each do |target|
           dependencies = {}
           specs = target.dependencies.map(&:name).flat_map do |name|
             node = @activated.vertex_named(name)
-            valid_dependencies_for_target_from_node(target, dependencies, node) << node
+            (valid_dependencies_for_target_from_node(target, dependencies, node) << node).map { |s| [s, node.payload.test_specification?] }
           end
 
-          specs_by_target[target] = specs.
-            map(&:payload).
-            uniq.
+          resolver_specs_by_target[target] = specs.
+            group_by(&:first).
+            map { |vertex, spec_test_only_tuples| ResolverSpecification.new(vertex.payload, spec_test_only_tuples.map { |tuple| tuple[1] }.all?) }.
             sort_by(&:name)
         end
       end
@@ -517,7 +550,6 @@ module Pod
 
         dependency_nodes + dependency_nodes.flat_map do |item|
           node_result = valid_dependencies_for_target_from_node(target, dependencies, item)
-
           node_result
         end
       end
