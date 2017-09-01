@@ -38,6 +38,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#6971](https://github.com/CocoaPods/CocoaPods/issue/6971)
 
+* Fix xcconfig boolean merging when substrings include yes or no  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#6997](https://github.com/CocoaPods/CocoaPods/pull/6997)
 
 ## 1.3.1 (2017-08-02)
 

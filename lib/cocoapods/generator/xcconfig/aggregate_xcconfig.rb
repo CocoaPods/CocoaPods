@@ -218,7 +218,7 @@ module Pod
           settings = user_target_xcconfig_values_by_consumer_by_key
           settings.each_with_object({}) do |(key, values_by_consumer), xcconfig|
             uniq_values = values_by_consumer.values.uniq
-            values_are_bools = uniq_values.all? { |v| v =~ /(yes|no)/i }
+            values_are_bools = uniq_values.all? { |v| v =~ /^(yes|no)$/i }
             if values_are_bools
               # Boolean build settings
               if uniq_values.count > 1
