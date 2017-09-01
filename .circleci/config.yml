@@ -1,0 +1,48 @@
+version: 2
+references:
+  run_specs_job: &run_specs_job
+    environment:
+      - COCOAPODS_CI_TASKS: SPECS
+    steps:
+      - run: bundle install
+      - run: bundle exec rake spec:all
+jobs:
+  lint:
+    docker:
+      - image: ruby:latest
+    environment:
+      - COCOAPODS_CI_TASKS: LINT
+    steps:
+      - run: bundle install
+      - run: bundle exec rake spec:all
+      - run: bundle exec danger
+  ruby_2.0:
+    docker:
+      - image: ruby:2.0
+    <<: *run_specs_job
+  ruby_2.3:
+    docker:
+      - image: ruby:latest
+    <<: *run_specs_job
+  examples:
+    macos:
+      xcode:
+        version: 8.3.3
+    environment:
+      - COCOAPODS_CI_TASKS: EXAMPLES
+    steps:
+      - run: git config --global user.email "tests@cocoapods.org"
+      - run: git config --global user.name "CocoaPods Tests"
+      - run: bundle install
+      - run: bundle exec pod env
+      - run: .circle-scripts/fetch-cocoapods-repo-from-s3.sh
+      - run: bundle exec rake spec:all
+
+workflows:
+  version: 2
+  build_test:
+    jobs:
+      - lint
+      - ruby_2.0
+      - ruby_2.3
+      - examples
