@@ -5,6 +5,11 @@ references:
       - COCOAPODS_CI_TASKS: SPECS
     steps:
       - checkout
+      - run:
+          name: Setup Git Credentials
+          command: |
+            git config --global user.email "tests@cocoapods.org"
+            git config --global user.name "CocoaPods Tests"
       - run: bundle install
       - run:
           name: Fetch Specs Repo
@@ -47,8 +52,11 @@ jobs:
       - COCOAPODS_CI_TASKS: EXAMPLES
     steps:
       - checkout
-      - run: git config --global user.email "tests@cocoapods.org"
-      - run: git config --global user.name "CocoaPods Tests"
+      - run:
+          name: Setup Git Credentials
+          command: |
+            git config --global user.email "tests@cocoapods.org"
+            git config --global user.name "CocoaPods Tests"
       - run: bundle install
       - run: bundle exec pod env
       - run: .circle-scripts/fetch-cocoapods-repo-from-s3.sh
