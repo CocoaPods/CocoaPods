@@ -4,6 +4,7 @@ references:
     environment:
       - COCOAPODS_CI_TASKS: SPECS
     steps:
+      - checkout
       - run: bundle install
       - run: bundle exec rake spec:all
 jobs:
@@ -13,6 +14,7 @@ jobs:
     environment:
       - COCOAPODS_CI_TASKS: LINT
     steps:
+      - checkout
       - run: bundle install
       - run: bundle exec rake spec:all
       - run: bundle exec danger
@@ -27,15 +29,17 @@ jobs:
   examples:
     macos:
       xcode:
-        version: 8.3.3
+        version: 8.2.1
     environment:
       - COCOAPODS_CI_TASKS: EXAMPLES
     steps:
+      - checkout
       - run: git config --global user.email "tests@cocoapods.org"
       - run: git config --global user.name "CocoaPods Tests"
       - run: bundle install
       - run: bundle exec pod env
       - run: .circle-scripts/fetch-cocoapods-repo-from-s3.sh
+      - run: sudo xcode-select -p /Applications/Xcode-8.2*
       - run: bundle exec rake spec:all
 
 workflows:
