@@ -412,6 +412,13 @@ module Pod
                 '["BananaLib", "OrangeFramework"]. Boolean build setting '\
                 'ENABLE_HEADER_DEPENDENCIES has different values.'
             end
+
+            it 'make sure "no" or "yes" substring doesnt get treated as boolean' do
+              @consumer_a.stubs(:user_target_xcconfig).returns('GCC_PREPROCESSOR_DEFINITIONS' => '-DNOWAY')
+              @consumer_b.stubs(:user_target_xcconfig).returns('GCC_PREPROCESSOR_DEFINITIONS' => '-DYESWAY')
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 -DNOWAY -DYESWAY'
+            end
           end
 
           describe 'with list build settings' do
