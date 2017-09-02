@@ -273,6 +273,17 @@ module Pod
         def self.settings_for_dependent_targets(target, dependent_targets, test_xcconfig = false)
           dependent_targets = dependent_targets.select(&:should_build?)
 
+          # Filter out dependent targets that are subsets of another target.
+          subset_targets = []
+          dependent_targets.combination(2) do |a, b|
+            if (a.specs - b.specs).empty?
+              subset_targets << a
+            elsif (b.specs - a.specs).empty?
+              subset_targets << b
+            end
+          end
+          dependent_targets -= subset_targets
+
           # Alias build dirs to avoid recursive definitions for pod targets and depending
           # on build settings which could be overwritten in the user target.
           build_settings = {
