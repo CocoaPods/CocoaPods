@@ -161,6 +161,18 @@ module Pod
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "Foo"'
           end
 
+          it 'includes HEADER_SEARCH_PATHS from search paths' do
+            xcconfig = Xcodeproj::Config.new
+            spec_consumer = stub(:user_target_xcconfig => { 'HEADER_SEARCH_PATHS' => 'my/path' })
+            pod_target = stub(:spec_consumers => [spec_consumer])
+            search_path_target = stub(
+              :pod_targets_for_build_configuration => [pod_target],
+              :pod_targets => [pod_target],
+            )
+            @sut.propagate_header_search_paths_from_search_paths(search_path_target, xcconfig)
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) my/path'
+          end
+
           it 'adds the frameworks of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(

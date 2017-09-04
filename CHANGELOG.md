@@ -71,6 +71,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7002](https://github.com/CocoaPods/CocoaPods/pull/7002)
 
+* Propagate HEADER_SEARCH_PATHS settings from search paths  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7006](https://github.com/CocoaPods/CocoaPods/pull/7006)
+
 ## 1.3.1 (2017-08-02)
 
 ##### Enhancements
