@@ -21,8 +21,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#6811](https://github.com/CocoaPods/CocoaPods/pull/6811)
 
 * Add Private Header support to static frameworks
-  [paulb777](https://github.com/paulb777)
-  [#6969](https://github.com/CocoaPods/CocoaPods/issues/6969)
+  [Paul Beusterien](https://github.com/paulb777)
+  [#6969](https://github.com/CocoaPods/CocoaPods/pull/6969)
 
 ##### Bug Fixes
 
@@ -41,6 +41,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix xcconfig boolean merging when substrings include yes or no  
   [Paul Beusterien](https://github.com/paulb777)
   [#6997](https://github.com/CocoaPods/CocoaPods/pull/6997)
+
+* Filter out subset dependent targets from FRAMEWORK_SEARCH_PATHS  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7002](https://github.com/CocoaPods/CocoaPods/pull/7002)
 
 ## 1.3.1 (2017-08-02)
 

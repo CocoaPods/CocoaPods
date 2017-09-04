@@ -63,6 +63,24 @@ module Pod
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"xml2"'
           end
 
+          it 'check that subspec subsets are removed from frameworks search paths' do
+            target1 = stub(
+              :specs => %w(A, B),
+              :should_build? => true,
+              :requires_frameworks? => true,
+              :configuration_build_dir => 'AB',
+            )
+            target2 = stub(
+              :specs => ['B'],
+              :should_build? => true,
+              :requires_frameworks? => true,
+              :configuration_build_dir => 'B',
+            )
+            dependent_targets = [target1, target2]
+            build_settings = @sut.settings_for_dependent_targets(nil, dependent_targets)
+            build_settings['FRAMEWORK_SEARCH_PATHS'].should == '"AB"'
+          end
+
           it 'adds the frameworks of the xcconfig' do
             xcconfig = Xcodeproj::Config.new
             consumer = stub(
