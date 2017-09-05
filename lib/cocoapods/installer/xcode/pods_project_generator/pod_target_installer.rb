@@ -199,6 +199,8 @@ module Pod
                 # requires frameworks. For tests we always use the test target name as the product name
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
+                # We need to codesign the contents of xctest bundles for Xcode to allow them to be launchable
+                configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
               end
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
