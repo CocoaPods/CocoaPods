@@ -190,6 +190,7 @@ module Pod
                 native_test_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
                 native_test_target.build_configurations.each do |bc|
                   bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                 end
                 native_test_target.symbol_type.should == :unit_test_bundle
                 @coconut_pod_target.test_native_targets.count.should == 1
