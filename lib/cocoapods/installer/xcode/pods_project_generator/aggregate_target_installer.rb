@@ -17,7 +17,7 @@ module Pod
               create_support_files_group
               create_xcconfig_file
               if target.requires_frameworks?
-                create_info_plist_file
+                create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 create_module_map
                 create_umbrella_header
               end

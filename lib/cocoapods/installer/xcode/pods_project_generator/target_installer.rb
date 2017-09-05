@@ -136,12 +136,26 @@ module Pod
 
           # Creates the Info.plist file which sets public framework attributes
           #
+          # @param  [Pathname] path
+          #         the path to save the generated Info.plist file.
+          #
+          # @param  [PBXNativeTarget] native_target
+          #         the native target to link the generated Info.plist file into.
+          #
+          # @param  [Version] version
+          #         the version to use for when generating this Info.plist file.
+          #
+          # @param  [Platform] platform
+          #         the platform to use for when generating this Info.plist file.
+          #
+          # @param  [Symbol] bundle_package_type
+          #         the CFBundlePackageType of the target this Info.plist file is for.
+          #
           # @return [void]
           #
-          def create_info_plist_file
-            path = target.info_plist_path
+          def create_info_plist_file(path, native_target, version, platform, bundle_package_type = :fmwk)
             UI.message "- Generating Info.plist file at #{UI.path(path)}" do
-              generator = Generator::InfoPlistFile.new(target)
+              generator = Generator::InfoPlistFile.new(version, platform, bundle_package_type)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
 

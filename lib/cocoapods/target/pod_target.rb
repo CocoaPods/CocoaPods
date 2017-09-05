@@ -185,16 +185,29 @@ module Pod
       end
     end
 
+    # @return [Hash{Array => Specification}] a hash where the keys are the test native targets and the value
+    #         an array of all the test specs associated with this native target.
+    #
+    def test_specs_by_native_target
+      test_specs.group_by { |test_spec| native_target_for_spec(test_spec) }
+    end
+
     # @return [Boolean] Whether the target has any tests specifications.
     #
     def contains_test_specifications?
       specs.any?(&:test_specification?)
     end
 
+    # @return [Array<Specification>] All of the test specs within this target.
+    #
+    def test_specs
+      specs.select(&:test_specification?)
+    end
+
     # @return [Array<Symbol>] All of the test supported types within this target.
     #
     def supported_test_types
-      specs.select(&:test_specification?).map(&:test_type).uniq
+      test_specs.map(&:test_type).uniq
     end
 
     # Returns the framework paths associated with this target. By default all paths include the framework paths
@@ -342,6 +355,15 @@ module Pod
     #
     def test_target_label(test_type)
       "#{label}-#{test_type.capitalize}-Tests"
+    end
+
+    # @param  [Symbol] test_type
+    #         The test type to use for producing the test label.
+    #
+    # @return [String] The label of the app host label to use given the platform and test type.
+    #
+    def app_host_label(test_type)
+      "AppHost-#{Platform.string_name(platform.symbolic_name)}-#{test_type.capitalize}-Tests"
     end
 
     # @param  [Symbol] test_type
@@ -495,6 +517,13 @@ module Pod
     #
     def pod_target_srcroot
       "${PODS_ROOT}/#{sandbox.pod_dir(pod_name).relative_path_from(sandbox.root)}"
+    end
+
+    # @return [String] The version associated with this target
+    #
+    def version
+      version = root_spec.version
+      [version.major, version.minor, version.patch].join('.')
     end
 
     private

@@ -5,9 +5,13 @@ module Pod
     # framework. It states public attributes.
     #
     class InfoPlistFile
-      # @return [Target] the target represented by this Info.plist.
+      # @return [Version] version The version to use for when generating this Info.plist file.
       #
-      attr_reader :target
+      attr_reader :version
+
+      # @return [Platform] The platform to use for when generating this Info.plist file.
+      #
+      attr_reader :platform
 
       # @return [Symbol] the CFBundlePackageType of the target this Info.plist
       #         file is for.
@@ -16,12 +20,13 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param  [Target] target @see target
-      #
+      # @param  [Version] version @see version
+      # @param  [Platform] platform @see platform
       # @param  [Symbol] bundle_package_type @see bundle_package_type
       #
-      def initialize(target, bundle_package_type: :fmwk)
-        @target = target
+      def initialize(version, platform, bundle_package_type = :fmwk)
+        @version = version
+        @platform = platform
         @bundle_package_type = bundle_package_type
       end
 
@@ -36,21 +41,6 @@ module Pod
         contents = generate
         path.open('w') do |f|
           f.write(contents)
-        end
-      end
-
-      # The version associated with the current target
-      #
-      # @note Will return 1.0.0 for the AggregateTarget
-      #
-      # @return [String]
-      #
-      def target_version
-        if target && target.respond_to?(:root_spec)
-          version = target.root_spec.version
-          [version.major, version.minor, version.patch].join('.')
-        else
-          '1.0.0'
         end
       end
 
@@ -108,7 +98,7 @@ module Pod
           'CFBundleInfoDictionaryVersion' => '6.0',
           'CFBundleName' => '${PRODUCT_NAME}',
           'CFBundlePackageType' => bundle_package_type.to_s.upcase,
-          'CFBundleShortVersionString' => target_version,
+          'CFBundleShortVersionString' => version,
           'CFBundleSignature' => '????',
           'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
           'NSPrincipalClass' => '',
@@ -117,6 +107,7 @@ module Pod
 
         info['CFBundleExecutable'] = '${EXECUTABLE_NAME}' if bundle_package_type != :bndl
         info['CFBundleVersion'] = '1' if bundle_package_type == :bndl
+        info['NSPrincipalClass'] = 'NSApplication' if bundle_package_type == :appl && platform == :osx
 
         info
       end

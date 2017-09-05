@@ -287,11 +287,16 @@ module Pod
 
         def add_pod_target_test_dependencies(pod_target, frameworks_group)
           test_dependent_targets = pod_target.all_test_dependent_targets
-          pod_target.test_native_targets.each do |test_native_target|
+          pod_target.test_specs_by_native_target.each do |test_native_target, test_specs|
             test_dependent_targets.reject(&:should_build?).each do |test_dependent_target|
               add_resource_bundles_to_native_target(test_dependent_target, test_native_target)
             end
             add_dependent_targets_to_native_target(test_dependent_targets, test_native_target, false, pod_target.requires_frameworks?, frameworks_group)
+            test_spec_consumers = test_specs.map { |test_spec| test_spec.consumer(pod_target.platform) }
+            if test_spec_consumers.any?(&:requires_app_host?)
+              app_host_target = project.targets.find { |t| t.name == pod_target.app_host_label(test_specs.first.test_type) }
+              test_native_target.add_dependency(app_host_target)
+            end
           end
         end
 
