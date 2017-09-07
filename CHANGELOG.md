@@ -109,6 +109,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Filter out subset dependent targets from FRAMEWORK_SEARCH_PATHS  
   [Paul Beusterien](https://github.com/paulb777)
   [#7002](https://github.com/CocoaPods/CocoaPods/pull/7002)
+  
+* Fix App Icons compilation in build from Xcode 9  
+  [Timofey Khomutnikov](https://github.com/khomTima)
+  [#7003](https://github.com/CocoaPods/CocoaPods/issues/7003)
 
 * Propagate HEADER_SEARCH_PATHS settings from search paths  
   [Paul Beusterien](https://github.com/paulb777)
