@@ -245,6 +245,31 @@ module Pod
             matryoshka/Outer/Inner
           )
         end
+
+        it 'does not create multiple variants across different targets that require different set of testspecs' do
+          @podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            target 'TestRunner' do
+              pod 'CoconutLib', :testspecs => ['Tests']
+            end
+
+            target 'SampleProject' do
+              pod 'CoconutLib'
+            end
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+
+          result.targets.count.should == 2
+          result.targets[0].pod_targets.count == 1
+          result.targets[0].pod_targets[0].name.should == 'CoconutLib'
+          result.targets[1].pod_targets.count == 1
+          result.targets[1].pod_targets[0].name.should == 'CoconutLib'
+          result.targets[0].pod_targets[0].should == result.targets[1].pod_targets[0]
+        end
       end
 
       describe 'deduplication' do

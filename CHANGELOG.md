@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Deduplicate test specs correctly from pod variants and targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7036](https://github.com/CocoaPods/CocoaPods/pull/7036)
+
 * Fix common paths sometimes calculating incorrectly  
   [amorde](https://github.com/amorde)
   [#7028](https://github.com/CocoaPods/CocoaPods/pull/7028)

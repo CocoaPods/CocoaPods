@@ -481,16 +481,19 @@ module Pod
           distinct_targets = resolver_specs_by_target.each_with_object({}) do |dependency, hash|
             target_definition, dependent_specs = *dependency
             dependent_specs.group_by(&:root).each do |root_spec, resolver_specs|
-              pod_variant = PodVariant.new(resolver_specs.map(&:spec), target_definition.platform, target_definition.uses_frameworks?)
+              all_specs = resolver_specs.map(&:spec)
+              test_specs, specs = all_specs.partition(&:test_specification?)
+              pod_variant = PodVariant.new(specs, test_specs, target_definition.platform, target_definition.uses_frameworks?)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
+              hash[root_spec].keys.find { |k| k == pod_variant }.test_specs.concat(test_specs).uniq!
             end
           end
 
           pod_targets = distinct_targets.flat_map do |_root, target_definitions_by_variant|
             suffixes = PodVariantSet.new(target_definitions_by_variant.keys).scope_suffixes
             target_definitions_by_variant.flat_map do |variant, target_definitions|
-              generate_pod_target(target_definitions, variant.specs, :scope_suffix => suffixes[variant])
+              generate_pod_target(target_definitions, variant.specs + variant.test_specs, :scope_suffix => suffixes[variant])
             end
           end
 
