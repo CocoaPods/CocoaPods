@@ -76,13 +76,15 @@ module Pod
         #
         def self.add_settings_for_file_accessors_of_target(aggregate_target, pod_target, xcconfig)
           pod_target.file_accessors.each do |file_accessor|
-            XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
-            XCConfigHelper.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
+            if aggregate_target.nil? || !file_accessor.spec.test_specification?
+              XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
+              XCConfigHelper.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
+            end
           end
-          XCConfigHelper.add_dynamic_dependency_build_settings(pod_target, xcconfig)
+          XCConfigHelper.add_dynamic_dependency_build_settings(aggregate_target, pod_target, xcconfig)
           if pod_target.requires_frameworks?
             pod_target.dependent_targets.each do |dependent_target|
-              XCConfigHelper.add_dynamic_dependency_build_settings(dependent_target, xcconfig)
+              XCConfigHelper.add_dynamic_dependency_build_settings(aggregate_target, dependent_target, xcconfig)
             end
           end
         end
@@ -104,13 +106,15 @@ module Pod
         # @return [void]
         #
         def self.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
-          file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
-            adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
-            XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
-          end
-          file_accessor.vendored_static_libraries.each do |vendored_static_library|
-            adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
-            XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
+          if aggregate_target.nil? || !file_accessor.spec.test_specification?
+            file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
+              adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
+              XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
+            end
+            file_accessor.vendored_static_libraries.each do |vendored_static_library|
+              adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
+              XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
+            end
           end
         end
 
@@ -132,6 +136,9 @@ module Pod
 
         # Adds build settings for dynamic vendored frameworks and libraries.
         #
+        # @param  [AggregateTarget] aggregate_target
+        #         The aggregate target, may be nil.
+        #
         # @param [PodTarget] pod_target
         #        The pod target, which holds the list of +Spec::FileAccessor+.
         #
@@ -140,13 +147,15 @@ module Pod
         #
         # @return [void]
         #
-        def self.add_dynamic_dependency_build_settings(pod_target, xcconfig)
+        def self.add_dynamic_dependency_build_settings(aggregate_target, pod_target, xcconfig)
           pod_target.file_accessors.each do |file_accessor|
-            file_accessor.vendored_dynamic_frameworks.each do |vendored_dynamic_framework|
-              XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, pod_target.sandbox.root)
-            end
-            file_accessor.vendored_dynamic_libraries.each do |vendored_dynamic_library|
-              XCConfigHelper.add_library_build_settings(vendored_dynamic_library, xcconfig, pod_target.sandbox.root)
+            if aggregate_target.nil? || !file_accessor.spec.test_specification?
+              file_accessor.vendored_dynamic_frameworks.each do |vendored_dynamic_framework|
+                XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, pod_target.sandbox.root)
+              end
+              file_accessor.vendored_dynamic_libraries.each do |vendored_dynamic_library|
+                XCConfigHelper.add_library_build_settings(vendored_dynamic_library, xcconfig, pod_target.sandbox.root)
+              end
             end
           end
         end
