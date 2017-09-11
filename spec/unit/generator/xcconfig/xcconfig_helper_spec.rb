@@ -82,6 +82,7 @@ module Pod
           end
 
           it 'adds the libraries of the xcconfig for a static framework' do
+            spec = stub(:test_specification? => false)
             target_definition = stub(:inheritance => 'search_paths')
             consumer = stub(
               :pod_target_xcconfig => {},
@@ -91,6 +92,7 @@ module Pod
               :platform_name => :ios,
             )
             file_accessor = stub(
+              :spec => spec,
               :spec_consumer => consumer,
               :vendored_static_frameworks => [],
               :vendored_dynamic_frameworks => [],
