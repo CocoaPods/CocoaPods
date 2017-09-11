@@ -30,7 +30,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Ensure a unique ID is generated for each resource bundle
+* Do not code sign OSX targets for testing bundles  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#7027](https://github.com/CocoaPods/CocoaPods/pull/7027)
+
+* Ensure a unique ID is generated for each resource bundle  
   [Justin Martin](https://github.com/justinseanmartin)
   [#7015](https://github.com/CocoaPods/CocoaPods/pull/7015)
 
