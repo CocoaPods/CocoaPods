@@ -52,7 +52,7 @@ module Pod
       it 'resolves the specification of the podfile' do
         target_definition = @podfile.target_definitions['Pods']
         specs = @resolver.resolve[target_definition]
-        specs.map(&:to_s).should == [
+        specs.map(&:spec).map(&:to_s).should == [
           'A2DynamicDelegate (2.0.2)',
           'BlocksKit (1.5.2)',
           'libffi (3.0.13)',
@@ -62,8 +62,8 @@ module Pod
       it 'returns the resolved specifications grouped by target definition' do
         @resolver.resolve
         target_definition = @podfile.target_definitions['Pods']
-        specs = @resolver.specs_by_target[target_definition]
-        specs.map(&:to_s).should == [
+        specs = @resolver.resolver_specs_by_target[target_definition]
+        specs.map(&:spec).map(&:to_s).should == [
           'A2DynamicDelegate (2.0.2)',
           'BlocksKit (1.5.2)',
           'libffi (3.0.13)',
@@ -80,8 +80,8 @@ module Pod
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
         resolver.resolve
-        specs = resolver.specs_by_target.values.flatten
-        specs.map(&:to_s).should == ['Reachability (3.0.0)']
+        specs = resolver.resolver_specs_by_target.values.flatten
+        specs.map(&:spec).map(&:to_s).should == ['Reachability (3.0.0)']
       end
 
       it 'resolves an empty podfile' do
@@ -89,7 +89,7 @@ module Pod
           platform :ios
         end
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == []
       end
     end
@@ -113,7 +113,7 @@ module Pod
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFNetworking (0.9.1)', 'AFQuickLookView (0.1.0)']
       end
 
@@ -125,7 +125,7 @@ module Pod
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFNetworking (1.2.1)', 'RestKit (0.20.1)',
                          'RestKit/Core (0.20.1)', 'RestKit/CoreData (0.20.1)',
                          'RestKit/Network (0.20.1)', 'RestKit/ObjectMapping (0.20.1)',
@@ -141,7 +141,7 @@ module Pod
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFAmazonS3Client (1.0.1)', 'AFNetworking (1.3.4)',
                          'AFOAuth2Client (1.0.0)', 'CargoBay (1.0.0)']
       end
@@ -155,7 +155,7 @@ module Pod
           end
 
           resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-          specs = resolver.resolve.values.flatten.map(&:root).map(&:to_s).uniq.sort
+          specs = resolver.resolve.values.flatten.map(&:spec).map(&:root).map(&:to_s).uniq.sort
           specs.should == ['AFNetworking (2.0.1)', 'InstagramKit (3.7)']
         end
 
@@ -186,7 +186,7 @@ module Pod
           pod 'AFNetworking' # the most recent version requires 10.8
         end
         @resolver.stubs(:podfile).returns(@podfile)
-        @resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+        @resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort.should == [
           'AFNetworking (1.3.4)',
         ]
       end
@@ -210,7 +210,7 @@ module Pod
         end
         @resolver.stubs(:podfile).returns(@podfile)
         @resolver.send(:cached_sets)['lib'] = stub(:all_specifications => [spec])
-        @resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+        @resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort.should == [
           'AFNetworking (1.3.4)', 'lib (1.0)', 'lib/Calendar (1.0)', 'lib/Classes (1.0)', 'lib/RequestManager (1.0)'
         ]
       end
@@ -287,7 +287,7 @@ module Pod
           pod 'RestKit', '0.20.0-rc1'
         end
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        resolver.resolve.values.flatten.map(&:to_s).sort.should == [
+        resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort.should == [
           'AFNetworking (1.1.0)',
           'RestKit (0.20.0-rc1)',
           'RestKit/Core (0.20.0-rc1)',
@@ -322,6 +322,86 @@ module Pod
         )
       end
 
+      it 'handles test only dependencies correctly' do
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests']
+        end
+        spec = Spec.new do |s|
+          s.name         = 'MainSpec'
+          s.version      = '1.2.3'
+          s.platform     = :ios
+
+          s.test_spec 'Tests' do |tss|
+            tss.source_files = 'some/file'
+          end
+        end
+        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolved_specs = resolver.resolve.values.flatten
+        spec_names = resolved_specs.map(&:name).sort
+        spec_names.should == %w(
+          MainSpec MainSpec/Tests
+        )
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_tests_only?.should.be.false
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_tests_only?.should.be.true
+      end
+
+      it 'handles test only transitive dependencies' do
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests']
+        end
+        spec = Spec.new do |s|
+          s.name         = 'MainSpec'
+          s.version      = '1.2.3'
+          s.platform     = :ios
+
+          s.test_spec 'Tests' do |tss|
+            tss.source_files = 'some/file'
+            tss.dependency 'Expecta'
+          end
+        end
+        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolved_specs = resolver.resolve.values.flatten
+        spec_names = resolved_specs.map(&:name).sort
+        spec_names.should == %w(
+          Expecta MainSpec MainSpec/Tests
+        )
+        resolved_specs.find { |rs| rs.name == 'Expecta' }.used_by_tests_only?.should.be.true
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_tests_only?.should.be.false
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_tests_only?.should.be.true
+      end
+
+      it 'handles test only dependencies when they are also required by sources' do
+        @podfile = Podfile.new do
+          platform :ios
+          pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests']
+        end
+        spec = Spec.new do |s|
+          s.name         = 'MainSpec'
+          s.version      = '1.2.3'
+          s.platform     = :ios
+          s.dependency 'Expecta'
+
+          s.test_spec 'Tests' do |tss|
+            tss.source_files = 'some/file'
+            tss.dependency 'Expecta'
+          end
+        end
+        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolved_specs = resolver.resolve.values.flatten
+        spec_names = resolved_specs.map(&:name).sort
+        spec_names.should == %w(
+          Expecta MainSpec MainSpec/Tests
+        )
+        resolved_specs.find { |rs| rs.name == 'Expecta' }.used_by_tests_only?.should.be.false
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_tests_only?.should.be.false
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_tests_only?.should.be.true
+      end
+
       it 'allows pre-release spec versions when a requirement has an ' \
          'external source' do
         @podfile = Podfile.new do
@@ -335,7 +415,7 @@ module Pod
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == [
           'MainSpec (1.2.3-pre)',
         ]
@@ -461,12 +541,12 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'JSONKit', '<= 1.5pre'
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
-        version = resolver.resolve.values.flatten.first.version
+        version = resolver.resolve.values.flatten.first.spec.version
         version.to_s.should == '1.5pre'
 
         locked_deps = dependency_graph_from_array([Dependency.new('JSONKit', '= 1.4')])
         resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
-        version = resolver.resolve.values.flatten.first.version
+        version = resolver.resolve.values.flatten.first.spec.version
         version.to_s.should == '1.4'
       end
 
@@ -499,7 +579,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
             platform :osx, '10.10'
             pod(*requirement)
           end
-          resolve.values.flatten.map(&:to_s).should.not.include ios_subspec
+          resolve.values.flatten.map(&:spec).map(&:to_s).should.not.include ios_subspec
         end
 
         it 'includes those for the requested platform' do
@@ -507,7 +587,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
             platform :ios, '7'
             pod(*requirement)
           end
-          resolve.values.flatten.map(&:to_s).should.include ios_subspec
+          resolve.values.flatten.map(&:spec).map(&:to_s).should.include ios_subspec
         end
 
         it 'includes those in the target for the requested platform only' do
@@ -524,8 +604,8 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           resolved = resolve
           ios_target = resolved.keys.find { |td| td.label == 'Pods-iOS' }
           osx_target = resolved.keys.find { |td| td.label == 'Pods-OSX' }
-          resolved[ios_target].map(&:to_s).should.include ios_subspec
-          resolved[osx_target].map(&:to_s).should.not.include ios_subspec
+          resolved[ios_target].map(&:spec).map(&:to_s).should.include ios_subspec
+          resolved[osx_target].map(&:spec).map(&:to_s).should.not.include ios_subspec
         end
 
         it 'includes dependencies in the target for the requested platform only' do
@@ -544,10 +624,10 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           resolved = resolve
           ios_target = resolved.keys.find { |td| td.label == 'Pods-iOS' }
           osx_target = resolved.keys.find { |td| td.label == 'Pods-OSX' }
-          resolved[ios_target].map(&:to_s).should.include ios_dependency
-          resolved[osx_target].map(&:to_s).should.not.include ios_dependency
-          resolved[ios_target].map(&:to_s).should.not.include osx_dependency
-          resolved[osx_target].map(&:to_s).should.include osx_dependency
+          resolved[ios_target].map(&:spec).map(&:to_s).should.include ios_dependency
+          resolved[osx_target].map(&:spec).map(&:to_s).should.not.include ios_dependency
+          resolved[ios_target].map(&:spec).map(&:to_s).should.not.include osx_dependency
+          resolved[osx_target].map(&:spec).map(&:to_s).should.include osx_dependency
         end
       end
     end
@@ -563,15 +643,15 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
         sources = config.sources_manager.sources(%w(master test_repo))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
+        spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '999.999.999'
         spec.defined_in_file.should == file
 
         sources = config.sources_manager.sources(%w(test_repo master))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
+        spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '999.999.999'
-        resolver.resolve.values.flatten.first.defined_in_file.should == file
+        resolver.resolve.values.flatten.first.spec.defined_in_file.should == file
       end
 
       it 'warns and chooses the first source when multiple sources contain ' \
@@ -582,15 +662,15 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
         sources = config.sources_manager.sources(%w(master test_repo))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
+        spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.4'
         spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json')
 
         sources = config.sources_manager.sources(%w(test_repo master))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
+        spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.4'
-        resolver.resolve.values.flatten.first.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
+        resolver.resolve.values.flatten.first.spec.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
 
         UI.warnings.should.match /multiple specifications/
       end
@@ -637,7 +717,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         sources = config.sources_manager.sources(%w(test_repo))
         sources.map(&:url).should.not.include(master_repo_url)
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
-        spec = resolver.resolve.values.flatten.first
+        spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.5pre'
         spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.5pre/JSONKit.podspec.json')
       end
@@ -678,7 +758,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
         resolver.resolve
 
-        specs = resolver.resolve.values.flatten
+        specs = resolver.resolve.values.flatten.map(&:spec)
 
         specs.map(&:name).should ==
           %w(AFNetworking AFNetworking/NSURLConnection AFNetworking/NSURLSession AFNetworking/Reachability) +
@@ -708,7 +788,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFNetworking (1.0RC3)']
       end
 
@@ -719,7 +799,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.3.4)']
       end
@@ -731,7 +811,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
       end
@@ -743,7 +823,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (0.10.1)']
       end
@@ -755,7 +835,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
       end
@@ -767,7 +847,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
@@ -779,7 +859,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
@@ -791,7 +871,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
       end
@@ -826,7 +906,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'PrereleaseMonkey', '1.0-beta1'
         end
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
-        specs = resolver.resolve.values.flatten.map(&:to_s).sort
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['PrereleaseMonkey (1.0-beta1)']
       end
     end
