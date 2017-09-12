@@ -176,6 +176,9 @@ module Pod
             generator = AggregateXCConfig.new(search_paths_target, configuration_name)
             @xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(nil, search_paths_target.pod_targets)
             @xcconfig.merge!(generator.settings_to_import_pod_targets)
+
+            # Propagate any HEADER_SEARCH_PATHS settings from the search paths.
+            XCConfigHelper.propagate_header_search_paths_from_search_paths(search_paths_target, @xcconfig)
           end
         end
 

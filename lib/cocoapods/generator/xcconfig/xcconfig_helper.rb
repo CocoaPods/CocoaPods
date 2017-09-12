@@ -321,6 +321,32 @@ module Pod
           build_settings
         end
 
+        # Updates xcconfig with the HEADER_SEARCH_PATHS from the search_paths.
+        #
+        # @param  [Target] search_paths_target
+        #         The target.
+        #
+        # @param  [Xcodeproj::Config] xcconfig
+        #         The xcconfig to edit.
+        #
+        def self.propagate_header_search_paths_from_search_paths(search_paths_target, xcconfig)
+          header_search_paths_list = []
+          search_paths_target.pod_targets.each do |target|
+            target.spec_consumers.each do |spec_consumer|
+              paths = spec_consumer.user_target_xcconfig['HEADER_SEARCH_PATHS']
+              header_search_paths_list <<= paths unless paths.nil?
+            end
+            unless header_search_paths_list == []
+              header_search_paths = header_search_paths_list.join(' ')
+              unless header_search_paths.include? '$(inherited)'
+                header_search_paths = '$(inherited) ' + header_search_paths
+              end
+              build_settings = { 'HEADER_SEARCH_PATHS' => header_search_paths }
+              xcconfig.merge!(build_settings)
+            end
+          end
+        end
+
         # Add custom build settings and required build settings to link to
         # vendored libraries and frameworks.
         #
