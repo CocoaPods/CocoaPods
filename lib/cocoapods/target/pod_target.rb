@@ -197,51 +197,73 @@ module Pod
       specs.select(&:test_specification?).map(&:test_type).uniq
     end
 
+    # Returns the framework paths associated with this target. By default all paths include the framework paths
+    # that are part of test specifications.
+    #
+    # @param  [Boolean] include_test_spec_paths
+    #         Whether to include framework paths from test specifications or not.
+    #
     # @return [Array<Hash{Symbol => [String]}>] The vendored and non vendored framework paths
     #         this target depends upon.
     #
-    def framework_paths
-      @framework_paths ||= begin
-        frameworks = []
-        file_accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
-          relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
-          framework = { :name => framework_path.basename.to_s,
-                        :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
-                        :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
-          # Until this can be configured, assume the dSYM file uses the file name as the framework.
-          # See https://github.com/CocoaPods/CocoaPods/issues/1698
-          dsym_name = "#{framework_path.basename}.dSYM"
-          dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
-          if dsym_path.exist?
-            framework[:dsym_name] = dsym_name
-            framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
-            framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
+    def framework_paths(include_test_spec_paths = true)
+      @framework_paths ||= Hash.new do |h, key|
+        h[key] = begin
+          accessors = file_accessors
+          accessors = accessors.reject { |a| a.spec.test_specification? } unless include_test_spec_paths
+          frameworks = []
+          accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
+            relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
+            framework = { :name => framework_path.basename.to_s,
+                          :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
+                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
+            # Until this can be configured, assume the dSYM file uses the file name as the framework.
+            # See https://github.com/CocoaPods/CocoaPods/issues/1698
+            dsym_name = "#{framework_path.basename}.dSYM"
+            dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
+            if dsym_path.exist?
+              framework[:dsym_name] = dsym_name
+              framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
+              framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
+            end
+            frameworks << framework
           end
-          frameworks << framework
+          if should_build? && requires_frameworks? && !static_framework?
+            frameworks << { :name => product_name,
+                            :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
+                            :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }
+          end
+          frameworks
         end
-        if should_build? && requires_frameworks? && !static_framework?
-          frameworks << { :name => product_name,
-                          :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
-                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }
-        end
-        frameworks
       end
+      @framework_paths[include_test_spec_paths]
     end
 
+    # Returns the resource paths associated with this target. By default all paths include the resource paths
+    # that are part of test specifications.
+    #
+    # @param  [Boolean] include_test_spec_paths
+    #         Whether to include resource paths from test specifications or not.
+    #
     # @return [Array<String>] The resource and resource bundle paths this target depends upon.
     #
-    def resource_paths
-      @resource_paths ||= begin
-        resource_paths = file_accessors.flat_map do |accessor|
-          accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
+    def resource_paths(include_test_spec_paths = true)
+      @resource_paths ||= Hash.new do |h, key|
+        h[key] = begin
+          accessors = file_accessors
+          accessors = accessors.reject { |a| a.spec.test_specification? } unless include_test_spec_paths
+          resource_paths = accessors.flat_map do |accessor|
+            accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
+          end
+          resource_bundles = accessors.flat_map do |accessor|
+            prefix = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE
+            prefix = configuration_build_dir unless accessor.spec.test_specification?
+            accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
+          end
+          resource_paths + resource_bundles
         end
-        resource_bundles = file_accessors.flat_map do |accessor|
-          prefix = Generator::XCConfig::XCConfigHelper::CONFIGURATION_BUILD_DIR_VARIABLE
-          prefix = configuration_build_dir unless accessor.spec.test_specification?
-          accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
-        end
-        resource_paths + resource_bundles
       end
+      @resource_paths[include_test_spec_paths]
     end
 
     # Returns the corresponding native target to use based on the provided specification.
@@ -249,7 +271,7 @@ module Pod
     # test native targets.
     #
     # @param  [Specification] spec
-    #         The specifcation to base from in order to find the native target.
+    #         The specification to base from in order to find the native target.
     #
     # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
     #
