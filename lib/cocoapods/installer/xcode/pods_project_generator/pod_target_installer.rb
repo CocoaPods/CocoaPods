@@ -226,7 +226,6 @@ module Pod
                 bundle_target.product_reference.tap do |bundle_product|
                   bundle_file_name = "#{bundle_name}.bundle"
                   bundle_product.name = bundle_file_name
-                  bundle_product.path = bundle_file_name
                 end
 
                 filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|

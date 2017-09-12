@@ -400,7 +400,7 @@ module Pod
                 it 'adds the resource bundle targets' do
                   @bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
                   @bundle_target.product_reference.name.should == 'banana_bundle.bundle'
-                  @bundle_target.product_reference.path.should == 'banana_bundle.bundle'
+                  @bundle_target.product_reference.path.should == 'BananaLib-Pods-SampleProject-banana_bundle.bundle'
                   @bundle_target.platform_name.should == :ios
                   @bundle_target.deployment_target.should == '4.3'
                 end
@@ -468,7 +468,7 @@ module Pod
                 it 'adds the resource bundle targets' do
                   @bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
                   @bundle_target.product_reference.name.should == 'banana_bundle.bundle'
-                  @bundle_target.product_reference.path.should == 'banana_bundle.bundle'
+                  @bundle_target.product_reference.path.should == 'BananaLib-banana_bundle.bundle'
                 end
 
                 it 'adds the build configurations to the resources bundle targets' do
