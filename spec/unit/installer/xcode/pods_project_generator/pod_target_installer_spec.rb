@@ -143,11 +143,16 @@ module Pod
               before do
                 config.sandbox.prepare
                 @podfile = Podfile.new do
-                  platform :ios, '6.0'
                   project 'SampleProject/SampleProject'
-                  target 'SampleProject'
+                  target 'SampleProject' do
+                    platform :ios, '6.0'
+                  end
+                  target 'SampleProject2' do
+                    platform :osx, '10.8'
+                  end
                 end
                 @target_definition = @podfile.target_definitions['SampleProject']
+                @target_definition2 = @podfile.target_definitions['SampleProject2']
                 @project = Project.new(config.sandbox.project_path)
                 config.sandbox.project = @project
 
@@ -179,9 +184,13 @@ module Pod
                 @coconut_pod_target.file_accessors = [file_accessor, test_file_accessor]
                 @coconut_pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @installer = PodTargetInstaller.new(config.sandbox, @coconut_pod_target)
+                @coconut_pod_target2 = PodTarget.new([@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition2], config.sandbox)
+                @coconut_pod_target2.file_accessors = [file_accessor, test_file_accessor]
+                @coconut_pod_target2.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @installer2 = PodTargetInstaller.new(config.sandbox, @coconut_pod_target2)
               end
 
-              it 'adds the native test target to the project' do
+              it 'adds the native test target to the project for iOS targets with code signing' do
                 @installer.install!
                 @project.targets.count.should == 2
                 @project.targets.first.name.should == 'CoconutLib'
@@ -194,6 +203,21 @@ module Pod
                 end
                 native_test_target.symbol_type.should == :unit_test_bundle
                 @coconut_pod_target.test_native_targets.count.should == 1
+              end
+
+              it 'adds the native test target to the project for OSX targets without code signing' do
+                @installer2.install!
+                @project.targets.count.should == 2
+                @project.targets.first.name.should == 'CoconutLib'
+                native_test_target = @project.targets[1]
+                native_test_target.name.should == 'CoconutLib-Unit-Tests'
+                native_test_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
+                native_test_target.build_configurations.each do |bc|
+                  bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
+                end
+                native_test_target.symbol_type.should == :unit_test_bundle
+                @coconut_pod_target2.test_native_targets.count.should == 1
               end
 
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
