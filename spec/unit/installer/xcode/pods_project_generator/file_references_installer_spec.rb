@@ -252,6 +252,18 @@ module Pod
                 result.should == Pathname.new('/Base/Sub/A')
               end
 
+              it 'compares path components instead of string prefixes' do
+                paths = [
+                  '/Base/Sub/A/1.txt',
+                  '/Base/Sub/AA/2.txt',
+                  '/Base/Sub/AAA/B/1.txt',
+                  '/Base/Sub/AAAA/B/2.txt',
+                  '/Base/Sub/AAAAA/D/E/1.txt',
+                ].map { |p| Pathname.new(p) }
+                result = @installer.send(:common_path, paths)
+                result.should == Pathname.new('/Base/Sub')
+              end
+
               it 'should not consider root \'/\' a common path' do
                 paths = [
                   '/A/B/C',

@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix common paths sometimes calculating incorrectly  
+  [amorde](https://github.com/amorde)
+  [#7028](https://github.com/CocoaPods/CocoaPods/pull/7028)
+
 * Do not code sign OSX targets for testing bundles  
   [Justin Martin](https://github.com/justinseanmartin)
   [#7027](https://github.com/CocoaPods/CocoaPods/pull/7027)

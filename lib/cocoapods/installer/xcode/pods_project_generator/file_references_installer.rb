@@ -242,7 +242,7 @@ module Pod
           end
 
           # Returns a Pathname of the nearest parent from which all the given paths descend.
-          # Converts each Pathname to a string and finds the longest common prefix
+          # Converts each Pathname to a list of path components and finds the longest common prefix
           #
           # @param  [Array<Pathname>] paths
           #         The paths to files or directories on disk. Must be absolute paths
@@ -258,10 +258,12 @@ module Pod
               path.dirname.to_s
             end
             min, max = strs.minmax
+            min = min.split('/')
+            max = max.split('/')
             idx = min.size.times { |i| break i if min[i] != max[i] }
-            result = Pathname.new(min[0...idx])
+            result = Pathname.new(min[0...idx].join('/'))
             # Don't consider "/" a common path
-            return result unless result.to_s == '/'
+            return result unless result.to_s == '' || result.to_s == '/'
           end
 
           # Computes the destination sub-directory in the sandbox
