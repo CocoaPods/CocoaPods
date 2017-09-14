@@ -103,46 +103,71 @@ module Pod
         @installer.install!
       end
 
-      it 'runs source provider hooks before analyzing' do
-        @installer.unstub(:resolve_dependencies)
-        @installer.stubs(:validate_build_configurations)
-        @installer.stubs(:clean_sandbox)
-        def @installer.run_source_provider_hooks
-          @hook_called = true
+      describe 'handling spec sources' do
+        before do
+          @hooks_manager = Pod::HooksManager
+          @hooks_manager.instance_variable_set(:@registrations, nil)
         end
 
-        def @installer.analyze(*)
+        it 'runs source provider hooks before analyzing' do
+          @installer.unstub(:resolve_dependencies)
+          @installer.stubs(:validate_build_configurations)
+          @installer.stubs(:clean_sandbox)
+          @installer.stubs(:analyze)
+          @installer.stubs(:run_source_provider_hooks).with do
+            @hook_called = true
+          end
+          @installer.install!
           @hook_called.should.be.true
         end
-        @installer.install!
-      end
 
-      it 'includes sources from source provider plugins' do
-        plugin_name = 'test-plugin'
-        Pod::HooksManager.register(plugin_name, :source_provider) do |context, options|
-          source_url = options['sources'].first
-          return unless source_url
-          source = Pod::Source.new(source_url)
-          context.add_source(source)
+        it 'includes sources from source provider plugins' do
+          plugin_name = 'test-plugin'
+          @hooks_manager.register(plugin_name, :source_provider) do |context, options|
+            source_url = options['sources'].first
+            return unless source_url
+            source = Pod::Source.new(source_url)
+            context.add_source(source)
+          end
+
+          test_source_name = 'https://github.com/artsy/CustomSpecs.git'
+          plugins_hash = Installer::DEFAULT_PLUGINS.merge(plugin_name => { 'sources' => [test_source_name] })
+          @installer.podfile.stubs(:plugins).returns(plugins_hash)
+          @installer.unstub(:resolve_dependencies)
+          @installer.stubs(:validate_build_configurations)
+          @installer.stubs(:clean_sandbox)
+          @installer.stubs(:analyze)
+          Installer::Analyzer.any_instance.stubs(:update_repositories)
+
+          analyzer = @installer.resolve_dependencies
+
+          source = Pod::Source.new(test_source_name)
+          names = analyzer.sources.map(&:name)
+          names.should.include(source.name)
         end
 
-        test_source_name = 'https://github.com/artsy/Specs.git'
-        plugins_hash = Installer::DEFAULT_PLUGINS.merge(plugin_name => { 'sources' => [test_source_name] })
-        @installer.podfile.stubs(:plugins).returns(plugins_hash)
-        @installer.unstub(:resolve_dependencies)
-        @installer.stubs(:validate_build_configurations)
-        @installer.stubs(:clean_sandbox)
-        @installer.stubs(:ensure_plugins_are_installed!)
-        @installer.stubs(:analyze)
+        it 'does not automatically add master spec repo if plugin sources exist' do
+          plugin_name = 'test-plugin'
+          @hooks_manager.register(plugin_name, :source_provider) do |context, options|
+            source_url = options['sources'].first
+            return unless source_url
+            source = Pod::Source.new(source_url)
+            context.add_source(source)
+          end
 
-        analyzer = Installer::Analyzer.new(config.sandbox, @installer.podfile, @installer.lockfile)
-        analyzer.stubs(:analyze)
-        @installer.stubs(:create_analyzer).returns(analyzer)
-        @installer.install!
+          test_source_name = 'https://github.com/artsy/CustomSpecs.git'
+          plugins_hash = Installer::DEFAULT_PLUGINS.merge(plugin_name => { 'sources' => [test_source_name] })
+          @installer.podfile.stubs(:plugins).returns(plugins_hash)
+          @installer.unstub(:resolve_dependencies)
+          @installer.stubs(:validate_build_configurations)
+          @installer.stubs(:clean_sandbox)
+          @installer.stubs(:analyze)
+          Installer::Analyzer.any_instance.stubs(:update_repositories)
 
-        source = Pod::Source.new(test_source_name)
-        names = analyzer.sources.map(&:name)
-        names.should.include(source.name)
+          analyzer = @installer.resolve_dependencies
+          names = analyzer.sources.map(&:name)
+          names.should == [Pod::Source.new('https://github.com/artsy/CustomSpecs.git').name]
+        end
       end
 
       it 'integrates the user targets if the corresponding config is set' do
