@@ -142,14 +142,32 @@ module Pod
             @banana_pod_target = fixture_pod_target(@banana_spec)
 
             @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
-            @coconut_pod_target = fixture_pod_target(@coconut_spec)
+            @coconut_test_spec = @coconut_spec.test_specs.first
+            @coconut_pod_target = fixture_pod_target_with_specs([@coconut_spec, @coconut_test_spec])
 
             @consumer = @coconut_pod_target.spec_consumers.first
+            @test_consumer = @coconut_pod_target.spec_consumers[1]
             @podfile = @coconut_pod_target.podfile
 
-            file_accessors = [Sandbox::FileAccessor.new(fixture('coconut-lib'), @consumer)]
+            file_accessors = [Sandbox::FileAccessor.new(fixture('coconut-lib'), @consumer), Sandbox::FileAccessor.new(fixture('coconut-lib'), @test_consumer)]
 
             @coconut_pod_target.stubs(:file_accessors).returns(file_accessors)
+          end
+
+          it 'does not merge pod target xcconfig of test specifications for a non test xcconfig' do
+            @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1' }
+            @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1' }
+            generator = PodXCConfig.new(@coconut_pod_target, false)
+            xcconfig = generator.generate
+            xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1'
+          end
+
+          it 'merges the pod target xcconfig of non test specifications for test xcconfigs' do
+            @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1' }
+            @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1' }
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1 TEST_ONLY=1'
           end
 
           it 'includes correct other ld flags' do
