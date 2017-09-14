@@ -32,16 +32,22 @@ module Pod
       #
       attr_reader :lockfile
 
+      # @return [Array<Source>] Sources provided by plugins
+      #
+      attr_reader :plugin_sources
+
       # Initialize a new instance
       #
-      # @param  [Sandbox]  sandbox     @see sandbox
-      # @param  [Podfile]  podfile     @see podfile
-      # @param  [Lockfile] lockfile    @see lockfile
+      # @param  [Sandbox]       sandbox           @see sandbox
+      # @param  [Podfile]       podfile           @see podfile
+      # @param  [Lockfile]      lockfile          @see lockfile
+      # @param  [Array<Source>] plugin_sources    @see plugin_sources
       #
-      def initialize(sandbox, podfile, lockfile = nil)
+      def initialize(sandbox, podfile, lockfile = nil, plugin_sources = nil)
         @sandbox  = sandbox
         @podfile  = podfile
         @lockfile = lockfile
+        @plugin_sources = plugin_sources
 
         @update = false
         @allow_pre_downloads = true
@@ -825,8 +831,8 @@ module Pod
 
       # Returns the sources used to query for specifications
       #
-      # When no explicit Podfile sources are defined, this defaults to the
-      # master spec repository.
+      # When no explicit Podfile sources or plugin sources are defined, this
+      # defaults to the master spec repository.
       # available sources ({config.sources_manager.all}).
       #
       # @return [Array<Source>] the sources to be used in finding
@@ -835,6 +841,7 @@ module Pod
       def sources
         @sources ||= begin
           sources = podfile.sources
+          plugin_sources = @plugin_sources || []
 
           # Add any sources specified using the :source flag on individual dependencies.
           dependency_sources = podfile.dependencies.map(&:podspec_repo).compact
@@ -842,15 +849,19 @@ module Pod
 
           if all_dependencies_have_sources
             sources = dependency_sources
-          elsif has_dependencies? && sources.empty?
+          elsif has_dependencies? && sources.empty? && plugin_sources.empty?
             sources = ['https://github.com/CocoaPods/Specs.git']
           else
             sources += dependency_sources
           end
 
-          sources.uniq.map do |source_url|
+          result = sources.uniq.map do |source_url|
             config.sources_manager.find_or_create_source_with_url(source_url)
           end
+          unless plugin_sources.empty?
+            result.insert(0, *plugin_sources)
+          end
+          result
         end
       end
 

@@ -140,11 +140,11 @@ module Pod
       end
     end
 
+    # @return [Analyzer] The analyzer used to resolve dependencies
+    #
     def resolve_dependencies
-      analyzer = create_analyzer
-
       plugin_sources = run_source_provider_hooks
-      analyzer.sources.insert(0, *plugin_sources)
+      analyzer = create_analyzer(plugin_sources)
 
       UI.section 'Updating local specs repositories' do
         analyzer.update_repositories
@@ -155,6 +155,7 @@ module Pod
         validate_build_configurations
         clean_sandbox
       end
+      analyzer
     end
 
     def download_dependencies
@@ -243,8 +244,8 @@ module Pod
       @aggregate_targets = analyzer.result.targets
     end
 
-    def create_analyzer
-      Analyzer.new(sandbox, podfile, lockfile).tap do |analyzer|
+    def create_analyzer(plugin_sources = nil)
+      Analyzer.new(sandbox, podfile, lockfile, plugin_sources).tap do |analyzer|
         analyzer.installation_options = installation_options
         analyzer.has_dependencies = has_dependencies?
       end
