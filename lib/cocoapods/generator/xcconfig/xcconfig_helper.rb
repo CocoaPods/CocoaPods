@@ -11,7 +11,7 @@ module Pod
         #         this variable to point to the standard directory, which
         #         will be used by CocoaPods.
         #
-        BUILD_DIR_VARIABLE = '$PODS_BUILD_DIR'.freeze
+        BUILD_DIR_VARIABLE = '${PODS_BUILD_DIR}'.freeze
 
         # @return [String] Used as alias for CONFIGURATION_BUILD_DIR, so that
         #         when this is overridden per {PodTarget}, it is still possible
@@ -20,7 +20,7 @@ module Pod
         #         the user can override this variable to point to the standard
         #         directory, which will be used by CocoaPods.
         #
-        CONFIGURATION_BUILD_DIR_VARIABLE = '$PODS_CONFIGURATION_BUILD_DIR'.freeze
+        CONFIGURATION_BUILD_DIR_VARIABLE = '${PODS_CONFIGURATION_BUILD_DIR}'.freeze
 
         # Converts an array of strings to a single string where the each string
         # is surrounded by double quotes and separated by a space. Used to
@@ -296,8 +296,8 @@ module Pod
           # Alias build dirs to avoid recursive definitions for pod targets and depending
           # on build settings which could be overwritten in the user target.
           build_settings = {
-            BUILD_DIR_VARIABLE[1..-1] => '$BUILD_DIR',
-            CONFIGURATION_BUILD_DIR_VARIABLE[1..-1] => "#{BUILD_DIR_VARIABLE}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+            BUILD_DIR_VARIABLE[2..-2] => '${BUILD_DIR}',
+            CONFIGURATION_BUILD_DIR_VARIABLE[2..-2] => "#{BUILD_DIR_VARIABLE}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
           }
 
           # Scope pod targets as long as they are not test targets.

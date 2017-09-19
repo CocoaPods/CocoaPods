@@ -106,15 +106,15 @@ module Pod
           end
 
           it 'sets the PODS_BUILD_DIR build variable' do
-            @xcconfig.to_hash['PODS_BUILD_DIR'].should == '$BUILD_DIR'
+            @xcconfig.to_hash['PODS_BUILD_DIR'].should == '${BUILD_DIR}'
           end
 
           it 'sets the PODS_CONFIGURATION_BUILD_DIR build variable' do
-            @xcconfig.to_hash['PODS_CONFIGURATION_BUILD_DIR'].should == '$PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+            @xcconfig.to_hash['PODS_CONFIGURATION_BUILD_DIR'].should == '${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
           end
 
           it 'sets the CONFIGURATION_BUILD_DIR build variable' do
-            @xcconfig.to_hash['CONFIGURATION_BUILD_DIR'].should.be == '$PODS_CONFIGURATION_BUILD_DIR/BananaLib'
+            @xcconfig.to_hash['CONFIGURATION_BUILD_DIR'].should.be == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib'
           end
 
           it 'will be skipped when installing' do
@@ -202,7 +202,7 @@ module Pod
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BananaLib" "$PODS_CONFIGURATION_BUILD_DIR/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
           end
 
           it 'adds settings for test dependent targets excluding the parents targets' do
@@ -211,7 +211,7 @@ module Pod
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BananaLib" "$PODS_CONFIGURATION_BUILD_DIR/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
           end
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do

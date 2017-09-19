@@ -170,15 +170,15 @@ module Pod
       end
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
-        @pod_target.configuration_build_dir.should == '$PODS_CONFIGURATION_BUILD_DIR/BananaLib'
-        @pod_target.scoped.first.configuration_build_dir.should == '$PODS_CONFIGURATION_BUILD_DIR/BananaLib-Pods'
-        @pod_target.configuration_build_dir('$PODS_BUILD_DIR').should == '$PODS_BUILD_DIR/BananaLib'
-        @pod_target.scoped.first.configuration_build_dir('$PODS_BUILD_DIR').should == '$PODS_BUILD_DIR/BananaLib-Pods'
+        @pod_target.configuration_build_dir.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib'
+        @pod_target.scoped.first.configuration_build_dir.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-Pods'
+        @pod_target.configuration_build_dir('${PODS_BUILD_DIR}').should == '${PODS_BUILD_DIR}/BananaLib'
+        @pod_target.scoped.first.configuration_build_dir('${PODS_BUILD_DIR}').should == '${PODS_BUILD_DIR}/BananaLib-Pods'
       end
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
-        @pod_target.build_product_path.should == '$PODS_CONFIGURATION_BUILD_DIR/BananaLib/libBananaLib.a'
-        @pod_target.scoped.first.build_product_path.should == '$PODS_CONFIGURATION_BUILD_DIR/BananaLib-Pods/libBananaLib-Pods.a'
+        @pod_target.build_product_path.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/libBananaLib.a'
+        @pod_target.scoped.first.build_product_path.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-Pods/libBananaLib-Pods.a'
         @pod_target.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib/libBananaLib.a'
         @pod_target.scoped.first.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib-Pods/libBananaLib-Pods.a'
       end
@@ -373,7 +373,7 @@ module Pod
           fa.stubs(:resources).returns([])
           fa.stubs(:spec).returns(stub(:test_specification? => true))
           @test_pod_target.stubs(:file_accessors).returns([fa])
-          @test_pod_target.resource_paths.should == ['$PODS_CONFIGURATION_BUILD_DIR/TestResourceBundle.bundle']
+          @test_pod_target.resource_paths.should == ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
         end
 
         it 'includes framework paths from test specifications' do
