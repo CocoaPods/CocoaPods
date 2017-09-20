@@ -32,6 +32,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [paulb777](https://github.com/paulb777)
   [#6988](https://github.com/CocoaPods/CocoaPods/pull/6988)
 
+* Added '-verbose' flag to xcodebuild for validation  
+  [abbeycode](https://github.com/abbeycode)
+  [#7040](https://github.com/CocoaPods/CocoaPods/issues/7040)
+
 ##### Bug Fixes
 
 * Fix common paths sometimes calculating incorrectly  
