@@ -857,6 +857,10 @@ module Pod
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
       end
 
+      if config.verbose
+        command += ' -verbose'
+      end
+
       output, status = _xcodebuild(command)
 
       unless status.success?
