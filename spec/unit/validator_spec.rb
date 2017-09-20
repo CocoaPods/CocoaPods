@@ -535,7 +535,7 @@ module Pod
         Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
         Executable.stubs(:which).with(:xcrun)
         config.verbose = true
-        command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release', 'CODE_SIGN_IDENTITY=']#, '-verbose']
+        command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release', 'CODE_SIGN_IDENTITY=', '-verbose']
         Executable.expects(:capture_command).with('xcodebuild', command).once
         validator.validate
       end
