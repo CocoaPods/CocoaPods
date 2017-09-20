@@ -536,7 +536,7 @@ module Pod
         Executable.stubs(:which).with(:xcrun)
         config.verbose = true
         command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release', 'CODE_SIGN_IDENTITY=', '-verbose']
-        Executable.expects(:capture_command).with('xcodebuild', command, :capture => :merge).once.returns(['', stub(:success? => true)])
+        Executable.expects(:capture_command).with('xcodebuild', command).once
         validator.validate
       end
 
