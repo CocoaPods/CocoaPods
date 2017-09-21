@@ -38,6 +38,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7036](https://github.com/CocoaPods/CocoaPods/pull/7036)
 
+* Do not merge `pod_target_xcconfig` from test specs into non test xcconfigs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7037](https://github.com/CocoaPods/CocoaPods/pull/7037)
+
 * Fix common paths sometimes calculating incorrectly  
   [amorde](https://github.com/amorde)
   [#7028](https://github.com/CocoaPods/CocoaPods/pull/7028)

@@ -127,12 +127,18 @@ end
 
 def fixture_pod_target(spec_or_name, target_definitions = [])
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
+  fixture_pod_target_with_specs([spec], target_definitions)
+end
+
+def fixture_pod_target_with_specs(specs, target_definitions = [])
   target_definitions << fixture_target_definition if target_definitions.empty?
-  target_definitions.each { |td| td.store_pod(spec.name) }
-  Pod::PodTarget.new([spec], target_definitions, config.sandbox).tap do |pod_target|
-    pod_target.file_accessors << fixture_file_accessor(spec, pod_target.platform)
-    consumer = spec.consumer(pod_target.platform)
-    pod_target.spec_consumers << consumer
+  target_definitions.each { |td| specs.each { |spec| td.store_pod(spec.name) } }
+  Pod::PodTarget.new(specs, target_definitions, config.sandbox).tap do |pod_target|
+    specs.each do |spec|
+      pod_target.file_accessors << fixture_file_accessor(spec, pod_target.platform)
+      consumer = spec.consumer(pod_target.platform)
+      pod_target.spec_consumers << consumer
+    end
   end
 end
 

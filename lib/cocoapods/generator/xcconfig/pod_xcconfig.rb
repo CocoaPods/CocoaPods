@@ -66,7 +66,7 @@ module Pod
 
           XCConfigHelper.add_settings_for_file_accessors_of_target(nil, target, @xcconfig)
           target.file_accessors.each do |file_accessor|
-            @xcconfig.merge!(file_accessor.spec_consumer.pod_target_xcconfig)
+            @xcconfig.merge!(file_accessor.spec_consumer.pod_target_xcconfig) if @test_xcconfig == file_accessor.spec.test_specification?
           end
           XCConfigHelper.add_target_specific_settings(target, @xcconfig)
           recursive_dependent_targets = target.recursive_dependent_targets
