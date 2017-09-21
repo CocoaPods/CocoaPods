@@ -523,6 +523,23 @@ module Pod
         validator.validate
       end
 
+      it 'passes the -verbose flag on to xcodebuild when --verbose passed to validator' do
+        require 'fourflusher'
+        Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:validate_url)
+        git = Executable.which(:git)
+        Executable.stubs(:which).with('git').returns(git)
+        Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
+        Executable.stubs(:which).with(:xcrun)
+        config.verbose = true
+        command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release', 'CODE_SIGN_IDENTITY=', '-verbose']
+        Executable.expects(:capture_command).with('xcodebuild', command).once
+        validator.validate
+      end
+
       it 'sets the -Wincomplete-umbrella compiler flag for pod targets' do
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
         validator.no_clean = true
