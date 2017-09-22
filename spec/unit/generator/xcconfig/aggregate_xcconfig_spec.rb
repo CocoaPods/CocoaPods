@@ -86,11 +86,11 @@ module Pod
           end
 
           it 'sets the PODS_BUILD_DIR build variable' do
-            @xcconfig.to_hash['PODS_BUILD_DIR'].should == '$BUILD_DIR'
+            @xcconfig.to_hash['PODS_BUILD_DIR'].should == '${BUILD_DIR}'
           end
 
           it 'sets the PODS_CONFIGURATION_BUILD_DIR build variable' do
-            @xcconfig.to_hash['PODS_CONFIGURATION_BUILD_DIR'].should == '$PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+            @xcconfig.to_hash['PODS_CONFIGURATION_BUILD_DIR'].should == '${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
           end
 
           it 'adds the COCOAPODS macro definition' do
@@ -198,12 +198,12 @@ module Pod
             end
 
             it 'does not include framework header paths as local headers for pods that are linked statically' do
-              monkey_headers = '-iquote "$PODS_CONFIGURATION_BUILD_DIR/monkey.framework/Headers"'
+              monkey_headers = '-iquote "${PODS_CONFIGURATION_BUILD_DIR}/monkey.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should.not.include monkey_headers
             end
 
             it 'includes the public header paths as system headers' do
-              expected = '$(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/OrangeFramework/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
+              expected = '$(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
               @generator.stubs(:pod_targets).returns([@pod_targets.first, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'), @target_definition)])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
@@ -242,22 +242,22 @@ module Pod
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$PODS_CONFIGURATION_BUILD_DIR/BananaLib-iOS" "$PODS_CONFIGURATION_BUILD_DIR/OrangeFramework-iOS"'
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-iOS" "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework-iOS"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-              expected = '$(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/BananaLib-iOS/BananaLib.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/OrangeFramework-iOS/OrangeFramework.framework/Headers"'
+              expected = '$(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-iOS/BananaLib.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework-iOS/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
           end
 
           describe 'with an unscoped pod target' do
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$PODS_CONFIGURATION_BUILD_DIR/OrangeFramework"'
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
-              expected = '$(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/OrangeFramework/OrangeFramework.framework/Headers"'
+              expected = '$(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
           end

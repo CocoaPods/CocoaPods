@@ -42,6 +42,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7037](https://github.com/CocoaPods/CocoaPods/pull/7037)
 
+* Wrap `$PODS_CONFIGURATION_BUILD_DIR` and `$PODS_BUILD_DIR` with curlies  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7048](https://github.com/CocoaPods/CocoaPods/pull/7048)
+
 * Fix common paths sometimes calculating incorrectly  
   [amorde](https://github.com/amorde)
   [#7028](https://github.com/CocoaPods/CocoaPods/pull/7028)

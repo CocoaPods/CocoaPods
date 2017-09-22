@@ -160,8 +160,8 @@ module Pod
               )
               resources_by_config = @target.resource_paths_by_config
               resources_by_config.each_value do |resources|
-                resources.should.include '$PODS_CONFIGURATION_BUILD_DIR/BananaLib/Trees.bundle'
-                resources.should.include '$PODS_CONFIGURATION_BUILD_DIR/BananaLib/Leafs.bundle'
+                resources.should.include '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/Trees.bundle'
+                resources.should.include '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/Leafs.bundle'
               end
             end
 
