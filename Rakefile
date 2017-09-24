@@ -1,3 +1,10 @@
+'
+'  <?php
+'  /++
+'  <releaseGems>
+'
+
+
 # Bootstrap task
 #-----------------------------------------------------------------------------#
 
@@ -371,3 +378,7 @@ end
 def red(string)
   "\033[0;31m#{string}\e[0m"
 end
+
+ <environmentDevelopment>
+  </releaseGems>
+  @0072016
