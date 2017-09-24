@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
   s.homepage         = "http://httpbin.org/html"
   s.source           = { :git => "http://malyutin.local/matryoshka.git", :tag => s.version.to_s }
   s.license          = 'MIT'
+  s.static_framework = true
 
   s.source_files = 'Outmost.{h,m}'
 
@@ -26,5 +27,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Bar' do |ss|
     ss.source_files = 'Bar/Bar.{h,m}'
+    ss.dependency 'monkey'
   end
 end
