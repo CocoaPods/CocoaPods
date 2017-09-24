@@ -22,11 +22,11 @@ PODS:
     - asserts
 
 DEPENDENCIES:
-  - asserts (from `asserts`)
-  - logger (from `logger`)
-  - sharedlib/Core (from `sharedlib`)
-  - sharedlib/Testing (from `sharedlib`)
-  - testkit (from `testkit`)
+  - "asserts (from `asserts`)"
+  - "logger (from `logger`)"
+  - "sharedlib/Core (from `sharedlib`)"
+  - "sharedlib/Testing (from `sharedlib`)"
+  - "testkit (from `testkit`)"
 
 EXTERNAL SOURCES:
   asserts:
