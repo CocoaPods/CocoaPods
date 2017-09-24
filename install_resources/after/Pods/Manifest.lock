@@ -2,7 +2,7 @@ PODS:
   - res (0.1.0)
 
 DEPENDENCIES:
-  - res (from `res`)
+  - "res (from `res`)"
 
 EXTERNAL SOURCES:
   res:

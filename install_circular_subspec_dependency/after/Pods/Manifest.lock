@@ -15,17 +15,17 @@ PODS:
     - Pod1/s2
 
 DEPENDENCIES:
-  - Pod1 (from `./DeveloperPods/Pod1`)
-  - Pod2 (from `./DeveloperPods/Pod2`)
-  - Pod3/s3 (from `./DeveloperPods/Pod3`)
+  - "Pod1 (from `./DeveloperPods/Pod1`)"
+  - "Pod2 (from `./DeveloperPods/Pod2`)"
+  - "Pod3/s3 (from `./DeveloperPods/Pod3`)"
 
 EXTERNAL SOURCES:
   Pod1:
-    :path: ./DeveloperPods/Pod1
+    :path: "./DeveloperPods/Pod1"
   Pod2:
-    :path: ./DeveloperPods/Pod2
+    :path: "./DeveloperPods/Pod2"
   Pod3:
-    :path: ./DeveloperPods/Pod3
+    :path: "./DeveloperPods/Pod3"
 
 SPEC CHECKSUMS:
   Pod1: 94fcc2b419412321eb22c5abaf3949fdf7eda51c
