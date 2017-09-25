@@ -45,8 +45,21 @@ module Pod
         #
         def generate
           target_search_paths = target.build_headers.search_paths(target.platform)
-          sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-          search_paths = target_search_paths.concat(sandbox_search_paths).uniq
+          # sandbox_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+          search_paths = target_search_paths#target_search_paths.concat(sandbox_search_paths)
+
+          # for static lib targets
+          if !target.requires_frameworks?
+            # to find its own modulemap and umbrella
+            search_paths << "${PODS_ROOT}/" + target.support_files_dir.relative_path_from(target.sandbox.root).to_s
+            # to find dependents' modulemap and umbrella
+            search_paths += target.recursive_dependent_targets.map do |dependent_target|
+              # "${PODS_ROOT}/" + dependent_target.support_files_dir.relative_path_from(target.sandbox.root).to_s
+              dependent_target.configuration_build_dir.to_s
+            end
+          end
+
+          search_paths = search_paths.uniq
 
           config = {
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
