@@ -287,16 +287,6 @@ module Pod
               phase.output_paths = td_script_phase[:output_files] if td_script_phase.key?(:output_files)
               phase.show_env_vars_in_log = td_script_phase[:show_env_vars_in_log] ? '1' : '0' if td_script_phase.key?(:show_env_vars_in_log)
             end
-
-            # Move script phases to their correct index if the order has changed.
-            offset = native_target.build_phases.count - target_definition_script_phases.count
-            target_definition_script_phases.each_with_index do |td_script_phase, index|
-              current_index = native_target.build_phases.index do |bp|
-                bp.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && bp.name.sub(USER_BUILD_PHASE_PREFIX, '') == td_script_phase[:name]
-              end
-              expected_index = offset + index
-              native_target.build_phases.insert(expected_index, native_target.build_phases.delete_at(current_index)) if current_index != expected_index
-            end
           end
         end
 
