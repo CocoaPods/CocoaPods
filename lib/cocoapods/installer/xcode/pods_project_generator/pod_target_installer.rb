@@ -21,7 +21,6 @@ module Pod
               create_support_files_dir
               add_test_targets if target.contains_test_specifications?
               add_resources_bundle_targets
-              add_files_to_build_phases
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
               create_module_map
@@ -46,8 +45,9 @@ module Pod
                 end
               else
                 add_copy_module_map_build_phase
-                add_copy_umbrella_header_build_phase
+                # add_copy_umbrella_header_build_phase
               end
+              add_files_to_build_phases
               create_prefix_header
               create_dummy_source
             end
@@ -576,7 +576,7 @@ module Pod
               copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
                 native_target.new_copy_files_build_phase(copy_phase_name)
               copy_phase.symbol_dst_subfolder_spec = :products_directory
-              copy_phase.dst_path = 'Headers/'
+              copy_phase.dst_path = ''
               copy_phase.add_file_reference(file_ref, true)
             else
               build_file.settings ||= {}
@@ -591,7 +591,7 @@ module Pod
           end
 
           def add_copy_module_map_build_phase(path = target.module_map_path.relative_path_from(target.support_files_dir))
-            if !target.requires_frameworks? && !target.uses_swift?
+            if !target.requires_frameworks? #&& !target.uses_swift?
               file_ref = support_files_group.find_file_by_path(path.to_s)
               copy_phase_name = 'Copy modulemap'
               copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
@@ -602,17 +602,17 @@ module Pod
           end
 
           # FIXME: Umbrella header should be copied as part of copy public headers?
-          def add_copy_umbrella_header_build_phase(path = target.umbrella_header_path.relative_path_from(target.support_files_dir))
-            if !target.requires_frameworks? && !target.uses_swift?
-              file_ref = support_files_group.find_file_by_path(path.to_s)
-              copy_phase_name = 'Copy umbrella header'
-              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
-                native_target.new_copy_files_build_phase(copy_phase_name)
-              copy_phase.symbol_dst_subfolder_spec = :products_directory
-              copy_phase.dst_path = 'Headers/'
-              copy_phase.add_file_reference(file_ref, false)
-            end
-          end
+          # def add_copy_umbrella_header_build_phase(path = target.umbrella_header_path.relative_path_from(target.support_files_dir))
+          #   if !target.requires_frameworks? && !target.uses_swift?
+          #     file_ref = support_files_group.find_file_by_path(path.to_s)
+          #     copy_phase_name = 'Copy umbrella header'
+          #     copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
+          #       native_target.new_copy_files_build_phase(copy_phase_name)
+          #     copy_phase.symbol_dst_subfolder_spec = :products_directory
+          #     copy_phase.dst_path = 'Headers/'
+          #     copy_phase.add_file_reference(file_ref, false)
+          #   end
+          # end
 
           #-----------------------------------------------------------------------#
         end

@@ -37,8 +37,9 @@ module Pod
       # @return [String]
       #
       def generate
+        framework_prefix = target.try(:requires_frameworks?) ? "framework " : ""
         <<-MODULE_MAP.strip_heredoc
-          framework module #{target.product_module_name} {
+          #{framework_prefix}module #{target.product_module_name} {
             umbrella header "#{target.umbrella_header_path.basename}"
 
             export *

@@ -182,7 +182,7 @@ module Pod
         #         The path retrieved from Sandbox#root.
         #
         # @return [void]
-        #
+        #a
         def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root, include_other_ldflags = true)
           name = File.basename(framework_path, '.framework')
           dirname = '${PODS_ROOT}/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
@@ -410,6 +410,7 @@ module Pod
           if target.uses_swift?
             other_swift_flags = ['$(inherited)', quote(%w(-D COCOAPODS))]
             other_swift_flags << quote(%w(-suppress-warnings)) if target.try(:inhibit_warnings?)
+            other_swift_flags << quote(%w(-import-underlying-module)) if !target.try(:requires_frameworks?)
             build_settings = { 'OTHER_SWIFT_FLAGS' => other_swift_flags.join(' ') }
             xcconfig.merge!(build_settings)
           end
