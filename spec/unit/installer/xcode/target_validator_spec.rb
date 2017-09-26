@@ -181,6 +181,31 @@ module Pod
           end
         end
 
+        describe '#verify_no_static_framework_transitive_dependencies_with_static_framework' do
+          before do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            @podfile = Pod::Podfile.new do
+              install! 'cocoapods', 'integrate_targets' => false
+              platform :ios, '8.0'
+              project 'SampleProject/SampleProject'
+              use_frameworks!
+              pod 'matryoshka/Bar',  :path => (fixture_path + 'matryoshka').to_s
+              pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+              target 'SampleProject'
+            end
+            @lockfile = generate_lockfile
+
+            @file = Pathname('/yolo.m')
+            @file.stubs(:realpath).returns(@file)
+          end
+
+          it 'allows transitive static dependencies when building a static framework' do
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.not.raise(Informative) { @validator.send :verify_no_static_framework_transitive_dependencies }
+          end
+        end
+
         #-------------------------------------------------------------------------#
 
         describe '#verify_no_pods_used_with_multiple_swift_versions' do

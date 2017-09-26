@@ -93,7 +93,7 @@ module Pod
     # @return [Boolean] Whether the target should build a static framework.
     #
     def static_framework?
-      !is_a?(Pod::AggregateTarget) && specs.any? && specs.all?(&:static_framework)
+      !is_a?(Pod::AggregateTarget) && specs.any? && specs.flat_map(&:root).all?(&:static_framework)
     end
 
     #-------------------------------------------------------------------------#
