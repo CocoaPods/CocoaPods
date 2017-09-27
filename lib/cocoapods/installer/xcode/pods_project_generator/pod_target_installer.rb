@@ -45,12 +45,20 @@ module Pod
                   create_build_phase_to_move_static_framework_archive
                 end
               end
-              create_prefix_header
+              unless skip_pch?
+                create_prefix_header
+              end
               create_dummy_source
             end
           end
 
           private
+
+          # @return [Boolean] Whether the target should build a pch file.
+          #
+          def skip_pch?
+            target.specs.any? { |spec| spec.prefix_header_file.is_a?(FalseClass) }
+          end
 
           # Remove the default headers folder path settings for static library pod
           # targets.
