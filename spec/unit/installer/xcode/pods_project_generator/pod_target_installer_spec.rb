@@ -417,9 +417,6 @@ module Pod
                   'BananaLib-Pods-SampleProject-prefix.pch',
                   'BananaLib-Pods-SampleProject.xcconfig',
                 ]
-                group.children.map(&:display_name).sort.should.not == [
-                  'BananaLib-Pods-SampleProject-prefix.pch',
-                ]
               end
 
               it 'verifies disabling prefix header generation' do
@@ -429,9 +426,6 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
                   'BananaLib-Pods-SampleProject.xcconfig',
-                ]
-                group.children.map(&:display_name).sort.should.not == [
-                  'BananaLib-Pods-SampleProject-prefix.pch',
                 ]
               end
 
@@ -510,9 +504,6 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-dummy.m',
                   'BananaLib.xcconfig',
-                ]
-                group.children.map(&:display_name).sort.should.not == [
-                  'BananaLib-prefix.pch',
                 ]
               end
 
