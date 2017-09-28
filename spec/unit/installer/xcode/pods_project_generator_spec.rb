@@ -55,7 +55,7 @@ module Pod
             @generator = @installer.send(:create_generator)
           end
 
-          describe 'Preparing' do
+          describe '#prepare' do
             before do
               @generator.send(:prepare)
             end
@@ -69,6 +69,13 @@ module Pod
               @generator.project.build_settings('Test')['STRIP_INSTALLED_PRODUCT'].should == 'NO'
               @generator.project.build_settings('Release')['STRIP_INSTALLED_PRODUCT'].should == 'NO'
               @generator.project.build_settings('App Store')['STRIP_INSTALLED_PRODUCT'].should == 'NO'
+            end
+
+            it 'sets the SYMROOT to the default value for all configurations for the whole project' do
+              @generator.project.build_settings('Debug')['SYMROOT'].should == Pod::Project::LEGACY_BUILD_ROOT
+              @generator.project.build_settings('Test')['SYMROOT'].should == Pod::Project::LEGACY_BUILD_ROOT
+              @generator.project.build_settings('Release')['SYMROOT'].should == Pod::Project::LEGACY_BUILD_ROOT
+              @generator.project.build_settings('App Store')['SYMROOT'].should == Pod::Project::LEGACY_BUILD_ROOT
             end
 
             it 'creates the Pods project' do
