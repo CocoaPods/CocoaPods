@@ -408,6 +408,27 @@ module Pod
                 ]
               end
 
+              it 'verifies keeping prefix header generation' do
+                @pod_target.specs.first.stubs(:prefix_header_file).returns(true)
+                @installer.install!
+                group = @project['Pods/BananaLib/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'BananaLib-Pods-SampleProject-dummy.m',
+                  'BananaLib-Pods-SampleProject-prefix.pch',
+                  'BananaLib-Pods-SampleProject.xcconfig',
+                ]
+              end
+
+              it 'verifies disabling prefix header generation' do
+                @pod_target.specs.first.stubs(:prefix_header_file).returns(false)
+                @installer.install!
+                group = @project['Pods/BananaLib/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'BananaLib-Pods-SampleProject-dummy.m',
+                  'BananaLib-Pods-SampleProject.xcconfig',
+                ]
+              end
+
               it 'adds the target for the static library to the project' do
                 @installer.install!
                 @project.targets.count.should == 1
@@ -472,6 +493,16 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-dummy.m',
                   'BananaLib-prefix.pch',
+                  'BananaLib.xcconfig',
+                ]
+              end
+
+              it 'verifies disabling prefix header generation' do
+                @pod_target.specs.first.stubs(:prefix_header_file).returns(false)
+                @installer.install!
+                group = @project['Pods/BananaLib/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'BananaLib-dummy.m',
                   'BananaLib.xcconfig',
                 ]
               end
