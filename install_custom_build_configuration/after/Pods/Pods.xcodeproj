@@ -251,6 +251,7 @@ Build Configurations:
       PRODUCT_NAME: "$(TARGET_NAME)"
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SYMROOT: "${SRCROOT}/../build"
 - Custom Release:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
@@ -300,6 +301,7 @@ Build Configurations:
       PRODUCT_NAME: "$(TARGET_NAME)"
       PROVISIONING_PROFILE_SPECIFIER: NO_SIGNING/
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SYMROOT: "${SRCROOT}/../build"
 - Debug:
     Build Settings:
       ALWAYS_SEARCH_USER_PATHS: 'NO'
