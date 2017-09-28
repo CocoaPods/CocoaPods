@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Remove automatic script phase re-ordering  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7065](https://github.com/CocoaPods/CocoaPods/issues/7065)
+
 * Build subspecs in static frameworks without error  
   [Paul Beusterien](https://github.com/paulb777)
   [#7058](https://github.com/CocoaPods/CocoaPods/pull/7058)

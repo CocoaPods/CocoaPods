@@ -388,34 +388,6 @@ module Pod
           target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }.should.be.nil
         end
 
-        it 'moves custom shell scripts to their correct index' do
-          shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"' }
-          shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
-          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two])
-          @target_integrator.integrate!
-          target = @target_integrator.send(:native_targets).first
-          target.shell_script_build_phases.map(&:name).should == [
-            '[CP] Check Pods Manifest.lock',
-            '[CP] Embed Pods Frameworks',
-            '[CP] Copy Pods Resources',
-            '[CP-User] Custom Script',
-            '[CP-User] Custom Script 2',
-          ]
-          shell_script_one_uuid = target.shell_script_build_phases[3].uuid
-          shell_script_two_uuid = target.shell_script_build_phases[4].uuid
-          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_two, shell_script_one])
-          @target_integrator.integrate!
-          target.shell_script_build_phases.map(&:name).should == [
-            '[CP] Check Pods Manifest.lock',
-            '[CP] Embed Pods Frameworks',
-            '[CP] Copy Pods Resources',
-            '[CP-User] Custom Script 2',
-            '[CP-User] Custom Script',
-          ]
-          target.shell_script_build_phases[3].uuid.should == shell_script_two_uuid
-          target.shell_script_build_phases[4].uuid.should == shell_script_one_uuid
-        end
-
         it 'adds, removes and moves custom shell script phases' do
           shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"' }
           shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
