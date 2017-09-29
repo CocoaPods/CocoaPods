@@ -8,13 +8,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add support for preventing pch file generation with the skip_pch podspec attribute  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7044](https://github.com/CocoaPods/CocoaPods/pull/7044)
 
 ##### Bug Fixes
 
 * Build subspecs in static frameworks without error  
   [Paul Beusterien](https://github.com/paulb777)
   [#7058](https://github.com/CocoaPods/CocoaPods/pull/7058)
+  
+* fix bug : can’t filter xcassets in pods root dir  
+  [grittymindy](https://github.com/grittymindy)
+  [#7087](https://github.com/CocoaPods/CocoaPods/issues/7087)
 
 
 ## 1.4.0.beta.1 (2017-09-24)
@@ -42,7 +48,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#6969](https://github.com/CocoaPods/CocoaPods/pull/6969)
 
 * For source static frameworks, include frameworks from dependent targets and libraries in OTHER_LDFLAGS  
-  [paulb777](https://github.com/paulb777)
+  [Paul Beusterien](https://github.com/paulb777)
   [#6988](https://github.com/CocoaPods/CocoaPods/pull/6988)
 
 ##### Bug Fixes
