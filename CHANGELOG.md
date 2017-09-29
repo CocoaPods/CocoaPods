@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Build subspecs in static frameworks without error  
   [Paul Beusterien](https://github.com/paulb777)
   [#7058](https://github.com/CocoaPods/CocoaPods/pull/7058)
+  
+* fix bug : can’t filter xcassets in pods root dir  
+  [grittymindy](https://github.com/grittymindy)
+  [#7087](https://github.com/CocoaPods/CocoaPods/issues/7087)
 
 
 ## 1.4.0.beta.1 (2017-09-24)
