@@ -78,10 +78,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: cabd6955800e98beb3b62dbfee39fd88c7ee9be3
+  revision: e1e5092199865edf8137aa6ae55a292e9b7304fe
   branch: master
   specs:
-    cocoapods-trunk (1.2.0)
+    cocoapods-trunk (1.3.0)
       nap (>= 0.8, < 2.0)
       netrc (~> 0.11)
 
@@ -111,7 +111,7 @@ PATH
       cocoapods-plugins (>= 1.0.0, < 2.0)
       cocoapods-search (>= 1.0.0, < 2.0)
       cocoapods-stats (>= 1.0.0, < 2.0)
-      cocoapods-trunk (>= 1.2.0, < 2.0)
+      cocoapods-trunk (>= 1.3.0, < 2.0)
       cocoapods-try (>= 1.1.0, < 2.0)
       colored2 (~> 3.1)
       escape (~> 0.0.4)
@@ -126,7 +126,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.5)
-    activesupport (4.2.9)
+    activesupport (4.2.10)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
