@@ -18,6 +18,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7058](https://github.com/CocoaPods/CocoaPods/pull/7058)
 
+* Ensure `SYMROOT` is properly set for all user configurations  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7081](https://github.com/CocoaPods/CocoaPods/issues/7081)
 
 ## 1.4.0.beta.1 (2017-09-24)
 

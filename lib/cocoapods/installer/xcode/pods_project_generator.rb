@@ -124,6 +124,8 @@ module Pod
             analysis_result.all_user_build_configurations.each do |name, type|
               @project.add_build_configuration(name, type)
             end
+            # Reset symroot just in case the user has added a new build configuration other than 'Debug' or 'Release'.
+            @project.symroot = Pod::Project::LEGACY_BUILD_ROOT
 
             pod_names = pod_targets.map(&:pod_name).uniq
             pod_names.each do |pod_name|
