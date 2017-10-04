@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support to integrate script phases from podspecs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7092](https://github.com/CocoaPods/CocoaPods/pull/7092)
+
 * Add support for preventing pch file generation with the skip_pch podspec attribute  
   [Paul Beusterien](https://github.com/paulb777)
   [#7044](https://github.com/CocoaPods/CocoaPods/pull/7044)
