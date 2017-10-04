@@ -74,7 +74,7 @@ module Pod
             it "adds the user's build configurations to the target" do
               @pod_target.user_build_configurations.merge!('AppStore' => :release, 'Test' => :debug)
               @installer.install!
-              @project.targets.first.build_configurations.map(&:name).sort.should == %w( AppStore Debug Release Test        )
+              @project.targets.first.build_configurations.map(&:name).sort.should == %w(AppStore Debug Release Test)
             end
 
             it 'it creates different hash instances for the build settings of various build configurations' do
@@ -272,6 +272,50 @@ module Pod
                 test_resource_bundle_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'CoconutLib.unit.xcconfig'
                   bc.build_settings['CONFIGURATION_BUILD_DIR'].should.be.nil
+                end
+              end
+
+              describe 'app host generation' do
+                before do
+                  @coconut_spec.test_specs.first.requires_app_host = true
+                end
+
+                it 'creates and links app host with an iOS test native target' do
+                  @installer.install!
+                  @project.targets.count.should == 3
+                  app_host_target = @project.targets[2]
+                  app_host_target.name.should == 'AppHost-iOS-Unit-Tests'
+                  app_host_target.symbol_type.should == :application
+                  native_test_target = @project.targets[1]
+                  native_test_target.build_configurations.each do |bc|
+                    bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
+                  end
+                  @project.root_object.attributes['TargetAttributes'].should == {
+                    native_test_target.uuid.to_s => {
+                      'TestTargetID' => app_host_target.uuid.to_s,
+                    },
+                  }
+                end
+
+                it 'creates and links app host with an OSX test native target' do
+                  @installer2.install!
+                  @project.targets.count.should == 3
+                  app_host_target = @project.targets[2]
+                  app_host_target.name.should == 'AppHost-macOS-Unit-Tests'
+                  app_host_target.symbol_type.should == :application
+                  app_host_target.build_configurations.each do |bc|
+                    bc.build_settings['PRODUCT_NAME'].should == 'AppHost-macOS-Unit-Tests'
+                    bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  end
+                  native_test_target = @project.targets[1]
+                  native_test_target.build_configurations.each do |bc|
+                    bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-macOS-Unit-Tests.app/Contents/MacOS/AppHost-macOS-Unit-Tests'
+                  end
+                  @project.root_object.attributes['TargetAttributes'].should == {
+                    native_test_target.uuid.to_s => {
+                      'TestTargetID' => app_host_target.uuid.to_s,
+                    },
+                  }
                 end
               end
             end

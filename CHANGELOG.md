@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7044](https://github.com/CocoaPods/CocoaPods/pull/7044)
 
+* Add app host support for test specs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#6953](https://github.com/CocoaPods/CocoaPods/issues/6953)
+
 ##### Bug Fixes
 
 * Fix framework and resources paths caching  

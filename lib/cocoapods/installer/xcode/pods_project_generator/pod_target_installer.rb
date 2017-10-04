@@ -19,14 +19,17 @@ module Pod
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
               add_target
               create_support_files_dir
-              add_test_targets if target.contains_test_specifications?
+              if target.contains_test_specifications?
+                add_test_targets
+                add_test_app_host_targets
+              end
               add_resources_bundle_targets
               add_files_to_build_phases
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
               if target.requires_frameworks?
                 unless target.static_framework?
-                  create_info_plist_file
+                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
                 create_module_map
                 create_umbrella_header do |generator|
@@ -180,6 +183,42 @@ module Pod
             end
           end
 
+          # Adds the test app host targets for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @return [void]
+          #
+          def add_test_app_host_targets
+            target.test_specs.each do |test_spec|
+              next unless test_spec.consumer(target.platform).requires_app_host?
+              name = target.app_host_label(test_spec.test_type)
+              platform_name = target.platform.name
+              app_host_target = project.targets.find { |t| t.name == name }
+              if app_host_target.nil?
+                app_host_target = Pod::Generator::AppTargetHelper.add_app_target(project, platform_name, deployment_target, name)
+                app_host_target.build_configurations.each do |configuration|
+                  configuration.build_settings.merge!(custom_build_settings)
+                  configuration.build_settings['PRODUCT_NAME'] = name
+                  configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                end
+                Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
+                app_host_info_plist_path = project.path.dirname.+("#{name}/Info.plist")
+                create_info_plist_file(app_host_info_plist_path, app_host_target, '1.0.0', target.platform, :appl)
+              end
+              # Wire all test native targets with the app host.
+              native_test_target = target.native_target_for_spec(test_spec)
+              native_test_target.build_configurations.each do |configuration|
+                test_host = "$(BUILT_PRODUCTS_DIR)/#{name}.app/"
+                test_host << 'Contents/MacOS/' if target.platform == :osx
+                test_host << name.to_s
+                configuration.build_settings['TEST_HOST'] = test_host
+              end
+              target_attributes = project.root_object.attributes['TargetAttributes'] || {}
+              target_attributes[native_test_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
+              project.root_object.attributes['TargetAttributes'] = target_attributes
+            end
+          end
+
           # Adds the test targets for the library to the Pods project with the
           # appropriate build configurations.
           #
@@ -267,7 +306,7 @@ module Pod
                 path = target.info_plist_path
                 path.dirname.mkdir unless path.dirname.exist?
                 info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
-                generator = Generator::InfoPlistFile.new(target, :bundle_package_type => :bndl)
+                generator = Generator::InfoPlistFile.new(target.version, target.platform, :bndl)
                 update_changed_file(generator, info_plist_path)
                 add_file_to_support_group(info_plist_path)
 

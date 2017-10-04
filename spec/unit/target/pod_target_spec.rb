@@ -111,6 +111,30 @@ module Pod
       end
     end
 
+    describe 'target version' do
+      it 'handles when the version is more than 3 numeric parts' do
+        version = Version.new('0.2.0.1')
+        @pod_target.root_spec.stubs(:version).returns(version)
+        @pod_target.version.should == '0.2.0'
+      end
+
+      it 'handles when the version is less than 3 numeric parts' do
+        version = Version.new('0.2')
+        @pod_target.root_spec.stubs(:version).returns(version)
+        @pod_target.version.should == '0.2.0'
+      end
+
+      it 'handles when the version is a pre-release' do
+        version = Version.new('1.0.0-beta.1')
+        @pod_target.root_spec.stubs(:version).returns(version)
+        @pod_target.version.should == '1.0.0'
+
+        version = Version.new('1.0-beta.5')
+        @pod_target.root_spec.stubs(:version).returns(version)
+        @pod_target.version.should == '1.0.0'
+      end
+    end
+
     describe 'Support files' do
       it 'returns the absolute path of the xcconfig file' do
         @pod_target.xcconfig_path('Release').to_s.should.include?(
@@ -315,7 +339,7 @@ module Pod
           @test_spec_target_definition = Podfile::TargetDefinition.new('Pods', nil)
           @test_spec_target_definition.abstract = false
           @test_pod_target = PodTarget.new([@coconut_spec, *@coconut_spec.recursive_subspecs], [@test_spec_target_definition], config.sandbox)
-          @test_pod_target.stubs(:platform).returns(:ios)
+          @test_pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         end
 
         it 'returns that it has test specifications' do
@@ -328,6 +352,10 @@ module Pod
 
         it 'returns test label based on test type' do
           @test_pod_target.test_target_label(:unit).should == 'CoconutLib-Unit-Tests'
+        end
+
+        it 'returns app host label based on test type' do
+          @test_pod_target.app_host_label(:unit).should == 'AppHost-iOS-Unit-Tests'
         end
 
         it 'returns the correct native target based on the consumer provided' do
