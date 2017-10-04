@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Integrate execution position for shell script phases  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7101](https://github.com/CocoaPods/CocoaPods/pull/7101)
+
 * Add support to integrate script phases from podspecs  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7092](https://github.com/CocoaPods/CocoaPods/pull/7092)

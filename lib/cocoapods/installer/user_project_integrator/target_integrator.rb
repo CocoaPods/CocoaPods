@@ -165,21 +165,29 @@ module Pod
             end
             # Create or update the ones that are expected to be.
             script_phases.each do |td_script_phase|
-              phase = TargetIntegrator.create_or_update_build_phase(native_target, USER_BUILD_PHASE_PREFIX + td_script_phase[:name])
+              name_with_prefix = USER_BUILD_PHASE_PREFIX + td_script_phase[:name]
+              phase = TargetIntegrator.create_or_update_build_phase(native_target, name_with_prefix)
               phase.shell_script = td_script_phase[:script]
               phase.shell_path = td_script_phase[:shell_path] if td_script_phase.key?(:shell_path)
               phase.input_paths = td_script_phase[:input_files] if td_script_phase.key?(:input_files)
               phase.output_paths = td_script_phase[:output_files] if td_script_phase.key?(:output_files)
               phase.show_env_vars_in_log = td_script_phase[:show_env_vars_in_log] ? '1' : '0' if td_script_phase.key?(:show_env_vars_in_log)
-            end
-            # Move script phases to their correct index if the order has changed.
-            offset = native_target.build_phases.count - script_phases.count
-            script_phases.each_with_index do |td_script_phase, index|
-              current_index = native_target.build_phases.index do |bp|
-                bp.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && bp.name.sub(USER_BUILD_PHASE_PREFIX, '') == td_script_phase[:name]
+
+              execution_position = td_script_phase[:execution_position]
+              unless execution_position == :any
+                compile_build_phase_index = native_target.build_phases.index do |bp|
+                  bp.is_a?(Xcodeproj::Project::Object::PBXSourcesBuildPhase)
+                end
+                unless compile_build_phase_index.nil?
+                  script_phase_index = native_target.build_phases.index do |bp|
+                    bp.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase) && !bp.name.nil? && bp.name == name_with_prefix
+                  end
+                  if (execution_position == :before_compile && script_phase_index > compile_build_phase_index) ||
+                    (execution_position == :after_compile && script_phase_index < compile_build_phase_index)
+                    native_target.build_phases.move_from(script_phase_index, compile_build_phase_index)
+                  end
+                end
               end
-              expected_index = offset + index
-              native_target.build_phases.insert(expected_index, native_target.build_phases.delete_at(current_index)) if current_index != expected_index
             end
           end
         end
