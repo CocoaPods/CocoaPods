@@ -163,7 +163,7 @@ module Pod
       @should_build = begin
         source_files = file_accessors.flat_map(&:source_files)
         source_files -= file_accessors.flat_map(&:headers)
-        !source_files.empty?
+        !source_files.empty? || contains_script_phases?
       end
     end
 
@@ -183,6 +183,12 @@ module Pod
           file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
         end
       end
+    end
+
+    # @return [Boolean] Whether the target contains any script phases.
+    #
+    def contains_script_phases?
+      !spec_consumers.map(&:script_phases).flatten.empty?
     end
 
     # @return [Hash{Array => Specification}] a hash where the keys are the test native targets and the value
