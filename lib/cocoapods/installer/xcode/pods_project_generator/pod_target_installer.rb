@@ -200,6 +200,7 @@ module Pod
                   configuration.build_settings.merge!(custom_build_settings)
                   configuration.build_settings['PRODUCT_NAME'] = name
                   configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
                 end
                 Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
                 app_host_info_plist_path = project.path.dirname.+("#{name}/Info.plist")
@@ -248,6 +249,8 @@ module Pod
                 configuration.build_settings['PRODUCT_NAME'] = name
                 # We must codesign iOS XCTest bundles that contain binary frameworks to allow them to be launchable in the simulator
                 configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES' unless target.platform == :osx
+                # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
+                configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
