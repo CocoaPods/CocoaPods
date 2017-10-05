@@ -205,7 +205,7 @@ module Pod
     def resource_paths_by_config
       @resource_paths_by_config ||= begin
         relevant_pod_targets = pod_targets.reject do |pod_target|
-          pod_target.should_build? && pod_target.requires_frameworks?
+          pod_target.should_build? && pod_target.requires_frameworks? && !pod_target.static_framework?
         end
         user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
           resources_by_config[config] = relevant_pod_targets.flat_map do |pod_target|

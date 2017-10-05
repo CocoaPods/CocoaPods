@@ -150,6 +150,28 @@ module Pod
           ]
         end
 
+        it 'checks resource paths are empty for dynamic frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @pod_target.stubs(:static_framework?).returns(false)
+          @pod_target.stubs(:resource_paths).returns(['MyResources.bundle'])
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          resource_paths_by_config['Debug'].should.be.empty
+          resource_paths_by_config['Release'].should.be.empty
+        end
+
+        it 'checks resource paths are included for static frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @pod_target.stubs(:static_framework?).returns(true)
+          @pod_target.stubs(:resource_paths).returns(['MyResources.bundle'])
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          resource_paths_by_config['Debug'].should == ['MyResources.bundle']
+          resource_paths_by_config['Release'].should == ['MyResources.bundle']
+        end
+
         it 'returns non vendored frameworks by config with different release and debug targets' do
           @pod_target_release.stubs(:should_build?).returns(true)
           @pod_target_release.stubs(:requires_frameworks?).returns(true)
