@@ -109,6 +109,15 @@ module Pod
 
         @pod_target.should_build?.should == false
       end
+
+      it 'builds a pod target if there are no actual source files but there are script phases' do
+        fa = Sandbox::FileAccessor.new(nil, @pod_target)
+        fa.stubs(:source_files).returns([Pathname.new('foo.h')])
+        @pod_target.stubs(:file_accessors).returns([fa])
+        @pod_target.root_spec.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
+
+        @pod_target.should_build?.should == true
+      end
     end
 
     describe 'target version' do
@@ -330,6 +339,21 @@ module Pod
           it 'resolves the cycle' do
             @pod_target.recursive_dependent_targets.should == [@pod_dependency]
           end
+        end
+      end
+
+      describe 'script phases support' do
+        before do
+          @pod_target = fixture_pod_target('coconut-lib/CoconutLib.podspec')
+        end
+
+        it 'returns false if it does not contain test specifications' do
+          @pod_target.contains_script_phases?.should == false
+        end
+
+        it 'returns true if it contains test specifications' do
+          @pod_target.root_spec.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
+          @pod_target.contains_script_phases?.should == true
         end
       end
 

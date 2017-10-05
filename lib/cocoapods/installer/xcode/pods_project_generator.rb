@@ -180,10 +180,10 @@ module Pod
         end
 
         def integrate_targets
-          pod_targets_with_test_targets = pod_targets.reject { |pt| pt.test_native_targets.empty? }
-          unless pod_targets_with_test_targets.empty?
+          pod_targets_to_integrate = pod_targets.select { |pt| !pt.test_native_targets.empty? || pt.contains_script_phases? }
+          unless pod_targets_to_integrate.empty?
             UI.message '- Integrating targets' do
-              pod_targets_with_test_targets.each do |pod_target|
+              pod_targets_to_integrate.each do |pod_target|
                 PodTargetIntegrator.new(pod_target).integrate!
               end
             end
