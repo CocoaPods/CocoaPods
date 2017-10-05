@@ -52,9 +52,21 @@ module Pod
         end
         escaped_root = escape_path_for_glob(root)
 
-        absolute_paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH).lazy
-        dirs_and_files = absolute_paths.reject { |path| path.basename.to_s =~ /^\.\.?$/ }
-        dirs, files = dirs_and_files.partition { |path| File.directory?(path) }
+        absolute_paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH)
+        absolute_paths = absolute_paths.reject { |path| path.basename.to_s =~ /^\.\.?$/ }
+        absolute_paths = absolute_paths.map do |path|
+          if File.symlink?(path)
+            realpath = path.realpath
+            children = Pathname.glob(realpath + '**/*', File::FNM_DOTMATCH).
+              map { |child_path| path + child_path.relative_path_from(realpath) }.
+              reject { |child_path| child_path.basename.to_s =~ /^\.\.?$/ }.
+              reject { |child_path| child_path == path }
+            children
+          else
+            [path]
+          end
+        end.flatten.uniq
+        dirs, files = absolute_paths.partition { |path| File.directory?(path) }
 
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
         sorted_relative_paths_from_full_paths = lambda do |paths|
