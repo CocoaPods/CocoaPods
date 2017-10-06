@@ -514,6 +514,35 @@ module Pod
           end.message.should.include 'Could not install \'RandomPod\' pod. There is no target that supports it.'
         end
 
+        it 'prints a warning for installed pods that included script phases' do
+          spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
+          pod_target = PodTarget.new([spec, *spec.test_specs], [fixture_target_definition], config.sandbox)
+          pod_target.stubs(:platform).returns(:ios)
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.added << 'CoconutLib'
+          @installer.stubs(:pod_targets).returns([pod_target])
+          @installer.stubs(:root_specs).returns([spec])
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.send(:warn_for_installed_script_phases)
+          UI.warnings.should.include 'CoconutLib has added 1 script phase. Please inspect before executing a build. ' \
+            'See `https://guides.cocoapods.org/syntax/podspec.html#script_phases` for more information.'
+        end
+
+        it 'does not print a warning for already installed pods that include script phases' do
+          spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
+          pod_target = PodTarget.new([spec, *spec.test_specs], [fixture_target_definition], config.sandbox)
+          pod_target.stubs(:platform).returns(:ios)
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.unchanged << 'CoconutLib'
+          @installer.stubs(:pod_targets).returns([pod_target])
+          @installer.stubs(:root_specs).returns([spec])
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.send(:warn_for_installed_script_phases)
+          UI.warnings.should.be.empty
+        end
+
         #--------------------------------------#
 
         describe '#clean' do
