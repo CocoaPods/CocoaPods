@@ -25,6 +25,9 @@ module Pod
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
       self.symroot = LEGACY_BUILD_ROOT
+      root_object.build_configuration_list.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = Validator::DEFAULT_SWIFT_VERSION
+      end
     end
 
     # @return [PBXGroup] The group for the support files of the aggregate

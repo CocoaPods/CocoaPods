@@ -16,7 +16,7 @@ module Pod
 
     # The default version of Swift to use when linting pods
     #
-    DEFAULT_SWIFT_VERSION = '3.0'.freeze
+    DEFAULT_SWIFT_VERSION = '3.2'.freeze
 
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.
@@ -470,7 +470,7 @@ module Pod
           next unless (native_target = pod_target.native_target)
           native_target.build_configuration_list.build_configurations.each do |build_configuration|
             (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-            build_configuration.build_settings['SWIFT_VERSION'] = swift_version if pod_target.uses_swift?
+            build_configuration.build_settings['SWIFT_VERSION'] = swift_version if pod_target.uses_swift? && !swift_version.nil?
           end
         end
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
