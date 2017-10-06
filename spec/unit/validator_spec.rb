@@ -894,10 +894,10 @@ module Pod
       end
 
       describe '#swift_version' do
-        it 'defaults to Swift 3.0' do
+        it 'defaults to Swift 3.2' do
           validator = test_swiftpod
           validator.stubs(:dot_swift_version).returns(nil)
-          validator.swift_version.should == '3.0'
+          validator.swift_version.should == '3.2'
         end
 
         it 'allows the user to set the version' do
