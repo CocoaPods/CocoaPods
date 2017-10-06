@@ -185,10 +185,16 @@ module Pod
       end
     end
 
+    # @return [Array<Hash{Symbol=>String}>] An array of hashes where each hash represents a single script phase.
+    #
+    def script_phases
+      spec_consumers.map(&:script_phases).flatten
+    end
+
     # @return [Boolean] Whether the target contains any script phases.
     #
     def contains_script_phases?
-      !spec_consumers.map(&:script_phases).flatten.empty?
+      !script_phases.empty?
     end
 
     # @return [Hash{Array => Specification}] a hash where the keys are the test native targets and the value
