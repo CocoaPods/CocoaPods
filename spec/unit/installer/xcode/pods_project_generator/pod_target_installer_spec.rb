@@ -200,6 +200,7 @@ module Pod
                 native_test_target.build_configurations.each do |bc|
                   bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                 end
                 native_test_target.symbol_type.should == :unit_test_bundle
                 @coconut_pod_target.test_native_targets.count.should == 1
@@ -215,6 +216,7 @@ module Pod
                 native_test_target.build_configurations.each do |bc|
                   bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                 end
                 native_test_target.symbol_type.should == :unit_test_bundle
                 @coconut_pod_target2.test_native_targets.count.should == 1

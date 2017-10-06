@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7104](https://github.com/CocoaPods/CocoaPods/pull/7104)
 
+* Do not set a `CODE_SIGN_IDENTITY` for macOS app hosts or xctest bundles
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7103](https://github.com/CocoaPods/CocoaPods/pull/7103)
+
 * Fix framework and resources paths caching  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7068](https://github.com/CocoaPods/CocoaPods/pull/7068)
