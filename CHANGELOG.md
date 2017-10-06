@@ -50,7 +50,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7081](https://github.com/CocoaPods/CocoaPods/issues/7081)
 
-* Avoid 'Unspecificed' value for SWIFT_VERSION build settings and make 'Swift 3.2' the default value
+* Avoid 'Unspecified' value for SWIFT_VERSION build settings and make 'Swift 3.2' the default value
   [Victor Hugo Barros](https://github.com/heyzooi)
   [#7109](https://github.com/CocoaPods/CocoaPods/issues/7109)
 
