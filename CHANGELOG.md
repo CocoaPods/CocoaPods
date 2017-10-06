@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Strip vendored dSYMs during embed script phase  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7111](https://github.com/CocoaPods/CocoaPods/issues/7111)
+
 * Warn when a pod that was added or changed includes script phases  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7110](https://github.com/CocoaPods/CocoaPods/pull/7110)
