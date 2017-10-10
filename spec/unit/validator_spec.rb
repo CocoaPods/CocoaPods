@@ -886,10 +886,10 @@ module Pod
           result = validator.results.first
           result.type.should == :warning
           result.message.should == 'The validator for ' \
-            'Swift projects uses Swift 3.0 by default, if you are using a ' \
+            'Swift projects uses Swift 3.2 by default, if you are using a ' \
             'different version of swift you can use a `.swift-version` file ' \
-            'to set the version for your Pod. For example to use Swift 2.3, ' \
-            "run: \n    `echo \"2.3\" > .swift-version`"
+            'to set the version for your Pod. For example to use Swift 4.0, ' \
+            "run: \n    `echo \"4.0\" > .swift-version`"
         end
       end
 

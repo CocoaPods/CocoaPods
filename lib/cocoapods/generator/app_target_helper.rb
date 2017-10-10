@@ -99,8 +99,9 @@ module Pod
       # @return [void]
       #
       def self.add_swift_version(target, swift_version)
+        version_to_set = !swift_version.nil? ? swift_version : Validator::DEFAULT_SWIFT_VERSION
         target.build_configurations.each do |configuration|
-          configuration.build_settings['SWIFT_VERSION'] = !swift_version.nil? ? swift_version : Validator::DEFAULT_SWIFT_VERSION
+          configuration.build_settings['SWIFT_VERSION'] = version_to_set
         end
       end
 
