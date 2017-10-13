@@ -256,7 +256,7 @@ module Pod
     # @return [String] the SWIFT_VERSION to use for validation.
     #
     def swift_version
-      return @swift_version if defined?(@swift_version)
+      return @swift_version unless @swift_version.nil?
       if version = dot_swift_version
         @swift_version = version
       else
@@ -277,11 +277,10 @@ module Pod
       swift_version_path.read.strip
     end
 
-    # @return [String] A string representing the Swift version used during linting
-    #                  or nil, if Swift was not used.
+    # @return [Boolean] Whether any of the pod targets part of this validator use Swift or not.
     #
-    def used_swift_version
-      swift_version if @installer.pod_targets.any?(&:uses_swift?)
+    def uses_swift?
+      @installer.pod_targets.any?(&:uses_swift?)
     end
 
     #-------------------------------------------------------------------------#
@@ -318,7 +317,7 @@ module Pod
           download_pod
           check_file_patterns
           install_pod
-          validate_dot_swift_version
+          validate_swift_version
           add_app_project_import
           validate_vendored_dynamic_frameworks
           build_pod
@@ -394,14 +393,21 @@ module Pod
       validate_url(spec.documentation_url) if spec.documentation_url
     end
 
-    def validate_dot_swift_version
-      if !used_swift_version.nil? && @swift_version.nil?
+    # Performs validation for which version of Swift is used during validation.
+    #
+    # The user will be warned that the default version of Swift was used if the following things are true:
+    #   - The project uses Swift at all
+    #   - The user did not supply a Swift version via a parameter
+    #   - There is no `.swift-version` file present either.
+    #
+    def validate_swift_version
+      if uses_swift? && @swift_version.nil? && dot_swift_version.nil?
         warning(:swift_version,
-                'The validator for Swift projects uses ' \
-                'Swift 3.0 by default, if you are using a different version of ' \
-                'swift you can use a `.swift-version` file to set the version for ' \
-                "your Pod. For example to use Swift 2.3, run: \n" \
-                '    `echo "2.3" > .swift-version`')
+                'The validator used ' \
+                "Swift #{DEFAULT_SWIFT_VERSION} by default because no Swift version was specified. " \
+                'If you want to use a different version of Swift during validation, then either use the `--swift-version` parameter ' \
+                'or use a `.swift-version` file to set the version of Swift to use for ' \
+                'your Pod. For example to use Swift 2.3, run: `echo "2.3" > .swift-version`.')
       end
     end
 

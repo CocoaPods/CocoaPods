@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Better warning message for which Swift version was used during validation  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7121](https://github.com/CocoaPods/CocoaPods/issues/7121)
+
 * Strip vendored dSYMs during embed script phase  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7111](https://github.com/CocoaPods/CocoaPods/issues/7111)
@@ -139,7 +143,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Fix validation warnings when using --swift-version  
   [Danielle Tomlinson](https://github.com/dantoml)
-  [#6971](https://github.com/CocoaPods/CocoaPods/issue/6971)
+  [#6971](https://github.com/CocoaPods/CocoaPods/pull/6971)
 
 * Fix xcconfig boolean merging when substrings include yes or no  
   [Paul Beusterien](https://github.com/paulb777)

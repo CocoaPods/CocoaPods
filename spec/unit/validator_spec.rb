@@ -885,11 +885,29 @@ module Pod
 
           result = validator.results.first
           result.type.should == :warning
-          result.message.should == 'The validator for ' \
-            'Swift projects uses Swift 3.0 by default, if you are using a ' \
-            'different version of swift you can use a `.swift-version` file ' \
-            'to set the version for your Pod. For example to use Swift 2.3, ' \
-            "run: \n    `echo \"2.3\" > .swift-version`"
+          result.message.should == 'The validator used ' \
+            'Swift 3.0 by default because no Swift version was specified. ' \
+            'If you want to use a different version of Swift during validation, then either use the `--swift-version` parameter ' \
+            'or use a `.swift-version` file to set the version of Swift to use for ' \
+            'your Pod. For example to use Swift 2.3, run: `echo "2.3" > .swift-version`.'
+        end
+
+        it 'does not warn for Swift if version was set by a dot swift version file' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+          validator = test_swiftpod_with_dot_swift_version
+          validator.validate
+          validator.results.count.should == 0
+        end
+
+        it 'does not warn for Swift if version was set as a parameter' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+          validator = test_swiftpod
+          validator.stubs(:dot_swift_version).returns(nil)
+          validator.swift_version = '3.1.0'
+          validator.validate
+          validator.results.count.should == 0
         end
       end
 
@@ -950,7 +968,7 @@ module Pod
           validator.instance_variable_set(:@installer, installer)
 
           validator.stubs(:dot_swift_version).returns('1.2.3')
-          validator.used_swift_version.should == '1.2.3'
+          validator.uses_swift?.should.be.true
         end
 
         it 'returns the swift_version when a target has used Swift' do
@@ -959,7 +977,7 @@ module Pod
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
 
-          validator.used_swift_version.should.nil?
+          validator.uses_swift?.should.be.false
         end
       end
     end
