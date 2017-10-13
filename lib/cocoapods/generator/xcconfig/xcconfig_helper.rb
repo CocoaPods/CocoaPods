@@ -63,8 +63,8 @@ module Pod
 
         # Configures the given Xcconfig
         #
-        # @param  [AggregateTarget] aggregate_target
-        #         The aggregate target, may be nil.
+        # @param  [Target] target
+        #         The root target, may be nil.
         #
         # @param  [PodTarget] pod_target
         #         The pod target, which holds the list of +Spec::FileAccessor+.
@@ -72,27 +72,30 @@ module Pod
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
         #
+        # @param  [Boolean] include_ld_flags
+        #         Indicates whether or not to generate ld flags in addition to compile flags
+        #
         # @return [void]
         #
-        def self.add_settings_for_file_accessors_of_target(aggregate_target, pod_target, xcconfig)
+        def self.add_settings_for_file_accessors_of_target(target, pod_target, xcconfig, include_ld_flags = true)
           pod_target.file_accessors.each do |file_accessor|
-            if aggregate_target.nil? || !file_accessor.spec.test_specification?
-              XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig)
-              XCConfigHelper.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
+            if target.nil? || !file_accessor.spec.test_specification?
+              XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig) if include_ld_flags
+              XCConfigHelper.add_static_dependency_build_settings(target, pod_target, xcconfig, file_accessor, include_ld_flags)
             end
           end
-          XCConfigHelper.add_dynamic_dependency_build_settings(aggregate_target, pod_target, xcconfig)
+          XCConfigHelper.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags)
           if pod_target.requires_frameworks?
             pod_target.dependent_targets.each do |dependent_target|
-              XCConfigHelper.add_dynamic_dependency_build_settings(aggregate_target, dependent_target, xcconfig)
+              XCConfigHelper.add_dynamic_dependency_build_settings(target, dependent_target, xcconfig, include_ld_flags)
             end
           end
         end
 
         # Adds build settings for static vendored frameworks and libraries.
         #
-        # @param  [AggregateTarget] aggregate_target
-        #         The aggregate target, may be nil.
+        # @param  [Target] target
+        #         The root target, may be nil.
         #
         # @param [PodTarget] pod_target
         #        The pod target, which holds the list of +Spec::FileAccessor+.
@@ -103,16 +106,18 @@ module Pod
         # @param [Spec::FileAccessor] file_accessor
         #        The file accessor, which holds the list of static frameworks.
         #
+        # @param  [Boolean] include_ld_flags
+        #         Indicates whether or not to generate ld flags in addition to compile flags
+        #
         # @return [void]
         #
-        def self.add_static_dependency_build_settings(aggregate_target, pod_target, xcconfig, file_accessor)
-          if aggregate_target.nil? || !file_accessor.spec.test_specification?
+        def self.add_static_dependency_build_settings(target, pod_target, xcconfig, file_accessor, include_ld_flags)
+          if target.nil? || !file_accessor.spec.test_specification?
+            adds_other_ldflags = include_ld_flags && XCConfigHelper.links_dependency?(target, pod_target)
             file_accessor.vendored_static_frameworks.each do |vendored_static_framework|
-              adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
               XCConfigHelper.add_framework_build_settings(vendored_static_framework, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
             end
             file_accessor.vendored_static_libraries.each do |vendored_static_library|
-              adds_other_ldflags = XCConfigHelper.links_dependency?(aggregate_target, pod_target)
               XCConfigHelper.add_library_build_settings(vendored_static_library, xcconfig, pod_target.sandbox.root, adds_other_ldflags)
             end
           end
@@ -136,8 +141,8 @@ module Pod
 
         # Adds build settings for dynamic vendored frameworks and libraries.
         #
-        # @param  [AggregateTarget] aggregate_target
-        #         The aggregate target, may be nil.
+        # @param  [Target] target
+        #         The root target, may be nil.
         #
         # @param [PodTarget] pod_target
         #        The pod target, which holds the list of +Spec::FileAccessor+.
@@ -145,16 +150,19 @@ module Pod
         # @param [Xcodeproj::Config] xcconfig
         #        The xcconfig to edit.
         #
+        # @param  [Boolean] include_ld_flags
+        #         Indicates whether or not to generate ld flags in addition to compile flags
+        #
         # @return [void]
         #
-        def self.add_dynamic_dependency_build_settings(aggregate_target, pod_target, xcconfig)
+        def self.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags)
           pod_target.file_accessors.each do |file_accessor|
-            if aggregate_target.nil? || !file_accessor.spec.test_specification?
+            if target.nil? || !file_accessor.spec.test_specification?
               file_accessor.vendored_dynamic_frameworks.each do |vendored_dynamic_framework|
-                XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, pod_target.sandbox.root)
+                XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, pod_target.sandbox.root, include_ld_flags)
               end
               file_accessor.vendored_dynamic_libraries.each do |vendored_dynamic_library|
-                XCConfigHelper.add_library_build_settings(vendored_dynamic_library, xcconfig, pod_target.sandbox.root)
+                XCConfigHelper.add_library_build_settings(vendored_dynamic_library, xcconfig, pod_target.sandbox.root, include_ld_flags)
               end
             end
           end
@@ -190,15 +198,18 @@ module Pod
         # @param  [Pathname] sandbox_root
         #         The path retrieved from Sandbox#root.
         #
+        # @param  [Boolean] include_ld_flags
+        #         Indicates whether or not to generate ld flags in addition to compile flags
+        #
         # @return [void]
         #
-        def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root, include_other_ldflags = true)
+        def self.add_framework_build_settings(framework_path, xcconfig, sandbox_root, include_ld_flags = true)
           name = File.basename(framework_path, '.framework')
           dirname = '${PODS_ROOT}/' + framework_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'FRAMEWORK_SEARCH_PATHS' => quote([dirname]),
           }
-          build_settings['OTHER_LDFLAGS'] = "-framework #{name}" if include_other_ldflags
+          build_settings['OTHER_LDFLAGS'] = "-framework #{name}" if include_ld_flags
           xcconfig.merge!(build_settings)
         end
 
@@ -214,16 +225,19 @@ module Pod
         # @param  [Pathname] sandbox_root
         #         The path retrieved from Sandbox#root.
         #
+        # @param  [Boolean] include_ld_flags
+        #         Indicates whether or not to generate ld flags in addition to compile flags
+        #
         # @return [void]
         #
-        def self.add_library_build_settings(library_path, xcconfig, sandbox_root, include_other_ldflags = true)
+        def self.add_library_build_settings(library_path, xcconfig, sandbox_root, include_ld_flags = true)
           extension = File.extname(library_path)
           name = File.basename(library_path, extension).sub(/\Alib/, '')
           dirname = '${PODS_ROOT}/' + library_path.dirname.relative_path_from(sandbox_root).to_s
           build_settings = {
             'LIBRARY_SEARCH_PATHS' => quote([dirname]),
           }
-          build_settings['OTHER_LDFLAGS'] = "-l#{name}" if include_other_ldflags
+          build_settings['OTHER_LDFLAGS'] = "-l#{name}" if include_ld_flags
           xcconfig.merge!(build_settings)
         end
 
@@ -350,14 +364,17 @@ module Pod
         # Add custom build settings and required build settings to link to
         # vendored libraries and frameworks.
         #
-        # @param  [AggregateTarget] aggregate_target
-        #         The aggregate target, may be nil.
+        # @param  [Target] target
+        #         The root target, may be nil.
         #
-        # @param  [Array<PodTarget] pod_targets
-        #         The pod targets to add the vendored build settings for.
+        # @param  [Array<PodTarget] dep_targets
+        #         The dependency targets to add the vendored build settings for.
         #
         # @param  [Xcodeproj::Config] xcconfig
         #         The xcconfig to edit.
+        #
+        # @param  [Boolean] include_ld_flags
+        #         Indicates whether or not to generate ld flags in addition to compile flags
         #
         # @note
         #   In case of generated pod targets, which require frameworks, the
@@ -365,10 +382,10 @@ module Pod
         #   into the framework binary and must not be linked again to the
         #   user target.
         #
-        def self.generate_vendored_build_settings(aggregate_target, pod_targets, xcconfig)
-          pod_targets.each do |pod_target|
-            unless pod_target.should_build? && pod_target.requires_frameworks? && !pod_target.static_framework?
-              XCConfigHelper.add_settings_for_file_accessors_of_target(aggregate_target, pod_target, xcconfig)
+        def self.generate_vendored_build_settings(target, dep_targets, xcconfig, include_ld_flags = true)
+          dep_targets.each do |dep_target|
+            unless dep_target.should_build? && dep_target.requires_frameworks? && !dep_target.static_framework?
+              XCConfigHelper.add_settings_for_file_accessors_of_target(target, dep_target, xcconfig, include_ld_flags)
             end
           end
         end
