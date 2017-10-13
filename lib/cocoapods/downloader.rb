@@ -30,7 +30,8 @@ module Pod
       request,
       target,
       can_cache: true,
-      cache_path: Config.instance.cache_root + 'Pods'
+      cache_path: Config.instance.cache_root + 'Pods',
+      spec_name: nil
     )
       can_cache &&= !Config.instance.skip_download_cache
 
@@ -39,13 +40,13 @@ module Pod
       if can_cache
         raise ArgumentError, 'Must provide a `cache_path` when caching.' unless cache_path
         cache = Cache.new(cache_path)
-        result = cache.download_pod(request)
+        result = cache.download_pod(request, spec_name)
       else
         raise ArgumentError, 'Must provide a `target` when caching is disabled.' unless target
 
         require 'cocoapods/installer/pod_source_preparer'
         result, = download_request(request, target)
-        Installer::PodSourcePreparer.new(result.spec, result.location).prepare!
+        Installer::PodSourcePreparer.new(result.spec, result.location, spec_name).prepare!
       end
 
       if target && result.location && target != result.location

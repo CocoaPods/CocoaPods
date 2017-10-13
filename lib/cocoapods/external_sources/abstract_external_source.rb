@@ -107,12 +107,12 @@ module Pod
       #
       # @return [void]
       #
-      def pre_download(sandbox)
+      def pre_download(sandbox, spec_name = nil)
         title = "Pre-downloading: `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
           target = sandbox.pod_dir(name)
           begin
-            download_result = Downloader.download(download_request, target, :can_cache => can_cache)
+            download_result = Downloader.download(download_request, target, :can_cache => can_cache, :spec_name => spec_name)
           rescue Pod::DSLError => e
             raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
           rescue => _

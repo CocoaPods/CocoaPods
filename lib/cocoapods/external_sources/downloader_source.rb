@@ -9,8 +9,8 @@ module Pod
     class DownloaderSource < AbstractExternalSource
       # @see AbstractExternalSource#fetch
       #
-      def fetch(sandbox)
-        pre_download(sandbox)
+      def fetch(sandbox, spec_name = nil)
+        pre_download(sandbox, spec_name)
       end
 
       # @see AbstractExternalSource#description
