@@ -229,10 +229,11 @@ module Pod
               aggregate_target.native_target.add_dependency(pod_target.native_target)
               configure_app_extension_api_only_for_target(pod_target) if is_app_extension
 
+              add_dependent_targets_to_native_target(pod_target.dependent_targets,
+                                                     pod_target.native_target, is_app_extension,
+                                                     pod_target.requires_frameworks? && !pod_target.static_framework?,
+                                                     frameworks_group)
               unless pod_target.static_framework?
-                add_dependent_targets_to_native_target(pod_target.dependent_targets,
-                                                       pod_target.native_target, is_app_extension,
-                                                       pod_target.requires_frameworks?, frameworks_group)
                 add_pod_target_test_dependencies(pod_target, frameworks_group)
               end
             end

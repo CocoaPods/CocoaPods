@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7121](https://github.com/CocoaPods/CocoaPods/issues/7121)
 
+* Fix static_framework Swift pod dependencies and implement pod access to dependent vendored_framework modules  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7117](https://github.com/CocoaPods/CocoaPods/issues/7117)
+
 * Strip vendored dSYMs during embed script phase  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7111](https://github.com/CocoaPods/CocoaPods/issues/7111)

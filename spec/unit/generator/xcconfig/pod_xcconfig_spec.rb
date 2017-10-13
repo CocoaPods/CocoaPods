@@ -9,9 +9,35 @@ module Pod
             @monkey_spec = fixture_spec('monkey/monkey.podspec')
             @monkey_pod_target = fixture_pod_target(@monkey_spec)
 
+            vspec = stub(:test_specification? => false)
+            consumer = stub(
+              :pod_target_xcconfig => {},
+              :libraries => ['xml2'],
+              :frameworks => [],
+              :weak_frameworks => [],
+              :platform_name => :ios,
+            )
+            file_accessor = stub(
+              :spec => vspec,
+              :spec_consumer => consumer,
+              :vendored_static_frameworks => [config.sandbox.root + 'AAA/StaticFramework.framework'],
+              :vendored_static_libraries => [config.sandbox.root + 'BBB/StaticLibrary.a'],
+              :vendored_dynamic_frameworks => [config.sandbox.root + 'CCC/VendoredFramework.framework'],
+              :vendored_dynamic_libraries => [config.sandbox.root + 'DDD/VendoredDyld.dyld'],
+            )
+            vendored_dep_target = stub(
+              :name => 'BananaLib',
+              :sandbox => config.sandbox,
+              :should_build? => false,
+              :requires_frameworks? => true,
+              :static_framework? => false,
+              :dependent_targets => [],
+              :file_accessors => [file_accessor],
+            )
+
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
             @pod_target = fixture_pod_target(@spec)
-            @pod_target.dependent_targets = [@monkey_pod_target]
+            @pod_target.dependent_targets = [@monkey_pod_target, vendored_dep_target]
             @pod_target.host_requires_frameworks = true
 
             @consumer = @pod_target.spec_consumers.first
@@ -51,11 +77,11 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework "iAd"')
           end
 
-          it 'includes the vendored dynamic frameworks for dependecy pods of the specification' do
+          it 'includes the vendored dynamic frameworks for dependency pods of the specification' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "dynamic-monkey"')
           end
 
-          it 'does not include vendored static frameworks for dependecy pods of the specification' do
+          it 'does not include vendored static frameworks for dependency pods of the specification' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-l"monkey.a"')
           end
 
@@ -73,6 +99,23 @@ module Pod
             @consumer.stubs(:requires_arc?).returns(true)
             @xcconfig = @generator.generate
             @xcconfig.to_hash['OTHER_LDFLAGS'].split(' ').should.include('-fobjc-arc')
+          end
+
+          it 'sets the framework search paths' do
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('spec/fixtures/banana-lib')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('spec/fixtures/monkey')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('${PODS_ROOT}/AAA')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/BBB')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('${PODS_ROOT}/CCC')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/DDD')
+          end
+
+          it 'vendored frameworks dont get added to frameworks paths if use_frameworks! isnt set' do
+            @pod_target.stubs(:requires_frameworks?).returns(false)
+            @xcconfig = @generator.generate
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('spec/fixtures/monkey')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/AAA')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/CCC')
           end
 
           it 'sets the PODS_ROOT build variable' do
