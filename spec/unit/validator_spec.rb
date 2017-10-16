@@ -886,10 +886,10 @@ module Pod
           result = validator.results.first
           result.type.should == :warning
           result.message.should == 'The validator used ' \
-            'Swift 3.0 by default because no Swift version was specified. ' \
+            'Swift 3.2 by default because no Swift version was specified. ' \
             'If you want to use a different version of Swift during validation, then either use the `--swift-version` parameter ' \
             'or use a `.swift-version` file to set the version of Swift to use for ' \
-            'your Pod. For example to use Swift 2.3, run: `echo "2.3" > .swift-version`.'
+            'your Pod. For example to use Swift 4.0, run: `echo "4.0" > .swift-version`.'
         end
 
         it 'does not warn for Swift if version was set by a dot swift version file' do
@@ -912,10 +912,10 @@ module Pod
       end
 
       describe '#swift_version' do
-        it 'defaults to Swift 3.0' do
+        it 'defaults to Swift 3.2' do
           validator = test_swiftpod
           validator.stubs(:dot_swift_version).returns(nil)
-          validator.swift_version.should == '3.0'
+          validator.swift_version.should == '3.2'
         end
 
         it 'allows the user to set the version' do

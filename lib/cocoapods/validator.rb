@@ -16,7 +16,7 @@ module Pod
 
     # The default version of Swift to use when linting pods
     #
-    DEFAULT_SWIFT_VERSION = '3.0'.freeze
+    DEFAULT_SWIFT_VERSION = '3.2'.freeze
 
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.
@@ -407,7 +407,7 @@ module Pod
                 "Swift #{DEFAULT_SWIFT_VERSION} by default because no Swift version was specified. " \
                 'If you want to use a different version of Swift during validation, then either use the `--swift-version` parameter ' \
                 'or use a `.swift-version` file to set the version of Swift to use for ' \
-                'your Pod. For example to use Swift 2.3, run: `echo "2.3" > .swift-version`.')
+                'your Pod. For example to use Swift 4.0, run: `echo "4.0" > .swift-version`.')
       end
     end
 

@@ -30,6 +30,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set the default Swift version to 3.2 during validation  
+  [Victor Hugo Barros](https://github.com/heyzooi)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7136](https://github.com/CocoaPods/CocoaPods/pull/7136)
+
 * Better warning message for which Swift version was used during validation  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7121](https://github.com/CocoaPods/CocoaPods/issues/7121)
