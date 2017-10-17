@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix docs for prefix header paths  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7149](https://github.com/CocoaPods/CocoaPods/pull/7149)
+
 * Fix integration `prefix_header_file` with test specs  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7147](https://github.com/CocoaPods/CocoaPods/pull/7147)

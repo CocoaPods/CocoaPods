@@ -66,6 +66,9 @@ module Pod
 
           private
 
+          # @param [Array<Specification>] specs
+          #        the specs to check against whether `.pch` generation should be skipped or not.
+          #
           # @return [Boolean] Whether the target should build a pch file.
           #
           def skip_pch?(specs)
@@ -477,7 +480,7 @@ module Pod
           #        the path to generate the prefix header for.
           #
           # @param [Array<Sandbox::FileAccessor>] file_accessors
-          #        the file accessors to use for this prefix header that point to a path of a prefix header
+          #        the file accessors to use for this prefix header that point to a path of a prefix header.
           #
           # @param [Platform] platform
           #        the platform to use for this prefix header.

@@ -409,7 +409,7 @@ module Pod
     end
 
     # @param  [Symbol] test_type
-    #         The test type this embed frameworks script path is for.
+    #         The test type prefix header path is for.
     #
     # @return [Pathname] the absolute path of the prefix header file for the given test type.
     #
