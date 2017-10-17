@@ -48,8 +48,17 @@ module Pod
                   create_build_phase_to_move_static_framework_archive
                 end
               end
-              unless skip_pch?
-                create_prefix_header
+              unless skip_pch?(target.non_test_specs)
+                path = target.prefix_header_path
+                file_accessors = target.file_accessors.reject { |f| f.spec.test_specification? }
+                create_prefix_header(path, file_accessors, target.platform, [native_target])
+              end
+              unless skip_pch?(target.test_specs)
+                target.supported_test_types.each do |test_type|
+                  path = target.prefix_header_path_for_test_type(test_type)
+                  file_accessors = target.file_accessors.select { |f| f.spec.test_specification? }
+                  create_prefix_header(path, file_accessors, target.platform, target.test_native_targets)
+                end
               end
               create_dummy_source
             end
@@ -59,8 +68,8 @@ module Pod
 
           # @return [Boolean] Whether the target should build a pch file.
           #
-          def skip_pch?
-            target.specs.any? { |spec| spec.prefix_header_file.is_a?(FalseClass) }
+          def skip_pch?(specs)
+            specs.any? { |spec| spec.prefix_header_file.is_a?(FalseClass) }
           end
 
           # Remove the default headers folder path settings for static library pod
@@ -464,17 +473,30 @@ module Pod
           # to the platform of the target. This file also include any prefix header
           # content reported by the specification of the pods.
           #
+          # @param [Pathname] path
+          #        the path to generate the prefix header for.
+          #
+          # @param [Array<Sandbox::FileAccessor>] file_accessors
+          #        the file accessors to use for this prefix header that point to a path of a prefix header
+          #
+          # @param [Platform] platform
+          #        the platform to use for this prefix header.
+          #
+          # @param [Array<PBXNativetarget>] native_targets
+          #        the native targets on which the prefix header should be configured for.
+          #
           # @return [void]
           #
-          def create_prefix_header
-            path = target.prefix_header_path
-            generator = Generator::PrefixHeader.new(target.file_accessors, target.platform)
+          def create_prefix_header(path, file_accessors, platform, native_targets)
+            generator = Generator::PrefixHeader.new(file_accessors, platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
 
-            native_target.build_configurations.each do |c|
-              relative_path = path.relative_path_from(project.path.dirname)
-              c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
+            native_targets.each do |native_target|
+              native_target.build_configurations.each do |c|
+                relative_path = path.relative_path_from(project.path.dirname)
+                c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
+              end
             end
           end
 
@@ -483,7 +505,7 @@ module Pod
             :osx => Version.new('10.8'),
             :watchos => Version.new('2.0'),
             :tvos => Version.new('9.0'),
-          }
+          }.freeze
 
           # Returns the compiler flags for the source files of the given specification.
           #

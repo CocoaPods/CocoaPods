@@ -40,10 +40,6 @@ module Pod
         @lib.copy_resources_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-resources.sh')
       end
 
-      it 'returns the absolute path of the prefix header file' do
-        @lib.prefix_header_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-prefix.pch')
-      end
-
       it 'returns the absolute path of the bridge support file' do
         @lib.bridge_support_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods.bridgesupport')
       end

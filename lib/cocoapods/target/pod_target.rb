@@ -216,6 +216,12 @@ module Pod
       specs.select(&:test_specification?)
     end
 
+    # @return [Array<Specification>] All of the non test specs within this target.
+    #
+    def non_test_specs
+      specs.reject(&:test_specification?)
+    end
+
     # @return [Array<Symbol>] All of the test supported types within this target.
     #
     def supported_test_types
@@ -394,6 +400,21 @@ module Pod
     #
     def embed_frameworks_script_path_for_test_type(test_type)
       support_files_dir + "#{test_target_label(test_type)}-frameworks.sh"
+    end
+
+    # @return [Pathname] the absolute path of the prefix header file.
+    #
+    def prefix_header_path
+      support_files_dir + "#{label}-prefix.pch"
+    end
+
+    # @param  [Symbol] test_type
+    #         The test type this embed frameworks script path is for.
+    #
+    # @return [Pathname] the absolute path of the prefix header file for the given test type.
+    #
+    def prefix_header_path_for_test_type(test_type)
+      support_files_dir + "#{test_target_label(test_type)}-prefix.pch"
     end
 
     # @return [Array<String>] The names of the Pods on which this target
