@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix integration `prefix_header_file` with test specs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7147](https://github.com/CocoaPods/CocoaPods/pull/7147)
+
 * Set the default Swift version to 3.2 during validation  
   [Victor Hugo Barros](https://github.com/heyzooi)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)

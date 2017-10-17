@@ -158,12 +158,6 @@ module Pod
       support_files_dir + "#{label}.modulemap"
     end
 
-    # @return [Pathname] the absolute path of the prefix header file.
-    #
-    def prefix_header_path
-      support_files_dir + "#{label}-prefix.pch"
-    end
-
     # @return [Pathname] the absolute path of the bridge support file.
     #
     def bridge_support_path

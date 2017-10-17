@@ -215,6 +215,10 @@ module Pod
         @pod_target.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib/libBananaLib.a'
         @pod_target.scoped.first.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib-Pods/libBananaLib-Pods.a'
       end
+
+      it 'returns prefix header path' do
+        @pod_target.prefix_header_path.to_s.should.include 'Pods/Target Support Files/BananaLib/BananaLib-prefix.pch'
+      end
     end
 
     describe 'Product type dependent helpers' do
@@ -417,6 +421,10 @@ module Pod
 
         it 'returns correct embed frameworks script path for test unit test type' do
           @test_pod_target.embed_frameworks_script_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks.sh'
+        end
+
+        it 'returns correct prefix header path for test unit test type' do
+          @test_pod_target.prefix_header_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-prefix.pch'
         end
 
         it 'returns the correct resource path for test resource bundles' do
