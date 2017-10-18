@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Copy .swiftmodule into static_frameworks to enable access to Swift static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7140](https://github.com/CocoaPods/CocoaPods/issues/7140)
+
 * Fix docs for prefix header paths  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7149](https://github.com/CocoaPods/CocoaPods/pull/7149)

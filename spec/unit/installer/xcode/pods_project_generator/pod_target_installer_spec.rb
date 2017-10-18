@@ -715,6 +715,7 @@ module Pod
                 build_phase = target.shell_script_build_phases.find do |bp|
                   bp.name == 'Setup Static Framework Archive'
                 end
+                build_phase.shell_script.should.include?('swiftmodule')
                 build_phase.should.not.be.nil
               end
             end
