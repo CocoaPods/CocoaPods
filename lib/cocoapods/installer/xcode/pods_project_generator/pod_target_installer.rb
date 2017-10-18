@@ -469,6 +469,8 @@ module Pod
           mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules"
           cp "${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
           cp "${MODULEMAP_FILE}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/module.modulemap"
+          # If there's a .swiftmodule, copy it into the framework's Modules folder
+          cp -r "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}".swiftmodule "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/" 2>/dev/null || :
             eos
           end
 
