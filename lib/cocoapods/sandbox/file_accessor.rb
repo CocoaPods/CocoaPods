@@ -17,6 +17,8 @@ module Pod
         :license             => 'licen{c,s}e{*,.*}'.freeze,
         :source_files        => "*{#{SOURCE_FILE_EXTENSIONS.join(',')}}".freeze,
         :public_header_files => "*{#{HEADER_EXTENSIONS.join(',')}}".freeze,
+        :podspecs            => '*.{podspec,podspec.json}'.freeze,
+        :docs                => 'doc{s}{*,.*}/**/*'.freeze,
       }.freeze
 
       # @return [Sandbox::PathList] the directory where the source of the Pod
@@ -291,6 +293,34 @@ module Pod
         end
       end
 
+      # @return [Array<Pathname>] The paths of auto-detected podspecs
+      #
+      def specs
+        path_list.glob([GLOB_PATTERNS[:podspecs]])
+      end
+
+      # @return [Array<Pathname>] The paths of auto-detected docs
+      #
+      def docs
+        path_list.glob([GLOB_PATTERNS[:docs]])
+      end
+
+      # @return [Array<Pathname>] Paths to include for local pods to assist in development
+      #
+      def developer_files
+        podspecs = specs
+        result = [module_map, prefix_header]
+        if podspecs.size <= 1
+          result += [license, readme, podspecs, docs]
+        else
+          result << podspec_file
+          if file = spec_consumer.license[:file]
+            result << root + file
+          end
+        end
+        result.compact.flatten.sort
+      end
+
       #-----------------------------------------------------------------------#
 
       private
@@ -309,6 +339,12 @@ module Pod
       #
       def private_header_files
         paths_for_attribute(:private_header_files)
+      end
+
+      # @return [Pathname] The path of the podspec matching @spec
+      #
+      def podspec_file
+        specs.lazy.select { |p| File.basename(p.to_s, '.*') == spec.name }.first
       end
 
       #-----------------------------------------------------------------------#

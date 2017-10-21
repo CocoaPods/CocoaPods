@@ -22,6 +22,10 @@ module Pod
         .git
         .gitmodules
         BananaLib.podspec
+        docs
+        docs/guide1.md
+        docs/subdir
+        docs/subdir/guide2.md
         libPusher
         sub-dir
         sub-dir/sub-dir-2

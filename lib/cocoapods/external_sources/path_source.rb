@@ -16,7 +16,7 @@ module Pod
           end
           store_podspec(sandbox, podspec, podspec.extname == '.json')
           is_absolute = absolute?(declared_path)
-          sandbox.store_local_path(name, podspec.dirname, is_absolute)
+          sandbox.store_local_path(name, podspec, is_absolute)
           sandbox.remove_checkout_source(name)
         end
       end
