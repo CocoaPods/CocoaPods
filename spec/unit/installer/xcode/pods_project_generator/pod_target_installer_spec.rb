@@ -713,9 +713,10 @@ module Pod
 
                 target = @project.native_targets.first
                 build_phase = target.shell_script_build_phases.find do |bp|
-                  bp.name == 'Setup Static Framework Archive'
+                  bp.name == 'Setup Static Framework'
                 end
                 build_phase.shell_script.should.include?('swiftmodule')
+                build_phase.shell_script.should.include?('PrivateHeaders')
                 build_phase.should.not.be.nil
               end
             end

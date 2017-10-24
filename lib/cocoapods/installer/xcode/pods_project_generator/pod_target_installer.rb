@@ -456,7 +456,7 @@ module Pod
             eos
           end
 
-          # Creates a build phase to put the static framework archive in the appropriate framework location
+          # Creates a build phase to put the static framework in the appropriate framework location
           # Since Xcode does not provide template support for static library frameworks, we've built a static library
           # of the form lib{LibraryName}.a. We need to move that to the framework location -
           # {LibraryName}.framework/{LibraryName}.
@@ -464,13 +464,16 @@ module Pod
           # @return [void]
           #
           def create_build_phase_to_move_static_framework_archive
-            build_phase = native_target.new_shell_script_build_phase('Setup Static Framework Archive')
+            build_phase = native_target.new_shell_script_build_phase('Setup Static Framework')
             build_phase.shell_script = <<-eos.strip_heredoc
           mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules"
           cp "${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
           cp "${MODULEMAP_FILE}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/module.modulemap"
           # If there's a .swiftmodule, copy it into the framework's Modules folder
           cp -r "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}".swiftmodule "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/" 2>/dev/null || :
+          # If archiving, Headers copy is needed
+          cp -r "${TARGET_BUILD_DIR}/${PRODUCT_NAME}.framework/Headers" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/" 2>/dev/null || :
+          cp -r "${TARGET_BUILD_DIR}/${PRODUCT_NAME}.framework/PrivateHeaders" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/" 2>/dev/null || :
             eos
           end
 
