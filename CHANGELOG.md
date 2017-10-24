@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Fix archiving apps with static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7158](https://github.com/CocoaPods/CocoaPods/issues/7158)
 
 ## 1.4.0.beta.2 (2017-10-24)
 
