@@ -121,7 +121,7 @@ Targets:
     - Headers:
       - Reachability.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:

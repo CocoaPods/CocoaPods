@@ -87,10 +87,10 @@ Targets:
     - Headers:
       - subspec_1.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - subspec_2.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:

@@ -118,61 +118,61 @@ Targets:
     - Headers:
       - AFHTTPRequestOperation.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFHTTPRequestOperationManager.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFHTTPSessionManager.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFNetworkActivityIndicatorManager.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFNetworkReachabilityManager.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFSecurityPolicy.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFURLConnectionOperation.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFURLRequestSerialization.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFURLResponseSerialization.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - AFURLSessionManager.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIActivityIndicatorView+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIAlertView+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIButton+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIImageView+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIKit+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIProgressView+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIRefreshControl+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - UIWebView+AFNetworking.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -264,7 +264,7 @@ Targets:
     - Headers:
       - RKValueTransformers.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -314,7 +314,7 @@ Targets:
     - Headers:
       - SEGModule.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
