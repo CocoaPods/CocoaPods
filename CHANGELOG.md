@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent multiple script phases from stripping vendored dSYM  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7166](https://github.com/CocoaPods/CocoaPods/pull/7166)
+
 * Fix archiving apps with static frameworks  
   [Paul Beusterien](https://github.com/paulb777)
   [#7158](https://github.com/CocoaPods/CocoaPods/issues/7158)
