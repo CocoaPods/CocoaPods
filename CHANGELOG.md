@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set language to Swift for test native targets if any dependencies use Swift  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7170](https://github.com/CocoaPods/CocoaPods/issues/7170)
+  
 * Prevent multiple script phases from stripping vendored dSYM  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7166](https://github.com/CocoaPods/CocoaPods/pull/7166)

@@ -242,7 +242,7 @@ module Pod
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_type)
               platform_name = target.platform.name
-              language = target.uses_swift? ? :swift : :objc
+              language = target.all_test_dependent_targets.any?(&:uses_swift?) ? :swift : :objc
               native_test_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
               native_test_target.product_reference.name = name
 
@@ -431,7 +431,7 @@ module Pod
           #
           def test_target_swift_debug_hack(test_target_bc)
             return unless test_target_bc.debug?
-            return unless [target, *target.recursive_dependent_targets].any?(&:uses_swift?)
+            return unless target.all_test_dependent_targets.any?(&:uses_swift?)
             ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
             ldflags << ' -lswiftSwiftOnoneSupport'
           end
