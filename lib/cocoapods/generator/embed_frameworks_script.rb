@@ -99,17 +99,22 @@ module Pod
           install_dsym() {
             local source="$1"
             if [ -r "$source" ]; then
-              echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${DWARF_DSYM_FOLDER_PATH}\\""
-              rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${DWARF_DSYM_FOLDER_PATH}"
-            fi
+              # Copy the dSYM into a the targets temp dir.
+              echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${DERIVED_FILES_DIR}\\""
+              rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${DERIVED_FILES_DIR}"
 
-            local basename
-            basename="$(basename -s .framework.dSYM "$source")"
-            binary="${DWARF_DSYM_FOLDER_PATH}/${basename}.framework.dSYM/Contents/Resources/DWARF/${basename}"
+              local basename
+              basename="$(basename -s .framework.dSYM "$source")"
+              binary="${DERIVED_FILES_DIR}/${basename}.framework.dSYM/Contents/Resources/DWARF/${basename}"
 
-            # Strip invalid architectures so "fat" simulator / device frameworks work on device
-            if [[ "$(file "$binary")" == *"Mach-O dSYM companion"* ]]; then
-              strip_invalid_archs "$binary"
+              # Strip invalid architectures so "fat" simulator / device frameworks work on device
+              if [[ "$(file "$binary")" == *"Mach-O dSYM companion"* ]]; then
+               strip_invalid_archs "$binary"
+              fi
+
+              # Move the stripped file into its final destination.
+              echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${DERIVED_FILES_DIR}/${basename}.framework.dSYM\\" \\"${DWARF_DSYM_FOLDER_PATH}\\""
+              rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${DERIVED_FILES_DIR}/${basename}.framework.dSYM" "${DWARF_DSYM_FOLDER_PATH}"
             fi
           }
 
