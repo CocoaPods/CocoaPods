@@ -8,7 +8,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'http://banana-corp.local/banana-lib.git', :tag => 'v1.0' }
   s.license      = {
     :type => 'MIT',
-    :file => 'LICENSE',
     :text => 'Permission is hereby granted ...'
   }
   s.source_files        = 'Classes/*.{h,m}'

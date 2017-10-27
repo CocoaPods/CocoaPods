@@ -4,6 +4,9 @@ File References:
 - Development Pods:
   - res:
     - foo.m
+    - Pod:
+      - LICENSE
+      - res.podspec
     - Resources:
       - 512_black.png
       - troll.png

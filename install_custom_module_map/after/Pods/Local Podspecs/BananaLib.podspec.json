@@ -16,7 +16,6 @@
   },
   "license": {
     "type": "MIT",
-    "file": "LICENSE",
     "text": "Permission is hereby granted ..."
   },
   "source_files": "Classes/*.{h,m}",

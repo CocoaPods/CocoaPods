@@ -7,6 +7,9 @@ File References:
     - Banana.m
     - BananaPrivate.h
     - BananaProject.h
+    - Pod:
+      - BananaLib.modulemap
+      - BananaLib.podspec
     - Support Files:
       - BananaLib.modulemap
       - BananaLib.xcconfig

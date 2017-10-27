@@ -3,6 +3,8 @@ File References:
 - Podfile
 - Development Pods:
   - Pod1:
+    - Pod:
+      - Pod1.podspec
     - s1:
       - Pod1.h
       - Pod1.m
@@ -12,6 +14,8 @@ File References:
       - Pod1-dummy.m
       - Pod1-prefix.pch
   - Pod2:
+    - Pod:
+      - Pod2.podspec
     - s2:
       - Pod2.h
       - Pod2.m
@@ -20,6 +24,8 @@ File References:
       - Pod2-dummy.m
       - Pod2-prefix.pch
   - Pod3:
+    - Pod:
+      - Pod3.podspec
     - s3:
       - Pod3.h
       - Pod3.m
