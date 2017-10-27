@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent passing empty string to git when running `pod repo update --silent`
+  [Jon Sorrells](https://github.com/jonsorrells)
+  [#7176](https://github.com/CocoaPods/CocoaPods/issues/7176)
+
 * Do not propagate test spec frameworks and libraries into pod target xcconfig  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7172](https://github.com/CocoaPods/CocoaPods/issues/7172)
