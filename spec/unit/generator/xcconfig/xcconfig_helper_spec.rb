@@ -442,6 +442,51 @@ module Pod
             xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
 
+          it 'propagates correct frameworks or libraries to both test and non test xcconfigs' do
+            spec = stub(:test_specification? => false)
+            consumer = stub(
+              :libraries => [],
+              :frameworks => [],
+              :weak_frameworks => [],
+              :spec => spec,
+            )
+            file_accessor = stub(
+              :spec => spec,
+              :spec_consumer => consumer,
+              :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+              :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+              :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+              :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+            )
+            test_spec = stub(:test_specification? => true)
+            test_consumer = stub(
+              :libraries => ['xml2'],
+              :frameworks => ['XCTest'],
+              :weak_frameworks => [],
+              :spec => test_spec,
+            )
+            test_file_accessor = stub(
+              :spec => test_spec,
+              :spec_consumer => test_consumer,
+              :vendored_static_frameworks => [],
+              :vendored_static_libraries => [],
+              :vendored_dynamic_frameworks => [],
+              :vendored_dynamic_libraries => [],
+            )
+            pod_target = stub(
+              :file_accessors => [file_accessor, test_file_accessor],
+              :requires_frameworks? => true,
+              :dependent_targets => [],
+              :sandbox => config.sandbox,
+            )
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_settings_for_file_accessors_of_target(nil, pod_target, xcconfig, true, false)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"StaticLibrary" -l"VendoredDyld" -framework "StaticFramework" -framework "VendoredFramework"'
+            test_xcconfig = Xcodeproj::Config.new
+            @sut.add_settings_for_file_accessors_of_target(nil, pod_target, test_xcconfig, true, true)
+            test_xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest"'
+          end
+
           it 'does propagate framework or libraries from a non test specification to an aggregate target' do
             spec = stub(:test_specification? => false)
             consumer = stub(

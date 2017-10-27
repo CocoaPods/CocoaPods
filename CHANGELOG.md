@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not propagate test spec frameworks and libraries into pod target xcconfig  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7172](https://github.com/CocoaPods/CocoaPods/issues/7172)
+
 * Set language to Swift for test native targets if any dependencies use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7170](https://github.com/CocoaPods/CocoaPods/issues/7170)
@@ -87,7 +91,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7104](https://github.com/CocoaPods/CocoaPods/pull/7104)
 
-* Do not set a `CODE_SIGN_IDENTITY` for macOS app hosts or xctest bundles
+* Do not set a `CODE_SIGN_IDENTITY` for macOS app hosts or xctest bundles  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7103](https://github.com/CocoaPods/CocoaPods/pull/7103)
 

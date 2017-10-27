@@ -75,19 +75,24 @@ module Pod
         # @param  [Boolean] include_ld_flags
         #         Indicates whether or not to generate ld flags in addition to compile flags
         #
+        # @param  [Boolean] test_xcconfig
+        #         Whether the settings for dependent targets are being generated for a test xcconfig or not.
+        #
         # @return [void]
         #
-        def self.add_settings_for_file_accessors_of_target(target, pod_target, xcconfig, include_ld_flags = true)
-          pod_target.file_accessors.each do |file_accessor|
+        def self.add_settings_for_file_accessors_of_target(target, pod_target, xcconfig, include_ld_flags = true, test_xcconfig = false)
+          file_accessors = pod_target.file_accessors
+          file_accessors = file_accessors.reject { |f| f.spec.test_specification? } unless test_xcconfig
+          file_accessors.each do |file_accessor|
             if target.nil? || !file_accessor.spec.test_specification?
               XCConfigHelper.add_spec_build_settings_to_xcconfig(file_accessor.spec_consumer, xcconfig) if include_ld_flags
               XCConfigHelper.add_static_dependency_build_settings(target, pod_target, xcconfig, file_accessor, include_ld_flags)
             end
           end
-          XCConfigHelper.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags)
+          XCConfigHelper.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags, test_xcconfig)
           if pod_target.requires_frameworks?
             pod_target.dependent_targets.each do |dependent_target|
-              XCConfigHelper.add_dynamic_dependency_build_settings(target, dependent_target, xcconfig, include_ld_flags)
+              XCConfigHelper.add_dynamic_dependency_build_settings(target, dependent_target, xcconfig, include_ld_flags, test_xcconfig)
             end
           end
         end
@@ -153,10 +158,15 @@ module Pod
         # @param  [Boolean] include_ld_flags
         #         Indicates whether or not to generate ld flags in addition to compile flags
         #
+        # @param  [Boolean] test_xcconfig
+        #         Whether the settings for dependent targets are being generated for a test xcconfig or not.
+        #
         # @return [void]
         #
-        def self.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags)
-          pod_target.file_accessors.each do |file_accessor|
+        def self.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags, test_xcconfig)
+          file_accessors = pod_target.file_accessors
+          file_accessors = file_accessors.reject { |f| f.spec.test_specification? } unless test_xcconfig
+          file_accessors.each do |file_accessor|
             if target.nil? || !file_accessor.spec.test_specification?
               file_accessor.vendored_dynamic_frameworks.each do |vendored_dynamic_framework|
                 XCConfigHelper.add_framework_build_settings(vendored_dynamic_framework, xcconfig, pod_target.sandbox.root, include_ld_flags)
@@ -376,16 +386,19 @@ module Pod
         # @param  [Boolean] include_ld_flags
         #         Indicates whether or not to generate ld flags in addition to compile flags
         #
+        # @param  [Boolean] test_xcconfig
+        #         Indicates whether or not the generated ld flags are for a test xcconfig or not
+        #
         # @note
         #   In case of generated pod targets, which require frameworks, the
         #   vendored frameworks and libraries are already linked statically
         #   into the framework binary and must not be linked again to the
         #   user target.
         #
-        def self.generate_vendored_build_settings(target, dep_targets, xcconfig, include_ld_flags = true)
+        def self.generate_vendored_build_settings(target, dep_targets, xcconfig, include_ld_flags = true, test_xcconfig = false)
           dep_targets.each do |dep_target|
             unless dep_target.should_build? && dep_target.requires_frameworks? && !dep_target.static_framework?
-              XCConfigHelper.add_settings_for_file_accessors_of_target(target, dep_target, xcconfig, include_ld_flags)
+              XCConfigHelper.add_settings_for_file_accessors_of_target(target, dep_target, xcconfig, include_ld_flags, test_xcconfig)
             end
           end
         end
