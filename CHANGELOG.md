@@ -367,7 +367,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add `set -u` to the copy frameworks and copy resources scripts  
+  [Keith Smiley](https://github.com/keith)
+  [#7180](https://github.com/CocoaPods/CocoaPods/pull/7180)
 
 ##### Bug Fixes
 
