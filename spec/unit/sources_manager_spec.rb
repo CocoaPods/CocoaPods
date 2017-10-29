@@ -111,6 +111,30 @@ module Pod
         @sources_manager.update(test_repo_path.basename.to_s, true)
       end
 
+      it 'updates source with --silent flag' do
+        set_up_test_repo_for_update
+        @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
+
+        repo_update = sequence('repo update --silent')
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} fetch origin)).
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
+          returns("my-special-branch\n").
+          in_sequence(repo_update)
+
+        MasterSource.any_instance.
+          expects(:git!).
+          with(%W(-C #{test_repo_path} reset --hard origin/my-special-branch)).
+          in_sequence(repo_update)
+
+        @sources_manager.update(test_repo_path.basename.to_s, false)
+      end
+
       it 'unshallows if the git repo is shallow' do
         set_up_test_repo_for_update
         test_repo_path.join('.git', 'shallow').open('w') { |f| f << 'a' * 40 }
