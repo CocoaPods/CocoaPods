@@ -37,6 +37,7 @@ module Pod
         script = <<-SH.strip_heredoc
           #!/bin/sh
           set -e
+          set -u
 
           echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
           mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"

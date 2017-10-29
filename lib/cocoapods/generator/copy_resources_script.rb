@@ -96,6 +96,7 @@ module Pod
       INSTALL_RESOURCES_FUNCTION = <<EOS
 #!/bin/sh
 set -e
+set -u
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 
