@@ -303,9 +303,9 @@ module Pod
                 output_extension = TargetIntegrator.output_extension_for_resource(File.extname(input_path))
                 File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
               end.uniq
+              TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+              TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
             end
-            TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
 
@@ -337,9 +337,9 @@ module Pod
             unless framework_paths_by_config.all?(&:empty?)
               input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
               output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
+              TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+              TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
             end
-            TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-            TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
 
