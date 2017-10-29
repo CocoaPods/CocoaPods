@@ -109,7 +109,7 @@ XCASSET_FILES=()
 # was originally proposed here: https://lists.samba.org/archive/rsync/2008-February/020158.html
 RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 
-case "${TARGETED_DEVICE_FAMILY}" in
+case "${TARGETED_DEVICE_FAMILY:-}" in
   1,2)
     TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
     ;;
