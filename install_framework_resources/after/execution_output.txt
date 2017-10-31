@@ -26,6 +26,7 @@ Generating Pods project
   - Adding frameworks to Pods project
   - Adding libraries to Pods project
   - Adding resources to Pods project
+  - Adding development pod helper files to Pods project
   - Linking headers
   - Installing targets
     - Installing target `SamplePodWithResources` macOS 10.0

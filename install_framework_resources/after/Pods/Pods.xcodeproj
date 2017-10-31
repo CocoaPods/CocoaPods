@@ -4,6 +4,9 @@ File References:
 - Development Pods:
   - SamplePodWithResources:
     - Foo.m
+    - Pod:
+      - LICENSE
+      - SamplePodWithResources.podspec
     - Resources:
       - logo.png
       - troll.png

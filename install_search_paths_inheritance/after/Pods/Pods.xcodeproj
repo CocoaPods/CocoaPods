@@ -5,6 +5,8 @@ File References:
   - asserts:
     - Asserts.h
     - Asserts.m
+    - Pod:
+      - asserts.podspec
     - Support Files:
       - asserts.modulemap
       - asserts.xcconfig
@@ -16,6 +18,8 @@ File References:
     - Core:
       - Logger.h
       - Logger.m
+    - Pod:
+      - logger.podspec
     - Support Files:
       - Info.plist
       - logger.modulemap
@@ -27,6 +31,8 @@ File References:
     - Core:
       - AmazingModel.h
       - AmazingModel.m
+    - Pod:
+      - sharedlib.podspec
     - Support Files:
       - Info.plist
       - Info.plist
@@ -46,6 +52,8 @@ File References:
   - testkit:
     - TestCase.h
     - TestCase.m
+    - Pod:
+      - testkit.podspec
     - Support Files:
       - Info.plist
       - testkit.modulemap

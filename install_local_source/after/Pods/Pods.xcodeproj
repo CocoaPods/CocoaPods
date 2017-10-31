@@ -5,6 +5,8 @@ File References:
   - Reachability:
     - Reachability.h
     - Reachability.m
+    - Pod:
+      - Reachability.podspec
     - Support Files:
       - Reachability.xcconfig
       - Reachability-dummy.m
