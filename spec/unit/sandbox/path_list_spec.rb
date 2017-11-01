@@ -22,6 +22,7 @@ module Pod
           Classes/BananaLib.pch
           Classes/BananaPrivate.h
           Classes/BananaTrace.d
+          LICENSE
           README
           Resources/Base.lproj/Main.storyboard
           Resources/Images.xcassets/Logo.imageset/Contents.json
@@ -36,6 +37,8 @@ module Pod
           Resources/en.lproj/nested/logo-nested.png
           Resources/logo-sidebar.png
           Resources/sub_dir/logo-sidebar.png
+          docs/guide1.md
+          docs/subdir/guide2.md
           framework/Source/MoreBanana.h
           libBananalib.a
           preserve_me.txt
@@ -71,6 +74,8 @@ module Pod
           Resources/en.lproj
           Resources/en.lproj/nested
           Resources/sub_dir
+          docs
+          docs/subdir
           framework
           framework/Source
           sub-dir

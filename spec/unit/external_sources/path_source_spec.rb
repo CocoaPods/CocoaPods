@@ -22,7 +22,7 @@ module Pod
     it 'marks the Pod as local in the sandbox' do
       @subject.fetch(config.sandbox)
       config.sandbox.development_pods.should == {
-        'Reachability' => fixture('integration/Reachability').to_s,
+        'Reachability' => fixture('integration/Reachability/Reachability.podspec'),
       }
     end
 

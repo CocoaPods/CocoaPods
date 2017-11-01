@@ -40,6 +40,7 @@ module Pod
             add_frameworks_bundles
             add_vendored_libraries
             add_resources
+            add_developer_files unless sandbox.development_pods.empty?
             link_headers
           end
 
@@ -106,6 +107,21 @@ module Pod
             UI.message '- Adding resources to Pods project' do
               add_file_accessors_paths_to_pods_group(:resources, :resources, true)
               add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources, true)
+            end
+          end
+
+          def add_developer_files
+            UI.message '- Adding development pod helper files to Pods project' do
+              file_accessors.each do |file_accessor|
+                pod_name = file_accessor.spec.name
+                next unless sandbox.local?(pod_name)
+                root_name = Specification.root_name(pod_name)
+                paths = file_accessor.developer_files
+                paths.each do |path|
+                  group = pods_project.group_for_spec(root_name, :developer)
+                  pods_project.add_file_reference(path, group, false)
+                end
+              end
             end
           end
 
@@ -184,7 +200,7 @@ module Pod
               paths = allowable_project_paths(paths)
               base_path = local ? common_path(paths) : nil
               paths.each do |path|
-                group = pods_project.group_for_spec(file_accessor.spec.name, group_key)
+                group = pods_project.group_for_spec(pod_name, group_key)
                 pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development, base_path)
               end
             end

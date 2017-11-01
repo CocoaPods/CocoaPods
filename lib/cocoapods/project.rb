@@ -113,6 +113,7 @@ module Pod
     SPEC_SUBGROUPS = {
       :resources  => 'Resources',
       :frameworks => 'Frameworks',
+      :developer  => 'Pod',
     }
 
     # Returns the group for the specification with the give name creating it if

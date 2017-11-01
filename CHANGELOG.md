@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add support for editing the podspec, license, README, license, and docs of local development pods  
+  [Eric Amorde](https://github.com/amorde)
+  [#7093](https://github.com/CocoaPods/CocoaPods/pull/7093)
 
 ##### Bug Fixes
 
