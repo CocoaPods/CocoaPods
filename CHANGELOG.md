@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not display script phases warnings multiple times per platform  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7193](https://github.com/CocoaPods/CocoaPods/pull/7193)
+
 * Prevent passing empty string to git when running `pod repo update --silent`
   [Jon Sorrells](https://github.com/jonsorrells)
   [#7176](https://github.com/CocoaPods/CocoaPods/issues/7176)
