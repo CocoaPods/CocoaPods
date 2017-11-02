@@ -245,9 +245,9 @@ module Pod
         repo_sources = sources
 
         if update_mode == :selected
-          repo_sources = repo_sources.select { |source| 
+          repo_sources = repo_sources.select do |source|
             !(config.sources_manager.source_with_name_or_url(source.name).pods & update[:pods]).empty?
-          }
+          end
         end
 
         repo_sources.each do |source|
