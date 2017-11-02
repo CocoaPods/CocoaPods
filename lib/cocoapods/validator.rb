@@ -257,8 +257,8 @@ module Pod
     #
     def swift_version
       return @swift_version unless @swift_version.nil?
-      if version = dot_swift_version
-        @swift_version = version
+      if (version = spec.swift_version) || (version = dot_swift_version)
+        @swift_version = version.to_s
       else
         DEFAULT_SWIFT_VERSION
       end
@@ -395,19 +395,37 @@ module Pod
 
     # Performs validation for which version of Swift is used during validation.
     #
+    # An error will be displayed if the user has provided a `swift_version` attribute within the podspec but is also
+    # using either  `--swift-version` parameter or a `.swift-version with a different Swift version.
+    #
     # The user will be warned that the default version of Swift was used if the following things are true:
     #   - The project uses Swift at all
     #   - The user did not supply a Swift version via a parameter
+    #   - There is no `swift_version` attribute set within the specification
     #   - There is no `.swift-version` file present either.
     #
     def validate_swift_version
-      if uses_swift? && @swift_version.nil? && dot_swift_version.nil?
-        warning(:swift_version,
+      return unless uses_swift?
+      spec_swift_version = spec.swift_version
+      unless spec_swift_version.nil?
+        message = nil
+        if !dot_swift_version.nil? && dot_swift_version != spec_swift_version.to_s
+          message = "Specification `#{spec.name}` specifies an inconsistent `swift_version` (`#{spec_swift_version}`) compared to the one present in your `.swift-version` file (`#{dot_swift_version}`). " \
+                    'Please remove the `.swift-version` file which is now deprecated and only use the `swift_version` attribute within your podspec.'
+        elsif !@swift_version.nil? && @swift_version != spec_swift_version.to_s
+          message = "Specification `#{spec.name}` specifies an inconsistent `swift_version` (`#{spec_swift_version}`) compared to the one passed during lint (`#{@swift_version}`)."
+        end
+        unless message.nil?
+          error('swift', message)
+          return
+        end
+      end
+      if @swift_version.nil? && spec_swift_version.nil? && dot_swift_version.nil?
+        warning('swift',
                 'The validator used ' \
                 "Swift #{DEFAULT_SWIFT_VERSION} by default because no Swift version was specified. " \
-                'If you want to use a different version of Swift during validation, then either use the `--swift-version` parameter ' \
-                'or use a `.swift-version` file to set the version of Swift to use for ' \
-                'your Pod. For example to use Swift 4.0, run: `echo "4.0" > .swift-version`.')
+                'To specify a Swift version during validation, add the `swift_version` attribute in your podspec. ' \
+                'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.')
       end
     end
 
@@ -471,12 +489,17 @@ module Pod
          perform_post_install_actions).each { |m| @installer.send(m) }
 
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
-      @installer.aggregate_targets.each do |target|
+      configure_pod_targets(@installer.aggregate_targets, deployment_target)
+      @installer.pods_project.save
+    end
+
+    def configure_pod_targets(targets, deployment_target)
+      targets.each do |target|
         target.pod_targets.each do |pod_target|
           next unless (native_target = pod_target.native_target)
           native_target.build_configuration_list.build_configurations.each do |build_configuration|
             (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-            build_configuration.build_settings['SWIFT_VERSION'] = swift_version if pod_target.uses_swift?
+            build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
           end
           if pod_target.uses_swift?
             pod_target.test_native_targets.each do |test_native_target|
@@ -492,7 +515,6 @@ module Pod
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
         end
       end
-      @installer.pods_project.save
     end
 
     def validate_vendored_dynamic_frameworks
