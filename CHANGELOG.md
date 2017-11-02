@@ -13,6 +13,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#7093](https://github.com/CocoaPods/CocoaPods/pull/7093)
 
 ##### Bug Fixes
+
 * Skip updating master repo when running `pod repo update --sources` without including master repo  as source
   [Nikita Ivanchikov](https://github.com/nivanchikov)
   [#6976](https://github.com/CocoaPods/CocoaPods/issues/6976)
