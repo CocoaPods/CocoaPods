@@ -242,7 +242,17 @@ module Pod
       # Updates the git source repositories.
       #
       def update_repositories
-        sources.each do |source|
+        repo_sources = sources
+
+        if update_mode == :selected
+          repo_sources = repo_sources.select { |source| 
+            !(config.sources_manager.source_with_name_or_url(source.name).pods & update[:pods]).empty?
+          }
+        end
+		
+		UI.message "REPOS #{repo_sources}"
+
+        repo_sources.each do |source|
           if source.git?
             config.sources_manager.update(source.name, true)
           else
