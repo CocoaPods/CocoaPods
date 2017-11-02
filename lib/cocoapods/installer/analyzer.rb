@@ -249,8 +249,6 @@ module Pod
             !(config.sources_manager.source_with_name_or_url(source.name).pods & update[:pods]).empty?
           }
         end
-		
-		UI.message "REPOS #{repo_sources}"
 
         repo_sources.each do |source|
           if source.git?
