@@ -530,12 +530,11 @@ module Pod
     #
     def warn_for_installed_script_phases
       pods_to_install = sandbox_state.added | sandbox_state.changed
-      pod_targets.each do |pod_target|
-        spec = pod_target.root_spec
-        if pods_to_install.include?(spec.name)
-          script_phase_count = pod_target.script_phases.count
+      pod_targets.group_by(&:pod_name).each do |name, pod_targets|
+        if pods_to_install.include?(name)
+          script_phase_count = pod_targets.inject(0) { |sum, target| sum + target.script_phases.count }
           unless script_phase_count.zero?
-            UI.warn "#{spec.name} has added #{pod_target.script_phases.count} #{'script phase'.pluralize(script_phase_count)}. " \
+            UI.warn "#{name} has added #{script_phase_count} #{'script phase'.pluralize(script_phase_count)}. " \
               'Please inspect before executing a build. See `https://guides.cocoapods.org/syntax/podspec.html#script_phases` for more information.'
           end
         end
