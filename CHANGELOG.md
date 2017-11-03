@@ -14,6 +14,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Be more lenient when stripping frameworks and dSYMs for non fat binaries
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7196](https://github.com/CocoaPods/CocoaPods/issues/7196)
+  [#5854](https://github.com/CocoaPods/CocoaPods/issues/5854)
+
 * Do not display script phases warnings multiple times per platform  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7193](https://github.com/CocoaPods/CocoaPods/pull/7193)
