@@ -14,7 +14,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Be more lenient when stripping frameworks and dSYMs for non fat binaries
+* Be more lenient when stripping frameworks and dSYMs for non fat binaries  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7196](https://github.com/CocoaPods/CocoaPods/issues/7196)
   [#5854](https://github.com/CocoaPods/CocoaPods/issues/5854)
@@ -23,11 +23,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7193](https://github.com/CocoaPods/CocoaPods/pull/7193)
 
-* Fix unnecessary whole project recompilation with static frameworks
+* Fix unnecessary whole project recompilation with static frameworks  
   [Vladimir Gorbenko](https://github.com/volodg)
   [#7187](https://github.com/CocoaPods/CocoaPods/issues/7187)
 
-* Prevent passing empty string to git when running `pod repo update --silent`
+* Prevent passing empty string to git when running `pod repo update --silent`  
   [Jon Sorrells](https://github.com/jonsorrells)
   [#7176](https://github.com/CocoaPods/CocoaPods/issues/7176)
 
