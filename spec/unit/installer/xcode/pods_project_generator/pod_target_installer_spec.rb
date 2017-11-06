@@ -719,6 +719,16 @@ module Pod
                 build_phase.shell_script.should.include?('PrivateHeaders')
                 build_phase.should.not.be.nil
               end
+
+              it 'verifies that headers in build phase for static libraries are all Project headers' do
+                @pod_target.stubs(:requires_frameworks?).returns(false)
+
+                @installer.install!
+
+                @project.targets.first.headers_build_phase.files.find do |hf|
+                  hf.settings['ATTRIBUTES'].should == ['Project']
+                end
+              end
             end
 
             it "doesn't create a build phase to symlink header folders by default on OS X" do
