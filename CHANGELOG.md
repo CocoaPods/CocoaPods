@@ -43,6 +43,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7166](https://github.com/CocoaPods/CocoaPods/pull/7166)
 
+* Static library headers should all be `Project` in Xcode header build phase  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#4496](https://github.com/CocoaPods/CocoaPods/issues/4496)
+
 * Fix archiving apps with static frameworks  
   [Paul Beusterien](https://github.com/paulb777)
   [#7158](https://github.com/CocoaPods/CocoaPods/issues/7158)

@@ -631,7 +631,9 @@ module Pod
 
           def add_header(build_file, public_headers, private_headers, native_target)
             file_ref = build_file.file_ref
-            acl = if public_headers.include?(file_ref.real_path)
+            acl = if !target.requires_frameworks? # Headers are already rooted at ${PODS_ROOT}/Headers/P*/[pod]/...
+                    'Project'
+                  elsif public_headers.include?(file_ref.real_path)
                     'Public'
                   elsif private_headers.include?(file_ref.real_path)
                     'Private'
