@@ -43,7 +43,7 @@ Targets:
     - Headers:
       - TimeParser.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:

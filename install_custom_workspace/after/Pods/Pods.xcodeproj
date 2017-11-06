@@ -134,7 +134,7 @@ Targets:
     - Headers:
       - Reachability.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:

@@ -86,10 +86,10 @@ Targets:
     - Headers:
       - AFRaptureXMLRequestOperation.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - Foo.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:

@@ -64,7 +64,7 @@ Targets:
     - Headers:
       - Pod1.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -111,7 +111,7 @@ Targets:
     - Headers:
       - Pod2.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -158,7 +158,7 @@ Targets:
     - Headers:
       - Pod3.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
