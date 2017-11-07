@@ -192,13 +192,14 @@ module Pod
 
         def add_system_framework_dependencies
           # @TODO: Add Specs
-          pod_targets.sort_by(&:name).each do |pod_target|
-            pod_target.file_accessors.each do |file_accessor|
-              file_accessor.spec_consumer.frameworks.each do |framework|
-                if pod_target.should_build?
-                  pod_target.native_target.add_system_framework(framework)
-                end
-              end
+          pod_targets.select(&:should_build?).sort_by(&:name).each do |pod_target|
+            test_file_accessors, file_accessors = pod_target.file_accessors.partition { |fa| fa.spec.test_specification? }
+            file_accessors.each do |file_accessor|
+              add_system_frameworks_to_native_target(file_accessor, pod_target.native_target)
+            end
+            test_file_accessors.each do |test_file_accessor|
+              native_target = pod_target.native_target_for_spec(test_file_accessor.spec)
+              add_system_frameworks_to_native_target(test_file_accessor, native_target)
             end
           end
         end
@@ -312,6 +313,12 @@ module Pod
                   frameworks_group.new_product_ref_for_target(pod_dependency_target.product_basename, pod_dependency_target.product_type)
               native_target.frameworks_build_phase.add_file_reference(product_ref, true)
             end
+          end
+        end
+
+        def add_system_frameworks_to_native_target(file_accessor, native_target)
+          file_accessor.spec_consumer.frameworks.each do |framework|
+            native_target.add_system_framework(framework)
           end
         end
 
