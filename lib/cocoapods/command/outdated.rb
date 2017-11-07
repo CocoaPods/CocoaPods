@@ -22,10 +22,24 @@ module Pod
         if updates.empty?
           UI.puts 'No pod updates are available.'.yellow
         else
+          UI.section 'The color indicates what happens when you run `pod update`' do
+            UI.puts "#{'<green>'.green}\t\t - Will be updated to the newest version"
+            UI.puts "#{'<yellow>'.yellow}\t - Will be updated, but not to the newest version because of specified version in Podfile"
+            UI.puts "#{'<red>'.red}\t\t - Will not be updated because of specified version in Podfile"
+            UI.puts ''
+          end
           UI.section 'The following pod updates are available:' do
             updates.each do |(name, from_version, matching_version, to_version)|
-              UI.puts "- #{name} #{from_version} -> #{matching_version} " \
-                "(latest version #{to_version})"
+              color = :yellow
+              if matching_version == to_version
+                color = :green
+              elsif from_version == matching_version
+                color = :red
+              end
+              # For the specs, its necessary that to_s is called here even though it is redundant
+              # https://github.com/CocoaPods/CocoaPods/pull/7204#issuecomment-342512015
+              UI.puts "- #{name} #{from_version.to_s.send(color)} -> #{matching_version.to_s.send(color)} " \
+              "(latest version #{to_version.to_s})" # rubocop:disable Lint/StringConversionInInterpolation
             end
           end
         end

@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add color indication to output of `pod outdated`  
+  [iv-mexx](https://github.com/iv-mexx)
+  [#7204](https://github.com/CocoaPods/CocoaPods/pull/7204)
+
 * Add support for editing the podspec, license, README, license, and docs of local development pods  
   [Eric Amorde](https://github.com/amorde)
   [#7093](https://github.com/CocoaPods/CocoaPods/pull/7093)
