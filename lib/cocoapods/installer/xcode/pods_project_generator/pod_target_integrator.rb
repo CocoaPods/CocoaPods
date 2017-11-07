@@ -56,8 +56,13 @@ module Pod
             input_paths = []
             output_paths = []
             unless resource_paths.empty?
-              input_paths = [script_path, *resource_paths.flatten.uniq]
-              output_paths = ['${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}']
+              resource_paths_flattened = resource_paths.flatten.uniq
+              input_paths = [script_path, *resource_paths_flattened]
+              output_paths = resource_paths_flattened.map do |input_path|
+                base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
+                output_extension = UserProjectIntegrator::TargetIntegrator.output_extension_for_resource(File.extname(input_path))
+                File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
+              end
             end
             UserProjectIntegrator::TargetIntegrator.add_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

@@ -301,19 +301,41 @@ module Pod
 
         it 'adds copy pods resources input and output paths' do
           resource_paths_by_config = {
-            'Debug' => ['${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLib.bundle'],
-            'Release' => ['${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.bundle'],
+            'Debug' => [
+              '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodeld',
+              '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodel',
+              '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugMappingModel.xcmappingmodel',
+              '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLib.bundle',
+            ],
+            'Release' => [
+              '${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.bundle',
+              '${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.storyboard',
+              '${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLibXIB.xib',
+            ],
           }
           @pod_bundle.stubs(:resource_paths_by_config => resource_paths_by_config)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
           phase.input_paths.sort.should == %w(
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodel
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodeld
             ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLib.bundle
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugMappingModel.xcmappingmodel
             ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.bundle
+            ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.storyboard
+            ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLibXIB.xib
             ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
           )
-          phase.output_paths.sort.should == %w(${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH})
+          phase.output_paths.sort.should == %w(
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugDataModel.mom
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugDataModel.momd
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugLib.bundle
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugMappingModel.cdm
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReleaseLib.bundle
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReleaseLib.storyboardc
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReleaseLibXIB.nib
+          )
         end
 
         it 'does not add embed frameworks build phase input output paths with no frameworks' do
