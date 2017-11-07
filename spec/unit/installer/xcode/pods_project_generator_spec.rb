@@ -131,6 +131,7 @@ module Pod
             it 'install the targets of the Pod project' do
               spec = fixture_spec('banana-lib/BananaLib.podspec')
               target_definition = Podfile::TargetDefinition.new(:default, nil)
+              target_definition.set_platform(:ios, '8.0')
               target_definition.abstract = false
               target_definition.store_pod('BananaLib')
               pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
@@ -143,6 +144,7 @@ module Pod
             it 'does not skip empty pod targets' do
               spec = fixture_spec('banana-lib/BananaLib.podspec')
               target_definition = Podfile::TargetDefinition.new(:default, nil)
+              target_definition.set_platform(:ios, '8.0')
               target_definition.abstract = false
               pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
               @generator.stubs(:aggregate_targets).returns([])

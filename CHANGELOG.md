@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not link system frameworks of test specs to library targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7205](https://github.com/CocoaPods/CocoaPods/pull/7205)
+
 * Be more lenient when stripping frameworks and dSYMs for non fat binaries  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7196](https://github.com/CocoaPods/CocoaPods/issues/7196)
