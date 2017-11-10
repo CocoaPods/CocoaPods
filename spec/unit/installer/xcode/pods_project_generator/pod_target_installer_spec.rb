@@ -277,6 +277,34 @@ module Pod
                 end
               end
 
+              it 'creates embed frameworks script for test target' do
+                @coconut_pod_target.stubs(:requires_frameworks? => true)
+                @installer.install!
+                script_path = @coconut_pod_target.embed_frameworks_script_path_for_test_type(:unit)
+                script = script_path.read
+                @coconut_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_framework "${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework"
+        fi
+                  eos
+                end
+              end
+
+              it 'adds the resources bundles for to the copy resources script for test target' do
+                @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Tests/*.xib'] }
+                @installer.install!
+                script_path = @coconut_pod_target.copy_resources_script_path_for_test_type(:unit)
+                script = script_path.read
+                @coconut_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_resource "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLibTestResources.bundle"
+        fi
+                  eos
+                end
+              end
+
               describe 'app host generation' do
                 before do
                   @coconut_spec.test_specs.first.requires_app_host = true
