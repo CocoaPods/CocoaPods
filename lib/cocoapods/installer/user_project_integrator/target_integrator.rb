@@ -190,6 +190,23 @@ module Pod
               end
             end
           end
+
+          # Returns an extension in the target that corresponds to the
+          # resource's input extension.
+          #
+          # @return [String] The output extension.
+          #
+          def output_extension_for_resource(input_extension)
+            case input_extension
+            when '.storyboard'        then '.storyboardc'
+            when '.xib'               then '.nib'
+            when '.framework'         then '.framework'
+            when '.xcdatamodel'       then '.mom'
+            when '.xcdatamodeld'      then '.momd'
+            when '.xcmappingmodel'    then '.cdm'
+            else                      input_extension
+            end
+          end
         end
 
         # Integrates the user project targets. Only the targets that do **not**
@@ -263,8 +280,14 @@ module Pod
             input_paths = []
             output_paths = []
             unless resource_paths_by_config.values.all?(&:empty?)
-              input_paths = [target.copy_resources_script_relative_path, *resource_paths_by_config.values.flatten.uniq]
-              output_paths = ['${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}']
+              resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
+              input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
+              # convert input paths to output paths according to extensions
+              output_paths = resource_paths_flattened.map do |input_path|
+                base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
+                output_extension = TargetIntegrator.output_extension_for_resource(File.extname(input_path))
+                File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
+              end
             end
             TargetIntegrator.add_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

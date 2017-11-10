@@ -53,7 +53,7 @@ module Pod
                   '${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle',
                 ]
                 @test_native_target.build_phases[1].output_paths.should == [
-                  '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}',
+                  '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TestResourceBundle.bundle',
                 ]
               end
 

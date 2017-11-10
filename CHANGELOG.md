@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Add copied resources' paths to "Copy Pods Resources" output file list  
+  [igor-makarov](https://github.com/igor-makarov)
+  [#6936](https://github.com/CocoaPods/CocoaPods/issues/6936)
+
 * Do not link system frameworks of test specs to library targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7205](https://github.com/CocoaPods/CocoaPods/pull/7205)
