@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set `SWIFT_VERSION` to test native targets during validation  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7216](https://github.com/CocoaPods/CocoaPods/pull/7216)
+
 * Add copied resources' paths to "Copy Pods Resources" output file list  
   [igor-makarov](https://github.com/igor-makarov)
   [#6936](https://github.com/CocoaPods/CocoaPods/issues/6936)
