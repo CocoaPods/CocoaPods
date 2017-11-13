@@ -9,7 +9,8 @@
 	url = https://github.com/tonymillion/Reachability.git
 [submodule "spec/cocoapods-integration-specs"]
 	path = spec/cocoapods-integration-specs
-	url = https://github.com/CocoaPods/cocoapods-integration-specs.git
+	url = https://github.com/guillaumealgis/cocoapods-integration-specs.git
+	branch = use-isystem-for-frameworks
 [submodule "spec/fixtures/spec-repos/test_repo"]
 	path = spec/fixtures/spec-repos/test_repo
 	url = https://github.com/CocoaPods/cocoapods-test-specs.git
