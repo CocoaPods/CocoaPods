@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Install resource bundles and embed frameworks for every test target's configuration  
+  [Nickolay Tarbayev](https://github.com/tarbayev)
+  [#7012](https://github.com/CocoaPods/CocoaPods/issues/7012)
+
 * Set `SWIFT_VERSION` to test native targets during validation  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7216](https://github.com/CocoaPods/CocoaPods/pull/7216)

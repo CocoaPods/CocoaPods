@@ -402,7 +402,9 @@ module Pod
           def create_test_target_copy_resources_script(test_type)
             path = target.copy_resources_script_path_for_test_type(test_type)
             pod_targets = target.all_test_dependent_targets
-            resource_paths_by_config = { 'Debug' => pod_targets.flat_map(&:resource_paths) }
+            resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+              resources_by_config[config] = pod_targets.flat_map(&:resource_paths)
+            end
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
@@ -418,7 +420,9 @@ module Pod
           def create_test_target_embed_frameworks_script(test_type)
             path = target.embed_frameworks_script_path_for_test_type(test_type)
             pod_targets = target.all_test_dependent_targets
-            framework_paths_by_config = { 'Debug' => pod_targets.flat_map(&:framework_paths) }
+            framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
+              paths_by_config[config] = pod_targets.flat_map(&:framework_paths)
+            end
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
