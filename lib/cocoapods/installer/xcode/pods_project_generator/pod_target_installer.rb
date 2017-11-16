@@ -471,7 +471,8 @@ module Pod
             build_phase = native_target.new_shell_script_build_phase('Setup Static Framework')
             build_phase.shell_script = <<-eos.strip_heredoc
           mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules"
-          rsync -t "${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
+          # The fat library archive is at a file symbolic link when archiving, so use -L option
+          rsync -tL "${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
           rsync -t "${MODULEMAP_FILE}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/module.modulemap"
           # If there's a .swiftmodule, copy it into the framework's Modules folder
           rsync -tr "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}".swiftmodule "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/" 2>/dev/null || :
