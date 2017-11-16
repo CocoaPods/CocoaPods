@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix static framework archive regression from #7187  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7225](https://github.com/CocoaPods/CocoaPods/issues/7225)
+
 * Install resource bundles and embed frameworks for every test target's configuration  
   [Nickolay Tarbayev](https://github.com/tarbayev)
   [#7012](https://github.com/CocoaPods/CocoaPods/issues/7012)
