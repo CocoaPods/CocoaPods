@@ -119,7 +119,7 @@ module Pod
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-l"xml2"'
           end
 
-          it 'checks OTHER_LD_FLAGS and FRAMEWORK_SEARCH_PATHS for a vendored dependencies to a static framework' do
+          it 'checks OTHER_LDFLAGS and FRAMEWORK_SEARCH_PATHS for a vendored dependencies to a static framework' do
             spec = stub(:test_specification? => false)
             target_definition = stub(:inheritance => 'search_paths')
             consumer = stub(
@@ -159,7 +159,15 @@ module Pod
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '"${PODS_ROOT}/."'
           end
 
-          it 'check that include_ld_flags being false doesnt generate OTHER_LD_FLAGS' do
+          it 'quotes OTHER_LDFLAGS to properly handle spaces' do
+            framework_path = config.sandbox.root + 'Sample/Framework with Spaces.framework'
+            xcconfig = Xcodeproj::Config.new
+            @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
+            hash_config = xcconfig.to_hash
+            hash_config['OTHER_LDFLAGS'].should == '-framework "Framework with Spaces"'
+          end
+
+          it 'check that include_ld_flags being false doesnt generate OTHER_LDFLAGS' do
             spec = stub(:test_specification? => false)
             target_definition = stub(:inheritance => 'search_paths')
             consumer = stub(
