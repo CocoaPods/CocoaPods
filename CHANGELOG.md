@@ -18,7 +18,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Quote framework names in OTHER_LDFLAGS
+* Quote framework names in OTHER_LDFLAGS  
   [Tyler Stromberg](https://github.com/AquaGeek)
   [#7185](https://github.com/CocoaPods/CocoaPods/issues/7185)
 
