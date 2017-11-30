@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Quote framework names in OTHER_LDFLAGS  
+  [Tyler Stromberg](https://github.com/AquaGeek)
+  [#7185](https://github.com/CocoaPods/CocoaPods/issues/7185)
+
 * Fix static framework archive regression from #7187  
   [Paul Beusterien](https://github.com/paulb777)
   [#7225](https://github.com/CocoaPods/CocoaPods/issues/7225)
