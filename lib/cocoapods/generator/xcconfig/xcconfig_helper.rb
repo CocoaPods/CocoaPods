@@ -247,7 +247,7 @@ module Pod
           build_settings = {
             'LIBRARY_SEARCH_PATHS' => quote([dirname]),
           }
-          build_settings['OTHER_LDFLAGS'] = "-l#{name}" if include_ld_flags
+          build_settings['OTHER_LDFLAGS'] = "-l\"#{name}\"" if include_ld_flags
           xcconfig.merge!(build_settings)
         end
 

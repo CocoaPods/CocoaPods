@@ -161,10 +161,14 @@ module Pod
 
           it 'quotes OTHER_LDFLAGS to properly handle spaces' do
             framework_path = config.sandbox.root + 'Sample/Framework with Spaces.framework'
+            library_path = config.sandbox.root + 'Sample/libSample Lib.a'
+
             xcconfig = Xcodeproj::Config.new
             @sut.add_framework_build_settings(framework_path, xcconfig, config.sandbox.root)
+            @sut.add_library_build_settings(library_path, xcconfig, config.sandbox.root)
+
             hash_config = xcconfig.to_hash
-            hash_config['OTHER_LDFLAGS'].should == '-framework "Framework with Spaces"'
+            hash_config['OTHER_LDFLAGS'].should == '-l"Sample Lib" -framework "Framework with Spaces"'
           end
 
           it 'check that include_ld_flags being false doesnt generate OTHER_LDFLAGS' do
