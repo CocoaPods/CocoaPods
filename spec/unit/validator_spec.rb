@@ -139,6 +139,7 @@ module Pod
           @validator.stubs(:validate_screenshots)
           @validator.stubs(:validate_social_media_url)
           @validator.stubs(:validate_documentation_url)
+          @validator.stubs(:validate_source_url)
           @validator.stubs(:perform_extensive_subspec_analysis)
           Specification.any_instance.stubs(:available_platforms).returns([])
 
@@ -259,6 +260,24 @@ module Pod
         end
 
         describe 'documentation URL validation' do
+          before do
+            @validator.unstub(:validate_source_url)
+          end
+
+          it 'checks if the source URL is valid' do
+            Specification.any_instance.stubs(:source).returns({ :http => 'https://orta.io/package.zip' })
+            @validator.validate
+            @validator.results.should.be.empty?
+          end
+
+          it "should fail validation if the source URL is not HTTPs encrypted" do
+            Specification.any_instance.stubs(:source).returns({ :http => 'http://orta.io/package.zip' })
+            @validator.validate
+            @validator.results.map(&:to_s).first.should.match /use the encrypted HTTPs protocol./
+          end
+        end
+
+        describe 'source URL validation' do
           before do
             @validator.unstub(:validate_documentation_url)
           end
