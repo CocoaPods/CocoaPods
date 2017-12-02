@@ -399,7 +399,7 @@ module Pod
     def validate_source_url(spec)
       return if spec.source.nil? || spec.source[:http].nil?
       url = spec.source[:http]
-      return if url.downcase.start_with?("https://")
+      return if url.downcase.start_with?('https://')
       error('http', "The URL (#{url}) doesn't use the encrypted HTTPs protocol. " \
             'It is crucial for Pods to be transferred over a secure protocol to protect your users from man-in-the-middle attacks. '\
             'Please update the URL to use https and try again.')
