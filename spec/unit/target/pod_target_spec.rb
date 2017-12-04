@@ -144,6 +144,20 @@ module Pod
       end
     end
 
+    describe 'swift version' do
+      it 'uses the swift version defined in the specification' do
+        @pod_target.root_spec.stubs(:swift_version).returns('3.0')
+        @target_definition.stubs(:swift_version).returns('2.3')
+        @pod_target.swift_version.should == '3.0'
+      end
+
+      it 'uses the swift version defined by the target definitions if no swift version is specifed in the spec' do
+        @pod_target.root_spec.stubs(:swift_version).returns(nil)
+        @target_definition.stubs(:swift_version).returns('2.3')
+        @pod_target.swift_version.should == '2.3'
+      end
+    end
+
     describe 'Support files' do
       it 'returns the absolute path of the xcconfig file' do
         @pod_target.xcconfig_path('Release').to_s.should.include?(

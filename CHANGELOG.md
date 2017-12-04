@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Integrate `swift_version` DSL support into pod targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7134](https://github.com/CocoaPods/CocoaPods/issues/7134)
+
 * Add color indication to output of `pod outdated`  
   [iv-mexx](https://github.com/iv-mexx)
   [#7204](https://github.com/CocoaPods/CocoaPods/pull/7204)
