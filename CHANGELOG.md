@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#7093](https://github.com/CocoaPods/CocoaPods/pull/7093)
 
+* Show warning when SDK provider tries to push a version with an unencrypted HTTP source  
+  [KrauseFx](https://github.com/KrauseFx)
+  [#7250](https://github.com/CocoaPods/CocoaPods/pull/7250)
+
 ##### Bug Fixes
 
 * Quote framework names in OTHER_LDFLAGS  

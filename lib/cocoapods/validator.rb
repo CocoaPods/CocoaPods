@@ -307,6 +307,7 @@ module Pod
       validate_screenshots(spec)
       validate_social_media_url(spec)
       validate_documentation_url(spec)
+      validate_source_url(spec)
 
       valid = spec.available_platforms.send(fail_fast ? :all? : :each) do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
@@ -391,6 +392,17 @@ module Pod
     #
     def validate_documentation_url(spec)
       validate_url(spec.documentation_url) if spec.documentation_url
+    end
+
+    # Performs validations related to the `source` -> `http` attribute (if exists)
+    #
+    def validate_source_url(spec)
+      return if spec.source.nil? || spec.source[:http].nil?
+      url = spec.source[:http]
+      return if url.downcase.start_with?('https://')
+      warning('http', "The URL (`#{url}`) doesn't use the encrypted HTTPs protocol. " \
+              'It is crucial for Pods to be transferred over a secure protocol to protect your users from man-in-the-middle attacks. '\
+              'This will be an error in future releases. Please update the URL to use https.')
     end
 
     # Performs validation for which version of Swift is used during validation.
