@@ -287,7 +287,7 @@ module Pod
                 base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
                 output_extension = TargetIntegrator.output_extension_for_resource(File.extname(input_path))
                 File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
-              end
+              end.uniq
             end
             TargetIntegrator.add_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
@@ -320,7 +320,7 @@ module Pod
             output_paths = []
             unless framework_paths_by_config.all?(&:empty?)
               input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
-              output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact
+              output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
             end
             TargetIntegrator.add_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

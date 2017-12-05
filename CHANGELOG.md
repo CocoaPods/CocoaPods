@@ -26,6 +26,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Deduplicate output path file names for resources and frameworks  
+  [Eric Amorde](https://github.com/amorde)
+  [#7259](https://github.com/CocoaPods/CocoaPods/issues/7259)
+
 * Allow installation of a pod with its own Swift version on multiple targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7261](https://github.com/CocoaPods/CocoaPods/pull/7261)
