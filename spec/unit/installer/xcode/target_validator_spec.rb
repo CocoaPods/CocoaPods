@@ -225,8 +225,8 @@ module Pod
             podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
             podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
 
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
 
             @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
             e = should.raise Informative do
@@ -254,8 +254,8 @@ module Pod
             # when the swift version is unset at the project level, but set in one target, swift_version is nil
             podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
 
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
 
             @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
             lambda { @validator.validate! }.should.not.raise
@@ -278,8 +278,31 @@ module Pod
             podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
 
             # Pretend none of the pod targets use swift, even if the target definitions they are linked with do have different Swift versions.
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']])
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
+
+            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            lambda { @validator.validate! }.should.not.raise
+          end
+
+          it 'does not raise when targets with different Swift versions integrate the same pod that specifies swift version attribute' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              use_frameworks!
+              platform :ios, '8.0'
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+
+            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
+
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => '4.0')
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => '3.2')
 
             @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
             lambda { @validator.validate! }.should.not.raise
