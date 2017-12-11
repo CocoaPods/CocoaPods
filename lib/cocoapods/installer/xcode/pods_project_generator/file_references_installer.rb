@@ -119,7 +119,10 @@ module Pod
                 paths = file_accessor.developer_files
                 paths.each do |path|
                   group = pods_project.group_for_spec(root_name, :developer)
-                  pods_project.add_file_reference(path, group, false)
+                  ref = pods_project.add_file_reference(path, group, false)
+                  if path.extname == '.podspec'
+                    pods_project.mark_ruby_file_ref(ref)
+                  end
                 end
               end
             end

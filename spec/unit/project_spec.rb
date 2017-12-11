@@ -246,6 +246,15 @@ module Pod
           ref = @project.add_file_reference(sym_file, @group)
           ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
         end
+
+        it 'sets syntax to ruby when requested' do
+          Pathname.any_instance.stubs(:realpath).returns(@file)
+          ref = @project.add_file_reference(@file, @group)
+          @project.mark_ruby_file_ref(ref)
+          ref.xc_language_specification_identifier.should == 'xcode.lang.ruby'
+          ref.explicit_file_type.should == 'text.script.ruby'
+          ref.last_known_file_type.should == 'text'
+        end
       end
 
       #----------------------------------------#
