@@ -221,10 +221,20 @@ module Pod
     #
     def add_podfile(podfile_path)
       new_file(podfile_path, :project).tap do |podfile_ref|
-        podfile_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
-        podfile_ref.explicit_file_type = 'text.script.ruby'
-        podfile_ref.last_known_file_type = 'text'
+        mark_ruby_file_ref(podfile_ref)
       end
+    end
+
+    # Sets the syntax of the provided file reference to be Ruby, in the case that
+    # the file does not already have a ".rb" file extension (ex. the Podfile)
+    #
+    # @param  [PBXFileReference] file_ref
+    #         The file reference to change
+    #
+    def mark_ruby_file_ref(file_ref)
+      file_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
+      file_ref.explicit_file_type = 'text.script.ruby'
+      file_ref.last_known_file_type = 'text'
     end
 
     # Adds a new build configuration to the project and populates it with
