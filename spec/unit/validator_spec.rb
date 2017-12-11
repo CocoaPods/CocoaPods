@@ -139,6 +139,7 @@ module Pod
           @validator.stubs(:validate_screenshots)
           @validator.stubs(:validate_social_media_url)
           @validator.stubs(:validate_documentation_url)
+          @validator.stubs(:validate_source_url)
           @validator.stubs(:perform_extensive_subspec_analysis)
           Specification.any_instance.stubs(:available_platforms).returns([])
 
@@ -259,6 +260,24 @@ module Pod
         end
 
         describe 'documentation URL validation' do
+          before do
+            @validator.unstub(:validate_source_url)
+          end
+
+          it 'checks if the source URL is valid' do
+            Specification.any_instance.stubs(:source).returns(:http => 'https://orta.io/package.zip')
+            @validator.validate
+            @validator.results.should.be.empty?
+          end
+
+          it 'should fail validation if the source URL is not HTTPs encrypted' do
+            Specification.any_instance.stubs(:source).returns(:http => 'http://orta.io/package.zip')
+            @validator.validate
+            @validator.results.map(&:to_s).first.should.match /use the encrypted HTTPs protocol./
+          end
+        end
+
+        describe 'source URL validation' do
           before do
             @validator.unstub(:validate_documentation_url)
           end
@@ -887,9 +906,55 @@ module Pod
           result.type.should == :warning
           result.message.should == 'The validator used ' \
             'Swift 3.2 by default because no Swift version was specified. ' \
-            'If you want to use a different version of Swift during validation, then either use the `--swift-version` parameter ' \
-            'or use a `.swift-version` file to set the version of Swift to use for ' \
-            'your Pod. For example to use Swift 4.0, run: `echo "4.0" > .swift-version`.'
+            'To specify a Swift version during validation, add the `swift_version` attribute in your podspec. ' \
+            'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.'
+        end
+
+        it 'errors when swift version spec attribute does not match dot swift version' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
+
+          validator = test_swiftpod_with_dot_swift_version('3.2')
+          validator.validate
+          validator.results.count.should == 1
+
+          result = validator.results.first
+          result.type.should == :error
+          result.message.should == 'Specification `JSONKit` specifies an inconsistent `swift_version` (`4.0`) compared to the one present in your `.swift-version` file (`3.2`). ' \
+                                   'Please remove the `.swift-version` file which is now deprecated and only use the `swift_version` attribute within your podspec.'
+        end
+
+        it 'does not error when swift version spec attribute matches dot swift version' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
+
+          validator = test_swiftpod_with_dot_swift_version('4.0')
+          validator.validate
+          validator.results.count.should == 0
+        end
+
+        it 'errors when swift version spec attribute does not match parameter based swift version' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
+
+          validator = test_swiftpod
+          validator.swift_version = '3.2'
+          validator.validate
+          validator.results.count.should == 1
+
+          result = validator.results.first
+          result.type.should == :error
+          result.message.should == 'Specification `JSONKit` specifies an inconsistent `swift_version` (`4.0`) compared to the one passed during lint (`3.2`).'
+        end
+
+        it 'does not error when swift version spec attribute matches parameter based swift version' do
+          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
+
+          validator = test_swiftpod
+          validator.swift_version = '4.0'
+          validator.validate
+          validator.results.count.should == 0
         end
 
         it 'does not warn for Swift if version was set by a dot swift version file' do
@@ -918,7 +983,13 @@ module Pod
           validator.swift_version.should == '3.2'
         end
 
-        it 'allows the user to set the version' do
+        it 'uses the Swift version specified by the swift_version attribute in the spec' do
+          validator = test_swiftpod
+          validator.spec.swift_version = '4.0'
+          validator.swift_version.should == '4.0'
+        end
+
+        it 'allows the user to set the Swift version using a .swift-version file' do
           validator = test_swiftpod
           validator.stubs(:dot_swift_version).returns('3.0')
           validator.swift_version = '4.0'
@@ -978,6 +1049,22 @@ module Pod
           validator.instance_variable_set(:@installer, installer)
 
           validator.uses_swift?.should.be.false
+        end
+
+        it 'honors swift version set by the pod target for dependencies' do
+          validator = test_swiftpod
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration_one = stub(:build_settings => {})
+          debug_configuration_two = stub(:build_settings => {})
+          native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+          native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
+          pod_target_one = stub(:uses_swift? => true, :swift_version => '4.0', :native_target => native_target_one, :test_native_targets => [])
+          pod_target_two = stub(:uses_swift? => true, :swift_version => '3.2', :native_target => native_target_two, :test_native_targets => [])
+          aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
+          validator.send(:configure_pod_targets, [aggregate_target], '9.0')
+          debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
+          debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
         end
       end
     end

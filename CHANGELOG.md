@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Integrate `swift_version` DSL support into pod targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7134](https://github.com/CocoaPods/CocoaPods/issues/7134)
+
 * Add color indication to output of `pod outdated`  
   [iv-mexx](https://github.com/iv-mexx)
   [#7204](https://github.com/CocoaPods/CocoaPods/pull/7204)
@@ -16,7 +20,23 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#7093](https://github.com/CocoaPods/CocoaPods/pull/7093)
 
+* Show warning when Pod source uses unencrypted HTTP  
+  [KrauseFx](https://github.com/KrauseFx)
+  [#7238](https://github.com/CocoaPods/CocoaPods/issues/7238)
+
+* Show warning when SDK provider tries to push a version with an unencrypted HTTP source  
+  [KrauseFx](https://github.com/KrauseFx)
+  [#7250](https://github.com/CocoaPods/CocoaPods/pull/7250)
+
 ##### Bug Fixes
+
+* Deduplicate output path file names for resources and frameworks  
+  [Eric Amorde](https://github.com/amorde)
+  [#7259](https://github.com/CocoaPods/CocoaPods/issues/7259)
+
+* Allow installation of a pod with its own Swift version on multiple targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7261](https://github.com/CocoaPods/CocoaPods/pull/7261)
 
 * Quote framework names in OTHER_LDFLAGS  
   [Tyler Stromberg](https://github.com/AquaGeek)

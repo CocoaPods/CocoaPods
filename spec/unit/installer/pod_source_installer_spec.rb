@@ -30,6 +30,22 @@ module Pod
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
+
+        it 'does not show warning if the source is encrypted using https' do
+          @spec.source = { :http => 'https://orta.io/sdk.zip' }
+          dummy_response = Pod::Downloader::Response.new
+          Downloader.stubs(:download).returns(dummy_response)
+          @installer.install!
+          UI.warnings.length.should.equal(0)
+        end
+
+        it 'shows a warning if the source is unencrypted (e.g. http)' do
+          @spec.source = { :http => 'http://orta.io/sdk.zip' }
+          dummy_response = Pod::Downloader::Response.new
+          Downloader.stubs(:download).returns(dummy_response)
+          @installer.install!
+          UI.warnings.should.include 'Please reach out to the library author to notify them of this security issue'
+        end
       end
 
       #--------------------------------------#

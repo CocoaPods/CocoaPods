@@ -95,10 +95,18 @@ module Pod
       end
     end
 
-    # @return [String] the Swift version for the target.
+    # @return [String] the Swift version for the target. If the pod author has provided a swift version
+    #                  then that is the one returned, otherwise the Swift version is determined by the user
+    #                  targets that include this pod target.
     #
     def swift_version
-      target_definitions.map(&:swift_version).compact.uniq.first
+      spec_swift_version || target_definitions.map(&:swift_version).compact.uniq.first
+    end
+
+    # @return [String] the Swift version within the root spec. Might be `nil` if none is set.
+    #
+    def spec_swift_version
+      root_spec.swift_version
     end
 
     # @note   The deployment target for the pod target is the maximum of all
