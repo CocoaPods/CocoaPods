@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Fixing the method recreate_user_scheme for targets other than type PBXNativeTarget.
+  [Yadir Hernandez](https://github.com/yadirhb)
+  [#531](https://github.com/CocoaPods/CocoaPods/issues/531)
+
 * Integrate `swift_version` DSL support into pod targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7134](https://github.com/CocoaPods/CocoaPods/issues/7134)
