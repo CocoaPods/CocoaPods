@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Restore `development_pod_targets` public method in installer  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7292](https://github.com/CocoaPods/CocoaPods/pull/7292)
 
 ## 1.4.0.rc.1 (2017-12-16)
 
