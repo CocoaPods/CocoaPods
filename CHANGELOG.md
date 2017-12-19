@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Show warning when Pod source uses unencrypted HTTP  
+  [KrauseFx](https://github.com/KrauseFx)
+  [#7238](https://github.com/CocoaPods/CocoaPods/issues/7238)
 
 ##### Bug Fixes
 
