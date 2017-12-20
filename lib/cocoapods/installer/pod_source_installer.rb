@@ -117,11 +117,27 @@ module Pod
       # @return [void]
       #
       def download_source
+        verify_source_is_secure(root_spec)
         download_result = Downloader.download(download_request, root, :can_cache => can_cache?)
 
         if (@specific_source = download_result.checkout_options) && specific_source != root_spec.source
           sandbox.store_checkout_source(root_spec.name, specific_source)
         end
+      end
+
+      # Verify the source of the spec is secure, which is used to
+      # show a warning to the user if that isn't the case
+      # This method doesn't verify all protocols, but currently
+      # only prohibits unencrypted http:// connections
+      #
+      def verify_source_is_secure(root_spec)
+        return if root_spec.source.nil? || root_spec.source[:http].nil?
+        http_source = root_spec.source[:http]
+        return if http_source.downcase.start_with?('https://')
+
+        UI.warn "'#{root_spec.name}' uses the unencrypted http protocol to transfer the Pod. " \
+                'Please be sure you\'re in a safe network with only trusted hosts in there. ' \
+                'Please reach out to the library author to notify them of this security issue.'
       end
 
       def download_request
