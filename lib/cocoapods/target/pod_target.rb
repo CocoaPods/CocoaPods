@@ -468,10 +468,10 @@ module Pod
       end
     end
 
-    # @return [Array<PodTarget>] the canonical list of test dependent targets this target has a dependency upon.
-    #         This includes the parent target as well as its transitive dependencies.
+    # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
+    #         This list includes the target itself as well as its recursive dependent and test dependent targets.
     #
-    def all_test_dependent_targets
+    def all_dependent_targets
       [self, *recursive_dependent_targets, *recursive_test_dependent_targets].uniq
     end
 

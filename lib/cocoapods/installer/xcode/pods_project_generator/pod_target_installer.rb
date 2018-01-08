@@ -242,7 +242,7 @@ module Pod
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_type)
               platform_name = target.platform.name
-              language = target.all_test_dependent_targets.any?(&:uses_swift?) ? :swift : :objc
+              language = target.all_dependent_targets.any?(&:uses_swift?) ? :swift : :objc
               native_test_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
               native_test_target.product_reference.name = name
 
@@ -401,9 +401,12 @@ module Pod
           #
           def create_test_target_copy_resources_script(test_type)
             path = target.copy_resources_script_path_for_test_type(test_type)
-            pod_targets = target.all_test_dependent_targets
+            pod_targets = target.all_dependent_targets
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
-              resources_by_config[config] = pod_targets.flat_map(&:resource_paths)
+              resources_by_config[config] = pod_targets.flat_map do |pod_target|
+                include_test_spec_paths = pod_target == target
+                pod_target.resource_paths(include_test_spec_paths)
+              end
             end
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
             update_changed_file(generator, path)
@@ -419,9 +422,12 @@ module Pod
           #
           def create_test_target_embed_frameworks_script(test_type)
             path = target.embed_frameworks_script_path_for_test_type(test_type)
-            pod_targets = target.all_test_dependent_targets
+            pod_targets = target.all_dependent_targets
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
-              paths_by_config[config] = pod_targets.flat_map(&:framework_paths)
+              paths_by_config[config] = pod_targets.flat_map do |pod_target|
+                include_test_spec_paths = pod_target == target
+                pod_target.framework_paths(include_test_spec_paths)
+              end
             end
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
             update_changed_file(generator, path)
@@ -435,7 +441,7 @@ module Pod
           #
           def test_target_swift_debug_hack(test_target_bc)
             return unless test_target_bc.debug?
-            return unless target.all_test_dependent_targets.any?(&:uses_swift?)
+            return unless target.all_dependent_targets.any?(&:uses_swift?)
             ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
             ldflags << ' -lswiftSwiftOnoneSupport'
           end
