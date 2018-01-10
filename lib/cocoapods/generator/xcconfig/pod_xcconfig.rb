@@ -75,8 +75,8 @@ module Pod
           if @test_xcconfig
             test_dependent_targets = [target, *target.recursive_test_dependent_targets].uniq
             @xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(target, test_dependent_targets - recursive_dependent_targets, @test_xcconfig)
-            XCConfigHelper.generate_vendored_build_settings(nil, target.all_test_dependent_targets, @xcconfig, true, @test_xcconfig)
-            XCConfigHelper.generate_other_ld_flags(nil, target.all_test_dependent_targets, @xcconfig)
+            XCConfigHelper.generate_vendored_build_settings(nil, target.all_dependent_targets, @xcconfig, true, @test_xcconfig)
+            XCConfigHelper.generate_other_ld_flags(nil, target.all_dependent_targets, @xcconfig)
             XCConfigHelper.generate_ld_runpath_search_paths(target, false, true, @xcconfig)
           end
           @xcconfig

@@ -351,7 +351,7 @@ module Pod
               test_dependent_target.expects(:should_build?).returns(true)
 
               @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
-              @pod_target.stubs(:all_test_dependent_targets).returns([test_dependent_target])
+              @pod_target.stubs(:all_dependent_targets).returns([test_dependent_target])
               @pod_target.stubs(:should_build? => false)
 
               mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)
@@ -384,7 +384,7 @@ module Pod
 
               @pod_target.test_specs.first.requires_app_host = true
               @pod_target.stubs(:test_native_targets).returns([mock_test_native_target])
-              @pod_target.stubs(:all_test_dependent_targets).returns([test_dependent_target])
+              @pod_target.stubs(:all_dependent_targets).returns([test_dependent_target])
               @pod_target.stubs(:should_build? => false)
 
               mock_test_native_target.expects(:add_dependency).with(test_dependent_native_target)

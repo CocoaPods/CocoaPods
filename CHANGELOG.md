@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not include test spec resources and framework paths of dependent targets into test scripts  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7318](https://github.com/CocoaPods/CocoaPods/pull/7318)
+
 * Restore `development_pod_targets` public method in installer  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7292](https://github.com/CocoaPods/CocoaPods/pull/7292)
