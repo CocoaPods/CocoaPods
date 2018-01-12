@@ -737,6 +737,54 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         UI.warnings.should.match /multiple specifications/
       end
 
+      it 'chooses the first source in a complicated scenario' do
+        test_repo1 = MockSource.new('test_repo1') do
+          pod 'Core', '1.0.0' do
+            test_spec
+          end
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.0' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Testing', '1.0.0' do |s|
+            s.dependency 'Core'
+          end
+          pod 'Testing', '1.0.1' do |s|
+            s.dependency 'Core'
+          end
+        end
+
+        test_repo2 = MockSource.new('test_repo2') do
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Testing', '1.0.1' do |s|
+            s.dependency 'Core'
+          end
+        end
+        sources = [test_repo1, test_repo2]
+        podfile = Podfile.new do
+          platform :ios, '9.0'
+          pod 'Data/Tests', '~> 1.0'
+          pod 'Data', '~> 1.0'
+        end
+
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver.resolve.values.flatten.map { |rs| rs.spec.to_s }.sort.
+          should == ['Core (1.0.1)', 'Data (1.0.1)', 'Data/Tests (1.0.1)', 'Testing (1.0.1)']
+      end
+
       it 'does not warn when multiple sources contain a pod but a dependency ' \
          'has an explicit source specified' do
         test_repo_url = config.sources_manager.source_with_name_or_url('test_repo').url
