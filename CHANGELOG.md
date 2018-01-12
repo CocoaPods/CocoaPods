@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7292](https://github.com/CocoaPods/CocoaPods/pull/7292)
 
+* Fix resolution when multiple sources provide the same pods, and there are 
+  (potential) dependencies between the sources.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#7031](https://github.com/CococaPods/CocoaPods/issues/7031)
+
 ## 1.4.0.rc.1 (2017-12-16)
 
 ##### Enhancements

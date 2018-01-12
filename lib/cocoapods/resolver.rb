@@ -351,8 +351,7 @@ module Pod
         all_specifications(installation_options.warn_for_multiple_pod_sources).
         select { |s| requirement.satisfied_by? s.version }.
         map { |s| s.subspec_by_name(dependency.name, false, true) }.
-        compact.
-        reverse
+        compact
     end
 
     # @return [Set] Loads or returns a previously initialized set for the Pod
@@ -508,7 +507,7 @@ module Pod
           end,
         )
       end
-      raise type, message
+      raise type.new(message).tap { |e| e.set_backtrace(error.backtrace) }
     end
 
     # Returns whether the given spec is platform-compatible with the dependency
