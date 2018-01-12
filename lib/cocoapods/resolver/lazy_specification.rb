@@ -37,12 +37,12 @@ module Pod
         end
       end
 
+      # returns the highest versioned spec last
       def all_specifications(warn_for_multiple_pod_sources)
         @all_specifications ||= begin
           sources_by_version = {}
           versions_by_source.each do |source, versions|
             versions.each { |v| (sources_by_version[v] ||= []) << source }
-            sources_by_version
           end
 
           if warn_for_multiple_pod_sources
@@ -56,8 +56,11 @@ module Pod
             end
           end
 
-          versions_by_source.flat_map do |source, versions|
-            versions.map { |version| LazySpecification.new(name, version, source) }
+          # sort versions from high to low
+          sources_by_version.sort_by(&:first).flat_map do |version, sources|
+            # within each version, we want the prefered (first-specified) source
+            # to be the _last_ one
+            sources.reverse_each.map { |source| LazySpecification.new(name, version, source) }
           end
         end
       end

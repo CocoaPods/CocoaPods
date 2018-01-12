@@ -13,6 +13,68 @@ end
 
 module Pod
   describe Resolver do
+    class MockSource < Source
+      attr_reader :name
+
+      def initialize(name, &blk)
+        @name = name
+        @_pods_by_name = Hash.new { |h, k| h[k] = [] }
+        @_current_pod = nil
+        instance_eval(&blk)
+        super('/mock/repo')
+      end
+
+      def pod(name, version = nil, platform: [[:ios, '9.0']], test_spec: false, &_blk)
+        cp = @_current_pod
+        Pod::Specification.new(cp, name, test_spec) do |spec|
+          @_current_pod = spec
+          if cp
+            cp.subspecs << spec
+          else
+            spec.version = version
+          end
+          platform.each { |pl, dt| spec.send(pl).deployment_target = dt }
+          yield spec if block_given?
+        end
+        @_pods_by_name[name] << @_current_pod if cp.nil?
+      ensure
+        @_current_pod = cp
+      end
+
+      def test_spec(name: 'Tests', &blk)
+        pod(name, :test_spec => true, &blk)
+      end
+
+      def all_specs
+        @_pods_by_name.values.flatten(1)
+      end
+
+      def pods
+        @_pods_by_name.keys
+      end
+
+      def search(query)
+        query = query.root_name if query.is_a?(Dependency)
+        set(query) if @_pods_by_name.key?(query)
+      end
+
+      def specification(name, version)
+        @_pods_by_name[name].find { |s| s.version == Pod::Version.new(version) }
+      end
+
+      def versions(name)
+        @_pods_by_name[name].map(&:version)
+      end
+
+      def specification_path(name, version)
+        pod_path(name).join(version.to_s, "#{name}.podspec")
+      end
+
+      def specs_dir
+        repo
+      end
+    end
+
     describe 'In general' do
       before do
         @podfile = Podfile.new do
@@ -673,6 +735,54 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         resolver.resolve.values.flatten.first.spec.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
 
         UI.warnings.should.match /multiple specifications/
+      end
+
+      it 'chooses the first source in a complicated scenario' do
+        test_repo1 = MockSource.new('test_repo1') do
+          pod 'Core', '1.0.0' do
+            test_spec
+          end
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.0' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Testing', '1.0.0' do |s|
+            s.dependency 'Core'
+          end
+          pod 'Testing', '1.0.1' do |s|
+            s.dependency 'Core'
+          end
+        end
+
+        test_repo2 = MockSource.new('test_repo2') do
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Testing', '1.0.1' do |s|
+            s.dependency 'Core'
+          end
+        end
+        sources = [test_repo1, test_repo2]
+        podfile = Podfile.new do
+          platform :ios, '9.0'
+          pod 'Data/Tests', '~> 1.0'
+          pod 'Data', '~> 1.0'
+        end
+
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver.resolve.values.flatten.map { |rs| rs.spec.to_s }.sort.
+          should == ['Core (1.0.1)', 'Data (1.0.1)', 'Data/Tests (1.0.1)', 'Testing (1.0.1)']
       end
 
       it 'does not warn when multiple sources contain a pod but a dependency ' \
