@@ -545,41 +545,46 @@ module Pod
     # Performs platform specific analysis. It requires to download the source
     # at each iteration
     #
-    # @note   Xcode warnings are treaded as notes because the spec maintainer
+    # @note   Xcode warnings are treated as notes because the spec maintainer
     #         might not be the author of the library
     #
     # @return [void]
     #
     def build_pod
       if !xcodebuild_available?
-        UI.warn "Skipping compilation with `xcodebuild' because it can't be found.\n".yellow
+        UI.warn "Skipping compilation with `xcodebuild` because it can't be found.\n".yellow
       else
-        UI.message "\nBuilding with xcodebuild.\n".yellow do
+        UI.message "\nBuilding with `xcodebuild`.\n".yellow do
           scheme = if skip_import_validation?
-                     @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }.label
+                     pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
+                     pod_target.label if pod_target.should_build?
                    else
                      'App'
                    end
-          output = xcodebuild('build', scheme, 'Release')
-          UI.puts output
-          parsed_output = parse_xcodebuild_output(output)
-          translate_output_to_linter_messages(parsed_output)
+          if scheme.nil?
+            UI.warn "Skipping compilation with `xcodebuild` because target contains no sources.\n".yellow
+          else
+            output = xcodebuild('build', scheme, 'Release')
+            UI.puts output
+            parsed_output = parse_xcodebuild_output(output)
+            translate_output_to_linter_messages(parsed_output)
+          end
         end
       end
     end
 
     # Builds and runs all test sources associated with the current specification being validated.
     #
-    # @note   Xcode warnings are treaded as notes because the spec maintainer
+    # @note   Xcode warnings are treated as notes because the spec maintainer
     #         might not be the author of the library
     #
     # @return [void]
     #
     def test_pod
       if !xcodebuild_available?
-        UI.warn "Skipping test validation with `xcodebuild' because it can't be found.\n".yellow
+        UI.warn "Skipping test validation with `xcodebuild` because it can't be found.\n".yellow
       else
-        UI.message "\nTesting with xcodebuild.\n".yellow do
+        UI.message "\nTesting with `xcodebuild`.\n".yellow do
           pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
           consumer.spec.test_specs.each do |test_spec|
             scheme = pod_target.native_target_for_spec(test_spec)
