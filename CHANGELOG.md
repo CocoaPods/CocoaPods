@@ -27,6 +27,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#7031](https://github.com/CococaPods/CocoaPods/issues/7031)
 
+* Ensure that externally-sourced (e.g. local & git) pods are allowed to resolve
+  to prerelease versions.  
+  [segiddins](https://github.com/segiddins)
+
 ## 1.4.0.rc.1 (2017-12-16)
 
 ##### Enhancements
