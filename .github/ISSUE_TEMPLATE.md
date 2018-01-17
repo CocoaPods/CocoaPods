@@ -25,22 +25,22 @@ Issues with `pod search`? Try deleting your cache `rm -rf ~/Library/Caches/Cocoa
 
 ## What did you do?
 
-ℹ Please replace these with what you did.  
+ℹ Please replace these two lines with what you did.  
 e.g. Run `pod install`
 
 ## What did you expect to happen?
 
-ℹ Please replace these with what you expected to happen.  
+ℹ Please replace these two lines with what you expected to happen.  
 e.g. Install all pod dependencies correctly.
 
 ## What happened instead?
 
-ℹ Please replace these with of what happened instead.  
+ℹ Please replace these two lines with of what happened instead.  
 e.g. Pod A is missing the subspec B for target C.
 
 ## CocoaPods Environment
 
-ℹ Please replace these with the output of `pod env`.
+ℹ Please replace these two lines with the output of `pod env`.
 e.g. via `pod env | pbcopy`
 
 ## Project that demonstrates the issue
