@@ -1019,6 +1019,29 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['PrereleaseMonkey (1.0-beta1)']
       end
+
+      it 'resolves when there is no prerelease dependency on an external source pod' do
+        sandbox = config.sandbox
+        local_pod = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0.0.LOCAL')
+        local_pod2 = Specification.from_hash('name' => 'LocalPod2', 'version' => '1.0.0.LOCAL', 'dependencies' => { 'LocalPod' => [] })
+        sandbox.stubs(:specification).with('LocalPod').returns(local_pod)
+        sandbox.stubs(:specification).with('LocalPod2').returns(local_pod2)
+        podfile = Podfile.new do
+          target 'SampleProject' do
+            platform :ios, '9.0'
+            pod 'LocalPod', :path => '../'
+            pod 'LocalPod2', :path => '../'
+          end
+        end
+        locked_graph = dependency_graph_from_array([
+          Dependency.new('LocalPod', '= 1.0.0.LOCAL'),
+          Dependency.new('LocalPod2', '= 1.0.0.LOCAL'),
+        ])
+        resolver = Resolver.new(config.sandbox, podfile, locked_graph, config.sources_manager.all)
+
+        specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
+        specs.should == ['LocalPod (1.0.0.LOCAL)', 'LocalPod2 (1.0.0.LOCAL)']
+      end
     end
   end
 end
