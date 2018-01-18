@@ -535,7 +535,7 @@ module Pod
       vertex = dependency_graph.vertex_named(dependency.name)
       predecessors = vertex.recursive_predecessors.select(&:root)
       predecessors << vertex if vertex.root?
-      platforms_to_satisfy = predecessors.lazy.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
+      platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }.uniq
 
       available_platforms = spec.available_platforms
 
