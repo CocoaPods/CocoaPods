@@ -127,14 +127,19 @@ module Pod
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
         podfile.target_definition_list.each do |target|
           dependencies = {}
-          specs = target.dependencies.map(&:name).flat_map do |name|
+          specs = target.dependencies.flat_map do |dep|
+            name = dep.name
             node = @activated.vertex_named(name)
             (valid_dependencies_for_target_from_node(target, dependencies, node) << node).map { |s| [s, node.payload.test_specification?] }
           end
 
           resolver_specs_by_target[target] = specs.
             group_by(&:first).
-            map { |vertex, spec_test_only_tuples| ResolverSpecification.new(vertex.payload, spec_test_only_tuples.map { |tuple| tuple[1] }.all?, vertex.payload.respond_to?(:spec_source) && vertex.payload.spec_source) }.
+            map do |vertex, spec_test_only_tuples|
+              test_only = spec_test_only_tuples.all? { |tuple| tuple[1] }
+              spec_source = vertex.payload.respond_to?(:spec_source) && vertex.payload.spec_source
+              ResolverSpecification.new(vertex.payload, test_only, spec_source)
+            end.
             sort_by(&:name)
         end
       end
