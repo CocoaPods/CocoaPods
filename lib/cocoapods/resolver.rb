@@ -558,14 +558,15 @@ module Pod
     def valid_dependencies_for_target_from_node(target, dependencies, node)
       dependencies[node.name] ||= begin
         validate_platform(node.payload, target)
-        dependency_nodes = node.outgoing_edges.select do |edge|
-          edge_is_valid_for_target?(edge, target)
-        end.map(&:destination)
-
-        dependency_nodes + dependency_nodes.flat_map do |item|
-          node_result = valid_dependencies_for_target_from_node(target, dependencies, item)
-          node_result
+        dependency_nodes = []
+        node.outgoing_edges.each do |edge|
+          next unless edge_is_valid_for_target?(edge, target)
+          dependency_nodes << edge.destination
         end
+
+        dependency_nodes.flat_map do |item|
+          valid_dependencies_for_target_from_node(target, dependencies, item)
+        end.concat dependency_nodes
       end
     end
 
@@ -575,9 +576,11 @@ module Pod
     # @return [Bool]
     #
     def edge_is_valid_for_target?(edge, target)
-      dependencies_for_target_platform =
-        edge.origin.payload.all_dependencies(target.platform).map(&:name)
-      dependencies_for_target_platform.include?(edge.requirement.name)
+      requirement_name = edge.requirement.name
+
+      edge.origin.payload.all_dependencies(target.platform).any? do |dep|
+        dep.name == requirement_name
+      end
     end
   end
 end
