@@ -162,17 +162,18 @@ module Pod
     #         to this target.
     attr_reader :test_resource_bundle_targets
 
-    # @return [Bool] Whether or not this target should be build.
+    # @return [Bool] Whether or not this target should be built.
     #
-    # A target should not be build if it has no source files.
+    # A target should not be built if it has no source files.
     #
     def should_build?
       return @should_build if defined? @should_build
-      @should_build = begin
-        source_files = file_accessors.flat_map(&:source_files)
-        source_files -= file_accessors.flat_map(&:headers)
-        !source_files.empty? || contains_script_phases?
-      end
+
+      return @should_build = true if contains_script_phases?
+
+      source_files = file_accessors.flat_map(&:source_files)
+      source_files -= file_accessors.flat_map(&:headers)
+      @should_build = !source_files.empty?
     end
 
     # @return [Array<Specification::Consumer>] the specification consumers for
@@ -196,7 +197,7 @@ module Pod
     # @return [Array<Hash{Symbol=>String}>] An array of hashes where each hash represents a single script phase.
     #
     def script_phases
-      spec_consumers.map(&:script_phases).flatten
+      spec_consumers.flat_map(&:script_phases)
     end
 
     # @return [Boolean] Whether the target contains any script phases.
