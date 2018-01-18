@@ -251,13 +251,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TestInclusionsPods-TestInclusions-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		23FBFF6CF467540E5F102610 /* [CP] Copy Pods Resources */ = {
@@ -266,9 +269,78 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests-resources.sh",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_keyboardBackground.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_keyboardBackground@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-empty.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-empty@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-full.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-full@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/SwrveConversation.storyboard",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/VGConversationKitResources-Info.plist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/close_button.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/close_button@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_keyboardBackground.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_keyboardBackground@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-empty.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-empty@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-full.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-full@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SwrveConversation.storyboardc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/VGConversationKitResources-Info.plist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -311,9 +383,78 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions-resources.sh",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_mid_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_single_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_ios7.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_ios7@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_tapped.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_top_tapped@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_keyboardBackground.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_keyboardBackground@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-empty.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-empty@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-full.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/star-full@2x.png",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/SwrveConversation.storyboard",
+				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/VGConversationKitResources-Info.plist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/close_button.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/close_button@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_bottom_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_mid_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_single_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_ios7.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_ios7@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_tapped.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_grouped_cell_top_tapped@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_keyboardBackground.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cvsr_keyboardBackground@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-empty.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-empty@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-full.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/star-full@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SwrveConversation.storyboardc",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/VGConversationKitResources-Info.plist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -326,13 +467,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TestInclusionsPods-TestInclusionsTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
