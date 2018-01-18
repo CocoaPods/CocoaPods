@@ -175,10 +175,12 @@ module Pod
       it 'orders paths case insensitively' do
         root = fixture('banana-unordered')
 
-        # Let Pathname.glob result be ordered case-sensitively
-        Pathname.stubs(:glob).returns([Pathname.new("#{root}/Classes/NSFetchRequest+Banana.h"),
-                                       Pathname.new("#{root}/Classes/NSFetchedResultsController+Banana.h")])
-        File.stubs(:directory?).returns(false)
+        # Let Find.find result be ordered case-sensitively
+        Find.stubs(:find).multiple_yields(
+          "#{root}/Classes",
+          "#{root}/Classes/NSFetchRequest+Banana.h",
+          "#{root}/Classes/NSFetchedResultsController+Banana.h",
+        )
 
         path_list = Sandbox::PathList.new(root)
         path_list.files.should == %w(Classes/NSFetchedResultsController+Banana.h Classes/NSFetchRequest+Banana.h)
