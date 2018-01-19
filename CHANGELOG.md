@@ -8,7 +8,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Set direct and transitive dependency header search paths for pod targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7116](https://github.com/CocoaPods/CocoaPods/pull/7116)
+
+* Log target names missing host for libraries  
+  [Keith Smiley](https://github.com/keith)
+  [#7346](https://github.com/CocoaPods/CocoaPods/pull/7346)
 
 ##### Bug Fixes
 
@@ -18,10 +24,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ## 1.4.0 (2018-01-18)
 
 ##### Enhancements
-
-* Log target names missing host for libraries  
-  [Keith Smiley](https://github.com/keith)
-  [#7346](https://github.com/CocoaPods/CocoaPods/pull/7346)
 
 * Show warning when Pod source uses unencrypted HTTP  
   [KrauseFx](https://github.com/KrauseFx)

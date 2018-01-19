@@ -567,6 +567,23 @@ module Pod
       [version.major, version.minor, version.patch].join('.')
     end
 
+    # @param [Boolean] include_test_dependent_targets
+    #        whether to include header search paths for test dependent targets
+    #
+    # @return [Array<String>] The set of header search paths this target uses.
+    #
+    def header_search_paths(include_test_dependent_targets = false)
+      header_search_paths = []
+      header_search_paths.concat(build_headers.search_paths(platform))
+      header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name))
+      dependent_targets = recursive_dependent_targets
+      dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
+      dependent_targets.each do |dependent_target|
+        header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name))
+      end
+      header_search_paths.uniq
+    end
+
     private
 
     # @param  [TargetDefinition] target_definition
