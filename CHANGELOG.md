@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Log target names missing host for libraries  
+  [Keith Smiley](https://github.com/keith)
+  [#7346](https://github.com/CocoaPods/CocoaPods/pull/7346)
+
 * Show warning when Pod source uses unencrypted HTTP  
   [KrauseFx](https://github.com/KrauseFx)
   [#7293](https://github.com/CocoaPods/CocoaPods/issues/7293)
