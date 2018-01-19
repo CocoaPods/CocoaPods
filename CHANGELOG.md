@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Keith Smiley](https://github.com/keith)
   [#7346](https://github.com/CocoaPods/CocoaPods/pull/7346)
 
+* Add a `--no-overwrite` flag to `pod repo push` to disable overwriting
+  existing specs that have already been pushed.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Do not attempt compilation for pods with no sources and skipping import validation  

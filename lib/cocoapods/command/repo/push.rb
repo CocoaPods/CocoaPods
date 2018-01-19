@@ -36,6 +36,7 @@ module Pod
             ['--use-json', 'Push JSON spec to repo'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used when linting the spec. ' \
              'This takes precedence over a .swift-version file.'],
+            ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec.'],
           ].concat(super)
         end
 
@@ -54,6 +55,7 @@ module Pod
           @swift_version = argv.option('swift-version', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
+          @allow_overwrite = argv.flag?('overwrite', true)
           super
         end
 
@@ -183,6 +185,9 @@ module Pod
             if @message && !@message.empty?
               message = @message
             elsif output_path.exist?
+              unless @allow_overwrite
+                raise Informative, "#{spec} already exists and overwriting has been disabled."
+              end
               message = "[Fix] #{spec}"
             elsif output_path.dirname.directory?
               message = "[Update] #{spec}"
