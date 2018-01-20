@@ -1,34 +1,44 @@
+require 'delegate'
 module Pod
   class Specification
     class Set
-      class LazySpecification < BasicObject
-        attr_reader :name, :version, :source
+      class SpecWithSource < DelegateClass(Specification)
+        attr_reader :spec_repo
+        def initialize(spec, source)
+          super(spec)
+          @spec_repo = source
+        end
 
-        def initialize(name, version, source)
+        undef is_a?
+      end
+
+      class LazySpecification < DelegateClass(Specification)
+        attr_reader :name, :version, :spec_source
+
+        def initialize(name, version, spec_source)
           @name = name
           @version = version
-          @source = source
-        end
-
-        def method_missing(method, *args, &block)
-          specification.send(method, *args, &block)
-        end
-
-        def respond_to_missing?(method, include_all = false)
-          specification.respond_to?(method, include_all)
+          @spec_source = spec_source
         end
 
         def subspec_by_name(name = nil, raise_if_missing = true, include_test_specifications = false)
-          if !name || name == self.name
-            self
-          else
-            specification.subspec_by_name(name, raise_if_missing, include_test_specifications)
-          end
+          subspec =
+            if !name || name == self.name
+              self
+            else
+              specification.subspec_by_name(name, raise_if_missing, include_test_specifications)
+            end
+          return unless subspec
+
+          SpecWithSource.new subspec, spec_source
         end
 
         def specification
-          @specification ||= source.specification(name, version.version)
+          @specification ||= spec_source.specification(name, version.version)
         end
+        alias __getobj__ specification
+
+        undef is_a?
       end
 
       class External

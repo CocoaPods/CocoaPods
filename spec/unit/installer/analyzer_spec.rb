@@ -698,8 +698,8 @@ module Pod
       #-------------------------------------------------------------------------#
 
       it 'does include pod target if any spec is not used by tests only and is part of target definition' do
-        spec1 = Resolver::ResolverSpecification.new(stub, false)
-        spec2 = Resolver::ResolverSpecification.new(stub, true)
+        spec1 = Resolver::ResolverSpecification.new(stub, false, nil)
+        spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
         target_definition = stub
         pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
         resolver_specs_by_target = { target_definition => [spec1, spec2] }
@@ -707,8 +707,8 @@ module Pod
       end
 
       it 'does not include pod target if its used by tests only' do
-        spec1 = Resolver::ResolverSpecification.new(stub, true)
-        spec2 = Resolver::ResolverSpecification.new(stub, true)
+        spec1 = Resolver::ResolverSpecification.new(stub, true, nil)
+        spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
         target_definition = stub
         pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
         resolver_specs_by_target = { target_definition => [spec1, spec2] }
@@ -716,7 +716,7 @@ module Pod
       end
 
       it 'does not include pod target if its not part of the target definition' do
-        spec = Resolver::ResolverSpecification.new(stub, false)
+        spec = Resolver::ResolverSpecification.new(stub, false, nil)
         target_definition = stub
         pod_target = stub(:name => 'Pod1', :target_definitions => [], :specs => [spec.spec])
         resolver_specs_by_target = { target_definition => [spec] }

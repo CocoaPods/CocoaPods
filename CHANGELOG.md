@@ -20,6 +20,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   existing specs that have already been pushed.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Store which specs repo a pod comes from in the lockfile.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Unique all available pre-release versions when displaying  

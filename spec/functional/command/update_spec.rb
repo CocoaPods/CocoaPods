@@ -30,7 +30,11 @@ module Pod
           end,
         ]
         external_sources = {}
-        Lockfile.generate(podfile, specs, external_sources).write_to_disk(temporary_directory + 'Podfile.lock')
+        specs_by_source = {
+          Source.new(fixture('spec-repos/master')) => specs,
+        }
+        Lockfile.generate(podfile, specs, external_sources, specs_by_source).
+          write_to_disk(temporary_directory + 'Podfile.lock')
       end
 
       describe 'updates of the spec repos' do

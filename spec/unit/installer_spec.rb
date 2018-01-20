@@ -564,6 +564,7 @@ module Pod
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = [fixture_spec('banana-lib/BananaLib.podspec')]
+          @analysis_result.specs_by_source = {}
           @installer.stubs(:analysis_result).returns(@analysis_result)
         end
 
