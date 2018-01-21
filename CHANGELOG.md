@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Unique all available pre-release versions when displaying  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#7353](https://github.com/CocoaPods/CocoaPods/pull/7353)
+
 * Do not attempt compilation for pods with no sources and skipping import validation  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7336](https://github.com/CocoaPods/CocoaPods/issues/7336)

@@ -477,7 +477,7 @@ module Pod
               # Conflict was caused by not specifying an explicit version for the requirement #[name],
               # and there is no available stable version satisfying constraints for the requirement.
               o << "\nThere are only pre-release versions available satisfying the following requirements:\n"
-              conflict.requirements.values.flatten.each do |r|
+              conflict.requirements.values.flatten.uniq.each do |r|
                 unless search_for(r).empty?
                   o << "\n\t'#{name}', '#{r.requirement}'\n"
                 end
