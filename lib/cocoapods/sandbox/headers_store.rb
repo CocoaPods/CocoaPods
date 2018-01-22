@@ -4,7 +4,7 @@ module Pod
     # the header search paths.
     #
     class HeadersStore
-      SEARCH_PATHS_KEY = Struct.new(:platform_name, :target_name)
+      SEARCH_PATHS_KEY = Struct.new(:platform_name, :target_name, :use_modular_headers)
 
       # @return [Pathname] the absolute path of this header directory.
       #
@@ -22,36 +22,48 @@ module Pod
       #         the relative path to the sandbox root and hence to the Pods
       #         project.
       #
-      def initialize(sandbox, relative_path)
+      # @param  [Symbol] visibility_scope
+      #         the header visibility scope to use in this store. Can be `:private` or `:public`.
+      #
+      def initialize(sandbox, relative_path, visibility_scope)
         @sandbox       = sandbox
         @relative_path = relative_path
         @search_paths  = []
         @search_paths_cache = {}
+        @visibility_scope = visibility_scope
       end
 
       # @param  [Platform] platform
       #         the platform for which the header search paths should be
-      #         returned
+      #         returned.
       #
       # @param  [String] target_name
       #         the target for which the header search paths should be
-      #         returned. This will return only header root scope e.g. `${PODS_ROOT}/Headers/Public`
-      #         if the target name specified is `nil`.
+      #         returned. Can be `nil` in which case all headers that match the platform
+      #         will be returned.
+      #
+      # @param  [Boolean] use_modular_headers
+      #         whether the search paths generated should use modular (stricter) style.
       #
       # @return [Array<String>] All the search paths of the header directory in
       #         xcconfig format. The paths are specified relative to the pods
       #         root with the `${PODS_ROOT}` variable.
       #
-      def search_paths(platform, target_name = nil)
-        key = SEARCH_PATHS_KEY.new(platform.name, target_name)
+      def search_paths(platform, target_name = nil, use_modular_headers = false)
+        key = SEARCH_PATHS_KEY.new(platform.name, target_name, use_modular_headers)
         return @search_paths_cache[key] if @search_paths_cache.key?(key)
-        platform_search_paths = @search_paths.select do |entry|
+        search_paths = @search_paths.select do |entry|
           matches_platform = entry[:platform] == platform.name
           matches_target = target_name.nil? || (entry[:path].basename.to_s == target_name)
           matches_platform && matches_target
         end
         headers_dir = root.relative_path_from(sandbox.root).dirname
-        @search_paths_cache[key] = ["${PODS_ROOT}/#{headers_dir}/#{@relative_path}"] + platform_search_paths.uniq.map { |entry| "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" }
+        @search_paths_cache[key] = search_paths.uniq.flat_map do |entry|
+          path = "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}"
+          paths = [path]
+          paths.push("#{path}/#{entry[:path].basename}") if !use_modular_headers && @visibility_scope == :public
+          paths
+        end
       end
 
       # Removes the directory as it is regenerated from scratch during each

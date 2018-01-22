@@ -147,11 +147,15 @@ module Pod
                     pod_target.build_headers.add_search_path(headers_sandbox, pod_target.platform)
                     sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform)
 
+                    # Private headers will always end up in Pods/Headers/Private/PodA/*.h
+                    # This will allow for `""` imports to work.
                     header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
                       pod_target.build_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp })
                     end
 
-                    header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
+                    # Public headers on the other hand will be added in Pods/Headers/Public/PodA/PodA/*.h
+                    # The extra folder is intentional in order for `<>` imports to work.
+                    header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers, :public).each do |namespaced_path, files|
                       sandbox.public_headers.add_files(namespaced_path, files.reject { |f| f.to_path =~ framework_exp })
                     end
                   end
@@ -295,6 +299,10 @@ module Pod
           #         The consumer file accessor for which the headers need to be
           #         linked.
           #
+          # @param  [Symbol] visibility_scope
+          #         The visibility scope to produce header mappings for. If set to :public then the headers
+          #         are nested an additional level deep. For example, 'Pods/Headers/Public/PodA/PodA'.
+          #
           # @param  [Array<Pathname>] headers
           #         The absolute paths of the headers which need to be mapped.
           #
@@ -302,9 +310,10 @@ module Pod
           #         headers folders as the keys and the absolute paths of the
           #         header files as the values.
           #
-          def header_mappings(headers_sandbox, file_accessor, headers)
+          def header_mappings(headers_sandbox, file_accessor, headers, visibility_scope = :private)
             consumer = file_accessor.spec_consumer
             dir = headers_sandbox
+            dir += headers_sandbox if visibility_scope == :public
             dir += consumer.header_dir if consumer.header_dir
 
             mappings = {}

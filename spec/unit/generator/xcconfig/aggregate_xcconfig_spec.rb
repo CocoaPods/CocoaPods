@@ -126,6 +126,10 @@ module Pod
         #-----------------------------------------------------------------------#
 
         describe 'with library' do
+          before do
+            config.sandbox.public_headers.stubs(:search_paths).returns(['${PODS_ROOT}/Headers/Public/BananaLib'])
+          end
+
           def specs
             [fixture_spec('banana-lib/BananaLib.podspec')]
           end
@@ -137,12 +141,12 @@ module Pod
           end
 
           it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as header search paths' do
-            expected = "$(inherited) \"#{config.sandbox.public_headers.search_paths(Platform.ios).join('" "')}\""
+            expected = '$(inherited) "${PODS_ROOT}/Headers/Public/BananaLib"'
             @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
           end
 
           it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
-            expected = "$(inherited) -isystem \"#{config.sandbox.public_headers.search_paths(Platform.ios).join('" -isystem "')}\""
+            expected = '$(inherited) -isystem "${PODS_ROOT}/Headers/Public/BananaLib"'
             @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
           end
 
@@ -185,6 +189,10 @@ module Pod
           end
 
           describe 'with a vendored-library pod' do
+            before do
+              config.sandbox.public_headers.stubs(:search_paths).returns(['${PODS_ROOT}/Headers/Public/monkey'])
+            end
+
             def specs
               [fixture_spec('monkey/monkey.podspec')]
             end
@@ -199,23 +207,26 @@ module Pod
 
             it 'does not include framework header paths as local headers for pods that are linked statically' do
               monkey_headers = '-iquote "${PODS_CONFIGURATION_BUILD_DIR}/monkey.framework/Headers"'
+              @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CFLAGS'].should.not.include monkey_headers
             end
 
             it 'includes the public header paths as system headers' do
-              expected = '$(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public"'
+              expected = '$(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public/monkey"'
               @generator.stubs(:pod_targets).returns([@pod_targets.first, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'), @target_definition)])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
             end
 
             it 'includes the public header paths as user headers' do
-              expected = '${PODS_ROOT}/Headers/Public'
+              expected = '${PODS_ROOT}/Headers/Public/monkey'
+              @xcconfig = @generator.generate
               @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include expected
             end
 
             it 'includes $(inherited) in the header search paths' do
               expected = '$(inherited)'
+              @xcconfig = @generator.generate
               @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include expected
             end
 

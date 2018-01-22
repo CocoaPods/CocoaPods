@@ -163,11 +163,11 @@ module Pod
 
         private
 
-        # Add build settings, which ensure that the pod targets can be imported
-        # from the integrating target by all sort of imports, which are:
-        #  - `#import <…>`
-        #  - `#import "…"`
-        #  - `@import …;` / `import …`
+        # Add build settings, which ensure that the pod targets can be imported from the integrating target.
+        # For >= 1.5.0 we use modular (stricter) header search paths this means that the integrated target will only be
+        # able to import public headers using `<>` or `@import` notation, but never import any private headers.
+        #
+        # For < 1.5.0 legacy header search paths the same rules apply: It's the wild west.
         #
         def generate_settings_to_import_pod_targets
           @xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(target, pod_targets)
@@ -176,7 +176,6 @@ module Pod
             generator = AggregateXCConfig.new(search_paths_target, configuration_name)
             @xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(nil, search_paths_target.pod_targets)
             @xcconfig.merge!(generator.settings_to_import_pod_targets)
-
             # Propagate any HEADER_SEARCH_PATHS settings from the search paths.
             XCConfigHelper.propagate_header_search_paths_from_search_paths(search_paths_target, @xcconfig)
           end
