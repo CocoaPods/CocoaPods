@@ -28,6 +28,10 @@ DEPENDENCIES:
   - "sharedlib/Testing (from `sharedlib`)"
   - "testkit (from `testkit`)"
 
+SPEC REPOS:
+  "https://github.com/CocoaPods/Specs.git":
+    - CocoaLumberjack
+
 EXTERNAL SOURCES:
   asserts:
     :path: asserts
