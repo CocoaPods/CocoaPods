@@ -157,7 +157,7 @@ module Pod
     #         defines the module structure for the compiler.
     #
     def module_map_path
-      support_files_dir + 'module.modulemap'
+      support_files_dir + "#{product_module_name}.modulemap"
     end
 
     # @return [Pathname] the absolute path of the bridge support file.
