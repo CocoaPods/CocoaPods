@@ -41,7 +41,7 @@ module Pod
               end
               if target.requires_frameworks?
                 unless target.static_framework?
-                  create_info_plist_file
+                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
                 create_build_phase_to_symlink_header_folders
                 if target.static_framework?
