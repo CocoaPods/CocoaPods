@@ -27,6 +27,8 @@ module Pod
               add_files_to_build_phases
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
+              # TODO: determine if it is safe to unconditionally create (& 'link') module maps & umbrella
+              #       headers for _all_ static libraries -- we've caused bugs by trying to do this in the past
               create_module_map
               create_umbrella_header do |generator|
                 file_accessors = target.file_accessors
@@ -47,9 +49,8 @@ module Pod
                 if target.static_framework?
                   create_build_phase_to_move_static_framework_archive
                 end
-              else
-                add_copy_module_map_build_phase
-                add_copy_umbrella_header_build_phase
+              elsif target.uses_swift?
+                add_swift_static_library_compatibility_header_phase
               end
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
@@ -99,6 +100,11 @@ module Pod
             if target.swift_version
               settings['SWIFT_VERSION'] = target.swift_version
             end
+
+            if target.requires_frameworks? || target.uses_swift?
+              settings['DEFINES_MODULE'] = 'YES'
+            end
+
             settings
           end
 
@@ -589,10 +595,7 @@ module Pod
           # @return [PBXFileReference] the file reference of the added file.
           #
           def add_file_to_support_group(path)
-            pod_name = target.pod_name
-            dir = target.support_files_dir
-            group = project.pod_support_files_group(pod_name, dir)
-            group.new_file(path)
+            support_files_group.new_file(path)
           end
 
           def apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
@@ -664,14 +667,6 @@ module Pod
               copy_phase.symbol_dst_subfolder_spec = :products_directory
               copy_phase.dst_path = "$(#{acl.upcase}_HEADERS_FOLDER_PATH)/#{sub_dir}"
               copy_phase.add_file_reference(file_ref, true)
-            elsif acl != 'Project'
-              relative_path = file_ref.real_path.basename
-              copy_phase_name = "Copy #{acl} Headers"
-              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
-                native_target.new_copy_files_build_phase(copy_phase_name)
-              copy_phase.symbol_dst_subfolder_spec = :products_directory
-              copy_phase.dst_path = 'Headers/'
-              copy_phase.add_file_reference(file_ref, true)
             else
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = [acl]
@@ -679,33 +674,28 @@ module Pod
           end
 
           def support_files_group
-              pod_name = target.pod_name
-              dir = target.support_files_dir
-              project.pod_support_files_group(pod_name, dir)
+            pod_name = target.pod_name
+            dir = target.support_files_dir
+            project.pod_support_files_group(pod_name, dir)
           end
 
-          def add_copy_module_map_build_phase(path = target.module_map_path.relative_path_from(target.support_files_dir))
-            if !target.requires_frameworks? && !target.uses_swift?
-              file_ref = support_files_group.find_file_by_path(path.to_s)
-              copy_phase_name = 'Copy modulemap'
-              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
-                native_target.new_copy_files_build_phase(copy_phase_name)
-              copy_phase.symbol_dst_subfolder_spec = :products_directory
-              copy_phase.add_file_reference(file_ref, false)
-            end
-          end
+          # Adds a shell script phase, intended only for static library targets that contain swift,
+          # to copy the ObjC compatibility header (the -Swift.h file that the swift compiler generates)
+          # to the built products directory. Additionally, the script phase copies the module map, appending a `.Swift`
+          # submodule that references the (moved) compatibility header.
+          #
+          # @return [Void]
+          #
+          def add_swift_static_library_compatibility_header_phase
+            build_phase = native_target.new_shell_script_build_phase('Copy generated compatibility header')
+            build_phase.shell_script = <<-SH.strip_heredoc
+              COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+              MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
 
-          # FIXME: Umbrella header should be copied as part of copy public headers?
-          def add_copy_umbrella_header_build_phase(path = target.umbrella_header_path.relative_path_from(target.support_files_dir))
-            if !target.requires_frameworks? && !target.uses_swift?
-              file_ref = support_files_group.find_file_by_path(path.to_s)
-              copy_phase_name = 'Copy umbrella header'
-              copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
-                native_target.new_copy_files_build_phase(copy_phase_name)
-              copy_phase.symbol_dst_subfolder_spec = :products_directory
-              copy_phase.dst_path = 'Headers/'
-              copy_phase.add_file_reference(file_ref, false)
-            end
+              ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+              ditto "${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}" "${MODULE_MAP_PATH}"
+              printf "\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\"${COMPATIBILITY_HEADER_PATH}\\"\\n  requires objc\\n}\\n" >> "${MODULE_MAP_PATH}"
+            SH
           end
 
           #-----------------------------------------------------------------------#
