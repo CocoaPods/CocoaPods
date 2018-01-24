@@ -47,17 +47,18 @@ module Pod
           config = {
             'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
             'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-            'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(target.header_search_paths(@test_xcconfig)),
+            'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(target.header_search_paths(@test_xcconfig)),
             'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
+            'OTHER_CFLAGS' => '$(inherited) ',
             'OTHER_LDFLAGS' => XCConfigHelper.default_ld_flags(target, @test_xcconfig),
+            'OTHER_SWIFT_FLAGS' => '$(inherited) ',
             'PODS_ROOT' => '${SRCROOT}',
             'PODS_TARGET_SRCROOT' => target.pod_target_srcroot,
             'PRODUCT_BUNDLE_IDENTIFIER' => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
             'PRODUCT_MODULE_NAME' => target.product_module_name,
             'SKIP_INSTALL' => 'YES',
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) ',
-            'SWIFT_INCLUDE_PATHS' => '$(inherited) ${LIBRARY_SEARCH_PATHS}',
-            # 'USE_HEADERMAP' => 'NO'
+            'SWIFT_INCLUDE_PATHS' => '$(inherited) ',
           }
 
           @xcconfig = Xcodeproj::Config.new(config)
