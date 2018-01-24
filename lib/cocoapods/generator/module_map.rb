@@ -38,13 +38,26 @@ module Pod
       #
       def generate
         <<-MODULE_MAP.strip_heredoc
-          framework module #{target.product_module_name} {
+          #{module_specificier_prefix}module #{target.product_module_name} {
             umbrella header "#{target.umbrella_header_path.basename}"
 
             export *
             module * { export * }
           }
         MODULE_MAP
+      end
+
+      private
+
+      # The prefix to `module` to prepend in the module map.
+      # Ensures that only framework targets have `framework` prepended.
+      #
+      def module_specificier_prefix
+        if target.requires_frameworks?
+          'framework '
+        else
+          ''
+        end
       end
     end
   end
