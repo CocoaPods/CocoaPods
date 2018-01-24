@@ -63,6 +63,8 @@ module Pod
               'PODS_ROOT'                          => '$(SRCROOT)',
               'PRODUCT_BUNDLE_IDENTIFIER'          => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
               'SKIP_INSTALL'                       => 'YES',
+
+              'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' => 'NO',
             }
             super.merge(settings)
           end
