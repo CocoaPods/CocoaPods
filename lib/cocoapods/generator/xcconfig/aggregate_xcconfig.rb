@@ -55,12 +55,16 @@ module Pod
           includes_static_libs = !target.requires_frameworks?
           includes_static_libs ||= pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_static_artifacts.empty? }
           config = {
+            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
+            'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
+            'HEADER_SEARCH_PATHS' => '$(inherited) ',
+            'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
+            'OTHER_CFLAGS' => '$(inherited) ',
             'OTHER_LDFLAGS' => '$(inherited) ' + XCConfigHelper.default_ld_flags(target, includes_static_libs),
+            'OTHER_SWIFT_FLAGS' => '$(inherited) ',
             'PODS_PODFILE_DIR_PATH' => target.podfile_dir_relative_path,
             'PODS_ROOT' => target.relative_pods_root,
-            'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
-            'FRAMEWORK_SEARCH_PATHS' => '$(inherited) ',
-            'LIBRARY_SEARCH_PATHS' => '$(inherited) ',
+            'SWIFT_INCLUDE_PATHS' => '$(inherited) ',
           }.merge(embedded_content_settings)
 
           @xcconfig = Xcodeproj::Config.new(config)
@@ -140,25 +144,23 @@ module Pod
             end
             build_settings = {
               # Make framework headers discoverable by `import "…"`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
+              'OTHER_CFLAGS' => XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
             }
             if pod_targets.any? { |t| !t.should_build? }
               # Make library headers discoverable by `#import "…"`
               library_header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-              build_settings['HEADER_SEARCH_PATHS'] = '$(inherited) ' + XCConfigHelper.quote(library_header_search_paths)
+              build_settings['HEADER_SEARCH_PATHS'] = XCConfigHelper.quote(library_header_search_paths)
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
             end
             build_settings
           else
             # Make headers discoverable from $PODS_ROOT/Headers directory
             header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
-            swift_search_paths = pod_targets.select(&:should_build?).select(&:uses_swift?).map(&:configuration_build_dir)
             {
-              'SWIFT_INCLUDE_PATHS' => '$(inherited) ' + XCConfigHelper.quote(swift_search_paths),
               # by `#import "…"`
-              'HEADER_SEARCH_PATHS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths),
+              'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`
-              'OTHER_CFLAGS' => '$(inherited) ' + XCConfigHelper.quote(header_search_paths, '-isystem'),
+              'OTHER_CFLAGS' => XCConfigHelper.quote(header_search_paths, '-isystem'),
             }
           end
         end
