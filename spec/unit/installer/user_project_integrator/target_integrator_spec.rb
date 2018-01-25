@@ -370,6 +370,29 @@ module Pod
           phase.output_paths.should.be.empty
         end
 
+        it 'updates embed frameworks phase if it becomes empty' do
+          debug_non_vendored_framework = { :name => 'DebugCompiledFramework.framework',
+                                           :input_path => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
+                                           :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
+          framework_paths_by_config = {
+            'Debug' => [debug_non_vendored_framework],
+          }
+          @pod_bundle.stubs(:framework_paths_by_config => framework_paths_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.input_paths.sort.should == %w(
+            ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework
+            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-frameworks.sh
+          )
+          # Now pretend the same target has no more framework paths, it should update the targets input/output paths
+          @pod_bundle.stubs(:framework_paths_by_config => {})
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.input_paths.sort.should.be.empty
+        end
+
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks' do
           debug_vendored_framework = { :name => 'DebugVendoredFramework.framework',
                                        :input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
