@@ -4,10 +4,10 @@ workspace 'Examples.xcworkspace'
 project 'watchOSsample.xcodeproj'
 
 target 'watchOSsample' do
-  pod 'Alamofire', :path => './Alamofire'
+  pod 'Alamofire', :path => '../Alamofire Example/Alamofire'
 end
 
 target 'watchOSsample WatchKit Extension' do
-  platform :watchos, '2.0'
-  pod 'Alamofire', :path => './Alamofire'
+  platform :watchos, '4.0'
+  pod 'Alamofire', :path => '../Alamofire Example/Alamofire'
 end

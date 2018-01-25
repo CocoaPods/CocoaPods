@@ -1,0 +1,34 @@
+version: 2.0
+jobs:
+  build:
+    macos:
+      xcode: "9.2.0"
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Setup Dependencies
+          command: |
+            sudo gem update --system
+            bundle check || bundle install --path .bundle
+      - save_cache:
+          key: v1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ".bundle"
+      - run:
+          name: Fetch CocoaPods Specs
+          command: .circle-scripts/fetch-cocoapods-repo-from-s3.sh
+      - run:
+          name: Setup Git
+          command: |
+            git config --global user.email "tests@cocoapods.org"
+            git config --global user.name "CocoaPods Tests"
+      - run: bundle exec pod env
+      - run:
+          name: Run Examples
+          command: bundle exec rake spec:all
+          environment:
+           COCOAPODS_CI_TASKS: EXAMPLES

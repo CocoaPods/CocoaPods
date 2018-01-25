@@ -268,7 +268,7 @@ begin
     desc 'Build all examples'
     task :build do
       Bundler.require 'xcodeproj', :development
-      Dir['examples/*'].each do |dir|
+      Dir['examples/*'].sort.each do |dir|
         Dir.chdir(dir) do
           puts "Example: #{dir}"
 

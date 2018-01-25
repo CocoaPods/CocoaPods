@@ -13,7 +13,6 @@
 		F8111E0F19A951050040E7D1 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8111E0E19A951050040E7D1 /* DetailViewController.swift */; };
 		F8111E1219A951050040E7D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8111E1019A951050040E7D1 /* Main.storyboard */; };
 		F8111E1419A951050040E7D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8111E1319A951050040E7D1 /* Images.xcassets */; };
-		F8E6024019CB3C0700A3E7F1 /* HTTPBin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E6023F19CB3C0700A3E7F1 /* HTTPBin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		F8111E0E19A951050040E7D1 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		F8111E1119A951050040E7D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F8111E1319A951050040E7D1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F8E6023F19CB3C0700A3E7F1 /* HTTPBin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPBin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +81,6 @@
 				F8111E0A19A951050040E7D1 /* AppDelegate.swift */,
 				F8111E0C19A951050040E7D1 /* MasterViewController.swift */,
 				F8111E0E19A951050040E7D1 /* DetailViewController.swift */,
-				F8E6023F19CB3C0700A3E7F1 /* HTTPBin.swift */,
 				F8111E1019A951050040E7D1 /* Main.storyboard */,
 				F8111E1319A951050040E7D1 /* Images.xcassets */,
 				F8111E0819A951050040E7D1 /* Supporting Files */,
@@ -228,7 +225,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8111E0F19A951050040E7D1 /* DetailViewController.swift in Sources */,
-				F8E6024019CB3C0700A3E7F1 /* HTTPBin.swift in Sources */,
 				F8111E0D19A951050040E7D1 /* MasterViewController.swift in Sources */,
 				F8111E0B19A951050040E7D1 /* AppDelegate.swift in Sources */,
 			);
@@ -336,7 +332,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "iOS Example";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -349,7 +345,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "iOS Example";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
