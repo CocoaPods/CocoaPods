@@ -71,15 +71,11 @@ module Pod
           #
           # @return [void]
           #
-          def add_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
+          def create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
             phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + EMBED_FRAMEWORK_PHASE_NAME)
             phase.shell_script = %("#{script_path}"\n)
-            unless input_paths.empty?
-              phase.input_paths = input_paths
-            end
-            unless output_paths.empty?
-              phase.output_paths = output_paths
-            end
+            phase.input_paths = input_paths
+            phase.output_paths = output_paths
           end
 
           # Delete a 'Embed Pods Frameworks' Copy Files Build Phase if present
@@ -111,16 +107,12 @@ module Pod
           #
           # @return [void]
           #
-          def add_copy_resources_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
+          def create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
             phase_name = COPY_PODS_RESOURCES_PHASE_NAME
             phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             phase.shell_script = %("#{script_path}"\n)
-            unless input_paths.empty?
-              phase.input_paths = input_paths
-            end
-            unless output_paths.empty?
-              phase.output_paths = output_paths
-            end
+            phase.input_paths = input_paths
+            phase.output_paths = output_paths
           end
 
           # Creates or update a shell script build phase for the given target.
@@ -289,7 +281,7 @@ module Pod
                 File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
               end.uniq
             end
-            TargetIntegrator.add_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
 
@@ -322,7 +314,7 @@ module Pod
               input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
               output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
             end
-            TargetIntegrator.add_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+            TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
 
