@@ -71,15 +71,21 @@ module Pod
             next unless aggregate_target.requires_frameworks?
 
             aggregate_target.user_build_configurations.keys.each do |config|
-              pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
+              dynamic_pod_targets = aggregate_target.pod_targets_for_build_configuration(config).reject(&:static_framework?)
 
-              dependencies = pod_targets.select(&:should_build?).reject(&:static_framework?).flat_map(&:dependencies)
-              depended_upon_targets = pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
+              dependencies = dynamic_pod_targets.select(&:should_build?).flat_map(&:dependencies)
+              depended_upon_targets = dynamic_pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
 
               static_libs = depended_upon_targets.flat_map(&:file_accessors).flat_map(&:vendored_static_artifacts)
               unless static_libs.empty?
                 raise Informative, "The '#{aggregate_target.label}' target has " \
                   "transitive dependencies that include static binaries: (#{static_libs.to_sentence})"
+              end
+
+              static_framework_deps = dynamic_pod_targets.select(&:should_build?).flat_map(&:recursive_dependent_targets).select(&:static_framework?)
+              unless static_framework_deps.empty?
+                raise Informative, "The '#{aggregate_target.label}' target has " \
+                  "transitive dependencies that include static frameworks: (#{static_framework_deps.flat_map(&:name).to_sentence})"
               end
             end
           end
