@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: f80744433c6d5d1229d663b289456cc5662d91a9
-  branch: seg-lockfile-spec-repos
+  revision: c67c10dc718bae4c07bdfb78d8917134432aaff4
+  branch: master
   specs:
     cocoapods-core (1.4.0)
       activesupport (>= 4.0.2, < 6)
