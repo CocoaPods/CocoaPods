@@ -6,6 +6,11 @@ DEPENDENCIES:
   - JSONKit
   - Reachability (= 3.1.0)
 
+SPEC REPOS:
+  "https://github.com/CocoaPods/Specs.git":
+    - JSONKit
+    - Reachability
+
 SPEC CHECKSUMS:
   JSONKit: 5b69e804ea54d99293eed0fd2ce596c5703fefb0
   Reachability: 3c8fe9643e52184d17f207e781cd84158da8c02b

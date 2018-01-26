@@ -8,6 +8,11 @@ PODS:
 DEPENDENCIES:
   - libPusher
 
+SPEC REPOS:
+  "https://github.com/CocoaPods/Specs.git":
+    - libPusher
+    - SocketRocket
+
 SPEC CHECKSUMS:
   libPusher: 21c6209fa84a829e963f1b2fe5bff34722f3f3f4
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
