@@ -11,6 +11,11 @@ module Pod
         #
         attr_accessor :specs_by_target
 
+        # @return [Hash{Source => Array<Specification>}] the
+        #         specifications grouped by spec repo source.
+        #
+        attr_accessor :specs_by_source
+
         # @return [Array<Specification>] the specifications of the resolved
         #         version of Pods that should be installed.
         #

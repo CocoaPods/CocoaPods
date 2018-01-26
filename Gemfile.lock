@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b4fb2f193897c789c094d126ebca91034edc261d
+  revision: c67c10dc718bae4c07bdfb78d8917134432aaff4
   branch: master
   specs:
     cocoapods-core (1.4.0)
@@ -180,7 +180,7 @@ GEM
     gh_inspector (1.0.3)
     git (1.3.0)
     hashdiff (0.3.1)
-    i18n (0.9.1)
+    i18n (0.9.3)
       concurrent-ruby (~> 1.0)
     inch (0.7.0)
       pry

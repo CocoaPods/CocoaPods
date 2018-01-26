@@ -32,7 +32,7 @@ module Pod
 
 ```
 #{exception.class} - #{exception.message}
-#{exception.backtrace.join("\n")}
+#{exception.backtrace.join("\n") if exception.backtrace}
 ```
 
 #{'――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――'.reversed}

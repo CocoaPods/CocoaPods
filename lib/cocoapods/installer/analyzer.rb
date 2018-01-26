@@ -90,6 +90,8 @@ module Pod
         @result.specs_by_target = resolver_specs_by_target.each_with_object({}) do |rspecs_by_target, hash|
           hash[rspecs_by_target[0]] = rspecs_by_target[1].map(&:spec)
         end
+        @result.specs_by_source = Hash[resolver_specs_by_target.values.flatten(1).group_by(&:source).map { |source, specs| [source, specs.map(&:spec).uniq] }]
+        sources.each { |s| @result.specs_by_source[s] ||= [] }
         @result
       end
 

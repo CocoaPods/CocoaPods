@@ -20,14 +20,19 @@ module Pod
       #
       attr_reader :spec
 
+      # @return [Source] the spec repo source the specification came from
+      #
+      attr_reader :source
+
       # @return [Bool] whether this resolved specification is only used by tests.
       #
       attr_reader :used_by_tests_only
       alias used_by_tests_only? used_by_tests_only
 
-      def initialize(spec, used_by_tests_only)
+      def initialize(spec, used_by_tests_only, source)
         @spec = spec
         @used_by_tests_only = used_by_tests_only
+        @source = source
       end
 
       def name
@@ -129,7 +134,7 @@ module Pod
 
           resolver_specs_by_target[target] = specs.
             group_by(&:first).
-            map { |vertex, spec_test_only_tuples| ResolverSpecification.new(vertex.payload, spec_test_only_tuples.map { |tuple| tuple[1] }.all?) }.
+            map { |vertex, spec_test_only_tuples| ResolverSpecification.new(vertex.payload, spec_test_only_tuples.map { |tuple| tuple[1] }.all?, vertex.payload.respond_to?(:spec_source) && vertex.payload.spec_source) }.
             sort_by(&:name)
         end
       end
