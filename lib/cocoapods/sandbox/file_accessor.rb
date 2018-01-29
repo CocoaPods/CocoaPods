@@ -278,11 +278,7 @@ module Pod
       #         specification or auto-detected.
       #
       def license
-        if file = spec_consumer.license[:file]
-          path_list.root + file
-        else
-          path_list.glob([GLOB_PATTERNS[:license]]).first
-        end
+        spec_license || path_list.glob([GLOB_PATTERNS[:license]]).first
       end
 
       # @return [Pathname, Nil] The path of the custom module map file of the
@@ -305,17 +301,37 @@ module Pod
         path_list.glob([GLOB_PATTERNS[:docs]])
       end
 
+      # @return [Pathname] The path of the license file specified in the
+      #         specification, if it exists
+      #
+      def spec_license
+        if file = spec_consumer.license[:file]
+          absolute_path = root + file
+          absolute_path if File.exist?(absolute_path)
+        end
+      end
+
       # @return [Array<Pathname>] Paths to include for local pods to assist in development
       #
       def developer_files
         podspecs = specs
         result = [module_map, prefix_header]
+
+        if license_path = spec_consumer.license[:file]
+          license_path = root + license_path
+          unless File.exist?(license_path)
+            UI.warn "A license was specified in podspec `#{spec.name}` but the file does not exist - #{license_path}"
+          end
+        end
+
         if podspecs.size <= 1
           result += [license, readme, podspecs, docs]
         else
+          # Manually add non-globbing files since there are multiple podspecs in the same folder
           result << podspec_file
-          if file = spec_consumer.license[:file]
-            result << root + file
+          if license_file = spec_license
+            absolute_path = root + license_file
+            result << absolute_path if File.exist?(absolute_path)
           end
         end
         result.compact.flatten.sort
