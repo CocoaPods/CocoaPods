@@ -45,11 +45,7 @@ module Pod
     #         and #product_module_name or #label.
     #
     def product_basename
-      if requires_frameworks?
-        product_module_name
-      else
-        label
-      end
+      product_module_name
     end
 
     # @return [String] the name of the framework, depends on #label.
@@ -67,7 +63,7 @@ module Pod
     #       used for migration.
     #
     def static_library_name
-      "lib#{label}.a"
+      "lib#{product_module_name}.a"
     end
 
     # @return [Symbol] either :framework or :static_library, depends on

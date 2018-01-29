@@ -101,9 +101,6 @@ module Pod
               settings['SWIFT_VERSION'] = target.swift_version
             end
 
-            if target.requires_frameworks? || target.uses_swift?
-              settings['DEFINES_MODULE'] = 'YES'
-            end
 
             settings
           end
@@ -610,14 +607,22 @@ module Pod
             return super unless custom_module_map
             path = target.module_map_path
             UI.message "- Copying module map file to #{UI.path(path)}" do
-              unless path.exist? && FileUtils.identical?(custom_module_map, path)
-                FileUtils.cp(custom_module_map, path)
-              end
-              add_file_to_support_group(path)
+              Tempfile.open(path.basename.to_s) do |tmp_module_map|
+                contents = custom_module_map.read
+                unless target.requires_frameworks?
+                  contents.gsub!(/^(\s*)framework\s+module/, '\1module')
+                end
+                tmp_module_map.write contents
+                tmp_module_map.rewind
+                unless path.exist? && FileUtils.identical?(tmp_module_map, path)
+                  FileUtils.cp(tmp_module_map, path)
+                end
+                add_file_to_support_group(path)
 
-              native_target.build_configurations.each do |c|
-                relative_path = path.relative_path_from(sandbox.root)
-                c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
+                native_target.build_configurations.each do |c|
+                  relative_path = path.relative_path_from(sandbox.root)
+                  c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
+                end
               end
             end
           end
@@ -696,6 +701,14 @@ module Pod
               ditto "${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}" "${MODULE_MAP_PATH}"
               printf "\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\"${COMPATIBILITY_HEADER_PATH}\\"\\n  requires objc\\n}\\n" >> "${MODULE_MAP_PATH}"
             SH
+            build_phase.input_paths = %W[
+              ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
+              ${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}
+            ]
+            build_phase.output_paths = %W[
+              ${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap
+              ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
+            ]
           end
 
           #-----------------------------------------------------------------------#
