@@ -10,12 +10,38 @@ module Pod
       #
       attr_reader :target
 
+      attr_reader :headers
+
+      Header = Struct.new(:path, :umbrella, :private, :textual, :size, :mtime) do
+        alias private? private
+        def to_s
+          [
+            (:private if private?),
+            (:textual if textual),
+            (:umbrella if umbrella),
+            'header',
+            %("#{path}"),
+            attrs,
+        ].compact.join(' ')
+        end
+
+        def attrs
+          attrs = {
+            'size' => size,
+            'mtime' => mtime,
+          }.reject {|k,v| v.nil? }
+          return nil if attrs.empty?
+          attrs.to_s
+        end
+      end
+
       # Initialize a new instance
       #
       # @param  [PodTarget] target @see target
       #
       def initialize(target)
         @target = target
+        @headers = [Header.new(target.umbrella_header_path.basename, true)]
       end
 
       # Generates and saves the Info.plist to the given path.
@@ -39,7 +65,7 @@ module Pod
       def generate
         <<-MODULE_MAP.strip_heredoc
           #{module_specificier_prefix}module #{target.product_module_name} {
-            umbrella header "#{target.umbrella_header_path.basename}"
+            #{headers.join("\n  ")}
 
             export *
             module * { export * }

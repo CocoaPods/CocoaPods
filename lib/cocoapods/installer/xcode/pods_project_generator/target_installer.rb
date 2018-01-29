@@ -176,6 +176,7 @@ module Pod
             path = target.module_map_path
             UI.message "- Generating module map file at #{UI.path(path)}" do
               generator = Generator::ModuleMap.new(target)
+              yield generator if block_given?
               update_changed_file(generator, path)
               add_file_to_support_group(path)
 
