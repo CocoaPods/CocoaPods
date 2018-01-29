@@ -172,6 +172,57 @@ module Pod
             @validator = create_validator(config.sandbox, @podfile, @lockfile)
             should.not.raise(Informative) { @validator.validate! }
           end
+        end
+
+        describe '#verify_no_incorrect_static_framework_transitive_dependencies_with_static_frameworks' do
+          before do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            @podfile = Pod::Podfile.new do
+              install! 'cocoapods', 'integrate_targets' => false
+              platform :ios, '8.0'
+              project 'SampleProject/SampleProject'
+              use_frameworks!
+              pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
+              pod 'CoconutLib',      :path => (fixture_path + 'coconut-lib').to_s
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'static-matryoshka').to_s
+              pod 'monkey',          :path => (fixture_path + 'monkey').to_s
+              target 'SampleProject'
+            end
+            @lockfile = generate_lockfile
+
+            @file = Pathname('/yolo.m')
+            @file.stubs(:realpath).returns(@file)
+
+            @lib_thing = Pathname('/libThing.a')
+            @lib_thing.stubs(:realpath).returns(@lib_thing)
+          end
+
+          it 'detects transitive static dependencies which are linked directly to the user target' do
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.raise(Informative) { @validator.validate! }.message.should.match /transitive.*monkey.a/
+          end
+
+          it 'detects transitive static dependencies which are linked directly to the user target with stubbing' do
+            Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.raise(Informative) { @validator.validate! }.message.should.match /transitive.*libThing/
+          end
+
+          it 'detects transitive static dependencies to static frameworks from dynamic library pods' do
+            Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([@file])
+            Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.raise(Informative) { @validator.validate! }.message.should.match /transitive.*matryoshka/
+          end
+
+          it 'allows transitive static dependencies when both dependencies are linked against the user target' do
+            PodTarget.any_instance.stubs(:should_build? => false)
+            Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([@lib_thing])
+            @validator = create_validator(config.sandbox, @podfile, @lockfile)
+            should.not.raise(Informative) { @validator.validate! }
+          end
 
           it 'allows transitive static dependencies when building a static framework' do
             PodTarget.any_instance.stubs(:static_framework? => true)
@@ -190,7 +241,7 @@ module Pod
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
               use_frameworks!
-              pod 'matryoshka/Bar',  :path => (fixture_path + 'matryoshka').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'static-matryoshka').to_s
               pod 'monkey',          :path => (fixture_path + 'monkey').to_s
               target 'SampleProject'
             end

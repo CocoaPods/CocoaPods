@@ -25,6 +25,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Better static frameworks transitive dependency error checking  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7352](https://github.com/CocoaPods/CocoaPods/issues/7352)
+
 * Always update input/output paths even if they are empty  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7368](https://github.com/CocoaPods/CocoaPods/pull/7368)
