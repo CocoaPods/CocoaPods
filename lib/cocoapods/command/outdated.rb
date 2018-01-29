@@ -24,13 +24,13 @@ module Pod
         else
           UI.section 'The color indicates what happens when you run `pod update`' do
             UI.puts "#{'<green>'.green}\t\t - Will be updated to the newest version"
-            UI.puts "#{'<yellow>'.yellow}\t - Will be updated, but not to the newest version because of specified version in Podfile"
+            UI.puts "#{'<blue>'.blue}\t - Will be updated, but not to the newest version because of specified version in Podfile"
             UI.puts "#{'<red>'.red}\t\t - Will not be updated because of specified version in Podfile"
             UI.puts ''
           end
           UI.section 'The following pod updates are available:' do
             updates.each do |(name, from_version, matching_version, to_version)|
-              color = :yellow
+              color = :blue
               if matching_version == to_version
                 color = :green
               elsif from_version == matching_version
