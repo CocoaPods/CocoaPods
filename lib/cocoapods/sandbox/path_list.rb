@@ -55,7 +55,7 @@ module Pod
         dirs = []
         files = []
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
-        Find.find(root) do |f|
+        Find.find(root.to_s) do |f|
           directory = File.directory?(f)
           f = f.slice(root_length, f.length - root_length)
           next if f.nil?
