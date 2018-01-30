@@ -146,14 +146,18 @@ module Pod
     #         module map.
     #
     def umbrella_header_path
-      support_files_dir + "#{label}-umbrella.h"
+      module_map_path.parent + "#{label}-umbrella.h"
     end
 
     # @return [Pathname] the absolute path of the LLVM module map file that
     #         defines the module structure for the compiler.
     #
     def module_map_path
-      support_files_dir + "#{product_module_name}.modulemap"
+      if requires_frameworks? || !respond_to?(:build_headers)
+        support_files_dir + "#{product_module_name}.modulemap"
+      else
+        build_headers.root + product_module_name + "#{label}.modulemap"
+      end
     end
 
     # @return [Pathname] the absolute path of the bridge support file.
