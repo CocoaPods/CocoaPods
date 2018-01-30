@@ -211,6 +211,24 @@ module Pod
         @accessor.license.should == @root + 'LICENSE'
       end
 
+      describe '#spec_license' do
+        it 'returns the license file of the specification' do
+          @accessor.spec_license.should == @root + 'LICENSE'
+        end
+
+        it 'does not auto-detect the license' do
+          FileUtils.cp(@root + 'LICENSE', @root + 'LICENSE_TEMP')
+          @spec_consumer.stubs(:license).returns({})
+          @accessor.spec_license.should.be.nil
+          FileUtils.rm_f(@root + 'LICENSE_TEMP')
+        end
+
+        it 'returns nil if the license file path does not exist' do
+          @spec_consumer.stubs(:license).returns(:file => 'MISSING_PATH')
+          @accessor.spec_license.should.be.nil
+        end
+      end
+
       it 'returns the docs of the specification' do
         @accessor.docs.should == [
           @root + 'docs/guide1.md',
@@ -239,6 +257,20 @@ module Pod
           @root + 'docs/guide1.md',
           @root + 'docs/subdir/guide2.md',
         ]
+      end
+
+      it 'warns when a LICENSE file is specified but the path does not exist' do
+        @spec_consumer.stubs(:license).returns(:file => 'PathThatDoesNotExist/LICENSE')
+        @accessor.developer_files.should == [
+          @root + 'Banana.modulemap',
+          @root + 'BananaLib.podspec',
+          @root + 'Classes/BananaLib.pch',
+          @root + 'LICENSE', # Found by globbing
+          @root + 'README',
+          @root + 'docs/guide1.md',
+          @root + 'docs/subdir/guide2.md',
+        ]
+        UI.warnings.should.include "A license was specified in podspec `#{@spec_consumer.name}` but the file does not exist - #{@accessor.root + 'PathThatDoesNotExist/LICENSE'}\n"
       end
 
       it 'does not return auto-detected developer files when there are multiple podspecs' do
