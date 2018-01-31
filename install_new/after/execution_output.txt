@@ -19,16 +19,16 @@ Downloading dependencies
      $ GIT_BIN clone https://github.com/tonymillion/Reachability.git PROJECT/Pods/Reachability --template= --single-branch --depth 1 --branch v3.1.0
      Cloning into 'PROJECT/Pods/Reachability'...
      Note: checking out 'f7176f4798d068d233dca5223ae4bd9c8059e830'.
-     
+
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this
      state without impacting any branches by performing another checkout.
-     
+
      If you want to create a new branch to retain commits you create, you may
      do so (now or later) by using -b with the checkout command again. Example:
-     
+
        git checkout -b new_branch_name
-     
+
   - Running pre install hooks
 
 Generating Pods project
@@ -52,8 +52,6 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
 
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
-  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-  Adding Build Phase '[CP] Copy Pods Resources' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`

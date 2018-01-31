@@ -30,16 +30,16 @@ Downloading dependencies
      $ GIT_BIN clone https://github.com/CocoaLumberjack/CocoaLumberjack.git PROJECT/Pods/CocoaLumberjack --template= --single-branch --depth 1 --branch 3.0.0
      Cloning into 'PROJECT/Pods/CocoaLumberjack'...
      Note: checking out '96f5978ea6339f17069d74c4652c79dee8f760b7'.
-     
+
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this
      state without impacting any branches by performing another checkout.
-     
+
      If you want to create a new branch to retain commits you create, you may
      do so (now or later) by using -b with the checkout command again. Example:
-     
+
        git checkout -b new_branch_name
-     
+
 
 -> Installing asserts (0.0.1)
 
@@ -103,12 +103,10 @@ Integrating client project
 
 Integrating target `Pods-App` (`App.xcodeproj` project)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-  Adding Build Phase '[CP] Copy Pods Resources' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
 
 Integrating target `Pods-Test` (`App.xcodeproj` project)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-  Adding Build Phase '[CP] Copy Pods Resources' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
