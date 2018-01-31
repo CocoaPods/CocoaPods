@@ -651,7 +651,7 @@ module Pod
     #
     def development_pod_targets
       pod_targets.select do |pod_target|
-        sandbox.development_pods.keys.include?(pod_target.pod_name)
+        sandbox.local?(pod_target.pod_name)
       end
     end
 
