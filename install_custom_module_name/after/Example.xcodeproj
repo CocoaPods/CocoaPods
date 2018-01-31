@@ -26,7 +26,6 @@ Targets:
       - Pods_Example.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:

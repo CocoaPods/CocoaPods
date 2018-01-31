@@ -85,8 +85,6 @@ Targets:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -118,7 +116,6 @@ Targets:
     - Resources:
       - InfoPlist.strings
     - ShellScript: []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -157,8 +154,6 @@ Targets:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:

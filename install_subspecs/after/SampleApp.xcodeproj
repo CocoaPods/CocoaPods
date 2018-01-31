@@ -65,8 +65,6 @@ Targets:
       - Default.png
       - Default@2x.png
       - Default-568h@2x.png
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -112,7 +110,6 @@ Targets:
       - Credits.rtf
       - MainMenu.xib
     - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:

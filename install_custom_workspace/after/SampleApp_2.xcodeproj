@@ -43,8 +43,6 @@ Targets:
       - Credits.rtf
       - MainMenu.xib
     - "[CP] Copy Pods Resources": []
-    - "[CP] Copy Pods Resources": []
-    - "[CP] Embed Pods Frameworks": []
     Build Configurations:
     - Debug:
         Build Settings:

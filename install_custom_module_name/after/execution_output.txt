@@ -20,16 +20,16 @@ Downloading dependencies
      $ GIT_BIN clone https://github.com/square/SocketRocket.git PROJECT/Pods/SocketRocket --template= --single-branch --depth 1 --branch 0.5.1
      Cloning into 'PROJECT/Pods/SocketRocket'...
      Note: checking out '36e68c11ab131747c401728e79b110e98d98a70f'.
-     
+
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this
      state without impacting any branches by performing another checkout.
-     
+
      If you want to create a new branch to retain commits you create, you may
      do so (now or later) by using -b with the checkout command again. Example:
-     
+
        git checkout -b new_branch_name
-     
+
 
 -> Installing libPusher (1.6.2)
  > Git download
@@ -37,16 +37,16 @@ Downloading dependencies
      $ GIT_BIN clone https://github.com/pusher/libPusher.git PROJECT/Pods/libPusher --template= --single-branch --depth 1 --branch v1.6.2
      Cloning into 'PROJECT/Pods/libPusher'...
      Note: checking out '1775fdb8fe97a821489dd35f7f49cbf6ebc2750c'.
-     
+
      You are in 'detached HEAD' state. You can look around, make experimental
      changes and commit them, and you can discard any commits you make in this
      state without impacting any branches by performing another checkout.
-     
+
      If you want to create a new branch to retain commits you create, you may
      do so (now or later) by using -b with the checkout command again. Example:
-     
+
        git checkout -b new_branch_name
-     
+
   - Running pre install hooks
 
 Generating Pods project
@@ -81,7 +81,6 @@ Integrating client project
 
 Integrating target `Pods-Example` (`Example.xcodeproj` project)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-  Adding Build Phase '[CP] Copy Pods Resources' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`

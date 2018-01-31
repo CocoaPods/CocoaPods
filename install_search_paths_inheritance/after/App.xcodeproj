@@ -45,7 +45,6 @@ Targets:
       - Assets.xcassets
       - Main.storyboard
     - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -72,7 +71,6 @@ Targets:
       - Pods_Test.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:

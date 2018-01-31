@@ -43,8 +43,6 @@ Targets:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
     Build Configurations:
     - Debug:
         Build Settings:
