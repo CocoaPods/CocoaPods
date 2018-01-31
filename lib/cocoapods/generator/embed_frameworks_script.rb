@@ -38,6 +38,7 @@ module Pod
           #!/bin/sh
           set -e
           set -u
+          set -o pipefail
 
           echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
           mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
