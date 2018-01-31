@@ -373,7 +373,7 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new
           @analysis_result.specifications = []
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new
-          @spec = stub(:name => 'Spec')
+          @spec = stub(:name => 'Spec', :test_specification? => false)
           @spec.stubs(:root => @spec)
           @pod_targets = [PodTarget.new([@spec], [fixture_target_definition], config.sandbox)]
           @installer.stubs(:analysis_result).returns(@analysis_result)

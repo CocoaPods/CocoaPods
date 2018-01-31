@@ -512,8 +512,9 @@ module Pod
             hash[name] = values.sort_by { |pt| pt.specs.count }
           end
           pod_targets.each do |target|
-            dependencies = transitive_dependencies_for_specs(target.specs.reject(&:test_specification?).to_set, target.platform, all_resolver_specs.to_set).group_by(&:root)
-            test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?).to_set, target.platform, all_resolver_specs.to_set).group_by(&:root)
+            all_specs = all_resolver_specs.to_set
+            dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs).group_by(&:root)
+            test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs).group_by(&:root)
             test_dependencies.delete_if { |k| dependencies.key? k }
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
@@ -527,8 +528,9 @@ module Pod
             end
 
             pod_targets.each do |target|
-              dependencies = transitive_dependencies_for_specs(target.specs.reject(&:test_specification?).to_set, target.platform, specs.map(&:spec).to_set).group_by(&:root)
-              test_dependencies = transitive_dependencies_for_specs(target.specs.select(&:test_specification?).to_set, target.platform, specs.map(&:spec).to_set).group_by(&:root)
+              all_specs = specs.map(&:spec).to_set
+              dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs).group_by(&:root)
+              test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs).group_by(&:root)
               test_dependencies.delete_if { |k| dependencies.key? k }
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }

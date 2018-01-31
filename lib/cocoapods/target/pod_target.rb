@@ -49,7 +49,8 @@ module Pod
       raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
       super()
-      @specs = specs
+      @specs = specs.dup.freeze
+      @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
       @target_definitions = target_definitions
       @sandbox = sandbox
       @scope_suffix = scope_suffix
@@ -216,20 +217,16 @@ module Pod
     # @return [Boolean] Whether the target has any tests specifications.
     #
     def contains_test_specifications?
-      specs.any?(&:test_specification?)
+      !test_specs.empty?
     end
 
     # @return [Array<Specification>] All of the test specs within this target.
     #
-    def test_specs
-      specs.select(&:test_specification?)
-    end
+    attr_reader :test_specs
 
     # @return [Array<Specification>] All of the non test specs within this target.
     #
-    def non_test_specs
-      specs.reject(&:test_specification?)
-    end
+    attr_reader :non_test_specs
 
     # @return [Array<Symbol>] All of the test supported types within this target.
     #
