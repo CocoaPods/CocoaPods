@@ -25,6 +25,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Clear input/output paths if they exceed an arbitrary limit  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7362](https://github.com/CocoaPods/CocoaPods/issues/7362)
+
 * Warn instead of throwing an exception when a development pod specifies an invalid license file path  
   [Eric Amorde](https://github.com/amorde)
   [#7377](https://github.com/CocoaPods/CocoaPods/issues/7377)

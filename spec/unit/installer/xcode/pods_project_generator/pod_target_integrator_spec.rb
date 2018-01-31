@@ -30,6 +30,21 @@ module Pod
                 @test_native_target.build_phases[1].shell_script.should == "\"${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources.sh\"\n"
               end
 
+              it 'clears input and output paths from script phase if it exceeds limit' do
+                # The paths represented here will be 501 for input paths and 501 for output paths which will exceed the limit.
+                resource_paths = (0..500).map do |i|
+                  "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
+                end
+                @coconut_pod_target.stubs(:resource_paths).returns(resource_paths)
+                PodTargetIntegrator.new(@coconut_pod_target).integrate!
+                @test_native_target.build_phases.map(&:display_name).should == [
+                  '[CP] Embed Pods Frameworks',
+                  '[CP] Copy Pods Resources',
+                ]
+                @test_native_target.build_phases[1].input_paths.should == []
+                @test_native_target.build_phases[1].output_paths.should == []
+              end
+
               it 'integrates test native targets with frameworks and resources script phase input and output paths' do
                 framework_paths = { :name => 'Vendored.framework', :input_path => '${PODS_ROOT}/Vendored/Vendored.framework', :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' }
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']

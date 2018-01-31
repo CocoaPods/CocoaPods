@@ -40,6 +40,10 @@ module Pod
         #
         COPY_PODS_RESOURCES_PHASE_NAME = 'Copy Pods Resources'.freeze
 
+        # @return [Integer] the maximum number of input and output paths to use for a script phase
+        #
+        MAX_INPUT_OUTPUT_PATHS = 1000
+
         # @return [AggregateTarget] the target that should be integrated.
         #
         attr_reader :target
@@ -183,6 +187,25 @@ module Pod
             end
           end
 
+          # Script phases can have a limited number of input and output paths due to each one being exported to `env`.
+          # A large number can cause a build failure because of limitations in `env`. See issue
+          # https://github.com/CocoaPods/CocoaPods/issues/7362.
+          #
+          # @param [Array<String>] input_paths
+          #        The input paths to trim.
+          #
+          # @param [Array<String>] output_paths
+          #        The output paths to trim.
+          #
+          # @return [void]
+          #
+          def validate_input_output_path_limit(input_paths, output_paths)
+            if (input_paths.count + output_paths.count) > MAX_INPUT_OUTPUT_PATHS
+              input_paths.clear
+              output_paths.clear
+            end
+          end
+
           # Returns an extension in the target that corresponds to the
           # resource's input extension.
           #
@@ -281,6 +304,7 @@ module Pod
                 File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
               end.uniq
             end
+            TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
@@ -314,6 +338,7 @@ module Pod
               input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
               output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
             end
+            TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end

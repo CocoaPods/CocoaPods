@@ -64,6 +64,7 @@ module Pod
                 File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
               end
             end
+            UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             UserProjectIntegrator::TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
 
@@ -81,6 +82,7 @@ module Pod
               input_paths = [script_path, *framework_paths.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
               output_paths = framework_paths.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact
             end
+            UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
 
