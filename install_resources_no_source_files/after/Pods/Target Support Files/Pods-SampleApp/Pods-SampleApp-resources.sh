@@ -1,5 +1,13 @@
 #!/bin/sh
 set -e
+set -u
+set -o pipefail
+
+if [ -z ${UNLOCALIZED_RESOURCES_FOLDER_PATH+x} ]; then
+    # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's no where for us to copy
+    # resources to, so exit 0 (signalling the script phase was successful).
+    exit 0
+fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 
@@ -12,7 +20,7 @@ XCASSET_FILES=()
 # was originally proposed here: https://lists.samba.org/archive/rsync/2008-February/020158.html
 RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 
-case "${TARGETED_DEVICE_FAMILY}" in
+case "${TARGETED_DEVICE_FAMILY:-}" in
   1,2)
     TARGET_DEVICE_ARGS="--target-device ipad --target-device iphone"
     ;;
@@ -100,7 +108,7 @@ if [[ "${ACTION}" == "install" ]] && [[ "${SKIP_INSTALL}" == "NO" ]]; then
 fi
 rm -f "$RESOURCES_TO_COPY"
 
-if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "$XCASSET_FILES" ]
+if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "${XCASSET_FILES:-}" ]
 then
   # Find all other xcassets (this unfortunately includes those of path pods and other targets).
   OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
