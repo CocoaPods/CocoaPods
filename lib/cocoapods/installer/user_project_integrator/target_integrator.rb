@@ -119,6 +119,17 @@ module Pod
             phase.output_paths = output_paths
           end
 
+          # Delete a 'Copy Pods Resources' script phase if present
+          #
+          # @param [PBXNativeTarget] native_target
+          #        The native target to remove the script phase from.
+          #
+          def remove_copy_resources_script_phase_from_target(native_target)
+            build_phase = native_target.shell_script_build_phases.find { |bp| bp.name && bp.name.end_with?(COPY_PODS_RESOURCES_PHASE_NAME) }
+            return unless build_phase.present?
+            native_target.build_phases.delete(build_phase)
+          end
+
           # Creates or update a shell script build phase for the given target.
           #
           # @param [PBXNativeTarget] native_target
@@ -292,9 +303,9 @@ module Pod
           native_targets.each do |native_target|
             script_path = target.copy_resources_script_relative_path
             resource_paths_by_config = target.resource_paths_by_config
-            input_paths = []
-            output_paths = []
-            unless resource_paths_by_config.values.all?(&:empty?)
+            if resource_paths_by_config.values.all?(&:empty?)
+              TargetIntegrator.remove_copy_resources_script_phase_from_target(native_target)
+            else
               resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
               input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
               # convert input paths to output paths according to extensions
@@ -332,9 +343,9 @@ module Pod
           native_targets_to_embed_in.each do |native_target|
             script_path = target.embed_frameworks_script_relative_path
             framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
-            input_paths = []
-            output_paths = []
-            unless framework_paths_by_config.all?(&:empty?)
+            if framework_paths_by_config.all?(&:empty?)
+              TargetIntegrator.remove_embed_frameworks_script_phase_from_target(native_target)
+            else
               input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
               output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
               TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
