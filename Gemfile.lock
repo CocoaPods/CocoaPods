@@ -94,6 +94,15 @@ GIT
     cocoapods-try (1.1.0)
 
 GIT
+  remote: https://github.com/segiddins/CLIntegracon.git
+  revision: 8bb9aa1fecd1731df996bda5cabc53fd746d2577
+  branch: segiddins/replacement-pattern-overlapping-replacements
+  specs:
+    clintegracon (0.8.1)
+      colored2 (~> 3.1)
+      diffy
+
+GIT
   remote: https://github.com/segiddins/json.git
   revision: a9588bc4334c2f5bf985f255b61c05eafdcd8907
   branch: seg-1.7.7-ruby-2.2
@@ -142,15 +151,11 @@ GEM
       cork
       nap
       open4 (~> 1.3)
-    clintegracon (0.8.1)
-      colored (~> 1.2)
-      diffy
     cocoapods-dependencies (1.0.0.beta.1)
       ruby-graphviz (~> 1.2)
     cocoapods_debug (0.1.0)
       pry (= 0.10.3)
     coderay (1.1.0)
-    colored (1.2)
     colored2 (3.1.2)
     concurrent-ruby (1.0.5)
     cork (0.3.0)
@@ -267,7 +272,7 @@ DEPENDENCIES
   bacon
   bundler (~> 1.3)
   claide!
-  clintegracon
+  clintegracon!
   cocoapods!
   cocoapods-core!
   cocoapods-deintegrate!
