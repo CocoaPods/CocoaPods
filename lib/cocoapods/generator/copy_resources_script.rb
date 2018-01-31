@@ -99,6 +99,12 @@ set -e
 set -u
 set -o pipefail
 
+if [ -z ${UNLOCALIZED_RESOURCES_FOLDER_PATH+x} ]; then
+    # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's no where for us to copy
+    # resources to, so exit 0 (signalling the script phase was successful).
+    exit 0
+fi
+
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 
 RESOURCES_TO_COPY=${PODS_ROOT}/resources-to-copy-${TARGETNAME}.txt
