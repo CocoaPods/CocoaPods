@@ -299,6 +299,23 @@ module Pod
           phase.output_paths.should.be.empty
         end
 
+        it 'clears input and output paths from script phase if it exceeds limit' do
+          # The paths represented here will be 501 for input paths and 501 for output paths which will exceed the limit.
+          paths = (0..500).map do |i|
+            "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
+          end
+          resource_paths_by_config = {
+            'Debug' => [paths],
+            'Release' => [paths],
+          }
+          @pod_bundle.stubs(:resource_paths_by_config => resource_paths_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
+          phase.input_paths.should == []
+          phase.output_paths.should == []
+        end
+
         it 'adds copy pods resources input and output paths' do
           resource_paths_by_config = {
             'Debug' => [
