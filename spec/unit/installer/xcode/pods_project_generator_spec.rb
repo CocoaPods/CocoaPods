@@ -438,7 +438,7 @@ module Pod
                 pod_target = fixture_pod_target(spec)
 
                 @generator.stubs(:pod_targets).returns([pod_target])
-                @generator.sandbox.stubs(:development_pods).returns('BananaLib' => nil)
+                @generator.sandbox.stubs(:development_pods).returns('BananaLib' => fixture('BananaLib'))
               end
 
               it 'does not share by default' do
@@ -468,7 +468,7 @@ module Pod
                     returns(true)
 
                 @generator.stubs(:pod_targets).returns([pod_target])
-                @generator.sandbox.stubs(:development_pods).returns('CoconutLib' => nil)
+                @generator.sandbox.stubs(:development_pods).returns('CoconutLib' => fixture('CoconutLib'))
 
                 Xcodeproj::XCScheme.expects(:share_scheme).with(
                   @generator.project.path,

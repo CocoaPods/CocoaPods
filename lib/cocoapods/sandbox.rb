@@ -389,9 +389,7 @@ module Pod
     #
     def local_podspec(name)
       root_name = Specification.root_name(name)
-      if path = development_pods[root_name]
-        Pathname.new(path)
-      end
+      development_pods[root_name]
     end
 
     #-------------------------------------------------------------------------#
