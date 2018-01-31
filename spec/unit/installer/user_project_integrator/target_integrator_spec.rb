@@ -19,6 +19,8 @@ module Pod
         @pod_bundle.user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
         @pod_bundle.client_root = project_path.dirname
         @pod_bundle.user_target_uuids = [@target.uuid]
+        @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
+        @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [{ :input_path => '${PODS_BUILD_DIR}/Lib/Lib.framework' }])
         configuration = Xcodeproj::Config.new(
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         )
@@ -290,13 +292,28 @@ module Pod
           phase.nil?.should == true
         end
 
-        it 'does not add copy pods resources input and output paths with no resources' do
+        it 'does not add copy pods resources script phase with no resources' do
           @pod_bundle.stubs(:resource_paths_by_config => { 'Debug' => [], 'Release' => [] })
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
-          phase.input_paths.should.be.empty
-          phase.output_paths.should.be.empty
+          phase.should.be.nil
+        end
+
+        it 'removes copy resources phase if it becomes empty' do
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
+          phase.input_paths.sort.should == %w(
+            ${PODS_ROOT}/Lib/Resources/image.png
+            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
+          )
+          # Now pretend the same target has no more framework paths, it should update the targets input/output paths
+          @pod_bundle.stubs(:resource_paths_by_config => {})
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
+          phase.should.be.nil
         end
 
         it 'clears input and output paths from script phase if it exceeds limit' do
@@ -378,16 +395,15 @@ module Pod
           )
         end
 
-        it 'does not add embed frameworks build phase input output paths with no frameworks' do
+        it 'does not add embed frameworks build phase with no frameworks' do
           @pod_bundle.stubs(:framework_paths_by_config => { 'Debug' => {}, 'Release' => {} })
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
-          phase.input_paths.should.be.empty
-          phase.output_paths.should.be.empty
+          phase.should.be.nil
         end
 
-        it 'updates embed frameworks phase if it becomes empty' do
+        it 'removes embed frameworks phase if it becomes empty' do
           debug_non_vendored_framework = { :name => 'DebugCompiledFramework.framework',
                                            :input_path => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
                                            :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
@@ -407,7 +423,7 @@ module Pod
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
-          phase.input_paths.sort.should.be.empty
+          phase.should.be.nil
         end
 
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks' do
