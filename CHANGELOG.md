@@ -49,6 +49,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7336](https://github.com/CocoaPods/CocoaPods/issues/7336)
 
+* Avoid adding copy resources and frameworks script phases when those phases
+  would not copy anything.  
+  [Keith Smiley](https://github.com/keith)
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.4.0 (2018-01-18)
 

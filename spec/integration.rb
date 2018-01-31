@@ -149,6 +149,7 @@ describe_cli 'pod' do
 
     # This was changed in a very recent git version
     s.replace_pattern /git checkout -b <new-branch-name>/, 'git checkout -b new_branch_name'
+    s.replace_pattern /[ \t]+(\r?$)/, '\1'
 
     # git sometimes prints this, but not always ¯\_(ツ)_/¯
     s.replace_pattern /^\s*Checking out files.*done\./, ''
