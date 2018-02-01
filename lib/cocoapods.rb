@@ -57,6 +57,7 @@ module Pod
     autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
     autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
     autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
+    autoload :Constant,                'cocoapods/generator/constant'
     autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
     autoload :DummySource,             'cocoapods/generator/dummy_source'
     autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
