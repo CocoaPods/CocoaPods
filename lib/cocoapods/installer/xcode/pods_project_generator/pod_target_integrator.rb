@@ -29,7 +29,7 @@ module Pod
                 add_copy_resources_script_phase(native_target)
                 UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), native_target)
               end
-              specs = target.specs.reject(&:test_specification?)
+              specs = target.non_test_specs
               UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target.native_target)
             end
           end

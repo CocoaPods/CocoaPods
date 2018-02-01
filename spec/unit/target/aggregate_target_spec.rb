@@ -89,9 +89,9 @@ module Pod
         @spec = fixture_spec('banana-lib/BananaLib.podspec')
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
+        @target_definition.set_platform(:ios, '10.0')
         @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
         @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.stubs(:platform).returns(:ios)
         @target.pod_targets = [@pod_target]
       end
 

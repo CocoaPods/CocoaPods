@@ -1,4 +1,5 @@
 require 'active_support/multibyte/unicode'
+require 'find'
 
 module Pod
   class Sandbox
@@ -50,23 +51,23 @@ module Pod
         unless root.exist?
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
-        escaped_root = escape_path_for_glob(root)
 
-        absolute_paths = Pathname.glob(escaped_root + '**/*', File::FNM_DOTMATCH).lazy
-        dirs_and_files = absolute_paths.reject { |path| path.basename.to_s =~ /^\.\.?$/ }
-        dirs, files = dirs_and_files.partition { |path| File.directory?(path) }
-
+        dirs = []
+        files = []
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
-        sorted_relative_paths_from_full_paths = lambda do |paths|
-          relative_paths = paths.lazy.map do |path|
-            path_string = path.to_s
-            path_string.slice(root_length, path_string.length - root_length)
-          end
-          relative_paths.sort_by(&:upcase)
+        Find.find(root.to_s) do |f|
+          directory = File.directory?(f)
+          f = f.slice(root_length, f.length - root_length)
+          next if f.nil?
+
+          (directory ? dirs : files) << f
         end
 
-        @dirs = sorted_relative_paths_from_full_paths.call(dirs)
-        @files = sorted_relative_paths_from_full_paths.call(files)
+        dirs.sort_by!(&:upcase)
+        files.sort_by!(&:upcase)
+
+        @dirs = dirs
+        @files = files
         @glob_cache = {}
       end
 

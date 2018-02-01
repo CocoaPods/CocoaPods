@@ -336,28 +336,26 @@ module Pod
       relative_base = base_path.nil? ? group.real_path : base_path.realdirpath
       relative_pathname = absolute_pathname.relative_path_from(relative_base)
       relative_dir = relative_pathname.dirname
-      lproj_regex = /\.lproj/i
 
       # Add subgroups for directories, but treat .lproj as a file
       if reflect_file_system_structure
         path = relative_base
         relative_dir.each_filename do |name|
-          break if name.to_s =~ lproj_regex
+          break if name.to_s.downcase.include? '.lproj'
           next if name == '.'
           # Make sure groups have the correct absolute path set, as intermittent
           # directories may not be included in the group structure
           path += name
-          group = group[name] || group.new_group(name, path)
+          group = group.children.find { |c| c.display_name == name } || group.new_group(name, path)
         end
       end
 
       # Turn files inside .lproj directories into a variant group
-      if relative_dir.basename.to_s =~ lproj_regex
+      if relative_dir.basename.to_s.downcase.include? '.lproj'
         group_name = variant_group_name(absolute_pathname)
         lproj_parent_dir = absolute_pathname.dirname.dirname
-        group = @variant_groups_by_path_and_name[[lproj_parent_dir, group_name]] ||
-          group.new_variant_group(group_name, lproj_parent_dir)
-        @variant_groups_by_path_and_name[[lproj_parent_dir, group_name]] ||= group
+        group = @variant_groups_by_path_and_name[[lproj_parent_dir, group_name]] ||=
+                  group.new_variant_group(group_name, lproj_parent_dir)
       end
 
       group

@@ -127,14 +127,19 @@ module Pod
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
         podfile.target_definition_list.each do |target|
           dependencies = {}
-          specs = target.dependencies.map(&:name).flat_map do |name|
+          specs = target.dependencies.flat_map do |dep|
+            name = dep.name
             node = @activated.vertex_named(name)
             (valid_dependencies_for_target_from_node(target, dependencies, node) << node).map { |s| [s, node.payload.test_specification?] }
           end
 
           resolver_specs_by_target[target] = specs.
             group_by(&:first).
-            map { |vertex, spec_test_only_tuples| ResolverSpecification.new(vertex.payload, spec_test_only_tuples.map { |tuple| tuple[1] }.all?, vertex.payload.respond_to?(:spec_source) && vertex.payload.spec_source) }.
+            map do |vertex, spec_test_only_tuples|
+              test_only = spec_test_only_tuples.all? { |tuple| tuple[1] }
+              spec_source = vertex.payload.respond_to?(:spec_source) && vertex.payload.spec_source
+              ResolverSpecification.new(vertex.payload, test_only, spec_source)
+            end.
             sort_by(&:name)
         end
       end
@@ -530,11 +535,15 @@ module Pod
       vertex = dependency_graph.vertex_named(dependency.name)
       predecessors = vertex.recursive_predecessors.select(&:root)
       predecessors << vertex if vertex.root?
-      platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }
+      platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }.uniq
+
+      available_platforms = spec.available_platforms
 
       platforms_to_satisfy.all? do |platform_to_satisfy|
-        spec.available_platforms.select { |spec_platform| spec_platform.name == platform_to_satisfy.name }.
-          all? { |spec_platform| platform_to_satisfy.supports?(spec_platform) }
+        available_platforms.all? do |spec_platform|
+          next true unless spec_platform.name == platform_to_satisfy.name
+          platform_to_satisfy.supports?(spec_platform)
+        end
       end
     end
 
@@ -549,14 +558,15 @@ module Pod
     def valid_dependencies_for_target_from_node(target, dependencies, node)
       dependencies[node.name] ||= begin
         validate_platform(node.payload, target)
-        dependency_nodes = node.outgoing_edges.select do |edge|
-          edge_is_valid_for_target?(edge, target)
-        end.map(&:destination)
-
-        dependency_nodes + dependency_nodes.flat_map do |item|
-          node_result = valid_dependencies_for_target_from_node(target, dependencies, item)
-          node_result
+        dependency_nodes = []
+        node.outgoing_edges.each do |edge|
+          next unless edge_is_valid_for_target?(edge, target)
+          dependency_nodes << edge.destination
         end
+
+        dependency_nodes.flat_map do |item|
+          valid_dependencies_for_target_from_node(target, dependencies, item)
+        end.concat dependency_nodes
       end
     end
 
@@ -566,9 +576,11 @@ module Pod
     # @return [Bool]
     #
     def edge_is_valid_for_target?(edge, target)
-      dependencies_for_target_platform =
-        edge.origin.payload.all_dependencies(target.platform).map(&:name)
-      dependencies_for_target_platform.include?(edge.requirement.name)
+      requirement_name = edge.requirement.name
+
+      edge.origin.payload.all_dependencies(target.platform).any? do |dep|
+        dep.name == requirement_name
+      end
     end
   end
 end
