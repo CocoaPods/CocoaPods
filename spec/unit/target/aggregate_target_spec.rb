@@ -433,7 +433,7 @@ module Pod
         end
 
         it 'returns the library name' do
-          @target.static_library_name.should == 'libPods-iOS Example.a'
+          @target.static_library_name.should == 'libPods_iOS_Example.a'
         end
 
         it 'returns :framework as product type' do
