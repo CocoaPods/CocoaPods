@@ -165,8 +165,14 @@ module Pod
 
         def install_libraries
           UI.message '- Installing targets' do
+            umbrella_headers_by_dir = pod_targets.map do |pod_target|
+              next unless pod_target.should_build? && pod_target.defines_module?
+              pod_target.umbrella_header_path
+            end.compact.group_by(&:dirname)
+
             pod_targets.sort_by(&:name).each do |pod_target|
               target_installer = PodTargetInstaller.new(sandbox, pod_target)
+              target_installer.umbrella_headers_by_dir = umbrella_headers_by_dir
               target_installer.install!
             end
 
