@@ -23,6 +23,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Store which specs repo a pod comes from in the lockfile.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Add `set -u` to the copy frameworks and copy resources scripts.  
+  [Keith Smiley](https://github.com/keith)
+  [#7180](https://github.com/CocoaPods/CocoaPods/pull/7180)
+
+* Allow integrating into static library targets without attempting to copy 
+  resources or embed frameworks unless `UNLOCALIZED_RESOURCES_FOLDER_PATH` 
+  or `FRAMEWORKS_FOLDER_PATH` is set.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Clear input/output paths if they exceed an arbitrary limit  
