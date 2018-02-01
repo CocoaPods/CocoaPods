@@ -195,6 +195,19 @@ module Pod
       end
     end
 
+    # @return [Boolean] Whether the target defines a "module"
+    #         (and thus will need a module map and umbrella header).
+    #
+    # @note   Static library targets can temporarily opt in to this behavior by setting
+    #         `DEFINES_MODULE = YES` in their specification's `pod_target_xcconfig`.
+    #
+    def defines_module?
+      return @defines_module if defined?(@defines_module)
+      return @defines_module = true if uses_swift? || requires_frameworks?
+
+      @defines_module = non_test_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
+    end
+
     # @return [Array<Hash{Symbol=>String}>] An array of hashes where each hash represents a single script phase.
     #
     def script_phases

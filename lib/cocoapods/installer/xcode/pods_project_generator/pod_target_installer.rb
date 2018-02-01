@@ -27,22 +27,24 @@ module Pod
               add_files_to_build_phases
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
-              # TODO: determine if it is safe to unconditionally create (& 'link') module maps & umbrella
-              #       headers for _all_ static libraries -- we've caused bugs by trying to do this in the past
-              create_module_map do |generator|
-                generator.headers.concat module_map_additional_headers
+
+              if target.defines_module?
+                create_module_map do |generator|
+                  generator.headers.concat module_map_additional_headers
+                end
+                create_umbrella_header do |generator|
+                  file_accessors = target.file_accessors
+                  file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
+                  generator.imports += if header_mappings_dir
+                                         file_accessors.flat_map(&:public_headers).map do |pathname|
+                                           pathname.relative_path_from(header_mappings_dir)
+                                         end
+                                       else
+                                         file_accessors.flat_map(&:public_headers).map(&:basename)
+                                      end
+                end
               end
-              create_umbrella_header do |generator|
-                file_accessors = target.file_accessors
-                file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
-                generator.imports += if header_mappings_dir
-                                       file_accessors.flat_map(&:public_headers).map do |pathname|
-                                         pathname.relative_path_from(header_mappings_dir)
-                                       end
-                                     else
-                                       file_accessors.flat_map(&:public_headers).map(&:basename)
-                                     end
-              end
+
               if target.requires_frameworks?
                 unless target.static_framework?
                   create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
@@ -54,6 +56,7 @@ module Pod
               elsif target.uses_swift?
                 add_swift_static_library_compatibility_header_phase
               end
+
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
                 file_accessors = target.file_accessors.reject { |f| f.spec.test_specification? }

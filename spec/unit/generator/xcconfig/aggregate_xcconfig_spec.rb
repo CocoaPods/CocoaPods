@@ -142,6 +142,13 @@ module Pod
           end
 
           it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
+            expected = "$(inherited) -isystem \"#{config.sandbox.public_headers.search_paths(Platform.ios).join('" -isystem "')}\""
+            @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
+          end
+
+          it 'adds the dependent pods module map file to OTHER_CFLAGS' do
+            @pod_targets.each { |pt| pt.stubs(:defines_module? => true) }
+            @xcconfig = @generator.generate
             expected = "$(inherited) -fmodule-map-file=\"${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap\" -isystem \"#{config.sandbox.public_headers.search_paths(Platform.ios).join('" -isystem "')}\""
             @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
           end

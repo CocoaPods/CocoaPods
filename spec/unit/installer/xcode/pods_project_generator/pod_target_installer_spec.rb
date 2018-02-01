@@ -478,7 +478,6 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
                   'BananaLib-Pods-SampleProject-prefix.pch',
-                  'BananaLib-Pods-SampleProject.modulemap',
                   'BananaLib-Pods-SampleProject.xcconfig',
                 ]
               end
@@ -490,7 +489,6 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
                   'BananaLib-Pods-SampleProject-prefix.pch',
-                  'BananaLib-Pods-SampleProject.modulemap',
                   'BananaLib-Pods-SampleProject.xcconfig',
                 ]
               end
@@ -501,6 +499,17 @@ module Pod
                 group = @project['Pods/BananaLib/Support Files']
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
+                  'BananaLib-Pods-SampleProject.xcconfig',
+                ]
+              end
+
+              it 'adds the module map when the target defines a module' do
+                @pod_target.stubs(:defines_module?).returns(true)
+                @installer.install!
+                group = @project['Pods/BananaLib/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'BananaLib-Pods-SampleProject-dummy.m',
+                  'BananaLib-Pods-SampleProject-prefix.pch',
                   'BananaLib-Pods-SampleProject.modulemap',
                   'BananaLib-Pods-SampleProject.xcconfig',
                 ]
@@ -570,7 +579,6 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-dummy.m',
                   'BananaLib-prefix.pch',
-                  'BananaLib.modulemap',
                   'BananaLib.xcconfig',
                 ]
               end
@@ -581,6 +589,17 @@ module Pod
                 group = @project['Pods/BananaLib/Support Files']
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-dummy.m',
+                  'BananaLib.xcconfig',
+                ]
+              end
+
+              it 'adds the module map when the target defines a module' do
+                @pod_target.stubs(:defines_module?).returns(true)
+                @installer.install!
+                group = @project['Pods/BananaLib/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'BananaLib-dummy.m',
+                  'BananaLib-prefix.pch',
                   'BananaLib.modulemap',
                   'BananaLib.xcconfig',
                 ]

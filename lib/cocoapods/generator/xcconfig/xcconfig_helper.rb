@@ -339,13 +339,15 @@ module Pod
                 framework_search_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
               else
                 library_search_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
-                module_map_file = if dependent_target.uses_swift?
-                                    # for swift, we have a custom build phase that copies in the module map, appending the .Swift module
-                                    "${PODS_CONFIGURATION_BUILD_DIR}/#{dependent_target.label}/#{dependent_target.product_module_name}.modulemap"
-                                  else
-                                    "${PODS_ROOT}/#{dependent_target.module_map_path.relative_path_from(dependent_target.sandbox.root)}"
-                                  end
-                module_map_files << %(-fmodule-map-file="#{module_map_file}")
+                if dependent_target.defines_module?
+                  module_map_file = if dependent_target.uses_swift?
+                                      # for swift, we have a custom build phase that copies in the module map, appending the .Swift module
+                                      "${PODS_CONFIGURATION_BUILD_DIR}/#{dependent_target.label}/#{dependent_target.product_module_name}.modulemap"
+                                    else
+                                      "${PODS_ROOT}/#{dependent_target.module_map_path.relative_path_from(dependent_target.sandbox.root)}"
+                                    end
+                  module_map_files << %(-fmodule-map-file="#{module_map_file}")
+                end
               end
               swift_import_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
             end
@@ -356,7 +358,7 @@ module Pod
           end
 
           other_swift_flags = module_map_files.tap(&:uniq!).flat_map { |f| ['-Xcc', f] }
-          if target.is_a?(PodTarget) && !target.requires_frameworks?
+          if target.is_a?(PodTarget) && !target.requires_frameworks? && target.defines_module?
             # make it possible for a mixed swift/objc static library to be able to import the objc from within swift
             other_swift_flags += ['-import-underlying-module', '-Xcc', '-fmodule-map-file="${SRCROOT}/${MODULEMAP_FILE}"']
           end
