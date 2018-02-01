@@ -91,6 +91,9 @@ module Pod
               settings['PUBLIC_HEADERS_FOLDER_PATH'] = ''
             end
 
+            settings['PRODUCT_NAME'] = target.product_basename
+            settings['PRODUCT_MODULE_NAME'] = target.product_module_name
+
             settings['CODE_SIGN_IDENTITY[sdk=appletvos*]'] = ''
             settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'] = ''
             settings['CODE_SIGN_IDENTITY[sdk=watchos*]'] = ''

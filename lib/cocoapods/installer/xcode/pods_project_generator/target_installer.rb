@@ -74,9 +74,7 @@ module Pod
           # @return [Hash{String => String}]
           #
           def custom_build_settings
-            settings = {
-              'PRODUCT_NAME' => target.product_module_name,
-            }
+            settings = {}
 
             unless target.archs.empty?
               settings['ARCHS'] = target.archs
