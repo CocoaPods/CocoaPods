@@ -606,6 +606,7 @@ module Pod
           def create_module_map
             return super unless custom_module_map
             path = target.module_map_path
+            path.mkpath
             UI.message "- Copying module map file to #{UI.path(path)}" do
               Tempfile.open(path.basename.to_s) do |tmp_module_map|
                 contents = custom_module_map.read

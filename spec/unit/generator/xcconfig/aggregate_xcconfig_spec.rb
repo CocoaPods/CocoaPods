@@ -142,7 +142,7 @@ module Pod
           end
 
           it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
-            expected = "$(inherited) -fmodule-map-file=\"${PODS_ROOT}/Target Support Files/BananaLib/BananaLib.modulemap\" -isystem \"#{config.sandbox.public_headers.search_paths(Platform.ios).join('" -isystem "')}\""
+            expected = "$(inherited) -fmodule-map-file=\"${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap\" -isystem \"#{config.sandbox.public_headers.search_paths(Platform.ios).join('" -isystem "')}\""
             @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
           end
 
@@ -152,7 +152,7 @@ module Pod
             end
 
             it 'links the pod targets with the aggregate target' do
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib-Pods"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib"'
             end
           end
 

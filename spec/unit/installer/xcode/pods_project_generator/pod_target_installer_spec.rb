@@ -478,8 +478,8 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
                   'BananaLib-Pods-SampleProject-prefix.pch',
+                  'BananaLib-Pods-SampleProject.modulemap',
                   'BananaLib-Pods-SampleProject.xcconfig',
-                  'BananaLib.modulemap',
                 ]
               end
 
@@ -490,8 +490,8 @@ module Pod
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
                   'BananaLib-Pods-SampleProject-prefix.pch',
+                  'BananaLib-Pods-SampleProject.modulemap',
                   'BananaLib-Pods-SampleProject.xcconfig',
-                  'BananaLib.modulemap',
                 ]
               end
 
@@ -501,8 +501,8 @@ module Pod
                 group = @project['Pods/BananaLib/Support Files']
                 group.children.map(&:display_name).sort.should == [
                   'BananaLib-Pods-SampleProject-dummy.m',
+                  'BananaLib-Pods-SampleProject.modulemap',
                   'BananaLib-Pods-SampleProject.xcconfig',
-                  'BananaLib.modulemap',
                 ]
               end
 
