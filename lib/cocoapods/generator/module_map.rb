@@ -12,13 +12,14 @@ module Pod
 
       attr_reader :headers
 
-      Header = Struct.new(:path, :umbrella, :private, :textual, :size, :mtime) do
+      Header = Struct.new(:path, :umbrella, :private, :textual, :exclude, :size, :mtime) do
         alias_method :private?, :private
         def to_s
           [
             (:private if private?),
             (:textual if textual),
             (:umbrella if umbrella),
+            (:exclude if exclude),
             'header',
             %("#{path}"),
             attrs,
