@@ -75,7 +75,7 @@ module Pod
           #
           def custom_build_settings
             settings = {
-              'PRODUCT_NAME' => target.product_module_name
+              'PRODUCT_NAME' => target.product_module_name,
             }
 
             unless target.archs.empty?

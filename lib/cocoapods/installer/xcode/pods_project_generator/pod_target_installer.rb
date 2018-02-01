@@ -101,7 +101,6 @@ module Pod
               settings['SWIFT_VERSION'] = target.swift_version
             end
 
-
             settings
           end
 
@@ -702,14 +701,14 @@ module Pod
               ditto "${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}" "${MODULE_MAP_PATH}"
               printf "\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\"${COMPATIBILITY_HEADER_PATH}\\"\\n  requires objc\\n}\\n" >> "${MODULE_MAP_PATH}"
             SH
-            build_phase.input_paths = %W[
+            build_phase.input_paths = %W(
               ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
               ${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}
-            ]
-            build_phase.output_paths = %W[
+            )
+            build_phase.output_paths = %w(
               ${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap
               ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
-            ]
+            )
           end
 
           #-----------------------------------------------------------------------#
