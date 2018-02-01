@@ -29,7 +29,9 @@ module Pod
               create_test_xcconfig_files if target.contains_test_specifications?
               # TODO: determine if it is safe to unconditionally create (& 'link') module maps & umbrella
               #       headers for _all_ static libraries -- we've caused bugs by trying to do this in the past
-              create_module_map
+              create_module_map do |generator|
+                generator.headers.concat module_map_additional_headers
+              end
               create_umbrella_header do |generator|
                 file_accessors = target.file_accessors
                 file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
@@ -67,6 +69,11 @@ module Pod
               create_dummy_source
             end
           end
+
+          # @return [Hash<Pathname,Pathname>] A hash of all umbrella headers, grouped by the directory
+          #         the are stored in
+          #
+          attr_accessor :umbrella_headers_by_dir
 
           private
 
@@ -627,6 +634,17 @@ module Pod
                   c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
                 end
               end
+            end
+          end
+
+          def module_map_additional_headers
+            return [] unless umbrella_headers_by_dir
+
+            other_paths = umbrella_headers_by_dir[target.module_map_path.dirname] - [target.umbrella_header_path]
+            other_paths.map do |module_map_path|
+              # exclude other targets umbrella headers, to avoid
+              # incomplete umbrella warnings
+              Generator::ModuleMap::Header.new(module_map_path.basename, nil, nil, nil, true)
             end
           end
 
