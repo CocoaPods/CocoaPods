@@ -614,25 +614,20 @@ module Pod
 
           def create_module_map
             return super unless custom_module_map
-            path = target.module_map_path
-            path.mkpath
-            UI.message "- Copying module map file to #{UI.path(path)}" do
-              Tempfile.open(path.basename.to_s) do |tmp_module_map|
-                contents = custom_module_map.read
-                unless target.requires_frameworks?
-                  contents.gsub!(/^(\s*)framework\s+module/, '\1module')
-                end
-                tmp_module_map.write contents
-                tmp_module_map.rewind
-                unless path.exist? && FileUtils.identical?(tmp_module_map, path)
-                  FileUtils.cp(tmp_module_map, path)
-                end
-                add_file_to_support_group(path)
 
-                native_target.build_configurations.each do |c|
-                  relative_path = path.relative_path_from(sandbox.root)
-                  c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
-                end
+            path = target.module_map_path
+            UI.message "- Copying module map file to #{UI.path(path)}" do
+              contents = custom_module_map.read
+              unless target.requires_frameworks?
+                contents.gsub!(/^(\s*)framework\s+module/, '\1module')
+              end
+              generator = Generator::Constant.new(contents)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+
+              native_target.build_configurations.each do |c|
+                relative_path = path.relative_path_from(sandbox.root)
+                c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
               end
             end
           end
