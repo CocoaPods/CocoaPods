@@ -206,7 +206,6 @@
 				A129F8BE1B2CA81600EBC1DD /* Resources */,
 				A129F8F61B2CA81700EBC1DD /* Embed Watch Content */,
 				B55D105F75FDCEAD4A12BE64 /* [CP] Embed Pods Frameworks */,
-				1E232F64274BFFA8F587E155 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -245,7 +244,6 @@
 				A865B2771CAF18FF0031EFC6 /* Frameworks */,
 				A865B2781CAF18FF0031EFC6 /* Resources */,
 				766BB1279F3F20E30F8D82AC /* [CP] Embed Pods Frameworks */,
-				9404B5E651690A16E40B8F95 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -328,21 +326,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1E232F64274BFFA8F587E155 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		1E8987D060C89B71B6F2E504 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -395,21 +378,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9404B5E651690A16E40B8F95 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B55D105F75FDCEAD4A12BE64 /* [CP] Embed Pods Frameworks */ = {
