@@ -41,7 +41,9 @@ module Pod
       #
       def initialize(target)
         @target = target
-        @headers = [Header.new(target.umbrella_header_path.basename, true)]
+        @headers = [
+          Header.new(target.umbrella_header_path.basename, true),
+        ]
       end
 
       # Generates and saves the Info.plist to the given path.
@@ -64,12 +66,12 @@ module Pod
       #
       def generate
         <<-MODULE_MAP.strip_heredoc
-          #{module_specificier_prefix}module #{target.product_module_name} {
-            #{headers.join("\n  ")}
+#{module_specificier_prefix}module #{target.product_module_name} {
+  #{headers.join("\n  ")}
 
-            export *
-            module * { export * }
-          }
+  export *
+  module * { export * }
+}
         MODULE_MAP
       end
 
