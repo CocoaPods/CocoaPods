@@ -13,7 +13,7 @@ module Pod
       attr_reader :headers
 
       Header = Struct.new(:path, :umbrella, :private, :textual, :size, :mtime) do
-        alias private? private
+        alias_method :private?, :private
         def to_s
           [
             (:private if private?),
@@ -22,14 +22,14 @@ module Pod
             'header',
             %("#{path}"),
             attrs,
-        ].compact.join(' ')
+          ].compact.join(' ')
         end
 
         def attrs
           attrs = {
             'size' => size,
             'mtime' => mtime,
-          }.reject {|k,v| v.nil? }
+          }.reject { |_k, v| v.nil? }
           return nil if attrs.empty?
           attrs.to_s
         end
