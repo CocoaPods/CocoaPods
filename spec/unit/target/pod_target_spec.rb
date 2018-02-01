@@ -48,7 +48,7 @@ module Pod
 
       it 'returns the name of its product' do
         @pod_target.product_name.should == 'libBananaLib.a'
-        @pod_target.scoped.first.product_name.should == 'libBananaLib.a'
+        @pod_target.scoped.first.product_name.should == 'libBananaLib-Pods.a'
       end
 
       it 'returns the spec consumers for the pod targets' do
@@ -225,9 +225,9 @@ module Pod
 
       it 'returns the path for the CONFIGURATION_BUILD_DIR build setting' do
         @pod_target.build_product_path.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/libBananaLib.a'
-        @pod_target.scoped.first.build_product_path.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-Pods/libBananaLib.a'
+        @pod_target.scoped.first.build_product_path.should == '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-Pods/libBananaLib-Pods.a'
         @pod_target.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib/libBananaLib.a'
-        @pod_target.scoped.first.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib-Pods/libBananaLib.a'
+        @pod_target.scoped.first.build_product_path('$BUILT_PRODUCTS_DIR').should == '$BUILT_PRODUCTS_DIR/BananaLib-Pods/libBananaLib-Pods.a'
       end
 
       it 'returns prefix header path' do
@@ -308,7 +308,7 @@ module Pod
 
           it 'returns the library name' do
             @pod_target.static_library_name.should == 'libBananaLib.a'
-            @pod_target.scoped.first.static_library_name.should == 'libBananaLib.a'
+            @pod_target.scoped.first.static_library_name.should == 'libBananaLib-Pods.a'
           end
 
           it 'returns :framework as product type' do
@@ -327,7 +327,7 @@ module Pod
         describe 'Host does not requires frameworks' do
           it 'returns the product name' do
             @pod_target.product_name.should == 'libBananaLib.a'
-            @pod_target.scoped.first.product_name.should == 'libBananaLib.a'
+            @pod_target.scoped.first.product_name.should == 'libBananaLib-Pods.a'
           end
 
           it 'returns the framework name' do
@@ -336,7 +336,7 @@ module Pod
 
           it 'returns the library name' do
             @pod_target.static_library_name.should == 'libBananaLib.a'
-            @pod_target.scoped.first.static_library_name.should == 'libBananaLib.a'
+            @pod_target.scoped.first.static_library_name.should == 'libBananaLib-Pods.a'
           end
 
           it 'returns :static_library as product type' do
@@ -373,7 +373,7 @@ module Pod
 
         it 'returns the library name' do
           @pod_target.static_library_name.should == 'libOrangeFramework.a'
-          @pod_target.scoped.first.static_library_name.should == 'libOrangeFramework.a'
+          @pod_target.scoped.first.static_library_name.should == 'libOrangeFramework-Pods.a'
         end
 
         it 'returns :framework as product type' do

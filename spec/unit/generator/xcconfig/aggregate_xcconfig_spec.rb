@@ -152,7 +152,7 @@ module Pod
             end
 
             it 'links the pod targets with the aggregate target' do
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib-Pods"'
             end
           end
 
