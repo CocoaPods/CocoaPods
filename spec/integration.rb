@@ -308,6 +308,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Integrates a pod with static swift libraries and objective c modules' do
+      behaves_like cli_spec 'install_static_swift_modules',
+                            'install --no-repo-update'
+    end
+
     describe 'Integrates a Pod with circular subspec dependencies' do
       behaves_like cli_spec 'install_circular_subspec_dependency',
                             'install --no-repo-update'
