@@ -100,7 +100,7 @@ set -u
 set -o pipefail
 
 if [ -z ${UNLOCALIZED_RESOURCES_FOLDER_PATH+x} ]; then
-    # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's no where for us to copy
+    # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's nowhere for us to copy
     # resources to, so exit 0 (signalling the script phase was successful).
     exit 0
 fi
