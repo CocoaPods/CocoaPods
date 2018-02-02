@@ -67,7 +67,7 @@ module Pod
       #
       def generate
         <<-MODULE_MAP.strip_heredoc
-#{module_specificier_prefix}module #{target.product_module_name} {
+#{module_specifier_prefix}module #{target.product_module_name} {
   #{headers.join("\n  ")}
 
   export *
@@ -81,7 +81,7 @@ module Pod
       # The prefix to `module` to prepend in the module map.
       # Ensures that only framework targets have `framework` prepended.
       #
-      def module_specificier_prefix
+      def module_specifier_prefix
         if target.requires_frameworks?
           'framework '
         else
