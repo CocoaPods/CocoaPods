@@ -1,0 +1,30 @@
+workspace 'Examples.xcworkspace'
+
+abstract_target 'Abstract Target' do
+    pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+
+    pod 'Alamofire', path: '../Alamofire Example/Alamofire'
+
+    %w[iOS macOS].each do |platform|
+        abstract_target "#{platform} Pods" do
+            project "#{platform} Modules.xcodeproj"
+
+            case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
+
+            target 'Static' do
+                use_frameworks!(false)
+            end
+            target 'Dynamic' do
+                use_frameworks!(true)
+            end
+        end
+    end
+end
+
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
