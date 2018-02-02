@@ -111,7 +111,7 @@ EOS
         message.should == '[!] at -'
       end
 
-      it 'handles inspector_successfully_recieved_report' do
+      it 'handles inspector_successfully_received_report' do
         time = Time.new(2016, 5, 13)
         Time.stubs(:now).returns(time)
 
