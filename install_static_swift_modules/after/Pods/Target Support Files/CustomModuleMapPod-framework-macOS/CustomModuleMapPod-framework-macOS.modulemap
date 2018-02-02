@@ -1,0 +1,10 @@
+framework module CustomModuleMapPod {
+    umbrella header "CMM.h"
+
+    explicit module Private {
+        header "CMM+Private.h"
+    }
+
+    export *
+    module * { export * }
+}
