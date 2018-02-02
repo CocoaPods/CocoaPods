@@ -157,10 +157,11 @@ module Pod
     #         defines the module structure for the compiler.
     #
     def module_map_path
+      basename = "#{label}.modulemap"
       if requires_frameworks? || !respond_to?(:build_headers)
-        support_files_dir + "#{product_module_name}.modulemap"
+        support_files_dir + basename
       else
-        build_headers.root + product_module_name + "#{label}.modulemap"
+        build_headers.root + product_module_name + basename
       end
     end
 
