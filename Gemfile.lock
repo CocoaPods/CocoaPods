@@ -31,12 +31,12 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: a95a8b831d451ae25ceb7749c5a27a37b1961f79
+  revision: 823cb65720d3eceae8d5c3f27e3ead0c6e595a1e
   branch: master
   specs:
     xcodeproj (1.5.5)
       CFPropertyList (~> 2.3.3)
-      atomos (~> 0.1.0)
+      atomos (~> 0.1.2)
       claide (>= 1.0.2, < 2.0)
       colored2 (~> 3.1)
       nanaimo (~> 0.2.3)
@@ -135,7 +135,7 @@ GEM
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
     ast (2.2.0)
-    atomos (0.1.1)
+    atomos (0.1.2)
     awesome_print (1.6.1)
     bacon (1.2.0)
     claide-plugins (0.9.2)
