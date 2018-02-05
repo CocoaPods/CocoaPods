@@ -250,7 +250,7 @@ GEM
     terminal-table (1.6.0)
     thread_safe (0.3.6)
     tins (1.8.1)
-    tzinfo (1.2.4)
+    tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (0.3.1)
     webmock (2.3.1)

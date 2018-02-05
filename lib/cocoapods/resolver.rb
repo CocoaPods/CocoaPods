@@ -163,7 +163,9 @@ module Pod
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
-        specifications_for_dependency(dependency, [requirement_for_locked_pod_named(dependency.name)])
+        locked_requirement = requirement_for_locked_pod_named(dependency.name)
+        additional_requirements = Array(locked_requirement)
+        specifications_for_dependency(dependency, additional_requirements)
       end
       @search[dependency].dup
     end
@@ -357,7 +359,7 @@ module Pod
     # @return [Array<Specification>] List of specifications satisfying given requirements.
     #
     def specifications_for_dependency(dependency, additional_requirements = [])
-      requirement = Requirement.new(dependency.requirement.as_list + additional_requirements)
+      requirement = Requirement.new(dependency.requirement.as_list + additional_requirements.flat_map(&:as_list))
       find_cached_set(dependency).
         all_specifications(installation_options.warn_for_multiple_pod_sources).
         select { |s| requirement.satisfied_by? s.version }.
