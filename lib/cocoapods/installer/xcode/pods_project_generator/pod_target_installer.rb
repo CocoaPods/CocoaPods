@@ -52,6 +52,9 @@ module Pod
                 create_build_phase_to_symlink_header_folders
                 if target.static_framework?
                   create_build_phase_to_move_static_framework_archive
+                  if target.uses_swift?
+                    add_swift_static_library_compatibility_header_phase
+                  end
                 end
               elsif target.uses_swift?
                 add_swift_static_library_compatibility_header_phase
