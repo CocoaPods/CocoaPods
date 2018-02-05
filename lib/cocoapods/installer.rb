@@ -544,8 +544,6 @@ module Pod
 
     # Writes the Podfile and the lock files.
     #
-    # @todo   Pass the checkout options to the Lockfile.
-    #
     # @return [void]
     #
     def write_lockfiles
@@ -570,11 +568,6 @@ module Pod
     # needed.
     #
     # @return [void]
-    #
-    # @todo   [#397] The libraries should be cleaned and the re-added on every
-    #         installation. Maybe a clean_user_project phase should be added.
-    #         In any case it appears to be a good idea store target definition
-    #         information in the lockfile.
     #
     def integrate_user_project
       UI.section "Integrating client #{'project'.pluralize(aggregate_targets.map(&:user_project_path).uniq.count)}" do

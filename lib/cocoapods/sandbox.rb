@@ -367,8 +367,6 @@ module Pod
     # @return [Hash{String=>Pathname}] The path of the Pods' podspecs with a local source
     #         grouped by their root name.
     #
-    # @todo   Rename (e.g. `pods_with_local_path`)
-    #
     attr_reader :development_pods
 
     # Checks if a Pod is locally sourced?

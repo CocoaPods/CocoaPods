@@ -44,8 +44,6 @@ module Pod
       # @param  [Pathname] installation_root @see #installation_root
       # @param  [Array<AggregateTarget>]  targets @see #targets
       #
-      # @todo   Too many initialization arguments
-      #
       def initialize(podfile, sandbox, installation_root, targets)
         @podfile = podfile
         @sandbox = sandbox

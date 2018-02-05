@@ -63,9 +63,6 @@ module Pod
 
       # Cleans the installations if appropriate.
       #
-      # @todo   As the pre install hooks need to run before cleaning this
-      #         method should be refactored.
-      #
       # @return [void]
       #
       def clean!
@@ -73,9 +70,6 @@ module Pod
       end
 
       # Locks the source files if appropriate.
-      #
-      # @todo   As the pre install hooks need to run before cleaning this
-      #         method should be refactored.
       #
       # @return [void]
       #
@@ -87,9 +81,6 @@ module Pod
       end
 
       # Unlocks the source files if appropriate.
-      #
-      # @todo   As the pre install hooks need to run before cleaning this
-      #         method should be refactored.
       #
       # @return [void]
       #
