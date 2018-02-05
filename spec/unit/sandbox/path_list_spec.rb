@@ -192,6 +192,16 @@ module Pod
         path_list = Sandbox::PathList.new(fixture(unicode_name))
         path_list.files.should == ['README']
       end
+
+      it 'warns when symlinks are found' do
+        root = @path_list.root
+        Find.stubs(:find).multiple_yields(
+          "#{root}/SymlinkDirectory",
+        )
+        Pathname.any_instance.stubs(:realpath).returns(Pathname.new('/Some/different/path/SymlinkDirectory'))
+        @path_list.read_file_system
+        UI.warnings.should.include "Symlink `#{root}/SymlinkDirectory` found while traversing `#{root}`. Symlinks are not traversed"
+      end
     end
 
     #-------------------------------------------------------------------------#

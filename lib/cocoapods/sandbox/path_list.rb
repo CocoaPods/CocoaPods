@@ -57,6 +57,11 @@ module Pod
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
         Find.find(root.to_s) do |f|
           directory = File.directory?(f)
+          path = Pathname.new(f)
+          # File.symlink? does not detect folder symlinks
+          if File.symlink?(f) || (path.realpath != path)
+            UI.warn "Symlink `#{f}` found while traversing `#{root}`. Symlinks are not traversed."
+          end
           f = f.slice(root_length, f.length - root_length)
           next if f.nil?
 

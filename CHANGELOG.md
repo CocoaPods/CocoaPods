@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Warn when a symlink is found during globbing  
+  [Eric Amorde](https://github.com/amorde)
+  [#7051](https://github.com/CocoaPods/CocoaPods/pull/7051)
+
 * Clear input/output paths if they exceed an arbitrary limit  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7362](https://github.com/CocoaPods/CocoaPods/issues/7362)
