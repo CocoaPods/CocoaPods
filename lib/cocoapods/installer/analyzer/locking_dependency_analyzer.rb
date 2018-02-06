@@ -33,10 +33,9 @@ module Pod
           dependency_graph = Molinillo::DependencyGraph.new
 
           if lockfile
-            explicit_dependencies = lockfile.to_hash['DEPENDENCIES'] || []
-            explicit_dependencies.each do |string|
-              dependency = Dependency.new(string)
-              dependency_graph.add_vertex(dependency.name, nil, true)
+            explicit_dependencies = lockfile.dependencies
+            explicit_dependencies.each do |dependency|
+              dependency_graph.add_vertex(dependency.name, dependency, true)
             end
 
             pods = lockfile.to_hash['PODS'] || []
@@ -46,7 +45,7 @@ module Pod
 
             pods_to_update = pods_to_update.flat_map do |u|
               root_name = Specification.root_name(u).downcase
-              dependency_graph.vertices.keys.select { |n| Specification.root_name(n).downcase == root_name }
+              dependency_graph.vertices.each_key.select { |n| Specification.root_name(n).downcase == root_name }
             end
 
             pods_to_update.each do |u|
@@ -73,7 +72,9 @@ module Pod
           if pods_to_unlock.include?(dependency.root_name)
             dependency = Dependency.new(dependency.name)
           end
-          dependency_graph.add_child_vertex(dependency.name, parents.empty? ? dependency : nil, parents, nil)
+          vertex = dependency_graph.add_child_vertex(dependency.name, nil, parents, nil)
+          dependency = vertex.payload.merge(dependency) if vertex.payload
+          vertex.payload = dependency
           dependency
         end
 

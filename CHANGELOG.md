@@ -66,6 +66,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Speed up `pod install` times by up to 50% for very large project.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Avoid dependency resolution conflicts when a pod depends upon a local pod.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.4.0 (2018-01-18)
 
