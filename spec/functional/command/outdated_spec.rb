@@ -75,16 +75,16 @@ module Pod
       UI.output.should.include('BlocksKit 1.0 -> 1.0 (latest version 2.0)')
     end
 
-    it 'tells the user about outdated pods that can be updated, but not to the latest version in yellow' do
+    it 'tells the user about outdated pods that can be updated, but not to the latest version in blue' do
       pod_name = 'BlocksKit'
 
       current_version_string = mock
-      current_version_string.expects(:yellow).returns('1.0').once
+      current_version_string.expects(:blue).returns('1.0').once
       current_version = mock
       current_version.stubs(:to_s).returns(current_version_string)
 
       next_version_string = mock
-      next_version_string.expects(:yellow).returns('1.1').once
+      next_version_string.expects(:blue).returns('1.1').once
       next_version = mock
       next_version.stubs(:to_s).returns(next_version_string)
 
