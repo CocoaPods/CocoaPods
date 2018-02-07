@@ -31,6 +31,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   resources or embed frameworks unless `UNLOCALIZED_RESOURCES_FOLDER_PATH` 
   or `FRAMEWORKS_FOLDER_PATH` is set.  
   [Samuel Giddins](https://github.com/segiddins)
+
 * Change color scheme of `pod outdated` from red-yellow-green to red-blue-green to be more colorblind friendly  
   [iv-mexx](https://github.com/iv-mexx)  
   [#7372](https://github.com/CocoaPods/CocoaPods/issues/7372)  
