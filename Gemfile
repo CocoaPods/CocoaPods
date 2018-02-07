@@ -47,7 +47,7 @@ group :development do
 
   # Integration tests
   gem 'diffy'
-  gem 'clintegracon', :git => 'https://github.com/segiddins/CLIntegracon.git', :branch => 'segiddins/replacement-pattern-overlapping-replacements'
+  gem 'clintegracon' #, :git => 'https://github.com/segiddins/CLIntegracon.git', :branch => 'segiddins/replacement-pattern-overlapping-replacements'
 
   # Code Quality
   gem 'inch_by_inch'

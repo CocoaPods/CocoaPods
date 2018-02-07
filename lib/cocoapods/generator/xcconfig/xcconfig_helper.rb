@@ -337,6 +337,11 @@ module Pod
             dependent_targets.each do |dependent_target|
               if dependent_target.requires_frameworks?
                 framework_search_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
+                if dependent_target.static_framework? && dependent_target.uses_swift?
+                  # for swift, we have a custom build phase that copies in the module map, appending the .Swift module
+                  module_map_file = "${PODS_CONFIGURATION_BUILD_DIR}/#{dependent_target.label}/#{dependent_target.product_module_name}.modulemap"
+                  module_map_files << %(-fmodule-map-file="#{module_map_file}")
+                end
               else
                 library_search_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
                 if dependent_target.defines_module?
