@@ -358,7 +358,7 @@ module Pod
           end
 
           other_swift_flags = module_map_files.tap(&:uniq!).flat_map { |f| ['-Xcc', f] }
-          if target.is_a?(PodTarget) && !target.requires_frameworks? && target.defines_module?
+          if target.is_a?(PodTarget) && !target.requires_frameworks? && target.defines_module? && !test_xcconfig
             # make it possible for a mixed swift/objc static library to be able to import the objc from within swift
             other_swift_flags += ['-import-underlying-module', '-Xcc', '-fmodule-map-file="${SRCROOT}/${MODULEMAP_FILE}"']
           end
