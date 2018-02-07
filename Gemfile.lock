@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b24b82511b8ed5a6f93e2a9f74bbdc9c33da8672
-  branch: master
+  revision: fffb3447abd4979100e490a1dd65bf003dfe1557
+  branch: seg-remove-lockfile-podfile-checksum
   specs:
     cocoapods-core (1.4.0)
       activesupport (>= 4.0.2, < 6)

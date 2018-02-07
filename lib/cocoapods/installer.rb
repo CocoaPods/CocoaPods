@@ -187,6 +187,7 @@ module Pod
         generator.write
         generator.share_development_pod_schemes
         write_lockfiles
+        write_podfile_checksum
       end
     end
 
@@ -541,9 +542,7 @@ module Pod
       end
     end
 
-    # Writes the Podfile and the lock files.
-    #
-    # @todo   Pass the checkout options to the Lockfile.
+    # Writes the lockfile and sandbox manifest.
     #
     # @return [void]
     #
@@ -557,9 +556,22 @@ module Pod
       end
 
       UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
-        sandbox.manifest_path.open('w') do |f|
-          f.write config.lockfile_path.read
-        end
+        FileUtils.cp(config.lockfile_path, sandbox.manifest_path)
+      end
+    end
+
+    # Writes the podfile checksum file into the sandbox,
+    # if the podfile was defined in a file.
+    #
+    # @return [Void]
+    #
+    def write_podfile_checksum
+      return unless checksum = podfile.checksum
+      return unless podfile_path = podfile.defined_in_file
+      checksum_path = sandbox.podfile_checksum_path
+
+      UI.message "- Writing Podfile checksum in #{UI.path checksum_path}" do
+        checksum_path.open('w') { |f| f << checksum << '  ' << podfile_path.basename.to_s << "\n" }
       end
     end
 
