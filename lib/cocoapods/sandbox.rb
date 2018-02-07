@@ -123,6 +123,12 @@ module Pod
       root + 'Manifest.lock'
     end
 
+    # @return [Pathname] the path of the Podfile checksum file.
+    #
+    def podfile_checksum_path
+      root + 'Podfile.sha1'
+    end
+
     # @return [Pathname] the path of the Pods project.
     #
     def project_path

@@ -103,16 +103,28 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase_name = @check_manifest_phase_name
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-          phase.shell_script.should == <<-EOS.strip_heredoc
-          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-          if [ $? != 0 ] ; then
+          phase.shell_script.should == <<-SH.strip_heredoc
+            set -e
+            set -u
+            set -o pipefail
+
+            fail() {
               # print error to STDERR
-              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." $@ >&2
               exit 1
-          fi
-          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
-          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
-          EOS
+            }
+
+            diff -q "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null || fail "The manifest in the sandbox differs from your lockfile."
+
+            if [ -f "${PODS_ROOT}/Podfile.sha1" ]; then
+              (cd "${PODS_PODFILE_DIR_PATH}" && shasum --algorithm 1 --status --check "${PODS_ROOT}/Podfile.sha1") || fail "Your Podfile has been changed since the last time you ran 'pod install'."
+            fi
+
+            # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+            echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
+          SH
+          phase.input_paths.should == %w(${PODS_PODFILE_DIR_PATH}/Podfile.lock ${PODS_ROOT}/Manifest.lock ${PODS_ROOT}/Podfile.sha1)
+          phase.output_paths.should == %w[$(DERIVED_FILE_DIR)/Pods-checkManifestLockResult.txt]
         end
 
         it 'adds the Check Manifest.lock build phase as the first build phase' do

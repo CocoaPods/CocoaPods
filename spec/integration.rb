@@ -83,12 +83,18 @@ CLIntegracon.configure do |c|
 
   # Register special handling for YAML files
   c.transform_produced %r{(^|/)(Podfile|Manifest).lock$} do |path|
-    # Remove CocoaPods version & Podfile checksum
+    # Remove CocoaPods version
     yaml = YAML.load(path.read)
-    deleted_keys = ['COCOAPODS', 'PODFILE CHECKSUM']
+    deleted_keys = ['COCOAPODS']
     deleted_keys.each { |key| yaml.delete(key) }
     keys_hint = Pod::Lockfile::HASH_KEY_ORDER - deleted_keys
     path.open('w') { |f| f << Pod::YAMLHelper.convert_hash(yaml, keys_hint, "\n\n") }
+  end
+
+  c.transform_produced 'Pods/Podfile.sha1' do |path|
+    contents = path.read
+    contents.gsub!(/^\h+/, 'SHA1SUM')
+    path.open('w') { |f| f << contents }
   end
 
   c.preprocess('**/*.xcodeproj', %r{(^|/)(Podfile|Manifest).lock$}) do |path|

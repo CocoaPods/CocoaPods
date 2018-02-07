@@ -271,6 +271,14 @@ module Pod
       '${PODS_ROOT}/..'
     end
 
+    # @return [Pathname] The basename of the Podfile, if it is defined in a file
+    #
+    def podfile_basename
+      return unless podfile = target_definition.podfile
+      return unless podfile_path = podfile.defined_in_file
+      podfile_path.basename
+    end
+
     # @param  [String] config_name The build configuration name to get the xcconfig for
     # @return [String] The path of the xcconfig file relative to the root of
     #         the user project.

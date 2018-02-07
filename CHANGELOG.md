@@ -36,6 +36,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [iv-mexx](https://github.com/iv-mexx)  
   [#7372](https://github.com/CocoaPods/CocoaPods/issues/7372)  
 
+* The Podfile checksum is stored in a separate file in the Pods directory 
+  instead of in the Podfile.lock, allowing concurrent modification of the
+  Podfile from multiple branches without causing merge conflicts.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Clear input/output paths if they exceed an arbitrary limit  

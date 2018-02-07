@@ -380,16 +380,29 @@ module Pod
             phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             native_target.build_phases.unshift(phase).uniq! unless native_target.build_phases.first == phase
             phase.shell_script = <<-SH.strip_heredoc
-              diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
-              if [ $? != 0 ] ; then
-                  # print error to STDERR
-                  echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
-                  exit 1
+              set -e
+              set -u
+              set -o pipefail
+
+              fail() {
+                # print error to STDERR
+                echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." $@ >&2
+                exit 1
+              }
+
+              diff -q "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null || fail "The manifest in the sandbox differs from your lockfile."
+
+              if [ -f "${PODS_ROOT}/Podfile.sha1" ]; then
+                (cd "${PODS_PODFILE_DIR_PATH}" && shasum --algorithm 1 --status --check "${PODS_ROOT}/Podfile.sha1") || fail "Your Podfile has been changed since the last time you ran 'pod install'."
               fi
+
               # This output is used by Xcode 'outputs' to avoid re-running this script phase.
               echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
             SH
-            phase.input_paths = %w(${PODS_PODFILE_DIR_PATH}/Podfile.lock ${PODS_ROOT}/Manifest.lock)
+            phase.input_paths = %w(${PODS_PODFILE_DIR_PATH}/Podfile.lock ${PODS_ROOT}/Manifest.lock ${PODS_ROOT}/Podfile.sha1)
+            if podfile_basename = target.podfile_basename
+              phase.input_paths << "${PODS_PODFILE_DIR_PATH}/#{podfile_basename}"
+            end
             phase.output_paths = [target.check_manifest_lock_script_output_file_path]
           end
         end
