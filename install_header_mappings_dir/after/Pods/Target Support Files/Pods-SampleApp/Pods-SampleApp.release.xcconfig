@@ -1,0 +1,9 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public/DepPod" "${PODS_ROOT}/Headers/Public/DepPod/DepPod" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod"
+LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/DepPod-library" "${PODS_CONFIGURATION_BUILD_DIR}/HeaderMappingsDirPod-library"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public/DepPod" -isystem "${PODS_ROOT}/Headers/Public/DepPod/DepPod" -isystem "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod" -isystem "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"DepPod-library" -l"HeaderMappingsDirPod-library"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
+PODS_ROOT = ${SRCROOT}/Pods
