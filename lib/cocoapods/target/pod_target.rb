@@ -585,14 +585,31 @@ module Pod
     #
     def header_search_paths(include_test_dependent_targets = false)
       header_search_paths = []
-      header_search_paths.concat(build_headers.search_paths(platform, nil, defines_module?))
-      header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, defines_module?))
+      header_search_paths.concat(build_headers.search_paths(platform, nil, uses_modular_headers?))
+      header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
       dependent_targets = recursive_dependent_targets
       dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
       dependent_targets.each do |dependent_target|
-        header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module?))
+        header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
       header_search_paths.uniq
+    end
+
+    protected
+
+    # Returns whether the pod target should use modular headers.
+    #
+    # @param  [Boolean] only_if_defines_modules
+    #         whether the use of modular headers should require the target to define a module
+    #
+    # @note  This must return false when a pod has a `header_mappings_dir`,
+    #        as that allows the spec to completely customize the header structure, and
+    #        therefore it might not be expecting the module name to be prepended
+    #        to imports at all.
+    #
+    def uses_modular_headers?(only_if_defines_modules = true)
+      return false if only_if_defines_modules && !defines_module?
+      spec_consumers.none?(&:header_mappings_dir)
     end
 
     private

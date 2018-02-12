@@ -11,6 +11,7 @@ module Pod
 
             vspec = stub(:test_specification? => false)
             consumer = stub(
+              "Spec Consumer (#{vspec} iOS)",
               :pod_target_xcconfig => {},
               :libraries => ['xml2'],
               :frameworks => [],
@@ -18,6 +19,7 @@ module Pod
               :platform_name => :ios,
             )
             file_accessor = stub(
+              'File Accessor',
               :spec => vspec,
               :spec_consumer => consumer,
               :vendored_static_frameworks => [config.sandbox.root + 'AAA/StaticFramework.framework'],
@@ -26,6 +28,7 @@ module Pod
               :vendored_dynamic_libraries => [config.sandbox.root + 'DDD/VendoredDyld.dyld'],
             )
             vendored_dep_target = stub(
+              'Vendored Dependent Target',
               :name => 'BananaLib',
               :pod_name => 'BananaLib',
               :sandbox => config.sandbox,
@@ -34,6 +37,7 @@ module Pod
               :static_framework? => false,
               :dependent_targets => [],
               :file_accessors => [file_accessor],
+              :uses_modular_headers? => false,
             )
 
             @spec = fixture_spec('banana-lib/BananaLib.podspec')

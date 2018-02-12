@@ -312,6 +312,7 @@ module Pod
           #
           def header_mappings(headers_sandbox, file_accessor, headers, visibility_scope = :private)
             consumer = file_accessor.spec_consumer
+            header_mappings_dir = consumer.header_mappings_dir
             dir = headers_sandbox
             dir += headers_sandbox if visibility_scope == :public
             dir += consumer.header_dir if consumer.header_dir
@@ -319,9 +320,8 @@ module Pod
             mappings = {}
             headers.each do |header|
               sub_dir = dir
-              if consumer.header_mappings_dir
-                header_mappings_dir = file_accessor.path_list.root + consumer.header_mappings_dir
-                relative_path = header.relative_path_from(header_mappings_dir)
+              if header_mappings_dir
+                relative_path = header.relative_path_from(file_accessor.path_list.root + header_mappings_dir)
                 sub_dir += relative_path.dirname
               end
               mappings[sub_dir] ||= []
