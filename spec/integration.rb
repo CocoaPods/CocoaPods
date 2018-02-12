@@ -279,6 +279,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Integrates a Pod with a header mappings directory' do
+      behaves_like cli_spec 'install_header_mappings_dir',
+                            'install --no-repo-update'
+    end
+
     describe 'Integrates a Pod using non Objective-C source files' do
       behaves_like cli_spec 'install_non_objective_c_files',
                             'install --no-repo-update'
