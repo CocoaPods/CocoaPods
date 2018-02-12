@@ -64,6 +64,10 @@ module Pod
               'PRODUCT_BUNDLE_IDENTIFIER'          => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
               'SKIP_INSTALL'                       => 'YES',
 
+              # Needed to ensure that static libraries won't try to embed the swift stdlib,
+              # since there's no where to embed in for a static library.
+              # Not necessary for dynamic frameworks either, since the aggregate targets are never shipped
+              # on their own, and are always further embedded into an app target.
               'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' => 'NO',
             }
             super.merge(settings)

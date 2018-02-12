@@ -383,7 +383,7 @@ module Pod
             e.message.should.include <<-EOS.strip_heredoc.strip
               [!] The following swift pods cannot yet be integrated as static libraries:
 
-              The swift pod `OrangeFramework` depends upon matryoshka, which do not define modules. To opt into those targets generating module maps (which is necessary to import them from swift when building as static libraries), you may add `'DEFINES_MODULE' => 'YES'` to those pods' `pod_target_xcconfig`.
+              The swift pod `OrangeFramework` depends upon `matryoshka`, which do not define modules. To opt into those targets generating module maps (which is necessary to import them from swift when building as static libraries), you may add `'DEFINES_MODULE' => 'YES'` to those pods' `pod_target_xcconfig`.
             EOS
           end
 

@@ -123,7 +123,7 @@ module Pod
 
             next if non_module_dependencies.empty?
 
-            error_messages << "The swift pod `#{pod_target.name}` depends upon #{non_module_dependencies.to_sentence}, " \
+            error_messages << "The swift pod `#{pod_target.name}` depends upon #{non_module_dependencies.map { |d| "`#{d}`" }.to_sentence}, " \
                               'which do not define modules. ' \
                               'To opt into those targets generating module maps '\
                               '(which is necessary to import them from swift when building as static libraries), ' \
