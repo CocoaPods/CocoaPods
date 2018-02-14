@@ -307,7 +307,7 @@ module Pod
 
           # Filter out dependent targets that are subsets of another target.
           subset_targets = []
-          dependent_targets.combination(2) do |a, b|
+          dependent_targets.uniq.combination(2) do |a, b|
             if (a.specs - b.specs).empty?
               subset_targets << a
             elsif (b.specs - a.specs).empty?
