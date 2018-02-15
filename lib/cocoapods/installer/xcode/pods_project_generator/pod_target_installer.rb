@@ -622,7 +622,7 @@ module Pod
             UI.message "- Copying module map file to #{UI.path(path)}" do
               contents = custom_module_map.read
               unless target.requires_frameworks?
-                contents.gsub!(/^(\s*)framework\s+module/, '\1module')
+                contents.gsub!(/^(\s*)framework\s+(module [^{}]){/, '\1\2 [system] {')
               end
               generator = Generator::Constant.new(contents)
               update_changed_file(generator, path)

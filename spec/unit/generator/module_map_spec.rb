@@ -27,7 +27,7 @@ module Pod
       @pod_target.stubs(:requires_frameworks?).returns(false)
       @gen.save_as(path)
       path.read.should == <<-EOS.strip_heredoc
-        module BananaLib {
+        module BananaLib [system] {
           umbrella header "BananaLib-umbrella.h"
 
           export *

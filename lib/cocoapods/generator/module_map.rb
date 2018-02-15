@@ -67,7 +67,7 @@ module Pod
       #
       def generate
         <<-MODULE_MAP.strip_heredoc
-#{module_specifier_prefix}module #{target.product_module_name} {
+#{module_specifier_prefix}module #{target.product_module_name}#{module_declaration_attributes} {
   #{headers.join("\n  ")}
 
   export *
@@ -87,6 +87,15 @@ module Pod
         else
           ''
         end
+      end
+
+      # The suffix attributes to `module`.
+      # Ensures that library module maps are treated as `system` modules,
+      # supressing warnings when imported, as is done for header imports given via `-isystem`.
+      #
+      def module_declaration_attributes
+        return '' if target.requires_frameworks?
+        ' [system]'
       end
     end
   end
