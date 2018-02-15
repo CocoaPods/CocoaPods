@@ -287,6 +287,19 @@ module Pod
           @pod_target.stubs(:defines_module?).returns(true)
         end
 
+        it 'uses modular header search paths when specified in the podfile' do
+          @pod_target.unstub(:defines_module?)
+          @pod_target.target_definitions.first.stubs(:build_pod_as_module?).with('BananaLib').returns(true)
+
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+          ]
+        end
+
         it 'returns the correct header search paths' do
           @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
