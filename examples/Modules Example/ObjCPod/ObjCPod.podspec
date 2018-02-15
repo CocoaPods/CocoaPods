@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.license = 'proprietary'
 
   s.source_files  = "src/**/*.{h,m,swift}"
+  s.private_header_files = "src/Private/*.h"
   s.public_header_files = "src/**/*.h"
 
   s.ios.deployment_target = '9.0'
