@@ -158,11 +158,7 @@ module Pod
     #
     def module_map_path
       basename = "#{label}.modulemap"
-      if requires_frameworks? || !respond_to?(:build_headers)
-        support_files_dir + basename
-      else
-        build_headers.root + product_module_name + basename
-      end
+      support_files_dir + basename
     end
 
     # @return [Pathname] the absolute path of the bridge support file.
