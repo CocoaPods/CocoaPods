@@ -54,7 +54,7 @@ module Pod
       @target_definitions = target_definitions
       @sandbox = sandbox
       @scope_suffix = scope_suffix
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private')
+      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @file_accessors = []
       @resource_bundle_targets = []
       @test_resource_bundle_targets = []
@@ -195,6 +195,20 @@ module Pod
       end
     end
 
+    # @return [Boolean] Whether the target defines a "module"
+    #         (and thus will need a module map and umbrella header).
+    #
+    # @note   Static library targets can temporarily opt in to this behavior by setting
+    #         `DEFINES_MODULE = YES` in their specification's `pod_target_xcconfig`.
+    #
+    def defines_module?
+      return @defines_module if defined?(@defines_module)
+      return @defines_module = true if uses_swift? || requires_frameworks?
+      return @defines_module = true if target_definitions.any? { |td| td.build_pod_as_module?(pod_name) }
+
+      @defines_module = non_test_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
+    end
+
     # @return [Array<Hash{Symbol=>String}>] An array of hashes where each hash represents a single script phase.
     #
     def script_phases
@@ -224,7 +238,7 @@ module Pod
     #
     attr_reader :test_specs
 
-    # @return [Array<Specification>] All of the non test specs within this target.
+    # @return [Array<Specification>] All of the specs within this target that are not test specs.
     #
     attr_reader :non_test_specs
 
@@ -572,14 +586,31 @@ module Pod
     #
     def header_search_paths(include_test_dependent_targets = false)
       header_search_paths = []
-      header_search_paths.concat(build_headers.search_paths(platform))
-      header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name))
+      header_search_paths.concat(build_headers.search_paths(platform, nil, uses_modular_headers?))
+      header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
       dependent_targets = recursive_dependent_targets
       dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
       dependent_targets.each do |dependent_target|
-        header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name))
+        header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
       header_search_paths.uniq
+    end
+
+    protected
+
+    # Returns whether the pod target should use modular headers.
+    #
+    # @param  [Boolean] only_if_defines_modules
+    #         whether the use of modular headers should require the target to define a module
+    #
+    # @note  This must return false when a pod has a `header_mappings_dir`,
+    #        as that allows the spec to completely customize the header structure, and
+    #        therefore it might not be expecting the module name to be prepended
+    #        to imports at all.
+    #
+    def uses_modular_headers?(only_if_defines_modules = true)
+      return false if only_if_defines_modules && !defines_module?
+      spec_consumers.none?(&:header_mappings_dir)
     end
 
     private

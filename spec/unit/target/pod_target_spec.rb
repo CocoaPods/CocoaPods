@@ -234,52 +234,113 @@ module Pod
         @pod_target.prefix_header_path.to_s.should.include 'Pods/Target Support Files/BananaLib/BananaLib-prefix.pch'
       end
 
-      it 'returns the correct header search paths' do
-        @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
-        @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
-        header_search_paths = @pod_target.header_search_paths
-        header_search_paths.sort.should == [
-          '${PODS_ROOT}/Headers/Private',
-          '${PODS_ROOT}/Headers/Private/BananaLib',
-          '${PODS_ROOT}/Headers/Public',
-          '${PODS_ROOT}/Headers/Public/BananaLib',
-        ]
+      describe 'non modular header search paths' do
+        it 'returns the correct search paths' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib/BananaLib',
+          ]
+        end
+
+        it 'returns the correct header search paths recursively for dependent targets' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
+          monkey_spec = fixture_spec('monkey/monkey.podspec')
+          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib/BananaLib',
+            '${PODS_ROOT}/Headers/Public/monkey',
+            '${PODS_ROOT}/Headers/Public/monkey/monkey',
+          ]
+        end
+
+        it 'returns the correct header search paths recursively for dependent targets excluding platform' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
+          monkey_spec = fixture_spec('monkey/monkey.podspec')
+          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
+          header_search_paths = @pod_target.header_search_paths
+          # The monkey lib header search paths should not be present since they are only present in OSX.
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib/BananaLib',
+          ]
+        end
       end
 
-      it 'returns the correct header search paths recursively for dependent targets' do
-        @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
-        @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
-        @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
-        monkey_spec = fixture_spec('monkey/monkey.podspec')
-        monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
-        monkey_pod_target.stubs(:platform).returns(Platform.ios)
-        @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
-        header_search_paths = @pod_target.header_search_paths
-        header_search_paths.sort.should == [
-          '${PODS_ROOT}/Headers/Private',
-          '${PODS_ROOT}/Headers/Private/BananaLib',
-          '${PODS_ROOT}/Headers/Public',
-          '${PODS_ROOT}/Headers/Public/BananaLib',
-          '${PODS_ROOT}/Headers/Public/monkey',
-        ]
-      end
+      describe 'modular header search paths' do
+        before do
+          @pod_target.stubs(:defines_module?).returns(true)
+        end
 
-      it 'returns the correct header search paths recursively for dependent targets excluding platform' do
-        @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
-        @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
-        @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
-        monkey_spec = fixture_spec('monkey/monkey.podspec')
-        monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
-        monkey_pod_target.stubs(:platform).returns(Platform.ios)
-        @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
-        header_search_paths = @pod_target.header_search_paths
-        # The monkey lib header search paths should not be present since they are only present in OSX.
-        header_search_paths.sort.should == [
-          '${PODS_ROOT}/Headers/Private',
-          '${PODS_ROOT}/Headers/Private/BananaLib',
-          '${PODS_ROOT}/Headers/Public',
-          '${PODS_ROOT}/Headers/Public/BananaLib',
-        ]
+        it 'uses modular header search paths when specified in the podfile' do
+          @pod_target.unstub(:defines_module?)
+          @pod_target.target_definitions.first.stubs(:build_pod_as_module?).with('BananaLib').returns(true)
+
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+          ]
+        end
+
+        it 'returns the correct header search paths' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+          ]
+        end
+
+        it 'returns the correct header search paths recursively for dependent targets' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
+          monkey_spec = fixture_spec('monkey/monkey.podspec')
+          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+            '${PODS_ROOT}/Headers/Public/monkey',
+          ]
+        end
+
+        it 'returns the correct header search paths recursively for dependent targets excluding platform' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
+          monkey_spec = fixture_spec('monkey/monkey.podspec')
+          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
+          header_search_paths = @pod_target.header_search_paths
+          # The monkey lib header search paths should not be present since they are only present in OSX.
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+          ]
+        end
       end
     end
 

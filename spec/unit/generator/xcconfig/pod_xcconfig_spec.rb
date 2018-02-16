@@ -11,6 +11,7 @@ module Pod
 
             vspec = stub(:test_specification? => false)
             consumer = stub(
+              "Spec Consumer (#{vspec} iOS)",
               :pod_target_xcconfig => {},
               :libraries => ['xml2'],
               :frameworks => [],
@@ -18,6 +19,7 @@ module Pod
               :platform_name => :ios,
             )
             file_accessor = stub(
+              'File Accessor',
               :spec => vspec,
               :spec_consumer => consumer,
               :vendored_static_frameworks => [config.sandbox.root + 'AAA/StaticFramework.framework'],
@@ -26,6 +28,7 @@ module Pod
               :vendored_dynamic_libraries => [config.sandbox.root + 'DDD/VendoredDyld.dyld'],
             )
             vendored_dep_target = stub(
+              'Vendored Dependent Target',
               :name => 'BananaLib',
               :pod_name => 'BananaLib',
               :sandbox => config.sandbox,
@@ -34,6 +37,7 @@ module Pod
               :static_framework? => false,
               :dependent_targets => [],
               :file_accessors => [file_accessor],
+              :uses_modular_headers? => false,
             )
 
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
@@ -133,11 +137,8 @@ module Pod
             @xcconfig.to_hash['PODS_TARGET_SRCROOT'].should == '${PODS_ROOT}/../../spec/fixtures/banana-lib'
           end
 
-          it 'adds the library build headers and public headers search paths to the xcconfig, with quotes' do
-            private_headers = "\"#{@pod_target.build_headers.search_paths(Platform.new(:ios)).join('" "')}\""
-            public_headers = "\"#{config.sandbox.public_headers.search_paths(Platform.new(:ios)).join('" "')}\""
-            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include private_headers
-            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.include public_headers
+          it 'does not add root public or private header search paths to the xcconfig' do
+            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.be.empty
           end
 
           it 'adds the COCOAPODS macro definition' do
@@ -269,8 +270,10 @@ module Pod
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '"${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/monkey"'
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '"${PODS_ROOT}/Headers/Private/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/BananaLib/BananaLib"' \
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/CoconutLib/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/monkey" "${PODS_ROOT}/Headers/Public/monkey/monkey"'
           end
 
           it 'adds correct header search paths for dependent and test targets for non test xcconfigs' do
@@ -285,8 +288,9 @@ module Pod
             # This is not an test xcconfig so it should exclude header search paths for the 'monkey' pod
             generator = PodXCConfig.new(@coconut_pod_target, false)
             xcconfig = generator.generate
-            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '"${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/CoconutLib"'
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '"${PODS_ROOT}/Headers/Private/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/BananaLib/BananaLib"' \
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/CoconutLib/CoconutLib"'
           end
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do

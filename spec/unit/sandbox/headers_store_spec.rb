@@ -4,11 +4,12 @@ module Pod
   describe Sandbox::HeadersStore do
     before do
       @sandbox = Pod::Sandbox.new(temporary_directory + 'Sandbox')
-      @header_dir = Sandbox::HeadersStore.new(@sandbox, 'Public')
+      @public_header_dir = Sandbox::HeadersStore.new(@sandbox, 'Public', :public)
+      @private_header_dir = Sandbox::HeadersStore.new(@sandbox, 'Private', :private)
     end
 
     it "returns it's headers root" do
-      @header_dir.root.should == temporary_directory + 'Sandbox/Headers/Public'
+      @public_header_dir.root.should == temporary_directory + 'Sandbox/Headers/Public'
     end
 
     it 'can add namespaced headers to its header path using symlinks and return the relative path' do
@@ -21,7 +22,7 @@ module Pod
       relative_header_paths.each do |path|
         File.open(@sandbox.root + path, 'w') { |file| file.write('hello') }
       end
-      symlink_paths = @header_dir.add_files(namespace_path, relative_header_paths)
+      symlink_paths = @public_header_dir.add_files(namespace_path, relative_header_paths)
       symlink_paths.each do |path|
         path.should.be.symlink
         File.read(path).should == 'hello'
@@ -39,35 +40,75 @@ module Pod
         File.open(@sandbox.root + path, 'w') { |file| file.write('hello') }
       end
       fake_platform = mock(:name => 'fake_platform')
-      @header_dir.add_files(namespace_path, relative_header_paths)
-      @header_dir.search_paths(fake_platform).should.not.include('${PODS_ROOT}/Headers/Public/ExampleLib')
+      @public_header_dir.add_files(namespace_path, relative_header_paths)
+      @public_header_dir.search_paths(fake_platform).should.not.include('${PODS_ROOT}/Headers/Public/ExampleLib')
     end
 
-    it 'always adds the Headers root to the header search paths' do
-      fake_platform = mock(:name => 'fake_platform')
-      @header_dir.search_paths(fake_platform).should.include('${PODS_ROOT}/Headers/Public')
+    describe 'non modular header search paths' do
+      it 'returns the correct public header search paths for the given platform' do
+        @public_header_dir.add_search_path('iOS Search Path', Platform.ios)
+        @public_header_dir.add_search_path('OS X Search Path', Platform.osx)
+        @public_header_dir.search_paths(Platform.ios).sort.should == [
+          '${PODS_ROOT}/Headers/Public/iOS Search Path',
+          '${PODS_ROOT}/Headers/Public/iOS Search Path/iOS Search Path',
+        ]
+      end
+
+      it 'returns the correct public header search paths given platform and target' do
+        @public_header_dir.add_search_path('ios-target', Platform.ios)
+        @public_header_dir.add_search_path('osx-target', Platform.osx)
+        @public_header_dir.search_paths(Platform.ios, 'ios-target').sort.should == [
+          '${PODS_ROOT}/Headers/Public/ios-target',
+          '${PODS_ROOT}/Headers/Public/ios-target/ios-target',
+        ]
+        @public_header_dir.search_paths(Platform.osx, 'osx-target').sort.should == [
+          '${PODS_ROOT}/Headers/Public/osx-target',
+          '${PODS_ROOT}/Headers/Public/osx-target/osx-target',
+        ]
+      end
+
+      it 'returns the correct private header search paths given platform and target' do
+        @private_header_dir.add_search_path('ios-target', Platform.ios)
+        @private_header_dir.add_search_path('osx-target', Platform.osx)
+        @private_header_dir.search_paths(Platform.ios, 'ios-target', false).sort.should == [
+          '${PODS_ROOT}/Headers/Private/ios-target',
+        ]
+        @private_header_dir.search_paths(Platform.osx, 'osx-target', false).sort.should == [
+          '${PODS_ROOT}/Headers/Private/osx-target',
+        ]
+      end
     end
 
-    it 'only exposes header search paths for the given platform' do
-      @header_dir.add_search_path('iOS Search Path', Platform.ios)
-      @header_dir.add_search_path('OS X Search Path', Platform.osx)
-      @header_dir.search_paths(Platform.ios).sort.should == [
-        '${PODS_ROOT}/Headers/Public',
-        '${PODS_ROOT}/Headers/Public/iOS Search Path',
-      ]
-    end
+    describe 'modular header search paths' do
+      it 'returns the correct public header search paths for the given platform' do
+        @public_header_dir.add_search_path('iOS Search Path', Platform.ios)
+        @public_header_dir.add_search_path('OS X Search Path', Platform.osx)
+        @public_header_dir.search_paths(Platform.ios, nil, true).sort.should == [
+          '${PODS_ROOT}/Headers/Public/iOS Search Path',
+        ]
+      end
 
-    it 'returns the correct header search paths given platform and target' do
-      @header_dir.add_search_path('ios-target', Platform.ios)
-      @header_dir.add_search_path('osx-target', Platform.osx)
-      @header_dir.search_paths(Platform.ios, 'ios-target').sort.should == [
-        '${PODS_ROOT}/Headers/Public',
-        '${PODS_ROOT}/Headers/Public/ios-target',
-      ]
-      @header_dir.search_paths(Platform.osx, 'osx-target').sort.should == [
-        '${PODS_ROOT}/Headers/Public',
-        '${PODS_ROOT}/Headers/Public/osx-target',
-      ]
+      it 'returns the correct public header search paths given platform and target' do
+        @public_header_dir.add_search_path('ios-target', Platform.ios)
+        @public_header_dir.add_search_path('osx-target', Platform.osx)
+        @public_header_dir.search_paths(Platform.ios, 'ios-target', true).sort.should == [
+          '${PODS_ROOT}/Headers/Public/ios-target',
+        ]
+        @public_header_dir.search_paths(Platform.osx, 'osx-target', true).sort.should == [
+          '${PODS_ROOT}/Headers/Public/osx-target',
+        ]
+      end
+
+      it 'returns the correct private header search paths given platform and target' do
+        @private_header_dir.add_search_path('ios-target', Platform.ios)
+        @private_header_dir.add_search_path('osx-target', Platform.osx)
+        @private_header_dir.search_paths(Platform.ios, 'ios-target', true).sort.should == [
+          '${PODS_ROOT}/Headers/Private/ios-target',
+        ]
+        @private_header_dir.search_paths(Platform.osx, 'osx-target', true).sort.should == [
+          '${PODS_ROOT}/Headers/Private/osx-target',
+        ]
+      end
     end
   end
 end
