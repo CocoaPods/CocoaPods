@@ -1,0 +1,70 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-OtherSampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `DepPod` from `DepPod`
+-> Fetching podspec for `HeaderMappingsDirPod` from `HeaderMappingsDirPod`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A DepPod
+  A HeaderMappingsDirPod
+
+Downloading dependencies
+
+-> Installing DepPod (1.0.0)
+
+-> Installing HeaderMappingsDirPod (1.0.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Adding development pod helper files to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `DepPod-framework` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/DepPod-framework/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/DepPod-framework/DepPod-framework.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/DepPod-framework/DepPod-framework-umbrella.h`
+    - Installing target `DepPod-library` iOS 4.3
+    - Installing target `HeaderMappingsDirPod-framework` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/HeaderMappingsDirPod-framework/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-umbrella.h`
+    - Installing target `HeaderMappingsDirPod-library` iOS 4.3
+    - Installing target `Pods-OtherSampleApp` iOS 10.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-OtherSampleApp/Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-umbrella.h`
+    - Installing target `Pods-SampleApp` iOS 10.0
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+    - Generating deterministic UUIDs
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods-OtherSampleApp` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post install hooks
+    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+
+-> Pod installation complete! There are 2 dependencies from the Podfile and 2 total pods installed.
