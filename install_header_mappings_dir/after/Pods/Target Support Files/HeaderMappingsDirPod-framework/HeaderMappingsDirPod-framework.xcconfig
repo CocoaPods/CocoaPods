@@ -1,7 +1,7 @@
 CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/HeaderMappingsDirPod-framework
 DEFINES_MODULE = YES
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_ROOT = ${SRCROOT}

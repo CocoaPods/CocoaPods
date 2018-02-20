@@ -59,6 +59,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -79,7 +80,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_SampleApp
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
@@ -90,6 +91,7 @@ Targets:
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -110,7 +112,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_SampleApp
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
@@ -159,6 +161,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/RealmSwift/RealmSwift.modulemap
+          PRODUCT_MODULE_NAME: RealmSwift
           PRODUCT_NAME: RealmSwift
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -186,6 +189,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/RealmSwift/RealmSwift.modulemap
+          PRODUCT_MODULE_NAME: RealmSwift
           PRODUCT_NAME: RealmSwift
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'

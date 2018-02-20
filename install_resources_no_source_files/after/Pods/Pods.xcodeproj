@@ -39,6 +39,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: "-"
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -56,6 +57,7 @@ Targets:
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: "-"
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''

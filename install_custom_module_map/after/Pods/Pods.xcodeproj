@@ -74,6 +74,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/BananaLib/BananaLib.modulemap
+          PRODUCT_MODULE_NAME: BananaLib
           PRODUCT_NAME: BananaLib
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -99,6 +100,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/BananaLib/BananaLib.modulemap
+          PRODUCT_MODULE_NAME: BananaLib
           PRODUCT_NAME: BananaLib
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -121,6 +123,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
@@ -140,7 +143,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_Example
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
@@ -149,6 +152,7 @@ Targets:
         Base Configuration: Pods-Example.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
@@ -168,7 +172,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_Example
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'

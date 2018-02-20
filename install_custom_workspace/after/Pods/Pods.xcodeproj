@@ -47,6 +47,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -64,6 +65,7 @@ Targets:
         Base Configuration: Pods-SampleApp_1.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -89,6 +91,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -106,6 +109,7 @@ Targets:
         Base Configuration: Pods-SampleApp_2.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -149,6 +153,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Reachability
+          PRODUCT_NAME: Reachability
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -168,6 +174,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Reachability
+          PRODUCT_NAME: Reachability
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'

@@ -13,9 +13,11 @@ File References:
       - DepPod-framework-dummy.m
       - DepPod-framework-prefix.pch
       - DepPod-framework-umbrella.h
+      - DepPod-library.modulemap
       - DepPod-library.xcconfig
       - DepPod-library-dummy.m
       - DepPod-library-prefix.pch
+      - DepPod-library-umbrella.h
       - Info.plist
   - HeaderMappingsDirPod:
     - include:
@@ -33,9 +35,11 @@ File References:
       - HeaderMappingsDirPod-framework-dummy.m
       - HeaderMappingsDirPod-framework-prefix.pch
       - HeaderMappingsDirPod-framework-umbrella.h
+      - HeaderMappingsDirPod-library.modulemap
       - HeaderMappingsDirPod-library.xcconfig
       - HeaderMappingsDirPod-library-dummy.m
       - HeaderMappingsDirPod-library-prefix.pch
+      - HeaderMappingsDirPod-library-umbrella.h
       - Info.plist
 - Frameworks:
   - HeaderMappingsDirPod.framework
@@ -107,6 +111,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/DepPod-framework/DepPod-framework.modulemap
+          PRODUCT_MODULE_NAME: DepPod
           PRODUCT_NAME: DepPod
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -133,6 +138,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/DepPod-framework/DepPod-framework.modulemap
+          PRODUCT_MODULE_NAME: DepPod
           PRODUCT_NAME: DepPod
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -151,6 +157,9 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Headers:
+      - DepPod-library-umbrella.h:
+          ATTRIBUTES:
+          - Public
       - DP.h:
           ATTRIBUTES:
           - Project
@@ -165,9 +174,12 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           GCC_PREFIX_HEADER: Target Support Files/DepPod-library/DepPod-library-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MODULEMAP_FILE: Headers/Public/DepPod/DepPod-library.modulemap
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: DepPod
+          PRODUCT_NAME: DepPod-library
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -184,9 +196,12 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           GCC_PREFIX_HEADER: Target Support Files/DepPod-library/DepPod-library-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MODULEMAP_FILE: Headers/Public/DepPod/DepPod-library.modulemap
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: DepPod
+          PRODUCT_NAME: DepPod-library
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -228,6 +243,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework.modulemap
+          PRODUCT_MODULE_NAME: HeaderMappingsDirPod
           PRODUCT_NAME: HeaderMappingsDirPod
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -254,6 +270,7 @@ Targets:
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
           MODULEMAP_FILE: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework.modulemap
+          PRODUCT_MODULE_NAME: HeaderMappingsDirPod
           PRODUCT_NAME: HeaderMappingsDirPod
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -272,6 +289,9 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Headers:
+      - HeaderMappingsDirPod-library-umbrella.h:
+          ATTRIBUTES:
+          - Public
       - HMDP.h:
           ATTRIBUTES:
           - Project
@@ -286,9 +306,12 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MODULEMAP_FILE: Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: HeaderMappingsDirPod
+          PRODUCT_NAME: HeaderMappingsDirPod-library
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -305,9 +328,12 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library-prefix.pch
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
+          MODULEMAP_FILE: Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: HeaderMappingsDirPod
+          PRODUCT_NAME: HeaderMappingsDirPod-library
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -328,6 +354,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
@@ -349,7 +376,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_OtherSampleApp
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
@@ -358,6 +385,7 @@ Targets:
         Base Configuration: Pods-OtherSampleApp.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
@@ -379,7 +407,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_OtherSampleApp
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
@@ -396,6 +424,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
@@ -414,6 +443,7 @@ Targets:
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer

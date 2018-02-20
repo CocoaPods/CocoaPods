@@ -186,6 +186,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: AFNetworking
+          PRODUCT_NAME: AFNetworking
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -204,6 +206,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: AFNetworking
+          PRODUCT_NAME: AFNetworking
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -220,6 +224,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -237,6 +242,7 @@ Targets:
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -278,6 +284,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: RKValueTransformers
+          PRODUCT_NAME: RKValueTransformers
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -296,6 +304,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: RKValueTransformers
+          PRODUCT_NAME: RKValueTransformers
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -329,6 +339,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: SEGModules
+          PRODUCT_NAME: SEGModules
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -348,6 +360,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: SEGModules
+          PRODUCT_NAME: SEGModules
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
