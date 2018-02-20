@@ -138,7 +138,7 @@ module Pod
           end
 
           it 'does not add root public or private header search paths to the xcconfig' do
-            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.be.empty
+            @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should.be.nil
           end
 
           it 'adds the COCOAPODS macro definition' do
