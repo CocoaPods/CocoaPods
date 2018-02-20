@@ -1005,9 +1005,9 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `RealmSwift` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/RealmSwift/Info.plist`
       - Generating module map file at `Pods/Target Support Files/RealmSwift/RealmSwift.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/RealmSwift/RealmSwift-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/RealmSwift/Info.plist`
     - Installing target `Pods-SampleApp` iOS 8.0
       - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`

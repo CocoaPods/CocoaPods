@@ -77,6 +77,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Pod1
+          PRODUCT_NAME: Pod1
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -94,6 +96,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Pod1
+          PRODUCT_NAME: Pod1
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -124,6 +128,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Pod2
+          PRODUCT_NAME: Pod2
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -141,6 +147,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Pod2
+          PRODUCT_NAME: Pod2
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -171,6 +179,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Pod3
+          PRODUCT_NAME: Pod3
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -188,6 +198,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: Pod3
+          PRODUCT_NAME: Pod3
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -204,6 +216,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
@@ -220,6 +233,7 @@ Targets:
         Base Configuration: Pods-SubSpecCircular.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''

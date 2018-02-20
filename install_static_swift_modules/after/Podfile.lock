@@ -1,0 +1,29 @@
+PODS:
+  - CustomModuleMapPod (0.0.1)
+  - MixedPod (0.0.1):
+    - ObjCPod
+    - SwiftPod
+  - ObjCPod (0.0.1)
+  - SwiftPod (0.0.1)
+
+DEPENDENCIES:
+  - "CustomModuleMapPod (from `CustomModuleMapPod`)"
+  - "MixedPod (from `MixedPod`)"
+  - "ObjCPod (from `ObjCPod`)"
+  - "SwiftPod (from `SwiftPod`)"
+
+EXTERNAL SOURCES:
+  CustomModuleMapPod:
+    :path: CustomModuleMapPod
+  MixedPod:
+    :path: MixedPod
+  ObjCPod:
+    :path: ObjCPod
+  SwiftPod:
+    :path: SwiftPod
+
+SPEC CHECKSUMS:
+  CustomModuleMapPod: 3c10fa49a04a1642893cf91aef5d991196257cc0
+  MixedPod: fcc78c09cef70617b39f864d879f74fbe4c4def7
+  ObjCPod: 6141d4380b88803d24df3696dfbffa64e0bbb05a
+  SwiftPod: 16812a121d88e5dfdcd2a0b8a59c9ac9ef28fdb4

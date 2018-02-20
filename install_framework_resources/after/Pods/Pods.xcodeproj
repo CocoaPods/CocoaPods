@@ -66,6 +66,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -88,7 +89,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_SampleApp
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -96,6 +97,7 @@ Targets:
         Base Configuration: Pods-SampleApp.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -118,7 +120,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_SampleApp
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -137,6 +139,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -159,7 +162,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_SampleAppTests
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -167,6 +170,7 @@ Targets:
         Base Configuration: Pods-SampleAppTests.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
@@ -189,7 +193,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_SampleAppTests
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -231,6 +235,7 @@ Targets:
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.0'
           MODULEMAP_FILE: Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap
+          PRODUCT_MODULE_NAME: SamplePodWithResources
           PRODUCT_NAME: SamplePodWithResources
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
@@ -258,6 +263,7 @@ Targets:
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.0'
           MODULEMAP_FILE: Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap
+          PRODUCT_MODULE_NAME: SamplePodWithResources
           PRODUCT_NAME: SamplePodWithResources
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'

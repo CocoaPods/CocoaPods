@@ -41,6 +41,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
@@ -59,6 +60,7 @@ Targets:
         Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
@@ -107,6 +109,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: PodTest
+          PRODUCT_NAME: PodTest
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -126,6 +130,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: PodTest
+          PRODUCT_NAME: PodTest
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'

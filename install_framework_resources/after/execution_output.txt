@@ -30,9 +30,9 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `SamplePodWithResources` macOS 10.0
-      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/Info.plist`
       - Generating module map file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/Info.plist`
     - Installing target `Pods-SampleApp` macOS 10.10
       - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`

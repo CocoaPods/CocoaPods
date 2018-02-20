@@ -60,29 +60,29 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `CocoaLumberjack` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/CocoaLumberjack/Info.plist`
       - Generating module map file at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/CocoaLumberjack/Info.plist`
     - Installing target `asserts` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/asserts/Info.plist`
       - Generating module map file at `Pods/Target Support Files/asserts/asserts.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/asserts/asserts-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/asserts/Info.plist`
     - Installing target `logger` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/logger/Info.plist`
       - Generating module map file at `Pods/Target Support Files/logger/logger.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/logger/logger-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/logger/Info.plist`
     - Installing target `sharedlib-Core` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/sharedlib-Core/Info.plist`
       - Generating module map file at `Pods/Target Support Files/sharedlib-Core/sharedlib-Core.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/sharedlib-Core/sharedlib-Core-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/sharedlib-Core/Info.plist`
     - Installing target `sharedlib-Testing` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/sharedlib-Testing/Info.plist`
       - Generating module map file at `Pods/Target Support Files/sharedlib-Testing/sharedlib-Testing.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/sharedlib-Testing/sharedlib-Testing-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/sharedlib-Testing/Info.plist`
     - Installing target `testkit` iOS 8.0
-      - Generating Info.plist file at `Pods/Target Support Files/testkit/Info.plist`
       - Generating module map file at `Pods/Target Support Files/testkit/testkit.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/testkit/testkit-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/testkit/Info.plist`
     - Installing target `Pods-App` iOS 8.0
       - Generating Info.plist file at `Pods/Target Support Files/Pods-App/Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-App/Pods-App.modulemap`

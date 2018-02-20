@@ -62,6 +62,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
@@ -80,6 +81,7 @@ Targets:
         Base Configuration: Pods-iOS App.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
@@ -110,6 +112,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
@@ -133,7 +136,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_OS_X_App
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -141,6 +144,7 @@ Targets:
         Base Configuration: Pods-OS X App.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: ''
@@ -164,7 +168,7 @@ Targets:
           OTHER_LIBTOOLFLAGS: ''
           PODS_ROOT: "$(SRCROOT)"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: Pods_OS_X_App
+          PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -196,6 +200,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: PodTest
+          PRODUCT_NAME: PodTest-subspec_1
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -215,6 +221,8 @@ Targets:
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
           PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: PodTest
+          PRODUCT_NAME: PodTest-subspec_1
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
@@ -259,6 +267,7 @@ Targets:
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap
+          PRODUCT_MODULE_NAME: PodTest
           PRODUCT_NAME: PodTest
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
@@ -287,6 +296,7 @@ Targets:
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.6'
           MODULEMAP_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap
+          PRODUCT_MODULE_NAME: PodTest
           PRODUCT_NAME: PodTest
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
