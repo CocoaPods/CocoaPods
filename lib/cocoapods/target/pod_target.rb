@@ -377,6 +377,20 @@ module Pod
       root_spec.name
     end
 
+    # @return [Pathname] the absolute path of the LLVM module map file that
+    #         defines the module structure for the compiler.
+    #
+    def module_map_path
+      basename = "#{label}.modulemap"
+      if requires_frameworks?
+        super
+      elsif file_accessors.any?(&:module_map)
+        build_headers.root + product_module_name + basename
+      else
+        sandbox.public_headers.root + product_module_name + basename
+      end
+    end
+
     # @param  [String] bundle_name
     #         The name of the bundle product, which is given by the +spec+.
     #

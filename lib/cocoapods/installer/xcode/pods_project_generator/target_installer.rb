@@ -82,7 +82,6 @@ module Pod
 
             if target.requires_frameworks?
               framework_name = target.product_module_name
-              settings['PRODUCT_NAME'] = framework_name
               if target.static_framework?
                 settings['PUBLIC_HEADERS_FOLDER_PATH'] = framework_name + '.framework' + '/Headers'
                 settings['PRIVATE_HEADERS_FOLDER_PATH'] = framework_name + '.framework' + '/PrivateHeaders'
@@ -105,6 +104,7 @@ module Pod
           # @return [Void]
           #
           def update_changed_file(generator, path)
+            path.dirname.mkpath
             if path.exist?
               generator.save_as(support_files_temp_dir)
               unless FileUtils.identical?(support_files_temp_dir, path)
@@ -168,9 +168,6 @@ module Pod
 
           # Creates the module map file which ensures that the umbrella header is
           # recognized with a customized path
-          #
-          # @yield_param [Generator::ModuleMap]
-          #              yielded once to configure the private headers
           #
           # @return [void]
           #

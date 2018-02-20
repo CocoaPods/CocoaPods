@@ -95,7 +95,9 @@ module Pod
     # @return [Boolean] Whether the target should build a static framework.
     #
     def static_framework?
-      !is_a?(Pod::AggregateTarget) && specs.any? && specs.flat_map(&:root).all?(&:static_framework)
+      return if is_a?(Pod::AggregateTarget)
+      return if specs.empty?
+      specs.all? { |spec| spec.root.static_framework }
     end
 
     #-------------------------------------------------------------------------#
@@ -148,14 +150,15 @@ module Pod
     #         module map.
     #
     def umbrella_header_path
-      support_files_dir + "#{label}-umbrella.h"
+      module_map_path.parent + "#{label}-umbrella.h"
     end
 
     # @return [Pathname] the absolute path of the LLVM module map file that
     #         defines the module structure for the compiler.
     #
     def module_map_path
-      support_files_dir + "#{label}.modulemap"
+      basename = "#{label}.modulemap"
+      support_files_dir + basename
     end
 
     # @return [Pathname] the absolute path of the bridge support file.

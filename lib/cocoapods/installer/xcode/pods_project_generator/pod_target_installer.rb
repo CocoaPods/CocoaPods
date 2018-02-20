@@ -27,11 +27,11 @@ module Pod
               add_files_to_build_phases
               create_xcconfig_file
               create_test_xcconfig_files if target.contains_test_specifications?
-              if target.requires_frameworks?
-                unless target.static_framework?
-                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
+
+              if target.defines_module?
+                create_module_map do |generator|
+                  generator.headers.concat module_map_additional_headers
                 end
-                create_module_map
                 create_umbrella_header do |generator|
                   file_accessors = target.file_accessors
                   file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
@@ -41,13 +41,22 @@ module Pod
                                          end
                                        else
                                          file_accessors.flat_map(&:public_headers).map(&:basename)
-                                       end
+                                      end
+                end
+              end
+
+              if target.requires_frameworks?
+                unless target.static_framework?
+                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
                 create_build_phase_to_symlink_header_folders
                 if target.static_framework?
                   create_build_phase_to_move_static_framework_archive
                 end
+              elsif target.uses_swift?
+                add_swift_static_library_compatibility_header_phase
               end
+
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
                 file_accessors = target.file_accessors.reject { |f| f.spec.test_specification? }
@@ -63,6 +72,11 @@ module Pod
               create_dummy_source
             end
           end
+
+          # @return [Hash<Pathname,Pathname>] A hash of all umbrella headers, grouped by the directory
+          #         the are stored in
+          #
+          attr_accessor :umbrella_headers_by_dir
 
           private
 
@@ -87,6 +101,9 @@ module Pod
               settings['PUBLIC_HEADERS_FOLDER_PATH'] = ''
             end
 
+            settings['PRODUCT_NAME'] = target.product_basename
+            settings['PRODUCT_MODULE_NAME'] = target.product_module_name
+
             settings['CODE_SIGN_IDENTITY[sdk=appletvos*]'] = ''
             settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'] = ''
             settings['CODE_SIGN_IDENTITY[sdk=watchos*]'] = ''
@@ -96,6 +113,7 @@ module Pod
             if target.swift_version
               settings['SWIFT_VERSION'] = target.swift_version
             end
+
             settings
           end
 
@@ -586,10 +604,7 @@ module Pod
           # @return [PBXFileReference] the file reference of the added file.
           #
           def add_file_to_support_group(path)
-            pod_name = target.pod_name
-            dir = target.support_files_dir
-            group = project.pod_support_files_group(pod_name, dir)
-            group.new_file(path)
+            support_files_group.new_file(path)
           end
 
           def apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
@@ -602,17 +617,32 @@ module Pod
 
           def create_module_map
             return super unless custom_module_map
+
             path = target.module_map_path
             UI.message "- Copying module map file to #{UI.path(path)}" do
-              unless path.exist? && FileUtils.identical?(custom_module_map, path)
-                FileUtils.cp(custom_module_map, path)
+              contents = custom_module_map.read
+              unless target.requires_frameworks?
+                contents.gsub!(/^(\s*)framework\s+(module[^{}]+){/, '\1\2[system] {')
               end
+              generator = Generator::Constant.new(contents)
+              update_changed_file(generator, path)
               add_file_to_support_group(path)
 
               native_target.build_configurations.each do |c|
                 relative_path = path.relative_path_from(sandbox.root)
                 c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
               end
+            end
+          end
+
+          def module_map_additional_headers
+            return [] unless umbrella_headers_by_dir
+
+            other_paths = umbrella_headers_by_dir[target.module_map_path.dirname] - [target.umbrella_header_path]
+            other_paths.map do |module_map_path|
+              # exclude other targets umbrella headers, to avoid
+              # incomplete umbrella warnings
+              Generator::ModuleMap::Header.new(module_map_path.basename, nil, nil, nil, true)
             end
           end
 
@@ -665,6 +695,39 @@ module Pod
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = [acl]
             end
+          end
+
+          def support_files_group
+            pod_name = target.pod_name
+            dir = target.support_files_dir
+            project.pod_support_files_group(pod_name, dir)
+          end
+
+          # Adds a shell script phase, intended only for static library targets that contain swift,
+          # to copy the ObjC compatibility header (the -Swift.h file that the swift compiler generates)
+          # to the built products directory. Additionally, the script phase copies the module map, appending a `.Swift`
+          # submodule that references the (moved) compatibility header.
+          #
+          # @return [Void]
+          #
+          def add_swift_static_library_compatibility_header_phase
+            build_phase = native_target.new_shell_script_build_phase('Copy generated compatibility header')
+            build_phase.shell_script = <<-SH.strip_heredoc
+              COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+              MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+
+              ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+              ditto "${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}" "${MODULE_MAP_PATH}"
+              printf "\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\"${COMPATIBILITY_HEADER_PATH}\\"\\n  requires objc\\n}\\n" >> "${MODULE_MAP_PATH}"
+            SH
+            build_phase.input_paths = %W(
+              ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
+              ${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}
+            )
+            build_phase.output_paths = %w(
+              ${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap
+              ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
+            )
           end
 
           #-----------------------------------------------------------------------#

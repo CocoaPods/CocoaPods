@@ -40,6 +40,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [iv-mexx](https://github.com/iv-mexx)  
   [#7372](https://github.com/CocoaPods/CocoaPods/issues/7372)  
 
+* Add support for integrating swift pods as static libraries.  
+  [Danielle Tomlinson](https://github.com/dantoml)
+  [Samuel Giddins](https://github.com/segiddins)
+  [#6899](https://github.com/CocoaPods/CocoaPods/issues/6899)
+
 ##### Bug Fixes
 
 * Clear input/output paths if they exceed an arbitrary limit  

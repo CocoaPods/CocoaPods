@@ -35,7 +35,7 @@ module Pod
           verify_no_duplicate_framework_and_library_names
           verify_no_static_framework_transitive_dependencies
           verify_no_pods_used_with_multiple_swift_versions
-          verify_framework_usage
+          verify_swift_pods_have_module_dependencies
         end
 
         private
@@ -106,26 +106,34 @@ module Pod
 
           unless error_messages.empty?
             raise Informative, 'The following pods are integrated into targets ' \
-            "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
+              "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
           end
         end
 
-        def verify_framework_usage
-          aggregate_targets.each do |aggregate_target|
-            next if aggregate_target.requires_frameworks?
+        def verify_swift_pods_have_module_dependencies
+          error_messages = []
+          pod_targets.each do |pod_target|
+            next unless pod_target.uses_swift?
 
-            aggregate_target.user_build_configurations.keys.each do |config|
-              pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
-
-              swift_pods = pod_targets.select(&:uses_swift?)
-              unless swift_pods.empty?
-                raise Informative, 'Pods written in Swift can only be integrated as frameworks; ' \
-                  'add `use_frameworks!` to your Podfile or target to opt into using it. ' \
-                  "The Swift #{swift_pods.size == 1 ? 'Pod being used is' : 'Pods being used are'}: " +
-                  swift_pods.map(&:name).to_sentence
-              end
+            non_module_dependencies = []
+            pod_target.dependent_targets.each do |dependent_target|
+              next if !dependent_target.should_build? || dependent_target.defines_module?
+              non_module_dependencies << dependent_target.name
             end
+
+            next if non_module_dependencies.empty?
+
+            error_messages << "The swift pod `#{pod_target.name}` depends upon #{non_module_dependencies.map { |d| "`#{d}`" }.to_sentence}, " \
+                              'which do not define modules. ' \
+                              'To opt into those targets generating module maps '\
+                              '(which is necessary to import them from swift when building as static libraries), ' \
+                              'you may set `use_modular_header!` globally in your Podfile, '\
+                              'or specify `:modular_headers => true` for particular dependencies.'
           end
+          return if error_messages.empty?
+
+          raise Informative, 'The following swift pods cannot yet be integrated '\
+                             "as static libraries:\n\n#{error_messages.join("\n\n")}"
         end
       end
     end
