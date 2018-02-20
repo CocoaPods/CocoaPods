@@ -13,8 +13,4 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '9.0'
   s.macos.deployment_target = '10.10'
-
-  s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
-  }
 end

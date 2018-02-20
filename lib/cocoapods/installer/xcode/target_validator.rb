@@ -127,7 +127,8 @@ module Pod
                               'which do not define modules. ' \
                               'To opt into those targets generating module maps '\
                               '(which is necessary to import them from swift when building as static libraries), ' \
-                              "you may add `'DEFINES_MODULE' => 'YES'` to those pods' `pod_target_xcconfig`."
+                              'you may set `use_modular_header!` globally in your Podfile, '\
+                              'or specify `:modular_headers => true` for particular dependencies.'
           end
           return if error_messages.empty?
 
