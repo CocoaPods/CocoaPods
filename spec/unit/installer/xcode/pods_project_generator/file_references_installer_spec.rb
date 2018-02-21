@@ -90,11 +90,11 @@ module Pod
               framework_subdir_header = headers_root + 'BananaLib/Bananalib/SubDir/SubBananalib.h'
               public_headers.each { |public_header| public_header.should.exist }
               private_header.should.not.exist
-              framework_header.should.exist
-              framework_subdir_header.should.exist
+              framework_header.should.not.exist
+              framework_subdir_header.should.not.exist
             end
 
-            it 'links the public headers meant for the user, but only for Pods that are not built' do
+            it 'does not link the public headers meant for the user for a vendored framework' do
               Target.any_instance.stubs(:requires_frameworks?).returns(true)
               pod_target_one = fixture_pod_target('banana-lib/BananaLib.podspec')
               pod_target_two = fixture_pod_target('monkey/monkey.podspec')
@@ -107,7 +107,7 @@ module Pod
               banana_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
               banana_headers.each { |banana_header| banana_header.should.not.exist }
               monkey_header = headers_root + 'monkey/monkey/monkey.h'
-              monkey_header.should.exist
+              monkey_header.should.not.exist
             end
 
             it "doesn't link public headers from vendored framework, when frameworks required" do
@@ -299,19 +299,6 @@ module Pod
                 paths = []
                 result = @installer.send(:common_path, paths)
                 result.should.be.nil
-              end
-            end
-
-            describe '#vendored_frameworks_header_mappings' do
-              it 'returns the vendored frameworks header mappings' do
-                headers_sandbox = Pathname.new('BananaLib')
-                header = @file_accessor.root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h'
-                header_subdir = @file_accessor.root + 'Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h'
-                mappings = @installer.send(:vendored_frameworks_header_mappings, headers_sandbox, @file_accessor)
-                mappings.should == {
-                  (headers_sandbox + 'Bananalib') => [header],
-                  (headers_sandbox + 'Bananalib/SubDir') => [header_subdir],
-                }
               end
             end
           end

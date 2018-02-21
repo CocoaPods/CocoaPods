@@ -115,7 +115,7 @@ module Pod
         config.verbose = true
         @hooks_manager.register('plugin', :post_install) {}
         @hooks_manager.run(:post_install, Object.new)
-        UI.output.should.match %r{- plugin from `spec/unit/hooks_manager_spec.rb`}
+        UI.output.should.include "- plugin from `#{__FILE__}`"
       end
     end
   end
