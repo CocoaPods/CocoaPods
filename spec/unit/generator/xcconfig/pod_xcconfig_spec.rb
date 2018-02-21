@@ -259,11 +259,13 @@ module Pod
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib" "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib"'
           end
 
-          it 'adds correct header search paths for dependent and test targets' do
+          it 'adds correct header search paths for dependent and test targets without modular headers' do
             @monkey_pod_target.build_headers.add_search_path('monkey', Platform.ios)
             @monkey_pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
             @banana_pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
             @banana_pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+            @coconut_pod_target.stubs(:uses_modular_headers?).returns(false)
+            @coconut_pod_target.stubs(:defines_module?).returns(false)
             @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
@@ -276,11 +278,13 @@ module Pod
               ' "${PODS_ROOT}/Headers/Public/monkey" "${PODS_ROOT}/Headers/Public/monkey/monkey"'
           end
 
-          it 'adds correct header search paths for dependent and test targets for non test xcconfigs' do
+          it 'adds correct header search paths for dependent and test targets for non test xcconfigs without modular headers' do
             @monkey_pod_target.build_headers.add_search_path('monkey', Platform.ios)
             @monkey_pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
             @banana_pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
             @banana_pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+            @coconut_pod_target.stubs(:uses_modular_headers?).returns(false)
+            @coconut_pod_target.stubs(:defines_module?).returns(false)
             @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
@@ -290,7 +294,45 @@ module Pod
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
               ' "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/BananaLib/BananaLib"' \
-              ' "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/CoconutLib/CoconutLib"'
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/CoconutLib/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/monkey" "${PODS_ROOT}/Headers/Public/monkey/monkey"'
+          end
+
+          it 'adds correct header search paths for dependent and test targets with modular headers' do
+            @monkey_pod_target.build_headers.add_search_path('monkey', Platform.ios)
+            @monkey_pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
+            @banana_pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+            @banana_pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+            @coconut_pod_target.stubs(:uses_modular_headers?).returns(true)
+            @coconut_pod_target.stubs(:defines_module?).returns(true)
+            @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
+            @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
+            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.dependent_targets = [@banana_pod_target]
+            generator = PodXCConfig.new(@coconut_pod_target, true)
+            xcconfig = generator.generate
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/BananaLib"' \
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/monkey"'
+          end
+
+          it 'adds correct header search paths for dependent and test targets for non test xcconfigs with modular headers' do
+            @monkey_pod_target.build_headers.add_search_path('monkey', Platform.ios)
+            @monkey_pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
+            @banana_pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+            @banana_pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+            @coconut_pod_target.stubs(:uses_modular_headers?).returns(true)
+            @coconut_pod_target.stubs(:defines_module?).returns(true)
+            @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
+            @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
+            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.dependent_targets = [@banana_pod_target]
+            generator = PodXCConfig.new(@coconut_pod_target, false)
+            xcconfig = generator.generate
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/BananaLib"' \
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib"' \
           end
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do

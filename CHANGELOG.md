@@ -87,6 +87,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   instead of via the sandbox headers store.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fix legacy header search paths that broke due to #7116 and #7412.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7445](https://github.com/CocoaPods/CocoaPods/pull/7445)
 
 ## 1.4.0 (2018-01-18)
 
