@@ -280,6 +280,31 @@ module Pod
             '${PODS_ROOT}/Headers/Public/BananaLib/BananaLib',
           ]
         end
+
+        # This is a legacy header search paths test support that adds header search paths for all dependencies
+        # even the ones that are not part of the podspec. It is how CocoaPods always worked until support for modular
+        # header search paths support was added in > 1.4.0
+        it 'includes header search paths for all dependent targets' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('matryoshka', Platform.ios)
+          monkey_spec = fixture_spec('monkey/monkey.podspec')
+          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          # Notice that pod target does not depend on `matryoshka` but it will still include its header search paths
+          @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib',
+            '${PODS_ROOT}/Headers/Public/BananaLib/BananaLib',
+            '${PODS_ROOT}/Headers/Public/matryoshka',
+            '${PODS_ROOT}/Headers/Public/matryoshka/matryoshka',
+            '${PODS_ROOT}/Headers/Public/monkey',
+            '${PODS_ROOT}/Headers/Public/monkey/monkey',
+          ]
+        end
       end
 
       describe 'modular header search paths' do
