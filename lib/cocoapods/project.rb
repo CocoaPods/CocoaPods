@@ -40,6 +40,15 @@ module Pod
     #
     attr_reader :development_pods
 
+    # Overridden to generate UUIDs in a much faster way, since we don't need to check for collisions
+    # (as the Pods project is regenerated each time, and thus all UUIDs will have come from this method)
+    def generate_available_uuid_list(count = 100)
+      start = @generated_uuids.size
+      uniques = Array.new(count) { |i| format('%011X0', start + i) }
+      @generated_uuids += uniques
+      @available_uuids += uniques
+    end
+
     public
 
     # @!group Legacy Xcode build root
