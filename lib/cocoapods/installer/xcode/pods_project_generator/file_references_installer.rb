@@ -135,27 +135,28 @@ module Pod
           def link_headers
             UI.message '- Linking headers' do
               pod_targets.each do |pod_target|
+                # When integrating Pod as frameworks, built Pods are built into
+                # frameworks, whose headers are included inside the built
+                # framework. Those headers do not need to be linked from the
+                # sandbox.
+                next if pod_target.requires_frameworks? && pod_target.should_build?
+
+                headers_sandbox = Pathname.new(pod_target.pod_name)
+                added_build_headers = false
+                added_public_headers = false
+
                 pod_target.file_accessors.each do |file_accessor|
-                  # When integrating Pod as frameworks, built Pods are built into
-                  # frameworks, whose headers are included inside the built
-                  # framework. Those headers do not need to be linked from the
-                  # sandbox.
-                  next if pod_target.requires_frameworks? || !pod_target.should_build?
-
-                  headers_sandbox = Pathname.new(file_accessor.spec.root.name)
-
-                  pod_target.build_headers.add_search_path(headers_sandbox, pod_target.platform)
-                  sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform)
-
                   # Private headers will always end up in Pods/Headers/Private/PodA/*.h
                   # This will allow for `""` imports to work.
                   header_mappings(headers_sandbox, file_accessor, file_accessor.headers).each do |namespaced_path, files|
+                    added_build_headers = true
                     pod_target.build_headers.add_files(namespaced_path, files)
                   end
 
                   # Public headers on the other hand will be added in Pods/Headers/Public/PodA/PodA/*.h
                   # The extra folder is intentional in order for `<>` imports to work.
                   header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers, :public).each do |namespaced_path, files|
+                    added_public_headers = true
                     sandbox.public_headers.add_files(namespaced_path, files)
                   end
 
@@ -165,6 +166,9 @@ module Pod
                     end
                   end
                 end
+
+                pod_target.build_headers.add_search_path(headers_sandbox, pod_target.platform) if added_build_headers
+                sandbox.public_headers.add_search_path(headers_sandbox, pod_target.platform) if added_public_headers
               end
             end
           end
