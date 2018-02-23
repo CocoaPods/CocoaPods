@@ -86,6 +86,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7445](https://github.com/CocoaPods/CocoaPods/pull/7445)
 
+* Stop adding header search paths that do not contain any headers.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ## 1.4.0 (2018-01-18)
 
 ##### Enhancements
