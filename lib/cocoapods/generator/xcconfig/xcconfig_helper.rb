@@ -140,8 +140,7 @@ module Pod
         #
         def self.links_dependency?(aggregate_target, pod_target)
           return true if aggregate_target.nil? || aggregate_target.target_definition.inheritance == 'complete'
-          targets = aggregate_target.pod_targets - aggregate_target.search_paths_aggregate_targets.flat_map(&:pod_targets)
-          targets.include?(pod_target)
+          aggregate_target.pod_targets_to_link.include?(pod_target)
         end
 
         # Adds build settings for dynamic vendored frameworks and libraries.
