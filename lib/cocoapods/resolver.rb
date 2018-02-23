@@ -85,9 +85,11 @@ module Pod
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     # @param  [Array<Source>, Source] sources @see sources
     #
-    def initialize(sandbox, podfile, locked_dependencies, sources)
+    def initialize(sandbox, podfile, locked_dependencies, sources,
+                   podfile_dependency_cache: Installer::Analyzer::PodfileDependencyCache.from_podfile(podfile))
       @sandbox = sandbox
       @podfile = podfile
+      @podfile_dependency_cache = podfile_dependency_cache
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
@@ -107,11 +109,13 @@ module Pod
     #         definition.
     #
     def resolve
-      dependencies = podfile.target_definition_list.flat_map do |target|
-        target.dependencies.each do |dep|
-          @platforms_by_dependency[dep].push(target.platform).uniq! if target.platform
+      dependencies = @podfile_dependency_cache.target_definition_list.flat_map do |target|
+        @podfile_dependency_cache.target_definition_dependencies(target).each do |dep|
+          next unless target.platform
+          @platforms_by_dependency[dep].push(target.platform)
         end
       end
+      @platforms_by_dependency.each_value(&:uniq!)
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       resolver_specs_by_target
     rescue Molinillo::ResolverError => e
@@ -125,9 +129,9 @@ module Pod
     #
     def resolver_specs_by_target
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
-        podfile.target_definition_list.each do |target|
-          dependencies = {}
-          specs = target.dependencies.flat_map do |dep|
+        dependencies = {}
+        @podfile_dependency_cache.target_definition_list.each do |target|
+          specs = @podfile_dependency_cache.target_definition_dependencies(target).flat_map do |dep|
             name = dep.name
             node = @activated.vertex_named(name)
             (valid_dependencies_for_target_from_node(target, dependencies, node) << node).map { |s| [s, node.payload.test_specification?] }
@@ -559,11 +563,11 @@ module Pod
     #         dependencies for `target`.
     #
     def valid_dependencies_for_target_from_node(target, dependencies, node)
-      dependencies[node.name] ||= begin
+      dependencies[[node.name, target.platform]] ||= begin
         validate_platform(node.payload, target)
         dependency_nodes = []
         node.outgoing_edges.each do |edge|
-          next unless edge_is_valid_for_target?(edge, target)
+          next unless edge_is_valid_for_target_platform?(edge, target.platform)
           dependency_nodes << edge.destination
         end
 
@@ -574,14 +578,14 @@ module Pod
     end
 
     # Whether the given `edge` should be followed to find dependencies for the
-    # given `target`.
+    # given `target_platform`.
     #
     # @return [Bool]
     #
-    def edge_is_valid_for_target?(edge, target)
+    def edge_is_valid_for_target_platform?(edge, target_platform)
       requirement_name = edge.requirement.name
 
-      edge.origin.payload.all_dependencies(target.platform).any? do |dep|
+      edge.origin.payload.all_dependencies(target_platform).any? do |dep|
         dep.name == requirement_name
       end
     end
