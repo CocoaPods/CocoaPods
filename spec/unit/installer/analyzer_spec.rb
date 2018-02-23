@@ -598,8 +598,11 @@ module Pod
       it 'fetches the dependencies with external sources' do
         podfile_state = Installer::Analyzer::SpecsState.new
         podfile_state.added << 'BananaLib'
+        @podfile = Podfile.new do
+          pod 'BananaLib', :git => 'example.com'
+        end
+        @analyzer = Installer::Analyzer.new(@sandbox, @podfile)
         @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
-        @podfile.stubs(:dependencies).returns([Dependency.new('BananaLib', :git => 'example.com')])
         ExternalSources::DownloaderSource.any_instance.expects(:fetch)
         @analyzer.send(:fetch_external_sources)
       end
@@ -607,11 +610,12 @@ module Pod
       it 'does not download the same source multiple times for different subspecs' do
         podfile_state = Installer::Analyzer::SpecsState.new
         podfile_state.added << 'ARAnalytics'
+        @podfile = Podfile.new do
+          pod 'ARAnalytics/Mixpanel', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'
+          pod 'ARAnalytics/HockeyApp', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'
+        end
+        @analyzer = Installer::Analyzer.new(@sandbox, @podfile)
         @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
-        @podfile.stubs(:dependencies).returns([
-          Dependency.new('ARAnalytics/Mixpanel', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
-          Dependency.new('ARAnalytics/HockeyApp', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'),
-        ])
         ExternalSources::DownloaderSource.any_instance.expects(:fetch).once
         @analyzer.send(:fetch_external_sources)
       end
@@ -984,7 +988,7 @@ module Pod
     describe 'podfile validation' do
       before do
         @sandbox = stub('Sandbox')
-        @podfile = stub('Podfile')
+        @podfile = Podfile.new
         @analyzer = Installer::Analyzer.new(@sandbox, @podfile)
       end
 
