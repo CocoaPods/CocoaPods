@@ -90,11 +90,9 @@ module Pod
             end
           end
           XCConfigHelper.add_dynamic_dependency_build_settings(target, pod_target, xcconfig, include_ld_flags, test_xcconfig)
-
-          pod_target.dependent_targets.each do |dependent_target|
-            XCConfigHelper.add_dynamic_dependency_build_settings(target, dependent_target, xcconfig, include_ld_flags, test_xcconfig)
-            dependent_target.file_accessors.each do |file_accessor|
-              XCConfigHelper.add_static_dependency_build_settings(target, dependent_target, xcconfig, file_accessor, false)
+          if pod_target.requires_frameworks?
+            pod_target.dependent_targets.each do |dependent_target|
+              XCConfigHelper.add_dynamic_dependency_build_settings(target, dependent_target, xcconfig, include_ld_flags, test_xcconfig)
             end
           end
         end
