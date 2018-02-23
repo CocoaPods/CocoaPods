@@ -90,8 +90,13 @@ module Pod
               framework_subdir_header = headers_root + 'BananaLib/Bananalib/SubDir/SubBananalib.h'
               public_headers.each { |public_header| public_header.should.exist }
               private_header.should.not.exist
-              framework_header.should.not.exist
-              framework_subdir_header.should.not.exist
+              framework_header.should.exist
+              framework_subdir_header.should.exist
+
+              config.sandbox.public_headers.search_paths(@pod_target.platform).should == %w(
+                ${PODS_ROOT}/Headers/Public/BananaLib
+                ${PODS_ROOT}/Headers/Public/BananaLib/BananaLib
+              )
             end
 
             it 'does not link the public headers meant for the user for a vendored framework' do

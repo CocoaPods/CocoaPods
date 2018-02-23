@@ -82,11 +82,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Avoid dependency resolution conflicts when a pod depends upon a local pod.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* When integrating a vendored framework while building pods as static 
-  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS` 
-  instead of via the sandbox headers store.  
-  [Samuel Giddins](https://github.com/segiddins)
-
 * Fix legacy header search paths that broke due to #7116 and #7412.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7445](https://github.com/CocoaPods/CocoaPods/pull/7445)
