@@ -162,6 +162,7 @@ module Pod
 
                   unless pod_target.requires_frameworks?
                     vendored_frameworks_header_mappings(headers_sandbox, file_accessor).each do |namespaced_path, files|
+                      added_public_headers = true
                       sandbox.public_headers.add_files(namespaced_path, files)
                     end
                   end
