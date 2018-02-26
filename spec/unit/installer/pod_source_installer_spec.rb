@@ -40,6 +40,14 @@ module Pod
         UI.warnings.length.should.equal(0)
       end
 
+      it 'does not show warning if the source uses file:///' do
+        @spec.source = { :http => 'file:///orta.io/sdk.zip' }
+        dummy_response = Pod::Downloader::Response.new
+        Downloader.stubs(:download).returns(dummy_response)
+        @installer.install!
+        UI.warnings.length.should.equal(0)
+      end
+
       it 'shows a warning if the source is unencrypted (e.g. http)' do
         @spec.source = { :http => 'http://orta.io/sdk.zip' }
         dummy_response = Pod::Downloader::Response.new

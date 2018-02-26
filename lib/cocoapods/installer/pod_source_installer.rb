@@ -132,9 +132,8 @@ module Pod
       #
       def verify_source_is_secure(root_spec)
         return if root_spec.source.nil? || root_spec.source[:http].nil?
-        http_source = root_spec.source[:http]
-        return if http_source.downcase.start_with?('https://')
-
+        http_source = URI(root_spec.source[:http])
+        return if http_source.scheme == 'https' || http_source.scheme == 'file'
         UI.warn "'#{root_spec.name}' uses the unencrypted http protocol to transfer the Pod. " \
                 'Please be sure you\'re in a safe network with only trusted hosts in there. ' \
                 'Please reach out to the library author to notify them of this security issue.'
