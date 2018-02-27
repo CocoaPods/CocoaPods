@@ -321,8 +321,17 @@ module Pod
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
           if sandbox_state.changed.include?(spec.name) && sandbox.manifest
-            previous = sandbox.manifest.version(spec.name)
-            title = "Installing #{spec.name} #{spec.version} (was #{previous})"
+            current_version = spec.version
+            previous_version = sandbox.manifest.version(spec.name)
+            has_changed_version = current_version != previous_version
+            current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
+            current_repo &&= current_repo.url || current_repo.name
+            previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
+            has_changed_repo = !previous_spec_repo.nil? && current_repo && (current_repo != previous_spec_repo)
+            title = "Installing #{spec.name} #{spec.version}"
+            title << " (was #{previous_version} and source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if has_changed_version && has_changed_repo
+            title << " (was #{previous_version})" if has_changed_version && !has_changed_repo
+            title << " (source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if !has_changed_version && has_changed_repo
           else
             title = "Installing #{spec}"
           end
