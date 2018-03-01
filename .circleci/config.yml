@@ -1,12 +1,14 @@
 version: 2.0
 
 refrences:
-  macos_steps: &steps
+  cache_key: &bundle_cache_key
+    v2-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+  steps: &steps
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch}}
+            - *bundle_cache_key
       - run: bundle config
       - run:
           name: Fetch CocoaPods Specs
@@ -38,12 +40,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
-      - run: bundle check || bundle install --path .bundle
+            - *bundle_cache_key
+      - run: bundle check || bundle install
       - save_cache:
-          key: v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+          key: *bundle_cache_key
           paths:
-            - ".bundle"
+            - "/usr/local/bundle"
   macos-cache:
     macos:
       xcode: "9.2.0"
@@ -51,10 +53,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+            - *bundle_cache_key
       - run: bundle check || bundle install --path .bundle
       - save_cache:
-          key: v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+          key: *bundle_cache_key
           paths:
             - ".bundle"
 
