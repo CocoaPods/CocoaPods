@@ -7,6 +7,7 @@ refrences:
       - restore_cache:
           keys:
             - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch}}
+      - run: bundle config
       - run:
           name: Fetch CocoaPods Specs
           command: |
@@ -27,7 +28,6 @@ refrences:
           command: |
             git config --global user.email "tests@cocoapods.org"
             git config --global user.name "CocoaPods Tests"
-      - run: bundle exec pod env
       - run: bundle exec rake spec:all
 
 jobs:
@@ -62,7 +62,6 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      BUNDLE_PATH: './.bundle'
       COCOAPODS_CI_TASKS: EXAMPLES
     <<: *steps
 
@@ -70,7 +69,6 @@ jobs:
     docker:
       - image: circleci/ruby:2.4
     environment:
-      BUNDLE_PATH: './.bundle'
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
 
@@ -78,7 +76,6 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      BUNDLE_PATH: './.bundle'
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
 
@@ -86,7 +83,6 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
-      BUNDLE_PATH: './.bundle'
       COCOAPODS_CI_TASKS: LINT
     <<: *steps
 
