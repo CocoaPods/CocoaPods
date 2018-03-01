@@ -40,7 +40,6 @@ jobs:
       BUNDLE_PATH: ''
       BUNDLE_BIN: ''
       BUNDLE_APP_CONFIG: ''
-    working_directory: /cocoapods
     steps:
       - checkout
       - restore_cache:
@@ -75,7 +74,6 @@ jobs:
   specs-linux_2.4:
     docker:
       - image: circleci/ruby:2.4
-    working_directory: /cocoapods
     environment:
       BUNDLE_PATH: ''
       BUNDLE_BIN: ''
@@ -93,7 +91,6 @@ jobs:
   lint:
     docker:
       - image: circleci/ruby:2.4
-    working_directory: /cocoapods
     environment:
       BUNDLE_PATH: ''
       BUNDLE_BIN: ''
