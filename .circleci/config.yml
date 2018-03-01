@@ -1,12 +1,12 @@
 version: 2.0
 
 refrences:
-  steps: &steps
+  macos_steps: &steps
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-{{ checksum "Gemfile.lock" }}
+            - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch}}
       - run:
           name: Fetch CocoaPods Specs
           command: |
@@ -31,17 +31,30 @@ refrences:
       - run: bundle exec rake spec:all
 
 jobs:
-  warm-cache:
+  linux-cache:
+    docker:
+      - image: circleci/ruby:2.4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+      - run: bundle check || bundle install --path .bundle
+      - save_cache:
+          key: v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+          paths:
+            - ".bundle"
+  macos-cache:
     macos:
       xcode: "9.2.0"
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-gems-{{ checksum "Gemfile.lock" }}
+            - v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
       - run: bundle check || bundle install --path .bundle
       - save_cache:
-          key: v1-gems-{{ checksum "Gemfile.lock" }}
+          key: v1-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
           paths:
             - ".bundle"
 
@@ -51,24 +64,28 @@ jobs:
     environment:
       COCOAPODS_CI_TASKS: EXAMPLES
     <<: *steps
+
   specs-linux_2.4:
     docker:
       - image: circleci/ruby:2.4
     environment:
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
+
   specs-macos_system:
     macos:
       xcode: "9.2.0"
     environment:
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
+
   lint:
     macos:
       xcode: "9.2.0"
     environment:
       COCOAPODS_CI_TASKS: LINT
     <<: *steps
+
   danger:
     docker:
       - image: dantoml/danger
@@ -80,18 +97,21 @@ workflows:
   version: 2
   build-test:
     jobs:
-      - warm-cache
-      - danger
-      - lint:
-          requires:
-            - warm-cache
+      - macos-cache
       - specs-macos_system:
           requires:
-            - warm-cache
-      - specs-linux_2.4:
-          requires:
-            - warm-cache
+            - macos-cache
       - examples:
           requires:
-            - warm-cache
+            - macos-cache
+
+      - linux-cache
+      - lint:
+          requires:
+            - linux-cache
+      - specs-linux_2.4:
+          requires:
+            - linux-cache
+
+      - danger
 
