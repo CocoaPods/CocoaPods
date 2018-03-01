@@ -36,6 +36,7 @@ jobs:
   linux-cache:
     docker:
       - image: ruby:2.4
+    working_directory: /cocoapods
     steps:
       - checkout
       - restore_cache:
@@ -70,6 +71,7 @@ jobs:
   specs-linux_2.4:
     docker:
       - image: ruby:2.4
+    working_directory: /cocoapods
     environment:
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
@@ -84,6 +86,7 @@ jobs:
   lint:
     docker:
       - image: ruby:2.4
+    working_directory: /cocoapods
     environment:
       COCOAPODS_CI_TASKS: LINT
     <<: *steps
