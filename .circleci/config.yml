@@ -2,7 +2,7 @@ version: 2.0
 
 refrences:
   cache_key: &bundle_cache_key
-    v2-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+    v3-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
   steps: &steps
     steps:
       - checkout
