@@ -209,7 +209,7 @@ begin
         tarballs.each do |tarball|
           basename = File.basename(tarball)
           Dir.chdir(File.dirname(tarball)) do
-            sh "rm -rf #{basename[0..-8]} && tar -zxf #{basename} --owner $(whoami) --group $(whoami) --no-same-owner"
+            sh "rm -rf #{basename[0..-8]} && tar -zxf #{basename} --no-same-owner"
           end
         end
       end
