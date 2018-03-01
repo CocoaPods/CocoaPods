@@ -35,7 +35,7 @@ refrences:
 jobs:
   linux-cache:
     docker:
-      - image: circleci/ruby:2.4
+      - image: ruby:2.4
     steps:
       - checkout
       - restore_cache:
@@ -69,7 +69,7 @@ jobs:
 
   specs-linux_2.4:
     docker:
-      - image: circleci/ruby:2.4
+      - image: ruby:2.4
     environment:
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
@@ -82,8 +82,8 @@ jobs:
     <<: *steps
 
   lint:
-    macos:
-      xcode: "9.2.0"
+    docker:
+      - image: ruby:2.4
     environment:
       COCOAPODS_CI_TASKS: LINT
     <<: *steps
