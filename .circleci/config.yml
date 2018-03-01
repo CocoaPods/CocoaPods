@@ -2,7 +2,7 @@ version: 2.0
 
 refrences:
   cache_key: &bundle_cache_key
-    v3-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
+    v4-gems-{{ checksum "Gemfile.lock" }}-{{ arch }}
   steps: &steps
     steps:
       - checkout
@@ -35,18 +35,22 @@ refrences:
 jobs:
   linux-cache:
     docker:
-      - image: ruby:2.4
+      - image: circleci/ruby:2.4
+    environment:
+      BUNDLE_PATH: ''
+      BUNDLE_BIN: ''
+      BUNDLE_APP_CONFIG: ''
     working_directory: /cocoapods
     steps:
       - checkout
       - restore_cache:
           keys:
             - *bundle_cache_key
-      - run: bundle check || bundle install
+      - run: bundle check || bundle install --path .bundle
       - save_cache:
           key: *bundle_cache_key
           paths:
-            - "/usr/local/bundle"
+            - ".bundle"
   macos-cache:
     macos:
       xcode: "9.2.0"
@@ -70,9 +74,12 @@ jobs:
 
   specs-linux_2.4:
     docker:
-      - image: ruby:2.4
+      - image: circleci/ruby:2.4
     working_directory: /cocoapods
     environment:
+      BUNDLE_PATH: ''
+      BUNDLE_BIN: ''
+      BUNDLE_APP_CONFIG: ''
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
 
@@ -85,9 +92,12 @@ jobs:
 
   lint:
     docker:
-      - image: ruby:2.4
+      - image: circleci/ruby:2.4
     working_directory: /cocoapods
     environment:
+      BUNDLE_PATH: ''
+      BUNDLE_BIN: ''
+      BUNDLE_APP_CONFIG: ''
       COCOAPODS_CI_TASKS: LINT
     <<: *steps
 
