@@ -4,22 +4,24 @@ refrences:
   steps: &steps
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - v1-gems-{{ checksum "Gemfile.lock" }}
       - run:
-          name: Setup Dependencies
-          command: |
-            sudo gem update --system
-            bundle check || bundle install --path .bundle
-      - save_cache:
-          key: v1-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ".bundle"
-      - run:
           name: Fetch CocoaPods Specs
-          command: .circle-scripts/fetch-cocoapods-repo-from-s3.sh
+          command: |
+            if [ "$COCOAPODS_CI_TASKS" != "LINT" ]; then
+              master_sha="$(ruby -e "puts '`git submodule status spec/fixtures/spec-repos/master`'.strip.sub(/^-/, '').split(/\s/, 2).first")"
+              curl -ssL "https://github.com/CocoaPods/Specs/archive/$master_sha.tar.gz" | tar xz -C spec/fixtures/spec-repos
+              git rm spec/fixtures/spec-repos/master
+              mv "spec/fixtures/spec-repos/Specs-$master_sha" spec/fixtures/spec-repos/master
+              (
+                cd spec/fixtures/spec-repos/master
+                git init
+                git remote add origin https://github.com/CocoaPods/Specs.git
+              )
+              git submodule update --init
+            fi
       - run:
           name: Setup Git
           command: |
@@ -29,13 +31,33 @@ refrences:
       - run: bundle exec rake spec:all
 
 jobs:
+  warm-cache:
+    macos:
+      xcode: "9.2.0"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install --path .bundle
+      - save_cache:
+          key: v1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ".bundle"
+
   examples:
     macos:
       xcode: "9.2.0"
     environment:
       COCOAPODS_CI_TASKS: EXAMPLES
     <<: *steps
-  specs:
+  specs-linux_2.4:
+    docker:
+      - image: circleci/ruby:2.4
+    environment:
+      COCOAPODS_CI_TASKS: SPECS
+    <<: *steps
+  specs-macos_system:
     macos:
       xcode: "9.2.0"
     environment:
@@ -58,8 +80,18 @@ workflows:
   version: 2
   build-test:
     jobs:
-      - lint
+      - warm-cache
       - danger
-      - specs
-      - examples
+      - lint:
+          requires:
+            - warm-cache
+      - specs-macos_system:
+          requires:
+            - warm-cache
+      - specs-linux_2.4:
+          requires:
+            - warm-cache
+      - examples:
+          requires:
+            - warm-cache
 
