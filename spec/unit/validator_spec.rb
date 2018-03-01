@@ -259,7 +259,7 @@ module Pod
           end
         end
 
-        describe 'documentation URL validation' do
+        describe 'source URL validation' do
           before do
             @validator.unstub(:validate_source_url)
           end
@@ -275,9 +275,15 @@ module Pod
             @validator.validate
             @validator.results.map(&:to_s).first.should.match /use the encrypted HTTPs protocol./
           end
+
+          it 'should not fail validation if the source URL is using file:///' do
+            Specification.any_instance.stubs(:source).returns(:http => 'file:///orta.io/package.zip')
+            @validator.validate
+            @validator.results.should.be.empty?
+          end
         end
 
-        describe 'source URL validation' do
+        describe 'documentation URL validation' do
           before do
             @validator.unstub(:validate_documentation_url)
           end
