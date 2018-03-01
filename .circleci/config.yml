@@ -1,8 +1,7 @@
 version: 2.0
-jobs:
-  build:
-    macos:
-      xcode: "9.2.0"
+
+refrences:
+  steps: &steps
     steps:
       - checkout
 
@@ -27,8 +26,40 @@ jobs:
             git config --global user.email "tests@cocoapods.org"
             git config --global user.name "CocoaPods Tests"
       - run: bundle exec pod env
-      - run:
-          name: Run Examples
-          command: bundle exec rake spec:all
-          environment:
-           COCOAPODS_CI_TASKS: EXAMPLES
+      - run: bundle exec rake spec:all
+
+jobs:
+  examples:
+    macos:
+      xcode: "9.2.0"
+    environment:
+      COCOAPODS_CI_TASKS: EXAMPLES
+    <<: *steps
+  specs:
+    macos:
+      xcode: "9.2.0"
+    environment:
+      COCOAPODS_CI_TASKS: SPECS
+    <<: *steps
+  lint:
+    macos:
+      xcode: "9.2.0"
+    environment:
+      COCOAPODS_CI_TASKS: LINT
+    <<: *steps
+  danger:
+    docker:
+      - image: dantoml/danger
+    steps:
+      - checkout
+      - run: danger
+
+workflows:
+  version: 2
+  build-test:
+    jobs:
+      - lint
+      - danger
+      - specs
+      - examples
+
