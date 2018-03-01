@@ -62,6 +62,7 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
+      BUNDLE_PATH: '$(pwd)/.bundle'
       COCOAPODS_CI_TASKS: EXAMPLES
     <<: *steps
 
@@ -69,6 +70,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.4
     environment:
+      BUNDLE_PATH: '$(pwd)/.bundle'
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
 
@@ -76,6 +78,7 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
+      BUNDLE_PATH: '$(pwd)/.bundle'
       COCOAPODS_CI_TASKS: SPECS
     <<: *steps
 
@@ -83,6 +86,7 @@ jobs:
     macos:
       xcode: "9.2.0"
     environment:
+      BUNDLE_PATH: '$(pwd)/.bundle'
       COCOAPODS_CI_TASKS: LINT
     <<: *steps
 
