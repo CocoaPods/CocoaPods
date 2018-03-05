@@ -131,6 +131,7 @@ module Pod
         patterns_array = Array(patterns)
         exact_matches = full_list & patterns_array
         patterns_array -= exact_matches
+
         all_patterns = patterns_array.map do |pattern|
           if directory?(pattern) && dir_pattern
             pattern += '/' unless pattern.end_with?('/')
@@ -138,9 +139,12 @@ module Pod
           end
           dir_glob_equivalent_patterns(pattern)
         end.flatten
-        list = exact_matches + full_list.select do |path|
-          all_patterns.any? do |p|
-            File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
+        list = exact_matches
+        unless all_patterns.empty?
+          list += full_list.select do |path|
+            all_patterns.any? do |p|
+              File.fnmatch(p, path, File::FNM_CASEFOLD | File::FNM_PATHNAME)
+            end
           end
         end
 
