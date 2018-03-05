@@ -109,6 +109,29 @@ module Pod
         paths.all?(&:absolute?).should == true
       end
 
+      describe 'Symlinked Directory' do
+        before do
+          @tmpdir = Pathname.new(Dir.mktmpdir)
+          FileUtils.copy_entry(@path_list.root.to_s, @tmpdir + 'banana-lib')
+
+          @symlink_dir = @path_list.root.dirname + 'banana-lib-symlinked'
+          FileUtils.remove_entry(@symlink_dir) if File.symlink?(@symlink_dir)
+        end
+
+        after do
+          FileUtils.remove_entry(@tmpdir) if Dir.exist?(@tmpdir)
+          FileUtils.remove_entry(@symlink_dir) if File.symlink?(@symlink_dir)
+        end
+
+        it 'glob returns the absolute path when root is a symlinked directory' do
+          File.symlink(@tmpdir + 'banana-lib', @symlink_dir.to_s)
+          @path_list = Sandbox::PathList.new(fixture('banana-lib-symlinked/'))
+
+          paths = @path_list.glob('Classes/*.{h,m}')
+          paths.first.realpath.to_s.should.include? @tmpdir.to_s
+        end
+      end
+
       it 'can return the relative paths from glob' do
         paths = @path_list.relative_glob('Classes/*.{h,m}')
         paths.any?(&:absolute?).should == false
@@ -246,6 +269,54 @@ module Pod
       end
 
       #--------------------------------------#
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe 'Symlinks' do
+      before do
+        @symlink_dir = @path_list.root + 'Classes' + 'symlinked'
+        @symlink_dir_file = @symlink_dir + 'someheader.h'
+        @symlink_file = @path_list.root + 'Classes' + 'symlinked.h'
+        @tmpdir = Pathname.new(Dir.mktmpdir)
+        tmpfile = Tempfile.new(['base', '.h'])
+        @tmpfile = tmpfile.path
+        tmpfile.close
+        @tmpdirheader = @tmpdir + 'someheader.h'
+        File.write(@tmpdirheader.to_s, '// this file does nothing. \n')
+        File.write(@tmpfile.to_s, '// this file also does nothing. \n')
+        FileUtils.remove_entry(@symlink_dir) if File.symlink?(@symlink_dir)
+        FileUtils.remove_entry(@symlink_file) if File.symlink?(@symlink_file)
+      end
+
+      after do
+        FileUtils.remove_entry(@tmpdir) if Dir.exist?(@tmpdir)
+        FileUtils.remove_entry(@tmpfile) if File.exist?(@tmpfile)
+        FileUtils.remove_entry(@symlink_dir) if File.symlink?(@symlink_dir)
+        FileUtils.remove_entry(@symlink_file) if File.symlink?(@symlink_file)
+      end
+
+      it 'includes symlinked file' do
+        @path_list.instance_variable_set(:@files, nil)
+        File.symlink(@tmpfile, @symlink_file)
+
+        @path_list.files.map(&:to_s).include?('Classes/symlinked.h').should == true
+      end
+
+      it 'includes symlinked dir' do
+        @path_list.instance_variable_set(:@dirs, nil)
+        File.symlink(@tmpdir, @symlink_dir)
+
+        @path_list.dirs.map(&:to_s).include?('Classes/symlinked').should == true
+      end
+
+      it 'doesn\'t include file in symlinked dir' do
+        @path_list.instance_variable_set(:@files, nil)
+        @path_list.instance_variable_set(:@dirs, nil)
+        File.symlink(@tmpdir, @symlink_dir)
+
+        @path_list.files.map(&:to_s).include?('Classes/symlinked/someheader.h').should == false
+      end
     end
 
     #-------------------------------------------------------------------------#
