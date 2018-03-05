@@ -58,9 +58,7 @@ module Pod
           # @return [void]
           #
           def refresh_file_accessors
-            file_accessors.each do |fa|
-              fa.path_list.read_file_system
-            end
+            file_accessors.map(&:path_list).uniq.each(&:read_file_system)
           end
 
           # Adds the source files of the Pods to the Pods project.
