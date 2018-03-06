@@ -51,7 +51,3 @@ Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
 
 -> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
-
-[!] The `iOS App [Release]` target overrides the `OTHER_CFLAGS` build setting defined in `Pods/Target Support Files/Pods-iOS App/Pods-iOS App.release.xcconfig'. This can lead to problems with the CocoaPods installation
-    - Use the `$(inherited)` flag, or
-    - Remove the build settings from the target.
