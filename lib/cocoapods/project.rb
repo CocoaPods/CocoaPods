@@ -40,8 +40,16 @@ module Pod
     #
     attr_reader :development_pods
 
-    # Overridden to generate UUIDs in a much faster way, since we don't need to check for collisions
-    # (as the Pods project is regenerated each time, and thus all UUIDs will have come from this method)
+    # Generates a list of new UUIDs that created objects can be assigned.
+    #
+    # @note Overridden to generate UUIDs in a much faster way, since we don't need to check for collisions
+    #       (as the Pods project is regenerated each time, and thus all UUIDs will have come from this method)
+    #
+    # @param [Integer] count
+    #        The number of UUIDs to generate
+    #
+    # @return [Void]
+    #
     def generate_available_uuid_list(count = 100)
       start = @generated_uuids.size
       uniques = Array.new(count) { |i| format('%011X0', start + i) }
