@@ -20,8 +20,9 @@ module Pod
       # @param [Podfile] podfile
       #        The podfile to validate
       #
-      def initialize(podfile)
+      def initialize(podfile, podfile_dependency_cache = Analyzer::PodfileDependencyCache.from_podfile(podfile))
         @podfile = podfile
+        @podfile_dependency_cache = podfile_dependency_cache
         @errors = []
         @warnings = []
         @validated = false
@@ -67,11 +68,7 @@ module Pod
       end
 
       def validate_pod_directives
-        dependencies = podfile.target_definitions.flat_map do |_, target|
-          target.dependencies
-        end.uniq
-
-        dependencies.each do |dependency|
+        @podfile_dependency_cache.podfile_dependencies.each do |dependency|
           validate_conflicting_external_sources!(dependency)
         end
       end
@@ -106,7 +103,7 @@ module Pod
       # @return [void]
       #
       def validate_dependencies_are_present!
-        if podfile.target_definitions.values.all?(&:empty?)
+        if @podfile_dependency_cache.target_definition_list.all?(&:empty?)
           add_warning 'The Podfile does not contain any dependencies.'
         end
       end
@@ -116,8 +113,8 @@ module Pod
       # target, or be inherited by a target where `inheritance == complete`.
       #
       def validate_no_abstract_only_pods!
-        all_dependencies = podfile.dependencies
-        concrete_dependencies = podfile.target_definition_list.reject(&:abstract?).flat_map(&:dependencies).uniq
+        all_dependencies = @podfile_dependency_cache.podfile_dependencies
+        concrete_dependencies = @podfile_dependency_cache.target_definition_list.reject(&:abstract?).flat_map { |td| @podfile_dependency_cache.target_definition_dependencies(td) }
         abstract_only_dependencies = all_dependencies - concrete_dependencies
         abstract_only_dependencies.each do |dep|
           add_error "The dependency `#{dep}` is not used in any concrete target."
@@ -125,7 +122,7 @@ module Pod
       end
 
       def validate_no_duplicate_targets!
-        podfile.target_definition_list.group_by { |td| [td.name, td.user_project_path] }.
+        @podfile_dependency_cache.target_definition_list.group_by { |td| [td.name, td.user_project_path] }.
           each do |(name, project), definitions|
           next unless definitions.size > 1
           error = "The target `#{name}` is declared twice"

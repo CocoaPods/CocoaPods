@@ -429,7 +429,7 @@ module Pod
     end
 
     def print_post_install_message
-      podfile_dependencies = podfile.dependencies.uniq.size
+      podfile_dependencies = analysis_result.podfile_dependency_cache.podfile_dependencies.size
       pods_installed = root_specs.size
       title_options = { :verbose_prefix => '-> '.green }
       UI.titled_section('Pod installation complete! ' \
@@ -548,7 +548,7 @@ module Pod
     # @return [void]
     #
     def write_lockfiles
-      external_source_pods = podfile.dependencies.select(&:external_source).map(&:root_name).uniq
+      external_source_pods = analysis_result.podfile_dependency_cache.podfile_dependencies.select(&:external_source).map(&:root_name).uniq
       checkout_options = sandbox.checkout_sources.select { |root_name, _| external_source_pods.include? root_name }
       @lockfile = Lockfile.generate(podfile, analysis_result.specifications, checkout_options, analysis_result.specs_by_source)
 

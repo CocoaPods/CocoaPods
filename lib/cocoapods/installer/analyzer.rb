@@ -10,11 +10,12 @@ module Pod
       delegate_installation_options { podfile }
 
       autoload :AnalysisResult,            'cocoapods/installer/analyzer/analysis_result'
-      autoload :SandboxAnalyzer,           'cocoapods/installer/analyzer/sandbox_analyzer'
-      autoload :SpecsState,                'cocoapods/installer/analyzer/specs_state'
       autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
+      autoload :PodfileDependencyCache,    'cocoapods/installer/analyzer/podfile_dependency_cache'
       autoload :PodVariant,                'cocoapods/installer/analyzer/pod_variant'
       autoload :PodVariantSet,             'cocoapods/installer/analyzer/pod_variant_set'
+      autoload :SandboxAnalyzer,           'cocoapods/installer/analyzer/sandbox_analyzer'
+      autoload :SpecsState,                'cocoapods/installer/analyzer/specs_state'
       autoload :TargetInspectionResult,    'cocoapods/installer/analyzer/target_inspection_result'
       autoload :TargetInspector,           'cocoapods/installer/analyzer/target_inspector'
 
@@ -54,6 +55,7 @@ module Pod
         @has_dependencies = true
         @test_pod_target_analyzer_cache = {}
         @test_pod_target_key = Struct.new(:name, :pod_targets)
+        @podfile_dependency_cache = PodfileDependencyCache.from_podfile(podfile)
       end
 
       # Performs the analysis.
@@ -71,6 +73,7 @@ module Pod
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
+        @result.podfile_dependency_cache = @podfile_dependency_cache
         if installation_options.integrate_targets?
           @result.target_inspections = inspect_targets_to_integrate
         else
@@ -186,7 +189,7 @@ module Pod
       alias_method :specs_updated?, :specs_updated
 
       def validate_podfile!
-        validator = Installer::PodfileValidator.new(podfile)
+        validator = Installer::PodfileValidator.new(podfile, @podfile_dependency_cache)
         validator.validate
 
         unless validator.valid?
@@ -234,7 +237,7 @@ module Pod
           pods_state
         else
           state = SpecsState.new
-          state.added.merge(podfile.dependencies.map(&:root_name))
+          state.added.merge(@podfile_dependency_cache.podfile_dependencies.map(&:root_name))
           state
         end
       end
@@ -395,8 +398,7 @@ module Pod
           embedded_targets = aggregate_targets.select(&:requires_host_target?)
           analyze_host_targets_in_podfile(aggregate_targets, embedded_targets)
 
-          use_frameworks_embedded_targets = embedded_targets.select(&:requires_frameworks?)
-          non_use_frameworks_embedded_targets = embedded_targets.reject(&:requires_frameworks?)
+          use_frameworks_embedded_targets, non_use_frameworks_embedded_targets = embedded_targets.partition(&:requires_frameworks?)
           aggregate_targets.each do |target|
             # For targets that require frameworks, we always have to copy their pods to their
             # host targets because those frameworks will all be loaded from the host target's bundle
@@ -408,9 +410,9 @@ module Pod
           end
         end
         aggregate_targets.each do |target|
-          target.search_paths_aggregate_targets = aggregate_targets.select do |aggregate_target|
+          target.search_paths_aggregate_targets.concat(aggregate_targets.select do |aggregate_target|
             target.target_definition.targets_to_inherit_search_paths.include?(aggregate_target.target_definition)
-          end
+          end).freeze
         end
       end
 
@@ -634,7 +636,7 @@ module Pod
         else
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
-          local_pod_names = podfile.dependencies.select(&:local?).map(&:root_name)
+          local_pod_names = @podfile_dependency_cache.podfile_dependencies.select(&:local?).map(&:root_name)
           pods_to_unlock = local_pod_names.reject do |pod_name|
             sandbox.specification(pod_name).checksum == lockfile.checksum(pod_name)
           end
@@ -675,7 +677,7 @@ module Pod
       end
 
       def verify_no_pods_with_different_sources!
-        deps_with_different_sources = podfile.dependencies.group_by(&:root_name).
+        deps_with_different_sources = @podfile_dependency_cache.podfile_dependencies.group_by(&:root_name).
           select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
         deps_with_different_sources.each do |root_name, dependencies|
           raise Informative, 'There are multiple dependencies with different ' \
@@ -698,7 +700,7 @@ module Pod
       def dependencies_to_fetch
         @deps_to_fetch ||= begin
           deps_to_fetch = []
-          deps_with_external_source = podfile.dependencies.select(&:external_source)
+          deps_with_external_source = @podfile_dependency_cache.podfile_dependencies.select(&:external_source)
 
           if update_mode == :all
             deps_to_fetch = deps_with_external_source
@@ -731,7 +733,7 @@ module Pod
           elsif update_mode == :all
             pods_to_fetch += result.podfile_state.unchanged + result.podfile_state.deleted
           end
-          pods_to_fetch += podfile.dependencies.
+          pods_to_fetch += @podfile_dependency_cache.podfile_dependencies.
             select { |dep| Hash(dep.external_source).key?(:podspec) && sandbox.specification_path(dep.root_name).nil? }.
             map(&:root_name)
           pods_to_fetch
@@ -739,7 +741,7 @@ module Pod
       end
 
       def store_existing_checkout_options
-        podfile.dependencies.select(&:external_source).each do |dep|
+        @podfile_dependency_cache.podfile_dependencies.select(&:external_source).each do |dep|
           if checkout_options = lockfile && lockfile.checkout_options_for_pod_named(dep.root_name)
             sandbox.store_checkout_source(dep.root_name, checkout_options)
           end
@@ -766,7 +768,7 @@ module Pod
       #         grouped by target.
       #
       def resolve_dependencies
-        duplicate_dependencies = podfile.dependencies.group_by(&:name).
+        duplicate_dependencies = @podfile_dependency_cache.podfile_dependencies.group_by(&:name).
           select { |_name, dependencies| dependencies.count > 1 }
         duplicate_dependencies.each do |name, dependencies|
           UI.warn "There are duplicate dependencies on `#{name}` in #{UI.path podfile.defined_in_file}:\n\n" \
@@ -857,8 +859,8 @@ module Pod
           plugin_sources = @plugin_sources || []
 
           # Add any sources specified using the :source flag on individual dependencies.
-          dependency_sources = podfile.dependencies.map(&:podspec_repo).compact
-          all_dependencies_have_sources = dependency_sources.count == podfile.dependencies.count
+          dependency_sources = @podfile_dependency_cache.podfile_dependencies.map(&:podspec_repo).compact
+          all_dependencies_have_sources = dependency_sources.count == @podfile_dependency_cache.podfile_dependencies.count
 
           if all_dependencies_have_sources
             sources = dependency_sources
@@ -890,7 +892,7 @@ module Pod
       #
       def verify_platforms_specified!
         unless installation_options.integrate_targets?
-          podfile.target_definition_list.each do |target_definition|
+          @podfile_dependency_cache.target_definition_list.each do |target_definition|
             if !target_definition.empty? && target_definition.platform.nil?
               raise Informative, 'It is necessary to specify the platform in the Podfile if not integrating.'
             end
@@ -909,7 +911,7 @@ module Pod
       def inspect_targets_to_integrate
         inspection_result = {}
         UI.section 'Inspecting targets to integrate' do
-          inspectors = podfile.target_definition_list.map do |target_definition|
+          inspectors = @podfile_dependency_cache.target_definition_list.map do |target_definition|
             next if target_definition.abstract?
             TargetInspector.new(target_definition, config.installation_root)
           end.compact

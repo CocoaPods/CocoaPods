@@ -522,10 +522,8 @@ module Pod
 
       if whitelists.empty?
         @build_config_cache[key] = true
-        true
       elsif whitelists.count == 1
         @build_config_cache[key] = whitelists.first
-        whitelists.first
       else
         raise Informative, "The subspecs of `#{pod_name}` are linked to " \
           "different build configurations for the `#{target_definition}` " \

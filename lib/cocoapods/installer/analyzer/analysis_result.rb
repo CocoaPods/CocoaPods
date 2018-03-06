@@ -33,7 +33,13 @@ module Pod
 
         # @return [Hash{TargetDefinition => Array<TargetInspectionResult>}] the
         #         results of inspecting the user targets
+        #
         attr_accessor :target_inspections
+
+        # @return [PodfileDependencyCache] the cache of all dependencies in the
+        #         podfile.
+        #
+        attr_accessor :podfile_dependency_cache
 
         # @return [Hash{String=>Symbol}] A hash representing all the user build
         #         configurations across all integration targets. Each key

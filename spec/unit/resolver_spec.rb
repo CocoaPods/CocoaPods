@@ -159,12 +159,8 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Resolution' do
-      before do
-        @podfile = Podfile.new do
-          platform :ios, '6.0'
-          pod 'BlocksKit', '1.5.2'
-        end
-        @resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+      def create_resolver(podfile = @podfile, locked_deps = empty_graph)
+        @resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
       end
 
       it 'cross resolves dependencies' do
@@ -174,7 +170,7 @@ module Pod
           pod 'AFQuickLookView', '=  0.1.0' # requires  'AFNetworking', '>= 0.9.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFNetworking (0.9.1)', 'AFQuickLookView (0.1.0)']
       end
@@ -186,7 +182,7 @@ module Pod
           pod 'AFNetworking', '~> 1.2.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFNetworking (1.2.1)', 'RestKit (0.20.1)',
                          'RestKit/Core (0.20.1)', 'RestKit/CoreData (0.20.1)',
@@ -202,7 +198,7 @@ module Pod
           pod 'AFOAuth2Client' # latest version (0.1.2) requires 'AFNetworking', '~> 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFAmazonS3Client (1.0.1)', 'AFNetworking (1.3.4)',
                          'AFOAuth2Client (1.0.0)', 'CargoBay (1.0.0)']
@@ -216,12 +212,17 @@ module Pod
             pod 'AFNetworking', '2.0.1'
           end
 
-          resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+          resolver = create_resolver
           specs = resolver.resolve.values.flatten.map(&:spec).map(&:root).map(&:to_s).uniq.sort
           specs.should == ['AFNetworking (2.0.1)', 'InstagramKit (3.7)']
         end
 
       it 'holds the context state, such as cached specification sets' do
+        @podfile = Podfile.new do
+          platform :ios, '6.0'
+          pod 'BlocksKit', '1.5.2'
+        end
+        create_resolver
         @resolver.resolve
         cached_sets = @resolver.send(:cached_sets)
         cached_sets.values.sort_by(&:name).should == [
@@ -236,7 +237,7 @@ module Pod
           platform :osx, '10.7'
           pod 'ReactiveCocoa', '0.16.1' # this version is iOS-only
         end
-        @resolver.stubs(:podfile).returns(@podfile)
+        create_resolver
         should.raise Informative do
           @resolver.resolve
         end.message.should.match /platform .* not compatible/
@@ -247,7 +248,7 @@ module Pod
           platform :osx, '10.7'
           pod 'AFNetworking' # the most recent version requires 10.8
         end
-        @resolver.stubs(:podfile).returns(@podfile)
+        create_resolver
         @resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort.should == [
           'AFNetworking (1.3.4)',
         ]
@@ -270,7 +271,7 @@ module Pod
           platform :ios, '5.0'
           pod 'lib'
         end
-        @resolver.stubs(:podfile).returns(@podfile)
+        create_resolver
         @resolver.send(:cached_sets)['lib'] = stub(:all_specifications => [spec])
         @resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort.should == [
           'AFNetworking (1.3.4)', 'lib (1.0)', 'lib/Calendar (1.0)', 'lib/Classes (1.0)', 'lib/RequestManager (1.0)'
@@ -282,7 +283,7 @@ module Pod
           platform :osx, '10.7'
           pod 'AFNetworking', '2.0.0' # requires 10.8
         end
-        @resolver.stubs(:podfile).returns(@podfile)
+        create_resolver
         message = should.raise(Informative) { @resolver.resolve }.message
         message.should.match /required a higher minimum deployment target/
       end
@@ -297,13 +298,18 @@ module Pod
             pod 'LocalPod', :path => '../'
           end
         end
-        @resolver.stubs(:podfile).returns(@podfile)
+        create_resolver
         message = should.raise(Informative) { @resolver.resolve }.message
         message.should.match /required a higher minimum deployment target/
       end
 
       it 'raises if unable to find a specification' do
+        @podfile = Podfile.new do
+          platform :ios, '6'
+          pod 'BlocksKit', '1.5.2'
+        end
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
+        create_resolver
         message = should.raise Informative do
           @resolver.resolve
         end.message
@@ -312,6 +318,11 @@ module Pod
       end
 
       it 'does not raise if all dependencies are supported by the platform of the target definition' do
+        @podfile = Podfile.new do
+          platform :ios, '6'
+          pod 'BlocksKit', '1.5.2'
+        end
+        create_resolver
         lambda { @resolver.resolve }.should.not.raise
       end
 
@@ -320,7 +331,7 @@ module Pod
           platform :ios, '7.0'
           pod 'RestKit', '0.10.3'
         end
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         resolver.resolve.values.flatten.map(&:name).sort.should == %w(
           FileMD5Hash
           ISO8601DateFormatter
@@ -348,7 +359,7 @@ module Pod
           platform :ios, '7.0'
           pod 'RestKit', '0.20.0-rc1'
         end
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort.should == [
           'AFNetworking (1.1.0)',
           'RestKit (0.20.0-rc1)',
@@ -377,7 +388,7 @@ module Pod
           end
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:name).sort
         specs.should == %w(
           MainSpec/FirstSubSpec MainSpec/FirstSubSpec/SecondSubSpec
@@ -399,7 +410,7 @@ module Pod
           end
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         resolved_specs = resolver.resolve.values.flatten
         spec_names = resolved_specs.map(&:name).sort
         spec_names.should == %w(
@@ -425,7 +436,7 @@ module Pod
           end
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         resolved_specs = resolver.resolve.values.flatten
         spec_names = resolved_specs.map(&:name).sort
         spec_names.should == %w(
@@ -453,7 +464,7 @@ module Pod
           end
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         resolved_specs = resolver.resolve.values.flatten
         spec_names = resolved_specs.map(&:name).sort
         spec_names.should == %w(
@@ -476,7 +487,7 @@ module Pod
           s.platform     = :ios
         end
         config.sandbox.expects(:specification).with('MainSpec').returns(spec)
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == [
           'MainSpec (1.2.3-pre)',
@@ -489,7 +500,7 @@ module Pod
           pod 'JSONKit', '1.4'
           pod 'JSONKit', '1.5pre'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver(podfile)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.include <<-EOS.strip
 [!] CocoaPods could not find compatible versions for pod "JSONKit":
@@ -506,7 +517,7 @@ module Pod
           pod 'RestKit', '0.23.3' # dependends on AFNetworking ~> 1.3.0
           pod 'AFNetworking', '> 2'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver(podfile)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.include <<-EOS.strip
 [!] CocoaPods could not find compatible versions for pod "AFNetworking":
@@ -525,7 +536,7 @@ module Pod
           platform :ios
           pod 'AFNetworking', '999.999.999'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver(podfile)
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.include <<-EOS.strip
 [!] CocoaPods could not find compatible versions for pod "AFNetworking":
@@ -549,7 +560,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           platform :ios
           pod 'AFNetworking', '999.999.999'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver(podfile)
         resolver.specs_updated = true
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.include <<-EOS.strip
@@ -575,7 +586,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
         locked_deps = dependency_graph_from_array([Dependency.new('AFNetworking', '= 1.4')])
 
-        resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
+        resolver = create_resolver(podfile, locked_deps)
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.include <<-EOS.strip
 [!] CocoaPods could not find compatible versions for pod "AFNetworking":
@@ -602,12 +613,12 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           platform :ios
           pod 'JSONKit', '<= 1.5pre'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = create_resolver(podfile)
         version = resolver.resolve.values.flatten.first.spec.version
         version.to_s.should == '1.5pre'
 
         locked_deps = dependency_graph_from_array([Dependency.new('JSONKit', '= 1.4')])
-        resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
+        resolver = create_resolver(podfile, locked_deps)
         version = resolver.resolve.values.flatten.first.spec.version
         version.to_s.should == '1.4'
       end
@@ -620,7 +631,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'CocoaLumberjack'
         end
         locked_deps = dependency_graph_from_array([Dependency.new('CocoaLumberjack', '= 2.0.0-beta2')])
-        resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
+        resolver = create_resolver(podfile, locked_deps)
         e = lambda { puts resolver.resolve.values.flatten }.should.raise Informative
         e.message.should.match(/you were using a pre-release version of `CocoaLumberjack`/)
         e.message.should.match(/`pod 'CocoaLumberjack', '= 2.0.0-beta2'`/)

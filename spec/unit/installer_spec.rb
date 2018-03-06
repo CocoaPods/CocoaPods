@@ -371,6 +371,7 @@ module Pod
       describe '#clean_sandbox' do
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
+          @analysis_result.podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
           @analysis_result.specifications = []
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new
           @spec = stub(:name => 'Spec', :test_specification? => false)
@@ -563,6 +564,7 @@ module Pod
       describe '#write_lockfiles' do
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new
+          @analysis_result.podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
           @analysis_result.specifications = [fixture_spec('banana-lib/BananaLib.podspec')]
           @analysis_result.specs_by_source = {}
           @installer.stubs(:analysis_result).returns(@analysis_result)

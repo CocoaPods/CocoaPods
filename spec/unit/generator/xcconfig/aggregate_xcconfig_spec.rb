@@ -497,7 +497,7 @@ module Pod
             it 'should include inherited search paths' do
               # It's the responsibility of the analyzer to
               # populate this when the file is loaded.
-              @blank_target.search_paths_aggregate_targets = [@target]
+              @blank_target.search_paths_aggregate_targets.replace [@target]
               @xcconfig = @generator.generate
               @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.be.nil
             end
