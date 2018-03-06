@@ -18,7 +18,7 @@ Comparing resolved specification to the sandbox manifest
 
 Downloading dependencies
 
--> Installing JSONKit 1.4 (was 1.4)
+-> Installing JSONKit 1.4
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/johnezang/JSONKit.git PROJECT/Pods/JSONKit --template= --single-branch --depth 1 --branch v1.4
