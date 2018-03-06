@@ -36,7 +36,7 @@ Downloading dependencies
 
 -> Installing AFNetworking (2.4.1)
 
--> Installing RKValueTransformers 1.1.0 (was 1.1.0)
+-> Installing RKValueTransformers 1.1.0
 
 -> Using SEGModules (0.1.0)
   - Running pre install hooks
