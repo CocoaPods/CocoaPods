@@ -3,6 +3,7 @@ module Pod
     class Analyzer
       # Caches podfile & target definition dependencies, so they do not need to be re-computed
       # from the internal hash on each access
+      #
       class PodfileDependencyCache
         # @return [Array<Pod::Dependency>]
         #         All the dependencies in the podfile
@@ -17,7 +18,8 @@ module Pod
         # Returns the dependencies for the given target definition
         #
         def target_definition_dependencies(target_definition)
-          @dependencies_by_target_definition[target_definition] || raise("dependencies for #{target_definition.inspect} do not exist in the cache")
+          @dependencies_by_target_definition[target_definition] ||
+            raise(ArgumentError, "dependencies for #{target_definition.inspect} do not exist in the cache")
         end
 
         # Returns a list of all of the target definitions in the Podfile
