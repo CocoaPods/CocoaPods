@@ -1,7 +1,5 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public/res" "${PODS_ROOT}/Headers/Public/res/res"
 LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/res"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public/res" -isystem "${PODS_ROOT}/Headers/Public/res/res"
 OTHER_LDFLAGS = $(inherited) -ObjC -l"res"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
