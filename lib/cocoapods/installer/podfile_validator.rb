@@ -17,8 +17,12 @@ module Pod
       attr_reader :warnings
 
       # Initialize a new instance
+      #
       # @param [Podfile] podfile
       #        The podfile to validate
+      #
+      # @param [Analyzer::PodfileDependencyCache] podfile_dependency_cache
+      #        An (optional) cache of all the dependencies in the podfile
       #
       def initialize(podfile, podfile_dependency_cache = Analyzer::PodfileDependencyCache.from_podfile(podfile))
         @podfile = podfile

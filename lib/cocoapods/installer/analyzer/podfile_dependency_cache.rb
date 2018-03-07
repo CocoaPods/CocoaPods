@@ -30,6 +30,12 @@ module Pod
 
         # Creates a {PodfileDependencyCache} from the given {Podfile}
         #
+        # @param [Podfile] podfile
+        #        The {Podfile} from which dependencies should be cached
+        #
+        # @return [PodfileDependencyCache]
+        #         A warmed, immutable cache of all the dependencies in the {Podfile}
+        #
         def self.from_podfile(podfile)
           podfile_dependencies = []
           dependencies_by_target_definition = {}
