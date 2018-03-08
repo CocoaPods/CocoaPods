@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#7473](https://github.com/CocoaPods/CocoaPods/pull/7473)
 
+* Display a message when a pods source has changed during installation  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7464](https://github.com/CocoaPods/CocoaPods/pull/7464)
+
 * Add support for modular header search paths, include "legacy" support.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7412](https://github.com/CocoaPods/CocoaPods/pull/7412)

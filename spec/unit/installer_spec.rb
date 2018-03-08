@@ -492,9 +492,13 @@ module Pod
         it 'prints the previous version of a pod while updating the spec' do
           spec = Spec.new
           spec.name = 'RestKit'
-          spec.version = '2.0'
-          manifest = Lockfile.new({})
-          manifest.stubs(:version).with('RestKit').returns('1.0')
+          spec.version = Version.new('2.0')
+          manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
+          manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
+          analysis_result = Installer::Analyzer::AnalysisResult.new
+          analysis_result.specifications = [spec]
+          analysis_result.specs_by_source = { Source.new('source1') => [spec] }
+          @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
           sandbox_state = Installer::Analyzer::SpecsState.new
@@ -502,7 +506,49 @@ module Pod
           @installer.stubs(:sandbox_state).returns(sandbox_state)
           @installer.expects(:install_source_of_pod).with('RestKit')
           @installer.send(:install_pod_sources)
+          UI.output.should.not.include 'source changed'
           UI.output.should.include 'was 1.0'
+        end
+
+        it 'prints the spec repo of a pod while updating the spec' do
+          spec = Spec.new
+          spec.name = 'RestKit'
+          spec.version = Version.new('1.0')
+          manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
+          manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
+          analysis_result = Installer::Analyzer::AnalysisResult.new
+          analysis_result.specifications = [spec]
+          analysis_result.specs_by_source = { Source.new('source2') => [spec] }
+          @installer.stubs(:analysis_result).returns(analysis_result)
+          @installer.sandbox.stubs(:manifest).returns(manifest)
+          @installer.stubs(:root_specs).returns([spec])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+          UI.output.should.not.include 'was 1.0'
+          UI.output.should.include 'source changed to `source2` from `source1`'
+        end
+
+        it 'prints the version and spec repo of a pod while updating the spec' do
+          spec = Spec.new
+          spec.name = 'RestKit'
+          spec.version = Version.new('3.0')
+          manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
+          manifest.stubs(:version).with('RestKit').returns(Version.new('2.0'))
+          analysis_result = Installer::Analyzer::AnalysisResult.new
+          analysis_result.specifications = [spec]
+          analysis_result.specs_by_source = { Source.new('source2') => [spec] }
+          @installer.stubs(:analysis_result).returns(analysis_result)
+          @installer.sandbox.stubs(:manifest).returns(manifest)
+          @installer.stubs(:root_specs).returns([spec])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+          UI.output.should.include 'was 2.0 and source changed to `source2` from `source1`'
         end
 
         it 'raises when it attempts to install pod source with no target supporting it' do
