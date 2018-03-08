@@ -255,6 +255,28 @@ module Pod
               script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
               File.exist?(script).should == false
             end
+
+            it 'installs umbrella headers for swift static libraries' do
+              @pod_target.stubs(:uses_swift? => true)
+              @target.stubs(:uses_swift? => true)
+              @installer.install!
+
+              build_files = @installer.target.native_target.headers_build_phase.files
+              build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-umbrella.h') }
+              build_file.should.not.be.nil
+              build_file.settings.should == { 'ATTRIBUTES' => ['Project'] }
+            end
+
+            it 'installs umbrella headers for frameworks' do
+              @pod_target.stubs(:requires_frameworks? => true)
+              @target.stubs(:requires_frameworks? => true)
+              @installer.install!
+
+              build_files = @installer.target.native_target.headers_build_phase.files
+              build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-umbrella.h') }
+              build_file.should.not.be.nil
+              build_file.settings.should == { 'ATTRIBUTES' => ['Public'] }
+            end
           end
         end
       end
