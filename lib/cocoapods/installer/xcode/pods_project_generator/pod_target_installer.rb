@@ -695,26 +695,34 @@ module Pod
           # Adds a shell script phase, intended only for static library targets that contain swift,
           # to copy the ObjC compatibility header (the -Swift.h file that the swift compiler generates)
           # to the built products directory. Additionally, the script phase copies the module map, appending a `.Swift`
-          # submodule that references the (moved) compatibility header.
+          # submodule that references the (moved) compatibility header. Since the module map has been moved, the umbrella header
+          # is _also_ copied, so that it is sitting next to the module map. This is necessary for a successful archive build.
           #
           # @return [Void]
           #
           def add_swift_static_library_compatibility_header_phase
             build_phase = native_target.new_shell_script_build_phase('Copy generated compatibility header')
+
+            relative_module_map_path = target.module_map_path.relative_path_from(target.sandbox.root)
+            relative_umbrella_header_path = target.umbrella_header_path.relative_path_from(target.sandbox.root)
+
             build_phase.shell_script = <<-SH.strip_heredoc
               COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
               MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
 
               ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
-              ditto "${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}" "${MODULE_MAP_PATH}"
+              ditto "${PODS_ROOT}/#{relative_module_map_path}" "${MODULE_MAP_PATH}"
+              ditto "${PODS_ROOT}/#{relative_umbrella_header_path}" "${BUILT_PRODUCTS_DIR}"
               printf "\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\"${COMPATIBILITY_HEADER_PATH}\\"\\n  requires objc\\n}\\n" >> "${MODULE_MAP_PATH}"
             SH
             build_phase.input_paths = %W(
               ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
-              ${PODS_ROOT}/#{target.module_map_path.relative_path_from(target.sandbox.root)}
+              ${PODS_ROOT}/#{relative_module_map_path}
+              ${PODS_ROOT}/#{relative_umbrella_header_path}
             )
-            build_phase.output_paths = %w(
+            build_phase.output_paths = %W(
               ${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap
+              ${BUILT_PRODUCTS_DIR}/#{relative_umbrella_header_path.basename}
               ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
             )
           end
