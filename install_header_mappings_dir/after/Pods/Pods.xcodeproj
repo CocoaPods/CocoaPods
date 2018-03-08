@@ -159,7 +159,7 @@ Targets:
     - Headers:
       - DepPod-library-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - DP.h:
           ATTRIBUTES:
           - Project
@@ -291,7 +291,7 @@ Targets:
     - Headers:
       - HeaderMappingsDirPod-library-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
       - HMDP.h:
           ATTRIBUTES:
           - Project
