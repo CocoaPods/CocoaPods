@@ -204,10 +204,10 @@ module Pod
               file_ref = add_file_to_support_group(path)
               native_target.add_file_references([file_ref])
 
-              # Make the umbrella header public
+              acl = target.requires_frameworks? ? 'Public' : 'Project'
               build_file = native_target.headers_build_phase.build_file(file_ref)
               build_file.settings ||= {}
-              build_file.settings['ATTRIBUTES'] = ['Public']
+              build_file.settings['ATTRIBUTES'] = [acl]
             end
           end
 
