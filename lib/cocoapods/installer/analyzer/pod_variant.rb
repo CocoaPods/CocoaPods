@@ -5,19 +5,19 @@ module Pod
       class PodVariant
         # @return [Array<Specification>] the spec and subspecs for the target
         #
-        attr_accessor :specs
+        attr_reader :specs
 
         # @return [Array<Specification>] the test specs for the target
         #
-        attr_accessor :test_specs
+        attr_reader :test_specs
 
         # @return [Platform] the platform
         #
-        attr_accessor :platform
+        attr_reader :platform
 
         # @return [Bool] whether this pod should be built as framework
         #
-        attr_accessor :requires_frameworks
+        attr_reader :requires_frameworks
         alias_method :requires_frameworks?, :requires_frameworks
 
         # @return [Specification] the root specification
@@ -34,10 +34,10 @@ module Pod
         # @param [Bool] requires_frameworks        @see #requires_frameworks?
         #
         def initialize(specs, test_specs, platform, requires_frameworks = false)
-          self.specs = specs
-          self.test_specs = test_specs
-          self.platform = platform
-          self.requires_frameworks = requires_frameworks
+          @specs = specs
+          @test_specs = test_specs
+          @platform = platform
+          @requires_frameworks = requires_frameworks
         end
 
         # @note Test specs are intentionally not included as part of the equality for pod variants since a
