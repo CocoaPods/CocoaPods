@@ -5,16 +5,16 @@ module Pod
     class Analyzer
       # Collects all {PodVariant}.
       class PodVariantSet
-        # @return [Array<PodVariant>] the different variants.
+        # @return [Array<PodVariant>] the different variants within this set.
         #
-        attr_accessor :variants
+        attr_reader :variants
 
         # Initialize a new instance.
         #
         # @param [Array<PodVariant>] variants  @see #variants
         #
         def initialize(variants)
-          self.variants = variants
+          @variants = variants
         end
 
         # Describes what makes each {PodVariant} distinct among the others.
