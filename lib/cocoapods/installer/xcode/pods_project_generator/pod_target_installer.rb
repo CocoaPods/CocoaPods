@@ -596,17 +596,6 @@ module Pod
             flags * ' '
           end
 
-          # Adds a reference to the given file in the support group of this target.
-          #
-          # @param  [Pathname] path
-          #         The path of the file to which the reference should be added.
-          #
-          # @return [PBXFileReference] the file reference of the added file.
-          #
-          def add_file_to_support_group(path)
-            support_files_group.new_file(path)
-          end
-
           def apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
             resource_bundle_targets.each do |rsrc_target|
               rsrc_target.build_configurations.each do |rsrc_bc|
