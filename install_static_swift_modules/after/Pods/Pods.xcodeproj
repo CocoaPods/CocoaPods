@@ -628,7 +628,7 @@ Targets:
           - Project
       - MixedPod-library-iOS-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -690,7 +690,7 @@ Targets:
           - Project
       - MixedPod-library-macOS-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -895,7 +895,7 @@ Targets:
           - Project
       - ObjCPod-library-iOS-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -953,7 +953,7 @@ Targets:
           - Project
       - ObjCPod-library-macOS-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1085,7 +1085,7 @@ Targets:
     - Headers:
       - Pods-Abstract Target-iOS Pods-Static-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1218,7 +1218,7 @@ Targets:
     - Headers:
       - Pods-Abstract Target-macOS Pods-Static-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1414,7 +1414,7 @@ Targets:
     - Headers:
       - SwiftPod-library-iOS-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -1472,7 +1472,7 @@ Targets:
     - Headers:
       - SwiftPod-library-macOS-umbrella.h:
           ATTRIBUTES:
-          - Public
+          - Project
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
