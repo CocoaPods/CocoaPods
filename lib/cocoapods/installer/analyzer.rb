@@ -777,8 +777,7 @@ module Pod
 
         resolver_specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path(podfile.defined_in_file) || 'Podfile'}" do
-          resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources)
-          resolver.specs_updated = specs_updated?
+          resolver = Resolver.new(sandbox, podfile, locked_dependencies, sources, specs_updated?)
           resolver_specs_by_target = resolver.resolve
           resolver_specs_by_target.values.flatten(1).map(&:spec).each(&:validate_cocoapods_version)
         end
@@ -919,8 +918,7 @@ module Pod
             project = Xcodeproj::Project.open(project_path)
             target_inspectors.each do |inspector|
               target_definition = inspector.target_definition
-              inspector.user_project = project
-              results = inspector.compute_results
+              results = inspector.compute_results(project)
               inspection_result[target_definition] = results
               UI.message('Using `ARCHS` setting to build architectures of ' \
                 "target `#{target_definition.label}`: (`#{results.archs.join('`, `')}`)")

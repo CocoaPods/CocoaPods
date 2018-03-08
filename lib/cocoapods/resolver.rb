@@ -71,11 +71,11 @@ module Pod
     # @return [Array<Source>] The list of the sources which will be used for
     #         the resolution.
     #
-    attr_accessor :sources
+    attr_reader :sources
 
     # @return [Bool] Whether the resolver has sources repositories up-to-date.
     #
-    attr_accessor :specs_updated
+    attr_reader :specs_updated
     alias specs_updated? specs_updated
 
     # Init a new Resolver
@@ -84,14 +84,18 @@ module Pod
     # @param  [Podfile] podfile @see podfile
     # @param  [Array<Dependency>] locked_dependencies @see locked_dependencies
     # @param  [Array<Source>, Source] sources @see sources
+    # @param  [Boolean] specs_updated @see specs_updated
+    # @param  [PodfileDependencyCache] podfile_dependency_cache the podfile dependency cache to use
+    #         within this Resolver.
     #
-    def initialize(sandbox, podfile, locked_dependencies, sources,
+    def initialize(sandbox, podfile, locked_dependencies, sources, specs_updated,
                    podfile_dependency_cache: Installer::Analyzer::PodfileDependencyCache.from_podfile(podfile))
       @sandbox = sandbox
       @podfile = podfile
-      @podfile_dependency_cache = podfile_dependency_cache
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
+      @specs_updated = specs_updated
+      @podfile_dependency_cache = podfile_dependency_cache
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
       @cached_sets = {}
     end
@@ -344,7 +348,7 @@ module Pod
     #         one Pod installation, so different version of the same Pods for
     #         target definitions are not allowed.
     #
-    attr_accessor :cached_sets
+    attr_reader :cached_sets
 
     #-------------------------------------------------------------------------#
 

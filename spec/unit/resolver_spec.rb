@@ -82,7 +82,7 @@ module Pod
           pod 'BlocksKit', '1.5.2'
         end
         locked_deps = dependency_graph_from_array([Dependency.new('BlocksKit', '1.5.2')])
-        @resolver = Resolver.new(config.sandbox, @podfile, locked_deps, config.sources_manager.all)
+        @resolver = Resolver.new(config.sandbox, @podfile, locked_deps, config.sources_manager.all, false)
       end
 
       it 'returns the sandbox' do
@@ -140,7 +140,7 @@ module Pod
           platform :ios
           pod 'Reachability', :podspec => podspec
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all, false)
         resolver.resolve
         specs = resolver.resolver_specs_by_target.values.flatten
         specs.map(&:spec).map(&:to_s).should == ['Reachability (3.0.0)']
@@ -150,7 +150,7 @@ module Pod
         @podfile = Podfile.new do
           platform :ios
         end
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == []
       end
@@ -159,8 +159,8 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Resolution' do
-      def create_resolver(podfile = @podfile, locked_deps = empty_graph)
-        @resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all)
+      def create_resolver(podfile = @podfile, locked_deps = empty_graph, specs_updated = false)
+        @resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all, specs_updated)
       end
 
       it 'cross resolves dependencies' do
@@ -560,8 +560,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           platform :ios
           pod 'AFNetworking', '999.999.999'
         end
-        resolver = create_resolver(podfile)
-        resolver.specs_updated = true
+        resolver = create_resolver(podfile, empty_graph, true)
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.include <<-EOS.strip
 [!] CocoaPods could not find compatible versions for pod "AFNetworking":
@@ -640,7 +639,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
 
       describe 'concerning dependencies that are scoped by consumer platform' do
         def resolve
-          Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all).resolve
+          Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false).resolve
         end
 
         # AFNetworking Has an 'AFNetworking/UIKit' iOS-only default subspec
@@ -715,13 +714,13 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
         file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
         sources = config.sources_manager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '999.999.999'
         spec.defined_in_file.should == file
 
         sources = config.sources_manager.sources(%w(test_repo master))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '999.999.999'
         resolver.resolve.values.flatten.first.spec.defined_in_file.should == file
@@ -734,13 +733,13 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'JSONKit', '1.4'
         end
         sources = config.sources_manager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.4'
         spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json')
 
         sources = config.sources_manager.sources(%w(test_repo master))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.4'
         resolver.resolve.values.flatten.first.spec.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
@@ -791,7 +790,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'Data', '~> 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve.values.flatten.map { |rs| rs.spec.to_s }.sort.
           should == ['Core (1.0.1)', 'Data (1.0.1)', 'Data/Tests (1.0.1)', 'Testing (1.0.1)']
       end
@@ -805,7 +804,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         sources = config.sources_manager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve
 
         UI.warnings.should.not.match /multiple specifications/
@@ -820,7 +819,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         sources = config.sources_manager.sources(%w(master))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/None of your spec sources contain a spec/)
         e.message.should.match(/JSONKit/)
@@ -837,7 +836,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
 
         sources = config.sources_manager.sources(%w(test_repo))
         sources.map(&:url).should.not.include(master_repo_url)
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.5pre'
         spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.5pre/JSONKit.podspec.json')
@@ -855,7 +854,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         end
 
         sources = config.sources_manager.sources(%w(master test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve
 
         possible_specs = resolver.search_for(Dependency.new('JSONKit', '1.4'))
@@ -876,7 +875,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
 
         # CrossRepoDependent depends on AFNetworking which is only available in the master repo.
         sources = config.sources_manager.sources(%w(master))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve
 
         specs = resolver.resolve.values.flatten.map(&:spec)
@@ -891,7 +890,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
 
         # Check that if the master source is not available the dependency cannot be resolved.
         sources = config.sources_manager.sources(%w(test_repo))
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
 
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/Unable to find a specification for/)
@@ -908,7 +907,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '1.0RC3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['AFNetworking (1.0RC3)']
       end
@@ -919,7 +918,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '~> 1.0RC3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.3.4)']
@@ -931,7 +930,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
@@ -943,7 +942,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '< 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (0.10.1)']
@@ -955,7 +954,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '<= 1.0'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.0)']
@@ -967,7 +966,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '> 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -979,7 +978,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '>= 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -991,7 +990,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           pod 'AFNetworking', '~> 1.0', '< 1.3'
         end
 
-        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should != ['AFNetworking (1.0RC3)']
         specs.should == ['AFNetworking (1.2.1)']
@@ -1002,7 +1001,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           platform :ios
           pod 'PrereleaseMonkey'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all, false)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/There are only pre-release versions available satisfying the following requirements/)
         e.message.should.match(/PrereleaseMonkey.*>= 0/)
@@ -1014,7 +1013,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           platform :ios
           pod 'AFNetworking', '< 1.0', '> 0.10.1'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all, false)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/There are only pre-release versions available satisfying the following requirements/)
         e.message.should.match(/AFNetworking.*< 1\.0, > 0\.10\.1/)
@@ -1026,7 +1025,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           platform :ios
           pod 'PrereleaseMonkey', '1.0-beta1'
         end
-        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, config.sources_manager.all, false)
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['PrereleaseMonkey (1.0-beta1)']
       end
@@ -1048,7 +1047,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           Dependency.new('LocalPod', '= 1.0.0.LOCAL'),
           Dependency.new('LocalPod2', '= 1.0.0.LOCAL'),
         ])
-        resolver = Resolver.new(config.sandbox, podfile, locked_graph, config.sources_manager.all)
+        resolver = Resolver.new(config.sandbox, podfile, locked_graph, config.sources_manager.all, false)
 
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == ['LocalPod (1.0.0.LOCAL)', 'LocalPod2 (1.0.0.LOCAL)']
