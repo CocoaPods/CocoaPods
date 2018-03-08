@@ -153,7 +153,7 @@ module Pod
               build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
               build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
               build_configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
-              build_configuration.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = 'NO_SIGNING/' # a bogus provisioning profile ID assumed to be invalid
+              build_configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
             end
           end
         end

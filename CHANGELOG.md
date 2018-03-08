@@ -101,6 +101,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7460](https://github.com/CocoaPods/CocoaPods/issues/7460)
 
+* Remove bogus `PROVISIONING_PROFILE_SPECIFIER` value from Pods project.  
+  [Ruenzuo](https://github.com/Ruenzuo)
+  [#6964](https://github.com/CocoaPods/CocoaPods/issues/6964)
+
 ## 1.4.0 (2018-01-18)
 
 ##### Enhancements
