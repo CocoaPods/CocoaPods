@@ -8,11 +8,12 @@ module Pod
 
         # @return [TargetDefinition] the target definition to inspect
         #
-        attr_accessor :target_definition
+        attr_reader :target_definition
 
         # @return [Pathname] the root of the CocoaPods installation where the
         #         Podfile is located
-        attr_accessor :installation_root
+        #
+        attr_reader :installation_root
 
         # Initialize a new instance
         #
@@ -33,7 +34,7 @@ module Pod
         #
         # @return [TargetInspectionResult]
         #
-        def compute_results
+        def compute_results(user_project)
           raise ArgumentError, 'Cannot compute results without a user project set' unless user_project
 
           targets = compute_targets(user_project)
@@ -81,11 +82,6 @@ module Pod
           path
         end
 
-        # @return [Xcodeproj::Project] the user's Xcode project, used for target
-        #         inspection
-        #
-        attr_accessor :user_project
-
         #-----------------------------------------------------------------------#
 
         private
@@ -115,7 +111,7 @@ module Pod
           [target]
         end
 
-        # @param  [Array<PBXNativeTarget] the user's targets of the project of
+        # @param  [Array<PBXNativeTarget] user_targets the user's targets of the project of
         #         #target_definition which needs to be integrated
         #
         # @return [Hash{String=>Symbol}] A hash representing the user build
@@ -132,7 +128,7 @@ module Pod
           end
         end
 
-        # @param  [Array<PBXNativeTarget] the user's targets of the project of
+        # @param  [Array<PBXNativeTarget] user_targets the user's targets of the project of
         #         #target_definition which needs to be integrated
         #
         # @return [Platform] The platform of the user's targets
@@ -171,7 +167,7 @@ module Pod
 
         # Computes the architectures relevant for the user's targets.
         #
-        # @param  [Array<PBXNativeTarget] the user's targets of the project of
+        # @param  [Array<PBXNativeTarget] user_targets the user's targets of the project of
         #         #target_definition which needs to be integrated
         #
         # @return [Array<String>]

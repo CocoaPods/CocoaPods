@@ -12,6 +12,22 @@ module Pod
       #       subspecs are added instead of the name of the Pods.
       #
       class SpecsState
+        # @return [Set<String>] the names of the pods that were added.
+        #
+        attr_reader :added
+
+        # @return [Set<String>] the names of the pods that were changed.
+        #
+        attr_reader :changed
+
+        # @return [Set<String>] the names of the pods that were deleted.
+        #
+        attr_reader :deleted
+
+        # @return [Set<String>] the names of the pods that were unchanged.
+        #
+        attr_reader :unchanged
+
         # Initialize a new instance
         #
         # @param  [Hash{Symbol=>String}] pods_by_state
@@ -37,22 +53,6 @@ module Pod
             end
           end
         end
-
-        # @return [Set<String>] the names of the pods that were added.
-        #
-        attr_accessor :added
-
-        # @return [Set<String>] the names of the pods that were changed.
-        #
-        attr_accessor :changed
-
-        # @return [Set<String>] the names of the pods that were deleted.
-        #
-        attr_accessor :deleted
-
-        # @return [Set<String>] the names of the pods that were unchanged.
-        #
-        attr_accessor :unchanged
 
         # Displays the state of each pod.
         #
