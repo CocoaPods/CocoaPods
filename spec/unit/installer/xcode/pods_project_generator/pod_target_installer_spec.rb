@@ -412,21 +412,25 @@ module Pod
               end
 
               it 'raises when source file reference is not found' do
-                File.symlink(@first_source_file, @source_symlink_file)
+                file_path = @first_source_file.dirname + "notthere-#{@first_source_file.basename}"
+                File.symlink(file_path, @source_symlink_file)
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
                 @pod_target.file_accessors = [file_accessor]
-                exception = lambda { @installer.install! }.should.raise Informative
-                exception.message.should.include "Unable to find source ref for #{@source_symlink_file} for target BananaLib."
+                exception = lambda { @installer.install! }.should.raise Errno::ENOENT
+                exception.message.should.include 'No such file or directory'
+                exception.message.should.include file_path.to_s
               end
 
               it 'raises when header file reference is not found' do
-                File.symlink(@first_header_file, @header_symlink_file)
+                file_path = @first_header_file.dirname + "notthere-#{@first_header_file.basename}"
+                File.symlink(file_path, @header_symlink_file)
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
                 @pod_target.file_accessors = [file_accessor]
-                exception = lambda { @installer.install! }.should.raise Informative
-                exception.message.should.include "Unable to find header ref for #{@header_symlink_file} for target BananaLib."
+                exception = lambda { @installer.install! }.should.raise Errno::ENOENT
+                exception.message.should.include 'No such file or directory'
+                exception.message.should.include file_path.to_s
               end
 
               it 'does not raise when header file reference is found' do
@@ -447,6 +451,58 @@ module Pod
                 group = @project.group_for_spec('BananaLib')
                 @project.add_file_reference(@source_symlink_file.to_s, group)
                 lambda { @installer.install! }.should.not.raise
+              end
+            end
+
+            #--------------------------------------#
+
+            describe 'in symlinked directory' do
+              before do
+                # copy banana-lib to a temp directory, make symlink to this dir
+                @tmpdir = Pathname.new(Dir.mktmpdir)
+                old_path_root = Sandbox::PathList.new(fixture('banana-lib')).root
+                FileUtils.copy_entry(old_path_root.to_s, @tmpdir + 'banana-lib')
+                @symlink_dir = old_path_root.dirname + 'banana-lib-symlinked'
+                FileUtils.remove_entry(@symlink_dir) if File.symlink?(@symlink_dir)
+
+                File.symlink(@tmpdir + 'banana-lib', @symlink_dir.to_s)
+
+                # reset project to use symlinked dir
+                @project = Project.new(config.sandbox.project_path)
+                config.sandbox.project = @project
+
+                path_list = Sandbox::PathList.new(fixture('banana-lib-symlinked/'))
+                @spec = fixture_spec('banana-lib-symlinked/BananaLib.podspec')
+                file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
+
+                @project.add_pod_group('BananaLib', fixture('banana-lib-symlinked/'))
+                group = @project.group_for_spec('BananaLib')
+                file_accessor.source_files.each do |file|
+                  @project.add_file_reference(file, group)
+                end
+                file_accessor.resources.each do |resource|
+                  @project.add_file_reference(resource, group)
+                end
+
+                @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
+                @pod_target.file_accessors = [file_accessor]
+                @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
+              end
+
+              after do
+                FileUtils.remove_entry(@tmpdir) if Dir.exist?(@tmpdir)
+                FileUtils.remove_entry(@symlink_dir) if File.symlink?(@symlink_dir)
+              end
+
+              it 'headers are public if podspec directory is symlinked for static lib' do
+                @pod_target.stubs(:static_framework?).returns(true)
+                @pod_target.stubs(:requires_frameworks?).returns(true)
+
+                @installer.install!
+                @project.targets.first.headers_build_phase.files.find do |hf|
+                  hf.display_name == 'Banana.h' && hf.settings['ATTRIBUTES'] == ['Public']
+                end.should.not.nil?
               end
             end
 

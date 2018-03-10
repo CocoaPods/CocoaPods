@@ -105,6 +105,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ruenzuo](https://github.com/Ruenzuo)
   [#6964](https://github.com/CocoaPods/CocoaPods/issues/6964)
 
+* Fix returning absolute paths from glob, fixes issue with static framework and public headers.  
+  [Morgan McKenzie](https://github.com/rmtmckenzie)
+  [#7463](https://github.com/CocoaPods/CocoaPods/issues/7463)
+
 ## 1.4.0 (2018-01-18)
 
 ##### Enhancements
