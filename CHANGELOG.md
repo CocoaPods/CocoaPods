@@ -109,6 +109,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Morgan McKenzie](https://github.com/rmtmckenzie)
   [#7463](https://github.com/CocoaPods/CocoaPods/issues/7463)
 
+* Improve messages when integrating Swift pods as static libraries.  
+  [Marcelo Fabri](https://github.com/marcelofabri)
+  [#7495](https://github.com/CocoaPods/CocoaPods/issues/7495)
+
 ## 1.4.0 (2018-01-18)
 
 ##### Enhancements

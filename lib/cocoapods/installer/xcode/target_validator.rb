@@ -123,16 +123,16 @@ module Pod
 
             next if non_module_dependencies.empty?
 
-            error_messages << "The swift pod `#{pod_target.name}` depends upon #{non_module_dependencies.map { |d| "`#{d}`" }.to_sentence}, " \
+            error_messages << "The Swift pod `#{pod_target.name}` depends upon #{non_module_dependencies.map { |d| "`#{d}`" }.to_sentence}, " \
                               'which do not define modules. ' \
                               'To opt into those targets generating module maps '\
-                              '(which is necessary to import them from swift when building as static libraries), ' \
-                              'you may set `use_modular_header!` globally in your Podfile, '\
+                              '(which is necessary to import them from Swift when building as static libraries), ' \
+                              'you may set `use_modular_headers!` globally in your Podfile, '\
                               'or specify `:modular_headers => true` for particular dependencies.'
           end
           return if error_messages.empty?
 
-          raise Informative, 'The following swift pods cannot yet be integrated '\
+          raise Informative, 'The following Swift pods cannot yet be integrated '\
                              "as static libraries:\n\n#{error_messages.join("\n\n")}"
         end
       end
