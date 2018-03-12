@@ -381,9 +381,9 @@ module Pod
             @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
             e = lambda { @validator.validate! }.should.raise Informative
             e.message.should.include <<-EOS.strip_heredoc.strip
-              [!] The following swift pods cannot yet be integrated as static libraries:
+              [!] The following Swift pods cannot yet be integrated as static libraries:
 
-              The swift pod `OrangeFramework` depends upon `matryoshka`, which do not define modules. To opt into those targets generating module maps (which is necessary to import them from swift when building as static libraries), you may set `use_modular_header!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
+              The Swift pod `OrangeFramework` depends upon `matryoshka`, which do not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
             EOS
           end
 
