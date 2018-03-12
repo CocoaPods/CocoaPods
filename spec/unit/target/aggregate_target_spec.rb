@@ -6,7 +6,8 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
+        project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
+        @target = AggregateTarget.new(config.sandbox, false, {}, [], @target_definition, config.sandbox.root.dirname, Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], [])
       end
 
       it 'returns the target_definition that generated it' do
@@ -30,9 +31,6 @@ module Pod
       end
 
       it 'returns the user targets' do
-        project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-        @target.user_project = Xcodeproj::Project.open(project_path)
-        @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
         targets = @target.user_targets
         targets.count.should == 1
         targets.first.class.should == Xcodeproj::Project::PBXNativeTarget
@@ -43,8 +41,7 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.client_root = config.sandbox.root.dirname
+        @target = AggregateTarget.new(config.sandbox, false, {}, [], @target_definition, config.sandbox.root.dirname, nil, nil, [])
       end
 
       it 'returns the absolute path of the xcconfig file' do
@@ -90,21 +87,17 @@ module Pod
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
         @target_definition.set_platform(:ios, '10.0')
-        @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
-        @target = AggregateTarget.new(@target_definition, config.sandbox)
-        @target.pod_targets = [@pod_target]
+        @pod_target = PodTarget.new(config.sandbox, false, {}, [], [@spec], [@target_definition], nil)
+        @target = AggregateTarget.new(config.sandbox, false, {}, [], @target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
       end
 
       describe 'with configuration dependent pod targets' do
         before do
-          @pod_target_release = PodTarget.new([@spec], [@target_definition], config.sandbox)
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], [@spec], [@target_definition], nil)
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Debug').returns(false)
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
-          @target.pod_targets = [@pod_target, @pod_target_release]
-          @target.user_build_configurations = {
-            'Debug' => :debug,
-            'Release' => :release,
-          }
+          @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
+          @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
         end
 
         it 'returns pod targets for given build configuration' do
@@ -123,12 +116,9 @@ module Pod
       describe 'frameworks by config and input output paths' do
         before do
           @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
-          @pod_target_release = PodTarget.new([@coconut_spec], [@target_definition], config.sandbox)
-          @target.pod_targets = [@pod_target]
-          @target.user_build_configurations = {
-            'Debug' => :debug,
-            'Release' => :release,
-          }
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], [@coconut_spec], [@target_definition], nil)
+          @target.stubs(:pod_targets).returns([@pod_target])
+          @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
         end
 
         it 'returns non vendored framework input and output paths by config' do
@@ -175,7 +165,7 @@ module Pod
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:requires_frameworks?).returns(true)
-          @target.pod_targets = [@pod_target, @pod_target_release]
+          @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
           framework_paths_by_config = @target.framework_paths_by_config
           framework_paths_by_config['Debug'].should == [
             { :name => 'BananaLib.framework',
@@ -254,8 +244,7 @@ module Pod
       describe 'With libraries' do
         before do
           @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
-          @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
-          @target.pod_targets = [@pod_target]
+          @target = AggregateTarget.new(config.sandbox, false, {}, [], @pod_target.target_definitions.first, config.sandbox.root.dirname, nil, nil, [@pod_target])
         end
 
         it 'returns that it does not use swift' do
@@ -264,7 +253,7 @@ module Pod
 
         describe 'Host requires frameworks' do
           before do
-            @target.host_requires_frameworks = true
+            @target.stubs(:host_requires_frameworks?).returns(true)
           end
 
           it 'returns the product name' do
@@ -289,6 +278,10 @@ module Pod
         end
 
         describe 'Host does not requires frameworks' do
+          before do
+            @target.stubs(:host_requires_frameworks?).returns(false)
+          end
+
           it 'returns the product name' do
             @target.product_name.should == 'libPods.a'
           end
@@ -314,10 +307,8 @@ module Pod
           before do
             target_definition = Podfile::TargetDefinition.new('Pods', nil)
             target_definition.abstract = false
-            @target = AggregateTarget.new(target_definition, config.sandbox)
             project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-            @target.user_project = Xcodeproj::Project.open(project_path)
-            @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
+            @target = AggregateTarget.new(config.sandbox, true, {}, [], target_definition, config.sandbox.root.dirname, Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], [@pod_target])
           end
 
           it 'requires a host target for app extension targets' do
@@ -356,8 +347,8 @@ module Pod
           end
 
           it 'does not require a host target, if there is no user project (manual integration)' do
-            @target.user_project = nil
-            @target.user_target_uuids = []
+            @target.stubs(:user_project).returns(nil)
+            @target.stubs(:user_target_uuids).returns([])
             @target.requires_host_target?.should == false
           end
 
@@ -376,10 +367,8 @@ module Pod
         before do
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
           target_definition.abstract = false
-          @target = AggregateTarget.new(target_definition, config.sandbox)
           project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-          @target.user_project = Xcodeproj::Project.open(project_path)
-          @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
+          @target = AggregateTarget.new(config.sandbox, true, {}, [], target_definition, config.sandbox.root.dirname, Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], [@pod_target])
         end
 
         it 'is a library target if the user_target is a framework' do
@@ -410,10 +399,8 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', [fixture_target_definition('iOS Example')])
-          @target = AggregateTarget.new(@pod_target.target_definitions.first, config.sandbox)
-          @target.stubs(:requires_frameworks?).returns(true)
-          @target.pod_targets = [@pod_target]
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', true, {}, [fixture_target_definition('iOS Example')])
+          @target = AggregateTarget.new(config.sandbox, true, {}, [], @pod_target.target_definitions.first, config.sandbox.root.dirname, nil, nil, [@pod_target])
         end
 
         it 'returns that it uses swift' do

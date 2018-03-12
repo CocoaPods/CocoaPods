@@ -12,9 +12,13 @@ module Pod
         #
         attr_reader :target
 
+        # @return [Xcodeproj::Config] The generated xcconfig.
+        #
+        attr_reader :xcconfig
+
         # Initialize a new instance
         #
-        # @param  [Target] target @see target
+        # @param  [Target] target @see #target
         #
         # @param  [Boolean] test_xcconfig
         #         whether this is an xcconfig for a test native target.
@@ -23,10 +27,6 @@ module Pod
           @target = target
           @test_xcconfig = test_xcconfig
         end
-
-        # @return [Xcodeproj::Config] The generated xcconfig.
-        #
-        attr_reader :xcconfig
 
         # Generates and saves the xcconfig to the given path.
         #

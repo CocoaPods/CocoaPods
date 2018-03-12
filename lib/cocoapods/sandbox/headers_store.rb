@@ -16,7 +16,7 @@ module Pod
       #
       attr_reader :sandbox
 
-      # @param  [Sandbox] @see sandbox
+      # @param  [Sandbox] @see #sandbox
       #
       # @param  [String] relative_path
       #         the relative path to the sandbox root and hence to the Pods

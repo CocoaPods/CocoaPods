@@ -41,9 +41,8 @@ module Pod
             )
 
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
-            @pod_target = fixture_pod_target(@spec)
+            @pod_target = fixture_pod_target(@spec, true)
             @pod_target.dependent_targets = [@monkey_pod_target, vendored_dep_target]
-            @pod_target.host_requires_frameworks = true
 
             @consumer = @pod_target.spec_consumers.first
             @podfile = @pod_target.podfile

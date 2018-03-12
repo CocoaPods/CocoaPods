@@ -24,22 +24,20 @@ module Pod
               @project.add_file_reference(file, group)
             end
 
-            @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
+            @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }, ['$(ARCHS_STANDARD_64_BIT)'], [@spec], [@target_definition], nil)
             @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-            @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
             @pod_target.file_accessors = [file_accessor]
 
             @installer = TargetInstaller.new(config.sandbox, @pod_target)
           end
 
           it 'adds the architectures to the custom build configurations of the user target' do
-            @pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
             @installer.send(:add_target)
             @installer.send(:native_target).resolved_build_setting('ARCHS').should == {
-              'Release' => '$(ARCHS_STANDARD_64_BIT)',
-              'Debug' => '$(ARCHS_STANDARD_64_BIT)',
-              'AppStore' => '$(ARCHS_STANDARD_64_BIT)',
-              'Test' => '$(ARCHS_STANDARD_64_BIT)',
+              'Release' => ['$(ARCHS_STANDARD_64_BIT)'],
+              'Debug' => ['$(ARCHS_STANDARD_64_BIT)'],
+              'AppStore' => ['$(ARCHS_STANDARD_64_BIT)'],
+              'Test' => ['$(ARCHS_STANDARD_64_BIT)'],
             }
           end
 

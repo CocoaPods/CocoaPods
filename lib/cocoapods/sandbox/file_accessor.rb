@@ -33,8 +33,8 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param [Sandbox::PathList, Pathname] path_list @see path_list
-      # @param [Specification::Consumer] spec_consumer @see spec_consumer
+      # @param [Sandbox::PathList, Pathname] path_list @see #path_list
+      # @param [Specification::Consumer] spec_consumer @see #spec_consumer
       #
       def initialize(path_list, spec_consumer)
         if path_list.is_a?(PathList)

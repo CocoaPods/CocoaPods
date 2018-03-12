@@ -20,9 +20,9 @@ module Pod
 
           # Initialize a new instance
           #
-          # @param [Sandbox] sandbox @see sandbox
-          # @param [Array<PodTarget>] pod_targets @see pod_targets
-          # @param [Project] pods_project @see pod_project
+          # @param [Sandbox] sandbox @see #sandbox
+          # @param [Array<PodTarget>] pod_targets @see #pod_targets
+          # @param [Project] pods_project @see #pods_project
           #
           def initialize(sandbox, pod_targets, pods_project)
             @sandbox = sandbox

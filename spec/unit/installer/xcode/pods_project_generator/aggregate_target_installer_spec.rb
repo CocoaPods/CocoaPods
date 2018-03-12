@@ -26,15 +26,12 @@ module Pod
                 @project.add_file_reference(file, group)
               end
 
-              @target = AggregateTarget.new(@target_definition, config.sandbox)
-              @target.client_root = config.sandbox.root.dirname
-              @target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+              user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
 
-              @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
-              @pod_target.user_build_configurations = @target.user_build_configurations
+              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], [@spec], [@target_definition], nil)
               @pod_target.file_accessors = [file_accessor]
 
-              @target.pod_targets = [@pod_target]
+              @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], @target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
 
               @installer = AggregateTargetInstaller.new(config.sandbox, @target)
 

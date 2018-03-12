@@ -43,12 +43,12 @@ module Pod
 
         # Initialize a new instance
         #
-        # @param  [Array<AggregateTarget>] aggregate_targets     @see aggregate_targets
-        # @param  [Sandbox]                sandbox               @see sandbox
-        # @param  [Array<PodTarget>]       pod_targets           @see pod_targets
-        # @param  [Analyzer]               analysis_result       @see analysis_result
-        # @param  [InstallationOptions]    installation_options  @see installation_options
-        # @param  [Config]                 config                @see config
+        # @param  [Array<AggregateTarget>] aggregate_targets     @see #aggregate_targets
+        # @param  [Sandbox]                sandbox               @see #sandbox
+        # @param  [Array<PodTarget>]       pod_targets           @see #pod_targets
+        # @param  [Analyzer]               analysis_result       @see #analysis_result
+        # @param  [InstallationOptions]    installation_options  @see #installation_options
+        # @param  [Config]                 config                @see #config
         #
         def initialize(aggregate_targets, sandbox, pod_targets, analysis_result, installation_options, config)
           @aggregate_targets = aggregate_targets

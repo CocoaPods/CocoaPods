@@ -125,15 +125,15 @@ def fixture_target_definition(name = 'Pods', platform = Pod::Platform.ios)
                                      'platform' => platform_hash)
 end
 
-def fixture_pod_target(spec_or_name, target_definitions = [])
+def fixture_pod_target(spec_or_name, host_requires_frameworks = false, user_build_configurations = {}, target_definitions = [])
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
-  fixture_pod_target_with_specs([spec], target_definitions)
+  fixture_pod_target_with_specs([spec], host_requires_frameworks, user_build_configurations, target_definitions)
 end
 
-def fixture_pod_target_with_specs(specs, target_definitions = [])
+def fixture_pod_target_with_specs(specs, host_requires_frameworks = false, user_build_configurations = {}, target_definitions = [])
   target_definitions << fixture_target_definition if target_definitions.empty?
   target_definitions.each { |td| specs.each { |spec| td.store_pod(spec.name) } }
-  Pod::PodTarget.new(specs, target_definitions, config.sandbox).tap do |pod_target|
+  Pod::PodTarget.new(config.sandbox, host_requires_frameworks, user_build_configurations, [], specs, target_definitions, nil).tap do |pod_target|
     specs.each do |spec|
       pod_target.file_accessors << fixture_file_accessor(spec, pod_target.platform)
       consumer = spec.consumer(pod_target.platform)
@@ -144,10 +144,7 @@ end
 
 def fixture_aggregate_target(pod_targets = [], target_definition = nil)
   target_definition ||= pod_targets.flat_map(&:target_definitions).first || fixture_target_definition
-  target = Pod::AggregateTarget.new(target_definition, config.sandbox)
-  target.client_root = config.sandbox.root.dirname
-  target.pod_targets = pod_targets
-  target
+  Pod::AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, pod_targets)
 end
 
 #-----------------------------------------------------------------------------#

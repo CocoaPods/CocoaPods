@@ -6,7 +6,7 @@ module Pod
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       @target_definition = Podfile::TargetDefinition.new('Pods', nil)
       @target_definition.abstract = false
-      @pod_target = PodTarget.new([spec], [@target_definition], config.sandbox)
+      @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [@target_definition], nil)
       @pod_target.stubs(:platform).returns(Platform.ios)
     end
 
@@ -252,7 +252,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [], [monkey_spec], [@target_definition], nil)
           monkey_pod_target.stubs(:platform).returns(Platform.ios)
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -270,7 +270,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [], [monkey_spec], [@target_definition], nil)
           monkey_pod_target.stubs(:platform).returns(Platform.ios)
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -317,7 +317,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [], [monkey_spec], [@target_definition], nil)
           monkey_pod_target.stubs(:platform).returns(Platform.ios)
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -332,7 +332,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new([monkey_spec], [@target_definition], config.sandbox)
+          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [], [monkey_spec], [@target_definition], nil)
           monkey_pod_target.stubs(:platform).returns(Platform.ios)
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -357,7 +357,7 @@ module Pod
 
         describe 'Host requires frameworks' do
           before do
-            @pod_target.host_requires_frameworks = true
+            @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec', true)
           end
 
           it 'returns the product name' do
@@ -413,8 +413,7 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
-          @pod_target.host_requires_frameworks = true
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', true)
         end
 
         it 'returns that it uses swift' do
@@ -490,7 +489,7 @@ module Pod
           @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           @test_spec_target_definition = Podfile::TargetDefinition.new('Pods', nil)
           @test_spec_target_definition.abstract = false
-          @test_pod_target = PodTarget.new([@coconut_spec, *@coconut_spec.recursive_subspecs], [@test_spec_target_definition], config.sandbox)
+          @test_pod_target = PodTarget.new(config.sandbox, false, {}, [], [@coconut_spec, *@coconut_spec.recursive_subspecs], [@test_spec_target_definition], nil)
           @test_pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
         end
 

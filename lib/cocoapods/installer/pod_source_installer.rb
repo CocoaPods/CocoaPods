@@ -24,9 +24,9 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param [Sandbox] sandbox @see sandbox
-      # @param [Hash{Symbol=>Array}] specs_by_platform @see specs_by_platform
-      # @param [Boolean] can_cache @see can_cache
+      # @param [Sandbox] sandbox @see #sandbox
+      # @param [Hash{Symbol=>Array}] specs_by_platform @see #specs_by_platform
+      # @param [Boolean] can_cache @see #can_cache
       #
       def initialize(sandbox, specs_by_platform, can_cache: true)
         @sandbox = sandbox

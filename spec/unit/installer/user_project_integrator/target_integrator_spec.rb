@@ -14,11 +14,7 @@ module Pod
         @target = @project.targets.first
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.abstract = false
-        @pod_bundle = AggregateTarget.new(target_definition, config.sandbox)
-        @pod_bundle.user_project = @project
-        @pod_bundle.user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
-        @pod_bundle.client_root = project_path.dirname
-        @pod_bundle.user_target_uuids = [@target.uuid]
+        @pod_bundle = AggregateTarget.new(config.sandbox, false, { 'Release' => :release, 'Debug' => :debug }, [], target_definition, project_path.dirname, @project, [@target.uuid], [])
         @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
         @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [{ :input_path => '${PODS_BUILD_DIR}/Lib/Lib.framework' }])
         configuration = Xcodeproj::Config.new(

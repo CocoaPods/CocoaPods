@@ -4,7 +4,7 @@ module Pod
   describe Generator::ModuleMap do
     before do
       spec = fixture_spec('banana-lib/BananaLib.podspec')
-      @pod_target = PodTarget.new([spec], [fixture_target_definition], config.sandbox)
+      @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [fixture_target_definition], nil)
       @gen = Generator::ModuleMap.new(@pod_target)
     end
 

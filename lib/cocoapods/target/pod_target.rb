@@ -16,7 +16,7 @@ module Pod
     #
     attr_reader :build_headers
 
-    # @return [String] used as suffix in the label
+    # @return [String] the suffix used for this target when deduplicated. May be `nil`.
     #
     # @note This affects the value returned by #configuration_build_dir
     #       and accessors relying on this as #build_product_path.
@@ -38,21 +38,24 @@ module Pod
     #
     attr_accessor :test_native_targets
 
-    # @param [Array<Specification>] specs @see #specs
+    # Initialize a new instance
+    #
+    # @param [Sandbox] sandbox @see Target#sandbox
+    # @param [Boolean] host_requires_frameworks @see Target#host_requires_frameworks
+    # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
+    # @param [Array<String>] archs @see Target#archs
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
-    # @param [Sandbox] sandbox @see #sandbox
     # @param [String] scope_suffix @see #scope_suffix
     #
-    def initialize(specs, target_definitions, sandbox, scope_suffix = nil)
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, target_definitions, scope_suffix = nil)
+      super(sandbox, host_requires_frameworks, user_build_configurations, archs)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
       raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
-      super()
       @specs = specs.dup.freeze
       @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
       @target_definitions = target_definitions
-      @sandbox = sandbox
       @scope_suffix = scope_suffix
       @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @file_accessors = []
@@ -74,13 +77,10 @@ module Pod
         if cache[cache_key]
           cache[cache_key]
         else
-          target = PodTarget.new(specs, [target_definition], sandbox, target_definition.label)
+          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, [target_definition], target_definition.label)
           target.file_accessors = file_accessors
-          target.user_build_configurations = user_build_configurations
           target.native_target = native_target
-          target.archs = archs
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
-          target.host_requires_frameworks = host_requires_frameworks
           cache[cache_key] = target
         end
       end

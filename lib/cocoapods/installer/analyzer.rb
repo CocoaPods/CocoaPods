@@ -39,10 +39,10 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param  [Sandbox]       sandbox           @see sandbox
-      # @param  [Podfile]       podfile           @see podfile
-      # @param  [Lockfile]      lockfile          @see lockfile
-      # @param  [Array<Source>] plugin_sources    @see plugin_sources
+      # @param  [Sandbox]       sandbox           @see #sandbox
+      # @param  [Podfile]       podfile           @see #podfile
+      # @param  [Lockfile]      lockfile          @see #lockfile
+      # @param  [Array<Source>] plugin_sources    @see #plugin_sources
       #
       def initialize(sandbox, podfile, lockfile = nil, plugin_sources = nil)
         @sandbox  = sandbox
@@ -430,29 +430,27 @@ module Pod
       # @return [AggregateTarget]
       #
       def generate_target(target_definition, pod_targets, resolver_specs_by_target)
-        target = AggregateTarget.new(target_definition, sandbox)
-        target.host_requires_frameworks |= target_definition.uses_frameworks?
-
         if installation_options.integrate_targets?
           target_inspection = result.target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
-          target.user_project = target_inspection.project
-          target.client_root = target.user_project_path.dirname.realpath
-          target.user_target_uuids = target_inspection.project_target_uuids
-          target.user_build_configurations = target_inspection.build_configurations
-          target.archs = target_inspection.archs
+          user_project = target_inspection.project
+          client_root = user_project.path.dirname.realpath
+          user_target_uuids = target_inspection.project_target_uuids
+          user_build_configurations = target_inspection.build_configurations
+          archs = target_inspection.archs
         else
-          target.client_root = config.installation_root.realpath
-          target.user_target_uuids = []
-          target.user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
+          user_project = nil
+          client_root = config.installation_root.realpath
+          user_target_uuids = []
+          user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
+          archs = []
           if target_definition.platform && target_definition.platform.name == :osx
-            target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            archs = ['$(ARCHS_STANDARD_64_BIT)']
           end
         end
-
-        target.pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target)
-
-        target
+        pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target)
+        AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs,
+                            target_definition, client_root, user_project, user_target_uuids, pod_targets)
       end
 
       # Returns a filtered list of pod targets that should or should not be part of the target definition. Pod targets
@@ -602,21 +600,19 @@ module Pod
       # @return [PodTarget]
       #
       def generate_pod_target(target_definitions, pod_specs, scope_suffix: nil)
-        pod_target = PodTarget.new(pod_specs, target_definitions, sandbox, scope_suffix)
-        pod_target.host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
-
         if installation_options.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
-          pod_target.user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
-          pod_target.archs = target_inspections.flat_map(&:archs).compact.uniq.sort
+          user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
+          archs = target_inspections.flat_map(&:archs).compact.uniq.sort
         else
-          pod_target.user_build_configurations = {}
+          user_build_configurations = {}
+          archs = []
           if target_definitions.first.platform.name == :osx
-            pod_target.archs = '$(ARCHS_STANDARD_64_BIT)'
+            archs = ['$(ARCHS_STANDARD_64_BIT)']
           end
         end
-
-        pod_target
+        PodTarget.new(sandbox, target_definitions.any?(&:uses_frameworks?), user_build_configurations, archs, pod_specs,
+                      target_definitions, scope_suffix)
       end
 
       # Generates dependencies that require the specific version of the Pods
