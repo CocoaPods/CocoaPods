@@ -1068,6 +1068,26 @@ module Pod
           pod_target_one = stub(:uses_swift? => true, :swift_version => '4.0', :native_target => native_target_one, :test_native_targets => [])
           pod_target_two = stub(:uses_swift? => true, :swift_version => '3.2', :native_target => native_target_two, :test_native_targets => [])
           aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
+          installer = stub(:pod_targets => [pod_target_one, pod_target_two])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], '9.0')
+          debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
+          debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
+        end
+
+        it 'honors swift version set by the pod target for dependencies that are not part of the aggregate target' do
+          validator = test_swiftpod
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration_one = stub(:build_settings => {})
+          debug_configuration_two = stub(:build_settings => {})
+          native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+          native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
+          pod_target_one = stub(:uses_swift? => true, :swift_version => '4.0', :native_target => native_target_one, :test_native_targets => [])
+          pod_target_two = stub(:uses_swift? => true, :swift_version => '3.2', :native_target => native_target_two, :test_native_targets => [])
+          aggregate_target = stub(:pod_targets => [pod_target_one])
+          installer = stub(:pod_targets => [pod_target_one, pod_target_two])
+          validator.instance_variable_set(:@installer, installer)
           validator.send(:configure_pod_targets, [aggregate_target], '9.0')
           debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'

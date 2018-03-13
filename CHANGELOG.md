@@ -55,6 +55,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Ensure `SWIFT_VERSION` is set for test only pod targets during validation  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7498](https://github.com/CocoaPods/CocoaPods/issues/7498)
+
 * Fix iOS test native target signing settings  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7504](https://github.com/CocoaPods/CocoaPods/pull/7504)
