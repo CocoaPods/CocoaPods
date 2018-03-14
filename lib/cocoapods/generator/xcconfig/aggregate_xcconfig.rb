@@ -143,12 +143,14 @@ module Pod
               "#{target.build_product_path}/Headers"
             end
             build_settings = {
+              # TODO: remove quote imports in CocoaPods 2.0
               # Make framework headers discoverable by `import "…"`
               'OTHER_CFLAGS' => XCConfigHelper.quote(framework_header_search_paths, '-iquote'),
             }
             if pod_targets.any? { |t| !t.should_build? }
               # Make library headers discoverable by `#import "…"`
               library_header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+              # TODO: remove quote imports in CocoaPods 2.0
               build_settings['HEADER_SEARCH_PATHS'] = XCConfigHelper.quote(library_header_search_paths)
               build_settings['OTHER_CFLAGS'] += ' ' + XCConfigHelper.quote(library_header_search_paths, '-isystem')
             end
@@ -157,6 +159,7 @@ module Pod
             # Make headers discoverable from $PODS_ROOT/Headers directory
             header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
             {
+              # TODO: remove quote imports in CocoaPods 2.0
               # by `#import "…"`
               'HEADER_SEARCH_PATHS' => XCConfigHelper.quote(header_search_paths),
               # by `#import <…>`

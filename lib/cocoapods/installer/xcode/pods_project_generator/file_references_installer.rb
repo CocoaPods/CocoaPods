@@ -153,7 +153,7 @@ module Pod
 
                   # Public headers on the other hand will be added in Pods/Headers/Public/PodA/PodA/*.h
                   # The extra folder is intentional in order for `<>` imports to work.
-                  header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers, :public).each do |namespaced_path, files|
+                  header_mappings(headers_sandbox, file_accessor, file_accessor.public_headers).each do |namespaced_path, files|
                     added_public_headers = true
                     sandbox.public_headers.add_files(namespaced_path, files)
                   end
@@ -301,10 +301,6 @@ module Pod
           #         The consumer file accessor for which the headers need to be
           #         linked.
           #
-          # @param  [Symbol] visibility_scope
-          #         The visibility scope to produce header mappings for. If set to :public then the headers
-          #         are nested an additional level deep. For example, 'Pods/Headers/Public/PodA/PodA'.
-          #
           # @param  [Array<Pathname>] headers
           #         The absolute paths of the headers which need to be mapped.
           #
@@ -312,11 +308,10 @@ module Pod
           #         headers folders as the keys and the absolute paths of the
           #         header files as the values.
           #
-          def header_mappings(headers_sandbox, file_accessor, headers, visibility_scope = :private)
+          def header_mappings(headers_sandbox, file_accessor, headers)
             consumer = file_accessor.spec_consumer
             header_mappings_dir = consumer.header_mappings_dir
             dir = headers_sandbox
-            dir += headers_sandbox if visibility_scope == :public
             dir += consumer.header_dir if consumer.header_dir
 
             mappings = {}

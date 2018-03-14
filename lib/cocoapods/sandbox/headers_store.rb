@@ -58,12 +58,12 @@ module Pod
           matches_platform && matches_target
         end
         headers_dir = root.relative_path_from(sandbox.root).dirname
-        @search_paths_cache[key] = search_paths.uniq.flat_map do |entry|
-          path = "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}"
-          paths = [path]
-          paths.push("#{path}/#{entry[:path].basename}") if !use_modular_headers && @visibility_scope == :public
+        @search_paths_cache[key] = search_paths.flat_map do |entry|
+          paths = []
+          paths << "${PODS_ROOT}/#{headers_dir}/#{@relative_path}" if !use_modular_headers || @visibility_scope == :public
+          paths << "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" if !use_modular_headers || @visibility_scope == :private
           paths
-        end
+        end.uniq
       end
 
       # Removes the directory as it is regenerated from scratch during each
