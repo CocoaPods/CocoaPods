@@ -506,13 +506,10 @@ module Pod
     end
 
     def configure_pod_targets(targets, deployment_target)
+      test_only_pod_targets = @installer.pod_targets - targets.flat_map(&:pod_targets)
       targets.each do |target|
         target.pod_targets.each do |pod_target|
-          next unless (native_target = pod_target.native_target)
-          native_target.build_configuration_list.build_configurations.each do |build_configuration|
-            (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-            build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
-          end
+          update_pod_target_build_settings(pod_target)
           if pod_target.uses_swift?
             pod_target.test_native_targets.each do |test_native_target|
               test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
@@ -525,6 +522,20 @@ module Pod
             (deployment_target.nil? || Version.new(deployment_target).major < 8)
           uses_xctest = target.spec_consumers.any? { |c| (c.frameworks + c.weak_frameworks).include? 'XCTest' }
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
+        end
+      end
+      # Wire up Swift version to pod targets used only by tests.
+      test_only_pod_targets.each do |test_pod_target|
+        update_pod_target_build_settings(test_pod_target)
+      end
+    end
+
+    def update_pod_target_build_settings(pod_target)
+      native_target = pod_target.native_target
+      unless native_target.nil?
+        native_target.build_configuration_list.build_configurations.each do |build_configuration|
+          (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
+          build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
         end
       end
     end
