@@ -278,7 +278,10 @@ module Pod
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
                 # We must codesign iOS XCTest bundles that contain binary frameworks to allow them to be launchable in the simulator
-                configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES' unless target.platform == :osx
+                unless target.platform == :osx
+                  configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
+                  configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
+                end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end

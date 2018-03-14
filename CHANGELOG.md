@@ -55,6 +55,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix iOS test native target signing settings  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7504](https://github.com/CocoaPods/CocoaPods/pull/7504)
+
 * Clear input/output paths if they exceed an arbitrary limit  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7362](https://github.com/CocoaPods/CocoaPods/issues/7362)
