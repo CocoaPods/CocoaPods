@@ -600,16 +600,10 @@ module Pod
       header_search_paths = []
       header_search_paths.concat(build_headers.search_paths(platform, nil, uses_modular_headers?))
       header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
-      # Modular headers will only provide header search paths of the dependencies of the pod target. That is in
-      # contrast to legacy mode, which has always given access to all pods header search paths.
-      if uses_modular_headers?
-        dependent_targets = recursive_dependent_targets
-        dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
-        dependent_targets.each do |dependent_target|
-          header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
-        end
-      else
-        header_search_paths.concat(sandbox.public_headers.search_paths(platform))
+      dependent_targets = recursive_dependent_targets
+      dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
+      dependent_targets.each do |dependent_target|
+        header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
       header_search_paths.uniq
     end

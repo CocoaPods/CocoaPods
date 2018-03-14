@@ -272,10 +272,12 @@ module Pod
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/BananaLib/BananaLib"' \
-              ' "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/CoconutLib/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/monkey" "${PODS_ROOT}/Headers/Public/monkey/monkey"'
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
+              ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public"' \
+              ' "${PODS_ROOT}/Headers/Public/BananaLib"' \
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public/monkey"'
           end
 
           it 'adds correct header search paths for dependent and test targets for non test xcconfigs without modular headers' do
@@ -292,10 +294,11 @@ module Pod
             # This is not an test xcconfig so it should exclude header search paths for the 'monkey' pod
             generator = PodXCConfig.new(@coconut_pod_target, false)
             xcconfig = generator.generate
-            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/BananaLib" "${PODS_ROOT}/Headers/Public/BananaLib/BananaLib"' \
-              ' "${PODS_ROOT}/Headers/Public/CoconutLib" "${PODS_ROOT}/Headers/Public/CoconutLib/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/monkey" "${PODS_ROOT}/Headers/Public/monkey/monkey"'
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
+              ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public"' \
+              ' "${PODS_ROOT}/Headers/Public/BananaLib"' \
+              ' "${PODS_ROOT}/Headers/Public/CoconutLib"' \
           end
 
           it 'adds correct header search paths for dependent and test targets with modular headers' do
@@ -312,9 +315,7 @@ module Pod
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/BananaLib"' \
-              ' "${PODS_ROOT}/Headers/Public/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/monkey"'
+              ' "${PODS_ROOT}/Headers/Public"' \
           end
 
           it 'adds correct header search paths for dependent and test targets for non test xcconfigs with modular headers' do
@@ -331,8 +332,7 @@ module Pod
             generator = PodXCConfig.new(@coconut_pod_target, false)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
-              ' "${PODS_ROOT}/Headers/Public/BananaLib"' \
-              ' "${PODS_ROOT}/Headers/Public/CoconutLib"' \
+              ' "${PODS_ROOT}/Headers/Public"' \
           end
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do

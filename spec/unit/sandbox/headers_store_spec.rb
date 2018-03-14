@@ -49,8 +49,8 @@ module Pod
         @public_header_dir.add_search_path('iOS Search Path', Platform.ios)
         @public_header_dir.add_search_path('OS X Search Path', Platform.osx)
         @public_header_dir.search_paths(Platform.ios).sort.should == [
+          '${PODS_ROOT}/Headers/Public',
           '${PODS_ROOT}/Headers/Public/iOS Search Path',
-          '${PODS_ROOT}/Headers/Public/iOS Search Path/iOS Search Path',
         ]
       end
 
@@ -58,12 +58,12 @@ module Pod
         @public_header_dir.add_search_path('ios-target', Platform.ios)
         @public_header_dir.add_search_path('osx-target', Platform.osx)
         @public_header_dir.search_paths(Platform.ios, 'ios-target').sort.should == [
+          '${PODS_ROOT}/Headers/Public',
           '${PODS_ROOT}/Headers/Public/ios-target',
-          '${PODS_ROOT}/Headers/Public/ios-target/ios-target',
         ]
         @public_header_dir.search_paths(Platform.osx, 'osx-target').sort.should == [
+          '${PODS_ROOT}/Headers/Public',
           '${PODS_ROOT}/Headers/Public/osx-target',
-          '${PODS_ROOT}/Headers/Public/osx-target/osx-target',
         ]
       end
 
@@ -71,9 +71,11 @@ module Pod
         @private_header_dir.add_search_path('ios-target', Platform.ios)
         @private_header_dir.add_search_path('osx-target', Platform.osx)
         @private_header_dir.search_paths(Platform.ios, 'ios-target', false).sort.should == [
+          '${PODS_ROOT}/Headers/Private',
           '${PODS_ROOT}/Headers/Private/ios-target',
         ]
         @private_header_dir.search_paths(Platform.osx, 'osx-target', false).sort.should == [
+          '${PODS_ROOT}/Headers/Private',
           '${PODS_ROOT}/Headers/Private/osx-target',
         ]
       end
@@ -84,7 +86,7 @@ module Pod
         @public_header_dir.add_search_path('iOS Search Path', Platform.ios)
         @public_header_dir.add_search_path('OS X Search Path', Platform.osx)
         @public_header_dir.search_paths(Platform.ios, nil, true).sort.should == [
-          '${PODS_ROOT}/Headers/Public/iOS Search Path',
+          '${PODS_ROOT}/Headers/Public',
         ]
       end
 
@@ -92,10 +94,10 @@ module Pod
         @public_header_dir.add_search_path('ios-target', Platform.ios)
         @public_header_dir.add_search_path('osx-target', Platform.osx)
         @public_header_dir.search_paths(Platform.ios, 'ios-target', true).sort.should == [
-          '${PODS_ROOT}/Headers/Public/ios-target',
+          '${PODS_ROOT}/Headers/Public',
         ]
         @public_header_dir.search_paths(Platform.osx, 'osx-target', true).sort.should == [
-          '${PODS_ROOT}/Headers/Public/osx-target',
+          '${PODS_ROOT}/Headers/Public',
         ]
       end
 

@@ -84,7 +84,7 @@ module Pod
             it 'links the public headers meant for the user' do
               @installer.install!
               headers_root = config.sandbox.public_headers.root
-              public_headers = [headers_root + 'BananaLib/BananaLib/Banana.h', headers_root + 'BananaLib/BananaLib/MoreBanana.h']
+              public_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
               private_header = headers_root + 'BananaLib/BananaPrivate.h'
               framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
               framework_subdir_header = headers_root + 'BananaLib/Bananalib/SubDir/SubBananalib.h'
@@ -92,10 +92,9 @@ module Pod
               private_header.should.not.exist
               framework_header.should.exist
               framework_subdir_header.should.exist
-
               config.sandbox.public_headers.search_paths(@pod_target.platform).should == %w(
+                ${PODS_ROOT}/Headers/Public
                 ${PODS_ROOT}/Headers/Public/BananaLib
-                ${PODS_ROOT}/Headers/Public/BananaLib/BananaLib
               )
             end
 
@@ -111,12 +110,11 @@ module Pod
               headers_root = config.sandbox.public_headers.root
               banana_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
               banana_headers.each { |banana_header| banana_header.should.not.exist }
-              monkey_header = headers_root + 'monkey/monkey/monkey.h'
+              monkey_header = headers_root + 'monkey/monkey.h'
               monkey_header.should.exist # since it lives outside of the vendored framework
-
               config.sandbox.public_headers.search_paths(pod_target_one.platform).should == %w(
+                ${PODS_ROOT}/Headers/Public
                 ${PODS_ROOT}/Headers/Public/monkey
-                ${PODS_ROOT}/Headers/Public/monkey/monkey
               )
             end
 
@@ -219,9 +217,9 @@ module Pod
               it 'returns the correct public header mappings' do
                 headers_sandbox = Pathname.new('BananaLib')
                 headers = [Pathname.new('Banana.h')]
-                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers, :public)
+                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
                 mappings.should == {
-                  Pathname.new('BananaLib/BananaLib') => [Pathname.new('Banana.h')],
+                  Pathname.new('BananaLib') => [Pathname.new('Banana.h')],
                 }
               end
 
@@ -229,9 +227,9 @@ module Pod
                 headers_sandbox = Pathname.new('BananaLib')
                 headers = [Pathname.new('Banana.h')]
                 @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
-                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers, :public)
+                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
                 mappings.should == {
-                  Pathname.new('BananaLib/BananaLib/Sub_dir') => [Pathname.new('Banana.h')],
+                  Pathname.new('BananaLib/Sub_dir') => [Pathname.new('Banana.h')],
                 }
               end
 
