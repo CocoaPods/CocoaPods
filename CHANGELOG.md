@@ -59,6 +59,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7511](https://github.com/CocoaPods/CocoaPods/issues/7511)
 
+* Fix `PRODUCT_MODULE_NAME` for generated test targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7507](https://github.com/CocoaPods/CocoaPods/issues/7507)
+
 * Ensure `SWIFT_VERSION` is set for test only pod targets during validation  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7498](https://github.com/CocoaPods/CocoaPods/issues/7498)
