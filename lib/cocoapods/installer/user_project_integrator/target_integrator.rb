@@ -230,6 +230,7 @@ module Pod
             when '.xcdatamodel'       then '.mom'
             when '.xcdatamodeld'      then '.momd'
             when '.xcmappingmodel'    then '.cdm'
+            when '.xcassets'          then '.car'
             else                      input_extension
             end
           end
@@ -311,8 +312,10 @@ module Pod
               # convert input paths to output paths according to extensions
               output_paths = resource_paths_flattened.map do |input_path|
                 base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
-                output_extension = TargetIntegrator.output_extension_for_resource(File.extname(input_path))
-                File.join(base_path, File.basename(input_path, File.extname(input_path)) + output_extension)
+                extname = File.extname(input_path)
+                basename = extname == '.xcassets' ? 'Assets' : File.basename(input_path)
+                output_extension = TargetIntegrator.output_extension_for_resource(extname)
+                File.join(base_path, File.basename(basename, extname) + output_extension)
               end.uniq
               TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
               TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
