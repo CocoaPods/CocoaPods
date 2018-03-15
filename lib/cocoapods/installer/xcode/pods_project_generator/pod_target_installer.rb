@@ -277,6 +277,7 @@ module Pod
                 # requires frameworks. For tests we always use the test target name as the product name
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
+                configuration.build_settings['PRODUCT_MODULE_NAME'] = name
                 # We must codesign iOS XCTest bundles that contain binary frameworks to allow them to be launchable in the simulator
                 unless target.platform == :osx
                   configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
