@@ -16,11 +16,11 @@ module Pod
       # @return [Pathname] The root of the list whose files and directories
       #         are used to perform the matching operations.
       #
-      attr_accessor :root
+      attr_reader :root
 
       # Initialize a new instance
       #
-      # @param  [Pathname] root The root of the PathList.
+      # @param  [Pathname] root @see #root
       #
       def initialize(root)
         root_dir = ActiveSupport::Multibyte::Unicode.normalize(root.to_s)

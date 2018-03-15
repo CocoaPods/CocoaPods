@@ -5,40 +5,48 @@ module Pod
         # @return [TargetDefinition] the target definition, whose project was
         #         inspected
         #
-        attr_accessor :target_definition
+        attr_reader :target_definition
 
-        # @return [Pathname] the path of the user project that the
-        #         #target_definition should integrate
+        # @return [Xcodeproj::Project] the user's Xcode project
         #
-        attr_accessor :project_path
+        attr_reader :project
 
         # @return [Array<String>] the uuid of the user's targets
         #
-        attr_accessor :project_target_uuids
+        attr_reader :project_target_uuids
 
         # @return [Hash{String=>Symbol}] A hash representing the user build
         #         configurations where each key corresponds to the name of a
         #         configuration and its value to its type (`:debug` or
         #         `:release`).
         #
-        attr_accessor :build_configurations
+        attr_reader :build_configurations
 
         # @return [Platform] the platform of the user targets
         #
-        attr_accessor :platform
+        attr_reader :platform
 
         # @return [Array<String>] the architectures used by user's targets
         #
-        attr_accessor :archs
+        attr_reader :archs
 
-        # @return [Bool] whether frameworks are recommended for the integration
-        #         due to the presence of Swift source in the user's targets
+        # Initialize a new instance
         #
-        attr_accessor :recommends_frameworks
-
-        # @return [Xcodeproj::Project] the user's Xcode project
+        # @param [TargetDefinition] target_definition @see #target_definition
+        # @param [Xcodeproj::Project] project @see #project
+        # @param [Array<String>] project_target_uuids @see #project_target_uuids
+        # @param [Hash{String=>Symbol}] build_configurations @see #build_configurations
+        # @param [Platform] platform @see #platform
+        # @param [Array<String>] archs @see #archs
         #
-        attr_accessor :project
+        def initialize(target_definition, project, project_target_uuids, build_configurations, platform, archs)
+          @target_definition = target_definition
+          @project = project
+          @project_target_uuids = project_target_uuids
+          @build_configurations = build_configurations
+          @platform = platform
+          @archs = archs
+        end
       end
     end
   end

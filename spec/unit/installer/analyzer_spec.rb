@@ -1061,10 +1061,9 @@ module Pod
         @sandbox_manifest.send(:checkout_options_data).delete('BananaLib')
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file, true).returns(downloader)
 
         downloader.expects(:fetch)
-        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -1073,10 +1072,9 @@ module Pod
         @sandbox_manifest.send(:checkout_options_data)['BananaLib'] = @lockfile_checkout_options.merge(:commit => 'other commit')
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file, true).returns(downloader)
 
         downloader.expects(:fetch)
-        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -1084,10 +1082,9 @@ module Pod
         @analyzer.result.podfile_state.changed << 'BananaLib'
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file, true).returns(downloader)
 
         downloader.expects(:fetch)
-        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -1096,10 +1093,9 @@ module Pod
         @analyzer.stubs(:update).returns(:pods => %w(BananaLib))
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file, true).returns(downloader)
 
         downloader.expects(:fetch)
-        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -1108,10 +1104,9 @@ module Pod
         @analyzer.stubs(:update).returns(true)
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file, true).returns(downloader)
 
         downloader.expects(:fetch)
-        downloader.expects(:can_cache=).with(true).once
         @analyzer.send(:fetch_external_sources)
       end
 
@@ -1120,10 +1115,9 @@ module Pod
         @sandbox_manifest.send(:checkout_options_data).delete('BananaLib')
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file, false).returns(downloader)
 
         downloader.expects(:fetch)
-        downloader.expects(:can_cache=).with(false).once
         @analyzer.installation_options.clean = false
         @analyzer.send(:fetch_external_sources)
       end

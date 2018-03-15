@@ -16,18 +16,21 @@ module Pod
     # @param  [String] podfile_path
     #         @see AbstractExternalSource#podfile_path
     #
+    # @param  [Boolean] can_cache
+    #         @see AbstractExternalSource#can_cache
+    #
     # @return [AbstractExternalSource] an initialized instance of the concrete
     #         external source class associated with the option specified in the
     #         hash.
     #
-    def self.from_dependency(dependency, podfile_path)
-      from_params(dependency.external_source, dependency, podfile_path)
+    def self.from_dependency(dependency, podfile_path, can_cache)
+      from_params(dependency.external_source, dependency, podfile_path, can_cache)
     end
 
-    def self.from_params(params, dependency, podfile_path)
+    def self.from_params(params, dependency, podfile_path, can_cache)
       name = dependency.root_name
       if klass = concrete_class_from_params(params)
-        klass.new(name, params, podfile_path)
+        klass.new(name, params, podfile_path, can_cache)
       else
         msg = "Unknown external source parameters for `#{name}`: `#{params}`"
         raise Informative, msg

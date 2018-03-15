@@ -93,8 +93,8 @@ module Pod
             native_target.build_configurations.each do |configuration|
               path = target.xcconfig_path(configuration.name)
               gen = Generator::XCConfig::AggregateXCConfig.new(target, configuration.name)
-              update_changed_file(gen, path)
-              target.xcconfigs[configuration.name] = gen.xcconfig
+              xcconfig = update_changed_file(gen, path)
+              target.xcconfigs[configuration.name] = xcconfig
               xcconfig_file_ref = add_file_to_support_group(path)
               configuration.base_configuration_reference = xcconfig_file_ref
             end

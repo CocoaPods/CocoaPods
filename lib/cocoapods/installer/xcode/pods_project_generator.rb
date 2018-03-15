@@ -171,8 +171,7 @@ module Pod
             end.compact.group_by(&:dirname)
 
             pod_targets.sort_by(&:name).each do |pod_target|
-              target_installer = PodTargetInstaller.new(sandbox, pod_target)
-              target_installer.umbrella_headers_by_dir = umbrella_headers_by_dir
+              target_installer = PodTargetInstaller.new(sandbox, pod_target, umbrella_headers_by_dir)
               target_installer.install!
             end
 

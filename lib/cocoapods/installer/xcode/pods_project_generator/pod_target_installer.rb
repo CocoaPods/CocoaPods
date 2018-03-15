@@ -6,6 +6,22 @@ module Pod
         # relative support files.
         #
         class PodTargetInstaller < TargetInstaller
+          # @return [Hash{Pathname => Pathname}] A hash of all umbrella headers, grouped by the directory
+          #         the are stored in. This can be `nil` if there is no grouping.
+          #
+          attr_reader :umbrella_headers_by_dir
+
+          # Initialize a new instance
+          #
+          # @param [Sandbox] sandbox @see TargetInstaller#sandbox
+          # @param [Target] target @see TargetInstaller#target
+          # @param [Hash{Pathname => Pathname}] umbrella_headers_by_dir @see #umbrella_headers_by_dir
+          #
+          def initialize(sandbox, target, umbrella_headers_by_dir = nil)
+            super(sandbox, target)
+            @umbrella_headers_by_dir = umbrella_headers_by_dir
+          end
+
           # Creates the target in the Pods project and the relative support files.
           #
           # @return [void]
@@ -69,11 +85,6 @@ module Pod
               create_dummy_source
             end
           end
-
-          # @return [Hash<Pathname,Pathname>] A hash of all umbrella headers, grouped by the directory
-          #         the are stored in
-          #
-          attr_accessor :umbrella_headers_by_dir
 
           private
 
