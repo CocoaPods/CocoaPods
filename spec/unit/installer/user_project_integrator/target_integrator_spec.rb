@@ -336,6 +336,7 @@ module Pod
         it 'adds copy pods resources input and output paths' do
           resource_paths_by_config = {
             'Debug' => [
+              '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugAssets.xcassets',
               '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodeld',
               '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodel',
               '${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugMappingModel.xcmappingmodel',
@@ -352,6 +353,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
           phase.input_paths.sort.should == %w(
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugAssets.xcassets
             ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodel
             ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodeld
             ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLib.bundle
@@ -362,6 +364,7 @@ module Pod
             ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
           )
           phase.output_paths.sort.should == %w(
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car
             ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugDataModel.mom
             ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugDataModel.momd
             ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugLib.bundle
