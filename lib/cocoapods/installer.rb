@@ -241,15 +241,13 @@ module Pod
     # @return [void]
     #
     def analyze(analyzer = create_analyzer)
-      analyzer.update = update
       @analysis_result = analyzer.analyze
-      @aggregate_targets = analyzer.result.targets
+      @aggregate_targets = @analysis_result.targets
     end
 
     def create_analyzer(plugin_sources = nil)
-      Analyzer.new(sandbox, podfile, lockfile, plugin_sources).tap do |analyzer|
+      Analyzer.new(sandbox, podfile, lockfile, plugin_sources, has_dependencies?, update).tap do |analyzer|
         analyzer.installation_options = installation_options
-        analyzer.has_dependencies = has_dependencies?
       end
     end
 
@@ -684,9 +682,9 @@ module Pod
         plugin_sources = run_source_provider_hooks
         analyzer = create_analyzer(plugin_sources)
         analyze(analyzer)
-        if analyzer.podfile_needs_install?(analyzer.result)
+        if analysis_result.podfile_needs_install?
           raise Pod::Informative, 'The Podfile has changed, you must run `pod install`'
-        elsif analyzer.sandbox_needs_install?(analyzer.result)
+        elsif analysis_result.sandbox_needs_install?
           raise Pod::Informative, 'The `Pods` directory is out-of-date, you must run `pod install`'
         end
 

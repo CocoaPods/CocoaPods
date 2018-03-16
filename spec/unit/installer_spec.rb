@@ -192,7 +192,6 @@ module Pod
 
         analyzer = Installer::Analyzer.new(config.sandbox, @installer.podfile, @installer.lockfile)
         analyzer.stubs(:analyze).returns(result)
-        analyzer.stubs(:result).returns(result)
 
         @installer.stubs(:create_analyzer).returns(analyzer)
         @installer.send(:analyze)
@@ -336,10 +335,8 @@ module Pod
 
         it 'configures the analyzer to use update mode if appropriate' do
           @installer.update = true
-          Installer::Analyzer.any_instance.expects(:update=).with(true)
-          @installer.send(:analyze)
-          @installer.aggregate_targets.map(&:name).sort.should == ['Pods-SampleProject', 'Pods-SampleProjectTests']
-          @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
+          analyzer = @installer.send(:create_analyzer)
+          analyzer.pods_to_update.should.be.true
         end
       end
 
@@ -369,13 +366,13 @@ module Pod
 
       describe '#clean_sandbox' do
         before do
-          @analysis_result = Installer::Analyzer::AnalysisResult.new
-          @analysis_result.podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
-          @analysis_result.specifications = []
-          @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new
+          @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
+                                                                     [], Pod::Installer::Analyzer::SpecsState.new, [],
+                                                                     Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
           @spec = stub(:name => 'Spec', :test_specification? => false)
           @spec.stubs(:root => @spec)
-          @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec], [fixture_target_definition], nil)]
+          @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
+                                        [fixture_target_definition], nil)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
           @installer.stubs(:aggregate_targets).returns([])
@@ -421,7 +418,9 @@ module Pod
         end
 
         it 'deletes the target support file dirs of the removed aggregate targets' do
-          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, {})
+          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios,
+                                                 fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
+                                                 nil, {})
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           FileUtils.mkdir_p(@installer.aggregate_targets.first.support_files_dir)
@@ -434,7 +433,9 @@ module Pod
         end
 
         it 'does not delete the target support file dirs for non removed aggregate targets' do
-          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, {})
+          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios,
+                                                 fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
+                                                 nil, {})
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           FileUtils.mkdir_p(@installer.aggregate_targets.first.support_files_dir)
@@ -469,7 +470,8 @@ module Pod
 
         it 'correctly configures the Pod source installer' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
+                                     nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -479,7 +481,8 @@ module Pod
 
         it 'maintains the list of the installed specs' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
+                                     nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -494,9 +497,9 @@ module Pod
           spec.version = Version.new('2.0')
           manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
           manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
-          analysis_result = Installer::Analyzer::AnalysisResult.new
-          analysis_result.specifications = [spec]
-          analysis_result.specs_by_source = { Source.new('source1') => [spec] }
+          analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
+                                                                    { Source.new('source1') => [spec] }, [spec],
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], nil)
           @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
@@ -515,9 +518,9 @@ module Pod
           spec.version = Version.new('1.0')
           manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
           manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
-          analysis_result = Installer::Analyzer::AnalysisResult.new
-          analysis_result.specifications = [spec]
-          analysis_result.specs_by_source = { Source.new('source2') => [spec] }
+          analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
+                                                                    { Source.new('source2') => [spec] }, [spec],
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], nil)
           @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
@@ -536,9 +539,9 @@ module Pod
           spec.version = Version.new('3.0')
           manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
           manifest.stubs(:version).with('RestKit').returns(Version.new('2.0'))
-          analysis_result = Installer::Analyzer::AnalysisResult.new
-          analysis_result.specifications = [spec]
-          analysis_result.specs_by_source = { Source.new('source2') => [spec] }
+          analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
+                                                                    { Source.new('source2') => [spec] }, [spec],
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], nil)
           @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
@@ -552,7 +555,8 @@ module Pod
 
         it 'raises when it attempts to install pod source with no target supporting it' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
+                                     nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           should.raise Informative do
@@ -563,7 +567,8 @@ module Pod
         it 'prints a warning for installed pods that included script phases' do
           spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs],
+                                     [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           sandbox_state = Installer::Analyzer::SpecsState.new
           sandbox_state.added << 'CoconutLib'
@@ -578,7 +583,8 @@ module Pod
         it 'does not print a warning for already installed pods that include script phases' do
           spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs],
+                                     [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           sandbox_state = Installer::Analyzer::SpecsState.new
           sandbox_state.unchanged << 'CoconutLib'
@@ -608,10 +614,11 @@ module Pod
     describe 'Generating pods project' do
       describe '#write_lockfiles' do
         before do
-          @analysis_result = Installer::Analyzer::AnalysisResult.new
-          @analysis_result.podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
-          @analysis_result.specifications = [fixture_spec('banana-lib/BananaLib.podspec')]
-          @analysis_result.specs_by_source = {}
+          podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
+          @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
+                                                                     [fixture_spec('banana-lib/BananaLib.podspec')],
+                                                                     Pod::Installer::Analyzer::SpecsState.new, [],
+                                                                     podfile_dependency_cache)
           @installer.stubs(:analysis_result).returns(@analysis_result)
         end
 
@@ -638,7 +645,8 @@ module Pod
 
     describe 'Integrating client projects' do
       it 'integrates the client projects' do
-        target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition, config.sandbox.root.dirname, nil, nil, {})
+        target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition,
+                                     config.sandbox.root.dirname, nil, nil, {})
         @installer.stubs(:aggregate_targets).returns([target])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)

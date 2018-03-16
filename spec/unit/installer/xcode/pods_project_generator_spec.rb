@@ -63,8 +63,10 @@ module Pod
 
             aggregate_targets = [@ios_target, @osx_target]
 
-            @analysis_result = Pod::Installer::Analyzer::AnalysisResult.new
-            @analysis_result.targets = aggregate_targets
+            @analysis_result = Pod::Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new,
+                                                                            {}, {}, [],
+                                                                            Pod::Installer::Analyzer::SpecsState.new,
+                                                                            aggregate_targets, nil)
 
             @installation_options = Pod::Installer::InstallationOptions.new
 
