@@ -280,12 +280,15 @@ module Pod
     def sort_dependencies(dependencies, activated, conflicts)
       dependencies.sort_by do |dependency|
         name = name_for(dependency)
+        vertex = activated.vertex_named(name)
+        locked_vertex = @locked_dependencies.vertex_named(name)
         [
-          activated.vertex_named(name).payload ? 0 : 1,
+          locked_vertex ? 0 : 1,
+          vertex.payload ? 0 : 1,
           dependency.external_source ? 0 : 1,
-          dependency.prerelease? ? 0 : 1,
-          conflicts[name] ? 0 : 1,
+          vertex.root? ? 0 : 1,
           search_for(dependency).count,
+          conflicts[name] ? 0 : 1,
         ]
       end
     end
