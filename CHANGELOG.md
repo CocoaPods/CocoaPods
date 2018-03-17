@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+
+* Add `--exclude-pods` option to `pod update` to allow excluding specific pods from update  
+  [Oleksandr Kruk](https://github.com/0mega)
+  [#7334](https://github.com/CocoaPods/CocoaPods/issues/7334)
+
 * Improve `pod install` performance for pods with exact file paths rather than glob patterns  
   [Muhammed Yavuz Nuzumlalı](https://github.com/manuyavuz)
   [#7473](https://github.com/CocoaPods/CocoaPods/pull/7473)

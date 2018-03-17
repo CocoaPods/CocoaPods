@@ -23,6 +23,7 @@ module Pod
         [
           ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to update dependent pods. ' \
            'Multiple sources must be comma-delimited. The master repo will not be included by default with this option.'],
+          ['--exclude-pods=podName', 'Pods to exclude during update. Multiple pods must be comma-delimited.'],
         ].concat(super)
       end
 
@@ -30,6 +31,7 @@ module Pod
         @pods = argv.arguments! unless argv.arguments.empty?
 
         source_urls = argv.option('sources', '').split(',')
+        excluded_pods = argv.option('exclude-pods', '').split(',')
         unless source_urls.empty?
           source_pods = source_urls.flat_map { |url| config.sources_manager.source_with_name_or_url(url).pods }
           unless source_pods.empty?
@@ -40,6 +42,20 @@ module Pod
               @pods = source_pods unless source_pods.empty?
             end
           end
+        end
+
+        unless excluded_pods.empty?
+          @pods ||= config.lockfile.pod_names.dup
+
+          non_installed_pods = (excluded_pods - @pods)
+          unless non_installed_pods.empty?
+            pluralized_words = non_installed_pods.length > 1 ? %w(Pods are) : %w(Pod is)
+            message = "Trying to skip `#{non_installed_pods.join('`, `')}` #{pluralized_words.first} " \
+                    "which #{pluralized_words.last} not installed"
+            raise Informative, message
+          end
+
+          @pods.delete_if { |pod| excluded_pods.include?(pod) }
         end
 
         super
