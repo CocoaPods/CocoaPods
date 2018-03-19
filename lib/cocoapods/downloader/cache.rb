@@ -107,6 +107,20 @@ module Pod
       #         the download options that should be used in constructing the
       #         cache slug for this request.
       #
+      # @return [String] The lock file path for the Pod downloaded from the given
+      #         `request`.
+      #
+      def lock_path_for_pod(request, slug_opts = {})
+        path_for_pod(request, slug_opts).to_s + '.lock'
+      end
+
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
+      # @param  [Hash<Symbol,String>] slug_opts
+      #         the download options that should be used in constructing the
+      #         cache slug for this request.
+      #
       # @return [Pathname] The path for the podspec downloaded from the given
       #         `request`.
       #
@@ -156,7 +170,15 @@ module Pod
 
           podspecs.each do |name, spec|
             destination = path_for_pod(request, :name => name, :params => result.checkout_options)
-            copy_and_clean(target, destination, spec)
+
+            destination.parent.mkpath
+            lock_file_path = lock_path_for_pod(request, :name => name, :params => result.checkout_options)
+
+            File.new(lock_file_path, File::CREAT) unless File.exist? lock_file_path
+            File.open(lock_file_path) do |file|
+              flock(file, File::LOCK_EX) { copy_and_clean(target, destination, spec) }
+            end
+
             write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
             if request.name == name
               result.location = destination
@@ -165,6 +187,26 @@ module Pod
 
           result
         end
+      end
+
+      # @param  [File] file
+      #         should be locked file.
+      #
+      # @param  [mode] mode
+      #         the file lock mode.
+      #
+      # @return [Boolean] The result of lock specific file and mode.
+      #
+      def flock(file, mode)
+        success = file.flock(mode)
+        if success
+          begin
+            yield file
+          ensure
+            file.flock(File::LOCK_UN)
+          end
+        end
+        success
       end
 
       def download(request, target)

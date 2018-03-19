@@ -763,6 +763,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Ben Asher](https://github.com/benasher44)
   [#6533](https://github.com/CocoaPods/CocoaPods/pull/6533)
 
+* Fix miss cache file problem on Jenkins concurrent install.  
+  [yanzhiwei147](https://github.com/yanzhiwei147)
+  [#6280](https://github.com/CocoaPods/CocoaPods/issues/6280)
+
 ## 1.2.0 (2017-01-28)
 
 ##### Enhancements
