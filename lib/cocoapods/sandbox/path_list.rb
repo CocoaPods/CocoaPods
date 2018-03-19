@@ -88,7 +88,7 @@ module Pod
       # @return [Array<Pathname>]
       #
       def glob(patterns, options = {})
-        relative_glob(patterns, options).map { |p| (root + p).realpath }
+        relative_glob(patterns, options).map { |p| root.join(p) }
       end
 
       # The list of relative paths that are case insensitively matched by a

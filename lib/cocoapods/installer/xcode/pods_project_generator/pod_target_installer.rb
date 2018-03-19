@@ -182,8 +182,8 @@ module Pod
 
               native_target = target.native_target_for_spec(consumer.spec)
               headers = file_accessor.headers
-              public_headers = file_accessor.public_headers
-              private_headers = file_accessor.private_headers
+              public_headers = file_accessor.public_headers.map(&:realpath)
+              private_headers = file_accessor.private_headers.map(&:realpath)
               other_source_files = file_accessor.source_files.reject { |sf| SOURCE_FILE_EXTENSIONS.include?(sf.extname) }
 
               {
