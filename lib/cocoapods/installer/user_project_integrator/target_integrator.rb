@@ -220,6 +220,9 @@ module Pod
           # Returns an extension in the target that corresponds to the
           # resource's input extension.
           #
+          # @param [String] input_extension
+          #        The input extension to map to.
+          #
           # @return [String] The output extension.
           #
           def output_extension_for_resource(input_extension)
@@ -233,6 +236,23 @@ module Pod
             when '.xcassets'          then '.car'
             else                      input_extension
             end
+          end
+
+          # Returns the resource output paths for all given input paths.
+          #
+          # @param [Array<String>] resource_input_paths
+          #        The input paths to map to.
+          #
+          # @return [Array<String>] The resource output paths.
+          #
+          def resource_output_paths(resource_input_paths)
+            resource_input_paths.map do |resource_input_path|
+              base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
+              extname = File.extname(resource_input_path)
+              basename = extname == '.xcassets' ? 'Assets' : File.basename(resource_input_path)
+              output_extension = TargetIntegrator.output_extension_for_resource(extname)
+              File.join(base_path, File.basename(basename, extname) + output_extension)
+            end.uniq
           end
         end
 
@@ -309,14 +329,7 @@ module Pod
             else
               resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
               input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
-              # convert input paths to output paths according to extensions
-              output_paths = resource_paths_flattened.map do |input_path|
-                base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
-                extname = File.extname(input_path)
-                basename = extname == '.xcassets' ? 'Assets' : File.basename(input_path)
-                output_extension = TargetIntegrator.output_extension_for_resource(extname)
-                File.join(base_path, File.basename(basename, extname) + output_extension)
-              end.uniq
+              output_paths = TargetIntegrator.resource_output_paths(resource_paths_flattened)
               TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
               TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
             end

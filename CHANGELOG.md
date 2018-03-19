@@ -55,6 +55,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent `xcassets` compilation from stomping over the apps `xcassets`  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7003](https://github.com/CocoaPods/CocoaPods/issues/7003)
+
 * Fix script phase output path for `.xcasset` resources  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7511](https://github.com/CocoaPods/CocoaPods/issues/7511)
