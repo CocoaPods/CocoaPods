@@ -364,7 +364,7 @@ module Pod
           @project.add_pod_group('BananaLib', config.sandbox.pod_dir('BananaLib'), false)
           @file = config.sandbox.pod_dir('BananaLib') + 'file.m'
           @group = @project.group_for_spec('BananaLib')
-          Pathname.any_instance.stubs(:realpath).returns(@file)
+          @file.stubs(:realpath).returns(@file)
           @project.add_file_reference(@file, @group)
         end
 
@@ -375,6 +375,7 @@ module Pod
 
         it 'returns nil if no reference for the given path is available' do
           another_file = config.sandbox.pod_dir('BananaLib') + 'another_file.m'
+          another_file.stubs(:realpath).returns(another_file)
           ref = @project.reference_for_path(another_file)
           ref.should.be.nil
         end

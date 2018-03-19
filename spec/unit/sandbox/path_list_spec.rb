@@ -192,6 +192,13 @@ module Pod
           Resources/sub_dir
         )
       end
+
+      it 'can glob for exact matches' do
+        paths = @path_list.relative_glob('libBananalib.a').map(&:to_s)
+        paths.sort.should == %w(
+          libBananalib.a
+        )
+      end
     end
 
     describe 'Reading file system' do
@@ -260,15 +267,6 @@ module Pod
       end
 
       #--------------------------------------#
-
-      describe '#escape_path_for_glob' do
-        it 'escapes metacharacters' do
-          escaped = @path_list.send(:escape_path_for_glob, '[]{}?**')
-          escaped.to_s.should == '\[\]\{\}\?\*\*'
-        end
-      end
-
-      #--------------------------------------#
     end
 
     #-------------------------------------------------------------------------#
@@ -300,14 +298,27 @@ module Pod
         @path_list.instance_variable_set(:@files, nil)
         File.symlink(@tmpfile, @symlink_file)
 
-        @path_list.files.map(&:to_s).include?('Classes/symlinked.h').should == true
+        @path_list.files.map(&:to_s).should.include?('Classes/symlinked.h')
+      end
+
+      it 'includes symlinked file with a different basename' do
+        orange_h = @path_list.root.join('Classes', 'Orange.h')
+        File.symlink('Banana.h', orange_h)
+
+        begin
+          @path_list.glob('Classes/Orange.h').should == [
+            orange_h,
+          ]
+        ensure
+          FileUtils.remove_entry(orange_h)
+        end
       end
 
       it 'includes symlinked dir' do
         @path_list.instance_variable_set(:@dirs, nil)
         File.symlink(@tmpdir, @symlink_dir)
 
-        @path_list.dirs.map(&:to_s).include?('Classes/symlinked').should == true
+        @path_list.dirs.map(&:to_s).should.include?('Classes/symlinked')
       end
 
       it 'doesn\'t include file in symlinked dir' do
@@ -315,7 +326,7 @@ module Pod
         @path_list.instance_variable_set(:@dirs, nil)
         File.symlink(@tmpdir, @symlink_dir)
 
-        @path_list.files.map(&:to_s).include?('Classes/symlinked/someheader.h').should == false
+        @path_list.files.map(&:to_s).should.not.include?('Classes/symlinked/someheader.h')
       end
     end
 

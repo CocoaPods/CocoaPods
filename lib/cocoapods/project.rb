@@ -202,15 +202,14 @@ module Pod
     # @return [PBXFileReference] The new file reference.
     #
     def add_file_reference(absolute_path, group, reflect_file_system_structure = false, base_path = nil)
-      file_path_name = absolute_path.is_a?(Pathname) ? absolute_path : Pathname.new(absolute_path)
-      group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure, base_path)
-      if ref = reference_for_path(file_path_name.realpath)
-        @refs_by_absolute_path[absolute_path.to_s] = ref
-        ref
-      else
-        ref = group.new_file(file_path_name.realpath)
-        @refs_by_absolute_path[absolute_path.to_s] = ref
+      file_path_name = absolute_path.is_a?(Pathname) ? absolute_path : Pathname(absolute_path)
+      if ref = reference_for_path(file_path_name)
+        return ref
       end
+
+      group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure, base_path)
+      ref = group.new_file(file_path_name.realpath)
+      @refs_by_absolute_path[file_path_name.to_s] = ref
     end
 
     # Returns the file reference for the given absolute path.
@@ -222,11 +221,12 @@ module Pod
     # @return [Nil] If no file reference could be found.
     #
     def reference_for_path(absolute_path)
-      unless Pathname.new(absolute_path).absolute?
+      absolute_path = absolute_path.is_a?(Pathname) ? absolute_path : Pathname(absolute_path)
+      unless absolute_path.absolute?
         raise ArgumentError, "Paths must be absolute #{absolute_path}"
       end
 
-      refs_by_absolute_path[absolute_path.to_s]
+      refs_by_absolute_path[absolute_path.to_s] ||= refs_by_absolute_path[absolute_path.realpath.to_s]
     end
 
     # Adds a file reference to the Podfile.

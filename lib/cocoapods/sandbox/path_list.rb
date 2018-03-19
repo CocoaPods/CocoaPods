@@ -88,7 +88,7 @@ module Pod
       # @return [Array<Pathname>]
       #
       def glob(patterns, options = {})
-        relative_glob(patterns, options).map { |p| (root + p).realpath }
+        relative_glob(patterns, options).map { |p| root.join(p) }
       end
 
       # The list of relative paths that are case insensitively matched by a
@@ -205,33 +205,14 @@ module Pod
         else
           patterns = [pattern]
           values_by_set.each do |set, values|
-            patterns = patterns.map do |old_pattern|
+            patterns = patterns.flat_map do |old_pattern|
               values.map do |value|
                 old_pattern.gsub(set, value)
               end
-            end.flatten
+            end
           end
           patterns
         end
-      end
-
-      # Escapes the glob metacharacters from a given path so it can used in
-      # Dir#glob and similar methods.
-      #
-      # @note   See CocoaPods/CocoaPods#862.
-      #
-      # @param  [String, Pathname] path
-      #         The path to escape.
-      #
-      # @return [Pathname] The escaped path.
-      #
-      def escape_path_for_glob(path)
-        result = path.to_s
-        characters_to_escape = ['[', ']', '{', '}', '?', '*']
-        characters_to_escape.each do |character|
-          result.gsub!(character, "\\#{character}")
-        end
-        Pathname.new(result)
       end
 
       #-----------------------------------------------------------------------#
