@@ -260,15 +260,6 @@ module Pod
       end
 
       #--------------------------------------#
-
-      describe '#escape_path_for_glob' do
-        it 'escapes metacharacters' do
-          escaped = @path_list.send(:escape_path_for_glob, '[]{}?**')
-          escaped.to_s.should == '\[\]\{\}\?\*\*'
-        end
-      end
-
-      #--------------------------------------#
     end
 
     #-------------------------------------------------------------------------#

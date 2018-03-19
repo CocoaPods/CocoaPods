@@ -215,25 +215,6 @@ module Pod
         end
       end
 
-      # Escapes the glob metacharacters from a given path so it can used in
-      # Dir#glob and similar methods.
-      #
-      # @note   See CocoaPods/CocoaPods#862.
-      #
-      # @param  [String, Pathname] path
-      #         The path to escape.
-      #
-      # @return [Pathname] The escaped path.
-      #
-      def escape_path_for_glob(path)
-        result = path.to_s
-        characters_to_escape = ['[', ']', '{', '}', '?', '*']
-        characters_to_escape.each do |character|
-          result.gsub!(character, "\\#{character}")
-        end
-        Pathname.new(result)
-      end
-
       #-----------------------------------------------------------------------#
     end
   end
