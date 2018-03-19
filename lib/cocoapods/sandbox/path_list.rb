@@ -205,11 +205,11 @@ module Pod
         else
           patterns = [pattern]
           values_by_set.each do |set, values|
-            patterns = patterns.map do |old_pattern|
+            patterns = patterns.flat_map do |old_pattern|
               values.map do |value|
                 old_pattern.gsub(set, value)
               end
-            end.flatten
+            end
           end
           patterns
         end
