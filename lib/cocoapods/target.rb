@@ -74,7 +74,7 @@ module Pod
     #         #requires_frameworks?.
     #
     def product_type
-      requires_frameworks? && !static_framework? ? :framework : :static_library
+      requires_frameworks? ? :framework : :static_library
     end
 
     # @return [String] A string suitable for debugging.

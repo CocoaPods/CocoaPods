@@ -50,9 +50,6 @@ module Pod
                   create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
                 create_build_phase_to_symlink_header_folders
-                if target.static_framework?
-                  create_build_phase_to_move_static_framework_archive
-                end
               elsif target.uses_swift?
                 add_swift_static_library_compatibility_header_phase
               end
@@ -481,28 +478,6 @@ module Pod
           base="$CONFIGURATION_BUILD_DIR/$WRAPPER_NAME"
           ln -fs "$base/${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/}" "$base/${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
           ln -fs "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/}" "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
-            eos
-          end
-
-          # Creates a build phase to put the static framework in the appropriate framework location
-          # Since Xcode does not provide template support for static library frameworks, we've built a static library
-          # of the form lib{LibraryName}.a. We need to move that to the framework location -
-          # {LibraryName}.framework/{LibraryName}.
-          #
-          # @return [void]
-          #
-          def create_build_phase_to_move_static_framework_archive
-            build_phase = native_target.new_shell_script_build_phase('Setup Static Framework')
-            build_phase.shell_script = <<-eos.strip_heredoc
-          mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules"
-          # The fat library archive is at a file symbolic link when archiving, so use -L option
-          rsync -tL "${BUILT_PRODUCTS_DIR}/lib${PRODUCT_NAME}.a" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
-          rsync -t "${MODULEMAP_FILE}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/module.modulemap"
-          # If there's a .swiftmodule, copy it into the framework's Modules folder
-          rsync -tr "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}".swiftmodule "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Modules/" 2>/dev/null || :
-          # If archiving, Headers copy is needed
-          rsync -tr "${TARGET_BUILD_DIR}/${PRODUCT_NAME}.framework/Headers" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/" 2>/dev/null || :
-          rsync -tr "${TARGET_BUILD_DIR}/${PRODUCT_NAME}.framework/PrivateHeaders" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/" 2>/dev/null || :
             eos
           end
 
