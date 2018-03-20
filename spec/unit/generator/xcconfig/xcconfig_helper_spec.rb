@@ -69,12 +69,14 @@ module Pod
                            :should_build? => true,
                            :requires_frameworks? => true,
                            :configuration_build_dir => 'AB',
+                           :uses_swift? => false,
                           )
             target2 = stub('target2',
                            :specs => ['B'],
                            :should_build? => true,
                            :requires_frameworks? => true,
                            :configuration_build_dir => 'B',
+                           :uses_swift? => false,
                           )
             dependent_targets = [target1, target2]
             build_settings = @sut.search_paths_for_dependent_targets(nil, dependent_targets)

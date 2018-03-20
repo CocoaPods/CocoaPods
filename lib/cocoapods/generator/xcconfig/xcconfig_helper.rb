@@ -346,9 +346,9 @@ module Pod
                                       "${PODS_ROOT}/#{dependent_target.module_map_path.relative_path_from(dependent_target.sandbox.root)}"
                                     end
                   module_map_files << %(-fmodule-map-file="#{module_map_file}")
+                  swift_import_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE) if dependent_target.uses_swift?
                 end
               end
-              swift_import_paths << dependent_target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
             end
 
             build_settings['FRAMEWORK_SEARCH_PATHS'] = XCConfigHelper.quote(framework_search_paths.uniq)
