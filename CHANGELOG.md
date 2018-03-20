@@ -60,6 +60,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+  Use xcode default `PRODUCT_MODULE_NAME` for generated test targets  
+  [Paul Zabelin](https://github.com/paulz)
+  [#7506](https://github.com/CocoaPods/CocoaPods/issues/7506)
+  
 * Prevent `xcassets` compilation from stomping over the apps `xcassets`  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7003](https://github.com/CocoaPods/CocoaPods/issues/7003)
