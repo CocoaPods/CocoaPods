@@ -576,7 +576,6 @@ module Pod
             UI.warn "Skipping compilation with `xcodebuild` because target contains no sources.\n".yellow
           else
             output = xcodebuild('build', scheme, 'Release')
-            UI.puts output
             parsed_output = parse_xcodebuild_output(output)
             translate_output_to_linter_messages(parsed_output)
           end
@@ -600,7 +599,6 @@ module Pod
           consumer.spec.test_specs.each do |test_spec|
             scheme = pod_target.native_target_for_spec(test_spec)
             output = xcodebuild('test', scheme, 'Debug')
-            UI.puts output
             parsed_output = parse_xcodebuild_output(output)
             translate_output_to_linter_messages(parsed_output)
           end
@@ -873,25 +871,22 @@ module Pod
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
       end
 
-      output, status = _xcodebuild(command)
-
-      unless status.success?
+      begin
+        _xcodebuild(command, true)
+      rescue => e
         message = 'Returned an unsuccessful exit code.'
         message += ' You can use `--verbose` for more information.' unless config.verbose?
         error('xcodebuild', message)
+        e.message
       end
-
-      output
     end
 
     # Executes the given command in the current working directory.
     #
-    # @return [(String, Status)] The output of the given command and its
-    #         resulting status.
+    # @return [String] The output of the given command
     #
-    def _xcodebuild(command)
-      UI.puts 'xcodebuild ' << command.join(' ') if config.verbose
-      Executable.capture_command('xcodebuild', command, :capture => :merge)
+    def _xcodebuild(command, raise_on_failure = false)
+      Executable.execute_command('xcodebuild', command, raise_on_failure)
     end
 
     #-------------------------------------------------------------------------#
