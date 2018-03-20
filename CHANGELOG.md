@@ -60,6 +60,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Create a generic Info.plist file for test targets  
   Use xcode default `PRODUCT_MODULE_NAME` for generated test targets  
   [Paul Zabelin](https://github.com/paulz)
   [#7506](https://github.com/CocoaPods/CocoaPods/issues/7506)

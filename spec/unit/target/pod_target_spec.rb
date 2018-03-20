@@ -551,6 +551,10 @@ module Pod
           @test_pod_target.prefix_header_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-prefix.pch'
         end
 
+        it 'returns correct path for info plist for unit test type' do
+          @test_pod_target.info_plist_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
+        end
+
         it 'returns the correct resource path for test resource bundles' do
           fa = Sandbox::FileAccessor.new(nil, @test_pod_target)
           fa.stubs(:resource_bundles).returns('TestResourceBundle' => [Pathname.new('Model.xcdatamodeld')])

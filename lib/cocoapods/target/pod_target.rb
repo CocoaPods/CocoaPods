@@ -436,6 +436,15 @@ module Pod
       support_files_dir + "#{test_target_label(test_type)}-frameworks.sh"
     end
 
+    # @param  [Symbol] test_type
+    #         The test type this Info.plist path is for.
+    #
+    # @return [Pathname] The absolute path of the Info.plist for the given test type.
+    #
+    def info_plist_path_for_test_type(test_type)
+      support_files_dir + "#{test_target_label(test_type)}-Info.plist"
+    end
+
     # @return [Pathname] the absolute path of the prefix header file.
     #
     def prefix_header_path

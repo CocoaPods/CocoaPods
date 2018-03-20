@@ -294,6 +294,11 @@ module Pod
               create_test_target_embed_frameworks_script(test_type)
               create_test_target_copy_resources_script(test_type)
 
+              # Generate vanila Info.plist for test target similar to the one xcode gererates for new test target.
+              # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
+              # defined in podspec.
+              create_info_plist_file(target.info_plist_path_for_test_type(test_type), native_test_target, '1.0', target.platform, :bndl)
+
               target.test_native_targets << native_test_target
             end
           end
