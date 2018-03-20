@@ -58,6 +58,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#6899](https://github.com/CocoaPods/CocoaPods/issues/6899)
 
+* Document format of POD_NAMES in pod update  
+  [mrh-is](https://github.com/mrh-is)
+  
 ##### Bug Fixes
 
 * Prevent `xcassets` compilation from stomping over the apps `xcassets`  
