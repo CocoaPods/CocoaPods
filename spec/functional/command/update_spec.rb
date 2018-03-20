@@ -15,6 +15,8 @@ module Pod
         File.open(file, 'w') do |f|
           f.puts('platform :ios')
           f.puts('pod "BananaLib", "1.0"')
+          f.puts('pod "CoconutLib", "1.0"')
+          f.puts('pod "OCMock", "3.4"')
         end
       end
 
@@ -22,11 +24,21 @@ module Pod
         podfile = Podfile.new do
           platform :ios
           pod 'BananaLib', '1.0'
+          pod 'CoconutLib', '1.0'
+          pod 'OCMock', '3.4'
         end
         specs = [
           Specification.new do |s|
             s.name = 'BananaLib'
             s.version = '1.0'
+          end,
+          Specification.new do |s|
+            s.name = 'CoconutLib'
+            s.version = '2.0'
+          end,
+          Specification.new do |s|
+            s.name = 'OCMock'
+            s.version = '3.4'
           end,
         ]
         external_sources = {}
@@ -90,7 +102,7 @@ module Pod
           end
 
           it 'updates pods in repo and in lockfile' do
-            Installer.any_instance.expects(:update=).with(:pods => ['BananaLib'])
+            Installer.any_instance.expects(:update=).with(:pods => %w(BananaLib CoconutLib OCMock))
             run_command('update', '--sources=master')
           end
         end
@@ -116,6 +128,45 @@ module Pod
         it 'for multiple missing Pods' do
           exception = lambda { run_command('update', 'Reachability', 'BananaLib2', '--no-repo-update') }.should.raise Informative
           exception.message.should.include 'Pods `Reachability`, `BananaLib2` are not installed and cannot be updated'
+        end
+      end
+
+      describe 'ignored pods' do
+        before do
+          generate_lockfile
+        end
+
+        describe 'successfully ignores skipped pods' do
+          before do
+            Installer.any_instance.expects(:install!)
+          end
+
+          it 'ignores skiped pod' do
+            Installer.any_instance.expects(:update=).with(:pods => %w(BananaLib CoconutLib))
+            run_command('update', '--exclude-pods=OCMock')
+          end
+
+          it 'ignores multiple skipped pods' do
+            Installer.any_instance.expects(:update=).with(:pods => ['OCMock'])
+            run_command('update', '--exclude-pods=BananaLib,CoconutLib')
+          end
+        end
+
+        describe 'when a single supplied Pod is not installed' do
+          it 'raises with single message' do
+            should.raise Informative do
+              run_command('update', '--exclude-pods=Reachability,BananaLib')
+            end.message.should.include 'Trying to skip `Reachability` Pod which is not installed'
+          end
+        end
+
+        describe 'when multiple supplied Pods are not installed' do
+          it 'raises with plural message' do
+            should.raise Informative do
+              run_command('update', '--exclude-pods=Reachability,Alamofire')
+            end.message.should.include 'Trying to skip `Reachability`, `Alamofire` ' \
+            'Pods which are not installed'
+          end
         end
       end
     end
