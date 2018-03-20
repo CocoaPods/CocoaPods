@@ -81,10 +81,8 @@ module Pod
             end
 
             if target.requires_frameworks?
-              framework_name = target.product_module_name
               if target.static_framework?
-                settings['PUBLIC_HEADERS_FOLDER_PATH'] = framework_name + '.framework' + '/Headers'
-                settings['PRIVATE_HEADERS_FOLDER_PATH'] = framework_name + '.framework' + '/PrivateHeaders'
+                settings['MACH_O_TYPE'] = 'staticlib'
               end
             else
               settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')

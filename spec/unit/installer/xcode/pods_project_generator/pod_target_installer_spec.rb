@@ -818,20 +818,6 @@ module Pod
                 build_phase.should.not.be.nil
               end
 
-              it 'creates a build phase to set up a static library framework' do
-                @pod_target.stubs(:static_framework?).returns(true)
-
-                @installer.install!
-
-                target = @project.native_targets.first
-                build_phase = target.shell_script_build_phases.find do |bp|
-                  bp.name == 'Setup Static Framework'
-                end
-                build_phase.shell_script.should.include?('swiftmodule')
-                build_phase.shell_script.should.include?('PrivateHeaders')
-                build_phase.should.not.be.nil
-              end
-
               it 'verifies that headers in build phase for static libraries are all Project headers' do
                 @pod_target.stubs(:requires_frameworks?).returns(false)
 
