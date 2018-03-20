@@ -60,6 +60,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Document format of POD_NAMES in pod update  
   [mrh-is](https://github.com/mrh-is)
+
+* Update validator to stream output as xcodebuild runs  
+  [abbeycode](https://github.com/abbeycode)
+  [#7040](https://github.com/CocoaPods/CocoaPods/issues/7040)
   
 ##### Bug Fixes
 
