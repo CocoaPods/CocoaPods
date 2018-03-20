@@ -343,14 +343,10 @@ module Pod
                 path = target.info_plist_path
                 path.dirname.mkdir unless path.dirname.exist?
                 info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
-                generator = Generator::InfoPlistFile.new(target.version, target.platform, :bndl)
-                update_changed_file(generator, info_plist_path)
-                add_file_to_support_group(info_plist_path)
+                create_info_plist_file(info_plist_path, bundle_target, target.version, target.platform, :bndl)
 
                 bundle_target.build_configurations.each do |c|
                   c.build_settings['PRODUCT_NAME'] = bundle_name
-                  relative_info_plist_path = info_plist_path.relative_path_from(sandbox.root)
-                  c.build_settings['INFOPLIST_FILE'] = relative_info_plist_path.to_s
                   # Do not set the CONFIGURATION_BUILD_DIR for resource bundles that are only meant for test targets.
                   # This is because the test target itself also does not set this configuration build dir and it expects
                   # all bundles to be copied from the default path.
