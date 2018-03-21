@@ -4,6 +4,7 @@
 [submodule "spec/fixtures/spec-repos/master"]
 	path = spec/fixtures/spec-repos/master
 	url = https://github.com/CocoaPods/Specs.git
+	shallow = true
 [submodule "spec/fixtures/integration/Reachability"]
 	path = spec/fixtures/integration/Reachability
 	url = https://github.com/tonymillion/Reachability.git
