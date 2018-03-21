@@ -274,7 +274,10 @@ module Pod
                 # requires frameworks. For tests we always use the test target name as the product name
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
-                configuration.build_settings['PRODUCT_MODULE_NAME'] = name
+                # Use xcode default product module name, which is $(PRODUCT_NAME:c99extidentifier)
+                # this gives us always valid name that is distinct from the parent spec module name
+                # which allow tests to use either import or @testable import to access the parent framework
+                configuration.build_settings.delete('PRODUCT_MODULE_NAME')
                 # We must codesign iOS XCTest bundles that contain binary frameworks to allow them to be launchable in the simulator
                 unless target.platform == :osx
                   configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
@@ -287,6 +290,11 @@ module Pod
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
               create_test_target_embed_frameworks_script(test_type)
               create_test_target_copy_resources_script(test_type)
+
+              # Generate vanila Info.plist for test target similar to the one xcode gererates for new test target.
+              # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
+              # defined in podspec.
+              create_info_plist_file(target.info_plist_path_for_test_type(test_type), native_test_target, '1.0', target.platform, :bndl)
 
               target.test_native_targets << native_test_target
             end
