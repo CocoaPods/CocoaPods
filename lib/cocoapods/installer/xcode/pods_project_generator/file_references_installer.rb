@@ -182,7 +182,7 @@ module Pod
           #         specs platform combinations.
           #
           def file_accessors
-            @file_accessors ||= pod_targets.map(&:file_accessors).flatten.compact
+            @file_accessors ||= pod_targets.flat_map(&:file_accessors).compact
           end
 
           # Adds file references to the list of the paths returned by the file

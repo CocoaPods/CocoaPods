@@ -28,7 +28,7 @@ module Pod
           result = @analyzer.analyze
 
           aggregate_targets = result.targets
-          pod_targets = aggregate_targets.map(&:pod_targets).flatten.uniq
+          pod_targets = aggregate_targets.flat_map(&:pod_targets).uniq
           sandbox.create_file_accessors(pod_targets)
 
           TargetValidator.new(aggregate_targets, pod_targets)

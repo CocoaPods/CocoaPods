@@ -162,7 +162,7 @@ module Pod
     # @return [Array<Specification>] The specifications used by this aggregate target.
     #
     def specs
-      pod_targets.map(&:specs).flatten
+      pod_targets.flat_map(&:specs)
     end
 
     # @return [Hash{Symbol => Array<Specification>}] The pod targets for each

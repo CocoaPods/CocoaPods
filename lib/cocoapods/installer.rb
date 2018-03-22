@@ -219,8 +219,8 @@ module Pod
     #         generated as result of the analyzer.
     #
     def pod_targets
-      aggregate_target_pod_targets = aggregate_targets.map(&:pod_targets).flatten
-      test_dependent_targets = aggregate_target_pod_targets.map(&:test_dependent_targets).flatten
+      aggregate_target_pod_targets = aggregate_targets.flat_map(&:pod_targets)
+      test_dependent_targets = aggregate_target_pod_targets.flat_map(&:test_dependent_targets)
       (aggregate_target_pod_targets + test_dependent_targets).uniq
     end
 

@@ -196,9 +196,9 @@ module Pod
       #         shipped with the Pod.
       #
       def vendored_frameworks_headers
-        vendored_frameworks.map do |framework|
+        vendored_frameworks.flat_map do |framework|
           self.class.vendored_frameworks_headers(framework)
-        end.flatten.uniq
+        end.uniq
       end
 
       # @return [Array<Pathname>] The paths of the library bundles that come
