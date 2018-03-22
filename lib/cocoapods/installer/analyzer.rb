@@ -340,7 +340,7 @@ module Pod
         end
 
         unless embedded_targets_missing_hosts.empty?
-          embedded_targets_missing_hosts_product_types = Set.new embedded_targets_missing_hosts.map(&:user_targets).flatten.map(&:symbol_type)
+          embedded_targets_missing_hosts_product_types = Set.new embedded_targets_missing_hosts.flat_map(&:user_targets).map(&:symbol_type)
           target_names = embedded_targets_missing_hosts.map do |target|
             target.name.sub('Pods-', '') # Make the target names more recognizable to the user
           end.join ', '
