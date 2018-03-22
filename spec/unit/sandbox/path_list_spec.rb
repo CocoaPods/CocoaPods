@@ -199,6 +199,21 @@ module Pod
           libBananalib.a
         )
       end
+
+      it 'preserves pattern order' do
+        patterns = %w(
+          Classes/BananaPrivate.h
+          Classes/Banana.h
+          Classes/Banana.m
+        )
+
+        paths = @path_list.relative_glob(patterns).map(&:to_s)
+        paths.should == %w(
+          Classes/BananaPrivate.h
+          Classes/Banana.h
+          Classes/Banana.m
+        )
+      end
     end
 
     describe 'Reading file system' do
