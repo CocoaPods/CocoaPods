@@ -38,6 +38,7 @@ module Pod
       it 'cleans any trace of the Pod with the given name' do
         pod_root = @sandbox.pod_dir('BananaLib')
         pod_root.mkpath
+        @sandbox.specifications_root.mkpath
         @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
         specification_path = @sandbox.specification_path('BananaLib')
         @sandbox.clean_pod('BananaLib')
@@ -93,8 +94,12 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'Specification store' do
+      before do
+        # This is normally done in #prepare
+        @sandbox.specifications_root.mkdir
+      end
+
       it 'loads the stored specification with the given name' do
-        (@sandbox.specifications_root).mkdir
         FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.specifications_root)
         @sandbox.specification('BananaLib').name.should == 'BananaLib'
       end
@@ -121,7 +126,6 @@ module Pod
       end
 
       it "returns the path to a spec file in the 'Local Podspecs' dir" do
-        (@sandbox.root + 'Local Podspecs').mkdir
         FileUtils.cp(fixture('banana-lib/BananaLib.podspec'), @sandbox.root + 'Local Podspecs')
         @sandbox.specification_path('BananaLib').should ==
           @sandbox.root + 'Local Podspecs/BananaLib.podspec'

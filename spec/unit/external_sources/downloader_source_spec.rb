@@ -9,6 +9,7 @@ module Pod
       }
       dep = Dependency.new('Reachability', params)
       @subject = ExternalSources.from_dependency(dep, nil, true)
+      config.sandbox.specifications_root.mkpath
     end
 
     it 'creates a copy of the podspec' do

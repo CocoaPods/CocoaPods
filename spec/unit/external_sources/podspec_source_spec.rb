@@ -11,6 +11,7 @@ module Pod
     end
 
     it 'creates a copy of the podspec' do
+      config.sandbox.specifications_root.mkpath
       @subject.fetch(config.sandbox)
       path = config.sandbox.specifications_root + 'Reachability.podspec.json'
       path.should.exist?

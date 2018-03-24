@@ -172,7 +172,7 @@ module Pod
         end
         spec.defined_in_file = nil
         validate_podspec(spec)
-        sandbox.store_podspec(name, spec.to_pretty_json, true, true)
+        sandbox.store_podspec(name, spec, true, true)
       end
 
       def validate_podspec(podspec)

@@ -7,6 +7,7 @@ module Pod
       dependency = Dependency.new('Reachability', params)
       podfile_path = fixture('integration/Podfile')
       @subject = ExternalSources.from_dependency(dependency, podfile_path, true)
+      config.sandbox.specifications_root.mkpath
     end
 
     it 'creates a copy of the podspec' do
