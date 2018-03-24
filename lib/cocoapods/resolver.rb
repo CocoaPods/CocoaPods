@@ -133,19 +133,13 @@ module Pod
     #
     def resolver_specs_by_target
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
-        dependencies = {}
         @podfile_dependency_cache.target_definition_list.each do |target|
-          specs = @podfile_dependency_cache.target_definition_dependencies(target).flat_map do |dep|
-            name = dep.name
-            node = @activated.vertex_named(name)
-            (valid_dependencies_for_target_from_node(target, dependencies, node) << node).map { |s| [s, node.payload.test_specification?] }
-          end
+          vertices = valid_dependencies_for_target(target)
 
-          resolver_specs_by_target[target] = specs.
-            group_by(&:first).
-            map do |vertex, spec_test_only_tuples|
-              test_only = spec_test_only_tuples.all? { |tuple| tuple[1] }
+          resolver_specs_by_target[target] = vertices.
+            map do |vertex|
               payload = vertex.payload
+              test_only = vertex.recursive_predecessors.all? { |v| !v.root? || v.payload.test_specification? } && (!vertex.root? || payload.test_specification?)
               spec_source = payload.respond_to?(:spec_source) && payload.spec_source
               ResolverSpecification.new(payload, test_only, spec_source)
             end.
@@ -235,31 +229,29 @@ module Pod
     def requirement_satisfied_by?(requirement, activated, spec)
       version = spec.version
       return false unless requirement.requirement.satisfied_by?(version)
-      shared_possibility_versions, prerelease_requirement = possibility_versions_for_root_name(requirement, activated)
-      return false if !shared_possibility_versions.empty? && !shared_possibility_versions.include?(version)
-      return false if version.prerelease? && !prerelease_requirement
+      return false unless valid_possibility_version_for_root_name?(requirement, activated, spec)
       return false unless spec_is_platform_compatible?(activated, requirement, spec)
       true
     end
 
-    def possibility_versions_for_root_name(requirement, activated)
-      prerelease_requirement = requirement.prerelease? || requirement.external_source
-      existing = activated.vertices.values.flat_map do |vertex|
+    def valid_possibility_version_for_root_name?(requirement, activated, spec)
+      prerelease_requirement = requirement.prerelease? || requirement.external_source || !spec.version.prerelease?
+
+      activated.each do |vertex|
         next unless vertex.payload
         next unless Specification.root_name(vertex.name) == requirement.root_name
 
         prerelease_requirement ||= vertex.requirements.any? { |r| r.prerelease? || r.external_source }
 
-        if vertex.payload.respond_to?(:possibilities)
-          vertex.payload.possibilities.map(&:version)
-        else
-          vertex.payload.version
+        if vertex.payload.respond_to?(:version)
+          return true if vertex.payload.version == spec.version
+          break
         end
-      end.compact
+      end
 
-      [existing, prerelease_requirement]
+      prerelease_requirement
     end
-    private :possibility_versions_for_root_name
+    private :valid_possibility_version_for_root_name?
 
     # Sort dependencies so that the ones that are easiest to resolve are first.
     # Easiest to resolve is (usually) defined by:
@@ -543,8 +535,10 @@ module Pod
     #
     # @return [Bool]
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
+      return true if locked_dependencies.vertex_named(spec.name) # HACK: this probably isn't safe?
+
       vertex = dependency_graph.vertex_named(dependency.name)
-      predecessors = vertex.recursive_predecessors.select(&:root)
+      predecessors = vertex.recursive_predecessors.select(&:root?)
       predecessors << vertex if vertex.root?
       platforms_to_satisfy = predecessors.flat_map(&:explicit_requirements).flat_map { |r| @platforms_by_dependency[r] }.uniq
 
@@ -566,18 +560,21 @@ module Pod
     #         An array of target-appropriate nodes whose `payload`s are
     #         dependencies for `target`.
     #
-    def valid_dependencies_for_target_from_node(target, dependencies, node)
-      dependencies[[node.name, target.platform]] ||= begin
-        validate_platform(node.payload, target)
-        dependency_nodes = []
-        node.outgoing_edges.each do |edge|
-          next unless edge_is_valid_for_target_platform?(edge, target.platform)
-          dependency_nodes << edge.destination
-        end
+    def valid_dependencies_for_target(target)
+      dependencies = Set.new
+      @podfile_dependency_cache.target_definition_dependencies(target).each do |dep|
+        node = @activated.vertex_named(dep.name)
+        add_valid_dependencies_from_node(node, target, dependencies)
+      end
+      dependencies
+    end
 
-        dependency_nodes.flat_map do |item|
-          valid_dependencies_for_target_from_node(target, dependencies, item)
-        end.concat(dependency_nodes).uniq
+    def add_valid_dependencies_from_node(node, target, dependencies)
+      return unless dependencies.add?(node)
+      validate_platform(node.payload, target)
+      node.outgoing_edges.each do |edge|
+        next unless edge_is_valid_for_target_platform?(edge, target.platform)
+        add_valid_dependencies_from_node(edge.destination, target, dependencies)
       end
     end
 
