@@ -395,6 +395,13 @@ module Pod
           (!!target_definition.uses_frameworks?).should == false
           # rubocop:enable Style/DoubleNegation
         end
+
+        it 'inhibits warnings for all pods except the one being validated' do
+          podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
+          target_definition = podfile.target_definitions['App']
+          target_definition.should.not.inhibits_warnings_for_pod?('JSONKit')
+          target_definition.should.inhibits_warnings_for_pod?('NotJSONKit')
+        end
       end
 
       it 'empties sources when no dependencies' do

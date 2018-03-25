@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Inhibit warnings for all dependencies during validation except for the one being validated  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)
 
 
 ## 1.5.0.beta.1 (2018-03-23)
