@@ -12,9 +12,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Escape double quotes for module map contents  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7549](https://github.com/CocoaPods/CocoaPods/pull/7549)
+
 * Fix building Swift static library test specs.  
   [Samuel Giddins](https://github.com/segiddins)
-
 
 ## 1.5.0.beta.1 (2018-03-23)
 
