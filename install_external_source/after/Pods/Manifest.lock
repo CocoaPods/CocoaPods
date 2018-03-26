@@ -6,7 +6,7 @@ PODS:
   - PodTest/subspec_2 (1.0)
 
 DEPENDENCIES:
-  - "PodTest (from `PodTest-hg-source`)"
+  - PodTest (from `PodTest-hg-source`)
 
 EXTERNAL SOURCES:
   PodTest:

@@ -9,7 +9,7 @@ DEPENDENCIES:
   - libPusher
 
 SPEC REPOS:
-  "https://github.com/CocoaPods/Specs.git":
+  https://github.com/CocoaPods/Specs.git:
     - libPusher
     - SocketRocket
 

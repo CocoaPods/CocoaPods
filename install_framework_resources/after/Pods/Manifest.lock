@@ -2,7 +2,7 @@ PODS:
   - SamplePodWithResources (0.1.0)
 
 DEPENDENCIES:
-  - "SamplePodWithResources (from `SamplePodWithResources`)"
+  - SamplePodWithResources (from `SamplePodWithResources`)
 
 EXTERNAL SOURCES:
   SamplePodWithResources:

@@ -4,8 +4,8 @@ PODS:
   - HeaderMappingsDirPod (1.0.0)
 
 DEPENDENCIES:
-  - "DepPod (from `DepPod`)"
-  - "HeaderMappingsDirPod (from `HeaderMappingsDirPod`)"
+  - DepPod (from `DepPod`)
+  - HeaderMappingsDirPod (from `HeaderMappingsDirPod`)
 
 EXTERNAL SOURCES:
   DepPod:

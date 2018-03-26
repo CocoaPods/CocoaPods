@@ -2,7 +2,7 @@ PODS:
   - Reachability (3.1.0)
 
 DEPENDENCIES:
-  - "Reachability (from `Reachability.podspec`)"
+  - Reachability (from `Reachability.podspec`)
 
 EXTERNAL SOURCES:
   Reachability:

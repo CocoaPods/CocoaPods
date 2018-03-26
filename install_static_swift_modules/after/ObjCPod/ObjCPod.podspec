@@ -12,4 +12,9 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '9.0'
   s.macos.deployment_target = '10.10'
+
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'test/**/*.{h,m,swift}'
+    test_spec.framework = 'XCTest'
+  end
 end

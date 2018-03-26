@@ -2,7 +2,7 @@ PODS:
   - Moment (0.0.1)
 
 DEPENDENCIES:
-  - "Moment (from `Moment.podspec`)"
+  - Moment (from `Moment.podspec`)
 
 EXTERNAL SOURCES:
   Moment:
