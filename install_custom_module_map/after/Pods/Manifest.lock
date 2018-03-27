@@ -2,7 +2,7 @@ PODS:
   - BananaLib (1.0)
 
 DEPENDENCIES:
-  - "BananaLib (from `banana-lib/BananaLib.podspec`)"
+  - BananaLib (from `banana-lib/BananaLib.podspec`)
 
 EXTERNAL SOURCES:
   BananaLib:

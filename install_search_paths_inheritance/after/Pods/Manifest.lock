@@ -22,14 +22,14 @@ PODS:
     - asserts
 
 DEPENDENCIES:
-  - "asserts (from `asserts`)"
-  - "logger (from `logger`)"
-  - "sharedlib/Core (from `sharedlib`)"
-  - "sharedlib/Testing (from `sharedlib`)"
-  - "testkit (from `testkit`)"
+  - asserts (from `asserts`)
+  - logger (from `logger`)
+  - sharedlib/Core (from `sharedlib`)
+  - sharedlib/Testing (from `sharedlib`)
+  - testkit (from `testkit`)
 
 SPEC REPOS:
-  "https://github.com/CocoaPods/Specs.git":
+  https://github.com/CocoaPods/Specs.git:
     - CocoaLumberjack
 
 EXTERNAL SOURCES:

@@ -16,20 +16,42 @@ File References:
       - CustomModuleMapPod-framework-iOS.xcconfig
       - CustomModuleMapPod-framework-iOS-dummy.m
       - CustomModuleMapPod-framework-iOS-prefix.pch
+      - CustomModuleMapPod-framework-iOS-Unit-Tests-frameworks.sh
+      - CustomModuleMapPod-framework-iOS-Unit-Tests-Info.plist
+      - CustomModuleMapPod-framework-iOS-Unit-Tests-prefix.pch
+      - CustomModuleMapPod-framework-iOS-Unit-Tests-resources.sh
+      - CustomModuleMapPod-framework-iOS.unit.xcconfig
       - CustomModuleMapPod-framework-macOS.modulemap
       - CustomModuleMapPod-framework-macOS.xcconfig
       - CustomModuleMapPod-framework-macOS-dummy.m
       - CustomModuleMapPod-framework-macOS-prefix.pch
+      - CustomModuleMapPod-framework-macOS-Unit-Tests-frameworks.sh
+      - CustomModuleMapPod-framework-macOS-Unit-Tests-Info.plist
+      - CustomModuleMapPod-framework-macOS-Unit-Tests-prefix.pch
+      - CustomModuleMapPod-framework-macOS-Unit-Tests-resources.sh
+      - CustomModuleMapPod-framework-macOS.unit.xcconfig
       - CustomModuleMapPod-library-iOS.modulemap
       - CustomModuleMapPod-library-iOS.xcconfig
       - CustomModuleMapPod-library-iOS-dummy.m
       - CustomModuleMapPod-library-iOS-prefix.pch
+      - CustomModuleMapPod-library-iOS-Unit-Tests-frameworks.sh
+      - CustomModuleMapPod-library-iOS-Unit-Tests-Info.plist
+      - CustomModuleMapPod-library-iOS-Unit-Tests-prefix.pch
+      - CustomModuleMapPod-library-iOS-Unit-Tests-resources.sh
+      - CustomModuleMapPod-library-iOS.unit.xcconfig
       - CustomModuleMapPod-library-macOS.modulemap
       - CustomModuleMapPod-library-macOS.xcconfig
       - CustomModuleMapPod-library-macOS-dummy.m
       - CustomModuleMapPod-library-macOS-prefix.pch
+      - CustomModuleMapPod-library-macOS-Unit-Tests-frameworks.sh
+      - CustomModuleMapPod-library-macOS-Unit-Tests-Info.plist
+      - CustomModuleMapPod-library-macOS-Unit-Tests-prefix.pch
+      - CustomModuleMapPod-library-macOS-Unit-Tests-resources.sh
+      - CustomModuleMapPod-library-macOS.unit.xcconfig
       - Info.plist
       - Info.plist
+    - Tests:
+      - CustomModuleMapPodTests.m
   - MixedPod:
     - bce.h
     - bce.m
@@ -44,21 +66,44 @@ File References:
       - MixedPod-framework-iOS-dummy.m
       - MixedPod-framework-iOS-prefix.pch
       - MixedPod-framework-iOS-umbrella.h
+      - MixedPod-framework-iOS-Unit-Tests-frameworks.sh
+      - MixedPod-framework-iOS-Unit-Tests-Info.plist
+      - MixedPod-framework-iOS-Unit-Tests-prefix.pch
+      - MixedPod-framework-iOS-Unit-Tests-resources.sh
+      - MixedPod-framework-iOS.unit.xcconfig
       - MixedPod-framework-macOS.modulemap
       - MixedPod-framework-macOS.xcconfig
       - MixedPod-framework-macOS-dummy.m
       - MixedPod-framework-macOS-prefix.pch
       - MixedPod-framework-macOS-umbrella.h
+      - MixedPod-framework-macOS-Unit-Tests-frameworks.sh
+      - MixedPod-framework-macOS-Unit-Tests-Info.plist
+      - MixedPod-framework-macOS-Unit-Tests-prefix.pch
+      - MixedPod-framework-macOS-Unit-Tests-resources.sh
+      - MixedPod-framework-macOS.unit.xcconfig
       - MixedPod-library-iOS.modulemap
       - MixedPod-library-iOS.xcconfig
       - MixedPod-library-iOS-dummy.m
       - MixedPod-library-iOS-prefix.pch
       - MixedPod-library-iOS-umbrella.h
+      - MixedPod-library-iOS-Unit-Tests-frameworks.sh
+      - MixedPod-library-iOS-Unit-Tests-Info.plist
+      - MixedPod-library-iOS-Unit-Tests-prefix.pch
+      - MixedPod-library-iOS-Unit-Tests-resources.sh
+      - MixedPod-library-iOS.unit.xcconfig
       - MixedPod-library-macOS.modulemap
       - MixedPod-library-macOS.xcconfig
       - MixedPod-library-macOS-dummy.m
       - MixedPod-library-macOS-prefix.pch
       - MixedPod-library-macOS-umbrella.h
+      - MixedPod-library-macOS-Unit-Tests-frameworks.sh
+      - MixedPod-library-macOS-Unit-Tests-Info.plist
+      - MixedPod-library-macOS-Unit-Tests-prefix.pch
+      - MixedPod-library-macOS-Unit-Tests-resources.sh
+      - MixedPod-library-macOS.unit.xcconfig
+    - Tests:
+      - MixedPodTests.m
+      - MixedPodTests.swift
   - ObjCPod:
     - abc.h
     - abc.m
@@ -72,21 +117,43 @@ File References:
       - ObjCPod-framework-iOS-dummy.m
       - ObjCPod-framework-iOS-prefix.pch
       - ObjCPod-framework-iOS-umbrella.h
+      - ObjCPod-framework-iOS-Unit-Tests-frameworks.sh
+      - ObjCPod-framework-iOS-Unit-Tests-Info.plist
+      - ObjCPod-framework-iOS-Unit-Tests-prefix.pch
+      - ObjCPod-framework-iOS-Unit-Tests-resources.sh
+      - ObjCPod-framework-iOS.unit.xcconfig
       - ObjCPod-framework-macOS.modulemap
       - ObjCPod-framework-macOS.xcconfig
       - ObjCPod-framework-macOS-dummy.m
       - ObjCPod-framework-macOS-prefix.pch
       - ObjCPod-framework-macOS-umbrella.h
+      - ObjCPod-framework-macOS-Unit-Tests-frameworks.sh
+      - ObjCPod-framework-macOS-Unit-Tests-Info.plist
+      - ObjCPod-framework-macOS-Unit-Tests-prefix.pch
+      - ObjCPod-framework-macOS-Unit-Tests-resources.sh
+      - ObjCPod-framework-macOS.unit.xcconfig
       - ObjCPod-library-iOS.modulemap
       - ObjCPod-library-iOS.xcconfig
       - ObjCPod-library-iOS-dummy.m
       - ObjCPod-library-iOS-prefix.pch
       - ObjCPod-library-iOS-umbrella.h
+      - ObjCPod-library-iOS-Unit-Tests-frameworks.sh
+      - ObjCPod-library-iOS-Unit-Tests-Info.plist
+      - ObjCPod-library-iOS-Unit-Tests-prefix.pch
+      - ObjCPod-library-iOS-Unit-Tests-resources.sh
+      - ObjCPod-library-iOS.unit.xcconfig
       - ObjCPod-library-macOS.modulemap
       - ObjCPod-library-macOS.xcconfig
       - ObjCPod-library-macOS-dummy.m
       - ObjCPod-library-macOS-prefix.pch
       - ObjCPod-library-macOS-umbrella.h
+      - ObjCPod-library-macOS-Unit-Tests-frameworks.sh
+      - ObjCPod-library-macOS-Unit-Tests-Info.plist
+      - ObjCPod-library-macOS-Unit-Tests-prefix.pch
+      - ObjCPod-library-macOS-Unit-Tests-resources.sh
+      - ObjCPod-library-macOS.unit.xcconfig
+    - Tests:
+      - ObjCPodTests.m
   - SwiftPod:
     - xyz.swift
     - Pod:
@@ -99,31 +166,61 @@ File References:
       - SwiftPod-framework-iOS-dummy.m
       - SwiftPod-framework-iOS-prefix.pch
       - SwiftPod-framework-iOS-umbrella.h
+      - SwiftPod-framework-iOS-Unit-Tests-frameworks.sh
+      - SwiftPod-framework-iOS-Unit-Tests-Info.plist
+      - SwiftPod-framework-iOS-Unit-Tests-prefix.pch
+      - SwiftPod-framework-iOS-Unit-Tests-resources.sh
+      - SwiftPod-framework-iOS.unit.xcconfig
       - SwiftPod-framework-macOS.modulemap
       - SwiftPod-framework-macOS.xcconfig
       - SwiftPod-framework-macOS-dummy.m
       - SwiftPod-framework-macOS-prefix.pch
       - SwiftPod-framework-macOS-umbrella.h
+      - SwiftPod-framework-macOS-Unit-Tests-frameworks.sh
+      - SwiftPod-framework-macOS-Unit-Tests-Info.plist
+      - SwiftPod-framework-macOS-Unit-Tests-prefix.pch
+      - SwiftPod-framework-macOS-Unit-Tests-resources.sh
+      - SwiftPod-framework-macOS.unit.xcconfig
       - SwiftPod-library-iOS.modulemap
       - SwiftPod-library-iOS.xcconfig
       - SwiftPod-library-iOS-dummy.m
       - SwiftPod-library-iOS-prefix.pch
       - SwiftPod-library-iOS-umbrella.h
+      - SwiftPod-library-iOS-Unit-Tests-frameworks.sh
+      - SwiftPod-library-iOS-Unit-Tests-Info.plist
+      - SwiftPod-library-iOS-Unit-Tests-prefix.pch
+      - SwiftPod-library-iOS-Unit-Tests-resources.sh
+      - SwiftPod-library-iOS.unit.xcconfig
       - SwiftPod-library-macOS.modulemap
       - SwiftPod-library-macOS.xcconfig
       - SwiftPod-library-macOS-dummy.m
       - SwiftPod-library-macOS-prefix.pch
       - SwiftPod-library-macOS-umbrella.h
+      - SwiftPod-library-macOS-Unit-Tests-frameworks.sh
+      - SwiftPod-library-macOS-Unit-Tests-Info.plist
+      - SwiftPod-library-macOS-Unit-Tests-prefix.pch
+      - SwiftPod-library-macOS-Unit-Tests-resources.sh
+      - SwiftPod-library-macOS.unit.xcconfig
+    - Tests:
+      - SwiftPodTests.swift
 - Frameworks:
+  - CustomModuleMapPod.framework
+  - MixedPod.framework
   - ObjCPod.framework
   - SwiftPod.framework
   - iOS:
     - Foundation.framework
+    - XCTest.framework
   - OS X:
     - Cocoa.framework
+    - XCTest.framework
 - Products:
   - CustomModuleMapPod.framework
   - CustomModuleMapPod.framework
+  - CustomModuleMapPod-framework-iOS-Unit-Tests
+  - CustomModuleMapPod-framework-macOS-Unit-Tests
+  - CustomModuleMapPod-library-iOS-Unit-Tests
+  - CustomModuleMapPod-library-macOS-Unit-Tests
   - libCustomModuleMapPod-library-iOS.a
   - libCustomModuleMapPod-library-macOS.a
   - libMixedPod-library-iOS.a
@@ -136,12 +233,24 @@ File References:
   - libSwiftPod-library-macOS.a
   - MixedPod.framework
   - MixedPod.framework
+  - MixedPod-framework-iOS-Unit-Tests
+  - MixedPod-framework-macOS-Unit-Tests
+  - MixedPod-library-iOS-Unit-Tests
+  - MixedPod-library-macOS-Unit-Tests
   - ObjCPod.framework
   - ObjCPod.framework
+  - ObjCPod-framework-iOS-Unit-Tests
+  - ObjCPod-framework-macOS-Unit-Tests
+  - ObjCPod-library-iOS-Unit-Tests
+  - ObjCPod-library-macOS-Unit-Tests
   - Pods_Abstract_Target_iOS_Pods_Dynamic.framework
   - Pods_Abstract_Target_macOS_Pods_Dynamic.framework
   - SwiftPod.framework
   - SwiftPod.framework
+  - SwiftPod-framework-iOS-Unit-Tests
+  - SwiftPod-framework-macOS-Unit-Tests
+  - SwiftPod-library-iOS-Unit-Tests
+  - SwiftPod-library-macOS-Unit-Tests
 - Targets Support Files:
   - Pods-Abstract Target-iOS Pods-Dynamic:
     - Info.plist
@@ -262,6 +371,50 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: CustomModuleMapPod-framework-iOS.xcconfig
+- CustomModuleMapPod-framework-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - CustomModuleMapPodTests.m
+    - Frameworks:
+      - CustomModuleMapPod.framework
+      - Foundation.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          PRODUCT_NAME: CustomModuleMapPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: CustomModuleMapPod-framework-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          PRODUCT_NAME: CustomModuleMapPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: CustomModuleMapPod-framework-iOS.unit.xcconfig
 - CustomModuleMapPod-framework-macOS:
     Build Phases:
     - Sources:
@@ -338,6 +491,47 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: CustomModuleMapPod-framework-macOS.xcconfig
+- CustomModuleMapPod-framework-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - CustomModuleMapPodTests.m
+    - Frameworks:
+      - Cocoa.framework
+      - CustomModuleMapPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          PRODUCT_NAME: CustomModuleMapPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: CustomModuleMapPod-framework-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          PRODUCT_NAME: CustomModuleMapPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: CustomModuleMapPod-framework-macOS.unit.xcconfig
 - CustomModuleMapPod-library-iOS:
     Build Phases:
     - Sources:
@@ -399,6 +593,55 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: CustomModuleMapPod-library-iOS.xcconfig
+- CustomModuleMapPod-library-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - CustomModuleMapPodTests.m
+    - Frameworks:
+      - Foundation.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: CustomModuleMapPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: CustomModuleMapPod-library-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: CustomModuleMapPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: CustomModuleMapPod-library-iOS.unit.xcconfig
 - CustomModuleMapPod-library-macOS:
     Build Phases:
     - Sources:
@@ -461,6 +704,52 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4.0'
         Base Configuration: CustomModuleMapPod-library-macOS.xcconfig
+- CustomModuleMapPod-library-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - CustomModuleMapPodTests.m
+    - Frameworks:
+      - Cocoa.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: CustomModuleMapPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: CustomModuleMapPod-library-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: CustomModuleMapPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: CustomModuleMapPod-library-macOS.unit.xcconfig
 - MixedPod-framework-iOS:
     Build Phases:
     - Sources:
@@ -536,6 +825,58 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: MixedPod-framework-iOS.xcconfig
+- MixedPod-framework-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - MixedPodTests.m
+      - MixedPodTests.swift
+    - Frameworks:
+      - Foundation.framework
+      - MixedPod.framework
+      - ObjCPod.framework
+      - SwiftPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: MixedPod-framework-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: MixedPod-framework-iOS.unit.xcconfig
 - MixedPod-framework-macOS:
     Build Phases:
     - Sources:
@@ -614,6 +955,55 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: MixedPod-framework-macOS.xcconfig
+- MixedPod-framework-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - MixedPodTests.m
+      - MixedPodTests.swift
+    - Frameworks:
+      - Cocoa.framework
+      - MixedPod.framework
+      - ObjCPod.framework
+      - SwiftPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: MixedPod-framework-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: MixedPod-framework-macOS.unit.xcconfig
 - MixedPod-library-iOS:
     Build Phases:
     - Sources:
@@ -676,6 +1066,61 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: MixedPod-library-iOS.xcconfig
+- MixedPod-library-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - MixedPodTests.m
+      - MixedPodTests.swift
+    - Frameworks:
+      - Foundation.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: MixedPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: MixedPod-library-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: MixedPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: MixedPod-library-iOS.unit.xcconfig
 - MixedPod-library-macOS:
     Build Phases:
     - Sources:
@@ -739,6 +1184,58 @@ Targets:
           SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.xcconfig
+- MixedPod-library-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - MixedPodTests.m
+      - MixedPodTests.swift
+    - Frameworks:
+      - Cocoa.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: MixedPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: MixedPod-library-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: MixedPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: MixedPod-library-macOS.unit.xcconfig
 - ObjCPod-framework-iOS:
     Build Phases:
     - Sources:
@@ -809,6 +1306,50 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: ObjCPod-framework-iOS.xcconfig
+- ObjCPod-framework-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - ObjCPodTests.m
+    - Frameworks:
+      - Foundation.framework
+      - ObjCPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          PRODUCT_NAME: ObjCPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: ObjCPod-framework-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          PRODUCT_NAME: ObjCPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: ObjCPod-framework-iOS.unit.xcconfig
 - ObjCPod-framework-macOS:
     Build Phases:
     - Sources:
@@ -882,6 +1423,47 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: ObjCPod-framework-macOS.xcconfig
+- ObjCPod-framework-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - ObjCPodTests.m
+    - Frameworks:
+      - Cocoa.framework
+      - ObjCPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          PRODUCT_NAME: ObjCPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: ObjCPod-framework-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          PRODUCT_NAME: ObjCPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: ObjCPod-framework-macOS.unit.xcconfig
 - ObjCPod-library-iOS:
     Build Phases:
     - Sources:
@@ -940,6 +1522,55 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: ObjCPod-library-iOS.xcconfig
+- ObjCPod-library-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - ObjCPodTests.m
+    - Frameworks:
+      - Foundation.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: ObjCPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: ObjCPod-library-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: ObjCPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: ObjCPod-library-iOS.unit.xcconfig
 - ObjCPod-library-macOS:
     Build Phases:
     - Sources:
@@ -999,6 +1630,52 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4.0'
         Base Configuration: ObjCPod-library-macOS.xcconfig
+- ObjCPod-library-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - ObjCPodTests.m
+    - Frameworks:
+      - Cocoa.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: ObjCPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: ObjCPod-library-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: ObjCPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_VERSION: '4.0'
+        Base Configuration: ObjCPod-library-macOS.unit.xcconfig
 - Pods-Abstract Target-iOS Pods-Dynamic:
     Build Phases:
     - Sources:
@@ -1332,6 +2009,55 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: SwiftPod-framework-iOS.xcconfig
+- SwiftPod-framework-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - SwiftPodTests.swift
+    - Frameworks:
+      - Foundation.framework
+      - SwiftPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: SwiftPod-framework-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: SwiftPod-framework-iOS.unit.xcconfig
 - SwiftPod-framework-macOS:
     Build Phases:
     - Sources:
@@ -1404,6 +2130,52 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: SwiftPod-framework-macOS.xcconfig
+- SwiftPod-framework-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - SwiftPodTests.swift
+    - Frameworks:
+      - Cocoa.framework
+      - SwiftPod.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: SwiftPod-framework-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: SwiftPod-framework-macOS.unit.xcconfig
 - SwiftPod-library-iOS:
     Build Phases:
     - Sources:
@@ -1462,6 +2234,60 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: SwiftPod-library-iOS.xcconfig
+- SwiftPod-library-iOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - SwiftPodTests.swift
+    - Frameworks:
+      - Foundation.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: SwiftPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: SwiftPod-library-iOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'YES'
+          CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-Info.plist
+          IPHONEOS_DEPLOYMENT_TARGET: '9.0'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: SwiftPod-library-iOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: iphoneos
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+          VALIDATE_PRODUCT: 'YES'
+        Base Configuration: SwiftPod-library-iOS.unit.xcconfig
 - SwiftPod-library-macOS:
     Build Phases:
     - Sources:
@@ -1521,6 +2347,57 @@ Targets:
           SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.xcconfig
+- SwiftPod-library-macOS-Unit-Tests:
+    Build Phases:
+    - Sources:
+      - SwiftPodTests.swift
+    - Frameworks:
+      - Cocoa.framework
+      - XCTest.framework
+    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Copy Pods Resources": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-lswiftSwiftOnoneSupport"
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: SwiftPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: SwiftPod-library-macOS.unit.xcconfig
+    - Release:
+        Build Settings:
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY: ''
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-prefix.pch
+          INFOPLIST_FILE: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-Info.plist
+          MACOSX_DEPLOYMENT_TARGET: '10.10'
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_NAME: SwiftPod-library-macOS-Unit-Tests
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '4.0'
+        Base Configuration: SwiftPod-library-macOS.unit.xcconfig
 
 
 

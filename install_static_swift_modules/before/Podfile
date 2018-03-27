@@ -3,10 +3,10 @@ workspace 'Examples.xcworkspace'
 use_modular_headers!
 
 abstract_target 'Abstract Target' do
-  pod 'ObjCPod', path: 'ObjCPod'
-  pod 'SwiftPod', path: 'SwiftPod'
-  pod 'MixedPod', path: 'MixedPod'
-  pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+  pod 'ObjCPod', path: 'ObjCPod', :testspecs => %w[Tests]
+  pod 'SwiftPod', path: 'SwiftPod', :testspecs => %w[Tests]
+  pod 'MixedPod', path: 'MixedPod', :testspecs => %w[Tests]
+  pod 'CustomModuleMapPod', path: 'CustomModuleMapPod', :testspecs => %w[Tests]
 
   %w[iOS macOS].each do |platform|
     abstract_target "#{platform} Pods" do

@@ -7,7 +7,7 @@ DEPENDENCIES:
   - Reachability (= 3.1.0)
 
 SPEC REPOS:
-  "https://github.com/CocoaPods/Specs.git":
+  https://github.com/CocoaPods/Specs.git:
     - JSONKit
     - Reachability
 

@@ -1,16 +1,26 @@
 PODS:
   - CustomModuleMapPod (0.0.1)
+  - CustomModuleMapPod/Tests (0.0.1)
   - MixedPod (0.0.1):
     - ObjCPod
     - SwiftPod
+  - MixedPod/Tests (0.0.1):
+    - ObjCPod
+    - SwiftPod
   - ObjCPod (0.0.1)
+  - ObjCPod/Tests (0.0.1)
   - SwiftPod (0.0.1)
+  - SwiftPod/Tests (0.0.1)
 
 DEPENDENCIES:
-  - "CustomModuleMapPod (from `CustomModuleMapPod`)"
-  - "MixedPod (from `MixedPod`)"
-  - "ObjCPod (from `ObjCPod`)"
-  - "SwiftPod (from `SwiftPod`)"
+  - CustomModuleMapPod (from `CustomModuleMapPod`)
+  - CustomModuleMapPod/Tests (from `CustomModuleMapPod`)
+  - MixedPod (from `MixedPod`)
+  - MixedPod/Tests (from `MixedPod`)
+  - ObjCPod (from `ObjCPod`)
+  - ObjCPod/Tests (from `ObjCPod`)
+  - SwiftPod (from `SwiftPod`)
+  - SwiftPod/Tests (from `SwiftPod`)
 
 EXTERNAL SOURCES:
   CustomModuleMapPod:
@@ -23,7 +33,7 @@ EXTERNAL SOURCES:
     :path: SwiftPod
 
 SPEC CHECKSUMS:
-  CustomModuleMapPod: 3c10fa49a04a1642893cf91aef5d991196257cc0
-  MixedPod: fcc78c09cef70617b39f864d879f74fbe4c4def7
-  ObjCPod: 6141d4380b88803d24df3696dfbffa64e0bbb05a
-  SwiftPod: 16812a121d88e5dfdcd2a0b8a59c9ac9ef28fdb4
+  CustomModuleMapPod: cfd26c1ad10272d3b5dd32baa145c7a4719e9153
+  MixedPod: 37ee6be735a7ab69e5ba8ffe0eb116cdc7b4ab9a
+  ObjCPod: 62f62796ec21fc9eb347d633d8854e4cae6d662f
+  SwiftPod: 95a3adf44209f991ee51e0803d98eb9051e49a9d
