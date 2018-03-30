@@ -29,19 +29,11 @@ module Pod
                 @project.add_file_reference(resource, group)
               end
 
-              @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@spec], [@target_definition], nil)
-              @pod_target.file_accessors = [file_accessor]
+              user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], [@spec], [@target_definition], Platform.new(:ios, '4.3'), [file_accessor])
               @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
 
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
-            end
-
-            it 'uses the maximum of all spec deployment targets' do
-              spec_1 = Pod::Specification.new { |s| s.ios.deployment_target = '10.10' }
-              spec_2 = Pod::Specification.new { |s| s.ios.deployment_target = '10.9' }
-              spec_3 = Pod::Specification.new
-              @pod_target.stubs(:specs).returns([spec_1, spec_2, spec_3])
-              @installer.send(:deployment_target).should == '10.10'
             end
 
             it 'sets the platform and the deployment target for iOS targets' do
@@ -53,6 +45,7 @@ module Pod
             end
 
             it 'sets the platform and the deployment target for iOS targets that require frameworks' do
+              @pod_target.stubs(:platform).returns(Platform.new(:ios, '8.0'))
               @pod_target.stubs(:requires_frameworks?).returns(true)
               @installer.install!
               target = @project.targets.first
@@ -62,7 +55,7 @@ module Pod
             end
 
             it 'sets the platform and the deployment target for OS X targets' do
-              @pod_target.target_definitions.first.stubs(:platform).returns(Platform.new(:osx, '10.8'))
+              @pod_target.stubs(:platform).returns(Platform.new(:osx, '10.6'))
               @installer.install!
               target = @project.targets.first
               target.platform_name.should == :osx
@@ -179,11 +172,12 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
-                @coconut_pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition], nil)
-                @coconut_pod_target.file_accessors = [file_accessor, test_file_accessor]
+                user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                all_specs = [@coconut_spec, *@coconut_spec.recursive_subspecs]
+                file_accessors = [file_accessor, test_file_accessor]
+                @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], all_specs, [@target_definition], Platform.new(:ios, '6.0'), file_accessors)
                 @installer = PodTargetInstaller.new(config.sandbox, @coconut_pod_target)
-                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition2], nil)
-                @coconut_pod_target2.file_accessors = [file_accessor, test_file_accessor]
+                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [], all_specs, [@target_definition2], Platform.new(:osx, '10.8'), file_accessors)
                 @installer2 = PodTargetInstaller.new(config.sandbox, @coconut_pod_target2)
               end
 
@@ -375,8 +369,7 @@ module Pod
                   @project.add_file_reference(file, group) if file.fnmatch?('*.m') || file.fnmatch?('*.h')
                 end
 
-                @minions_pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], nil)
-                @minions_pod_target.file_accessors = [file_accessor]
+                @minions_pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], Platform.ios, [file_accessor])
                 @installer = PodTargetInstaller.new(config.sandbox, @minions_pod_target)
 
                 @first_json_file = file_accessor.source_files.find { |sf| sf.extname == '.json' }
@@ -418,7 +411,7 @@ module Pod
                 File.symlink(file_path, @source_symlink_file)
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-                @pod_target.file_accessors = [file_accessor]
+                @pod_target.stubs(:file_accessors).returns([file_accessor])
                 exception = lambda { @installer.install! }.should.raise Errno::ENOENT
                 exception.message.should.include 'No such file or directory'
                 exception.message.should.include file_path.to_s
@@ -429,7 +422,7 @@ module Pod
                 File.symlink(file_path, @header_symlink_file)
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-                @pod_target.file_accessors = [file_accessor]
+                @pod_target.stubs(:file_accessors).returns([file_accessor])
                 exception = lambda { @installer.install! }.should.raise Errno::ENOENT
                 exception.message.should.include 'No such file or directory'
                 exception.message.should.include file_path.to_s
@@ -439,7 +432,7 @@ module Pod
                 File.symlink(@first_header_file, @header_symlink_file)
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-                @pod_target.file_accessors = [file_accessor]
+                @pod_target.stubs(:file_accessors).returns([file_accessor])
                 group = @project.group_for_spec('BananaLib')
                 @project.add_file_reference(@header_symlink_file.to_s, group)
                 lambda { @installer.install! }.should.not.raise
@@ -449,7 +442,7 @@ module Pod
                 File.symlink(@first_source_file, @source_symlink_file)
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-                @pod_target.file_accessors = [file_accessor]
+                @pod_target.stubs(:file_accessors).returns([file_accessor])
                 group = @project.group_for_spec('BananaLib')
                 @project.add_file_reference(@source_symlink_file.to_s, group)
                 lambda { @installer.install! }.should.not.raise
@@ -486,8 +479,7 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
-                @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@spec], [@target_definition], nil)
-                @pod_target.file_accessors = [file_accessor]
+                @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@spec], [@target_definition], Platform.ios, [file_accessor])
                 @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
               end
 

@@ -119,27 +119,19 @@ end
 def fixture_target_definition(name = 'Pods', platform = Pod::Platform.ios)
   platform_hash = { platform.symbolic_name => platform.deployment_target }
   parent = Pod::Podfile.new
-  Pod::Podfile::TargetDefinition.new(name, parent,
-                                     'abstract' => false,
-                                     'name' => name,
-                                     'platform' => platform_hash)
+  Pod::Podfile::TargetDefinition.new(name, parent, 'abstract' => false, 'name' => name, 'platform' => platform_hash)
 end
 
-def fixture_pod_target(spec_or_name, host_requires_frameworks = false, user_build_configurations = {}, target_definitions = [])
+def fixture_pod_target(spec_or_name, host_requires_frameworks = false, user_build_configurations = {}, target_definitions = [], platform = Pod::Platform.ios)
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
-  fixture_pod_target_with_specs([spec], host_requires_frameworks, user_build_configurations, target_definitions)
+  fixture_pod_target_with_specs([spec], host_requires_frameworks, user_build_configurations, target_definitions, platform)
 end
 
-def fixture_pod_target_with_specs(specs, host_requires_frameworks = false, user_build_configurations = {}, target_definitions = [])
+def fixture_pod_target_with_specs(specs, host_requires_frameworks = false, user_build_configurations = {}, target_definitions = [], platform = Pod::Platform.ios)
   target_definitions << fixture_target_definition if target_definitions.empty?
   target_definitions.each { |td| specs.each { |spec| td.store_pod(spec.name) } }
-  Pod::PodTarget.new(config.sandbox, host_requires_frameworks, user_build_configurations, [], specs, target_definitions, nil).tap do |pod_target|
-    specs.each do |spec|
-      pod_target.file_accessors << fixture_file_accessor(spec, pod_target.platform)
-      consumer = spec.consumer(pod_target.platform)
-      pod_target.spec_consumers << consumer
-    end
-  end
+  file_accessors = specs.map { |spec| fixture_file_accessor(spec, platform) }
+  Pod::PodTarget.new(config.sandbox, host_requires_frameworks, user_build_configurations, [], specs, target_definitions, platform, file_accessors)
 end
 
 def fixture_aggregate_target(pod_targets = [], target_definition = nil)

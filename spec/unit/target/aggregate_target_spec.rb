@@ -87,13 +87,13 @@ module Pod
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
         @target_definition.set_platform(:ios, '10.0')
-        @pod_target = PodTarget.new(config.sandbox, false, {}, [], [@spec], [@target_definition], nil)
+        @pod_target = PodTarget.new(config.sandbox, false, {}, [], [@spec], [@target_definition], Platform.ios)
         @target = AggregateTarget.new(config.sandbox, false, {}, [], @target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
       end
 
       describe 'with configuration dependent pod targets' do
         before do
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], [@spec], [@target_definition], nil)
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], [@spec], [@target_definition], Platform.ios)
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Debug').returns(false)
           @pod_target_release.expects(:include_in_build_config?).with(@target_definition, 'Release').returns(true)
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
@@ -116,7 +116,7 @@ module Pod
       describe 'frameworks by config and input output paths' do
         before do
           @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], [@coconut_spec], [@target_definition], nil)
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], [@coconut_spec], [@target_definition], Platform.ios)
           @target.stubs(:pod_targets).returns([@pod_target])
           @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
         end
@@ -185,7 +185,7 @@ module Pod
         it 'returns vendored frameworks by config' do
           path_list = Sandbox::PathList.new(fixture('banana-lib'))
           file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-          @pod_target.file_accessors = [file_accessor]
+          @pod_target.stubs(:file_accessors).returns([file_accessor])
           @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
             [Pathname('/some/absolute/path/to/FrameworkA.framework')],
           )
@@ -214,7 +214,7 @@ module Pod
         it 'returns correct input and output paths for vendored frameworks' do
           path_list = Sandbox::PathList.new(fixture('banana-lib'))
           file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
-          @pod_target.file_accessors = [file_accessor]
+          @pod_target.stubs(:file_accessors).returns([file_accessor])
           @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
             [Pathname('/absolute/path/to/FrameworkA.framework')],
           )

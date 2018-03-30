@@ -160,7 +160,6 @@ module Pod
 
     def download_dependencies
       UI.section 'Downloading dependencies' do
-        create_file_accessors
         install_pod_sources
         run_podfile_pre_install_hooks
         clean_pod_sources
@@ -300,13 +299,6 @@ module Pod
           end
         end
       end
-    end
-
-    # @return [void] In this step we create the file accessors for the pod
-    #                targets.
-    #
-    def create_file_accessors
-      sandbox.create_file_accessors(pod_targets)
     end
 
     # Downloads, installs the documentation and cleans the sources of the Pods

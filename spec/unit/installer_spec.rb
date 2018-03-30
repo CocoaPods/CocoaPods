@@ -74,7 +74,6 @@ module Pod
 
       it 'in runs the pre-install hooks before cleaning the Pod sources' do
         @installer.unstub(:download_dependencies)
-        @installer.stubs(:create_file_accessors)
         @installer.stubs(:install_pod_sources)
         def @installer.run_podfile_pre_install_hooks
           @hook_called = true

@@ -591,7 +591,7 @@ module Pod
       # @param  [TargetDefinitions] target_definitions
       #         the aggregate target
       #
-      # @param  [Array<Specification>] pod_specs
+      # @param  [Array<Specification>] specs
       #         the specifications of an equal root.
       #
       # @param  [String] scope_suffix
@@ -599,7 +599,7 @@ module Pod
       #
       # @return [PodTarget]
       #
-      def generate_pod_target(target_definitions, pod_specs, scope_suffix: nil)
+      def generate_pod_target(target_definitions, specs, scope_suffix: nil)
         if installation_options.integrate_targets?
           target_inspections = result.target_inspections.select { |t, _| target_definitions.include?(t) }.values
           user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
@@ -611,8 +611,56 @@ module Pod
             archs = ['$(ARCHS_STANDARD_64_BIT)']
           end
         end
-        PodTarget.new(sandbox, target_definitions.any?(&:uses_frameworks?), user_build_configurations, archs, pod_specs,
-                      target_definitions, scope_suffix)
+        host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
+        platform = determine_platform(specs, target_definitions, host_requires_frameworks)
+        file_accessors = create_file_accessors(specs, platform)
+        PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, target_definitions,
+                      platform, file_accessors, scope_suffix)
+      end
+
+      # Creates the file accessors for a given pod.
+      #
+      # @param [Array<Specification>] specs
+      #        the specs to map each file accessor to.
+      #
+      # @param [Platform] platform
+      #        the platform to use when generating each file accessor.
+      #
+      # @return [Array<FileAccessor>]
+      #
+      def create_file_accessors(specs, platform)
+        name = specs.first.name
+        pod_root = sandbox.pod_dir(name)
+        path_list = Sandbox::PathList.new(pod_root)
+        specs.map do |spec|
+          Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
+        end
+      end
+
+      # Calculates and returns the platform to use for the given list of specs and target definitions.
+      #
+      # @param [Array<Specification>] specs
+      #        the specs to inspect and calculate the platform for.
+      #
+      # @param [Array<TargetDefinition>] target_definitions
+      #        the target definitions these specs are part of.
+      #
+      # @param [Boolean] host_requires_frameworks
+      #        whether the platform is calculated for a target that needs to be packaged as a framework.
+      #
+      # @return [Platform]
+      #
+      def determine_platform(specs, target_definitions, host_requires_frameworks)
+        platform_name = target_definitions.first.platform.name
+        default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
+        deployment_target = specs.map do |spec|
+          Version.new(spec.deployment_target(platform_name) || default)
+        end.max
+        if platform_name == :ios && host_requires_frameworks
+          minimum = Version.new('8.0')
+          deployment_target = [deployment_target, minimum].max
+        end
+        Platform.new(platform_name, deployment_target)
       end
 
       # Generates dependencies that require the specific version of the Pods

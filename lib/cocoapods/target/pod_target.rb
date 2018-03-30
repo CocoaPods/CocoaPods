@@ -1,20 +1,35 @@
 module Pod
   # Stores the information relative to the target used to compile a single Pod.
-  # A pod can have one or more activated spec/subspecs.
+  # A pod can have one or more activated spec, subspecs and test specs.
   #
   class PodTarget < Target
-    # @return [Array<Specification>] the spec and subspecs for the target.
+    # @return [Array<Specification>] the spec, subspecs and test specs of the target.
     #
     attr_reader :specs
+
+    # @return [Array<Specification>] All of the test specs within this target.
+    #         Subset of #specs.
+    #
+    attr_reader :test_specs
+
+    # @return [Array<Specification>] All of the specs within this target that are not test specs.
+    #         Subset of #specs.
+    #
+    attr_reader :non_test_specs
 
     # @return [Array<TargetDefinition>] the target definitions of the Podfile
     #         that generated this target.
     #
     attr_reader :target_definitions
 
-    # @return [HeadersStore] the header directory for the target.
+    # @return [Array<Sandbox::FileAccessor>] the file accessors for the
+    #         specifications of this target.
     #
-    attr_reader :build_headers
+    attr_reader :file_accessors
+
+    # @return [Platform] the platform of this target.
+    #
+    attr_reader :platform
 
     # @return [String] the suffix used for this target when deduplicated. May be `nil`.
     #
@@ -22,6 +37,10 @@ module Pod
     #       and accessors relying on this as #build_product_path.
     #
     attr_reader :scope_suffix
+
+    # @return [HeadersStore] the header directory for the target.
+    #
+    attr_reader :build_headers
 
     # @return [Array<PodTarget>] the targets that this target has a dependency
     #         upon.
@@ -38,27 +57,40 @@ module Pod
     #
     attr_accessor :test_native_targets
 
+    # @return [Array<PBXNativeTarget>] the resource bundle targets belonging
+    #         to this target.
+    #
+    attr_reader :resource_bundle_targets
+
+    # @return [Array<PBXNativeTarget>] the resource bundle test targets belonging
+    #         to this target.
+    #
+    attr_reader :test_resource_bundle_targets
+
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
     # @param [Boolean] host_requires_frameworks @see Target#host_requires_frameworks
     # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
     # @param [Array<String>] archs @see Target#archs
+    # @param [Platform] platform @see #platform
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
+    # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, target_definitions, scope_suffix = nil)
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, target_definitions, platform, file_accessors = [], scope_suffix = nil)
       super(sandbox, host_requires_frameworks, user_build_configurations, archs)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
       raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
       @specs = specs.dup.freeze
-      @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
       @target_definitions = target_definitions
+      @platform = platform
+      @file_accessors = file_accessors
       @scope_suffix = scope_suffix
-      @build_headers  = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
-      @file_accessors = []
+      @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
+      @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @resource_bundle_targets = []
       @test_resource_bundle_targets = []
       @test_native_targets = []
@@ -67,8 +99,11 @@ module Pod
       @build_config_cache = {}
     end
 
+    # Scopes the current target based on the existing pod targets within the cache.
+    #
     # @param [Hash{Array => PodTarget}] cache
-    #        the cached PodTarget for a previously scoped (specs, target_definition)
+    #        the cached target for a previously scoped target.
+    #
     # @return [Array<PodTarget>] a scoped copy for each target definition.
     #
     def scoped(cache = {})
@@ -77,10 +112,10 @@ module Pod
         if cache[cache_key]
           cache[cache_key]
         else
-          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, [target_definition], target_definition.label)
-          target.file_accessors = file_accessors
+          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, [target_definition], platform, file_accessors, target_definition.label)
           target.native_target = native_target
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
+          target.test_dependent_targets = test_dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
           cache[cache_key] = target
         end
       end
@@ -110,32 +145,6 @@ module Pod
       root_spec.swift_version
     end
 
-    # @note   The deployment target for the pod target is the maximum of all
-    #         the deployment targets for the current platform of the target
-    #         (or the minimum required to support the current installation
-    #         strategy, if higher).
-    #
-    # @return [Platform] the platform for this target.
-    #
-    def platform
-      @platform ||= begin
-        platform_name = target_definitions.first.platform.name
-        default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
-        deployment_target = specs.map do |spec|
-          Version.new(spec.deployment_target(platform_name) || default)
-        end.max
-        if platform_name == :ios && requires_frameworks?
-          minimum = Version.new('8.0')
-          deployment_target = [deployment_target, minimum].max
-        end
-        Platform.new(platform_name, deployment_target)
-      end
-    end
-
-    # @visibility private
-    #
-    attr_writer :platform
-
     # @return [Podfile] The podfile which declares the dependency.
     #
     def podfile
@@ -149,19 +158,6 @@ module Pod
     def product_module_name
       root_spec.module_name
     end
-
-    # @return [Array<Sandbox::FileAccessor>] the file accessors for the
-    #         specifications of this target.
-    #
-    attr_accessor :file_accessors
-
-    # @return [Array<PBXNativeTarget>] the resource bundle targets belonging
-    #         to this target.
-    attr_reader :resource_bundle_targets
-
-    # @return [Array<PBXNativeTarget>] the resource bundle test targets belonging
-    #         to this target.
-    attr_reader :test_resource_bundle_targets
 
     # @return [Bool] Whether or not this target should be built.
     #
@@ -233,14 +229,6 @@ module Pod
     def contains_test_specifications?
       !test_specs.empty?
     end
-
-    # @return [Array<Specification>] All of the test specs within this target.
-    #
-    attr_reader :test_specs
-
-    # @return [Array<Specification>] All of the specs within this target that are not test specs.
-    #
-    attr_reader :non_test_specs
 
     # @return [Array<Symbol>] All of the test supported types within this target.
     #
