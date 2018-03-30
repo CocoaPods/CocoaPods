@@ -56,6 +56,7 @@ module Pod
         @test_pod_target_analyzer_cache = {}
         @test_pod_target_key = Struct.new(:name, :pod_targets)
         @podfile_dependency_cache = PodfileDependencyCache.from_podfile(podfile)
+        @result = nil
       end
 
       # Performs the analysis.
@@ -70,6 +71,7 @@ module Pod
       # @return [AnalysisResult]
       #
       def analyze(allow_fetches = true)
+        return @result if @result
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
