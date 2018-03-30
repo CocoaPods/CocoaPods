@@ -678,7 +678,7 @@ module Pod
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
           local_pod_names = @podfile_dependency_cache.podfile_dependencies.select(&:local?).map(&:root_name)
-          pods_to_unlock = local_pod_names.reject do |pod_name|
+          pods_to_unlock = local_pod_names.to_set.delete_if do |pod_name|
             sandbox.specification(pod_name).checksum == lockfile.checksum(pod_name)
           end
           LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update, pods_to_unlock)
