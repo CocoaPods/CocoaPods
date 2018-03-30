@@ -170,8 +170,10 @@ module Pod
         rescue Pod::DSLError => e
           raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
         end
+        defined_in_file = spec.defined_in_file
         spec.defined_in_file = nil
         validate_podspec(spec)
+        spec.defined_in_file = defined_in_file
         sandbox.store_podspec(name, spec, true, true)
       end
 

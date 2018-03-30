@@ -62,6 +62,7 @@ module Pod
       @checkout_sources = {}
       @development_pods = {}
       @pods_with_absolute_path = []
+      @stored_podspecs = {}
     end
 
     # @return [Lockfile] the manifest which contains the information about the
@@ -209,7 +210,7 @@ module Pod
     # @return [Specification] the specification if the file is found.
     #
     def specification(name)
-      if file = specification_path(name)
+      @stored_podspecs[name] ||= if file = specification_path(name)
         original_path = development_pods[name]
         Specification.from_file(original_path || file)
       end
@@ -262,20 +263,19 @@ module Pod
         end
         FileUtils.copy(podspec, output_path)
       when Specification
+        raise ArgumentError unless json
         output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
         spec = podspec.dup
         spec.defined_in_file = output_path
+      else raise ArgumentError
       end
 
-      spec ||= Dir.chdir(podspec.is_a?(Pathname) ? File.dirname(podspec) : Dir.pwd) do
-        spec = Specification.from_file(output_path)
+      spec ||= Specification.from_file(output_path)
 
-        unless spec.name == name
-          raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
-        end
-
-        spec
+      unless spec.name == name
+        raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
       end
+      @stored_podspecs[spec.name] = spec
     end
 
     #-------------------------------------------------------------------------#
