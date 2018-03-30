@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Remove all PBX state from targets, improve project generation performance  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7610](https://github.com/CocoaPods/CocoaPods/pull/7610)
+
 * Improve performance of the dependency resolver by removing duplicates for dependency nodes.
   [Jacek Suliga](https://github.com/jmkk)
 

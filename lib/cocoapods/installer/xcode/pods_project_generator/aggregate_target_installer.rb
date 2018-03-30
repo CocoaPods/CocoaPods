@@ -8,21 +8,21 @@ module Pod
         class AggregateTargetInstaller < TargetInstaller
           # Creates the target in the Pods project and the relative support files.
           #
-          # @return [void]
+          # @return [TargetInstallationResult] the result of the installation of this target.
           #
           def install!
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
-              add_target
+              native_target = add_target
               create_support_files_dir
               create_support_files_group
-              create_xcconfig_file
+              create_xcconfig_file(native_target)
               if target.requires_frameworks?
                 create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
-                create_module_map
-                create_umbrella_header
+                create_module_map(native_target)
+                create_umbrella_header(native_target)
               elsif target.uses_swift?
-                create_module_map
-                create_umbrella_header
+                create_module_map(native_target)
+                create_umbrella_header(native_target)
               end
               # Because embedded targets live in their host target, CocoaPods
               # copies all of the embedded target's pod_targets to its host
@@ -31,10 +31,11 @@ module Pod
               # embedded in embedded targets.
               #
               create_embed_frameworks_script unless target.requires_host_target?
-              create_bridge_support_file
+              create_bridge_support_file(native_target)
               create_copy_resources_script
               create_acknowledgements
-              create_dummy_source
+              create_dummy_source(native_target)
+              TargetInstallationResult.new(target, native_target)
             end
           end
 
@@ -87,9 +88,12 @@ module Pod
 
           # Generates the contents of the xcconfig file and saves it to disk.
           #
+          # @param  [PBXNativeTarget] native_target
+          #         the native target to link the module map file into.
+          #
           # @return [void]
           #
-          def create_xcconfig_file
+          def create_xcconfig_file(native_target)
             native_target.build_configurations.each do |configuration|
               path = target.xcconfig_path(configuration.name)
               gen = Generator::XCConfig::AggregateXCConfig.new(target, configuration.name)
@@ -106,9 +110,12 @@ module Pod
           #         target because it is needed for environments interpreted at
           #         runtime.
           #
+          # @param  [PBXNativeTarget] native_target
+          #         the native target to add the bridge support file into.
+          #
           # @return [void]
           #
-          def create_bridge_support_file
+          def create_bridge_support_file(native_target)
             if target.podfile.generate_bridge_support?
               path = target.bridge_support_path
               headers = native_target.headers_build_phase.files.map { |bf| sandbox.root + bf.file_ref.path }

@@ -18,7 +18,7 @@ module Pod
           @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' } unless @specs.empty?
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
-          @target = fixture_aggregate_target(@pod_targets, Platform.new(:ios, '6.0'), @target_definition)
+          @target = fixture_aggregate_target(@pod_targets, false, {}, [], Platform.new(:ios, '6.0'), @target_definition)
           unless @specs.empty?
             @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           end

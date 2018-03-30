@@ -1079,12 +1079,15 @@ module Pod
           debug_configuration_two = stub(:build_settings => {})
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
-          pod_target_one = stub(:uses_swift? => true, :swift_version => '4.0', :native_target => native_target_one, :test_native_targets => [])
-          pod_target_two = stub(:uses_swift? => true, :swift_version => '3.2', :native_target => native_target_two, :test_native_targets => [])
+          pod_target_one = stub(:name => 'PodTarget1', :uses_swift? => true, :swift_version => '4.0')
+          pod_target_two = stub(:name => 'PodTarget2', :uses_swift? => true, :swift_version => '3.2')
+          pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one, :test_native_targets => [])
+          pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two, :test_native_targets => [])
+          pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
           aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
           installer = stub(:pod_targets => [pod_target_one, pod_target_two])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], '9.0')
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
           debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
         end
@@ -1097,12 +1100,15 @@ module Pod
           debug_configuration_two = stub(:build_settings => {})
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
-          pod_target_one = stub(:uses_swift? => true, :swift_version => '4.0', :native_target => native_target_one, :test_native_targets => [])
-          pod_target_two = stub(:uses_swift? => true, :swift_version => '3.2', :native_target => native_target_two, :test_native_targets => [])
+          pod_target_one = stub(:name => 'PodTarget1', :uses_swift? => true, :swift_version => '4.0')
+          pod_target_two = stub(:name => 'PodTarget2', :uses_swift? => true, :swift_version => '3.2')
+          pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one, :test_native_targets => [])
+          pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two, :test_native_targets => [])
+          pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
           aggregate_target = stub(:pod_targets => [pod_target_one])
           installer = stub(:pod_targets => [pod_target_one, pod_target_two])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], '9.0')
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
           debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
         end

@@ -607,7 +607,7 @@ module Pod
         describe 'for proper other ld flags' do
           def stub_aggregate_target(pod_targets, target_definition = nil, search_paths_aggregate_targets: [])
             target_definition.stubs(:abstract? => false) unless target_definition.respond_to?(:abstract?)
-            fixture_aggregate_target(pod_targets, Platform.ios, target_definition).tap do |aggregate_target|
+            fixture_aggregate_target(pod_targets, false, {}, [], Platform.ios, target_definition).tap do |aggregate_target|
               aggregate_target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
             end
           end

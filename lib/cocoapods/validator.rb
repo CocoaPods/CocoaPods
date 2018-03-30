@@ -501,41 +501,31 @@ module Pod
          perform_post_install_actions).each { |m| @installer.send(m) }
 
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
-      configure_pod_targets(@installer.aggregate_targets, deployment_target)
+      configure_pod_targets(@installer.aggregate_targets, @installer.target_installation_results, deployment_target)
       @installer.pods_project.save
     end
 
-    def configure_pod_targets(targets, deployment_target)
-      test_only_pod_targets = @installer.pod_targets - targets.flat_map(&:pod_targets)
-      targets.each do |target|
-        target.pod_targets.each do |pod_target|
-          update_pod_target_build_settings(pod_target)
-          if pod_target.uses_swift?
-            pod_target.test_native_targets.each do |test_native_target|
-              test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
-                build_configuration.build_settings['SWIFT_VERSION'] = swift_version
-              end
+    def configure_pod_targets(targets, target_installation_results, deployment_target)
+      target_installation_results.first.values.each do |pod_target_installation_result|
+        pod_target = pod_target_installation_result.target
+        native_target = pod_target_installation_result.native_target
+        native_target.build_configuration_list.build_configurations.each do |build_configuration|
+          (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
+          build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
+        end
+        if pod_target.uses_swift?
+          pod_target_installation_result.test_native_targets.each do |test_native_target|
+            test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
+              build_configuration.build_settings['SWIFT_VERSION'] = swift_version
             end
           end
         end
+      end
+      targets.each do |target|
         if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
             (deployment_target.nil? || Version.new(deployment_target).major < 8)
           uses_xctest = target.spec_consumers.any? { |c| (c.frameworks + c.weak_frameworks).include? 'XCTest' }
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
-        end
-      end
-      # Wire up Swift version to pod targets used only by tests.
-      test_only_pod_targets.each do |test_pod_target|
-        update_pod_target_build_settings(test_pod_target)
-      end
-    end
-
-    def update_pod_target_build_settings(pod_target)
-      native_target = pod_target.native_target
-      unless native_target.nil?
-        native_target.build_configuration_list.build_configurations.each do |build_configuration|
-          (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-          build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
         end
       end
     end
@@ -597,7 +587,7 @@ module Pod
         UI.message "\nTesting with `xcodebuild`.\n".yellow do
           pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
           consumer.spec.test_specs.each do |test_spec|
-            scheme = pod_target.native_target_for_spec(test_spec)
+            scheme = @installer.target_installation_results.first[pod_target.name].native_target_for_spec(test_spec)
             output = xcodebuild('test', scheme, 'Debug')
             parsed_output = parse_xcodebuild_output(output)
             translate_output_to_linter_messages(parsed_output)

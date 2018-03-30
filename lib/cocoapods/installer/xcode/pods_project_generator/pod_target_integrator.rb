@@ -6,16 +6,16 @@ module Pod
         # the test targets included by each pod target.
         #
         class PodTargetIntegrator
-          # @return [PodTarget] the target that should be integrated.
+          # @return [TargetInstallationResult] the installation result of the target that should be integrated.
           #
-          attr_reader :target
+          attr_reader :target_installation_result
 
-          # Init a new PodTargetIntegrator.
+          # Initialize a new instance
           #
-          # @param  [PodTarget] target @see #target
+          # @param  [TargetInstallationResult] target_installation_result @see #target_installation_result
           #
-          def initialize(target)
-            @target = target
+          def initialize(target_installation_result)
+            @target_installation_result = target_installation_result
           end
 
           # Integrates the pod target.
@@ -24,13 +24,13 @@ module Pod
           #
           def integrate!
             UI.section(integration_message) do
-              target.test_specs_by_native_target.each do |native_target, test_specs|
-                add_embed_frameworks_script_phase(native_target)
-                add_copy_resources_script_phase(native_target)
-                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), native_target)
+              target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
+                add_embed_frameworks_script_phase(test_native_target)
+                add_copy_resources_script_phase(test_native_target)
+                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), test_native_target)
               end
               specs = target.non_test_specs
-              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target.native_target)
+              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target)
             end
           end
 
@@ -87,6 +87,12 @@ module Pod
           #
           def integration_message
             "Integrating target `#{target.name}`"
+          end
+
+          # @return [PodTarget] the target part of the installation result.
+          #
+          def target
+            target_installation_result.target
           end
 
           # @param [Array<Specification] specs

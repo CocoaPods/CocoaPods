@@ -76,8 +76,7 @@ module Pod
             end
 
             it 'does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default' do
-              @installer.install!
-              @installer.target.native_target.build_configurations.each do |config|
+              @installer.install!.native_target.build_configurations.each do |config|
                 config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
               end
             end
@@ -182,13 +181,13 @@ module Pod
               end
 
               it 'adds the native test target to the project for iOS targets with code signing' do
-                @installer.install!
+                installation_result = @installer.install!
                 @project.targets.count.should == 2
                 @project.targets.first.name.should == 'CoconutLib'
-                native_test_target = @project.targets[1]
-                native_test_target.name.should == 'CoconutLib-Unit-Tests'
-                native_test_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
-                native_test_target.build_configurations.each do |bc|
+                test_native_target = @project.targets[1]
+                test_native_target.name.should == 'CoconutLib-Unit-Tests'
+                test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
+                test_native_target.build_configurations.each do |bc|
                   bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
@@ -196,18 +195,18 @@ module Pod
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
                 end
-                native_test_target.symbol_type.should == :unit_test_bundle
-                @coconut_pod_target.test_native_targets.count.should == 1
+                test_native_target.symbol_type.should == :unit_test_bundle
+                installation_result.test_native_targets.count.should == 1
               end
 
               it 'adds the native test target to the project for OSX targets without code signing' do
-                @installer2.install!
+                installation_result = @installer2.install!
                 @project.targets.count.should == 2
                 @project.targets.first.name.should == 'CoconutLib'
-                native_test_target = @project.targets[1]
-                native_test_target.name.should == 'CoconutLib-Unit-Tests'
-                native_test_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
-                native_test_target.build_configurations.each do |bc|
+                test_native_target = @project.targets[1]
+                test_native_target.name.should == 'CoconutLib-Unit-Tests'
+                test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
+                test_native_target.build_configurations.each do |bc|
                   bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
@@ -215,20 +214,20 @@ module Pod
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
                 end
-                native_test_target.symbol_type.should == :unit_test_bundle
-                @coconut_pod_target2.test_native_targets.count.should == 1
+                test_native_target.symbol_type.should == :unit_test_bundle
+                installation_result.test_native_targets.count.should == 1
               end
 
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
                 @coconut_pod_target.stubs(:uses_swift?).returns(true)
                 @installer.install!
-                native_test_target = @project.targets[1]
-                debug_configuration = native_test_target.build_configurations.find(&:debug?)
+                test_native_target = @project.targets[1]
+                debug_configuration = test_native_target.build_configurations.find(&:debug?)
                 debug_configuration.build_settings['OTHER_LDFLAGS'].sort.should == [
                   '$(inherited)',
                   '-lswiftSwiftOnoneSupport',
                 ]
-                release_configuration = native_test_target.build_configurations.find { |bc| bc.type == :release }
+                release_configuration = test_native_target.build_configurations.find { |bc| bc.type == :release }
                 release_configuration.build_settings['OTHER_LDFLAGS'].should.be.nil
               end
 
@@ -241,9 +240,9 @@ module Pod
                   'Coconut.m',
                   'CoconutLib-dummy.m',
                 ]
-                native_test_target = @project.targets[1]
-                native_test_target.source_build_phase.files.count.should == 1
-                native_test_target.source_build_phase.files.map(&:display_name).sort.should == [
+                test_native_target = @project.targets[1]
+                test_native_target.source_build_phase.files.count.should == 1
+                test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
                   'CoconutTests.m',
                 ]
               end
@@ -264,9 +263,9 @@ module Pod
 
               it 'adds test xcconfig file reference for test resource bundle targets' do
                 @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Model.xcdatamodeld'] }
-                @installer.install!
-                @coconut_pod_target.resource_bundle_targets.count.should == 0
-                @coconut_pod_target.test_resource_bundle_targets.count.should == 1
+                installation_result = @installer.install!
+                installation_result.resource_bundle_targets.count.should == 0
+                installation_result.test_resource_bundle_targets.count.should == 1
                 test_resource_bundle_target = @project.targets.find { |t| t.name == 'CoconutLib-CoconutLibTestResources' }
                 test_resource_bundle_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'CoconutLib.unit.xcconfig'
@@ -313,12 +312,12 @@ module Pod
                   app_host_target = @project.targets[2]
                   app_host_target.name.should == 'AppHost-iOS-Unit-Tests'
                   app_host_target.symbol_type.should == :application
-                  native_test_target = @project.targets[1]
-                  native_test_target.build_configurations.each do |bc|
+                  test_native_target = @project.targets[1]
+                  test_native_target.build_configurations.each do |bc|
                     bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
                   end
                   @project.root_object.attributes['TargetAttributes'].should == {
-                    native_test_target.uuid.to_s => {
+                    test_native_target.uuid.to_s => {
                       'TestTargetID' => app_host_target.uuid.to_s,
                     },
                   }
@@ -334,12 +333,12 @@ module Pod
                     bc.build_settings['PRODUCT_NAME'].should == 'AppHost-macOS-Unit-Tests'
                     bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
                   end
-                  native_test_target = @project.targets[1]
-                  native_test_target.build_configurations.each do |bc|
+                  test_native_target = @project.targets[1]
+                  test_native_target.build_configurations.each do |bc|
                     bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-macOS-Unit-Tests.app/Contents/MacOS/AppHost-macOS-Unit-Tests'
                   end
                   @project.root_object.attributes['TargetAttributes'].should == {
-                    native_test_target.uuid.to_s => {
+                    test_native_target.uuid.to_s => {
                       'TestTargetID' => app_host_target.uuid.to_s,
                     },
                   }
@@ -386,8 +385,7 @@ module Pod
             #--------------------------------------#
 
             it 'adds the source files of each pod to the target of the Pod library' do
-              @installer.install!
-              names = @installer.target.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
+              names = @installer.install!.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
               names.should.include('Banana.m')
             end
 
@@ -717,9 +715,8 @@ module Pod
             end
 
             it 'creates a dummy source to ensure the compilation of libraries with only categories' do
-              @installer.install!
               dummy_source_basename = @pod_target.dummy_source_path.basename.to_s
-              build_files = @installer.target.native_target.source_build_phase.files
+              build_files = @installer.install!.native_target.source_build_phase.files
               build_file = build_files.find { |bf| bf.file_ref.display_name == dummy_source_basename }
               build_file.should.be.not.nil
               build_file.file_ref.path.should == dummy_source_basename
@@ -728,10 +725,11 @@ module Pod
 
             #--------------------------------------------------------------------------------#
 
-            it 'does not create a target if the specification does not define source files' do
-              @pod_target.file_accessors.first.stubs(:source_files).returns([])
+            it 'creates an aggregate placeholder native target if the target should not be built' do
+              @pod_target.stubs(:should_build?).returns(false)
               @installer.install!
-              @project.targets.should == []
+              @project.targets.map(&:name).should == ['BananaLib']
+              @project.targets.first.class.should == Xcodeproj::Project::PBXAggregateTarget
             end
 
             #--------------------------------------------------------------------------------#
@@ -837,9 +835,7 @@ module Pod
 
               it 'flags should not be added to dtrace files' do
                 @installer.target.target_definitions.first.stubs(:inhibits_warnings_for_pod?).returns(true)
-                @installer.install!
-
-                dtrace_files = @installer.target.native_target.source_build_phase.files.select do |sf|
+                dtrace_files = @installer.install!.native_target.source_build_phase.files.select do |sf|
                   File.extname(sf.file_ref.path) == '.d'
                 end
                 dtrace_files.each do |dt|

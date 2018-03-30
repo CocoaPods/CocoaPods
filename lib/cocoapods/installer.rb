@@ -173,14 +173,14 @@ module Pod
     private
 
     def create_generator
-      Xcode::PodsProjectGenerator.new(aggregate_targets, sandbox, pod_targets, analysis_result, installation_options, config)
+      Xcode::PodsProjectGenerator.new(sandbox, aggregate_targets, pod_targets, analysis_result, installation_options, config)
     end
 
     # Generate the 'Pods/Pods.xcodeproj' project.
     #
     def generate_pods_project(generator = create_generator)
       UI.section 'Generating Pods project' do
-        generator.generate!
+        @target_installation_results = generator.generate!
         @pods_project = generator.project
         run_podfile_post_install_hooks
         generator.write
@@ -199,6 +199,11 @@ module Pod
     #         needs to be installed.
     #
     attr_reader :analysis_result
+
+    # @return [Array<Hash{String, TargetInstallationResult}>] the installation results produced by the pods project
+    #         generator
+    #
+    attr_reader :target_installation_results
 
     # @return [Pod::Project] the `Pods/Pods.xcodeproj` project.
     #
