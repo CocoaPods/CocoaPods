@@ -14,13 +14,14 @@ module Pod
     #     new_version_message: false
     #
     DEFAULTS = {
-      :verbose             => false,
-      :silent              => false,
-      :skip_download_cache => !ENV['COCOAPODS_SKIP_CACHE'].nil?,
+      :verbose              => false,
+      :silent               => false,
+      :use_new_build_system => !ENV['COCOAPODS_USE_NEW_BUILD_SYSTEM'].nil?,
+      :skip_download_cache  => !ENV['COCOAPODS_SKIP_CACHE'].nil?,
 
-      :new_version_message => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
+      :new_version_message  => ENV['COCOAPODS_SKIP_UPDATE_MESSAGE'].nil?,
 
-      :cache_root          => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
+      :cache_root           => Pathname.new(Dir.home) + 'Library/Caches/CocoaPods',
     }
 
     # Applies the given changes to the config for the duration of the given
@@ -74,6 +75,11 @@ module Pod
     #
     attr_accessor :skip_download_cache
     alias_method :skip_download_cache?, :skip_download_cache
+
+    # @return [Bool] Whether we're using the new build system.
+    #
+    attr_accessor :use_new_build_system
+    alias_method :use_new_build_system?, :use_new_build_system
 
     public
 

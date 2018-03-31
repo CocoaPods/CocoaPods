@@ -172,12 +172,14 @@ module Pod
 
             pod_targets.sort_by(&:name).each do |pod_target|
               target_installer = PodTargetInstaller.new(sandbox, pod_target)
+              target_installer.use_new_build_system = config.use_new_build_system
               target_installer.umbrella_headers_by_dir = umbrella_headers_by_dir
               target_installer.install!
             end
 
             aggregate_targets.sort_by(&:name).each do |target|
               target_installer = AggregateTargetInstaller.new(sandbox, target)
+              target_installer.use_new_build_system = config.use_new_build_system
               target_installer.install!
             end
 
@@ -202,7 +204,7 @@ module Pod
             test_file_accessors, file_accessors = pod_target.file_accessors.partition { |fa| fa.spec.test_specification? }
             file_accessors.each do |file_accessor|
               # Skip static libraries if we're going with the new build system
-              if ENV['USE_NEW_BUILD_SYSTEM'] == '1' && pod_target.native_target.product_type == Xcodeproj::Constants::PRODUCT_TYPE_UTI[:static_library]
+              if config.use_new_build_system && pod_target.native_target.product_type == Xcodeproj::Constants::PRODUCT_TYPE_UTI[:static_library]
                 next
               end
               add_system_frameworks_to_native_target(file_accessor, pod_target.native_target)

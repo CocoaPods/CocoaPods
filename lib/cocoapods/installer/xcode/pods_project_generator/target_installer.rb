@@ -17,6 +17,11 @@ module Pod
           #
           attr_reader :target
 
+          # @return [Boolean] use_new_build_system
+          #         Wether we're currently using the new build system
+          #
+          attr_accessor :use_new_build_system
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see sandbox
@@ -47,11 +52,11 @@ module Pod
             language = target.uses_swift? ? :swift : :objc
             @native_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
 
-            if ENV['USE_NEW_BUILD_SYSTEM'] == '1'
+            if use_new_build_system
               # Find foundation and remove it
-              foundation_frameworks = @native_target.frameworks_build_phase.files.find { |bf|
+              foundation_frameworks = @native_target.frameworks_build_phase.files.find do |bf|
                 bf.file_ref.name == 'Foundation.framework'
-              }
+              end
               @native_target.frameworks_build_phase.remove_build_file(foundation_frameworks) if foundation_frameworks
             end
 
