@@ -30,7 +30,7 @@ module Pod
               end
 
               user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], [@spec], [@target_definition], Platform.new(:ios, '4.3'), [file_accessor])
+              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '4.3'), [@spec], [@target_definition], [file_accessor])
               @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
 
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
@@ -175,9 +175,9 @@ module Pod
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@coconut_spec, *@coconut_spec.recursive_subspecs]
                 file_accessors = [file_accessor, test_file_accessor]
-                @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], all_specs, [@target_definition], Platform.new(:ios, '6.0'), file_accessors)
+                @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), all_specs, [@target_definition], file_accessors)
                 @installer = PodTargetInstaller.new(config.sandbox, @coconut_pod_target)
-                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [], all_specs, [@target_definition2], Platform.new(:osx, '10.8'), file_accessors)
+                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:osx, '10.8'), all_specs, [@target_definition2], file_accessors)
                 @installer2 = PodTargetInstaller.new(config.sandbox, @coconut_pod_target2)
               end
 
@@ -369,7 +369,8 @@ module Pod
                   @project.add_file_reference(file, group) if file.fnmatch?('*.m') || file.fnmatch?('*.h')
                 end
 
-                @minions_pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], Platform.ios, [file_accessor])
+                user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @minions_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], [file_accessor])
                 @installer = PodTargetInstaller.new(config.sandbox, @minions_pod_target)
 
                 @first_json_file = file_accessor.source_files.find { |sf| sf.extname == '.json' }
@@ -479,7 +480,8 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
-                @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@spec], [@target_definition], Platform.ios, [file_accessor])
+                user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, [@spec], [@target_definition], [file_accessor])
                 @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
               end
 

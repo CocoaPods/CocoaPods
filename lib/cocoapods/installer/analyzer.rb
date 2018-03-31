@@ -448,8 +448,9 @@ module Pod
             archs = ['$(ARCHS_STANDARD_64_BIT)']
           end
         end
+        platform = target_definition.platform
         pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target)
-        AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs,
+        AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
                             target_definition, client_root, user_project, user_target_uuids, pod_targets)
       end
 
@@ -614,8 +615,8 @@ module Pod
         host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
         platform = determine_platform(specs, target_definitions, host_requires_frameworks)
         file_accessors = create_file_accessors(specs, platform)
-        PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, target_definitions,
-                      platform, file_accessors, scope_suffix)
+        PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
+                      target_definitions, file_accessors, scope_suffix)
       end
 
       # Creates the file accessors for a given pod.

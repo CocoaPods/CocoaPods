@@ -27,10 +27,6 @@ module Pod
     #
     attr_reader :file_accessors
 
-    # @return [Platform] the platform of this target.
-    #
-    attr_reader :platform
-
     # @return [String] the suffix used for this target when deduplicated. May be `nil`.
     #
     # @note This affects the value returned by #configuration_build_dir
@@ -78,15 +74,14 @@ module Pod
     # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, target_definitions, platform, file_accessors = [], scope_suffix = nil)
-      super(sandbox, host_requires_frameworks, user_build_configurations, archs)
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, target_definitions, file_accessors = [], scope_suffix = nil)
+      super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
-      raise "Can't initialize a PodTarget with only abstract TargetDefinitions" if target_definitions.all?(&:abstract?)
+      raise "Can't initialize a PodTarget with only abstract TargetDefinitions!" if target_definitions.all?(&:abstract?)
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
       @specs = specs.dup.freeze
       @target_definitions = target_definitions
-      @platform = platform
       @file_accessors = file_accessors
       @scope_suffix = scope_suffix
       @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
@@ -112,7 +107,7 @@ module Pod
         if cache[cache_key]
           cache[cache_key]
         else
-          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, specs, [target_definition], platform, file_accessors, target_definition.label)
+          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, [target_definition], file_accessors, target_definition.label)
           target.native_target = native_target
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
           target.test_dependent_targets = test_dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
@@ -189,6 +184,12 @@ module Pod
           file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
         end
       end
+    end
+
+    # @return [Boolean] Whether the target should build a static framework.
+    #
+    def static_framework?
+      root_spec.static_framework
     end
 
     # @return [Boolean] Whether the target defines a "module"

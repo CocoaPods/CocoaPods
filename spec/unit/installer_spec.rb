@@ -375,7 +375,7 @@ module Pod
           @analysis_result.sandbox_state = Installer::Analyzer::SpecsState.new
           @spec = stub(:name => 'Spec', :test_specification? => false)
           @spec.stubs(:root => @spec)
-          @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], [@spec], [fixture_target_definition], nil)]
+          @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec], [fixture_target_definition], nil)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
           @installer.stubs(:aggregate_targets).returns([])
@@ -421,7 +421,7 @@ module Pod
         end
 
         it 'deletes the target support file dirs of the removed aggregate targets' do
-          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, [])
+          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, [])
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           FileUtils.mkdir_p(@installer.aggregate_targets.first.support_files_dir)
@@ -434,7 +434,7 @@ module Pod
         end
 
         it 'does not delete the target support file dirs for non removed aggregate targets' do
-          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, [])
+          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, [])
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           FileUtils.mkdir_p(@installer.aggregate_targets.first.support_files_dir)
@@ -469,7 +469,7 @@ module Pod
 
         it 'correctly configures the Pod source installer' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -479,7 +479,7 @@ module Pod
 
         it 'maintains the list of the installed specs' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
           @installer.instance_variable_set(:@installed_specs, [])
@@ -552,7 +552,7 @@ module Pod
 
         it 'raises when it attempts to install pod source with no target supporting it' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
           should.raise Informative do
@@ -563,7 +563,7 @@ module Pod
         it 'prints a warning for installed pods that included script phases' do
           spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.test_specs], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs], [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           sandbox_state = Installer::Analyzer::SpecsState.new
           sandbox_state.added << 'CoconutLib'
@@ -578,7 +578,7 @@ module Pod
         it 'does not print a warning for already installed pods that include script phases' do
           spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.test_specs], [fixture_target_definition], nil)
+          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs], [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           sandbox_state = Installer::Analyzer::SpecsState.new
           sandbox_state.unchanged << 'CoconutLib'
@@ -638,7 +638,7 @@ module Pod
 
     describe 'Integrating client projects' do
       it 'integrates the client projects' do
-        target = AggregateTarget.new(config.sandbox, false, {}, [], fixture_target_definition, config.sandbox.root.dirname, nil, nil, [])
+        target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition, config.sandbox.root.dirname, nil, nil, [])
         @installer.stubs(:aggregate_targets).returns([target])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)

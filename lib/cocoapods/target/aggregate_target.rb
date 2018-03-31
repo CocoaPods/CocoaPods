@@ -56,15 +56,17 @@ module Pod
     # @param [Boolean] host_requires_frameworks @see Target#host_requires_frameworks
     # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
     # @param [Array<String>] archs @see Target#archs
+    # @param [Platform] platform @see #Target#platform
     # @param [TargetDefinition] target_definition @see #target_definition
     # @param [Pathname] client_root @see #client_root
     # @param [Xcodeproj::Project] user_project @see #user_project
     # @param [Array<String>] user_target_uuids @see #user_target_uuids
     # @param [Array<PodTarget>] pod_targets @see #pod_targets
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, target_definition, client_root, user_project, user_target_uuids, pod_targets)
-      super(sandbox, host_requires_frameworks, user_build_configurations, archs)
-      raise "Can't initialize an AggregateTarget with an abstract TargetDefinition" if target_definition.abstract?
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, target_definition, client_root, user_project, user_target_uuids, pod_targets)
+      super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform)
+      raise "Can't initialize an AggregateTarget without a TargetDefinition!" if target_definition.nil?
+      raise "Can't initialize an AggregateTarget with an abstract TargetDefinition!" if target_definition.abstract?
       @target_definition = target_definition
       @client_root = client_root
       @user_project = user_project
@@ -106,20 +108,6 @@ module Pod
     #
     def label
       target_definition.label.to_s
-    end
-
-    # @return [String] the name to use for the source code module constructed
-    #         for this target, and which will be used to import the module in
-    #         implementation source files.
-    #
-    def product_module_name
-      c99ext_identifier(label)
-    end
-
-    # @return [Platform] the platform for this target.
-    #
-    def platform
-      @platform ||= target_definition.platform
     end
 
     # @return [Podfile] The podfile which declares the dependency
