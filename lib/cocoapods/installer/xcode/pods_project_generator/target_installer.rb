@@ -47,6 +47,14 @@ module Pod
             language = target.uses_swift? ? :swift : :objc
             @native_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
 
+            if ENV['USE_NEW_BUILD_SYSTEM'] == '1'
+              # Find foundation and remove it
+              foundation_frameworks = @native_target.frameworks_build_phase.files.find { |bf|
+                bf.file_ref.name == 'Foundation.framework'
+              }
+              @native_target.frameworks_build_phase.remove_build_file(foundation_frameworks) if foundation_frameworks
+            end
+
             product_name = target.product_name
             product = @native_target.product_reference
             product.name = product_name

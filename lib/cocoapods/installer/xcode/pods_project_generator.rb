@@ -201,6 +201,10 @@ module Pod
           pod_targets.select(&:should_build?).sort_by(&:name).each do |pod_target|
             test_file_accessors, file_accessors = pod_target.file_accessors.partition { |fa| fa.spec.test_specification? }
             file_accessors.each do |file_accessor|
+              # Skip static libraries if we're going with the new build system
+              if ENV['USE_NEW_BUILD_SYSTEM'] == '1' && pod_target.native_target.product_type == Xcodeproj::Constants::PRODUCT_TYPE_UTI[:static_library]
+                next
+              end
               add_system_frameworks_to_native_target(file_accessor, pod_target.native_target)
             end
             test_file_accessors.each do |test_file_accessor|
