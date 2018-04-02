@@ -6,7 +6,7 @@ module Pod
     # with existing headers of the podspec.
     #
     class ModuleMap
-      # @return [PodTarget] the target represented by this Info.plist.
+      # @return [PodTarget, AggregateTarget] the target the module map is generated for.
       #
       attr_reader :target
 
@@ -21,7 +21,7 @@ module Pod
             (:umbrella if umbrella),
             (:exclude if exclude),
             'header',
-            %("#{path}"),
+            %("#{path.to_s.gsub('"', '\"')}"),
             attrs,
           ].compact.join(' ')
         end
@@ -38,7 +38,7 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param  [PodTarget] target @see target
+      # @param  [PodTarget, AggregateTarget] target @see target
       #
       def initialize(target)
         @target = target

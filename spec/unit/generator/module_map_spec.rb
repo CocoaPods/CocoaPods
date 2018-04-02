@@ -35,5 +35,21 @@ module Pod
         }
       EOS
     end
+
+    it 'escapes double quotes properly for module map contents' do
+      path = temporary_directory + 'BananaLib.modulemap'
+      @pod_target.stubs(:umbrella_header_path).returns(Pathname.new('BananaLibWith"Quotes"-umbrella.h'))
+      @pod_target.stubs(:requires_frameworks?).returns(true)
+      gen = Generator::ModuleMap.new(@pod_target)
+      gen.save_as(path)
+      path.read.should == <<-EOS.strip_heredoc
+        framework module BananaLib {
+          umbrella header "BananaLibWith\\"Quotes\\"-umbrella.h"
+
+          export *
+          module * { export * }
+        }
+      EOS
+    end
   end
 end
