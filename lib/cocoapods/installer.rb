@@ -66,8 +66,8 @@ module Pod
     # @param  [Lockfile] lockfile    @see #lockfile
     #
     def initialize(sandbox, podfile, lockfile = nil)
-      @sandbox  = sandbox
-      @podfile  = podfile
+      @sandbox  = sandbox || raise(ArgumentError, "need a sandbox")
+      @podfile  = podfile || raise(ArgumentError, "need a podfile")
       @lockfile = lockfile
 
       @use_default_plugins = true
