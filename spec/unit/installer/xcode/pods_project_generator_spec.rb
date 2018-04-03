@@ -202,6 +202,17 @@ module Pod
               @generator.send(:set_target_dependencies)
             end
 
+            it 'adds target dependencies when inheriting search paths' do
+              native_target = mock('SearchPathsAggregateNativeTarget')
+              @target.stubs(:search_paths_aggregate_targets).returns([
+                mock('SearchPathsAggregateTarget', :native_target => native_target),
+              ])
+
+              @mock_target.expects(:add_dependency).with(native_target)
+
+              @generator.send(:set_target_dependencies)
+            end
+
             it 'configures APPLICATION_EXTENSION_API_ONLY for app extension targets' do
               test_extension_target(:app_extension)
             end
