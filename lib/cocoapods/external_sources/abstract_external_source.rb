@@ -170,14 +170,15 @@ module Pod
         rescue Pod::DSLError => e
           raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
         end
-        defined_in_file = spec.defined_in_file
-        spec.defined_in_file = nil
+
         validate_podspec(spec)
-        spec.defined_in_file = defined_in_file
         sandbox.store_podspec(name, spec, true, true)
       end
 
       def validate_podspec(podspec)
+        defined_in_file = podspec.defined_in_file
+        podspec.defined_in_file = nil
+
         validator = validator_for_podspec(podspec)
         validator.quick = true
         validator.allow_warnings = true
@@ -188,6 +189,8 @@ module Pod
         unless validator.validated?
           raise Informative, "The `#{name}` pod failed to validate due to #{validator.failure_reason}:\n#{validator.results_message}"
         end
+      ensure
+        podspec.defined_in_file = defined_in_file
       end
 
       def validator_for_podspec(podspec)

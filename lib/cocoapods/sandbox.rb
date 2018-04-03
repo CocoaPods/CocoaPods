@@ -266,8 +266,8 @@ module Pod
         raise ArgumentError unless json
         output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
         spec = podspec.dup
-        spec.defined_in_file = output_path
-      else raise ArgumentError
+      else
+        raise ArgumentError, "Unknown type for podspec: #{podspec.inspect}"
       end
 
       spec ||= Specification.from_file(output_path)
