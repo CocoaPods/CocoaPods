@@ -35,7 +35,7 @@ def generate_local_podfile
     platform :ios
     project SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     target 'SampleProject' do
-      pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability')
+      pod 'Reachability', :path => SpecHelper.fixture('integration/Reachability').to_s
       target 'SampleProjectTests' do
         inherit! :search_paths
       end
@@ -732,6 +732,97 @@ module Pod
       it 'runs the post install hooks' do
         @installer.podfile.expects(:post_install!).with(@installer)
         @installer.install!
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
+    describe '.targets_from_sandbox' do
+      it 'raises when there is no lockfile' do
+        sandbox = config.sandbox
+        podfile = generate_podfile
+        lockfile = nil
+
+        should.raise Informative do
+          Installer.targets_from_sandbox(sandbox, podfile, lockfile)
+        end.message.should.include 'You must run `pod install` to be able to generate target information'
+      end
+
+      it 'raises when the podfile has changed' do
+        sandbox = config.sandbox
+        podfile = generate_podfile(['AFNetworking'])
+        lockfile = generate_lockfile
+
+        should.raise Informative do
+          Installer.targets_from_sandbox(sandbox, podfile, lockfile)
+        end.message.should.include 'The Podfile has changed, you must run `pod install`'
+      end
+
+      it 'raises when the sandbox has changed' do
+        sandbox = config.sandbox
+        podfile = generate_podfile
+        lockfile = generate_lockfile
+        lockfile.internal_data['DEPENDENCIES'] = podfile.dependencies.map(&:to_s)
+
+        should.raise Informative do
+          Installer.targets_from_sandbox(sandbox, podfile, lockfile)
+        end.message.should.include 'The `Pods` directory is out-of-date, you must run `pod install`'
+      end
+
+      it 'returns the aggregate targets without performing installation' do
+        podfile = generate_podfile
+        lockfile = generate_lockfile
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.expects(:integrate_user_project)
+        @installer.install!
+        pod_targets = @installer.aggregate_targets.map(&:pod_targets)
+
+        ::SpecHelper.reset_config_instance
+
+        aggregate_targets = Installer.targets_from_sandbox(config.sandbox, podfile, config.lockfile)
+
+        aggregate_targets.map(&:target_definition).should == [
+          podfile.target_definitions['SampleProject'], podfile.target_definitions['SampleProjectTests']
+        ]
+
+        aggregate_targets.last.pod_targets.should == []
+        sample_project_target = aggregate_targets.first
+        sample_project_target.pod_targets.map(&:label).should == %w(JSONKit)
+
+        jsonkit = sample_project_target.pod_targets.first
+
+        jsonkit.sandbox.should == config.sandbox
+        jsonkit.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('JSONKit')]
+        jsonkit.archs.should == []
+      end
+
+      it 'returns the aggregate targets without performing installation with local pods' do
+        podfile = generate_local_podfile
+        lockfile = generate_lockfile
+
+        @installer = Installer.new(config.sandbox, podfile, lockfile)
+        @installer.expects(:integrate_user_project)
+        @installer.install!
+        pod_targets = @installer.aggregate_targets.map(&:pod_targets)
+
+        ::SpecHelper.reset_config_instance
+
+        aggregate_targets = Installer.targets_from_sandbox(config.sandbox, podfile, config.lockfile)
+
+        aggregate_targets.map(&:target_definition).should == [
+          podfile.target_definitions['SampleProject'], podfile.target_definitions['SampleProjectTests']
+        ]
+
+        aggregate_targets.last.pod_targets.should == []
+        sample_project_target = aggregate_targets.first
+        sample_project_target.pod_targets.map(&:label).should == %w(Reachability)
+
+        jsonkit = sample_project_target.pod_targets.first
+
+        jsonkit.sandbox.should == config.sandbox
+        jsonkit.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('Reachability')]
+        jsonkit.archs.should == []
       end
     end
   end

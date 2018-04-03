@@ -66,8 +66,8 @@ module Pod
     # @param  [Lockfile] lockfile    @see #lockfile
     #
     def initialize(sandbox, podfile, lockfile = nil)
-      @sandbox  = sandbox || raise(ArgumentError, "need a sandbox")
-      @podfile  = podfile || raise(ArgumentError, "need a podfile")
+      @sandbox  = sandbox || raise(ArgumentError, 'need a sandbox')
+      @podfile  = podfile || raise(ArgumentError, 'need a podfile')
       @lockfile = lockfile
 
       @use_default_plugins = true
@@ -666,6 +666,31 @@ module Pod
     #
     def sandbox_state
       analysis_result.sandbox_state
+    end
+
+    #-------------------------------------------------------------------------#
+
+    public
+
+    # @!group Convenience Methods
+
+    def self.targets_from_sandbox(sandbox, podfile, lockfile)
+      raise Informative, 'You must run `pod install` to be able to generate target information' unless lockfile
+
+      new(sandbox, podfile, lockfile).instance_exec do
+        plugin_sources = run_source_provider_hooks
+        analyzer = create_analyzer(plugin_sources)
+        analyze(analyzer)
+        if analyzer.podfile_needs_install?(analyzer.result)
+          raise Pod::Informative, 'The Podfile has changed, you must run `pod install`'
+        elsif analyzer.sandbox_needs_install?(analyzer.result)
+          raise Pod::Informative, 'The `Pods` directory is out-of-date, you must run `pod install`'
+        end
+
+        create_file_accessors
+
+        aggregate_targets
+      end
     end
 
     #-------------------------------------------------------------------------#
