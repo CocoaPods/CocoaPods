@@ -231,7 +231,7 @@ module Pod
           UI.section 'Finding Podfile changes' do
             pods_by_state = lockfile.detect_changes_with_podfile(podfile)
             pods_state = SpecsState.new(pods_by_state)
-            pods_state.print
+            pods_state.print if config.verbose?
           end
           pods_state
         else
