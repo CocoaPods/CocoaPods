@@ -223,6 +223,10 @@ module Pod
                                  [:app_extension, :watch_extension, :watch2_extension, :tv_extension, :messages_extension]).empty?
             is_app_extension ||= aggregate_target.user_targets.any? { |ut| ut.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY') == 'YES' }
 
+            aggregate_target.search_paths_aggregate_targets.each do |search_paths_target|
+              aggregate_target.native_target.add_dependency(search_paths_target.native_target)
+            end
+
             aggregate_target.pod_targets.each do |pod_target|
               test_only_pod_targets.delete(pod_target)
               configure_app_extension_api_only_for_target(aggregate_target) if is_app_extension
