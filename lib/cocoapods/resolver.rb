@@ -577,7 +577,7 @@ module Pod
 
         dependency_nodes.flat_map do |item|
           valid_dependencies_for_target_from_node(target, dependencies, item)
-        end.concat dependency_nodes
+        end.concat(dependency_nodes).uniq
       end
     end
 
