@@ -13,20 +13,19 @@ module Pod
         #
         attr_reader :configuration_name
 
+        # @return [Xcodeproj::Config] The generated xcconfig.
+        #
+        attr_reader :xcconfig
+
         # Initialize a new instance
         #
-        # @param  [Target] target @see target
-        #
-        # @param  [String] configuration_name @see configuration_name
+        # @param  [Target] target @see #target
+        # @param  [String] configuration_name @see #configuration_name
         #
         def initialize(target, configuration_name)
           @target = target
           @configuration_name = configuration_name
         end
-
-        # @return [Xcodeproj::Config] The generated xcconfig.
-        #
-        attr_reader :xcconfig
 
         # Generates and saves the xcconfig to the given path.
         #

@@ -191,11 +191,11 @@ module Pod
     class Indenter < ::Array
       # @return [Fixnum] The indentation level of the UI.
       #
-      attr_accessor :indent
+      attr_reader :indent
 
       # @return [IO] the {IO} to which the output should be printed.
       #
-      attr_accessor :io
+      attr_reader :io
 
       # Init a new Indenter
       #

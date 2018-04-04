@@ -5,7 +5,7 @@ module Pod
     describe 'In general' do
       before do
         @target_definition = fixture_target_definition
-        @lib = AggregateTarget.new(@target_definition, config.sandbox)
+        @lib = AggregateTarget.new(config.sandbox, false, {}, [], @target_definition, config.sandbox.root.dirname, nil, nil, [])
       end
 
       it 'returns the target_definition that generated it' do
@@ -28,8 +28,7 @@ module Pod
     describe 'Support files' do
       before do
         @target_definition = fixture_target_definition
-        @lib = AggregateTarget.new(@target_definition, config.sandbox)
-        @lib.client_root = config.sandbox.root.dirname
+        @lib = AggregateTarget.new(config.sandbox, false, {}, [], @target_definition, config.sandbox.root.dirname, nil, nil, [])
       end
 
       it 'returns the absolute path of the xcconfig file' do

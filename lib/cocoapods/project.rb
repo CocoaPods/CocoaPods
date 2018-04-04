@@ -8,9 +8,22 @@ module Pod
   # through the installation process.
   #
   class Project < Xcodeproj::Project
+    # @return [PBXGroup] The group for the support files of the aggregate
+    #         targets.
+    #
+    attr_reader :support_files_group
+
+    # @return [PBXGroup] The group for the Pods.
+    #
+    attr_reader :pods
+
+    # @return [PBXGroup] The group for Development Pods.
+    #
+    attr_reader :development_pods
+
     # Initialize a new instance
     #
-    # @param  [Pathname, String] path @see path
+    # @param  [Pathname, String] path @see #path
     # @param  [Bool] skip_initialization
     #         Whether the project should be initialized from scratch.
     # @param  [Int] object_version
@@ -26,19 +39,6 @@ module Pod
       @development_pods = new_group('Development Pods')
       self.symroot = LEGACY_BUILD_ROOT
     end
-
-    # @return [PBXGroup] The group for the support files of the aggregate
-    #         targets.
-    #
-    attr_reader :support_files_group
-
-    # @return [PBXGroup] The group for the Pods.
-    #
-    attr_reader :pods
-
-    # @return [PBXGroup] The group for Development Pods.
-    #
-    attr_reader :development_pods
 
     # Generates a list of new UUIDs that created objects can be assigned.
     #

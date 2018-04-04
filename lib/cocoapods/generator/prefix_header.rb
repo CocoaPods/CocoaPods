@@ -15,10 +15,10 @@ module Pod
       # Initialize a new instance
       #
       # @param  [Array<FileAccessor>] file_accessors
-      #         @see file_accessors
+      #         @see #file_accessors
       #
       # @param  [Platform] platform
-      #         @see platform
+      #         @see Header#platform
       #
       def initialize(file_accessors, platform)
         @file_accessors = file_accessors

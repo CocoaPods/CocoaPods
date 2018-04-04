@@ -10,12 +10,9 @@ module Pod
       user_project = Xcodeproj::Project.open(SpecHelper.create_sample_app_copy_from_fixture('SampleProject'))
       user_target = user_project.native_targets.find { |np| np.name == 'SampleProject' }
       target_definition = fixture_target_definition
-      pod_target = PodTarget.new([spec], [target_definition], config.sandbox)
-      umbrella = AggregateTarget.new(target_definition, config.sandbox)
-      umbrella.user_project = user_project
-      umbrella.user_target_uuids = [user_target.uuid]
+      pod_target = PodTarget.new(sandbox, false, {}, [], [spec], [target_definition], nil)
+      umbrella = AggregateTarget.new(sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, user_project, [user_target.uuid], [pod_target])
       umbrella.stubs(:platform).returns(Platform.new(:ios, '8.0'))
-      umbrella.pod_targets = [pod_target]
 
       result = Installer::PostInstallHooksContext.generate(sandbox, [umbrella])
       result.class.should == Installer::PostInstallHooksContext

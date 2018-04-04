@@ -9,7 +9,7 @@ module Pod
         end
 
         def pod_target(spec, target_definition)
-          fixture_pod_target(spec, [target_definition])
+          fixture_pod_target(spec, false, {}, [target_definition])
         end
 
         before do
@@ -41,7 +41,8 @@ module Pod
             podfile = @target.target_definition.podfile
             podfile.stubs(:defined_in_file).returns(Pathname.new(@target.client_root) + 'Podfile')
             @target.target_definition.stubs(:podfile).returns(podfile)
-            @target.client_root = Pathname.new(@target.client_root) + 'NestedFolder'
+            client_root = Pathname.new(@target.client_root) + 'NestedFolder'
+            @target.stubs(:client_root).returns(client_root)
             @generator.target.podfile_dir_relative_path.should == '${SRCROOT}/..'
           end
 
@@ -159,7 +160,7 @@ module Pod
 
           describe 'with a scoped pod target' do
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, [target_definition]).scoped.first
+              fixture_pod_target(spec, false, {}, [target_definition]).scoped.first
             end
 
             it 'links the pod targets with the aggregate target' do

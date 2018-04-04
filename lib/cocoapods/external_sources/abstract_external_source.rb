@@ -24,9 +24,9 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param [String] name @see name
-      # @param [Hash] params @see params
-      # @param [String] podfile_path @see podfile_path
+      # @param [String] name @see #name
+      # @param [Hash] params @see #params
+      # @param [String] podfile_path @see #podfile_path
       #
       def initialize(name, params, podfile_path)
         @name = name

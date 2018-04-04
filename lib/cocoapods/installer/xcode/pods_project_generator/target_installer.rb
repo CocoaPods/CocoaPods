@@ -19,8 +19,8 @@ module Pod
 
           # Initialize a new instance
           #
-          # @param [Sandbox] sandbox @see sandbox
-          # @param [Target] target  @see target
+          # @param [Sandbox] sandbox @see #sandbox
+          # @param [Target] target  @see #target
           #
           def initialize(sandbox, target)
             @sandbox = sandbox

@@ -29,9 +29,8 @@ module Pod
                 @project.add_file_reference(resource, group)
               end
 
-              @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
+              @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@spec], [@target_definition], nil)
               @pod_target.file_accessors = [file_accessor]
-              @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
               @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
 
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
@@ -180,13 +179,11 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
-                @coconut_pod_target = PodTarget.new([@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition], config.sandbox)
+                @coconut_pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition], nil)
                 @coconut_pod_target.file_accessors = [file_accessor, test_file_accessor]
-                @coconut_pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @installer = PodTargetInstaller.new(config.sandbox, @coconut_pod_target)
-                @coconut_pod_target2 = PodTarget.new([@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition2], config.sandbox)
+                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition2], nil)
                 @coconut_pod_target2.file_accessors = [file_accessor, test_file_accessor]
-                @coconut_pod_target2.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @installer2 = PodTargetInstaller.new(config.sandbox, @coconut_pod_target2)
               end
 
@@ -378,9 +375,8 @@ module Pod
                   @project.add_file_reference(file, group) if file.fnmatch?('*.m') || file.fnmatch?('*.h')
                 end
 
-                @minions_pod_target = PodTarget.new([@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], config.sandbox)
+                @minions_pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], nil)
                 @minions_pod_target.file_accessors = [file_accessor]
-                @minions_pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @installer = PodTargetInstaller.new(config.sandbox, @minions_pod_target)
 
                 @first_json_file = file_accessor.source_files.find { |sf| sf.extname == '.json' }
@@ -490,9 +486,8 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
-                @pod_target = PodTarget.new([@spec], [@target_definition], config.sandbox)
+                @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release }, [], [@spec], [@target_definition], nil)
                 @pod_target.file_accessors = [file_accessor]
-                @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
               end
 
@@ -751,8 +746,7 @@ module Pod
               before do
                 @project.add_pod_group('snake', fixture('snake'))
 
-                @pod_target = fixture_pod_target('snake/snake.podspec', [@target_definition])
-                @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @pod_target = fixture_pod_target('snake/snake.podspec', false, { 'Debug' => :debug, 'Release' => :release }, [@target_definition])
                 @pod_target.stubs(:requires_frameworks? => true)
                 group = @project.group_for_spec('snake')
                 @pod_target.file_accessors.first.source_files.each do |file|
@@ -933,9 +927,8 @@ module Pod
                 @spec.resource_bundle = nil
                 @project.add_pod_group('BananaLib', fixture('banana-lib'))
 
-                @pod_target = fixture_pod_target(@spec)
+                @pod_target = fixture_pod_target(@spec, false, 'Debug' => :debug, 'Release' => :release)
                 @pod_target.stubs(:requires_frameworks? => true)
-                @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 target_installer = PodTargetInstaller.new(config.sandbox, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
@@ -993,8 +986,7 @@ module Pod
                 @spec.resource_bundle = { 'banana_bundle' => ['Resources/**/*'] }
                 @project.add_pod_group('BananaLib', fixture('banana-lib'))
 
-                @pod_target = fixture_pod_target(@spec)
-                @pod_target.user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @pod_target = fixture_pod_target(@spec, false, 'Debug' => :debug, 'Release' => :release)
                 target_installer = PodTargetInstaller.new(config.sandbox, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.

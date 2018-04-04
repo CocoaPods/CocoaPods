@@ -15,13 +15,31 @@ module Pod
     # @return [Boolean] Whether the target needs to be implemented as a framework.
     #         Computed by analyzer.
     #
-    attr_accessor :host_requires_frameworks
+    attr_reader :host_requires_frameworks
     alias_method :host_requires_frameworks?, :host_requires_frameworks
+
+    # @return [Hash{String=>Symbol}] A hash representing the user build
+    #         configurations where each key corresponds to the name of a
+    #         configuration and its value to its type (`:debug` or `:release`).
+    #
+    attr_reader :user_build_configurations
+
+    # @return [Array<String>] The value for the ARCHS build setting.
+    #
+    attr_reader :archs
 
     # Initialize a new target
     #
-    def initialize
-      @archs = []
+    # @param [Sandbox] sandbox @see #sandbox
+    # @param [Boolean] host_requires_frameworks @see #host_requires_frameworks
+    # @param [Hash{String=>Symbol}] user_build_configurations @see #user_build_configurations
+    # @param [Array<String>] archs @see #archs
+    #
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs)
+      @sandbox = sandbox
+      @host_requires_frameworks = host_requires_frameworks
+      @user_build_configurations = user_build_configurations
+      @archs = archs
     end
 
     # @return [String] the name of the library.
@@ -102,22 +120,10 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    # @!group Information storage
-
-    # @return [Hash{String=>Symbol}] A hash representing the user build
-    #         configurations where each key corresponds to the name of a
-    #         configuration and its value to its type (`:debug` or `:release`).
-    #
-    attr_accessor :user_build_configurations
-
     # @return [PBXNativeTarget] the target generated in the Pods project for
     #         this library.
     #
     attr_accessor :native_target
-
-    # @return [Array<String>] The value for the ARCHS build setting.
-    #
-    attr_accessor :archs
 
     #-------------------------------------------------------------------------#
 

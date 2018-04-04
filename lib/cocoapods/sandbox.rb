@@ -52,7 +52,7 @@ module Pod
 
     # Initialize a new instance
     #
-    # @param [String, Pathname] root @see root
+    # @param [String, Pathname] root @see #root
     #
     def initialize(root)
       FileUtils.mkdir_p(root)

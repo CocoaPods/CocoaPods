@@ -17,16 +17,8 @@ module Pod
         end
         config.sandbox.project = Project.new(config.sandbox.project_path)
         config.sandbox.project.save
-        @target = AggregateTarget.new(@podfile.target_definitions['SampleProject'], config.sandbox)
-        @target.client_root = sample_project_path.dirname
-        @target.user_project = Xcodeproj::Project.open(@sample_project_path)
-        @target.user_target_uuids = ['A346496C14F9BE9A0080D870']
-        @target.user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
-        @empty_library = AggregateTarget.new(@podfile.target_definitions[:empty], config.sandbox)
-        @empty_library.client_root = sample_project_path.dirname
-        @empty_library.user_project = @target.user_project
-        @empty_library.user_target_uuids = ['C0C495321B9E5C47004F9854']
-        @empty_library.user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
+        @target = AggregateTarget.new(config.sandbox, false, { 'Release' => :release, 'Debug' => :debug }, [], @podfile.target_definitions['SampleProject'], sample_project_path.dirname, Xcodeproj::Project.open(@sample_project_path), ['A346496C14F9BE9A0080D870'], [])
+        @empty_library = AggregateTarget.new(config.sandbox, false, { 'Release' => :release, 'Debug' => :debug }, [], @podfile.target_definitions[:empty], sample_project_path.dirname, @target.user_project, ['C0C495321B9E5C47004F9854'], [])
         @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target, @empty_library])
       end
 

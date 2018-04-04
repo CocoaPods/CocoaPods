@@ -61,9 +61,9 @@ module Pod
 
     # Initialize a new instance
     #
-    # @param  [Sandbox]  sandbox     @see sandbox
-    # @param  [Podfile]  podfile     @see podfile
-    # @param  [Lockfile] lockfile    @see lockfile
+    # @param  [Sandbox]  sandbox     @see #sandbox
+    # @param  [Podfile]  podfile     @see #podfile
+    # @param  [Lockfile] lockfile    @see #lockfile
     #
     def initialize(sandbox, podfile, lockfile = nil)
       @sandbox  = sandbox
