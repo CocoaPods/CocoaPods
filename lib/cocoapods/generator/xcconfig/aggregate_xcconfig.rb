@@ -13,10 +13,6 @@ module Pod
         #
         attr_reader :configuration_name
 
-        # @return [Xcodeproj::Config] The generated xcconfig.
-        #
-        attr_reader :xcconfig
-
         # Initialize a new instance
         #
         # @param  [Target] target @see #target
@@ -32,10 +28,12 @@ module Pod
         # @param  [Pathname] path
         #         the path where the xcconfig should be stored.
         #
-        # @return [void]
+        # @return [Xcodeproj::Config]
         #
         def save_as(path)
-          generate.save_as(path)
+          result = generate
+          result.save_as(path)
+          result
         end
 
         # Generates the xcconfig.
@@ -66,23 +64,23 @@ module Pod
             'SWIFT_INCLUDE_PATHS' => '$(inherited) ',
           }.merge(embedded_content_settings)
 
-          @xcconfig = Xcodeproj::Config.new(config)
+          xcconfig = Xcodeproj::Config.new(config)
 
-          @xcconfig.merge!(merged_user_target_xcconfigs)
+          xcconfig.merge!(merged_user_target_xcconfigs)
 
-          generate_settings_to_import_pod_targets
+          generate_settings_to_import_pod_targets(xcconfig)
 
-          XCConfigHelper.add_target_specific_settings(target, @xcconfig)
+          XCConfigHelper.add_target_specific_settings(target, xcconfig)
 
           targets = pod_targets + target.search_paths_aggregate_targets.flat_map(&:pod_targets)
-          XCConfigHelper.generate_vendored_build_settings(target, targets, @xcconfig)
-          XCConfigHelper.generate_other_ld_flags(target, pod_targets, @xcconfig)
+          XCConfigHelper.generate_vendored_build_settings(target, targets, xcconfig)
+          XCConfigHelper.generate_other_ld_flags(target, pod_targets, xcconfig)
 
           # TODO: Need to decide how we are going to ensure settings like these
           # are always excluded from the user's project.
           #
           # See https://github.com/CocoaPods/CocoaPods/issues/1216
-          @xcconfig.attributes.delete('USE_HEADERMAP')
+          xcconfig.attributes.delete('USE_HEADERMAP')
 
           # If any of the aggregate target dependencies bring in any vendored dynamic artifacts we should ensure to
           # update the runpath search paths.
@@ -90,47 +88,14 @@ module Pod
 
           symbol_type = target.user_targets.map(&:symbol_type).uniq.first
           test_bundle = symbol_type == :octest_bundle || symbol_type == :unit_test_bundle || symbol_type == :ui_test_bundle
-          XCConfigHelper.generate_ld_runpath_search_paths(target, target.requires_host_target?, test_bundle, @xcconfig) if target.requires_frameworks? || vendored_dynamic_artifacts.count > 0
+          XCConfigHelper.generate_ld_runpath_search_paths(target, target.requires_host_target?, test_bundle, xcconfig) if target.requires_frameworks? || vendored_dynamic_artifacts.count > 0
 
-          @xcconfig
+          xcconfig
         end
 
         #---------------------------------------------------------------------#
 
         protected
-
-        # @return String the SWIFT_VERSION of the target being integrated
-        #
-        def target_swift_version
-          target.target_definition.swift_version unless target.target_definition.swift_version.blank?
-        end
-
-        EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION = Gem::Version.new('2.3')
-
-        # @return [Hash<String, String>] the build settings necessary for Swift
-        #  targets to be correctly embedded in their host.
-        #
-        def embedded_content_settings
-          # For embedded targets, which live in a host target, CocoaPods
-          # copies all of the embedded target's pod_targets its host
-          # target. Therefore, this check will properly require the Swift
-          # libs in the host target, if the embedded target has any pod targets
-          # that use Swift. Setting this for the embedded target would
-          # cause an App Store rejection because frameworks cannot be embedded
-          # in embedded targets.
-
-          swift_version = Gem::Version.new(target_swift_version)
-          should_embed = !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
-          config = {}
-          if should_embed
-            if swift_version >= EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION
-              config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-            else
-              config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
-            end
-          end
-          config
-        end
 
         # @return [Hash<String, String>] the build settings necessary to import
         #         the pod targets.
@@ -167,7 +132,42 @@ module Pod
           end
         end
 
+        #---------------------------------------------------------------------#
+
         private
+
+        # @return String the SWIFT_VERSION of the target being integrated
+        #
+        def target_swift_version
+          target.target_definition.swift_version unless target.target_definition.swift_version.blank?
+        end
+
+        EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION = Gem::Version.new('2.3')
+
+        # @return [Hash<String, String>] the build settings necessary for Swift
+        #  targets to be correctly embedded in their host.
+        #
+        def embedded_content_settings
+          # For embedded targets, which live in a host target, CocoaPods
+          # copies all of the embedded target's pod_targets its host
+          # target. Therefore, this check will properly require the Swift
+          # libs in the host target, if the embedded target has any pod targets
+          # that use Swift. Setting this for the embedded target would
+          # cause an App Store rejection because frameworks cannot be embedded
+          # in embedded targets.
+
+          swift_version = Gem::Version.new(target_swift_version)
+          should_embed = !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
+          config = {}
+          if should_embed
+            if swift_version >= EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION
+              config['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
+            else
+              config['EMBEDDED_CONTENT_CONTAINS_SWIFT'] = 'YES'
+            end
+          end
+          config
+        end
 
         # Add build settings, which ensure that the pod targets can be imported from the integrating target.
         # For >= 1.5.0 we use modular (stricter) header search paths this means that the integrated target will only be
@@ -175,19 +175,17 @@ module Pod
         #
         # For < 1.5.0 legacy header search paths the same rules apply: It's the wild west.
         #
-        def generate_settings_to_import_pod_targets
-          @xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(target, pod_targets)
-          @xcconfig.merge!(settings_to_import_pod_targets)
+        def generate_settings_to_import_pod_targets(xcconfig)
+          xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(target, pod_targets)
+          xcconfig.merge!(settings_to_import_pod_targets)
           target.search_paths_aggregate_targets.each do |search_paths_target|
             generator = AggregateXCConfig.new(search_paths_target, configuration_name)
-            @xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(nil, search_paths_target.pod_targets)
-            @xcconfig.merge!(generator.settings_to_import_pod_targets)
+            xcconfig.merge! XCConfigHelper.search_paths_for_dependent_targets(nil, search_paths_target.pod_targets)
+            xcconfig.merge!(generator.settings_to_import_pod_targets)
             # Propagate any HEADER_SEARCH_PATHS settings from the search paths.
-            XCConfigHelper.propagate_header_search_paths_from_search_paths(search_paths_target, @xcconfig)
+            XCConfigHelper.propagate_header_search_paths_from_search_paths(search_paths_target, xcconfig)
           end
         end
-
-        private
 
         #---------------------------------------------------------------------#
 

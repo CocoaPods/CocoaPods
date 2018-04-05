@@ -12,7 +12,7 @@ module Pod
         target_definition.user_project_path = 'SampleProject/SampleProject'
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        path = target_inspector.send(:compute_project_path)
+        path = target_inspector.compute_project_path
         path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
       end
 
@@ -21,7 +21,7 @@ module Pod
         target_definition.user_project_path = 'Test'
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        e = lambda { target_inspector.send(:compute_project_path) }.should.raise Informative
+        e = lambda { target_inspector.compute_project_path }.should.raise Informative
         e.message.should.match /Unable to find/
       end
 
@@ -30,7 +30,7 @@ module Pod
         config.installation_root = config.installation_root + 'SampleProject'
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        path = target_inspector.send(:compute_project_path)
+        path = target_inspector.compute_project_path
         path.to_s.should.include 'SampleProject/SampleProject.xcodeproj'
       end
 
@@ -38,7 +38,7 @@ module Pod
         target_definition = Podfile::TargetDefinition.new(:default, nil)
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        e = lambda { target_inspector.send(:compute_project_path) }.should.raise Informative
+        e = lambda { target_inspector.compute_project_path }.should.raise Informative
         e.message.should.match /Could not.*select.*project/
       end
 
@@ -49,7 +49,7 @@ module Pod
         config.installation_root = config.installation_root + 'Project[With]Special{chars}in*path?'
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        path = target_inspector.send(:compute_project_path)
+        path = target_inspector.compute_project_path
         path.to_s.should.include 'Project[With]Special{chars}in*path?/Project[With]Special{chars}in*path?.xcodeproj'
       end
     end

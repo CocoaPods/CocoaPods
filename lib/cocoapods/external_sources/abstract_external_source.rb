@@ -19,7 +19,7 @@ module Pod
 
       # @return [Boolean] Whether the source is allowed to touch the cache.
       #
-      attr_accessor :can_cache
+      attr_reader :can_cache
       alias_method :can_cache?, :can_cache
 
       # Initialize a new instance
@@ -27,12 +27,13 @@ module Pod
       # @param [String] name @see #name
       # @param [Hash] params @see #params
       # @param [String] podfile_path @see #podfile_path
+      # @param [Boolean] can_cache @see #can_cache
       #
-      def initialize(name, params, podfile_path)
+      def initialize(name, params, podfile_path, can_cache = true)
         @name = name
         @params = params
         @podfile_path = podfile_path
-        @can_cache = true
+        @can_cache = can_cache
       end
 
       # @return [Bool] whether an external source source is equal to another

@@ -4,7 +4,7 @@ module Pod
   describe ExternalSources::AbstractExternalSource do
     before do
       dependency = Dependency.new('Reachability', :git => fixture('integration/Reachability'))
-      @subject = ExternalSources.from_dependency(dependency, nil)
+      @subject = ExternalSources.from_dependency(dependency, nil, true)
       config.sandbox.prepare
     end
 

@@ -99,19 +99,20 @@ module Pod
           #
           # Saves the content the provided path unless the path exists and the contents are exactly the same.
           #
-          # @return [Void]
+          # @return [Object] the result of the generator.
           #
           def update_changed_file(generator, path)
             path.dirname.mkpath
             if path.exist?
-              generator.save_as(support_files_temp_dir)
+              result = generator.save_as(support_files_temp_dir)
               unless FileUtils.identical?(support_files_temp_dir, path)
                 FileUtils.mv(support_files_temp_dir, path)
               end
             else
-              generator.save_as(path)
+              result = generator.save_as(path)
             end
             clean_support_files_temp_dir if support_files_temp_dir.exist?
+            result
           end
 
           # Creates the directory where to store the support files of the target.

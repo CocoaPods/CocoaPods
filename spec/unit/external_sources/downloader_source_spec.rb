@@ -8,7 +8,7 @@ module Pod
         :branch => 'master',
       }
       dep = Dependency.new('Reachability', params)
-      @subject = ExternalSources.from_dependency(dep, nil)
+      @subject = ExternalSources.from_dependency(dep, nil, true)
     end
 
     it 'creates a copy of the podspec' do

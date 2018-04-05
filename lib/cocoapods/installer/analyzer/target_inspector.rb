@@ -32,22 +32,21 @@ module Pod
         #
         # @raise If no `user_project` is set
         #
-        # @return [TargetInspectionResult]
+        # @return [TargetInspectionResult] the result of the inspection of the target definition within the user project
         #
         def compute_results(user_project)
           raise ArgumentError, 'Cannot compute results without a user project set' unless user_project
 
           targets = compute_targets(user_project)
+          project_target_uuids = targets.map(&:uuid)
+          build_configurations = compute_build_configurations(targets)
+          platform = compute_platform(targets)
+          archs = compute_archs(targets)
+          swift_version = compute_swift_version_from_targets(targets)
 
-          result = TargetInspectionResult.new
-          result.target_definition = target_definition
-          result.project_path = user_project.path
-          result.project_target_uuids = targets.map(&:uuid)
-          result.build_configurations = compute_build_configurations(targets)
-          result.platform = compute_platform(targets)
-          result.archs = compute_archs(targets)
-          result.project = user_project
-          result.target_definition.swift_version = compute_swift_version_from_targets(targets)
+          result = TargetInspectionResult.new(target_definition, user_project, project_target_uuids,
+                                              build_configurations, platform, archs)
+          result.target_definition.swift_version = swift_version
           result
         end
 

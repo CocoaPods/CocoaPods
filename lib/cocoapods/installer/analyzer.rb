@@ -685,11 +685,10 @@ module Pod
       def fetch_external_source(dependency, use_lockfile_options)
         checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name) if lockfile
         source = if checkout_options && use_lockfile_options
-                   ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file)
+                   ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file, installation_options.clean?)
                  else
-                   ExternalSources.from_dependency(dependency, podfile.defined_in_file)
+                   ExternalSources.from_dependency(dependency, podfile.defined_in_file, installation_options.clean?)
         end
-        source.can_cache = installation_options.clean?
         source.fetch(sandbox)
       end
 

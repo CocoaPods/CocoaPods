@@ -17,7 +17,7 @@ module Pod
 
       # @return [Array<String>] The list of the modules to import.
       #
-      attr_accessor :module_imports
+      attr_reader :module_imports
 
       # Initialize a new instance
       #

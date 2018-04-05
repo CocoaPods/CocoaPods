@@ -6,7 +6,7 @@ module Pod
       params = { :path => fixture('integration/Reachability') }
       dependency = Dependency.new('Reachability', params)
       podfile_path = fixture('integration/Podfile')
-      @subject = ExternalSources.from_dependency(dependency, podfile_path)
+      @subject = ExternalSources.from_dependency(dependency, podfile_path, true)
     end
 
     it 'creates a copy of the podspec' do
