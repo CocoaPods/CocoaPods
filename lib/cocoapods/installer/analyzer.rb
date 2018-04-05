@@ -74,9 +74,8 @@ module Pod
         validate_lockfile_version!
         @result = AnalysisResult.new
         @result.podfile_dependency_cache = @podfile_dependency_cache
-        if installation_options.integrate_targets?
-          @result.target_inspections = inspect_targets_to_integrate
-        else
+        @result.target_inspections = inspect_targets_to_integrate
+        unless installation_options.integrate_targets?
           verify_platforms_specified!
         end
         @result.podfile_state = generate_podfile_state
