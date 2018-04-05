@@ -28,8 +28,7 @@ module Pod
 
               user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
 
-              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], [@spec], [@target_definition], nil)
-              @pod_target.file_accessors = [file_accessor]
+              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], [@spec], [@target_definition], Platform.ios, [file_accessor])
 
               @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], @target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
 

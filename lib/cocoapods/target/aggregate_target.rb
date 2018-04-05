@@ -71,7 +71,6 @@ module Pod
       @user_target_uuids = user_target_uuids
       @pod_targets = pod_targets
       @search_paths_aggregate_targets = []
-      @file_accessors = []
       @xcconfigs = {}
     end
 

@@ -6,8 +6,7 @@ module Pod
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       @target_definition = Podfile::TargetDefinition.new('Pods', nil)
       @target_definition.abstract = false
-      @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [@target_definition], nil)
-      @pod_target.stubs(:platform).returns(Platform.ios)
+      @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [@target_definition], Platform.ios)
     end
 
     describe 'Meta' do
@@ -448,12 +447,22 @@ module Pod
 
       describe 'With dependencies' do
         before do
-          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', false, {}, @pod_target.target_definitions)
+          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, @pod_target.target_definitions)
           @pod_target.dependent_targets = [@pod_dependency]
+          @pod_target.test_dependent_targets = [@test_pod_dependency]
         end
 
         it 'resolves simple dependencies' do
           @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+        end
+
+        it 'scopes test and non test dependencies' do
+          scoped_pod_target = @pod_target.scoped
+          scoped_pod_target.first.dependent_targets.count.should == 1
+          scoped_pod_target.first.dependent_targets.first.name.should == 'OrangeFramework-Pods'
+          scoped_pod_target.first.test_dependent_targets.count.should == 1
+          scoped_pod_target.first.test_dependent_targets.first.name.should == 'matryoshka-Pods'
         end
 
         describe 'With cyclic dependencies' do

@@ -24,9 +24,9 @@ module Pod
               @project.add_file_reference(file, group)
             end
 
-            @pod_target = PodTarget.new(config.sandbox, false, { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }, ['$(ARCHS_STANDARD_64_BIT)'], [@spec], [@target_definition], nil)
-            @pod_target.stubs(:platform).returns(Platform.new(:ios, '6.0'))
-            @pod_target.file_accessors = [file_accessor]
+            user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
+            archs = ['$(ARCHS_STANDARD_64_BIT)']
+            @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, archs, [@spec], [@target_definition], Platform.ios, [file_accessor])
 
             @installer = TargetInstaller.new(config.sandbox, @pod_target)
           end

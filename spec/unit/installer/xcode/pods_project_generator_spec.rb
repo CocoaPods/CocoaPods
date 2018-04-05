@@ -134,7 +134,7 @@ module Pod
               target_definition.set_platform(:ios, '8.0')
               target_definition.abstract = false
               target_definition.store_pod('BananaLib')
-              pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], nil)
+              pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], Platform.ios)
               @generator.stubs(:aggregate_targets).returns([])
               @generator.stubs(:pod_targets).returns([pod_target])
               PodsProjectGenerator::PodTargetInstaller.any_instance.expects(:install!)
@@ -146,7 +146,7 @@ module Pod
               target_definition = Podfile::TargetDefinition.new(:default, nil)
               target_definition.set_platform(:ios, '8.0')
               target_definition.abstract = false
-              pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], nil)
+              pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], Platform.ios)
               @generator.stubs(:aggregate_targets).returns([])
               @generator.stubs(:pod_targets).returns([pod_target])
               PodsProjectGenerator::PodTargetInstaller.any_instance.expects(:install!).once
@@ -181,16 +181,15 @@ module Pod
               spec = fixture_spec('banana-lib/BananaLib.podspec')
 
               target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile.root_target_definitions.first)
-              @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], nil)
-              @target = AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, [])
-
+              @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], Platform.ios)
+              @target = AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
               @mock_target = mock('PodNativeTarget')
 
               mock_project = mock('PodsProject', :frameworks_group => mock('FrameworksGroup'))
               @generator.stubs(:project).returns(mock_project)
 
               @target.stubs(:native_target).returns(@mock_target)
-              @target.stubs(:pod_targets).returns([@pod_target])
+              @generator.stubs(:pod_targets).returns([@pod_target])
               @generator.stubs(:aggregate_targets).returns([@target])
             end
 
@@ -267,8 +266,8 @@ module Pod
               spec = fixture_spec('coconut-lib/CoconutLib.podspec')
 
               target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile.root_target_definitions.first)
-              @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.recursive_subspecs], [target_definition], nil)
-              @target = AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, [])
+              @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.recursive_subspecs], [target_definition], Platform.ios)
+              @target = AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
 
               @mock_target = mock('PodNativeTarget')
 
@@ -276,7 +275,7 @@ module Pod
               @generator.stubs(:project).returns(mock_project)
 
               @target.stubs(:native_target).returns(@mock_target)
-              @target.stubs(:pod_targets).returns([@pod_target])
+              @generator.stubs(:pod_targets).returns([@pod_target])
               @generator.stubs(:aggregate_targets).returns([@target])
             end
 
@@ -470,7 +469,7 @@ module Pod
               it 'shares test schemes' do
                 spec = fixture_spec('coconut-lib/CoconutLib.podspec')
                 target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile.root_target_definitions.first)
-                pod_target = Pod::PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.recursive_subspecs], [target_definition], nil)
+                pod_target = Pod::PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.recursive_subspecs], [target_definition], Platform.ios)
                 pod_target.stubs(:should_build?).returns(true)
 
                 @generator.installation_options.
