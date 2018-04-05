@@ -103,8 +103,7 @@ module Pod
         #
         def pod_added?(pod)
           return true if resolved_pods.include?(pod) && !sandbox_pods.include?(pod)
-          return true unless folder_exist?(pod)
-          return false if !folder_exist?(pod) && !sandbox.local?(pod)
+          return true if !folder_exist?(pod) && !sandbox.local?(pod)
           false
         end
 

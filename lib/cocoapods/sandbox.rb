@@ -272,6 +272,7 @@ module Pod
       end
 
       spec ||= Specification.from_file(output_path)
+      spec.defined_in_file ||= output_path
 
       unless spec.name == name
         raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
