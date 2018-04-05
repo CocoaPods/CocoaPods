@@ -261,9 +261,10 @@ module Pod
         unless podspec.exist?
           raise Informative, "No podspec found for `#{name}` in #{podspec}"
         end
+        spec = Specification.from_file(podspec)
         FileUtils.copy(podspec, output_path)
       when Specification
-        raise ArgumentError unless json
+        raise ArgumentError, "can only store Specification objects as json" unless json
         output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
         spec = podspec.dup
       else

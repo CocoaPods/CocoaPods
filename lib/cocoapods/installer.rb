@@ -687,8 +687,6 @@ module Pod
           raise Pod::Informative, 'The `Pods` directory is out-of-date, you must run `pod install`'
         end
 
-        create_file_accessors
-
         aggregate_targets
       end
     end

@@ -107,13 +107,8 @@ module Pod
       it 'loads the stored specification from the original path' do
         spec_file = fixture('banana-lib/BananaLib.podspec')
         spec = Specification.from_file(spec_file)
-        Specification.expects(:from_file).with do
-          Dir.pwd == fixture('banana-lib').to_s
-        end.once.returns(spec)
 
-        Specification.expects(:from_file).with do |path|
-          path == spec_file
-        end.once.returns(spec)
+        Specification.expects(:from_file).with(spec_file).once.returns(spec)
 
         @sandbox.store_podspec('BananaLib', spec_file)
         @sandbox.store_local_path('BananaLib', spec_file)

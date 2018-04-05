@@ -1040,6 +1040,7 @@ module Pod
         @sandbox_manifest = Pod::Lockfile.new(@lockfile.internal_data.deep_dup)
         @analyzer.sandbox.manifest = @sandbox_manifest
         @analyzer.sandbox.stubs(:specification).with('BananaLib').returns(stub)
+        @analyzer.sandbox.stubs(:specification_path).with('BananaLib').returns(stub)
         pod_dir = stub
         pod_dir.stubs(:directory?).returns(true)
         @analyzer.sandbox.stubs(:pod_dir).with('BananaLib').returns(pod_dir)
