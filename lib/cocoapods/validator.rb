@@ -808,20 +808,22 @@ module Pod
       urls     = source_urls
       Pod::Podfile.new do
         install! 'cocoapods', :deterministic_uuids => false
+        # By default inhibit warnings for all pods, except the one being validated.
+        inhibit_all_warnings!
         urls.each { |u| source(u) }
         target 'App' do
           use_frameworks!(use_frameworks)
           platform(platform_name, deployment_target)
           if local
-            pod name, :path => podspec.dirname.to_s
+            pod name, :path => podspec.dirname.to_s, :inhibit_warnings => false
           else
-            pod name, :podspec => podspec.to_s
+            pod name, :podspec => podspec.to_s, :inhibit_warnings => false
           end
           test_spec_names.each do |test_spec_name|
             if local
-              pod test_spec_name, :path => podspec.dirname.to_s
+              pod test_spec_name, :path => podspec.dirname.to_s, :inhibit_warnings => false
             else
-              pod test_spec_name, :podspec => podspec.to_s
+              pod test_spec_name, :podspec => podspec.to_s, :inhibit_warnings => false
             end
           end
         end
