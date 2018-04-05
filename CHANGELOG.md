@@ -8,7 +8,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Improve performance of the dependency resolver by removing duplicates for dependency nodes.
+  [Jacek Suliga](https://github.com/jmkk)
 
 ##### Bug Fixes
 
