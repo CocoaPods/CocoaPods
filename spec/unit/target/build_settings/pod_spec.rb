@@ -1,9 +1,9 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
-  module Generator
-    module XCConfig
-      describe PodXCConfig do
+  class Target
+    class BuildSettings
+      describe Pod do
         describe 'in general' do
           before do
             @monkey_spec = fixture_spec('monkey/monkey.podspec')
@@ -12,6 +12,7 @@ module Pod
             vspec = stub(:test_specification? => false)
             consumer = stub(
               "Spec Consumer (#{vspec} iOS)",
+              :spec => vspec,
               :pod_target_xcconfig => {},
               :libraries => ['xml2'],
               :frameworks => [],
@@ -27,6 +28,8 @@ module Pod
               :vendored_dynamic_frameworks => [config.sandbox.root + 'CCC/VendoredFramework.framework'],
               :vendored_dynamic_libraries => [config.sandbox.root + 'DDD/VendoredDyld.dyld'],
             )
+            file_accessor.stubs(:vendored_libraries => file_accessor.vendored_static_libraries + file_accessor.vendored_dynamic_libraries,
+                                :vendored_frameworks => file_accessor.vendored_static_frameworks + file_accessor.vendored_dynamic_frameworks)
             vendored_dep_target = stub(
               'Vendored Dependent Target',
               :name => 'BananaLib',
@@ -36,9 +39,13 @@ module Pod
               :requires_frameworks? => true,
               :static_framework? => false,
               :dependent_targets => [],
+              :recursive_dependent_targets => [],
               :file_accessors => [file_accessor],
+              :spec_consumers => [consumer],
               :uses_modular_headers? => false,
+              :uses_swift? => false,
             )
+            vendored_dep_target.stubs(:build_settings => Pod.new(vendored_dep_target, false))
 
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
             @pod_target = fixture_pod_target(@spec, true)
@@ -46,7 +53,7 @@ module Pod
 
             @consumer = @pod_target.spec_consumers.first
             @podfile = @pod_target.podfile
-            @generator = PodXCConfig.new(@pod_target)
+            @generator = Pod.new(@pod_target, false)
 
             @spec.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' }
             @spec.user_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' }
@@ -175,6 +182,39 @@ module Pod
             generated = Xcodeproj::Config.new(path)
             generated.class.should == Xcodeproj::Config
           end
+
+          it 'does propagate framework or libraries' do
+            spec = stub('spec', :test_specification? => false)
+            consumer = stub('consumer',
+                            :libraries => ['xml2'],
+                            :frameworks => ['XCTest'],
+                            :weak_frameworks => [],
+                            :spec => spec,
+                           )
+            file_accessor = stub('file_accessor',
+                                 :spec => spec,
+                                 :spec_consumer => consumer,
+                                 :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                                 :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                                 :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                                 :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                                )
+            pod_target = stub('pod_target',
+                              :file_accessors => [file_accessor],
+                              :spec_consumers => [consumer],
+                              :requires_frameworks? => true,
+                              :static_framework? => true,
+                              :dependent_targets => [],
+                              :recursive_dependent_targets => [],
+                              :sandbox => config.sandbox,
+                              :should_build? => true,
+                             )
+            pod_target.stubs(:build_settings => Pod.new(pod_target, false))
+            @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
+            @generator.stubs(:dependent_targets => [pod_target])
+            @generator.__clear__
+            @generator.other_ldflags.should.be == %w(-l"VendoredDyld" -l"xml2" -framework "VendoredFramework" -framework "XCTest" -weak_framework "iAd")
+          end
         end
 
         describe 'test xcconfig generation' do
@@ -201,7 +241,7 @@ module Pod
           it 'does not merge pod target xcconfig of test specifications for a non test xcconfig' do
             @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1' }
             @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1' }
-            generator = PodXCConfig.new(@coconut_pod_target, false)
+            generator = Pod.new(@coconut_pod_target, false)
             xcconfig = generator.generate
             xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1'
           end
@@ -209,41 +249,41 @@ module Pod
           it 'merges the pod target xcconfig of non test specifications for test xcconfigs' do
             @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1' }
             @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1' }
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1 TEST_ONLY=1'
           end
 
           it 'includes correct other ld flags' do
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"CoconutLib"'
           end
 
           it 'includes correct other ld flags when requires frameworks' do
             @coconut_pod_target.stubs(:requires_frameworks?).returns(true)
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -framework "CoconutLib"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -framework "CoconutLib"'
           end
 
           it 'includes other ld flags for transitive dependent targets' do
             @coconut_pod_target.dependent_targets = [@monkey_pod_target]
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
           end
 
           it 'includes other ld flags for test dependent targets' do
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
           end
 
           it 'adds settings for test dependent targets' do
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@banana_pod_target] }
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
@@ -252,10 +292,10 @@ module Pod
           it 'adds settings for test dependent targets excluding the parents targets' do
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@banana_pod_target] }
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
           end
 
           it 'adds correct header search paths for dependent and test targets without modular headers' do
@@ -269,7 +309,7 @@ module Pod
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
               ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
@@ -291,7 +331,7 @@ module Pod
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             # This is not an test xcconfig so it should exclude header search paths for the 'monkey' pod
-            generator = PodXCConfig.new(@coconut_pod_target, false)
+            generator = Pod.new(@coconut_pod_target, false)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
               ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
@@ -311,7 +351,7 @@ module Pod
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
               ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
@@ -329,7 +369,7 @@ module Pod
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
-            generator = PodXCConfig.new(@coconut_pod_target, false)
+            generator = Pod.new(@coconut_pod_target, false)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
               ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
@@ -338,27 +378,27 @@ module Pod
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
-            generator = PodXCConfig.new(@coconut_pod_target)
+            generator = Pod.new(@coconut_pod_target, false)
             xcconfig = generator.generate
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should.be.nil
             xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
 
           it 'includes default runpath search path list for test xcconfigs' do
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
           end
 
           it 'includes default runpath search path list for test xcconfigs for test bundle' do
             @coconut_pod_target.stubs(:platform).returns(Platform.new(:osx, '10.10'))
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks'"
           end
 
           it 'does not set configuration build dir for test xcconfigs' do
-            generator = PodXCConfig.new(@coconut_pod_target, true)
+            generator = Pod.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['CONFIGURATION_BUILD_DIR'].should.be.nil
           end

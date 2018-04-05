@@ -402,8 +402,7 @@ module Pod
           #
           def create_xcconfig_file(native_target, resource_bundle_targets)
             path = target.xcconfig_path
-            xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target)
-            update_changed_file(xcconfig_gen, path)
+            update_changed_file(target.build_settings, path)
             xcconfig_file_ref = add_file_to_support_group(path)
 
             native_target.build_configurations.each do |c|
@@ -427,8 +426,7 @@ module Pod
           def create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
             target.supported_test_types.each do |test_type|
               path = target.xcconfig_path(test_type.to_s)
-              xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target, true)
-              update_changed_file(xcconfig_gen, path)
+              update_changed_file(Target::BuildSettings::Pod.new(target, true), path)
               xcconfig_file_ref = add_file_to_support_group(path)
 
               test_native_targets.each do |test_target|

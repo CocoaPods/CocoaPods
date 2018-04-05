@@ -1,3 +1,5 @@
+require 'cocoapods/target/build_settings'
+
 module Pod
   # Model class which describes a Pods target.
   #
@@ -33,6 +35,10 @@ module Pod
     #
     attr_reader :platform
 
+    # @return [BuildSettings] the build settings for this target.
+    #
+    attr_reader :build_settings
+
     # Initialize a new target
     #
     # @param [Sandbox] sandbox @see #sandbox
@@ -47,6 +53,8 @@ module Pod
       @user_build_configurations = user_build_configurations
       @archs = archs
       @platform = platform
+
+      @build_settings = create_build_settings
     end
 
     # @return [String] the name of the library.
@@ -227,6 +235,10 @@ module Pod
     #
     def c99ext_identifier(name)
       name.gsub(/^([0-9])/, '_\1').gsub(/[^a-zA-Z0-9_]/, '_')
+    end
+
+    def create_build_settings
+      BuildSettings.new(self)
     end
   end
 end

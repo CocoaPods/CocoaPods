@@ -1,9 +1,9 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 
 module Pod
-  module Generator
-    module XCConfig
-      describe AggregateXCConfig do
+  class Target
+    class BuildSettings
+      describe Aggregate do
         def specs
           [fixture_spec('banana-lib/BananaLib.podspec')]
         end
@@ -18,14 +18,14 @@ module Pod
           @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' } unless @specs.empty?
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
-          @target = fixture_aggregate_target(@pod_targets, false, {}, [], Platform.new(:ios, '6.0'), @target_definition)
+          @target = fixture_aggregate_target(@pod_targets, false, { 'Release' => :release }, [], Platform.new(:ios, '6.0'), @target_definition)
           unless @specs.empty?
             @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           end
-          @generator = AggregateXCConfig.new(@target, 'Release')
+          @generator = Aggregate.new(@target, 'Release')
         end
 
-        shared 'AggregateXCConfig' do
+        shared 'Aggregate' do
           it 'returns the path of the pods root relative to the user project' do
             @generator.target.relative_pods_root.should == '${SRCROOT}/Pods'
           end
@@ -135,7 +135,7 @@ module Pod
             [fixture_spec('banana-lib/BananaLib.podspec')]
           end
 
-          behaves_like 'AggregateXCConfig'
+          behaves_like 'Aggregate'
 
           it 'configures the project to load all members that implement Objective-c classes or categories' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-ObjC'
@@ -175,9 +175,50 @@ module Pod
           end
 
           it 'does not links the pod targets with the aggregate target for non-whitelisted configuration' do
-            @generator = AggregateXCConfig.new(@target, 'Debug')
+            @generator = Aggregate.new(@target, 'Debug')
             @xcconfig = @generator.generate
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
+          end
+
+          it 'does propagate framework or libraries from a non test specification to an aggregate target' do
+            target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
+            spec = stub('spec', :test_specification? => false)
+            consumer = stub('consumer',
+                            :libraries => ['xml2'],
+                            :frameworks => ['XCTest'],
+                            :weak_frameworks => [],
+                            :spec => spec,
+                           )
+            file_accessor = stub('file_accessor',
+                                 :spec => spec,
+                                 :spec_consumer => consumer,
+                                 :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                                 :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                                 :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                                 :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                                )
+            file_accessor.stubs(:vendored_frameworks => file_accessor.vendored_static_frameworks + file_accessor.vendored_dynamic_frameworks,
+                                :vendored_dynamic_artifacts => file_accessor.vendored_dynamic_frameworks + file_accessor.vendored_dynamic_libraries)
+            pod_target = stub('pod_target',
+                              :file_accessors => [file_accessor],
+                              :spec_consumers => [consumer],
+                              :requires_frameworks? => true,
+                              :static_framework? => false,
+                              :dependent_targets => [],
+                              :recursive_dependent_targets => [],
+                              :sandbox => config.sandbox,
+                              :should_build? => true,
+                              :configuration_build_dir => 'CBD',
+                              :include_in_build_config? => true,
+                              :uses_swift? => false,
+                              :build_product_path => 'BPP',
+                              :product_basename => 'PodTarget',
+                              :target_definitions => [target_definition],
+                             )
+            pod_target.stubs(:build_settings => Pod.new(pod_target, false))
+            aggregate_target = fixture_aggregate_target([pod_target])
+            @generator = Aggregate.new(aggregate_target, 'Debug')
+            @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end
 
@@ -190,7 +231,7 @@ module Pod
             Target.any_instance.stubs(:requires_frameworks?).returns(true)
           end
 
-          behaves_like 'AggregateXCConfig'
+          behaves_like 'Aggregate'
 
           it "doesn't configure the project to load all members that implement Objective-c classes or categories" do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-ObjC'
@@ -220,7 +261,7 @@ module Pod
             end
 
             it 'includes the public header paths as system headers' do
-              expected = '$(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public/monkey"'
+              expected = '$(inherited) -isystem "${PODS_ROOT}/Headers/Public/monkey" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers"'
               @generator.stubs(:pod_targets).returns([@pod_targets.first, pod_target(fixture_spec('orange-framework/OrangeFramework.podspec'), @target_definition)])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
@@ -259,7 +300,7 @@ module Pod
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-iOS" "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework-iOS"'
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib-iOS" "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework-iOS" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
             end
 
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
@@ -284,7 +325,7 @@ module Pod
           end
 
           it 'adds the COCOAPODS macro definition' do
-            @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) "-D" "COCOAPODS"'
+            @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should.include '$(inherited) -D COCOAPODS'
           end
 
           it 'includes default runpath search path list for a non host target' do
@@ -313,56 +354,57 @@ module Pod
 
           it 'uses the target definition swift version' do
             @target_definition.stubs(:swift_version).returns('0.1')
-            @generator.send(:target_swift_version).should == '0.1'
+            @generator.__clear__
+            @generator.send(:target_swift_version).should == Version.new('0.1')
           end
 
           it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when the target_swift_version is < 2.3' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.stubs(:target_swift_version).returns('2.2')
+            @target_definition.stubs(:swift_version).returns('2.2')
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
           end
 
           it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is no swift' do
             @generator.send(:pod_targets).each { |pt| pt.stubs(:uses_swift?).returns(false) }
-            @generator.stubs(:target_swift_version).returns('2.2')
+            @target_definition.stubs(:swift_version).returns('2.2')
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
           end
 
           it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift, but the target is an extension' do
             @target.stubs(:requires_host_target?).returns(true)
-            @generator.stubs(:target_swift_version).returns('2.2')
+            @target_definition.stubs(:swift_version).returns('2.2')
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should.be.nil
           end
 
           it 'sets EMBEDDED_CONTENT_CONTAINS_SWIFT when the target_swift_version is nil' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.stubs(:target_swift_version).returns(nil)
+            @target_definition.stubs(:swift_version).returns(nil)
             @generator.generate.to_hash['EMBEDDED_CONTENT_CONTAINS_SWIFT'].should == 'YES'
           end
 
           it 'sets ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES to YES when there is swift >= 2.3' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.stubs(:target_swift_version).returns('2.3')
+            @target_definition.stubs(:swift_version).returns('2.3')
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].should == 'YES'
           end
 
           it 'does not set ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when there is no swift' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(false)
-            @generator.stubs(:target_swift_version).returns(nil)
+            @target_definition.stubs(:swift_version).returns(nil)
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].nil?.should == true
           end
 
           it 'does not set ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES when there is swift, but the target is an extension' do
             @target.stubs(:requires_host_target?).returns(true)
-            @generator.stubs(:target_swift_version).returns('2.3')
+            @target_definition.stubs(:swift_version).returns('2.3')
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @generator.generate.to_hash['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'].nil?.should == true
           end
 
           it 'does not set EMBEDDED_CONTENT_CONTAINS_SWIFT when there is swift 2.3 or higher' do
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
-            @generator.stubs(:target_swift_version).returns('2.3')
+            @target_definition.stubs(:swift_version).returns('2.3')
             @generator.generate.to_hash.key?('EMBEDDED_CONTENT_CONTAINS_SWIFT').should == false
           end
         end
@@ -455,7 +497,7 @@ module Pod
 
             it 'adds values from all subspecs' do
               @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
-              consumer_c = mock(:user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' }, :script_phases => [])
+              consumer_c = mock('consumer_c', :user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' }, :script_phases => [], :spec => mock(:test_specification? => false), :frameworks => [], :libraries => [])
               @pod_targets[1].stubs(:spec_consumers).returns([@consumer_b, consumer_c])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'
@@ -484,7 +526,7 @@ module Pod
         describe 'an empty pod target' do
           before do
             @blank_target = fixture_aggregate_target
-            @generator = AggregateXCConfig.new(@blank_target, 'Release')
+            @generator = Aggregate.new(@blank_target, 'Release')
           end
 
           it 'it should not have any framework search paths' do

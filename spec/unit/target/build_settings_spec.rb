@@ -1,0 +1,101 @@
+require File.expand_path('../../../spec_helper', __FILE__)
+
+module Pod
+  class Target
+    describe BuildSettings do
+      def pod(pod_target, test_xcconfig = false)
+        BuildSettings::Pod.new(pod_target, test_xcconfig)
+      end
+
+      def aggregate(aggregate_target, configuration_name = 'Release')
+        BuildSettings::Aggregate.new(aggregate_target, configuration_name)
+      end
+
+      #---------------------------------------------------------------------#
+
+      describe '::add_developers_frameworks_if_needed' do
+        it 'adds the developer frameworks search paths to the xcconfig if SenTestingKit has been detected' do
+          xcconfig = BuildSettings.new(stub('Target'))
+          xcconfig.stubs(:frameworks => %w(SenTestingKit))
+          frameworks_search_paths = xcconfig.framework_search_paths
+          frameworks_search_paths.should == %w($(PLATFORM_DIR)/Developer/Library/Frameworks)
+        end
+
+        it 'adds the developer frameworks search paths to the xcconfig if XCTest has been detected' do
+          xcconfig = BuildSettings.new(stub('Target'))
+          xcconfig.stubs(:frameworks => %w(XCTest))
+          frameworks_search_paths = xcconfig.framework_search_paths
+          frameworks_search_paths.should == %w($(PLATFORM_DIR)/Developer/Library/Frameworks)
+        end
+      end
+
+      #---------------------------------------------------------------------#
+
+      describe '::add_language_specific_settings' do
+        it 'does not add OTHER_SWIFT_FLAGS to the xcconfig if the target does not use swift' do
+          target = fixture_pod_target('integration/Reachability/Reachability.podspec')
+          build_settings = pod(target)
+          other_swift_flags = build_settings.xcconfig.to_hash['OTHER_SWIFT_FLAGS']
+          other_swift_flags.should.be.nil
+        end
+
+        it 'does not add the -suppress-warnings flag to the xcconfig if the target uses swift, but does not inhibit warnings' do
+          target = fixture_pod_target('integration/Reachability/Reachability.podspec')
+          target.stubs(:uses_swift? => true, :inhibit_warnings? => false)
+          build_settings = pod(target)
+          other_swift_flags = build_settings.xcconfig.to_hash['OTHER_SWIFT_FLAGS']
+          other_swift_flags.should.not.include '-suppress-warnings'
+        end
+
+        it 'adds the -suppress-warnings flag to the xcconfig if the target uses swift and inhibits warnings' do
+          target = fixture_pod_target('integration/Reachability/Reachability.podspec')
+          target.stubs(:uses_swift? => true, :inhibit_warnings? => true)
+          build_settings = pod(target)
+          other_swift_flags = build_settings.xcconfig.to_hash['OTHER_SWIFT_FLAGS']
+          other_swift_flags.should.include '-suppress-warnings'
+        end
+      end
+
+      #---------------------------------------------------------------------#
+
+      describe 'concerning settings for file accessors' do
+        it 'does not propagate framework or libraries from a test specification to an aggregate target' do
+          target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
+          spec = stub('spec', :test_specification? => true)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                               :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                               :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                               :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                              )
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :static_framework? => false,
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                           )
+          pod_target.stubs(:build_settings => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target])
+          aggregate(aggregate_target).other_ldflags.should.not.include '-framework'
+        end
+      end
+
+      #---------------------------------------------------------------------#
+    end
+  end
+end

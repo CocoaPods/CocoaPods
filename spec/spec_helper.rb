@@ -146,7 +146,7 @@ def fixture_pod_target_with_specs(specs, host_requires_frameworks = false, user_
                      target_definitions, file_accessors, scope_suffix)
 end
 
-def fixture_aggregate_target(pod_targets = [], host_requires_frameworks = false, user_build_configurations = {},
+def fixture_aggregate_target(pod_targets = [], host_requires_frameworks = false, user_build_configurations = { 'Release' => :release },
                              archs = [], platform = Pod::Platform.new(:ios, '6.0'), target_definition = nil)
   target_definition ||= pod_targets.flat_map(&:target_definitions).first || fixture_target_definition
   Pod::AggregateTarget.new(config.sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
