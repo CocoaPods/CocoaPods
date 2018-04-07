@@ -326,7 +326,7 @@ module Pod
           ]
         end
 
-        it 'returns the correct header search paths for dependent targets with header_dir set' do
+        it 'returns header search path including header_dir from dependent' do
           @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
