@@ -312,6 +312,10 @@ module Pod
         end
 
         def add_dependent_targets_to_native_target(dependent_targets, native_target, is_app_extension, requires_frameworks, frameworks_group)
+          @processed_native_targets ||= Set.new
+          return if @processed_native_targets.include? native_target
+          @processed_native_targets << native_target
+
           dependent_targets.each do |pod_dependency_target|
             next unless pod_dependency_target.should_build?
             native_target.add_dependency(pod_dependency_target.native_target)
