@@ -23,9 +23,9 @@ module Pod
           UI.puts 'No pod updates are available.'.yellow
         else
           UI.section 'The color indicates what happens when you run `pod update`' do
-            UI.puts "#{'<green>'.green}\t\t - Will be updated to the newest version"
+            UI.puts "#{'<green>'.green}\t - Will be updated to the newest version"
             UI.puts "#{'<blue>'.blue}\t - Will be updated, but not to the newest version because of specified version in Podfile"
-            UI.puts "#{'<red>'.red}\t\t - Will not be updated because of specified version in Podfile"
+            UI.puts "#{'<red>'.red}\t - Will not be updated because of specified version in Podfile"
             UI.puts ''
           end
           UI.section 'The following pod updates are available:' do
