@@ -217,6 +217,7 @@ module Pod
         def set_target_dependencies
           frameworks_group = project.frameworks_group
           test_only_pod_targets = pod_targets.dup
+          pod_targets_for_deps = Set.new
           aggregate_targets.each do |aggregate_target|
             is_app_extension = !(aggregate_target.user_targets.map(&:symbol_type) &
                                  [:app_extension, :watch_extension, :watch2_extension, :tv_extension, :messages_extension]).empty?
@@ -239,15 +240,13 @@ module Pod
               aggregate_target.native_target.add_dependency(pod_target.native_target)
               configure_app_extension_api_only_for_target(pod_target) if is_app_extension
 
-              add_dependent_targets_to_native_target(pod_target.dependent_targets,
-                                                     pod_target.native_target, is_app_extension,
-                                                     pod_target.requires_frameworks? && !pod_target.static_framework?,
-                                                     frameworks_group)
+              pod_targets_for_deps << pod_target
               unless pod_target.static_framework?
                 add_pod_target_test_dependencies(pod_target, frameworks_group)
               end
             end
           end
+          test_pod_targets_for_deps = Set.new
           # Wire up remaining pod targets used only by tests and are not used by any aggregate target.
           test_only_pod_targets.each do |pod_target|
             unless pod_target.should_build?
@@ -255,11 +254,23 @@ module Pod
               next
             end
             unless pod_target.static_framework?
-              add_dependent_targets_to_native_target(pod_target.dependent_targets,
-                                                     pod_target.native_target, false,
-                                                     pod_target.requires_frameworks?, frameworks_group)
+              test_pod_targets_for_deps << pod_target
               add_pod_target_test_dependencies(pod_target, frameworks_group)
             end
+          end
+
+          # Actually add the dependent targets
+          pod_targets_for_deps.each do |pod_target|
+            add_dependent_targets_to_native_target(pod_target.dependent_targets,
+                                         pod_target.native_target, is_app_extension,
+                                         pod_target.requires_frameworks? && !pod_target.static_framework?,
+                                         frameworks_group)
+          end
+
+          test_pod_targets_for_deps.each do |test_pod_target|
+            add_dependent_targets_to_native_target(test_pod_target.dependent_targets,
+                                                   test_pod_target.native_target, false,
+                                                   test_pod_target.requires_frameworks?, frameworks_group)
           end
         end
 
@@ -312,10 +323,6 @@ module Pod
         end
 
         def add_dependent_targets_to_native_target(dependent_targets, native_target, is_app_extension, requires_frameworks, frameworks_group)
-          @processed_native_targets ||= Set.new
-          return if @processed_native_targets.include? native_target
-          @processed_native_targets << native_target
-
           dependent_targets.each do |pod_dependency_target|
             next unless pod_dependency_target.should_build?
             native_target.add_dependency(pod_dependency_target.native_target)
