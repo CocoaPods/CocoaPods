@@ -326,6 +326,23 @@ module Pod
           ]
         end
 
+        it 'returns header search path including header_dir from dependent' do
+          @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+          @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
+          @monkey_pod_target = fixture_pod_target('monkey/monkey.podspec')
+          @monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          @pod_target.stubs(:dependent_targets).returns([@monkey_pod_target])
+          @file_accessor = @monkey_pod_target.file_accessors.first
+          @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
+          header_search_paths = @pod_target.header_search_paths
+          header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private/BananaLib',
+            '${PODS_ROOT}/Headers/Public',
+            '${PODS_ROOT}/Headers/Public/monkey',
+          ]
+        end
+
         it 'returns the correct header search paths recursively for dependent targets excluding platform' do
           @pod_target.build_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)

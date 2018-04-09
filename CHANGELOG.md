@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix modular header access to header_dir's.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7597](https://github.com/CocoaPods/CocoaPods/issues/7597)
+
 * Inhibit warnings for all dependencies during validation except for the one being validated  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)
