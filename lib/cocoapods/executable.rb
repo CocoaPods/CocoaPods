@@ -49,6 +49,10 @@ module Pod
       bin = which!(executable)
 
       command = command.map(&:to_s)
+      if File.basename(bin) == 'tar.exe'
+        # Tar on Windows needs --force-local
+        command.push('--force-local')
+      end
       full_command = "#{bin} #{command.join(' ')}"
 
       if Config.instance.verbose?
@@ -91,6 +95,9 @@ module Pod
       paths.uniq!
       paths.each do |path|
         bin = File.expand_path(program, path)
+        if Gem.win_platform?
+          bin += '.exe'
+        end
         if File.file?(bin) && File.executable?(bin)
           return bin
         end

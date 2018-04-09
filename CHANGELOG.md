@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Ensuring  pod install/update can run on Windows.  
+  [David Airapetyan](https://github.com/davidair)
+  [#8055](https://github.com/CocoaPods/CocoaPods/issues/8055)
+
 * Remove contraction from docs to fix rendering on the website.  
   [stevemoser](https://github.com/stevemoser)
   [#8131](https://github.com/CocoaPods/CocoaPods/pull/8131)

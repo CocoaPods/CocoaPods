@@ -122,7 +122,11 @@ module Pod
 
         absolute_source = (sandbox.root + relative_header_path)
         source = absolute_source.relative_path_from(namespaced_path)
-        FileUtils.ln_sf(source, namespaced_path)
+        if Gem.win_platform?
+          FileUtils.ln(absolute_source, namespaced_path, :force => true)
+        else
+          FileUtils.ln_sf(source, namespaced_path)
+        end
         namespaced_path + relative_header_path.basename
       end
 
