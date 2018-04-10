@@ -7,6 +7,7 @@ module Pod
   #
   class Target
     DEFAULT_VERSION = '1.0.0'.freeze
+    DEFAULT_NAME = 'Default'.freeze
 
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
@@ -28,24 +29,62 @@ module Pod
     #
     attr_reader :archs
 
+    # @return [Platform] the platform of this target.
+    #
+    attr_reader :platform
+
     # Initialize a new target
     #
     # @param [Sandbox] sandbox @see #sandbox
     # @param [Boolean] host_requires_frameworks @see #host_requires_frameworks
     # @param [Hash{String=>Symbol}] user_build_configurations @see #user_build_configurations
     # @param [Array<String>] archs @see #archs
+    # @param [Platform] platform @see #platform
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs)
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform)
       @sandbox = sandbox
       @host_requires_frameworks = host_requires_frameworks
       @user_build_configurations = user_build_configurations
       @archs = archs
+      @platform = platform
     end
 
     # @return [String] the name of the library.
     #
     def name
       label
+    end
+
+    # @return [String] the label for the target.
+    #
+    def label
+      DEFAULT_NAME
+    end
+
+    # @return [String] The version associated with this target
+    #
+    def version
+      DEFAULT_VERSION
+    end
+
+    # @return [Boolean] Whether the target uses Swift code
+    #
+    def uses_swift?
+      false
+    end
+
+    # @return [Boolean] Whether the target should build a static framework.
+    #
+    def static_framework?
+      false
+    end
+
+    # @return [String] the name to use for the source code module constructed
+    #         for this target, and which will be used to import the module in
+    #         implementation source files.
+    #
+    def product_module_name
+      c99ext_identifier(label)
     end
 
     # @return [String] the name of the product.
@@ -108,14 +147,6 @@ module Pod
     #
     def requires_frameworks?
       host_requires_frameworks? || false
-    end
-
-    # @return [Boolean] Whether the target should build a static framework.
-    #
-    def static_framework?
-      return if is_a?(Pod::AggregateTarget)
-      return if specs.empty?
-      specs.all? { |spec| spec.root.static_framework }
     end
 
     #-------------------------------------------------------------------------#
@@ -183,12 +214,6 @@ module Pod
     #
     def dummy_source_path
       support_files_dir + "#{label}-dummy.m"
-    end
-
-    # @return [String] The version associated with this target
-    #
-    def version
-      DEFAULT_VERSION
     end
 
     #-------------------------------------------------------------------------#

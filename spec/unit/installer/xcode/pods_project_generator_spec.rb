@@ -100,10 +100,12 @@ module Pod
             end
 
             it 'sets the deployment target for the whole project' do
-              target_definition_osx = fixture_target_definition('OSX Target', Platform.new(:osx, '10.8'))
-              target_definition_ios = fixture_target_definition('iOS Target', Platform.new(:ios, '6.0'))
-              aggregate_target_osx = AggregateTarget.new(config.sandbox, false, {}, [], target_definition_osx, config.sandbox.root.dirname, nil, nil, [])
-              aggregate_target_ios = AggregateTarget.new(config.sandbox, false, {}, [], target_definition_ios, config.sandbox.root.dirname, nil, nil, [])
+              osx_platform = Platform.new(:osx, '10.8')
+              ios_platform = Platform.new(:ios, '6.0')
+              target_definition_osx = fixture_target_definition('OSX Target', osx_platform)
+              target_definition_ios = fixture_target_definition('iOS Target', ios_platform)
+              aggregate_target_osx = AggregateTarget.new(config.sandbox, false, {}, [], osx_platform, target_definition_osx, config.sandbox.root.dirname, nil, nil, [])
+              aggregate_target_ios = AggregateTarget.new(config.sandbox, false, {}, [], ios_platform, target_definition_ios, config.sandbox.root.dirname, nil, nil, [])
               @generator.stubs(:aggregate_targets).returns([aggregate_target_osx, aggregate_target_ios])
               @generator.stubs(:pod_targets).returns([])
               @generator.send(:prepare)
@@ -134,7 +136,7 @@ module Pod
               target_definition.set_platform(:ios, '8.0')
               target_definition.abstract = false
               target_definition.store_pod('BananaLib')
-              pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], Platform.ios)
+              pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [target_definition])
               @generator.stubs(:aggregate_targets).returns([])
               @generator.stubs(:pod_targets).returns([pod_target])
               PodsProjectGenerator::PodTargetInstaller.any_instance.expects(:install!)
@@ -146,7 +148,7 @@ module Pod
               target_definition = Podfile::TargetDefinition.new(:default, nil)
               target_definition.set_platform(:ios, '8.0')
               target_definition.abstract = false
-              pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], Platform.ios)
+              pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [target_definition])
               @generator.stubs(:aggregate_targets).returns([])
               @generator.stubs(:pod_targets).returns([pod_target])
               PodsProjectGenerator::PodTargetInstaller.any_instance.expects(:install!).once
@@ -181,8 +183,8 @@ module Pod
               spec = fixture_spec('banana-lib/BananaLib.podspec')
 
               target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile.root_target_definitions.first)
-              @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec], [target_definition], Platform.ios)
-              @target = AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
+              @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [target_definition])
+              @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
               @mock_target = mock('PodNativeTarget')
 
               mock_project = mock('PodsProject', :frameworks_group => mock('FrameworksGroup'))
@@ -266,8 +268,8 @@ module Pod
               spec = fixture_spec('coconut-lib/CoconutLib.podspec')
 
               target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile.root_target_definitions.first)
-              @pod_target = PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.recursive_subspecs], [target_definition], Platform.ios)
-              @target = AggregateTarget.new(config.sandbox, false, {}, [], target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
+              @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.recursive_subspecs], [target_definition])
+              @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
 
               @mock_target = mock('PodNativeTarget')
 
@@ -432,7 +434,7 @@ module Pod
               proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 1)
               proj.save
 
-              aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], fixture_target_definition, config.sandbox.root.dirname, proj, nil, [])
+              aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition, config.sandbox.root.dirname, proj, nil, [])
               @generator.stubs(:aggregate_targets).returns([aggregate_target])
 
               @generator.send(:prepare)
@@ -469,7 +471,7 @@ module Pod
               it 'shares test schemes' do
                 spec = fixture_spec('coconut-lib/CoconutLib.podspec')
                 target_definition = Podfile::TargetDefinition.new(:default, @installer.podfile.root_target_definitions.first)
-                pod_target = Pod::PodTarget.new(config.sandbox, false, {}, [], [spec, *spec.recursive_subspecs], [target_definition], Platform.ios)
+                pod_target = Pod::PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.recursive_subspecs], [target_definition])
                 pod_target.stubs(:should_build?).returns(true)
 
                 @generator.installation_options.

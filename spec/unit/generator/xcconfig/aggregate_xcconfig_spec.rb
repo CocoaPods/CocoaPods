@@ -9,7 +9,7 @@ module Pod
         end
 
         def pod_target(spec, target_definition)
-          fixture_pod_target(spec, false, {}, [target_definition])
+          fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition])
         end
 
         before do
@@ -18,7 +18,7 @@ module Pod
           @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' } unless @specs.empty?
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
-          @target = fixture_aggregate_target(@pod_targets, @target_definition)
+          @target = fixture_aggregate_target(@pod_targets, Platform.new(:ios, '6.0'), @target_definition)
           unless @specs.empty?
             @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           end
@@ -160,7 +160,7 @@ module Pod
 
           describe 'with a scoped pod target' do
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, false, {}, [target_definition]).scoped.first
+              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).scoped.first
             end
 
             it 'links the pod targets with the aggregate target' do
@@ -255,9 +255,7 @@ module Pod
             def pod_target(spec, target_definition)
               target_definition = fixture_target_definition(spec.name)
               target_definition.stubs(:parent).returns(@target_definition.podfile)
-              fixture_pod_target(spec, [target_definition, @target_definition].uniq).tap do |pod_target|
-                pod_target.stubs(:scope_suffix).returns('iOS')
-              end
+              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [@target_definition], 'iOS')
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do

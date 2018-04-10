@@ -4,7 +4,7 @@ module Pod
   describe Target do
     describe '#c99ext_identifier' do
       before do
-        @target = Target.new(config.sandbox, false, {}, [])
+        @target = Target.new(config.sandbox, false, {}, [], Platform.ios)
       end
 
       it 'should mask, but keep leading numbers' do

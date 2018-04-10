@@ -11,7 +11,7 @@ module Pod
               @project.save
               @target_definition = fixture_target_definition
               @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
-              @coconut_pod_target = PodTarget.new(config.sandbox, false, {}, [], [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition], Platform.ios)
+              @coconut_pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition])
               @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [], :project => @project)
               @test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [], :shell_script_build_phases => [], :project => @project)
               @coconut_pod_target.stubs(:native_target).returns(@native_target)
