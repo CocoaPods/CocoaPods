@@ -15,6 +15,7 @@ File References:
       - CustomModuleMapPod-framework-iOS.modulemap
       - CustomModuleMapPod-framework-iOS.xcconfig
       - CustomModuleMapPod-framework-iOS-dummy.m
+      - CustomModuleMapPod-framework-iOS-Info.plist
       - CustomModuleMapPod-framework-iOS-prefix.pch
       - CustomModuleMapPod-framework-iOS-Unit-Tests-frameworks.sh
       - CustomModuleMapPod-framework-iOS-Unit-Tests-Info.plist
@@ -24,6 +25,7 @@ File References:
       - CustomModuleMapPod-framework-macOS.modulemap
       - CustomModuleMapPod-framework-macOS.xcconfig
       - CustomModuleMapPod-framework-macOS-dummy.m
+      - CustomModuleMapPod-framework-macOS-Info.plist
       - CustomModuleMapPod-framework-macOS-prefix.pch
       - CustomModuleMapPod-framework-macOS-Unit-Tests-frameworks.sh
       - CustomModuleMapPod-framework-macOS-Unit-Tests-Info.plist
@@ -48,8 +50,6 @@ File References:
       - CustomModuleMapPod-library-macOS-Unit-Tests-prefix.pch
       - CustomModuleMapPod-library-macOS-Unit-Tests-resources.sh
       - CustomModuleMapPod-library-macOS.unit.xcconfig
-      - Info.plist
-      - Info.plist
     - Tests:
       - CustomModuleMapPodTests.m
   - MixedPod:
@@ -59,11 +59,10 @@ File References:
     - Pod:
       - MixedPod.podspec
     - Support Files:
-      - Info.plist
-      - Info.plist
       - MixedPod-framework-iOS.modulemap
       - MixedPod-framework-iOS.xcconfig
       - MixedPod-framework-iOS-dummy.m
+      - MixedPod-framework-iOS-Info.plist
       - MixedPod-framework-iOS-prefix.pch
       - MixedPod-framework-iOS-umbrella.h
       - MixedPod-framework-iOS-Unit-Tests-frameworks.sh
@@ -74,6 +73,7 @@ File References:
       - MixedPod-framework-macOS.modulemap
       - MixedPod-framework-macOS.xcconfig
       - MixedPod-framework-macOS-dummy.m
+      - MixedPod-framework-macOS-Info.plist
       - MixedPod-framework-macOS-prefix.pch
       - MixedPod-framework-macOS-umbrella.h
       - MixedPod-framework-macOS-Unit-Tests-frameworks.sh
@@ -110,11 +110,10 @@ File References:
     - Pod:
       - ObjCPod.podspec
     - Support Files:
-      - Info.plist
-      - Info.plist
       - ObjCPod-framework-iOS.modulemap
       - ObjCPod-framework-iOS.xcconfig
       - ObjCPod-framework-iOS-dummy.m
+      - ObjCPod-framework-iOS-Info.plist
       - ObjCPod-framework-iOS-prefix.pch
       - ObjCPod-framework-iOS-umbrella.h
       - ObjCPod-framework-iOS-Unit-Tests-frameworks.sh
@@ -125,6 +124,7 @@ File References:
       - ObjCPod-framework-macOS.modulemap
       - ObjCPod-framework-macOS.xcconfig
       - ObjCPod-framework-macOS-dummy.m
+      - ObjCPod-framework-macOS-Info.plist
       - ObjCPod-framework-macOS-prefix.pch
       - ObjCPod-framework-macOS-umbrella.h
       - ObjCPod-framework-macOS-Unit-Tests-frameworks.sh
@@ -159,11 +159,10 @@ File References:
     - Pod:
       - SwiftPod.podspec
     - Support Files:
-      - Info.plist
-      - Info.plist
       - SwiftPod-framework-iOS.modulemap
       - SwiftPod-framework-iOS.xcconfig
       - SwiftPod-framework-iOS-dummy.m
+      - SwiftPod-framework-iOS-Info.plist
       - SwiftPod-framework-iOS-prefix.pch
       - SwiftPod-framework-iOS-umbrella.h
       - SwiftPod-framework-iOS-Unit-Tests-frameworks.sh
@@ -174,6 +173,7 @@ File References:
       - SwiftPod-framework-macOS.modulemap
       - SwiftPod-framework-macOS.xcconfig
       - SwiftPod-framework-macOS-dummy.m
+      - SwiftPod-framework-macOS-Info.plist
       - SwiftPod-framework-macOS-prefix.pch
       - SwiftPod-framework-macOS-umbrella.h
       - SwiftPod-framework-macOS-Unit-Tests-frameworks.sh
@@ -253,12 +253,12 @@ File References:
   - SwiftPod-library-macOS-Unit-Tests
 - Targets Support Files:
   - Pods-Abstract Target-iOS Pods-Dynamic:
-    - Info.plist
     - Pods-Abstract Target-iOS Pods-Dynamic.modulemap
     - Pods-Abstract Target-iOS Pods-Dynamic-acknowledgements.markdown
     - Pods-Abstract Target-iOS Pods-Dynamic-acknowledgements.plist
     - Pods-Abstract Target-iOS Pods-Dynamic-dummy.m
     - Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh
+    - Pods-Abstract Target-iOS Pods-Dynamic-Info.plist
     - Pods-Abstract Target-iOS Pods-Dynamic-resources.sh
     - Pods-Abstract Target-iOS Pods-Dynamic-umbrella.h
     - Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig
@@ -274,12 +274,12 @@ File References:
     - Pods-Abstract Target-iOS Pods-Static.debug.xcconfig
     - Pods-Abstract Target-iOS Pods-Static.release.xcconfig
   - Pods-Abstract Target-macOS Pods-Dynamic:
-    - Info.plist
     - Pods-Abstract Target-macOS Pods-Dynamic.modulemap
     - Pods-Abstract Target-macOS Pods-Dynamic-acknowledgements.markdown
     - Pods-Abstract Target-macOS Pods-Dynamic-acknowledgements.plist
     - Pods-Abstract Target-macOS Pods-Dynamic-dummy.m
     - Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh
+    - Pods-Abstract Target-macOS Pods-Dynamic-Info.plist
     - Pods-Abstract Target-macOS Pods-Dynamic-resources.sh
     - Pods-Abstract Target-macOS Pods-Dynamic-umbrella.h
     - Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig
@@ -328,7 +328,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -355,7 +355,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -448,7 +448,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -477,7 +477,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -780,7 +780,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -808,7 +808,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -910,7 +910,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -940,7 +940,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -1263,7 +1263,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -1290,7 +1290,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -1380,7 +1380,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -1409,7 +1409,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -1700,7 +1700,8 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract
+            Target-iOS Pods-Dynamic-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -1733,7 +1734,8 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract
+            Target-iOS Pods-Dynamic-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -1834,7 +1836,8 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
-          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract
+            Target-macOS Pods-Dynamic-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACH_O_TYPE: staticlib
@@ -1868,7 +1871,8 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
-          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract
+            Target-macOS Pods-Dynamic-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACH_O_TYPE: staticlib
@@ -1964,7 +1968,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -1992,7 +1996,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -2085,7 +2089,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -2115,7 +2119,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-prefix.pch
-          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/Info.plist
+          INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.10'

@@ -50,10 +50,10 @@ File References:
       - PTURLRequestOperation.m
       - Pusher.h
     - Support Files:
-      - Info.plist
       - libPusher.modulemap
       - libPusher.xcconfig
       - libPusher-dummy.m
+      - libPusher-Info.plist
       - libPusher-prefix.pch
       - libPusher-umbrella.h
   - SocketRocket:
@@ -61,10 +61,10 @@ File References:
     - SRWebSocket.h
     - SRWebSocket.m
     - Support Files:
-      - Info.plist
       - SocketRocket.modulemap
       - SocketRocket.xcconfig
       - SocketRocket-dummy.m
+      - SocketRocket-Info.plist
       - SocketRocket-prefix.pch
       - SocketRocket-umbrella.h
 - Products:
@@ -73,12 +73,12 @@ File References:
   - SocketRocket.framework
 - Targets Support Files:
   - Pods-Example:
-    - Info.plist
     - Pods-Example.modulemap
     - Pods-Example-acknowledgements.markdown
     - Pods-Example-acknowledgements.plist
     - Pods-Example-dummy.m
     - Pods-Example-frameworks.sh
+    - Pods-Example-Info.plist
     - Pods-Example-resources.sh
     - Pods-Example-umbrella.h
     - Pods-Example.debug.xcconfig
@@ -198,7 +198,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/libPusher/libPusher-prefix.pch
-          INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
+          INFOPLIST_FILE: Target Support Files/libPusher/libPusher-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -224,7 +224,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/libPusher/libPusher-prefix.pch
-          INFOPLIST_FILE: Target Support Files/libPusher/Info.plist
+          INFOPLIST_FILE: Target Support Files/libPusher/libPusher-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -262,7 +262,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Example/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Example/Pods-Example-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -291,7 +291,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Example/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Example/Pods-Example-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -341,7 +341,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/SocketRocket/SocketRocket-prefix.pch
-          INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
+          INFOPLIST_FILE: Target Support Files/SocketRocket/SocketRocket-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -367,7 +367,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/SocketRocket/SocketRocket-prefix.pch
-          INFOPLIST_FILE: Target Support Files/SocketRocket/Info.plist
+          INFOPLIST_FILE: Target Support Files/SocketRocket/SocketRocket-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"

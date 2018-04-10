@@ -15,13 +15,13 @@ File References:
       - subspec_2.h
       - subspec_2.m
     - Support Files:
-      - Info.plist
       - PodTest-subspec_1.xcconfig
       - PodTest-subspec_1-dummy.m
       - PodTest-subspec_1-prefix.pch
       - PodTest-subspec_2.modulemap
       - PodTest-subspec_2.xcconfig
       - PodTest-subspec_2-dummy.m
+      - PodTest-subspec_2-Info.plist
       - PodTest-subspec_2-prefix.pch
       - PodTest-subspec_2-umbrella.h
 - Products:
@@ -39,12 +39,12 @@ File References:
     - Pods-iOS App.debug.xcconfig
     - Pods-iOS App.release.xcconfig
   - Pods-OS X App:
-    - Info.plist
     - Pods-OS X App.modulemap
     - Pods-OS X App-acknowledgements.markdown
     - Pods-OS X App-acknowledgements.plist
     - Pods-OS X App-dummy.m
     - Pods-OS X App-frameworks.sh
+    - Pods-OS X App-Info.plist
     - Pods-OS X App-resources.sh
     - Pods-OS X App-umbrella.h
     - Pods-OS X App.debug.xcconfig
@@ -126,7 +126,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
-          INFOPLIST_FILE: Target Support Files/Pods-OS X App/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-OS X App/Pods-OS X App-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACH_O_TYPE: staticlib
@@ -158,7 +158,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
-          INFOPLIST_FILE: Target Support Files/Pods-OS X App/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-OS X App/Pods-OS X App-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACH_O_TYPE: staticlib
@@ -262,7 +262,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-prefix.pch
-          INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/Info.plist
+          INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.6'
@@ -291,7 +291,7 @@ Targets:
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           FRAMEWORK_VERSION: A
           GCC_PREFIX_HEADER: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-prefix.pch
-          INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/Info.plist
+          INFOPLIST_FILE: Target Support Files/PodTest-subspec_2/PodTest-subspec_2-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
           MACOSX_DEPLOYMENT_TARGET: '10.6'

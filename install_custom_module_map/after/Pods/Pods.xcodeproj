@@ -14,8 +14,8 @@ File References:
       - BananaLib.modulemap
       - BananaLib.xcconfig
       - BananaLib-dummy.m
+      - BananaLib-Info.plist
       - BananaLib-prefix.pch
-      - Info.plist
 - Frameworks:
   - iOS:
     - Foundation.framework
@@ -24,12 +24,12 @@ File References:
   - Pods_Example.framework
 - Targets Support Files:
   - Pods-Example:
-    - Info.plist
     - Pods-Example.modulemap
     - Pods-Example-acknowledgements.markdown
     - Pods-Example-acknowledgements.plist
     - Pods-Example-dummy.m
     - Pods-Example-frameworks.sh
+    - Pods-Example-Info.plist
     - Pods-Example-resources.sh
     - Pods-Example-umbrella.h
     - Pods-Example.debug.xcconfig
@@ -69,7 +69,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/BananaLib/BananaLib-prefix.pch
-          INFOPLIST_FILE: Target Support Files/BananaLib/Info.plist
+          INFOPLIST_FILE: Target Support Files/BananaLib/BananaLib-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -95,7 +95,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/BananaLib/BananaLib-prefix.pch
-          INFOPLIST_FILE: Target Support Files/BananaLib/Info.plist
+          INFOPLIST_FILE: Target Support Files/BananaLib/BananaLib-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -133,7 +133,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Example/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Example/Pods-Example-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -162,7 +162,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Example/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Example/Pods-Example-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.2'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"

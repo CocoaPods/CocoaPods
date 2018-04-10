@@ -14,7 +14,7 @@ File References:
       - res.xcconfig
       - res-dummy.m
       - res-prefix.pch
-      - ResourceBundle-res-Info.plist
+      - ResourceBundle-res-res-Info.plist
 - Frameworks:
   - OS X:
     - Cocoa.framework
@@ -141,7 +141,7 @@ Targets:
           CODE_SIGN_IDENTITY: "-"
           COMBINE_HIDPI_IMAGES: 'YES'
           CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
-          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-Info.plist
+          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-res-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Bundles"
           MACOSX_DEPLOYMENT_TARGET: '10.0'
           PRODUCT_NAME: res
@@ -154,7 +154,7 @@ Targets:
           CODE_SIGN_IDENTITY: "-"
           COMBINE_HIDPI_IMAGES: 'YES'
           CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
-          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-Info.plist
+          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-res-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Bundles"
           MACOSX_DEPLOYMENT_TARGET: '10.0'
           PRODUCT_NAME: res

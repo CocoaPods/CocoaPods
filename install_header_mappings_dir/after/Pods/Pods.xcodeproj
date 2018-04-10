@@ -11,6 +11,7 @@ File References:
       - DepPod-framework.modulemap
       - DepPod-framework.xcconfig
       - DepPod-framework-dummy.m
+      - DepPod-framework-Info.plist
       - DepPod-framework-prefix.pch
       - DepPod-framework-umbrella.h
       - DepPod-library.modulemap
@@ -18,7 +19,6 @@ File References:
       - DepPod-library-dummy.m
       - DepPod-library-prefix.pch
       - DepPod-library-umbrella.h
-      - Info.plist
   - HeaderMappingsDirPod:
     - include:
       - com:
@@ -33,6 +33,7 @@ File References:
       - HeaderMappingsDirPod-framework.modulemap
       - HeaderMappingsDirPod-framework.xcconfig
       - HeaderMappingsDirPod-framework-dummy.m
+      - HeaderMappingsDirPod-framework-Info.plist
       - HeaderMappingsDirPod-framework-prefix.pch
       - HeaderMappingsDirPod-framework-umbrella.h
       - HeaderMappingsDirPod-library.modulemap
@@ -40,7 +41,6 @@ File References:
       - HeaderMappingsDirPod-library-dummy.m
       - HeaderMappingsDirPod-library-prefix.pch
       - HeaderMappingsDirPod-library-umbrella.h
-      - Info.plist
 - Frameworks:
   - HeaderMappingsDirPod.framework
   - iOS:
@@ -54,12 +54,12 @@ File References:
   - Pods_OtherSampleApp.framework
 - Targets Support Files:
   - Pods-OtherSampleApp:
-    - Info.plist
     - Pods-OtherSampleApp.modulemap
     - Pods-OtherSampleApp-acknowledgements.markdown
     - Pods-OtherSampleApp-acknowledgements.plist
     - Pods-OtherSampleApp-dummy.m
     - Pods-OtherSampleApp-frameworks.sh
+    - Pods-OtherSampleApp-Info.plist
     - Pods-OtherSampleApp-resources.sh
     - Pods-OtherSampleApp-umbrella.h
     - Pods-OtherSampleApp.debug.xcconfig
@@ -106,7 +106,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/DepPod-framework/DepPod-framework-prefix.pch
-          INFOPLIST_FILE: Target Support Files/DepPod-framework/Info.plist
+          INFOPLIST_FILE: Target Support Files/DepPod-framework/DepPod-framework-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -133,7 +133,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/DepPod-framework/DepPod-framework-prefix.pch
-          INFOPLIST_FILE: Target Support Files/DepPod-framework/Info.plist
+          INFOPLIST_FILE: Target Support Files/DepPod-framework/DepPod-framework-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -238,7 +238,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-prefix.pch
-          INFOPLIST_FILE: Target Support Files/HeaderMappingsDirPod-framework/Info.plist
+          INFOPLIST_FILE: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -265,7 +265,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-prefix.pch
-          INFOPLIST_FILE: Target Support Files/HeaderMappingsDirPod-framework/Info.plist
+          INFOPLIST_FILE: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -366,7 +366,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-OtherSampleApp/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -397,7 +397,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-OtherSampleApp/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
