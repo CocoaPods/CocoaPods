@@ -602,7 +602,7 @@ module Pod
 
                 it 'sets the correct Info.plist file path' do
                   @bundle_target.build_configurations.each do |bc|
-                    bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/BananaLib-Pods-SampleProject/ResourceBundle-banana_bundle-Info.plist'
+                    bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/BananaLib-Pods-SampleProject/ResourceBundle-banana_bundle-BananaLib-Pods-SampleProject-Info.plist'
                   end
                 end
 

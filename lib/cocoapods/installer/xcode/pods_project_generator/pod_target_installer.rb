@@ -228,7 +228,8 @@ module Pod
           #
           def add_test_app_host_targets
             target.test_specs.each do |test_spec|
-              next unless test_spec.consumer(target.platform).requires_app_host?
+              spec_consumer = test_spec.consumer(target.platform)
+              next unless spec_consumer.requires_app_host?
               name = target.app_host_label(test_spec.test_type)
               platform_name = target.platform.name
               app_host_target = project.targets.find { |t| t.name == name }
@@ -241,7 +242,7 @@ module Pod
                   configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
                 end
                 Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
-                app_host_info_plist_path = project.path.dirname.+("#{name}/Info.plist")
+                app_host_info_plist_path = target.app_host_info_plist_path_for_test_type(spec_consumer.test_type)
                 create_info_plist_file(app_host_info_plist_path, app_host_target, '1.0.0', target.platform, :appl)
               end
               # Wire all test native targets with the app host.
