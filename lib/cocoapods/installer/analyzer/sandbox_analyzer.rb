@@ -43,11 +43,7 @@ module Pod
         alias_method :update_mode?, :update_mode
 
         # @return [Lockfile] The lockfile of the installation as a fall-back if
-        #         there is no sandbox manifest. This is indented as a temporary
-        #         solution to prevent the full re-installation from users which
-        #         are upgrading from CP < 0.17.
-        #
-        # @todo   Remove for CP 0.18.
+        #         there is no sandbox manifest.
         #
         attr_reader :lockfile
 

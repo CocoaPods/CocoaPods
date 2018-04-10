@@ -13,11 +13,6 @@ module Pod
 
       # Run the command
       #
-      # @todo the command reports new dependencies added to the Podfile as
-      #       updates.
-      #
-      # @todo fix.
-      #
       def run
         if updates.empty?
           UI.puts 'No pod updates are available.'.yellow

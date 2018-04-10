@@ -223,9 +223,6 @@ module Pod
       #         the name of the Pod (root name of the dependencies) and doesn't
       #         group them by target definition.
       #
-      # @todo   [CocoaPods > 0.18] If there isn't a Lockfile all the Pods should
-      #         be marked as added.
-      #
       def generate_podfile_state
         if lockfile
           pods_state = nil
@@ -705,8 +702,6 @@ module Pod
       #         external source the resolver will raise.
       #
       # @return [void]
-      #
-      # TODO:    Specs
       #
       def fetch_external_sources
         return unless allow_pre_downloads?
