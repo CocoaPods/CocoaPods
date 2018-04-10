@@ -489,7 +489,7 @@ module Pod
           unless aggregate_target.nil?
             dependent_targets = aggregate_target.search_paths_aggregate_targets
             dependent_targets.each do |dependent_target|
-              if dependent_target.pod_targets.any?(&:static_framework?)
+              if aggregate_target.requires_frameworks? && dependent_target.pod_targets.any?(&:static_framework?)
                 generate_other_ld_flags(dependent_target, dependent_target.pod_targets, xcconfig)
               end
             end
