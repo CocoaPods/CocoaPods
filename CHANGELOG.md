@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7597](https://github.com/CocoaPods/CocoaPods/issues/7597)
 
+* Fix static framework dependent target double linking without use_frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7592](https://github.com/CocoaPods/CocoaPods/issues/7592)
+
 * Inhibit warnings for all dependencies during validation except for the one being validated  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)

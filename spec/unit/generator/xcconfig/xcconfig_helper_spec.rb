@@ -250,10 +250,54 @@ module Pod
                                          :target_definition => target_definition,
                                          :pod_targets => [],
                                          :search_paths_aggregate_targets => [aggregate_target],
+                                         :requires_frameworks? => true,
                                         )
             xcconfig = Xcodeproj::Config.new
             @sut.generate_other_ld_flags(test_aggregate_target, [], xcconfig)
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-framework "Foo"'
+          end
+
+          it 'makes sure setting from search_paths dont propagate for static frameworks when static linking' do
+            target_definition = stub('target_definition', :inheritance => 'search_paths')
+            consumer = stub('consumer',
+                            :pod_target_xcconfig => {},
+                            :libraries => ['xml2'],
+                            :frameworks => ['Foo'],
+                            :weak_frameworks => [],
+                            :platform_name => :ios,
+                           )
+            file_accessor = stub('file_accessor',
+                                 :spec_consumer => consumer,
+                                 :vendored_static_frameworks => [],
+                                 :vendored_dynamic_frameworks => [],
+                                 :vendored_static_libraries => [],
+                                 :vendored_dynamic_libraries => [],
+                                )
+            pod_target = stub('pod_target',
+                              :name => 'BananaLib',
+                              :sandbox => config.sandbox,
+                              :should_build? => true,
+                              :requires_frameworks? => false,
+                              :static_framework? => true,
+                              :dependent_targets => [],
+                              :file_accessors => [file_accessor],
+                              :product_basename => 'Foo',
+                             )
+            pod_targets = [pod_target]
+            aggregate_target = stub('aggregate_target',
+                                    :target_definition => target_definition,
+                                    :pod_targets => pod_targets,
+                                    :search_paths_aggregate_targets => [],
+                                   )
+            test_aggregate_target = stub('test_aggregate_target',
+                                         :target_definition => target_definition,
+                                         :pod_targets => [],
+                                         :search_paths_aggregate_targets => [aggregate_target],
+                                         :requires_frameworks? => false,
+                                        )
+            xcconfig = Xcodeproj::Config.new
+            @sut.generate_other_ld_flags(test_aggregate_target, [], xcconfig)
+            xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
 
           it 'includes HEADER_SEARCH_PATHS from search paths' do
