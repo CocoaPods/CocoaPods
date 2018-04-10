@@ -171,12 +171,12 @@ module Pod
             end.compact.group_by(&:dirname)
 
             pod_targets.sort_by(&:name).each do |pod_target|
-              target_installer = PodTargetInstaller.new(sandbox, pod_target, umbrella_headers_by_dir)
+              target_installer = PodTargetInstaller.new(sandbox, project, pod_target, umbrella_headers_by_dir)
               target_installer.install!
             end
 
             aggregate_targets.sort_by(&:name).each do |target|
-              target_installer = AggregateTargetInstaller.new(sandbox, target)
+              target_installer = AggregateTargetInstaller.new(sandbox, project, target)
               target_installer.install!
             end
 

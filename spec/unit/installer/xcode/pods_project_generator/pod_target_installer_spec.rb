@@ -31,7 +31,7 @@ module Pod
 
               user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
               @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '4.3'), [@spec], [@target_definition], [file_accessor])
-              @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
+              @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
             end
@@ -176,9 +176,9 @@ module Pod
                 all_specs = [@coconut_spec, *@coconut_spec.recursive_subspecs]
                 file_accessors = [file_accessor, test_file_accessor]
                 @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), all_specs, [@target_definition], file_accessors)
-                @installer = PodTargetInstaller.new(config.sandbox, @coconut_pod_target)
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @coconut_pod_target)
                 @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:osx, '10.8'), all_specs, [@target_definition2], file_accessors)
-                @installer2 = PodTargetInstaller.new(config.sandbox, @coconut_pod_target2)
+                @installer2 = PodTargetInstaller.new(config.sandbox, @project, @coconut_pod_target2)
               end
 
               it 'adds the native test target to the project for iOS targets with code signing' do
@@ -371,7 +371,7 @@ module Pod
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @minions_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], [file_accessor])
-                @installer = PodTargetInstaller.new(config.sandbox, @minions_pod_target)
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @minions_pod_target)
 
                 @first_json_file = file_accessor.source_files.find { |sf| sf.extname == '.json' }
               end
@@ -482,7 +482,7 @@ module Pod
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, [@spec], [@target_definition], [file_accessor])
-                @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
               end
 
               after do
@@ -520,7 +520,7 @@ module Pod
             describe 'with a scoped pod target' do
               before do
                 @pod_target = @pod_target.scoped.first
-                @installer = PodTargetInstaller.new(config.sandbox, @pod_target)
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
               end
 
               it 'adds file references for the support files of the target' do
@@ -923,7 +923,7 @@ module Pod
 
                 @pod_target = fixture_pod_target(@spec, false, 'Debug' => :debug, 'Release' => :release)
                 @pod_target.stubs(:requires_frameworks? => true)
-                target_installer = PodTargetInstaller.new(config.sandbox, @pod_target)
+                target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
                 file_ref_installer = Installer::Xcode::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
@@ -981,7 +981,7 @@ module Pod
                 @project.add_pod_group('BananaLib', fixture('banana-lib'))
 
                 @pod_target = fixture_pod_target(@spec, false, 'Debug' => :debug, 'Release' => :release)
-                target_installer = PodTargetInstaller.new(config.sandbox, @pod_target)
+                target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
                 file_ref_installer = Installer::Xcode::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)

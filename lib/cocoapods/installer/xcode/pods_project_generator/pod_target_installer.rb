@@ -14,11 +14,12 @@ module Pod
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see TargetInstaller#sandbox
+          # @param [Pod::Project] project @see TargetInstaller#project
           # @param [Target] target @see TargetInstaller#target
           # @param [Hash{Pathname => Pathname}] umbrella_headers_by_dir @see #umbrella_headers_by_dir
           #
-          def initialize(sandbox, target, umbrella_headers_by_dir = nil)
-            super(sandbox, target)
+          def initialize(sandbox, project, target, umbrella_headers_by_dir = nil)
+            super(sandbox, project, target)
             @umbrella_headers_by_dir = umbrella_headers_by_dir
           end
 
