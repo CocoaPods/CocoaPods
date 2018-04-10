@@ -11,9 +11,9 @@ File References:
       - asserts.modulemap
       - asserts.xcconfig
       - asserts-dummy.m
+      - asserts-Info.plist
       - asserts-prefix.pch
       - asserts-umbrella.h
-      - Info.plist
   - logger:
     - Core:
       - Logger.h
@@ -21,10 +21,10 @@ File References:
     - Pod:
       - logger.podspec
     - Support Files:
-      - Info.plist
       - logger.modulemap
       - logger.xcconfig
       - logger-dummy.m
+      - logger-Info.plist
       - logger-prefix.pch
       - logger-umbrella.h
   - sharedlib:
@@ -34,16 +34,16 @@ File References:
     - Pod:
       - sharedlib.podspec
     - Support Files:
-      - Info.plist
-      - Info.plist
       - sharedlib-Core.modulemap
       - sharedlib-Core.xcconfig
       - sharedlib-Core-dummy.m
+      - sharedlib-Core-Info.plist
       - sharedlib-Core-prefix.pch
       - sharedlib-Core-umbrella.h
       - sharedlib-Testing.modulemap
       - sharedlib-Testing.xcconfig
       - sharedlib-Testing-dummy.m
+      - sharedlib-Testing-Info.plist
       - sharedlib-Testing-prefix.pch
       - sharedlib-Testing-umbrella.h
     - Testing:
@@ -55,10 +55,10 @@ File References:
     - Pod:
       - testkit.podspec
     - Support Files:
-      - Info.plist
       - testkit.modulemap
       - testkit.xcconfig
       - testkit-dummy.m
+      - testkit-Info.plist
       - testkit-prefix.pch
       - testkit-umbrella.h
 - Frameworks:
@@ -101,9 +101,9 @@ File References:
       - CocoaLumberjack.modulemap
       - CocoaLumberjack.xcconfig
       - CocoaLumberjack-dummy.m
+      - CocoaLumberjack-Info.plist
       - CocoaLumberjack-prefix.pch
       - CocoaLumberjack-umbrella.h
-      - Info.plist
 - Products:
   - asserts.framework
   - CocoaLumberjack.framework
@@ -115,23 +115,23 @@ File References:
   - testkit.framework
 - Targets Support Files:
   - Pods-App:
-    - Info.plist
     - Pods-App.modulemap
     - Pods-App-acknowledgements.markdown
     - Pods-App-acknowledgements.plist
     - Pods-App-dummy.m
     - Pods-App-frameworks.sh
+    - Pods-App-Info.plist
     - Pods-App-resources.sh
     - Pods-App-umbrella.h
     - Pods-App.debug.xcconfig
     - Pods-App.release.xcconfig
   - Pods-Test:
-    - Info.plist
     - Pods-Test.modulemap
     - Pods-Test-acknowledgements.markdown
     - Pods-Test-acknowledgements.plist
     - Pods-Test-dummy.m
     - Pods-Test-frameworks.sh
+    - Pods-Test-Info.plist
     - Pods-Test-resources.sh
     - Pods-Test-umbrella.h
     - Pods-Test.debug.xcconfig
@@ -169,7 +169,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/asserts/asserts-prefix.pch
-          INFOPLIST_FILE: Target Support Files/asserts/Info.plist
+          INFOPLIST_FILE: Target Support Files/asserts/asserts-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -195,7 +195,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/asserts/asserts-prefix.pch
-          INFOPLIST_FILE: Target Support Files/asserts/Info.plist
+          INFOPLIST_FILE: Target Support Files/asserts/asserts-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -293,7 +293,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch
-          INFOPLIST_FILE: Target Support Files/CocoaLumberjack/Info.plist
+          INFOPLIST_FILE: Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -319,7 +319,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/CocoaLumberjack/CocoaLumberjack-prefix.pch
-          INFOPLIST_FILE: Target Support Files/CocoaLumberjack/Info.plist
+          INFOPLIST_FILE: Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -363,7 +363,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/logger/logger-prefix.pch
-          INFOPLIST_FILE: Target Support Files/logger/Info.plist
+          INFOPLIST_FILE: Target Support Files/logger/logger-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -389,7 +389,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/logger/logger-prefix.pch
-          INFOPLIST_FILE: Target Support Files/logger/Info.plist
+          INFOPLIST_FILE: Target Support Files/logger/logger-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -427,7 +427,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-App/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-App/Pods-App-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -456,7 +456,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-App/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-App/Pods-App-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -497,7 +497,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Test/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Test/Pods-Test-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -526,7 +526,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-Test/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-Test/Pods-Test-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -574,7 +574,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Core/sharedlib-Core-prefix.pch
-          INFOPLIST_FILE: Target Support Files/sharedlib-Core/Info.plist
+          INFOPLIST_FILE: Target Support Files/sharedlib-Core/sharedlib-Core-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -600,7 +600,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Core/sharedlib-Core-prefix.pch
-          INFOPLIST_FILE: Target Support Files/sharedlib-Core/Info.plist
+          INFOPLIST_FILE: Target Support Files/sharedlib-Core/sharedlib-Core-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -646,7 +646,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Testing/sharedlib-Testing-prefix.pch
-          INFOPLIST_FILE: Target Support Files/sharedlib-Testing/Info.plist
+          INFOPLIST_FILE: Target Support Files/sharedlib-Testing/sharedlib-Testing-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -672,7 +672,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/sharedlib-Testing/sharedlib-Testing-prefix.pch
-          INFOPLIST_FILE: Target Support Files/sharedlib-Testing/Info.plist
+          INFOPLIST_FILE: Target Support Files/sharedlib-Testing/sharedlib-Testing-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -718,7 +718,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/testkit/testkit-prefix.pch
-          INFOPLIST_FILE: Target Support Files/testkit/Info.plist
+          INFOPLIST_FILE: Target Support Files/testkit/testkit-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -744,7 +744,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/testkit/testkit-prefix.pch
-          INFOPLIST_FILE: Target Support Files/testkit/Info.plist
+          INFOPLIST_FILE: Target Support Files/testkit/testkit-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"

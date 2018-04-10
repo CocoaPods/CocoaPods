@@ -21,10 +21,10 @@ File References:
     - SortDescriptor.swift
     - Util.swift
     - Support Files:
-      - Info.plist
       - RealmSwift.modulemap
       - RealmSwift.xcconfig
       - RealmSwift-dummy.m
+      - RealmSwift-Info.plist
       - RealmSwift-prefix.pch
       - RealmSwift-umbrella.h
 - Products:
@@ -32,12 +32,12 @@ File References:
   - RealmSwift.framework
 - Targets Support Files:
   - Pods-SampleApp:
-    - Info.plist
     - Pods-SampleApp.modulemap
     - Pods-SampleApp-acknowledgements.markdown
     - Pods-SampleApp-acknowledgements.plist
     - Pods-SampleApp-dummy.m
     - Pods-SampleApp-frameworks.sh
+    - Pods-SampleApp-Info.plist
     - Pods-SampleApp-resources.sh
     - Pods-SampleApp-umbrella.h
     - Pods-SampleApp.debug.xcconfig
@@ -70,7 +70,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -102,7 +102,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Info.plist
+          INFOPLIST_FILE: Target Support Files/Pods-SampleApp/Pods-SampleApp-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -156,7 +156,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/RealmSwift/RealmSwift-prefix.pch
-          INFOPLIST_FILE: Target Support Files/RealmSwift/Info.plist
+          INFOPLIST_FILE: Target Support Files/RealmSwift/RealmSwift-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
@@ -184,7 +184,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           GCC_PREFIX_HEADER: Target Support Files/RealmSwift/RealmSwift-prefix.pch
-          INFOPLIST_FILE: Target Support Files/RealmSwift/Info.plist
+          INFOPLIST_FILE: Target Support Files/RealmSwift/RealmSwift-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '8.0'
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"

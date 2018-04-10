@@ -30,16 +30,16 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `SamplePodWithResources` macOS 10.0
-      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/ResourceBundle-SamplePodWithResources-Info.plist`
+      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/ResourceBundle-SamplePodWithResources-SamplePodWithResources-Info.plist`
       - Generating module map file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-umbrella.h`
-      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/Info.plist`
+      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-Info.plist`
     - Installing target `Pods-SampleApp` macOS 10.10
-      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Info.plist`
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-umbrella.h`
     - Installing target `Pods-SampleAppTests` macOS 10.10
-      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleAppTests/Info.plist`
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-umbrella.h`
   - Running post install hooks
