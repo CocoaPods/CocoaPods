@@ -114,12 +114,12 @@ module Pod
             @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/DDD')
           end
 
-          it 'vendored frameworks dont get added to frameworks paths if use_frameworks! isnt set' do
+          it 'vendored frameworks should be added to frameworks paths if use_frameworks! isnt set' do
             @pod_target.stubs(:requires_frameworks?).returns(false)
             @xcconfig = @generator.generate
-            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('spec/fixtures/monkey')
-            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/AAA')
-            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.include('${PODS_ROOT}/CCC')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('spec/fixtures/monkey')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('${PODS_ROOT}/AAA')
+            @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('${PODS_ROOT}/CCC')
           end
 
           it 'sets the PODS_ROOT build variable' do
@@ -255,7 +255,7 @@ module Pod
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
-            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib"'
           end
 
           it 'adds correct header search paths for dependent and test targets without modular headers' do
