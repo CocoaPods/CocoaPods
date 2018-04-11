@@ -193,10 +193,10 @@ module Pod
 
       it 'returns the absolute path of the info plist file' do
         @pod_target.info_plist_path.to_s.should.include?(
-          'Pods/Target Support Files/BananaLib/Info.plist',
+          'Pods/Target Support Files/BananaLib/BananaLib-Info.plist',
         )
         @pod_target.scoped.first.info_plist_path.to_s.should.include?(
-          'Pods/Target Support Files/BananaLib-Pods/Info.plist',
+          'Pods/Target Support Files/BananaLib-Pods/BananaLib-Pods-Info.plist',
         )
       end
 
@@ -562,6 +562,10 @@ module Pod
         it 'raises for unknown product type' do
           exception = lambda { @test_pod_target.test_type_for_product_type(:weird_product_type) }.should.raise Informative
           exception.message.should.include 'Unknown product type `weird_product_type`'
+        end
+
+        it 'returns correct app host info plist path for test type' do
+          @test_pod_target.app_host_info_plist_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/AppHost-iOS-Unit-Tests-Info.plist'
         end
 
         it 'returns correct copy resources script path for test unit test type' do

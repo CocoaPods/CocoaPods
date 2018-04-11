@@ -408,6 +408,15 @@ module Pod
     end
 
     # @param  [Symbol] test_type
+    #         The test type this Info.plist path is for.
+    #
+    # @return [Pathname] The absolute path of the Info.plist to use for an app host.
+    #
+    def app_host_info_plist_path_for_test_type(test_type)
+      support_files_dir + "#{app_host_label(test_type)}-Info.plist"
+    end
+
+    # @param  [Symbol] test_type
     #         The test type this embed frameworks script path is for.
     #
     # @return [Pathname] The absolute path of the copy resources script for the given test type.
