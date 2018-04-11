@@ -861,7 +861,7 @@ module Pod
       def generate_sandbox_state
         sandbox_state = nil
         UI.section 'Comparing resolved specification to the sandbox manifest' do
-          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?, lockfile)
+          sandbox_analyzer = SandboxAnalyzer.new(sandbox, result.specifications, update_mode?)
           sandbox_state = sandbox_analyzer.analyze
           sandbox_state.print
         end
