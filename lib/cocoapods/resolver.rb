@@ -139,7 +139,7 @@ module Pod
           resolver_specs_by_target[target] = vertices.
             map do |vertex|
               payload = vertex.payload
-              test_only = vertex.recursive_predecessors.all? { |v| !v.root? || v.payload.test_specification? } && (!vertex.root? || payload.test_specification?)
+              test_only = (!vertex.root? || payload.test_specification?) && vertex.recursive_predecessors.all? { |v| !v.root? || v.payload.test_specification? }
               spec_source = payload.respond_to?(:spec_source) && payload.spec_source
               ResolverSpecification.new(payload, test_only, spec_source)
             end.
@@ -535,7 +535,9 @@ module Pod
     #
     # @return [Bool]
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
-      return true if locked_dependencies.vertex_named(spec.name) # HACK: this probably isn't safe?
+      # This is safe since a pod will only be in locked dependencies if we're
+      # using the same exact version
+      return true if locked_dependencies.vertex_named(spec.name)
 
       vertex = dependency_graph.vertex_named(dependency.name)
       predecessors = vertex.recursive_predecessors.select(&:root?)
