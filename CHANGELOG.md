@@ -11,6 +11,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Improve performance of the dependency resolver by removing duplicates for dependency nodes.
   [Jacek Suliga](https://github.com/jmkk)
 
+* Improve performance of Pods project generator by skipping native targets for which dependent targets have already been added.
+  [Jacek Suliga](https://github.com/jmkk)
+
 ##### Bug Fixes
 
 * Fix modular header access to header_dir's.  
