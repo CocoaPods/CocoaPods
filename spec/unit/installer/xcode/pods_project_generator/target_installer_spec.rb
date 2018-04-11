@@ -11,7 +11,7 @@ module Pod
             user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
             archs = ['$(ARCHS_STANDARD_64_BIT)']
             @target = Target.new(config.sandbox, false, user_build_configurations, archs, Platform.ios)
-            @installer = TargetInstaller.new(config.sandbox, @target)
+            @installer = TargetInstaller.new(config.sandbox, @project, @target)
           end
 
           it 'adds the architectures to the custom build configurations of the user target' do

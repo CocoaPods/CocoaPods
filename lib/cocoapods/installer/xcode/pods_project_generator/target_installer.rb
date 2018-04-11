@@ -12,6 +12,11 @@ module Pod
           #
           attr_reader :sandbox
 
+          # @return [Pod::Project]
+          #         The `Pods/Pods.xcodeproj` to install the target into.
+          #
+          attr_reader :project
+
           # @return [Target] target
           #         The library whose target needs to be generated.
           #
@@ -20,10 +25,12 @@ module Pod
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
+          # @param [Pod::Project] project @see #project
           # @param [Target] target  @see #target
           #
-          def initialize(sandbox, target)
+          def initialize(sandbox, project, target)
             @sandbox = sandbox
+            @project = project
             @target = target
           end
 
@@ -235,12 +242,6 @@ module Pod
           #-----------------------------------------------------------------------#
 
           # @!group Private helpers.
-
-          # @return [Project] the Pods project of the sandbox.
-          #
-          def project
-            sandbox.project
-          end
 
           # @return [PBXGroup] the group where the file references to the support
           #         files should be stored.

@@ -29,7 +29,7 @@ module Pod
               user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
               @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), [@spec], [@target_definition], [file_accessor])
               @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), @target_definition, config.sandbox.root.dirname, nil, nil, [@pod_target])
-              @installer = AggregateTargetInstaller.new(config.sandbox, @target)
+              @installer = AggregateTargetInstaller.new(config.sandbox, @project, @target)
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
             end
 
