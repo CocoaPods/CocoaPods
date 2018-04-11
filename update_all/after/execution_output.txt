@@ -17,7 +17,7 @@ Comparing resolved specification to the sandbox manifest
 
 Downloading dependencies
 
--> Installing Reachability (3.1.0)
+-> Installing Reachability 3.1.0 (was 2.0.5)
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/tonymillion/Reachability.git PROJECT/Pods/Reachability --template= --single-branch --depth 1 --branch v3.1.0
