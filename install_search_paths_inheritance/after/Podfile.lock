@@ -29,7 +29,7 @@ DEPENDENCIES:
   - testkit (from `testkit`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - CocoaLumberjack
 
 EXTERNAL SOURCES:
