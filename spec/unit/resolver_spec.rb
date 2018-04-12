@@ -475,6 +475,50 @@ module Pod
         resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_tests_only
       end
 
+      it 'handles test only dependencies when they are also used in a different target' do
+        @podfile = Podfile.new do
+          platform :ios, '10'
+
+          target 'A' do
+            pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests']
+          end
+
+          target 'B' do
+            pod 'Expecta'
+            pod 'OCMock'
+          end
+        end
+        spec = Spec.new do |s|
+          s.name         = 'MainSpec'
+          s.version      = '1.2.3'
+          s.platform     = :ios
+          s.dependency 'Expecta'
+
+          s.test_spec 'Tests' do |tss|
+            tss.source_files = 'some/file'
+            tss.dependency 'Expecta'
+            tss.dependency 'OCMock'
+          end
+        end
+        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        resolver = create_resolver
+        resolved_specs = resolver.resolve
+
+        a_specs = resolved_specs[@podfile.target_definitions['A']]
+        b_specs = resolved_specs[@podfile.target_definitions['B']]
+
+        a_specs.map(&:name).sort.should == %w(Expecta MainSpec MainSpec/Tests OCMock)
+        b_specs.map(&:name).sort.should == %w(Expecta OCMock)
+
+        a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_tests_only
+        a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_tests_only
+        a_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_tests_only
+        a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_tests_only
+
+        b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_tests_only
+        b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_tests_only
+      end
+
       it 'allows pre-release spec versions when a requirement has an ' \
          'external source' do
         @podfile = Podfile.new do
