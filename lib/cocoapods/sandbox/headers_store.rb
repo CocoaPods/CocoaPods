@@ -54,7 +54,7 @@ module Pod
         return @search_paths_cache[key] if @search_paths_cache.key?(key)
         search_paths = @search_paths.select do |entry|
           matches_platform = entry[:platform] == platform.name
-          matches_target = target_name.nil? || (entry[:path].basename.to_s == target_name)
+          matches_target = target_name.nil? || (File.basename(entry[:path]) == target_name)
           matches_platform && matches_target
         end
         headers_dir = root.relative_path_from(sandbox.root).dirname
@@ -96,8 +96,9 @@ module Pod
       # @return [Array<Pathname>]
       #
       def add_files(namespace, relative_header_paths)
+        root.join(namespace).mkpath unless relative_header_paths.empty?
         relative_header_paths.map do |relative_header_path|
-          add_file(namespace, relative_header_path)
+          add_file(namespace, relative_header_path, :mkdir => false)
         end
       end
 
@@ -115,9 +116,9 @@ module Pod
       #
       # @return [Pathname]
       #
-      def add_file(namespace, relative_header_path)
+      def add_file(namespace, relative_header_path, mkdir: true)
         namespaced_path = root + namespace
-        namespaced_path.mkpath unless File.exist?(namespaced_path)
+        namespaced_path.mkpath if mkdir
 
         absolute_source = (sandbox.root + relative_header_path)
         source = absolute_source.relative_path_from(namespaced_path)
@@ -128,7 +129,7 @@ module Pod
       # Adds an header search path to the sandbox.
       #
       # @param  [Pathname] path
-      #         the path tho add.
+      #         the path to add.
       #
       # @param  [String] platform
       #         the platform the search path applies to
@@ -136,7 +137,7 @@ module Pod
       # @return [void]
       #
       def add_search_path(path, platform)
-        @search_paths << { :platform => platform.name, :path => (Pathname.new(@relative_path) + path) }
+        @search_paths << { :platform => platform.name, :path => File.join(@relative_path, path) }
       end
 
       #-----------------------------------------------------------------------#

@@ -38,6 +38,7 @@ module Pod
           @test_specs = test_specs
           @platform = platform
           @requires_frameworks = requires_frameworks
+          @hash = [specs, platform, requires_frameworks].hash
         end
 
         # @note Test specs are intentionally not included as part of the equality for pod variants since a
@@ -48,9 +49,9 @@ module Pod
         #
         def ==(other)
           self.class == other.class &&
-            specs == other.specs &&
+            requires_frameworks == other.requires_frameworks &&
             platform == other.platform &&
-            requires_frameworks == other.requires_frameworks
+            specs == other.specs
         end
         alias_method :eql?, :==
 
@@ -59,9 +60,7 @@ module Pod
         # This adds support to make instances usable as Hash keys.
         #
         # @!visibility private
-        def hash
-          [specs, platform, requires_frameworks].hash
-        end
+        attr_reader :hash
       end
     end
   end

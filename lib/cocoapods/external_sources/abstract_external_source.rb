@@ -119,9 +119,13 @@ module Pod
           rescue => _
             raise Informative, "Failed to download '#{name}'."
           end
-          spec = download_result.spec
 
+          spec = download_result.spec
           raise Informative, "Unable to find a specification for '#{name}'." unless spec
+
+          # since the podspec might be cleaned, we want the checksum to refer
+          # to the json in the sandbox
+          spec.defined_in_file = nil
 
           store_podspec(sandbox, spec)
           sandbox.store_pre_downloaded_pod(name)
@@ -161,7 +165,7 @@ module Pod
                  when String
                    path = "#{name}.podspec"
                    path << '.json' if json
-                   Specification.from_string(spec, path)
+                   Specification.from_string(spec, path).tap { |s| s.defined_in_file = nil }
                  when Specification
                    spec.dup
                  else
@@ -170,12 +174,15 @@ module Pod
         rescue Pod::DSLError => e
           raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
         end
-        spec.defined_in_file = nil
+
         validate_podspec(spec)
-        sandbox.store_podspec(name, spec.to_pretty_json, true, true)
+        sandbox.store_podspec(name, spec, true, true)
       end
 
       def validate_podspec(podspec)
+        defined_in_file = podspec.defined_in_file
+        podspec.defined_in_file = nil
+
         validator = validator_for_podspec(podspec)
         validator.quick = true
         validator.allow_warnings = true
@@ -186,6 +193,8 @@ module Pod
         unless validator.validated?
           raise Informative, "The `#{name}` pod failed to validate due to #{validator.failure_reason}:\n#{validator.results_message}"
         end
+      ensure
+        podspec.defined_in_file = defined_in_file
       end
 
       def validator_for_podspec(podspec)

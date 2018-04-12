@@ -5,14 +5,7 @@ module Bacon
     old_run_requirement = instance_method(:run_requirement)
 
     define_method(:run_requirement) do |description, spec|
-      ::Pod::Config.instance = nil
-      ::Pod::Config.instance.tap do |c|
-        c.verbose           =  false
-        c.silent            =  true
-        c.repos_dir         =  fixture('spec-repos')
-        c.installation_root =  SpecHelper.temporary_directory
-        c.cache_root        =  SpecHelper.temporary_directory + 'Cache'
-      end
+      ::SpecHelper.reset_config_instance
 
       ::Pod::UI.output = ''
       ::Pod::UI.warnings = ''

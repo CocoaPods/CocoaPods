@@ -56,6 +56,7 @@ module Pod
         @test_pod_target_analyzer_cache = {}
         @test_pod_target_key = Struct.new(:name, :pod_targets)
         @podfile_dependency_cache = PodfileDependencyCache.from_podfile(podfile)
+        @result = nil
       end
 
       # Performs the analysis.
@@ -70,6 +71,7 @@ module Pod
       # @return [AnalysisResult]
       #
       def analyze(allow_fetches = true)
+        return @result if @result
         validate_podfile!
         validate_lockfile_version!
         @result = AnalysisResult.new
@@ -229,7 +231,7 @@ module Pod
           UI.section 'Finding Podfile changes' do
             pods_by_state = lockfile.detect_changes_with_podfile(podfile)
             pods_state = SpecsState.new(pods_by_state)
-            pods_state.print
+            pods_state.print if config.verbose?
           end
           pods_state
         else
@@ -467,9 +469,8 @@ module Pod
       #
       def filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target)
         pod_targets.select do |pod_target|
-          included_in_target_definition = pod_target.target_definitions.include?(target_definition)
-          used_by_tests_only = resolver_specs_by_target[target_definition].select { |resolver_spec| pod_target.specs.include?(resolver_spec.spec) }.all?(&:used_by_tests_only?)
-          included_in_target_definition && !used_by_tests_only
+          next false unless pod_target.target_definitions.include?(target_definition)
+          resolver_specs_by_target[target_definition].any? { |resolver_spec| !resolver_spec.used_by_tests_only? && pod_target.specs.include?(resolver_spec.spec) }
         end
       end
 
@@ -510,9 +511,9 @@ module Pod
             hash[name] = values.sort_by { |pt| pt.specs.count }
           end
           pod_targets.each do |target|
-            all_specs = all_resolver_specs.to_set
-            dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs).group_by(&:root)
-            test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs).group_by(&:root)
+            all_specs = all_resolver_specs.group_by(&:name)
+            dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+            test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
             test_dependencies.delete_if { |k| dependencies.key? k }
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
@@ -526,9 +527,9 @@ module Pod
             end
 
             pod_targets.each do |target|
-              all_specs = specs.map(&:spec).to_set
-              dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs).group_by(&:root)
-              test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs).group_by(&:root)
+              all_specs = specs.map(&:spec).group_by(&:name)
+              dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+              test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
               test_dependencies.delete_if { |k| dependencies.key? k }
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
@@ -559,7 +560,7 @@ module Pod
       # @param  [Platform] platform
       #         The platform for which the dependencies should be returned.
       #
-      # @param  [Array<Specification>] all_specs
+      # @param  [Hash<String, Specification>] all_specs
       #         All specifications which are installed alongside.
       #
       # @return [Array<Specification>]
@@ -568,20 +569,20 @@ module Pod
         return [] if specs.empty? || all_specs.empty?
 
         dependent_specs = Set.new
-        specs.each do |spec|
-          spec.consumer(platform).dependencies.each do |dependency|
-            match = all_specs.find do |s|
-              next false unless s.name == dependency.name
-              next false if specs.include?(s)
-              true
+        to_process = specs
+        loop do
+          break if to_process.empty?
+          next_to_process = Set.new
+          to_process.each do |s|
+            s.dependencies(platform).each do |dep|
+              all_specs[dep.name].each do |spec|
+                next_to_process.add(spec) if dependent_specs.add?(spec)
+              end
             end
-            dependent_specs << match if match
           end
+          to_process = next_to_process
         end
-
-        remaining_specs = all_specs - dependent_specs
-
-        dependent_specs.union transitive_dependencies_for_specs(dependent_specs, platform, remaining_specs)
+        dependent_specs - specs
       end
 
       # Create a target for each spec group
@@ -679,7 +680,7 @@ module Pod
           pods_to_update = result.podfile_state.changed + result.podfile_state.deleted
           pods_to_update += update[:pods] if update_mode == :selected
           local_pod_names = @podfile_dependency_cache.podfile_dependencies.select(&:local?).map(&:root_name)
-          pods_to_unlock = local_pod_names.reject do |pod_name|
+          pods_to_unlock = local_pod_names.to_set.delete_if do |pod_name|
             sandbox.specification(pod_name).checksum == lockfile.checksum(pod_name)
           end
           LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, pods_to_update, pods_to_unlock)
@@ -747,7 +748,7 @@ module Pod
             deps_to_fetch = deps_with_external_source.select { |dep| pods_to_fetch.include?(dep.root_name) }
             deps_to_fetch_if_needed = deps_with_external_source.select { |dep| result.podfile_state.unchanged.include?(dep.root_name) }
             deps_to_fetch += deps_to_fetch_if_needed.select do |dep|
-              sandbox.specification(dep.root_name).nil? ||
+              sandbox.specification_path(dep.root_name).nil? ||
                 !dep.external_source[:path].nil? ||
                 !sandbox.pod_dir(dep.root_name).directory? ||
                 checkout_requires_update?(dep)

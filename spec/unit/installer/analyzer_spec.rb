@@ -713,7 +713,7 @@ module Pod
       it 'does not include pod target if its used by tests only' do
         spec1 = Resolver::ResolverSpecification.new(stub, true, nil)
         spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
-        target_definition = stub
+        target_definition = stub('TargetDefinition')
         pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
         resolver_specs_by_target = { target_definition => [spec1, spec2] }
         @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target).should.be.empty
@@ -1040,6 +1040,7 @@ module Pod
         @sandbox_manifest = Pod::Lockfile.new(@lockfile.internal_data.deep_dup)
         @analyzer.sandbox.manifest = @sandbox_manifest
         @analyzer.sandbox.stubs(:specification).with('BananaLib').returns(stub)
+        @analyzer.sandbox.stubs(:specification_path).with('BananaLib').returns(stub)
         pod_dir = stub
         pod_dir.stubs(:directory?).returns(true)
         @analyzer.sandbox.stubs(:pod_dir).with('BananaLib').returns(pod_dir)

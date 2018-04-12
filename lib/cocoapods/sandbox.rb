@@ -62,6 +62,7 @@ module Pod
       @checkout_sources = {}
       @development_pods = {}
       @pods_with_absolute_path = []
+      @stored_podspecs = {}
     end
 
     # @return [Lockfile] the manifest which contains the information about the
@@ -209,9 +210,9 @@ module Pod
     # @return [Specification] the specification if the file is found.
     #
     def specification(name)
-      if file = specification_path(name)
-        original_path = development_pods[name]
-        Specification.from_file(original_path || file)
+      @stored_podspecs[name] ||= if file = specification_path(name)
+                                   original_path = development_pods[name]
+                                   Specification.from_file(original_path || file)
       end
     end
 
@@ -242,7 +243,7 @@ module Pod
     # @param  [String] name
     #         the name of the pod
     #
-    # @param  [String, Pathname] podspec
+    # @param  [String, Pathname, Specification] podspec
     #         The contents of the specification (String) or the path to a
     #         podspec file (Pathname).
     #
@@ -252,23 +253,31 @@ module Pod
     def store_podspec(name, podspec, _external_source = false, json = false)
       file_name = json ? "#{name}.podspec.json" : "#{name}.podspec"
       output_path = specifications_root + file_name
-      output_path.dirname.mkpath
-      if podspec.is_a?(String)
+
+      case podspec
+      when String
         output_path.open('w') { |f| f.puts(podspec) }
-      else
+      when Pathname
         unless podspec.exist?
           raise Informative, "No podspec found for `#{name}` in #{podspec}"
         end
+        spec = Specification.from_file(podspec)
         FileUtils.copy(podspec, output_path)
+      when Specification
+        raise ArgumentError, 'can only store Specification objects as json' unless json
+        output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
+        spec = podspec.dup
+      else
+        raise ArgumentError, "Unknown type for podspec: #{podspec.inspect}"
       end
 
-      Dir.chdir(podspec.is_a?(Pathname) ? File.dirname(podspec) : Dir.pwd) do
-        spec = Specification.from_file(output_path)
+      spec ||= Specification.from_file(output_path)
+      spec.defined_in_file ||= output_path
 
-        unless spec.name == name
-          raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
-        end
+      unless spec.name == name
+        raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
       end
+      @stored_podspecs[spec.name] = spec
     end
 
     #-------------------------------------------------------------------------#

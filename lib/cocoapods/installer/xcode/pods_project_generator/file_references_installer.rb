@@ -115,8 +115,9 @@ module Pod
                 next unless sandbox.local?(pod_name)
                 root_name = Specification.root_name(pod_name)
                 paths = file_accessor.developer_files
+                next if paths.empty?
+                group = pods_project.group_for_spec(root_name, :developer)
                 paths.each do |path|
-                  group = pods_project.group_for_spec(root_name, :developer)
                   ref = pods_project.add_file_reference(path, group, false)
                   if path.extname == '.podspec'
                     pods_project.mark_ruby_file_ref(ref)
@@ -203,13 +204,15 @@ module Pod
           #
           def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key = nil, reflect_file_system_structure_for_development = false)
             file_accessors.each do |file_accessor|
-              pod_name = file_accessor.spec.name
-              local = sandbox.local?(pod_name)
               paths = file_accessor.send(file_accessor_key)
               paths = allowable_project_paths(paths)
+              next if paths.empty?
+
+              pod_name = file_accessor.spec.name
+              local = sandbox.local?(pod_name)
               base_path = local ? common_path(paths) : nil
+              group = pods_project.group_for_spec(pod_name, group_key)
               paths.each do |path|
-                group = pods_project.group_for_spec(pod_name, group_key)
                 pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development, base_path)
               end
             end

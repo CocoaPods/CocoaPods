@@ -470,9 +470,9 @@ module Pod
         spec_names.should == %w(
           Expecta MainSpec MainSpec/Tests
         )
-        resolved_specs.find { |rs| rs.name == 'Expecta' }.used_by_tests_only?.should.be.false
-        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_tests_only?.should.be.false
-        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_tests_only?.should.be.true
+        resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_tests_only
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_tests_only
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_tests_only
       end
 
       it 'allows pre-release spec versions when a requirement has an ' \

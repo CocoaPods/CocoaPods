@@ -55,14 +55,10 @@ require 'spec_helper/webmock'         # Cleans up mocks after each spec
 #
 module Pod
   class Specification
-    alias_method :original_source, :source
     def source
       fixture = SpecHelper.fixture("integration/#{name}")
       result = super
-      if fixture.exist?
-        # puts "Using fixture [#{name}]"
-        result[:git] = fixture.to_s
-      end
+      result[:git] = fixture.to_s if fixture.exist?
       result
     end
   end
@@ -98,6 +94,17 @@ Mocha::Configuration.prevent(:stubbing_non_existent_method)
 module SpecHelper
   def self.temporary_directory
     ROOT + 'tmp'
+  end
+
+  def self.reset_config_instance
+    ::Pod::Config.instance = nil
+    ::Pod::Config.instance.tap do |c|
+      c.verbose           =  false
+      c.silent            =  true
+      c.repos_dir         =  fixture('spec-repos')
+      c.installation_root =  SpecHelper.temporary_directory
+      c.cache_root        =  SpecHelper.temporary_directory + 'Cache'
+    end
   end
 end
 

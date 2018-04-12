@@ -360,12 +360,14 @@ module Pod
           s.ios.deployment_target = '7.0'
         end
         validator.spec.stubs(:subspecs).returns([subspec])
-        validator.expects(:podfile_from_spec).with(:osx, nil, nil, []).once
-        validator.expects(:podfile_from_spec).with(:ios, nil, nil, []).once
-        validator.expects(:podfile_from_spec).with(:ios, '7.0', nil, []).once
-        validator.expects(:podfile_from_spec).with(:tvos, nil, nil, []).once
-        validator.expects(:podfile_from_spec).with(:watchos, nil, nil, []).once
+        validator.expects(:podfile_from_spec).with(:osx, nil, nil, []).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:ios, nil, nil, []).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:ios, '7.0', nil, []).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:tvos, nil, nil, []).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:watchos, nil, nil, []).once.returns(stub('Podfile'))
         validator.send(:perform_extensive_analysis, validator.spec)
+
+        validator.results_message.strip.should.be.empty
       end
 
       describe '#podfile_from_spec' do
@@ -799,11 +801,13 @@ module Pod
 
         setup_validator
 
-        @validator.expects(:podfile_from_spec).with(:osx, nil, true, []).once
-        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true, []).once
-        @validator.expects(:podfile_from_spec).with(:tvos, nil, true, []).once
-        @validator.expects(:podfile_from_spec).with(:watchos, nil, true, []).once
+        @validator.expects(:podfile_from_spec).with(:osx, nil, true, []).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true, []).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:tvos, nil, true, []).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, true, []).once.returns(stub('Podfile'))
         @validator.send(:perform_extensive_analysis, @validator.spec)
+
+        @validator.results_message.strip.should.be.empty
       end
 
       it 'lint as a static library if specified' do
@@ -811,11 +815,13 @@ module Pod
 
         setup_validator
 
-        @validator.expects(:podfile_from_spec).with(:osx, nil, false, []).once
-        @validator.expects(:podfile_from_spec).with(:ios, nil, false, []).once
-        @validator.expects(:podfile_from_spec).with(:tvos, nil, false, []).once
-        @validator.expects(:podfile_from_spec).with(:watchos, nil, false, []).once
+        @validator.expects(:podfile_from_spec).with(:osx, nil, false, []).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:ios, nil, false, []).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:tvos, nil, false, []).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, false, []).once.returns(stub('Podfile'))
         @validator.send(:perform_extensive_analysis, @validator.spec)
+
+        @validator.results_message.strip.should.be.empty
       end
 
       it 'shows an error when performing extensive analysis on a test spec' do

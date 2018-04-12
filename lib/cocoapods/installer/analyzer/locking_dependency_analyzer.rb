@@ -33,6 +33,8 @@ module Pod
           dependency_graph = Molinillo::DependencyGraph.new
 
           if lockfile
+            added_dependency_strings = Set.new
+
             explicit_dependencies = lockfile.dependencies
             explicit_dependencies.each do |dependency|
               dependency_graph.add_vertex(dependency.name, dependency, true)
@@ -40,7 +42,7 @@ module Pod
 
             pods = lockfile.to_hash['PODS'] || []
             pods.each do |pod|
-              add_to_dependency_graph(pod, [], dependency_graph, pods_to_unlock)
+              add_to_dependency_graph(pod, [], dependency_graph, pods_to_unlock, added_dependency_strings)
             end
 
             pods_to_update = pods_to_update.flat_map do |u|
@@ -67,7 +69,8 @@ module Pod
 
         private
 
-        def self.add_child_vertex_to_graph(dependency_string, parents, dependency_graph, pods_to_unlock)
+        def self.add_child_vertex_to_graph(dependency_string, parents, dependency_graph, pods_to_unlock, added_dependency_strings)
+          return unless added_dependency_strings.add?(dependency_string)
           dependency = Dependency.from_string(dependency_string)
           if pods_to_unlock.include?(dependency.root_name)
             dependency = Dependency.new(dependency.name)
@@ -78,14 +81,14 @@ module Pod
           dependency
         end
 
-        def self.add_to_dependency_graph(object, parents, dependency_graph, pods_to_unlock)
+        def self.add_to_dependency_graph(object, parents, dependency_graph, pods_to_unlock, added_dependency_strings)
           case object
           when String
-            add_child_vertex_to_graph(object, parents, dependency_graph, pods_to_unlock)
+            add_child_vertex_to_graph(object, parents, dependency_graph, pods_to_unlock, added_dependency_strings)
           when Hash
             object.each do |key, value|
-              dependency = add_child_vertex_to_graph(key, parents, dependency_graph, pods_to_unlock)
-              value.each { |v| add_to_dependency_graph(v, [dependency.name], dependency_graph, pods_to_unlock) }
+              dependency = add_child_vertex_to_graph(key, parents, dependency_graph, pods_to_unlock, added_dependency_strings)
+              value.each { |v| add_to_dependency_graph(v, [dependency.name], dependency_graph, pods_to_unlock, added_dependency_strings) }
             end
           end
         end
