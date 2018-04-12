@@ -134,12 +134,15 @@ module Pod
     def resolver_specs_by_target
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
         @podfile_dependency_cache.target_definition_list.each do |target|
+          # can't use vertex.root? since that considers _all_ targets
+          explicit_dependencies = @podfile_dependency_cache.target_definition_dependencies(target).map(&:name).to_set
           vertices = valid_dependencies_for_target(target)
 
           resolver_specs_by_target[target] = vertices.
             map do |vertex|
               payload = vertex.payload
-              test_only = (!vertex.root? || payload.test_specification?) && vertex.recursive_predecessors.all? { |v| !v.root? || v.payload.test_specification? }
+              test_only = (!explicit_dependencies.include?(vertex.name) || payload.test_specification?) &&
+                (vertex.recursive_predecessors & vertices).all? { |v| !explicit_dependencies.include?(v.name) || v.payload.test_specification? }
               spec_source = payload.respond_to?(:spec_source) && payload.spec_source
               ResolverSpecification.new(payload, test_only, spec_source)
             end.
