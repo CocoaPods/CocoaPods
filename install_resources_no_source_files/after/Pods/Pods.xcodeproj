@@ -73,6 +73,17 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
         Base Configuration: Pods-SampleApp.release.xcconfig
+- res:
+    Build Phases: []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    - Release:
+        Build Settings:
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 - res-res:
     Build Phases:
     - Sources: []

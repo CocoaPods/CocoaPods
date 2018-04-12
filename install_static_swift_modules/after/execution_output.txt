@@ -127,51 +127,7 @@ Generating Pods project
       - Generating umbrella header at `Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static-umbrella.h`
   - Integrating targets
 
-Integrating target `CustomModuleMapPod-library-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `MixedPod-library-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `ObjCPod-library-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `SwiftPod-library-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
 Integrating target `CustomModuleMapPod-framework-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `MixedPod-framework-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `ObjCPod-framework-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `SwiftPod-framework-iOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `CustomModuleMapPod-library-macOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `MixedPod-library-macOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `ObjCPod-library-macOS`
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
-
-Integrating target `SwiftPod-library-macOS`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Copy Pods Resources' to project.
 
@@ -179,7 +135,31 @@ Integrating target `CustomModuleMapPod-framework-macOS`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Copy Pods Resources' to project.
 
+Integrating target `CustomModuleMapPod-library-iOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `CustomModuleMapPod-library-macOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `MixedPod-framework-iOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
 Integrating target `MixedPod-framework-macOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `MixedPod-library-iOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `MixedPod-library-macOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `ObjCPod-framework-iOS`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Copy Pods Resources' to project.
 
@@ -187,7 +167,27 @@ Integrating target `ObjCPod-framework-macOS`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Copy Pods Resources' to project.
 
+Integrating target `ObjCPod-library-iOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `ObjCPod-library-macOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `SwiftPod-framework-iOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
 Integrating target `SwiftPod-framework-macOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `SwiftPod-library-iOS`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+
+Integrating target `SwiftPod-library-macOS`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Copy Pods Resources' to project.
   - Running post install hooks

@@ -1004,6 +1004,7 @@ Generating Pods project
   - Adding resources to Pods project
   - Linking headers
   - Installing targets
+    - Installing target `Realm` iOS 8.0
     - Installing target `RealmSwift` iOS 8.0
       - Generating module map file at `Pods/Target Support Files/RealmSwift/RealmSwift.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/RealmSwift/RealmSwift-umbrella.h`

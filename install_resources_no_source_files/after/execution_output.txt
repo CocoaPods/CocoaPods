@@ -28,7 +28,8 @@ Generating Pods project
   - Adding development pod helper files to Pods project
   - Linking headers
   - Installing targets
-    - Generating Info.plist file at `Pods/Target Support Files/res/ResourceBundle-res-res-Info.plist`
+    - Installing target `res` macOS 10.0
+      - Generating Info.plist file at `Pods/Target Support Files/res/ResourceBundle-res-res-Info.plist`
     - Installing target `Pods-SampleApp` macOS 10.8
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`

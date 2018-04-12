@@ -121,6 +121,17 @@ Targets:
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: Pods-SampleApp.release.xcconfig
+- Realm:
+    Build Phases: []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    - Release:
+        Build Settings:
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 - RealmSwift:
     Build Phases:
     - Sources:
