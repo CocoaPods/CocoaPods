@@ -165,7 +165,7 @@ module Pod
                  when String
                    path = "#{name}.podspec"
                    path << '.json' if json
-                   Specification.from_string(spec, path).tap {|s| s.defined_in_file = nil }
+                   Specification.from_string(spec, path).tap { |s| s.defined_in_file = nil }
                  when Specification
                    spec.dup
                  else

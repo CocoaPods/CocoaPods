@@ -211,8 +211,8 @@ module Pod
     #
     def specification(name)
       @stored_podspecs[name] ||= if file = specification_path(name)
-        original_path = development_pods[name]
-        Specification.from_file(original_path || file)
+                                   original_path = development_pods[name]
+                                   Specification.from_file(original_path || file)
       end
     end
 
@@ -264,7 +264,7 @@ module Pod
         spec = Specification.from_file(podspec)
         FileUtils.copy(podspec, output_path)
       when Specification
-        raise ArgumentError, "can only store Specification objects as json" unless json
+        raise ArgumentError, 'can only store Specification objects as json' unless json
         output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
         spec = podspec.dup
       else

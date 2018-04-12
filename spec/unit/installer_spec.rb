@@ -776,7 +776,6 @@ module Pod
         @installer = Installer.new(config.sandbox, podfile, lockfile)
         @installer.expects(:integrate_user_project)
         @installer.install!
-        pod_targets = @installer.aggregate_targets.map(&:pod_targets)
 
         ::SpecHelper.reset_config_instance
 
@@ -804,7 +803,6 @@ module Pod
         @installer = Installer.new(config.sandbox, podfile, lockfile)
         @installer.expects(:integrate_user_project)
         @installer.install!
-        pod_targets = @installer.aggregate_targets.map(&:pod_targets)
 
         ::SpecHelper.reset_config_instance
 
