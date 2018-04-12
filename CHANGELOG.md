@@ -4,7 +4,7 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
-## 1.5.0 (2018-04-04)
+## Master
 
 ##### Enhancements
 
@@ -13,15 +13,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Do not include test dependencies input and output paths  
+* Do not include test dependencies input and output paths.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)
 
-* Remove [system] declaration attribute from generated module maps  
+* Remove [system] declaration attribute from generated module maps.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7589](https://github.com/CocoaPods/CocoaPods/issues/7589)
 
-* Properly namespace Info.plist names during target installation  
+* Properly namespace Info.plist names during target installation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7611](https://github.com/CocoaPods/CocoaPods/pull/7611)
 
@@ -33,7 +33,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7597](https://github.com/CocoaPods/CocoaPods/issues/7597)
 
-* Fix static framework dependent target double linking without use_frameworks  
+* Fix static framework dependent target double linking without `use_frameworks`.  
   [Paul Beusterien](https://github.com/paulb777)
   [#7592](https://github.com/CocoaPods/CocoaPods/issues/7592)
 
@@ -41,17 +41,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7596](https://github.com/CocoaPods/CocoaPods/issues/7596)
 
-* Inhibit warnings for all dependencies during validation except for the one being validated  
+* Inhibit warnings for all dependencies during validation except for the one being validated.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)
 
-* Prevent duplicated targets from being stripped out from the framework search paths  
+* Prevent duplicated targets from being stripped out from the framework search paths.  
   [Liquidsoul](https://github.com/liquidsoul)
   [#7644](https://github.com/CocoaPods/CocoaPods/pull/7644)
 
-* Fix assetcatalog_generated_info.plist path in copy resources phase  
+* Fix `assetcatalog_generated_info.plist` path in copy resources phase.  
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
+
 
 ## 1.5.0 (2018-04-04)
 
