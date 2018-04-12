@@ -13,6 +13,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Properly namespace Info.plist names during target installation  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7611](https://github.com/CocoaPods/CocoaPods/pull/7611)
+
+* Always generate FRAMEWORK_SEARCH_PATHS for vendored_frameworks.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7591](https://github.com/CocoaPods/CocoaPods/issues/7591)
+
 * Fix modular header access to header_dir's.  
   [Paul Beusterien](https://github.com/paulb777)
   [#7597](https://github.com/CocoaPods/CocoaPods/issues/7597)
