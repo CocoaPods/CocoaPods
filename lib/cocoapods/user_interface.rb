@@ -62,6 +62,7 @@ module Pod
         self.indentation_level += relative_indentation
         self.title_level += 1
         yield if block_given?
+      ensure
         self.indentation_level -= relative_indentation
         self.title_level -= 1
       end
@@ -83,6 +84,7 @@ module Pod
         self.indentation_level += relative_indentation
         self.title_level += 1
         yield if block_given?
+      ensure
         self.indentation_level -= relative_indentation
         self.title_level -= 1
       end
@@ -114,6 +116,7 @@ module Pod
         self.indentation_level += relative_indentation
         self.title_level += 1
         yield if block_given?
+      ensure
         self.indentation_level -= relative_indentation
         self.title_level -= 1
       end
@@ -140,6 +143,7 @@ module Pod
 
         self.indentation_level += relative_indentation
         yield if block_given?
+      ensure
         self.indentation_level -= relative_indentation
       end
 
@@ -160,6 +164,7 @@ module Pod
         self.indentation_level += 2
         @treat_titles_as_messages = true
         yield if block_given?
+      ensure
         @treat_titles_as_messages = false
         self.indentation_level -= 2
       end
