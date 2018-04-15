@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Liquidsoul](https://github.com/liquidsoul)
   [#7644](https://github.com/CocoaPods/CocoaPods/pull/7644)
 
+* Fix assetcatalog_generated_info.plist path in copy resources phase  
+  [Maxime Le Moine](https://github.com/MaximeLM)
+  [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
+
 ## 1.5.0 (2018-04-04)
 
 ##### Enhancements
