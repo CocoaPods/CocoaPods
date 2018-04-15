@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Remove [system] declaration attribute from generated module maps  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7589](https://github.com/CocoaPods/CocoaPods/issues/7589)
+
 * Properly namespace Info.plist names during target installation  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7611](https://github.com/CocoaPods/CocoaPods/pull/7611)
