@@ -1,4 +1,4 @@
-module HeaderMappingsDirPod [system] {
+module HeaderMappingsDirPod {
   umbrella header "HeaderMappingsDirPod-library-umbrella.h"
 
   export *

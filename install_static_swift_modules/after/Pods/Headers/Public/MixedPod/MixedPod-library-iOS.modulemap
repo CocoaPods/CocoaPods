@@ -1,4 +1,4 @@
-module MixedPod [system] {
+module MixedPod {
   umbrella header "MixedPod-library-iOS-umbrella.h"
   exclude header "MixedPod-library-macOS-umbrella.h"
 
