@@ -91,19 +91,13 @@ module Pod
         end
       end
 
-      # @return [Hash] @see Downloader#checkout_options
-      #
-      attr_reader :specific_source
-
       #-----------------------------------------------------------------------#
 
       private
 
       # @!group Installation Steps
 
-      # Downloads the source of the Pod. It also stores the specific options
-      # needed to recreate the same exact installation if needed in
-      # `#specific_source`.
+      # Downloads the source of the Pod.
       #
       # @return [void]
       #
@@ -111,7 +105,7 @@ module Pod
         verify_source_is_secure(root_spec)
         download_result = Downloader.download(download_request, root, :can_cache => can_cache?)
 
-        if (@specific_source = download_result.checkout_options) && specific_source != root_spec.source
+        if (specific_source = download_result.checkout_options) && specific_source != root_spec.source
           sandbox.store_checkout_source(root_spec.name, specific_source)
         end
       end
