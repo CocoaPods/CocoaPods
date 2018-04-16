@@ -83,6 +83,18 @@ module Pod
             build_settings['FRAMEWORK_SEARCH_PATHS'].should == '"AB"'
           end
 
+          it 'adds the frameworks search paths once if there are duplicated targets' do
+            target = stub(
+              :specs => %w(A, B),
+              :should_build? => true,
+              :requires_frameworks? => true,
+              :configuration_build_dir => 'AB',
+            )
+            dependent_targets = [target, target]
+            build_settings = @sut.search_paths_for_dependent_targets(nil, dependent_targets)
+            build_settings['FRAMEWORK_SEARCH_PATHS'].should == '"AB"'
+          end
+
           it 'adds the libraries of the xcconfig for a static framework' do
             spec = stub('spec', :test_specification? => false)
             target_definition = stub('target_definition', :inheritance => 'search_paths')

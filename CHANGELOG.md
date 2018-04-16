@@ -33,6 +33,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)
 
+* Prevent duplicated targets from being stripped out from the framework search paths  
+  [Liquidsoul](https://github.com/liquidsoul)
+  [#7644](https://github.com/CocoaPods/CocoaPods/pull/7644)
 
 ## 1.5.0 (2018-04-04)
 
