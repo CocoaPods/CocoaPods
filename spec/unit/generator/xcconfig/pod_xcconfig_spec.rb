@@ -314,7 +314,8 @@ module Pod
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
-            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
+              ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
               ' "${PODS_ROOT}/Headers/Public"' \
           end
 
@@ -331,7 +332,8 @@ module Pod
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, false)
             xcconfig = generator.generate
-            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private/CoconutLib"' \
+            xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
+              ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
               ' "${PODS_ROOT}/Headers/Public"' \
           end
 

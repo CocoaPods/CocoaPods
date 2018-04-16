@@ -607,7 +607,7 @@ module Pod
     #
     def header_search_paths(include_test_dependent_targets = false)
       header_search_paths = []
-      header_search_paths.concat(build_headers.search_paths(platform, nil, uses_modular_headers?))
+      header_search_paths.concat(build_headers.search_paths(platform, nil, false))
       header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
       dependent_targets = recursive_dependent_targets
       dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
