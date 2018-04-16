@@ -1,4 +1,4 @@
-module DepPod [system] {
+module DepPod {
   umbrella header "DepPod-library-umbrella.h"
 
   export *
