@@ -142,19 +142,14 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
+    # @!group Framework support
+
     # @return [Boolean] whether the generated target needs to be implemented
     #         as a framework
     #
     def requires_frameworks?
       host_requires_frameworks? || false
     end
-
-    #-------------------------------------------------------------------------#
-
-    # @return [PBXNativeTarget] the target generated in the Pods project for
-    #         this library.
-    #
-    attr_accessor :native_target
 
     #-------------------------------------------------------------------------#
 

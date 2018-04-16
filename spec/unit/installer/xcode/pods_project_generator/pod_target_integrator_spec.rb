@@ -14,13 +14,12 @@ module Pod
               @coconut_pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition])
               @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [], :project => @project)
               @test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [], :shell_script_build_phases => [], :project => @project)
-              @coconut_pod_target.stubs(:native_target).returns(@native_target)
-              @coconut_pod_target.stubs(:test_native_targets).returns([@test_native_target])
+              @target_installation_result = TargetInstallationResult.new(@coconut_pod_target, @native_target, [], [@test_native_target])
             end
 
             describe '#integrate!' do
               it 'integrates test native targets with frameworks and resources script phases' do
-                PodTargetIntegrator.new(@coconut_pod_target).integrate!
+                PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
@@ -36,7 +35,7 @@ module Pod
                   "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
                 end
                 @coconut_pod_target.stubs(:resource_paths).returns(resource_paths)
-                PodTargetIntegrator.new(@coconut_pod_target).integrate!
+                PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
                   '[CP] Copy Pods Resources',
@@ -50,7 +49,7 @@ module Pod
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns(framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns(resource_paths)
-                PodTargetIntegrator.new(@coconut_pod_target).integrate!
+                PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
@@ -74,7 +73,7 @@ module Pod
 
               it 'integrates test native target with shell script phases' do
                 @coconut_spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-                PodTargetIntegrator.new(@coconut_pod_target).integrate!
+                PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 3
                 @test_native_target.build_phases[2].display_name.should == '[CP-User] Hello World'
                 @test_native_target.build_phases[2].shell_script.should == 'echo "Hello World"'
@@ -82,7 +81,7 @@ module Pod
 
               it 'integrates native target with shell script phases' do
                 @coconut_spec.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-                PodTargetIntegrator.new(@coconut_pod_target).integrate!
+                PodTargetIntegrator.new(@target_installation_result).integrate!
                 @native_target.build_phases.count.should == 1
                 @native_target.build_phases[0].display_name.should == '[CP-User] Hello World'
                 @native_target.build_phases[0].shell_script.should == 'echo "Hello World"'

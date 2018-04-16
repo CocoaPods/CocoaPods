@@ -25,33 +25,39 @@ module Pod
 
           # Creates the target in the Pods project and the relative support files.
           #
-          # @return [void]
+          # @return [TargetInstallationResult] the result of the installation of this target.
           #
           def install!
-            unless target.should_build?
-              add_resources_bundle_targets
-              return
-            end
-
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
-              add_target
-              create_support_files_dir
-              if target.contains_test_specifications?
-                add_test_targets
-                add_test_app_host_targets
+              test_file_accessors, file_accessors = target.file_accessors.partition { |fa| fa.spec.test_specification? }
+
+              unless target.should_build?
+                # For targets that should not be built (e.g. pre-built vendored frameworks etc), we add a placeholder
+                # PBXAggregateTarget that will be used to wire up dependencies later.
+                native_target = add_placeholder_target
+                resource_bundle_targets = add_resources_bundle_targets(file_accessors)
+                return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
-              add_resources_bundle_targets
-              add_files_to_build_phases
-              create_xcconfig_file
-              create_test_xcconfig_files if target.contains_test_specifications?
+
+              create_support_files_dir
+
+              native_target = add_target
+              resource_bundle_targets = add_resources_bundle_targets(file_accessors)
+
+              test_native_targets = add_test_targets
+              test_app_host_targets = add_test_app_host_targets(test_native_targets)
+              test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
+
+              add_files_to_build_phases(native_target, test_native_targets)
+
+              create_xcconfig_file(native_target, resource_bundle_targets)
+              create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
 
               if target.defines_module?
-                create_module_map do |generator|
+                create_module_map(native_target) do |generator|
                   generator.headers.concat module_map_additional_headers
                 end
-                create_umbrella_header do |generator|
-                  file_accessors = target.file_accessors
-                  file_accessors = file_accessors.reject { |f| f.spec.test_specification? } if target.contains_test_specifications?
+                create_umbrella_header(native_target) do |generator|
                   generator.imports += if header_mappings_dir
                                          file_accessors.flat_map(&:public_headers).map do |pathname|
                                            pathname.relative_path_from(header_mappings_dir)
@@ -66,24 +72,24 @@ module Pod
                 unless target.static_framework?
                   create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
-                create_build_phase_to_symlink_header_folders
+                create_build_phase_to_symlink_header_folders(native_target)
               elsif target.uses_swift?
-                add_swift_static_library_compatibility_header_phase
+                add_swift_static_library_compatibility_header_phase(native_target)
               end
 
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
-                file_accessors = target.file_accessors.reject { |f| f.spec.test_specification? }
                 create_prefix_header(path, file_accessors, target.platform, [native_target])
               end
               unless skip_pch?(target.test_specs)
                 target.supported_test_types.each do |test_type|
                   path = target.prefix_header_path_for_test_type(test_type)
-                  file_accessors = target.file_accessors.select { |f| f.spec.test_specification? }
-                  create_prefix_header(path, file_accessors, target.platform, target.test_native_targets)
+                  create_prefix_header(path, test_file_accessors, target.platform, test_native_targets)
                 end
               end
-              create_dummy_source
+              create_dummy_source(native_target)
+              TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
+                                           test_resource_bundle_targets, test_app_host_targets)
             end
           end
 
@@ -185,11 +191,16 @@ module Pod
           #
           # @return [void]
           #
-          def add_files_to_build_phases
+          def add_files_to_build_phases(native_target, test_native_targets)
             target.file_accessors.each do |file_accessor|
               consumer = file_accessor.spec_consumer
 
-              native_target = target.native_target_for_spec(consumer.spec)
+              native_target = if !consumer.spec.test_specification?
+                                native_target
+                              else
+                                test_native_target_from_spec_consumer(consumer, test_native_targets)
+                              end
+
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers.map(&:realpath)
               private_headers = file_accessor.private_headers.map(&:realpath)
@@ -225,13 +236,16 @@ module Pod
           # Adds the test app host targets for the library to the Pods project with the
           # appropriate build configurations.
           #
-          # @return [void]
+          # @param  [Array<PBXNativeTarget>] test_native_targets
+          #         the test native targets to use when linking the app host to.
           #
-          def add_test_app_host_targets
-            target.test_specs.each do |test_spec|
+          # @return [Array<PBXNativeTarget>] the app host targets created.
+          #
+          def add_test_app_host_targets(test_native_targets)
+            target.test_specs.map do |test_spec|
               spec_consumer = test_spec.consumer(target.platform)
               next unless spec_consumer.requires_app_host?
-              name = target.app_host_label(test_spec.test_type)
+              name = target.app_host_label(spec_consumer.test_type)
               platform_name = target.platform.name
               app_host_target = project.targets.find { |t| t.name == name }
               if app_host_target.nil?
@@ -247,38 +261,38 @@ module Pod
                 create_info_plist_file(app_host_info_plist_path, app_host_target, '1.0.0', target.platform, :appl)
               end
               # Wire all test native targets with the app host.
-              native_test_target = target.native_target_for_spec(test_spec)
-              native_test_target.build_configurations.each do |configuration|
+              test_native_target = test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
+              test_native_target.build_configurations.each do |configuration|
                 test_host = "$(BUILT_PRODUCTS_DIR)/#{name}.app/"
                 test_host << 'Contents/MacOS/' if target.platform == :osx
                 test_host << name.to_s
                 configuration.build_settings['TEST_HOST'] = test_host
               end
               target_attributes = project.root_object.attributes['TargetAttributes'] || {}
-              target_attributes[native_test_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
+              target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
               project.root_object.attributes['TargetAttributes'] = target_attributes
-            end
+            end.compact
           end
 
           # Adds the test targets for the library to the Pods project with the
           # appropriate build configurations.
           #
-          # @return [void]
+          # @return [Array<PBXNativeTarget>] the test native targets created.
           #
           def add_test_targets
-            target.supported_test_types.each do |test_type|
+            target.supported_test_types.map do |test_type|
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_type)
               platform_name = target.platform.name
               language = target.all_dependent_targets.any?(&:uses_swift?) ? :swift : :objc
-              native_test_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
-              native_test_target.product_reference.name = name
+              test_native_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
+              test_native_target.product_reference.name = name
 
               target.user_build_configurations.each do |bc_name, type|
-                native_test_target.add_build_configuration(bc_name, type)
+                test_native_target.add_build_configuration(bc_name, type)
               end
 
-              native_test_target.build_configurations.each do |configuration|
+              test_native_target.build_configurations.each do |configuration|
                 configuration.build_settings.merge!(custom_build_settings)
                 # target_installer will automatically add an empty `OTHER_LDFLAGS`. For test
                 # targets those are set via a test xcconfig file instead.
@@ -307,9 +321,9 @@ module Pod
               # Generate vanila Info.plist for test target similar to the one xcode gererates for new test target.
               # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
               # defined in podspec.
-              create_info_plist_file(target.info_plist_path_for_test_type(test_type), native_test_target, '1.0', target.platform, :bndl)
+              create_info_plist_file(target.info_plist_path_for_test_type(test_type), test_native_target, '1.0', target.platform, :bndl)
 
-              target.test_native_targets << native_test_target
+              test_native_target
             end
           end
 
@@ -318,14 +332,17 @@ module Pod
           # @note   The source files are grouped by Pod and in turn by subspec
           #         (recursively) in the resources group.
           #
-          # @return [void]
+          # @param  [Array<Sandbox::FileAccessor>] file_accessors
+          #         the file accessors list to generate resource bundles for.
           #
-          def add_resources_bundle_targets
-            target.file_accessors.each do |file_accessor|
-              file_accessor.resource_bundles.each do |bundle_name, paths|
+          # @return [Array<PBXNativeTarget] the resource bundle native targets created.
+          #
+          def add_resources_bundle_targets(file_accessors)
+            file_accessors.flat_map do |file_accessor|
+              file_accessor.resource_bundles.map do |bundle_name, paths|
                 label = target.resources_bundle_target_label(bundle_name)
-                bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
-                bundle_target.product_reference.tap do |bundle_product|
+                resource_bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
+                resource_bundle_target.product_reference.tap do |bundle_product|
                   bundle_file_name = "#{bundle_name}.bundle"
                   bundle_product.name = bundle_file_name
                 end
@@ -333,42 +350,26 @@ module Pod
                 filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|
                   # Resource bundles are only meant to have resources, so install everything
                   # into the resources phase. See note in filter_resource_file_references.
-                  bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
+                  resource_bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
                 end
 
-                native_target = target.native_target_for_spec(file_accessor.spec_consumer.spec)
                 target.user_build_configurations.each do |bc_name, type|
-                  bundle_target.add_build_configuration(bc_name, type)
+                  resource_bundle_target.add_build_configuration(bc_name, type)
                 end
-                bundle_target.deployment_target = deployment_target
-
-                test_specification = file_accessor.spec.test_specification?
-
-                if test_specification
-                  target.test_resource_bundle_targets << bundle_target
-                else
-                  target.resource_bundle_targets << bundle_target
-                end
-
-                if target.should_build?
-                  native_target.add_dependency(bundle_target)
-                  if target.requires_frameworks?
-                    native_target.add_resources([bundle_target.product_reference])
-                  end
-                end
+                resource_bundle_target.deployment_target = deployment_target
 
                 # Create Info.plist file for bundle
                 path = target.info_plist_path
                 path.dirname.mkdir unless path.dirname.exist?
                 info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
-                create_info_plist_file(info_plist_path, bundle_target, target.version, target.platform, :bndl)
+                create_info_plist_file(info_plist_path, resource_bundle_target, target.version, target.platform, :bndl)
 
-                bundle_target.build_configurations.each do |c|
+                resource_bundle_target.build_configurations.each do |c|
                   c.build_settings['PRODUCT_NAME'] = bundle_name
                   # Do not set the CONFIGURATION_BUILD_DIR for resource bundles that are only meant for test targets.
                   # This is because the test target itself also does not set this configuration build dir and it expects
                   # all bundles to be copied from the default path.
-                  unless test_specification
+                  unless file_accessor.spec.test_specification?
                     c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
                   end
 
@@ -383,15 +384,23 @@ module Pod
                     c.build_settings['TARGETED_DEVICE_FAMILY'] = family
                   end
                 end
+
+                resource_bundle_target
               end
             end
           end
 
           # Generates the contents of the xcconfig file and saves it to disk.
           #
+          # @param  [PBXNativeTarget] native_target
+          #         the native target to link the xcconfig file into.
+          #
+          # @param  [Array<PBXNativeTarget>] resource_bundle_targets
+          #         the additional resource bundle targets to link the xcconfig file into.
+          #
           # @return [void]
           #
-          def create_xcconfig_file
+          def create_xcconfig_file(native_target, resource_bundle_targets)
             path = target.xcconfig_path
             xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target)
             update_changed_file(xcconfig_gen, path)
@@ -402,21 +411,27 @@ module Pod
             end
 
             # also apply the private config to resource bundle targets.
-            apply_xcconfig_file_ref_to_resource_bundle_targets(target.resource_bundle_targets, xcconfig_file_ref)
+            apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
           end
 
           # Generates the contents of the xcconfig file used for each test target type and saves it to disk.
           #
+          # @param  [Array<PBXNativeTarget>] test_native_targets
+          #         the test native target to link the xcconfig file into.
+          #
+          # @param  [Array<PBXNativeTarget>] test_resource_bundle_targets
+          #         the additional test resource bundle targets to link the xcconfig file into.
+          #
           # @return [void]
           #
-          def create_test_xcconfig_files
+          def create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
             target.supported_test_types.each do |test_type|
               path = target.xcconfig_path(test_type.to_s)
               xcconfig_gen = Generator::XCConfig::PodXCConfig.new(target, true)
               update_changed_file(xcconfig_gen, path)
               xcconfig_file_ref = add_file_to_support_group(path)
 
-              target.test_native_targets.each do |test_target|
+              test_native_targets.each do |test_target|
                 test_target.build_configurations.each do |test_target_bc|
                   test_target_swift_debug_hack(test_target_bc)
                   test_target_bc.base_configuration_reference = xcconfig_file_ref
@@ -424,7 +439,7 @@ module Pod
               end
 
               # also apply the private config to resource bundle test targets.
-              apply_xcconfig_file_ref_to_resource_bundle_targets(target.test_resource_bundle_targets, xcconfig_file_ref)
+              apply_xcconfig_file_ref_to_resource_bundle_targets(test_resource_bundle_targets, xcconfig_file_ref)
             end
           end
 
@@ -489,9 +504,12 @@ module Pod
           # header_mappings_dir interferes with xcodebuild's expectations
           # about the existence of private or public headers.
           #
+          # @param  [PBXNativeTarget] native_target
+          #         the native target to add the script phase into.
+          #
           # @return [void]
           #
-          def create_build_phase_to_symlink_header_folders
+          def create_build_phase_to_symlink_header_folders(native_target)
             return unless target.platform.name == :osx && header_mappings_dir
 
             build_phase = native_target.new_shell_script_build_phase('Create Symlinks to Header Folders')
@@ -515,7 +533,7 @@ module Pod
           # @param [Platform] platform
           #        the platform to use for this prefix header.
           #
-          # @param [Array<PBXNativetarget>] native_targets
+          # @param [Array<PBXNativeTarget>] native_targets
           #        the native targets on which the prefix header should be configured for.
           #
           # @return [void]
@@ -600,8 +618,8 @@ module Pod
             end
           end
 
-          def create_module_map
-            return super unless custom_module_map
+          def create_module_map(native_target)
+            return super(native_target) unless custom_module_map
 
             path = target.module_map_path
             UI.message "- Copying module map file to #{UI.path(path)}" do
@@ -631,8 +649,8 @@ module Pod
             end
           end
 
-          def create_umbrella_header
-            return super unless custom_module_map
+          def create_umbrella_header(native_target)
+            return super(native_target) unless custom_module_map
           end
 
           def custom_module_map
@@ -688,15 +706,41 @@ module Pod
             project.pod_support_files_group(pod_name, dir)
           end
 
+          def test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
+            test_native_targets.find do |native_target|
+              native_target.symbol_type == target.product_type_for_test_type(spec_consumer.test_type)
+            end
+          end
+
+          # Adds a placeholder native target for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @return [PBXAggregateTarget] the native target that was added.
+          #
+          def add_placeholder_target
+            native_target = project.new_aggregate_target(target.label)
+            native_target.deployment_target = deployment_target
+            target.user_build_configurations.each do |bc_name, type|
+              native_target.add_build_configuration(bc_name, type)
+            end
+            native_target.build_configurations.each do |configuration|
+              configuration.build_settings['ARCHS'] = target.archs
+            end
+            native_target
+          end
+
           # Adds a shell script phase, intended only for static library targets that contain swift,
           # to copy the ObjC compatibility header (the -Swift.h file that the swift compiler generates)
           # to the built products directory. Additionally, the script phase copies the module map, appending a `.Swift`
           # submodule that references the (moved) compatibility header. Since the module map has been moved, the umbrella header
           # is _also_ copied, so that it is sitting next to the module map. This is necessary for a successful archive build.
           #
+          # @param  [PBXNativeTarget] native_target
+          #         the native target to add the Swift static library script phase into.
+          #
           # @return [Void]
           #
-          def add_swift_static_library_compatibility_header_phase
+          def add_swift_static_library_compatibility_header_phase(native_target)
             build_phase = native_target.new_shell_script_build_phase('Copy generated compatibility header')
 
             relative_module_map_path = target.module_map_path.relative_path_from(target.sandbox.root)

@@ -48,21 +48,6 @@ module Pod
     #
     attr_accessor :test_dependent_targets
 
-    # return [Array<PBXNativeTarget>] the test target generated in the Pods project for
-    #         this library or `nil` if there is no test target created.
-    #
-    attr_accessor :test_native_targets
-
-    # @return [Array<PBXNativeTarget>] the resource bundle targets belonging
-    #         to this target.
-    #
-    attr_reader :resource_bundle_targets
-
-    # @return [Array<PBXNativeTarget>] the resource bundle test targets belonging
-    #         to this target.
-    #
-    attr_reader :test_resource_bundle_targets
-
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
@@ -74,7 +59,8 @@ module Pod
     # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, target_definitions, file_accessors = [], scope_suffix = nil)
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
+                   target_definitions, file_accessors = [], scope_suffix = nil)
       super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
@@ -86,9 +72,6 @@ module Pod
       @scope_suffix = scope_suffix
       @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
       @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
-      @resource_bundle_targets = []
-      @test_resource_bundle_targets = []
-      @test_native_targets = []
       @dependent_targets = []
       @test_dependent_targets = []
       @build_config_cache = {}
@@ -108,7 +91,6 @@ module Pod
           cache[cache_key]
         else
           target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, [target_definition], file_accessors, target_definition.label)
-          target.native_target = native_target
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
           target.test_dependent_targets = test_dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
           cache[cache_key] = target
@@ -218,13 +200,6 @@ module Pod
       !script_phases.empty?
     end
 
-    # @return [Hash{Array => Specification}] a hash where the keys are the test native targets and the value
-    #         an array of all the test specs associated with this native target.
-    #
-    def test_specs_by_native_target
-      test_specs.group_by { |test_spec| native_target_for_spec(test_spec) }
-    end
-
     # @return [Boolean] Whether the target has any tests specifications.
     #
     def contains_test_specifications?
@@ -301,22 +276,6 @@ module Pod
           accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
         end
         resource_paths + resource_bundles
-      end
-    end
-
-    # Returns the corresponding native target to use based on the provided specification.
-    # This is used to figure out whether to add a source file into the library native target or any of the
-    # test native targets.
-    #
-    # @param  [Specification] spec
-    #         The specification to base from in order to find the native target.
-    #
-    # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
-    #
-    def native_target_for_spec(spec)
-      return native_target unless spec.test_specification?
-      test_native_targets.find do |native_target|
-        native_target.symbol_type == product_type_for_test_type(spec.test_type)
       end
     end
 

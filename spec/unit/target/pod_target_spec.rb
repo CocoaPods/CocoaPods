@@ -535,17 +535,6 @@ module Pod
           @test_pod_target.app_host_label(:unit).should == 'AppHost-iOS-Unit-Tests'
         end
 
-        it 'returns the correct native target based on the consumer provided' do
-          @test_pod_target.stubs(:native_target).returns(stub(:name => 'CoconutLib', :symbol_type => :dynamic_library, :product_reference => stub(:name => 'libCoconutLib.a')))
-          @test_pod_target.stubs(:test_native_targets).returns([stub(:name => 'CoconutLib-Unit-Tests', :symbol_type => :unit_test_bundle, :product_reference => stub(:name => 'CoconutLib-Unit-Tests'))])
-          native_target = @test_pod_target.native_target_for_spec(@coconut_spec)
-          native_target.name.should == 'CoconutLib'
-          native_target.product_reference.name.should == 'libCoconutLib.a'
-          test_native_target = @test_pod_target.native_target_for_spec(@coconut_spec.test_specs.first)
-          test_native_target.name.should == 'CoconutLib-Unit-Tests'
-          test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
-        end
-
         it 'returns the correct product type for test type' do
           @test_pod_target.product_type_for_test_type(:unit).should == :unit_test_bundle
         end

@@ -63,7 +63,8 @@ module Pod
     # @param [Array<String>] user_target_uuids @see #user_target_uuids
     # @param [Array<PodTarget>] pod_targets @see #pod_targets
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, target_definition, client_root, user_project, user_target_uuids, pod_targets)
+    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, target_definition,
+                   client_root, user_project, user_target_uuids, pod_targets)
       super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform)
       raise "Can't initialize an AggregateTarget without a TargetDefinition!" if target_definition.nil?
       raise "Can't initialize an AggregateTarget with an abstract TargetDefinition!" if target_definition.abstract?

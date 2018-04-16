@@ -88,29 +88,25 @@ module Pod
             end
 
             it 'does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default' do
-              @installer.install!
-              @installer.target.native_target.build_configurations.each do |config|
+              @installer.install!.native_target.build_configurations.each do |config|
                 config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
               end
             end
 
             it 'will be built as static library' do
-              @installer.install!
-              @installer.target.native_target.build_configurations.each do |config|
+              @installer.install!.native_target.build_configurations.each do |config|
                 config.build_settings['MACH_O_TYPE'].should == 'staticlib'
               end
             end
 
             it 'will be skipped when installing' do
-              @installer.install!
-              @installer.target.native_target.build_configurations.each do |config|
+              @installer.install!.native_target.build_configurations.each do |config|
                 config.build_settings['SKIP_INSTALL'].should == 'YES'
               end
             end
 
             it 'has a PRODUCT_BUNDLE_IDENTIFIER set' do
-              @installer.install!
-              @installer.target.native_target.build_configurations.each do |config|
+              @installer.install!.native_target.build_configurations.each do |config|
                 config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
               end
             end
@@ -219,8 +215,7 @@ module Pod
             end
 
             it 'creates a dummy source to ensure the creation of a single base library' do
-              @installer.install!
-              build_files = @installer.target.native_target.source_build_phase.files
+              build_files = @installer.install!.native_target.source_build_phase.files
               build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-dummy.m') }
               build_file.should.be.not.nil
               build_file.file_ref.path.should == 'Pods-SampleProject-dummy.m'
@@ -251,9 +246,7 @@ module Pod
             it 'installs umbrella headers for swift static libraries' do
               @pod_target.stubs(:uses_swift? => true)
               @target.stubs(:uses_swift? => true)
-              @installer.install!
-
-              build_files = @installer.target.native_target.headers_build_phase.files
+              build_files = @installer.install!.native_target.headers_build_phase.files
               build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-umbrella.h') }
               build_file.should.not.be.nil
               build_file.settings.should == { 'ATTRIBUTES' => ['Project'] }
@@ -262,9 +255,7 @@ module Pod
             it 'installs umbrella headers for frameworks' do
               @pod_target.stubs(:requires_frameworks? => true)
               @target.stubs(:requires_frameworks? => true)
-              @installer.install!
-
-              build_files = @installer.target.native_target.headers_build_phase.files
+              build_files = @installer.install!.native_target.headers_build_phase.files
               build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-umbrella.h') }
               build_file.should.not.be.nil
               build_file.settings.should == { 'ATTRIBUTES' => ['Public'] }
