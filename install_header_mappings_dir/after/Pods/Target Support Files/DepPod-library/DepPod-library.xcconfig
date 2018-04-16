@@ -1,7 +1,7 @@
 CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/DepPod-library
 DEFINES_MODULE = YES
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Private/DepPod" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/DepPod" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod"
 LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/HeaderMappingsDirPod-library"
 OTHER_CFLAGS = $(inherited) -fmodule-map-file="${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap"
 OTHER_SWIFT_FLAGS = $(inherited) -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap" -import-underlying-module -Xcc -fmodule-map-file="${SRCROOT}/${MODULEMAP_FILE}"
