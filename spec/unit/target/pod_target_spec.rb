@@ -296,6 +296,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           header_search_paths = @pod_target.header_search_paths
           header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private',
             '${PODS_ROOT}/Headers/Private/BananaLib',
             '${PODS_ROOT}/Headers/Public',
           ]
@@ -306,6 +307,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           header_search_paths = @pod_target.header_search_paths
           header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private',
             '${PODS_ROOT}/Headers/Private/BananaLib',
             '${PODS_ROOT}/Headers/Public',
           ]
@@ -321,6 +323,7 @@ module Pod
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
           header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private',
             '${PODS_ROOT}/Headers/Private/BananaLib',
             '${PODS_ROOT}/Headers/Public',
           ]
@@ -337,6 +340,7 @@ module Pod
           @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
           header_search_paths = @pod_target.header_search_paths
           header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private',
             '${PODS_ROOT}/Headers/Private/BananaLib',
             '${PODS_ROOT}/Headers/Public',
             '${PODS_ROOT}/Headers/Public/monkey',
@@ -354,6 +358,7 @@ module Pod
           header_search_paths = @pod_target.header_search_paths
           # The monkey lib header search paths should not be present since they are only present in OSX.
           header_search_paths.sort.should == [
+            '${PODS_ROOT}/Headers/Private',
             '${PODS_ROOT}/Headers/Private/BananaLib',
             '${PODS_ROOT}/Headers/Public',
           ]
