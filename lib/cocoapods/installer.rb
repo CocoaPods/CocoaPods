@@ -224,7 +224,9 @@ module Pod
     #
     def pod_targets
       aggregate_target_pod_targets = aggregate_targets.flat_map(&:pod_targets)
-      test_dependent_targets = aggregate_target_pod_targets.flat_map(&:test_dependent_targets)
+      test_dependent_targets = aggregate_target_pod_targets.flat_map do |pod_target|
+        pod_target.test_dependent_targets_by_spec_name.values.flatten
+      end
       (aggregate_target_pod_targets + test_dependent_targets).uniq
     end
 

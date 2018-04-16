@@ -43,10 +43,9 @@ module Pod
     #
     attr_accessor :dependent_targets
 
-    # @return [Array<PodTarget>] the targets that this target has a test dependency
-    #         upon.
+    # @return [Hash{String=>Array<PodTarget>}] all target dependencies by test spec name.
     #
-    attr_accessor :test_dependent_targets
+    attr_accessor :test_dependent_targets_by_spec_name
 
     # Initialize a new instance
     #
@@ -73,7 +72,7 @@ module Pod
       @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
       @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @dependent_targets = []
-      @test_dependent_targets = []
+      @test_dependent_targets_by_spec_name = {}
       @build_config_cache = {}
     end
 
@@ -92,7 +91,12 @@ module Pod
         else
           target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, [target_definition], file_accessors, target_definition.label)
           target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
-          target.test_dependent_targets = test_dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
+          target.test_dependent_targets_by_spec_name = Hash[test_dependent_targets_by_spec_name.map do |spec_name, test_pod_targets|
+            scoped_test_pod_targets = test_pod_targets.flat_map do |test_pod_target|
+              test_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
+            end
+            [spec_name, scoped_test_pod_targets]
+          end]
           cache[cache_key] = target
         end
       end
@@ -448,10 +452,10 @@ module Pod
     #
     def recursive_test_dependent_targets
       @recursive_test_dependent_targets ||= begin
-        targets = test_dependent_targets.clone
+        targets = test_dependent_targets_by_spec_name.values.flatten.clone
 
         targets.each do |target|
-          target.test_dependent_targets.each do |t|
+          target.test_dependent_targets_by_spec_name.values.flatten.each do |t|
             targets.push(t) unless t == self || targets.include?(t)
           end
         end
