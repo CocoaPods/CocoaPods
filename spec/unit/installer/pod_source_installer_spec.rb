@@ -18,7 +18,6 @@ module Pod
         it 'downloads the source' do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
           @installer.install!
-          @installer.specific_source[:tag].should == 'v1.0'
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
@@ -26,7 +25,6 @@ module Pod
         it 'returns the checkout options of the downloader if any' do
           @spec.source = { :git => SpecHelper.fixture('banana-lib'), :branch => 'topicbranch' }
           @installer.install!
-          @installer.specific_source[:commit].should == '446b22414597f1bb4062a62c4eed7af9627a3f1b'
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
