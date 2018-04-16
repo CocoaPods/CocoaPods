@@ -36,6 +36,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7592](https://github.com/CocoaPods/CocoaPods/issues/7592)
 
+* Make modular header private header access consistent with frameworks and static libraries.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7596](https://github.com/CocoaPods/CocoaPods/issues/7596)
+
 * Inhibit warnings for all dependencies during validation except for the one being validated  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)
