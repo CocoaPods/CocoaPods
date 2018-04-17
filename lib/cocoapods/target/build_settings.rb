@@ -97,6 +97,10 @@ module Pod
       end
 
       define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true do
+        framework_search_paths_to_import_developer_frameworks(frameworks)
+      end
+
+      def framework_search_paths_to_import_developer_frameworks(frameworks)
         if frameworks.include?('XCTest') || frameworks.include?('SenTestingKit')
           %w[ $(PLATFORM_DIR)/Developer/Library/Frameworks ]
         else
@@ -249,11 +253,15 @@ module Pod
           dependent_targets.each { |pt| pt.build_settings.__clear__ }
         end
 
+        define_build_settings_method :consumer_frameworks, :memoized => true do
+          spec_consumers.flat_map(&:frameworks)
+        end
+
         define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
           frameworks = vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
-          frameworks.concat spec_consumers.flat_map(&:frameworks)
+          frameworks.concat consumer_frameworks
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } if test_xcconfig?
           frameworks.tap(&:uniq!).tap(&:sort!)
@@ -268,7 +276,7 @@ module Pod
         define_build_settings_method :dynamic_frameworks_to_import, :memoized => true do
           dynamic_frameworks_to_import = vendored_dynamic_frameworks.map { |f| File.basename(f, '.framework') }
           dynamic_frameworks_to_import << target.product_basename if target.should_build? && target.requires_frameworks? && !target.static_framework?
-          dynamic_frameworks_to_import.concat spec_consumers.flat_map(&:frameworks)
+          dynamic_frameworks_to_import.concat consumer_frameworks
           dynamic_frameworks_to_import
         end
 
@@ -391,12 +399,8 @@ module Pod
         define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
           paths = super().dup
           paths.concat dependent_targets.flat_map { |t| t.build_settings.framework_search_paths_to_import }
-          if test_xcconfig?
-            paths.concat framework_search_paths_to_import
-          else
-            paths.concat vendored_framework_search_paths
-            paths.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE))
-          end
+          paths.concat framework_search_paths_to_import
+          paths.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)) unless test_xcconfig?
           paths
         end
 
@@ -405,9 +409,11 @@ module Pod
         end
 
         define_build_settings_method :framework_search_paths_to_import, :memoized => true do
-          return vendored_framework_search_paths unless target.requires_frameworks? && target.should_build?
+          paths = framework_search_paths_to_import_developer_frameworks(consumer_frameworks)
+          paths.concat vendored_framework_search_paths
+          return paths unless target.requires_frameworks? && target.should_build?
 
-          vendored_framework_search_paths + [target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)]
+          paths + [target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)]
         end
 
         define_build_settings_method :other_swift_flags, :build_setting => true, :memoized => true do

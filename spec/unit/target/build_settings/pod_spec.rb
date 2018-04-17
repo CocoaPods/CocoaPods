@@ -298,6 +298,19 @@ module Pod
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BananaLib" "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib" "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
           end
 
+          it 'adds the developer frameworks dir when XCTest is used but not linked' do
+            @banana_pod_target.spec_consumers.each { |sc| sc.stubs(:frameworks => %w(XCTest), :vendored_frameworks => []) }
+            @coconut_pod_target.dependent_targets = [@banana_pod_target]
+
+            generator = Pod.new(@coconut_pod_target, false)
+            xcconfig = generator.generate
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(PLATFORM_DIR)/Developer/Library/Frameworks"'
+
+            generator = Pod.new(@banana_pod_target, false)
+            xcconfig = generator.generate
+            xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "$(PLATFORM_DIR)/Developer/Library/Frameworks"'
+          end
+
           it 'adds correct header search paths for dependent and test targets without modular headers' do
             @monkey_pod_target.build_headers.add_search_path('monkey', Platform.ios)
             @monkey_pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
