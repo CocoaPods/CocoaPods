@@ -535,12 +535,22 @@ module Pod
           end
 
           describe 'with inherited targets' do
-            it 'should include inherited search paths' do
+            before do
               # It's the responsibility of the analyzer to
               # populate this when the file is loaded.
               @blank_target.search_paths_aggregate_targets.replace [@target]
+            end
+
+            it 'should include inherited search paths' do
               @xcconfig = @generator.generate
-              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.not.be.nil
+              @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
+            end
+
+            it 'should include OTHER_LDFLAGS to link against dynamic libraries' do
+              @target.pod_targets.each { |pt| pt.spec_consumers.each { |sc| sc.stubs(:frameworks => %w(UIKit), :libraries => %w(z c++)) } }
+
+              @xcconfig = @generator.generate
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"c++" -l"z" -framework "UIKit"'
             end
           end
         end

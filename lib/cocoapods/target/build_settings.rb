@@ -35,7 +35,7 @@ module Pod
       #         @!method $1
       #
       def self.define_build_settings_method(method_name, build_setting: false,
-                                            memoized: false, sorted: false, uniqued: false, frozen: true,
+                                            memoized: false, sorted: false, uniqued: false, compacted: false, frozen: true,
                                             from_search_paths_aggregate_targets: false, from_pod_targets: false,
                                             &implementation)
 
@@ -63,13 +63,9 @@ module Pod
           retval = retval.dup if dup_before_freeze && retval.frozen?
 
           retval.concat(pod_targets.flat_map { |pod_target| pod_target.build_settings.public_send("#{method_name}_to_import") }) if from_pod_targets
-          retval.concat(target.search_paths_aggregate_targets.flat_map do |aggregate_target|
-            unless build_settings = aggregate_target.build_settings(configuration_name)
-              raise("#{aggregate_target.inspect} has no build settings for configuration #{configuration_name.inspect}")
-            end
-            build_settings.public_send(method_name)
-          end) if from_search_paths_aggregate_targets
+          retval.concat(search_paths_aggregate_target_pod_target_build_settings.flat_map(&from_search_paths_aggregate_targets)) if from_search_paths_aggregate_targets
 
+          retval.compact! if compacted
           retval.uniq! if uniqued
           retval.sort! if sorted
           retval.freeze if frozen
@@ -515,36 +511,40 @@ module Pod
           target.search_paths_aggregate_targets.each { |at| at.build_settings(configuration_name).__clear__ }
         end
 
-        define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true do
+        define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :dynamic_libraries_to_import do
           []
         end
 
-        define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true do
+        define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :vendored_dynamic_library_search_paths do
           []
         end
 
-        define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => true do
+        define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :dynamic_frameworks_to_import do
           []
         end
 
-        define_build_settings_method :weak_frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => true do
+        define_build_settings_method :weak_frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :weak_frameworks do
           []
         end
 
-        define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => true do
+        define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :framework_search_paths_to_import do
           []
         end
 
-        define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => true do
+        define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :swift_include_paths_to_import do
           []
         end
 
-        define_build_settings_method :header_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_search_paths_aggregate_targets => true do
-          if target.requires_frameworks? && pod_targets.all?(&:should_build?)
-            []
-          else
-            target.sandbox.public_headers.search_paths(target.platform).dup
+        define_build_settings_method :header_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
+          paths = []
+
+          if !target.requires_frameworks? || !pod_targets.all?(&:should_build?)
+            paths.concat target.sandbox.public_headers.search_paths(target.platform)
           end
+
+          paths.concat target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).header_search_paths }
+
+          paths
         end
 
         define_build_settings_method :pods_podfile_dir_path, :build_setting => true, :memoized => true do
@@ -558,10 +558,12 @@ module Pod
             framework_header_paths_for_iquote.flat_map { |p| ['-iquote', p] }
         end
 
-        define_build_settings_method :framework_header_paths_for_iquote, :memoized => true, :sorted => true, :uniqued => true, :from_search_paths_aggregate_targets => true do
-          pod_targets.
-          select { |pt| pt.should_build? && pt.requires_frameworks? }.
-          map { |pt| "#{pt.build_product_path}/Headers" }
+        define_build_settings_method :framework_header_paths_for_iquote, :memoized => true, :sorted => true, :uniqued => true do
+          paths = pod_targets.
+                    select { |pt| pt.should_build? && pt.requires_frameworks? }.
+                    map { |pt| "#{pt.build_product_path}/Headers" }
+          paths.concat target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).framework_header_paths_for_iquote }
+          paths
         end
 
         define_build_settings_method :pods_root, :build_setting => true, :memoized => true do
@@ -589,8 +591,8 @@ module Pod
           target.spec_consumers.any?(&:requires_arc?)
         end
 
-        define_build_settings_method :module_map_files, :memoized => true, :sorted => true, :uniqued => true, :from_search_paths_aggregate_targets => true do
-          pod_targets.map { |t| t.build_settings.module_map_file_to_import }.compact.sort
+        define_build_settings_method :module_map_files, :memoized => true, :sorted => true, :uniqued => true, :compacted => true, :from_search_paths_aggregate_targets => :module_map_file_to_import do
+          pod_targets.map { |t| t.build_settings.module_map_file_to_import }
         end
 
         define_build_settings_method :always_embed_swift_standard_libraries, :build_setting => true, :memoized => true do
@@ -630,6 +632,10 @@ module Pod
         #
         define_build_settings_method :pod_targets, :memoized => true do
           target.pod_targets_for_build_configuration(configuration_name)
+        end
+
+        define_build_settings_method :search_paths_aggregate_target_pod_target_build_settings, :memoized => true, :uniqued => true do
+          target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).pod_targets.flat_map(&:build_settings) }
         end
 
         # Returns the +user_target_xcconfig+ for all pod targets and their spec
