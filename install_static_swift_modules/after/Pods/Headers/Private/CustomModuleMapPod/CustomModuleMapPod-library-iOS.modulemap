@@ -1,4 +1,4 @@
-module CustomModuleMapPod [system] {
+module CustomModuleMapPod {
     umbrella header "CMM.h"
 
     explicit module Private {
