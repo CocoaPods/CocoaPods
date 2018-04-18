@@ -183,9 +183,9 @@ module Pod
       end
 
       it 'includes pod targets from test dependent targets' do
-        pod_target_one = stub(:test_dependent_targets => [])
-        pod_target_three = stub(:test_dependent_targets => [])
-        pod_target_two = stub(:test_dependent_targets => [pod_target_three])
+        pod_target_one = stub('PodTarget1', :test_dependent_targets_by_spec_name => {})
+        pod_target_three = stub('PodTarget2', :test_dependent_targets_by_spec_name => {})
+        pod_target_two = stub('PodTarget3', :test_dependent_targets_by_spec_name => { 'TestSpec1' => [pod_target_three] })
         aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
 
         result = stub(:targets => [aggregate_target])

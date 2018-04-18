@@ -513,10 +513,12 @@ module Pod
           pod_targets.each do |target|
             all_specs = all_resolver_specs.group_by(&:name)
             dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-            test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-            test_dependencies.delete_if { |k| dependencies.key? k }
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
-            target.test_dependent_targets = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+            target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
+              test_dependencies = transitive_dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
+              test_dependencies.delete_if { |k| dependencies.key? k }
+              hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+            end
           end
         else
           dedupe_cache = {}
@@ -529,10 +531,12 @@ module Pod
             pod_targets.each do |target|
               all_specs = specs.map(&:spec).group_by(&:name)
               dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-              test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-              test_dependencies.delete_if { |k| dependencies.key? k }
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
-              target.test_dependent_targets = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
+              target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
+                test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+                test_dependencies.delete_if { |k| dependencies.key? k }
+                hash[test_spec.name] = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
+              end
             end
           end
         end

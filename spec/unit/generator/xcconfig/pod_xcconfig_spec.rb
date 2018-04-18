@@ -235,14 +235,14 @@ module Pod
           end
 
           it 'includes other ld flags for test dependent targets' do
-            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '-ObjC -l"CoconutLib" -l"monkey" -framework "dynamic-monkey"'
           end
 
           it 'adds settings for test dependent targets' do
-            @coconut_pod_target.test_dependent_targets = [@banana_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@banana_pod_target] }
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
@@ -251,7 +251,7 @@ module Pod
 
           it 'adds settings for test dependent targets excluding the parents targets' do
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
-            @coconut_pod_target.test_dependent_targets = [@banana_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@banana_pod_target] }
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
             xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"'
@@ -267,7 +267,7 @@ module Pod
             @coconut_pod_target.stubs(:defines_module?).returns(false)
             @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
-            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
@@ -288,7 +288,7 @@ module Pod
             @coconut_pod_target.stubs(:defines_module?).returns(false)
             @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
-            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             # This is not an test xcconfig so it should exclude header search paths for the 'monkey' pod
             generator = PodXCConfig.new(@coconut_pod_target, false)
@@ -309,7 +309,7 @@ module Pod
             @coconut_pod_target.stubs(:defines_module?).returns(true)
             @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
-            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, true)
             xcconfig = generator.generate
@@ -327,7 +327,7 @@ module Pod
             @coconut_pod_target.stubs(:defines_module?).returns(true)
             @coconut_pod_target.build_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
-            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
             generator = PodXCConfig.new(@coconut_pod_target, false)
             xcconfig = generator.generate
@@ -337,7 +337,7 @@ module Pod
           end
 
           it 'does not include other ld flags for test dependent targets if its not a test xcconfig' do
-            @coconut_pod_target.test_dependent_targets = [@monkey_pod_target]
+            @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             generator = PodXCConfig.new(@coconut_pod_target)
             xcconfig = generator.generate
             xcconfig.to_hash['LIBRARY_SEARCH_PATHS'].should.be.nil
