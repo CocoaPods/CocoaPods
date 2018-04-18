@@ -240,6 +240,27 @@ module Pod
             ]
           end
 
+          it 'adds framework file references for framework pod targets that require building' do
+            @orangeframework_pod_target.stubs(:requires_frameworks?).returns(true)
+            @coconut_ios_pod_target.stubs(:requires_frameworks?).returns(true)
+            @coconut_ios_pod_target.stubs(:should_build?).returns(true)
+            @generator.generate!
+            native_target = @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS' }
+            native_target.isa.should == 'PBXNativeTarget'
+            native_target.frameworks_build_phase.file_display_names.sort.should == [
+              'Foundation.framework',
+              'OrangeFramework.framework',
+            ]
+          end
+
+          it 'does not add framework references for framework pod targets that do not require building' do
+            @orangeframework_pod_target.stubs(:requires_frameworks?).returns(true)
+            @coconut_ios_pod_target.stubs(:requires_frameworks?).returns(true)
+            @coconut_ios_pod_target.stubs(:should_build?).returns(false)
+            @generator.generate!
+            @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS' }.isa.should == 'PBXAggregateTarget'
+          end
+
           it 'configures APPLICATION_EXTENSION_API_ONLY for pod targets of an aggregate target' do
             user_target = stub('SampleApp-iOS-User-Target', :symbol_type => :app_extension)
             @ios_target.stubs(:user_targets).returns([user_target])
