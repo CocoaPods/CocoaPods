@@ -552,6 +552,16 @@ module Pod
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"c++" -l"z" -framework "UIKit"'
             end
+
+            it 'should not doubly link static libraries' do
+              @specs.each { |s| s.user_target_xcconfig = nil }
+              @target.pod_targets.each { |pt| pt.spec_consumers.each { |sc| sc.stubs(:frameworks => %w(UIKit), :libraries => %w(z), :vendored_libraries => %w()) } }
+              @blank_target.pod_targets.replace  @target.pod_targets
+
+              @xcconfig = @generator.generate
+              # -lBananaLib is not added
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"z" -framework "UIKit"'
+            end
           end
         end
       end

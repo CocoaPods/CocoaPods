@@ -163,10 +163,6 @@ module Pod
       end
     end
 
-    def pod_targets_to_link
-      @pod_targets_to_link ||= pod_targets.to_set - search_paths_aggregate_targets.flat_map(&:pod_targets)
-    end
-
     # @return [Array<Specification>] The specifications used by this aggregate target.
     #
     def specs

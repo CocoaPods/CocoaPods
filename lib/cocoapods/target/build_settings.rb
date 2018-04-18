@@ -36,7 +36,7 @@ module Pod
       #
       def self.define_build_settings_method(method_name, build_setting: false,
                                             memoized: false, sorted: false, uniqued: false, compacted: false, frozen: true,
-                                            from_search_paths_aggregate_targets: false, from_pod_targets: false,
+                                            from_search_paths_aggregate_targets: false, from_pod_targets_to_link: false,
                                             &implementation)
 
         memoized_key = "#{self}##{method_name}".freeze
@@ -47,7 +47,7 @@ module Pod
         define_method(raw_method_name, &implementation)
         private(raw_method_name)
 
-        dup_before_freeze = frozen && (from_pod_targets || from_search_paths_aggregate_targets || uniqued || sorted)
+        dup_before_freeze = frozen && (from_pod_targets_to_link || from_search_paths_aggregate_targets || uniqued || sorted)
 
         define_method(method_name) do
           retval =
@@ -62,7 +62,7 @@ module Pod
 
           retval = retval.dup if dup_before_freeze && retval.frozen?
 
-          retval.concat(pod_targets.flat_map { |pod_target| pod_target.build_settings.public_send("#{method_name}_to_import") }) if from_pod_targets
+          retval.concat(pod_targets_to_link.flat_map { |pod_target| pod_target.build_settings.public_send("#{method_name}_to_import") }) if from_pod_targets_to_link
           retval.concat(search_paths_aggregate_target_pod_target_build_settings.flat_map(&from_search_paths_aggregate_targets)) if from_search_paths_aggregate_targets
 
           retval.compact! if compacted
@@ -260,7 +260,7 @@ module Pod
           frameworks.concat consumer_frameworks
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } if test_xcconfig?
-          frameworks.tap(&:uniq!).tap(&:sort!)
+          frameworks
         end
 
         define_build_settings_method :static_frameworks_to_import, :memoized => true do
@@ -281,7 +281,7 @@ module Pod
 
           weak_frameworks = spec_consumers.flat_map(&:weak_frameworks)
           weak_frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.weak_frameworks_to_import }
-          weak_frameworks.tap(&:uniq!).tap(&:sort!)
+          weak_frameworks
         end
 
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
@@ -291,7 +291,7 @@ module Pod
           libraries.concat spec_consumers.flat_map(&:libraries)
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import } if test_xcconfig?
-          libraries.tap(&:uniq!).tap(&:sort!)
+          libraries
         end
 
         define_build_settings_method :static_libraries_to_import, :memoized => true do
@@ -511,27 +511,27 @@ module Pod
           target.search_paths_aggregate_targets.each { |at| at.build_settings(configuration_name).__clear__ }
         end
 
-        define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :dynamic_libraries_to_import do
+        define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :dynamic_libraries_to_import do
           []
         end
 
-        define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :vendored_dynamic_library_search_paths do
+        define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :vendored_dynamic_library_search_paths do
           []
         end
 
-        define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :dynamic_frameworks_to_import do
+        define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :dynamic_frameworks_to_import do
           []
         end
 
-        define_build_settings_method :weak_frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :weak_frameworks do
+        define_build_settings_method :weak_frameworks, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :weak_frameworks do
           []
         end
 
-        define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :framework_search_paths_to_import do
+        define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :framework_search_paths_to_import do
           []
         end
 
-        define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets => true, :from_search_paths_aggregate_targets => :swift_include_paths_to_import do
+        define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :swift_include_paths_to_import do
           []
         end
 
@@ -571,14 +571,18 @@ module Pod
         end
 
         define_build_settings_method :ld_runpath_search_paths, :build_setting => true, :memoized => true, :uniqued => true do
-          return unless target.requires_frameworks? || vendored_dynamic_artifacts.any?
+          return unless target.requires_frameworks? || any_vendored_dynamic_artifacts?
           symbol_type = target.user_targets.map(&:symbol_type).uniq.first
           test_bundle = symbol_type == :octest_bundle || symbol_type == :unit_test_bundle || symbol_type == :ui_test_bundle
           _ld_runpath_search_paths(:requires_host_target => target.requires_host_target?, :test_bundle => test_bundle)
         end
 
-        define_build_settings_method :vendored_dynamic_artifacts, :memoized => true do
-          pod_targets.flat_map(&:file_accessors).flat_map(&:vendored_dynamic_artifacts)
+        define_build_settings_method :any_vendored_dynamic_artifacts?, :memoized => true do
+          pod_targets.any? do |pt|
+            pt.file_accessors.any? do |fa|
+              fa.vendored_dynamic_artifacts.any?
+            end
+          end
         end
 
         define_build_settings_method :requires_objc_linker_flag?, :memoized => true do
@@ -632,6 +636,11 @@ module Pod
         #
         define_build_settings_method :pod_targets, :memoized => true do
           target.pod_targets_for_build_configuration(configuration_name)
+        end
+
+        define_build_settings_method :pod_targets_to_link, :memoized => true do
+          pod_targets -
+            target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).pod_targets_to_link }
         end
 
         define_build_settings_method :search_paths_aggregate_target_pod_target_build_settings, :memoized => true, :uniqued => true do
