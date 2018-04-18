@@ -251,6 +251,13 @@ module Pod
               'Foundation.framework',
               'OrangeFramework.framework',
             ]
+            test_native_target = @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS-Unit-Tests' }
+            test_native_target.isa.should == 'PBXNativeTarget'
+            test_native_target.frameworks_build_phase.file_display_names.sort.should == [
+                'CoconutLib.framework',
+                'Foundation.framework',
+                'OrangeFramework.framework'
+            ]
           end
 
           it 'does not add framework references for framework pod targets that do not require building' do

@@ -276,7 +276,9 @@ module Pod
             dependent_targets = pod_target.dependent_targets
             dependent_targets.each do |dependent_target|
               native_target.add_dependency(pod_target_installation_results_hash[dependent_target.name].native_target)
-              add_framework_file_reference_to_native_target(native_target, pod_target, dependent_target, frameworks_group)
+              if pod_target.should_build?
+                add_framework_file_reference_to_native_target(native_target, pod_target, dependent_target, frameworks_group)
+              end
             end
             # Wire up test native targets.
             unless pod_target_installation_result.test_native_targets.empty?
@@ -338,7 +340,7 @@ module Pod
         end
 
         def add_framework_file_reference_to_native_target(native_target, pod_target, dependent_target, frameworks_group)
-          if pod_target.should_build? && pod_target.requires_frameworks? && !pod_target.static_framework? && dependent_target.should_build?
+          if pod_target.requires_frameworks? && !pod_target.static_framework? && dependent_target.should_build?
             product_ref = frameworks_group.files.find { |f| f.path == dependent_target.product_name } ||
                 frameworks_group.new_product_ref_for_target(dependent_target.product_basename, dependent_target.product_type)
             native_target.frameworks_build_phase.add_file_reference(product_ref, true)
