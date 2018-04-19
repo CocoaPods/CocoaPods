@@ -59,6 +59,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
 
+* When integrating a vendored framework while building pods as static 
+  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS` 
+  instead of via the sandbox headers store.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 1.5.0 (2018-04-04)
 
 ##### Enhancements
