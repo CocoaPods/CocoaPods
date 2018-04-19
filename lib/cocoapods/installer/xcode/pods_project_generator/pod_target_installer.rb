@@ -35,14 +35,14 @@ module Pod
                 # For targets that should not be built (e.g. pre-built vendored frameworks etc), we add a placeholder
                 # PBXAggregateTarget that will be used to wire up dependencies later.
                 native_target = add_placeholder_target
-                resource_bundle_targets = add_resources_bundle_targets(file_accessors)
+                resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
                 return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
 
               create_support_files_dir
 
               native_target = add_target
-              resource_bundle_targets = add_resources_bundle_targets(file_accessors)
+              resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
 
               test_native_targets = add_test_targets
               test_app_host_targets = add_test_app_host_targets(test_native_targets)
@@ -51,7 +51,7 @@ module Pod
               add_files_to_build_phases(native_target, test_native_targets)
 
               create_xcconfig_file(native_target, resource_bundle_targets)
-              create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
+              create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets.values.flatten)
 
               if target.defines_module?
                 create_module_map(native_target) do |generator|
@@ -338,8 +338,8 @@ module Pod
           # @return [Array<PBXNativeTarget] the resource bundle native targets created.
           #
           def add_resources_bundle_targets(file_accessors)
-            file_accessors.flat_map do |file_accessor|
-              file_accessor.resource_bundles.map do |bundle_name, paths|
+            file_accessors.each_with_object({}) do |file_accessor, hash|
+              hash[file_accessor.spec.name] = file_accessor.resource_bundles.map do |bundle_name, paths|
                 label = target.resources_bundle_target_label(bundle_name)
                 resource_bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
                 resource_bundle_target.product_reference.tap do |bundle_product|
@@ -455,8 +455,8 @@ module Pod
             pod_targets = target.all_dependent_targets
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
-                include_test_spec_paths = pod_target == target
-                pod_target.resource_paths(include_test_spec_paths)
+                specs = pod_target == target ? pod_target.specs : pod_target.non_test_specs
+                pod_target.resource_paths(specs)
               end
             end
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
@@ -476,8 +476,8 @@ module Pod
             pod_targets = target.all_dependent_targets
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
-                include_test_spec_paths = pod_target == target
-                pod_target.framework_paths(include_test_spec_paths)
+                specs = pod_target == target ? pod_target.specs : pod_target.non_test_specs
+                pod_target.framework_paths(specs)
               end
             end
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
