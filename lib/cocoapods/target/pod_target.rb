@@ -612,7 +612,7 @@ module Pod
     end
 
     def create_build_settings
-      BuildSettings::Pod.new(self, false)
+      BuildSettings::PodTargetSettings.new(self, false)
     end
   end
 end

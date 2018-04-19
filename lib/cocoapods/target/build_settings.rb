@@ -412,7 +412,7 @@ module Pod
       end
 
       # A subclass that generates build settings for a {PodTarget}
-      class Pod < BuildSettings
+      class PodTargetSettings < BuildSettings
         #-------------------------------------------------------------------------#
 
         # @!group Public API
@@ -785,7 +785,7 @@ module Pod
       end
 
       # A subclass that generates build settings for a `PodTarget`
-      class Aggregate < BuildSettings
+      class AggregateTargetSettings < BuildSettings
         #-------------------------------------------------------------------------#
 
         # @!group Public API

@@ -3,7 +3,7 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 module Pod
   class Target
     class BuildSettings
-      describe Aggregate do
+      describe AggregateTargetSettings do
         def specs
           [fixture_spec('banana-lib/BananaLib.podspec')]
         end
@@ -22,7 +22,7 @@ module Pod
           unless @specs.empty?
             @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           end
-          @generator = Aggregate.new(@target, 'Release')
+          @generator = AggregateTargetSettings.new(@target, 'Release')
         end
 
         shared 'Aggregate' do
@@ -175,7 +175,7 @@ module Pod
           end
 
           it 'does not links the pod targets with the aggregate target for non-whitelisted configuration' do
-            @generator = Aggregate.new(@target, 'Debug')
+            @generator = AggregateTargetSettings.new(@target, 'Debug')
             @xcconfig = @generator.generate
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
           end
@@ -215,9 +215,9 @@ module Pod
                               :product_basename => 'PodTarget',
                               :target_definitions => [target_definition],
                              )
-            pod_target.stubs(:build_settings => Pod.new(pod_target, false))
+            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
             aggregate_target = fixture_aggregate_target([pod_target])
-            @generator = Aggregate.new(aggregate_target, 'Debug')
+            @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
             @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end
@@ -526,7 +526,7 @@ module Pod
         describe 'an empty pod target' do
           before do
             @blank_target = fixture_aggregate_target
-            @generator = Aggregate.new(@blank_target, 'Release')
+            @generator = AggregateTargetSettings.new(@blank_target, 'Release')
           end
 
           it 'it should not have any framework search paths' do

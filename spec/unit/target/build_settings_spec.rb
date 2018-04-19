@@ -4,11 +4,11 @@ module Pod
   class Target
     describe BuildSettings do
       def pod(pod_target, test_xcconfig = false)
-        BuildSettings::Pod.new(pod_target, test_xcconfig)
+        BuildSettings::PodTargetSettings.new(pod_target, test_xcconfig)
       end
 
       def aggregate(aggregate_target, configuration_name = 'Release')
-        BuildSettings::Aggregate.new(aggregate_target, configuration_name)
+        BuildSettings::AggregateTargetSettings.new(aggregate_target, configuration_name)
       end
 
       describe 'memoization' do
