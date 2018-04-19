@@ -373,6 +373,40 @@ module Pod
         end.join(' ')
       end
 
+      # @param [Hash] xcconfig_values_by_consumer_by_key
+      #
+      # @param [#to_s] attribute
+      #   The name of the attribute being merged
+      #
+      # @return [Hash<String, String>]
+      #
+      def merged_xcconfigs(xcconfig_values_by_consumer_by_key, attribute)
+        xcconfig_values_by_consumer_by_key.each_with_object({}) do |(key, values_by_consumer), xcconfig|
+          uniq_values = values_by_consumer.values.uniq
+          values_are_bools = uniq_values.all? { |v| v =~ /\A(yes|no)\z/i }
+          if values_are_bools
+            # Boolean build settings
+            if uniq_values.count > 1
+              UI.warn "Can't merge #{attribute} for pod targets: " \
+                "#{values_by_consumer.keys.map(&:name)}. Boolean build " \
+                "setting #{key} has different values."
+            else
+              xcconfig[key] = uniq_values.first
+            end
+          elsif PLURAL_SETTINGS.include? key
+            # Plural build settings
+            xcconfig[key] = uniq_values.join(' ')
+          elsif uniq_values.count > 1
+            # Singular build settings
+            UI.warn "Can't merge #{attribute} for pod targets: " \
+              "#{values_by_consumer.keys.map(&:name)}. Singular build " \
+              "setting #{key} has different values."
+          else
+            xcconfig[key] = uniq_values.first
+          end
+        end
+      end
+
       # A subclass that generates build settings for a {PodTarget}
       class Pod < BuildSettings
         #-------------------------------------------------------------------------#
@@ -704,6 +738,28 @@ module Pod
           config
         end
 
+        # Returns the +pod_target_xcconfig+ for the pod target and its spec
+        # consumers grouped by keys
+        #
+        # @return [Hash{String,Hash{Target,String}]
+        #
+        def pod_target_xcconfig_values_by_consumer_by_key
+          spec_consumers.each_with_object({}) do |spec_consumer, hash|
+            spec_consumer.user_target_xcconfig.each do |k, v|
+              (hash[k] ||= {})[spec_consumer] = v
+            end
+          end
+        end
+
+        # Merges the +pod_target_xcconfig+ for all pod targets into a
+        # single hash and warns on conflicting definitions.
+        #
+        # @return [Hash{String, String}]
+        #
+        define_build_settings_method :merged_pod_target_xcconfigs, :memoized => true do
+          merged_xcconfigs(pod_target_xcconfig_values_by_consumer_by_key, :pod_target_xcconfig)
+        end
+
         # @return [Array<Sandbox::FileAccessor>]
         define_build_settings_method :file_accessors, :memoized => true do
           target.file_accessors.select { |fa| fa.spec.test_specification? == test_xcconfig? }
@@ -957,31 +1013,7 @@ module Pod
         # @return [Hash{String, String}]
         #
         define_build_settings_method :merged_user_target_xcconfigs, :memoized => true do
-          settings = user_target_xcconfig_values_by_consumer_by_key
-          settings.each_with_object({}) do |(key, values_by_consumer), xcconfig|
-            uniq_values = values_by_consumer.values.uniq
-            values_are_bools = uniq_values.all? { |v| v =~ /^(yes|no)$/i }
-            if values_are_bools
-              # Boolean build settings
-              if uniq_values.count > 1
-                UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
-                "#{values_by_consumer.keys.map(&:name)}. Boolean build "\
-                "setting #{key} has different values."
-              else
-                xcconfig[key] = uniq_values.first
-              end
-            elsif PLURAL_SETTINGS.include? key
-              # Plural build settings
-              xcconfig[key] = uniq_values.join(' ')
-            elsif uniq_values.count > 1
-              # Singular build settings
-              UI.warn 'Can\'t merge user_target_xcconfig for pod targets: ' \
-              "#{values_by_consumer.keys.map(&:name)}. Singular build "\
-              "setting #{key} has different values."
-            else
-              xcconfig[key] = uniq_values.first
-            end
-          end
+          merged_xcconfigs(user_target_xcconfig_values_by_consumer_by_key, :user_target_xcconfig)
         end
 
         #-------------------------------------------------------------------------#
