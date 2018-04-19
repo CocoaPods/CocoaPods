@@ -217,20 +217,21 @@ module Pod
     end
 
     # Returns the framework paths associated with this target. By default all paths include the framework paths
-    # that are part of test specifications.
+    # that belong to subspec and test specifications.
     #
-    # @param  [Boolean] include_test_spec_paths
-    #         Whether to include framework paths from test specifications or not.
+    # @param  [Array<Specification>] specs
+    #         If provided, it returns the framework paths scoped to the specs requested only.
     #
     # @return [Array<Hash{Symbol => [String]}>] The vendored and non vendored framework paths
     #         this target depends upon.
     #
-    def framework_paths(include_test_spec_paths = true)
+    def framework_paths(specs = [])
       @framework_paths ||= {}
-      return @framework_paths[include_test_spec_paths] if @framework_paths.key?(include_test_spec_paths)
-      @framework_paths[include_test_spec_paths] = begin
+      key = specs.empty? ? 'all_specs' : specs.map(&:name).join('-')
+      return @framework_paths[key] if @framework_paths.key?(key)
+      @framework_paths[key] = begin
         accessors = file_accessors
-        accessors = accessors.reject { |a| a.spec.test_specification? } unless include_test_spec_paths
+        accessors = accessors.select { |fa| specs.map(&:name).include?(fa.spec_consumer.spec.name) } unless specs.empty?
         frameworks = []
         accessors.flat_map(&:vendored_dynamic_artifacts).map do |framework_path|
           relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
@@ -257,20 +258,21 @@ module Pod
       end
     end
 
-    # Returns the resource paths associated with this target. By default all paths include the resource paths
-    # that are part of test specifications.
+    # Returns the resource paths associated with this target. By default all paths include the resource paths that
+    # belong to subspec and test specifications.
     #
-    # @param  [Boolean] include_test_spec_paths
-    #         Whether to include resource paths from test specifications or not.
+    # @param  [Array<Specification>] specs
+    #         If provided, it returns the framework paths scoped to the specs requested only.
     #
     # @return [Array<String>] The resource and resource bundle paths this target depends upon.
     #
-    def resource_paths(include_test_spec_paths = true)
+    def resource_paths(specs = [])
       @resource_paths ||= {}
-      return @resource_paths[include_test_spec_paths] if @resource_paths.key?(include_test_spec_paths)
-      @resource_paths[include_test_spec_paths] = begin
+      key = specs.empty? ? 'all_specs' : specs.map(&:name).join('-')
+      return @resource_paths[key] if @resource_paths.key?(key)
+      @resource_paths[key] = begin
         accessors = file_accessors
-        accessors = accessors.reject { |a| a.spec.test_specification? } unless include_test_spec_paths
+        accessors = accessors.select { |fa| specs.map(&:name).include?(fa.spec_consumer.spec.name) } unless specs.empty?
         resource_paths = accessors.flat_map do |accessor|
           accessor.resources.flat_map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
         end

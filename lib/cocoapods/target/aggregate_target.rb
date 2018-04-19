@@ -195,7 +195,7 @@ module Pod
         framework_paths_by_config = {}
         user_build_configurations.keys.each do |config|
           relevant_pod_targets = pod_targets_for_build_configuration(config)
-          framework_paths_by_config[config] = relevant_pod_targets.flat_map { |pt| pt.framework_paths(false) }
+          framework_paths_by_config[config] = relevant_pod_targets.flat_map { |pt| pt.framework_paths(pt.non_test_specs) }
         end
         framework_paths_by_config
       end
@@ -210,7 +210,7 @@ module Pod
         end
         user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
           resources_by_config[config] = (relevant_pod_targets & pod_targets_for_build_configuration(config)).flat_map do |pod_target|
-            (pod_target.resource_paths(false) + [bridge_support_file].compact).uniq
+            (pod_target.resource_paths(pod_target.non_test_specs) + [bridge_support_file].compact).uniq
           end
         end
       end
