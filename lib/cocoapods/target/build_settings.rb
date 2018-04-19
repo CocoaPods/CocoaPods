@@ -98,15 +98,17 @@ module Pod
         dup_before_freeze = frozen && (from_pod_targets_to_link || from_search_paths_aggregate_targets || uniqued || sorted)
 
         define_method(method_name) do
-          retval =
-            if memoized
-              @__memoized ||= {}
-              @__memoized.fetch(memoized_key) { @__memoized[memoized_key] = send(raw_method_name) }
-            else
-              send(raw_method_name)
-            end
+          if memoized
+            @__memoized ||= {}
+            retval = @__memoized.fetch(memoized_key, :not_found)
+            return retval if :not_found != retval
+          end
 
-          return if retval.nil?
+          retval = send(raw_method_name)
+          if retval.nil?
+            @__memoized[memoized_key] = retval if memoized
+            return
+          end
 
           retval = retval.dup if dup_before_freeze && retval.frozen?
 
@@ -117,6 +119,8 @@ module Pod
           retval.uniq! if uniqued
           retval.sort! if sorted
           retval.freeze if frozen
+
+          @__memoized[memoized_key] = retval if memoized
 
           retval
         end

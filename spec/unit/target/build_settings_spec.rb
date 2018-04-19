@@ -11,6 +11,37 @@ module Pod
         BuildSettings::Aggregate.new(aggregate_target, configuration_name)
       end
 
+      describe 'memoization' do
+        it 'memoizes methods when requested' do
+          cls = Class.new(BuildSettings) do
+            define_build_settings_method :foobar, :memoized => true do
+              Object.new
+            end
+          end
+
+          settings = cls.new(stub('Target'))
+
+          object = settings.foobar
+          object.should.be.frozen
+          object.should.equal?(settings.foobar)
+        end
+
+        it 'memoizes array methods when requested' do
+          cls = Class.new(BuildSettings) do
+            define_build_settings_method :foobar, :memoized => true, :sorted => true, :uniqued => true do
+              %w(b a c a)
+            end
+          end
+
+          settings = cls.new(stub('Target'))
+
+          object = settings.foobar
+          object.should.be.frozen
+          object.should == %w(a b c)
+          object.should.equal?(settings.foobar)
+        end
+      end
+
       #---------------------------------------------------------------------#
 
       describe '::add_developers_frameworks_if_needed' do
