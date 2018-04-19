@@ -18,6 +18,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Improve performance of Pods project generator by skipping native targets for which dependent targets have already been added.
   [Jacek Suliga](https://github.com/jmkk)
 
+* Refactor build settings generation to perform much better on large projects.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Remove [system] declaration attribute from generated module maps  
