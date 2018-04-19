@@ -10,6 +10,7 @@ module Pod
   class Target
     DEFAULT_VERSION = '1.0.0'.freeze
     DEFAULT_NAME = 'Default'.freeze
+    DEFAULT_BUILD_CONFIGURATIONS = { 'Release' => :release, 'Debug' => :debug }.freeze
 
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #

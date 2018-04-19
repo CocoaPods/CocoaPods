@@ -441,7 +441,7 @@ module Pod
           user_project = nil
           client_root = config.installation_root.realpath
           user_target_uuids = []
-          user_build_configurations = target_definition.build_configurations || { 'Release' => :release, 'Debug' => :debug }
+          user_build_configurations = target_definition.build_configurations || Target::DEFAULT_BUILD_CONFIGURATIONS
           archs = []
           if target_definition.platform && target_definition.platform.name == :osx
             archs = ['$(ARCHS_STANDARD_64_BIT)']
