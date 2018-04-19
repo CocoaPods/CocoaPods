@@ -158,6 +158,13 @@ module Pod
             @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
           end
 
+          it 'adds the dependent pods module map file to OTHER_SWIFT_FLAGS' do
+            @pod_targets.each { |pt| pt.stubs(:defines_module? => true) }
+            @xcconfig = @generator.generate
+            expected = '$(inherited) -D COCOAPODS -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap"'
+            @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should == expected
+          end
+
           describe 'with a scoped pod target' do
             def pod_target(spec, target_definition)
               fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).scoped.first

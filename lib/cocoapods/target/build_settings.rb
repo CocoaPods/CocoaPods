@@ -277,9 +277,17 @@ module Pod
 
       # @!group Swift
 
+      # @return [Boolean]
+      #   Whether `OTHER_SWIFT_FLAGS` should be generated when the target
+      #   does not use swift.
+      #
+      def other_swift_flags_without_swift?
+        false
+      end
+
       # @return [Array<String>]
       define_build_settings_method :other_swift_flags, :build_setting => true, :memoized => true do
-        return unless target.uses_swift?
+        return unless target.uses_swift? || other_swift_flags_without_swift?
         flags = %w(-D COCOAPODS)
         flags.concat module_map_files.flat_map { |f| ['-Xcc', "-fmodule-map-file=#{f}"] }
         flags
@@ -930,6 +938,11 @@ module Pod
         #-------------------------------------------------------------------------#
 
         # @!group Swift
+
+        # @see BuildSettings#other_swift_flags_without_swift?
+        def other_swift_flags_without_swift?
+          module_map_files.any?
+        end
 
         # @return [Array<String>]
         define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true, :from_pod_targets_to_link => true, :from_search_paths_aggregate_targets => :swift_include_paths_to_import do
