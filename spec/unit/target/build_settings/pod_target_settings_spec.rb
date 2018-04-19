@@ -176,6 +176,12 @@ module Pod
             @xcconfig.to_hash['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
           end
 
+          it 'does not have a module map to import if it is not built' do
+            @pod_target.stubs(:should_build? => false, :requires_frameworks? => false, :defines_module? => true)
+            @generator.generate
+            @generator.module_map_file_to_import.should.be.nil
+          end
+
           it 'saves the xcconfig' do
             path = temporary_directory + 'sample.xcconfig'
             @generator.save_as(path)

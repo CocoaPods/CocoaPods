@@ -650,6 +650,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :module_map_file_to_import, :memoized => true do
+          return unless target.should_build?
           return if target.requires_frameworks?
           return unless target.defines_module?
 
