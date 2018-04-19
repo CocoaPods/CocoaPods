@@ -8,7 +8,9 @@ module Pod
 
       # @!group Constants
 
-      # @return [Set<String>] The build settings that should be treated as arrays, rather than strings.
+      # @return [Set<String>]
+      #   The build settings that should be treated as arrays, rather than strings.
+      #
       PLURAL_SETTINGS = %w(
         ALTERNATE_PERMISSIONS_FILES
         ARCHS
@@ -33,8 +35,9 @@ module Pod
         WARNING_LDFLAGS
       ).to_set.freeze
 
-      # @return [String] The variable for the configuration build directory used when
-      #   building pod targets.
+      # @return [String]
+      #   The variable for the configuration build directory used when building pod targets.
+      #
       CONFIGURATION_BUILD_DIR_VARIABLE = '${PODS_CONFIGURATION_BUILD_DIR}'.freeze
 
       #-------------------------------------------------------------------------#
@@ -132,7 +135,9 @@ module Pod
 
         # @!group Public API
 
-        # @return [Set<String>] a set of all the build settings names that will be present in the #xcconfig
+        # @return [Set<String>] a set of all the build settings names that will
+        # be present in the #xcconfig
+        #
         attr_reader :build_settings_names
       end
 
@@ -140,10 +145,16 @@ module Pod
 
       # @!group Public API
 
-      # @return [Target] The target this
+      # @return [Target]
+      #  The target this build settings object is generating build settings for
+      #
       attr_reader :target
 
-      # @param [Target] target @see #target
+      # Initialize a new instance
+      #
+      # @param [Target] target
+      #   see {#target}
+      #
       def initialize(target)
         @target = target
       end
@@ -164,11 +175,15 @@ module Pod
         xcconfig
       end
 
+      # Saves the generated xcconfig to the given path
+      #
       # @return [Xcodeproj::Config]
       #
       # @see #xcconfig
       #
       # @param [String,Pathname] path
+      #   The path the xcconfig will be saved to
+      #
       def save_as(path)
         xcconfig.save_as(path)
       end
@@ -428,9 +443,16 @@ module Pod
         attr_reader :test_xcconfig
         alias test_xcconfig? test_xcconfig
 
-        # @param [PodTarget] target @see #target
+        # Intializes a new instance
         #
-        # @param [Boolean] test_xcconfig @see #test_xcconfig?
+        # @param [PodTarget] target
+        #   see {#target}
+        #
+        # @param [String] configuration_name
+        #   see {#configuration_name}
+        #
+        # @param [Boolean] test_xcconfig
+        #  see {#test_xcconfig?}
         #
         def initialize(target, test_xcconfig)
           super(target)
@@ -799,8 +821,14 @@ module Pod
         #   The build configuration these settings will be used for
         attr_reader :configuration_name
 
-        # @param [AggregateTarget] target @see #target
-        # @param [String] configuration_name @see #configuration_name
+        # Intializes a new instance
+        #
+        # @param [AggregateTarget] target
+        #   see {#target}
+        #
+        # @param [String] configuration_name
+        #   see {#configuration_name}
+        #
         def initialize(target, configuration_name)
           super(target)
           @configuration_name = configuration_name
