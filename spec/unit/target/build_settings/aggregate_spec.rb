@@ -354,7 +354,7 @@ module Pod
 
           it 'uses the target definition swift version' do
             @target_definition.stubs(:swift_version).returns('0.1')
-            @generator.__clear__
+            @generator.send :__clear__
             @generator.send(:target_swift_version).should == Version.new('0.1')
           end
 

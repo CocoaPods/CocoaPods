@@ -212,7 +212,7 @@ module Pod
             pod_target.stubs(:build_settings => Pod.new(pod_target, false))
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
-            @generator.__clear__
+            @generator.send :__clear__
             @generator.other_ldflags.should.be == %w(-l"VendoredDyld" -l"xml2" -framework "VendoredFramework" -framework "XCTest" -weak_framework "iAd")
           end
         end
