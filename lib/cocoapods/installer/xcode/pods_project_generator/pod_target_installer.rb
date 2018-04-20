@@ -495,6 +495,10 @@ module Pod
             return unless target.all_dependent_targets.any?(&:uses_swift?)
             ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
             ldflags << ' -lswiftSwiftOnoneSupport'
+            unless target.uses_swift?
+              library_search_paths = test_target_bc.build_settings['LIBRARY_SEARCH_PATHS'] ||= '$(inherited)'
+              library_search_paths << ' -lswiftSwiftOnoneSupport'
+            end
           end
 
           # Creates a build phase which links the versioned header folders
