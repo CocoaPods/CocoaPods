@@ -27,9 +27,9 @@ module Pod
           #
           attr_reader :test_native_targets
 
-          # @return [Array<PBXNativeTarget>] test_resource_bundle_targets
-          #         The test resource bundle targets that were produced for this target. Can be empty if the target had
-          #         no resource bundles for any tests.
+          # @return [Hash{String=>Array<PBXNativeTarget>}] test_resource_bundle_targets
+          #         The test resource bundle targets that were produced for this target keyed by test spec name.
+          #         Can be empty if the target had no resource bundles for any tests.
           #
           attr_reader :test_resource_bundle_targets
 
@@ -44,11 +44,11 @@ module Pod
           # @param [PBXNativeTarget] native_target @see #native_target
           # @param [Array<PBXNativeTarget>] resource_bundle_targets @see #resource_bundle_targets
           # @param [Array<PBXNativeTarget>] test_native_targets @see #test_native_targets
-          # @param [Array<PBXNativeTarget>] test_resource_bundle_targets @see #test_resource_bundle_targets
+          # @param [Hash{String=>Array<PBXNativeTarget>}] test_resource_bundle_targets @see #test_resource_bundle_targets
           # @param [Array<PBXNativeTarget>] test_app_host_targets @see #test_app_host_targets
           #
           def initialize(target, native_target, resource_bundle_targets = [], test_native_targets = [],
-                         test_resource_bundle_targets = [], test_app_host_targets = [])
+                         test_resource_bundle_targets = {}, test_app_host_targets = [])
             @target = target
             @native_target = native_target
             @resource_bundle_targets = resource_bundle_targets

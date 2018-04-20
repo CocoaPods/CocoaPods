@@ -34,7 +34,7 @@ module Pod
                 resource_paths = (0..500).map do |i|
                   "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
                 end
-                @coconut_pod_target.stubs(:resource_paths).returns(resource_paths)
+                @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
                 PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
@@ -45,10 +45,12 @@ module Pod
               end
 
               it 'integrates test native targets with frameworks and resources script phase input and output paths' do
-                framework_paths = { :name => 'Vendored.framework', :input_path => '${PODS_ROOT}/Vendored/Vendored.framework', :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' }
+                framework_paths = [{ :name => 'Vendored.framework',
+                                     :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
+                                     :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' }]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
-                @coconut_pod_target.stubs(:framework_paths).returns(framework_paths)
-                @coconut_pod_target.stubs(:resource_paths).returns(resource_paths)
+                @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
+                @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
                 PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
