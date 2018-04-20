@@ -146,11 +146,10 @@ module Pod
     #
     def should_build?
       return @should_build if defined? @should_build
-
       return @should_build = true if contains_script_phases?
-
-      source_files = file_accessors.flat_map(&:source_files)
-      source_files -= file_accessors.flat_map(&:headers)
+      accessors = file_accessors.reject { |fa| fa.spec.test_specification? }
+      source_files = accessors.flat_map(&:source_files)
+      source_files -= accessors.flat_map(&:headers)
       @should_build = !source_files.empty?
     end
 
@@ -166,7 +165,24 @@ module Pod
     def uses_swift?
       return @uses_swift if defined? @uses_swift
       @uses_swift = begin
-        file_accessors.any? do |file_accessor|
+        file_accessors.reject { |a| a.spec.test_specification? }.any? do |file_accessor|
+          file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
+        end
+      end
+    end
+
+    # Checks whether a particular test type uses Swift or not.
+    #
+    # @param  [Symbol] test_type
+    #         The test type to check whether it uses Swift or not.
+    #
+    # @return [Boolean] Whether the target uses Swift code in the specified test type.
+    #
+    def uses_swift_for_test_type?(test_type)
+      @uses_swift_for_test_type ||= {}
+      return @uses_swift_for_test_type[test_type] if @uses_swift_for_test_type.key?(test_type)
+      @uses_swift_for_test_type[test_type] = begin
+        file_accessors.select { |a| a.spec.test_specification? && a.spec.test_type == test_type }.any? do |file_accessor|
           file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
         end
       end

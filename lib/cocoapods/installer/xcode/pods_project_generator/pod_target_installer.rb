@@ -284,7 +284,7 @@ module Pod
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_type)
               platform_name = target.platform.name
-              language = target.all_dependent_targets.any?(&:uses_swift?) ? :swift : :objc
+              language = target.uses_swift_for_test_type?(test_type) ? :swift : :objc
               test_native_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
               test_native_target.product_reference.name = name
 

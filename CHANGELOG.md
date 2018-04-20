@@ -27,6 +27,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)
 
+* Skip test file accessors for `uses_swift?` and `should_build?` methods  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7671](https://github.com/CocoaPods/CocoaPods/pull/7671)
+
 * Remove [system] declaration attribute from generated module maps  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7589](https://github.com/CocoaPods/CocoaPods/issues/7589)
