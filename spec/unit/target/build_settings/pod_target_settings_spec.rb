@@ -44,6 +44,7 @@ module Pod
               :spec_consumers => [consumer],
               :uses_modular_headers? => false,
               :uses_swift? => false,
+              :specs => [vspec],
             )
             vendored_dep_target.stubs(:build_settings => PodTargetSettings.new(vendored_dep_target, false))
 

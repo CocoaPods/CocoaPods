@@ -434,6 +434,25 @@ module Pod
         end
       end
 
+      # Filters out pod targets whose `specs` are a subset of
+      # another target's.
+      #
+      # @param [Array<PodTarget>] dependent_targets
+      #
+      # @return [Array<PodTarget>]
+      #
+      def select_maximal_pod_targets(pod_targets)
+        subset_targets = []
+        pod_targets.uniq.combination(2) do |a, b|
+          if (a.specs - b.specs).empty?
+            subset_targets << a
+          elsif (b.specs - a.specs).empty?
+            subset_targets << b
+          end
+        end
+        pod_targets - subset_targets
+      end
+
       # A subclass that generates build settings for a {PodTarget}
       class PodTargetSettings < BuildSettings
         #-------------------------------------------------------------------------#
@@ -755,11 +774,13 @@ module Pod
 
         # @return [Array<PodTarget>]
         define_build_settings_method :dependent_targets, :memoized => true do
-          if test_xcconfig?
-            target.all_dependent_targets
-          else
-            target.recursive_dependent_targets
-          end
+          select_maximal_pod_targets(
+            if test_xcconfig?
+              target.all_dependent_targets
+            else
+              target.recursive_dependent_targets
+            end,
+          )
         end
 
         # @return [Hash<String => String>]
@@ -1030,12 +1051,14 @@ module Pod
         # @return [Array<PodTarget>]
         define_build_settings_method :pod_targets_to_link, :memoized => true do
           pod_targets -
-          target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).pod_targets_to_link }
+            target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).pod_targets_to_link }
         end
 
         # @return [Array<PodTarget>]
         define_build_settings_method :search_paths_aggregate_target_pod_target_build_settings, :memoized => true, :uniqued => true do
-          target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).pod_targets.flat_map(&:build_settings) }
+          pod_targets = target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).pod_targets }
+          pod_targets = select_maximal_pod_targets(pod_targets)
+          pod_targets.flat_map(&:build_settings)
         end
 
         # Returns the +user_target_xcconfig+ for all pod targets and their spec
