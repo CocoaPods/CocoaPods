@@ -71,28 +71,6 @@ module Pod
         @pod_target.dependencies.should == ['monkey']
       end
 
-      it 'returns whether it is whitelisted in a build configuration' do
-        @target_definition.store_pod('BananaLib')
-        @target_definition.whitelist_pod_for_configuration('BananaLib', 'debug')
-        @pod_target.include_in_build_config?(@target_definition, 'Debug').should.be.true
-        @pod_target.include_in_build_config?(@target_definition, 'Release').should.be.false
-      end
-
-      it 'is whitelisted on all build configurations of it is a dependency of other Pods' do
-        @pod_target.include_in_build_config?(@target_definition, 'Debug').should.be.true
-        @pod_target.include_in_build_config?(@target_definition, 'Release').should.be.true
-      end
-
-      it 'raises if a Pod is whitelisted for different build configurations' do
-        @target_definition.store_pod('BananaLib')
-        @target_definition.store_pod('BananaLib/Subspec')
-        @target_definition.whitelist_pod_for_configuration('BananaLib', 'debug')
-        message = should.raise Informative do
-          @pod_target.include_in_build_config?(@target_definition, 'release').should.be.true
-        end.message
-        message.should.match /subspecs across different build configurations/
-      end
-
       it 'builds a pod target if there are actual source files' do
         fa = Sandbox::FileAccessor.new(nil, @pod_target)
         fa.stubs(:source_files).returns([Pathname.new('foo.m')])

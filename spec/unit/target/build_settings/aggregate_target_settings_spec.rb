@@ -223,7 +223,7 @@ module Pod
                              )
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
             aggregate_target = fixture_aggregate_target([pod_target])
-            @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
+            @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
             @generator.other_ldflags.should == %w(-ObjC -l"PodTarget" -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end
@@ -452,7 +452,7 @@ module Pod
                              )
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
             aggregate_target = fixture_aggregate_target([pod_target])
-            @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
+            @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
             @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "VendoredFramework" -framework "XCTest")
           end
 
@@ -494,7 +494,7 @@ module Pod
                              )
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
             aggregate_target = fixture_aggregate_target([pod_target])
-            @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
+            @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
             @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end

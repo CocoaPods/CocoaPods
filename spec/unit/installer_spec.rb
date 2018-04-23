@@ -421,7 +421,7 @@ module Pod
         end
 
         it 'deletes the target support file dirs of the removed aggregate targets' do
-          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, [])
+          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, {})
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           FileUtils.mkdir_p(@installer.aggregate_targets.first.support_files_dir)
@@ -434,7 +434,7 @@ module Pod
         end
 
         it 'does not delete the target support file dirs for non removed aggregate targets' do
-          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, [])
+          aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil, nil, {})
           @installer.stubs(:aggregate_targets).returns([aggregate_target])
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           FileUtils.mkdir_p(@installer.aggregate_targets.first.support_files_dir)
@@ -638,7 +638,7 @@ module Pod
 
     describe 'Integrating client projects' do
       it 'integrates the client projects' do
-        target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition, config.sandbox.root.dirname, nil, nil, [])
+        target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition, config.sandbox.root.dirname, nil, nil, {})
         @installer.stubs(:aggregate_targets).returns([target])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)
         @installer.send(:integrate_user_project)

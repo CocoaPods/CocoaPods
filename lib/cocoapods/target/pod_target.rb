@@ -471,37 +471,6 @@ module Pod
       [self, *recursive_dependent_targets, *recursive_test_dependent_targets].uniq
     end
 
-    # Checks if the target should be included in the build configuration with
-    # the given name of a given target definition.
-    #
-    # @param  [TargetDefinition] target_definition
-    #         The target definition to check.
-    #
-    # @param  [String] configuration_name
-    #         The name of the build configuration.
-    #
-    def include_in_build_config?(target_definition, configuration_name)
-      key = [target_definition.label, configuration_name]
-      if @build_config_cache.key?(key)
-        return @build_config_cache[key]
-      end
-
-      whitelists = target_definition_dependencies(target_definition).map do |dependency|
-        target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
-      end.uniq
-
-      if whitelists.empty?
-        @build_config_cache[key] = true
-      elsif whitelists.count == 1
-        @build_config_cache[key] = whitelists.first
-      else
-        raise Informative, "The subspecs of `#{pod_name}` are linked to " \
-          "different build configurations for the `#{target_definition}` " \
-          'target. CocoaPods does not currently support subspecs across ' \
-          'different build configurations.'
-      end
-    end
-
     # Checks if warnings should be inhibited for this pod.
     #
     # @return [Bool]
@@ -596,20 +565,6 @@ module Pod
     end
 
     private
-
-    # @param  [TargetDefinition] target_definition
-    #         The target definition to check.
-    #
-    # @return [Array<Dependency>] The dependency of the target definition for
-    #         this Pod. Return an empty array if the Pod is not a direct
-    #         dependency of the target definition but the dependency of one or
-    #         more Pods.
-    #
-    def target_definition_dependencies(target_definition)
-      target_definition.dependencies.select do |dependency|
-        Specification.root_name(dependency.name) == pod_name
-      end
-    end
 
     def create_build_settings
       BuildSettings::PodTargetSettings.new(self, false)

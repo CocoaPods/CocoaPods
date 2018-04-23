@@ -701,31 +701,82 @@ module Pod
 
       #-------------------------------------------------------------------------#
 
-      it 'does include pod target if any spec is not used by tests only and is part of target definition' do
-        spec1 = Resolver::ResolverSpecification.new(stub, false, nil)
-        spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
-        target_definition = stub
-        pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
-        resolver_specs_by_target = { target_definition => [spec1, spec2] }
-        @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target).should == [pod_target]
+      describe '#filter_pod_targets_for_target_definition' do
+        it 'does include pod target if any spec is not used by tests only and is part of target definition' do
+          spec1 = Resolver::ResolverSpecification.new(stub, false, nil)
+          spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
+          target_definition = @podfile.target_definitions['SampleProject']
+          pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec], :pod_name => 'Pod1')
+          resolver_specs_by_target = { target_definition => [spec1, spec2] }
+          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [pod_target] }
+        end
+
+        it 'does not include pod target if its used by tests only' do
+          spec1 = Resolver::ResolverSpecification.new(stub, true, nil)
+          spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
+          target_definition = stub('TargetDefinition')
+          pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
+          resolver_specs_by_target = { target_definition => [spec1, spec2] }
+          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [] }
+        end
+
+        it 'does not include pod target if its not part of the target definition' do
+          spec = Resolver::ResolverSpecification.new(stub, false, nil)
+          target_definition = stub
+          pod_target = stub(:name => 'Pod1', :target_definitions => [], :specs => [spec.spec])
+          resolver_specs_by_target = { target_definition => [spec] }
+          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [] }
+        end
+
+        it 'returns whether it is whitelisted in a build configuration' do
+          target_definition = @podfile.target_definitions['SampleProject']
+          target_definition.whitelist_pod_for_configuration('JSONKit', 'Debug')
+
+          aggregate_target = @analyzer.analyze.targets.find { |t| t.target_definition == target_definition }
+          aggregate_target.pod_targets_for_build_configuration('Debug').map(&:name).
+            should.include 'JSONKit'
+          aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).
+            should.not.include 'JSONKit'
+        end
+
+        it 'allows a pod that is a dependency for other pods to be whitelisted' do
+          @podfile = Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject' do
+              pod 'AFNetworking', :configuration => 'Debug'
+              pod 'AFNetworkActivityLogger'
+            end
+          end
+          @analyzer = Installer::Analyzer.new(config.sandbox, @podfile)
+          target_definition = @podfile.target_definitions['SampleProject']
+          aggregate_target = @analyzer.analyze.targets.find { |t| t.target_definition == target_definition }
+
+          aggregate_target.pod_targets_for_build_configuration('Debug').map(&:name).
+            should.include 'AFNetworking'
+          aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).
+            should.not.include 'AFNetworking'
+        end
+
+        it 'raises if a Pod is whitelisted for different build configurations' do
+          @podfile = Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject' do
+              pod 'AFNetworking'
+              pod 'AFNetworking/NSURLConnection', :configuration => 'Debug'
+              pod 'AFNetworkActivityLogger'
+            end
+          end
+          @analyzer = Installer::Analyzer.new(config.sandbox, @podfile)
+
+          should.raise(Informative) do
+            @analyzer.analyze
+          end.message.should.include 'The subspecs of `AFNetworking` are linked to different build configurations for the `Pods-SampleProject` target. CocoaPods does not currently support subspecs across different build configurations.'
+        end
       end
 
-      it 'does not include pod target if its used by tests only' do
-        spec1 = Resolver::ResolverSpecification.new(stub, true, nil)
-        spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
-        target_definition = stub('TargetDefinition')
-        pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
-        resolver_specs_by_target = { target_definition => [spec1, spec2] }
-        @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target).should.be.empty
-      end
-
-      it 'does not include pod target if its not part of the target definition' do
-        spec = Resolver::ResolverSpecification.new(stub, false, nil)
-        target_definition = stub
-        pod_target = stub(:name => 'Pod1', :target_definitions => [], :specs => [spec.spec])
-        resolver_specs_by_target = { target_definition => [spec] }
-        @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target).should.be.empty
-      end
+      #-------------------------------------------------------------------------#
 
       describe 'extension targets' do
         before do
