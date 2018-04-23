@@ -520,6 +520,7 @@ module Pod
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
           frameworks = vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
+          frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } unless test_xcconfig?
           frameworks.concat consumer_frameworks
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } if test_xcconfig?
@@ -528,7 +529,8 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :static_frameworks_to_import, :memoized => true do
-          static_frameworks_to_import = vendored_static_frameworks.map { |f| File.basename(f, '.framework') }
+          static_frameworks_to_import = []
+          static_frameworks_to_import.concat vendored_static_frameworks.map { |f| File.basename(f, '.framework') } unless target.should_build? && target.requires_frameworks? && !target.static_framework?
           static_frameworks_to_import << target.product_basename if target.should_build? && target.requires_frameworks? && target.static_framework?
           static_frameworks_to_import
         end

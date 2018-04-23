@@ -209,8 +209,7 @@ module Pod
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
                               :spec_consumers => [consumer],
-                              :requires_frameworks? => true,
-                              :static_framework? => false,
+                              :requires_frameworks? => false,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -225,7 +224,7 @@ module Pod
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
-            @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
+            @generator.other_ldflags.should == %w(-ObjC -l"PodTarget" -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end
 
@@ -413,6 +412,90 @@ module Pod
             @generator.send(:pod_targets).first.stubs(:uses_swift?).returns(true)
             @target_definition.stubs(:swift_version).returns('2.3')
             @generator.generate.to_hash.key?('EMBEDDED_CONTENT_CONTAINS_SWIFT').should == false
+          end
+
+          it 'does propagate framework or libraries from a non test specification to an aggregate target' do
+            target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
+            spec = stub('spec', :test_specification? => false)
+            consumer = stub('consumer',
+                            :libraries => ['xml2'],
+                            :frameworks => ['XCTest'],
+                            :weak_frameworks => [],
+                            :spec => spec,
+                           )
+            file_accessor = stub('file_accessor',
+                                 :spec => spec,
+                                 :spec_consumer => consumer,
+                                 :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                                 :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                                 :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                                 :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                                )
+            file_accessor.stubs(:vendored_frameworks => file_accessor.vendored_static_frameworks + file_accessor.vendored_dynamic_frameworks,
+                                :vendored_dynamic_artifacts => file_accessor.vendored_dynamic_frameworks + file_accessor.vendored_dynamic_libraries,
+                                :vendored_static_artifacts => file_accessor.vendored_static_frameworks + file_accessor.vendored_static_libraries)
+            pod_target = stub('pod_target',
+                              :file_accessors => [file_accessor],
+                              :spec_consumers => [consumer],
+                              :requires_frameworks? => true,
+                              :static_framework? => false,
+                              :dependent_targets => [],
+                              :recursive_dependent_targets => [],
+                              :sandbox => config.sandbox,
+                              :should_build? => true,
+                              :configuration_build_dir => 'CBD',
+                              :include_in_build_config? => true,
+                              :uses_swift? => false,
+                              :build_product_path => 'BPP',
+                              :product_basename => 'PodTarget',
+                              :target_definitions => [target_definition],
+                             )
+            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
+            aggregate_target = fixture_aggregate_target([pod_target])
+            @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
+            @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "VendoredFramework" -framework "XCTest")
+          end
+
+          it 'does propagate framework or libraries from a non test specification static framework to an aggregate target' do
+            target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
+            spec = stub('spec', :test_specification? => false)
+            consumer = stub('consumer',
+                            :libraries => ['xml2'],
+                            :frameworks => ['XCTest'],
+                            :weak_frameworks => [],
+                            :spec => spec,
+                           )
+            file_accessor = stub('file_accessor',
+                                 :spec => spec,
+                                 :spec_consumer => consumer,
+                                 :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
+                                 :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                                 :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
+                                 :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                                )
+            file_accessor.stubs(:vendored_frameworks => file_accessor.vendored_static_frameworks + file_accessor.vendored_dynamic_frameworks,
+                                :vendored_dynamic_artifacts => file_accessor.vendored_dynamic_frameworks + file_accessor.vendored_dynamic_libraries,
+                                :vendored_static_artifacts => file_accessor.vendored_static_frameworks + file_accessor.vendored_static_libraries)
+            pod_target = stub('pod_target',
+                              :file_accessors => [file_accessor],
+                              :spec_consumers => [consumer],
+                              :requires_frameworks? => true,
+                              :static_framework? => true,
+                              :dependent_targets => [],
+                              :recursive_dependent_targets => [],
+                              :sandbox => config.sandbox,
+                              :should_build? => true,
+                              :configuration_build_dir => 'CBD',
+                              :include_in_build_config? => true,
+                              :uses_swift? => false,
+                              :build_product_path => 'BPP',
+                              :product_basename => 'PodTarget',
+                              :target_definitions => [target_definition],
+                             )
+            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
+            aggregate_target = fixture_aggregate_target([pod_target])
+            @generator = AggregateTargetSettings.new(aggregate_target, 'Debug')
+            @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end
 
