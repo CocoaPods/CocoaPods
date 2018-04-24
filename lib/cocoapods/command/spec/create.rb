@@ -112,7 +112,7 @@ module Pod
 #  Be sure to run `pod spec lint #{data[:name]}.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
-#  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
+#  To learn more about Podspec attributes see https://docs.cocoapods.org/specification.html
 #  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
@@ -143,7 +143,7 @@ Pod::Spec.new do |s|
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
-  #  Licensing your code is important. See http://choosealicense.com for more info.
+  #  Licensing your code is important. See https://choosealicense.com for more info.
   #  CocoaPods will detect a license file if there is a named LICENSE*
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
@@ -165,7 +165,7 @@ Pod::Spec.new do |s|
   s.author             = { "#{data[:author_name]}" => "#{data[:author_email]}" }
   # Or just: s.author    = "#{data[:author_name]}"
   # s.authors            = { "#{data[:author_name]}" => "#{data[:author_email]}" }
-  # s.social_media_url   = "http://twitter.com/#{data[:author_name]}"
+  # s.social_media_url   = "https://twitter.com/#{data[:author_name]}"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -259,7 +259,7 @@ CocoaPods is a tool for managing dependencies for OSX and iOS Xcode projects and
 
 However, #{repo} doesn't have any version tags. I’ve added the current HEAD as version 0.0.1, but a version tag will make dependency resolution much easier.
 
-[Semantic version](http://semver.org) tags (instead of plain commit hashes/revisions) allow for [resolution of cross-dependencies](https://github.com/CocoaPods/Specs/wiki/Cross-dependencies-resolution-example).
+[Semantic version](https://semver.org) tags (instead of plain commit hashes/revisions) allow for [resolution of cross-dependencies](https://github.com/CocoaPods/Specs/wiki/Cross-dependencies-resolution-example).
 
 In case you didn’t know this yet; you can tag the current HEAD as, for instance, version 1.0.0, like so:
 
