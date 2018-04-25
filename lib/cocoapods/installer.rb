@@ -209,10 +209,6 @@ module Pod
     #
     attr_reader :pods_project
 
-    # @return [Array<String>] The Pods that should be installed.
-    #
-    attr_reader :names_of_pods_to_install
-
     # @return [Array<AggregateTarget>] The model representations of an
     #         aggregation of pod targets generated for a target definition
     #         in the Podfile as result of the analyzer.
