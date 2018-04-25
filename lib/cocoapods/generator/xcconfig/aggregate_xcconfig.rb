@@ -121,7 +121,9 @@ module Pod
             build_settings
           else
             # Make headers discoverable from $PODS_ROOT/Headers directory
-            header_search_paths = target.sandbox.public_headers.search_paths(target.platform)
+            header_search_paths = pod_targets.flat_map do |pod_target|
+              target.sandbox.public_headers.search_paths(target.platform, pod_target.pod_name, false)
+            end.uniq
             {
               # TODO: remove quote imports in CocoaPods 2.0
               # by `#import "…"`

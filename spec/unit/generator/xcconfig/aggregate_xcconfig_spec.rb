@@ -383,6 +383,26 @@ module Pod
 
         #-----------------------------------------------------------------------#
 
+        describe '#settings_to_import_pod_targets' do
+          it 'should not include import settings for non-dependent pod targets' do
+            config.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
+            config.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
+            banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+            banana_pod_target = pod_target(banana_spec, @target_definition)
+            target = fixture_aggregate_target([banana_pod_target], @target_definition)
+            target.target_definition.whitelist_pod_for_configuration(banana_spec.name, 'Release')
+            generator = AggregateXCConfig.new(target, 'Release')
+            target.stubs(:requires_frameworks?).returns(false)
+            result = generator.send(:settings_to_import_pod_targets)
+            # CoconutLib is part of the sandbox public header search paths but it is not a dependency to this aggregate
+            # target, therefore it should not include its header search paths as part of its xcconfig.
+            result['HEADER_SEARCH_PATHS'].should == '"${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/BananaLib"'
+            result['OTHER_CFLAGS'].should == '-isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/BananaLib"'
+          end
+        end
+
+        #-----------------------------------------------------------------------#
+
         describe 'when no pods are whitelisted for the given configuration' do
           before do
             @generator.stubs(:configuration_name).returns('.invalid')
