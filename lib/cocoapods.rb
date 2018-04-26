@@ -66,7 +66,6 @@ module Pod
     autoload :ModuleMap,               'cocoapods/generator/module_map'
     autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
     autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
-    autoload :XCConfig,                'cocoapods/generator/xcconfig'
     autoload :AppTargetHelper,         'cocoapods/generator/app_target_helper'
   end
 

@@ -18,6 +18,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Improve performance of Pods project generator by skipping native targets for which dependent targets have already been added.
   [Jacek Suliga](https://github.com/jmkk)
 
+* Refactor build settings generation to perform much better on large projects.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Remove [system] declaration attribute from generated module maps  
@@ -55,6 +58,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix assetcatalog_generated_info.plist path in copy resources phase  
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
+
+* When integrating a vendored framework while building pods as static 
+  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS` 
+  instead of via the sandbox headers store.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.5.0 (2018-04-04)
 

@@ -322,8 +322,9 @@ module Pod
             user_target = stub('SampleApp-iOS-User-Target', :symbol_type => :application)
             user_target.expects(:common_resolved_build_setting).with('APPLICATION_EXTENSION_API_ONLY').returns('NO')
 
-            target = AggregateTarget.new(config.sandbox, false, {}, [],
-                                         Platform.new(:ios, '6.0'), fixture_target_definition,
+            target = AggregateTarget.new(config.sandbox, false,
+                                         { 'App Store' => :release, 'Debug' => :debug, 'Release' => :release, 'Test' => :debug },
+                                         [], Platform.new(:ios, '6.0'), fixture_target_definition,
                                          config.sandbox.root.dirname, proj, nil, [])
 
             target.stubs(:user_targets).returns([user_target])

@@ -77,6 +77,16 @@ module Pod
       @xcconfigs = {}
     end
 
+    def build_settings(configuration_name = nil)
+      if configuration_name
+        @build_settings[configuration_name] ||
+          raise(ArgumentError, "#{self} does not contain a build setting for the #{configuration_name.inspect} configuration, only #{@build_settings.keys.inspect}")
+      else
+        @build_settings.each_value.first ||
+          raise(ArgumentError, "#{self} does not contain any build settings")
+      end
+    end
+
     # @return [Boolean] True if the user_target refers to a
     #         library (framework, static or dynamic lib).
     #
@@ -151,10 +161,6 @@ module Pod
       @pod_targets_for_build_configuration[build_configuration] ||= pod_targets.select do |pod_target|
         pod_target.include_in_build_config?(target_definition, build_configuration)
       end
-    end
-
-    def pod_targets_to_link
-      @pod_targets_to_link ||= pod_targets.to_set - search_paths_aggregate_targets.flat_map(&:pod_targets)
     end
 
     # @return [Array<Specification>] The specifications used by this aggregate target.
@@ -308,6 +314,16 @@ module Pod
     #
     def relative_to_srcroot(path)
       path.relative_path_from(client_root).to_s
+    end
+
+    def create_build_settings
+      settings = {}
+
+      user_build_configurations.each_key do |configuration_name|
+        settings[configuration_name] = BuildSettings::AggregateTargetSettings.new(self, configuration_name)
+      end
+
+      settings
     end
   end
 end

@@ -63,7 +63,7 @@ module Pod
           paths << "${PODS_ROOT}/#{headers_dir}/#{@relative_path}" if !use_modular_headers || @visibility_scope == :public
           paths << "${PODS_ROOT}/#{headers_dir}/#{entry[:path]}" if !use_modular_headers || @visibility_scope == :private
           paths
-        end.uniq
+        end.tap(&:uniq!).freeze
       end
 
       # Removes the directory as it is regenerated from scratch during each
