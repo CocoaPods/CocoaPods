@@ -10,11 +10,19 @@ module Pod
               @project = Pod::Project.new(config.sandbox.project_path)
               @project.save
               @target_definition = fixture_target_definition
+              @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+              @banana_pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+                                                 [@target_definition])
               @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
-              @coconut_pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@coconut_spec, *@coconut_spec.recursive_subspecs], [@target_definition])
-              @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [], :project => @project)
-              @test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [], :shell_script_build_phases => [], :project => @project)
-              @target_installation_result = TargetInstallationResult.new(@coconut_pod_target, @native_target, [], [@test_native_target])
+              @coconut_pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios,
+                                                  [@coconut_spec, *@coconut_spec.recursive_subspecs],
+                                                  [@target_definition])
+              @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [],
+                                                    :project => @project)
+              @test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
+                                                             :shell_script_build_phases => [], :project => @project)
+              @target_installation_result = TargetInstallationResult.new(@coconut_pod_target, @native_target, [],
+                                                                         [@test_native_target])
             end
 
             describe '#integrate!' do
@@ -30,7 +38,8 @@ module Pod
               end
 
               it 'clears input and output paths from script phase if it exceeds limit' do
-                # The paths represented here will be 501 for input paths and 501 for output paths which will exceed the limit.
+                # The paths represented here will be 501 for input paths and 501 for output paths
+                # which will exceed the limit.
                 resource_paths = (0..500).map do |i|
                   "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
                 end
@@ -45,7 +54,9 @@ module Pod
               end
 
               it 'integrates test native targets with frameworks and resources script phase input and output paths' do
-                framework_paths = { :name => 'Vendored.framework', :input_path => '${PODS_ROOT}/Vendored/Vendored.framework', :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' }
+                framework_paths = { :name => 'Vendored.framework',
+                                    :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
+                                    :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' }
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns(framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns(resource_paths)
@@ -71,8 +82,31 @@ module Pod
                 ]
               end
 
+              it 'excludes test framework and resource paths from dependent targets' do
+                framework_paths = { :name => 'TestVendored.framework',
+                                    :input_path => '${PODS_ROOT}/Vendored/TestVendored.framework',
+                                    :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TestVendored.framework' }
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+                @banana_pod_target.stubs(:resource_paths).with(true).returns(resource_paths)
+                @banana_pod_target.stubs(:framework_paths).with(true).returns(framework_paths)
+                @banana_pod_target.expects(:resource_paths).with(false).returns([])
+                @banana_pod_target.expects(:framework_paths).with(false).returns([])
+                @coconut_pod_target.stubs(:dependent_targets).returns([@banana_pod_target])
+                PodTargetIntegrator.new(@target_installation_result).integrate!
+                @test_native_target.build_phases.count.should == 2
+                @test_native_target.build_phases.map(&:display_name).should == [
+                  '[CP] Embed Pods Frameworks',
+                  '[CP] Copy Pods Resources',
+                ]
+                @test_native_target.build_phases[0].input_paths.should.be.empty
+                @test_native_target.build_phases[0].output_paths.should.be.empty
+                @test_native_target.build_phases[1].input_paths.should.be.empty
+                @test_native_target.build_phases[1].output_paths.should.should.be.empty
+              end
+
               it 'integrates test native target with shell script phases' do
-                @coconut_spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
+                @coconut_spec.test_specs.first.script_phase = { :name => 'Hello World',
+                                                                :script => 'echo "Hello World"' }
                 PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 3
                 @test_native_target.build_phases[2].display_name.should == '[CP-User] Hello World'

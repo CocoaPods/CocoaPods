@@ -52,7 +52,10 @@ module Pod
           def add_copy_resources_script_phase(native_target)
             test_type = target.test_type_for_product_type(native_target.symbol_type)
             script_path = "${PODS_ROOT}/#{target.copy_resources_script_path_for_test_type(test_type).relative_path_from(target.sandbox.root)}"
-            resource_paths = target.all_dependent_targets.flat_map(&:resource_paths)
+            resource_paths = target.all_dependent_targets.flat_map do |dependent_target|
+              include_test_spec_paths = dependent_target == target
+              dependent_target.resource_paths(include_test_spec_paths)
+            end
             input_paths = []
             output_paths = []
             unless resource_paths.empty?
@@ -71,7 +74,11 @@ module Pod
           def add_embed_frameworks_script_phase(native_target)
             test_type = target.test_type_for_product_type(native_target.symbol_type)
             script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_test_type(test_type).relative_path_from(target.sandbox.root)}"
-            framework_paths = target.all_dependent_targets.flat_map(&:framework_paths)
+            all_dependent_targets = target.all_dependent_targets
+            framework_paths = all_dependent_targets.flat_map do |dependent_target|
+              include_test_spec_paths = dependent_target == target
+              dependent_target.framework_paths(include_test_spec_paths)
+            end
             input_paths = []
             output_paths = []
             unless framework_paths.empty?
