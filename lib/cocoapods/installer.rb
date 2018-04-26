@@ -226,7 +226,7 @@ module Pod
       (aggregate_target_pod_targets + test_dependent_targets).uniq
     end
 
-    # @return [Array<Specification>] The specifications that where installed.
+    # @return [Array<Specification>] The specifications that were installed.
     #
     attr_accessor :installed_specs
 
