@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not include test dependencies input and output paths  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)
+
 * Remove [system] declaration attribute from generated module maps  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7589](https://github.com/CocoaPods/CocoaPods/issues/7589)
