@@ -157,13 +157,17 @@ module Pod
           # @param  [Symbol] bundle_package_type
           #         the CFBundlePackageType of the target this Info.plist file is for.
           #
+          # @param  [Boolean] add_to_support_group
+          #         Whether to add the generated file into the support files group by default.
+          #
           # @return [void]
           #
-          def create_info_plist_file(path, native_target, version, platform, bundle_package_type = :fmwk)
+          def create_info_plist_file(path, native_target, version, platform, bundle_package_type = :fmwk,
+                                     add_to_support_group = true)
             UI.message "- Generating Info.plist file at #{UI.path(path)}" do
               generator = Generator::InfoPlistFile.new(version, platform, bundle_package_type)
               update_changed_file(generator, path)
-              add_file_to_support_group(path)
+              add_file_to_support_group(path) if add_to_support_group
 
               native_target.build_configurations.each do |c|
                 relative_path = path.relative_path_from(sandbox.root)
