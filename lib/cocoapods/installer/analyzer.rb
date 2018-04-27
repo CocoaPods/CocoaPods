@@ -448,7 +448,8 @@ module Pod
           end
         end
         platform = target_definition.platform
-        pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target)
+        build_configurations = user_build_configurations.keys.concat(target_definition.all_whitelisted_configurations).uniq
+        pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target, build_configurations)
         AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
                             target_definition, client_root, user_project, user_target_uuids, pod_targets)
       end
@@ -465,13 +466,46 @@ module Pod
       # @param  [Hash{Podfile::TargetDefinition => Array<ResolvedSpecification>}] resolver_specs_by_target
       #         the resolved specifications grouped by target.
       #
-      # @return [Array<PodTarget>] the filtered list of pod targets.
+      # @param  [Array<String>] build_configurations
+      #         The list of all build configurations the targets will be built for.
       #
-      def filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target)
-        pod_targets.select do |pod_target|
-          next false unless pod_target.target_definitions.include?(target_definition)
-          resolver_specs_by_target[target_definition].any? { |resolver_spec| !resolver_spec.used_by_tests_only? && pod_target.specs.include?(resolver_spec.spec) }
+      # @return [Hash<String => Array<PodTarget>>]
+      #         the filtered list of pod targets, grouped by build configuration.
+      #
+      def filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target, build_configurations)
+        pod_targets_by_build_config = Hash.new([].freeze)
+        build_configurations.each { |config| pod_targets_by_build_config[config] = [] }
+
+        pod_targets.each do |pod_target|
+          next unless pod_target.target_definitions.include?(target_definition)
+          next unless resolver_specs_by_target[target_definition].any? { |resolver_spec| !resolver_spec.used_by_tests_only? && pod_target.specs.include?(resolver_spec.spec) }
+
+          pod_name = pod_target.pod_name
+
+          dependencies = @podfile_dependency_cache.target_definition_dependencies(target_definition).select do |dependency|
+            Specification.root_name(dependency.name) == pod_name
+          end
+
+          build_configurations.each do |configuration_name|
+            whitelists = dependencies.map do |dependency|
+              target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
+            end.uniq
+
+            case whitelists
+            when [], [true] then nil
+            when [false] then next
+            else
+              raise Informative, "The subspecs of `#{pod_name}` are linked to " \
+                "different build configurations for the `#{target_definition}` " \
+                'target. CocoaPods does not currently support subspecs across ' \
+                'different build configurations.'
+            end
+
+            pod_targets_by_build_config[configuration_name] << pod_target
+          end
         end
+
+        pod_targets_by_build_config
       end
 
       # Setup the pod targets for an aggregate target. Deduplicates resulting

@@ -9,7 +9,7 @@ module Pod
       @target = @project.targets.first
       target_definition = Podfile::TargetDefinition.new('Pods', nil)
       target_definition.abstract = false
-      @pod_bundle = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, target_definition, project_path.dirname, @project, [@target.uuid], [])
+      @pod_bundle = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, target_definition, project_path.dirname, @project, [@target.uuid], {})
       configuration = Xcodeproj::Config.new(
         'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
       )

@@ -61,10 +61,10 @@ module Pod
     # @param [Pathname] client_root @see #client_root
     # @param [Xcodeproj::Project] user_project @see #user_project
     # @param [Array<String>] user_target_uuids @see #user_target_uuids
-    # @param [Array<PodTarget>] pod_targets @see #pod_targets
+    # @param [Array<PodTarget>] pod_targets_for_build_configuration @see #pod_targets_for_build_configuration
     #
     def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, target_definition,
-                   client_root, user_project, user_target_uuids, pod_targets)
+                   client_root, user_project, user_target_uuids, pod_targets_for_build_configuration)
       super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform)
       raise "Can't initialize an AggregateTarget without a TargetDefinition!" if target_definition.nil?
       raise "Can't initialize an AggregateTarget with an abstract TargetDefinition!" if target_definition.abstract?
@@ -72,7 +72,8 @@ module Pod
       @client_root = client_root
       @user_project = user_project
       @user_target_uuids = user_target_uuids
-      @pod_targets = pod_targets
+      @pod_targets_for_build_configuration = pod_targets_for_build_configuration
+      @pod_targets = pod_targets_for_build_configuration.values.flatten.uniq
       @search_paths_aggregate_targets = []
       @xcconfigs = {}
     end
@@ -157,10 +158,7 @@ module Pod
     #         configuration.
     #
     def pod_targets_for_build_configuration(build_configuration)
-      @pod_targets_for_build_configuration ||= {}
-      @pod_targets_for_build_configuration[build_configuration] ||= pod_targets.select do |pod_target|
-        pod_target.include_in_build_config?(target_definition, build_configuration)
-      end
+      @pod_targets_for_build_configuration[build_configuration] || []
     end
 
     # @return [Array<Specification>] The specifications used by this aggregate target.

@@ -150,7 +150,7 @@ def fixture_aggregate_target(pod_targets = [], host_requires_frameworks = false,
                              archs = [], platform = Pod::Platform.new(:ios, '6.0'), target_definition = nil)
   target_definition ||= pod_targets.flat_map(&:target_definitions).first || fixture_target_definition
   Pod::AggregateTarget.new(config.sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
-                           target_definition, config.sandbox.root.dirname, nil, nil, pod_targets)
+                           target_definition, config.sandbox.root.dirname, nil, nil, 'Release' => pod_targets)
 end
 
 #-----------------------------------------------------------------------------#

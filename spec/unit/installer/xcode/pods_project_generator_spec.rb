@@ -325,7 +325,7 @@ module Pod
             target = AggregateTarget.new(config.sandbox, false,
                                          { 'App Store' => :release, 'Debug' => :debug, 'Release' => :release, 'Test' => :debug },
                                          [], Platform.new(:ios, '6.0'), fixture_target_definition,
-                                         config.sandbox.root.dirname, proj, nil, [])
+                                         config.sandbox.root.dirname, proj, nil, {})
 
             target.stubs(:user_targets).returns([user_target])
 
