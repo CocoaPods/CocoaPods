@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not crash when creating build settings for a missing user build configuration  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7698](https://github.com/CocoaPods/CocoaPods/pull/7698)
+
 * Do not include test dependencies input and output paths  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)
