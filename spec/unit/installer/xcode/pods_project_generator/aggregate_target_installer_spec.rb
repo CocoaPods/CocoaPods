@@ -19,6 +19,7 @@ module Pod
               config.sandbox.project = @project
               path_list = Sandbox::PathList.new(fixture('banana-lib'))
               @spec = fixture_spec('banana-lib/BananaLib.podspec')
+              @spec.prefix_header_contents = '#import "BlocksKit.h"'
               file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
               @project.add_pod_group('BananaLib', fixture('banana-lib'))
               group = @project.group_for_spec('BananaLib')
@@ -26,12 +27,17 @@ module Pod
                 @project.add_file_reference(file, group)
               end
 
-              user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
-              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), [@spec], [@target_definition], [file_accessor])
+              @platform = Platform.new(:ios, '6.0')
+
+              user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release,
+                                            'Test' => :debug }
+              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], @platform, [@spec],
+                                          [@target_definition], [file_accessor])
               pod_targets_by_config = Hash[user_build_configurations.each_key.map { |c| [c, [@pod_target]] }]
-              @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), @target_definition, config.sandbox.root.dirname, nil, nil, pod_targets_by_config)
+              @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], @platform,
+                                            @target_definition, config.sandbox.root.dirname, nil, nil,
+                                            pod_targets_by_config)
               @installer = AggregateTargetInstaller.new(config.sandbox, @project, @target)
-              @spec.prefix_header_contents = '#import "BlocksKit.h"'
             end
 
             it 'adds file references for the support files of the target' do
@@ -260,6 +266,22 @@ module Pod
               build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-umbrella.h') }
               build_file.should.not.be.nil
               build_file.settings.should == { 'ATTRIBUTES' => ['Public'] }
+            end
+
+            it 'does not create xcconfigs for non existent user build configurations' do
+              target = AggregateTarget.new(config.sandbox, false, { 'Debug' => :debug }, [], @platform,
+                                           @target_definition, config.sandbox.root.dirname, nil, nil, {})
+              @installer = AggregateTargetInstaller.new(config.sandbox, @project, target)
+              @installer.install!
+              group = @project.support_files_group['Pods-SampleProject']
+              group.children.map(&:display_name).sort.should == [
+                'Pods-SampleProject-acknowledgements.markdown',
+                'Pods-SampleProject-acknowledgements.plist',
+                'Pods-SampleProject-dummy.m',
+                'Pods-SampleProject-frameworks.sh',
+                'Pods-SampleProject-resources.sh',
+                'Pods-SampleProject.debug.xcconfig',
+              ]
             end
           end
         end

@@ -95,6 +95,7 @@ module Pod
           #
           def create_xcconfig_file(native_target)
             native_target.build_configurations.each do |configuration|
+              next unless target.user_build_configurations.key?(configuration.name)
               path = target.xcconfig_path(configuration.name)
               build_settings = target.build_settings(configuration.name)
               update_changed_file(build_settings, path)
