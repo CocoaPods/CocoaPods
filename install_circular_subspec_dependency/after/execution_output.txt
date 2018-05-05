@@ -37,9 +37,13 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Pod1` iOS 8.0
+      - Generating dummy source at `Pods/Target Support Files/Pod1/Pod1-dummy.m`
     - Installing target `Pod2` iOS 8.0
+      - Generating dummy source at `Pods/Target Support Files/Pod2/Pod2-dummy.m`
     - Installing target `Pod3` iOS 8.0
+      - Generating dummy source at `Pods/Target Support Files/Pod3/Pod3-dummy.m`
     - Installing target `Pods-SubSpecCircular` iOS 9.3
+      - Generating dummy source at `Pods/Target Support Files/Pods-SubSpecCircular/Pods-SubSpecCircular-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

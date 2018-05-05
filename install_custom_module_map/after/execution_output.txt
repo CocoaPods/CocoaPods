@@ -31,10 +31,12 @@ Generating Pods project
     - Installing target `BananaLib` iOS 8.0
       - Copying module map file to `Pods/Target Support Files/BananaLib/BananaLib.modulemap`
       - Generating Info.plist file at `Pods/Target Support Files/BananaLib/BananaLib-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/BananaLib/BananaLib-dummy.m`
     - Installing target `Pods-Example` iOS 8.2
       - Generating Info.plist file at `Pods/Target Support Files/Pods-Example/Pods-Example-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-Example/Pods-Example.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-Example/Pods-Example-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-Example/Pods-Example-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

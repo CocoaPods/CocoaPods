@@ -60,10 +60,15 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `JSONKit` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/JSONKit/JSONKit-dummy.m`
     - Installing target `Reachability` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Reachability/Reachability-dummy.m`
     - Installing target `Pods-SampleApp` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
     - Installing target `Pods-SampleAppTests` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-dummy.m`
     - Installing target `Pods-SampleApp_2` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp_2/Pods-SampleApp_2-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

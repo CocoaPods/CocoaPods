@@ -29,7 +29,9 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Reachability` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Reachability/Reachability-dummy.m`
     - Installing target `Pods-iOS App` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Pods-iOS App/Pods-iOS App-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

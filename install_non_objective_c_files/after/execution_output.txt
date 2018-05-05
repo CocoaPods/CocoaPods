@@ -33,7 +33,9 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `Moment` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Moment/Moment-dummy.m`
     - Installing target `Pods-SampleApp` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
