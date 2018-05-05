@@ -61,14 +61,17 @@ Generating Pods project
       - Generating module map file at `Pods/Target Support Files/SocketRocket/SocketRocket.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/SocketRocket/SocketRocket-umbrella.h`
       - Generating Info.plist file at `Pods/Target Support Files/SocketRocket/SocketRocket-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/SocketRocket/SocketRocket-dummy.m`
     - Installing target `libPusher` iOS 8.0
       - Generating module map file at `Pods/Target Support Files/libPusher/libPusher.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/libPusher/libPusher-umbrella.h`
       - Generating Info.plist file at `Pods/Target Support Files/libPusher/libPusher-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/libPusher/libPusher-dummy.m`
     - Installing target `Pods-Example` iOS 8.2
       - Generating Info.plist file at `Pods/Target Support Files/Pods-Example/Pods-Example-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-Example/Pods-Example.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-Example/Pods-Example-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-Example/Pods-Example-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

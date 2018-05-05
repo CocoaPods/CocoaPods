@@ -30,7 +30,9 @@ Generating Pods project
   - Installing targets
     - Installing target `res` macOS 10.0
       - Generating Info.plist file at `Pods/Target Support Files/res/ResourceBundle-res-res-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/res/res-dummy.m`
     - Installing target `Pods-SampleApp` macOS 10.8
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

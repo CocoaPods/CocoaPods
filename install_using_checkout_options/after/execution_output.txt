@@ -50,9 +50,13 @@ Generating Pods project
   - Linking headers
   - Installing targets
     - Installing target `AFNetworking` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/AFNetworking/AFNetworking-dummy.m`
     - Installing target `RKValueTransformers` iOS 5.1.1
+      - Generating dummy source at `Pods/Target Support Files/RKValueTransformers/RKValueTransformers-dummy.m`
     - Installing target `SEGModules` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/SEGModules/SEGModules-dummy.m`
     - Installing target `Pods-SampleApp` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

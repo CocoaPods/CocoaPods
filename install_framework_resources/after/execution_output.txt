@@ -34,14 +34,17 @@ Generating Pods project
       - Generating module map file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-umbrella.h`
       - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-dummy.m`
     - Installing target `Pods-SampleApp` macOS 10.10
       - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
     - Installing target `Pods-SampleAppTests` macOS 10.10
       - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-dummy.m`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs
