@@ -12,9 +12,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7610](https://github.com/CocoaPods/CocoaPods/pull/7610)
 
-* Improve performance of the dependency resolver by removing duplicates for dependency nodes.
-  [Jacek Suliga](https://github.com/jmkk)
-
 * Improve performance of Pods project generator by skipping native targets for which dependent targets have already been added.
   [Jacek Suliga](https://github.com/jmkk)
 
@@ -35,11 +32,33 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7671](https://github.com/CocoaPods/CocoaPods/pull/7671)
 
-* Remove [system] declaration attribute from generated module maps  
+* When integrating a vendored framework while building pods as static 
+  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS` 
+  instead of via the sandbox headers store.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Improve performance of grouping pods by configuration.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
+## 1.5.1 (2018-05-07)
+
+##### Enhancements
+
+* Improve performance of the dependency resolver by removing duplicates for dependency nodes.
+  [Jacek Suliga](https://github.com/jmkk)
+
+##### Bug Fixes
+
+* Do not include test dependencies input and output paths.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)
+
+* Remove [system] declaration attribute from generated module maps.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7589](https://github.com/CocoaPods/CocoaPods/issues/7589)
 
-* Properly namespace Info.plist names during target installation  
+* Properly namespace Info.plist names during target installation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7611](https://github.com/CocoaPods/CocoaPods/pull/7611)
 
@@ -51,7 +70,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7597](https://github.com/CocoaPods/CocoaPods/issues/7597)
 
-* Fix static framework dependent target double linking without use_frameworks  
+* Fix static framework dependent target double linking without `use_frameworks`.  
   [Paul Beusterien](https://github.com/paulb777)
   [#7592](https://github.com/CocoaPods/CocoaPods/issues/7592)
 
@@ -59,26 +78,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#7596](https://github.com/CocoaPods/CocoaPods/issues/7596)
 
-* Inhibit warnings for all dependencies during validation except for the one being validated  
+* Inhibit warnings for all dependencies during validation except for the one being validated.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7434](https://github.com/CocoaPods/CocoaPods/issues/7434)
 
-* Prevent duplicated targets from being stripped out from the framework search paths  
+* Prevent duplicated targets from being stripped out from the framework search paths.  
   [Liquidsoul](https://github.com/liquidsoul)
   [#7644](https://github.com/CocoaPods/CocoaPods/pull/7644)
 
-* Fix assetcatalog_generated_info.plist path in copy resources phase  
+* Fix `assetcatalog_generated_info.plist` path in copy resources phase.  
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
-
-* When integrating a vendored framework while building pods as static 
-  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS` 
-  instead of via the sandbox headers store.  
-  [Samuel Giddins](https://github.com/segiddins)
-
-
-* Improve performance of grouping pods by configuration.  
-  [Samuel Giddins](https://github.com/segiddins)
 
 
 ## 1.5.0 (2018-04-04)
