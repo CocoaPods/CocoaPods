@@ -1,9 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - OS X:
-    - Cocoa.framework
+- Frameworks: []
 - Products:
   - libPods-SampleApp.a
 - Targets Support Files:
@@ -23,8 +21,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Cocoa.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:

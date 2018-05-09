@@ -1,9 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - iOS:
-    - Foundation.framework
+- Frameworks: []
 - Pods:
   - Test:
     - AFRaptureXMLRequestOperation.h
@@ -35,8 +33,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-iOS App-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -83,8 +80,7 @@ Targets:
       - Foo.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - Test-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - AFRaptureXMLRequestOperation.h:
           ATTRIBUTES:

@@ -1,10 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - iOS:
-    - Foundation.framework
-    - SystemConfiguration.framework
+- Frameworks: []
 - Pods:
   - Reachability:
     - Reachability.h
@@ -35,8 +32,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:
@@ -119,9 +115,7 @@ Targets:
       - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: "-fno-objc-arc"
-    - Frameworks:
-      - Foundation.framework
-      - SystemConfiguration.framework
+    - Frameworks: []
     - Headers:
       - Reachability.h:
           ATTRIBUTES:

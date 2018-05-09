@@ -1,10 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - iOS:
-    - Foundation.framework
-    - SystemConfiguration.framework
+- Frameworks: []
 - Pods:
   - JSONKit:
     - JSONKit.h
@@ -43,8 +40,7 @@ Targets:
       - JSONKit-dummy.m
       - JSONKit.m:
           COMPILER_FLAGS: "-fno-objc-arc"
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - JSONKit.h:
           ATTRIBUTES:
@@ -97,8 +93,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -143,9 +138,7 @@ Targets:
       - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Foundation.framework
-      - SystemConfiguration.framework
+    - Frameworks: []
     - Headers:
       - Reachability.h:
           ATTRIBUTES:

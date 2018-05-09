@@ -1,9 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - iOS:
-    - Foundation.framework
+- Frameworks: []
 - Pods:
   - PodTest:
     - subspec_1:
@@ -36,8 +34,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-iOS App-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -86,8 +83,7 @@ Targets:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - subspec_2.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - subspec_1.h:
           ATTRIBUTES:

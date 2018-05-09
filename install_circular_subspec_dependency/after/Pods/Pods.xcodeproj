@@ -33,9 +33,7 @@ File References:
       - Pod3.xcconfig
       - Pod3-dummy.m
       - Pod3-prefix.pch
-- Frameworks:
-  - iOS:
-    - Foundation.framework
+- Frameworks: []
 - Products:
   - libPod1.a
   - libPod2.a
@@ -59,8 +57,7 @@ Targets:
     - Sources:
       - Pod1-dummy.m
       - Pod1.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - Pod1.h:
           ATTRIBUTES:
@@ -110,8 +107,7 @@ Targets:
     - Sources:
       - Pod2-dummy.m
       - Pod2.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - Pod2.h:
           ATTRIBUTES:
@@ -161,8 +157,7 @@ Targets:
     - Sources:
       - Pod3-dummy.m
       - Pod3.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - Pod3.h:
           ATTRIBUTES:
@@ -211,8 +206,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SubSpecCircular-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:

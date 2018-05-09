@@ -1,9 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - iOS:
-    - Foundation.framework
+- Frameworks: []
 - Pods:
   - Moment:
     - parseIt.ym
@@ -38,8 +36,7 @@ Targets:
       - TimeParser.c:
           COMPILER_FLAGS: "-fno-objc-arc"
       - tokeIt.l
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - TimeParser.h:
           ATTRIBUTES:
@@ -92,8 +89,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
