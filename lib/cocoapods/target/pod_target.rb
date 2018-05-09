@@ -191,7 +191,7 @@ module Pod
     # @return [Boolean] Whether the target should build a static framework.
     #
     def static_framework?
-      root_spec.static_framework
+      requires_frameworks? && root_spec.static_framework
     end
 
     # @return [Boolean] Whether the target defines a "module"

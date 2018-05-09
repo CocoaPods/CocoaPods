@@ -220,6 +220,7 @@ module Pod
           sorted_installation_results.each do |target_installation_result|
             pod_target = target_installation_result.target
             next unless pod_target.should_build?
+            next if !pod_target.requires_frameworks? || pod_target.static_framework?
             pod_target.file_accessors.each do |file_accessor|
               native_target = target_installation_result.native_target_for_spec(file_accessor.spec)
               add_system_frameworks_to_native_target(native_target, file_accessor)
