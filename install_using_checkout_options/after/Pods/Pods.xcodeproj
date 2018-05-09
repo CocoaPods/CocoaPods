@@ -1,13 +1,7 @@
 
 File References:
 - Podfile
-- Frameworks:
-  - iOS:
-    - CoreGraphics.framework
-    - Foundation.framework
-    - MobileCoreServices.framework
-    - Security.framework
-    - SystemConfiguration.framework
+- Frameworks: []
 - Pods:
   - AFNetworking:
     - AFNetworking.h
@@ -109,12 +103,7 @@ Targets:
       - UIProgressView+AFNetworking.m
       - UIRefreshControl+AFNetworking.m
       - UIWebView+AFNetworking.m
-    - Frameworks:
-      - CoreGraphics.framework
-      - Foundation.framework
-      - MobileCoreServices.framework
-      - Security.framework
-      - SystemConfiguration.framework
+    - Frameworks: []
     - Headers:
       - AFHTTPRequestOperation.h:
           ATTRIBUTES:
@@ -219,8 +208,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -265,8 +253,7 @@ Targets:
       - RKValueTransformers-dummy.m
       - RKValueTransformers.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - RKValueTransformers.h:
           ATTRIBUTES:
@@ -319,8 +306,7 @@ Targets:
       - SEGModule.m:
           COMPILER_FLAGS: "-fno-objc-arc"
       - SEGModules-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - SEGModule.h:
           ATTRIBUTES:

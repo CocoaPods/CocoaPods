@@ -154,8 +154,7 @@ Targets:
       - DepPod-library-dummy.m
       - DP.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - DepPod-library-umbrella.h:
           ATTRIBUTES:
@@ -286,8 +285,7 @@ Targets:
       - HeaderMappingsDirPod-library-dummy.m
       - HMDP.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     - Headers:
       - HeaderMappingsDirPod-library-umbrella.h:
           ATTRIBUTES:
@@ -419,8 +417,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:

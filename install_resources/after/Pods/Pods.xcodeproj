@@ -15,9 +15,7 @@ File References:
       - res-dummy.m
       - res-prefix.pch
       - ResourceBundle-res-res-Info.plist
-- Frameworks:
-  - OS X:
-    - Cocoa.framework
+- Frameworks: []
 - Products:
   - libPods-SampleApp.a
   - libres.a
@@ -39,8 +37,7 @@ Targets:
     Build Phases:
     - Sources:
       - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Cocoa.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -84,8 +81,7 @@ Targets:
       - foo.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - res-dummy.m
-    - Frameworks:
-      - Cocoa.framework
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
