@@ -41,6 +41,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 
+## 1.5.2 (2018-05-09)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 1.5.1 (2018-05-07)
 
 ##### Enhancements
