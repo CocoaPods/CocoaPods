@@ -176,12 +176,18 @@ module Pod
             ]
           end
 
-          it 'adds system frameworks to targets' do
+          it 'adds no system frameworks to static targets' do
             @generator.generate!
-            @generator.project.targets.find { |t| t.name == 'OrangeFramework' }.frameworks_build_phase.file_display_names.sort.should == [
-              'Foundation.framework',
-              'UIKit.framework',
-            ]
+            @generator.project.targets.find { |t| t.name == 'OrangeFramework' }.frameworks_build_phase.file_display_names.should == []
+          end
+
+          it 'adds system frameworks to dynamic targets' do
+            @orangeframework_pod_target.stubs(:requires_frameworks? => true)
+            @generator.generate!
+            @generator.project.targets.find { |t| t.name == 'OrangeFramework' }.frameworks_build_phase.file_display_names.should == %w(
+              Foundation.framework
+              UIKit.framework
+            )
           end
 
           it 'adds target dependencies when inheriting search paths' do

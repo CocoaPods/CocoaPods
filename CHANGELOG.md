@@ -40,6 +40,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Improve performance of grouping pods by configuration.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Stop linking frameworks to static libraries to avoid warnings with the new build system.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#7570](https://github.com/CocoaPods/CocoaPods/pull/7570)
+
 
 ## 1.5.2 (2018-05-09)
 
