@@ -218,7 +218,14 @@ module Pod
         #
         def compute_swift_version_from_targets(targets)
           versions_to_targets = targets.inject({}) do |memo, target|
-            versions = target.resolved_build_setting('SWIFT_VERSION').values
+            # User project may have an xcconfig that specifies the `SWIFT_VERSION`. We first check if that is true and
+            # that the xcconfig file actually exists. After the first integration the xcconfig set is most probably
+            # the one that was generated from CocoaPods. See https://github.com/CocoaPods/CocoaPods/issues/7731 for
+            # more details.
+            resolve_against_xcconfig = target.build_configuration_list.build_configurations.all? do |bc|
+              !bc.base_configuration_reference.nil? && File.exist?(bc.base_configuration_reference.real_path)
+            end
+            versions = target.resolved_build_setting('SWIFT_VERSION', resolve_against_xcconfig).values
             versions.each do |version|
               memo[version] = [] if memo[version].nil?
               memo[version] << target.name unless memo[version].include? target.name
