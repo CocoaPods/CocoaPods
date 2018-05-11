@@ -58,13 +58,23 @@ module Pod
                   generator.headers.concat module_map_additional_headers
                 end
                 create_umbrella_header(native_target) do |generator|
-                  generator.imports += if header_mappings_dir
-                                         file_accessors.flat_map(&:public_headers).map do |pathname|
-                                           pathname.relative_path_from(header_mappings_dir)
-                                         end
-                                       else
-                                         file_accessors.flat_map(&:public_headers).map(&:basename)
+                  generator.imports += file_accessors.flat_map do |file_accessor|
+                    header_dir = if !target.requires_frameworks? && dir = file_accessor.spec_consumer.header_dir
+                                   Pathname.new(dir)
+                    end
+
+                    file_accessor.public_headers.map do |public_header|
+                      public_header = if header_mappings_dir
+                                        public_header.relative_path_from(header_mappings_dir)
+                                      else
+                                        public_header.basename
                                       end
+                      if header_dir
+                        public_header = header_dir.join(public_header)
+                      end
+                      public_header
+                    end
+                  end
                 end
               end
 
