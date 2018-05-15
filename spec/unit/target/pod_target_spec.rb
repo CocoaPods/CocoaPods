@@ -88,13 +88,13 @@ module Pod
         @pod_target.should_build?.should == false
       end
 
-      it 'builds a pod target if there are no actual source files but there are script phases' do
+      it 'does not build a pod target if there are no actual source files but there are script phases' do
         fa = Sandbox::FileAccessor.new(nil, @banana_spec.consumer(Platform.ios))
         fa.stubs(:source_files).returns([Pathname.new('foo.h')])
         @pod_target.stubs(:file_accessors).returns([fa])
         @pod_target.root_spec.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
 
-        @pod_target.should_build?.should == true
+        @pod_target.should_build?.should == false
       end
     end
 

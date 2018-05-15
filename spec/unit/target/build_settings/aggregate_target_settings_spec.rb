@@ -587,7 +587,8 @@ module Pod
 
             it 'adds values from all subspecs' do
               @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
-              consumer_c = mock('consumer_c', :user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' }, :script_phases => [], :spec => mock(:test_specification? => false), :frameworks => [], :libraries => [])
+              consumer_c = mock('consumer_c', :user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' },
+                                              :spec => mock(:test_specification? => false), :frameworks => [], :libraries => [])
               @pod_targets[1].stubs(:spec_consumers).returns([@consumer_b, consumer_c])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'

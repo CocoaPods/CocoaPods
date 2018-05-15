@@ -162,7 +162,7 @@ module Pod
           #
           def create_or_update_user_script_phases(script_phases, native_target)
             script_phase_names = script_phases.map { |k| k[:name] }
-            # Delete script phases no longer present in the target definition.
+            # Delete script phases no longer present in the target.
             native_target_script_phases = native_target.shell_script_build_phases.select { |bp| !bp.name.nil? && bp.name.start_with?(USER_BUILD_PHASE_PREFIX) }
             native_target_script_phases.each do |script_phase|
               script_phase_name_without_prefix = script_phase.name.sub(USER_BUILD_PHASE_PREFIX, '')
@@ -171,16 +171,16 @@ module Pod
               end
             end
             # Create or update the ones that are expected to be.
-            script_phases.each do |td_script_phase|
-              name_with_prefix = USER_BUILD_PHASE_PREFIX + td_script_phase[:name]
+            script_phases.each do |script_phase|
+              name_with_prefix = USER_BUILD_PHASE_PREFIX + script_phase[:name]
               phase = TargetIntegrator.create_or_update_build_phase(native_target, name_with_prefix)
-              phase.shell_script = td_script_phase[:script]
-              phase.shell_path = td_script_phase[:shell_path] if td_script_phase.key?(:shell_path)
-              phase.input_paths = td_script_phase[:input_files] if td_script_phase.key?(:input_files)
-              phase.output_paths = td_script_phase[:output_files] if td_script_phase.key?(:output_files)
-              phase.show_env_vars_in_log = td_script_phase[:show_env_vars_in_log] ? '1' : '0' if td_script_phase.key?(:show_env_vars_in_log)
+              phase.shell_script = script_phase[:script]
+              phase.shell_path = script_phase[:shell_path] if script_phase.key?(:shell_path)
+              phase.input_paths = script_phase[:input_files] if script_phase.key?(:input_files)
+              phase.output_paths = script_phase[:output_files] if script_phase.key?(:output_files)
+              phase.show_env_vars_in_log = script_phase[:show_env_vars_in_log] ? '1' : '0' if script_phase.key?(:show_env_vars_in_log)
 
-              execution_position = td_script_phase[:execution_position]
+              execution_position = script_phase[:execution_position]
               unless execution_position == :any
                 compile_build_phase_index = native_target.build_phases.index do |bp|
                   bp.is_a?(Xcodeproj::Project::Object::PBXSourcesBuildPhase)
