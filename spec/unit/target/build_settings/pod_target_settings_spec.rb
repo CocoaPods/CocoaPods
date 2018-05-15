@@ -220,7 +220,8 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.send :__clear__
-            @generator.other_ldflags.should.be == %w(-l"VendoredDyld" -l"xml2" -framework "Bananalib" -framework "VendoredFramework" -framework "XCTest" -weak_framework "iAd")
+            @generator.other_ldflags.should.
+              be == %w(-l"Bananalib" -l"VendoredDyld" -l"xml2" -framework "Bananalib" -framework "VendoredFramework" -framework "XCTest" -weak_framework "iAd")
           end
         end
 

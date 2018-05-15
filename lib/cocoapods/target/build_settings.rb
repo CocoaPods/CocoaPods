@@ -603,8 +603,7 @@ module Pod
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
-          libraries = vendored_dynamic_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
-          libraries.concat spec_consumers.flat_map(&:libraries)
+          libraries = libraries_to_import.dup
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import } if test_xcconfig?
           libraries
@@ -630,7 +629,9 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          vendored = vendored_dynamic_library_search_paths.dup
+          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+
+          vendored = library_search_paths_to_import.dup
           vendored.concat dependent_targets.flat_map { |t| t.build_settings.vendored_dynamic_library_search_paths }
           if test_xcconfig?
             vendored.concat dependent_targets.flat_map { |t| t.build_settings.library_search_paths_to_import }
