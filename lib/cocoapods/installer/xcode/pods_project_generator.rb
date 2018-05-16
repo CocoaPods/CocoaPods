@@ -285,7 +285,7 @@ module Pod
               pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
                 test_dependent_targets.each do |test_dependent_target|
                   dependency_installation_result = pod_target_installation_results_hash[test_dependent_target.name]
-                  dependency_installation_result.test_resource_bundle_targets.each do |test_resource_bundle_target|
+                  dependency_installation_result.test_resource_bundle_targets.values.flatten.each do |test_resource_bundle_target|
                     test_native_target.add_dependency(test_resource_bundle_target)
                   end
                   test_native_target.add_dependency(dependency_installation_result.native_target)
