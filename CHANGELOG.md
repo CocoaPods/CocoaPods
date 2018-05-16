@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7746](https://github.com/CocoaPods/CocoaPods/issues/7746)
 
+* Do not try to integrate uncreated test native targets  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7394](https://github.com/CocoaPods/CocoaPods/issues/7394)
+
 * Do not crash when creating build settings for a missing user build configuration  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7698](https://github.com/CocoaPods/CocoaPods/pull/7698)
