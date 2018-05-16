@@ -46,12 +46,20 @@ module Pod
         UI.warnings.length.should.equal(0)
       end
 
-      it 'shows a warning if the source is unencrypted (e.g. http)' do
+      it 'shows a warning if the source is unencrypted with http://' do
         @spec.source = { :http => 'http://orta.io/sdk.zip' }
         dummy_response = Pod::Downloader::Response.new
         Downloader.stubs(:download).returns(dummy_response)
         @installer.install!
-        UI.warnings.should.include 'Please reach out to the library author to notify them of this security issue'
+        UI.warnings.should.include 'uses the unencrypted \'http\' protocol'
+      end
+
+      it 'shows a warning if the source is unencrypted with git://' do
+        @spec.source = { :git => 'git://git.orta.io/orta.git' }
+        dummy_response = Pod::Downloader::Response.new
+        Downloader.stubs(:download).returns(dummy_response)
+        @installer.install!
+        UI.warnings.should.include 'uses the unencrypted \'git\' protocol'
       end
 
       #--------------------------------------#
