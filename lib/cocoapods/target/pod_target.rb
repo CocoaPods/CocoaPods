@@ -146,7 +146,6 @@ module Pod
     #
     def should_build?
       return @should_build if defined? @should_build
-      return @should_build = true if contains_script_phases?
       accessors = file_accessors.reject { |fa| fa.spec.test_specification? }
       source_files = accessors.flat_map(&:source_files)
       source_files -= accessors.flat_map(&:headers)
