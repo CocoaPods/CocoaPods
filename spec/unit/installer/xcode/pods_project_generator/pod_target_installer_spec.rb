@@ -343,6 +343,11 @@ module Pod
                     },
                   }
                 end
+
+                it 'returns correct app host info plist path for test type' do
+                  expected = 'Pods/AppHost/AppHost-iOS-Unit-Tests-Info.plist'
+                  @installer.send(:app_host_info_plist_path_for_test_type, 'AppHost', :unit).to_s.should.include expected
+                end
               end
             end
 

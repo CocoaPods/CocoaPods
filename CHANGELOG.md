@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7698](https://github.com/CocoaPods/CocoaPods/pull/7698)
 
+* Do not overwrite App host info plist path for multiple test specs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7695](https://github.com/CocoaPods/CocoaPods/pull/7695)
+
 * Do not include test dependencies input and output paths  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)

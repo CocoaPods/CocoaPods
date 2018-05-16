@@ -539,10 +539,6 @@ module Pod
           exception.message.should.include 'Unknown product type `weird_product_type`'
         end
 
-        it 'returns correct app host info plist path for test type' do
-          @test_pod_target.app_host_info_plist_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/AppHost-iOS-Unit-Tests-Info.plist'
-        end
-
         it 'returns correct copy resources script path for test unit test type' do
           @test_pod_target.copy_resources_script_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources.sh'
         end
