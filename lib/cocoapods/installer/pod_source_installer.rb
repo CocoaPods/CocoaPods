@@ -8,6 +8,8 @@ module Pod
     # @note This class needs to consider all the activated specs of a Pod.
     #
     class PodSourceInstaller
+      UNENCRYPTED_PROTOCOLS = %w(http git).freeze
+
       # @return [Sandbox] The installation target.
       #
       attr_reader :sandbox
@@ -110,18 +112,24 @@ module Pod
         end
       end
 
-      # Verify the source of the spec is secure, which is used to
-      # show a warning to the user if that isn't the case
-      # This method doesn't verify all protocols, but currently
-      # only prohibits unencrypted http:// connections
+      # Verify the source of the spec is secure, which is used to show a warning to the user if that isn't the case
+      # This method doesn't verify all protocols, but currently only prohibits unencrypted 'http://' and 'git://''
+      # connections.
+      #
+      # @return [void]
       #
       def verify_source_is_secure(root_spec)
-        return if root_spec.source.nil? || root_spec.source[:http].nil?
-        http_source = URI(root_spec.source[:http])
-        return if http_source.scheme == 'https' || http_source.scheme == 'file'
-        UI.warn "'#{root_spec.name}' uses the unencrypted http protocol to transfer the Pod. " \
-                'Please be sure you\'re in a safe network with only trusted hosts in there. ' \
-                'Please reach out to the library author to notify them of this security issue.'
+        return if root_spec.source.nil? || (root_spec.source[:http].nil? && root_spec.source[:git].nil?)
+        source = if !root_spec.source[:http].nil?
+                   URI(root_spec.source[:http].to_s)
+                 elsif !root_spec.source[:git].nil?
+                   URI(root_spec.source[:git].to_s)
+                 end
+        if UNENCRYPTED_PROTOCOLS.include?(source.scheme)
+          UI.warn "'#{root_spec.name}' uses the unencrypted '#{source.scheme}' protocol to transfer the Pod. " \
+                'Please be sure you\'re in a safe network with only trusted hosts. ' \
+                'Otherwise, please reach out to the library author to notify them of this security issue.'
+        end
       end
 
       def download_request

@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Warn if 'git://' protocol is used as the source of a pod  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7705](https://github.com/CocoaPods/CocoaPods/issues/7705)
+
 * Remove all PBX state from targets, improve project generation performance  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7610](https://github.com/CocoaPods/CocoaPods/pull/7610)
