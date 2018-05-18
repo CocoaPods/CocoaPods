@@ -73,9 +73,10 @@ module Pod
           #         an array of all the test specs associated with this native target.
           #
           def test_specs_by_native_target
-            target.test_specs.group_by do |test_spec|
+            test_specs_by_native_target = target.test_specs.group_by do |test_spec|
               test_native_target_from_spec(test_spec)
             end
+            test_specs_by_native_target.delete_if { |k, _| k.nil? }
           end
 
           private
