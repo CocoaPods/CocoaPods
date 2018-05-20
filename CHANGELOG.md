@@ -32,6 +32,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7394](https://github.com/CocoaPods/CocoaPods/issues/7394)
 
+* Attempt to parse `SWIFT_VERSION` from xcconfig during target inspection  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7731](https://github.com/CocoaPods/CocoaPods/issues/7731)
+
 * Do not crash when creating build settings for a missing user build configuration  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7698](https://github.com/CocoaPods/CocoaPods/pull/7698)
