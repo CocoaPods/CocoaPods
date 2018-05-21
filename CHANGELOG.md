@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [chuganzy](https://github.com/chuganzy)
   [#7724](https://github.com/CocoaPods/CocoaPods/pull/7724)
 
+* Do not symlink headers that belong to test specs  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7762](https://github.com/CocoaPods/CocoaPods/pull/7762)
+
 * Do not build pod target if it only contains script phases  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7746](https://github.com/CocoaPods/CocoaPods/issues/7746)
