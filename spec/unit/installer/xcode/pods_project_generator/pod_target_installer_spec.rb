@@ -261,6 +261,35 @@ module Pod
                 content.should.not =~ /"CoconutTestHeader.h"/
               end
 
+              it 'uses header_dir to umbrella header imports' do
+                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Coconut')
+                @coconut_pod_target.stubs(:requires_frameworks?).returns(false)
+                @coconut_pod_target.stubs(:defines_module?).returns(true)
+                @installer.install!
+                content = @coconut_pod_target.umbrella_header_path.read
+                content.should =~ %r{"Coconut/Coconut.h"}
+              end
+
+              it 'uses header_dir and header_mappings_dir to umbrella header imports' do
+                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Coconut2')
+                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_mappings_dir).returns('Classes')
+                @coconut_pod_target.stubs(:requires_frameworks?).returns(false)
+                @coconut_pod_target.stubs(:defines_module?).returns(true)
+                @installer.install!
+                content = @coconut_pod_target.umbrella_header_path.read
+                content.should =~ %r{"Coconut2/Coconut.h"}
+              end
+
+              it 'does not use header_dir to umbrella header imports' do
+                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Coconut')
+                @coconut_pod_target.stubs(:requires_frameworks?).returns(true)
+                @coconut_pod_target.stubs(:defines_module?).returns(true)
+                @installer.install!
+                content = @coconut_pod_target.umbrella_header_path.read
+                content.should.not =~ %r{"Coconut/Coconut.h"}
+                content.should =~ /"Coconut.h"/
+              end
+
               it 'adds test xcconfig file reference for test resource bundle targets' do
                 @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Model.xcdatamodeld'] }
                 installation_result = @installer.install!
