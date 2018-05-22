@@ -106,7 +106,7 @@ module Pod
           target.target_definition.swift_version unless target.target_definition.swift_version.blank?
         end
 
-        EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION = Gem::Version.new('2.3')
+        EMBED_STANDARD_LIBRARIES_MINIMUM_VERSION = Version.new('2.3')
 
         # @return [Hash<String, String>] the build settings necessary for Swift
         #  targets to be correctly embedded in their host.
@@ -120,7 +120,7 @@ module Pod
           # cause an App Store rejection because frameworks cannot be embedded
           # in embedded targets.
 
-          swift_version = Gem::Version.new(target_swift_version)
+          swift_version = Version.new(target_swift_version)
           should_embed = !target.requires_host_target? && pod_targets.any?(&:uses_swift?)
           config = {}
           if should_embed

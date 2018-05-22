@@ -12,7 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix compatibility with RubyGems 2.7.7.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#7765](https://github.com/CocoaPods/CocoaPods/issues/7765)
+  [#7766](https://github.com/CocoaPods/CocoaPods/issues/7766)
+  [#7763](https://github.com/CocoaPods/CocoaPods/issues/7763)
 
 
 ## 1.5.2 (2018-05-09)
