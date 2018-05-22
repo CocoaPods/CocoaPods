@@ -20,7 +20,9 @@ module Pod
         @sources = []
       end
 
-      # @param [Source] Source object to be added to the installer
+      # @param [Source] source object to be added to the installer
+      #
+      # @return [void]
       #
       def add_source(source)
         unless source.nil?

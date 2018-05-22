@@ -40,17 +40,15 @@ module Pod
       end
 
       it 'returns whether an installation should be performed' do
-        @analyzer.needs_install?.should.be.true
+        @analyzer.analyze.needs_install?.should.be.true
       end
 
       it 'returns whether the Podfile has changes' do
-        analysis_result = @analyzer.analyze(false)
-        @analyzer.podfile_needs_install?(analysis_result).should.be.true
+        @analyzer.analyze(false).podfile_needs_install?.should.be.true
       end
 
       it 'returns whether the sandbox is not in sync with the lockfile' do
-        analysis_result = @analyzer.analyze(false)
-        @analyzer.sandbox_needs_install?(analysis_result).should.be.true
+        @analyzer.analyze(false).sandbox_needs_install?.should.be.true
       end
 
       #--------------------------------------#
@@ -469,22 +467,22 @@ module Pod
       #--------------------------------------#
 
       it 'locks the version of the dependencies which did not change in the Podfile' do
-        @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:payload).map(&:to_s).
-          should == ['JSONKit (= 1.5pre)', 'SVPullToRefresh (= 0.4)']
+        podfile_state = @analyzer.send(:generate_podfile_state)
+        @analyzer.send(:generate_version_locking_dependencies, podfile_state).map(&:payload).map(&:to_s).should ==
+            ['JSONKit (= 1.5pre)', 'SVPullToRefresh (= 0.4)']
       end
 
       it 'does not lock the dependencies in update mode' do
-        @analyzer.update = true
-        @analyzer.analyze
-        @analyzer.send(:locked_dependencies).to_a.map(&:payload).should == []
+        @analyzer.stubs(:pods_to_update).returns(true)
+        podfile_state = @analyzer.send(:generate_podfile_state)
+        @analyzer.send(:generate_version_locking_dependencies, podfile_state).to_a.map(&:payload).should == []
       end
 
       it 'unlocks dependencies in a case-insensitive manner' do
-        @analyzer.update = { :pods => %w(JSONKit) }
-        @analyzer.analyze
-        @analyzer.send(:locked_dependencies).map(&:payload).map(&:to_s).
-          should == ['SVPullToRefresh (= 0.4)']
+        @analyzer.stubs(:pods_to_update).returns(:pods => %w(JSONKit))
+        podfile_state = @analyzer.send(:generate_podfile_state)
+        @analyzer.send(:generate_version_locking_dependencies, podfile_state).map(&:payload).map(&:to_s).should ==
+            ['SVPullToRefresh (= 0.4)']
       end
 
       it 'unlocks all dependencies with the same root name in update mode' do
@@ -511,9 +509,8 @@ module Pod
         hash['SPEC CHECKSUMS'] = {}
         hash['COCOAPODS'] = Pod::VERSION
         lockfile = Pod::Lockfile.new(hash)
-        analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
+        analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile, nil, true, :pods => %w(AFNetworking))
 
-        analyzer.update = { :pods => %w(AFNetworking) }
         analyzer.analyze.specifications.
           find { |s| s.name == 'AFNetworking' }.
           version.to_s.should == '2.6.3'
@@ -602,9 +599,8 @@ module Pod
           pod 'BananaLib', :git => 'example.com'
         end
         @analyzer = Installer::Analyzer.new(@sandbox, @podfile)
-        @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
         ExternalSources::DownloaderSource.any_instance.expects(:fetch)
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'does not download the same source multiple times for different subspecs' do
@@ -615,9 +611,8 @@ module Pod
           pod 'ARAnalytics/HockeyApp', :git => 'https://github.com/orta/ARAnalytics', :commit => '6f1a1c314894437e7e5c09572c276e644dbfb64b'
         end
         @analyzer = Installer::Analyzer.new(@sandbox, @podfile)
-        @analyzer.stubs(:result).returns(stub(:podfile_state => podfile_state))
         ExternalSources::DownloaderSource.any_instance.expects(:fetch).once
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       xit 'it fetches the specification from either the sandbox or from the remote by default' do
@@ -1103,82 +1098,95 @@ module Pod
         @analyzer.send(:checkout_requires_update?, @dependency).should == true
       end
 
-      before do
-        @analyzer.result = Installer::Analyzer::AnalysisResult.new
-        @analyzer.result.podfile_state = Installer::Analyzer::SpecsState.new
-      end
-
       it 'uses lockfile checkout options when no source exists in the sandbox' do
-        @analyzer.result.podfile_state.unchanged << 'BananaLib'
         @sandbox_manifest.send(:checkout_options_data).delete('BananaLib')
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file, true).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file,
+                                                 true).returns(downloader)
+
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
 
         downloader.expects(:fetch)
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'uses lockfile checkout options when a different checkout exists in the sandbox' do
-        @analyzer.result.podfile_state.unchanged << 'BananaLib'
         @sandbox_manifest.send(:checkout_options_data)['BananaLib'] = @lockfile_checkout_options.merge(:commit => 'other commit')
 
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
+
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file, true).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file,
+                                                 true).returns(downloader)
 
         downloader.expects(:fetch)
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'ignores lockfile checkout options when the podfile state has changed' do
-        @analyzer.result.podfile_state.changed << 'BananaLib'
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.changed << 'BananaLib'
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file, true).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file,
+                                                 true).returns(downloader)
 
         downloader.expects(:fetch)
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'ignores lockfile checkout options when updating selected pods' do
-        @analyzer.result.podfile_state.unchanged << 'BananaLib'
-        @analyzer.stubs(:update).returns(:pods => %w(BananaLib))
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
+
+        @analyzer.stubs(:pods_to_update).returns(:pods => %w(BananaLib))
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file, true).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file,
+                                                 true).returns(downloader)
 
         downloader.expects(:fetch)
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'ignores lockfile checkout options when updating all pods' do
-        @analyzer.result.podfile_state.unchanged << 'BananaLib'
-        @analyzer.stubs(:update).returns(true)
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
+
+        @analyzer.stubs(:pods_to_update).returns(true)
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file, true).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@dependency.external_source, @dependency, @podfile.defined_in_file,
+                                                 true).returns(downloader)
 
         downloader.expects(:fetch)
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'does not use the cache when the podfile instructs not to clean' do
-        @analyzer.result.podfile_state.unchanged << 'BananaLib'
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
+
         @sandbox_manifest.send(:checkout_options_data).delete('BananaLib')
 
         downloader = stub('DownloaderSource')
-        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file, false).returns(downloader)
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file,
+                                                 false).returns(downloader)
 
         downloader.expects(:fetch)
         @analyzer.installation_options.clean = false
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
       it 'does not re-fetch the external source when the sandbox has the correct revision of the source' do
-        @analyzer.result.podfile_state.unchanged << 'BananaLib'
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
 
         @analyzer.expects(:fetch_external_source).never
-        @analyzer.send(:fetch_external_sources)
+        @analyzer.send(:fetch_external_sources, podfile_state)
       end
     end
   end

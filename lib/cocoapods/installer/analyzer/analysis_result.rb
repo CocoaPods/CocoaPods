@@ -1,45 +1,47 @@
 module Pod
   class Installer
     class Analyzer
+      # A simple container produced after a analysis is completed by the {Analyzer}.
+      #
       class AnalysisResult
         # @return [SpecsState] the states of the Podfile specs.
         #
-        attr_accessor :podfile_state
+        attr_reader :podfile_state
 
-        # @return [Hash{TargetDefinition => Array<Specification>}] the
-        #         specifications grouped by target.
+        # @return [Hash{TargetDefinition => Array<Specification>}] the specifications grouped by target.
         #
-        attr_accessor :specs_by_target
+        attr_reader :specs_by_target
 
-        # @return [Hash{Source => Array<Specification>}] the
-        #         specifications grouped by spec repo source.
+        # @return [Hash{Source => Array<Specification>}] the specifications grouped by spec repo source.
         #
-        attr_accessor :specs_by_source
+        attr_reader :specs_by_source
 
-        # @return [Array<Specification>] the specifications of the resolved
-        #         version of Pods that should be installed.
+        # @return [Array<Specification>] the specifications of the resolved version of Pods that should be installed.
         #
-        attr_accessor :specifications
+        attr_reader :specifications
 
-        # @return [SpecsState] the states of the {Sandbox} respect the resolved
-        #         specifications.
+        # @return [SpecsState] the states of the {Sandbox} respect the resolved specifications.
         #
         attr_accessor :sandbox_state
 
-        # @return [Array<AggregateTarget>] The aggregate targets created for each
-        #         {TargetDefinition} from the {Podfile}.
+        # @return [Array<AggregateTarget>] The aggregate targets created for each {TargetDefinition} from the {Podfile}.
         #
-        attr_accessor :targets
+        attr_reader :targets
 
-        # @return [Hash{TargetDefinition => Array<TargetInspectionResult>}] the
-        #         results of inspecting the user targets
+        # @return [PodfileDependencyCache] the cache of all dependencies in the podfile.
         #
-        attr_accessor :target_inspections
+        attr_reader :podfile_dependency_cache
 
-        # @return [PodfileDependencyCache] the cache of all dependencies in the
-        #         podfile.
-        #
-        attr_accessor :podfile_dependency_cache
+        def initialize(podfile_state, specs_by_target, specs_by_source, specifications, sandbox_state, targets,
+                       podfile_dependency_cache)
+          @podfile_state = podfile_state
+          @specs_by_target = specs_by_target
+          @specs_by_source = specs_by_source
+          @specifications = specifications
+          @sandbox_state = sandbox_state
+          @targets = targets
+          @podfile_dependency_cache = podfile_dependency_cache
+        end
 
         # @return [Hash{String=>Symbol}] A hash representing all the user build
         #         configurations across all integration targets. Each key
@@ -50,6 +52,29 @@ module Pod
           targets.reduce({}) do |result, target|
             result.merge(target.user_build_configurations)
           end
+        end
+
+        # @return [Bool] Whether an installation should be performed or this
+        #         CocoaPods project is already up to date.
+        #
+        def needs_install?
+          podfile_needs_install? || sandbox_needs_install?
+        end
+
+        # @return [Bool] Whether the podfile has changes respect to the lockfile.
+        #
+        def podfile_needs_install?
+          state = podfile_state
+          needing_install = state.added.length + state.changed.length + state.deleted.length
+          needing_install > 0
+        end
+
+        # @return [Bool] Whether the sandbox is in synch with the lockfile.
+        #
+        def sandbox_needs_install?
+          state = sandbox_state
+          needing_install = state.added.length + state.changed.length + state.deleted.length
+          needing_install > 0
         end
       end
     end
