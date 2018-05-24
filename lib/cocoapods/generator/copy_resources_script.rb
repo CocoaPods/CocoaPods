@@ -6,20 +6,31 @@ module Pod
       #
       attr_reader :resources_by_config
 
-      # @return [Platform] The platform of the library for which the copy
-      #         resources script is needed.
+      # @return [Xcodeproj::Project] the user project that this target will
+      #         integrate as identified by the analyzer.
       #
+      attr_reader :user_project_path
+
+      # @return [Target] target
+      #         The library whose target needs to be generated.
+      #
+      attr_reader :target_name
       attr_reader :platform
 
       # Initialize a new instance
       #
+      # @param  [Pod::Project] project
+      #         @see project
+      #
+      # @param  [Target] target
+      #         @see target
+      #
       # @param  [Hash<String, Array<String>>] resources_by_config
       #         @see resources_by_config
       #
-      # @param  [Platform] platform
-      #         @see platform
-      #
-      def initialize(resources_by_config, platform)
+      def initialize(resources_by_config, platform, user_project_path, target_name)
+        @user_project_path = user_project_path
+        @target_name = target_name
         @resources_by_config = resources_by_config
         @platform = platform
       end
@@ -71,6 +82,28 @@ module Pod
         end
       end
 
+      # @return [String] The contents of the target xcassets script.
+      #
+      def target_xcassets
+
+        project_path = user_project_path.to_path
+        user_target_name = target_name.sub("Pods-", "")
+
+        script = <<-EOS 
+        require 'xcodeproj';
+        project_path = '#{project_path}';
+        target_name = '#{user_target_name}';
+        project = Xcodeproj::Project.open(project_path);
+
+        target = project.targets.find { |t| t.name == target_name };
+        files = target.resources_build_phase.files;
+        xcassets = files.select { | file | file.display_name.end_with?('.xcassets') };
+
+        xcassets.each { | file | puts file.file_ref.real_path };
+        EOS
+        script.delete!("\n")
+      end
+
       # @return [String] The contents of the copy resources script.
       #
       def script
@@ -89,7 +122,7 @@ module Pod
         end
 
         script += RSYNC_CALL
-        script += XCASSETS_COMPILE
+        script += xcassets_compile
         script
       end
 
@@ -199,17 +232,15 @@ if [[ "${ACTION}" == "install" ]] && [[ "${SKIP_INSTALL}" == "NO" ]]; then
 fi
 rm -f "$RESOURCES_TO_COPY"
 EOS
-
-      XCASSETS_COMPILE = <<EOS
+      
+      def xcassets_compile 
+        <<-EOS
 
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "${XCASSET_FILES:-}" ]
 then
-  # Find all other xcassets (this unfortunately includes those of path pods and other targets).
-  OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
+  OTHER_XCASSETS=$(ruby -e "#{target_xcassets}")
   while read line; do
-    if [[ $line != "${PODS_ROOT}*" ]]; then
-      XCASSET_FILES+=("$line")
-    fi
+    XCASSET_FILES+=("$line")
   done <<<"$OTHER_XCASSETS"
 
   if [ -z ${ASSETCATALOG_COMPILER_APPICON_NAME+x} ]; then
@@ -219,6 +250,8 @@ then
   fi
 fi
 EOS
+      end
+
     end
   end
 end
