@@ -139,6 +139,8 @@ module Pod
               pod 'monkey',          :path => (fixture_path + 'monkey').to_s
               target 'SampleProject'
             end
+            @podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+
             @lockfile = generate_lockfile
 
             @file = Pathname('/yolo.m')
@@ -190,6 +192,8 @@ module Pod
               pod 'monkey',          :path => (fixture_path + 'monkey').to_s
               target 'SampleProject'
             end
+            @podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+
             @lockfile = generate_lockfile
 
             @file = Pathname('/yolo.m')
@@ -259,7 +263,7 @@ module Pod
 
         #-------------------------------------------------------------------------#
 
-        describe '#verify_no_pods_used_with_multiple_swift_versions' do
+        describe '#verify_swift_pods_swift_version' do
           it 'raises when targets integrate the same swift pod but have different swift versions' do
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
@@ -283,9 +287,43 @@ module Pod
             e = should.raise Informative do
               @validator.validate!
             end
-            e.message.should.match /The following pods are integrated into targets that do not have the same Swift version:/
-            e.message.should.include 'OrangeFramework required by SampleProject (Swift 3.0), TestRunner (Swift 2.3)'
-            e.message.should.not.include 'matryoshka required by SampleProject (Swift 3.0), TestRunner (Swift 2.3)'
+            e.message.should.match /Unable to determine Swift version for the following pods:/
+            e.message.should.include '`OrangeFramework` is integrated by multiple targets that use a different Swift version: ' \
+              '`SampleProject` (Swift 3.0) and `TestRunner` (Swift 2.3).'
+            e.message.should.not.include '`matryoshka` is integrated by multiple targets that use a different Swift version: ' \
+              '`SampleProject` (Swift 3.0) and `TestRunner` (Swift 2.3).'
+          end
+
+          it 'raises when swift pods integrated into targets that do not specify a swift version' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              use_frameworks!
+              platform :ios, '8.0'
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+
+            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns(nil)
+            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
+
+            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil, :dependent_targets => [])
+            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil, :dependent_targets => [])
+
+            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            e = should.raise Informative do
+              @validator.validate!
+            end
+            e.message.should.match /Unable to determine Swift version for the following pods:/
+            e.message.should.include '`OrangeFramework` does not specify a Swift version and none of the targets ' \
+              '(`SampleProject` and `TestRunner`) integrating it have the `SWIFT_VERSION` attribute set. Please contact ' \
+              'the author or set the `SWIFT_VERSION` attribute in at least one of the targets that integrate this pod.'
+            e.message.should.include '`matryoshka` does not specify a Swift version and none of the targets ' \
+              '(`SampleProject` and `TestRunner`) integrating it have the `SWIFT_VERSION` attribute set. Please contact ' \
+            'the author or set the `SWIFT_VERSION` attribute in at least one of the targets that integrate this pod.'
           end
 
           it 'does not raise when targets integrate the same pod but only one of the targets is a swift target' do
@@ -358,7 +396,9 @@ module Pod
             @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
             lambda { @validator.validate! }.should.not.raise
           end
+        end
 
+        describe '#verify_swift_pods_have_module_dependencies' do
           it 'raises when a swift target depends upon a target that does not define a module' do
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
@@ -387,7 +427,7 @@ module Pod
             EOS
           end
 
-          it 'does not raise when a swift target depends upon a target thatis not built' do
+          it 'does not raise when a swift target depends upon a target that is not built' do
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do

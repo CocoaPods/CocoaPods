@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Raise an error if user target `SWIFT_VERSION` is missing  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7770](https://github.com/CocoaPods/CocoaPods/issues/7770)
+
 * Umbrella header import path gets wrong when `header_dir` is specified in PodSpec + try to build statically + Modular header is enabled  
   [chuganzy](https://github.com/chuganzy)
   [#7724](https://github.com/CocoaPods/CocoaPods/pull/7724)
