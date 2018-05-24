@@ -178,6 +178,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+          SWIFT_VERSION: '3.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -206,6 +207,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_VERSION: '3.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
