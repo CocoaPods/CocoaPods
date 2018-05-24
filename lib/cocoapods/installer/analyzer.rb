@@ -420,13 +420,13 @@ module Pod
           target_inspection = target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
           user_project = target_inspection.project
-          client_root = user_project.path.dirname.realpath
+          client_root = user_project.path.dirname.cleanpath
           user_target_uuids = target_inspection.project_target_uuids
           user_build_configurations = target_inspection.build_configurations
           archs = target_inspection.archs
         else
           user_project = nil
-          client_root = config.installation_root.realpath
+          client_root = config.installation_root.cleanpath
           user_target_uuids = []
           user_build_configurations = target_definition.build_configurations || Target::DEFAULT_BUILD_CONFIGURATIONS
           archs = []
@@ -647,7 +647,19 @@ module Pod
         platform = determine_platform(specs, target_definitions, host_requires_frameworks)
         file_accessors = create_file_accessors(specs, platform)
         PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
-                      target_definitions, file_accessors, scope_suffix)
+                      target_definitions, file_accessors, scope_suffix).tap do |target|
+          name = target.root_spec.name
+          if sandbox.local?(name)
+            # we will create a symlink `Pods/#{name}` to the realpath of the pod,
+            # then we could access the Pod's files by the `${PODS_ROOT}/#{name}` instead of the realpath.
+            poddir = sandbox.pod_dir(target.root_spec.name)
+            realdir = sandbox.pod_realdir(name)
+            unless sandbox.local_path_was_absolute?(name)
+              realdir = realdir.realpath.relative_path_from(poddir.dirname.realpath)
+            end
+            `cd "#{poddir.dirname}" && rm -rf "#{poddir.basename}" && ln -fs "#{realdir}" "#{poddir.basename}"`
+          end
+        end
       end
 
       # Creates the file accessors for a given pod.

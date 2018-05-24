@@ -56,7 +56,7 @@ module Pod
     #
     def initialize(root)
       FileUtils.mkdir_p(root)
-      @root = Pathname.new(root).realpath
+      @root = Pathname.new(root).cleanpath
       @public_headers = HeadersStore.new(self, 'Public', :public)
       @predownloaded_pods = []
       @checkout_sources = {}
@@ -151,6 +151,11 @@ module Pod
     # @return [Pathname] the path of the Pod.
     #
     def pod_dir(name)
+      root_name = Specification.root_name(name)
+      sources_root + root_name
+    end
+
+    def pod_realdir(name)
       root_name = Specification.root_name(name)
       if local?(root_name)
         Pathname.new(development_pods[root_name].dirname)

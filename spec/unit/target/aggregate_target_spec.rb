@@ -65,15 +65,15 @@ module Pod
       end
 
       it 'returns the path of the resources script relative to the user project' do
-        @target.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh'
+        @target.copy_resources_script_relative_path.should == '${PODS_ROOT}/Target Support Files/Pods/Pods-resources.sh'
       end
 
       it 'returns the path of the frameworks script relative to the user project' do
-        @target.embed_frameworks_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh'
+        @target.embed_frameworks_script_relative_path.should == '${PODS_ROOT}/Target Support Files/Pods/Pods-frameworks.sh'
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do
-        @target.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
+        @target.xcconfig_relative_path('Release').should == 'Target Support Files/Pods/Pods.release.xcconfig'
       end
 
       it 'returns the path of output file for the check pod manifest file  script' do
@@ -191,7 +191,7 @@ module Pod
           )
           @target.framework_paths_by_config['Debug'].should == [
             { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../../../../../../some/absolute/path/to/FrameworkA.framework',
+              :input_path => '${PODS_ROOT}/../../../../../../../../some/absolute/path/to/FrameworkA.framework',
               :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
           ]
         end
@@ -220,7 +220,7 @@ module Pod
           )
           @target.framework_paths_by_config['Debug'].should == [
             { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../../../../../../absolute/path/to/FrameworkA.framework',
+              :input_path => '${PODS_ROOT}/../../../../../../../../absolute/path/to/FrameworkA.framework',
               :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
           ]
         end

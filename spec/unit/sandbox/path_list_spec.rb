@@ -336,12 +336,20 @@ module Pod
         @path_list.dirs.map(&:to_s).should.include?('Classes/symlinked')
       end
 
-      it 'doesn\'t include file in symlinked dir' do
+      it 'includes file in symlinked dir if link to other directory which not in root' do
         @path_list.instance_variable_set(:@files, nil)
         @path_list.instance_variable_set(:@dirs, nil)
         File.symlink(@tmpdir, @symlink_dir)
 
-        @path_list.files.map(&:to_s).should.not.include?('Classes/symlinked/someheader.h')
+        @path_list.files.map(&:to_s).should.include?('Classes/symlinked/someheader.h')
+      end
+
+      it 'doesn\'t include file in symlinked dir if link to other directory in root' do
+        @path_list.instance_variable_set(:@files, nil)
+        @path_list.instance_variable_set(:@dirs, nil)
+        File.symlink(@path_list.root + 'framework/Source', @symlink_dir)
+
+        @path_list.files.map(&:to_s).should.not.include?('Classes/symlinked/MoreBanana.h')
       end
     end
 

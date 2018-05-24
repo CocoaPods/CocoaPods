@@ -141,7 +141,7 @@ module Pod
           it 'sets the PODS_TARGET_SRCROOT build variable for local pod' do
             @pod_target.sandbox.store_local_path(@pod_target.pod_name, @spec.defined_in_file)
             @xcconfig = @generator.generate
-            @xcconfig.to_hash['PODS_TARGET_SRCROOT'].should == '${PODS_ROOT}/../../spec/fixtures/banana-lib'
+            @xcconfig.to_hash['PODS_TARGET_SRCROOT'].should == '${PODS_ROOT}/BananaLib'
           end
 
           it 'does not add root public or private header search paths to the xcconfig' do

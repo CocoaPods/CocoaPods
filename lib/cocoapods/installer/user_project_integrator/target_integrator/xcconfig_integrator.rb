@@ -42,9 +42,13 @@ module Pod
           #         The build configuration.
           #
           def self.set_target_xcconfig(pod_bundle, target, config)
+            # Xcode root group's path is a realpath, we must get the relative path of sandbox to user project's realpath
+            group_path = pod_bundle.relative_pods_root_path
             path = pod_bundle.xcconfig_relative_path(config.name)
-            group = config.project['Pods'] || config.project.new_group('Pods')
-            file_ref = group.files.find { |f| f.path == path }
+            group = config.project['Pods'] || config.project.new_group('Pods', group_path)
+            group.set_path(group_path) if group.path != group_path
+            file_ref = group.files.find { |f| f.display_name == File.basename(path) }
+            file_ref.path = path if file_ref && file_ref.path != path
             existing = config.base_configuration_reference
 
             set_base_configuration_reference = ->() do
@@ -97,7 +101,7 @@ module Pod
             ]
             message = "The `#{target.name} [#{config.name}]` " \
               "target overrides the `#{key}` build setting defined in " \
-              "`#{pod_bundle.xcconfig_relative_path(config.name)}'. " \
+              "`#{pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)}'. " \
               'This can lead to problems with the CocoaPods installation'
             UI.warn(message, actions)
           end

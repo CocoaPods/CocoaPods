@@ -272,6 +272,7 @@ module Pod
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             add_user_script_phases
+            link_pods_directory
           end
         end
 
@@ -407,6 +408,20 @@ module Pod
             SH
             phase.input_paths = %w(${PODS_PODFILE_DIR_PATH}/Podfile.lock ${PODS_ROOT}/Manifest.lock)
             phase.output_paths = [target.check_manifest_lock_script_output_file_path]
+          end
+        end
+
+        # Adds a fake Pods directory that link to real Pods directory,
+        # if the user project is a symlink
+        #
+        # @note   will remove origin Pods directory
+        #
+        # @return [void]
+        #
+        def link_pods_directory
+          if target.user_project_is_symlink
+            project_dir = target.user_project_path.dirname.realpath
+            `cd "#{project_dir}" && rm -rf Pods && ln -s "#{target.sandbox.root.realpath.relative_path_from(project_dir)}" Pods`
           end
         end
 

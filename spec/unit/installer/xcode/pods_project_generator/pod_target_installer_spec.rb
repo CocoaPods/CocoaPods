@@ -445,9 +445,9 @@ module Pod
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
                 @pod_target.stubs(:file_accessors).returns([file_accessor])
-                exception = lambda { @installer.install! }.should.raise Errno::ENOENT
-                exception.message.should.include 'No such file or directory'
-                exception.message.should.include file_path.to_s
+                exception = lambda { @installer.install! }.should.raise Pod::Informative
+                exception.message.should.include 'Unable to find '
+                exception.message.should.include @source_symlink_file.to_s
               end
 
               it 'raises when header file reference is not found' do
@@ -456,9 +456,9 @@ module Pod
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
                 @pod_target.stubs(:file_accessors).returns([file_accessor])
-                exception = lambda { @installer.install! }.should.raise Errno::ENOENT
-                exception.message.should.include 'No such file or directory'
-                exception.message.should.include file_path.to_s
+                exception = lambda { @installer.install! }.should.raise Pod::Informative
+                exception.message.should.include 'Unable to find '
+                exception.message.should.include @header_symlink_file.to_s
               end
 
               it 'does not raise when header file reference is found' do

@@ -54,9 +54,9 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase_name = @copy_pods_resources_phase_name
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-          phase.shell_script = %("${SRCROOT}/../Pods/Pods-resources.sh"\n)
+          phase.shell_script = %("${PODS_ROOT}/Pods-resources.sh"\n)
           @target_integrator.integrate!
-          phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
+          phase.shell_script.strip.should == '"${PODS_ROOT}/Target Support Files/Pods/Pods-resources.sh"'
         end
 
         it 'adds references to the Pods static libraries to the Frameworks group' do
@@ -92,7 +92,7 @@ module Pod
           target = @target_integrator.send(:native_targets).first
           phase_name = @copy_pods_resources_phase_name
           phase = target.shell_script_build_phases.find { |bp| bp.name == phase_name }
-          phase.shell_script.strip.should == '"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh"'
+          phase.shell_script.strip.should == '"${PODS_ROOT}/Target Support Files/Pods/Pods-resources.sh"'
         end
 
         it 'adds a Check Manifest.lock build phase to each target' do
@@ -119,6 +119,23 @@ module Pod
           phase_name = @check_manifest_phase_name
           phase = target.build_phases.find { |bp| bp.name == phase_name }
           target.build_phases.first.should.equal? phase
+        end
+
+        it 'links Pods directory if the path of user project is a symlink' do
+          project_symlink_dir = config.installation_root + 'tmp_symlink_project'
+          require 'fileutils'
+          FileUtils.rm_f(project_symlink_dir)
+          File.symlink(@project.path.dirname, project_symlink_dir)
+          @project = Xcodeproj::Project.open(project_symlink_dir + @project.path.basename)
+          @pod_bundle.stubs(:user_project).returns(@project)
+          @pod_bundle.send(:check_user_project_is_symlink)
+          @pod_bundle.user_project_is_symlink.should == true
+          @target_integrator.integrate!
+          pods_symlink = project_symlink_dir + 'Pods'
+          pods_symlink.exist?.should == true
+          pods_symlink.symlink?.should == true
+          File.readlink(pods_symlink.to_s).should.equal '../Pods'
+          FileUtils.rm_f(project_symlink_dir)
         end
 
         it 'does not perform the integration if there are no targets to integrate' do
@@ -303,7 +320,7 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == @copy_pods_resources_phase_name }
           phase.input_paths.sort.should == %w(
             ${PODS_ROOT}/Lib/Resources/image.png
-            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-resources.sh
           )
           # Now pretend the same target has no more framework paths, it should update the targets input/output paths
           @pod_bundle.stubs(:resource_paths_by_config => {})
@@ -358,7 +375,7 @@ module Pod
             ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.bundle
             ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.storyboard
             ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLibXIB.xib
-            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-resources.sh
           )
           phase.output_paths.sort.should == %w(
             ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car
@@ -388,7 +405,7 @@ module Pod
           phase.input_paths.sort.should == %w(
             ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/SomeBundle.bundle
             ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/SomeBundle.bundle
-            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-resources.sh
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-resources.sh
           )
           phase.output_paths.sort.should == %w(
             ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SomeBundle.bundle
@@ -416,7 +433,7 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
           phase.input_paths.sort.should == %w(
             ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework
-            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-frameworks.sh
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
           # Now pretend the same target has no more framework paths, it should update the targets input/output paths
           @pod_bundle.stubs(:framework_paths_by_config => {})
@@ -459,7 +476,7 @@ module Pod
             ${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM
             ${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework
             ${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM
-            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-frameworks.sh
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
           phase.output_paths.sort.should == %w(
             ${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM
@@ -508,7 +525,7 @@ module Pod
             ${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM
             ${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework
             ${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM
-            ${SRCROOT}/../Pods/Target\ Support\ Files/Pods/Pods-frameworks.sh
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
           phase.output_paths.sort.should == %w(
             ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM

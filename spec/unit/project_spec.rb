@@ -235,7 +235,7 @@ module Pod
           end.message.should.match /Paths must be absolute/
         end
 
-        it 'uses realpath for resolving symlinks' do
+        it 'does not resolve symlinks' do
           file = Pathname.new(Dir.tmpdir) + 'file.m'
           FileUtils.rm_f(file)
           File.open(file, 'w') { |f| f.write('') }
@@ -244,7 +244,7 @@ module Pod
           File.symlink(file, sym_file)
 
           ref = @project.add_file_reference(sym_file, @group)
-          ref.hierarchy_path.should == '/Pods/BananaLib/file.m'
+          ref.hierarchy_path.should == '/Pods/BananaLib/symlinked_file.m'
         end
 
         it 'sets syntax to ruby when requested' do
