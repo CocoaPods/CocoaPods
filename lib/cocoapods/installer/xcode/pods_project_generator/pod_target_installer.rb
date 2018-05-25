@@ -469,7 +469,7 @@ module Pod
                 pod_target.resource_paths(include_test_spec_paths)
               end
             end
-            generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
+            generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform, target.user_project.path, target.name)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
           end
