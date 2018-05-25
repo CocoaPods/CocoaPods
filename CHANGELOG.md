@@ -79,6 +79,20 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Allow `EXPANDED_CODE_SIGN_IDENTITY` to be unset.  
   [Keith Smiley](https://github.com/keith)
   [#7708](https://github.com/CocoaPods/CocoaPods/issues/7708)
+## 1.5.3 (2018-05-25)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix compatibility with RubyGems 2.7.7.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#7765](https://github.com/CocoaPods/CocoaPods/issues/7765)
+  [#7766](https://github.com/CocoaPods/CocoaPods/issues/7766)
+  [#7763](https://github.com/CocoaPods/CocoaPods/issues/7763)
+
 
 ## 1.5.2 (2018-05-09)
 
