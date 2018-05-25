@@ -34,7 +34,7 @@ module Pod
         def validate!
           verify_no_duplicate_framework_and_library_names
           verify_no_static_framework_transitive_dependencies
-          verify_no_pods_used_with_multiple_swift_versions
+          verify_swift_pods_swift_version
           verify_swift_pods_have_module_dependencies
         end
 
@@ -91,22 +91,28 @@ module Pod
           end
         end
 
-        def verify_no_pods_used_with_multiple_swift_versions
-          error_message_for_target = lambda do |target|
-            "#{target.name} (Swift #{target.swift_version})"
+        def verify_swift_pods_swift_version
+          error_message_for_target_definition = lambda do |target_definition|
+            "`#{target_definition.name}` (Swift #{target_definition.swift_version})"
           end
           swift_pod_targets = pod_targets.select(&:uses_swift?)
           error_messages = swift_pod_targets.map do |pod_target|
             next unless pod_target.spec_swift_version.nil?
             swift_target_definitions = pod_target.target_definitions.reject { |target| target.swift_version.blank? }
-            next if swift_target_definitions.empty? || swift_target_definitions.uniq(&:swift_version).count == 1
-            target_errors = swift_target_definitions.map(&error_message_for_target).join(', ')
-            "- #{pod_target.name} required by #{target_errors}"
+            next if swift_target_definitions.uniq(&:swift_version).count == 1
+            if swift_target_definitions.empty?
+              "- `#{pod_target.name}` does not specify a Swift version and none of the targets " \
+                "(#{pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence}) integrating it have the " \
+                '`SWIFT_VERSION` attribute set. Please contact the author or set the `SWIFT_VERSION` attribute in at ' \
+                'least one of the targets that integrate this pod.'
+            else
+              target_errors = swift_target_definitions.map(&error_message_for_target_definition).to_sentence
+              "- `#{pod_target.name}` is integrated by multiple targets that use a different Swift version: #{target_errors}."
+            end
           end.compact
 
           unless error_messages.empty?
-            raise Informative, 'The following pods are integrated into targets ' \
-              "that do not have the same Swift version:\n\n#{error_messages.join("\n")}"
+            raise Informative, "Unable to determine Swift version for the following pods:\n\n #{error_messages.join('\n')}"
           end
         end
 

@@ -278,6 +278,8 @@ module Pod
             pod 'monkey', :path => (fixture_path + 'monkey').to_s
           end
         end
+        podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
+
         lockfile = generate_lockfile
 
         @installer = Installer.new(config.sandbox, podfile, lockfile)

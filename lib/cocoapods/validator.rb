@@ -475,7 +475,8 @@ module Pod
 
     def create_app_project
       app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
-      Pod::Generator::AppTargetHelper.add_app_target(app_project, consumer.platform_name, deployment_target)
+      app_target = Pod::Generator::AppTargetHelper.add_app_target(app_project, consumer.platform_name, deployment_target)
+      Pod::Generator::AppTargetHelper.add_swift_version(app_target, swift_version)
       app_project.save
       app_project.recreate_user_schemes
     end
@@ -485,7 +486,6 @@ module Pod
       app_target = app_project.targets.first
       pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
       Pod::Generator::AppTargetHelper.add_app_project_import(app_project, app_target, pod_target, consumer.platform_name, use_frameworks)
-      Pod::Generator::AppTargetHelper.add_swift_version(app_target, swift_version)
       Pod::Generator::AppTargetHelper.add_xctest_search_paths(app_target) if @installer.pod_targets.any? { |pt| pt.spec_consumers.any? { |c| c.frameworks.include?('XCTest') } }
       app_project.save
       Xcodeproj::XCScheme.share_scheme(app_project.path, 'App')
