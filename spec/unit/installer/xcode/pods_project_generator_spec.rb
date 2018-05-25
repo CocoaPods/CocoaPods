@@ -157,7 +157,7 @@ module Pod
               Specification::Consumer.any_instance.stubs(:frameworks).returns(['QuartzCore'])
               @installer.send(:install!)
               names = @installer.pods_project['Frameworks']['iOS'].children.map(&:name)
-              names.sort.should == ['Foundation.framework', 'QuartzCore.framework']
+              names.sort.should == ['QuartzCore.framework']
             end
           end
 

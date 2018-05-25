@@ -31,10 +31,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: b792bafe384981530c58b50345d0aed9a4130b2c
+  revision: cadb238767d09942a1c5eba90a3112034438ba23
   branch: master
   specs:
-    xcodeproj (1.5.7)
+    xcodeproj (1.5.9)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.2)
       claide (>= 1.0.2, < 2.0)
@@ -297,4 +297,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
