@@ -267,6 +267,7 @@
 				GCC_PREFIX_HEADER = "SampleApp/SampleApp-Prefix.pch";
 				INFOPLIST_FILE = "SampleApp/SampleApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -279,6 +280,7 @@
 				GCC_PREFIX_HEADER = "SampleApp/SampleApp-Prefix.pch";
 				INFOPLIST_FILE = "SampleApp/SampleApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
