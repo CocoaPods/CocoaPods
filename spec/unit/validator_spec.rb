@@ -914,7 +914,7 @@ module Pod
         end
       end
 
-      describe 'wihout a user provided swift version' do
+      describe 'without a user provided swift version' do
         it 'warns for Swift Pods' do
           Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
