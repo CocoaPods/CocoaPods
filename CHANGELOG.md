@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix `INFOPLIST_FILE` being overridden when set in a Podspec's `pod_target_xcconfig`  
+  [Eric Amorde](https://github.com/amorde)
+  [#7530](https://github.com/CocoaPods/CocoaPods/issues/7530)
+
 * Raise an error if user target `SWIFT_VERSION` is missing  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7770](https://github.com/CocoaPods/CocoaPods/issues/7770)

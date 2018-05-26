@@ -90,6 +90,16 @@ module Pod
               end
             end
 
+            it 'respects INFOPLIST_FILE of pod_target_xcconfig' do
+              @spec.pod_target_xcconfig = {
+                'INFOPLIST_FILE' => 'somefile.plist',
+              }
+              @installer.install!
+              @project.targets.first.build_configurations.each do |config|
+                config.resolve_build_setting('INFOPLIST_FILE').should == 'somefile.plist'
+              end
+            end
+
             #--------------------------------------#
 
             describe 'headers folder paths' do
@@ -755,6 +765,34 @@ module Pod
               build_file.should.be.not.nil
               build_file.file_ref.path.should == dummy_source_basename
               @pod_target.dummy_source_path.read.should.include?('@interface PodsDummy_BananaLib')
+            end
+
+            it 'creates an info.plist file when frameworks are required' do
+              @pod_target.stubs(:requires_frameworks?).returns(true)
+              @installer.install!
+              group = @project['Pods/BananaLib/Support Files']
+              group.children.map(&:display_name).sort.should == [
+                'BananaLib-Info.plist',
+                'BananaLib-dummy.m',
+                'BananaLib-prefix.pch',
+                'BananaLib.modulemap',
+                'BananaLib.xcconfig',
+              ]
+            end
+
+            it 'does not create an Info.plist file if INFOPLIST_FILE is set' do
+              @pod_target.stubs(:requires_frameworks?).returns(true)
+              @spec.pod_target_xcconfig = {
+                'INFOPLIST_FILE' => 'somefile.plist',
+              }
+              @installer.install!
+              group = @project['Pods/BananaLib/Support Files']
+              group.children.map(&:display_name).sort.should == [
+                'BananaLib-dummy.m',
+                'BananaLib-prefix.pch',
+                'BananaLib.modulemap',
+                'BananaLib.xcconfig',
+              ]
             end
 
             #--------------------------------------------------------------------------------#
