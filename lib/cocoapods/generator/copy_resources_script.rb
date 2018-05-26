@@ -204,13 +204,53 @@ EOS
 
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "${XCASSET_FILES:-}" ]
 then
-  # Find all other xcassets (this unfortunately includes those of path pods and other targets).
+
+  ASSETS_CAR_PATH="${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car"
+  TMP_DIR="$TARGET_TEMP_DIR"
+
+  # TODO: Does PLATFORM_NAME match the input?
+  # TODO: Need to figure out an alternative to parse out `Name` in bash
+  # TODO: Is bash 4 an option? The matching is very inefficient
+  INCLUDED_IMAGESETS=$(xcrun --sdk "$PLATFORM_NAME" assetutil --info "$ASSETS_CAR_PATH" | ruby -e "require 'json'; JSON.parse(STDIN.read).each { |o| puts o['Name'] };")
+  echo "$INCLUDED_IMAGESETS"
+  PODS_XCASSETS="$TMP_DIR/Pods.xcassets"
+  rm -rf "$PODS_XCASSETS"
+  mkdir "$PODS_XCASSETS"
+
   OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
-  while read line; do
-    if [[ $line != "${PODS_ROOT}*" ]]; then
-      XCASSET_FILES+=("$line")
-    fi
+  while read xcassets; do
+
+    # TODO: Can files other than .imageset and .appiconset be in a xcassets file
+    ASSETS_PATHS_IN_CATALOGUE=$(find "$xcassets" -iname "*.imageset" -or -iname "*.appiconset" -type d)
+    while read path; do
+      folder_name_with_extension=${path##*/}
+      folder_name=${folder_name_with_extension%%.*}
+
+      ASSET_INCLUDED=0
+      while read included_asset; do
+        if [ "$included_asset" == "$folder_name" ]; then
+          echo "including $included_asset"
+          ASSET_INCLUDED=1
+        fi
+      done <<<"$INCLUDED_IMAGESETS"
+      
+      if [ "$ASSET_INCLUDED" == "1" ]; then
+        cp -r "$path" "$PODS_XCASSETS"
+      fi
+      
+    done <<<"$ASSETS_PATHS_IN_CATALOGUE"
   done <<<"$OTHER_XCASSETS"
+
+  XCASSET_FILES+=("$PODS_XCASSETS")
+
+  # TODO: Add environment switch
+  # Find all other xcassets (this unfortunately includes those of path pods and other targets).
+  # OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
+  # while read line; do
+    # if [[ $line != "${PODS_ROOT}*" ]]; then
+      # XCASSET_FILES+=("$line")
+    # fi
+  # done <<<"$OTHER_XCASSETS"
 
   if [ -z ${ASSETCATALOG_COMPILER_APPICON_NAME+x} ]; then
     printf "%s\\0" "${XCASSET_FILES[@]}" | xargs -0 xcrun actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${!DEPLOYMENT_TARGET_SETTING_NAME}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
