@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify which platforms to lint.  
+  [Eric Amorde](https://github.com/amorde)
+  [#7783](https://github.com/CocoaPods/CocoaPods/issues/7783)
+
 * Warn if 'git://' protocol is used as the source of a pod  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7705](https://github.com/CocoaPods/CocoaPods/issues/7705)

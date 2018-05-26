@@ -312,15 +312,64 @@ module Pod
         validator.validation_dir.should.exist
       end
 
-      it 'builds the pod per platform' do
-        file = write_podspec(stub_podspec)
-        validator = Validator.new(file, config.sources_manager.master.map(&:url))
-        validator.stubs(:validate_url)
-        validator.expects(:install_pod).times(4)
-        validator.expects(:build_pod).times(4)
-        validator.expects(:add_app_project_import).times(4)
-        validator.expects(:check_file_patterns).times(4)
-        validator.validate
+      describe 'Platforms' do
+        it 'builds the pod per platform' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url))
+          validator.stubs(:validate_url)
+          validator.expects(:install_pod).times(4)
+          validator.expects(:build_pod).times(4)
+          validator.expects(:add_app_project_import).times(4)
+          validator.expects(:check_file_patterns).times(4)
+          validator.validate
+        end
+
+        it 'builds the pod per platform specified' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx))
+          validator.stubs(:validate_url)
+          validator.expects(:install_pod).times(2)
+          validator.expects(:build_pod).times(2)
+          validator.expects(:add_app_project_import).times(2)
+          validator.expects(:check_file_patterns).times(2)
+          validator.validate
+        end
+
+        it 'builds the pod per platform specified, ignoring duplicates' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx macos ios))
+          validator.stubs(:validate_url)
+          validator.expects(:install_pod).times(2)
+          validator.expects(:build_pod).times(2)
+          validator.expects(:add_app_project_import).times(2)
+          validator.expects(:check_file_patterns).times(2)
+          validator.validate
+        end
+
+        it 'only builds the platforms specified' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx))
+          validator.send(:platforms_to_lint, validator.spec).map(&:to_s).sort.should == %w(iOS macOS)
+
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx watchos tvos))
+          validator.send(:platforms_to_lint, validator.spec).map(&:to_s).sort.should == %w(iOS macOS tvOS watchOS)
+        end
+
+        it 'raises when given an invalid platform' do
+          file = write_podspec(stub_podspec)
+          should.raise(Informative) do
+            Validator.new(file, config.sources_manager.master.map(&:url), %w(ios amazingos))
+          end
+        end
+
+        it 'raises when given a platform not supported by the specification' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios watchos tvos))
+          validator.spec.stubs(:available_platforms).returns([Platform.ios])
+          should.raise(Informative) do
+            validator.send(:platforms_to_lint, validator.spec)
+          end
+        end
       end
 
       it 'builds the pod only once if the first fails with fail_fast' do
