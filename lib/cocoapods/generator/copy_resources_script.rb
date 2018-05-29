@@ -89,15 +89,7 @@ module Pod
         end
 
         script += RSYNC_CALL
-        script += XCASSETS_COMPILE_BEGIN
-        # TODO: Proper way of checking the env?
-        if ENV['XCASSETS_SELECTIVE_COMPILE'].is_set?
-          script += XCASSETS_COMPILE_FIND_SELECTIVE
-        else
-          script += XCASSETS_COMPILE_FIND_ALL  
-        end
-        
-        script += XCASSETS_COMPILE_END
+        script += XCASSETS_COMPILE
         script
       end
 
@@ -207,56 +199,56 @@ if [[ "${ACTION}" == "install" ]] && [[ "${SKIP_INSTALL}" == "NO" ]]; then
 fi
 rm -f "$RESOURCES_TO_COPY"
 EOS
-      XCASSETS_COMPILE_FIND_ALL = <<EOS
-  #Find all other xcassets (this unfortunately includes those of path pods and other targets).
-  OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
-  while read line; do
-    if [[ $line != "${PODS_ROOT}*" ]]; then
-      XCASSET_FILES+=("$line")
-    fi
-  done <<<"$OTHER_XCASSETS"
-EOS
-      XCASSETS_COMPILE_FIND_SELECTIVE = <<EOS
-  ASSETS_CAR_PATH="${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car"
-  TMP_DIR="$TARGET_TEMP_DIR"
-
-  # Get the names of all assets in the compiled Assets.car file
-  INCLUDED_IMAGESETS=$(xcrun --sdk "$PLATFORM_NAME" assetutil --info "$ASSETS_CAR_PATH" | grep "\"Name\"" | sed -E "s/ *\"Name\" *: * \"(.*)\",/\1/")
-  PODS_XCASSETS="$TMP_DIR/Pods.xcassets"
-  rm -rf "$PODS_XCASSETS"
-  mkdir "$PODS_XCASSETS"
-
-  # Find all .xcassets
-  OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
-  while read xcassets; do
-    
-    # Find all assets in the catalogue. Collect all folders with "any.any" format.
-    # This picks up all .imageset and .appiconset + everything else added in the future
-    ASSETS_PATHS_IN_CATALOGUE=$(find "$xcassets" -iname "*.*" -type d)
-    while read path; do
-      folder_name_with_extension=${path##*/}
-      folder_name=${folder_name_with_extension%%.*}
-      ASSET_INCLUDED=0
-      while read included_asset; do
-        if [ "$included_asset" == "$folder_name" ]; then
-          ASSET_INCLUDED=1
-        fi
-      done <<<"$INCLUDED_IMAGESETS"
-      
-      if [ "$ASSET_INCLUDED" == "1" ]; then
-        cp -r "$path" "$PODS_XCASSETS"
-      fi
-      
-    done <<<"$ASSETS_PATHS_IN_CATALOGUE"
-  done <<<"$OTHER_XCASSETS"
-
-  XCASSET_FILES+=("$PODS_XCASSETS")
-EOS
-      XCASSETS_COMPILE_BEGIN = <<EOS
+      XCASSETS_COMPILE = <<EOS
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "${XCASSET_FILES:-}" ]
 then
-EOS
-      XCASSETS_COMPILE_END = <<EOS
+
+
+  if [[ -z "${CP_XCASSETS_SELECTIVE_COMPILE+x}" ]]; then
+    #Find all other xcassets (this unfortunately includes those of path pods and other targets).
+    OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
+    while read line; do
+      if [[ $line != "${PODS_ROOT}*" ]]; then
+        XCASSET_FILES+=("$line")
+      fi
+    done <<<"$OTHER_XCASSETS"
+  else
+    ASSETS_CAR_PATH="${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car"
+    TMP_DIR="$TARGET_TEMP_DIR"
+
+    # Get the names of all assets in the compiled Assets.car file
+    INCLUDED_IMAGESETS=$(xcrun --sdk "$PLATFORM_NAME" assetutil --info "$ASSETS_CAR_PATH" | grep "\\"Name\\"" | sed -E "s/ *\\"Name\\" *: * \\"(.*)\\",/\\1/")
+    PODS_XCASSETS="$TMP_DIR/Pods.xcassets"
+    rm -rf "$PODS_XCASSETS"
+    mkdir "$PODS_XCASSETS"
+
+    # Find all .xcassets
+    OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
+    while read xcassets; do
+      
+      # Find all assets in the catalogue. Collect all folders with "any.any" format.
+      # This picks up all .imageset and .appiconset + everything else added in the future
+      ASSETS_PATHS_IN_CATALOGUE=$(find "$xcassets" -iname "*.*" -type d)
+      while read path; do
+        folder_name_with_extension=${path##*/}
+        folder_name=${folder_name_with_extension%%.*}
+        ASSET_INCLUDED=0
+        while read included_asset; do
+          if [ "$included_asset" == "$folder_name" ]; then
+            ASSET_INCLUDED=1
+          fi
+        done <<<"$INCLUDED_IMAGESETS"
+        
+        if [ "$ASSET_INCLUDED" == "1" ]; then
+          cp -r "$path" "$PODS_XCASSETS"
+        fi
+        
+      done <<<"$ASSETS_PATHS_IN_CATALOGUE"
+    done <<<"$OTHER_XCASSETS"
+
+    XCASSET_FILES+=("$PODS_XCASSETS")
+  fi  
+
   if [ -z ${ASSETCATALOG_COMPILER_APPICON_NAME+x} ]; then
     printf "%s\\0" "${XCASSET_FILES[@]}" | xargs -0 xcrun actool --output-format human-readable-text --notices --warnings --platform "${PLATFORM_NAME}" --minimum-deployment-target "${!DEPLOYMENT_TARGET_SETTING_NAME}" ${TARGET_DEVICE_ARGS} --compress-pngs --compile "${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
   else
