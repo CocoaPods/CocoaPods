@@ -123,7 +123,9 @@ module Pod
         source = if !root_spec.source[:http].nil?
                    URI(root_spec.source[:http].to_s)
                  elsif !root_spec.source[:git].nil?
-                   URI(root_spec.source[:git].to_s)
+                   git_source = root_spec.source[:git].to_s
+                   return unless git_source =~ /^#{URI.regexp}$/
+                   URI(git_source)
                  end
         if UNENCRYPTED_PROTOCOLS.include?(source.scheme)
           UI.warn "'#{root_spec.name}' uses the unencrypted '#{source.scheme}' protocol to transfer the Pod. " \

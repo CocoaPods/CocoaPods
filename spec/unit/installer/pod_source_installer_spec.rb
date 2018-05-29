@@ -62,6 +62,30 @@ module Pod
         UI.warnings.should.include 'uses the unencrypted \'git\' protocol'
       end
 
+      it 'does not warn for local repositories with spaces' do
+        @spec.source = { :git => '/Users/kylef/Projects X', :tag => '1.0' }
+        dummy_response = Pod::Downloader::Response.new
+        Downloader.stubs(:download).returns(dummy_response)
+        @installer.install!
+        UI.warnings.length.should.equal(0)
+      end
+
+      it 'does not warn for SSH repositories' do
+        @spec.source = { :git => 'git@bitbucket.org:kylef/test.git', :tag => '1.0' }
+        dummy_response = Pod::Downloader::Response.new
+        Downloader.stubs(:download).returns(dummy_response)
+        @installer.install!
+        UI.warnings.length.should.equal(0)
+      end
+
+      it 'does not warn for SSH repositories on Github' do
+        @spec.source = { :git => 'git@github.com:kylef/test.git', :tag => '1.0' }
+        dummy_response = Pod::Downloader::Response.new
+        Downloader.stubs(:download).returns(dummy_response)
+        @installer.install!
+        UI.warnings.length.should.equal(0)
+      end
+
       #--------------------------------------#
 
       describe 'Prepare command' do
