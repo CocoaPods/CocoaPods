@@ -42,7 +42,7 @@ module Pod
           #         The build configuration.
           #
           def self.set_target_xcconfig(pod_bundle, target, config)
-            # Xcode root group's path is a realpath, we must get the relative path of sandbox to user project's realpath
+            # Xcode root group's path is absolute, we must get the relative path of the sandbox to the user project
             group_path = pod_bundle.relative_pods_root_path
             path = pod_bundle.xcconfig_relative_path(config.name)
             group = config.project['Pods'] || config.project.new_group('Pods', group_path)

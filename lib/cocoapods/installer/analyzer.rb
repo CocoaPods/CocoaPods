@@ -650,14 +650,17 @@ module Pod
                       target_definitions, file_accessors, scope_suffix).tap do |target|
           name = target.root_spec.name
           if sandbox.local?(name)
-            # we will create a symlink `Pods/#{name}` to the realpath of the pod,
-            # then we could access the Pod's files by the `${PODS_ROOT}/#{name}` instead of the realpath.
+            # Create a symlink at `$PODS_ROOT/#{name}` to the path of the local pod,
+            # making the local pod's files available at `${PODS_ROOT}/#{name}`
             poddir = sandbox.pod_dir(target.root_spec.name)
             realdir = sandbox.pod_realdir(name)
             unless sandbox.local_path_was_absolute?(name)
               realdir = realdir.realpath.relative_path_from(poddir.dirname.realpath)
             end
-            `cd "#{poddir.dirname}" && rm -rf "#{poddir.basename}" && ln -fs "#{realdir}" "#{poddir.basename}"`
+            if File.symlink?(poddir)
+              File.unlink(poddir)
+            end
+            File.symlink(realdir, poddir)
           end
         end
       end

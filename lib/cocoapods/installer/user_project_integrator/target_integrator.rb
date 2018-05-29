@@ -272,7 +272,7 @@ module Pod
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             add_user_script_phases
-            link_pods_directory
+            add_sandbox_symlink
           end
         end
 
@@ -411,17 +411,22 @@ module Pod
           end
         end
 
-        # Adds a fake Pods directory that link to real Pods directory,
+        # Adds a symlink at $PROJECT_DIR/Pods pointing to $PODS_ROOT if the user project is behind a symlink
         # if the user project is a symlink
         #
-        # @note   will remove origin Pods directory
+        # @note Replaces any existing symlinks at $PROJECT_DIR/Pods
         #
         # @return [void]
         #
-        def link_pods_directory
+        def add_sandbox_symlink
           if target.user_project_is_symlink
             project_dir = target.user_project_path.dirname.realpath
-            `cd "#{project_dir}" && rm -rf Pods && ln -s "#{target.sandbox.root.realpath.relative_path_from(project_dir)}" Pods`
+            link_source = target.sandbox.root.realpath.relative_path_from(project_dir)
+            link_path = project_dir + target.sandbox.root.basename
+            if File.symlink?(link_path)
+              File.unlink(link_path)
+            end
+            File.symlink(link_source, link_path)
           end
         end
 
