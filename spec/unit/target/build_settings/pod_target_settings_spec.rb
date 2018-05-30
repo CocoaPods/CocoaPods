@@ -233,17 +233,12 @@ module Pod
             @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
             @banana_pod_target = fixture_pod_target(@banana_spec)
 
+            @matryoshka_spec = fixture_spec('matryoshka/matryoshka.podspec')
+            @matryoshka_pod_target = fixture_pod_target_with_specs([@matryoshka_spec, *@matryoshka_spec.subspecs])
+
             @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
             @coconut_test_spec = @coconut_spec.test_specs.first
             @coconut_pod_target = fixture_pod_target_with_specs([@coconut_spec, @coconut_test_spec])
-
-            @consumer = @coconut_pod_target.spec_consumers.first
-            @test_consumer = @coconut_pod_target.spec_consumers[1]
-            @podfile = @coconut_pod_target.podfile
-
-            file_accessors = [Sandbox::FileAccessor.new(fixture('coconut-lib'), @consumer), Sandbox::FileAccessor.new(fixture('coconut-lib'), @test_consumer)]
-
-            @coconut_pod_target.stubs(:file_accessors).returns(file_accessors)
           end
 
           it 'does not merge pod target xcconfig of test specifications for a non test xcconfig' do
@@ -252,6 +247,14 @@ module Pod
             generator = PodTargetSettings.new(@coconut_pod_target, false)
             xcconfig = generator.generate
             xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1'
+          end
+
+          it 'merges pod target xcconfig settings from subspecs' do
+            @matryoshka_spec.subspecs[0].pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FIRST_SUBSPEC_FLAG=1' }
+            @matryoshka_spec.subspecs[1].pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'SECOND_SUBSPEC_FLAG=1' }
+            generator = PodTargetSettings.new(@matryoshka_pod_target, false)
+            xcconfig = generator.generate
+            xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 FIRST_SUBSPEC_FLAG=1 SECOND_SUBSPEC_FLAG=1'
           end
 
           it 'merges the pod target xcconfig of non test specifications for test xcconfigs' do

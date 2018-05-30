@@ -437,7 +437,7 @@ module Pod
       # Filters out pod targets whose `specs` are a subset of
       # another target's.
       #
-      # @param [Array<PodTarget>] dependent_targets
+      # @param [Array<PodTarget>] pod_targets
       #
       # @return [Array<PodTarget>]
       #
@@ -475,9 +475,6 @@ module Pod
         # @param [PodTarget] target
         #   see {#target}
         #
-        # @param [String] configuration_name
-        #   see {#configuration_name}
-        #
         # @param [Boolean] test_xcconfig
         #  see {#test_xcconfig?}
         #
@@ -489,7 +486,7 @@ module Pod
         # @return [Xcodeproj::Xconfig]
         define_build_settings_method :xcconfig, :memoized => true do
           xcconfig = super()
-          xcconfig.merge(pod_target_xcconfig)
+          xcconfig.merge(merged_pod_target_xcconfigs)
         end
 
         #-------------------------------------------------------------------------#
@@ -786,17 +783,6 @@ module Pod
           )
         end
 
-        # @return [Hash<String => String>]
-        define_build_settings_method :pod_target_xcconfig, :memoized => true do
-          config = {}
-
-          spec_consumers.each do |consumer|
-            config.update(consumer.pod_target_xcconfig) # TODO: resolve conflicts
-          end
-
-          config
-        end
-
         # Returns the +pod_target_xcconfig+ for the pod target and its spec
         # consumers grouped by keys
         #
@@ -804,7 +790,7 @@ module Pod
         #
         def pod_target_xcconfig_values_by_consumer_by_key
           spec_consumers.each_with_object({}) do |spec_consumer, hash|
-            spec_consumer.user_target_xcconfig.each do |k, v|
+            spec_consumer.pod_target_xcconfig.each do |k, v|
               (hash[k] ||= {})[spec_consumer] = v
             end
           end
