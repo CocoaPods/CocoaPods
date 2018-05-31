@@ -26,6 +26,9 @@ module Pod
             ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
              '(defaults to https://github.com/CocoaPods/Specs.git). ' \
              'Multiple sources must be comma-delimited.'],
+            ['--platforms=ios,macos', 'Lint against specific platforms' \
+              '(defaults to all platforms supported by the podspec).' \
+              'Multiple platforms must be comma-delimited'],
             ['--private', 'Lint skips checks that apply only to public specs'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
              'This takes precedence over a .swift-version file.'],
@@ -43,6 +46,7 @@ module Pod
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = !argv.flag?('use-libraries')
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
+          @platforms       = argv.option('platforms', '').split(',')
           @private         = argv.flag?('private', false)
           @swift_version   = argv.option('swift-version', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
@@ -55,7 +59,7 @@ module Pod
           UI.puts
           failure_reasons = []
           podspecs_to_lint.each do |podspec|
-            validator                = Validator.new(podspec, @source_urls)
+            validator                = Validator.new(podspec, @source_urls, @platforms)
             validator.quick          = @quick
             validator.no_clean       = !@clean
             validator.fail_fast      = @fail_fast
