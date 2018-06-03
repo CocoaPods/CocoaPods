@@ -198,7 +198,7 @@ module Pod
       end
 
       def validator_for_podspec(podspec)
-        Validator.new(podspec, [])
+        Validator.new(podspec, [], [])
       end
     end
   end

@@ -18,6 +18,10 @@ module Pod
     #
     DEFAULT_SWIFT_VERSION = '3.2'.freeze
 
+    # The valid platforms for linting
+    #
+    VALID_PLATFORMS = Platform.all.freeze
+
     # @return [Specification::Linter] the linter instance from CocoaPods
     #         Core.
     #
@@ -31,13 +35,28 @@ module Pod
     # @param  [Array<String>] source_urls
     #         the Source URLs to use in creating a {Podfile}.
     #
-    def initialize(spec_or_path, source_urls)
+    # @param. [Array<String>] platforms
+    #         the platforms to lint.
+    #
+    def initialize(spec_or_path, source_urls, platforms = [])
       @linter = Specification::Linter.new(spec_or_path)
       @source_urls = if @linter.spec && @linter.spec.dependencies.empty? && @linter.spec.recursive_subspecs.all? { |s| s.dependencies.empty? }
                        []
                      else
                        source_urls.map { |url| config.sources_manager.source_with_name_or_url(url) }.map(&:url)
                      end
+
+      @platforms = platforms.map do |platform|
+        result =  case platform.to_s.downcase
+                  # Platform doesn't recognize 'macos' as being the same as 'osx' when initializing
+                  when 'macos' then Platform.macos
+                  else Platform.new(platform, nil)
+                  end
+        unless valid_platform?(result)
+          raise Informative, "Unrecognized platform `#{platform}`. Valid platforms: #{VALID_PLATFORMS.join(', ')}"
+        end
+        result
+      end
     end
 
     #-------------------------------------------------------------------------#
@@ -53,6 +72,28 @@ module Pod
     #
     def file
       @linter.file
+    end
+
+    # Returns a list of platforms to lint for a given Specification
+    #
+    # @param [Specification] spec
+    #         The specification to lint
+    #
+    # @return [Array<Platform>] platforms to lint for the given specification
+    #
+    def platforms_to_lint(spec)
+      return spec.available_platforms if @platforms.empty?
+
+      # Validate that the platforms specified are actually supported by the spec
+      results = @platforms.map do |platform|
+        matching_platform = spec.available_platforms.find { |p| p.name == platform.name }
+        unless matching_platform
+          raise Informative, "Platform `#{platform}` is not supported by specification `#{spec}`."
+        end
+        matching_platform
+      end.uniq
+
+      results
     end
 
     # @return [Sandbox::FileAccessor] the file accessor for the spec.
@@ -309,7 +350,9 @@ module Pod
       validate_documentation_url(spec)
       validate_source_url(spec)
 
-      valid = spec.available_platforms.send(fail_fast ? :all? : :each) do |platform|
+      platforms = platforms_to_lint(spec)
+
+      valid = platforms.send(fail_fast ? :all? : :each) do |platform|
         UI.message "\n\n#{spec} - Analyzing on #{platform} platform.".green.reversed
         @consumer = spec.consumer(platform)
         setup_validation_environment
@@ -878,6 +921,45 @@ module Pod
     #
     def _xcodebuild(command, raise_on_failure = false)
       Executable.execute_command('xcodebuild', command, raise_on_failure)
+    end
+
+    # Whether the platform with the specified name is valid
+    #
+    # @param  [Platform] platform
+    #         The platform to check
+    #
+    # @return [Bool] True if the platform is valid
+    #
+    def valid_platform?(platform)
+      VALID_PLATFORMS.any? { |p| p.name == platform.name }
+    end
+
+    # Whether the platform is supported by the specification
+    #
+    # @param  [Platform] platform
+    #         The platform to check
+    #
+    # @param  [Specification] specification
+    #         The specification which must support the provided platform
+    #
+    # @return [Bool] Whether the platform is supported by the specification
+    #
+    def supported_platform?(platform, spec)
+      available_platforms = spec.available_platforms
+
+      available_platforms.any? { |p| p.name == platform.name }
+    end
+
+    # Whether the provided name matches the platform
+    #
+    # @param  [Platform] platform
+    #         The platform
+    #
+    # @param  [String] name
+    #         The name to check against the provided platform
+    #
+    def platform_name_match?(platform, name)
+      [platform.name, platform.string_name].any? { |n| n.casecmp(name) == 0 }
     end
 
     #-------------------------------------------------------------------------#
