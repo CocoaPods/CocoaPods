@@ -1059,6 +1059,11 @@ module Pod
           pod_targets.each_with_object({}) do |target, hash|
             target.spec_consumers.each do |spec_consumer|
               spec_consumer.user_target_xcconfig.each do |k, v|
+                # TODO: Need to decide how we are going to ensure settings like these
+                # are always excluded from the user's project.
+                #
+                # See https://github.com/CocoaPods/CocoaPods/issues/1216
+                next if k == 'USE_HEADERMAP'
                 (hash[k] ||= {})[spec_consumer] = v
               end
             end
