@@ -15,7 +15,7 @@ module Pod
         before do
           @target_definition = fixture_target_definition
           @specs = specs
-          @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind' } unless @specs.empty?
+          @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind', 'USE_HEADERMAP' => 'NO' } unless @specs.empty?
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
           @target = fixture_aggregate_target(@pod_targets, false, { 'Release' => :release }, [], Platform.new(:ios, '6.0'), @target_definition)
@@ -100,6 +100,10 @@ module Pod
 
           it 'inherits the parent GCC_PREPROCESSOR_DEFINITIONS value' do
             @xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should.include '$(inherited)'
+          end
+
+          it 'excludes the `USE_HEADERMAP` from the user project' do
+            @xcconfig.to_hash['USE_HEADERMAP'].should.be.nil
           end
         end
 
