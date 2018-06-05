@@ -19,7 +19,7 @@ Please run `[sudo] gem uninstall nanaimo` and remove all but the latest version.
 Issues with `pod search`? Try deleting your cache `rm -rf ~/Library/Caches/CocoaPods`first.
 -->
 
-* [ ] I've read and understood the [*CONTRIBUTING guidelines and have done my best effort to follow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).
+* [ ] I've read and understood the [*CONTRIBUTING* guidelines and have done my best effort to follow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).
 
 # Report
 
