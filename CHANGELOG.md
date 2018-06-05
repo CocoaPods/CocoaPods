@@ -26,6 +26,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Refactor build settings generation to perform much better on large projects.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Make sure the temporary directory used to download the pod is remove even if an error is throwed
+  [augustorsouza](https://github.com/augustorsouza)
+
 ##### Bug Fixes
 
 * Fix `INFOPLIST_FILE` being overridden when set in a Podspec's `pod_target_xcconfig`  
