@@ -322,6 +322,8 @@ module Pod
         #
         def add_copy_resources_script_phase
           native_targets.each do |native_target|
+            # Static library targets cannot include resources. Skip this phase from being added instead.
+            next if native_target.symbol_type == :static_library
             script_path = target.copy_resources_script_relative_path
             resource_paths_by_config = target.resource_paths_by_config
             if resource_paths_by_config.values.all?(&:empty?)
