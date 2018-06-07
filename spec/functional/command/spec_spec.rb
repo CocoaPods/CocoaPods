@@ -132,7 +132,7 @@ module Pod
         spec = Specification.from_file(path)
         spec.version.should == Version.new('1.4.0')
         spec.source.should == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => '1.4.0' }
-        File.open(path, 'r') { |f| f.read.should.include ':tag => "#{s.version}"' }
+        File.open(path, 'r') { |f| f.read.should.include ':tag => "#{spec.version}"' }
       end
 
       it 'correctly reuses version variable in source if matching tag with prefix is found on github' do
@@ -151,7 +151,7 @@ module Pod
         spec = Specification.from_file(path)
         spec.version.should == Version.new('1.4.0')
         spec.source.should == { :git => 'https://github.com/lukeredpath/libPusher.git', :tag => 'v1.4.0' }
-        File.open(path, 'r') { |f| f.read.should.include ':tag => "v#{s.version}"' }
+        File.open(path, 'r') { |f| f.read.should.include ':tag => "v#{spec.version}"' }
       end
 
       it "raises an informative message when the GitHub repository doesn't have any commits" do
