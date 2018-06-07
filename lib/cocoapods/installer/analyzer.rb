@@ -657,8 +657,8 @@ module Pod
             unless sandbox.local_path_was_absolute?(name)
               realdir = realdir.realpath.relative_path_from(poddir.dirname.realpath)
             end
-            if File.symlink?(poddir)
-              File.unlink(poddir)
+            if File.exists?(poddir)
+              FileUtils.rm_r(poddir)
             end
             File.symlink(realdir, poddir)
           end
