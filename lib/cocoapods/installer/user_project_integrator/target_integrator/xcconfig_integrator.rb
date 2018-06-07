@@ -44,9 +44,9 @@ module Pod
           def self.set_target_xcconfig(pod_bundle, target, config)
             # Xcode root group's path is absolute, we must get the relative path of the sandbox to the user project
             group_path = pod_bundle.relative_pods_root_path
-            path = pod_bundle.xcconfig_relative_path(config.name)
             group = config.project['Pods'] || config.project.new_group('Pods', group_path)
-            group.set_path(group_path) if group.path != group_path
+            group_path = Pathname.new(group.path || "") # supoort user custom path of Pods group
+            path = (pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)).relative_path_from(group_path).to_s
             file_ref = group.files.find { |f| f.display_name == File.basename(path) }
             file_ref.path = path if file_ref && file_ref.path != path
             existing = config.base_configuration_reference
