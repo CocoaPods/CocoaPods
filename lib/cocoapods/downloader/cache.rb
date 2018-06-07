@@ -180,7 +180,7 @@ module Pod
         tmpdir = Pathname(Dir.mktmpdir)
         blk.call(tmpdir)
       ensure
-        FileUtils.remove_entry(tmpdir) if tmpdir && tmpdir.exist?
+        FileUtils.remove_entry(tmpdir, :force => true) if tmpdir && tmpdir.exist?
       end
 
       # Copies the `source` directory to `destination`, cleaning the directory
