@@ -414,7 +414,6 @@ module Pod
         end
 
         # Adds a symlink at $PROJECT_DIR/Pods pointing to $PODS_ROOT if the user project is behind a symlink
-        # if the user project is a symlink
         #
         # @note Replaces any existing symlinks at $PROJECT_DIR/Pods
         #
