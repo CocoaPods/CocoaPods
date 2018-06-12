@@ -67,7 +67,7 @@ module Pod
             if existing && existing != file_ref
               if existing.real_path.to_path.start_with?(pod_bundle.sandbox.root.to_path << '/')
                 set_base_configuration_reference.call
-              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
+              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path.to_s)
                 unless existing_config_is_identical_to_pod_config?(existing.real_path, pod_bundle.xcconfig_path(config.name))
                   UI.warn 'CocoaPods did not set the base configuration of your ' \
                   'project because your project already has a custom ' \
