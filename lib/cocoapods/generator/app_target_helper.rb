@@ -38,18 +38,38 @@ module Pod
       # @param  [Symbol] platform
       #         the platform of the target. Can be `:ios` or `:osx`, etc.
       #
-      # @param  [Boolean] use_frameworks
-      #         whether to use frameworks or not when generating the contents of the import file.
+      # @param  [String] name
+      #         The name to use for the target, defaults to 'App'.
+      #
+      # @return [Array<PBXBuildFile>] the created build file references.
+      #
+      def self.add_app_project_import(project, target, pod_target, platform, name = 'App')
+        source_file = AppTargetHelper.create_app_import_source_file(project, pod_target, platform, name)
+        group = project[name] || project.new_group(name, name)
+        source_file_ref = group.new_file(source_file)
+        target.add_file_references([source_file_ref])
+      end
+
+      # Creates and links an empty Swift file for the given target.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the target into.
+      #
+      # @param  [PBXNativeTarget] target
+      #         the native target to link the generated import file into.
       #
       # @param  [String] name
       #         The name to use for the target, defaults to 'App'.
       #
       # @return [Array<PBXBuildFile>] the created build file references.
       #
-      def self.add_app_project_import(project, target, pod_target, platform, use_frameworks, name = 'App')
-        source_file = AppTargetHelper.create_app_import_source_file(project, pod_target, platform, use_frameworks, name)
-        source_file_ref = project.new_group(name, name).new_file(source_file)
-        target.add_file_references([source_file_ref])
+      def self.add_empty_swift_file(project, target, name = 'App')
+        swift_file = project.path.dirname.+("#{name}/dummy.swift")
+        swift_file.parent.mkpath
+        File.write(swift_file, '')
+        group = project[name] || project.new_group(name, name)
+        swift_file_ref = group.new_file(swift_file)
+        target.add_file_references([swift_file_ref])
       end
 
       # Creates and links a default app host 'main.m' file.
@@ -116,26 +136,23 @@ module Pod
       # @param  [Symbol] platform
       #         the platform of the target. Can be `:ios` or `:osx`, etc.
       #
-      # @param  [Boolean] use_frameworks
-      #         whether to use frameworks or not when generating the contents of the import file.
-      #
       # @param  [String] name
       #         The name of the folder to use and save the generated main file.
       #
       # @return [Pathname] the new source file that was generated.
       #
-      def self.create_app_import_source_file(project, pod_target, platform, use_frameworks, name = 'App')
+      def self.create_app_import_source_file(project, pod_target, platform, name = 'App')
         language = pod_target.uses_swift? ? :swift : :objc
 
         if language == :swift
           source_file = project.path.dirname.+("#{name}/main.swift")
           source_file.parent.mkpath
-          import_statement = use_frameworks && pod_target.should_build? ? "import #{pod_target.product_module_name}\n" : ''
+          import_statement = pod_target.should_build? && pod_target.defines_module? ? "import #{pod_target.product_module_name}\n" : ''
           source_file.open('w') { |f| f << import_statement }
         else
           source_file = project.path.dirname.+("#{name}/main.m")
           source_file.parent.mkpath
-          import_statement = if use_frameworks && pod_target.should_build?
+          import_statement = if pod_target.should_build? && pod_target.defines_module?
                                "@import #{pod_target.product_module_name};\n"
                              else
                                header_name = "#{pod_target.product_module_name}/#{pod_target.product_module_name}.h"

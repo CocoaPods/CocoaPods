@@ -278,6 +278,7 @@ module Pod
                   configuration.build_settings['PRODUCT_NAME'] = name
                   configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
                   configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if platform == :osx
+                  configuration.build_settings['CURRENT_PROJECT_VERSION'] = '1'
                 end
                 Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
                 app_host_info_plist_path = app_host_info_plist_path_for_test_type(name, spec_consumer.test_type)
