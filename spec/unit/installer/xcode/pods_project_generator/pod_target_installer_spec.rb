@@ -351,6 +351,11 @@ module Pod
                   app_host_target = @project.targets[2]
                   app_host_target.name.should == 'AppHost-iOS-Unit-Tests'
                   app_host_target.symbol_type.should == :application
+                  app_host_target.build_configurations.each do |bc|
+                    bc.build_settings['PRODUCT_NAME'].should == 'AppHost-iOS-Unit-Tests'
+                    bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                    bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
+                  end
                   test_native_target = @project.targets[1]
                   test_native_target.build_configurations.each do |bc|
                     bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
@@ -371,6 +376,7 @@ module Pod
                   app_host_target.build_configurations.each do |bc|
                     bc.build_settings['PRODUCT_NAME'].should == 'AppHost-macOS-Unit-Tests'
                     bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                    bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
                   end
                   test_native_target = @project.targets[1]
                   test_native_target.build_configurations.each do |bc|
