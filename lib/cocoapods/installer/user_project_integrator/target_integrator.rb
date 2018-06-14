@@ -424,8 +424,8 @@ module Pod
             project_dir = target.user_project_path.dirname.realpath
             link_source = target.sandbox.root.realpath.relative_path_from(project_dir)
             link_path = project_dir + target.sandbox.root.basename
-            if File.symlink?(link_path)
-              File.unlink(link_path)
+            if File.exists?(link_path)
+              FileUtils.rm_r(link_path)
             end
             File.symlink(link_source, link_path)
           end
