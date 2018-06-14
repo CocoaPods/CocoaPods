@@ -37,6 +37,7 @@ module Pod
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used when linting the spec. ' \
              'This takes precedence over a .swift-version file.'],
             ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec.'],
+            ['--build-active-ios-arch-only', 'Lint builds the iOS library with only active architectures'],
           ].concat(super)
         end
 
@@ -54,6 +55,7 @@ module Pod
           @use_json = argv.flag?('use-json')
           @swift_version = argv.option('swift-version', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
+          @build_active_ios_arch_only = argv.flag?('build-active-ios-arch-only', false)
           @skip_tests = argv.flag?('skip-tests', false)
           @allow_overwrite = argv.flag?('overwrite', true)
           super
@@ -135,6 +137,7 @@ module Pod
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
+            validator.build_active_ios_arch_only = @build_active_ios_arch_only
             begin
               validator.validate
             rescue => e

@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add `--build-active-ios-arch-only` parameter to `pod spec lint` and `pod lib lint` and `pod repo push` to allow linting and pushing of frameworks that may still have i386 support.  
+  [Dan Fischer](https://github.com/fischerdan)
+  [#5854](https://github.com/CocoaPods/CocoaPods/issues/5854)
+
 * Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify which platforms to lint.  
   [Eric Amorde](https://github.com/amorde)
   [#7783](https://github.com/CocoaPods/CocoaPods/issues/7783)

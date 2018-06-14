@@ -28,21 +28,23 @@ module Pod
              'This takes precedence over a .swift-version file.'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
+            ['--build-active-ios-arch-only', 'Lint builds the iOS library with only active architecture'],
           ].concat(super)
         end
 
         def initialize(argv)
-          @quick           = argv.flag?('quick')
-          @allow_warnings  = argv.flag?('allow-warnings')
-          @clean           = argv.flag?('clean', true)
-          @fail_fast       = argv.flag?('fail-fast', false)
-          @subspecs        = argv.flag?('subspecs', true)
-          @only_subspec    = argv.option('subspec')
-          @use_frameworks  = !argv.flag?('use-libraries')
-          @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
-          @platforms       = argv.option('platforms', '').split(',')
-          @private         = argv.flag?('private', false)
-          @swift_version   = argv.option('swift-version', nil)
+          @quick                      = argv.flag?('quick')
+          @allow_warnings             = argv.flag?('allow-warnings')
+          @clean                      = argv.flag?('clean', true)
+          @fail_fast                  = argv.flag?('fail-fast', false)
+          @subspecs                   = argv.flag?('subspecs', true)
+          @only_subspec               = argv.option('subspec')
+          @use_frameworks             = !argv.flag?('use-libraries')
+          @source_urls                = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
+          @platforms                  = argv.option('platforms', '').split(',')
+          @private                    = argv.flag?('private', false)
+          @swift_version              = argv.option('swift-version', nil)
+          @build_active_ios_arch_only = argv.flag?('build-active-ios-arch-only', false)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
           @podspecs_paths = argv.arguments!
@@ -67,6 +69,7 @@ module Pod
             validator.use_frameworks = @use_frameworks
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
+            validator.build_active_ios_arch_only = @build_active_ios_arch_only
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
             validator.validate

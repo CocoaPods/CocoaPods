@@ -248,6 +248,11 @@ module Pod
     #
     attr_accessor :ignore_public_only_results
 
+    # @return [Boolean] Whether iOS builds should be for only active architectures
+    #         Bool be skipped.
+    #
+    attr_accessor :build_active_ios_arch_only
+
     attr_accessor :skip_import_validation
     alias_method :skip_import_validation?, :skip_import_validation
 
@@ -899,6 +904,9 @@ module Pod
       when :ios
         command += %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'iOS', deployment_target)
+        if build_active_ios_arch_only
+          command += %w( ONLY_ACTIVE_ARCH=YES)
+        end
       when :watchos
         command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'watchOS', deployment_target)
