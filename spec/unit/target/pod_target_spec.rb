@@ -296,8 +296,8 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [monkey_spec], [@target_definition])
-          monkey_pod_target.stubs(:platform).returns(Platform.ios)
+          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [],
+                                            Platform.ios, [monkey_spec], [@target_definition])
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
           header_search_paths.sort.should == [
@@ -559,44 +559,46 @@ module Pod
           fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
           fa.stubs(:resource_bundles).returns('TestResourceBundle' => [Pathname.new('Model.xcdatamodeld')])
           fa.stubs(:resources).returns([])
-          fa.stubs(:spec).returns(stub(:test_specification? => true))
           @test_pod_target.stubs(:file_accessors).returns([fa])
-          @test_pod_target.resource_paths.should == ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+          @test_pod_target.resource_paths.should == { 'CoconutLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle'] }
         end
 
         it 'includes framework paths from test specifications' do
-          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
+          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
           fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/Vendored.framework')])
-          fa.stubs(:spec).returns(stub(:test_specification? => false))
           test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
           test_fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/TestVendored.framework')])
-          test_fa.stubs(:spec).returns(stub(:test_specification? => true))
           @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
           @test_pod_target.stubs(:should_build?).returns(true)
-          @test_pod_target.framework_paths.should == [
-            { :name => 'Vendored.framework',
-              :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' },
-            { :name => 'TestVendored.framework',
-              :input_path => '${PODS_ROOT}/Vendored/TestVendored.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TestVendored.framework' },
-          ]
+          @test_pod_target.framework_paths.should == {
+            'CoconutLib' => [
+              { :name => 'Vendored.framework',
+                :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
+                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework',
+              },
+            ],
+            'CoconutLib/Tests' => [
+              { :name => 'TestVendored.framework',
+                :input_path => '${PODS_ROOT}/Vendored/TestVendored.framework',
+                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TestVendored.framework',
+              },
+            ],
+          }
         end
 
         it 'excludes framework paths from test specifications when not requested' do
           fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
           fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/Vendored.framework')])
-          fa.stubs(:spec).returns(stub(:test_specification? => false))
-          test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
-          test_fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/TestVendored.framework')])
-          test_fa.stubs(:spec).returns(stub(:test_specification? => true))
-          @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
+          @test_pod_target.stubs(:file_accessors).returns([fa])
           @test_pod_target.stubs(:should_build?).returns(true)
-          @test_pod_target.framework_paths(false).should == [
-            { :name => 'Vendored.framework',
-              :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' },
-          ]
+          @test_pod_target.framework_paths.should == {
+            'CoconutLib' => [
+              { :name => 'Vendored.framework',
+                :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
+                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework',
+                },
+            ],
+          }
         end
 
         it 'includes resource paths from test specifications' do
@@ -604,27 +606,29 @@ module Pod
           fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
           fa.stubs(:resource_bundles).returns({})
           fa.stubs(:resources).returns([Pathname.new('Model.xcdatamodeld')])
-          fa.stubs(:spec).returns(stub(:test_specification? => false))
           test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
           test_fa.stubs(:resource_bundles).returns({})
           test_fa.stubs(:resources).returns([Pathname.new('TestModel.xcdatamodeld')])
-          test_fa.stubs(:spec).returns(stub(:test_specification? => true))
           @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
-          @test_pod_target.resource_paths.should == ['${PODS_ROOT}/Model.xcdatamodeld', '${PODS_ROOT}/TestModel.xcdatamodeld']
+          @test_pod_target.resource_paths.should == {
+            'CoconutLib' => ['${PODS_ROOT}/Model.xcdatamodeld'],
+            'CoconutLib/Tests' => ['${PODS_ROOT}/TestModel.xcdatamodeld'],
+          }
         end
 
-        it 'excludes resource paths from test specifications when not requested' do
+        it 'returns resource paths from all specifications by default' do
           config.sandbox.stubs(:project => stub(:path => Pathname.new('ProjectPath')))
           fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
           fa.stubs(:resource_bundles).returns({})
           fa.stubs(:resources).returns([Pathname.new('Model.xcdatamodeld')])
-          fa.stubs(:spec).returns(stub(:test_specification? => false))
           test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
           test_fa.stubs(:resource_bundles).returns({})
           test_fa.stubs(:resources).returns([Pathname.new('TestModel.xcdatamodeld')])
-          test_fa.stubs(:spec).returns(stub(:test_specification? => true))
           @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
-          @test_pod_target.resource_paths(false).should == ['${PODS_ROOT}/Model.xcdatamodeld']
+          @test_pod_target.resource_paths.should == {
+            'CoconutLib' => ['${PODS_ROOT}/Model.xcdatamodeld'],
+            'CoconutLib/Tests' => ['${PODS_ROOT}/TestModel.xcdatamodeld'],
+          }
         end
       end
     end

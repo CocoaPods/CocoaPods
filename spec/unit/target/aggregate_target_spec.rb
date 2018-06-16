@@ -7,7 +7,9 @@ module Pod
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
         project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition, config.sandbox.root.dirname, Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], {})
+        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition,
+                                      config.sandbox.root.dirname, Xcodeproj::Project.open(project_path),
+                                      ['A346496C14F9BE9A0080D870'], {})
       end
 
       it 'returns the target_definition that generated it' do
@@ -87,13 +89,18 @@ module Pod
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
         @target_definition.set_platform(:ios, '10.0')
-        @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec], [@target_definition])
-        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition, config.sandbox.root.dirname, nil, nil, 'Release' => [@pod_target], 'Debug' => [@pod_target])
+        file_accessor = fixture_file_accessor(@spec, Platform.ios)
+        @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec], [@target_definition],
+                                    [file_accessor])
+        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition,
+                                      config.sandbox.root.dirname, nil, nil, 'Release' => [@pod_target], 'Debug' => [@pod_target])
       end
 
       describe 'with configuration dependent pod targets' do
         before do
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec], [@target_definition])
+          file_accessor = fixture_file_accessor(@spec, Platform.ios)
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
+                                              [@target_definition], [file_accessor])
           @target.stubs(:pod_targets_for_build_configuration).with('Debug').returns([@pod_target])
           @target.stubs(:pod_targets_for_build_configuration).with('Release').returns([@pod_target, @pod_target_release])
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
@@ -116,7 +123,10 @@ module Pod
       describe 'frameworks by config and input output paths' do
         before do
           @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@coconut_spec], [@target_definition])
+          file_accessor = fixture_file_accessor(@coconut_spec, Platform.ios)
+          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [],
+                                              Platform.ios, [@coconut_spec], [@target_definition],
+                                              [file_accessor])
           @target.stubs(:pod_targets).returns([@pod_target])
           @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
         end
@@ -151,7 +161,7 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:requires_frameworks?).returns(true)
           @pod_target.stubs(:static_framework?).returns(true)
-          @pod_target.stubs(:resource_paths).returns(['MyResources.bundle'])
+          @pod_target.stubs(:resource_paths).returns('BananaLib' => ['MyResources.bundle'])
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
           resource_paths_by_config['Debug'].should == ['MyResources.bundle']

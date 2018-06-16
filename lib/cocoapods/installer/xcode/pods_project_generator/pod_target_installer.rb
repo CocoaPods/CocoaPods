@@ -478,8 +478,8 @@ module Pod
             pod_targets = target.all_dependent_targets
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
-                include_test_spec_paths = pod_target == target
-                pod_target.resource_paths(include_test_spec_paths)
+                spec_paths_to_include = pod_target == target ? pod_target.specs.map(&:name) : pod_target.non_test_specs.map(&:name)
+                pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
@@ -499,8 +499,8 @@ module Pod
             pod_targets = target.all_dependent_targets
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
-                include_test_spec_paths = pod_target == target
-                pod_target.framework_paths(include_test_spec_paths)
+                spec_paths_to_include = pod_target == target ? pod_target.specs.map(&:name) : pod_target.non_test_specs.map(&:name)
+                pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
