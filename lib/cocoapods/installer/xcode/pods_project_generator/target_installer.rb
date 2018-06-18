@@ -118,7 +118,6 @@ module Pod
               path.dirname.mkpath
               result = generator.save_as(path)
             end
-            clean_support_files_temp_dir if support_files_temp_dir.exist?
             result
           end
 
@@ -131,7 +130,7 @@ module Pod
           # Remove temp file whose store .prefix/config/dummy file.
           #
           def clean_support_files_temp_dir
-            support_files_temp_dir.rmtree
+            support_files_temp_dir.rmtree if support_files_temp_dir.exist?
           end
 
           # @return [String] The temp file path to store temporary files.
@@ -169,9 +168,9 @@ module Pod
               update_changed_file(generator, path)
               add_file_to_support_group(path) if add_to_support_group
 
+              relative_path_string = path.relative_path_from(sandbox.root).to_s
               native_target.build_configurations.each do |c|
-                relative_path = path.relative_path_from(sandbox.root)
-                c.build_settings['INFOPLIST_FILE'] = relative_path.to_s
+                c.build_settings['INFOPLIST_FILE'] = relative_path_string
               end
             end
           end
@@ -192,9 +191,9 @@ module Pod
               update_changed_file(generator, path)
               add_file_to_support_group(path)
 
+              relative_path_string = path.relative_path_from(sandbox.root).to_s
               native_target.build_configurations.each do |c|
-                relative_path = path.relative_path_from(sandbox.root)
-                c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
+                c.build_settings['MODULEMAP_FILE'] = relative_path_string
               end
             end
           end
@@ -220,10 +219,9 @@ module Pod
               # Add the file to the support group and the native target,
               # so it will been added to the header build phase
               file_ref = add_file_to_support_group(path)
-              native_target.add_file_references([file_ref])
+              build_file = native_target.headers_build_phase.add_file_reference(file_ref)
 
               acl = target.requires_frameworks? ? 'Public' : 'Project'
-              build_file = native_target.headers_build_phase.build_file(file_ref)
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = [acl]
             end

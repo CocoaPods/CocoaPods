@@ -64,6 +64,12 @@ module Pod
         @accessor.non_arc_source_files.sort.should == []
       end
 
+      it 'returns the source files that do not match expected file extensions' do
+        @accessor.other_source_files.sort.should == [
+          @root + 'Classes/BananaTrace.d',
+        ]
+      end
+
       it 'returns the header files' do
         @accessor.headers.sort.should == [
           @root + 'Classes/Banana.h',

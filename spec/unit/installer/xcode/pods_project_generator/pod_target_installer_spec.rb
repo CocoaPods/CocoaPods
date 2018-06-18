@@ -100,6 +100,11 @@ module Pod
               end
             end
 
+            it 'cleans up temporary directories' do
+              @installer.expects(:clean_support_files_temp_dir).once
+              @installer.install!
+            end
+
             #--------------------------------------#
 
             describe 'headers folder paths' do

@@ -77,9 +77,7 @@ module Pod
       #
       def lock_files!(file_accessors)
         return if local?
-        each_source_file(file_accessors) do |source_file|
-          FileUtils.chmod('u-w', source_file)
-        end
+        FileUtils.chmod('u-w', source_files(file_accessors))
       end
 
       # Unlocks the source files if appropriate.
@@ -88,9 +86,7 @@ module Pod
       #
       def unlock_files!(file_accessors)
         return if local?
-        each_source_file(file_accessors) do |source_file|
-          FileUtils.chmod('u+w', source_file)
-        end
+        FileUtils.chmod('u+w', source_files(file_accessors))
       end
 
       #-----------------------------------------------------------------------#
@@ -194,13 +190,10 @@ module Pod
         !local? && !predownloaded? && sandbox.specification(root_spec.name) != root_spec
       end
 
-      def each_source_file(file_accessors, &blk)
-        file_accessors.each do |file_accessor|
-          file_accessor.source_files.each do |source_file|
-            next unless source_file.exist?
-            blk[source_file]
-          end
-        end
+      # @return [Array<Pathname>] The paths of the source files
+      #
+      def source_files(file_accessors)
+        file_accessors.flat_map(&:source_files)
       end
 
       #-----------------------------------------------------------------------#

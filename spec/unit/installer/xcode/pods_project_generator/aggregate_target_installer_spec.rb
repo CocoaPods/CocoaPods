@@ -56,6 +56,11 @@ module Pod
               ]
             end
 
+            it 'cleans up temporary directories' do
+              @installer.expects(:clean_support_files_temp_dir).once
+              @installer.install!
+            end
+
             #--------------------------------------#
 
             it 'adds the target for the static library to the project' do
