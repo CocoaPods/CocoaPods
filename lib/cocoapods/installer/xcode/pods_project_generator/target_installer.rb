@@ -184,14 +184,20 @@ module Pod
           # @return [void]
           #
           def create_module_map(native_target)
-            path = target.module_map_path
+            path = target.module_map_path_to_write
             UI.message "- Generating module map file at #{UI.path(path)}" do
               generator = Generator::ModuleMap.new(target)
               yield generator if block_given?
               update_changed_file(generator, path)
               add_file_to_support_group(path)
 
-              relative_path_string = path.relative_path_from(sandbox.root).to_s
+              linked_path = target.module_map_path
+              if path != linked_path
+                linked_path.dirname.mkpath
+                FileUtils.ln_sf(path, linked_path)
+              end
+
+              relative_path_string = target.module_map_path.relative_path_from(sandbox.root).to_s
               native_target.build_configurations.each do |c|
                 c.build_settings['MODULEMAP_FILE'] = relative_path_string
               end
@@ -210,7 +216,7 @@ module Pod
           # @return [void]
           #
           def create_umbrella_header(native_target)
-            path = target.umbrella_header_path
+            path = target.umbrella_header_path_to_write
             UI.message "- Generating umbrella header at #{UI.path(path)}" do
               generator = Generator::UmbrellaHeader.new(target)
               yield generator if block_given?
@@ -220,6 +226,12 @@ module Pod
               # so it will been added to the header build phase
               file_ref = add_file_to_support_group(path)
               build_file = native_target.headers_build_phase.add_file_reference(file_ref)
+
+              linked_path = target.umbrella_header_path
+              if path != linked_path
+                linked_path.dirname.mkpath
+                FileUtils.ln_sf(path, linked_path)
+              end
 
               acl = target.requires_frameworks? ? 'Public' : 'Project'
               build_file.settings ||= {}
