@@ -225,7 +225,7 @@ module Pod
                               :product_basename => 'PodTarget',
                               :target_definitions => [target_definition],
                              )
-            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
+            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
             @generator.other_ldflags.should == %w(-ObjC -l"PodTarget" -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
@@ -454,7 +454,7 @@ module Pod
                               :product_basename => 'PodTarget',
                               :target_definitions => [target_definition],
                              )
-            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
+            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
             @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "VendoredFramework" -framework "XCTest")
@@ -496,7 +496,7 @@ module Pod
                               :product_basename => 'PodTarget',
                               :target_definitions => [target_definition],
                              )
-            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target, false))
+            pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
             @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")

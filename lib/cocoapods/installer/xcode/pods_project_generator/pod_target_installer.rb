@@ -449,9 +449,11 @@ module Pod
           # @return [void]
           #
           def create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
-            target.supported_test_types.each do |test_type|
+            target.test_specs.each do |test_spec|
+              spec_consumer = test_spec.consumer(target.platform)
+              test_type = spec_consumer.test_type
               path = target.xcconfig_path(test_type.to_s)
-              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, true), path)
+              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, test_spec), path)
               xcconfig_file_ref = add_file_to_support_group(path)
 
               test_native_targets.each do |test_target|
