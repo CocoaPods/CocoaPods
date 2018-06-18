@@ -11,8 +11,9 @@ module Pod
               @project.save
               @target_definition = fixture_target_definition
 
-              @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
-              @banana_pod_target = fixture_pod_target(@banana_spec, false, {}, [], Platform.ios, [@target_definition])
+              @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+              @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
+                                                                     false, {}, [], Platform.ios, [@target_definition])
 
               @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
               @coconut_pod_target = fixture_pod_target_with_specs([@coconut_spec, *@coconut_spec.recursive_subspecs],
@@ -85,13 +86,7 @@ module Pod
               end
 
               it 'excludes test framework and resource paths from dependent targets' do
-                test_framework_paths = [{ :name => 'TestVendored.framework',
-                                          :input_path => '${PODS_ROOT}/Vendored/TestVendored.framework',
-                                          :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TestVendored.framework' }]
-                test_resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
-                @banana_pod_target.stubs(:framework_paths).returns('BananaLib' => [], 'BananaLib/Tests' => test_framework_paths)
-                @banana_pod_target.stubs(:resource_paths).returns('BananaLib' => [], 'BananaLib/Tests' => test_resource_paths)
-                @coconut_pod_target.stubs(:dependent_targets).returns([@banana_pod_target])
+                @coconut_pod_target.stubs(:dependent_targets).returns([@watermelon_pod_target])
                 PodTargetIntegrator.new(@target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
