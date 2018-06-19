@@ -810,6 +810,14 @@ module Pod
               @project.targets.first.class.should == Xcodeproj::Project::PBXAggregateTarget
             end
 
+            it 'adds xcconfig file reference for the aggregate placeholder native target' do
+              @pod_target.stubs(:should_build?).returns(false)
+              @installer.install!
+              @project.support_files_group
+              group = @project['Pods/BananaLib/Support Files']
+              group.children.map(&:display_name).sort.should == ['BananaLib.xcconfig']
+            end
+
             #--------------------------------------------------------------------------------#
 
             describe 'concerning header_mappings_dirs' do
