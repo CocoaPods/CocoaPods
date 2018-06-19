@@ -10,6 +10,7 @@ File References:
       - 512_black.png
       - troll.png
     - Support Files:
+      - res.xcconfig
       - ResourceBundle-res-res-Info.plist
 - Frameworks: []
 - Products:
@@ -77,10 +78,12 @@ Targets:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        Base Configuration: res.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        Base Configuration: res.xcconfig
 - res-res:
     Build Phases:
     - Sources: []
@@ -100,6 +103,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           WRAPPER_EXTENSION: bundle
+        Base Configuration: res.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: "-"
@@ -112,6 +116,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           WRAPPER_EXTENSION: bundle
+        Base Configuration: res.xcconfig
 
 
 
