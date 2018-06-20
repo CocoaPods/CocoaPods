@@ -29,6 +29,7 @@ module Pod
           #
           def install!
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
+              create_support_files_dir
               test_file_accessors, file_accessors = target.file_accessors.partition { |fa| fa.spec.test_specification? }
 
               unless target.should_build?
@@ -36,10 +37,9 @@ module Pod
                 # PBXAggregateTarget that will be used to wire up dependencies later.
                 native_target = add_placeholder_target
                 resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
+                create_xcconfig_file(native_target, resource_bundle_targets)
                 return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
-
-              create_support_files_dir
 
               native_target = add_target
               resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
