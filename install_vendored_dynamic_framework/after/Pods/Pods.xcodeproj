@@ -8,6 +8,8 @@ File References:
   - Realm:
     - Frameworks:
       - Realm.framework
+    - Support Files:
+      - Realm.xcconfig
   - RealmSwift:
     - Aliases.swift
     - List.swift
@@ -128,10 +130,12 @@ Targets:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        Base Configuration: Realm.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        Base Configuration: Realm.xcconfig
 - RealmSwift:
     Build Phases:
     - Sources:
