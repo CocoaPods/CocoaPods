@@ -829,8 +829,6 @@ Targets:
     - Frameworks:
       - Foundation.framework
       - MixedPod.framework
-      - ObjCPod.framework
-      - SwiftPod.framework
       - XCTest.framework
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
@@ -959,8 +957,6 @@ Targets:
     - Frameworks:
       - Cocoa.framework
       - MixedPod.framework
-      - ObjCPod.framework
-      - SwiftPod.framework
       - XCTest.framework
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []

@@ -622,9 +622,7 @@ Targets:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - sharedlib-Testing-dummy.m
     - Frameworks:
-      - asserts.framework
       - Foundation.framework
-      - logger.framework
       - testkit.framework
     - Headers:
       - AmazingTestHelper.h:
@@ -696,7 +694,6 @@ Targets:
     - Frameworks:
       - asserts.framework
       - Foundation.framework
-      - logger.framework
       - XCTest.framework
     - Headers:
       - TestCase.h:
