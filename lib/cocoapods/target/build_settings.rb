@@ -470,17 +470,23 @@ module Pod
         attr_reader :test_xcconfig
         alias test_xcconfig? test_xcconfig
 
-        # Intializes a new instance
+        # @return [Specification]
+        #   The test specification these build settings are for or `nil`.
+        #
+        attr_reader :test_spec
+
+        # Initializes a new instance
         #
         # @param [PodTarget] target
         #   see {#target}
         #
-        # @param [Boolean] test_xcconfig
-        #  see {#test_xcconfig?}
+        # @param [Specification] test_spec
+        #  see {#test_spec}
         #
-        def initialize(target, test_xcconfig)
+        def initialize(target, test_spec = nil)
           super(target)
-          @test_xcconfig = test_xcconfig
+          @test_spec = test_spec
+          @test_xcconfig = !test_spec.nil?
         end
 
         # @return [Xcodeproj::Xconfig]

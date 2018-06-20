@@ -555,7 +555,7 @@ module Pod
     private
 
     def create_build_settings
-      BuildSettings::PodTargetSettings.new(self, false)
+      BuildSettings::PodTargetSettings.new(self)
     end
   end
 end

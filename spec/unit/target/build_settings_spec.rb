@@ -3,8 +3,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   class Target
     describe BuildSettings do
-      def pod(pod_target, test_xcconfig = false)
-        BuildSettings::PodTargetSettings.new(pod_target, test_xcconfig)
+      def pod(pod_target)
+        BuildSettings::PodTargetSettings.new(pod_target)
       end
 
       def aggregate(aggregate_target, configuration_name = 'Release')
