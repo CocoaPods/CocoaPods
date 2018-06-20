@@ -442,13 +442,13 @@ module Pod
     # Runs the registered callbacks for the plugins post install hooks.
     #
     def run_plugins_post_install_hooks
-      # This short-circuits because locking & unlocking pod sources is expensive
-      return unless any_plugin_post_install_hooks?
+      # This short-circuits because unlocking pod sources is expensive
+      if any_plugin_post_install_hooks?
+        unlock_pod_sources
 
-      unlock_pod_sources
-
-      context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
-      HooksManager.run(:post_install, context, plugins)
+        context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
+        HooksManager.run(:post_install, context, plugins)
+      end
 
       lock_pod_sources
     end

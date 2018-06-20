@@ -706,12 +706,12 @@ module Pod
         @installer.send(:run_plugins_post_install_hooks)
       end
 
-      it 'does not lock or unlock sources with no hooks' do
+      it 'does not unlock sources with no hooks' do
         @installer.expects(:any_plugin_post_install_hooks?).returns(false)
 
         @installer.expects(:unlock_pod_sources).never
         HooksManager.expects(:run).never
-        @installer.expects(:lock_pod_sources).never
+        @installer.expects(:lock_pod_sources).once
         @installer.send(:run_plugins_post_install_hooks)
       end
 
