@@ -79,7 +79,7 @@ module Pod
       # Returns all the hooks to run for the given event name
       # and set of whitelisted plugins
       #
-      # @see run
+      # @see #run
       #
       # @return [Array<Hook>] the hooks to run
       #
@@ -113,7 +113,6 @@ module Pod
 
         UI.message "- Running #{name.to_s.tr('_', ' ')} hooks" do
           hooks.each do |hook|
-            next if whitelisted_plugins && !whitelisted_plugins.key?(hook.plugin_name)
             UI.message "- #{hook.plugin_name} from " \
                         "`#{hook.block.source_location.first}`" do
               block = hook.block

@@ -29,7 +29,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Make sure the temporary directory used to download the pod is remove even if an error is throwed
   [augustorsouza](https://github.com/augustorsouza)
 
-* Avoid unlocking sources on every `pod install` when there are no 
+* Avoid unlocking sources on every `pod install` when there are no
   plugin post-install hooks for performance reasons.  
   [Samuel Giddins](https://github.com/segiddins)
 
