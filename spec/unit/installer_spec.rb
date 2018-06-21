@@ -182,22 +182,6 @@ module Pod
         UI.output.should.include 'Skipping User Project Integration'
       end
 
-      it 'includes pod targets from test dependent targets' do
-        pod_target_one = stub('PodTarget1', :test_dependent_targets_by_spec_name => {})
-        pod_target_three = stub('PodTarget2', :test_dependent_targets_by_spec_name => {})
-        pod_target_two = stub('PodTarget3', :test_dependent_targets_by_spec_name => { 'TestSpec1' => [pod_target_three] })
-        aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
-
-        result = stub(:targets => [aggregate_target])
-
-        analyzer = Installer::Analyzer.new(config.sandbox, @installer.podfile, @installer.lockfile)
-        analyzer.stubs(:analyze).returns(result)
-
-        @installer.stubs(:create_analyzer).returns(analyzer)
-        @installer.send(:analyze)
-        @installer.pod_targets.should == [pod_target_one, pod_target_two, pod_target_three]
-      end
-
       it 'prints a list of deprecated pods' do
         spec = Spec.new
         spec.name = 'RestKit'
@@ -369,7 +353,7 @@ module Pod
       describe '#clean_sandbox' do
         before do
           @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
-                                                                     [], Pod::Installer::Analyzer::SpecsState.new, [],
+                                                                     [], Pod::Installer::Analyzer::SpecsState.new, [], [],
                                                                      Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
           @spec = stub(:name => 'Spec', :test_specification? => false)
           @spec.stubs(:root => @spec)
@@ -501,7 +485,7 @@ module Pod
           manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
           analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
                                                                     { Source.new('source1') => [spec] }, [spec],
-                                                                    Pod::Installer::Analyzer::SpecsState.new, [], nil)
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], [], nil)
           @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
@@ -522,7 +506,7 @@ module Pod
           manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
           analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
                                                                     { Source.new('source2') => [spec] }, [spec],
-                                                                    Pod::Installer::Analyzer::SpecsState.new, [], nil)
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], [], nil)
           @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
@@ -543,7 +527,7 @@ module Pod
           manifest.stubs(:version).with('RestKit').returns(Version.new('2.0'))
           analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
                                                                     { Source.new('source2') => [spec] }, [spec],
-                                                                    Pod::Installer::Analyzer::SpecsState.new, [], nil)
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], [], nil)
           @installer.stubs(:analysis_result).returns(analysis_result)
           @installer.sandbox.stubs(:manifest).returns(manifest)
           @installer.stubs(:root_specs).returns([spec])
@@ -619,7 +603,7 @@ module Pod
           podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
           @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
                                                                      [fixture_spec('banana-lib/BananaLib.podspec')],
-                                                                     Pod::Installer::Analyzer::SpecsState.new, [],
+                                                                     Pod::Installer::Analyzer::SpecsState.new, [], [],
                                                                      podfile_dependency_cache)
           @installer.stubs(:analysis_result).returns(@analysis_result)
         end

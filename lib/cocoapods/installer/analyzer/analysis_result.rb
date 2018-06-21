@@ -28,11 +28,15 @@ module Pod
         #
         attr_reader :targets
 
+        # @return [Array<PodTarget>] The pod targets created for all the aggregate targets.
+        #
+        attr_reader :pod_targets
+
         # @return [PodfileDependencyCache] the cache of all dependencies in the podfile.
         #
         attr_reader :podfile_dependency_cache
 
-        def initialize(podfile_state, specs_by_target, specs_by_source, specifications, sandbox_state, targets,
+        def initialize(podfile_state, specs_by_target, specs_by_source, specifications, sandbox_state, targets, pod_targets,
                        podfile_dependency_cache)
           @podfile_state = podfile_state
           @specs_by_target = specs_by_target
@@ -40,6 +44,7 @@ module Pod
           @specifications = specifications
           @sandbox_state = sandbox_state
           @targets = targets
+          @pod_targets = pod_targets
           @podfile_dependency_cache = podfile_dependency_cache
         end
 
