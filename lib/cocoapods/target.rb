@@ -64,6 +64,8 @@ module Pod
       label
     end
 
+    alias to_s name
+
     # @return [String] the label for the target.
     #
     def label
