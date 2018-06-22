@@ -1,16 +1,1 @@
-#ifdef __OBJC__
-#import <Cocoa/Cocoa.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
-
-
-FOUNDATION_EXPORT double SwiftPodVersionNumber;
-FOUNDATION_EXPORT const unsigned char SwiftPodVersionString[];
-
+/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-umbrella.h

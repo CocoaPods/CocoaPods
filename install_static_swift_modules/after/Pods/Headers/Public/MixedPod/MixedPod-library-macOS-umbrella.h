@@ -1,17 +1,1 @@
-#ifdef __OBJC__
-#import <Cocoa/Cocoa.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
-
-#import "bce.h"
-
-FOUNDATION_EXPORT double MixedPodVersionNumber;
-FOUNDATION_EXPORT const unsigned char MixedPodVersionString[];
-
+/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-umbrella.h

@@ -1,17 +1,1 @@
-#ifdef __OBJC__
-#import <UIKit/UIKit.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
-
-#import "DP.h"
-
-FOUNDATION_EXPORT double DepPodVersionNumber;
-FOUNDATION_EXPORT const unsigned char DepPodVersionString[];
-
+/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_header_mappings_dir/transformed/Pods/Target Support Files/DepPod-library/DepPod-library-umbrella.h
