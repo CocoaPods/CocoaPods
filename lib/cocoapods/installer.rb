@@ -218,13 +218,7 @@ module Pod
     # @return [Array<PodTarget>] The model representations of pod targets
     #         generated as result of the analyzer.
     #
-    def pod_targets
-      aggregate_target_pod_targets = aggregate_targets.flat_map(&:pod_targets)
-      test_dependent_targets = aggregate_target_pod_targets.flat_map do |pod_target|
-        pod_target.test_dependent_targets_by_spec_name.values.flatten
-      end
-      (aggregate_target_pod_targets + test_dependent_targets).uniq
-    end
+    attr_reader :pod_targets
 
     # @return [Array<Specification>] The specifications that were installed.
     #
@@ -243,6 +237,7 @@ module Pod
     def analyze(analyzer = create_analyzer)
       @analysis_result = analyzer.analyze
       @aggregate_targets = @analysis_result.targets
+      @pod_targets = @analysis_result.pod_targets
     end
 
     def create_analyzer(plugin_sources = nil)

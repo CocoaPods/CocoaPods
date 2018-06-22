@@ -214,6 +214,16 @@ module Pod
           restkit_target.dependent_targets.all?(&:scoped).should.be.true
         end
 
+        it 'includes pod targets from test dependent targets' do
+          pod_target_one = stub('PodTarget1', :test_dependent_targets_by_spec_name => {})
+          pod_target_three = stub('PodTarget2', :test_dependent_targets_by_spec_name => {})
+          pod_target_two = stub('PodTarget3', :test_dependent_targets_by_spec_name => { 'TestSpec1' => [pod_target_three] })
+          aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
+
+          @analyzer.send(:calculate_pod_targets, [aggregate_target]).
+            should == [pod_target_one, pod_target_two, pod_target_three]
+        end
+
         it 'picks the right variants up when there are multiple' do
           @podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url

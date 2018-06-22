@@ -66,7 +66,7 @@ module Pod
             @analysis_result = Pod::Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new,
                                                                             {}, {}, [],
                                                                             Pod::Installer::Analyzer::SpecsState.new,
-                                                                            aggregate_targets, nil)
+                                                                            aggregate_targets, pod_targets, nil)
 
             @installation_options = Pod::Installer::InstallationOptions.new
 

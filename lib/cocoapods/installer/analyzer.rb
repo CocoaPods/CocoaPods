@@ -99,6 +99,7 @@ module Pod
         validate_platforms(resolver_specs_by_target)
         specifications  = generate_specifications(resolver_specs_by_target)
         targets         = generate_targets(resolver_specs_by_target, target_inspections)
+        pod_targets     = calculate_pod_targets(targets)
         sandbox_state   = generate_sandbox_state(specifications)
         specs_by_target = resolver_specs_by_target.each_with_object({}) do |rspecs_by_target, hash|
           hash[rspecs_by_target[0]] = rspecs_by_target[1].map(&:spec)
@@ -108,7 +109,7 @@ module Pod
         end]
         sources.each { |s| specs_by_source[s] ||= [] }
         @result = AnalysisResult.new(podfile_state, specs_by_target, specs_by_source, specifications, sandbox_state,
-                                     targets, @podfile_dependency_cache)
+                                     targets, pod_targets, @podfile_dependency_cache)
       end
 
       # Updates the git source repositories.
@@ -439,6 +440,16 @@ module Pod
         pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target, build_configurations)
         AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
                             target_definition, client_root, user_project, user_target_uuids, pod_targets)
+      end
+
+      # @return [Array<PodTarget>] The model representations of pod targets.
+      #
+      def calculate_pod_targets(aggregate_targets)
+        aggregate_target_pod_targets = aggregate_targets.flat_map(&:pod_targets).uniq
+        test_dependent_targets = aggregate_target_pod_targets.flat_map do |pod_target|
+          pod_target.test_dependent_targets_by_spec_name.values.flatten
+        end
+        (aggregate_target_pod_targets + test_dependent_targets).uniq
       end
 
       # Returns a filtered list of pod targets that should or should not be part of the target definition. Pod targets
