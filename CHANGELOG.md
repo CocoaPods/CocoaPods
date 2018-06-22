@@ -106,6 +106,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Allow `EXPANDED_CODE_SIGN_IDENTITY` to be unset.  
   [Keith Smiley](https://github.com/keith)
   [#7708](https://github.com/CocoaPods/CocoaPods/issues/7708)
+
+* Running `pod install` with static library modules no longer causes pods to
+  be recompiled.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 1.5.3 (2018-05-25)
 
 ##### Enhancements
