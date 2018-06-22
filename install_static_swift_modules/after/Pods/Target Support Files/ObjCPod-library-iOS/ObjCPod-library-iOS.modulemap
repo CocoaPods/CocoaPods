@@ -1,0 +1,7 @@
+module ObjCPod {
+  umbrella header "ObjCPod-library-iOS-umbrella.h"
+  exclude header "ObjCPod-library-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

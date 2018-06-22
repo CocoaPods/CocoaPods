@@ -1,7 +1,1 @@
-module SwiftPod {
-  umbrella header "SwiftPod-library-macOS-umbrella.h"
-  exclude header "SwiftPod-library-iOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS.modulemap

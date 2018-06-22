@@ -1,17 +1,1 @@
-#ifdef __OBJC__
-#import <UIKit/UIKit.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
-
-#import "abc.h"
-
-FOUNDATION_EXPORT double ObjCPodVersionNumber;
-FOUNDATION_EXPORT const unsigned char ObjCPodVersionString[];
-
+/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-umbrella.h
