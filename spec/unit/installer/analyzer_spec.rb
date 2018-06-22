@@ -211,6 +211,13 @@ module Pod
             SOCKit
             TransitionKit
           )
+          restkit_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            AFNetworking
+            ISO8601DateFormatterValueTransformer
+            RKValueTransformers
+            SOCKit
+            TransitionKit
+          )
           restkit_target.dependent_targets.all?(&:scoped).should.be.true
         end
 
@@ -222,6 +229,38 @@ module Pod
 
           @analyzer.send(:calculate_pod_targets, [aggregate_target]).
             should == [pod_target_one, pod_target_two, pod_target_three]
+        end
+
+        it 'does not mark transitive dependencies as dependent targets' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject'
+            pod 'Firebase', '3.9.0'
+            pod 'ARAnalytics', '4.0.0', :subspecs => %w(Firebase)
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          result.targets.count.should == 1
+          target = result.targets.first
+
+          firebase_target = target.pod_targets.find { |pt| pt.pod_name == 'Firebase' }
+          firebase_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore
+          )
+          firebase_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          firebase_target.dependent_targets.all?(&:scoped).should.be.true
+
+          aranalytics_target = target.pod_targets.find { |pt| pt.pod_name == 'ARAnalytics' }
+          aranalytics_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase
+          )
+          aranalytics_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          aranalytics_target.dependent_targets.all?(&:scoped).should.be.true
         end
 
         it 'picks the right variants up when there are multiple' do
