@@ -47,6 +47,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7883](https://github.com/CocoaPods/CocoaPods/pull/7883)
   
+* Can not strip the frameworks in project with single quote in the name   
+  [Paolo Carollo](https://github.com/pcarollo84)
+  [#7546](https://github.com/CocoaPods/CocoaPods/issues/7546)
+
 * Set `CURRENT_PROJECT_VERSION` for generated app host targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7825](https://github.com/CocoaPods/CocoaPods/pull/7825)
