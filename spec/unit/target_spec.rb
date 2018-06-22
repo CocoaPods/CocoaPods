@@ -14,6 +14,10 @@ module Pod
       it 'should mask invalid chars' do
         @target.send(:c99ext_identifier, 'iOS-App BânánàLïb').should == 'iOS_App_B_n_n_L_b'
       end
+
+      it 'has a human-readable #to_s' do
+        @target.to_s.should == @target.label
+      end
     end
   end
 end
