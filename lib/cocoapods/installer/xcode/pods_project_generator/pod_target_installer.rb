@@ -6,21 +6,20 @@ module Pod
         # relative support files.
         #
         class PodTargetInstaller < TargetInstaller
-          # @return [Hash{Pathname => Pathname}] A hash of all umbrella headers, grouped by the directory
-          #         the are stored in. This can be `nil` if there is no grouping.
+          # @return [Array<Pathname>] Array of umbrella header paths in the headers directory
           #
-          attr_reader :umbrella_headers_by_dir
+          attr_reader :umbrella_header_paths
 
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see TargetInstaller#sandbox
           # @param [Pod::Project] project @see TargetInstaller#project
           # @param [Target] target @see TargetInstaller#target
-          # @param [Hash{Pathname => Pathname}] umbrella_headers_by_dir @see #umbrella_headers_by_dir
+          # @param [Array<Pathname>] umbrella_header_paths @see #umbrella_header_paths
           #
-          def initialize(sandbox, project, target, umbrella_headers_by_dir = nil)
+          def initialize(sandbox, project, target, umbrella_header_paths = nil)
             super(sandbox, project, target)
-            @umbrella_headers_by_dir = umbrella_headers_by_dir
+            @umbrella_header_paths = umbrella_header_paths
           end
 
           # Creates the target in the Pods project and the relative support files.
@@ -98,6 +97,7 @@ module Pod
                 end
               end
               create_dummy_source(native_target)
+              clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
                                            test_resource_bundle_targets, test_app_host_targets)
             end
@@ -198,8 +198,6 @@ module Pod
 
           #-----------------------------------------------------------------------#
 
-          SOURCE_FILE_EXTENSIONS = Sandbox::FileAccessor::SOURCE_FILE_EXTENSIONS
-
           # Adds the build files of the pods to the target and adds a reference to
           # the frameworks of the Pods.
           #
@@ -226,12 +224,13 @@ module Pod
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers.map(&:realpath)
               private_headers = file_accessor.private_headers.map(&:realpath)
-              other_source_files = file_accessor.source_files.reject { |sf| SOURCE_FILE_EXTENSIONS.include?(sf.extname) }
+              other_source_files = file_accessor.other_source_files
 
               {
                 true => file_accessor.arc_source_files,
                 false => file_accessor.non_arc_source_files,
               }.each do |arc, files|
+                next if files.empty?
                 files = files - headers - other_source_files
                 flags = compiler_flags_for_consumer(consumer, arc)
                 regular_file_refs = project_file_references_array(files, 'source')
@@ -664,9 +663,9 @@ module Pod
           end
 
           def module_map_additional_headers
-            return [] unless umbrella_headers_by_dir
+            return [] unless umbrella_header_paths
 
-            other_paths = umbrella_headers_by_dir[target.module_map_path.dirname] - [target.umbrella_header_path]
+            other_paths = umbrella_header_paths - [target.umbrella_header_path]
             other_paths.map do |module_map_path|
               # exclude other targets umbrella headers, to avoid
               # incomplete umbrella warnings

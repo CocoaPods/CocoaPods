@@ -907,6 +907,8 @@ module Pod
 
         Podfile::TargetDefinition.any_instance.stubs(:uses_frameworks?).returns(true)
         Pod::Sandbox::FileAccessor.any_instance.stubs(:source_files).returns([pathname])
+        Pod::Installer::PodSourceInstaller.any_instance.stubs(:lock_files!)
+        Pod::Installer::PodSourceInstaller.any_instance.stubs(:unlock_files!)
         validator = Validator.new(file, config.sources_manager.master.map(&:url))
         validator.stubs(:build_pod)
         validator.stubs(:validate_url)
