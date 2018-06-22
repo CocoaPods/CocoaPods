@@ -422,11 +422,9 @@ module Pod
     # @return [void]
     #
     def perform_post_install_actions
-      unlock_pod_sources
       run_plugins_post_install_hooks
       warn_for_deprecations
       warn_for_installed_script_phases
-      lock_pod_sources
       print_post_install_message
     end
 
@@ -444,8 +442,21 @@ module Pod
     # Runs the registered callbacks for the plugins post install hooks.
     #
     def run_plugins_post_install_hooks
-      context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
-      HooksManager.run(:post_install, context, plugins)
+      # This short-circuits because unlocking pod sources is expensive
+      if any_plugin_post_install_hooks?
+        unlock_pod_sources
+
+        context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
+        HooksManager.run(:post_install, context, plugins)
+      end
+
+      lock_pod_sources
+    end
+
+    # @return [Boolean] whether there are any plugin post-install hooks to run
+    #
+    def any_plugin_post_install_hooks?
+      HooksManager.hooks_to_run(:post_install, plugins).any?
     end
 
     # Runs the registered callbacks for the source provider plugin hooks.

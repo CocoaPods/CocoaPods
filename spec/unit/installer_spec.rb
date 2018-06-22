@@ -684,6 +684,7 @@ module Pod
         context = stub
         Installer::PostInstallHooksContext.expects(:generate).returns(context)
         HooksManager.expects(:run).with(:post_install, context, Installer::DEFAULT_PLUGINS)
+        @installer.expects(:any_plugin_post_install_hooks?).returns(true)
         @installer.send(:run_plugins_post_install_hooks)
       end
 
@@ -701,6 +702,16 @@ module Pod
         plugins_hash = Installer::DEFAULT_PLUGINS.merge('cocoapods-keys' => { 'keyring' => 'Eidolon' })
         @installer.podfile.stubs(:plugins).returns(plugins_hash)
         HooksManager.expects(:run).with(:post_install, context, plugins_hash)
+        @installer.expects(:any_plugin_post_install_hooks?).returns(true)
+        @installer.send(:run_plugins_post_install_hooks)
+      end
+
+      it 'does not unlock sources with no hooks' do
+        @installer.expects(:any_plugin_post_install_hooks?).returns(false)
+
+        @installer.expects(:unlock_pod_sources).never
+        HooksManager.expects(:run).never
+        @installer.expects(:lock_pod_sources).once
         @installer.send(:run_plugins_post_install_hooks)
       end
 
