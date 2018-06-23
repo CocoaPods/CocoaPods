@@ -110,21 +110,12 @@ module Pod
           #
           def update_changed_file(generator, path)
             if path.exist?
-              if !generator.respond_to?(:generate)
-                # the generator doesn't support generating string contents, so write it to a tmp file and compare
-                # it with the existing file
-                generator.save_as(support_files_temp_dir)
-                unless FileUtils.identical?(support_files_temp_dir, path)
-                  FileUtils.mv(support_files_temp_dir, path)
-                end
-              else
-                contents = generator.generate.to_s
-                content_stream = StringIO.new(contents)
-                identical = File.open(path, 'rb') { |f| FileUtils.compare_stream(f, content_stream) }
-                return if identical
+              contents = generator.generate.to_s
+              content_stream = StringIO.new(contents)
+              identical = File.open(path, 'rb') { |f| FileUtils.compare_stream(f, content_stream) }
+              return if identical
 
-                File.open(path, 'w') { |f| f.write(contents) }
-              end
+              File.open(path, 'w') { |f| f.write(contents) }
             else
               path.dirname.mkpath
               generator.save_as(path)

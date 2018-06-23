@@ -11,12 +11,13 @@ module Pod
       # @return [String] the string contents of the dummy source file.
       #
       def generate
-        result = ''
-        result << "#import <Foundation/Foundation.h>\n"
-        result << "@interface #{class_name} : NSObject\n"
-        result << "@end\n"
-        result << "@implementation #{class_name}\n"
-        result << "@end\n"
+        result = <<-source.strip_heredoc
+          #import <Foundation/Foundation.h>
+          @interface #{class_name} : NSObject
+          @end
+          @implementation #{class_name}
+          @end
+        source
         result
       end
 
