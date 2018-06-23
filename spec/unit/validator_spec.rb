@@ -757,6 +757,26 @@ module Pod
           validator.result_type.should == :error
         end
 
+        it 'warns if public_header_files does not match any files' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "JSONKit.*", "public_header_files": "MissingHeader.h",'))
+          validator = Validator.new(file, config.sources_manager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.match /The `public_header_files` pattern did not match any file./
+          validator.result_type.should == :warning
+        end
+
+        it 'warns if private_header_files does not match any files' do
+          file = write_podspec(stub_podspec(/.*source_files.*/, '"source_files": "JSONKit.*", "private_header_files": "MissingHeader.h",'))
+          validator = Validator.new(file, config.sources_manager.master.map(&:url))
+          validator.stubs(:build_pod)
+          validator.stubs(:validate_url)
+          validator.validate
+          validator.results.map(&:to_s).first.should.match /The `private_header_files` pattern did not match any file./
+          validator.result_type.should == :warning
+        end
+
         it 'checks presence of license file' do
           file = write_podspec(stub_podspec(/.*license.*$/, '"license": "MIT",'))
           validator = Validator.new(file, config.sources_manager.master.map(&:url))
