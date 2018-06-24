@@ -201,7 +201,7 @@ module Pod
           )
           @target.framework_paths_by_config['Debug'].should == [
             { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../../../../../../../some/absolute/path/to/FrameworkA.framework',
+              :input_path => '${PODS_ROOT}/../../../../../../../some/absolute/path/to/FrameworkA.framework',
               :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
           ]
         end
@@ -230,7 +230,7 @@ module Pod
           )
           @target.framework_paths_by_config['Debug'].should == [
             { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../../../../../../../absolute/path/to/FrameworkA.framework',
+              :input_path => '${PODS_ROOT}/../../../../../../../absolute/path/to/FrameworkA.framework',
               :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
           ]
         end
