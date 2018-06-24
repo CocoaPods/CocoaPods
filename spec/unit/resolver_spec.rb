@@ -666,21 +666,6 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         version.to_s.should == '1.4'
       end
 
-      it 'shows a helpful error message if the old resolver incorrectly ' \
-         'activated a pre-release version that now leads to a version ' \
-         'conflict' do
-        podfile = Podfile.new do
-          platform :ios, '8.0'
-          pod 'CocoaLumberjack'
-        end
-        locked_deps = dependency_graph_from_array([Dependency.new('CocoaLumberjack', '= 2.0.0-beta2')])
-        resolver = create_resolver(podfile, locked_deps)
-        e = lambda { puts resolver.resolve.values.flatten }.should.raise Informative
-        e.message.should.match(/you were using a pre-release version of `CocoaLumberjack`/)
-        e.message.should.match(/`pod 'CocoaLumberjack', '= 2.0.0-beta2'`/)
-        e.message.should.match(/`pod update CocoaLumberjack`/)
-      end
-
       describe 'concerning dependencies that are scoped by consumer platform' do
         def resolve
           Resolver.new(config.sandbox, @podfile, empty_graph, config.sources_manager.all, false).resolve
