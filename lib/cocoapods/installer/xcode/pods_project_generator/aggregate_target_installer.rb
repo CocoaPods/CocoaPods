@@ -35,6 +35,7 @@ module Pod
               create_copy_resources_script
               create_acknowledgements
               create_dummy_source(native_target)
+              clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target)
             end
           end

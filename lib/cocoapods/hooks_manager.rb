@@ -76,6 +76,20 @@ module Pod
         @registrations[hook_name] << Hook.new(hook_name, plugin_name, block)
       end
 
+      # Returns all the hooks to run for the given event name
+      # and set of whitelisted plugins
+      #
+      # @see #run
+      #
+      # @return [Array<Hook>] the hooks to run
+      #
+      def hooks_to_run(name, whitelisted_plugins = nil)
+        return [] unless registrations
+        hooks = registrations.fetch(name, [])
+        return hooks unless whitelisted_plugins
+        hooks.select { |hook| whitelisted_plugins.key?(hook.plugin_name) }
+      end
+
       # Runs all the registered blocks for the hook with the given name.
       #
       # @param  [Symbol] name
@@ -94,23 +108,20 @@ module Pod
         raise ArgumentError, 'Missing name' unless name
         raise ArgumentError, 'Missing options' unless context
 
-        if registrations
-          hooks = registrations[name]
-          if hooks
-            UI.message "- Running #{name.to_s.tr('_', ' ')} hooks" do
-              hooks.each do |hook|
-                next if whitelisted_plugins && !whitelisted_plugins.key?(hook.plugin_name)
-                UI.message "- #{hook.plugin_name} from " \
-                           "`#{hook.block.source_location.first}`" do
-                  block = hook.block
-                  if block.arity > 1
-                    user_options = whitelisted_plugins[hook.plugin_name]
-                    user_options = user_options.with_indifferent_access if user_options
-                    block.call(context, user_options)
-                  else
-                    block.call(context)
-                  end
-                end
+        hooks = hooks_to_run(name, whitelisted_plugins)
+        return if hooks.empty?
+
+        UI.message "- Running #{name.to_s.tr('_', ' ')} hooks" do
+          hooks.each do |hook|
+            UI.message "- #{hook.plugin_name} from " \
+                        "`#{hook.block.source_location.first}`" do
+              block = hook.block
+              if block.arity > 1
+                user_options = whitelisted_plugins[hook.plugin_name]
+                user_options = user_options.with_indifferent_access if user_options
+                block.call(context, user_options)
+              else
+                block.call(context)
               end
             end
           end

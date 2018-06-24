@@ -142,7 +142,7 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
         config.base_configuration_reference.should.not == old_config
-        config.base_configuration_reference.path.should == @pod_bundle.xcconfig_relative_path(config.name)
+        config.base_configuration_reference.path.should == (@pod_bundle.relative_pods_root_path + @pod_bundle.xcconfig_relative_path(config.name)).to_s
       end
 
       @pod_bundle.stubs(:label).returns('Pods-Foo')
@@ -153,7 +153,7 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
         config.base_configuration_reference.should.not == old_config
-        config.base_configuration_reference.path.should == @pod_bundle.xcconfig_relative_path(config.name)
+        config.base_configuration_reference.path.should == (@pod_bundle.relative_pods_root_path + @pod_bundle.xcconfig_relative_path(config.name)).to_s
       end
 
       UI.warnings.should.be.empty

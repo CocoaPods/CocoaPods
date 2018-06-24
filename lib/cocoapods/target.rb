@@ -64,6 +64,8 @@ module Pod
       label
     end
 
+    alias to_s name
+
     # @return [String] the label for the target.
     #
     def label
@@ -194,10 +196,24 @@ module Pod
       module_map_path.parent + "#{label}-umbrella.h"
     end
 
+    def umbrella_header_path_to_write
+      module_map_path_to_write.parent + "#{label}-umbrella.h"
+    end
+
     # @return [Pathname] the absolute path of the LLVM module map file that
     #         defines the module structure for the compiler.
     #
     def module_map_path
+      module_map_path_to_write
+    end
+
+    # @!private
+    #
+    # @return [Pathname] the absolute path of the module map file that
+    #         CocoaPods writes. This can be different from `module_map_path`
+    #         if the module map gets symlinked.
+    #
+    def module_map_path_to_write
       basename = "#{label}.modulemap"
       support_files_dir + basename
     end

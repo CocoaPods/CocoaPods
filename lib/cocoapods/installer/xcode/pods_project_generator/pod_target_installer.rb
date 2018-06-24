@@ -6,21 +6,20 @@ module Pod
         # relative support files.
         #
         class PodTargetInstaller < TargetInstaller
-          # @return [Hash{Pathname => Pathname}] A hash of all umbrella headers, grouped by the directory
-          #         the are stored in. This can be `nil` if there is no grouping.
+          # @return [Array<Pathname>] Array of umbrella header paths in the headers directory
           #
-          attr_reader :umbrella_headers_by_dir
+          attr_reader :umbrella_header_paths
 
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see TargetInstaller#sandbox
           # @param [Pod::Project] project @see TargetInstaller#project
           # @param [Target] target @see TargetInstaller#target
-          # @param [Hash{Pathname => Pathname}] umbrella_headers_by_dir @see #umbrella_headers_by_dir
+          # @param [Array<Pathname>] umbrella_header_paths @see #umbrella_header_paths
           #
-          def initialize(sandbox, project, target, umbrella_headers_by_dir = nil)
+          def initialize(sandbox, project, target, umbrella_header_paths = nil)
             super(sandbox, project, target)
-            @umbrella_headers_by_dir = umbrella_headers_by_dir
+            @umbrella_header_paths = umbrella_header_paths
           end
 
           # Creates the target in the Pods project and the relative support files.
@@ -29,6 +28,7 @@ module Pod
           #
           def install!
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
+              create_support_files_dir
               test_file_accessors, file_accessors = target.file_accessors.partition { |fa| fa.spec.test_specification? }
 
               unless target.should_build?
@@ -36,10 +36,9 @@ module Pod
                 # PBXAggregateTarget that will be used to wire up dependencies later.
                 native_target = add_placeholder_target
                 resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
+                create_xcconfig_file(native_target, resource_bundle_targets)
                 return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
-
-              create_support_files_dir
 
               native_target = add_target
               resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
@@ -98,6 +97,7 @@ module Pod
                 end
               end
               create_dummy_source(native_target)
+              clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
                                            test_resource_bundle_targets, test_app_host_targets)
             end
@@ -198,8 +198,6 @@ module Pod
 
           #-----------------------------------------------------------------------#
 
-          SOURCE_FILE_EXTENSIONS = Sandbox::FileAccessor::SOURCE_FILE_EXTENSIONS
-
           # Adds the build files of the pods to the target and adds a reference to
           # the frameworks of the Pods.
           #
@@ -226,12 +224,13 @@ module Pod
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers
               private_headers = file_accessor.private_headers
-              other_source_files = file_accessor.source_files.reject { |sf| SOURCE_FILE_EXTENSIONS.include?(sf.extname) }
+              other_source_files = file_accessor.other_source_files
 
               {
                 true => file_accessor.arc_source_files,
                 false => file_accessor.non_arc_source_files,
               }.each do |arc, files|
+                next if files.empty?
                 files = files - headers - other_source_files
                 flags = compiler_flags_for_consumer(consumer, arc)
                 regular_file_refs = project_file_references_array(files, 'source')
@@ -449,9 +448,11 @@ module Pod
           # @return [void]
           #
           def create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
-            target.supported_test_types.each do |test_type|
+            target.test_specs.each do |test_spec|
+              spec_consumer = test_spec.consumer(target.platform)
+              test_type = spec_consumer.test_type
               path = target.xcconfig_path(test_type.to_s)
-              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, true), path)
+              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, test_spec), path)
               xcconfig_file_ref = add_file_to_support_group(path)
 
               test_native_targets.each do |test_target|
@@ -478,8 +479,8 @@ module Pod
             pod_targets = target.all_dependent_targets
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
-                include_test_spec_paths = pod_target == target
-                pod_target.resource_paths(include_test_spec_paths)
+                spec_paths_to_include = pod_target == target ? pod_target.specs.map(&:name) : pod_target.non_test_specs.map(&:name)
+                pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
             generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
@@ -499,8 +500,8 @@ module Pod
             pod_targets = target.all_dependent_targets
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
-                include_test_spec_paths = pod_target == target
-                pod_target.framework_paths(include_test_spec_paths)
+                spec_paths_to_include = pod_target == target ? pod_target.specs.map(&:name) : pod_target.non_test_specs.map(&:name)
+                pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
             generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
@@ -644,7 +645,7 @@ module Pod
           def create_module_map(native_target)
             return super(native_target) unless custom_module_map
 
-            path = target.module_map_path
+            path = target.module_map_path_to_write
             UI.message "- Copying module map file to #{UI.path(path)}" do
               contents = custom_module_map.read
               unless target.requires_frameworks?
@@ -654,17 +655,23 @@ module Pod
               update_changed_file(generator, path)
               add_file_to_support_group(path)
 
+              linked_path = target.module_map_path
+              if path != linked_path
+                linked_path.dirname.mkpath
+                FileUtils.ln_sf(path, linked_path)
+              end
+
+              relative_path = target.module_map_path.relative_path_from(sandbox.root).to_s
               native_target.build_configurations.each do |c|
-                relative_path = path.relative_path_from(sandbox.root)
                 c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
               end
             end
           end
 
           def module_map_additional_headers
-            return [] unless umbrella_headers_by_dir
+            return [] unless umbrella_header_paths
 
-            other_paths = umbrella_headers_by_dir[target.module_map_path.dirname] - [target.umbrella_header_path]
+            other_paths = umbrella_header_paths - [target.umbrella_header_path]
             other_paths.map do |module_map_path|
               # exclude other targets umbrella headers, to avoid
               # incomplete umbrella warnings
@@ -776,6 +783,11 @@ module Pod
           # @return [Void]
           #
           def add_swift_static_library_compatibility_header_phase(native_target)
+            if custom_module_map
+              raise Informative, 'Using Swift static libraries with custom module maps does not yet work.' \
+                                 "Please build #{pod_target.label} as a framework or remove the custom module map for the time being."
+            end
+
             build_phase = native_target.new_shell_script_build_phase('Copy generated compatibility header')
 
             relative_module_map_path = target.module_map_path.relative_path_from(target.sandbox.root)

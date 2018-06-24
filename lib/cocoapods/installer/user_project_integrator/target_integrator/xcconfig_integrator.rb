@@ -47,16 +47,17 @@ module Pod
             group = config.project['Pods'] || config.project.new_group('Pods', group_path)
 
             # support user custom paths of Pods group and xcconfigs files.
-            group_path = Pathname.new(group.path || "")
-            path = (pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)).relative_path_from(group_path)
+            group_path = Pathname.new(group.path || '')
+            xcconfig_path = pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)
+            path = xcconfig_path.relative_path_from(group_path)
             file_ref = group.files.find { |f| f.display_name == path.basename.to_s }
             if file_ref && file_ref.path != path
               file_ref_path = Pathname.new(file_ref.real_path)
-              if !file_ref_path.exist? || file_ref_path.realpath != path.realpath
+              if !file_ref_path.exist? || file_ref_path.realpath != xcconfig_path.realpath
                 file_ref.path = path.to_s
               end
             end
-            
+
             existing = config.base_configuration_reference
 
             set_base_configuration_reference = ->() do

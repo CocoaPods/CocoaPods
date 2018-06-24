@@ -78,15 +78,18 @@ module Pod
               UI.message('- Generating deterministic UUIDs') { project.predictabilize_uuids }
             end
             library_product_types = [:framework, :dynamic_library, :static_library]
-            pod_target_installation_results = @target_installation_results.pod_target_installation_results.values
+
+            pod_target_installation_results = @target_installation_results.pod_target_installation_results
+            results_by_native_target = Hash[pod_target_installation_results.map do |_, result|
+              [result.native_target, result]
+            end]
             project.recreate_user_schemes(false) do |scheme, target|
               next unless target.respond_to?(:symbol_type)
               next unless library_product_types.include? target.symbol_type
-              pod_target_installation_results.each do |pod_target_installation_result|
-                next unless pod_target_installation_result.native_target == target
-                pod_target_installation_result.test_native_targets.each do |test_native_target|
-                  scheme.add_test_target(test_native_target)
-                end
+              installation_result = results_by_native_target[target]
+              next unless installation_result
+              installation_result.test_native_targets.each do |test_native_target|
+                scheme.add_test_target(test_native_target)
               end
             end
             project.save
@@ -179,7 +182,8 @@ module Pod
             end.compact.group_by(&:dirname)
 
             pod_target_installation_results = Hash[pod_targets.sort_by(&:name).map do |pod_target|
-              target_installer = PodTargetInstaller.new(sandbox, @project, pod_target, umbrella_headers_by_dir)
+              umbrella_headers_in_header_dir = umbrella_headers_by_dir[pod_target.module_map_path.dirname]
+              target_installer = PodTargetInstaller.new(sandbox, @project, pod_target, umbrella_headers_in_header_dir)
               [pod_target.name, target_installer.install!]
             end]
 

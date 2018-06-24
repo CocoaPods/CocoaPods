@@ -106,6 +106,13 @@ module Pod
         source_files - arc_source_files
       end
 
+      # @return [Array<Pathname] the source files that do not match any of the
+      #                          recognized file extensions
+      def other_source_files
+        extensions = SOURCE_FILE_EXTENSIONS
+        source_files.reject { |f| extensions.include?(f.extname) }
+      end
+
       # @return [Array<Pathname>] the headers of the specification.
       #
       def headers
@@ -413,9 +420,7 @@ module Pod
       #
       def expanded_paths(patterns, options = {})
         return [] if patterns.empty?
-        result = []
-        result << path_list.glob(patterns, options)
-        result.flatten.compact.uniq
+        path_list.glob(patterns, options).flatten.compact.uniq
       end
 
       # @param  [Pathname] binary

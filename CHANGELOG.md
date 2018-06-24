@@ -29,6 +29,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Make sure the temporary directory used to download the pod is remove even if an error is throwed
   [augustorsouza](https://github.com/augustorsouza)
 
+* Avoid unlocking sources on every `pod install` when there are no
+  plugin post-install hooks for performance reasons.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Set `CURRENT_PROJECT_VERSION` for generated app host targets  
@@ -102,6 +106,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Allow `EXPANDED_CODE_SIGN_IDENTITY` to be unset.  
   [Keith Smiley](https://github.com/keith)
   [#7708](https://github.com/CocoaPods/CocoaPods/issues/7708)
+
+* Running `pod install` with static library modules no longer causes pods to
+  be recompiled.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 1.5.3 (2018-05-25)
 
 ##### Enhancements
