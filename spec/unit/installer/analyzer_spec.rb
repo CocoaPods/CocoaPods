@@ -625,26 +625,6 @@ module Pod
         @analyzer.send(:fetch_external_sources, podfile_state)
       end
 
-      xit 'it fetches the specification from either the sandbox or from the remote by default' do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
-        ExternalSources::DownloaderSource.any_instance.expects(:specification_from_external).returns(Specification.new).once
-        @resolver.send(:set_from_external_source, dependency)
-      end
-
-      xit 'it fetches the specification from the remote if in update mode' do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
-        ExternalSources::DownloaderSource.any_instance.expects(:specification).returns(Specification.new).once
-        @resolver.update_external_specs = false
-        @resolver.send(:set_from_external_source, dependency)
-      end
-
-      xit 'it fetches the specification only from the sandbox if pre-downloads are disabled' do
-        dependency = Dependency.new('Name', :git => 'www.example.com')
-        Sandbox.any_instance.expects(:specification).returns(Specification.new).once
-        @resolver.allow_pre_downloads = true
-        @resolver.send(:set_from_external_source, dependency)
-      end
-
       #--------------------------------------#
 
       it 'resolves the dependencies' do
