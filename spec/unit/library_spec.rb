@@ -49,12 +49,12 @@ module Pod
 
       #--------------------------------------#
 
-      it 'returns the path of the resources script relative to the user project' do
-        @lib.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh'
+      it 'returns the path of the resources script relative to the Pods project' do
+        @lib.copy_resources_script_relative_path.should == '${PODS_ROOT}/Target Support Files/Pods/Pods-resources.sh'
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do
-        @lib.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
+        @lib.xcconfig_relative_path('Release').should == 'Target Support Files/Pods/Pods.release.xcconfig'
       end
     end
   end

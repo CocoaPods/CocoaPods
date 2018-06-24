@@ -659,7 +659,6 @@ module Pod
         if respond_to?("_validate_#{attr_name}", true)
           send("_validate_#{attr_name}")
         end
-
         if !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
           error('file patterns', "The `#{attr_name}` pattern did not match any file.")
         end
@@ -837,7 +836,7 @@ module Pod
     #
     def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [])
       name     = subspec_name || spec.name
-      podspec  = file.realpath
+      podspec  = file.cleanpath
       local    = local?
       urls     = source_urls
       Pod::Podfile.new do

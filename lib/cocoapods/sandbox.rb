@@ -56,7 +56,7 @@ module Pod
     #
     def initialize(root)
       FileUtils.mkdir_p(root)
-      @root = Pathname.new(root).realpath
+      @root = Pathname.new(root).cleanpath
       @public_headers = HeadersStore.new(self, 'Public', :public)
       @predownloaded_pods = []
       @checkout_sources = {}
@@ -142,6 +142,19 @@ module Pod
       target_support_files_root + name
     end
 
+    # Returns the path where the Pod with the given name is stored
+    # within the Sandbox. Does not account for where local pods are stored
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Pathname] the path of the Pod.
+    #
+    def pod_dir(name)
+      root_name = Specification.root_name(name)
+      sources_root + root_name
+    end
+
     # Returns the path where the Pod with the given name is stored, taking into
     # account whether the Pod is locally sourced.
     #
@@ -150,7 +163,7 @@ module Pod
     #
     # @return [Pathname] the path of the Pod.
     #
-    def pod_dir(name)
+    def pod_realdir(name)
       root_name = Specification.root_name(name)
       if local?(root_name)
         Pathname.new(development_pods[root_name].dirname)

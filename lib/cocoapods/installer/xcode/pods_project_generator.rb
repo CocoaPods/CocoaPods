@@ -143,8 +143,7 @@ module Pod
             pod_names.each do |pod_name|
               local = sandbox.local?(pod_name)
               path = sandbox.pod_dir(pod_name)
-              was_absolute = sandbox.local_path_was_absolute?(pod_name)
-              @project.add_pod_group(pod_name, path, local, was_absolute)
+              @project.add_pod_group(pod_name, path, local, false)
             end
 
             if config.podfile_path

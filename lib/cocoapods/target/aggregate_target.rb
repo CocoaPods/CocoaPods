@@ -24,6 +24,10 @@ module Pod
     #
     attr_reader :user_project
 
+    # @return [Bool] the path of the user project is a symlink.
+    #
+    attr_reader :user_project_is_symlink
+
     # @return [Array<String>] the list of the UUIDs of the user targets that
     #         will be integrated by this target as identified by the analyzer.
     #
@@ -71,6 +75,7 @@ module Pod
       @target_definition = target_definition
       @client_root = client_root
       @user_project = user_project
+      check_user_project_is_symlink
       @user_target_uuids = user_target_uuids
       @pod_targets_for_build_configuration = pod_targets_for_build_configuration
       @pod_targets = pod_targets_for_build_configuration.values.flatten.uniq
@@ -263,43 +268,55 @@ module Pod
       "$(DERIVED_FILE_DIR)/#{label}-checkManifestLockResult.txt"
     end
 
+    # @return [Pathname] The relative path of the Pods directory from user project's directory.
+    #
+    def relative_pods_root_path
+      if user_project_is_symlink
+        Pathname.new('Pods')
+      else
+        sandbox.root.relative_path_from(client_root)
+      end
+    end
+
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
     #         variable of the user's project.
     #
     def relative_pods_root
-      "${SRCROOT}/#{sandbox.root.relative_path_from(client_root)}"
+      "${SRCROOT}/#{relative_pods_root_path}"
     end
 
     # @return [String] The path of the Podfile directory relative to the
     #         root of the user project.
     #
     def podfile_dir_relative_path
-      podfile_path = target_definition.podfile.defined_in_file
-      return "${SRCROOT}/#{podfile_path.relative_path_from(client_root).dirname}" unless podfile_path.nil?
+      unless user_project_is_symlink
+        podfile_path = target_definition.podfile.defined_in_file
+        return "${SRCROOT}/#{podfile_path.relative_path_from(client_root).dirname}" unless podfile_path.nil?
+      end
       # Fallback to the standard path if the Podfile is not represented by a file.
       '${PODS_ROOT}/..'
     end
 
     # @param  [String] config_name The build configuration name to get the xcconfig for
     # @return [String] The path of the xcconfig file relative to the root of
-    #         the user project.
+    #         the Pods project.
     #
     def xcconfig_relative_path(config_name)
-      relative_to_srcroot(xcconfig_path(config_name)).to_s
+      relative_to_pods_root(xcconfig_path(config_name)).to_s
     end
 
     # @return [String] The path of the copy resources script relative to the
-    #         root of the user project.
+    #         root of the Pods project.
     #
     def copy_resources_script_relative_path
-      "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
+      "${PODS_ROOT}/#{relative_to_pods_root(copy_resources_script_path)}"
     end
 
     # @return [String] The path of the embed frameworks relative to the
-    #         root of the user project.
+    #         root of the Pods project.
     #
     def embed_frameworks_script_relative_path
-      "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
+      "${PODS_ROOT}/#{relative_to_pods_root(embed_frameworks_script_path)}"
     end
 
     private
@@ -307,16 +324,16 @@ module Pod
     # @!group Private Helpers
     #-------------------------------------------------------------------------#
 
-    # Computes the relative path of a sandboxed file from the `$(SRCROOT)`
-    # variable of the user's project.
+    # Computes the relative path of a sandboxed file from the `$(PODS_ROOT)`
+    # variable of the Pods's project.
     #
     # @param  [Pathname] path
     #         A relative path from the root of the sandbox.
     #
     # @return [String] The computed path.
     #
-    def relative_to_srcroot(path)
-      path.relative_path_from(client_root).to_s
+    def relative_to_pods_root(path)
+      path.relative_path_from(sandbox.root).to_s
     end
 
     def create_build_settings
@@ -327,6 +344,15 @@ module Pod
       end
 
       settings
+    end
+
+    def check_user_project_is_symlink
+      if user_project && user_project.path && user_project.path.exist? && sandbox.root.exist?
+        relative_cleanpath = user_project.path.cleanpath.relative_path_from(sandbox.root.cleanpath)
+        relative_realpath = user_project.path.realpath.relative_path_from(sandbox.root.realpath)
+        @user_project_is_symlink = (relative_cleanpath != relative_realpath)
+        # Pathname.realpath will return false if the directory is a symlink
+      end
     end
   end
 end

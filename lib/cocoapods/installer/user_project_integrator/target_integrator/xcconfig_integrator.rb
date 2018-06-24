@@ -42,20 +42,33 @@ module Pod
           #         The build configuration.
           #
           def self.set_target_xcconfig(pod_bundle, target, config)
-            path = pod_bundle.xcconfig_relative_path(config.name)
-            group = config.project['Pods'] || config.project.new_group('Pods')
-            file_ref = group.files.find { |f| f.path == path }
+            # Xcode root group's path is absolute, we must get the relative path of the sandbox to the user project
+            group_path = pod_bundle.relative_pods_root_path
+            group = config.project['Pods'] || config.project.new_group('Pods', group_path)
+
+            # support user custom paths of Pods group and xcconfigs files.
+            group_path = Pathname.new(group.path || '')
+            xcconfig_path = pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)
+            path = xcconfig_path.relative_path_from(group_path)
+            file_ref = group.files.find { |f| f.display_name == path.basename.to_s }
+            if file_ref && file_ref.path != path
+              file_ref_path = Pathname.new(file_ref.real_path)
+              if !file_ref_path.exist? || file_ref_path.realpath != xcconfig_path.realpath
+                file_ref.path = path.to_s
+              end
+            end
+
             existing = config.base_configuration_reference
 
             set_base_configuration_reference = ->() do
-              file_ref ||= group.new_file(path)
+              file_ref ||= group.new_file(path.to_s)
               config.base_configuration_reference = file_ref
             end
 
             if existing && existing != file_ref
               if existing.real_path.to_path.start_with?(pod_bundle.sandbox.root.to_path << '/')
                 set_base_configuration_reference.call
-              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
+              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path.to_s)
                 unless existing_config_is_identical_to_pod_config?(existing.real_path, pod_bundle.xcconfig_path(config.name))
                   UI.warn 'CocoaPods did not set the base configuration of your ' \
                   'project because your project already has a custom ' \
@@ -97,7 +110,7 @@ module Pod
             ]
             message = "The `#{target.name} [#{config.name}]` " \
               "target overrides the `#{key}` build setting defined in " \
-              "`#{pod_bundle.xcconfig_relative_path(config.name)}'. " \
+              "`#{pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)}'. " \
               'This can lead to problems with the CocoaPods installation'
             UI.warn(message, actions)
           end
