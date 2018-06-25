@@ -11,6 +11,12 @@ module Pod
         file.close
       end
 
+      # @return [String] The contents of the acknowledgements in Markdown format.
+      #
+      def generate
+        licenses
+      end
+
       def title_from_string(string, level)
         unless string.empty?
           '#' * level << " #{string}"

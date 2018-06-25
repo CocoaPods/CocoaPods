@@ -1,3 +1,5 @@
+require 'stringio'
+
 module Pod
   module Generator
     class Plist < Acknowledgements
@@ -7,6 +9,15 @@ module Pod
 
       def save_as(path)
         Xcodeproj::Plist.write_to_path(plist, path)
+      end
+
+      # @return [String] The contents of the plist
+      #
+      def generate
+        plist = Nanaimo::Plist.new(plist, :xml)
+        contents = StringIO.new
+        Nanaimo::Writer::XMLWriter.new(plist, :pretty => true, :output => contents, :strict => false).write
+        contents.string
       end
 
       def plist
