@@ -450,11 +450,6 @@ module Pod
 
     # Handles errors that come out of a {Molinillo::Resolver}.
     #
-    # @todo   The check for version conflicts coming from the {Lockfile}
-    #         requiring a pre-release version can be deleted for version 1.0,
-    #         as it is a migration step for Lockfiles coming from CocoaPods
-    #         versions before `0.35.0`.
-    #
     # @return [void]
     #
     # @param  [Molinillo::ResolverError] error
@@ -470,16 +465,7 @@ module Pod
           :version_for_spec => lambda(&:version),
           :additional_message_for_conflict => lambda do |o, name, conflict|
             local_pod_parent = conflict.requirement_trees.flatten.reverse.find(&:local?)
-            lockfile_reqs = conflict.requirements[name_for_locking_dependency_source]
-            if lockfile_reqs && lockfile_reqs.last && lockfile_reqs.last.prerelease? && !conflict.existing
-              o << "\nDue to the previous naïve CocoaPods resolver, " \
-                "you were using a pre-release version of `#{name}`, " \
-                'without explicitly asking for a pre-release version, which now leads to a conflict. ' \
-                'Please decide to either use that pre-release version by adding the ' \
-                'version requirement to your Podfile ' \
-                "(e.g. `pod '#{name}', '#{lockfile_reqs.map(&:requirement).join("', '")}'`) " \
-                "or revert to a stable version by running `pod update #{name}`."
-            elsif local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility && conflict.locked_requirement
+            if local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility && conflict.locked_requirement
               # Conflict was caused by a requirement from a local dependency.
               # Tell user to use `pod update`.
               o << "\nIt seems like you've changed the constraints of dependency `#{name}` " \
