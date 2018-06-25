@@ -226,7 +226,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-framework-macOS/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CustomModuleMapPod-framework-macOS/CustomModuleMapPod.framework",
 				"${BUILT_PRODUCTS_DIR}/MixedPod-framework-macOS/MixedPod.framework",
@@ -243,7 +243,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FDE12D3B73D1A84536C81922 /* [CP] Check Pods Manifest.lock */ = {

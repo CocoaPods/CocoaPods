@@ -263,11 +263,17 @@ module Pod
       "$(DERIVED_FILE_DIR)/#{label}-checkManifestLockResult.txt"
     end
 
+    # @return [Pathname] The relative path of the Pods directory from user project's directory.
+    #
+    def relative_pods_root_path
+      sandbox.root.relative_path_from(client_root)
+    end
+
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
     #         variable of the user's project.
     #
     def relative_pods_root
-      "${SRCROOT}/#{sandbox.root.relative_path_from(client_root)}"
+      "${SRCROOT}/#{relative_pods_root_path}"
     end
 
     # @return [String] The path of the Podfile directory relative to the
@@ -285,21 +291,21 @@ module Pod
     #         the user project.
     #
     def xcconfig_relative_path(config_name)
-      relative_to_srcroot(xcconfig_path(config_name)).to_s
+      xcconfig_path(config_name).relative_path_from(client_root).to_s
     end
 
     # @return [String] The path of the copy resources script relative to the
-    #         root of the user project.
+    #         root of the Pods project.
     #
     def copy_resources_script_relative_path
-      "${SRCROOT}/#{relative_to_srcroot(copy_resources_script_path)}"
+      "${PODS_ROOT}/#{relative_to_pods_root(copy_resources_script_path)}"
     end
 
     # @return [String] The path of the embed frameworks relative to the
-    #         root of the user project.
+    #         root of the Pods project.
     #
     def embed_frameworks_script_relative_path
-      "${SRCROOT}/#{relative_to_srcroot(embed_frameworks_script_path)}"
+      "${PODS_ROOT}/#{relative_to_pods_root(embed_frameworks_script_path)}"
     end
 
     private
@@ -307,16 +313,16 @@ module Pod
     # @!group Private Helpers
     #-------------------------------------------------------------------------#
 
-    # Computes the relative path of a sandboxed file from the `$(SRCROOT)`
-    # variable of the user's project.
+    # Computes the relative path of a sandboxed file from the `$(PODS_ROOT)`
+    # variable of the Pods's project.
     #
     # @param  [Pathname] path
     #         A relative path from the root of the sandbox.
     #
     # @return [String] The computed path.
     #
-    def relative_to_srcroot(path)
-      path.relative_path_from(client_root).to_s
+    def relative_to_pods_root(path)
+      path.relative_path_from(sandbox.root).to_s
     end
 
     def create_build_settings

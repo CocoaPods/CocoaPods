@@ -67,11 +67,11 @@ module Pod
       end
 
       it 'returns the path of the resources script relative to the user project' do
-        @target.copy_resources_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh'
+        @target.copy_resources_script_relative_path.should == '${PODS_ROOT}/Target Support Files/Pods/Pods-resources.sh'
       end
 
       it 'returns the path of the frameworks script relative to the user project' do
-        @target.embed_frameworks_script_relative_path.should == '${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh'
+        @target.embed_frameworks_script_relative_path.should == '${PODS_ROOT}/Target Support Files/Pods/Pods-frameworks.sh'
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do

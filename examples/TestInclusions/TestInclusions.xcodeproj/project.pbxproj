@@ -267,7 +267,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests-resources.sh",
 				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button.png",
 				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button@2x.png",
 				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom.png",
@@ -342,7 +342,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BEB56E0CAF877FA9577BF299 /* [CP] Copy Pods Resources */ = {
@@ -351,7 +351,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions-resources.sh",
 				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button.png",
 				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/close_button@2x.png",
 				"${PODS_ROOT}/SwrveConversationSDK/SwrveConversationSDK/Resources/cvsr_grouped_cell_bottom.png",
@@ -426,7 +426,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FF15824F61254F4257FD78E7 /* [CP] Check Pods Manifest.lock */ = {
