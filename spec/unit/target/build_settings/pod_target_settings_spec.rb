@@ -39,6 +39,7 @@ module Pod
               :requires_frameworks? => true,
               :static_framework? => false,
               :dependent_targets => [],
+              :_add_recursive_dependent_targets => [],
               :recursive_dependent_targets => [],
               :file_accessors => [file_accessor],
               :spec_consumers => [consumer],
