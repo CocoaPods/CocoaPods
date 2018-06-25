@@ -29,11 +29,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1FCF8BAEE357AA92F190B2B4 /* Pods-TestInclusionsPods-TestInclusionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusionsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests.debug.xcconfig"; sourceTree = "<group>"; };
-		608A450DCBC2FE115679CA41 /* Pods-TestInclusionsPods-TestInclusions.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusions.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions.debug.xcconfig"; sourceTree = "<group>"; };
+		1FCF8BAEE357AA92F190B2B4 /* Pods-TestInclusionsPods-TestInclusionsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusionsTests.debug.xcconfig"; path = "Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		608A450DCBC2FE115679CA41 /* Pods-TestInclusionsPods-TestInclusions.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusions.debug.xcconfig"; path = "Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions.debug.xcconfig"; sourceTree = "<group>"; };
 		6A07B12B5DB8260B6A622B86 /* libPods-TestInclusionsPods-TestInclusionsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TestInclusionsPods-TestInclusionsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB3F583724B0611C9FF1D90A /* Pods-TestInclusionsPods-TestInclusions.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusions.release.xcconfig"; path = "Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions.release.xcconfig"; sourceTree = "<group>"; };
-		D8D5B29CD27C0B3126780CA0 /* Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig"; sourceTree = "<group>"; };
+		BB3F583724B0611C9FF1D90A /* Pods-TestInclusionsPods-TestInclusions.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusions.release.xcconfig"; path = "Target Support Files/Pods-TestInclusionsPods-TestInclusions/Pods-TestInclusionsPods-TestInclusions.release.xcconfig"; sourceTree = "<group>"; };
+		D8D5B29CD27C0B3126780CA0 /* Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig"; path = "Target Support Files/Pods-TestInclusionsPods-TestInclusionsTests/Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig"; sourceTree = "<group>"; };
 		EC574385012724E61AA86C91 /* libPods-TestInclusionsPods-TestInclusions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TestInclusionsPods-TestInclusions.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F58833CF1CBBC0C9007D4DA4 /* TestInclusions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestInclusions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F58833D31CBBC0C9007D4DA4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -79,6 +79,7 @@
 				D8D5B29CD27C0B3126780CA0 /* Pods-TestInclusionsPods-TestInclusionsTests.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		C1232D40125B8536BD98182B /* Frameworks */ = {

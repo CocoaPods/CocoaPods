@@ -24,10 +24,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		33A84E66EBEDC738A1DC928D /* Pods-Abstract Target-iOS Pods-Static.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Static.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract Target-iOS Pods-Static.debug.xcconfig"; sourceTree = "<group>"; };
+		33A84E66EBEDC738A1DC928D /* Pods-Abstract Target-iOS Pods-Static.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Static.debug.xcconfig"; path = "Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract Target-iOS Pods-Static.debug.xcconfig"; sourceTree = "<group>"; };
 		66EF8CD87550366CE411E9E5 /* Pods_Abstract_Target_iOS_Pods_Dynamic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Abstract_Target_iOS_Pods_Dynamic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BCCB47A125EFE121F6CB0060 /* Pods-Abstract Target-iOS Pods-Static.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Static.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract Target-iOS Pods-Static.release.xcconfig"; sourceTree = "<group>"; };
-		BFD3374B6AE6E01A26161DF6 /* Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig"; sourceTree = "<group>"; };
+		BCCB47A125EFE121F6CB0060 /* Pods-Abstract Target-iOS Pods-Static.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Static.release.xcconfig"; path = "Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract Target-iOS Pods-Static.release.xcconfig"; sourceTree = "<group>"; };
+		BFD3374B6AE6E01A26161DF6 /* Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig"; path = "Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig"; sourceTree = "<group>"; };
 		C00A217D2017E42500A11955 /* ModelThing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModelThing.h; sourceTree = "<group>"; };
 		C00A217E2017E42500A11955 /* ModelThing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ModelThing.m; sourceTree = "<group>"; };
 		C06248E52016A708009EF3DE /* Static.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Static.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,7 +38,7 @@
 		C06248F22016A708009EF3DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C06248F42016A708009EF3DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C06249062016AE3A009EF3DE /* Dynamic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynamic.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C8305F6CEF9F399F706F50A8 /* Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig"; sourceTree = "<group>"; };
+		C8305F6CEF9F399F706F50A8 /* Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig"; path = "Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig"; sourceTree = "<group>"; };
 		E99245D1CAE3EAEA11963B29 /* libPods-Abstract Target-iOS Pods-Static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abstract Target-iOS Pods-Static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -114,6 +114,7 @@
 				BCCB47A125EFE121F6CB0060 /* Pods-Abstract Target-iOS Pods-Static.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -66,10 +66,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		41314F4384F8287A07D79620 /* Pods-watchOSsample WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		41314F4384F8287A07D79620 /* Pods-watchOSsample WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample WatchKit Extension.release.xcconfig"; path = "Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 		4450B87362C0C46870057E2E /* Pods_watchOSsample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_watchOSsample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4990CC328E0216782022CC58 /* Pods-watchOSsample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample.debug.xcconfig"; sourceTree = "<group>"; };
-		5C2B6806A87F8254E36C3BF8 /* Pods-watchOSsample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample.release.xcconfig"; path = "Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample.release.xcconfig"; sourceTree = "<group>"; };
+		4990CC328E0216782022CC58 /* Pods-watchOSsample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample.debug.xcconfig"; path = "Target Support Files/Pods-watchOSsample/Pods-watchOSsample.debug.xcconfig"; sourceTree = "<group>"; };
+		5C2B6806A87F8254E36C3BF8 /* Pods-watchOSsample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample.release.xcconfig"; path = "Target Support Files/Pods-watchOSsample/Pods-watchOSsample.release.xcconfig"; sourceTree = "<group>"; };
 		A129F8C01B2CA81600EBC1DD /* watchOSsample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchOSsample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A129F8C31B2CA81600EBC1DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A129F8C51B2CA81600EBC1DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		A865B2811CAF18FF0031EFC6 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		A865B2831CAF18FF0031EFC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A865B2851CAF18FF0031EFC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B357BA941E65ECC483AE0860 /* Pods-watchOSsample WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample WatchKit Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		B357BA941E65ECC483AE0860 /* Pods-watchOSsample WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watchOSsample WatchKit Extension.debug.xcconfig"; path = "Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		F24E238D0AA182DCD952E71E /* Pods_watchOSsample_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_watchOSsample_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -126,6 +126,7 @@
 				41314F4384F8287A07D79620 /* Pods-watchOSsample WatchKit Extension.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		A129F8B71B2CA81600EBC1DD = {

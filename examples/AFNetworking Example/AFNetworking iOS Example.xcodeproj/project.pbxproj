@@ -33,10 +33,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0678DF4121D5956B85653CB1 /* Pods-AFNetworking iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.release.xcconfig"; sourceTree = "<group>"; };
+		0678DF4121D5956B85653CB1 /* Pods-AFNetworking iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.release.xcconfig"; path = "Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.release.xcconfig"; sourceTree = "<group>"; };
 		2982AD3117107C0000FFF048 /* adn.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = adn.cer; sourceTree = SOURCE_ROOT; };
 		50ABD6EC159FC2CE001BE42C /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		5723FFCCA3CB8D6E467F174B /* Pods-AFNetworking iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
+		5723FFCCA3CB8D6E467F174B /* Pods-AFNetworking iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetworking iOS Example.debug.xcconfig"; path = "Target Support Files/Pods-AFNetworking iOS Example/Pods-AFNetworking iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 		F3C0AE9D618FB17D8FBD760E /* libPods-AFNetworking iOS Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetworking iOS Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8129C3815910830009BFE23 /* Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
 		F8129C7215910C37009BFE23 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = SOURCE_ROOT; };
@@ -95,6 +95,7 @@
 				0678DF4121D5956B85653CB1 /* Pods-AFNetworking iOS Example.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		F8DA09C61396AB690057D0CC /* Controllers */ = {
