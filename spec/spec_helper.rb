@@ -45,6 +45,7 @@ require 'spec_helper/temporary_cache' # Allows to create temporary cache directo
 require 'spec_helper/user_interface'  # Redirects UI to UI.output & UI.warnings.
 require 'spec_helper/pre_flight'      # Cleans the temporary directory, the config & the UI.output before every test.
 require 'spec_helper/webmock'         # Cleans up mocks after each spec
+require 'spec_helper/mock_source'     # Allows building a mock source from Spec objects.
 
 #-----------------------------------------------------------------------------#
 
