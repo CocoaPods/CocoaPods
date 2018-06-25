@@ -9,13 +9,20 @@ module Pod
     #-------------------------------------------------------------------------#
 
     describe 'In general' do
-      it 'reads the real path of the root so it can be used to build relative paths' do
+      it 'does not read the real path of the root' do
         root_realpath = temporary_directory + 'Folder/SubFolder'
         FileUtils.mkdir_p(root_realpath)
         symlink = temporary_directory + 'symlink'
         File.symlink(root_realpath, symlink)
         sandbox = Pod::Sandbox.new(symlink + 'Sandbox')
-        sandbox.root.to_s.should.end_with 'Folder/SubFolder/Sandbox'
+        sandbox.root.to_s.should.end_with 'symlink/Sandbox'
+      end
+
+      it 'reads the clean path of the root' do
+        root_realpath = temporary_directory + 'Folder/SubFolder'
+        FileUtils.mkdir_p(root_realpath)
+        sandbox = Pod::Sandbox.new(root_realpath + '../Sandbox')
+        sandbox.root.to_s.should.end_with 'Folder/Sandbox'
       end
 
       it "automatically creates its root if it doesn't exist" do
@@ -80,12 +87,20 @@ module Pod
 
       it 'returns the directory where a local Pod is stored' do
         @sandbox.store_local_path('BananaLib', Pathname.new('Some Path/BananaLib.podspec'))
-        @sandbox.pod_dir('BananaLib').should.be == Pathname.new('Some Path')
+        @sandbox.pod_dir('BananaLib').should.be == @sandbox.sources_root + Pathname.new('BananaLib')
+        @sandbox.pod_realdir('BananaLib').should.be == Pathname.new('Some Path')
       end
 
-      it 'handles symlinks in /tmp' do
+      it 'doesn\'t handle symlinks in /tmp' do
         tmp_sandbox = Pod::Sandbox.new('/tmp/CocoaPods')
-        tmp_sandbox.root.should.be == Pathname.new('/tmp/CocoaPods').realpath
+        tmp_sandbox.root.should.be == Pathname.new('/tmp/CocoaPods')
+        require 'fileutils'
+        FileUtils.rm_rf(tmp_sandbox.root)
+      end
+
+      it 'handles relative paths which like `../..`' do
+        tmp_sandbox = Pod::Sandbox.new('/tmp/CocoaPods/../CocoaPods1')
+        tmp_sandbox.root.should.be == Pathname.new('/tmp/CocoaPods1')
         require 'fileutils'
         FileUtils.rm_rf(tmp_sandbox.root)
       end

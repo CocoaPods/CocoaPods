@@ -44,6 +44,32 @@ module Pod
         @dirs
       end
 
+      # List all files and directories under {dir}. This method could be executed recursively.
+      #
+      # @param  [Pathname] dir directory to traverse
+      #
+      # @return [Array<Array<String>>] The array of directories and
+      #         files in {dir}. The paths are relative from
+      #
+      def list_files_under(dir, basepath = nil)
+        dirs = []
+        files = []
+        basepath = dir.realpath unless basepath
+        dir.children.each do |path|
+          if path.directory?
+            dirs << path.to_s
+            if !path.symlink? || path.realpath.relative_path_from(basepath).to_s.start_with?('..')
+              tmp_dirs, tmp_files = list_files_under(path, basepath)
+              dirs.concat(tmp_dirs)
+              files.concat(tmp_files)
+            end
+          else
+            files << path.to_s
+          end
+        end
+        [dirs, files]
+      end
+
       # @return [void] Reads the file system and populates the files and paths
       #         lists.
       #
@@ -54,13 +80,8 @@ module Pod
 
         dirs = []
         files = []
-        root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
-        Find.find(root.to_s) do |f|
-          directory = File.directory?(f)
-          f = f.slice(root_length, f.length - root_length)
-          next if f.nil?
-
-          (directory ? dirs : files) << f
+        Dir.chdir(root.cleanpath.to_s) do
+          dirs, files = list_files_under(Pathname.new('.'))
         end
 
         dirs.sort_by!(&:upcase)

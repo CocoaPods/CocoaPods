@@ -837,7 +837,7 @@ module Pod
     #
     def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [])
       name     = subspec_name || spec.name
-      podspec  = file.realpath
+      podspec  = file.cleanpath
       local    = local?
       urls     = source_urls
       Pod::Podfile.new do

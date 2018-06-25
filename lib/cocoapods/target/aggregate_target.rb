@@ -24,6 +24,10 @@ module Pod
     #
     attr_reader :user_project
 
+    # @return [Bool] the path of the user project is a symlink.
+    #
+    attr_reader :user_project_is_symlink
+
     # @return [Array<String>] the list of the UUIDs of the user targets that
     #         will be integrated by this target as identified by the analyzer.
     #
@@ -71,6 +75,7 @@ module Pod
       @target_definition = target_definition
       @client_root = client_root
       @user_project = user_project
+      check_user_project_is_symlink
       @user_target_uuids = user_target_uuids
       @pod_targets_for_build_configuration = pod_targets_for_build_configuration
       @pod_targets = pod_targets_for_build_configuration.values.flatten.uniq
@@ -266,7 +271,11 @@ module Pod
     # @return [Pathname] The relative path of the Pods directory from user project's directory.
     #
     def relative_pods_root_path
-      sandbox.root.relative_path_from(client_root)
+      if user_project_is_symlink
+        Pathname.new('Pods')
+      else
+        sandbox.root.relative_path_from(client_root)
+      end
     end
 
     # @return [String] The xcconfig path of the root from the `$(SRCROOT)`
@@ -280,8 +289,10 @@ module Pod
     #         root of the user project.
     #
     def podfile_dir_relative_path
-      podfile_path = target_definition.podfile.defined_in_file
-      return "${SRCROOT}/#{podfile_path.relative_path_from(client_root).dirname}" unless podfile_path.nil?
+      unless user_project_is_symlink
+        podfile_path = target_definition.podfile.defined_in_file
+        return "${SRCROOT}/#{podfile_path.relative_path_from(client_root).dirname}" unless podfile_path.nil?
+      end
       # Fallback to the standard path if the Podfile is not represented by a file.
       '${PODS_ROOT}/..'
     end
@@ -333,6 +344,15 @@ module Pod
       end
 
       settings
+    end
+
+    def check_user_project_is_symlink
+      if user_project && user_project.path && user_project.path.exist? && sandbox.root.exist?
+        relative_cleanpath = user_project.path.cleanpath.relative_path_from(sandbox.root.cleanpath)
+        relative_realpath = user_project.path.realpath.relative_path_from(sandbox.root.realpath)
+        @user_project_is_symlink = (relative_cleanpath != relative_realpath)
+        # Pathname.realpath will return false if the directory is a symlink
+      end
     end
   end
 end

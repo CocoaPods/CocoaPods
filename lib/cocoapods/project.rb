@@ -208,7 +208,7 @@ module Pod
       end
 
       group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure, base_path)
-      ref = group.new_file(file_path_name.realpath)
+      ref = group.new_file(file_path_name.cleanpath)
       @refs_by_absolute_path[file_path_name.to_s] = ref
     end
 
@@ -226,7 +226,7 @@ module Pod
         raise ArgumentError, "Paths must be absolute #{absolute_path}"
       end
 
-      refs_by_absolute_path[absolute_path.to_s] ||= refs_by_absolute_path[absolute_path.realpath.to_s]
+      refs_by_absolute_path[absolute_path.to_s] ||= refs_by_absolute_path[absolute_path.cleanpath.to_s]
     end
 
     # Adds a file reference to the Podfile.
@@ -350,7 +350,7 @@ module Pod
         raise ArgumentError, "Paths must be absolute #{base_path}"
       end
 
-      relative_base = base_path.nil? ? group.real_path : base_path.realdirpath
+      relative_base = base_path || group.real_path
       relative_pathname = absolute_pathname.relative_path_from(relative_base)
       relative_dir = relative_pathname.dirname
 

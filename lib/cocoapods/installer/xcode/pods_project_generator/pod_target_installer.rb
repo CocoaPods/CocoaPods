@@ -222,8 +222,8 @@ module Pod
                               end
 
               headers = file_accessor.headers
-              public_headers = file_accessor.public_headers.map(&:realpath)
-              private_headers = file_accessor.private_headers.map(&:realpath)
+              public_headers = file_accessor.public_headers
+              private_headers = file_accessor.private_headers
               other_source_files = file_accessor.other_source_files
 
               {
