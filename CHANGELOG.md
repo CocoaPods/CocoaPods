@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Warn instead of error when linting if `public_header_files` or `private_header_files` do not match any files  
+  [Eric Amorde](https://github.com/amorde)
+  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427) 
+
 * Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify which platforms to lint.  
   [Eric Amorde](https://github.com/amorde)
   [#7783](https://github.com/CocoaPods/CocoaPods/issues/7783)
