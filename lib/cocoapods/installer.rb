@@ -315,7 +315,7 @@ module Pod
             current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
             current_repo &&= current_repo.url || current_repo.name
             previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
-            has_changed_repo = !previous_spec_repo.nil? && current_repo && (current_repo != previous_spec_repo)
+            has_changed_repo = !previous_spec_repo.nil? && current_repo && !current_repo.casecmp(previous_spec_repo).zero?
             title = "Installing #{spec.name} #{spec.version}"
             title << " (was #{previous_version} and source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if has_changed_version && has_changed_repo
             title << " (was #{previous_version})" if has_changed_version && !has_changed_repo

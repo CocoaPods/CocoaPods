@@ -39,6 +39,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not display a source was changed if it uses different casing  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7883](https://github.com/CocoaPods/CocoaPods/pull/7883)
+  
 * Set `CURRENT_PROJECT_VERSION` for generated app host targets  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7825](https://github.com/CocoaPods/CocoaPods/pull/7825)
