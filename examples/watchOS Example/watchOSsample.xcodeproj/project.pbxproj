@@ -350,7 +350,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-watchOS/Alamofire.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -359,7 +359,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-watchOSsample WatchKit Extension/Pods-watchOSsample WatchKit Extension-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		80D5F6FDF4441AF84D902FA8 /* [CP] Check Pods Manifest.lock */ = {
@@ -386,7 +386,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-iOS/Alamofire.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -395,7 +395,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-watchOSsample/Pods-watchOSsample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

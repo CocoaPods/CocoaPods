@@ -262,7 +262,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire-framework-iOS/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CustomModuleMapPod-framework-iOS/CustomModuleMapPod.framework",
 				"${BUILT_PRODUCTS_DIR}/MixedPod-framework-iOS/MixedPod.framework",
@@ -279,7 +279,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

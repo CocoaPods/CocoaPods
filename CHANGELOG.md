@@ -37,6 +37,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   plugin post-install hooks for performance reasons.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Change shell script relative path to ${PODS_ROOT} instead of ${SRCROOT}/Pods  
+  [Whirlwind](https://github.com/Whirlwind)
+  [#7878](https://github.com/CocoaPods/CocoaPods/pull/7878)
+
 ##### Bug Fixes
 
 * Do not display a source was changed if it uses different casing  
