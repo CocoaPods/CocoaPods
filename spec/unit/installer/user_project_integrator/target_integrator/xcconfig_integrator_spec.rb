@@ -38,7 +38,7 @@ module Pod
       group = @project['Pods']
       group.files.each do |ref|
         if ref.display_name.end_with?('.xcconfig')
-          ref.path.should.match /^Target Support Files/
+          ref.path.should.start_with 'Target Support Files'
         end
       end
     end
