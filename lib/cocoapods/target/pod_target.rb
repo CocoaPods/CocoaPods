@@ -422,35 +422,35 @@ module Pod
     #         dependency upon.
     #
     def recursive_dependent_targets
-      @recursive_dependent_targets ||= begin
-        targets = dependent_targets.clone
-
-        targets.each do |target|
-          target.dependent_targets.each do |t|
-            targets.push(t) unless t == self || targets.include?(t)
-          end
-        end
-
-        targets
-      end
+      @recursive_dependent_targets ||= _add_recursive_dependent_targets(Set.new).delete(self).to_a
     end
+
+    def _add_recursive_dependent_targets(set)
+      dependent_targets.each do |target|
+        target._add_recursive_dependent_targets(set) if set.add?(target)
+      end
+
+      set
+    end
+    protected :_add_recursive_dependent_targets
 
     # @return [Array<PodTarget>] the recursive targets that this target has a
     #         test dependency upon.
     #
     def recursive_test_dependent_targets
-      @recursive_test_dependent_targets ||= begin
-        targets = test_dependent_targets_by_spec_name.values.flatten.clone
-
-        targets.each do |target|
-          target.test_dependent_targets_by_spec_name.values.flatten.each do |t|
-            targets.push(t) unless t == self || targets.include?(t)
-          end
-        end
-
-        targets
-      end
+      @recursive_test_dependent_targets ||= _add_recursive_test_dependent_targets(Set.new).to_a
     end
+
+    def _add_recursive_test_dependent_targets(set)
+      test_dependent_targets_by_spec_name.each_value do |dependent_targets|
+        dependent_targets.each do |target|
+          target._add_recursive_dependent_targets(set) if set.add?(target)
+        end
+      end
+
+      set
+    end
+    private :_add_recursive_test_dependent_targets
 
     # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
     #         This list includes the target itself as well as its recursive dependent and test dependent targets.
@@ -529,7 +529,7 @@ module Pod
       header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
       dependent_targets = recursive_dependent_targets
       dependent_targets += recursive_test_dependent_targets if include_test_dependent_targets
-      dependent_targets.each do |dependent_target|
+      dependent_targets.uniq.each do |dependent_target|
         header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
       header_search_paths.uniq

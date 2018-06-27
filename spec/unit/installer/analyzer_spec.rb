@@ -211,6 +211,13 @@ module Pod
             SOCKit
             TransitionKit
           )
+          restkit_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            AFNetworking
+            ISO8601DateFormatterValueTransformer
+            RKValueTransformers
+            SOCKit
+            TransitionKit
+          )
           restkit_target.dependent_targets.all?(&:scoped).should.be.true
         end
 
@@ -222,6 +229,220 @@ module Pod
 
           @analyzer.send(:calculate_pod_targets, [aggregate_target]).
             should == [pod_target_one, pod_target_two, pod_target_three]
+        end
+
+        it 'does not mark transitive dependencies as dependent targets' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject'
+            pod 'Firebase', '3.9.0'
+            pod 'ARAnalytics', '4.0.0', :subspecs => %w(Firebase)
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          result.targets.count.should == 1
+          target = result.targets.first
+
+          firebase_target = target.pod_targets.find { |pt| pt.pod_name == 'Firebase' }
+          firebase_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore
+          )
+          firebase_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          firebase_target.dependent_targets.all?(&:scoped).should.be.true
+
+          aranalytics_target = target.pod_targets.find { |pt| pt.pod_name == 'ARAnalytics' }
+          aranalytics_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase
+          )
+          aranalytics_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          aranalytics_target.dependent_targets.all?(&:scoped).should.be.true
+        end
+
+        it 'does not mark transitive dependencies as dependent targets' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject'
+            pod 'Firebase', '3.9.0'
+            pod 'ARAnalytics', '4.0.0', :subspecs => %w(Firebase)
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          result.targets.count.should == 1
+          target = result.targets.first
+
+          firebase_target = target.pod_targets.find { |pt| pt.pod_name == 'Firebase' }
+          firebase_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore
+          )
+          firebase_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          firebase_target.dependent_targets.all?(&:scoped).should.be.true
+
+          aranalytics_target = target.pod_targets.find { |pt| pt.pod_name == 'ARAnalytics' }
+          aranalytics_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase
+          )
+          aranalytics_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          aranalytics_target.dependent_targets.all?(&:scoped).should.be.true
+        end
+
+        it 'does not mark transitive dependencies as dependent targets' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject'
+            pod 'Firebase', '3.9.0'
+            pod 'ARAnalytics', '4.0.0', :subspecs => %w(Firebase)
+          end
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+          result.targets.count.should == 1
+          target = result.targets.first
+
+          firebase_target = target.pod_targets.find { |pt| pt.pod_name == 'Firebase' }
+          firebase_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore
+          )
+          firebase_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          firebase_target.dependent_targets.all?(&:scoped).should.be.true
+
+          aranalytics_target = target.pod_targets.find { |pt| pt.pod_name == 'ARAnalytics' }
+          aranalytics_target.dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase
+          )
+          aranalytics_target.recursive_dependent_targets.map(&:pod_name).sort.should == %w(
+            Firebase FirebaseAnalytics FirebaseCore FirebaseInstanceID GoogleInterchangeUtilities GoogleSymbolUtilities GoogleToolboxForMac
+          )
+          aranalytics_target.dependent_targets.all?(&:scoped).should.be.true
+        end
+
+        it 'correctly computes recursive dependent targets' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '10.0'
+            project 'SampleProject/SampleProject'
+
+            # The order of target definitions is important for this test.
+            target 'SampleProject' do
+              pod 'a', :testspecs => %w(Tests)
+              pod 'b', :testspecs => %w(Tests)
+              pod 'c', :testspecs => %w(Tests)
+              pod 'd', :testspecs => %w(Tests)
+              pod 'base'
+            end
+          end
+
+          source = MockSource.new 'Source' do
+            pod 'base' do
+              test_spec do |ts|
+                ts.dependency 'base_testing'
+              end
+            end
+
+            pod 'a' do |s|
+              s.dependency 'b'
+              s.dependency 'base'
+              test_spec do |ts|
+                ts.dependency 'a_testing'
+              end
+            end
+
+            pod 'b' do |s|
+              s.dependency 'c'
+              test_spec do |ts|
+              end
+            end
+
+            pod 'c' do |s|
+              s.dependency 'e'
+              test_spec do |ts|
+                ts.dependency 'a_testing'
+              end
+            end
+
+            pod 'd' do |s|
+              s.dependency 'a'
+              test_spec do |ts|
+                ts.dependency 'b'
+              end
+            end
+
+            pod 'e' do |s|
+              s.dependency 'base'
+              test_spec do |ts|
+              end
+            end
+
+            pod 'a_testing' do |s|
+              s.dependency 'a'
+              s.dependency 'base_testing'
+              test_spec do |ts|
+                ts.dependency 'base_testing'
+              end
+            end
+
+            pod 'base_testing' do |s|
+              s.dependency 'base'
+              test_spec do |ts|
+              end
+            end
+          end
+
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          @analyzer.stubs(:sources).returns([source])
+          result = @analyzer.analyze
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'a' }
+          pod_target.dependent_targets.map(&:name).sort.should == %w(b base)
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(b base c e)
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['a/Tests', ['a_testing']]]
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(a a_testing b base base_testing c e)
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'a_testing' }
+          pod_target.dependent_targets.map(&:name).sort.should == %w(a base_testing)
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base base_testing c e)
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'b' }
+          pod_target.dependent_targets.map(&:name).sort.should == ['c']
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(base c e)
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['b/Tests', []]]
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'base' }
+          pod_target.dependent_targets.map(&:name).sort.should == []
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == []
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'c' }
+          pod_target.dependent_targets.map(&:name).sort.should == ['e']
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(base e)
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['a_testing']]]
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(a a_testing b base base_testing c e)
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'd' }
+          pod_target.dependent_targets.map(&:name).sort.should == ['a']
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base c e)
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['d/Tests', ['b']]]
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(b base c e)
+
+          pod_target = result.pod_targets.find { |pt| pt.name == 'e' }
+          pod_target.dependent_targets.map(&:name).sort.should == ['base']
+          pod_target.recursive_dependent_targets.map(&:name).sort.should == ['base']
+          pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
+          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
         end
 
         it 'picks the right variants up when there are multiple' do
