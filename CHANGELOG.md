@@ -41,6 +41,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Whirlwind](https://github.com/Whirlwind)
   [#7878](https://github.com/CocoaPods/CocoaPods/pull/7878)
 
+* Add support if project path is symbol link  
+  [Whirlwind](https://github.com/Whirlwind)
+  [#7879](https://github.com/CocoaPods/CocoaPods/pull/7879)
+
 ##### Bug Fixes
 
 * Do not display a source was changed if it uses different casing  
