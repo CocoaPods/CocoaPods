@@ -284,8 +284,8 @@ module Pod
             end
             # Wire up test native targets.
             unless pod_target_installation_result.test_native_targets.empty?
-              test_dependent_targets = pod_target.all_dependent_targets
               pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
+                test_dependent_targets = test_specs.flat_map { |s| pod_target.test_dependent_targets_by_spec_name[s.name] }.compact.unshift(pod_target).uniq
                 test_dependent_targets.each do |test_dependent_target|
                   dependency_installation_result = pod_target_installation_results_hash[test_dependent_target.name]
                   dependency_installation_result.test_resource_bundle_targets.values.flatten.each do |test_resource_bundle_target|

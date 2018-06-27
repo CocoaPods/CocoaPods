@@ -1,3 +1,5 @@
+require 'stringio'
+
 module Pod
   class Installer
     class Xcode
@@ -106,19 +108,18 @@ module Pod
           #
           # Saves the content the provided path unless the path exists and the contents are exactly the same.
           #
-          # @return [Object] the result of the generator.
-          #
           def update_changed_file(generator, path)
             if path.exist?
-              result = generator.save_as(support_files_temp_dir)
-              unless FileUtils.identical?(support_files_temp_dir, path)
-                FileUtils.mv(support_files_temp_dir, path)
-              end
+              contents = generator.generate.to_s
+              content_stream = StringIO.new(contents)
+              identical = File.open(path, 'rb') { |f| FileUtils.compare_stream(f, content_stream) }
+              return if identical
+
+              File.open(path, 'w') { |f| f.write(contents) }
             else
               path.dirname.mkpath
-              result = generator.save_as(path)
+              generator.save_as(path)
             end
-            result
           end
 
           # Creates the directory where to store the support files of the target.

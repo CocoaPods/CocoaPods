@@ -38,6 +38,12 @@ module Pod
         File.chmod(0755, pathname.to_s)
       end
 
+      # @return [String] The contents of the copy resources script.
+      #
+      def generate
+        script
+      end
+
       private
 
       # @!group Private Helpers

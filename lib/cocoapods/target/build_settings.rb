@@ -102,7 +102,6 @@ module Pod
 
         define_method(method_name) do
           if memoized
-            @__memoized ||= {}
             retval = @__memoized.fetch(memoized_key, :not_found)
             return retval if :not_found != retval
           end
@@ -157,6 +156,12 @@ module Pod
       #
       def initialize(target)
         @target = target
+        @__memoized = {}
+      end
+
+      def initialize_copy(other)
+        super
+        @__memoized = {}
       end
 
       # @return [Xcodeproj::Config]
@@ -165,15 +170,7 @@ module Pod
         Xcodeproj::Config.new(settings)
       end
 
-      # @return [Xcodeproj::Config]
-      #
-      # @!visibility private
-      # @see #__clear__
-      # @see #xcconfig
-      def generate
-        __clear__
-        xcconfig
-      end
+      alias generate xcconfig
 
       # Saves the generated xcconfig to the given path
       #
@@ -345,13 +342,6 @@ module Pod
       #-------------------------------------------------------------------------#
 
       # @!group Private Methods
-
-      # Clears all memoized settings.
-      # @!visibility private
-      # @return [Void]
-      def __clear__
-        @__memoized = nil
-      end
 
       private
 
@@ -822,13 +812,6 @@ module Pod
         end
 
         #-------------------------------------------------------------------------#
-
-        # @!group Private Methods
-
-        def __clear__
-          super
-          dependent_targets.each { |pt| pt.build_settings.__clear__ }
-        end
       end
 
       # A subclass that generates build settings for a `PodTarget`
@@ -1086,14 +1069,6 @@ module Pod
         end
 
         #-------------------------------------------------------------------------#
-
-        # @!group Private Methods
-
-        def __clear__
-          super
-          pod_targets.each { |pt| pt.build_settings.__clear__ }
-          target.search_paths_aggregate_targets.each { |at| at.build_settings(configuration_name).__clear__ }
-        end
       end
     end
   end

@@ -658,10 +658,8 @@ module Pod
       FILE_PATTERNS.each do |attr_name|
         if respond_to?("_validate_#{attr_name}", true)
           send("_validate_#{attr_name}")
-        end
-
-        if !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
-          error('file patterns', "The `#{attr_name}` pattern did not match any file.")
+        else
+          validate_nonempty_patterns(attr_name, :error)
         end
       end
 
@@ -672,12 +670,26 @@ module Pod
       end
     end
 
+    # Validates that the file patterns in `attr_name` match at least 1 file.
+    #
+    # @param [String,Symbol] attr_name the name of the attribute to check (ex. :public_header_files)
+    #
+    # @param [String,Symbol] message_type the type of message to send if the patterns are empty (ex. :error)
+    #
+    def validate_nonempty_patterns(attr_name, message_type)
+      return unless !file_accessor.spec_consumer.send(attr_name).empty? && file_accessor.send(attr_name).empty?
+
+      add_result(message_type, 'file patterns', "The `#{attr_name}` pattern did not match any file.")
+    end
+
     def _validate_private_header_files
       _validate_header_files(:private_header_files)
+      validate_nonempty_patterns(:private_header_files, :warning)
     end
 
     def _validate_public_header_files
       _validate_header_files(:public_header_files)
+      validate_nonempty_patterns(:public_header_files, :warning)
     end
 
     def _validate_license

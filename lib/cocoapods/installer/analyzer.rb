@@ -549,10 +549,10 @@ module Pod
           end
           pod_targets.each do |target|
             all_specs = all_resolver_specs.group_by(&:name)
-            dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+            dependencies = dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
-              test_dependencies = transitive_dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
+              test_dependencies = dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
               test_dependencies.delete_if { |k| dependencies.key? k }
               hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
             end
@@ -567,10 +567,10 @@ module Pod
 
             pod_targets.each do |target|
               all_specs = specs.map(&:spec).group_by(&:name)
-              dependencies = transitive_dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+              dependencies = dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
-                test_dependencies = transitive_dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+                test_dependencies = dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
                 test_dependencies.delete_if { |k| dependencies.key? k }
                 hash[test_spec.name] = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
               end
@@ -590,7 +590,7 @@ module Pod
         end
       end
 
-      # Returns the specs upon which the given specs _transitively_ depend.
+      # Returns the specs upon which the given specs _directly_ depend.
       #
       # @note: This is implemented in the analyzer, because we don't have to
       #        care about the requirements after dependency resolution.
@@ -606,23 +606,19 @@ module Pod
       #
       # @return [Array<Specification>]
       #
-      def transitive_dependencies_for_specs(specs, platform, all_specs)
+      def dependencies_for_specs(specs, platform, all_specs)
         return [] if specs.empty? || all_specs.empty?
 
         dependent_specs = Set.new
-        to_process = specs
-        loop do
-          break if to_process.empty?
-          next_to_process = Set.new
-          to_process.each do |s|
-            s.dependencies(platform).each do |dep|
-              all_specs[dep.name].each do |spec|
-                next_to_process.add(spec) if dependent_specs.add?(spec)
-              end
+
+        specs.each do |s|
+          s.dependencies(platform).each do |dep|
+            all_specs[dep.name].each do |spec|
+              dependent_specs << spec
             end
           end
-          to_process = next_to_process
         end
+
         dependent_specs - specs
       end
 

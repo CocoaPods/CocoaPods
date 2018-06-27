@@ -58,7 +58,7 @@ module Pod
           before do
             @consumer = @pod_targets.first.spec_consumers.last
             @podfile = @target.target_definition.podfile
-            @xcconfig = @generator.generate
+            @xcconfig = @generator.dup.generate
           end
 
           it 'generates the xcconfig' do
@@ -155,18 +155,24 @@ module Pod
             @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
           end
 
-          it 'adds the dependent pods module map file to OTHER_CFLAGS' do
-            @pod_targets.each { |pt| pt.stubs(:defines_module? => true) }
-            @xcconfig = @generator.generate
-            expected = '$(inherited) -fmodule-map-file="${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap" -isystem "${PODS_ROOT}/Headers/Public/BananaLib"'
-            @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
-          end
+          describe 'with pod targets that define modules' do
+            def pod_target(spec, target_definition)
+              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).tap { |pt| pt.stubs(:defines_module? => true) }
+            end
 
-          it 'adds the dependent pods module map file to OTHER_SWIFT_FLAGS' do
-            @pod_targets.each { |pt| pt.stubs(:defines_module? => true) }
-            @xcconfig = @generator.generate
-            expected = '$(inherited) -D COCOAPODS -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap"'
-            @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should == expected
+            it 'adds the dependent pods module map file to OTHER_CFLAGS' do
+              @pod_targets.each { |pt| pt.stubs(:defines_module? => true) }
+              @xcconfig = @generator.generate
+              expected = '$(inherited) -fmodule-map-file="${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap" -isystem "${PODS_ROOT}/Headers/Public/BananaLib"'
+              @xcconfig.to_hash['OTHER_CFLAGS'].should == expected
+            end
+
+            it 'adds the dependent pods module map file to OTHER_SWIFT_FLAGS' do
+              @pod_targets.each { |pt| pt.stubs(:defines_module? => true) }
+              @xcconfig = @generator.generate
+              expected = '$(inherited) -D COCOAPODS -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Private/BananaLib/BananaLib.modulemap"'
+              @xcconfig.to_hash['OTHER_SWIFT_FLAGS'].should == expected
+            end
           end
 
           describe 'with a scoped pod target' do
@@ -187,7 +193,7 @@ module Pod
 
           it 'does not links the pod targets with the aggregate target for non-whitelisted configuration' do
             @generator = AggregateTargetSettings.new(@target, 'Debug')
-            @xcconfig = @generator.generate
+            @xcconfig = @generator.dup.generate
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
           end
 
@@ -364,7 +370,6 @@ module Pod
 
           it 'uses the target definition swift version' do
             @target_definition.stubs(:swift_version).returns('0.1')
-            @generator.send :__clear__
             @generator.send(:target_swift_version).should == Version.new('0.1')
           end
 
@@ -508,7 +513,7 @@ module Pod
         describe 'serializing and deserializing' do
           before do
             @path = temporary_directory + 'sample.xcconfig'
-            @generator.save_as(@path)
+            @generator.dup.save_as(@path)
           end
 
           it 'saves the xcconfig' do
