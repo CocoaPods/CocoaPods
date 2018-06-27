@@ -498,7 +498,28 @@ module Pod
           UI.output.should.include 'was 1.0'
         end
 
-        it 'prints the spec repo of a pod while updating the spec' do
+        it 'does not print the spec repo of a pod if the source is the same but with different case' do
+          spec = Spec.new
+          spec.name = 'RestKit'
+          spec.version = Version.new('1.0')
+          manifest = Lockfile.new('SPEC REPOS' => { 'source1' => ['RestKit'] })
+          manifest.stubs(:version).with('RestKit').returns(Version.new('1.0'))
+          analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {},
+                                                                    { Source.new('Source1') => [spec] }, [spec],
+                                                                    Pod::Installer::Analyzer::SpecsState.new, [], [], nil)
+          @installer.stubs(:analysis_result).returns(analysis_result)
+          @installer.sandbox.stubs(:manifest).returns(manifest)
+          @installer.stubs(:root_specs).returns([spec])
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+          UI.output.should.not.include 'was 1.0'
+          UI.output.should.not.include 'source changed'
+        end
+
+        it 'prints the spec repo of a pod while updating the spec with a new source' do
           spec = Spec.new
           spec.name = 'RestKit'
           spec.version = Version.new('1.0')

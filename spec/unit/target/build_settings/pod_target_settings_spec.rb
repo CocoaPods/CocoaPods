@@ -39,6 +39,7 @@ module Pod
               :requires_frameworks? => true,
               :static_framework? => false,
               :dependent_targets => [],
+              :_add_recursive_dependent_targets => [],
               :recursive_dependent_targets => [],
               :file_accessors => [file_accessor],
               :spec_consumers => [consumer],
@@ -65,7 +66,7 @@ module Pod
 
             @pod_target.stubs(:file_accessors).returns(file_accessors)
 
-            @xcconfig = @generator.generate
+            @xcconfig = @generator.dup.generate
           end
 
           it 'generates the xcconfig' do
@@ -219,7 +220,6 @@ module Pod
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
-            @generator.send :__clear__
             @generator.other_ldflags.should.
               be == %w(-l"Bananalib" -l"VendoredDyld" -l"xml2" -framework "Bananalib" -framework "VendoredFramework" -framework "XCTest" -weak_framework "iAd")
           end

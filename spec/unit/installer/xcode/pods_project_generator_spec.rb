@@ -226,7 +226,6 @@ module Pod
             @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS-Unit-Tests' }.dependencies.map(&:name).sort.should == [
               'CoconutLib-iOS',
               'CoconutLib-iOS-CoconutLibTestResourcesBundle',
-              'OrangeFramework',
             ]
             @generator.project.targets.find { |t| t.name == 'CoconutLib-macOS-Unit-Tests' }.dependencies.map(&:name).sort.should == [
               'CoconutLib-macOS',
@@ -241,7 +240,6 @@ module Pod
             @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS-Unit-Tests' }.dependencies.map(&:name).sort.should == [
               'AppHost-iOS-Unit-Tests',
               'CoconutLib-iOS',
-              'OrangeFramework',
             ]
             @generator.project.targets.find { |t| t.name == 'CoconutLib-macOS-Unit-Tests' }.dependencies.map(&:name).should == [
               'CoconutLib-macOS',
