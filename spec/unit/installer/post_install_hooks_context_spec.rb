@@ -3,8 +3,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Installer::PostInstallHooksContext do
     it 'offers a convenience method to be generated' do
-      pods_project = Project.new('/tmppath/Pods.xcodeproj')
-      sandbox = stub(:root => Pathname.new('/tmppath'), :project => pods_project)
+      pods_project = Project.new('/path/Pods.xcodeproj')
+      sandbox = stub(:root => Pathname.new('/path'), :project => pods_project)
 
       spec = fixture_spec('banana-lib/BananaLib.podspec')
       user_project = Xcodeproj::Project.open(SpecHelper.create_sample_app_copy_from_fixture('SampleProject'))
@@ -16,7 +16,7 @@ module Pod
 
       result = Installer::PostInstallHooksContext.generate(sandbox, [umbrella])
       result.class.should == Installer::PostInstallHooksContext
-      result.sandbox_root.should == '/tmppath'
+      result.sandbox_root.should == '/path'
       result.pods_project.should == pods_project
       result.sandbox.should == sandbox
       result.umbrella_targets.count.should == 1
