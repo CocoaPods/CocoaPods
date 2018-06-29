@@ -194,6 +194,16 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Integrates a project with single quoted name with CocoaPods' do
+      behaves_like cli_spec 'install_new_with_single_quoted_project_name',
+                            'install --no-repo-update'
+    end
+
+    describe 'Integrates a project with single quoted name and spaces with CocoaPods' do
+      behaves_like cli_spec 'install_new_with_single_quoted_and_spaces_project_name',
+                            'install --no-repo-update'
+    end
+
     describe 'Adds a Pod to an existing installation' do
       behaves_like cli_spec 'install_add_pod',
                             'install --no-repo-update'
