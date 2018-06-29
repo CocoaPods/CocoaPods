@@ -116,8 +116,8 @@ module Pod
             download_result = Downloader.download(download_request, target, :can_cache => can_cache)
           rescue Pod::DSLError => e
             raise Informative, "Failed to load '#{name}' podspec: #{e.message}"
-          rescue => _
-            raise Informative, "Failed to download '#{name}'."
+          rescue => e
+            raise Informative, "Failed to download '#{name}': #{e.message}"
           end
 
           spec = download_result.spec
