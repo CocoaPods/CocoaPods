@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Always display downloader error message  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7625](https://github.com/CocoaPods/CocoaPods/issues/7625)
+
 * Warn instead of error when linting if `public_header_files` or `private_header_files` do not match any files  
   [Eric Amorde](https://github.com/amorde)
   [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427) 

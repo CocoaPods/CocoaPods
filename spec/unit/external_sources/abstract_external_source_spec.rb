@@ -39,7 +39,7 @@ module Pod
       it 'raises a generic error if pre download fails' do
         Downloader.stubs(:download).raises(Pod::Downloader::DownloaderError.new('Some generic exception'))
         exception = lambda { @subject.send(:pre_download, config.sandbox) }.should.raise Informative
-        exception.message.should.include "Failed to download 'Reachability'"
+        exception.message.should.include "Failed to download 'Reachability': Some generic exception"
       end
 
       it 'raises appropriate error if a DSLError when storing a podspec from string' do
