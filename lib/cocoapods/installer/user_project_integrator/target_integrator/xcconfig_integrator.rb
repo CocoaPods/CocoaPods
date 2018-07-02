@@ -165,7 +165,7 @@ module Pod
             file_ref = group.files.find { |f| f.display_name == filename }
             if file_ref && file_ref.path != path
               file_ref_path = Pathname.new(file_ref.real_path)
-              if !file_ref_path.exist? || file_ref_path.realpath != xcconfig_path.realpath
+              if !file_ref_path.exist? || !xcconfig_path.exist? || file_ref_path.realpath != xcconfig_path.realpath
                 file_ref.path = path.to_s
               end
             end
