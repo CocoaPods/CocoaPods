@@ -54,7 +54,7 @@ module Pod
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do
-        @lib.xcconfig_relative_path('Release').should == 'Target Support Files/Pods/Pods.release.xcconfig'
+        @lib.xcconfig_relative_srcroot('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
       end
     end
   end

@@ -45,7 +45,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Whirlwind](https://github.com/Whirlwind)
   [#7878](https://github.com/CocoaPods/CocoaPods/pull/7878)
 
-* Set Pods group path in user project  
+* Set the path of the Pods group in the user project 
   [Whirlwind](https://github.com/Whirlwind)
   [#7886](https://github.com/CocoaPods/CocoaPods/pull/7886)
   [#6194](https://github.com/CocoaPods/CocoaPods/issues/6194)

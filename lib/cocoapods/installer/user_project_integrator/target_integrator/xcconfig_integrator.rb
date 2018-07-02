@@ -43,28 +43,25 @@ module Pod
           #
           def self.set_target_xcconfig(pod_bundle, target, config)
             file_ref = create_xcconfig_ref(pod_bundle, config)
+            path = file_ref.path
 
             existing = config.base_configuration_reference
 
-            set_base_configuration_reference = ->() do
-              config.base_configuration_reference = file_ref
-            end
-
             if existing && existing != file_ref
               if existing.real_path.to_path.start_with?(pod_bundle.sandbox.root.to_path << '/')
-                set_base_configuration_reference.call
-              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, file_ref.path)
+                config.base_configuration_reference = file_ref
+              elsif !xcconfig_includes_target_xcconfig?(config.base_configuration_reference, path)
                 unless existing_config_is_identical_to_pod_config?(existing.real_path, pod_bundle.xcconfig_path(config.name))
                   UI.warn 'CocoaPods did not set the base configuration of your ' \
                   'project because your project already has a custom ' \
                   'config set. In order for CocoaPods integration to work at ' \
                   'all, please either set the base configurations of the target ' \
-                  "`#{target.name}` to `#{file_ref.path}` or include the `#{file_ref.path}` in your " \
+                  "`#{target.name}` to `#{path}` or include the `#{path}` in your " \
                   "build configuration (#{UI.path(existing.real_path)})."
                 end
               end
             elsif config.base_configuration_reference.nil? || file_ref.nil?
-              set_base_configuration_reference.call
+              config.base_configuration_reference = file_ref
             end
           end
 
@@ -95,7 +92,7 @@ module Pod
             ]
             message = "The `#{target.name} [#{config.name}]` " \
               "target overrides the `#{key}` build setting defined in " \
-              "`#{pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)}'. " \
+              "`#{pod_bundle.pod_bundle.xcconfig_relative_srcroot(config.name)}'. " \
               'This can lead to problems with the CocoaPods installation'
             UI.warn(message, actions)
           end
@@ -161,10 +158,11 @@ module Pod
 
             # support user custom paths of Pods group and xcconfigs files.
             group_path = Pathname.new(group.path || '')
-            xcconfig_path = pod_bundle.relative_pods_root_path + pod_bundle.xcconfig_relative_path(config.name)
+            xcconfig_path = Pathname.new(pod_bundle.xcconfig_relative_srcroot(config.name))
             path = xcconfig_path.relative_path_from(group_path)
 
-            file_ref = group.files.find { |f| f.display_name == path.basename.to_s }
+            filename = path.basename.to_s
+            file_ref = group.files.find { |f| f.display_name == filename }
             if file_ref && file_ref.path != path
               file_ref_path = Pathname.new(file_ref.real_path)
               if !file_ref_path.exist? || file_ref_path.realpath != xcconfig_path.realpath
