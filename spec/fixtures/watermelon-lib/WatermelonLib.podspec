@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   }
   
   s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '10.11'
 
   s.source_files        = 'Classes/*.{h,m}'
 
@@ -22,6 +23,7 @@ Pod::Spec.new do |s|
   end
 
   s.test_spec 'SnapshotTests' do |test_spec|
+    test_spec.requires_app_host = true
     test_spec.source_files = 'SnapshotTests/*.{h,m}'
     test_spec.dependency 'iOSSnapshotTestCase/Core'
   end
