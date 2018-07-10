@@ -517,10 +517,6 @@ module Pod
           @test_pod_target.test_target_label(:unit).should == 'CoconutLib-Unit-Tests'
         end
 
-        it 'returns app host label based on test type' do
-          @test_pod_target.app_host_label(:unit).should == 'AppHost-iOS-Unit-Tests'
-        end
-
         it 'returns the correct product type for test type' do
           @test_pod_target.product_type_for_test_type(:unit).should == :unit_test_bundle
         end

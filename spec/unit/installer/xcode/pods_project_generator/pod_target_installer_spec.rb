@@ -30,7 +30,8 @@ module Pod
               end
 
               user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '4.3'), [@spec], [@target_definition], [file_accessor])
+              @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
+                                          Platform.new(:ios, '4.3'), [@spec], [@target_definition], [file_accessor])
               @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
@@ -165,7 +166,8 @@ module Pod
                 @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
 
                 # Add sources to the project.
-                file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('coconut-lib')), @coconut_spec.consumer(:ios))
+                file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('coconut-lib')),
+                                                          @coconut_spec.consumer(:ios))
                 @project.add_pod_group('CoconutLib', fixture('coconut-lib'))
                 group = @project.group_for_spec('CoconutLib')
                 file_accessor.source_files.each do |file|
@@ -176,7 +178,8 @@ module Pod
                 end
 
                 # Add test sources to the project.
-                test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('coconut-lib')), @coconut_spec.test_specs.first.consumer(:ios))
+                test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('coconut-lib')),
+                                                               @coconut_spec.test_specs.first.consumer(:ios))
                 @project.add_pod_group('CoconutLibTests', fixture('coconut-lib'))
                 group = @project.group_for_spec('CoconutLibTests')
                 test_file_accessor.source_files.each do |file|
@@ -189,9 +192,13 @@ module Pod
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@coconut_spec, *@coconut_spec.recursive_subspecs]
                 file_accessors = [file_accessor, test_file_accessor]
-                @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:ios, '6.0'), all_specs, [@target_definition], file_accessors)
+                @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
+                                                    Platform.new(:ios, '6.0'), all_specs, [@target_definition],
+                                                    file_accessors)
                 @installer = PodTargetInstaller.new(config.sandbox, @project, @coconut_pod_target)
-                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.new(:osx, '10.8'), all_specs, [@target_definition2], file_accessors)
+                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [],
+                                                     Platform.new(:osx, '10.8'), all_specs, [@target_definition2],
+                                                     file_accessors)
                 @installer2 = PodTargetInstaller.new(config.sandbox, @project, @coconut_pod_target2)
               end
 
@@ -344,61 +351,6 @@ module Pod
                   eos
                 end
               end
-
-              describe 'app host generation' do
-                before do
-                  @coconut_spec.test_specs.first.requires_app_host = true
-                end
-
-                it 'creates and links app host with an iOS test native target' do
-                  @installer.install!
-                  @project.targets.count.should == 3
-                  app_host_target = @project.targets[2]
-                  app_host_target.name.should == 'AppHost-iOS-Unit-Tests'
-                  app_host_target.symbol_type.should == :application
-                  app_host_target.build_configurations.each do |bc|
-                    bc.build_settings['PRODUCT_NAME'].should == 'AppHost-iOS-Unit-Tests'
-                    bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
-                    bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
-                  end
-                  test_native_target = @project.targets[1]
-                  test_native_target.build_configurations.each do |bc|
-                    bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
-                  end
-                  @project.root_object.attributes['TargetAttributes'].should == {
-                    test_native_target.uuid.to_s => {
-                      'TestTargetID' => app_host_target.uuid.to_s,
-                    },
-                  }
-                end
-
-                it 'creates and links app host with an OSX test native target' do
-                  @installer2.install!
-                  @project.targets.count.should == 3
-                  app_host_target = @project.targets[2]
-                  app_host_target.name.should == 'AppHost-macOS-Unit-Tests'
-                  app_host_target.symbol_type.should == :application
-                  app_host_target.build_configurations.each do |bc|
-                    bc.build_settings['PRODUCT_NAME'].should == 'AppHost-macOS-Unit-Tests'
-                    bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
-                    bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
-                  end
-                  test_native_target = @project.targets[1]
-                  test_native_target.build_configurations.each do |bc|
-                    bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-macOS-Unit-Tests.app/Contents/MacOS/AppHost-macOS-Unit-Tests'
-                  end
-                  @project.root_object.attributes['TargetAttributes'].should == {
-                    test_native_target.uuid.to_s => {
-                      'TestTargetID' => app_host_target.uuid.to_s,
-                    },
-                  }
-                end
-
-                it 'returns correct app host info plist path for test type' do
-                  expected = 'Pods/AppHost/AppHost-iOS-Unit-Tests-Info.plist'
-                  @installer.send(:app_host_info_plist_path_for_test_type, 'AppHost', :unit).to_s.should.include expected
-                end
-              end
             end
 
             describe 'test other files under sources' do
@@ -424,7 +376,9 @@ module Pod
                 end
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-                @minions_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, [@minions_spec, *@minions_spec.recursive_subspecs], [@target_definition], [file_accessor])
+                @minions_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios,
+                                                    [@minions_spec, *@minions_spec.recursive_subspecs],
+                                                    [@target_definition], [file_accessor])
                 @installer = PodTargetInstaller.new(config.sandbox, @project, @minions_pod_target)
 
                 @first_json_file = file_accessor.source_files.find { |sf| sf.extname == '.json' }
@@ -534,7 +488,8 @@ module Pod
                 end
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-                @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, [@spec], [@target_definition], [file_accessor])
+                @pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios,
+                                            [@spec], [@target_definition], [file_accessor])
                 @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
               end
 
@@ -829,7 +784,8 @@ module Pod
               before do
                 @project.add_pod_group('snake', fixture('snake'))
 
-                @pod_target = fixture_pod_target('snake/snake.podspec', false, { 'Debug' => :debug, 'Release' => :release }, [@target_definition])
+                @pod_target = fixture_pod_target('snake/snake.podspec', false,
+                                                 { 'Debug' => :debug, 'Release' => :release }, [@target_definition])
                 @pod_target.stubs(:requires_frameworks? => true)
                 group = @project.group_for_spec('snake')
                 @pod_target.file_accessors.first.source_files.each do |file|
@@ -1013,7 +969,9 @@ module Pod
                 target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
-                file_ref_installer = Installer::Xcode::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+                file_ref_installer = Installer::Xcode::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox,
+                                                                                                         [@pod_target],
+                                                                                                         @project)
                 file_ref_installer.install!
 
                 target_installer.install!
@@ -1071,7 +1029,9 @@ module Pod
                 target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
-                file_ref_installer = Installer::Xcode::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+                file_ref_installer = Installer::Xcode::PodsProjectGenerator::FileReferencesInstaller.new(config.sandbox,
+                                                                                                         [@pod_target],
+                                                                                                         @project)
                 file_ref_installer.install!
 
                 target_installer.install!

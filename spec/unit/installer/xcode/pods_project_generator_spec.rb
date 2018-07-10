@@ -34,6 +34,7 @@ module Pod
             @orangeframework_pod_target = fixture_pod_target_with_specs([@orangeframework_spec], false,
                                                                         user_build_configurations, [], @ios_platform,
                                                                         [@ios_target_definition])
+
             @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
             @coconut_test_spec = @coconut_spec.test_specs.first
             @coconut_ios_pod_target = fixture_pod_target_with_specs([@coconut_spec, @coconut_test_spec],
@@ -42,16 +43,25 @@ module Pod
                                                                     [@ios_target_definition],
                                                                     'iOS')
             @coconut_ios_pod_target.dependent_targets = [@orangeframework_pod_target]
-
             @coconut_osx_pod_target = fixture_pod_target_with_specs([@coconut_spec, @coconut_test_spec],
                                                                     false,
                                                                     user_build_configurations, [], @osx_platform,
                                                                     [@osx_target_definition],
                                                                     'macOS')
 
+            @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+            @watermelon_ios_pod_target = fixture_pod_target_with_specs([@watermelon_spec,
+                                                                        *@watermelon_spec.recursive_subspecs], false,
+                                                                       user_build_configurations, [], Platform.new(:ios, '9.0'),
+                                                                       [@ios_target_definition], 'iOS')
+            @watermelon_osx_pod_target = fixture_pod_target_with_specs([@watermelon_spec,
+                                                                        *@watermelon_spec.recursive_subspecs], false,
+                                                                       user_build_configurations, [], @osx_platform,
+                                                                       [@osx_target_definition], 'macOS')
+
             ios_pod_targets = [@banana_ios_pod_target, @monkey_ios_pod_target, @coconut_ios_pod_target,
-                               @orangeframework_pod_target]
-            osx_pod_targets = [@banana_osx_pod_target, @monkey_osx_pod_target, @coconut_osx_pod_target]
+                               @orangeframework_pod_target, @watermelon_ios_pod_target]
+            osx_pod_targets = [@banana_osx_pod_target, @monkey_osx_pod_target, @coconut_osx_pod_target, @watermelon_osx_pod_target]
             pod_targets = ios_pod_targets + osx_pod_targets
 
             @ios_target = fixture_aggregate_target(ios_pod_targets, false,
@@ -141,6 +151,8 @@ module Pod
           it 'installs the correct targets in the project' do
             @generator.generate!
             @generator.project.targets.map(&:name).sort.should == [
+              'AppHost-iOS-Unit-Tests',
+              'AppHost-macOS-Unit-Tests',
               'BananaLib-iOS',
               'BananaLib-macOS',
               'CoconutLib-iOS',
@@ -150,6 +162,12 @@ module Pod
               'OrangeFramework',
               'Pods-SampleApp-iOS',
               'Pods-SampleApp-macOS',
+              'WatermelonLib-iOS',
+              'WatermelonLib-iOS-Unit-Tests',
+              'WatermelonLib-iOS-WatermelonLibTestResources',
+              'WatermelonLib-macOS',
+              'WatermelonLib-macOS-Unit-Tests',
+              'WatermelonLib-macOS-WatermelonLibTestResources',
               'monkey-iOS',
               'monkey-macOS',
             ]
@@ -169,11 +187,13 @@ module Pod
               'BananaLib-iOS',
               'CoconutLib-iOS',
               'OrangeFramework',
+              'WatermelonLib-iOS',
               'monkey-iOS',
             ]
             @generator.project.targets.find { |t| t.name == 'Pods-SampleApp-macOS' }.dependencies.map(&:name).sort.should == [
               'BananaLib-macOS',
               'CoconutLib-macOS',
+              'WatermelonLib-macOS',
               'monkey-macOS',
             ]
           end
@@ -241,6 +261,7 @@ module Pod
               'AppHost-iOS-Unit-Tests',
               'CoconutLib-iOS',
             ]
+            @generator.project.targets.find { |t| t.name == 'AppHost-macOS-Unit-Tests' }.should.not.be.nil
             @generator.project.targets.find { |t| t.name == 'CoconutLib-macOS-Unit-Tests' }.dependencies.map(&:name).should == [
               'CoconutLib-macOS',
             ]
@@ -265,6 +286,36 @@ module Pod
             @coconut_ios_pod_target.stubs(:should_build?).returns(false)
             @generator.generate!
             @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS' }.isa.should == 'PBXAggregateTarget'
+          end
+
+          it 'creates and links app host with an iOS test native target' do
+            @generator.generate!
+            app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-iOS-Unit-Tests' }
+            app_host_target.name.should.not.be.nil
+            app_host_target.symbol_type.should == :application
+            test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-iOS-Unit-Tests' }
+            test_native_target.should.not.be.nil
+            test_native_target.build_configurations.each do |bc|
+              bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
+            end
+            @generator.project.root_object.attributes['TargetAttributes'][test_native_target.uuid.to_s].should == {
+              'TestTargetID' => app_host_target.uuid.to_s,
+            }
+          end
+
+          it 'creates and links app host with an OSX test native target' do
+            @generator.generate!
+            app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-macOS-Unit-Tests' }
+            app_host_target.name.should.not.be.nil
+            app_host_target.symbol_type.should == :application
+            test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-macOS-Unit-Tests' }
+            test_native_target.should.not.be.nil
+            test_native_target.build_configurations.each do |bc|
+              bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-macOS-Unit-Tests.app/Contents/MacOS/AppHost-macOS-Unit-Tests'
+            end
+            @generator.project.root_object.attributes['TargetAttributes'][test_native_target.uuid.to_s].should == {
+              'TestTargetID' => app_host_target.uuid.to_s,
+            }
           end
 
           it 'configures APPLICATION_EXTENSION_API_ONLY for pod targets of an aggregate target' do

@@ -53,7 +53,7 @@ module Pod
     # @param [Boolean] host_requires_frameworks @see Target#host_requires_frameworks
     # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
     # @param [Array<String>] archs @see Target#archs
-    # @param [Platform] platform @see #platform
+    # @param [Platform] platform @see Target#platform
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
     # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
@@ -157,6 +157,13 @@ module Pod
     #
     def spec_consumers
       specs.map { |spec| spec.consumer(platform) }
+    end
+
+    # @return [Array<Specification::Consumer>] the test specification consumers for
+    #         the target.
+    #
+    def test_spec_consumers
+      test_specs.map { |test_spec| test_spec.consumer(platform) }
     end
 
     # @return [Boolean] Whether the target uses Swift code.
@@ -356,15 +363,6 @@ module Pod
     #
     def test_target_label(test_type)
       "#{label}-#{test_type.capitalize}-Tests"
-    end
-
-    # @param  [Symbol] test_type
-    #         The test type to use for producing the test label.
-    #
-    # @return [String] The label of the app host label to use given the platform and test type.
-    #
-    def app_host_label(test_type)
-      "AppHost-#{Platform.string_name(platform.symbolic_name)}-#{test_type.capitalize}-Tests"
     end
 
     # @param  [Symbol] test_type
