@@ -44,7 +44,6 @@ module Pod
               resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
 
               test_native_targets = add_test_targets
-              test_app_host_targets = add_test_app_host_targets(test_native_targets)
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
               add_files_to_build_phases(native_target, test_native_targets)
@@ -99,7 +98,7 @@ module Pod
               create_dummy_source(native_target)
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
-                                           test_resource_bundle_targets, test_app_host_targets)
+                                           test_resource_bundle_targets)
             end
           end
 
@@ -252,50 +251,6 @@ module Pod
                 native_target.add_resources(resource_phase_refs)
               end
             end
-          end
-
-          # Adds the test app host targets for the library to the Pods project with the
-          # appropriate build configurations.
-          #
-          # @param  [Array<PBXNativeTarget>] test_native_targets
-          #         the test native targets to use when linking the app host to.
-          #
-          # @return [Array<PBXNativeTarget>] the app host targets created.
-          #
-          def add_test_app_host_targets(test_native_targets)
-            target.test_specs.map do |test_spec|
-              platform = target.platform
-              spec_consumer = test_spec.consumer(platform)
-              next unless spec_consumer.requires_app_host?
-              name = target.app_host_label(spec_consumer.test_type)
-              platform_name = platform.name
-              app_host_target = project.targets.find { |t| t.name == name }
-              if app_host_target.nil?
-                app_host_target = Pod::Generator::AppTargetHelper.add_app_target(project, platform_name, deployment_target, name)
-                app_host_target.build_configurations.each do |configuration|
-                  configuration.build_settings.merge!(custom_build_settings)
-                  configuration.build_settings['PRODUCT_NAME'] = name
-                  configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
-                  configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if platform == :osx
-                  configuration.build_settings['CURRENT_PROJECT_VERSION'] = '1'
-                end
-                Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
-                app_host_info_plist_path = app_host_info_plist_path_for_test_type(name, spec_consumer.test_type)
-                create_info_plist_file(app_host_info_plist_path, app_host_target, '1.0.0', platform, :appl, false)
-                project[name].new_file(app_host_info_plist_path)
-              end
-              # Wire all test native targets with the app host.
-              test_native_target = test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
-              test_native_target.build_configurations.each do |configuration|
-                test_host = "$(BUILT_PRODUCTS_DIR)/#{name}.app/"
-                test_host << 'Contents/MacOS/' if platform == :osx
-                test_host << name.to_s
-                configuration.build_settings['TEST_HOST'] = test_host
-              end
-              target_attributes = project.root_object.attributes['TargetAttributes'] || {}
-              target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
-              project.root_object.attributes['TargetAttributes'] = target_attributes
-            end.compact
           end
 
           # Adds the test targets for the library to the Pods project with the

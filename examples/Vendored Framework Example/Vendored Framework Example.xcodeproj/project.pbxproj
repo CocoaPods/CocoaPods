@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		57D9D0A9E402C4C20EF1132A /* Pods-Vendored Framework Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vendored Framework Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vendored Framework Example/Pods-Vendored Framework Example.release.xcconfig"; sourceTree = "<group>"; };
+		57D9D0A9E402C4C20EF1132A /* Pods-Vendored Framework Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vendored Framework Example.release.xcconfig"; path = "Target Support Files/Pods-Vendored Framework Example/Pods-Vendored Framework Example.release.xcconfig"; sourceTree = "<group>"; };
 		5CAF4FE81CC1125900B44520 /* Vendored Framework Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vendored Framework Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CAF4FEB1CC1125900B44520 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CAF4FED1CC1125900B44520 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -25,7 +25,7 @@
 		5CAF4FF51CC1125900B44520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5CAF4FF71CC1125900B44520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		96EFE8B18DE5C33B7F9ADC2A /* Pods_Vendored_Framework_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vendored_Framework_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8A706EB2A5031760E4C935B /* Pods-Vendored Framework Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vendored Framework Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vendored Framework Example/Pods-Vendored Framework Example.debug.xcconfig"; sourceTree = "<group>"; };
+		A8A706EB2A5031760E4C935B /* Pods-Vendored Framework Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vendored Framework Example.debug.xcconfig"; path = "Target Support Files/Pods-Vendored Framework Example/Pods-Vendored Framework Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +47,7 @@
 				57D9D0A9E402C4C20EF1132A /* Pods-Vendored Framework Example.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		4DB9B2875EE9F40EE36D9317 /* Frameworks */ = {

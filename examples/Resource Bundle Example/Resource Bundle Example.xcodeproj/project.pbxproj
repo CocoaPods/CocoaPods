@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		10B8F5D36339B23370337CC5 /* Pods-Resource Bundle Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Resource Bundle Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Resource Bundle Example/Pods-Resource Bundle Example.debug.xcconfig"; sourceTree = "<group>"; };
+		10B8F5D36339B23370337CC5 /* Pods-Resource Bundle Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Resource Bundle Example.debug.xcconfig"; path = "Target Support Files/Pods-Resource Bundle Example/Pods-Resource Bundle Example.debug.xcconfig"; sourceTree = "<group>"; };
 		683360ECF4FA39345D55C4F4 /* Pods_Resource_Bundle_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Resource_Bundle_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8C77C4F1C9DA931000AFF69 /* Resource Bundle Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Resource Bundle Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8C77C531C9DA931000AFF69 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -29,7 +29,7 @@
 		A8C77C5E1C9DA931000AFF69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8C77C611C9DA931000AFF69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A8C77C631C9DA931000AFF69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB8DF5F89FA0B0BDC30AAAFD /* Pods-Resource Bundle Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Resource Bundle Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Resource Bundle Example/Pods-Resource Bundle Example.release.xcconfig"; sourceTree = "<group>"; };
+		FB8DF5F89FA0B0BDC30AAAFD /* Pods-Resource Bundle Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Resource Bundle Example.release.xcconfig"; path = "Target Support Files/Pods-Resource Bundle Example/Pods-Resource Bundle Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +51,7 @@
 				FB8DF5F89FA0B0BDC30AAAFD /* Pods-Resource Bundle Example.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		A8C77C461C9DA931000AFF69 = {

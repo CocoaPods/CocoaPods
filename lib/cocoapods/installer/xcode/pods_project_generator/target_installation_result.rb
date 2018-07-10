@@ -33,11 +33,6 @@ module Pod
           #
           attr_reader :test_resource_bundle_targets
 
-          # @return [Array<PBXNativeTarget>] test_app_host_targets
-          #         The test app host native targets that were produced for this target. Can be empty.
-          #
-          attr_reader :test_app_host_targets
-
           # Initialize a new instance
           #
           # @param [Target] target @see #target
@@ -45,16 +40,14 @@ module Pod
           # @param [Array<PBXNativeTarget>] resource_bundle_targets @see #resource_bundle_targets
           # @param [Array<PBXNativeTarget>] test_native_targets @see #test_native_targets
           # @param [Hash{String=>Array<PBXNativeTarget>}] test_resource_bundle_targets @see #test_resource_bundle_targets
-          # @param [Array<PBXNativeTarget>] test_app_host_targets @see #test_app_host_targets
           #
           def initialize(target, native_target, resource_bundle_targets = [], test_native_targets = [],
-                         test_resource_bundle_targets = {}, test_app_host_targets = [])
+                         test_resource_bundle_targets = {})
             @target = target
             @native_target = native_target
             @resource_bundle_targets = resource_bundle_targets
             @test_native_targets = test_native_targets
             @test_resource_bundle_targets = test_resource_bundle_targets
-            @test_app_host_targets = test_app_host_targets
           end
 
           # Returns the corresponding native target to use based on the provided specification.

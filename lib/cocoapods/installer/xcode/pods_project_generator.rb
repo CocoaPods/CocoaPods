@@ -4,12 +4,14 @@ module Pod
       # The {PodsProjectGenerator} handles generation of the 'Pods/Pods.xcodeproj'
       #
       class PodsProjectGenerator
+        require 'cocoapods/installer/xcode/pods_project_generator/target_installer_helper'
         require 'cocoapods/installer/xcode/pods_project_generator/pod_target_integrator'
         require 'cocoapods/installer/xcode/pods_project_generator/target_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/target_installation_result'
         require 'cocoapods/installer/xcode/pods_project_generator/pod_target_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/file_references_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/aggregate_target_installer'
+        require 'cocoapods/installer/xcode/pods_project_generator/app_host_installer'
 
         # @return [Sandbox] The sandbox where the Pods should be installed.
         #
@@ -63,9 +65,10 @@ module Pod
         def generate!
           prepare
           install_file_references
-          @target_installation_results = install_libraries
+          @target_installation_results = install_targets
           integrate_targets(@target_installation_results.pod_target_installation_results)
-          wire_target_dependencies(@target_installation_results)
+          app_hosts_by_host_key = install_app_hosts
+          wire_target_dependencies(@target_installation_results, app_hosts_by_host_key)
           @target_installation_results
         end
 
@@ -114,6 +117,7 @@ module Pod
 
         private
 
+        AppHostKey = Struct.new(:test_type, :platform)
         InstallationResults = Struct.new(:pod_target_installation_results, :aggregate_target_installation_results)
 
         def create_project
@@ -174,7 +178,7 @@ module Pod
           installer.install!
         end
 
-        def install_libraries
+        def install_targets
           UI.message '- Installing targets' do
             umbrella_headers_by_dir = pod_targets.map do |pod_target|
               next unless pod_target.should_build? && pod_target.defines_module?
@@ -199,6 +203,36 @@ module Pod
             end]
 
             InstallationResults.new(pod_target_installation_results, aggregate_target_installation_results)
+          end
+        end
+
+        def install_app_hosts
+          pod_target_with_test_specs = pod_targets.reject do |pod_target|
+            pod_target.test_specs.empty? || pod_target.test_spec_consumers.none?(&:requires_app_host?)
+          end
+
+          return if pod_target_with_test_specs.empty?
+
+          UI.message '- Installing app hosts' do
+            app_host_keys = pod_target_with_test_specs.flat_map do |pod_target|
+              pod_target.supported_test_types.flat_map do |test_type|
+                AppHostKey.new(test_type, pod_target.platform)
+              end.uniq
+            end
+
+            app_host_keys_by_test_type = app_host_keys.group_by do |app_host_key|
+              [app_host_key.test_type, app_host_key.platform.symbolic_name]
+            end
+
+            app_host_keys_by_test_type.map do |(test_type, platform_symbol), keys|
+              deployment_target = keys.map { |k| k.platform.deployment_target }.max
+              platform = Platform.new(platform_symbol, deployment_target)
+              AppHostKey.new(test_type, platform)
+            end
+
+            Hash[app_host_keys.map do |app_host_key|
+              [app_host_key, AppHostInstaller.new(sandbox, project, app_host_key.platform, app_host_key.test_type).install!]
+            end]
           end
         end
 
@@ -238,9 +272,12 @@ module Pod
         #         the installation results that were produced when all targets were installed. This includes
         #         pod target installation results and aggregate target installation results.
         #
+        # @param  [Hash{AppHostKey=>Array<PBXNativeTarget>}] app_hosts_by_host_key
+        #         the app hosts by test type that were installed in #install_app_hosts
+        #
         # @return [void]
         #
-        def wire_target_dependencies(target_installation_results)
+        def wire_target_dependencies(target_installation_results, app_hosts_by_host_key)
           frameworks_group = project.frameworks_group
           pod_target_installation_results_hash = target_installation_results.pod_target_installation_results
           aggregate_target_installation_results_hash = target_installation_results.aggregate_target_installation_results
@@ -293,10 +330,13 @@ module Pod
                   end
                   test_native_target.add_dependency(dependency_installation_result.native_target)
                   add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
-                  test_spec_consumers = test_specs.map { |test_spec| test_spec.consumer(pod_target.platform) }
-                  if test_spec_consumers.any?(&:requires_app_host?)
-                    app_host_target = project.targets.find { |t| t.name == pod_target.app_host_label(test_specs.first.test_type) }
-                    test_native_target.add_dependency(app_host_target)
+                  # Wire app host dependencies to test native target
+                  if pod_target.test_spec_consumers.any?(&:requires_app_host?)
+                    pod_target.supported_test_types.each do |test_type|
+                      app_host_target = app_hosts_by_host_key[AppHostKey.new(test_type, pod_target.platform)]
+                      test_native_target.add_dependency(app_host_target)
+                      configure_app_host_to_native_target(app_host_target, test_native_target)
+                    end
                   end
                 end
               end
@@ -356,6 +396,18 @@ module Pod
           native_target.build_configurations.each do |config|
             config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
           end
+        end
+
+        def configure_app_host_to_native_target(app_host_target, test_native_target)
+          test_native_target.build_configurations.each do |configuration|
+            test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target.name}.app/"
+            test_host << 'Contents/MacOS/' if app_host_target.platform_name == :osx
+            test_host << app_host_target.name.to_s
+            configuration.build_settings['TEST_HOST'] = test_host
+          end
+          target_attributes = project.root_object.attributes['TargetAttributes'] || {}
+          target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
+          project.root_object.attributes['TargetAttributes'] = target_attributes
         end
       end
     end
