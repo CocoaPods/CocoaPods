@@ -100,10 +100,18 @@ module Pod
     def initialize(use_user_settings = true)
       configure_with(DEFAULTS)
 
+      unless ENV['CP_HOME_DIR'].nil?
+        @cache_root = home_dir + 'cache'
+      end
+
       if use_user_settings && user_settings_file.exist?
         require 'yaml'
         user_settings = YAML.load_file(user_settings_file)
         configure_with(user_settings)
+      end
+
+      unless ENV['CP_CACHE_DIR'].nil?
+        @cache_root = Pathname.new(ENV['CP_CACHE_DIR']).expand_path
       end
     end
 

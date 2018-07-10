@@ -31,10 +31,12 @@ module Pod
       end
 
       it 'allows to specify the home dir with an environment variable' do
-        ENV['CP_HOME_DIR'] = '~/custom_home_dir'
-        @config.home_dir.should == Pathname.new('~/custom_home_dir').expand_path
-        @config.repos_dir.should == Pathname.new('~/custom_home_dir/repos').expand_path
-        @config.templates_dir.should == Pathname.new('~/custom_home_dir/templates').expand_path
+        ENV['CP_HOME_DIR'] = (SpecHelper.temporary_directory + 'custom_home_dir').to_s
+        @config = Config.new(false)
+        @config.home_dir.should == (SpecHelper.temporary_directory + 'custom_home_dir').expand_path
+        @config.repos_dir.should == (SpecHelper.temporary_directory + 'custom_home_dir/repos').expand_path
+        @config.templates_dir.should == (SpecHelper.temporary_directory + 'custom_home_dir/templates').expand_path
+        @config.cache_root.should == (SpecHelper.temporary_directory + 'custom_home_dir/cache').expand_path
         ENV.delete('CP_HOME_DIR')
       end
 
@@ -50,6 +52,13 @@ module Pod
         @config.repos_dir.should == Pathname.new('~/custom_repos_dir').expand_path
         ENV.delete('CP_REPOS_DIR')
         ENV.delete('CP_HOME_DIR')
+      end
+
+      it 'allows to specify the cache dir with an environment variable' do
+        ENV['CP_CACHE_DIR'] = (SpecHelper.temporary_directory + 'custom_cache_dir').to_s
+        @config = Config.new(false)
+        @config.cache_root.should == (SpecHelper.temporary_directory + 'custom_cache_dir').expand_path
+        ENV.delete('CP_CACHE_DIR')
       end
     end
 
