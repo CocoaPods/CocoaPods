@@ -5,7 +5,7 @@ module Pod
         self.summary = 'Remove a spec repo'
 
         self.description = <<-DESC
-          Deletes the remote named `NAME` from the local spec-repos directory at `~/.cocoapods/repos/.`
+          Deletes the remote named `NAME` from the local spec-repos directory at `#{Config.instance.repos_dir}`.
         DESC
 
         self.arguments = [

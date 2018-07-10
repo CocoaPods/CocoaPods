@@ -6,7 +6,7 @@ module Pod
       self.summary = 'Setup the CocoaPods environment'
 
       self.description = <<-DESC
-        Creates a directory at `~/.cocoapods/repos` which will hold your spec-repos.
+        Creates a directory at `#{Config.instance.repos_dir}` which will hold your spec-repos.
         This is where it will create a clone of the public `master` spec-repo from:
 
             https://github.com/CocoaPods/Specs

@@ -5,7 +5,7 @@ module Pod
         self.summary = 'Add a spec repo'
 
         self.description = <<-DESC
-          Clones `URL` in the local spec-repos directory at `~/.cocoapods/repos/`. The
+          Clones `URL` in the local spec-repos directory at `#{Config.instance.repos_dir}`. The
           remote can later be referred to by `NAME`.
         DESC
 
