@@ -33,6 +33,8 @@ module Pod
       it 'allows to specify the home dir with an environment variable' do
         ENV['CP_HOME_DIR'] = '~/custom_home_dir'
         @config.home_dir.should == Pathname.new('~/custom_home_dir').expand_path
+        @config.repos_dir.should == Pathname.new('~/custom_home_dir/repos').expand_path
+        @config.templates_dir.should == Pathname.new('~/custom_home_dir/templates').expand_path
         ENV.delete('CP_HOME_DIR')
       end
 
@@ -40,6 +42,14 @@ module Pod
         ENV['CP_REPOS_DIR'] = '~/custom_repos_dir'
         @config.repos_dir.should == Pathname.new('~/custom_repos_dir').expand_path
         ENV.delete('CP_REPOS_DIR')
+      end
+
+      it 'allows to specify the repos dir with an environment variable that overrides home dir variable' do
+        ENV['CP_HOME_DIR'] = '~/custom_home_dir'
+        ENV['CP_REPOS_DIR'] = '~/custom_repos_dir'
+        @config.repos_dir.should == Pathname.new('~/custom_repos_dir').expand_path
+        ENV.delete('CP_REPOS_DIR')
+        ENV.delete('CP_HOME_DIR')
       end
     end
 
