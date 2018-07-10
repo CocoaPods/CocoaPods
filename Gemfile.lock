@@ -24,14 +24,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: aa4d0c50772c4392039e70a88bd9cc944064f0ad
+  revision: cdd75d07a93dd51680ad75c78a40d813e67bd968
   branch: master
   specs:
-    nanaimo (0.2.5)
+    nanaimo (0.2.6)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: cadb238767d09942a1c5eba90a3112034438ba23
+  revision: 9dfe99f12ed093cb0cb59147a056bd47734b7c39
   branch: master
   specs:
     xcodeproj (1.5.9)
@@ -39,7 +39,7 @@ GIT
       atomos (~> 0.1.2)
       claide (>= 1.0.2, < 2.0)
       colored2 (~> 3.1)
-      nanaimo (~> 0.2.5)
+      nanaimo (~> 0.2.6)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
