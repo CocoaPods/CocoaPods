@@ -92,7 +92,11 @@ module Pod
         podfile_state = generate_podfile_state
 
         store_existing_checkout_options
-        fetch_external_sources(podfile_state) if allow_fetches
+        if allow_fetches
+          fetch_external_sources(podfile_state)
+        elsif !dependencies_to_fetch(podfile_state).all?(&:local?)
+          raise Informative, 'Cannot analyze without fetching dependencies since the sandbox is not up-to-date. Run `pod install` to ensure all dependencies have been fetched.'
+        end
 
         locked_dependencies = generate_version_locking_dependencies(podfile_state)
         resolver_specs_by_target = resolve_dependencies(locked_dependencies)
@@ -782,7 +786,7 @@ module Pod
                    ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file, installation_options.clean?)
                  else
                    ExternalSources.from_dependency(dependency, podfile.defined_in_file, installation_options.clean?)
-        end
+                 end
         source.fetch(sandbox)
       end
 

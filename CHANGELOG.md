@@ -147,6 +147,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [mcfedr](https://github.com/mcfedr)
   [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
 
+* Fail gracefully when the analyzer has dependencies to fetch, but has been
+  told not to fetch them.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ## 1.5.3 (2018-05-25)
 
 ##### Enhancements
