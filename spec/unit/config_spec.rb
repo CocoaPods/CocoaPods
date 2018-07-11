@@ -60,6 +60,28 @@ module Pod
         @config.cache_root.should == (SpecHelper.temporary_directory + 'custom_cache_dir').expand_path
         ENV.delete('CP_CACHE_DIR')
       end
+
+      it 'allows to specify the cache dir with a config file' do
+        ENV['CP_HOME_DIR'] = SpecHelper.temporary_directory.to_s
+        config = { :cache_root => 'config_cache_dir' }
+        File.write(SpecHelper.temporary_directory + 'config.yaml', config.to_yaml)
+        @config = Config.new
+        @config.cache_root.should == Pathname.new('config_cache_dir').expand_path
+        File.delete(SpecHelper.temporary_directory + 'config.yaml')
+        ENV.delete('CP_HOME_DIR')
+      end
+
+      it 'allows cache dir environment variable to override the config file' do
+        ENV['CP_HOME_DIR'] = SpecHelper.temporary_directory.to_s
+        config = { :cache_root => 'config_cache_dir' }
+        File.write(SpecHelper.temporary_directory + 'config.yaml', config.to_yaml)
+        ENV['CP_CACHE_DIR'] = (SpecHelper.temporary_directory + 'custom_cache_dir').to_s
+        @config = Config.new
+        @config.cache_root.should == (SpecHelper.temporary_directory + 'custom_cache_dir').expand_path
+        File.delete(SpecHelper.temporary_directory + 'config.yaml')
+        ENV.delete('CP_CACHE_DIR')
+        ENV.delete('CP_HOME_DIR')
+      end
     end
 
     #-------------------------------------------------------------------------#
