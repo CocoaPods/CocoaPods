@@ -716,6 +716,15 @@ module Pod
             ['SVPullToRefresh (= 0.4)']
       end
 
+      it 'unlocks dependencies when the local spec does not exist' do
+        @analyzer.stubs(:pods_to_update).returns(:pods => %w(JSONKit))
+        @analyzer.stubs(:podfile_dependencies).returns [Dependency.new('foo', :path => 'Foo.podspec')]
+        config.sandbox.stubs(:specification).returns(nil)
+        podfile_state = @analyzer.send(:generate_podfile_state)
+        @analyzer.send(:generate_version_locking_dependencies, podfile_state).map(&:payload).map(&:to_s).should ==
+            ['SVPullToRefresh (= 0.4)']
+      end
+
       it 'unlocks all dependencies with the same root name in update mode' do
         podfile = Podfile.new do
           platform :ios, '8.0'
