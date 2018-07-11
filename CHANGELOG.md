@@ -127,6 +127,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   be recompiled.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* A pod built as a static library linked into multiple targets will only build
+  as a module when all of the targets it is linked into have opted into it.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.5.3 (2018-05-25)
 

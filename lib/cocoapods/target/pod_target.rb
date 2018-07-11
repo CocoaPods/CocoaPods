@@ -209,7 +209,7 @@ module Pod
     def defines_module?
       return @defines_module if defined?(@defines_module)
       return @defines_module = true if uses_swift? || requires_frameworks?
-      return @defines_module = true if target_definitions.any? { |td| td.build_pod_as_module?(pod_name) }
+      return @defines_module = true if target_definitions.all? { |td| td.build_pod_as_module?(pod_name) }
 
       @defines_module = non_test_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
     end
