@@ -6,7 +6,7 @@ module Pod
 
         self.description = <<-DESC
           Updates the local clone of the spec-repo `NAME`. If `NAME` is omitted
-          this will update all spec-repos in `~/.cocoapods/repos`.
+          this will update all spec-repos in `#{Config.instance.repos_dir}`.
         DESC
 
         self.arguments = [
