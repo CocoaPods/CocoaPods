@@ -138,8 +138,8 @@ module Pod
           plugin_sources = @plugin_sources || []
 
           # Add any sources specified using the :source flag on individual dependencies.
-          dependency_sources = @podfile_dependency_cache.podfile_dependencies.map(&:podspec_repo).compact
-          all_dependencies_have_sources = dependency_sources.count == @podfile_dependency_cache.podfile_dependencies.count
+          dependency_sources = podfile_dependencies.map(&:podspec_repo).compact
+          all_dependencies_have_sources = dependency_sources.count == podfile_dependencies.count
 
           if all_dependencies_have_sources
             sources = dependency_sources
@@ -183,6 +183,10 @@ module Pod
         elsif !pods_to_update[:pods].nil?
           :selected
         end
+      end
+
+      def podfile_dependencies
+        @podfile_dependency_cache.podfile_dependencies
       end
 
       #-----------------------------------------------------------------------#
@@ -235,7 +239,7 @@ module Pod
           pods_state
         else
           state = SpecsState.new
-          state.added.merge(@podfile_dependency_cache.podfile_dependencies.map(&:root_name))
+          state.added.merge(podfile_dependencies.map(&:root_name))
           state
         end
       end
@@ -722,9 +726,10 @@ module Pod
         else
           deleted_and_changed = podfile_state.changed + podfile_state.deleted
           deleted_and_changed += pods_to_update[:pods] if update_mode == :selected
-          local_pod_names = @podfile_dependency_cache.podfile_dependencies.select(&:local?).map(&:root_name)
+          local_pod_names = podfile_dependencies.select(&:local?).map(&:root_name)
           pods_to_unlock = local_pod_names.to_set.delete_if do |pod_name|
-            sandbox.specification(pod_name).checksum == lockfile.checksum(pod_name)
+            next unless sandbox_specification = sandbox.specification(pod_name)
+            sandbox_specification.checksum == lockfile.checksum(pod_name)
           end
           LockingDependencyAnalyzer.generate_version_locking_dependencies(lockfile, deleted_and_changed, pods_to_unlock)
         end
@@ -762,7 +767,7 @@ module Pod
       end
 
       def verify_no_pods_with_different_sources!
-        deps_with_different_sources = @podfile_dependency_cache.podfile_dependencies.group_by(&:root_name).
+        deps_with_different_sources = podfile_dependencies.group_by(&:root_name).
           select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
         deps_with_different_sources.each do |root_name, dependencies|
           raise Informative, 'There are multiple dependencies with different ' \
@@ -784,7 +789,7 @@ module Pod
       def dependencies_to_fetch(podfile_state)
         @deps_to_fetch ||= begin
           deps_to_fetch = []
-          deps_with_external_source = @podfile_dependency_cache.podfile_dependencies.select(&:external_source)
+          deps_with_external_source = podfile_dependencies.select(&:external_source)
 
           if update_mode == :all
             deps_to_fetch = deps_with_external_source
@@ -817,7 +822,7 @@ module Pod
           elsif update_mode == :all
             pods_to_fetch += podfile_state.unchanged + podfile_state.deleted
           end
-          pods_to_fetch += @podfile_dependency_cache.podfile_dependencies.
+          pods_to_fetch += podfile_dependencies.
             select { |dep| Hash(dep.external_source).key?(:podspec) && sandbox.specification_path(dep.root_name).nil? }.
             map(&:root_name)
           pods_to_fetch
@@ -825,7 +830,7 @@ module Pod
       end
 
       def store_existing_checkout_options
-        @podfile_dependency_cache.podfile_dependencies.select(&:external_source).each do |dep|
+        podfile_dependencies.select(&:external_source).each do |dep|
           if checkout_options = lockfile && lockfile.checkout_options_for_pod_named(dep.root_name)
             sandbox.store_checkout_source(dep.root_name, checkout_options)
           end
@@ -852,7 +857,7 @@ module Pod
       #         grouped by target.
       #
       def resolve_dependencies(locked_dependencies)
-        duplicate_dependencies = @podfile_dependency_cache.podfile_dependencies.group_by(&:name).
+        duplicate_dependencies = podfile_dependencies.group_by(&:name).
           select { |_name, dependencies| dependencies.count > 1 }
         duplicate_dependencies.each do |name, dependencies|
           UI.warn "There are duplicate dependencies on `#{name}` in #{UI.path podfile.defined_in_file}:\n\n" \
