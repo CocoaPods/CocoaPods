@@ -150,6 +150,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `CP_HOME_DIR` as the base for all default directories  
   [mcfedr](https://github.com/mcfedr)
   [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
+  
+* Exclude 32-bit architectures from Pod targets when the deployment target is iOS 11.0 or higher  
+  [Eric Amorde](https://github.com/amorde)
+  [#7148](https://github.com/CocoaPods/CocoaPods/issues/7148)
 
 * Fail gracefully when the analyzer has dependencies to fetch, but has been
   told not to fetch them.  

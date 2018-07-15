@@ -19,6 +19,10 @@ module Pod
       autoload :TargetInspectionResult,    'cocoapods/installer/analyzer/target_inspection_result'
       autoload :TargetInspector,           'cocoapods/installer/analyzer/target_inspector'
 
+      # @return [String] The version of iOS which requires binaries with only 64-bit architectures
+      #
+      IOS_64_BIT_ONLY_VERSION = Version.new('11.0')
+
       # @return [Sandbox] The sandbox to use for this analysis.
       #
       attr_reader :sandbox
@@ -425,6 +429,7 @@ module Pod
       # @return [AggregateTarget]
       #
       def generate_target(target_definition, target_inspections, pod_targets, resolver_specs_by_target)
+        target_requires_64_bit = requires_64_bit_archs?(target_definition.platform)
         if installation_options.integrate_targets?
           target_inspection = target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
@@ -432,16 +437,13 @@ module Pod
           client_root = user_project.path.dirname.realpath
           user_target_uuids = target_inspection.project_target_uuids
           user_build_configurations = target_inspection.build_configurations
-          archs = target_inspection.archs
+          archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : target_inspection.archs
         else
           user_project = nil
           client_root = config.installation_root.realpath
           user_target_uuids = []
           user_build_configurations = target_definition.build_configurations || Target::DEFAULT_BUILD_CONFIGURATIONS
-          archs = []
-          if target_definition.platform && target_definition.platform.name == :osx
-            archs = ['$(ARCHS_STANDARD_64_BIT)']
-          end
+          archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : []
         end
         platform = target_definition.platform
         build_configurations = user_build_configurations.keys.concat(target_definition.all_whitelisted_configurations).uniq
@@ -632,8 +634,8 @@ module Pod
 
       # Create a target for each spec group
       #
-      # @param  [TargetDefinitions] target_definitions
-      #         the aggregate target
+      # @param  [Array<TargetDefinition>] target_definitions
+      #         the target definitions of the aggregate target
       #
       # @param  [Array<TargetInspection>] target_inspections
       #         the user target inspections used to construct the aggregate and pod targets.
@@ -647,16 +649,18 @@ module Pod
       # @return [PodTarget]
       #
       def generate_pod_target(target_definitions, target_inspections, specs, scope_suffix: nil)
+        target_requires_64_bit = target_definitions.all? { |td| requires_64_bit_archs?(td.platform) }
         if installation_options.integrate_targets?
           target_inspections = target_inspections.select { |t, _| target_definitions.include?(t) }.values
           user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
-          archs = target_inspections.flat_map(&:archs).compact.uniq.sort
+          archs = if target_requires_64_bit
+                    ['$(ARCHS_STANDARD_64_BIT)']
+                  else
+                    target_inspections.flat_map(&:archs).compact.uniq.sort
+                  end
         else
           user_build_configurations = {}
-          archs = []
-          if target_definitions.first.platform.name == :osx
-            archs = ['$(ARCHS_STANDARD_64_BIT)']
-          end
+          archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : []
         end
         host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
         platform = determine_platform(specs, target_definitions, host_requires_frameworks)
@@ -923,6 +927,25 @@ module Pod
           sandbox_state.print
         end
         sandbox_state
+      end
+
+      # @param  [Platform] platform
+      #         The platform to build against
+      #
+      # @return [Boolean] Whether the platform requires 64-bit architectures
+      #
+      def requires_64_bit_archs?(platform)
+        return false unless platform
+        case platform.name
+        when :osx
+          true
+        when :ios
+          platform.deployment_target >= IOS_64_BIT_ONLY_VERSION
+        when :watchos
+          false
+        when :tvos
+          false
+        end
       end
 
       #-----------------------------------------------------------------------#
