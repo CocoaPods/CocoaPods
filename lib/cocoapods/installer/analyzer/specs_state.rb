@@ -91,8 +91,8 @@ module Pod
         def lines(states)
           prefixes = {
             :added     => 'A'.green,
-            :deleted   => 'R'.green,
-            :changed   => 'M'.green,
+            :deleted   => 'R'.red,
+            :changed   => 'M'.yellow,
             :unchanged => '-',
           }
 
