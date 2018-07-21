@@ -47,6 +47,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Generate -ObjC in OTHER_LDFLAGS for apps with static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7946](https://github.com/CocoaPods/CocoaPods/pull/7946)
+
 * Do not display a source was changed if it uses different casing  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7883](https://github.com/CocoaPods/CocoaPods/pull/7883)
