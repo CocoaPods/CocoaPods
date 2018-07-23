@@ -30,7 +30,7 @@ module Pod
       def self.options
         [
           ['--repo-update', 'Force running `pod repo update` before install'],
-          ['--deployment', 'Dissallow any changes to the Podfile or the Podfile.lock during installation'],
+          ['--deployment', 'Disallow any changes to the Podfile or the Podfile.lock during installation'],
         ].concat(super).reject { |(name, _)| name == '--no-repo-update' }
       end
 
