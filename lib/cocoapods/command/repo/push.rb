@@ -182,18 +182,20 @@ module Pod
           podspec_files.each do |spec_file|
             spec = Pod::Specification.from_file(spec_file)
             output_path = @source.pod_path(spec.name) + spec.version.to_s
-            if @message && !@message.empty?
-              message = @message
-            elsif output_path.exist?
-              unless @allow_overwrite
-                raise Informative, "#{spec} already exists and overwriting has been disabled."
-              end
-              message = "[Fix] #{spec}"
-            elsif output_path.dirname.directory?
-              message = "[Update] #{spec}"
-            else
-              message = "[Add] #{spec}"
+            message = if @message && !@message.empty?
+                        @message
+                      elsif output_path.exist?
+                        "[Fix] #{spec}"
+                      elsif output_path.dirname.directory?
+                        "[Update] #{spec}"
+                      else
+                        "[Add] #{spec}"
+                      end
+
+            if output_path.exist? && !@allow_overwrite
+              raise Informative, "#{spec} already exists and overwriting has been disabled."
             end
+
             FileUtils.mkdir_p(output_path)
 
             if @use_json
