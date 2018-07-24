@@ -46,13 +46,13 @@ module Pod
     it 'sets the Pods xcconfig as the base config for each build configuration' do
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
-        xcconfig_file = @project.files.find { |f| f.full_path.to_s == @pod_bundle.xcconfig_relative_srcroot(config.name) }
+        xcconfig_file = @project.files.find { |f| f.full_path.to_s == @pod_bundle.xcconfig_relative_path(config.name) }
         config.base_configuration_reference.should == xcconfig_file
       end
     end
 
     it 'does not duplicate the file reference to the CocoaPods xcconfig in the user project' do
-      path = @pod_bundle.xcconfig_relative_srcroot('Release')
+      path = @pod_bundle.xcconfig_relative_path('Release')
       existing = @project.new_file(path)
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       config = @target.build_configuration_list['Release']
@@ -87,7 +87,7 @@ module Pod
       sample_config = @project.new_file('SampleConfig.xcconfig')
       File.open(sample_config.real_path, 'w') do |file|
         @target.build_configurations.each do |config|
-          file.write("\#include \"#{@pod_bundle.xcconfig_relative_srcroot(config.name)}\"\n")
+          file.write("\#include \"#{@pod_bundle.xcconfig_relative_path(config.name)}\"\n")
         end
       end
       @target.build_configurations.each do |config|
@@ -142,7 +142,7 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
         config.base_configuration_reference.should.not == old_config
-        config.base_configuration_reference.full_path.to_s.should == @pod_bundle.xcconfig_relative_srcroot(config.name)
+        config.base_configuration_reference.full_path.to_s.should == @pod_bundle.xcconfig_relative_path(config.name)
       end
 
       @pod_bundle.stubs(:label).returns('Pods-Foo')
@@ -153,7 +153,7 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
         config.base_configuration_reference.should.not == old_config
-        config.base_configuration_reference.full_path.to_s.should == @pod_bundle.xcconfig_relative_srcroot(config.name)
+        config.base_configuration_reference.full_path.to_s.should == @pod_bundle.xcconfig_relative_path(config.name)
       end
 
       UI.warnings.should.be.empty

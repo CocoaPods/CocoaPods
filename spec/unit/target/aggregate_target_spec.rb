@@ -75,7 +75,7 @@ module Pod
       end
 
       it 'returns the path of the xcconfig file relative to the user project' do
-        @target.xcconfig_relative_srcroot('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
+        @target.xcconfig_relative_path('Release').should == 'Pods/Target Support Files/Pods/Pods.release.xcconfig'
       end
 
       it 'returns the path of output file for the check pod manifest file  script' do
