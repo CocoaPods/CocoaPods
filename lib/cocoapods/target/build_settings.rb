@@ -992,8 +992,9 @@ module Pod
 
         # @return [Boolean]
         define_build_settings_method :requires_objc_linker_flag?, :memoized => true do
-          includes_static_libs = !target.requires_frameworks?
-          includes_static_libs || pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_static_artifacts.empty? }
+          !target.requires_frameworks? ||
+            pod_targets.any?(&:static_framework?) ||
+            pod_targets.flat_map(&:file_accessors).any? { |fa| !fa.vendored_static_artifacts.empty? }
         end
 
         # @return [Boolean]

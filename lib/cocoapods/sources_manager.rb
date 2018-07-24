@@ -31,7 +31,7 @@ module Pod
               "named `#{name}`.\n"
             message << "(#{e})\n" if Config.instance.verbose?
             message << 'You can try adding it manually in ' \
-              '`~/.cocoapods/repos` or via `pod repo add`.'
+              "`#{Config.instance.repos_dir}` or via `pod repo add`."
             raise Informative, message
           ensure
             UI.title_level = previous_title_level

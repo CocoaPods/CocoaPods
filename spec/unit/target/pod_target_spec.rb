@@ -345,6 +345,38 @@ module Pod
       end
     end
 
+    describe '#defines_module?' do
+      it 'returns false when building as a library' do
+        @pod_target.should.not.defines_module
+      end
+
+      it 'returns true when building as a framework' do
+        @pod_target.stubs(:requires_frameworks? => true)
+        @pod_target.should.defines_module
+      end
+
+      it 'returns true when building as a static framework' do
+        @pod_target.stubs(:requires_frameworks? => true, :static_framework? => true)
+        @pod_target.should.defines_module
+      end
+
+      it 'returns true when the target definition says to' do
+        @target_definition.set_use_modular_headers_for_pod('BananaLib', true)
+        @pod_target.should.defines_module
+      end
+
+      it 'returns false when any target definition says to' do
+        @target_definition.set_use_modular_headers_for_pod('BananaLib', true)
+
+        other_target_definition = Podfile::TargetDefinition.new('Other', nil)
+        other_target_definition.abstract = false
+
+        @pod_target.stubs(:target_definitions).returns([@target_definition, other_target_definition])
+
+        @pod_target.should.not.defines_module
+      end
+    end
+
     describe 'Product type dependent helpers' do
       describe 'With libraries' do
         before do

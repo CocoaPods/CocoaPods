@@ -122,6 +122,15 @@ module Pod
       Pod::UI.output.should.include('[Add] PushTest (1.4)')
     end
 
+    it 'refuses to push if --no-overwrite is passed, the spec exists and a commit message is present' do
+      cmd = command('repo', 'push', 'master', 'JSONKit.podspec', '--commit-message="foo"', '--no-overwrite')
+      Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
+      cmd.expects(:validate_podspec_files).returns(true)
+
+      e = lambda { Dir.chdir(temporary_directory) { cmd.run } }.should.raise Pod::Informative
+      e.message.should == '[!] JSONKit (1.4) already exists and overwriting has been disabled.'
+    end
+
     it 'generate a message for commit' do
       cmd = command('repo', 'push', 'master')
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
