@@ -297,6 +297,13 @@ module Pod
           config.sources_manager.expects(:update).once
           @installer.send(:resolve_dependencies)
         end
+
+        it 'raises when in deployment mode and the podfile has changes' do
+          @installer.deployment = true
+          should.raise Informative do
+            @installer.install!
+          end.message.should.include 'There were changes to the podfile in deployment mode'
+        end
       end
 
       #--------------------------------------#

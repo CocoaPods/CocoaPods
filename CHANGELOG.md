@@ -45,6 +45,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Whirlwind](https://github.com/Whirlwind)
   [#7878](https://github.com/CocoaPods/CocoaPods/pull/7878)
 
+* Add a `--deployment` flag to `pod install` that errors if there are any
+  changes to the Podfile or Lockfile.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Do not ignore `--no-overwrite` parameter if a commit message is specified  
