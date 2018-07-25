@@ -52,8 +52,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Whirlwind](https://github.com/Whirlwind)
   [#7886](https://github.com/CocoaPods/CocoaPods/pull/7886)
   [#6194](https://github.com/CocoaPods/CocoaPods/issues/6194)
+* Add a `--deployment` flag to `pod install` that errors if there are any
+  changes to the Podfile or Lockfile.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ##### Bug Fixes
+
+* Do not ignore `--no-overwrite` parameter if a commit message is specified  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7926](https://github.com/CocoaPods/CocoaPods/issues/7926)
+  
+* Generate -ObjC in OTHER_LDFLAGS for apps with static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7946](https://github.com/CocoaPods/CocoaPods/pull/7946)
 
 * Do not display a source was changed if it uses different casing  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -135,6 +146,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   be recompiled.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* A pod built as a static library linked into multiple targets will only build
+  as a module when all of the targets it is linked into have opted into it.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Use `CP_HOME_DIR` as the base for all default directories  
+  [mcfedr](https://github.com/mcfedr)
+  [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
+
+* Fail gracefully when the analyzer has dependencies to fetch, but has been
+  told not to fetch them.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ## 1.5.3 (2018-05-25)
 

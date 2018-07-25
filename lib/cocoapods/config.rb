@@ -100,10 +100,18 @@ module Pod
     def initialize(use_user_settings = true)
       configure_with(DEFAULTS)
 
+      unless ENV['CP_HOME_DIR'].nil?
+        @cache_root = home_dir + 'cache'
+      end
+
       if use_user_settings && user_settings_file.exist?
         require 'yaml'
         user_settings = YAML.load_file(user_settings_file)
         configure_with(user_settings)
+      end
+
+      unless ENV['CP_CACHE_DIR'].nil?
+        @cache_root = Pathname.new(ENV['CP_CACHE_DIR']).expand_path
       end
     end
 
@@ -127,7 +135,7 @@ module Pod
     # @return [Pathname] the directory where the CocoaPods sources are stored.
     #
     def repos_dir
-      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || '~/.cocoapods/repos').expand_path
+      @repos_dir ||= Pathname.new(ENV['CP_REPOS_DIR'] || (home_dir + 'repos')).expand_path
     end
 
     attr_writer :repos_dir
@@ -140,7 +148,7 @@ module Pod
     # @return [Pathname] the directory where the CocoaPods templates are stored.
     #
     def templates_dir
-      @templates_dir ||= Pathname.new(ENV['CP_TEMPLATES_DIR'] || '~/.cocoapods/templates').expand_path
+      @templates_dir ||= Pathname.new(ENV['CP_TEMPLATES_DIR'] || (home_dir + 'templates')).expand_path
     end
 
     # @return [Pathname] the root of the CocoaPods installation where the
@@ -268,6 +276,9 @@ module Pod
     def configure_with(values_by_key)
       return unless values_by_key
       values_by_key.each do |key, value|
+        if key == :cache_root
+          value = Pathname.new(value).expand_path
+        end
         instance_variable_set("@#{key}", value)
       end
     end

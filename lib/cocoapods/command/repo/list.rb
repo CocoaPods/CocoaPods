@@ -5,7 +5,7 @@ module Pod
         self.summary = 'List repos'
 
         self.description = <<-DESC
-            List the repos from the local spec-repos directory at `~/.cocoapods/repos/.`
+            List the repos from the local spec-repos directory at `#{Config.instance.repos_dir}`.
         DESC
 
         def self.options

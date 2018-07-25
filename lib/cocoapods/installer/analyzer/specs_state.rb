@@ -59,10 +59,14 @@ module Pod
         # @return [void]
         #
         def print
-          added    .sort.each { |pod| UI.message('A'.green + " #{pod}", '', 2) }
-          deleted  .sort.each { |pod| UI.message('R'.red + " #{pod}", '', 2) }
-          changed  .sort.each { |pod| UI.message('M'.yellow + " #{pod}", '', 2) }
-          unchanged.sort.each { |pod| UI.message('-' + " #{pod}", '', 2) }
+          states = %i(added deleted changed unchanged)
+          lines(states).each do |line|
+            UI.message(line, '', 2)
+          end
+        end
+
+        def to_s(states: %i(added deleted changed unchanged))
+          lines(states).join("\n")
         end
 
         # Adds the name of a Pod to the give state.
@@ -77,6 +81,26 @@ module Pod
         #
         def add_name(name, state)
           send(state) << Specification.root_name(name)
+        end
+
+        private
+
+        # @return [Array<String>] A description of changes for the given states,
+        #                         one per line
+        #
+        def lines(states)
+          prefixes = {
+            :added     => 'A'.green,
+            :deleted   => 'R'.red,
+            :changed   => 'M'.yellow,
+            :unchanged => '-',
+          }
+
+          states.flat_map do |state|
+            send(state).sort.map do |pod|
+              prefixes[state.to_sym] + " #{pod}"
+            end
+          end
         end
       end
     end

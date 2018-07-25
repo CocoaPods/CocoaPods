@@ -97,6 +97,12 @@ module Pod
     attr_accessor :use_default_plugins
     alias_method :use_default_plugins?, :use_default_plugins
 
+    # @return [Boolean] Whether installation should verify that there are no
+    #                   Podfile or Lockfile changes. Defaults to false.
+    #
+    attr_accessor :deployment
+    alias_method :deployment?, :deployment
+
     # Installs the Pods.
     #
     # The installation process is mostly linear with a few minor complications
@@ -155,6 +161,12 @@ module Pod
         validate_build_configurations
         clean_sandbox
       end
+
+      UI.section 'Verifying no changes' do
+        verify_no_podfile_changes!
+        verify_no_lockfile_changes!
+      end if deployment?
+
       analyzer
     end
 
@@ -295,6 +307,28 @@ module Pod
           end
         end
       end
+    end
+
+    # @raise [Informative] If there are any Podfile changes
+    #
+    def verify_no_podfile_changes!
+      return unless analysis_result.podfile_needs_install?
+
+      changed_state = analysis_result.podfile_state.to_s(:states => %i(added deleted changed))
+      raise Informative, "There were changes to the podfile in deployment mode:\n#{changed_state}"
+    end
+
+    # @raise [Informative] If there are any Lockfile changes
+    #
+    def verify_no_lockfile_changes!
+      new_lockfile = generate_lockfile
+      return if new_lockfile == lockfile
+
+      diff = Xcodeproj::Differ.hash_diff(lockfile.to_hash, new_lockfile.to_hash, :key_1 => 'Old Lockfile', :key_2 => 'New Lockfile')
+      pretty_diff = YAMLHelper.convert_hash(diff, Lockfile::HASH_KEY_ORDER, "\n\n")
+      pretty_diff.gsub!(':diff:', 'diff:'.yellow)
+
+      raise Informative, "There were changes to the lockfile in deployment mode:\n#{pretty_diff}"
     end
 
     # Downloads, installs the documentation and cleans the sources of the Pods
@@ -549,14 +583,20 @@ module Pod
       end
     end
 
+    # @return [Lockfile] The lockfile to write to disk.
+    #
+    def generate_lockfile
+      external_source_pods = analysis_result.podfile_dependency_cache.podfile_dependencies.select(&:external_source).map(&:root_name).uniq
+      checkout_options = sandbox.checkout_sources.select { |root_name, _| external_source_pods.include? root_name }
+      Lockfile.generate(podfile, analysis_result.specifications, checkout_options, analysis_result.specs_by_source)
+    end
+
     # Writes the Podfile and the lock files.
     #
     # @return [void]
     #
     def write_lockfiles
-      external_source_pods = analysis_result.podfile_dependency_cache.podfile_dependencies.select(&:external_source).map(&:root_name).uniq
-      checkout_options = sandbox.checkout_sources.select { |root_name, _| external_source_pods.include? root_name }
-      @lockfile = Lockfile.generate(podfile, analysis_result.specifications, checkout_options, analysis_result.specs_by_source)
+      @lockfile = generate_lockfile
 
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
         @lockfile.write_to_disk(config.lockfile_path)

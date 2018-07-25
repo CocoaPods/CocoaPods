@@ -301,7 +301,7 @@ module Pod
     # @return [String] The path of the xcconfig file relative to the root of
     #         the user project.
     #
-    def xcconfig_relative_srcroot(config_name)
+    def xcconfig_relative_path(config_name)
       xcconfig_path(config_name).relative_path_from(client_root).to_s
     end
 
