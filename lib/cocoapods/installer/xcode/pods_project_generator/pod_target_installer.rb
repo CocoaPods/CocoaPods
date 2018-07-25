@@ -297,7 +297,7 @@ module Pod
               create_test_target_embed_frameworks_script(test_type)
               create_test_target_copy_resources_script(test_type)
 
-              # Generate vanila Info.plist for test target similar to the one xcode gererates for new test target.
+              # Generate vanilla Info.plist for test target similar to the one Xcode generates for new test target.
               # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
               # defined in podspec.
               create_info_plist_file(target.info_plist_path_for_test_type(test_type), test_native_target, '1.0', target.platform, :bndl)
@@ -326,10 +326,12 @@ module Pod
                   bundle_product.name = bundle_file_name
                 end
 
+                contains_compile_phase_refs = false
                 filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|
                   # Resource bundles are only meant to have resources, so install everything
                   # into the resources phase. See note in filter_resource_file_references.
                   resource_bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
+                  contains_compile_phase_refs = !compile_phase_refs.empty?
                 end
 
                 target.user_build_configurations.each do |bc_name, type|
@@ -343,13 +345,19 @@ module Pod
                 info_plist_path = path.dirname + "ResourceBundle-#{bundle_name}-#{path.basename}"
                 create_info_plist_file(info_plist_path, resource_bundle_target, target.version, target.platform, :bndl)
 
-                resource_bundle_target.build_configurations.each do |c|
-                  c.build_settings['PRODUCT_NAME'] = bundle_name
+                resource_bundle_target.build_configurations.each do |configuration|
+                  configuration.build_settings['PRODUCT_NAME'] = bundle_name
                   # Do not set the CONFIGURATION_BUILD_DIR for resource bundles that are only meant for test targets.
                   # This is because the test target itself also does not set this configuration build dir and it expects
                   # all bundles to be copied from the default path.
                   unless file_accessor.spec.test_specification?
-                    c.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
+                    configuration.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
+                  end
+
+                  # Set the `SWIFT_VERSION` build setting for resource bundles that could have resources that get
+                  # compiled such as an `xcdatamodeld` file which has 'Swift' as its code generation language.
+                  if contains_compile_phase_refs && target.uses_swift?
+                    configuration.build_settings['SWIFT_VERSION'] = target.swift_version
                   end
 
                   # Set the correct device family for this bundle, based on the platform
@@ -360,7 +368,7 @@ module Pod
                   }
 
                   if (family = device_family_by_platform[target.platform.name])
-                    c.build_settings['TARGETED_DEVICE_FAMILY'] = family
+                    configuration.build_settings['TARGETED_DEVICE_FAMILY'] = family
                   end
                 end
 
@@ -739,8 +747,8 @@ module Pod
           #
           def add_swift_static_library_compatibility_header_phase(native_target)
             if custom_module_map
-              raise Informative, 'Using Swift static libraries with custom module maps does not yet work.' \
-                                 "Please build #{pod_target.label} as a framework or remove the custom module map for the time being."
+              raise Informative, 'Using Swift static libraries with custom module maps is currently not supported. ' \
+                                 "Please build `#{target.label}` as a framework or remove the custom module map."
             end
 
             build_phase = native_target.new_shell_script_build_phase('Copy generated compatibility header')

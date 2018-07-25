@@ -51,6 +51,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set the `SWIFT_VERSION` on resource bundle targets that contain compiled sources and use Swift  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7950](https://github.com/CocoaPods/CocoaPods/issues/7950)
+
 * Do not ignore `--no-overwrite` parameter if a commit message is specified  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7926](https://github.com/CocoaPods/CocoaPods/issues/7926)
