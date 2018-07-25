@@ -54,7 +54,7 @@ module Pod
       def list_files_under(dir, basepath = nil)
         dirs = []
         files = []
-        basepath = dir.realpath unless basepath
+        basepath = dir unless basepath
         dir.children.each do |path|
           if path.directory?
             dirs << path.relative_path_from(basepath).to_s
@@ -78,8 +78,6 @@ module Pod
           raise Informative, "Attempt to read non existent folder `#{root}`."
         end
 
-        dirs = []
-        files = []
         dirs, files = list_files_under(root.cleanpath)
 
         dirs.sort_by!(&:upcase)
