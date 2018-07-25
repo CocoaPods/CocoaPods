@@ -272,7 +272,6 @@ module Pod
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             add_user_script_phases
-            add_sandbox_symlink
           end
         end
 
@@ -410,24 +409,6 @@ module Pod
             SH
             phase.input_paths = %w(${PODS_PODFILE_DIR_PATH}/Podfile.lock ${PODS_ROOT}/Manifest.lock)
             phase.output_paths = [target.check_manifest_lock_script_output_file_path]
-          end
-        end
-
-        # Adds a symlink at $PROJECT_DIR/Pods pointing to $PODS_ROOT if the user project is behind a symlink
-        #
-        # @note Replaces any existing symlinks at $PROJECT_DIR/Pods
-        #
-        # @return [void]
-        #
-        def add_sandbox_symlink
-          if target.user_project_is_symlink
-            project_dir = target.user_project_path.dirname.realpath
-            link_source = target.sandbox.root.realpath.relative_path_from(project_dir)
-            link_path = project_dir + target.sandbox.root.basename
-            if File.exist?(link_path)
-              FileUtils.rm_r(link_path)
-            end
-            File.symlink(link_source, link_path)
           end
         end
 

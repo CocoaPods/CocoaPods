@@ -121,23 +121,6 @@ module Pod
           target.build_phases.first.should.equal? phase
         end
 
-        it 'links Pods directory if the path of user project is a symlink' do
-          project_symlink_dir = config.installation_root + 'tmp_symlink_project'
-          require 'fileutils'
-          FileUtils.rm_f(project_symlink_dir)
-          File.symlink(@project.path.dirname, project_symlink_dir)
-          @project = Xcodeproj::Project.open(project_symlink_dir + @project.path.basename)
-          @pod_bundle.stubs(:user_project).returns(@project)
-          @pod_bundle.send(:check_user_project_is_symlink)
-          @pod_bundle.user_project_is_symlink.should == true
-          @target_integrator.integrate!
-          pods_symlink = project_symlink_dir + 'Pods'
-          pods_symlink.exist?.should == true
-          pods_symlink.symlink?.should == true
-          File.readlink(pods_symlink.to_s).should.equal '../Pods'
-          FileUtils.rm_f(project_symlink_dir)
-        end
-
         it 'does not perform the integration if there are no targets to integrate' do
           Installer::UserProjectIntegrator::TargetIntegrator::XCConfigIntegrator.
             integrate(@pod_bundle, @target_integrator.send(:native_targets))

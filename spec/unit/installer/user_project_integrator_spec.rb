@@ -2,6 +2,45 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe UserProjectIntegrator = Installer::UserProjectIntegrator do
+    describe 'Symbol links' do
+      before do
+        @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+        @project_symlink_dir = config.installation_root + 'tmp_symlink_project'
+        require 'fileutils'
+        FileUtils.rm_f(@project_symlink_dir)
+        File.symlink(@sample_project_path.dirname, @project_symlink_dir)
+        sample_project_path = @project_symlink_dir + @sample_project_path.basename
+
+        @podfile = Podfile.new do
+          platform :ios
+          project sample_project_path
+          target 'SampleProject' do
+            pod 'JSONKit'
+            target :empty do
+            end
+          end
+        end
+        config.sandbox.project = Project.new(config.sandbox.project_path)
+        config.sandbox.project.save
+        user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
+        @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, @podfile.target_definitions['SampleProject'], sample_project_path.dirname, Xcodeproj::Project.open(sample_project_path), ['A346496C14F9BE9A0080D870'], {})
+        @empty_library = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, @podfile.target_definitions[:empty], sample_project_path.dirname, @target.user_project, ['C0C495321B9E5C47004F9854'], {})
+        @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target, @empty_library])
+        @target.send(:check_user_project_is_symlink)
+      end
+
+      it 'links Pods directory if the path of user project is a symlink' do
+        @target.user_project_is_symlink.should == true
+
+        @integrator.send(:add_sandbox_symlink)
+        pods_symlink = @project_symlink_dir + 'Pods'
+        pods_symlink.exist?.should == true
+        pods_symlink.symlink?.should == true
+        File.readlink(pods_symlink.to_s).should.equal '../Pods'
+        FileUtils.rm_f(@project_symlink_dir)
+      end
+    end
+
     describe 'In general' do
       before do
         @sample_project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
