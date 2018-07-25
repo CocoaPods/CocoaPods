@@ -49,6 +49,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Whirlwind](https://github.com/Whirlwind)
   [#7886](https://github.com/CocoaPods/CocoaPods/pull/7886)
   [#6194](https://github.com/CocoaPods/CocoaPods/issues/6194)
+* Add a `--deployment` flag to `pod install` that errors if there are any
+  changes to the Podfile or Lockfile.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ##### Bug Fixes
 
@@ -147,6 +150,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `CP_HOME_DIR` as the base for all default directories  
   [mcfedr](https://github.com/mcfedr)
   [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
+
+* Fail gracefully when the analyzer has dependencies to fetch, but has been
+  told not to fetch them.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ## 1.5.3 (2018-05-25)
 
