@@ -37,6 +37,24 @@ module Pod
         targets.count.should == 1
         targets.first.class.should == Xcodeproj::Project::PBXNativeTarget
       end
+
+      it 'returns whether it has frameworks to embed' do
+        @target.stubs(:framework_paths_by_config).returns(
+          'DEBUG' => [{  :name => 'BananaLib.framework',
+                         :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
+                         :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' }],
+        )
+        @target.includes_frameworks?.should.be.true
+        @target.stubs(:framework_paths_by_config).returns('DEBUG' => [], 'RELEASE' => [])
+        @target.includes_frameworks?.should.be.false
+      end
+
+      it 'returns whether it has resources' do
+        @target.stubs(:resource_paths_by_config).returns('DEBUG' => %w(path/to/image.png banana/lib.png))
+        @target.includes_resources?.should.be.true
+        @target.stubs(:resource_paths_by_config).returns('DEBUG' => [], 'RELEASE' => [])
+        @target.includes_resources?.should.be.false
+      end
     end
 
     describe 'Support files' do

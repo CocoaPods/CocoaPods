@@ -159,6 +159,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   told not to fetch them.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Don't generate framework or resource scripts if they will not be used  
+  [Eric Amorde](https://github.com/amorde)
+
 ## 1.5.3 (2018-05-25)
 
 ##### Enhancements

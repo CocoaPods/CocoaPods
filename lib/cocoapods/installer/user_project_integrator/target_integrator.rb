@@ -321,20 +321,24 @@ module Pod
         # @return [void]
         #
         def add_copy_resources_script_phase
+          unless target.includes_resources?
+            native_targets.each do |native_target|
+              TargetIntegrator.remove_copy_resources_script_phase_from_target(native_target)
+            end
+            return
+          end
+
+          script_path = target.copy_resources_script_relative_path
+          resource_paths_by_config = target.resource_paths_by_config
+          resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
+          input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
+          output_paths = TargetIntegrator.resource_output_paths(resource_paths_flattened)
+          TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+
           native_targets.each do |native_target|
             # Static library targets cannot include resources. Skip this phase from being added instead.
             next if native_target.symbol_type == :static_library
-            script_path = target.copy_resources_script_relative_path
-            resource_paths_by_config = target.resource_paths_by_config
-            if resource_paths_by_config.values.all?(&:empty?)
-              TargetIntegrator.remove_copy_resources_script_phase_from_target(native_target)
-            else
-              resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
-              input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
-              output_paths = TargetIntegrator.resource_output_paths(resource_paths_flattened)
-              TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-              TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
-            end
+            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
 
@@ -358,17 +362,21 @@ module Pod
         # @return [void]
         #
         def add_embed_frameworks_script_phase
-          native_targets_to_embed_in.each do |native_target|
-            script_path = target.embed_frameworks_script_relative_path
-            framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
-            if framework_paths_by_config.all?(&:empty?)
+          unless target.includes_frameworks?
+            native_targets_to_embed_in.each do |native_target|
               TargetIntegrator.remove_embed_frameworks_script_phase_from_target(native_target)
-            else
-              input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
-              output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
-              TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-              TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
             end
+            return
+          end
+
+          script_path = target.embed_frameworks_script_relative_path
+          framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
+          input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
+          output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
+          TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+
+          native_targets_to_embed_in.each do |native_target|
+            TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end
         end
 

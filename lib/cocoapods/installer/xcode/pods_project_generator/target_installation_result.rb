@@ -62,7 +62,7 @@ module Pod
             test_native_target_from_spec(spec)
           end
 
-          # @return [Hash{Array => Specification}] a hash where the keys are the test native targets and the value
+          # @return [Hash{PBXNativeTarget => Specification}] a hash where the keys are the test native targets and the value
           #         an array of all the test specs associated with this native target.
           #
           def test_specs_by_native_target
