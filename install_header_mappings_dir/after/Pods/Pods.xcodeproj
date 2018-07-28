@@ -60,7 +60,6 @@ File References:
     - Pods-OtherSampleApp-dummy.m
     - Pods-OtherSampleApp-frameworks.sh
     - Pods-OtherSampleApp-Info.plist
-    - Pods-OtherSampleApp-resources.sh
     - Pods-OtherSampleApp-umbrella.h
     - Pods-OtherSampleApp.debug.xcconfig
     - Pods-OtherSampleApp.release.xcconfig
@@ -68,8 +67,6 @@ File References:
     - Pods-SampleApp-acknowledgements.markdown
     - Pods-SampleApp-acknowledgements.plist
     - Pods-SampleApp-dummy.m
-    - Pods-SampleApp-frameworks.sh
-    - Pods-SampleApp-resources.sh
     - Pods-SampleApp.debug.xcconfig
     - Pods-SampleApp.release.xcconfig
 

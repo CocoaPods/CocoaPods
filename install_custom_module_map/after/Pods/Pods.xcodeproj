@@ -30,7 +30,6 @@ File References:
     - Pods-Example-dummy.m
     - Pods-Example-frameworks.sh
     - Pods-Example-Info.plist
-    - Pods-Example-resources.sh
     - Pods-Example-umbrella.h
     - Pods-Example.debug.xcconfig
     - Pods-Example.release.xcconfig

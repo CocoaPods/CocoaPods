@@ -40,7 +40,6 @@ File References:
     - Pods-SampleApp-dummy.m
     - Pods-SampleApp-frameworks.sh
     - Pods-SampleApp-Info.plist
-    - Pods-SampleApp-resources.sh
     - Pods-SampleApp-umbrella.h
     - Pods-SampleApp.debug.xcconfig
     - Pods-SampleApp.release.xcconfig

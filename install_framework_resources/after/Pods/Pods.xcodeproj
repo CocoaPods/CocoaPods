@@ -34,7 +34,6 @@ File References:
     - Pods-SampleApp-dummy.m
     - Pods-SampleApp-frameworks.sh
     - Pods-SampleApp-Info.plist
-    - Pods-SampleApp-resources.sh
     - Pods-SampleApp-umbrella.h
     - Pods-SampleApp.debug.xcconfig
     - Pods-SampleApp.release.xcconfig
@@ -43,9 +42,7 @@ File References:
     - Pods-SampleAppTests-acknowledgements.markdown
     - Pods-SampleAppTests-acknowledgements.plist
     - Pods-SampleAppTests-dummy.m
-    - Pods-SampleAppTests-frameworks.sh
     - Pods-SampleAppTests-Info.plist
-    - Pods-SampleAppTests-resources.sh
     - Pods-SampleAppTests-umbrella.h
     - Pods-SampleAppTests.debug.xcconfig
     - Pods-SampleAppTests.release.xcconfig

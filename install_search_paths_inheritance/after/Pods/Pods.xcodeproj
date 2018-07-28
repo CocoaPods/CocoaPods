@@ -121,7 +121,6 @@ File References:
     - Pods-App-dummy.m
     - Pods-App-frameworks.sh
     - Pods-App-Info.plist
-    - Pods-App-resources.sh
     - Pods-App-umbrella.h
     - Pods-App.debug.xcconfig
     - Pods-App.release.xcconfig
@@ -132,7 +131,6 @@ File References:
     - Pods-Test-dummy.m
     - Pods-Test-frameworks.sh
     - Pods-Test-Info.plist
-    - Pods-Test-resources.sh
     - Pods-Test-umbrella.h
     - Pods-Test.debug.xcconfig
     - Pods-Test.release.xcconfig

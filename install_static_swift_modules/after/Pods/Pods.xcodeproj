@@ -259,7 +259,6 @@ File References:
     - Pods-Abstract Target-iOS Pods-Dynamic-dummy.m
     - Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh
     - Pods-Abstract Target-iOS Pods-Dynamic-Info.plist
-    - Pods-Abstract Target-iOS Pods-Dynamic-resources.sh
     - Pods-Abstract Target-iOS Pods-Dynamic-umbrella.h
     - Pods-Abstract Target-iOS Pods-Dynamic.debug.xcconfig
     - Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig
@@ -268,8 +267,6 @@ File References:
     - Pods-Abstract Target-iOS Pods-Static-acknowledgements.markdown
     - Pods-Abstract Target-iOS Pods-Static-acknowledgements.plist
     - Pods-Abstract Target-iOS Pods-Static-dummy.m
-    - Pods-Abstract Target-iOS Pods-Static-frameworks.sh
-    - Pods-Abstract Target-iOS Pods-Static-resources.sh
     - Pods-Abstract Target-iOS Pods-Static-umbrella.h
     - Pods-Abstract Target-iOS Pods-Static.debug.xcconfig
     - Pods-Abstract Target-iOS Pods-Static.release.xcconfig
@@ -280,7 +277,6 @@ File References:
     - Pods-Abstract Target-macOS Pods-Dynamic-dummy.m
     - Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh
     - Pods-Abstract Target-macOS Pods-Dynamic-Info.plist
-    - Pods-Abstract Target-macOS Pods-Dynamic-resources.sh
     - Pods-Abstract Target-macOS Pods-Dynamic-umbrella.h
     - Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig
     - Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig
@@ -289,8 +285,6 @@ File References:
     - Pods-Abstract Target-macOS Pods-Static-acknowledgements.markdown
     - Pods-Abstract Target-macOS Pods-Static-acknowledgements.plist
     - Pods-Abstract Target-macOS Pods-Static-dummy.m
-    - Pods-Abstract Target-macOS Pods-Static-frameworks.sh
-    - Pods-Abstract Target-macOS Pods-Static-resources.sh
     - Pods-Abstract Target-macOS Pods-Static-umbrella.h
     - Pods-Abstract Target-macOS Pods-Static.debug.xcconfig
     - Pods-Abstract Target-macOS Pods-Static.release.xcconfig
