@@ -48,6 +48,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add a `--deployment` flag to `pod install` that errors if there are any
   changes to the Podfile or Lockfile.  
   [Samuel Giddins](https://github.com/segiddins)
+  
+* Add `--use-modular-headers` flag to `pod spec lint`, `pod lib lint`, and `pod repo push` commands  
+  [Eric Amorde](https://github.com/amorde)
+  [#7683](https://github.com/CocoaPods/CocoaPods/issues/7683)
 
 ##### Bug Fixes
 

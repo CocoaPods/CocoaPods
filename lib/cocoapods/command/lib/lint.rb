@@ -17,6 +17,7 @@ module Pod
             ['--no-clean', 'Lint leaves the build directory intact for inspection'],
             ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
             ['--use-libraries', 'Lint uses static libraries to install the spec'],
+            ['--use-modular-headers', 'Lint uses modular headers during installation'],
             ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
              '(defaults to https://github.com/CocoaPods/Specs.git). ' \
              'Multiple sources must be comma-delimited.'],
@@ -39,6 +40,7 @@ module Pod
           @subspecs        = argv.flag?('subspecs', true)
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = !argv.flag?('use-libraries')
+          @use_modular_headers = argv.flag?('use-modular-headers')
           @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
           @platforms       = argv.option('platforms', '').split(',')
           @private         = argv.flag?('private', false)
@@ -65,6 +67,7 @@ module Pod
             validator.no_subspecs    = !@subspecs || @only_subspec
             validator.only_subspec   = @only_subspec
             validator.use_frameworks = @use_frameworks
+            validator.use_modular_headers = @use_modular_headers
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
