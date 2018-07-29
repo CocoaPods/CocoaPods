@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Xinyu Zhao](https://github.com/X140Yu)
   [#8064](https://github.com/CocoaPods/CocoaPods/issues/8064)
 
+* Silence warnings in headers for Pods with `inhibit_warnings => true`  
+  [Guillaume Algis](https://github.com/guillaumealgis)
+  [#6401](https://github.com/CocoaPods/CocoaPods/pull/6401)
+
 ##### Bug Fixes
 
 * Provide an installation option to disable usage of input/output paths.  

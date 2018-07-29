@@ -564,6 +564,12 @@ module Pod
           paths
         end
 
+        # @return [String]
+        define_build_settings_method :framework_header_search_path, :memoized => true do
+          return unless target.requires_frameworks?
+          "#{target.build_product_path}/Headers"
+        end
+
         # @return [Array<String>]
         define_build_settings_method :vendored_framework_search_paths, :memoized => true do
           file_accessors.flat_map(&:vendored_frameworks).map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
@@ -688,6 +694,11 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :header_search_paths, :build_setting => true, :memoized => true, :sorted => true do
           target.header_search_paths(:include_dependent_targets_for_test_spec => test_spec)
+        end
+
+        # @return [Array<String>]
+        define_build_settings_method :public_header_search_paths, :memoized => true, :sorted => true do
+          target.header_search_paths(:include_dependent_targets_for_test_spec => test_xcconfig?, :include_private_headers => false)
         end
 
         #-------------------------------------------------------------------------#
@@ -907,6 +918,12 @@ module Pod
             paths.concat target.sandbox.public_headers.search_paths(target.platform)
           end
 
+          # Make frameworks headers discoverable with any syntax (quotes,
+          # brackets, @import, etc.)
+          paths.concat pod_targets.
+            select { |pt| pt.requires_frameworks? && pt.should_build? }.
+            map { |pt| pt.build_settings.framework_header_search_path }
+
           paths.concat target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).header_search_paths }
 
           paths
@@ -915,18 +932,24 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :other_cflags, :build_setting => true, :memoized => true do
           flags = super()
-          flags +
-            header_search_paths.flat_map { |p| ['-isystem', p] } +
-            framework_header_paths_for_iquote.flat_map { |p| ['-iquote', p] }
-        end
 
-        # @return [Array<String>]
-        define_build_settings_method :framework_header_paths_for_iquote, :memoized => true, :sorted => true, :uniqued => true do
-          paths = pod_targets.
-                    select { |pt| pt.should_build? && pt.requires_frameworks? }.
-                    map { |pt| "#{pt.build_product_path}/Headers" }
-          paths.concat target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).framework_header_paths_for_iquote }
-          paths
+          pod_targets_inhibiting_warnings = pod_targets.select(&:inhibit_warnings?)
+
+          silenced_headers = []
+          silenced_frameworks = []
+          pod_targets_inhibiting_warnings.each do |pt|
+            if pt.requires_frameworks? && pt.should_build?
+              silenced_headers.append pt.build_settings.framework_header_search_path
+            else
+              silenced_headers.concat pt.build_settings.public_header_search_paths
+            end
+            silenced_frameworks.concat pt.build_settings.framework_search_paths_to_import
+          end
+
+          flags += silenced_headers.uniq.flat_map { |p| ['-isystem', p] }
+          flags += silenced_frameworks.uniq.flat_map { |p| ['-iframework', p] }
+
+          flags
         end
 
         # @return [Array<String>]
