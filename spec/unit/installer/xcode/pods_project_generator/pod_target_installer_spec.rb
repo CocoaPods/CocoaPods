@@ -811,6 +811,15 @@ module Pod
               group.children.map(&:display_name).sort.should == ['BananaLib.xcconfig']
             end
 
+            it 'does not set architectures for targets that should not build' do
+              @pod_target.stubs(:should_build?).returns(false)
+              result = @installer.install!
+              target = result.native_target
+              target.build_configurations.each do |config|
+                config.build_settings['ARCHS'].should.be.nil
+              end
+            end
+
             #--------------------------------------------------------------------------------#
 
             describe 'concerning header_mappings_dirs' do
