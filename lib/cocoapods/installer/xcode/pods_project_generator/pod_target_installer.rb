@@ -728,8 +728,10 @@ module Pod
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)
             end
-            native_target.build_configurations.each do |configuration|
-              configuration.build_settings['ARCHS'] = target.archs
+            unless target.archs.empty?
+              native_target.build_configurations.each do |configuration|
+                configuration.build_settings['ARCHS'] = target.archs
+              end
             end
             native_target
           end
