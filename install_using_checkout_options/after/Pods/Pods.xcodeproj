@@ -82,26 +82,6 @@ File References:
 Targets:
 - AFNetworking:
     Build Phases:
-    - Sources:
-      - AFHTTPRequestOperation.m
-      - AFHTTPRequestOperationManager.m
-      - AFHTTPSessionManager.m
-      - AFNetworkActivityIndicatorManager.m
-      - AFNetworking-dummy.m
-      - AFNetworkReachabilityManager.m
-      - AFSecurityPolicy.m
-      - AFURLConnectionOperation.m
-      - AFURLRequestSerialization.m
-      - AFURLResponseSerialization.m
-      - AFURLSessionManager.m
-      - UIActivityIndicatorView+AFNetworking.m
-      - UIAlertView+AFNetworking.m
-      - UIButton+AFNetworking.m
-      - UIImageView+AFNetworking.m
-      - UIProgressView+AFNetworking.m
-      - UIRefreshControl+AFNetworking.m
-      - UIWebView+AFNetworking.m
-    - Frameworks: []
     - Headers:
       - AFHTTPRequestOperation.h:
           ATTRIBUTES:
@@ -160,6 +140,26 @@ Targets:
       - UIWebView+AFNetworking.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - AFHTTPRequestOperation.m
+      - AFHTTPRequestOperationManager.m
+      - AFHTTPSessionManager.m
+      - AFNetworkActivityIndicatorManager.m
+      - AFNetworking-dummy.m
+      - AFNetworkReachabilityManager.m
+      - AFSecurityPolicy.m
+      - AFURLConnectionOperation.m
+      - AFURLRequestSerialization.m
+      - AFURLResponseSerialization.m
+      - AFURLSessionManager.m
+      - UIActivityIndicatorView+AFNetworking.m
+      - UIAlertView+AFNetworking.m
+      - UIButton+AFNetworking.m
+      - UIImageView+AFNetworking.m
+      - UIProgressView+AFNetworking.m
+      - UIRefreshControl+AFNetworking.m
+      - UIWebView+AFNetworking.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -204,6 +204,7 @@ Targets:
         Base Configuration: AFNetworking.xcconfig
 - Pods-SampleApp:
     Build Phases:
+    - Headers: []
     - Sources:
       - Pods-SampleApp-dummy.m
     - Frameworks: []
@@ -247,15 +248,15 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - RKValueTransformers:
     Build Phases:
+    - Headers:
+      - RKValueTransformers.h:
+          ATTRIBUTES:
+          - Project
     - Sources:
       - RKValueTransformers-dummy.m
       - RKValueTransformers.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
     - Frameworks: []
-    - Headers:
-      - RKValueTransformers.h:
-          ATTRIBUTES:
-          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -300,15 +301,15 @@ Targets:
         Base Configuration: RKValueTransformers.xcconfig
 - SEGModules:
     Build Phases:
+    - Headers:
+      - SEGModule.h:
+          ATTRIBUTES:
+          - Project
     - Sources:
       - SEGModule.m:
           COMPILER_FLAGS: "-fno-objc-arc"
       - SEGModules-dummy.m
     - Frameworks: []
-    - Headers:
-      - SEGModule.h:
-          ATTRIBUTES:
-          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -409,7 +410,8 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -465,6 +467,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"

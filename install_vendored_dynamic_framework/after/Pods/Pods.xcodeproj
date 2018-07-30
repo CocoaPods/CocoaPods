@@ -49,14 +49,15 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
-    - Sources:
-      - Pods-SampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
     - Headers:
       - Pods-SampleApp-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - Pods-SampleApp-dummy.m
+    - Frameworks:
+      - Foundation.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -116,7 +117,8 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -137,6 +139,10 @@ Targets:
         Base Configuration: Realm.xcconfig
 - RealmSwift:
     Build Phases:
+    - Headers:
+      - RealmSwift-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
       - Aliases.swift
       - List.swift
@@ -152,10 +158,7 @@ Targets:
       - Util.swift
     - Frameworks:
       - Foundation.framework
-    - Headers:
-      - RealmSwift-umbrella.h:
-          ATTRIBUTES:
-          - Public
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -209,7 +212,8 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '3.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -272,7 +276,8 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '8.0'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -328,6 +333,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '8.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"

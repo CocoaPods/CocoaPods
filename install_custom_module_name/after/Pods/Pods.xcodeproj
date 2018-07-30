@@ -88,26 +88,6 @@ File References:
 Targets:
 - libPusher:
     Build Phases:
-    - Sources:
-      - libPusher-dummy.m
-      - NSDictionary+QueryString.m
-      - NSDictionary+StringValue.m
-      - NSString+Hashing.m
-      - PTBlockEventListener.m
-      - PTJSON.m
-      - PTPusher.m
-      - PTPusherAPI.m
-      - PTPusherChannel.m
-      - PTPusherChannelServerBasedAuthorization.m
-      - PTPusherConnection.m
-      - PTPusherEvent.m
-      - PTPusherEventDispatcher.m
-      - PTPusherMockConnection.m
-      - PTTargetActionEventListener.m
-      - PTURLRequestOperation.m
-    - Frameworks:
-      - Foundation.framework
-      - SocketRocket.framework
     - Headers:
       - libPusher-umbrella.h:
           ATTRIBUTES:
@@ -184,6 +164,27 @@ Targets:
       - Pusher.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - libPusher-dummy.m
+      - NSDictionary+QueryString.m
+      - NSDictionary+StringValue.m
+      - NSString+Hashing.m
+      - PTBlockEventListener.m
+      - PTJSON.m
+      - PTPusher.m
+      - PTPusherAPI.m
+      - PTPusherChannel.m
+      - PTPusherChannelServerBasedAuthorization.m
+      - PTPusherConnection.m
+      - PTPusherEvent.m
+      - PTPusherEventDispatcher.m
+      - PTPusherMockConnection.m
+      - PTTargetActionEventListener.m
+      - PTURLRequestOperation.m
+    - Frameworks:
+      - Foundation.framework
+      - SocketRocket.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -240,14 +241,15 @@ Targets:
         Base Configuration: libPusher.xcconfig
 - Pods-Example:
     Build Phases:
-    - Sources:
-      - Pods-Example-dummy.m
-    - Frameworks:
-      - Foundation.framework
     - Headers:
       - Pods-Example-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - Pods-Example-dummy.m
+    - Frameworks:
+      - Foundation.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -310,13 +312,6 @@ Targets:
         Base Configuration: Pods-Example.release.xcconfig
 - SocketRocket:
     Build Phases:
-    - Sources:
-      - SocketRocket-dummy.m
-      - SRWebSocket.m
-    - Frameworks:
-      - CFNetwork.framework
-      - Foundation.framework
-      - Security.framework
     - Headers:
       - SocketRocket-umbrella.h:
           ATTRIBUTES:
@@ -327,6 +322,14 @@ Targets:
       - SRWebSocket.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - SocketRocket-dummy.m
+      - SRWebSocket.m
+    - Frameworks:
+      - CFNetwork.framework
+      - Foundation.framework
+      - Security.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -437,7 +440,8 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '8.2'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -493,6 +497,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '8.2'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"

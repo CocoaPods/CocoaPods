@@ -29,6 +29,7 @@ File References:
 Targets:
 - Pods-iOS App:
     Build Phases:
+    - Headers: []
     - Sources:
       - Pods-iOS App-dummy.m
     - Frameworks: []
@@ -72,13 +73,6 @@ Targets:
         Base Configuration: Pods-iOS App.release.xcconfig
 - Test:
     Build Phases:
-    - Sources:
-      - AFRaptureXMLRequestOperation.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-      - Foo.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-      - Test-dummy.m
-    - Frameworks: []
     - Headers:
       - AFRaptureXMLRequestOperation.h:
           ATTRIBUTES:
@@ -86,6 +80,13 @@ Targets:
       - Foo.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - AFRaptureXMLRequestOperation.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - Foo.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - Test-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -184,7 +185,8 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -240,6 +242,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"

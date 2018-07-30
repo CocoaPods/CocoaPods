@@ -28,6 +28,7 @@ File References:
 Targets:
 - Pods-SampleApp:
     Build Phases:
+    - Headers: []
     - Sources:
       - Pods-SampleApp-dummy.m
     - Frameworks: []
@@ -109,15 +110,15 @@ Targets:
         Base Configuration: Pods-SampleApp.release.xcconfig
 - Reachability:
     Build Phases:
+    - Headers:
+      - Reachability.h:
+          ATTRIBUTES:
+          - Project
     - Sources:
       - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: "-fno-objc-arc"
     - Frameworks: []
-    - Headers:
-      - Reachability.h:
-          ATTRIBUTES:
-          - Project
     Build Configurations:
     - 'Custom Debug - missing some settings ':
         Build Settings:
@@ -260,6 +261,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"
@@ -313,6 +315,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"
@@ -368,7 +371,8 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -424,6 +428,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '6.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"
