@@ -44,8 +44,6 @@ File References:
     - Pods-SubSpecCircular-acknowledgements.markdown
     - Pods-SubSpecCircular-acknowledgements.plist
     - Pods-SubSpecCircular-dummy.m
-    - Pods-SubSpecCircular-frameworks.sh
-    - Pods-SubSpecCircular-resources.sh
     - Pods-SubSpecCircular.debug.xcconfig
     - Pods-SubSpecCircular.release.xcconfig
 
