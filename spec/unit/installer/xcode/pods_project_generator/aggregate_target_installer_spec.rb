@@ -41,6 +41,8 @@ module Pod
             end
 
             it 'adds file references for the support files of the target' do
+              @target.stubs(:includes_frameworks?).returns(true)
+              @target.stubs(:includes_resources?).returns(true)
               @installer.install!
               group = @project.support_files_group['Pods-SampleProject']
               group.children.map(&:display_name).sort.should == [
@@ -138,14 +140,23 @@ module Pod
               @installer.install!
             end
 
-            it 'creates a create copy resources script' do
+            it 'creates a create copy resources script if resources exist' do
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
               script = support_files_dir + 'Pods-SampleProject-resources.sh'
               script.read.should.include?('logo-sidebar.png')
             end
 
+            it 'does not a create copy resources script if there are no resources' do
+              @target.stubs(:includes_resources?).returns(false)
+              @installer.install!
+              support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+              script = support_files_dir + 'Pods-SampleProject-resources.sh'
+              script.exist?.should.be.false
+            end
+
             it 'does not add framework resources to copy resources script' do
+              @target.stubs(:includes_resources?).returns(true)
               @pod_target.stubs(:requires_frameworks? => true)
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
@@ -201,6 +212,7 @@ module Pod
               @pod_target.stubs(:should_build? => false)
               @pod_target.stubs(:requires_frameworks? => true)
               @target.stubs(:requires_frameworks? => true)
+              @target.stubs(:includes_frameworks? => true)
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
               script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
@@ -211,6 +223,7 @@ module Pod
               @pod_target.stubs(:static_framework? => true)
               @pod_target.stubs(:requires_frameworks? => true)
               @target.stubs(:requires_frameworks? => true)
+              @target.stubs(:includes_frameworks? => true)
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
               script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
@@ -255,6 +268,16 @@ module Pod
               File.exist?(script).should == false
             end
 
+            it 'does not create an embed frameworks script, if the target does not have frameworks to embed' do
+              @pod_target.stubs(:requires_frameworks? => true)
+              @target.stubs(:requires_frameworks? => true)
+              @target.stubs(:includes_frameworks? => false)
+              @installer.install!
+              support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
+              script = support_files_dir + 'Pods-SampleProject-frameworks.sh'
+              File.exist?(script).should == false
+            end
+
             it 'installs umbrella headers for swift static libraries' do
               @pod_target.stubs(:uses_swift? => true)
               @target.stubs(:uses_swift? => true)
@@ -276,6 +299,8 @@ module Pod
             it 'does not create xcconfigs for non existent user build configurations' do
               target = AggregateTarget.new(config.sandbox, false, { 'Debug' => :debug }, [], @platform,
                                            @target_definition, config.sandbox.root.dirname, nil, nil, {})
+              target.stubs(:includes_resources?).returns(true)
+              target.stubs(:includes_frameworks?).returns(true)
               @installer = AggregateTargetInstaller.new(config.sandbox, @project, target)
               @installer.install!
               group = @project.support_files_group['Pods-SampleProject']

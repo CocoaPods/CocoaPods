@@ -191,6 +191,19 @@ module Pod
       pod_targets.any?(&:uses_swift?)
     end
 
+    # @return [Boolean] Whether the target contains any resources
+    #
+    def includes_resources?
+      !resource_paths_by_config.values.all?(&:empty?)
+    end
+
+    # @return [Boolean] Whether the target contains framework to be embedded into
+    #         the user target
+    #
+    def includes_frameworks?
+      !framework_paths_by_config.values.all?(&:empty?)
+    end
+
     # @return [Hash{String => Array<Hash{Symbol => [String]}>}] The vendored dynamic artifacts and framework target
     #         input and output paths grouped by config
     #
