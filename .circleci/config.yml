@@ -3,17 +3,19 @@ jobs:
   build:
     macos:
       xcode: "9.2.0"
+    shell: /bin/bash --login -eo pipefail
     steps:
       - checkout
 
+      - run:
+          name: Set Ruby Version
+          command:  echo "2.4" > ~/.ruby-version
       - restore_cache:
           keys:
             - v1-gems-{{ checksum "Gemfile.lock" }}
       - run:
           name: Setup Dependencies
           command: |
-            set -eux
-
             function bundle_env () {
               bundle env
             }
