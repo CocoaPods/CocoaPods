@@ -1,0 +1,16 @@
+PODS:
+  - TestLib (0.1.0)
+  - TestLib/UnitTests1 (0.1.0)
+  - TestLib/UnitTests2 (0.1.0)
+
+DEPENDENCIES:
+  - TestLib (from `TestLib`)
+  - TestLib/UnitTests1 (from `TestLib`)
+  - TestLib/UnitTests2 (from `TestLib`)
+
+EXTERNAL SOURCES:
+  TestLib:
+    :path: TestLib
+
+SPEC CHECKSUMS:
+  TestLib: eaaea9d3d9d13606c8b6dcce246c5050950c19ae

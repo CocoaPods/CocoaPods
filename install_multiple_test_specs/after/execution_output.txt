@@ -1,0 +1,73 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-InstallMultipleTestSpecs`: (``)
+
+Finding Podfile changes
+  - TestLib
+
+Fetching external sources
+-> Fetching podspec for `TestLib` from `TestLib`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A TestLib
+
+Downloading dependencies
+
+-> Installing TestLib (0.1.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Adding source files to Pods project
+  - Adding frameworks to Pods project
+  - Adding libraries to Pods project
+  - Adding resources to Pods project
+  - Adding development pod helper files to Pods project
+  - Linking headers
+  - Installing targets
+    - Installing target `TestLib` iOS 9.0
+      - Generating Info.plist file at `Pods/Target Support Files/TestLib/TestLib-Unit-UnitTests1-Info.plist`
+      - Generating Info.plist file at `Pods/Target Support Files/TestLib/TestLib-Unit-UnitTests2-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/TestLib/TestLib.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/TestLib/TestLib-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/TestLib/TestLib-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/TestLib/TestLib-dummy.m`
+    - Installing target `Pods-InstallMultipleTestSpecs` iOS 11.4
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-InstallMultipleTestSpecs/Pods-InstallMultipleTestSpecs-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-InstallMultipleTestSpecs/Pods-InstallMultipleTestSpecs.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-InstallMultipleTestSpecs/Pods-InstallMultipleTestSpecs-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-InstallMultipleTestSpecs/Pods-InstallMultipleTestSpecs-dummy.m`
+  - Integrating targets
+
+Integrating target `TestLib`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy Pods Resources' to project.
+  - Installing app hosts
+    - Generating Info.plist file at `Pods/AppHost-iOS-Unit-Tests/AppHost-iOS-Unit-Tests-Info.plist`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+    - Generating deterministic UUIDs
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `InstallMultipleTestSpecs.xcworkspace` for this project from now on.
+
+Integrating target `Pods-InstallMultipleTestSpecs` (`InstallMultipleTestSpecs.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post install hooks
+    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+
+-> Pod installation complete! There are 3 dependencies from the Podfile and 1 total pod installed.
+
+[!] Automatically assigning platform `ios` with version `11.4` on target `InstallMultipleTestSpecs` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
