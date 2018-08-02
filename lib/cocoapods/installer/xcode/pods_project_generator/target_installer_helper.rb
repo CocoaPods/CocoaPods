@@ -45,11 +45,15 @@ module Pod
           # @param  [Symbol] bundle_package_type
           #         the CFBundlePackageType of the target this Info.plist file is for.
           #
+          #  @param [Hash] additional_entries
+          #         any additional entries to include in this Info.plist file.
+          #
           # @return [void]
           #
-          def create_info_plist_file_with_sandbox(sandbox, path, native_target, version, platform, bundle_package_type = :fmwk)
+          def create_info_plist_file_with_sandbox(sandbox, path, native_target, version, platform,
+                                                  bundle_package_type = :fmwk, additional_entries = {})
             UI.message "- Generating Info.plist file at #{UI.path(path)}" do
-              generator = Generator::InfoPlistFile.new(version, platform, bundle_package_type)
+              generator = Generator::InfoPlistFile.new(version, platform, bundle_package_type, additional_entries)
               update_changed_file(generator, path)
 
               relative_path_string = path.relative_path_from(sandbox.root).to_s

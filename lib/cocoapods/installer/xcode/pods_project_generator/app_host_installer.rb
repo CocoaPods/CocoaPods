@@ -53,12 +53,30 @@ module Pod
               configuration.build_settings['CURRENT_PROJECT_VERSION'] = '1'
             end
             Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
-            create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform, :appl)
+            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, name) if platform == :ios
+            additional_entries = platform == :ios ? ADDITIONAL_IOS_INFO_PLIST_ENTRIES : {}
+            create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
+                                                :appl, additional_entries)
             project[name].new_file(app_host_info_plist_path)
             app_host_target
           end
 
           private
+
+          ADDITIONAL_IOS_INFO_PLIST_ENTRIES = {
+            'UILaunchStoryboardName' => 'LaunchScreen',
+            'UISupportedInterfaceOrientations' => %w(
+              UIInterfaceOrientationPortrait
+              UIInterfaceOrientationLandscapeLeft
+              UIInterfaceOrientationLandscapeRight
+            ),
+            'UISupportedInterfaceOrientations~ipad' => %w(
+              UIInterfaceOrientationPortrait
+              UIInterfaceOrientationPortraitUpsideDown
+              UIInterfaceOrientationLandscapeLeft
+              UIInterfaceOrientationLandscapeRight
+            ),
+          }.freeze
 
           # @return [Pathname] The absolute path of the Info.plist to use for an app host.
           #

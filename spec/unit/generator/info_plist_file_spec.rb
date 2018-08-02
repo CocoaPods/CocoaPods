@@ -31,42 +31,61 @@ module Pod
         'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
         'NSPrincipalClass' => '',
       }
+    end
 
-      it 'sets the package type' do
-        generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'), :appl)
-        file = temporary_directory + 'Info.plist'
-        generator.save_as(file)
-        Xcodeproj::Plist.read_from_path(file).should == {
-          'CFBundleDevelopmentRegion' => 'en',
-          'CFBundleExecutable' => '${EXECUTABLE_NAME}',
-          'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
-          'CFBundleInfoDictionaryVersion' => '6.0',
-          'CFBundleName' => '${PRODUCT_NAME}',
-          'CFBundlePackageType' => 'APPL',
-          'CFBundleShortVersionString' => '1.0.0',
-          'CFBundleSignature' => '????',
-          'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
-          'NSPrincipalClass' => '',
-        }
-      end
+    it 'sets the package type' do
+      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'), :appl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file).should == {
+        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleExecutable' => '${EXECUTABLE_NAME}',
+        'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
+        'CFBundleInfoDictionaryVersion' => '6.0',
+        'CFBundleName' => '${PRODUCT_NAME}',
+        'CFBundlePackageType' => 'APPL',
+        'CFBundleShortVersionString' => '1.0.0',
+        'CFBundleSignature' => '????',
+        'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
+        'NSPrincipalClass' => '',
+      }
+    end
 
-      it 'adds NSPrincipalClass for OSX platform' do
-        generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:osx, '10.8'), :appl)
-        file = temporary_directory + 'Info.plist'
-        generator.save_as(file)
-        Xcodeproj::Plist.read_from_path(file).should == {
-          'CFBundleDevelopmentRegion' => 'en',
-          'CFBundleExecutable' => '${EXECUTABLE_NAME}',
-          'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
-          'CFBundleInfoDictionaryVersion' => '6.0',
-          'CFBundleName' => '${PRODUCT_NAME}',
-          'CFBundlePackageType' => 'APPL',
-          'CFBundleShortVersionString' => '1.0.0',
-          'CFBundleSignature' => '????',
-          'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
-          'NSPrincipalClass' => 'NSApplication',
-        }
-      end
+    it 'adds NSPrincipalClass for OSX platform' do
+      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:osx, '10.8'), :appl)
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file).should == {
+        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleExecutable' => '${EXECUTABLE_NAME}',
+        'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
+        'CFBundleInfoDictionaryVersion' => '6.0',
+        'CFBundleName' => '${PRODUCT_NAME}',
+        'CFBundlePackageType' => 'APPL',
+        'CFBundleShortVersionString' => '1.0.0',
+        'CFBundleSignature' => '????',
+        'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
+        'NSPrincipalClass' => 'NSApplication',
+      }
+    end
+
+    it 'includes additional entries if requested' do
+      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '10.8'), :appl, 'UILaunchStoryboardName' => 'LaunchScreen')
+      file = temporary_directory + 'Info.plist'
+      generator.save_as(file)
+      Xcodeproj::Plist.read_from_path(file).should == {
+        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleExecutable' => '${EXECUTABLE_NAME}',
+        'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
+        'CFBundleInfoDictionaryVersion' => '6.0',
+        'CFBundleName' => '${PRODUCT_NAME}',
+        'CFBundlePackageType' => 'APPL',
+        'CFBundleShortVersionString' => '1.0.0',
+        'CFBundleSignature' => '????',
+        'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
+        'NSPrincipalClass' => '',
+        'UILaunchStoryboardName' => 'LaunchScreen',
+      }
     end
 
     it 'properly formats serialized arrays' do
