@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add default launch screen storyboard to test app hosts  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7971](https://github.com/CocoaPods/CocoaPods/pull/7971)
+
 * Always display downloader error message  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7625](https://github.com/CocoaPods/CocoaPods/issues/7625)
