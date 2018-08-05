@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add default launch screen storyboard to test app hosts  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7971](https://github.com/CocoaPods/CocoaPods/pull/7971)
+
 * Always display downloader error message  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7625](https://github.com/CocoaPods/CocoaPods/issues/7625)
@@ -52,11 +56,20 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Whirlwind](https://github.com/Whirlwind)
   [#7886](https://github.com/CocoaPods/CocoaPods/pull/7886)
   [#6194](https://github.com/CocoaPods/CocoaPods/issues/6194)
+
 * Add a `--deployment` flag to `pod install` that errors if there are any
   changes to the Podfile or Lockfile.  
   [Samuel Giddins](https://github.com/segiddins)
+  
+* Add `--use-modular-headers` flag to `pod spec lint`, `pod lib lint`, and `pod repo push` commands  
+  [Eric Amorde](https://github.com/amorde)
+  [#7683](https://github.com/CocoaPods/CocoaPods/issues/7683)
 
 ##### Bug Fixes
+
+* Set the `SWIFT_VERSION` on resource bundle targets that contain compiled sources and use Swift  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7950](https://github.com/CocoaPods/CocoaPods/issues/7950)
 
 * Do not ignore `--no-overwrite` parameter if a commit message is specified  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -153,10 +166,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `CP_HOME_DIR` as the base for all default directories  
   [mcfedr](https://github.com/mcfedr)
   [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
+  
+* Exclude 32-bit architectures from Pod targets when the deployment target is iOS 11.0 or higher  
+  [Eric Amorde](https://github.com/amorde)
+  [#7148](https://github.com/CocoaPods/CocoaPods/issues/7148)
 
 * Fail gracefully when the analyzer has dependencies to fetch, but has been
   told not to fetch them.  
   [Samuel Giddins](https://github.com/segiddins)
+
+* Don't generate framework or resource scripts if they will not be used  
+  [Eric Amorde](https://github.com/amorde)
 
 ## 1.5.3 (2018-05-25)
 

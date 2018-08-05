@@ -243,6 +243,10 @@ module Pod
     #
     attr_accessor :use_frameworks
 
+    # @return [Boolean] Whether modular headers should be used for the installation.
+    #
+    attr_accessor :use_modular_headers
+
     # @return [Boolean] Whether attributes that affect only public sources
     #         Bool be skipped.
     #
@@ -507,7 +511,7 @@ module Pod
     end
 
     def download_pod
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, consumer.spec.test_specs.map(&:name))
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, consumer.spec.test_specs.map(&:name), use_modular_headers)
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
@@ -847,7 +851,7 @@ module Pod
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [])
+    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [], use_modular_headers = false)
       name     = subspec_name || spec.name
       podspec  = file.cleanpath
       local    = local?
@@ -859,6 +863,7 @@ module Pod
         urls.each { |u| source(u) }
         target 'App' do
           use_frameworks!(use_frameworks)
+          use_modular_headers! if use_modular_headers
           platform(platform_name, deployment_target)
           if local
             pod name, :path => podspec.dirname.to_s, :inhibit_warnings => false

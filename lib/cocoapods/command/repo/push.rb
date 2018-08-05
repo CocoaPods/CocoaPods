@@ -24,6 +24,7 @@ module Pod
           [
             ['--allow-warnings', 'Allows pushing even if there are warnings'],
             ['--use-libraries', 'Linter uses static libraries to install the spec'],
+            ['--use-modular-headers', 'Lint uses modular headers during installation'],
             ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
              '(defaults to all available repos). ' \
              'Multiple sources must be comma-delimited.'],
@@ -48,6 +49,7 @@ module Pod
           @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
+          @use_modular_headers = argv.flag?('use-modular-headers', false)
           @private = argv.flag?('private', true)
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
@@ -131,6 +133,7 @@ module Pod
             validator = Validator.new(podspec, @source_urls)
             validator.allow_warnings = @allow_warnings
             validator.use_frameworks = @use_frameworks
+            validator.use_modular_headers = @use_modular_headers
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation

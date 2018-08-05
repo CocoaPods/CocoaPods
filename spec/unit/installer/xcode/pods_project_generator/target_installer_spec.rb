@@ -33,8 +33,20 @@ module Pod
             @target.stubs(:requires_frameworks?).returns(true)
             @target.stubs(:uses_swift?).returns(true)
             @installer.send(:add_target).resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').should == {
-              'Release' => '-Owholemodule',
+              'Release' => '-O',
               'Debug' => '-Onone',
+              'Test' => nil,
+              'AppStore' => nil,
+            }
+            @installer.send(:add_target).resolved_build_setting('SWIFT_COMPILATION_MODE').should == {
+              'Release' => 'wholemodule',
+              'Debug' => nil,
+              'Test' => nil,
+              'AppStore' => nil,
+            }
+            @installer.send(:add_target).resolved_build_setting('SWIFT_ACTIVE_COMPILATION_CONDITIONS').should == {
+              'Release' => nil,
+              'Debug' => 'DEBUG',
               'Test' => nil,
               'AppStore' => nil,
             }
