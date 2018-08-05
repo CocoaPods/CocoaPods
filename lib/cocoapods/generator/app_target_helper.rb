@@ -75,7 +75,7 @@ module Pod
       # Creates and links a default app host 'main.m' file.
       #
       # @param  [Project] project
-      #         the Xcodeproj to generate the target into.
+      #         the Xcodeproj to generate the main file into.
       #
       # @param  [PBXNativeTarget] target
       #         the native target to link the generated main file into.
@@ -90,8 +90,32 @@ module Pod
       #
       def self.add_app_host_main_file(project, target, platform, name = 'App')
         source_file = AppTargetHelper.create_app_host_main_file(project, platform, name)
-        source_file_ref = project.new_group(name, name).new_file(source_file)
+        group = project[name] || project.new_group(name, name)
+        source_file_ref = group.new_file(source_file)
         target.add_file_references([source_file_ref])
+      end
+
+      # Creates a default launchscreen storyboard.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the launchscreen storyboard into.
+      #
+      # @param  [PBXNativeTarget] target
+      #         the native target to link the generated launchscreen storyboard into.
+      #
+      # @param  [Symbol] platform
+      #         the platform of the target. Can be `:ios` or `:osx`, etc.
+      #
+      # @param  [String] name
+      #         The name to use for the target, defaults to 'App'.
+      #
+      # @return [PBXFileReference] the created file reference of the launchscreen storyboard.
+      #
+      def self.add_launchscreen_storyboard(project, target, name = 'App')
+        launch_storyboard_file = AppTargetHelper.create_launchscreen_storyboard_file(project, name)
+        group = project[name] || project.new_group(name, name)
+        launch_storyboard_ref = group.new_file(launch_storyboard_file)
+        target.resources_build_phase.add_file_reference(launch_storyboard_ref)
       end
 
       # Adds the xctest framework search paths into the given target.
@@ -172,6 +196,23 @@ module Pod
         source_file
       end
 
+      # Creates a default launchscreen storyboard file.
+      #
+      # @param  [Project] project
+      #         the Xcodeproj to generate the launchscreen storyboard into.
+      #
+      # @param  [String] name
+      #         The name of the folder to use and save the generated launchscreen storyboard file.
+      #
+      # @return [Pathname] the new launchscreen storyboard file that was generated.
+      #
+      def self.create_launchscreen_storyboard_file(project, name = 'App')
+        launch_storyboard_file = project.path.dirname.+("#{name}/LaunchScreen.storyboard")
+        launch_storyboard_file.parent.mkpath
+        File.write(launch_storyboard_file, LAUNCHSCREEN_STORYBOARD_CONTENTS)
+        launch_storyboard_file
+      end
+
       # Creates a default app host 'main.m' file.
       #
       # @param  [Project] project
@@ -193,7 +234,7 @@ module Pod
           when :ios, :tvos
             f << IOS_APP_HOST_MAIN_CONTENTS
           when :osx
-            f << MACOS_APP_APP_HOST_MAIN_CONTENTS
+            f << MACOS_APP_HOST_MAIN_CONTENTS
           end
         end
         source_file
@@ -232,13 +273,41 @@ int main(int argc, char *argv[])
 }
 EOS
 
-      MACOS_APP_APP_HOST_MAIN_CONTENTS = <<EOS.freeze
+      MACOS_APP_HOST_MAIN_CONTENTS = <<EOS.freeze
 #import <Cocoa/Cocoa.h>
 
 int main(int argc, const char * argv[]) {
     return NSApplicationMain(argc, argv);
 }
 EOS
+
+      LAUNCHSCREEN_STORYBOARD_CONTENTS = <<-XML.strip_heredoc.freeze
+              <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+              <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+                <dependencies>
+                  <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+                  <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+                  <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+                </dependencies>
+                <scenes>
+                  <!--View Controller-->
+                  <scene sceneID="EHf-IW-A2E">
+                    <objects>
+                      <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                        <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                          <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                          <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                          <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                          <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        </view>
+                      </viewController>
+                      <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    </objects>
+                    <point key="canvasLocation" x="53" y="375"/>
+                  </scene>
+                </scenes>
+              </document>
+      XML
     end
   end
 end

@@ -112,7 +112,7 @@ module Pod
       end
     end
 
-    # @return [String] the Swift version for the target. If the pod author has provided a swift version
+    # @return [String] the Swift version for the target. If the pod author has provided a Swift version
     #                  then that is the one returned, otherwise the Swift version is determined by the user
     #                  targets that include this pod target.
     #

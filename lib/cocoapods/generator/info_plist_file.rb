@@ -18,16 +18,22 @@ module Pod
       #
       attr_reader :bundle_package_type
 
+      # @return [Hash] any additional entries to include in this Info.plist
+      #
+      attr_reader :additional_entries
+
       # Initialize a new instance
       #
-      # @param  [Version] version @see version
-      # @param  [Platform] platform @see platform
-      # @param  [Symbol] bundle_package_type @see bundle_package_type
+      # @param  [Version] version @see #version
+      # @param  [Platform] platform @see #platform
+      # @param  [Symbol] bundle_package_type @see #bundle_package_type
+      # @param  [Hash] additional_entries @see #additional_entries
       #
-      def initialize(version, platform, bundle_package_type = :fmwk)
+      def initialize(version, platform, bundle_package_type = :fmwk, additional_entries = {})
         @version = version
         @platform = platform
         @bundle_package_type = bundle_package_type
+        @additional_entries = additional_entries
       end
 
       # Generates and saves the Info.plist to the given path.
@@ -108,6 +114,8 @@ module Pod
         info['CFBundleExecutable'] = '${EXECUTABLE_NAME}' if bundle_package_type != :bndl
         info['CFBundleVersion'] = '1' if bundle_package_type == :bndl
         info['NSPrincipalClass'] = 'NSApplication' if bundle_package_type == :appl && platform == :osx
+
+        info.merge!(additional_entries)
 
         info
       end

@@ -109,7 +109,20 @@ module Pod
 
           file = AppTargetHelper.create_app_host_main_file(project, :osx)
           file.basename.to_s.should == 'main.m'
-          file.read.should == AppTargetHelper::MACOS_APP_APP_HOST_MAIN_CONTENTS
+          file.read.should == AppTargetHelper::MACOS_APP_HOST_MAIN_CONTENTS
+        end
+      end
+
+      describe 'creating a launchscreen storyboard' do
+        it 'creates the correct launchscreen storyboard contents' do
+          pod_target = stub('PodTarget', :uses_swift? => false, :should_build? => true,
+                                         :product_module_name => 'ModuleName', :name => 'ModuleName',
+                                         :sandbox => @sandbox)
+          project = stub('Project', :path => Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{pod_target.name}"])) + 'App.xcodeproj')
+
+          file = AppTargetHelper.create_launchscreen_storyboard_file(project)
+          file.basename.to_s.should == 'LaunchScreen.storyboard'
+          file.read.should == AppTargetHelper::LAUNCHSCREEN_STORYBOARD_CONTENTS
         end
       end
     end
