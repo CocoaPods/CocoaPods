@@ -28,10 +28,25 @@ module Pod
       @project.files.find { |f| f.path == path }.should.be.nil
     end
 
+    it 'sets the Pods group\'s location path to ${PODS_ROOT}' do
+      XCConfigIntegrator.integrate(@pod_bundle, [@target])
+      @project['Pods'].path.should.equal @pod_bundle.relative_pods_root_path.to_s
+    end
+
+    it 'sets the Pods xcconfig\'s location relative path from Pods group' do
+      XCConfigIntegrator.integrate(@pod_bundle, [@target])
+      group = @project['Pods']
+      group.files.each do |ref|
+        if ref.display_name.end_with?('.xcconfig')
+          ref.path.should.start_with 'Target Support Files'
+        end
+      end
+    end
+
     it 'sets the Pods xcconfig as the base config for each build configuration' do
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
-        xcconfig_file = @project.files.find { |f| f.path == @pod_bundle.xcconfig_relative_path(config.name) }
+        xcconfig_file = @project.files.find { |f| f.full_path.to_s == @pod_bundle.xcconfig_relative_path(config.name) }
         config.base_configuration_reference.should == xcconfig_file
       end
     end
@@ -41,7 +56,7 @@ module Pod
       existing = @project.new_file(path)
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       config = @target.build_configuration_list['Release']
-      config.base_configuration_reference.should.equal existing
+      config.base_configuration_reference.full_path.should.equal existing.full_path
     end
 
     it 'logs a warning and does not set the Pods xcconfig as the base config if the user ' \
@@ -127,7 +142,7 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
         config.base_configuration_reference.should.not == old_config
-        config.base_configuration_reference.path.should == @pod_bundle.xcconfig_relative_path(config.name)
+        config.base_configuration_reference.full_path.to_s.should == @pod_bundle.xcconfig_relative_path(config.name)
       end
 
       @pod_bundle.stubs(:label).returns('Pods-Foo')
@@ -138,7 +153,7 @@ module Pod
       XCConfigIntegrator.integrate(@pod_bundle, [@target])
       @target.build_configurations.each do |config|
         config.base_configuration_reference.should.not == old_config
-        config.base_configuration_reference.path.should == @pod_bundle.xcconfig_relative_path(config.name)
+        config.base_configuration_reference.full_path.to_s.should == @pod_bundle.xcconfig_relative_path(config.name)
       end
 
       UI.warnings.should.be.empty

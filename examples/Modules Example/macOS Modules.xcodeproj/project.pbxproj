@@ -18,8 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1E949C071CEB4793A667756F /* Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig"; sourceTree = "<group>"; };
-		47E1D32B15E8199CE61CF31B /* Pods-Abstract Target-macOS Pods-Static.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Static.release.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static.release.xcconfig"; sourceTree = "<group>"; };
+		1E949C071CEB4793A667756F /* Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig"; path = "Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig"; sourceTree = "<group>"; };
+		47E1D32B15E8199CE61CF31B /* Pods-Abstract Target-macOS Pods-Static.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Static.release.xcconfig"; path = "Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static.release.xcconfig"; sourceTree = "<group>"; };
 		5773DFEBB1F7D6376E3C6617 /* libPods-Abstract Target-macOS Pods-Static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Abstract Target-macOS Pods-Static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2203E94F7BFB62CF9A4152 /* Pods_Abstract_Target_macOS_Pods_Dynamic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Abstract_Target_macOS_Pods_Dynamic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C00A217D2017E42500A11955 /* ModelThing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModelThing.h; sourceTree = "<group>"; };
@@ -29,8 +29,8 @@
 		C06248EA2016A708009EF3DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C06248F42016A708009EF3DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C06249062016AE3A009EF3DE /* Dynamic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynamic.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD9AE208D231588BF9A4C0D2 /* Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig"; sourceTree = "<group>"; };
-		CFDA82AEB5C8A1B1DD6949AC /* Pods-Abstract Target-macOS Pods-Static.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Static.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static.debug.xcconfig"; sourceTree = "<group>"; };
+		CD9AE208D231588BF9A4C0D2 /* Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig"; path = "Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig"; sourceTree = "<group>"; };
+		CFDA82AEB5C8A1B1DD6949AC /* Pods-Abstract Target-macOS Pods-Static.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Abstract Target-macOS Pods-Static.debug.xcconfig"; path = "Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +71,7 @@
 				47E1D32B15E8199CE61CF31B /* Pods-Abstract Target-macOS Pods-Static.release.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		C06248DC2016A708009EF3DE = {
