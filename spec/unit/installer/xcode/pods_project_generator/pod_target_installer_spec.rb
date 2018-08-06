@@ -801,6 +801,9 @@ module Pod
               @installer.install!
               @project.targets.map(&:name).should == ['BananaLib']
               @project.targets.first.class.should == Xcodeproj::Project::PBXAggregateTarget
+              @project.targets.first.build_configurations.each do |config|
+                config.build_settings['SDKROOT'].should == 'iphoneos'
+              end
             end
 
             it 'adds xcconfig file reference for the aggregate placeholder native target' do

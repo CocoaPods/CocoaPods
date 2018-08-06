@@ -723,8 +723,7 @@ module Pod
           # @return [PBXAggregateTarget] the native target that was added.
           #
           def add_placeholder_target
-            native_target = project.new_aggregate_target(target.label)
-            native_target.deployment_target = deployment_target
+            native_target = project.new_aggregate_target(target.label, [], target.platform.name, deployment_target)
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)
             end
