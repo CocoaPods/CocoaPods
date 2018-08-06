@@ -1345,6 +1345,7 @@ module Pod
             pod 'RestKit', '~> 0.23.0'
           end
         end
+        config.sandbox.prepare
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         e = should.raise(Informative) { analyzer.analyze }
 
