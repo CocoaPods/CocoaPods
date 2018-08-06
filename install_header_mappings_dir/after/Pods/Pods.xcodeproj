@@ -75,13 +75,6 @@ File References:
 Targets:
 - DepPod-framework:
     Build Phases:
-    - Sources:
-      - DepPod-framework-dummy.m
-      - DP.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Foundation.framework
-      - HeaderMappingsDirPod.framework
     - Headers:
       - DepPod-framework-umbrella.h:
           ATTRIBUTES:
@@ -89,6 +82,14 @@ Targets:
       - DP.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - DepPod-framework-dummy.m
+      - DP.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+    - Frameworks:
+      - Foundation.framework
+      - HeaderMappingsDirPod.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -147,11 +148,6 @@ Targets:
         Base Configuration: DepPod-framework.xcconfig
 - DepPod-library:
     Build Phases:
-    - Sources:
-      - DepPod-library-dummy.m
-      - DP.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks: []
     - Headers:
       - DepPod-library-umbrella.h:
           ATTRIBUTES:
@@ -159,6 +155,11 @@ Targets:
       - DP.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - DepPod-library-dummy.m
+      - DP.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -207,17 +208,18 @@ Targets:
         Base Configuration: DepPod-library.xcconfig
 - HeaderMappingsDirPod-framework:
     Build Phases:
+    - Headers:
+      - HeaderMappingsDirPod-framework-umbrella.h:
+          ATTRIBUTES:
+          - Public
+      - HMDP.h
     - Sources:
       - HeaderMappingsDirPod-framework-dummy.m
       - HMDP.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
     - Frameworks:
       - Foundation.framework
-    - Headers:
-      - HeaderMappingsDirPod-framework-umbrella.h:
-          ATTRIBUTES:
-          - Public
-      - HMDP.h
+    - Resources: []
     - Copy com/company/foo Public Headers:
       - HMDP.h
     Build Configurations:
@@ -278,11 +280,6 @@ Targets:
         Base Configuration: HeaderMappingsDirPod-framework.xcconfig
 - HeaderMappingsDirPod-library:
     Build Phases:
-    - Sources:
-      - HeaderMappingsDirPod-library-dummy.m
-      - HMDP.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks: []
     - Headers:
       - HeaderMappingsDirPod-library-umbrella.h:
           ATTRIBUTES:
@@ -290,6 +287,11 @@ Targets:
       - HMDP.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - HeaderMappingsDirPod-library-dummy.m
+      - HMDP.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -338,14 +340,15 @@ Targets:
         Base Configuration: HeaderMappingsDirPod-library.xcconfig
 - Pods-OtherSampleApp:
     Build Phases:
-    - Sources:
-      - Pods-OtherSampleApp-dummy.m
-    - Frameworks:
-      - Foundation.framework
     - Headers:
       - Pods-OtherSampleApp-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - Pods-OtherSampleApp-dummy.m
+    - Frameworks:
+      - Foundation.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -412,6 +415,7 @@ Targets:
         Base Configuration: Pods-OtherSampleApp.release.xcconfig
 - Pods-SampleApp:
     Build Phases:
+    - Headers: []
     - Sources:
       - Pods-SampleApp-dummy.m
     - Frameworks: []
@@ -511,7 +515,8 @@ Build Configurations:
       GCC_WARN_UNUSED_FUNCTION: 'YES'
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -567,6 +572,7 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '10.0'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"

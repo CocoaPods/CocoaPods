@@ -50,6 +50,7 @@ File References:
 Targets:
 - Pods-iOS App:
     Build Phases:
+    - Headers: []
     - Sources:
       - Pods-iOS App-dummy.m
     - Frameworks: []
@@ -95,14 +96,15 @@ Targets:
         Base Configuration: Pods-iOS App.release.xcconfig
 - Pods-OS X App:
     Build Phases:
-    - Sources:
-      - Pods-OS X App-dummy.m
-    - Frameworks:
-      - Cocoa.framework
     - Headers:
       - Pods-OS X App-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - Pods-OS X App-dummy.m
+    - Frameworks:
+      - Cocoa.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -170,15 +172,15 @@ Targets:
         Base Configuration: Pods-OS X App.release.xcconfig
 - PodTest-subspec_1:
     Build Phases:
+    - Headers:
+      - subspec_1.h:
+          ATTRIBUTES:
+          - Project
     - Sources:
       - PodTest-subspec_1-dummy.m
       - subspec_1.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
     - Frameworks: []
-    - Headers:
-      - subspec_1.h:
-          ATTRIBUTES:
-          - Project
     Build Configurations:
     - Debug:
         Build Settings:
@@ -225,12 +227,6 @@ Targets:
         Base Configuration: PodTest-subspec_1.xcconfig
 - PodTest-subspec_2:
     Build Phases:
-    - Sources:
-      - PodTest-subspec_2-dummy.m
-      - subspec_2.m:
-          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
-    - Frameworks:
-      - Cocoa.framework
     - Headers:
       - PodTest-subspec_2-umbrella.h:
           ATTRIBUTES:
@@ -238,6 +234,13 @@ Targets:
       - subspec_2.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - PodTest-subspec_2-dummy.m
+      - subspec_2.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+    - Frameworks:
+      - Cocoa.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -354,7 +357,8 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
       MACOSX_DEPLOYMENT_TARGET: '10.6'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -411,6 +415,7 @@ Build Configurations:
       IPHONEOS_DEPLOYMENT_TARGET: '4.3'
       MACOSX_DEPLOYMENT_TARGET: '10.6'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"

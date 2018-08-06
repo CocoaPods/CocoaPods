@@ -294,11 +294,6 @@ File References:
 Targets:
 - CustomModuleMapPod-framework-iOS:
     Build Phases:
-    - Sources:
-      - CMM.m
-      - CustomModuleMapPod-framework-iOS-dummy.m
-    - Frameworks:
-      - Foundation.framework
     - Headers:
       - CMM+Private.h:
           ATTRIBUTES:
@@ -309,6 +304,12 @@ Targets:
       - CMMFunctions.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - CMM.m
+      - CustomModuleMapPod-framework-iOS-dummy.m
+    - Frameworks:
+      - Foundation.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -373,6 +374,7 @@ Targets:
       - CustomModuleMapPod.framework
       - Foundation.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -411,11 +413,6 @@ Targets:
         Base Configuration: CustomModuleMapPod-framework-iOS.unit.xcconfig
 - CustomModuleMapPod-framework-macOS:
     Build Phases:
-    - Sources:
-      - CMM.m
-      - CustomModuleMapPod-framework-macOS-dummy.m
-    - Frameworks:
-      - Cocoa.framework
     - Headers:
       - CMM+Private.h:
           ATTRIBUTES:
@@ -426,6 +423,12 @@ Targets:
       - CMMFunctions.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - CMM.m
+      - CustomModuleMapPod-framework-macOS-dummy.m
+    - Frameworks:
+      - Cocoa.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -495,6 +498,7 @@ Targets:
       - Cocoa.framework
       - CustomModuleMapPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -532,10 +536,6 @@ Targets:
         Base Configuration: CustomModuleMapPod-framework-macOS.unit.xcconfig
 - CustomModuleMapPod-library-iOS:
     Build Phases:
-    - Sources:
-      - CMM.m
-      - CustomModuleMapPod-library-iOS-dummy.m
-    - Frameworks: []
     - Headers:
       - CMM+Private.h:
           ATTRIBUTES:
@@ -546,6 +546,10 @@ Targets:
       - CMMFunctions.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - CMM.m
+      - CustomModuleMapPod-library-iOS-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -596,6 +600,7 @@ Targets:
       - CustomModuleMapPodTests.m
     - Frameworks:
       - Foundation.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -640,10 +645,6 @@ Targets:
         Base Configuration: CustomModuleMapPod-library-iOS.unit.xcconfig
 - CustomModuleMapPod-library-macOS:
     Build Phases:
-    - Sources:
-      - CMM.m
-      - CustomModuleMapPod-library-macOS-dummy.m
-    - Frameworks: []
     - Headers:
       - CMM+Private.h:
           ATTRIBUTES:
@@ -654,6 +655,10 @@ Targets:
       - CMMFunctions.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - CMM.m
+      - CustomModuleMapPod-library-macOS-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -707,6 +712,7 @@ Targets:
       - CustomModuleMapPodTests.m
     - Frameworks:
       - Cocoa.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -750,6 +756,13 @@ Targets:
         Base Configuration: CustomModuleMapPod-library-macOS.unit.xcconfig
 - MixedPod-framework-iOS:
     Build Phases:
+    - Headers:
+      - bce.h:
+          ATTRIBUTES:
+          - Public
+      - MixedPod-framework-iOS-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
       - bce.m
       - foo.swift
@@ -758,13 +771,7 @@ Targets:
       - Foundation.framework
       - ObjCPod.framework
       - SwiftPod.framework
-    - Headers:
-      - bce.h:
-          ATTRIBUTES:
-          - Public
-      - MixedPod-framework-iOS-umbrella.h:
-          ATTRIBUTES:
-          - Public
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -816,7 +823,8 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -832,6 +840,7 @@ Targets:
       - Foundation.framework
       - MixedPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -869,12 +878,20 @@ Targets:
           PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: MixedPod-framework-iOS.unit.xcconfig
 - MixedPod-framework-macOS:
     Build Phases:
+    - Headers:
+      - bce.h:
+          ATTRIBUTES:
+          - Public
+      - MixedPod-framework-macOS-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
       - bce.m
       - foo.swift
@@ -883,13 +900,7 @@ Targets:
       - Cocoa.framework
       - ObjCPod.framework
       - SwiftPod.framework
-    - Headers:
-      - bce.h:
-          ATTRIBUTES:
-          - Public
-      - MixedPod-framework-macOS-umbrella.h:
-          ATTRIBUTES:
-          - Public
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -948,7 +959,8 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -962,6 +974,7 @@ Targets:
       - Cocoa.framework
       - MixedPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -999,16 +1012,12 @@ Targets:
           PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-framework-macOS.unit.xcconfig
 - MixedPod-library-iOS:
     Build Phases:
-    - Sources:
-      - bce.m
-      - foo.swift
-      - MixedPod-library-iOS-dummy.m
-    - Frameworks: []
     - Headers:
       - bce.h:
           ATTRIBUTES:
@@ -1016,6 +1025,11 @@ Targets:
       - MixedPod-library-iOS-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - bce.m
+      - foo.swift
+      - MixedPod-library-iOS-dummy.m
+    - Frameworks: []
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -1058,7 +1072,8 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -1070,6 +1085,7 @@ Targets:
       - MixedPodTests.swift
     - Frameworks:
       - Foundation.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -1113,17 +1129,13 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: MixedPod-library-iOS.unit.xcconfig
 - MixedPod-library-macOS:
     Build Phases:
-    - Sources:
-      - bce.m
-      - foo.swift
-      - MixedPod-library-macOS-dummy.m
-    - Frameworks: []
     - Headers:
       - bce.h:
           ATTRIBUTES:
@@ -1131,6 +1143,11 @@ Targets:
       - MixedPod-library-macOS-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - bce.m
+      - foo.swift
+      - MixedPod-library-macOS-dummy.m
+    - Frameworks: []
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -1178,7 +1195,8 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.xcconfig
 - MixedPod-library-macOS-Unit-Tests:
@@ -1188,6 +1206,7 @@ Targets:
       - MixedPodTests.swift
     - Frameworks:
       - Cocoa.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -1231,16 +1250,12 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.unit.xcconfig
 - ObjCPod-framework-iOS:
     Build Phases:
-    - Sources:
-      - abc.m
-      - ObjCPod-framework-iOS-dummy.m
-    - Frameworks:
-      - Foundation.framework
     - Headers:
       - abc.h:
           ATTRIBUTES:
@@ -1248,6 +1263,12 @@ Targets:
       - ObjCPod-framework-iOS-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - abc.m
+      - ObjCPod-framework-iOS-dummy.m
+    - Frameworks:
+      - Foundation.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1312,6 +1333,7 @@ Targets:
       - Foundation.framework
       - ObjCPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -1350,11 +1372,6 @@ Targets:
         Base Configuration: ObjCPod-framework-iOS.unit.xcconfig
 - ObjCPod-framework-macOS:
     Build Phases:
-    - Sources:
-      - abc.m
-      - ObjCPod-framework-macOS-dummy.m
-    - Frameworks:
-      - Cocoa.framework
     - Headers:
       - abc.h:
           ATTRIBUTES:
@@ -1362,6 +1379,12 @@ Targets:
       - ObjCPod-framework-macOS-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - abc.m
+      - ObjCPod-framework-macOS-dummy.m
+    - Frameworks:
+      - Cocoa.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1431,6 +1454,7 @@ Targets:
       - Cocoa.framework
       - ObjCPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -1468,10 +1492,6 @@ Targets:
         Base Configuration: ObjCPod-framework-macOS.unit.xcconfig
 - ObjCPod-library-iOS:
     Build Phases:
-    - Sources:
-      - abc.m
-      - ObjCPod-library-iOS-dummy.m
-    - Frameworks: []
     - Headers:
       - abc.h:
           ATTRIBUTES:
@@ -1479,6 +1499,10 @@ Targets:
       - ObjCPod-library-iOS-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - abc.m
+      - ObjCPod-library-iOS-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1529,6 +1553,7 @@ Targets:
       - ObjCPodTests.m
     - Frameworks:
       - Foundation.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -1573,10 +1598,6 @@ Targets:
         Base Configuration: ObjCPod-library-iOS.unit.xcconfig
 - ObjCPod-library-macOS:
     Build Phases:
-    - Sources:
-      - abc.m
-      - ObjCPod-library-macOS-dummy.m
-    - Frameworks: []
     - Headers:
       - abc.h:
           ATTRIBUTES:
@@ -1584,6 +1605,10 @@ Targets:
       - ObjCPod-library-macOS-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - abc.m
+      - ObjCPod-library-macOS-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1637,6 +1662,7 @@ Targets:
       - ObjCPodTests.m
     - Frameworks:
       - Cocoa.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -1680,14 +1706,15 @@ Targets:
         Base Configuration: ObjCPod-library-macOS.unit.xcconfig
 - Pods-Abstract Target-iOS Pods-Dynamic:
     Build Phases:
-    - Sources:
-      - Pods-Abstract Target-iOS Pods-Dynamic-dummy.m
-    - Frameworks:
-      - Foundation.framework
     - Headers:
       - Pods-Abstract Target-iOS Pods-Dynamic-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - Pods-Abstract Target-iOS Pods-Dynamic-dummy.m
+    - Frameworks:
+      - Foundation.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1751,7 +1778,8 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -1759,13 +1787,13 @@ Targets:
         Base Configuration: Pods-Abstract Target-iOS Pods-Dynamic.release.xcconfig
 - Pods-Abstract Target-iOS Pods-Static:
     Build Phases:
-    - Sources:
-      - Pods-Abstract Target-iOS Pods-Static-dummy.m
-    - Frameworks: []
     - Headers:
       - Pods-Abstract Target-iOS Pods-Static-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - Pods-Abstract Target-iOS Pods-Static-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1807,20 +1835,22 @@ Targets:
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: Pods-Abstract Target-iOS Pods-Static.release.xcconfig
 - Pods-Abstract Target-macOS Pods-Dynamic:
     Build Phases:
-    - Sources:
-      - Pods-Abstract Target-macOS Pods-Dynamic-dummy.m
-    - Frameworks:
-      - Cocoa.framework
     - Headers:
       - Pods-Abstract Target-macOS Pods-Dynamic-umbrella.h:
           ATTRIBUTES:
           - Public
+    - Sources:
+      - Pods-Abstract Target-macOS Pods-Dynamic-dummy.m
+    - Frameworks:
+      - Cocoa.framework
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1889,19 +1919,20 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig
 - Pods-Abstract Target-macOS Pods-Static:
     Build Phases:
-    - Sources:
-      - Pods-Abstract Target-macOS Pods-Static-dummy.m
-    - Frameworks: []
     - Headers:
       - Pods-Abstract Target-macOS Pods-Static-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - Pods-Abstract Target-macOS Pods-Static-dummy.m
+    - Frameworks: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1946,19 +1977,21 @@ Targets:
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
         Base Configuration: Pods-Abstract Target-macOS Pods-Static.release.xcconfig
 - SwiftPod-framework-iOS:
     Build Phases:
+    - Headers:
+      - SwiftPod-framework-iOS-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
       - SwiftPod-framework-iOS-dummy.m
       - xyz.swift
     - Frameworks:
       - Foundation.framework
-    - Headers:
-      - SwiftPod-framework-iOS-umbrella.h:
-          ATTRIBUTES:
-          - Public
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2010,7 +2043,8 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -2025,6 +2059,7 @@ Targets:
       - Foundation.framework
       - SwiftPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -2062,21 +2097,23 @@ Targets:
           PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: SwiftPod-framework-iOS.unit.xcconfig
 - SwiftPod-framework-macOS:
     Build Phases:
+    - Headers:
+      - SwiftPod-framework-macOS-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
       - SwiftPod-framework-macOS-dummy.m
       - xyz.swift
     - Frameworks:
       - Cocoa.framework
-    - Headers:
-      - SwiftPod-framework-macOS-umbrella.h:
-          ATTRIBUTES:
-          - Public
+    - Resources: []
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2135,7 +2172,8 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -2148,6 +2186,7 @@ Targets:
       - Cocoa.framework
       - SwiftPod.framework
       - XCTest.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -2185,19 +2224,20 @@ Targets:
           PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-framework-macOS.unit.xcconfig
 - SwiftPod-library-iOS:
     Build Phases:
-    - Sources:
-      - SwiftPod-library-iOS-dummy.m
-      - xyz.swift
-    - Frameworks: []
     - Headers:
       - SwiftPod-library-iOS-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - SwiftPod-library-iOS-dummy.m
+      - xyz.swift
+    - Frameworks: []
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -2240,7 +2280,8 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -2251,6 +2292,7 @@ Targets:
       - SwiftPodTests.swift
     - Frameworks:
       - Foundation.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -2294,20 +2336,21 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: SwiftPod-library-iOS.unit.xcconfig
 - SwiftPod-library-macOS:
     Build Phases:
-    - Sources:
-      - SwiftPod-library-macOS-dummy.m
-      - xyz.swift
-    - Frameworks: []
     - Headers:
       - SwiftPod-library-macOS-umbrella.h:
           ATTRIBUTES:
           - Project
+    - Sources:
+      - SwiftPod-library-macOS-dummy.m
+      - xyz.swift
+    - Frameworks: []
     - Copy generated compatibility header: []
     Build Configurations:
     - Debug:
@@ -2355,7 +2398,8 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.xcconfig
 - SwiftPod-library-macOS-Unit-Tests:
@@ -2364,6 +2408,7 @@ Targets:
       - SwiftPodTests.swift
     - Frameworks:
       - Cocoa.framework
+    - Resources: []
     - "[CP] Embed Pods Frameworks": []
     - "[CP] Copy Pods Resources": []
     Build Configurations:
@@ -2407,7 +2452,8 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Owholemodule"
+          SWIFT_COMPILATION_MODE: wholemodule
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.unit.xcconfig
 
@@ -2467,7 +2513,8 @@ Build Configurations:
       GCC_WARN_UNUSED_VARIABLE: 'YES'
       IPHONEOS_DEPLOYMENT_TARGET: '10.0'
       MACOSX_DEPLOYMENT_TARGET: '10.10'
-      MTL_ENABLE_DEBUG_INFO: 'YES'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
       ONLY_ACTIVE_ARCH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
@@ -2524,6 +2571,7 @@ Build Configurations:
       IPHONEOS_DEPLOYMENT_TARGET: '10.0'
       MACOSX_DEPLOYMENT_TARGET: '10.10'
       MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SYMROOT: "${SRCROOT}/../build"
