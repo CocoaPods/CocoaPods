@@ -170,8 +170,9 @@ module Pod
       @search ||= {}
       @search[dependency] ||= begin
         locked_requirement = requirement_for_locked_pod_named(dependency.name)
-        additional_requirements = Array(locked_requirement)
-        specifications_for_dependency(dependency, additional_requirements)
+        podfile_deps = @podfile_dependency_cache.podfile_dependencies.select { |d| d.root_name == dependency.root_name }.map(&:requirement)
+        podfile_deps << locked_requirement if locked_requirement
+        specifications_for_dependency(dependency, podfile_deps)
       end
       @search[dependency].dup
     end
@@ -238,7 +239,7 @@ module Pod
     end
 
     def valid_possibility_version_for_root_name?(requirement, activated, spec)
-      prerelease_requirement = requirement.prerelease? || requirement.external_source || !spec.version.prerelease?
+      return true if prerelease_requirement = requirement.prerelease? || requirement.external_source || !spec.version.prerelease?
 
       activated.each do |vertex|
         next unless vertex.payload
@@ -381,7 +382,7 @@ module Pod
     #
     def find_cached_set(dependency)
       name = dependency.root_name
-      unless cached_sets[name]
+      cached_sets[name] ||= begin
         if dependency.external_source
           spec = sandbox.specification(name)
           unless spec
@@ -392,12 +393,13 @@ module Pod
         else
           set = create_set_from_sources(dependency)
         end
-        cached_sets[name] = set
+
         unless set
           raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
         end
+
+        set
       end
-      cached_sets[name]
     end
 
     # @return [Requirement, Nil]
@@ -427,7 +429,7 @@ module Pod
     #
     def aggregate_for_dependency(dependency)
       if dependency && dependency.podspec_repo
-        return Config.instance.sources_manager.aggregate_for_dependency(dependency)
+        Config.instance.sources_manager.aggregate_for_dependency(dependency)
       else
         @aggregate ||= Source::Aggregate.new(sources)
       end
@@ -441,6 +443,8 @@ module Pod
     #
     def validate_platform(spec, target)
       return unless target_platform = target.platform
+      @validated_platforms ||= Set.new
+      return unless @validated_platforms.add?([spec.object_id, target_platform])
       unless spec.available_platforms.any? { |p| target_platform.to_sym == p.to_sym }
         raise Informative, "The platform of the target `#{target.name}` "     \
           "(#{target.platform}) is not compatible with `#{spec}`, which does "  \
@@ -569,17 +573,26 @@ module Pod
       end
     end
 
+    EdgeAndPlatform = Struct.new(:edge, :target_platform)
+    private_constant :EdgeAndPlatform
+
     # Whether the given `edge` should be followed to find dependencies for the
     # given `target_platform`.
     #
     # @return [Bool]
     #
     def edge_is_valid_for_target_platform?(edge, target_platform)
-      requirement_name = edge.requirement.name
+      @edge_validity ||= Hash.new do |hash, edge_and_platform|
+        e = edge_and_platform.edge
+        platform = edge_and_platform.target_platform
+        requirement_name = e.requirement.name
 
-      edge.origin.payload.all_dependencies(target_platform).any? do |dep|
-        dep.name == requirement_name
+        hash[edge_and_platform] = e.origin.payload.all_dependencies(platform).any? do |dep|
+          dep.name == requirement_name
+        end
       end
+
+      @edge_validity[EdgeAndPlatform.new(edge, target_platform)]
     end
   end
 end

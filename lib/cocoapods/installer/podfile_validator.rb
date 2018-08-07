@@ -117,6 +117,7 @@ module Pod
       # target, or be inherited by a target where `inheritance == complete`.
       #
       def validate_no_abstract_only_pods!
+        return
         all_dependencies = @podfile_dependency_cache.podfile_dependencies
         concrete_dependencies = @podfile_dependency_cache.target_definition_list.reject(&:abstract?).flat_map { |td| @podfile_dependency_cache.target_definition_dependencies(td) }
         abstract_only_dependencies = all_dependencies - concrete_dependencies

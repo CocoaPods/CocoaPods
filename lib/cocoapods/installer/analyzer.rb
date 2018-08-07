@@ -425,7 +425,7 @@ module Pod
           target_inspection = target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
           user_project = target_inspection.project
-          client_root = user_project.path.dirname.realpath
+          client_root = target_inspection.client_root
           user_target_uuids = target_inspection.project_target_uuids
           user_build_configurations = target_inspection.build_configurations
           archs = target_inspection.archs
@@ -757,11 +757,12 @@ module Pod
       #
       def fetch_external_sources(podfile_state)
         verify_no_pods_with_different_sources!
-        unless dependencies_to_fetch(podfile_state).empty?
-          UI.section 'Fetching external sources' do
-            dependencies_to_fetch(podfile_state).sort.each do |dependency|
-              fetch_external_source(dependency, !pods_to_fetch(podfile_state).include?(dependency.root_name))
-            end
+        deps = dependencies_to_fetch(podfile_state)
+        pods = pods_to_fetch(podfile_state)
+        return if deps.empty?
+        UI.section 'Fetching external sources' do
+          deps.sort.each do |dependency|
+            fetch_external_source(dependency, !pods.include?(dependency.root_name))
           end
         end
       end
@@ -777,12 +778,11 @@ module Pod
       end
 
       def fetch_external_source(dependency, use_lockfile_options)
-        checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name) if lockfile
-        source = if checkout_options && use_lockfile_options
+        source = if use_lockfile_options && lockfile && checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name)
                    ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file, installation_options.clean?)
                  else
                    ExternalSources.from_dependency(dependency, podfile.defined_in_file, installation_options.clean?)
-        end
+                 end
         source.fetch(sandbox)
       end
 

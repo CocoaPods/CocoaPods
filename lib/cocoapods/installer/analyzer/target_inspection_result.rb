@@ -30,6 +30,8 @@ module Pod
         #
         attr_reader :archs
 
+        attr_reader :client_root
+
         # Initialize a new instance
         #
         # @param [TargetDefinition] target_definition @see #target_definition
@@ -46,6 +48,7 @@ module Pod
           @build_configurations = build_configurations
           @platform = platform
           @archs = archs
+          @client_root = project.path.dirname.realpath
         end
       end
     end
