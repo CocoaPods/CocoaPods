@@ -546,7 +546,7 @@ module Pod
         end
 
         it 'returns test label based on test type' do
-          @test_pod_target.test_target_label(:unit).should == 'CoconutLib-Unit-Tests'
+          @test_pod_target.test_target_label(@test_pod_target.test_specs.first).should == 'CoconutLib-Unit-Tests'
         end
 
         it 'returns the correct product type for test type' do
@@ -558,29 +558,20 @@ module Pod
           exception.message.should.include 'Unknown test type `weird_test_type`.'
         end
 
-        it 'returns the correct test type for product type' do
-          @test_pod_target.test_type_for_product_type(:unit_test_bundle).should == :unit
-        end
-
-        it 'raises for unknown product type' do
-          exception = lambda { @test_pod_target.test_type_for_product_type(:weird_product_type) }.should.raise Informative
-          exception.message.should.include 'Unknown product type `weird_product_type`'
-        end
-
         it 'returns correct copy resources script path for test unit test type' do
-          @test_pod_target.copy_resources_script_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources.sh'
+          @test_pod_target.copy_resources_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources.sh'
         end
 
         it 'returns correct embed frameworks script path for test unit test type' do
-          @test_pod_target.embed_frameworks_script_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks.sh'
+          @test_pod_target.embed_frameworks_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks.sh'
         end
 
         it 'returns correct prefix header path for test unit test type' do
-          @test_pod_target.prefix_header_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-prefix.pch'
+          @test_pod_target.prefix_header_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-prefix.pch'
         end
 
         it 'returns correct path for info plist for unit test type' do
-          @test_pod_target.info_plist_path_for_test_type(:unit).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
+          @test_pod_target.info_plist_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
         end
 
         it 'returns the correct resource path for test resource bundles' do

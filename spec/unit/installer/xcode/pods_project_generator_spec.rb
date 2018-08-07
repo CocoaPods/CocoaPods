@@ -163,9 +163,11 @@ module Pod
               'Pods-SampleApp-iOS',
               'Pods-SampleApp-macOS',
               'WatermelonLib-iOS',
+              'WatermelonLib-iOS-Unit-SnapshotTests',
               'WatermelonLib-iOS-Unit-Tests',
               'WatermelonLib-iOS-WatermelonLibTestResources',
               'WatermelonLib-macOS',
+              'WatermelonLib-macOS-Unit-SnapshotTests',
               'WatermelonLib-macOS-Unit-Tests',
               'WatermelonLib-macOS-WatermelonLibTestResources',
               'monkey-iOS',
@@ -293,7 +295,7 @@ module Pod
             app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-iOS-Unit-Tests' }
             app_host_target.name.should.not.be.nil
             app_host_target.symbol_type.should == :application
-            test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-iOS-Unit-Tests' }
+            test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-iOS-Unit-SnapshotTests' }
             test_native_target.should.not.be.nil
             test_native_target.build_configurations.each do |bc|
               bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
@@ -308,7 +310,7 @@ module Pod
             app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-macOS-Unit-Tests' }
             app_host_target.name.should.not.be.nil
             app_host_target.symbol_type.should == :application
-            test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-macOS-Unit-Tests' }
+            test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-macOS-Unit-SnapshotTests' }
             test_native_target.should.not.be.nil
             test_native_target.build_configurations.each do |bc|
               bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-macOS-Unit-Tests.app/Contents/MacOS/AppHost-macOS-Unit-Tests'

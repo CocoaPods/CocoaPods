@@ -229,6 +229,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Installs a pod with multiple test specs' do
+      behaves_like cli_spec 'install_multiple_test_specs',
+                            'install --no-repo-update'
+    end
+
     description = 'Installs a Pod with an external source'
     if has_mercurial
       describe description do

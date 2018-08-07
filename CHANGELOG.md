@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Every test spec will have its own xctest bundle  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+  [Jenn Kaplan](https://github.com/jkap)
+  [#7908](https://github.com/CocoaPods/CocoaPods/pull/7908)
+
 * Add default launch screen storyboard to test app hosts  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7971](https://github.com/CocoaPods/CocoaPods/pull/7971)

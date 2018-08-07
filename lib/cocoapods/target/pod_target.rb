@@ -305,22 +305,6 @@ module Pod
       end
     end
 
-    # Returns the corresponding test type given the product type.
-    #
-    # @param  [Symbol] product_type
-    #         The product type to map to a test type.
-    #
-    # @return [Symbol] The native product type to use.
-    #
-    def test_type_for_product_type(product_type)
-      case product_type
-      when :unit_test_bundle
-        :unit
-      else
-        raise Informative, "Unknown product type `#{product_type}`."
-      end
-    end
-
     # @return [Specification] The root specification for the target.
     #
     def root_spec
@@ -347,6 +331,12 @@ module Pod
       end
     end
 
+    # @return [Pathname] the absolute path of the prefix header file.
+    #
+    def prefix_header_path
+      support_files_dir + "#{label}-prefix.pch"
+    end
+
     # @param  [String] bundle_name
     #         The name of the bundle product, which is given by the +spec+.
     #
@@ -356,55 +346,49 @@ module Pod
       "#{label}-#{bundle_name}"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type to use for producing the test label.
+    # @param  [Specification] test_spec
+    #         The test spec to use for producing the test label.
     #
     # @return [String] The derived name of the test target.
     #
-    def test_target_label(test_type)
-      "#{label}-#{test_type.capitalize}-Tests"
+    def test_target_label(test_spec)
+      "#{label}-#{test_spec.test_type.capitalize}-#{test_spec.name.split('/')[1..-1].join('-')}"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type this embed frameworks script path is for.
+    # @param  [Specification] test_spec
+    #         The test spec this embed frameworks script path is for.
     #
     # @return [Pathname] The absolute path of the copy resources script for the given test type.
     #
-    def copy_resources_script_path_for_test_type(test_type)
-      support_files_dir + "#{test_target_label(test_type)}-resources.sh"
+    def copy_resources_script_path_for_test_spec(test_spec)
+      support_files_dir + "#{test_target_label(test_spec)}-resources.sh"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type this embed frameworks script path is for.
+    # @param  [Specification] test_spec
+    #         The test spec this embed frameworks script path is for.
     #
     # @return [Pathname] The absolute path of the embed frameworks script for the given test type.
     #
-    def embed_frameworks_script_path_for_test_type(test_type)
-      support_files_dir + "#{test_target_label(test_type)}-frameworks.sh"
+    def embed_frameworks_script_path_for_test_spec(test_spec)
+      support_files_dir + "#{test_target_label(test_spec)}-frameworks.sh"
     end
 
-    # @param  [Symbol] test_type
-    #         The test type this Info.plist path is for.
+    # @param  [Specification] test_spec
+    #         The test spec this Info.plist path is for.
     #
     # @return [Pathname] The absolute path of the Info.plist for the given test type.
     #
-    def info_plist_path_for_test_type(test_type)
-      support_files_dir + "#{test_target_label(test_type)}-Info.plist"
+    def info_plist_path_for_test_spec(test_spec)
+      support_files_dir + "#{test_target_label(test_spec)}-Info.plist"
     end
 
-    # @return [Pathname] the absolute path of the prefix header file.
-    #
-    def prefix_header_path
-      support_files_dir + "#{label}-prefix.pch"
-    end
-
-    # @param  [Symbol] test_type
-    #         The test type prefix header path is for.
+    # @param  [Specification] test_spec
+    #         The test spec this prefix header path is for.
     #
     # @return [Pathname] the absolute path of the prefix header file for the given test type.
     #
-    def prefix_header_path_for_test_type(test_type)
-      support_files_dir + "#{test_target_label(test_type)}-prefix.pch"
+    def prefix_header_path_for_test_spec(test_spec)
+      support_files_dir + "#{test_target_label(test_spec)}-prefix.pch"
     end
 
     # @return [Array<String>] The names of the Pods on which this target
@@ -450,11 +434,13 @@ module Pod
     end
     private :_add_recursive_test_dependent_targets
 
+    # @param [Specification] test_spec
+    #
     # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
     #         This list includes the target itself as well as its recursive dependent and test dependent targets.
     #
-    def all_dependent_targets
-      [self, *recursive_dependent_targets, *recursive_test_dependent_targets].uniq
+    def dependent_targets_for_test_spec(test_spec)
+      [self, *recursive_dependent_targets, *test_dependent_targets_by_spec_name[test_spec.name]].uniq
     end
 
     # Checks if warnings should be inhibited for this pod.

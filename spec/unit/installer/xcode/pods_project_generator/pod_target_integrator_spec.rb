@@ -22,7 +22,7 @@ module Pod
               @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [],
                                                     :project => @project)
               @test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
-                                                             :shell_script_build_phases => [], :project => @project)
+                                                             :shell_script_build_phases => [], :project => @project, :name => 'CoconutLib-Unit-Tests')
 
               @target_installation_result = TargetInstallationResult.new(@coconut_pod_target, @native_target, [],
                                                                          [@test_native_target])
