@@ -772,7 +772,7 @@ module Pod
         define_build_settings_method :dependent_targets, :memoized => true do
           select_maximal_pod_targets(
             if test_xcconfig?
-              target.all_dependent_targets
+              target.dependent_targets_for_test_spec(test_spec)
             else
               target.recursive_dependent_targets
             end,

@@ -273,7 +273,7 @@ module Pod
                 @installer.install!
                 @project.support_files_group
                 group = @project['Pods/CoconutLib/Support Files']
-                group.children.map(&:display_name).sort.should.include 'CoconutLib.unit.xcconfig'
+                group.children.map(&:display_name).sort.should.include 'CoconutLib.unit-tests.xcconfig'
               end
 
               it 'does not add test header imports to umbrella header' do
@@ -319,7 +319,7 @@ module Pod
                 installation_result.test_resource_bundle_targets.count.should == 1
                 test_resource_bundle_target = @project.targets.find { |t| t.name == 'CoconutLib-CoconutLibTestResources' }
                 test_resource_bundle_target.build_configurations.each do |bc|
-                  bc.base_configuration_reference.real_path.basename.to_s.should == 'CoconutLib.unit.xcconfig'
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'CoconutLib.unit-tests.xcconfig'
                   bc.build_settings['CONFIGURATION_BUILD_DIR'].should.be.nil
                 end
               end
@@ -327,7 +327,7 @@ module Pod
               it 'creates embed frameworks script for test target' do
                 @coconut_pod_target.stubs(:requires_frameworks? => true)
                 @installer.install!
-                script_path = @coconut_pod_target.embed_frameworks_script_path_for_test_type(:unit)
+                script_path = @coconut_pod_target.embed_frameworks_script_path_for_test_spec(@coconut_pod_target.test_specs.first)
                 script = script_path.read
                 @coconut_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
@@ -341,7 +341,7 @@ module Pod
               it 'adds the resources bundles for to the copy resources script for test target' do
                 @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Tests/*.xib'] }
                 @installer.install!
-                script_path = @coconut_pod_target.copy_resources_script_path_for_test_type(:unit)
+                script_path = @coconut_pod_target.copy_resources_script_path_for_test_spec(@coconut_spec.test_specs.first)
                 script = script_path.read
                 @coconut_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc

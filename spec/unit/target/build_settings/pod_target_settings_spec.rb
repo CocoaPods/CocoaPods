@@ -333,7 +333,7 @@ module Pod
             @coconut_pod_target.sandbox.public_headers.add_search_path('CoconutLib', Platform.ios)
             @coconut_pod_target.test_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
             @coconut_pod_target.dependent_targets = [@banana_pod_target]
-            generator = PodTargetSettings.new(@coconut_pod_target, true)
+            generator = PodTargetSettings.new(@coconut_pod_target, @coconut_test_spec)
             xcconfig = generator.generate
             xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == '$(inherited) "${PODS_ROOT}/Headers/Private"' \
               ' "${PODS_ROOT}/Headers/Private/CoconutLib"' \
