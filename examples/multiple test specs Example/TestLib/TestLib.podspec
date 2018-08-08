@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
 
   s.test_spec 'UnitTests1' do |test_spec|
     test_spec.source_files = 'TestLib/UnitTests1/**/*'
+    test_spec.dependency 'OCMock'
   end
 
   s.test_spec 'UnitTests2' do |test_spec|

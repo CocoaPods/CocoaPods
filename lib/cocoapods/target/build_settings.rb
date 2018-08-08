@@ -687,7 +687,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :header_search_paths, :build_setting => true, :memoized => true, :sorted => true do
-          target.header_search_paths(test_xcconfig?)
+          target.header_search_paths(:include_dependent_targets_for_test_spec => test_spec)
         end
 
         #-------------------------------------------------------------------------#
