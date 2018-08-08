@@ -108,8 +108,8 @@ module Pod
             next unless share_scheme_for_development_pod?(pod_target.pod_name)
             Xcodeproj::XCScheme.share_scheme(project.path, pod_target.label)
             if pod_target.contains_test_specifications?
-              pod_target.supported_test_types.each do |test_type|
-                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_type))
+              pod_target.test_specs.each do |test_spec|
+                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_spec))
               end
             end
           end
@@ -207,32 +207,32 @@ module Pod
         end
 
         def install_app_hosts
-          pod_target_with_test_specs = pod_targets.reject do |pod_target|
+          pod_targets_with_app_hosts = pod_targets.reject do |pod_target|
             pod_target.test_specs.empty? || pod_target.test_spec_consumers.none?(&:requires_app_host?)
           end
 
-          return if pod_target_with_test_specs.empty?
+          return if pod_targets_with_app_hosts.empty?
 
           UI.message '- Installing app hosts' do
-            app_host_keys = pod_target_with_test_specs.flat_map do |pod_target|
-              pod_target.supported_test_types.flat_map do |test_type|
-                AppHostKey.new(test_type, pod_target.platform)
+            pod_targets_with_app_hosts.reduce({}) do |app_hosts_by_host_key, pod_target|
+              app_host_keys = pod_target.test_spec_consumers.select(&:requires_app_host?).map do |test_spec_consumer|
+                AppHostKey.new(test_spec_consumer.test_type, pod_target.platform)
               end.uniq
-            end
 
-            app_host_keys_by_test_type = app_host_keys.group_by do |app_host_key|
-              [app_host_key.test_type, app_host_key.platform.symbolic_name]
-            end
+              app_host_keys_by_test_type = app_host_keys.group_by do |app_host_key|
+                [app_host_key.test_type, app_host_key.platform.symbolic_name]
+              end
 
-            app_host_keys_by_test_type.map do |(test_type, platform_symbol), keys|
-              deployment_target = keys.map { |k| k.platform.deployment_target }.max
-              platform = Platform.new(platform_symbol, deployment_target)
-              AppHostKey.new(test_type, platform)
-            end
+              app_host_keys_by_test_type.map do |(test_type, platform_symbol), keys|
+                deployment_target = keys.map { |k| k.platform.deployment_target }.max
+                platform = Platform.new(platform_symbol, deployment_target)
+                AppHostKey.new(test_type, platform)
+              end
 
-            Hash[app_host_keys.map do |app_host_key|
-              [app_host_key, AppHostInstaller.new(sandbox, project, app_host_key.platform, app_host_key.test_type).install!]
-            end]
+              app_hosts_by_host_key.merge Hash[app_host_keys.map do |app_host_key|
+                [app_host_key, AppHostInstaller.new(sandbox, project, app_host_key.platform, app_host_key.test_type).install!]
+              end]
+            end
           end
         end
 
@@ -325,18 +325,20 @@ module Pod
                 test_dependent_targets = test_specs.flat_map { |s| pod_target.test_dependent_targets_by_spec_name[s.name] }.compact.unshift(pod_target).uniq
                 test_dependent_targets.each do |test_dependent_target|
                   dependency_installation_result = pod_target_installation_results_hash[test_dependent_target.name]
-                  dependency_installation_result.test_resource_bundle_targets.values.flatten.each do |test_resource_bundle_target|
-                    test_native_target.add_dependency(test_resource_bundle_target)
+                  resource_bundle_native_targets = dependency_installation_result.test_resource_bundle_targets[test_specs.first.name]
+                  unless resource_bundle_native_targets.nil?
+                    resource_bundle_native_targets.each do |test_resource_bundle_target|
+                      test_native_target.add_dependency(test_resource_bundle_target)
+                    end
                   end
                   test_native_target.add_dependency(dependency_installation_result.native_target)
                   add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
                   # Wire app host dependencies to test native target
-                  if pod_target.test_spec_consumers.any?(&:requires_app_host?)
-                    pod_target.supported_test_types.each do |test_type|
-                      app_host_target = app_hosts_by_host_key[AppHostKey.new(test_type, pod_target.platform)]
-                      test_native_target.add_dependency(app_host_target)
-                      configure_app_host_to_native_target(app_host_target, test_native_target)
-                    end
+                  test_spec_consumers = test_specs.map { |test_spec| test_spec.consumer(pod_target.platform) }
+                  test_spec_consumers.select(&:requires_app_host?).each do |test_spec_consumer|
+                    app_host_target = app_hosts_by_host_key[AppHostKey.new(test_spec_consumer.test_type, pod_target.platform)]
+                    test_native_target.add_dependency(app_host_target)
+                    configure_app_host_to_native_target(app_host_target, test_native_target)
                   end
                 end
               end

@@ -266,10 +266,14 @@ module Pod
       #         targets are considered, otherwise, all other types are have
       #         their pods copied to their host targets as well (extensions, etc.)
       #
-      def copy_embedded_target_pod_targets_to_host(aggregate_target, embedded_aggregate_targets, libraries_only)
-        return if aggregate_target.requires_host_target?
+      # @return [Hash{String=>Array<PodTarget>}] the additional pod targets to include to the host
+      #          keyed by their configuration.
+      #
+      def embedded_target_pod_targets_by_host(aggregate_target, embedded_aggregate_targets, libraries_only)
+        return {} if aggregate_target.requires_host_target?
         pod_target_names = Set.new(aggregate_target.pod_targets.map(&:name))
         aggregate_user_target_uuids = Set.new(aggregate_target.user_targets.map(&:uuid))
+        embedded_pod_targets_by_build_config = Hash.new([].freeze)
         embedded_aggregate_targets.each do |embedded_aggregate_target|
           # Skip non libraries in library-only mode
           next if libraries_only && !embedded_aggregate_target.library?
@@ -283,11 +287,14 @@ module Pod
             host_target_uuids = Set.new(aggregate_target.user_project.host_targets_for_embedded_target(embedded_user_target).map(&:uuid))
             !aggregate_user_target_uuids.intersection(host_target_uuids).empty?
           end
-          # This embedded target is hosted by the aggregate target's user_target; copy over the non-duplicate pod_targets
-          aggregate_target.pod_targets = aggregate_target.pod_targets + embedded_aggregate_target.pod_targets.select do |pod_target|
-            !pod_target_names.include? pod_target.name
+          embedded_aggregate_target.user_build_configurations.keys.each do |configuration_name|
+            embedded_pod_targets = embedded_aggregate_target.pod_targets.select do |pod_target|
+              !pod_target_names.include? pod_target.name
+            end
+            embedded_pod_targets_by_build_config[configuration_name] = embedded_pod_targets
           end
         end
+        embedded_pod_targets_by_build_config
       end
 
       # Raises an error if there are embedded targets in the Podfile, but
@@ -395,14 +402,17 @@ module Pod
           analyze_host_targets_in_podfile(aggregate_targets, embedded_targets)
 
           use_frameworks_embedded_targets, non_use_frameworks_embedded_targets = embedded_targets.partition(&:requires_frameworks?)
-          aggregate_targets.each do |target|
+          aggregate_targets = aggregate_targets.map do |aggregate_target|
             # For targets that require frameworks, we always have to copy their pods to their
             # host targets because those frameworks will all be loaded from the host target's bundle
-            copy_embedded_target_pod_targets_to_host(target, use_frameworks_embedded_targets, false)
+            embedded_pod_targets = embedded_target_pod_targets_by_host(aggregate_target, use_frameworks_embedded_targets, false)
 
             # For targets that don't require frameworks, we only have to consider library-type
             # targets because their host targets will still need to link their pods
-            copy_embedded_target_pod_targets_to_host(target, non_use_frameworks_embedded_targets, true)
+            embedded_pod_targets.merge!(embedded_target_pod_targets_by_host(aggregate_target, non_use_frameworks_embedded_targets, true))
+
+            next aggregate_target if embedded_pod_targets.empty?
+            aggregate_target.merge_embedded_pod_targets(embedded_pod_targets)
           end
         end
         aggregate_targets.each do |target|
@@ -447,9 +457,12 @@ module Pod
         end
         platform = target_definition.platform
         build_configurations = user_build_configurations.keys.concat(target_definition.all_whitelisted_configurations).uniq
-        pod_targets = filter_pod_targets_for_target_definition(target_definition, pod_targets, resolver_specs_by_target, build_configurations)
+        pod_targets_for_build_configuration = filter_pod_targets_for_target_definition(target_definition, pod_targets,
+                                                                                       resolver_specs_by_target,
+                                                                                       build_configurations)
         AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
-                            target_definition, client_root, user_project, user_target_uuids, pod_targets)
+                            target_definition, client_root, user_project, user_target_uuids,
+                            pod_targets_for_build_configuration)
       end
 
       # @return [Array<PodTarget>] The model representations of pod targets.

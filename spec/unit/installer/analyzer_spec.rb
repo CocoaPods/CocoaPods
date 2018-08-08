@@ -1124,6 +1124,16 @@ module Pod
             'Pods-Sample Extensions Project/monkey',
             'Pods-Today Extension/monkey',
           ].sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-Sample Extensions Project/Debug/JSONKit',
+            'Pods-Sample Extensions Project/Debug/monkey',
+            'Pods-Today Extension/Debug/monkey',
+          ].sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-Sample Extensions Project/Release/JSONKit',
+            'Pods-Sample Extensions Project/Release/monkey',
+            'Pods-Today Extension/Release/monkey',
+          ].sort
         end
 
         it 'does not copy extension pod targets to host target, when not use_frameworks!' do

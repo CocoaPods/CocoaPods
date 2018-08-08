@@ -47,7 +47,7 @@ module Pod
 
     # @return [Array<PodTarget>] The dependencies for this target.
     #
-    attr_accessor :pod_targets
+    attr_reader :pod_targets
 
     # @return [Array<AggregateTarget>] The aggregate targets whose pods this
     #         target must be able to import, but will not directly link against.
@@ -65,7 +65,7 @@ module Pod
     # @param [Pathname] client_root @see #client_root
     # @param [Xcodeproj::Project] user_project @see #user_project
     # @param [Array<String>] user_target_uuids @see #user_target_uuids
-    # @param [Array<PodTarget>] pod_targets_for_build_configuration @see #pod_targets_for_build_configuration
+    # @param [Hash{String=>Array<PodTarget>}] pod_targets_for_build_configuration @see #pod_targets_for_build_configuration
     #
     def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, target_definition,
                    client_root, user_project, user_target_uuids, pod_targets_for_build_configuration)
@@ -81,6 +81,22 @@ module Pod
       @pod_targets = pod_targets_for_build_configuration.values.flatten.uniq
       @search_paths_aggregate_targets = []
       @xcconfigs = {}
+    end
+
+    # Merges this aggregate target with additional pod targets that are part of embedded aggregate targets.
+    #
+    # @param  [Hash{String=>Array<PodTarget>}] embedded_pod_targets_for_build_configuration
+    #         The pod targets to merge with.
+    #
+    # @return [AggregateTarget] a new instance of this aggregate target with additional pod targets to be used from
+    #         pod targets of embedded aggregate targets.
+    #
+    def merge_embedded_pod_targets(embedded_pod_targets_for_build_configuration)
+      merged = @pod_targets_for_build_configuration.merge(embedded_pod_targets_for_build_configuration) do |_, before, after|
+        (before + after).uniq
+      end
+      AggregateTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
+                          target_definition, client_root, user_project, user_target_uuids, merged)
     end
 
     def build_settings(configuration_name = nil)

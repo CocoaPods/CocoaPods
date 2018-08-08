@@ -76,7 +76,7 @@ module Pod
 
           def test_native_target_from_spec(spec)
             test_native_targets.find do |test_native_target|
-              test_native_target.symbol_type == target.product_type_for_test_type(spec.test_type)
+              test_native_target.name == target.test_target_label(spec)
             end
           end
         end
