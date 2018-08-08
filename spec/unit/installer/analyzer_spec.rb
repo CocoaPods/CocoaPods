@@ -480,46 +480,47 @@ module Pod
           result = @analyzer.analyze
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'a' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == %w(b base)
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(b base c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['a/Tests', ['a_testing']]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(a a_testing b base base_testing c e)
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e)
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'a_testing' }
           pod_target.dependent_targets.map(&:name).sort.should == %w(a base_testing)
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base base_testing c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'b' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == ['c']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(base c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['b/Tests', []]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'base' }
           pod_target.dependent_targets.map(&:name).sort.should == []
           pod_target.recursive_dependent_targets.map(&:name).sort.should == []
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'c' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == ['e']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(base e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['a_testing']]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(a a_testing b base base_testing c e)
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e)
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'd' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == ['a']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['d/Tests', ['b']]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(b base c e)
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(b base c e)
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'e' }
           pod_target.dependent_targets.map(&:name).sort.should == ['base']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == ['base']
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
         end
 
         it 'picks the right variants up when there are multiple' do

@@ -163,13 +163,13 @@ module Pod
                 @project = Project.new(config.sandbox.project_path)
                 config.sandbox.project = @project
 
-                @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+                @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
 
                 # Add sources to the project.
-                file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('coconut-lib')),
-                                                          @coconut_spec.consumer(:ios))
-                @project.add_pod_group('CoconutLib', fixture('coconut-lib'))
-                group = @project.group_for_spec('CoconutLib')
+                file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
+                                                          @watermelon_spec.consumer(:ios))
+                @project.add_pod_group('WatermelonLib', fixture('watermelon-lib'))
+                group = @project.group_for_spec('WatermelonLib')
                 file_accessor.source_files.each do |file|
                   @project.add_file_reference(file, group)
                 end
@@ -178,70 +178,107 @@ module Pod
                 end
 
                 # Add test sources to the project.
-                test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('coconut-lib')),
-                                                               @coconut_spec.test_specs.first.consumer(:ios))
-                @project.add_pod_group('CoconutLibTests', fixture('coconut-lib'))
-                group = @project.group_for_spec('CoconutLibTests')
-                test_file_accessor.source_files.each do |file|
+                unit_test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
+                                                                    @watermelon_spec.test_specs.first.consumer(:ios))
+                @project.add_pod_group('WatermelonLibTests', fixture('watermelon-lib'))
+                group = @project.group_for_spec('WatermelonLibTests')
+                unit_test_file_accessor.source_files.each do |file|
                   @project.add_file_reference(file, group)
                 end
-                test_file_accessor.resources.each do |resource|
+                unit_test_file_accessor.resources.each do |resource|
+                  @project.add_file_reference(resource, group)
+                end
+
+                snapshot_test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
+                                                                        @watermelon_spec.test_specs[1].consumer(:ios))
+                @project.add_pod_group('WatermelonLibSnapshotTests', fixture('watermelon-lib'))
+                group = @project.group_for_spec('WatermelonLibSnapshotTests')
+                snapshot_test_file_accessor.source_files.each do |file|
+                  @project.add_file_reference(file, group)
+                end
+                snapshot_test_file_accessor.resources.each do |resource|
                   @project.add_file_reference(resource, group)
                 end
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
-                all_specs = [@coconut_spec, *@coconut_spec.recursive_subspecs]
-                file_accessors = [file_accessor, test_file_accessor]
-                @coconut_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
-                                                    Platform.new(:ios, '6.0'), all_specs, [@target_definition],
-                                                    file_accessors)
-                @installer = PodTargetInstaller.new(config.sandbox, @project, @coconut_pod_target)
-                @coconut_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [],
-                                                     Platform.new(:osx, '10.8'), all_specs, [@target_definition2],
-                                                     file_accessors)
-                @installer2 = PodTargetInstaller.new(config.sandbox, @project, @coconut_pod_target2)
+                all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
+                file_accessors = [file_accessor, unit_test_file_accessor, snapshot_test_file_accessor]
+                @watermelon_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
+                                                       Platform.new(:ios, '6.0'), all_specs, [@target_definition],
+                                                       file_accessors)
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @watermelon_pod_target)
+                @watermelon_pod_target2 = PodTarget.new(config.sandbox, false, user_build_configurations, [],
+                                                        Platform.new(:osx, '10.8'), all_specs, [@target_definition2],
+                                                        file_accessors)
+                @installer2 = PodTargetInstaller.new(config.sandbox, @project, @watermelon_pod_target2)
               end
 
               it 'adds the native test target to the project for iOS targets with code signing' do
                 installation_result = @installer.install!
-                @project.targets.count.should == 2
-                @project.targets.first.name.should == 'CoconutLib'
-                test_native_target = @project.targets[1]
-                test_native_target.name.should == 'CoconutLib-Unit-Tests'
-                test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
-                test_native_target.build_configurations.each do |bc|
-                  bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
+                @project.targets.count.should == 4
+                @project.targets.first.name.should == 'WatermelonLib'
+                unit_test_native_target = @project.targets[1]
+                unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
-                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
                 end
-                test_native_target.symbol_type.should == :unit_test_bundle
-                installation_result.test_native_targets.count.should == 1
+                snapshot_test_native_target = @project.targets[2]
+                snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-snapshottests.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
+                end
+                snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                installation_result.test_native_targets.count.should == 2
               end
 
               it 'adds the native test target to the project for OSX targets without code signing' do
                 installation_result = @installer2.install!
-                @project.targets.count.should == 2
-                @project.targets.first.name.should == 'CoconutLib'
-                test_native_target = @project.targets[1]
-                test_native_target.name.should == 'CoconutLib-Unit-Tests'
-                test_native_target.product_reference.name.should == 'CoconutLib-Unit-Tests'
-                test_native_target.build_configurations.each do |bc|
-                  bc.build_settings['PRODUCT_NAME'].should == 'CoconutLib-Unit-Tests'
+                @project.targets.count.should == 4
+                @project.targets.first.name.should == 'WatermelonLib'
+                unit_test_native_target = @project.targets[1]
+                unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
-                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
                 end
-                test_native_target.symbol_type.should == :unit_test_bundle
-                installation_result.test_native_targets.count.should == 1
+                snapshot_test_native_target = @project.targets[2]
+                snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-snapshottests.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
+                end
+                snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                installation_result.test_native_targets.count.should == 2
               end
 
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
-                @coconut_pod_target.stubs(:uses_swift?).returns(true)
+                @watermelon_pod_target.stubs(:uses_swift?).returns(true)
                 @installer.install!
                 test_native_target = @project.targets[1]
                 debug_configuration = test_native_target.build_configurations.find(&:debug?)
@@ -255,98 +292,103 @@ module Pod
 
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
-                @project.targets.count.should == 2
+                @project.targets.count.should == 4
                 native_target = @project.targets[0]
                 native_target.source_build_phase.files.count.should == 2
                 native_target.source_build_phase.files.map(&:display_name).sort.should == [
-                  'Coconut.m',
-                  'CoconutLib-dummy.m',
+                  'Watermelon.m',
+                  'WatermelonLib-dummy.m',
                 ]
-                test_native_target = @project.targets[1]
-                test_native_target.source_build_phase.files.count.should == 1
-                test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
-                  'CoconutTests.m',
+                unit_test_native_target = @project.targets[1]
+                unit_test_native_target.source_build_phase.files.count.should == 1
+                unit_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
+                  'WatermelonTests.m',
+                ]
+                snapshot_test_native_target = @project.targets[2]
+                snapshot_test_native_target.source_build_phase.files.count.should == 1
+                snapshot_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
+                  'WatermelonSnapshotTests.m',
                 ]
               end
 
               it 'adds xcconfig file reference for test native targets' do
                 @installer.install!
                 @project.support_files_group
-                group = @project['Pods/CoconutLib/Support Files']
-                group.children.map(&:display_name).sort.should.include 'CoconutLib.unit-tests.xcconfig'
+                group = @project['Pods/WatermelonLib/Support Files']
+                group.children.map(&:display_name).sort.should.include 'WatermelonLib.unit-tests.xcconfig'
+                group.children.map(&:display_name).sort.should.include 'WatermelonLib.unit-snapshottests.xcconfig'
               end
 
               it 'does not add test header imports to umbrella header' do
-                @coconut_pod_target.stubs(:requires_frameworks?).returns(true)
+                @watermelon_pod_target.stubs(:requires_frameworks?).returns(true)
                 @installer.install!
-                content = @coconut_pod_target.umbrella_header_path.read
+                content = @watermelon_pod_target.umbrella_header_path.read
                 content.should.not =~ /"CoconutTestHeader.h"/
               end
 
               it 'uses header_dir to umbrella header imports' do
-                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Coconut')
-                @coconut_pod_target.stubs(:requires_frameworks?).returns(false)
-                @coconut_pod_target.stubs(:defines_module?).returns(true)
+                @watermelon_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Watermelon')
+                @watermelon_pod_target.stubs(:requires_frameworks?).returns(false)
+                @watermelon_pod_target.stubs(:defines_module?).returns(true)
                 @installer.install!
-                content = @coconut_pod_target.umbrella_header_path.read
-                content.should =~ %r{"Coconut/Coconut.h"}
+                content = @watermelon_pod_target.umbrella_header_path.read
+                content.should =~ %r{"Watermelon/Watermelon.h"}
               end
 
               it 'uses header_dir and header_mappings_dir to umbrella header imports' do
-                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Coconut2')
-                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_mappings_dir).returns('Classes')
-                @coconut_pod_target.stubs(:requires_frameworks?).returns(false)
-                @coconut_pod_target.stubs(:defines_module?).returns(true)
+                @watermelon_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Watermelon2')
+                @watermelon_pod_target.file_accessors.first.spec_consumer.stubs(:header_mappings_dir).returns('Classes')
+                @watermelon_pod_target.stubs(:requires_frameworks?).returns(false)
+                @watermelon_pod_target.stubs(:defines_module?).returns(true)
                 @installer.install!
-                content = @coconut_pod_target.umbrella_header_path.read
-                content.should =~ %r{"Coconut2/Coconut.h"}
+                content = @watermelon_pod_target.umbrella_header_path.read
+                content.should =~ %r{"Watermelon2/Watermelon.h"}
               end
 
               it 'does not use header_dir to umbrella header imports' do
-                @coconut_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Coconut')
-                @coconut_pod_target.stubs(:requires_frameworks?).returns(true)
-                @coconut_pod_target.stubs(:defines_module?).returns(true)
+                @watermelon_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Watermelon')
+                @watermelon_pod_target.stubs(:requires_frameworks?).returns(true)
+                @watermelon_pod_target.stubs(:defines_module?).returns(true)
                 @installer.install!
-                content = @coconut_pod_target.umbrella_header_path.read
-                content.should.not =~ %r{"Coconut/Coconut.h"}
-                content.should =~ /"Coconut.h"/
+                content = @watermelon_pod_target.umbrella_header_path.read
+                content.should.not =~ %r{"Watermelon/Watermelon.h"}
+                content.should =~ /"Watermelon.h"/
               end
 
               it 'adds test xcconfig file reference for test resource bundle targets' do
-                @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Model.xcdatamodeld'] }
                 installation_result = @installer.install!
                 installation_result.resource_bundle_targets.count.should == 0
-                installation_result.test_resource_bundle_targets.count.should == 1
-                test_resource_bundle_target = @project.targets.find { |t| t.name == 'CoconutLib-CoconutLibTestResources' }
-                test_resource_bundle_target.build_configurations.each do |bc|
-                  bc.base_configuration_reference.real_path.basename.to_s.should == 'CoconutLib.unit-tests.xcconfig'
+                installation_result.test_resource_bundle_targets.count.should == 2
+                unit_test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
+                unit_test_resource_bundle_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
                   bc.build_settings['CONFIGURATION_BUILD_DIR'].should.be.nil
                 end
+                @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibSnapshotTestResources' }.should.be.nil
               end
 
               it 'creates embed frameworks script for test target' do
-                @coconut_pod_target.stubs(:requires_frameworks? => true)
+                @watermelon_pod_target.stubs(:requires_frameworks? => true)
                 @installer.install!
-                script_path = @coconut_pod_target.embed_frameworks_script_path_for_test_spec(@coconut_pod_target.test_specs.first)
+                script_path = @watermelon_pod_target.embed_frameworks_script_path_for_test_spec(@watermelon_pod_target.test_specs.first)
                 script = script_path.read
-                @coconut_pod_target.user_build_configurations.keys.each do |configuration|
+                @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
-          install_framework "${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework"
+          install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
         fi
                   eos
                 end
               end
 
               it 'adds the resources bundles for to the copy resources script for test target' do
-                @coconut_spec.test_specs.first.resource_bundle = { 'CoconutLibTestResources' => ['Tests/*.xib'] }
                 @installer.install!
-                script_path = @coconut_pod_target.copy_resources_script_path_for_test_spec(@coconut_spec.test_specs.first)
+                script_path = @watermelon_pod_target.copy_resources_script_path_for_test_spec(@watermelon_spec.test_specs.first)
                 script = script_path.read
-                @coconut_pod_target.user_build_configurations.keys.each do |configuration|
+                @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
-          install_resource "${PODS_CONFIGURATION_BUILD_DIR}/CoconutLibTestResources.bundle"
+          install_resource "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle"
         fi
                   eos
                 end
