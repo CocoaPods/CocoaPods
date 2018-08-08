@@ -573,9 +573,9 @@ module Pod
                                      nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
-          should.raise Informative do
+          should.raise StandardError do
             @installer.send(:create_pod_installer, 'RandomPod')
-          end.message.should.include 'Could not install \'RandomPod\' pod. There is no target that supports it.'
+          end.message.should.include 'Could not install \'RandomPod\' pod. There is either no platform to build for, or no target to build.'
         end
 
         it 'prints a warning for installed pods that included script phases' do
