@@ -284,13 +284,12 @@ Targets:
           OTHER_LDFLAGS:
           - "$(inherited)"
           - "-lswiftSwiftOnoneSupport"
-          - " -lswiftSwiftOnoneSupport"
           PRODUCT_NAME: TestLib-Unit-UnitTests1
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4'
-        Base Configuration: TestLib.unit-unittests2.xcconfig
+        Base Configuration: TestLib.unit-unittests1.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -310,7 +309,7 @@ Targets:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: TestLib.unit-unittests2.xcconfig
+        Base Configuration: TestLib.unit-unittests1.xcconfig
 - TestLib-Unit-UnitTests2:
     Build Phases:
     - Sources:
@@ -337,7 +336,6 @@ Targets:
           OTHER_LDFLAGS:
           - "$(inherited)"
           - "-lswiftSwiftOnoneSupport"
-          - " -lswiftSwiftOnoneSupport"
           PRODUCT_NAME: TestLib-Unit-UnitTests2
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
