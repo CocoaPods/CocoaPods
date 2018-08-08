@@ -470,7 +470,9 @@ module Pod
       def calculate_pod_targets(aggregate_targets)
         aggregate_target_pod_targets = aggregate_targets.flat_map(&:pod_targets).uniq
         test_dependent_targets = aggregate_target_pod_targets.flat_map do |pod_target|
-          pod_target.test_dependent_targets_by_spec_name.values.flatten
+          pod_target.test_specs.flat_map do |test_spec|
+            pod_target.recursive_test_dependent_targets(test_spec)
+          end
         end
         (aggregate_target_pod_targets + test_dependent_targets).uniq
       end
