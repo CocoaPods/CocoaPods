@@ -13,6 +13,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jenn Kaplan](https://github.com/jkap)
   [#7908](https://github.com/CocoaPods/CocoaPods/pull/7908)
 
+* Generate a separate app host per pod  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+  [#8005](https://github.com/CocoaPods/CocoaPods/pull/8005)
+
 * Add default launch screen storyboard to test app hosts  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7971](https://github.com/CocoaPods/CocoaPods/pull/7971)
