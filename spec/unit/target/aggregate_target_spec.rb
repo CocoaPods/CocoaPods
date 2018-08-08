@@ -214,14 +214,13 @@ module Pod
           path_list = Sandbox::PathList.new(fixture('banana-lib'))
           file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
           @pod_target.stubs(:file_accessors).returns([file_accessor])
-          framework_path = Pathname('/some/absolute/path/to/FrameworkA.framework')
+          framework_path = path_list.root + 'some/absolute/path/to/FrameworkA.framework'
           @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
             [framework_path],
           )
-          framework_path.stubs(:relative_path_from).returns(Pathname.new('../../some/absolute/path/to/FrameworkA.framework'))
           @target.framework_paths_by_config['Debug'].should == [
             { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../some/absolute/path/to/FrameworkA.framework',
+              :input_path => "${PODS_ROOT}/#{@pod_target.pod_name}/some/absolute/path/to/FrameworkA.framework",
               :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
           ]
         end
@@ -245,14 +244,13 @@ module Pod
           path_list = Sandbox::PathList.new(fixture('banana-lib'))
           file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
           @pod_target.stubs(:file_accessors).returns([file_accessor])
-          framework_path = Pathname('/absolute/path/to/FrameworkA.framework')
+          framework_path = path_list.root + 'absolute/path/to/FrameworkA.framework'
           @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
             [framework_path],
           )
-          framework_path.stubs(:relative_path_from).returns(Pathname.new('../../absolute/path/to/FrameworkA.framework'))
           @target.framework_paths_by_config['Debug'].should == [
             { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../absolute/path/to/FrameworkA.framework',
+              :input_path => "${PODS_ROOT}/#{@pod_target.pod_name}/absolute/path/to/FrameworkA.framework",
               :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
           ]
         end

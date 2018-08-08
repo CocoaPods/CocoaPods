@@ -59,7 +59,11 @@ module Pod
       # @return [void]
       #
       def install!
-        download_source unless predownloaded? || local?
+        if local?
+          link_source
+        elsif !predownloaded?
+          download_source
+        end
         PodSourcePreparer.new(root_spec, root).prepare! if local?
       end
 
@@ -94,6 +98,25 @@ module Pod
       private
 
       # @!group Installation Steps
+
+      # Create a symlink at `$PODS_ROOT/#{POD_NAME}` to the path of the local pod,
+      # making the local pod's files available at `${PODS_ROOT}/#{POD_NAME}`
+      #
+      # @return [void]
+      #
+      def link_source
+        poddir = sandbox.pod_dir(name)
+        realdir = sandbox.pod_realdir(name)
+        unless sandbox.local_path_was_absolute?(name)
+          realdir = realdir.realpath.relative_path_from(poddir.dirname.realpath)
+        end
+        UI.message "Linking #{UI.path poddir} -> `#{realdir}`", '> ' do
+          if poddir.exist? || poddir.symlink?
+            FileUtils.rm_r(poddir)
+          end
+          File.symlink(realdir, poddir)
+        end
+      end
 
       # Downloads the source of the Pod.
       #

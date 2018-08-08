@@ -679,22 +679,7 @@ module Pod
         platform = determine_platform(specs, target_definitions, host_requires_frameworks)
         file_accessors = create_file_accessors(specs, platform)
         PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
-                      target_definitions, file_accessors, scope_suffix).tap do |target|
-          name = target.root_spec.name
-          if sandbox.local?(name)
-            # Create a symlink at `$PODS_ROOT/#{name}` to the path of the local pod,
-            # making the local pod's files available at `${PODS_ROOT}/#{name}`
-            poddir = sandbox.pod_dir(target.root_spec.name)
-            realdir = sandbox.pod_realdir(name)
-            unless sandbox.local_path_was_absolute?(name)
-              realdir = realdir.realpath.relative_path_from(poddir.dirname.realpath)
-            end
-            if File.exist?(poddir)
-              FileUtils.rm_r(poddir)
-            end
-            File.symlink(realdir, poddir)
-          end
-        end
+                      target_definitions, file_accessors, scope_suffix)
       end
 
       # Creates the file accessors for a given pod.
@@ -709,7 +694,7 @@ module Pod
       #
       def create_file_accessors(specs, platform)
         name = specs.first.name
-        pod_root = sandbox.pod_dir(name)
+        pod_root = sandbox.pod_realdir(name)
         path_list = Sandbox::PathList.new(pod_root)
         specs.map do |spec|
           Sandbox::FileAccessor.new(path_list, spec.consumer(platform))

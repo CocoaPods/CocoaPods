@@ -852,7 +852,7 @@ module Pod
         jsonkit = sample_project_target.pod_targets.first
 
         jsonkit.sandbox.should == config.sandbox
-        jsonkit.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('Reachability')]
+        jsonkit.file_accessors.flat_map(&:root).should == [config.sandbox.pod_realdir('Reachability')]
         jsonkit.archs.should == []
       end
     end

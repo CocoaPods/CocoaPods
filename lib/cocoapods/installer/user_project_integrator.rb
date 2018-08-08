@@ -58,7 +58,6 @@ module Pod
       #
       def integrate!
         create_workspace
-        add_sandbox_symlink
         integrate_user_targets
         warn_about_xcconfig_overrides
         save_projects
@@ -98,26 +97,6 @@ module Pod
           UI.notice "Please close any current Xcode sessions and use `#{workspace_path.basename}` for this project from now on."
           workspace = Xcodeproj::Workspace.new(*file_references)
           workspace.save_as(workspace_path)
-        end
-      end
-
-      # Adds a symlink at $PROJECT_DIR/Pods pointing to $PODS_ROOT if the user project is behind a symlink
-      #
-      # @note Replaces any existing symlinks at $PROJECT_DIR/Pods
-      #
-      # @return [void]
-      #
-      def add_sandbox_symlink
-        targets.uniq(&:user_project_path).each do |target|
-          if target.user_project_is_symlink
-            project_dir = target.user_project_path.dirname.realpath
-            link_source = sandbox.root.realpath.relative_path_from(project_dir)
-            link_path = project_dir + sandbox.root.basename
-            if File.exist?(link_path)
-              FileUtils.rm_r(link_path)
-            end
-            File.symlink(link_source, link_path)
-          end
         end
       end
 

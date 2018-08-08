@@ -58,7 +58,7 @@ module Pod
         dir.children.each do |path|
           if path.directory?
             dirs << path.relative_path_from(basepath).to_s
-            if !path.symlink? || path.realpath.relative_path_from(basepath).to_s.start_with?('..')
+            if !path.symlink? || (path.basename.to_s != 'Pods' && path.realpath.relative_path_from(basepath).to_s.start_with?('..'))
               tmp_dirs, tmp_files = list_files_under(path, basepath)
               dirs.concat(tmp_dirs)
               files.concat(tmp_files)

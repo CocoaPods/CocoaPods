@@ -621,32 +621,32 @@ module Pod
         end
 
         it 'includes resource paths from test specifications' do
-          config.sandbox.stubs(:project => stub(:path => Pathname.new('ProjectPath')))
+          config.sandbox.stubs(:project => stub(:path => temporary_directory + 'ProjectPath'))
           fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
           fa.stubs(:resource_bundles).returns({})
-          fa.stubs(:resources).returns([Pathname.new('Model.xcdatamodeld')])
+          fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/Model.xcdatamodeld'])
           test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
           test_fa.stubs(:resource_bundles).returns({})
-          test_fa.stubs(:resources).returns([Pathname.new('TestModel.xcdatamodeld')])
+          test_fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/TestModel.xcdatamodeld'])
           @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
           @test_pod_target.resource_paths.should == {
-            'CoconutLib' => ['${PODS_ROOT}/Model.xcdatamodeld'],
-            'CoconutLib/Tests' => ['${PODS_ROOT}/TestModel.xcdatamodeld'],
+            'CoconutLib' => ['${PODS_ROOT}/CoconutLib/Model.xcdatamodeld'],
+            'CoconutLib/Tests' => ['${PODS_ROOT}/CoconutLib/TestModel.xcdatamodeld'],
           }
         end
 
         it 'returns resource paths from all specifications by default' do
-          config.sandbox.stubs(:project => stub(:path => Pathname.new('ProjectPath')))
+          config.sandbox.stubs(:project => stub(:path => temporary_directory + 'ProjectPath'))
           fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
           fa.stubs(:resource_bundles).returns({})
-          fa.stubs(:resources).returns([Pathname.new('Model.xcdatamodeld')])
+          fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/Model.xcdatamodeld'])
           test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
           test_fa.stubs(:resource_bundles).returns({})
-          test_fa.stubs(:resources).returns([Pathname.new('TestModel.xcdatamodeld')])
+          test_fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/TestModel.xcdatamodeld'])
           @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
           @test_pod_target.resource_paths.should == {
-            'CoconutLib' => ['${PODS_ROOT}/Model.xcdatamodeld'],
-            'CoconutLib/Tests' => ['${PODS_ROOT}/TestModel.xcdatamodeld'],
+            'CoconutLib' => ['${PODS_ROOT}/CoconutLib/Model.xcdatamodeld'],
+            'CoconutLib/Tests' => ['${PODS_ROOT}/CoconutLib/TestModel.xcdatamodeld'],
           }
         end
       end

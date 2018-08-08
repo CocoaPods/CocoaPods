@@ -143,7 +143,21 @@ module Pod
     end
 
     # Returns the path where the Pod with the given name is stored
-    # within the Sandbox. Does not account for where local pods are stored
+    # within the Sandbox. Does not account for where local pods are stored.
+    # It maybe a symlink directory.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Pathname] the path of the Pod.
+    #
+    def pod_relative_dir(name)
+      Pathname.new(Specification.root_name(name))
+    end
+
+    # Returns the path where the Pod with the given name is stored
+    # within the Sandbox. Does not account for where local pods are stored.
+    # It maybe a symlink directory.
     #
     # @param  [String] name
     #         The name of the Pod.
@@ -151,8 +165,7 @@ module Pod
     # @return [Pathname] the path of the Pod.
     #
     def pod_dir(name)
-      root_name = Specification.root_name(name)
-      sources_root + root_name
+      sources_root + pod_relative_dir(name)
     end
 
     # Returns the path where the Pod with the given name is stored, taking into
@@ -413,5 +426,42 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
+    #
+    # Every pod have its own sandbox, because the pod maybe a local pod and it make a
+    # symbol link `Pods/` link to the main sandbox directory.
+    #
+    # CocoaPods create a shadow sandbox to forward all methods to main sandbox buts some
+    # methods about the path. It create a symlink if root is not the main sanbox.
+    #
+    class ShadowSandbox < Sandbox
+      attr_reader :root
+
+      def initialize(root, sandbox)
+        if root != sandbox.root
+          FileUtils.rm_r(root) if root.exist? || root.symlink?
+          relative_path = sandbox.root.relative_path_from(root.dirname)
+          File.symlink(relative_path, root)
+        end
+        @root = root
+        @sandbox = sandbox
+      end
+
+      extend Forwardable
+      def_delegators  :@sandbox,
+                      :public_headers,
+                      :project,
+                      :specification,
+                      :store_podspec,
+                      :store_pre_downloaded_pod,
+                      :predownloaded_pods,
+                      :predownloaded?,
+                      :store_checkout_source,
+                      :remove_checkout_source,
+                      :checkout_sources,
+                      :store_local_path,
+                      :development_pods,
+                      :local?,
+                      :local_podspec
+    end
   end
 end

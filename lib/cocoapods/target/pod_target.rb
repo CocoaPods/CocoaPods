@@ -247,9 +247,9 @@ module Pod
         file_accessors.each_with_object({}) do |file_accessor, hash|
           frameworks = []
           file_accessor.vendored_dynamic_artifacts.map do |framework_path|
-            relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
+            relative_path = relative_path_to_sandbox(file_accessor, framework_path)
             framework = { :name => framework_path.basename.to_s,
-                          :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
+                          :input_path => "${PODS_ROOT}/#{relative_path}",
                           :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
             # Until this can be configured, assume the dSYM file uses the file name as the framework.
             # See https://github.com/CocoaPods/CocoaPods/issues/1698
@@ -257,7 +257,7 @@ module Pod
             dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
             if dsym_path.exist?
               framework[:dsym_name] = dsym_name
-              framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
+              framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path}.dSYM"
               framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
             end
             frameworks << framework
@@ -278,7 +278,7 @@ module Pod
     def resource_paths
       @resource_paths ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
-          resource_paths = file_accessor.resources.map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project.path.dirname)}" }
+          resource_paths = file_accessor.resources.map { |res| "${PODS_ROOT}/#{relative_path_to_sandbox(file_accessor, res)}" }
           prefix = Pod::Target::BuildSettings::CONFIGURATION_BUILD_DIR_VARIABLE
           prefix = configuration_build_dir unless file_accessor.spec.test_specification?
           resource_bundle_paths = file_accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
@@ -537,6 +537,21 @@ module Pod
     end
 
     private
+
+    # Get the relative path from the Pod Directory in sandbox directory.
+    #
+    # @param [Sandbox::FileAccessor] file_accessor @see #file_accessors
+    # @param [Pathname] The Pathname from the file_accessor
+    #
+    # @return [String] Like "PodName/path"
+    #
+    def relative_path_to_sandbox(file_accessor, path)
+      if file_accessor && file_accessor.root
+        sandbox.pod_relative_dir(pod_name) + path.relative_path_from(file_accessor.root)
+      else
+        path.relative_path_from(sandbox.root)
+      end
+    end
 
     def create_build_settings
       BuildSettings::PodTargetSettings.new(self)

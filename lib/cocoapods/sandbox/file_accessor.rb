@@ -37,7 +37,7 @@ module Pod
       # @param [Specification::Consumer] spec_consumer @see #spec_consumer
       #
       def initialize(path_list, spec_consumer)
-        if path_list.is_a?(PathList)
+        if path_list.nil? || path_list.is_a?(PathList)
           @path_list = path_list
         else
           @path_list = PathList.new(path_list)
