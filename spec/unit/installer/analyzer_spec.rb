@@ -299,9 +299,9 @@ module Pod
         end
 
         it 'includes pod targets from test dependent targets' do
-          pod_target_one = stub('PodTarget1', :test_dependent_targets_by_spec_name => {})
-          pod_target_three = stub('PodTarget2', :test_dependent_targets_by_spec_name => {})
-          pod_target_two = stub('PodTarget3', :test_dependent_targets_by_spec_name => { 'TestSpec1' => [pod_target_three] })
+          pod_target_one = stub('PodTarget1', :test_specs => [])
+          pod_target_three = stub('PodTarget2', :test_specs => [])
+          pod_target_two = stub('PodTarget3', :test_specs => [stub('test_spec', :name => 'TestSpec1')]).tap { |pt2| pt2.expects(:recursive_test_dependent_targets => [pod_target_three]) }
           aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
 
           @analyzer.send(:calculate_pod_targets, [aggregate_target]).

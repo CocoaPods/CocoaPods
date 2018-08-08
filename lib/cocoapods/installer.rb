@@ -377,7 +377,13 @@ module Pod
         end
       end
 
-      raise Informative, "Could not install '#{pod_name}' pod. There is no target that supports it." if specs_by_platform.empty?
+      if specs_by_platform.empty?
+        requiring_targets = pod_targets.select { |pt| pt.recursive_dependent_targets.any? { |dt| dt.pod_name == pod_name } }
+        message = "Could not install '#{pod_name}' pod"
+        message += ", dependended upon by #{requiring_targets.to_sentence}" unless requiring_targets.empty?
+        message += '. There is either no platform to build for, or no target to build.'
+        raise StandardError, message
+      end
 
       @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, :can_cache => installation_options.clean?)
