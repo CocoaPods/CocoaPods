@@ -1196,6 +1196,33 @@ module Pod
           ).sort
         end
 
+        it "does not copy a static library's pod target, when the static library aggregate target has search paths inherited" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+
+            target 'SampleLib' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey'
+
+              target 'SampleProject' do
+                inherit! :search_paths
+                project 'SampleProject/SampleProject'
+                pod 'JSONKit'
+              end
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          result.targets.flat_map do |aggregate_target|
+            aggregate_target.pod_targets.flat_map { |pt| "#{aggregate_target}/#{pt}" }
+          end.sort.should == [
+            'Pods-SampleLib/monkey',
+            'Pods-SampleProject/JSONKit',
+          ]
+        end
+
         it "raises when unable to find an extension's host target" do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
