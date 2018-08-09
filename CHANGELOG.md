@@ -180,6 +180,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Don't generate framework or resource scripts if they will not be used  
   [Eric Amorde](https://github.com/amorde)
 
+* Fix a crash when loading Ruby MachO library in certain environments  
+  [Eric Amorde](https://github.com/amorde)
+  [#7867](https://github.com/CocoaPods/CocoaPods/issues/7867)
+
 ## 1.5.3 (2018-05-25)
 
 ##### Enhancements
