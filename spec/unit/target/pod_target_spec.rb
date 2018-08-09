@@ -6,8 +6,7 @@ module Pod
       @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
       @target_definition = Podfile::TargetDefinition.new('Pods', nil)
       @target_definition.abstract = false
-      @pod_target = PodTarget.new(config.sandbox, false, {}, [],
-                                  Platform.ios, [@banana_spec], [@target_definition])
+      @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [@target_definition])
     end
 
     describe 'Meta' do
@@ -374,6 +373,24 @@ module Pod
         @pod_target.stubs(:target_definitions).returns([@target_definition, other_target_definition])
 
         @pod_target.should.not.defines_module
+      end
+
+      it 'warns if multiple target definitions do not agree on whether to use a module or not' do
+        banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+        first_target_definition = fixture_target_definition('SampleApp')
+        first_target_definition.abstract = false
+        first_target_definition.store_pod('BananaLib', [])
+        first_target_definition.set_use_modular_headers_for_pod('BananaLib', true)
+        second_target_definition = fixture_target_definition('SampleApp2')
+        second_target_definition.abstract = false
+        second_target_definition.store_pod('BananaLib', [])
+        second_target_definition.set_use_modular_headers_for_pod('BananaLib', false)
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [banana_spec],
+                                   [first_target_definition, second_target_definition])
+        pod_target.should.not.defines_module
+        UI.warnings.should.include 'Unable to determine whether to build `BananaLib` as a module due to a conflict ' \
+          "between the following target definitions:\n\t- `Pods-SampleApp` requires `BananaLib` as a module\n\t- " \
+          "`Pods-SampleApp2` does not require `BananaLib` as a module\n\nDefaulting to skip building `BananaLib` as a module.\n"
       end
     end
 

@@ -299,9 +299,9 @@ module Pod
         end
 
         it 'includes pod targets from test dependent targets' do
-          pod_target_one = stub('PodTarget1', :test_dependent_targets_by_spec_name => {})
-          pod_target_three = stub('PodTarget2', :test_dependent_targets_by_spec_name => {})
-          pod_target_two = stub('PodTarget3', :test_dependent_targets_by_spec_name => { 'TestSpec1' => [pod_target_three] })
+          pod_target_one = stub('PodTarget1', :test_specs => [])
+          pod_target_three = stub('PodTarget2', :test_specs => [])
+          pod_target_two = stub('PodTarget3', :test_specs => [stub('test_spec', :name => 'TestSpec1')]).tap { |pt2| pt2.expects(:recursive_test_dependent_targets => [pod_target_three]) }
           aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
 
           @analyzer.send(:calculate_pod_targets, [aggregate_target]).
@@ -480,46 +480,47 @@ module Pod
           result = @analyzer.analyze
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'a' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == %w(b base)
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(b base c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['a/Tests', ['a_testing']]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(a a_testing b base base_testing c e)
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e)
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'a_testing' }
           pod_target.dependent_targets.map(&:name).sort.should == %w(a base_testing)
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base base_testing c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'b' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == ['c']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(base c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['b/Tests', []]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'base' }
           pod_target.dependent_targets.map(&:name).sort.should == []
           pod_target.recursive_dependent_targets.map(&:name).sort.should == []
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'c' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == ['e']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(base e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['a_testing']]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(a a_testing b base base_testing c e)
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e)
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'd' }
+          test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
           pod_target.dependent_targets.map(&:name).sort.should == ['a']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base c e)
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['d/Tests', ['b']]]
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == %w(b base c e)
+          pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(b base c e)
 
           pod_target = result.pod_targets.find { |pt| pt.name == 'e' }
           pod_target.dependent_targets.map(&:name).sort.should == ['base']
           pod_target.recursive_dependent_targets.map(&:name).sort.should == ['base']
           pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-          pod_target.recursive_test_dependent_targets.map(&:name).sort.should == []
         end
 
         it 'picks the right variants up when there are multiple' do
@@ -1193,6 +1194,33 @@ module Pod
             JSONKit
             monkey
           ).sort
+        end
+
+        it "does not copy a static library's pod target, when the static library aggregate target has search paths inherited" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+
+            target 'SampleLib' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey'
+
+              target 'SampleProject' do
+                inherit! :search_paths
+                project 'SampleProject/SampleProject'
+                pod 'JSONKit'
+              end
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          result.targets.flat_map do |aggregate_target|
+            aggregate_target.pod_targets.flat_map { |pt| "#{aggregate_target}/#{pt}" }
+          end.sort.should == [
+            'Pods-SampleLib/monkey',
+            'Pods-SampleProject/JSONKit',
+          ]
         end
 
         it "raises when unable to find an extension's host target" do

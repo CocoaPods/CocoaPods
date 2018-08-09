@@ -247,10 +247,12 @@ module Pod
           pod_target.should_build? && pod_target.requires_frameworks? && !pod_target.static_framework?
         end
         user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
-          resources_by_config[config] = (relevant_pod_targets & pod_targets_for_build_configuration(config)).flat_map do |pod_target|
+          targets = relevant_pod_targets & pod_targets_for_build_configuration(config)
+          resources_by_config[config] = targets.flat_map do |pod_target|
             non_test_specs = pod_target.non_test_specs.map(&:name)
-            resource_paths = pod_target.resource_paths.values_at(*non_test_specs).flatten.compact
-            (resource_paths + [bridge_support_file].compact).uniq
+            resource_paths = pod_target.resource_paths.values_at(*non_test_specs).flatten
+            resource_paths << bridge_support_file
+            resource_paths.compact.uniq
           end
         end
       end

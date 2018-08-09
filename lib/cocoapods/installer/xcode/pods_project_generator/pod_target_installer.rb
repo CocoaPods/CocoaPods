@@ -49,7 +49,7 @@ module Pod
               add_files_to_build_phases(native_target, test_native_targets)
 
               create_xcconfig_file(native_target, resource_bundle_targets)
-              create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets.values.flatten)
+              create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
 
               if target.defines_module?
                 create_module_map(native_target) do |generator|
@@ -407,7 +407,7 @@ module Pod
           # @param  [Array<PBXNativeTarget>] test_native_targets
           #         the test native target to link the xcconfig file into.
           #
-          # @param  [Array<PBXNativeTarget>] test_resource_bundle_targets
+          # @param  [Hash{String=>Array<PBXNativeTarget>}] test_resource_bundle_targets
           #         the additional test resource bundle targets to link the xcconfig file into.
           #
           # @return [void]
@@ -418,17 +418,19 @@ module Pod
               test_type = spec_consumer.test_type
               path = target.xcconfig_path("#{test_type.capitalize}-#{test_spec.name.split('/')[1..-1].join('-')}")
               update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, test_spec), path)
-              xcconfig_file_ref = add_file_to_support_group(path)
+              test_xcconfig_file_ref = add_file_to_support_group(path)
 
-              test_native_targets.each do |test_target|
-                test_target.build_configurations.each do |test_target_bc|
-                  test_target_swift_debug_hack(test_spec, test_target_bc)
-                  test_target_bc.base_configuration_reference = xcconfig_file_ref
-                end
+              test_native_target = test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
+              test_native_target.build_configurations.each do |test_native_target_bc|
+                test_target_swift_debug_hack(test_spec, test_native_target_bc)
+                test_native_target_bc.base_configuration_reference = test_xcconfig_file_ref
               end
 
-              # also apply the private config to resource bundle test targets.
-              apply_xcconfig_file_ref_to_resource_bundle_targets(test_resource_bundle_targets, xcconfig_file_ref)
+              # also apply the private config to resource bundle test targets related to this test spec.
+              scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
+              unless scoped_test_resource_bundle_targets.empty?
+                apply_xcconfig_file_ref_to_resource_bundle_targets(scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
+              end
             end
           end
 

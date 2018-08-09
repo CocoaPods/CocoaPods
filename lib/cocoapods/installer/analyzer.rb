@@ -277,6 +277,7 @@ module Pod
         embedded_aggregate_targets.each do |embedded_aggregate_target|
           # Skip non libraries in library-only mode
           next if libraries_only && !embedded_aggregate_target.library?
+          next if aggregate_target.search_paths_aggregate_targets.include?(embedded_aggregate_target)
           next unless embedded_aggregate_target.user_targets.any? do |embedded_user_target|
             # You have to ask the host target's project for the host targets of
             # the embedded target, as opposed to asking user_project for the
@@ -395,6 +396,12 @@ module Pod
         aggregate_targets = resolver_specs_by_target.keys.map do |target_definition|
           generate_target(target_definition, target_inspections, pod_targets, resolver_specs_by_target)
         end
+        aggregate_targets.each do |target|
+          search_paths_aggregate_targets = aggregate_targets.select do |aggregate_target|
+            target.target_definition.targets_to_inherit_search_paths.include?(aggregate_target.target_definition)
+          end
+          target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
+        end
         if installation_options.integrate_targets?
           # Copy embedded target pods that cannot have their pods embedded as frameworks to
           # their host targets, and ensure we properly link library pods to their host targets
@@ -415,11 +422,7 @@ module Pod
             aggregate_target.merge_embedded_pod_targets(embedded_pod_targets)
           end
         end
-        aggregate_targets.each do |target|
-          target.search_paths_aggregate_targets.concat(aggregate_targets.select do |aggregate_target|
-            target.target_definition.targets_to_inherit_search_paths.include?(aggregate_target.target_definition)
-          end).freeze
-        end
+        aggregate_targets
       end
 
       # Setup the aggregate target for a single user target
@@ -470,7 +473,9 @@ module Pod
       def calculate_pod_targets(aggregate_targets)
         aggregate_target_pod_targets = aggregate_targets.flat_map(&:pod_targets).uniq
         test_dependent_targets = aggregate_target_pod_targets.flat_map do |pod_target|
-          pod_target.test_dependent_targets_by_spec_name.values.flatten
+          pod_target.test_specs.flat_map do |test_spec|
+            pod_target.recursive_test_dependent_targets(test_spec)
+          end
         end
         (aggregate_target_pod_targets + test_dependent_targets).uniq
       end
