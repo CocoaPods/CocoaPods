@@ -439,8 +439,7 @@ module Pod
       def initialize(root, sandbox)
         if root != sandbox.root
           FileUtils.rm_r(root) if root.exist? || root.symlink?
-          relative_path = sandbox.root.relative_path_from(root.dirname)
-          File.symlink(relative_path, root)
+          File.symlink(sandbox.root, root)
         end
         @root = root
         @sandbox = sandbox
