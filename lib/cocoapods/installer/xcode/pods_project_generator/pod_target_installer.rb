@@ -417,7 +417,7 @@ module Pod
               spec_consumer = test_spec.consumer(target.platform)
               test_type = spec_consumer.test_type
               path = target.xcconfig_path("#{test_type.capitalize}-#{test_spec.name.split('/')[1..-1].join('-')}")
-              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, test_spec), path)
+              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, spec_consumer), path)
               test_xcconfig_file_ref = add_file_to_support_group(path)
 
               test_native_target = test_native_target_from_spec_consumer(spec_consumer, test_native_targets)

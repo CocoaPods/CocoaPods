@@ -464,6 +464,7 @@ module Pod
         #   The test specification these build settings are for or `nil`.
         #
         attr_reader :test_spec
+        attr_reader :test_spec_consumer
 
         # Initializes a new instance
         #
@@ -473,10 +474,11 @@ module Pod
         # @param [Specification] test_spec
         #  see {#test_spec}
         #
-        def initialize(target, test_spec = nil)
+        def initialize(target, test_spec_consumer = nil)
           super(target)
-          @test_spec = test_spec
-          @test_xcconfig = !test_spec.nil?
+          @test_spec_consumer = test_spec_consumer
+          @test_spec = test_spec_consumer ? test_spec_consumer.spec : nil
+          @test_xcconfig = !test_spec_consumer.nil?
         end
 
         # @return [Xcodeproj::Xconfig]
@@ -594,7 +596,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && (!test_spec || test_spec_consumer.requires_app_host?)
 
           libraries = libraries_to_import.dup
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
@@ -622,7 +624,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && (!test_spec || test_spec_consumer.requires_app_host?)
 
           vendored = library_search_paths_to_import.dup
           vendored.concat dependent_targets.flat_map { |t| t.build_settings.vendored_dynamic_library_search_paths }

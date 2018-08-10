@@ -117,7 +117,7 @@ module Pod
 
         private
 
-        AppHostKey = Struct.new(:test_type, :platform)
+        AppHostKey = Struct.new(:test_type, :platform, :pod_targets)
         InstallationResults = Struct.new(:pod_target_installation_results, :aggregate_target_installation_results)
 
         def create_project
@@ -217,7 +217,7 @@ module Pod
           UI.message '- Installing app hosts' do
             app_host_keys = pod_targets.flat_map do |pod_target|
               pod_target.test_spec_consumers.select(&:requires_app_host?).map do |test_spec_consumer|
-                AppHostKey.new(test_spec_consumer.test_type, pod_target.platform)
+                AppHostKey.new(test_spec_consumer.test_type, pod_target.platform, [pod_target])
               end
             end.uniq
 
@@ -228,11 +228,21 @@ module Pod
             app_host_keys = app_host_keys_by_test_type.map do |(test_type, platform_symbol), keys|
               deployment_target = keys.map { |k| k.platform.deployment_target }.max
               platform = Platform.new(platform_symbol, deployment_target)
-              AppHostKey.new(test_type, platform)
+              AppHostKey.new(test_type, platform, keys.flat_map(&:pod_targets).uniq)
             end
 
             app_host_keys.each_with_object({}) do |app_host_key, app_hosts_by_key|
-              app_hosts_by_key[app_host_key] = AppHostInstaller.new(sandbox, project, app_host_key.platform, app_host_key.test_type).install!
+              app_host_target = AppHostInstaller.new(sandbox, project, app_host_key.platform, app_host_key.test_type).install!
+              app_hosts_by_key[app_host_key] = app_host_target
+              targets_by_config = analysis_result.all_user_build_configurations.each_with_object({}) do |(name, _type), h|
+                h[name] = app_host_key.pod_targets
+              end
+              at = AggregateTarget.new(sandbox, true, analysis_result.all_user_build_configurations, [], app_host_key.platform,
+                Podfile::TargetDefinition.new("foo-#{app_host_key.platform}", Podfile.new, 'abstract' => false), sandbox.root, project, [app_host_target.uuid], targets_by_config)
+              res = AggregateTargetInstaller.new(sandbox, project, at).install!
+              @target_installation_results.aggregate_target_installation_results[at.name] = res
+              app_host_target.add_dependency(res.native_target)
+              UserProjectIntegrator::TargetIntegrator.new(at).integrate!
             end
           end
         end
@@ -333,7 +343,9 @@ module Pod
                     end
                   end
                   test_native_target.add_dependency(dependency_installation_result.native_target)
-                  add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
+                  unless test_specs.all? { |ts| ts.consumer(pod_target.platform).requires_app_host? }
+                    add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
+                  end
                   # Wire app host dependencies to test native target
                   test_spec_consumers = test_specs.map { |test_spec| test_spec.consumer(pod_target.platform) }
                   test_spec_consumers.select(&:requires_app_host?).each do |test_spec_consumer|

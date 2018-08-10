@@ -26,6 +26,7 @@ module Pod
             UI.section(integration_message) do
               target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
                 test_specs.each do |test_spec|
+                  next if test_spec.consumer(target.platform).requires_app_host?
                   add_embed_frameworks_script_phase(test_native_target, test_spec)
                   add_copy_resources_script_phase(test_native_target, test_spec)
                 end
