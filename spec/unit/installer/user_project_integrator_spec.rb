@@ -32,7 +32,7 @@ module Pod
         pods_symlink = @project_symlink_dir + 'Pods'
         pods_symlink.exist?.should == true
         pods_symlink.symlink?.should == true
-        File.readlink(pods_symlink.to_s).should.equal '../Pods'
+        File.readlink(pods_symlink.to_s).should.equal config.sandbox.root.to_s
         FileUtils.rm_f(@project_symlink_dir)
       end
     end
