@@ -163,25 +163,6 @@ module Pod
       end
 
       describe 'platform architectures' do
-        it 'correctly determines when a platform requires 64-bit architectures' do
-          @podfile = Pod::Podfile.new do
-            project 'SampleProject/SampleProject'
-            platform :ios, '11.0'
-            use_frameworks!
-            target 'TestRunner' do
-              pod 'AFNetworking'
-              pod 'JSONKit'
-            end
-          end
-          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
-
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '11.0')).should.be.true
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '10.0')).should.be.false
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:osx)).should.be.true
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:tvos)).should.be.false
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:watchos)).should.be.false
-        end
-
         it 'forces 64-bit architectures when required' do
           @podfile = Pod::Podfile.new do
             project 'SampleProject/SampleProject'
@@ -1062,33 +1043,7 @@ module Pod
 
       #-------------------------------------------------------------------------#
 
-      describe '#filter_pod_targets_for_target_definition' do
-        it 'does include pod target if any spec is not used by tests only and is part of target definition' do
-          spec1 = Resolver::ResolverSpecification.new(stub, false, nil)
-          spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
-          target_definition = @podfile.target_definitions['SampleProject']
-          pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec], :pod_name => 'Pod1')
-          resolver_specs_by_target = { target_definition => [spec1, spec2] }
-          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [pod_target] }
-        end
-
-        it 'does not include pod target if its used by tests only' do
-          spec1 = Resolver::ResolverSpecification.new(stub, true, nil)
-          spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
-          target_definition = stub('TargetDefinition')
-          pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
-          resolver_specs_by_target = { target_definition => [spec1, spec2] }
-          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [] }
-        end
-
-        it 'does not include pod target if its not part of the target definition' do
-          spec = Resolver::ResolverSpecification.new(stub, false, nil)
-          target_definition = stub
-          pod_target = stub(:name => 'Pod1', :target_definitions => [], :specs => [spec.spec])
-          resolver_specs_by_target = { target_definition => [spec] }
-          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [] }
-        end
-
+      describe '#pod_targets_for_configuration' do
         it 'returns whether it is whitelisted in a build configuration' do
           target_definition = @podfile.target_definitions['SampleProject']
           target_definition.whitelist_pod_for_configuration('JSONKit', 'Debug')

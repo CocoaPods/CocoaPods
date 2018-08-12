@@ -30,6 +30,8 @@ module Pod
 
         # Inspect the #target_definition
         #
+        # @param  [Xcodeproj::Project] user_project the user project
+        #
         # @raise If no `user_project` is set
         #
         # @return [TargetInspectionResult] the result of the inspection of the target definition within the user project
@@ -37,7 +39,7 @@ module Pod
         def compute_results(user_project)
           raise ArgumentError, 'Cannot compute results without a user project set' unless user_project
 
-          targets = compute_targets(user_project)
+          targets = compute_targets(user_project.native_targets)
           project_target_uuids = targets.map(&:uuid)
           build_configurations = compute_build_configurations(targets)
           platform = compute_platform(targets)
@@ -95,13 +97,12 @@ module Pod
         #         encountered target is returned (it is assumed to be the one
         #         to integrate in simple projects).
         #
-        # @param  [Xcodeproj::Project] user_project
-        #         the user project
+        # @param  [Array<PBXNativeTarget>] native_targets
+        #         all native targets in the user project
         #
-        # @return [Array<PBXNativeTarget>]
+        # @return [Array<PBXNativeTarget>] the targets to be integrated
         #
-        def compute_targets(user_project)
-          native_targets = user_project.native_targets
+        def compute_targets(native_targets)
           target = native_targets.find { |t| t.name == target_definition.name.to_s }
           unless target
             found = native_targets.map { |t| "`#{t.name}`" }.to_sentence
@@ -127,7 +128,7 @@ module Pod
           end
         end
 
-        # @param  [Array<PBXNativeTarget] user_targets the user's targets of the project of
+        # @param  [Array<PBXNativeTarget>] user_targets the user's targets of the project of
         #         #target_definition which needs to be integrated
         #
         # @return [Platform] The platform of the user's targets

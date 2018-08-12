@@ -101,12 +101,12 @@ module Pod
     #
     def resolver_specs_by_target
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
-        @podfile_dependency_cache.target_definition_list.each do |target|
+        @podfile_dependency_cache.target_definition_list.each do |target_definition|
           # can't use vertex.root? since that considers _all_ targets
-          explicit_dependencies = @podfile_dependency_cache.target_definition_dependencies(target).map(&:name).to_set
-          vertices = valid_dependencies_for_target(target)
+          explicit_dependencies = @podfile_dependency_cache.target_definition_dependencies(target_definition).map(&:name).to_set
+          vertices = valid_dependencies_for_target(target_definition)
 
-          resolver_specs_by_target[target] = vertices.
+          resolver_specs_by_target[target_definition] = vertices.
             map do |vertex|
               payload = vertex.payload
               non_library = (!explicit_dependencies.include?(vertex.name) || payload.test_specification? || payload.app_specification?) &&
@@ -531,25 +531,35 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
     # rejecting those that are scoped by target platform and have incompatible
     # targets.
     #
-    # @return [Array<Molinillo::DependencyGraph::Vertex>]
-    #         An array of target-appropriate nodes whose `payload`s are
+    # @param  [TargetDefinition] target_definition
+    #         the target definition for which to find valid dependencies
+    #
+    # @return [Set<Molinillo::DependencyGraph::Vertex>]
+    #         An set of target-appropriate nodes whose `payload`s are
     #         dependencies for `target`.
     #
-    def valid_dependencies_for_target(target)
+    def valid_dependencies_for_target(target_definition)
       dependencies = Set.new
-      @podfile_dependency_cache.target_definition_dependencies(target).each do |dep|
+      @podfile_dependency_cache.target_definition_dependencies(target_definition).each do |dep|
         node = @activated.vertex_named(dep.name)
-        add_valid_dependencies_from_node(node, target, dependencies)
+        add_valid_dependencies_from_node(node, target_definition, dependencies)
       end
       dependencies
     end
 
-    def add_valid_dependencies_from_node(node, target, dependencies)
+    # @param [Molinillo::DependencyGraph::Vertex] node
+    #
+    # @param [TargetDefinition] target_definition
+    #
+    # @param [Set<Pod::Depedency>] depedencies
+    #        a set of depedencies to insert dependencies into
+    #
+    def add_valid_dependencies_from_node(node, target_definition, dependencies)
       return unless dependencies.add?(node)
-      validate_platform(node.payload, target)
+      validate_platform(node.payload, target_definition)
       node.outgoing_edges.each do |edge|
-        next unless edge_is_valid_for_target_platform?(edge, target.platform)
-        add_valid_dependencies_from_node(edge.destination, target, dependencies)
+        next unless edge_is_valid_for_target_platform?(edge, target_definition.platform)
+        add_valid_dependencies_from_node(edge.destination, target_definition, dependencies)
       end
     end
 

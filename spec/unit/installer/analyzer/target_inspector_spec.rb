@@ -64,7 +64,7 @@ module Pod
         user_project.new_target(:application, 'UserTarget', :ios)
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        targets = target_inspector.send(:compute_targets, user_project)
+        targets = target_inspector.send(:compute_targets, user_project.native_targets)
         targets.map(&:name).should == ['UserTarget']
       end
 
@@ -73,7 +73,7 @@ module Pod
         user_project = Xcodeproj::Project.new('path')
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
+        e = lambda { target_inspector.send(:compute_targets, user_project.native_targets) }.should.raise Informative
         e.message.should.match /Unable to find a target named `UserTarget`/
       end
 
@@ -85,7 +85,7 @@ module Pod
         user_project.new_target(:application, 'ThirdTarget', :ios)
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
+        e = lambda { target_inspector.send(:compute_targets, user_project.native_targets) }.should.raise Informative
         e.message.should.include 'did find `FirstTarget`, `SecondTarget`, and `ThirdTarget`.'
       end
 
@@ -96,7 +96,7 @@ module Pod
         user_project.new_target(:application, 'UserTarget', :ios)
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        targets = target_inspector.send(:compute_targets, user_project)
+        targets = target_inspector.send(:compute_targets, user_project.native_targets)
         targets.map(&:name).should == ['UserTarget']
       end
 
@@ -105,7 +105,7 @@ module Pod
         user_project = Xcodeproj::Project.new('path')
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
+        e = lambda { target_inspector.send(:compute_targets, user_project.native_targets) }.should.raise Informative
         e.message.should.match /Unable to find a target named/
       end
     end
