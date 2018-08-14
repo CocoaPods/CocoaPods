@@ -314,7 +314,7 @@ module Pod
     #
     def podfile_dir_relative_path
       podfile_path = target_definition.podfile.defined_in_file
-      return "${SRCROOT}/#{podfile_path.relative_path_from(client_root).dirname}" unless podfile_path.nil?
+      return "${SRCROOT}/#{podfile_path.realpath.relative_path_from(client_root.realpath).dirname}" unless podfile_path.nil?
       # Fallback to the standard path if the Podfile is not represented by a file.
       '${PODS_ROOT}/..'
     end
