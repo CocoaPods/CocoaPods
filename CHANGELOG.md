@@ -74,6 +74,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Scope embedded pods to their host targets by their configuration  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8011](https://github.com/CocoaPods/CocoaPods/issues/8011)
+
 * Set the `SWIFT_VERSION` on resource bundle targets that contain compiled sources and use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7950](https://github.com/CocoaPods/CocoaPods/issues/7950)

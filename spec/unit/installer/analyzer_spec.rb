@@ -1170,6 +1170,49 @@ module Pod
             JSONKit
             monkey
           ).sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-SampleFramework/Debug/monkey',
+            'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/monkey',
+          ].sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-SampleFramework/Release/monkey',
+            'Pods-SampleProject/Release/JSONKit',
+            'Pods-SampleProject/Release/monkey',
+          ].sort
+        end
+
+        it "copy a framework's pod target, when the framework is in a sub project and is scoped to a configuration" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            use_frameworks!
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            target 'SampleProject' do
+              pod 'JSONKit'
+            end
+
+            target 'SampleFramework' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey', :configurations => ['Debug']
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
+            JSONKit
+            monkey
+          ).sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-SampleFramework/Debug/monkey',
+            'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/monkey',
+          ].sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-SampleProject/Release/JSONKit',
+          ].sort
         end
 
         it "copy a static library's pod target, when the static library is in a sub project" do
@@ -1194,6 +1237,48 @@ module Pod
             JSONKit
             monkey
           ).sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Debug/monkey',
+            'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/monkey',
+          ].sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Release/monkey',
+            'Pods-SampleProject/Release/JSONKit',
+            'Pods-SampleProject/Release/monkey',
+          ].sort
+        end
+
+        it "copy a static library's pod target, when the static library is in a sub project and is scoped to a configuration" do
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+
+            target 'SampleProject' do
+              pod 'JSONKit'
+            end
+
+            target 'SampleLib' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'monkey', :configuration => ['Debug']
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          result = analyzer.analyze
+
+          result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
+            JSONKit
+            monkey
+          ).sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Debug/monkey',
+            'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/monkey',
+          ].sort
+          result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-SampleProject/Release/JSONKit',
+          ].sort
         end
 
         it "does not copy a static library's pod target, when the static library aggregate target has search paths inherited" do
