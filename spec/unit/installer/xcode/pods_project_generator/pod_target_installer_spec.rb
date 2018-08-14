@@ -215,7 +215,7 @@ module Pod
 
               it 'adds the native test target to the project for iOS targets with code signing' do
                 installation_result = @installer.install!
-                @project.targets.count.should == 4
+                @project.targets.count.should == 5
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -247,7 +247,7 @@ module Pod
 
               it 'adds the native test target to the project for OSX targets without code signing' do
                 installation_result = @installer2.install!
-                @project.targets.count.should == 4
+                @project.targets.count.should == 5
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -292,7 +292,7 @@ module Pod
 
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
-                @project.targets.count.should == 4
+                @project.targets.count.should == 5
                 native_target = @project.targets[0]
                 native_target.source_build_phase.files.count.should == 2
                 native_target.source_build_phase.files.map(&:display_name).sort.should == [
