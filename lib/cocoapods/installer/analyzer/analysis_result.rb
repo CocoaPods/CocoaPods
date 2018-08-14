@@ -22,7 +22,7 @@ module Pod
 
         # @return [SpecsState] the states of the {Sandbox} respect the resolved specifications.
         #
-        attr_accessor :sandbox_state
+        attr_reader :sandbox_state
 
         # @return [Array<AggregateTarget>] The aggregate targets created for each {TargetDefinition} from the {Podfile}.
         #
