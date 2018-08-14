@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source_files        = 'Classes/*.{h,m}'
 
   s.test_spec do |test_spec|
-    test_spec.source_files = 'Tests/*.{h,m}'
+    test_spec.source_files = 'Tests/*.{h,m,swift}'
     test_spec.dependency 'OCMock'
     test_spec.resource_bundle = { 'WatermelonLibTestResources' => ['Tests/Resources/**/*'] }
   end
