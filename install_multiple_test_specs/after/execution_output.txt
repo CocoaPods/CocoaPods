@@ -34,6 +34,7 @@ Generating Pods project
     - Installing target `TestLib` iOS 9.0
       - Generating Info.plist file at `Pods/Target Support Files/TestLib/TestLib-Unit-UnitTests1-Info.plist`
       - Generating Info.plist file at `Pods/Target Support Files/TestLib/TestLib-Unit-UnitTests2-Info.plist`
+      - Generating Info.plist file at `Pods/AppHost-TestLib-Unit-Tests/AppHost-TestLib-Unit-Tests-Info.plist`
       - Generating module map file at `Pods/Target Support Files/TestLib/TestLib.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/TestLib/TestLib-umbrella.h`
       - Generating Info.plist file at `Pods/Target Support Files/TestLib/TestLib-Info.plist`
@@ -50,8 +51,6 @@ Integrating target `TestLib`
     Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Copy Pods Resources' to project.
-  - Installing app hosts
-    - Generating Info.plist file at `Pods/AppHost-iOS-Unit-Tests/AppHost-iOS-Unit-Tests-Info.plist`
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
     - Generating deterministic UUIDs

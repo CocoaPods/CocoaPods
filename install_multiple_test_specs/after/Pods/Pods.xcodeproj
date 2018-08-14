@@ -1,8 +1,8 @@
 
 File References:
 - Podfile
-- AppHost-iOS-Unit-Tests:
-  - AppHost-iOS-Unit-Tests-Info.plist
+- AppHost-TestLib-Unit-Tests:
+  - AppHost-TestLib-Unit-Tests-Info.plist
   - LaunchScreen.storyboard
   - main.m
 - Development Pods:
@@ -36,7 +36,7 @@ File References:
   - iOS:
     - Foundation.framework
 - Products:
-  - AppHost-iOS-Unit-Tests.app
+  - AppHost-TestLib-Unit-Tests.app
   - Pods_InstallMultipleTestSpecs.framework
   - TestLib.framework
   - TestLib-Unit-UnitTests1
@@ -56,7 +56,7 @@ File References:
 
 
 Targets:
-- AppHost-iOS-Unit-Tests:
+- AppHost-TestLib-Unit-Tests:
     Build Phases:
     - Sources:
       - main.m
@@ -70,13 +70,13 @@ Targets:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CODE_SIGN_IDENTITY: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
-          INFOPLIST_FILE: AppHost-iOS-Unit-Tests/AppHost-iOS-Unit-Tests-Info.plist
+          INFOPLIST_FILE: AppHost-TestLib-Unit-Tests/AppHost-TestLib-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS:
           - "$(inherited)"
           - "@executable_path/Frameworks"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: AppHost-iOS-Unit-Tests
+          PRODUCT_NAME: AppHost-TestLib-Unit-Tests
           SDKROOT: iphoneos
           TARGETED_DEVICE_FAMILY: '1,2'
     - Release:
@@ -84,13 +84,13 @@ Targets:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CODE_SIGN_IDENTITY: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
-          INFOPLIST_FILE: AppHost-iOS-Unit-Tests/AppHost-iOS-Unit-Tests-Info.plist
+          INFOPLIST_FILE: AppHost-TestLib-Unit-Tests/AppHost-TestLib-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           LD_RUNPATH_SEARCH_PATHS:
           - "$(inherited)"
           - "@executable_path/Frameworks"
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
-          PRODUCT_NAME: AppHost-iOS-Unit-Tests
+          PRODUCT_NAME: AppHost-TestLib-Unit-Tests
           SDKROOT: iphoneos
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -341,7 +341,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4'
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-TestLib-Unit-Tests.app/AppHost-TestLib-Unit-Tests"
         Base Configuration: TestLib.unit-unittests2.xcconfig
     - Release:
         Build Settings:
@@ -361,7 +361,7 @@ Targets:
           SWIFT_COMPILATION_MODE: wholemodule
           SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4'
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-TestLib-Unit-Tests.app/AppHost-TestLib-Unit-Tests"
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: TestLib.unit-unittests2.xcconfig
 
