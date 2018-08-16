@@ -794,7 +794,7 @@ module Pod
 
       def verify_no_pods_with_different_sources!
         deps_with_different_sources = podfile_dependencies.group_by(&:root_name).
-          select { |_root_name, dependencies| dependencies.map(&:external_source).uniq.count > 1 }
+          select { |_root_name, dependencies| dependencies.map(&:external_source).compact.uniq.count > 1 }
         deps_with_different_sources.each do |root_name, dependencies|
           raise Informative, 'There are multiple dependencies with different ' \
           "sources for `#{root_name}` in #{UI.path podfile.defined_in_file}:" \
@@ -884,7 +884,7 @@ module Pod
       #
       def resolve_dependencies(locked_dependencies)
         duplicate_dependencies = podfile_dependencies.group_by(&:name).
-          select { |_name, dependencies| dependencies.count > 1 }
+          select { |_name, dependencies| dependencies.count(&:external_source) > 1 }
         duplicate_dependencies.each do |name, dependencies|
           UI.warn "There are duplicate dependencies on `#{name}` in #{UI.path podfile.defined_in_file}:\n\n" \
            "- #{dependencies.map(&:to_s).join("\n- ")}"
@@ -892,7 +892,7 @@ module Pod
 
         resolver_specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path(podfile.defined_in_file) || 'Podfile'}" do
-          resolver = Pod::Resolver.new(sandbox, podfile, locked_dependencies, sources, @specs_updated)
+          resolver = Pod::Resolver.new(sandbox, podfile, locked_dependencies, sources, @specs_updated, @podfile_dependency_cache)
           resolver_specs_by_target = resolver.resolve
           resolver_specs_by_target.values.flatten(1).map(&:spec).each(&:validate_cocoapods_version)
         end

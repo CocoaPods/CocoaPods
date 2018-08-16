@@ -244,6 +244,26 @@ describe_cli 'pod' do
       Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
     end
 
+    description = 'Installs a Pod with an external source and version'
+    if has_mercurial
+      describe description do
+        behaves_like cli_spec 'install_external_source_with_version',
+                              'install --no-repo-update'
+      end
+    else
+      Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
+    end
+
+    describe 'Installs multiple duplicate pods in Podfile' do
+      behaves_like cli_spec 'install_podspec_for_sdk',
+                            'install --no-repo-update'
+    end
+
+    describe 'Re-installs multiple duplicate pods in Podfile' do
+      behaves_like cli_spec 'reinstall_podspec_for_sdk',
+                            'install --no-repo-update'
+    end
+
     describe 'Installs a Pod given the podspec' do
       behaves_like cli_spec 'install_podspec',
                             'install --no-repo-update'

@@ -89,7 +89,7 @@ module Pod
     #         within this Resolver.
     #
     def initialize(sandbox, podfile, locked_dependencies, sources, specs_updated,
-                   podfile_dependency_cache: Installer::Analyzer::PodfileDependencyCache.from_podfile(podfile))
+                   podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(podfile))
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
@@ -169,9 +169,16 @@ module Pod
     def search_for(dependency)
       @search ||= {}
       @search[dependency] ||= begin
-        locked_requirement = requirement_for_locked_pod_named(dependency.name)
-        additional_requirements = Array(locked_requirement)
-        specifications_for_dependency(dependency, additional_requirements)
+        deps_with_external_source = @podfile_dependency_cache.podfile_dependencies.select(&:external_source)
+        deps_with_external_source = deps_with_external_source.select { |dep| dep.root_name == dependency.root_name }
+        if deps_with_external_source.count > 0
+          spec = sandbox.specification(dependency.root_name)
+          [spec.subspec_by_name(dependency.name, false, true)]
+        else
+          locked_requirement = requirement_for_locked_pod_named(dependency.name)
+          additional_requirements = Array(locked_requirement)
+          specifications_for_dependency(dependency, additional_requirements)
+        end
       end
       @search[dependency].dup
     end

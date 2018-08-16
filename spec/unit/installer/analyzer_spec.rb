@@ -986,7 +986,7 @@ module Pod
 
       #--------------------------------------#
 
-      it 'warns when a dependency is duplicated' do
+      it 'resolves the dependencies when a dependency is duplicated' do
         podfile = Podfile.new do
           source 'https://github.com/CocoaPods/Specs.git'
           project 'SampleProject/SampleProject'
@@ -997,11 +997,9 @@ module Pod
           end
         end
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
-        analyzer.analyze
-
-        UI.warnings.should.match /duplicate dependencies on `RestKit`/
-        UI.warnings.should.match /RestKit \(~> 0.23.0\)/
-        UI.warnings.should.match /RestKit \(<= 0.23.2\)/
+        result = analyzer.analyze
+        spec = result.specifications.find { |s| s.name == 'RestKit' }
+        spec.version.should.equal Version.new('0.23.2')
       end
 
       it 'raises when specs have incompatible cocoapods requirements' do
@@ -1457,23 +1455,30 @@ module Pod
         e.message.should.match %r{RestKit \(from `https://github.com/segiddins/RestKit.git`\)}
       end
 
-      it 'raises when dependencies with the same name have different ' \
+      it 'allow use dependencies with the same name have different ' \
         'external sources with one being nil' do
+        SpecHelper.create_sample_app_copy_from_fixture('banana-lib')
+        repos = [Source.new(fixture('spec-repos/test_repo')), MasterSource.new(fixture('spec-repos/master'))]
+        aggregate = Pod::Source::Aggregate.new(repos)
+        config.sources_manager.stubs(:aggregate).returns(aggregate)
+        aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
+
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source SpecHelper.test_repo_url
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
-            pod 'RestKit', :git => 'https://github.com/RestKit/RestKit.git'
-            pod 'RestKit', '~> 0.23.0'
+            pod 'BananaLib', :path => SpecHelper.fixture('banana-lib').to_s
+            pod 'BananaLib', '~> 1.0'
           end
         end
+        config.sandbox.prepare
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
-        e = should.raise(Informative) { analyzer.analyze }
-
-        e.message.should.match /different sources for `RestKit`/
-        e.message.should.match %r{RestKit \(from `https://github.com/RestKit/RestKit.git`\)}
-        e.message.should.match /RestKit \(~> 0.23.0\)/
+        result = analyzer.analyze
+        result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
+          BananaLib
+          monkey
+        ).sort
       end
     end
 

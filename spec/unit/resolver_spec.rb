@@ -325,7 +325,7 @@ module Pod
             fss.subspec 'SecondSubSpec'
           end
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        config.sandbox.stubs(:specification).with('MainSpec').returns(spec)
         resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:name).sort
         specs.should == %w(
@@ -347,7 +347,7 @@ module Pod
             tss.source_files = 'some/file'
           end
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        config.sandbox.stubs(:specification).with('MainSpec').returns(spec)
         resolver = create_resolver
         resolved_specs = resolver.resolve.values.flatten
         spec_names = resolved_specs.map(&:name).sort
@@ -373,7 +373,7 @@ module Pod
             tss.dependency 'Expecta'
           end
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        config.sandbox.stubs(:specification).with('MainSpec').returns(spec)
         resolver = create_resolver
         resolved_specs = resolver.resolve.values.flatten
         spec_names = resolved_specs.map(&:name).sort
@@ -401,7 +401,7 @@ module Pod
             tss.dependency 'Expecta'
           end
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        config.sandbox.stubs(:specification).with('MainSpec').returns(spec)
         resolver = create_resolver
         resolved_specs = resolver.resolve.values.flatten
         spec_names = resolved_specs.map(&:name).sort
@@ -438,7 +438,7 @@ module Pod
             tss.dependency 'OCMock'
           end
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        config.sandbox.stubs(:specification).with('MainSpec').returns(spec)
         resolver = create_resolver
         resolved_specs = resolver.resolve
 
@@ -468,7 +468,7 @@ module Pod
           s.version      = '1.2.3-pre'
           s.platform     = :ios
         end
-        config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+        config.sandbox.stubs(:specification).with('MainSpec').returns(spec)
         resolver = create_resolver
         specs = resolver.resolve.values.flatten.map(&:spec).map(&:to_s).sort
         specs.should == [

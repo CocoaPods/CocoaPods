@@ -795,7 +795,7 @@ module Pod
         sandbox = config.sandbox
         podfile = generate_podfile
         lockfile = generate_lockfile
-        lockfile.internal_data['DEPENDENCIES'] = podfile.dependencies.map(&:to_s)
+        lockfile.internal_data['PODS'] = podfile.dependencies.map(&:to_s)
 
         should.raise Informative do
           Installer.targets_from_sandbox(sandbox, podfile, lockfile)
