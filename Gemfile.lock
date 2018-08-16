@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 3ea94ec009ba6a99bf4df05d7aec32ff7363cf98
+  revision: ebb41dcfe6d4bf253c664cbc1ccd7d0c08814864
   branch: master
   specs:
-    cocoapods-core (1.5.3)
+    cocoapods-core (1.6.0.beta.1)
       activesupport (>= 4.0.2, < 6)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
@@ -103,10 +103,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.5.3)
+    cocoapods (1.6.0.beta.1)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.5.3)
+      cocoapods-core (= 1.6.0.beta.1)
       cocoapods-deintegrate (>= 1.0.2, < 2.0)
       cocoapods-downloader (>= 1.2.1, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
