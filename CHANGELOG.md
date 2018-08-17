@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix line spacing for Swift error message.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8024](https://github.com/CocoaPods/CocoaPods/pull/8024)
 
 
 ## 1.6.0.beta.1 (2018-08-16)
@@ -20,13 +22,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Enhancements
 
 * Every test spec will have its own xctest bundle.  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [Jenn Kaplan](https://github.com/jkap)
   [#7908](https://github.com/CocoaPods/CocoaPods/pull/7908)
 
 * Generate a separate app host per pod.  
   [Samuel Giddins](https://github.com/segiddins)
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8005](https://github.com/CocoaPods/CocoaPods/pull/8005)
 
 * Add default launch screen storyboard to test app hosts.  
@@ -40,7 +42,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Warn instead of error when linting if `public_header_files` or
   `private_header_files` do not match any files.  
   [Eric Amorde](https://github.com/amorde)
-  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427) 
+  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427)
 
 * Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify
   which platforms to lint.  
