@@ -567,6 +567,49 @@ module Pod
           UI.output.should.include 'was 2.0 and source changed to `source2` from `source1`'
         end
 
+        describe '#specs_for_pod' do
+          it 'includes the specs by target name grouped by platform' do
+            spec = fixture_spec('matryoshka/matryoshka.podspec')
+            subspec = spec.subspec_by_name('matryoshka/Foo')
+            targets = [
+              ['matryoshka', Platform.ios, spec],
+              ['matryoshka', Platform.osx, spec],
+              ['matryoshka/Foo', Platform.ios, subspec],
+            ]
+            @pod_targets = targets.map do |(name, platform, target_spec)|
+              target_definition = fixture_target_definition(name, platform)
+              PodTarget.new(config.sandbox, false, {}, [], platform, [target_spec], [target_definition], nil)
+            end
+            @installer.stubs(:pod_targets).returns(@pod_targets)
+            @installer.send(:specs_for_pod, 'matryoshka').should == {
+              Platform.ios => [spec, subspec],
+              Platform.osx => [spec],
+            }
+          end
+        end
+
+        it 'creates a pod installer' do
+          spec = fixture_spec('matryoshka/matryoshka.podspec')
+          subspec = spec.subspec_by_name('matryoshka/Foo')
+          targets = [
+            ['matryoshka', Platform.ios, spec],
+            ['matryoshka', Platform.osx, spec],
+            ['matryoshka/Foo', Platform.ios, subspec],
+          ]
+          @pod_targets = targets.map do |(name, platform, target_spec)|
+            target_definition = fixture_target_definition(name, platform)
+            PodTarget.new(config.sandbox, false, {}, [], platform, [target_spec], [target_definition], nil)
+          end
+          @installer.stubs(:pod_targets).returns(@pod_targets)
+          pod_installer = @installer.send(:create_pod_installer, 'matryoshka')
+          pod_installer.specs_by_platform.should == {
+            Platform.ios => [spec, subspec],
+            Platform.osx => [spec],
+          }
+          pod_installer.sandbox.should == @installer.sandbox
+          pod_installer.can_cache.should.be.true?
+        end
+
         it 'raises when it attempts to install pod source with no target supporting it' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
           pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
