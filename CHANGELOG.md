@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix `weak_frameworks` missing regression.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7872](https://github.com/CocoaPods/CocoaPods/issues/7872)
+
 * Fix line spacing for Swift error message.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8024](https://github.com/CocoaPods/CocoaPods/pull/8024)

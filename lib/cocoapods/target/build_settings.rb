@@ -552,7 +552,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :weak_frameworks_to_import, :memoized => true, :sorted => true, :uniqued => true do
-          []
+          spec_consumers.flat_map(&:weak_frameworks)
         end
 
         # @return [Array<String>]
