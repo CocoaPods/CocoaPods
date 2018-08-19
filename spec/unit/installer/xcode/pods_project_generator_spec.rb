@@ -151,8 +151,8 @@ module Pod
           it 'installs the correct targets in the project' do
             @generator.generate!
             @generator.project.targets.map(&:name).sort.should == [
-              'AppHost-iOS-Unit-Tests',
-              'AppHost-macOS-Unit-Tests',
+              'AppHost-WatermelonLib-iOS-Unit-Tests',
+              'AppHost-WatermelonLib-macOS-Unit-Tests',
               'BananaLib-iOS',
               'BananaLib-macOS',
               'CoconutLib-iOS',
@@ -258,12 +258,12 @@ module Pod
           it 'sets the app host dependency for the tests that need it' do
             @coconut_test_spec.ios.requires_app_host = true
             @generator.generate!
-            @generator.project.targets.find { |t| t.name == 'AppHost-iOS-Unit-Tests' }.should.not.be.nil
+            @generator.project.targets.find { |t| t.name == 'AppHost-CoconutLib-iOS-Unit-Tests' }.should.not.be.nil
             @generator.project.targets.find { |t| t.name == 'CoconutLib-iOS-Unit-Tests' }.dependencies.map(&:name).sort.should == [
-              'AppHost-iOS-Unit-Tests',
+              'AppHost-CoconutLib-iOS-Unit-Tests',
               'CoconutLib-iOS',
             ]
-            @generator.project.targets.find { |t| t.name == 'AppHost-macOS-Unit-Tests' }.should.not.be.nil
+            @generator.project.targets.find { |t| t.name == 'AppHost-CoconutLib-macOS-Unit-Tests' }.should.be.nil
             @generator.project.targets.find { |t| t.name == 'CoconutLib-macOS-Unit-Tests' }.dependencies.map(&:name).should == [
               'CoconutLib-macOS',
             ]
@@ -292,13 +292,13 @@ module Pod
 
           it 'creates and links app host with an iOS test native target' do
             @generator.generate!
-            app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-iOS-Unit-Tests' }
+            app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-WatermelonLib-iOS-Unit-Tests' }
             app_host_target.name.should.not.be.nil
             app_host_target.symbol_type.should == :application
             test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-iOS-Unit-SnapshotTests' }
             test_native_target.should.not.be.nil
             test_native_target.build_configurations.each do |bc|
-              bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-iOS-Unit-Tests.app/AppHost-iOS-Unit-Tests'
+              bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-WatermelonLib-iOS-Unit-Tests.app/AppHost-WatermelonLib-iOS-Unit-Tests'
             end
             @generator.project.root_object.attributes['TargetAttributes'][test_native_target.uuid.to_s].should == {
               'TestTargetID' => app_host_target.uuid.to_s,
@@ -307,13 +307,13 @@ module Pod
 
           it 'creates and links app host with an OSX test native target' do
             @generator.generate!
-            app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-macOS-Unit-Tests' }
+            app_host_target = @generator.project.targets.find { |t| t.name == 'AppHost-WatermelonLib-macOS-Unit-Tests' }
             app_host_target.name.should.not.be.nil
             app_host_target.symbol_type.should == :application
             test_native_target = @generator.project.targets.find { |t| t.name == 'WatermelonLib-macOS-Unit-SnapshotTests' }
             test_native_target.should.not.be.nil
             test_native_target.build_configurations.each do |bc|
-              bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-macOS-Unit-Tests.app/Contents/MacOS/AppHost-macOS-Unit-Tests'
+              bc.build_settings['TEST_HOST'].should == '$(BUILT_PRODUCTS_DIR)/AppHost-WatermelonLib-macOS-Unit-Tests.app/Contents/MacOS/AppHost-WatermelonLib-macOS-Unit-Tests'
             end
             @generator.project.root_object.attributes['TargetAttributes'][test_native_target.uuid.to_s].should == {
               'TestTargetID' => app_host_target.uuid.to_s,

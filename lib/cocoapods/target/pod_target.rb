@@ -166,7 +166,7 @@ module Pod
       test_specs.map { |test_spec| test_spec.consumer(platform) }
     end
 
-    # @return [Boolean] Whether the target uses Swift code.
+    # @return [Boolean] Whether the target uses Swift code. This excludes source files from test specs.
     #
     def uses_swift?
       return @uses_swift if defined? @uses_swift
@@ -177,18 +177,18 @@ module Pod
       end
     end
 
-    # Checks whether a particular test type uses Swift or not.
+    # Checks whether a particular test specification uses Swift or not.
     #
-    # @param  [Symbol] test_type
-    #         The test type to check whether it uses Swift or not.
+    # @param  [Specification] test_spec
+    #         The test spec to query against.
     #
-    # @return [Boolean] Whether the target uses Swift code in the specified test type.
+    # @return [Boolean] Whether the target uses Swift code within the requested test spec.
     #
-    def uses_swift_for_test_type?(test_type)
+    def uses_swift_for_test_spec?(test_spec)
       @uses_swift_for_test_type ||= {}
-      return @uses_swift_for_test_type[test_type] if @uses_swift_for_test_type.key?(test_type)
-      @uses_swift_for_test_type[test_type] = begin
-        file_accessors.select { |a| a.spec.test_specification? && a.spec.test_type == test_type }.any? do |file_accessor|
+      return @uses_swift_for_test_type[test_spec.name] if @uses_swift_for_test_type.key?(test_spec.name)
+      @uses_swift_for_test_type[test_spec.name] = begin
+        file_accessors.select { |a| a.spec.test_specification? && a.spec == test_spec }.any? do |file_accessor|
           file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
         end
       end
@@ -242,12 +242,6 @@ module Pod
     #
     def contains_test_specifications?
       !test_specs.empty?
-    end
-
-    # @return [Array<Symbol>] All of the test supported types within this target.
-    #
-    def supported_test_types
-      test_specs.map(&:test_type).uniq
     end
 
     # @return [Hash{String=>Array<Hash{Symbol=>String}>}] The vendored and non vendored framework paths this target

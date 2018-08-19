@@ -562,7 +562,7 @@ module Pod
           build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
         end
         pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
-          if pod_target.uses_swift_for_test_type?(test_specs.first.test_type)
+          if pod_target.uses_swift_for_test_spec?(test_specs.first)
             test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
               build_configuration.build_settings['SWIFT_VERSION'] = swift_version
             end

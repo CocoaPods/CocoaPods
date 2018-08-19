@@ -93,7 +93,9 @@ module Pod
         (before + after).uniq
       end
       AggregateTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
-                          target_definition, client_root, user_project, user_target_uuids, merged)
+                          target_definition, client_root, user_project, user_target_uuids, merged).tap do |aggregate_target|
+        aggregate_target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
+      end
     end
 
     def build_settings(configuration_name = nil)

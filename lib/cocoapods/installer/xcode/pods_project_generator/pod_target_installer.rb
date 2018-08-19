@@ -6,6 +6,8 @@ module Pod
         # relative support files.
         #
         class PodTargetInstaller < TargetInstaller
+          require 'cocoapods/installer/xcode/pods_project_generator/app_host_installer'
+
           # @return [Array<Pathname>] Array of umbrella header paths in the headers directory
           #
           attr_reader :umbrella_header_paths
@@ -44,6 +46,7 @@ module Pod
               resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
 
               test_native_targets = add_test_targets
+              test_app_host_targets = add_test_app_host_targets(test_native_targets)
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
               add_files_to_build_phases(native_target, test_native_targets)
@@ -98,7 +101,7 @@ module Pod
               create_dummy_source(native_target)
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
-                                           test_resource_bundle_targets)
+                                           test_resource_bundle_targets, test_app_host_targets)
             end
           end
 
@@ -265,7 +268,7 @@ module Pod
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
-              language = target.uses_swift_for_test_type?(test_type) ? :swift : :objc
+              language = target.uses_swift_for_test_spec?(test_spec) ? :swift : :objc
               test_native_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
               test_native_target.product_reference.name = name
 
@@ -305,6 +308,37 @@ module Pod
               create_info_plist_file(target.info_plist_path_for_test_spec(test_spec), test_native_target, '1.0', target.platform, :bndl)
 
               test_native_target
+            end
+          end
+
+          # Adds the test app host targets for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @param  [Array<PBXNativeTarget>] test_native_targets
+          #         the test native targets that have been created to use as a lookup when linking the app host to.
+          #
+          # @return [Array<PBXNativeTarget>] the app host targets created.
+          #
+          def add_test_app_host_targets(test_native_targets)
+            target.test_spec_consumers.select(&:requires_app_host?).group_by(&:test_type).map do |test_type, test_spec_consumers|
+              platform = target.platform
+              name = "AppHost-#{target.label}-#{test_type.capitalize}-Tests"
+              app_host_target = AppHostInstaller.new(sandbox, project, platform, name).install!
+              # Wire test native targets to the generated app host.
+              test_spec_consumers.each do |test_spec_consumer|
+                test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
+                test_native_target.build_configurations.each do |configuration|
+                  test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target.name}.app/"
+                  test_host << 'Contents/MacOS/' if platform == :osx
+                  test_host << app_host_target.name.to_s
+                  configuration.build_settings['TEST_HOST'] = test_host
+                end
+                target_attributes = project.root_object.attributes['TargetAttributes'] || {}
+                target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
+                project.root_object.attributes['TargetAttributes'] = target_attributes
+                test_native_target.add_dependency(app_host_target)
+              end
+              app_host_target
             end
           end
 

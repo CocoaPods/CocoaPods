@@ -545,25 +545,20 @@ module Pod
 
       describe 'test spec support' do
         before do
-          @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
           @test_spec_target_definition = Podfile::TargetDefinition.new('Pods', nil)
           @test_spec_target_definition.abstract = false
-          @platform = Platform.new(:ios, '6.0')
-          @test_pod_target = PodTarget.new(config.sandbox, false, {}, [],
-                                           @platform, [@coconut_spec, *@coconut_spec.recursive_subspecs],
-                                           [@test_spec_target_definition])
+          @test_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
+                                                           true, {}, [], Platform.new(:ios, '6.0'),
+                                                           [@test_spec_target_definition])
         end
 
         it 'returns that it has test specifications' do
           @test_pod_target.contains_test_specifications?.should == true
         end
 
-        it 'returns supported test types' do
-          @test_pod_target.supported_test_types.should == [:unit]
-        end
-
         it 'returns test label based on test type' do
-          @test_pod_target.test_target_label(@test_pod_target.test_specs.first).should == 'CoconutLib-Unit-Tests'
+          @test_pod_target.test_target_label(@test_pod_target.test_specs.first).should == 'WatermelonLib-Unit-Tests'
         end
 
         it 'returns the correct product type for test type' do
@@ -576,95 +571,45 @@ module Pod
         end
 
         it 'returns correct copy resources script path for test unit test type' do
-          @test_pod_target.copy_resources_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources.sh'
+          @test_pod_target.copy_resources_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources.sh'
         end
 
         it 'returns correct embed frameworks script path for test unit test type' do
-          @test_pod_target.embed_frameworks_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks.sh'
+          @test_pod_target.embed_frameworks_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks.sh'
         end
 
         it 'returns correct prefix header path for test unit test type' do
-          @test_pod_target.prefix_header_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-prefix.pch'
+          @test_pod_target.prefix_header_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
         end
 
         it 'returns correct path for info plist for unit test type' do
-          @test_pod_target.info_plist_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-Info.plist'
+          @test_pod_target.info_plist_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
         end
 
-        it 'returns the correct resource path for test resource bundles' do
-          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
-          fa.stubs(:resource_bundles).returns('TestResourceBundle' => [Pathname.new('Model.xcdatamodeld')])
-          fa.stubs(:resources).returns([])
-          @test_pod_target.stubs(:file_accessors).returns([fa])
-          @test_pod_target.resource_paths.should == { 'CoconutLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle'] }
-        end
-
-        it 'includes framework paths from test specifications' do
-          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
-          fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/Vendored.framework')])
-          test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
-          test_fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/TestVendored.framework')])
-          @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
-          @test_pod_target.stubs(:should_build?).returns(true)
-          @test_pod_target.framework_paths.should == {
-            'CoconutLib' => [
-              { :name => 'Vendored.framework',
-                :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
-                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework',
-              },
-            ],
-            'CoconutLib/Tests' => [
-              { :name => 'TestVendored.framework',
-                :input_path => '${PODS_ROOT}/Vendored/TestVendored.framework',
-                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TestVendored.framework',
-              },
-            ],
+        it 'returns the correct resource paths' do
+          @test_pod_target.resource_paths.should == {
+            'WatermelonLib' => [],
+            'WatermelonLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
+            'WatermelonLib/SnapshotTests' => [],
           }
         end
 
-        it 'excludes framework paths from test specifications when not requested' do
-          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
-          fa.stubs(:vendored_dynamic_artifacts).returns([config.sandbox.root + Pathname.new('Vendored/Vendored.framework')])
-          @test_pod_target.stubs(:file_accessors).returns([fa])
-          @test_pod_target.stubs(:should_build?).returns(true)
+        it 'returns the correct framework paths' do
           @test_pod_target.framework_paths.should == {
-            'CoconutLib' => [
-              { :name => 'Vendored.framework',
-                :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
-                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework',
+            'WatermelonLib' => [
+              { :name => 'WatermelonLib.framework',
+                :input_path => '${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework',
+                :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WatermelonLib.framework',
                 },
             ],
+            'WatermelonLib/Tests' => [],
+            'WatermelonLib/SnapshotTests' => [],
           }
         end
 
-        it 'includes resource paths from test specifications' do
-          config.sandbox.stubs(:project => stub(:path => temporary_directory + 'ProjectPath'))
-          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
-          fa.stubs(:resource_bundles).returns({})
-          fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/Model.xcdatamodeld'])
-          test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
-          test_fa.stubs(:resource_bundles).returns({})
-          test_fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/TestModel.xcdatamodeld'])
-          @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
-          @test_pod_target.resource_paths.should == {
-            'CoconutLib' => ['${PODS_ROOT}/CoconutLib/Model.xcdatamodeld'],
-            'CoconutLib/Tests' => ['${PODS_ROOT}/CoconutLib/TestModel.xcdatamodeld'],
-          }
-        end
-
-        it 'returns resource paths from all specifications by default' do
-          config.sandbox.stubs(:project => stub(:path => temporary_directory + 'ProjectPath'))
-          fa = Sandbox::FileAccessor.new(nil, @coconut_spec.consumer(@platform))
-          fa.stubs(:resource_bundles).returns({})
-          fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/Model.xcdatamodeld'])
-          test_fa = Sandbox::FileAccessor.new(nil, @coconut_spec.test_specs.first.consumer(@platform))
-          test_fa.stubs(:resource_bundles).returns({})
-          test_fa.stubs(:resources).returns([temporary_sandbox.root + 'CoconutLib/TestModel.xcdatamodeld'])
-          @test_pod_target.stubs(:file_accessors).returns([fa, test_fa])
-          @test_pod_target.resource_paths.should == {
-            'CoconutLib' => ['${PODS_ROOT}/CoconutLib/Model.xcdatamodeld'],
-            'CoconutLib/Tests' => ['${PODS_ROOT}/CoconutLib/TestModel.xcdatamodeld'],
-          }
+        it 'returns correct whether a test spec uses Swift or not' do
+          @test_pod_target.uses_swift_for_test_spec?(@test_pod_target.test_specs[0]).should.be.true
+          @test_pod_target.uses_swift_for_test_spec?(@test_pod_target.test_specs[1]).should.be.false
         end
       end
     end

@@ -11,23 +11,23 @@ module Pod
           end
 
           it 'correctly installs an iOS app host target to the project' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios, :unit)
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios, 'AppHost-PodName-iOS-Unit-Tests')
             installer.install!
-            @project.targets.map(&:name).sort.should == ['AppHost-iOS-Unit-Tests']
+            @project.targets.map(&:name).sort.should == ['AppHost-PodName-iOS-Unit-Tests']
           end
 
           it 'correctly installs an OSX app host target to the project' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx, :unit)
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx, 'AppHost-PodName-macOS-Unit-Tests')
             installer.install!
-            @project.targets.map(&:name).sort.should == ['AppHost-macOS-Unit-Tests']
+            @project.targets.map(&:name).sort.should == ['AppHost-PodName-macOS-Unit-Tests']
           end
 
           it 'sets the correct build settings for an iOS app host target' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios, :unit)
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios, 'AppHost-PodName-iOS-Unit-Tests')
             app_host_target = installer.install!
             build_settings = app_host_target.build_configurations.map(&:build_settings)
             build_settings.each do |build_setting|
-              build_setting['PRODUCT_NAME'].should == 'AppHost-iOS-Unit-Tests'
+              build_setting['PRODUCT_NAME'].should == 'AppHost-PodName-iOS-Unit-Tests'
               build_setting['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
               build_setting['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
               build_setting['CURRENT_PROJECT_VERSION'].should == '1'
@@ -35,11 +35,11 @@ module Pod
           end
 
           it 'sets the correct build settings for an OSX app host target' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx, :unit)
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx, 'AppHost-PodName-macOS-Unit-Tests')
             app_host_target = installer.install!
             build_settings = app_host_target.build_configurations.map(&:build_settings)
             build_settings.each do |build_setting|
-              build_setting['PRODUCT_NAME'].should == 'AppHost-macOS-Unit-Tests'
+              build_setting['PRODUCT_NAME'].should == 'AppHost-PodName-macOS-Unit-Tests'
               build_setting['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
               build_setting['CODE_SIGN_IDENTITY'].should.be.empty
               build_setting['CURRENT_PROJECT_VERSION'].should == '1'

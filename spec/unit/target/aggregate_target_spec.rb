@@ -268,6 +268,28 @@ module Pod
         consumer_reps = @target.spec_consumers.map { |consumer| [consumer.spec.name, consumer.platform_name] }
         consumer_reps.should == [['BananaLib', :ios]]
       end
+
+      describe '#merge_embedded_pod_targets' do
+        it 'merges the embedded pod targets with the current pod targets' do
+          other_pod_target = stub('other pod target')
+          embedded_pod_targets_for_build_configuration = {
+            'Debug' => [@pod_target],
+            'Release' => [other_pod_target],
+          }
+
+          merged = @target.merge_embedded_pod_targets(embedded_pod_targets_for_build_configuration)
+          merged.pod_targets_for_build_configuration('Debug').should == [@pod_target]
+          merged.pod_targets_for_build_configuration('Release').should == [@pod_target, other_pod_target]
+        end
+
+        it 'copies over search paths aggregate targets' do
+          search_paths_aggregate_targets = [stub('other aggregate target')]
+          @target.stubs(:search_paths_aggregate_targets => search_paths_aggregate_targets)
+          merged = @target.merge_embedded_pod_targets({})
+          merged.search_paths_aggregate_targets.should == search_paths_aggregate_targets
+          merged.search_paths_aggregate_targets.should.be.frozen
+        end
+      end
     end
 
     describe 'Product type dependent helpers' do

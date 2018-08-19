@@ -213,9 +213,9 @@ module Pod
                 @installer2 = PodTargetInstaller.new(config.sandbox, @project, @watermelon_pod_target2)
               end
 
-              it 'adds the native test target to the project for iOS targets with code signing' do
+              it 'adds the native test target to the project for iOS targets with correct build settings' do
                 installation_result = @installer.install!
-                @project.targets.count.should == 4
+                @project.targets.count.should == 5
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -228,6 +228,7 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
+                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.not.be.nil
                 end
                 snapshot_test_native_target = @project.targets[2]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
@@ -240,14 +241,15 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
+                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.be.nil
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
                 installation_result.test_native_targets.count.should == 2
               end
 
-              it 'adds the native test target to the project for OSX targets without code signing' do
+              it 'adds the native test target to the project for OSX targets with correct build settings' do
                 installation_result = @installer2.install!
-                @project.targets.count.should == 4
+                @project.targets.count.should == 5
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -260,6 +262,7 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
+                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.not.be.nil
                 end
                 snapshot_test_native_target = @project.targets[2]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
@@ -272,6 +275,7 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
+                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.be.nil
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
                 installation_result.test_native_targets.count.should == 2
@@ -292,7 +296,7 @@ module Pod
 
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
-                @project.targets.count.should == 4
+                @project.targets.count.should == 5
                 native_target = @project.targets[0]
                 native_target.source_build_phase.files.count.should == 2
                 native_target.source_build_phase.files.map(&:display_name).sort.should == [
@@ -300,8 +304,9 @@ module Pod
                   'WatermelonLib-dummy.m',
                 ]
                 unit_test_native_target = @project.targets[1]
-                unit_test_native_target.source_build_phase.files.count.should == 1
+                unit_test_native_target.source_build_phase.files.count.should == 2
                 unit_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
+                  'WatermelonSwiftTests.swift',
                   'WatermelonTests.m',
                 ]
                 snapshot_test_native_target = @project.targets[2]

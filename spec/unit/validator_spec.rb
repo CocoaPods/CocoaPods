@@ -1157,9 +1157,7 @@ module Pod
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
           pod_target_one = stub(:name => 'PodTarget1', :uses_swift? => true, :swift_version => '4.0')
-          pod_target_one.stubs(:uses_swift_for_test_type?).with(:unit).returns(true)
           pod_target_two = stub(:name => 'PodTarget2', :uses_swift? => true, :swift_version => '3.2')
-          pod_target_two.stubs(:uses_swift_for_test_type?).with(:unit).returns(true)
           pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
                                              :test_native_targets => [],
                                              :test_specs_by_native_target => {})

@@ -112,7 +112,7 @@ module Pod
           end.compact
 
           unless error_messages.empty?
-            raise Informative, "Unable to determine Swift version for the following pods:\n\n #{error_messages.join('\n')}"
+            raise Informative, "Unable to determine Swift version for the following pods:\n\n#{error_messages.join("\n")}"
           end
         end
 

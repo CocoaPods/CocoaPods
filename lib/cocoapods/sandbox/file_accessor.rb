@@ -1,4 +1,4 @@
-autoload :MachO, 'macho'
+require 'macho'
 
 module Pod
   class Sandbox

@@ -8,49 +8,73 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Every test spec will have its own xctest bundle  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+* None.  
+
+##### Bug Fixes
+
+* Fix line spacing for Swift error message.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8024](https://github.com/CocoaPods/CocoaPods/pull/8024)
+
+
+## 1.6.0.beta.1 (2018-08-16)
+
+##### Enhancements
+
+* Every test spec will have its own xctest bundle.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [Jenn Kaplan](https://github.com/jkap)
   [#7908](https://github.com/CocoaPods/CocoaPods/pull/7908)
 
-* Add default launch screen storyboard to test app hosts  
+* Generate a separate app host per pod.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8005](https://github.com/CocoaPods/CocoaPods/pull/8005)
+
+* Add default launch screen storyboard to test app hosts.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7971](https://github.com/CocoaPods/CocoaPods/pull/7971)
 
-* Always display downloader error message  
+* Always display downloader error message.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7625](https://github.com/CocoaPods/CocoaPods/issues/7625)
 
-* Warn instead of error when linting if `public_header_files` or `private_header_files` do not match any files  
+* Warn instead of error when linting if `public_header_files` or
+  `private_header_files` do not match any files.  
   [Eric Amorde](https://github.com/amorde)
-  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427) 
+  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427)
 
-* Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify which platforms to lint.  
+* Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify
+  which platforms to lint.  
   [Eric Amorde](https://github.com/amorde)
   [#7783](https://github.com/CocoaPods/CocoaPods/issues/7783)
 
-* Warn if 'git://' protocol is used as the source of a pod  
+* Warn if the `git://` protocol is used as the source of a pod.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7705](https://github.com/CocoaPods/CocoaPods/issues/7705)
 
-* Remove all PBX state from targets, improve project generation performance  
+* Remove all xcode project state from target objects,
+  improving project generation performance.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7610](https://github.com/CocoaPods/CocoaPods/pull/7610)
 
-* Improve performance of Pods project generator by skipping native targets for which dependent targets have already been added.
+* Improve performance of Pods project generation by skipping native targets
+  for which dependent targets have already been added.
   [Jacek Suliga](https://github.com/jmkk)
 
 * Refactor build settings generation to perform much better on large projects.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Make sure the temporary directory used to download the pod is remove even if an error is throwed
+* Make sure the temporary directory used to download a pod is removed,
+  even if an error is raised.  
   [augustorsouza](https://github.com/augustorsouza)
 
 * Avoid unlocking sources on every `pod install` when there are no
   plugin post-install hooks for performance reasons.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Change shell script relative path to ${PODS_ROOT} instead of ${SRCROOT}/Pods  
+* Change shell script relative paths to use `${PODS_ROOT}` instead of 
+  `${SRCROOT}/Pods`.  
   [Whirlwind](https://github.com/Whirlwind)
   [#7878](https://github.com/CocoaPods/CocoaPods/pull/7878)
 
@@ -59,6 +83,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#7879](https://github.com/CocoaPods/CocoaPods/pull/7879)
 
 * Set the path of the Pods group in the user project 
+* Set the path of the Pods group in the user project.  
   [Whirlwind](https://github.com/Whirlwind)
   [#7886](https://github.com/CocoaPods/CocoaPods/pull/7886)
   [#6194](https://github.com/CocoaPods/CocoaPods/issues/6194)
@@ -67,86 +92,93 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   changes to the Podfile or Lockfile.  
   [Samuel Giddins](https://github.com/segiddins)
   
-* Add `--use-modular-headers` flag to `pod spec lint`, `pod lib lint`, and `pod repo push` commands  
+* Add `--use-modular-headers` flag to the `pod spec lint`, `pod lib lint`,
+  and `pod repo push` commands.  
   [Eric Amorde](https://github.com/amorde)
   [#7683](https://github.com/CocoaPods/CocoaPods/issues/7683)
 
 ##### Bug Fixes
 
-* Set the `SWIFT_VERSION` on resource bundle targets that contain compiled sources and use Swift  
+* Scope embedded pods to their host targets by their configuration.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8011](https://github.com/CocoaPods/CocoaPods/issues/8011)
+
+* Set the `SWIFT_VERSION` on resource bundle targets that contain compiled
+  sources and use Swift.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7950](https://github.com/CocoaPods/CocoaPods/issues/7950)
 
-* Do not ignore `--no-overwrite` parameter if a commit message is specified  
+* Do not ignore `--no-overwrite` parameter if a commit message is specified.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7926](https://github.com/CocoaPods/CocoaPods/issues/7926)
   
-* Generate -ObjC in OTHER_LDFLAGS for apps with static frameworks  
+* Generate `-ObjC` in `OTHER_LDFLAGS` for apps with static frameworks.  
   [Paul Beusterien](https://github.com/paulb777)
   [#7946](https://github.com/CocoaPods/CocoaPods/pull/7946)
 
-* Do not display a source was changed if it uses different casing  
+* Do not display that a source was changed if it uses different casing.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7883](https://github.com/CocoaPods/CocoaPods/pull/7883)
   
-* Set `CURRENT_PROJECT_VERSION` for generated app host targets  
+* Set `CURRENT_PROJECT_VERSION` for generated app host targets.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7825](https://github.com/CocoaPods/CocoaPods/pull/7825)
 
-* Properly follow symlinks within macOS universal frameworks  
+* Properly follow symlinks within macOS universal frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7587](https://github.com/CocoaPods/CocoaPods/issues/7587)
   
-* Validator adds a Swift file if any of the pod targets use Swift  
+* Validator adds a Swift file if any of the pod targets use Swift.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7738](https://github.com/CocoaPods/CocoaPods/issues/7738)
 
-* Fix `INFOPLIST_FILE` being overridden when set in a Podspec's `pod_target_xcconfig`  
+* Fix `INFOPLIST_FILE` being overridden when set in a podspec's `pod_target_xcconfig`.  
   [Eric Amorde](https://github.com/amorde)
   [#7530](https://github.com/CocoaPods/CocoaPods/issues/7530)
 
-* Raise an error if user target `SWIFT_VERSION` is missing  
+* Raise an error if user target `SWIFT_VERSION` is missing.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7770](https://github.com/CocoaPods/CocoaPods/issues/7770)
 
-* Umbrella header import path gets wrong when `header_dir` is specified in PodSpec + try to build statically + Modular header is enabled  
+* Fix the umbrella header import path when `header_dir` is specified in the
+  podspec and building a static library with modular headers enabled.  
   [chuganzy](https://github.com/chuganzy)
   [#7724](https://github.com/CocoaPods/CocoaPods/pull/7724)
 
-* Do not symlink headers that belong to test specs  
+* Do not symlink headers that belong to test specs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7762](https://github.com/CocoaPods/CocoaPods/pull/7762)
 
-* Do not build pod target if it only contains script phases  
+* Do not build pod target if it only contains script phases.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7746](https://github.com/CocoaPods/CocoaPods/issues/7746)
 
-* Do not try to integrate uncreated test native targets  
+* Do not try to integrate uncreated test native targets.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7394](https://github.com/CocoaPods/CocoaPods/issues/7394)
 
-* Attempt to parse `SWIFT_VERSION` from xcconfig during target inspection  
+* Attempt to parse `SWIFT_VERSION` from xcconfig during target inspection.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7731](https://github.com/CocoaPods/CocoaPods/issues/7731)
 
-* Do not crash when creating build settings for a missing user build configuration  
+* Do not crash when creating build settings for a missing user build configuration.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7698](https://github.com/CocoaPods/CocoaPods/pull/7698)
 
-* Do not overwrite App host info plist path for multiple test specs  
+* Do not overwrite App host info plist when using multiple test specs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7695](https://github.com/CocoaPods/CocoaPods/pull/7695)
 
-* Do not include test dependencies input and output paths  
+* Do not include test dependencies' input and output paths.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7688](https://github.com/CocoaPods/CocoaPods/pull/7688)
 
-* Skip test file accessors for `uses_swift?` and `should_build?` methods  
+* Skip test file accessors for `uses_swift?` and `should_build?` methods.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7671](https://github.com/CocoaPods/CocoaPods/pull/7671)
 
-* When integrating a vendored framework while building pods as static 
-  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS` 
+* When integrating a vendored framework while building pods as static
+  libraries, public headers will be found via `FRAMEWORK_SEARCH_PATHS`
   instead of via the sandbox headers store.  
   [Samuel Giddins](https://github.com/segiddins)
 
@@ -169,11 +201,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   as a module when all of the targets it is linked into have opted into it.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Use `CP_HOME_DIR` as the base for all default directories  
+* Use `CP_HOME_DIR` as the base for all default directories.  
   [mcfedr](https://github.com/mcfedr)
   [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
   
-* Exclude 32-bit architectures from Pod targets when the deployment target is iOS 11.0 or higher  
+* Exclude 32-bit architectures from Pod targets when the deployment target is
+  iOS 11.0 or higher.  
   [Eric Amorde](https://github.com/amorde)
   [#7148](https://github.com/CocoaPods/CocoaPods/issues/7148)
 
@@ -181,8 +214,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   told not to fetch them.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Don't generate framework or resource scripts if they will not be used  
+* Don't generate framework or resource scripts if they will not be used.  
   [Eric Amorde](https://github.com/amorde)
+
+* Fix a crash when loading the `macho` gem in certain environments.  
+  [Eric Amorde](https://github.com/amorde)
+  [#7867](https://github.com/CocoaPods/CocoaPods/issues/7867)
+
 
 ## 1.5.3 (2018-05-25)
 
