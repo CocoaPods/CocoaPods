@@ -285,6 +285,9 @@ module Pod
                 # requires frameworks. For tests we always use the test target name as the product name
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
+                # target_installer sets 'MACH_O_TYPE' for static frameworks ensure this does not propagate
+                # to test target.
+                configuration.build_settings.delete('MACH_O_TYPE')
                 # Use xcode default product module name, which is $(PRODUCT_NAME:c99extidentifier)
                 # this gives us always valid name that is distinct from the parent spec module name
                 # which allow tests to use either import or @testable import to access the parent framework
