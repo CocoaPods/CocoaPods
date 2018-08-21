@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Clear out `MACH_O_TYPE` for unit test bundles that use static frameworks.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8031](https://github.com/CocoaPods/CocoaPods/issues/8031)
+
 * Fix `weak_frameworks` missing regression.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7872](https://github.com/CocoaPods/CocoaPods/issues/7872)

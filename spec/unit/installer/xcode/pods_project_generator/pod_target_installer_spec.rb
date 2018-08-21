@@ -223,6 +223,7 @@ module Pod
                 unit_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
@@ -236,6 +237,7 @@ module Pod
                 snapshot_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-snapshottests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
@@ -257,6 +259,7 @@ module Pod
                 unit_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
@@ -270,6 +273,7 @@ module Pod
                 snapshot_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-snapshottests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
