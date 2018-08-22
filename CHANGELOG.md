@@ -11,6 +11,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 ##### Bug Fixes
+  
+* Don't add incomplete subspec subset targets for extensions.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7850](https://github.com/CocoaPods/CocoaPods/issues/7850)
 
 * Clear out `MACH_O_TYPE` for unit test bundles that use static frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)

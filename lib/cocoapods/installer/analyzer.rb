@@ -252,6 +252,24 @@ module Pod
         end
       end
 
+      # Checks if a pod_target is a subspec_subset of one of the aggregate pod targets
+      #
+      # @param  [PodTarget] pod_target pod_target to check
+      #
+      # @param  [Array<PodTarget>] embedded_pod_targets the aggregate target's
+      #         pod targets
+      #
+      # @return [Boolean] if the pod_target is found
+
+      def subspec_subset(pod_target, aggregate_pod_targets)
+        aggregate_pod_targets.select do |aggregate_pod_target|
+          if (pod_target.specs - aggregate_pod_target.specs).empty?
+            return true
+          end
+        end
+        false
+      end
+
       # Copies the pod_targets of any of the app embedded aggregate targets into
       # their potential host aggregate target, if that potential host aggregate target's
       # user_target hosts any of the app embedded aggregate targets' user_targets
@@ -290,7 +308,9 @@ module Pod
           end
           embedded_aggregate_target.user_build_configurations.keys.each do |configuration_name|
             embedded_pod_targets = embedded_aggregate_target.pod_targets_for_build_configuration(configuration_name).select do |pod_target|
-              !pod_target_names.include? pod_target.name
+              if !pod_target_names.include?(pod_target.name) && !subspec_subset(pod_target, aggregate_target.pod_targets)
+                pod_target.name
+              end
             end
             embedded_pod_targets_by_build_config[configuration_name] = embedded_pod_targets
           end
