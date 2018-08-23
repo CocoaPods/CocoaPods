@@ -252,7 +252,7 @@ module Pod
         end
       end
 
-      # Copies the pod_targets of any of the app embedded aggregate targets into
+      # Copies the pod targets of any of the app embedded aggregate targets into
       # their potential host aggregate target, if that potential host aggregate target's
       # user_target hosts any of the app embedded aggregate targets' user_targets
       #
@@ -271,7 +271,6 @@ module Pod
       #
       def embedded_target_pod_targets_by_host(aggregate_target, embedded_aggregate_targets, libraries_only)
         return {} if aggregate_target.requires_host_target?
-        pod_target_names = Set.new(aggregate_target.pod_targets.map(&:name))
         aggregate_user_target_uuids = Set.new(aggregate_target.user_targets.map(&:uuid))
         embedded_pod_targets_by_build_config = Hash.new([].freeze)
         embedded_aggregate_targets.each do |embedded_aggregate_target|
@@ -289,8 +288,12 @@ module Pod
             !aggregate_user_target_uuids.intersection(host_target_uuids).empty?
           end
           embedded_aggregate_target.user_build_configurations.keys.each do |configuration_name|
+            pod_target_names = Set.new(aggregate_target.pod_targets_for_build_configuration(configuration_name).map(&:name))
             embedded_pod_targets = embedded_aggregate_target.pod_targets_for_build_configuration(configuration_name).select do |pod_target|
-              !pod_target_names.include? pod_target.name
+              if !pod_target_names.include?(pod_target.name) &&
+                 aggregate_target.pod_targets.none? { |aggregate_pod_target| (pod_target.specs - aggregate_pod_target.specs).empty? }
+                pod_target.name
+              end
             end
             embedded_pod_targets_by_build_config[configuration_name] = embedded_pod_targets
           end

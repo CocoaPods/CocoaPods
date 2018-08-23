@@ -1104,9 +1104,11 @@ module Pod
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
             project 'Sample Extensions Project/Sample Extensions Project'
+            pod 'matryoshka/Bar'
 
             target 'Sample Extensions Project' do
               pod 'JSONKit', '1.4'
+              pod 'matryoshka/Foo'
             end
 
             target 'Today Extension' do
@@ -1122,17 +1124,23 @@ module Pod
 
           result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/JSONKit',
+            'Pods-Sample Extensions Project/matryoshka-Bar-Foo',
             'Pods-Sample Extensions Project/monkey',
+            'Pods-Today Extension/matryoshka-Bar',
             'Pods-Today Extension/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/Debug/JSONKit',
+            'Pods-Sample Extensions Project/Debug/matryoshka-Bar-Foo',
             'Pods-Sample Extensions Project/Debug/monkey',
+            'Pods-Today Extension/Debug/matryoshka-Bar',
             'Pods-Today Extension/Debug/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/Release/JSONKit',
             'Pods-Sample Extensions Project/Release/monkey',
+            'Pods-Sample Extensions Project/Release/matryoshka-Bar-Foo',
+            'Pods-Today Extension/Release/matryoshka-Bar',
             'Pods-Today Extension/Release/monkey',
           ].sort
         end
@@ -1143,6 +1151,8 @@ module Pod
 
           result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/JSONKit',
+            'Pods-Sample Extensions Project/matryoshka-Bar-Foo',
+            'Pods-Today Extension/matryoshka-Bar',
             'Pods-Today Extension/monkey',
           ].sort
         end
@@ -1220,9 +1230,11 @@ module Pod
             source SpecHelper.test_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
+            pod 'matryoshka/Bar'
 
             target 'SampleProject' do
               pod 'JSONKit'
+              pod 'matryoshka/Foo'
             end
 
             target 'SampleLib' do
@@ -1235,16 +1247,21 @@ module Pod
 
           result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
             JSONKit
+            matryoshka-Bar-Foo
             monkey
           ).sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Debug/matryoshka-Bar',
             'Pods-SampleLib/Debug/monkey',
             'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/matryoshka-Bar-Foo',
             'Pods-SampleProject/Debug/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Release/matryoshka-Bar',
             'Pods-SampleLib/Release/monkey',
             'Pods-SampleProject/Release/JSONKit',
+            'Pods-SampleProject/Release/matryoshka-Bar-Foo',
             'Pods-SampleProject/Release/monkey',
           ].sort
         end
