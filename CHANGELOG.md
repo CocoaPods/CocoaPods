@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8024](https://github.com/CocoaPods/CocoaPods/pull/8024)
 
+* Improve validation for test_specs on specific platforms  
+  [icecrystal23](https://github.com/icecrystal23)
+  [#7009](https://github.com/CocoaPods/CocoaPods/issues/7009)
+
 
 ## 1.6.0.beta.1 (2018-08-16)
 
