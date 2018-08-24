@@ -90,12 +90,14 @@ module Pod
 
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
-                create_prefix_header(path, file_accessors, target.platform, [native_target])
+                create_prefix_header(path, file_accessors, target.platform, native_target)
               end
               unless skip_pch?(target.test_specs)
                 target.test_specs.each do |test_spec|
                   path = target.prefix_header_path_for_test_spec(test_spec)
-                  create_prefix_header(path, test_file_accessors, target.platform, test_native_targets)
+                  test_spec_consumer = test_spec.consumer(target.platform)
+                  test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
+                  create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
                 end
               end
               create_dummy_source(native_target)
@@ -563,21 +565,19 @@ module Pod
           # @param [Platform] platform
           #        the platform to use for this prefix header.
           #
-          # @param [Array<PBXNativeTarget>] native_targets
-          #        the native targets on which the prefix header should be configured for.
+          # @param [PBXNativeTarget] native_target
+          #        the native target on which the prefix header should be configured for.
           #
           # @return [void]
           #
-          def create_prefix_header(path, file_accessors, platform, native_targets)
+          def create_prefix_header(path, file_accessors, platform, native_target)
             generator = Generator::PrefixHeader.new(file_accessors, platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
 
-            native_targets.each do |native_target|
-              native_target.build_configurations.each do |c|
-                relative_path = path.relative_path_from(project.path.dirname)
-                c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
-              end
+            relative_path = path.relative_path_from(project.path.dirname)
+            native_target.build_configurations.each do |c|
+              c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
             end
           end
 

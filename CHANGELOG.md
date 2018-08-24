@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
   
+* Scope prefix header setting to each test spec.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8046](https://github.com/CocoaPods/CocoaPods/pull/8046)
+
 * Don't add incomplete subspec subset targets for extensions.  
   [Paul Beusterien](https://github.com/paulb777)
   [#7850](https://github.com/CocoaPods/CocoaPods/issues/7850)
