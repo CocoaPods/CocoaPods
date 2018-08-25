@@ -278,7 +278,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
-          GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-Unit-UnitTests2-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-Unit-UnitTests1-prefix.pch
           INFOPLIST_FILE: Target Support Files/TestLib/TestLib-Unit-UnitTests1-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LDFLAGS:
@@ -299,7 +299,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
-          GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-Unit-UnitTests2-prefix.pch
+          GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-Unit-UnitTests1-prefix.pch
           INFOPLIST_FILE: Target Support Files/TestLib/TestLib-Unit-UnitTests1-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: TestLib-Unit-UnitTests1
