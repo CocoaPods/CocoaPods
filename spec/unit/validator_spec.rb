@@ -983,7 +983,7 @@ module Pod
     end
 
     describe 'swift validation' do
-      def test_swiftpod
+      def test_swiftpod(swift_version = '3.1.0')
         podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
         file = write_podspec(podspec)
         pathname = Pathname.new('/Foo.swift')
@@ -995,13 +995,14 @@ module Pod
         Pod::Installer::PodSourceInstaller.any_instance.stubs(:unlock_files!)
         validator = Validator.new(file, config.sources_manager.master.map(&:url))
         validator.stubs(:build_pod)
+        validator.swift_version = swift_version
         validator.stubs(:validate_url)
         validator
       end
 
-      def test_swiftpod_with_dot_swift_version(version = '3.1.0')
-        validator = test_swiftpod
-        validator.stubs(:dot_swift_version).returns(version)
+      def test_swiftpod_with_dot_swift_version(dot_swift_version = '3.1.0')
+        validator = test_swiftpod(nil)
+        validator.stubs(:dot_swift_version).returns(dot_swift_version)
         validator
       end
 
@@ -1030,137 +1031,138 @@ module Pod
         validator.results.count.should == 0
       end
 
-      describe 'with a user provided swift-version' do
-        it 'succeeds with a --swift-version provided value' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+      it 'succeeds with a --swift-version provided value' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-          validator = test_swiftpod
-          validator.swift_version = '3.1.0'
-          validator.validate
-          validator.results.count.should == 0
-        end
-
-        it 'succeeds with a .swift-version file' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-
-          validator = test_swiftpod_with_dot_swift_version
-          validator.validate
-          validator.results.count.should == 0
-        end
+        validator = test_swiftpod('3.1.0')
+        validator.validate
+        validator.results.count.should == 0
       end
 
-      describe 'without a user provided swift version' do
-        it 'warns for Swift Pods' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
+      it 'succeeds with a .swift-version file' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-          validator = test_swiftpod
-          validator.validate
-          validator.results.count.should == 1
-
-          result = validator.results.first
-          result.type.should == :warning
-          result.message.should == 'The validator used ' \
-            'Swift 3.2 by default because no Swift version was specified. ' \
-            'To specify a Swift version during validation, add the `swift_version` attribute in your podspec. ' \
-            'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.'
-        end
-
-        it 'errors when swift version spec attribute does not match dot swift version' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
-
-          validator = test_swiftpod_with_dot_swift_version('3.2')
-          validator.validate
-          validator.results.count.should == 1
-
-          result = validator.results.first
-          result.type.should == :error
-          result.message.should == 'Specification `JSONKit` specifies an inconsistent `swift_version` (`4.0`) compared to the one present in your `.swift-version` file (`3.2`). ' \
-                                   'Please remove the `.swift-version` file which is now deprecated and only use the `swift_version` attribute within your podspec.'
-        end
-
-        it 'does not error when swift version spec attribute matches dot swift version' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
-
-          validator = test_swiftpod_with_dot_swift_version('4.0')
-          validator.validate
-          validator.results.count.should == 0
-        end
-
-        it 'errors when swift version spec attribute does not match parameter based swift version' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
-
-          validator = test_swiftpod
-          validator.swift_version = '3.2'
-          validator.validate
-          validator.results.count.should == 1
-
-          result = validator.results.first
-          result.type.should == :error
-          result.message.should == 'Specification `JSONKit` specifies an inconsistent `swift_version` (`4.0`) compared to the one passed during lint (`3.2`).'
-        end
-
-        it 'does not error when swift version spec attribute matches parameter based swift version' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-          Specification.any_instance.stubs(:swift_version).returns(Version.new('4.0'))
-
-          validator = test_swiftpod
-          validator.swift_version = '4.0'
-          validator.validate
-          validator.results.count.should == 0
-        end
-
-        it 'does not warn for Swift if version was set by a dot swift version file' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-
-          validator = test_swiftpod_with_dot_swift_version
-          validator.validate
-          validator.results.count.should == 0
-        end
-
-        it 'does not warn for Swift if version was set as a parameter' do
-          Specification.any_instance.stubs(:deployment_target).returns('9.0')
-
-          validator = test_swiftpod
-          validator.stubs(:dot_swift_version).returns(nil)
-          validator.swift_version = '3.1.0'
-          validator.validate
-          validator.results.count.should == 0
-        end
+        validator = test_swiftpod_with_dot_swift_version
+        validator.validate
+        validator.results.count.should == 0
       end
 
-      describe '#swift_version' do
-        it 'defaults to Swift 3.2' do
-          validator = test_swiftpod
+      it 'warns that the default swift version was used if none was provided' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod(nil)
+        validator.validate
+        validator.results.count.should == 1
+
+        result = validator.results.first
+        result.type.should == :warning
+        result.message.should == 'The validator used ' \
+        'Swift `4.0` by default because no Swift version was specified. ' \
+        'To specify a Swift version during validation, add the `swift_versions` attribute in your podspec. ' \
+        'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.'
+      end
+
+      it 'warns when a dot swift version file is used instead of the swift_versions attribute' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod_with_dot_swift_version('3.2')
+        validator.validate
+
+        UI.warnings.should.include 'Usage of the `.swift_version` file has been deprecated! Please delete the ' \
+          'file and use the `swift_versions` attribute within your podspec instead.'
+      end
+
+      it 'errors when swift version spec attribute does not match dot swift version' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+        Specification.any_instance.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
+
+        validator = test_swiftpod_with_dot_swift_version('3.2')
+        validator.validate
+        validator.results.count.should == 1
+
+        result = validator.results.first
+        result.type.should == :error
+        result.message.should == 'Specification `JSONKit` specifies inconsistent `swift_versions` (`3.0`, `4.0`) compared to the one present in your `.swift-version` file (`3.2`). ' \
+                               'Please remove the `.swift-version` file which is now deprecated and only use the `swift_versions` attribute within your podspec.'
+      end
+
+      it 'does not error when swift version spec attribute includes dot swift version' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+        Specification.any_instance.stubs(:swift_versions).returns([Version.new('4.0')])
+
+        validator = test_swiftpod_with_dot_swift_version('4.0')
+        validator.validate
+        validator.results.count.should == 0
+      end
+
+      it 'errors when swift version spec attribute does not match parameter based swift version' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+        Specification.any_instance.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
+
+        validator = test_swiftpod('3.2')
+        validator.validate
+        validator.results.count.should == 1
+
+        result = validator.results.first
+        result.type.should == :error
+        result.message.should == 'Specification `JSONKit` specifies inconsistent `swift_versions` (`3.0`, `4.0`) compared to the one passed during lint (`3.2`).'
+      end
+
+      it 'does not error when swift version spec attribute matches parameter based swift version' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+        Specification.any_instance.stubs(:swift_versions).returns([Version.new('4.0')])
+
+        validator = test_swiftpod('4.0')
+        validator.validate
+        validator.results.count.should == 0
+      end
+
+      it 'does not warn for Swift if version was set by a dot swift version file' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod_with_dot_swift_version
+        validator.validate
+        validator.results.count.should == 0
+      end
+
+      it 'does not warn for Swift if version was set as a parameter' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_swiftpod('3.1.0')
+        validator.stubs(:dot_swift_version).returns(nil)
+        validator.validate
+        validator.results.count.should == 0
+      end
+
+      describe '#derived_swift_version' do
+        it 'defaults to Swift 4.0' do
+          validator = test_swiftpod(nil)
           validator.stubs(:dot_swift_version).returns(nil)
-          validator.swift_version.should == '3.2'
+          validator.derived_swift_version.should == '4.0'
         end
 
         it 'uses the Swift version specified by the swift_version attribute in the spec' do
-          validator = test_swiftpod
+          validator = test_swiftpod(nil)
           validator.spec.swift_version = '4.0'
-          validator.swift_version.should == '4.0'
+          validator.derived_swift_version.should == '4.0'
         end
 
         it 'allows the user to set the Swift version using a .swift-version file' do
-          validator = test_swiftpod
+          validator = test_swiftpod('4.0')
           validator.stubs(:dot_swift_version).returns('3.0')
-          validator.swift_version = '4.0'
-          validator.swift_version.should == '4.0'
+          validator.derived_swift_version.should == '4.0'
         end
 
         it 'checks for dot_swift_version' do
-          validator = test_swiftpod
+          validator = test_swiftpod(nil)
           validator.expects(:dot_swift_version)
-          validator.swift_version
+          validator.derived_swift_version
         end
 
         it 'uses the result of dot_swift_version if not nil' do
-          validator = test_swiftpod
+          validator = test_swiftpod(nil)
           validator.stubs(:dot_swift_version).returns('1.0')
-          validator.swift_version.should == '1.0'
+          validator.derived_swift_version.should == '1.0'
         end
       end
 
@@ -1182,7 +1184,7 @@ module Pod
           validator = test_swiftpod
           Pathname.any_instance.stubs(:exist?).returns(true)
           Pathname.any_instance.stubs(:read).returns("2.1\n")
-          validator.swift_version.should == '2.1'
+          validator.dot_swift_version.should == '2.1'
         end
       end
 

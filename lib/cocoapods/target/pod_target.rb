@@ -65,6 +65,7 @@ module Pod
     # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
     # @param [Array<String>] archs @see Target#archs
     # @param [Platform] platform @see Target#platform
+    # @param [Array<Specification>] specs @see #specs
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
     # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
@@ -127,18 +128,30 @@ module Pod
       end
     end
 
-    # @return [String] the Swift version for the target. If the pod author has provided a Swift version
-    #                  then that is the one returned, otherwise the Swift version is determined by the user
-    #                  targets that include this pod target.
+    # @return [String] the Swift version for the target. If the pod author has provided a set of Swift versions
+    #         supported by their pod then the max Swift version across all of target definitions is chosen, unless
+    #         a target definition specifies explicit requirements for supported Swift versions. Otherwise the Swift
+    #         version is derived by the target definitions that integrate this pod as long as they are the same.
     #
     def swift_version
-      spec_swift_version || target_definitions.map(&:swift_version).compact.uniq.first
+      @swift_version ||= begin
+        if spec_swift_versions.empty?
+          target_definitions.map(&:swift_version).compact.uniq.first
+        else
+          spec_swift_versions.sort.reverse_each.find do |swift_version|
+            target_definitions.all? do |td|
+              td.supports_swift_version?(swift_version)
+            end
+          end.to_s
+        end
+      end
     end
 
-    # @return [String] the Swift version within the root spec. Might be `nil` if none is set.
+    # @return [Array<Version>] the Swift versions supported. Might be empty if the author has not
+    #         specified any versions, most likely due to legacy reasons.
     #
-    def spec_swift_version
-      root_spec.swift_version
+    def spec_swift_versions
+      root_spec.swift_versions
     end
 
     # @return [Podfile] The podfile which declares the dependency.
@@ -328,7 +341,7 @@ module Pod
       when :unit
         :unit_test_bundle
       else
-        raise Informative, "Unknown test type `#{test_type}`."
+        raise ArgumentError, "Unknown test type `#{test_type}`."
       end
     end
 

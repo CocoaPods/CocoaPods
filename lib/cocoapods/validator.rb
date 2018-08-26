@@ -16,7 +16,7 @@ module Pod
 
     # The default version of Swift to use when linting pods
     #
-    DEFAULT_SWIFT_VERSION = '3.2'.freeze
+    DEFAULT_SWIFT_VERSION = '4.0'.freeze
 
     # The valid platforms for linting
     #
@@ -125,6 +125,7 @@ module Pod
       $stdout.flush
 
       perform_linting
+      warn_for_dot_swift_file_deprecation
       perform_extensive_analysis(a_spec) if a_spec && !quick
 
       UI.puts ' -> '.send(result_color) << (a_spec ? a_spec.to_s : file.basename.to_s)
@@ -298,28 +299,36 @@ module Pod
       @validation_dir ||= Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{spec.name}"]))
     end
 
-    # @return [String] the SWIFT_VERSION to use for validation.
+    # @return [String] The SWIFT_VERSION that should be used to validate the pod. This is set by passing the
+    # `--swift-version` parameter during validation.
     #
-    def swift_version
-      return @swift_version unless @swift_version.nil?
-      if (version = spec.swift_version) || (version = dot_swift_version)
-        @swift_version = version.to_s
-      else
-        DEFAULT_SWIFT_VERSION
-      end
-    end
+    attr_accessor :swift_version
 
-    # Set the SWIFT_VERSION that should be used to validate the pod.
-    #
-    attr_writer :swift_version
-
-    # @return [String] the SWIFT_VERSION in the .swift-version file or nil.
+    # @return [String] the SWIFT_VERSION within the .swift-version file or nil.
     #
     def dot_swift_version
       return unless file
       swift_version_path = file.dirname + '.swift-version'
       return unless swift_version_path.exist?
       swift_version_path.read.strip
+    end
+
+    # @return [String] The derived Swift version to use for validation. The order of precedence is as follows:
+    #         - The `--swift-version` parameter is always checked first and honored if passed.
+    #         - The `swift_versions` DSL attribute within the podspec, in which case the latest version is always chosen.
+    #         - The Swift version within the `.swift-version` file if present.
+    #         - If none of the above are set then the `#DEFAULT_SWIFT_VERSION` is used.
+    #
+    def derived_swift_version
+      @derived_swift_version ||= begin
+        if !swift_version.nil?
+          swift_version
+        elsif version = spec.swift_versions.max || dot_swift_version
+          version.to_s
+        else
+          DEFAULT_SWIFT_VERSION
+        end
+      end
     end
 
     # @return [Boolean] Whether any of the pod targets part of this validator use Swift or not.
@@ -339,6 +348,17 @@ module Pod
     def perform_linting
       linter.lint
       @results.concat(linter.results.to_a)
+    end
+
+    # Warns the user to delete the `.swift-version` file in favor of the `swift_versions` DSL attribute. This is
+    # intentionally not a lint warning since we do not want to break existing setups and instead just soft deprecate
+    # this slowly.
+    #
+    def warn_for_dot_swift_file_deprecation
+      if swift_version.nil? && (!spec.nil? && spec.swift_versions.empty?) && !dot_swift_version.nil?
+        UI.warn 'Usage of the `.swift_version` file has been deprecated! Please delete the file and use the ' \
+          "`swift_versions` attribute within your podspec instead.\n".yellow
+      end
     end
 
     # Perform analysis for a given spec (or subspec)
@@ -452,38 +472,40 @@ module Pod
               'This will be an error in future releases. Please update the URL to use https.')
     end
 
-    # Performs validation for which version of Swift is used during validation.
+    # Performs validation for the version of Swift used during validation.
     #
-    # An error will be displayed if the user has provided a `swift_version` attribute within the podspec but is also
-    # using either  `--swift-version` parameter or a `.swift-version with a different Swift version.
+    # An error will be displayed if the user has provided a `swift_versions` attribute within the podspec but is also
+    # using either `--swift-version` parameter or a `.swift-version` file with a Swift version that is not declared
+    # within the attribute.
     #
     # The user will be warned that the default version of Swift was used if the following things are true:
     #   - The project uses Swift at all
     #   - The user did not supply a Swift version via a parameter
-    #   - There is no `swift_version` attribute set within the specification
+    #   - There is no `swift_versions` attribute set within the specification
     #   - There is no `.swift-version` file present either.
     #
     def validate_swift_version
       return unless uses_swift?
-      spec_swift_version = spec.swift_version
-      unless spec_swift_version.nil?
+      spec_swift_versions = spec.swift_versions.map(&:to_s)
+      unless spec_swift_versions.empty?
         message = nil
-        if !dot_swift_version.nil? && dot_swift_version != spec_swift_version.to_s
-          message = "Specification `#{spec.name}` specifies an inconsistent `swift_version` (`#{spec_swift_version}`) compared to the one present in your `.swift-version` file (`#{dot_swift_version}`). " \
-                    'Please remove the `.swift-version` file which is now deprecated and only use the `swift_version` attribute within your podspec.'
-        elsif !@swift_version.nil? && @swift_version != spec_swift_version.to_s
-          message = "Specification `#{spec.name}` specifies an inconsistent `swift_version` (`#{spec_swift_version}`) compared to the one passed during lint (`#{@swift_version}`)."
+        if !dot_swift_version.nil? && !spec_swift_versions.include?(dot_swift_version)
+          message = "Specification `#{spec.name}` specifies inconsistent `swift_versions` (#{spec_swift_versions.map { |s| "`#{s}`" }.join(', ')}) compared to the one present in your `.swift-version` file (`#{dot_swift_version}`). " \
+                    'Please remove the `.swift-version` file which is now deprecated and only use the `swift_versions` attribute within your podspec.'
+        elsif !swift_version.nil? && !spec_swift_versions.include?(swift_version)
+          message = "Specification `#{spec.name}` specifies inconsistent `swift_versions` (#{spec_swift_versions.map { |s| "`#{s}`" }.join(', ')}) compared to the one passed during lint (`#{swift_version}`)."
         end
         unless message.nil?
           error('swift', message)
           return
         end
       end
-      if @swift_version.nil? && spec_swift_version.nil? && dot_swift_version.nil?
+
+      if swift_version.nil? && spec_swift_versions.empty? && dot_swift_version.nil?
         warning('swift',
                 'The validator used ' \
-                "Swift #{DEFAULT_SWIFT_VERSION} by default because no Swift version was specified. " \
-                'To specify a Swift version during validation, add the `swift_version` attribute in your podspec. ' \
+                "Swift `#{DEFAULT_SWIFT_VERSION}` by default because no Swift version was specified. " \
+                'To specify a Swift version during validation, add the `swift_versions` attribute in your podspec. ' \
                 'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.')
       end
     end
@@ -524,7 +546,7 @@ module Pod
     def create_app_project
       app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
       app_target = Pod::Generator::AppTargetHelper.add_app_target(app_project, consumer.platform_name, deployment_target)
-      Pod::Generator::AppTargetHelper.add_swift_version(app_target, swift_version)
+      Pod::Generator::AppTargetHelper.add_swift_version(app_target, derived_swift_version)
       app_project.save
       app_project.recreate_user_schemes
     end
@@ -560,12 +582,12 @@ module Pod
         native_target = pod_target_installation_result.native_target
         native_target.build_configuration_list.build_configurations.each do |build_configuration|
           (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-          build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
+          build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || derived_swift_version) if pod_target.uses_swift?
         end
         pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
           if pod_target.uses_swift_for_non_library_spec?(test_specs.first)
             test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
-              build_configuration.build_settings['SWIFT_VERSION'] = swift_version
+              build_configuration.build_settings['SWIFT_VERSION'] = derived_swift_version
             end
           end
         end

@@ -273,17 +273,16 @@ module Pod
               use_frameworks!
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject'
-              target 'TestRunner'
+              target 'SampleProject' do
+                current_target_definition.swift_version = '3.0'
+              end
+              target 'TestRunner' do
+                current_target_definition.swift_version = '2.3'
+              end
             end
+            lockfile = generate_lockfile
 
-            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
-            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
-
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
-
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             e = should.raise Informative do
               @validator.validate!
             end
@@ -306,14 +305,9 @@ module Pod
               target 'SampleProject'
               target 'TestRunner'
             end
+            lockfile = generate_lockfile
 
-            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns(nil)
-            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
-
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil, :dependent_targets => [])
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil, :dependent_targets => [])
-
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             e = should.raise Informative do
               @validator.validate!
             end
@@ -321,7 +315,7 @@ module Pod
             e.message.should.include '`OrangeFramework` does not specify a Swift version and none of the targets ' \
               '(`SampleProject` and `TestRunner`) integrating it have the `SWIFT_VERSION` attribute set. Please contact ' \
               'the author or set the `SWIFT_VERSION` attribute in at least one of the targets that integrate this pod.'
-            e.message.should.include '`matryoshka` does not specify a Swift version and none of the targets ' \
+            e.message.should.not.include '`matryoshka` does not specify a Swift version and none of the targets ' \
               '(`SampleProject` and `TestRunner`) integrating it have the `SWIFT_VERSION` attribute set. Please contact ' \
             'the author or set the `SWIFT_VERSION` attribute in at least one of the targets that integrate this pod.'
           end
@@ -335,18 +329,14 @@ module Pod
               platform :ios, '8.0'
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject'
+              target 'SampleProject' do
+                current_target_definition.swift_version = '3.0'
+              end
               target 'TestRunner'
             end
+            lockfile = generate_lockfile
 
-            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
-            # when the swift version is unset at the project level, but set in one target, swift_version is nil
-            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns(nil)
-
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil, :dependent_targets => [])
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil, :dependent_targets => [])
-
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             lambda { @validator.validate! }.should.not.raise
           end
 
@@ -357,20 +347,17 @@ module Pod
               project 'SampleProject/SampleProject'
               use_frameworks!
               platform :ios, '8.0'
-              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject'
-              target 'TestRunner'
+              target 'SampleProject' do
+                current_target_definition.swift_version = '3.0'
+              end
+              target 'TestRunner' do
+                current_target_definition.swift_version = '2.3'
+              end
             end
+            lockfile = generate_lockfile
 
-            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
-            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
-
-            # Pretend none of the pod targets use swift, even if the target definitions they are linked with do have different Swift versions.
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => nil)
-
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             lambda { @validator.validate! }.should.not.raise
           end
 
@@ -383,17 +370,57 @@ module Pod
               platform :ios, '8.0'
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject' do
+                current_target_definition.swift_version = '3.0'
+              end
+              target 'TestRunner' do
+                current_target_definition.swift_version = '2.3'
+              end
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:spec_swift_versions).returns(['4.0'])
+            @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:spec_swift_versions).returns(['3.2'])
+            lambda { @validator.validate! }.should.not.raise
+          end
+
+          it 'raises an error if a pods swift versions are not satisfied by the targets of the requirements' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              platform :ios, '10.0'
+              pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
+              supports_swift_versions '< 3.0'
               target 'SampleProject'
               target 'TestRunner'
             end
+            lockfile = generate_lockfile
 
-            podfile.target_definitions['SampleProject'].stubs(:swift_version).returns('3.0')
-            podfile.target_definitions['TestRunner'].stubs(:swift_version).returns('2.3')
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            e = should.raise Informative do
+              @validator.validate!
+            end
+            e.message.should.match /Unable to determine Swift version for the following pods:/
+            e.message.should.include 'MultiSwift` does not specify a Swift version (3.2, 4.0) that is satisfied by ' \
+              'any of targets (`SampleProject` and `TestRunner`) integrating it.'
+          end
 
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => '4.0', :dependent_targets => [])
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => true, :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']], :spec_swift_version => '3.2', :dependent_targets => [])
+          it 'does not raise an error if a pods swift versions are satisfied by the targets requirements' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project 'SampleProject/SampleProject'
+              platform :ios, '10.0'
+              pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
+              supports_swift_versions '> 3.0'
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+            lockfile = generate_lockfile
 
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             lambda { @validator.validate! }.should.not.raise
           end
         end
@@ -405,25 +432,20 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '10.0'
-              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
-              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s, :modular_headers => true
+              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s, :modular_headers => false
               target 'SampleProject'
               target 'TestRunner'
             end
+            lockfile = generate_lockfile
 
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false,
-                                         :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']],
-                                         :should_build? => true, :defines_module? => false, :dependent_targets => [])
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true,
-                                              :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']],
-                                              :should_build? => true, :defines_module? => true, :dependent_targets => [matryoshka_pod_target], :spec_swift_version => '4.0')
-
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:spec_swift_versions).returns(['4.0'])
             e = lambda { @validator.validate! }.should.raise Informative
             e.message.should.include <<-EOS.strip_heredoc.strip
               [!] The following Swift pods cannot yet be integrated as static libraries:
 
-              The Swift pod `OrangeFramework` depends upon `matryoshka`, which do not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
+              The Swift pod `OrangeFramework` depends upon `matryoshka`, which does not define modules. To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
             EOS
           end
 
@@ -433,20 +455,19 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '10.0'
-              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
+              pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s, :modular_headers => true
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject'
-              target 'TestRunner'
+              target 'SampleProject' do
+                current_target_definition.swift_version = '3.0'
+              end
+              target 'TestRunner' do
+                current_target_definition.swift_version = '3.0'
+              end
             end
+            lockfile = generate_lockfile
 
-            matryoshka_pod_target = stub(:name => 'matryoshka', :uses_swift? => false,
-                                         :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']],
-                                         :should_build? => false, :defines_module? => false, :dependent_targets => [])
-            orangeframework_pod_target = stub(:name => 'OrangeFramework', :uses_swift? => true,
-                                              :target_definitions => [podfile.target_definitions['SampleProject'], podfile.target_definitions['TestRunner']],
-                                              :should_build? => true, :defines_module? => true, :dependent_targets => [matryoshka_pod_target], :spec_swift_version => '4.0')
-
-            @validator = TargetValidator.new([], [orangeframework_pod_target, matryoshka_pod_target])
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:should_build?).returns(false)
             lambda { @validator.validate! }.should.not.raise
           end
         end

@@ -96,18 +96,25 @@ module Pod
             "`#{target_definition.name}` (Swift #{target_definition.swift_version})"
           end
           swift_pod_targets = pod_targets.select(&:uses_swift?)
-          error_messages = swift_pod_targets.map do |pod_target|
-            next unless pod_target.spec_swift_version.nil?
-            swift_target_definitions = pod_target.target_definitions.reject { |target| target.swift_version.blank? }
-            next if swift_target_definitions.uniq(&:swift_version).count == 1
-            if swift_target_definitions.empty?
-              "- `#{pod_target.name}` does not specify a Swift version and none of the targets " \
-                "(#{pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence}) integrating it have the " \
-                '`SWIFT_VERSION` attribute set. Please contact the author or set the `SWIFT_VERSION` attribute in at ' \
-                'least one of the targets that integrate this pod.'
-            else
-              target_errors = swift_target_definitions.map(&error_message_for_target_definition).to_sentence
-              "- `#{pod_target.name}` is integrated by multiple targets that use a different Swift version: #{target_errors}."
+          error_messages = swift_pod_targets.map do |swift_pod_target|
+            # Legacy targets that do not specify Swift versions derive their Swift version from the target definitions
+            # they are integrated with. An error is displayed if the target definition Swift versions collide or none
+            # of target definitions specify the `SWIFT_VERSION` attribute.
+            if swift_pod_target.spec_swift_versions.empty?
+              swift_target_definitions = swift_pod_target.target_definitions.reject { |target| target.swift_version.blank? }
+              next if swift_target_definitions.uniq(&:swift_version).count == 1
+              if swift_target_definitions.empty?
+                "- `#{swift_pod_target.name}` does not specify a Swift version and none of the targets " \
+                  "(#{swift_pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence}) integrating it have the " \
+                  '`SWIFT_VERSION` attribute set. Please contact the author or set the `SWIFT_VERSION` attribute in at ' \
+                  'least one of the targets that integrate this pod.'
+              else
+                target_errors = swift_target_definitions.map(&error_message_for_target_definition).to_sentence
+                "- `#{swift_pod_target.name}` is integrated by multiple targets that use a different Swift version: #{target_errors}."
+              end
+            elsif swift_pod_target.swift_version.empty?
+              "- `#{swift_pod_target.name}` does not specify a Swift version (#{swift_pod_target.spec_swift_versions.map(&:to_s).join(', ')}) " \
+                "that is satisfied by any of targets (#{swift_pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence}) integrating it."
             end
           end.compact
 
@@ -130,7 +137,7 @@ module Pod
             next if non_module_dependencies.empty?
 
             error_messages << "The Swift pod `#{pod_target.name}` depends upon #{non_module_dependencies.map { |d| "`#{d}`" }.to_sentence}, " \
-                              'which do not define modules. ' \
+                              "which #{non_module_dependencies.count == 1 ? 'does' : 'do'} not define modules. " \
                               'To opt into those targets generating module maps '\
                               '(which is necessary to import them from Swift when building as static libraries), ' \
                               'you may set `use_modular_headers!` globally in your Podfile, '\

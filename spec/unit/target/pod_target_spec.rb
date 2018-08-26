@@ -4,8 +4,7 @@ module Pod
   describe PodTarget do
     before do
       @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
-      @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-      @target_definition.abstract = false
+      @target_definition = fixture_target_definition
       @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [@target_definition])
     end
 
@@ -122,14 +121,49 @@ module Pod
     end
 
     describe 'swift version' do
+      it 'returns the swift version with the given requirements from the target definition' do
+        @target_definition.store_swift_version_requirements('>= 4.0')
+        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
+        @pod_target.swift_version.should == '4.0'
+      end
+
+      it 'returns the swift version with the given requirements from all target definitions' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.store_swift_version_requirements('>= 4.0')
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_swift_version_requirements('= 4.2')
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition_one,
+                                                                                                 target_definition_two])
+        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0'),
+                                                              Version.new('4.2')])
+        pod_target.swift_version.should == '4.2'
+      end
+
+      it 'returns an empty swift version if none of the requirements match' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.store_swift_version_requirements('>= 4.0')
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_swift_version_requirements('= 4.2')
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition_one,
+                                                                                                 target_definition_two])
+        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
+        pod_target.swift_version.should == ''
+      end
+
       it 'uses the swift version defined in the specification' do
-        @pod_target.root_spec.stubs(:swift_version).returns('3.0')
+        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0')])
         @target_definition.stubs(:swift_version).returns('2.3')
         @pod_target.swift_version.should == '3.0'
       end
 
-      it 'uses the swift version defined by the target definitions if no swift version is specifed in the spec' do
-        @pod_target.root_spec.stubs(:swift_version).returns(nil)
+      it 'uses the max swift version defined in the specification' do
+        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
+        @target_definition.stubs(:swift_version).returns('2.3')
+        @pod_target.swift_version.should == '4.0'
+      end
+
+      it 'uses the swift version defined by the target definitions if no swift version is specified in the spec' do
+        @pod_target.root_spec.stubs(:swift_versions).returns([])
         @target_definition.stubs(:swift_version).returns('2.3')
         @pod_target.swift_version.should == '2.3'
       end
@@ -566,7 +600,7 @@ module Pod
         end
 
         it 'raises for unknown test type' do
-          exception = lambda { @test_pod_target.product_type_for_test_type(:weird_test_type) }.should.raise Informative
+          exception = lambda { @test_pod_target.product_type_for_test_type(:weird_test_type) }.should.raise ArgumentError
           exception.message.should.include 'Unknown test type `weird_test_type`.'
         end
 
