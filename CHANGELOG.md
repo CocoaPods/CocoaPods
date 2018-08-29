@@ -33,6 +33,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix line spacing for Swift error message.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8024](https://github.com/CocoaPods/CocoaPods/pull/8024)
+  
+* Allow specification of SDKROOT in podspec.
+  [Ron Bendor](https://github.com/RonstaMonsta)
+  [#8058](https://github.com/CocoaPods/CocoaPods/pull/8058)
 
 
 ## 1.6.0.beta.1 (2018-08-16)
