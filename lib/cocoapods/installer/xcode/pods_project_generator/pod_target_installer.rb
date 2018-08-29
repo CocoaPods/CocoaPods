@@ -50,6 +50,7 @@ module Pod
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
               add_files_to_build_phases(native_target, test_native_targets)
+              validate_targets_contain_sources(test_native_targets + [native_target])
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
@@ -819,6 +820,13 @@ module Pod
               ${BUILT_PRODUCTS_DIR}/#{relative_umbrella_header_path.basename}
               ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
             )
+          end
+
+          def validate_targets_contain_sources(native_targets)
+            native_targets.each do |native_target|
+              next unless native_target.source_build_phase.files.empty?
+              raise Informative, "Unable to install the `#{target.label}` pod, because the `#{native_target}` target in Xcode would have no sources to compile."
+            end
           end
 
           #-----------------------------------------------------------------------#

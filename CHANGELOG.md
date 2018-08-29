@@ -11,6 +11,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Print an error that will show up in Xcode's issue navigator upon unexpected
   failures in the copy resources and embed frameworks script phases.  
   [Samuel Giddins](https://github.com/segiddins)
+  
+* Validate that all generated `PBXNativeTarget`s contain source files to build,
+  so specs (including test specs) with no source files won't fail at runtime
+  due to the lack of a generated executable.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ##### Bug Fixes
   

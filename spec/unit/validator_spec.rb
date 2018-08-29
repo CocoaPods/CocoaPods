@@ -567,6 +567,7 @@ module Pod
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         PodTarget.any_instance.stubs(:should_build?).returns(true)
+        Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
@@ -586,7 +587,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        validator.validate
+        validator.validate.should == true
       end
 
       it 'runs xcodebuild with correct arguments for code signing' do

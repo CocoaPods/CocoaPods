@@ -289,6 +289,13 @@ module Pod
                 installation_result.test_native_targets.count.should == 2
               end
 
+              it 'raises when a test spec has no source files' do
+                @watermelon_pod_target.test_spec_consumers.first.stubs(:source_files).returns([])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.
+                    include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-Unit-Tests` target in Xcode would have no sources to compile.'
+              end
+
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
                 @watermelon_pod_target.stubs(:uses_swift?).returns(true)
                 @installer.install!
