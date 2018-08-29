@@ -98,6 +98,11 @@ module Pod
             else
               settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
             end
+                   
+            if target.build_settings.generate.attributes.key?("SDKROOT")
+              puts "For target: #{target.name}, SDKROOT being set to #{target.build_settings.generate.attributes["SDKROOT"]}"
+              settings["SDKROOT"] = target.build_settings.generate.attributes["SDKROOT"]
+            end
 
             settings
           end
