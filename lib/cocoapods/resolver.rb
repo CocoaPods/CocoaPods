@@ -509,6 +509,17 @@ module Pod
             end
           end,
         )
+      when Molinillo::NoSuchDependencyError
+        message += <<-EOS
+
+
+You have either:
+ * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
+ * mistyped the name or version.
+ * not added the source repo that hosts the Podspec to your Podfile.
+
+Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
+        EOS
       end
       raise type.new(message).tap { |e| e.set_backtrace(error.backtrace) }
     end
