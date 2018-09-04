@@ -251,8 +251,16 @@ module Pod
         message = should.raise Informative do
           @resolver.resolve
         end.message
-        message.should.match /Unable to find a specification/
-        message.should.match /`Windows` depended upon by `BlocksKit`/
+        message.should.include <<-EOS.strip
+[!] Unable to find a specification for `Windows` depended upon by `BlocksKit`
+
+You have either:
+ * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
+ * mistyped the name or version.
+ * not added the source repo that hosts the Podspec to your Podfile.
+
+Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
+        EOS
       end
 
       it 'does not raise if all dependencies are supported by the platform of the target definition' do

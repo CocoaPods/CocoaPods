@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   due to the lack of a generated executable.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Print better promote message when unable to find a specification.  
+  [Xinyu Zhao](https://github.com/X140Yu)
+  [#8064](https://github.com/CocoaPods/CocoaPods/issues/8064)
+
 ##### Bug Fixes
   
 * Scope prefix header setting to each test spec.  
