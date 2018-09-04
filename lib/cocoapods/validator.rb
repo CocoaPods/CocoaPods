@@ -511,7 +511,8 @@ module Pod
     end
 
     def download_pod
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, consumer.spec.test_specs.map(&:name), use_modular_headers)
+      test_spec_names = consumer.spec.test_specs.select { |ts| ts.supported_on_platform?(consumer.platform_name) }.map(&:name)
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, test_spec_names, use_modular_headers)
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
@@ -635,10 +636,14 @@ module Pod
         UI.message "\nTesting with `xcodebuild`.\n".yellow do
           pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
           consumer.spec.test_specs.each do |test_spec|
-            scheme = @installer.target_installation_results.first[pod_target.name].native_target_for_spec(test_spec)
-            output = xcodebuild('test', scheme, 'Debug')
-            parsed_output = parse_xcodebuild_output(output)
-            translate_output_to_linter_messages(parsed_output)
+            if !test_spec.supported_on_platform?(consumer.platform_name)
+              UI.warn "Skipping test spec `#{test_spec.name}` on platform `#{consumer.platform_name}` since it is not supported.\n".yellow
+            else
+              scheme = @installer.target_installation_results.first[pod_target.name].native_target_for_spec(test_spec)
+              output = xcodebuild('test', scheme, 'Debug')
+              parsed_output = parse_xcodebuild_output(output)
+              translate_output_to_linter_messages(parsed_output)
+            end
           end
         end
       end
