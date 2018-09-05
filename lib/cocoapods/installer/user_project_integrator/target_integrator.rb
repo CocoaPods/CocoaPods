@@ -1,4 +1,5 @@
 require 'active_support/core_ext/string/inflections'
+require 'cocoapods/target/framework_paths'
 
 module Pod
   class Installer
@@ -260,6 +261,23 @@ module Pod
               File.join(base_path, File.basename(basename, extname) + output_extension)
             end.uniq
           end
+
+          # Returns the framework output paths for the given input paths
+          #
+          # @param  [Array<Target::FrameworkPaths>] framework_input_paths
+          #         The framework input paths to map to output paths.
+          #
+          # @return [Array<String>] The framework output paths
+          #
+          def framework_output_paths(framework_input_paths)
+            framework_input_paths.flat_map do |framework_path|
+              framework_output_path = "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{File.basename(framework_path.source_path)}"
+              dsym_path = if (dsym_input_path = framework_path.dsym_path)
+                            "${DWARF_DSYM_FOLDER_PATH}/#{File.basename(dsym_input_path)}"
+                          end
+              [framework_output_path, dsym_path]
+            end.compact.uniq
+          end
         end
 
         # Integrates the user project targets. Only the targets that do **not**
@@ -380,11 +398,13 @@ module Pod
           input_paths = []
           output_paths = []
           unless installation_options.disable_input_output_paths?
-            framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
-            input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
-            output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
+            framework_paths = target.framework_paths_by_config.values.flatten.uniq
+            framework_input_paths = framework_paths.flat_map { |path| [path.source_path, path.dsym_path] }.compact
+            input_paths = [target.embed_frameworks_script_relative_path, *framework_input_paths]
+            output_paths = TargetIntegrator.framework_output_paths(framework_paths)
             TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
           end
+
           native_targets_to_embed_in.each do |native_target|
             TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

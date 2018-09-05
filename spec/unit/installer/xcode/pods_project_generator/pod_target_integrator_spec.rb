@@ -59,9 +59,7 @@ module Pod
               end
 
               it 'integrates test native targets with frameworks and resources script phase input and output paths' do
-                framework_paths = [{ :name => 'Vendored.framework',
-                                     :input_path => '${PODS_ROOT}/Vendored/Vendored.framework',
-                                     :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vendored.framework' }]
+                framework_paths = [Target::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)

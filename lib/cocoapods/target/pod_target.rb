@@ -1,3 +1,5 @@
+require 'cocoapods/target/framework_paths'
+
 module Pod
   # Stores the information relative to the target used to compile a single Pod.
   # A pod can have one or more activated spec, subspecs and test specs.
@@ -244,34 +246,27 @@ module Pod
       !test_specs.empty?
     end
 
-    # @return [Hash{String=>Array<Hash{Symbol=>String}>}] The vendored and non vendored framework paths this target
+    # @return [Hash{String=>Array<FrameworkPaths>}] The vendored and non vendored framework paths this target
     #         depends upon keyed by spec name. For the root spec and subspecs the framework path of the target itself
     #         is included.
     #
     def framework_paths
       @framework_paths ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
-          frameworks = []
-          file_accessor.vendored_dynamic_artifacts.map do |framework_path|
+          frameworks = file_accessor.vendored_dynamic_artifacts.map do |framework_path|
             relative_path_to_sandbox = framework_path.relative_path_from(sandbox.root)
-            framework = { :name => framework_path.basename.to_s,
-                          :input_path => "${PODS_ROOT}/#{relative_path_to_sandbox}",
-                          :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{framework_path.basename}" }
+            framework_source = "${PODS_ROOT}/#{relative_path_to_sandbox}"
             # Until this can be configured, assume the dSYM file uses the file name as the framework.
             # See https://github.com/CocoaPods/CocoaPods/issues/1698
             dsym_name = "#{framework_path.basename}.dSYM"
             dsym_path = Pathname.new("#{framework_path.dirname}/#{dsym_name}")
-            if dsym_path.exist?
-              framework[:dsym_name] = dsym_name
-              framework[:dsym_input_path] = "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
-              framework[:dsym_output_path] = "${DWARF_DSYM_FOLDER_PATH}/#{dsym_name}"
-            end
-            frameworks << framework
+            dsym_source = if dsym_path.exist?
+                            "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
+                          end
+            FrameworkPaths.new(framework_source, dsym_source)
           end
           if !file_accessor.spec.test_specification? && should_build? && requires_frameworks? && !static_framework?
-            frameworks << { :name => product_name,
-                            :input_path => build_product_path('${BUILT_PRODUCTS_DIR}'),
-                            :output_path => "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{product_name}" }
+            frameworks << FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))
           end
           hash[file_accessor.spec.name] = frameworks
         end
