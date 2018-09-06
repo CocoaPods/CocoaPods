@@ -1,9 +1,9 @@
 module Pod
   # Stores the information relative to the target used to compile a single Pod.
-  # A pod can have one or more activated spec, subspecs and test specs.
+  # A pod can have one or more activated spec, subspecs, test, and app specs.
   #
   class PodTarget < Target
-    # @return [Array<Specification>] the spec, subspecs and test specs of the target.
+    # @return [Array<Specification>] the spec, subspecs, test, and app specs of the target.
     #
     attr_reader :specs
 
@@ -15,7 +15,7 @@ module Pod
     # @return [Array<Specification>] All of the specs within this target that are not test specs.
     #         Subset of #specs.
     #
-    attr_reader :non_test_specs
+    attr_reader :normal_specs
 
     # @return [Array<TargetDefinition>] the target definitions of the Podfile
     #         that generated this target.
@@ -69,7 +69,9 @@ module Pod
       @target_definitions = target_definitions
       @file_accessors = file_accessors
       @scope_suffix = scope_suffix
-      @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
+      @normal_specs = @specs.select(&:normal_specification?)
+      @app_specs = @specs.select(&:app_specification?)
+      @test_specs = @specs.select(&:test_specification?)
       @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @dependent_targets = []
       @test_dependent_targets_by_spec_name = {}
@@ -223,7 +225,7 @@ module Pod
         return @defines_module = true
       end
 
-      @defines_module = non_test_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
+      @defines_module = normal_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
     end
 
     # @return [Array<Hash{Symbol=>String}>] An array of hashes where each hash represents a single script phase.

@@ -231,8 +231,8 @@ module Pod
         user_build_configurations.keys.each do |config|
           relevant_pod_targets = pod_targets_for_build_configuration(config)
           framework_paths_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
-            non_test_specs = pod_target.non_test_specs.map(&:name)
-            pod_target.framework_paths.values_at(*non_test_specs).flatten.compact.uniq
+            normal_specs = pod_target.normal_specs.map(&:name)
+            pod_target.framework_paths.values_at(*normal_specs).flatten.compact.uniq
           end
         end
         framework_paths_by_config
@@ -249,8 +249,8 @@ module Pod
         user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
           targets = relevant_pod_targets & pod_targets_for_build_configuration(config)
           resources_by_config[config] = targets.flat_map do |pod_target|
-            non_test_specs = pod_target.non_test_specs.map(&:name)
-            resource_paths = pod_target.resource_paths.values_at(*non_test_specs).flatten
+            normal_specs = pod_target.normal_specs.map(&:name)
+            resource_paths = pod_target.resource_paths.values_at(*normal_specs).flatten
             resource_paths << bridge_support_file
             resource_paths.compact.uniq
           end

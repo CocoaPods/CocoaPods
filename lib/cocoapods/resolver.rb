@@ -367,7 +367,7 @@ module Pod
       find_cached_set(dependency).
         all_specifications(installation_options.warn_for_multiple_pod_sources).
         select { |s| requirement.satisfied_by? s.version }.
-        map { |s| s.subspec_by_name(dependency.name, false, true) }.
+        map { |s| s.subspec_by_name(dependency.name, false, [:test]) }.
         compact
     end
 

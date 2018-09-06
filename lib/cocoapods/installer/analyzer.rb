@@ -580,7 +580,7 @@ module Pod
           end
           pod_targets.each do |target|
             all_specs = all_resolver_specs.group_by(&:name)
-            dependencies = dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+            dependencies = dependencies_for_specs(target.normal_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
               test_dependencies = dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
@@ -598,7 +598,7 @@ module Pod
 
             pod_targets.each do |target|
               all_specs = specs.map(&:spec).group_by(&:name)
-              dependencies = dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+              dependencies = dependencies_for_specs(target.normal_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
                 test_dependencies = dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
