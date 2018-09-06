@@ -89,7 +89,7 @@ module Pod
                 add_swift_static_library_compatibility_header_phase(native_target)
               end
 
-              unless skip_pch?(target.non_test_specs)
+              unless skip_pch?(target.normal_specs)
                 path = target.prefix_header_path
                 create_prefix_header(path, file_accessors, target.platform, native_target)
               end
@@ -486,7 +486,7 @@ module Pod
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
-                spec_paths_to_include = pod_target.non_test_specs.map(&:name)
+                spec_paths_to_include = pod_target.normal_specs.map(&:name)
                 spec_paths_to_include << test_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
@@ -508,7 +508,7 @@ module Pod
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
-                spec_paths_to_include = pod_target.non_test_specs.map(&:name)
+                spec_paths_to_include = pod_target.normal_specs.map(&:name)
                 spec_paths_to_include << test_spec.name if pod_target == target
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
