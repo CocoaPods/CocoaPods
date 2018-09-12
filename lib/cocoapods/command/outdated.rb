@@ -85,7 +85,7 @@ module Pod
           pods = []
           UI.titled_section('Analyzing dependencies') do
             pods = Installer::Analyzer.new(config.sandbox, config.podfile).
-              analyze(false).
+              analyze(:outdated).
               specs_by_target.values.flatten.uniq
           end
           pods

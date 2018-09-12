@@ -96,10 +96,13 @@ module Pod
         podfile_state = generate_podfile_state
 
         store_existing_checkout_options
-        if allow_fetches
+        if allow_fetches == :outdated
+          # special-cased -- we're only really resolving for outdated, rather than doing a full analysis
+        elsif allow_fetches == true
           fetch_external_sources(podfile_state)
         elsif !dependencies_to_fetch(podfile_state).all?(&:local?)
-          raise Informative, 'Cannot analyze without fetching dependencies since the sandbox is not up-to-date. Run `pod install` to ensure all dependencies have been fetched.'
+          raise Informative, 'Cannot analyze without fetching dependencies since the sandbox is not up-to-date. Run `pod install` to ensure all dependencies have been fetched.' \
+            "\n    The missing dependencies are:\n    \t#{dependencies_to_fetch(podfile_state).reject(&:local?).join("\n    \t")}"
         end
 
         locked_dependencies = generate_version_locking_dependencies(podfile_state)
