@@ -387,7 +387,7 @@ module Pod
     # Recursively perform the extensive analysis on all subspecs
     #
     def perform_extensive_subspec_analysis(spec)
-      spec.subspecs.reject(&:test_specification?).send(fail_fast ? :all? : :each) do |subspec|
+      spec.subspecs.reject(&:non_library_specification?).send(fail_fast ? :all? : :each) do |subspec|
         @subspec_name = subspec.name
         perform_extensive_analysis(subspec)
       end
@@ -511,8 +511,8 @@ module Pod
     end
 
     def download_pod
-      test_spec_names = consumer.spec.test_specs.select { |ts| ts.supported_on_platform?(consumer.platform_name) }.map(&:name)
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, test_spec_names, use_modular_headers)
+      non_library_spec_names = consumer.spec.non_library_specs.select { |ts| ts.supported_on_platform?(consumer.platform_name) }.map(&:name)
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, non_library_spec_names, use_modular_headers)
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
@@ -563,7 +563,7 @@ module Pod
           build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || swift_version) if pod_target.uses_swift?
         end
         pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
-          if pod_target.uses_swift_for_test_spec?(test_specs.first)
+          if pod_target.non_library_swift_for_test_spec?(test_specs.first)
             test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
               build_configuration.build_settings['SWIFT_VERSION'] = swift_version
             end
@@ -639,7 +639,7 @@ module Pod
             if !test_spec.supported_on_platform?(consumer.platform_name)
               UI.warn "Skipping test spec `#{test_spec.name}` on platform `#{consumer.platform_name}` since it is not supported.\n".yellow
             else
-              scheme = @installer.target_installation_results.first[pod_target.name].native_target_for_spec(test_spec)
+              scheme = @installer.target_installation_results.first[pod_target.name].native_target_for_spec(non_library_spec)
               output = xcodebuild('test', scheme, 'Debug')
               parsed_output = parse_xcodebuild_output(output)
               translate_output_to_linter_messages(parsed_output)
@@ -847,7 +847,7 @@ module Pod
     # @param  [Bool] use_frameworks
     #         whether frameworks should be used for the installation
     #
-    # @param [Array<String>] test_spec_names
+    # @param [Array<String>] non_library_spec_names
     #         the test spec names to include in the podfile.
     #
     # @return [Podfile] a podfile that requires the specification on the
@@ -856,7 +856,7 @@ module Pod
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [], use_modular_headers = false)
+    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, non_library_spec_names = [], use_modular_headers = false)
       name     = subspec_name || spec.name
       podspec  = file.realpath
       local    = local?
@@ -875,11 +875,11 @@ module Pod
           else
             pod name, :podspec => podspec.to_s, :inhibit_warnings => false
           end
-          test_spec_names.each do |test_spec_name|
+          non_library_spec_names.each do |non_library_spec_name|
             if local
-              pod test_spec_name, :path => podspec.dirname.to_s, :inhibit_warnings => false
+              pod non_library_spec_name, :path => podspec.dirname.to_s, :inhibit_warnings => false
             else
-              pod test_spec_name, :podspec => podspec.to_s, :inhibit_warnings => false
+              pod non_library_spec_name, :podspec => podspec.to_s, :inhibit_warnings => false
             end
           end
         end
