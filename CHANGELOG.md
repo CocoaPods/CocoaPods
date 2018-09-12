@@ -47,6 +47,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [icecrystal23](https://github.com/icecrystal23)
   [#7009](https://github.com/CocoaPods/CocoaPods/issues/7009)
 
+* Fix running `pod outdated` with externally-sourced pods.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#8025](https://github.com/CocoaPods/CocoaPods/issues/8025)
+
 
 ## 1.6.0.beta.1 (2018-08-16)
 

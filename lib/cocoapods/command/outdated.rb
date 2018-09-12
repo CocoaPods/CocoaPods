@@ -22,7 +22,7 @@ module Pod
             UI.puts "#{'<blue>'.blue}\t - Will be updated, but not to the newest version because of specified version in Podfile"
             UI.puts "#{'<red>'.red}\t - Will not be updated because of specified version in Podfile"
             UI.puts ''
-          end
+          end if ansi_output?
           UI.section 'The following pod updates are available:' do
             updates.each do |(name, from_version, matching_version, to_version)|
               color = :blue
@@ -85,7 +85,7 @@ module Pod
           pods = []
           UI.titled_section('Analyzing dependencies') do
             pods = Installer::Analyzer.new(config.sandbox, config.podfile).
-              analyze(false).
+              analyze(:outdated).
               specs_by_target.values.flatten.uniq
           end
           pods
