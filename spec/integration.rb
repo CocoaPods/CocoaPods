@@ -345,6 +345,15 @@ describe_cli 'pod' do
 
   #--------------------------------------#
 
+  describe 'Pod outdated' do
+    describe 'Prints outdated specs' do
+      behaves_like cli_spec 'outdated_multiple_specs',
+                            'outdated --no-repo-update'
+    end
+  end
+
+  #--------------------------------------#
+
   describe 'Pod lint' do
     describe 'Lints a Pod from source with a prepare_command' do
       # We have to disable verbose mode by adding --no-verbose here,
