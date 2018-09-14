@@ -252,6 +252,8 @@ module Pod
       file_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       file_ref.explicit_file_type = 'text.script.ruby'
       file_ref.last_known_file_type = 'text'
+      file_ref.tab_width = '2'
+      file_ref.indent_width = '2'
     end
 
     # Adds a new build configuration to the project and populates it with
