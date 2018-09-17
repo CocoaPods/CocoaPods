@@ -254,6 +254,8 @@ module Pod
           ref.xc_language_specification_identifier.should == 'xcode.lang.ruby'
           ref.explicit_file_type.should == 'text.script.ruby'
           ref.last_known_file_type.should == 'text'
+          ref.tab_width.should == '2'
+          ref.indent_width.should == '2'
         end
       end
 

@@ -8,6 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* mark_ruby_file_ref add indent width and tab width config  
+  [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
+
 * Print an error that will show up in Xcode's issue navigator upon unexpected
   failures in the copy resources and embed frameworks script phases.  
   [Samuel Giddins](https://github.com/segiddins)
