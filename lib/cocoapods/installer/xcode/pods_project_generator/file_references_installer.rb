@@ -18,6 +18,16 @@ module Pod
           #
           attr_reader :pods_project
 
+          # @return [bool] Whether you want the folder structure.
+          #
+          attr_reader :keep_folder_structure
+
+          PODFILE_NAMES = [
+            'CocoaPods.podfile.yaml',
+            'CocoaPods.podfile',
+            'Podfile',
+          ].freeze
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
@@ -28,6 +38,16 @@ module Pod
             @sandbox = sandbox
             @pod_targets = pod_targets
             @pods_project = pods_project
+            @keep_folder_structure = false
+            
+            PODFILE_NAMES.each do |filename|
+              candidate = (Pathname sandbox.root).parent + filename
+              if candidate.exist?
+                if candidate.read.include? 'keep_folder_structure'
+                  @keep_folder_structure = true
+                end
+              end
+            end
           end
 
           # Installs the file references.
@@ -204,6 +224,11 @@ module Pod
 
               pod_name = file_accessor.spec.name
               local = sandbox.local?(pod_name)
+              if keep_folder_structure
+                local = true
+              end
+              paths = file_accessor.send(file_accessor_key)
+              paths = allowable_project_paths(paths)
               base_path = local ? common_path(paths) : nil
               group = pods_project.group_for_spec(pod_name, group_key)
               paths.each do |path|
