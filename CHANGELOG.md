@@ -54,6 +54,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#8025](https://github.com/CocoaPods/CocoaPods/issues/8025)
 
+* Remove codesign suppression  
+  [Jaehong Kang](https://github.com/sinoru)
+  [#7606](https://github.com/CocoaPods/CocoaPods/issues/7606)
+
 
 ## 1.6.0.beta.1 (2018-08-16)
 
@@ -329,10 +333,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix `assetcatalog_generated_info.plist` path in copy resources phase.  
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
-
-* Remove codesign suppression  
-  [Jaehong Kang](https://github.com/sinoru)
-  [#7606](https://github.com/CocoaPods/CocoaPods/issues/7606)
 
 ## 1.5.0 (2018-04-04)
 
