@@ -48,12 +48,18 @@ module Pod
         #
         attr_reader :target
 
+        # @return [InstallationOptions] the installation options from the Podfile.
+        #
+        attr_reader :installation_options
+
         # Init a new TargetIntegrator
         #
         # @param  [AggregateTarget] target @see #target
+        # @param  [InstallationOptions] installation_options @see #installation_options
         #
-        def initialize(target)
+        def initialize(target, installation_options)
           @target = target
+          @installation_options = installation_options
         end
 
         class << self
@@ -327,14 +333,16 @@ module Pod
             end
             return
           end
-
           script_path = target.copy_resources_script_relative_path
-          resource_paths_by_config = target.resource_paths_by_config
-          resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
-          input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
-          output_paths = TargetIntegrator.resource_output_paths(resource_paths_flattened)
+          input_paths = []
+          output_paths = []
+          unless installation_options.disable_input_output_paths?
+            resource_paths_by_config = target.resource_paths_by_config
+            resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
+            input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
+            output_paths = TargetIntegrator.resource_output_paths(resource_paths_flattened)
+          end
           TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-
           native_targets.each do |native_target|
             # Static library targets cannot include resources. Skip this phase from being added instead.
             next if native_target.symbol_type == :static_library
@@ -368,13 +376,15 @@ module Pod
             end
             return
           end
-
           script_path = target.embed_frameworks_script_relative_path
-          framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
-          input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
-          output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
-          TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-
+          input_paths = []
+          output_paths = []
+          unless installation_options.disable_input_output_paths?
+            framework_paths_by_config = target.framework_paths_by_config.values.flatten.uniq
+            input_paths = [target.embed_frameworks_script_relative_path, *framework_paths_by_config.map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.flatten.compact]
+            output_paths = framework_paths_by_config.map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.flatten.compact.uniq
+            TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+          end
           native_targets_to_embed_in.each do |native_target|
             TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

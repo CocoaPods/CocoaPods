@@ -23,7 +23,10 @@ module Pod
         )
         @pod_bundle.xcconfigs['Debug'] = configuration
         @pod_bundle.xcconfigs['Release'] = configuration
-        @target_integrator = TargetIntegrator.new(@pod_bundle)
+
+        @installation_options = Pod::Installer::InstallationOptions.new
+
+        @target_integrator = TargetIntegrator.new(@pod_bundle, @installation_options)
         @target_integrator.private_methods.grep(/^update_to_cocoapods_/).each do |method|
           @target_integrator.stubs(method)
         end

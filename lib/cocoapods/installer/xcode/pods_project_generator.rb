@@ -210,7 +210,7 @@ module Pod
           unless pod_installations_to_integrate.empty?
             UI.message '- Integrating targets' do
               pod_installations_to_integrate.each do |pod_target_installation_result|
-                PodTargetIntegrator.new(pod_target_installation_result).integrate!
+                PodTargetIntegrator.new(pod_target_installation_result, installation_options).integrate!
               end
             end
           end

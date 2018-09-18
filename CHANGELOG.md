@@ -25,7 +25,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#8064](https://github.com/CocoaPods/CocoaPods/issues/8064)
 
 ##### Bug Fixes
-  
+
+* Provide an installation option to disable usage of input/output paths.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)
+
 * Scope prefix header setting to each test spec.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8046](https://github.com/CocoaPods/CocoaPods/pull/8046)
