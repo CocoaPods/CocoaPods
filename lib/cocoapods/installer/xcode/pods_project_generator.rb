@@ -110,6 +110,12 @@ module Pod
                 Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_spec))
               end
             end
+
+            if pod_target.contains_app_specifications?
+              pod_target.app_specs.each do |app_spec|
+                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.app_target_label(app_spec))
+              end
+            end
           end
         end
 
@@ -205,7 +211,7 @@ module Pod
         def integrate_targets(pod_target_installation_results)
           pod_installations_to_integrate = pod_target_installation_results.values.select do |pod_target_installation_result|
             pod_target = pod_target_installation_result.target
-            !pod_target_installation_result.test_native_targets.empty? || pod_target.contains_script_phases?
+            !pod_target_installation_result.test_native_targets.empty? || !pod_target_installation_result.app_native_targets.empty? || pod_target.contains_script_phases?
           end
           unless pod_installations_to_integrate.empty?
             UI.message '- Integrating targets' do
@@ -296,6 +302,24 @@ module Pod
                   end
                   test_native_target.add_dependency(dependency_installation_result.native_target)
                   add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
+                end
+              end
+            end
+
+            # Wire up app native targets.
+            unless pod_target_installation_result.app_native_targets.empty?
+              pod_target_installation_result.app_specs_by_native_target.each do |app_native_target, app_specs|
+                app_dependent_targets = app_specs.flat_map { |s| pod_target.app_dependent_targets_by_spec_name[s.name] }.compact.unshift(pod_target).uniq
+                app_dependent_targets.each do |app_dependent_target|
+                  dependency_installation_result = pod_target_installation_results_hash[app_dependent_target.name]
+                  resource_bundle_native_targets = dependency_installation_result.app_resource_bundle_targets[app_specs.first.name]
+                  unless resource_bundle_native_targets.nil?
+                    resource_bundle_native_targets.each do |app_resource_bundle_target|
+                      app_native_target.add_dependency(app_resource_bundle_target)
+                    end
+                  end
+                  app_native_target.add_dependency(dependency_installation_result.native_target)
+                  add_framework_file_reference_to_native_target(app_native_target, pod_target, app_dependent_target, frameworks_group)
                 end
               end
             end

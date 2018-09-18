@@ -7,16 +7,6 @@ module Pod
     #
     attr_reader :specs
 
-    # @return [Array<Specification>] All of the test specs within this target.
-    #         Subset of #specs.
-    #
-    attr_reader :test_specs
-
-    # @return [Array<Specification>] All of the specs within this target that are not test specs.
-    #         Subset of #specs.
-    #
-    attr_reader :non_test_specs
-
     # @return [Array<TargetDefinition>] the target definitions of the Podfile
     #         that generated this target.
     #
@@ -47,6 +37,11 @@ module Pod
     #
     attr_accessor :test_dependent_targets_by_spec_name
 
+    # @return [Hash{String=>Array<PodTarget>}] all target dependencies by app spec name.
+    #
+    attr_accessor :app_dependent_targets_by_spec_name
+
+
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
@@ -69,11 +64,27 @@ module Pod
       @target_definitions = target_definitions
       @file_accessors = file_accessors
       @scope_suffix = scope_suffix
-      @test_specs, @non_test_specs = @specs.partition(&:test_specification?)
       @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @dependent_targets = []
       @test_dependent_targets_by_spec_name = {}
+      @app_dependent_targets_by_spec_name = {}
       @build_config_cache = {}
+    end
+
+    def test_specs
+      @specs.select(&:test_specification?)
+    end
+
+    def app_specs
+      @specs.select(&:app_specification?)
+    end
+
+    def library_specs
+      @specs.select(&:library_specification?)
+    end
+
+    def non_library_specs
+      @specs.select(&:library_specification?)
     end
 
     # Scopes the current target based on the existing pod targets within the cache.
@@ -96,6 +107,12 @@ module Pod
               test_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
             end
             [spec_name, scoped_test_pod_targets]
+          end]
+          target.app_dependent_targets_by_spec_name = Hash[app_dependent_targets_by_spec_name.map do |spec_name, app_pod_targets|
+            scoped_app_pod_targets = app_pod_targets.flat_map do |app_pod_target|
+              app_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
+            end
+            [spec_name, scoped_app_pod_targets]
           end]
           cache[cache_key] = target
         end
@@ -194,6 +211,24 @@ module Pod
       end
     end
 
+    # Checks whether a particular test specification uses Swift or not.
+    #
+    # @param  [Specification] test_spec
+    #         The test spec to query against.
+    #
+    # @return [Boolean] Whether the target uses Swift code within the requested test spec.
+    #
+    def uses_swift_for_app_spec?(app_spec)
+      @uses_swift_for_app_type ||= {}
+      return @uses_swift_for_app_type[app_spec.name] if @uses_swift_for_test_type.key?(app_spec.name)
+      @uses_swift_for_app_type[app_spec.name] = begin
+        file_accessors.select { |a| a.spec.app_specification? && a.spec == app_spec }.any? do |file_accessor|
+          file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
+        end
+      end
+    end
+
+
     # @return [Boolean] Whether the target should build a static framework.
     #
     def static_framework?
@@ -223,7 +258,7 @@ module Pod
         return @defines_module = true
       end
 
-      @defines_module = non_test_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
+      @defines_module = library_specs.any? { |s| s.consumer(platform).pod_target_xcconfig['DEFINES_MODULE'] == 'YES' }
     end
 
     # @return [Array<Hash{Symbol=>String}>] An array of hashes where each hash represents a single script phase.
@@ -243,6 +278,13 @@ module Pod
     def contains_test_specifications?
       !test_specs.empty?
     end
+
+    # @return [Boolean] Whether the target has any tests specifications.
+    #
+    def contains_app_specifications?
+      !app_specs.empty?
+    end
+
 
     # @return [Hash{String=>Array<Hash{Symbol=>String}>}] The vendored and non vendored framework paths this target
     #         depends upon keyed by spec name. For the root spec and subspecs the framework path of the target itself
@@ -397,6 +439,51 @@ module Pod
       support_files_dir + "#{test_target_label(test_spec)}-prefix.pch"
     end
 
+    # @param  [Specification] app_spec
+    #         The app_spec to use for producing the app_spec label.
+    #
+    # @return [String] The derived name of the test target.
+    #
+    def app_target_label(app_spec)
+      "#{label}-#{app_spec.name.split('/')[1..-1].join('-')}"
+    end
+
+    # @param  [Specification] test_spec
+    #         The test spec this embed frameworks script path is for.
+    #
+    # @return [Pathname] The absolute path of the copy resources script for the given test type.
+    #
+    def copy_resources_script_path_for_app_spec(app_spec)
+      support_files_dir + "#{app_target_label(app_spec)}-resources.sh"
+    end
+
+    # @param  [Specification] test_spec
+    #         The test spec this embed frameworks script path is for.
+    #
+    # @return [Pathname] The absolute path of the embed frameworks script for the given test type.
+    #
+    def embed_frameworks_script_path_for_app_spec(app_spec)
+      support_files_dir + "#{app_target_label(app_spec)}-frameworks.sh"
+    end
+
+    # @param  [Specification] test_spec
+    #         The test spec this Info.plist path is for.
+    #
+    # @return [Pathname] The absolute path of the Info.plist for the given test type.
+    #
+    def info_plist_path_for_app_spec(app_spec)
+      support_files_dir + "#{app_target_label(app_spec)}-Info.plist"
+    end
+
+    # @param  [Specification] test_spec
+    #         The test spec this prefix header path is for.
+    #
+    # @return [Pathname] the absolute path of the prefix header file for the given test type.
+    #
+    def prefix_header_path_for_app_spec(app_spec)
+      support_files_dir + "#{app_target_label(app_spec)}-prefix.pch"
+    end
+
     # @return [Array<String>] The names of the Pods on which this target
     #         depends.
     #
@@ -448,11 +535,44 @@ module Pod
     # @param [Specification] test_spec
     #        the test spec to scope dependencies for
     #
+    # @return [Array<PodTarget>] the recursive targets that this target has a
+    #         test dependency upon.
+    #
+    def recursive_app_dependent_targets(app_spec)
+      @recursive_app_dependent_targets ||= {}
+      @recursive_app_dependent_targets[app_spec] ||= _add_recursive_app_dependent_targets(app_spec, Set.new).to_a
+    end
+
+    def _add_recursive_app_dependent_targets(app_spec, set)
+      raise ArgumentError, 'Must give a test spec' unless app_spec
+      return unless dependent_targets = app_dependent_targets_by_spec_name[app_spec.name]
+
+      dependent_targets.each do |target|
+        target._add_recursive_dependent_targets(set) if set.add?(target)
+      end
+
+      set
+    end
+    private :_add_recursive_test_dependent_targets
+
+    # @param [Specification] test_spec
+    #        the test spec to scope dependencies for
+    #
     # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
     #         This list includes the target itself as well as its recursive dependent and test dependent targets.
     #
     def dependent_targets_for_test_spec(test_spec)
       [self, *recursive_dependent_targets, *recursive_test_dependent_targets(test_spec)].uniq
+    end
+
+    # @param [Specification] test_spec
+    #        the test spec to scope dependencies for
+    #
+    # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
+    #         This list includes the target itself as well as its recursive dependent and test dependent targets.
+    #
+    def dependent_targets_for_app_spec(app_spec)
+      [self, *recursive_dependent_targets, *recursive_app_dependent_targets(app_spec)].uniq
     end
 
     # Checks if warnings should be inhibited for this pod.
@@ -519,12 +639,13 @@ module Pod
     #
     # @return [Array<String>] The set of header search paths this target uses.
     #
-    def header_search_paths(include_dependent_targets_for_test_spec: nil)
+    def header_search_paths(include_dependent_targets_for_test_spec: nil, include_dependent_targets_for_app_spec: nil)
       header_search_paths = []
       header_search_paths.concat(build_headers.search_paths(platform, nil, false))
       header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
       dependent_targets = recursive_dependent_targets
       dependent_targets += recursive_test_dependent_targets(include_dependent_targets_for_test_spec) if include_dependent_targets_for_test_spec
+      dependent_targets += recursive_app_dependent_targets(include_dependent_targets_for_app_spec) if include_dependent_targets_for_app_spec
       dependent_targets.uniq.each do |dependent_target|
         header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
