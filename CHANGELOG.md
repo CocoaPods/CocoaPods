@@ -330,6 +330,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
 
+* Remove codesign suppression  
+  [Jaehong Kang](https://github.com/sinoru)
+  [#7606](https://github.com/CocoaPods/CocoaPods/issues/7606)
 
 ## 1.5.0 (2018-04-04)
 
