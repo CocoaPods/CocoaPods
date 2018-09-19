@@ -8,22 +8,41 @@ module Pod
           before do
             @project = Project.new(config.sandbox.project_path)
             config.sandbox.project = @project
+            @project.add_pod_group('Subgroup', '')
           end
 
           it 'correctly installs an iOS app host target to the project' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios, 'AppHost-PodName-iOS-Unit-Tests')
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
+                                             'AppHost-PodName-iOS-Unit-Tests', 'Subgroup')
             installer.install!
             @project.targets.map(&:name).sort.should == ['AppHost-PodName-iOS-Unit-Tests']
           end
 
           it 'correctly installs an OSX app host target to the project' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx, 'AppHost-PodName-macOS-Unit-Tests')
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx,
+                                             'AppHost-PodName-macOS-Unit-Tests',
+                                             'Subgroup')
             installer.install!
             @project.targets.map(&:name).sort.should == ['AppHost-PodName-macOS-Unit-Tests']
           end
 
+          it 'correctly adds app files under specified group' do
+            name = 'AppHost-PodName-iOS-Unit-Tests'
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
+                                             name,
+                                             'Subgroup')
+            installer.install!
+            @project.pod_group('Subgroup')[name].files.map(&:name).sort.should == [
+              'AppHost-PodName-iOS-Unit-Tests-Info.plist',
+              'LaunchScreen.storyboard',
+              'main.m',
+            ]
+          end
+
           it 'sets the correct build settings for an iOS app host target' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios, 'AppHost-PodName-iOS-Unit-Tests')
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
+                                             'AppHost-PodName-iOS-Unit-Tests',
+                                             'Subgroup')
             app_host_target = installer.install!
             build_settings = app_host_target.build_configurations.map(&:build_settings)
             build_settings.each do |build_setting|
@@ -35,7 +54,9 @@ module Pod
           end
 
           it 'sets the correct build settings for an OSX app host target' do
-            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx, 'AppHost-PodName-macOS-Unit-Tests')
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx,
+                                             'AppHost-PodName-macOS-Unit-Tests',
+                                             'Subgroup')
             app_host_target = installer.install!
             build_settings = app_host_target.build_configurations.map(&:build_settings)
             build_settings.each do |build_setting|

@@ -25,18 +25,26 @@ module Pod
           #
           attr_reader :name
 
+          # @return [String] the name of the pod the app host installer will be installing within.
+          #
+          attr_reader :pod_name
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
           # @param [Pod::Project] project @see #project
           # @param [Platform] platform @see #platform
           # @param [String] name @see #name
+          # @param [String] pod_name @see #pod_name
           #
-          def initialize(sandbox, project, platform, name)
+          def initialize(sandbox, project, platform, name, pod_name)
             @sandbox = sandbox
             @project = project
             @platform = platform
             @name = name
+            @pod_name = pod_name
+            target_group = project.pod_group(pod_name)
+            @group = target_group[name] || target_group.new_group(name)
           end
 
           # @return [PBXNativeTarget] the app host native target that was installed.
@@ -51,12 +59,13 @@ module Pod
               configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if platform == :osx
               configuration.build_settings['CURRENT_PROJECT_VERSION'] = '1'
             end
-            Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, name)
-            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, name) if platform == :ios
+
+            Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, name)
+            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, name) if platform == :ios
             additional_entries = platform == :ios ? ADDITIONAL_IOS_INFO_PLIST_ENTRIES : {}
             create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
                                                 :appl, additional_entries)
-            project[name].new_file(app_host_info_plist_path)
+            @group.new_file(app_host_info_plist_path)
             app_host_target
           end
 
@@ -80,7 +89,7 @@ module Pod
           # @return [Pathname] The absolute path of the Info.plist to use for an app host.
           #
           def app_host_info_plist_path
-            project.path.dirname.+("#{name}/#{name}-Info.plist")
+            project.path.dirname.+(name).+("#{name}-Info.plist")
           end
 
           # @return [String] The deployment target.
