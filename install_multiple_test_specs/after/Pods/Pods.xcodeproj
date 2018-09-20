@@ -1,13 +1,13 @@
 
 File References:
 - Podfile
-- AppHost-TestLib-Unit-Tests:
-  - AppHost-TestLib-Unit-Tests-Info.plist
-  - LaunchScreen.storyboard
-  - main.m
 - Development Pods:
   - TestLib:
     - main.swift
+    - AppHost-TestLib-Unit-Tests:
+      - AppHost-TestLib-Unit-Tests-Info.plist
+      - LaunchScreen.storyboard
+      - main.m
     - Pod:
       - TestLib.podspec
     - Support Files:
