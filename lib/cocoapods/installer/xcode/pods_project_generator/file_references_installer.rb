@@ -18,7 +18,7 @@ module Pod
           #
           attr_reader :pods_project
 
-          # @return [Bool] preserve file structure when value is true.
+          # @return [Bool] add support for preserving the file structure of externally sourced pods, in addition to local pods.
           #
           attr_reader :preserve_file_structure
           # Initialize a new instance
