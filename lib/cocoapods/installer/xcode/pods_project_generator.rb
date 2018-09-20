@@ -144,6 +144,7 @@ module Pod
             pod_names.each do |pod_name|
               local = sandbox.local?(pod_name)
               path = sandbox.pod_dir(pod_name)
+              path = path.realpath if path.exist?
               @project.add_pod_group(pod_name, path, local, false)
             end
 
