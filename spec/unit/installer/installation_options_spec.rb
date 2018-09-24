@@ -65,6 +65,7 @@ module Pod
           'lock_pod_sources' => true,
           'warn_for_multiple_pod_sources' => true,
           'share_schemes_for_development_pods' => false,
+          'disable_input_output_paths' => false,
         }
       end
 
