@@ -10,7 +10,7 @@ module Pod
           If there is multiple cache for various versions of the requested pod,
           you will be asked which one to clean. Use `--all` to clean them all.
 
-          If you don't give a pod `NAME`, you need to specify the `--all`
+          If you do not give a pod `NAME`, you need to specify the `--all`
           flag (this is to avoid cleaning all the cache by mistake).
         DESC
 
