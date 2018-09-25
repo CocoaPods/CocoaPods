@@ -170,7 +170,7 @@ module Pod
         end
 
         def install_file_references
-          installer = FileReferencesInstaller.new(sandbox, pod_targets, project)
+          installer = FileReferencesInstaller.new(sandbox, pod_targets, project, installation_options.preserve_file_structure)
           installer.install!
         end
 

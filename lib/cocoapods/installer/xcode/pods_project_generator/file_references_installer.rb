@@ -18,36 +18,21 @@ module Pod
           #
           attr_reader :pods_project
 
-          # @return [bool] Whether you want the folder structure.
+          # @return [Bool] preserve file structure when value is true.
           #
-          attr_reader :keep_folder_structure
-
-          PODFILE_NAMES = [
-            'CocoaPods.podfile.yaml',
-            'CocoaPods.podfile',
-            'Podfile',
-          ].freeze
-
+          attr_reader :preserve_file_structure
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
           # @param [Array<PodTarget>] pod_targets @see #pod_targets
           # @param [Project] pods_project @see #pods_project
+          # @param [Bool] preserve_file_structure @see #preserve_file_structure
           #
-          def initialize(sandbox, pod_targets, pods_project)
+          def initialize(sandbox, pod_targets, pods_project, preserve_file_structure = false)
             @sandbox = sandbox
             @pod_targets = pod_targets
             @pods_project = pods_project
-            @keep_folder_structure = false
-            
-            PODFILE_NAMES.each do |filename|
-              candidate = (Pathname sandbox.root).parent + filename
-              if candidate.exist?
-                if candidate.read.include? 'keep_folder_structure'
-                  @keep_folder_structure = true
-                end
-              end
-            end
+            @preserve_file_structure = preserve_file_structure
           end
 
           # Installs the file references.
@@ -223,16 +208,11 @@ module Pod
               next if paths.empty?
 
               pod_name = file_accessor.spec.name
-              local = sandbox.local?(pod_name)
-              if keep_folder_structure
-                local = true
-              end
-              paths = file_accessor.send(file_accessor_key)
-              paths = allowable_project_paths(paths)
-              base_path = local ? common_path(paths) : nil
+              preserve_file_structure_flag = (sandbox.local?(pod_name) || preserve_file_structure)
+              base_path = preserve_file_structure_flag ? common_path(paths) : nil
               group = pods_project.group_for_spec(pod_name, group_key)
               paths.each do |path|
-                pods_project.add_file_reference(path, group, local && reflect_file_system_structure_for_development, base_path)
+                pods_project.add_file_reference(path, group, preserve_file_structure_flag && reflect_file_system_structure_for_development, base_path)
               end
             end
           end

@@ -11,6 +11,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Remove contraction from docs to fix rendering on the website.  
   [stevemoser](https://github.com/stevemoser)
   [#8131](https://github.com/CocoaPods/CocoaPods/pull/8131)
+* Provide an installation option to preserve folder structure  
+  [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
+  [#8097](https://github.com/CocoaPods/CocoaPods/pull/8097)
 
 * mark_ruby_file_ref add indent width and tab width config  
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
