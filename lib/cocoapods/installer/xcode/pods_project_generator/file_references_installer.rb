@@ -21,6 +21,7 @@ module Pod
           # @return [Bool] add support for preserving the file structure of externally sourced pods, in addition to local pods.
           #
           attr_reader :preserve_file_structure
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
