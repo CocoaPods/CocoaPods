@@ -92,10 +92,11 @@ module Pod
                 dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
               unless framework_paths.empty?
-                input_paths = [script_path, *framework_paths.flat_map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.compact]
-                output_paths = framework_paths.flat_map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.compact
+                input_paths = [script_path, *framework_paths.flat_map { |fw| [fw.source_path, fw.dsym_path] }.compact]
+                output_paths = UserProjectIntegrator::TargetIntegrator.framework_output_paths(framework_paths)
               end
             end
+
             UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

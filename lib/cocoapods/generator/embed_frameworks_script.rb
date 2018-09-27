@@ -1,12 +1,14 @@
+require 'cocoapods/target/framework_paths'
+
 module Pod
   module Generator
     class EmbedFrameworksScript
-      # @return [Hash{String => Array<String>}] Multiple lists of frameworks per
+      # @return [Hash{String => Array<FrameworkPaths>}] Multiple lists of frameworks per
       #         configuration.
       #
       attr_reader :frameworks_by_config
 
-      # @param  [Hash{String => Array<String>] frameworks_by_config
+      # @param  [Hash{String => Array<FrameworkPaths>] frameworks_by_config
       #         @see #frameworks_by_config
       #
       def initialize(frameworks_by_config)
@@ -197,16 +199,15 @@ module Pod
         SH
         script << "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks_with_dsyms|
-          unless frameworks_with_dsyms.empty?
-            script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
-            frameworks_with_dsyms.each do |framework_with_dsym|
-              script << %(  install_framework "#{framework_with_dsym[:input_path]}"\n)
-              # Vendored frameworks might have a dSYM file next to them so ensure its copied. Frameworks built from
-              # sources will have their dSYM generated and copied by Xcode.
-              script << %(  install_dsym "#{framework_with_dsym[:dsym_input_path]}"\n) unless framework_with_dsym[:dsym_input_path].nil?
-            end
-            script << "fi\n"
+          next if frameworks_with_dsyms.empty?
+          script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+          frameworks_with_dsyms.each do |framework_with_dsym|
+            script << %(  install_framework "#{framework_with_dsym.source_path}"\n)
+            # Vendored frameworks might have a dSYM file next to them so ensure its copied. Frameworks built from
+            # sources will have their dSYM generated and copied by Xcode.
+            script << %(  install_dsym "#{framework_with_dsym.dsym_path}"\n) unless framework_with_dsym.dsym_path.nil?
           end
+          script << "fi\n"
         end
         script << <<-SH.strip_heredoc
         if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
