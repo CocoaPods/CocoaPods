@@ -218,9 +218,7 @@ then
   # Find all other xcassets (this unfortunately includes those of path pods and other targets).
   OTHER_XCASSETS=$(find "$PWD" -iname "*.xcassets" -type d)
   while read line; do
-    LOWER_LINE="$(echo $line | tr '[:upper:]' '[:lower:]')"
-    LOWER_PODS_ROOT="$(echo $PODS_ROOT | tr '[:upper:]' '[:lower:]')"
-    if [[ $LOWER_LINE != ${LOWER_PODS_ROOT}* ]]; then
+    if [[ $line != ${PODS_ROOT}* ]]; then
       XCASSET_FILES+=("$line")
     fi
   done <<<"$OTHER_XCASSETS"
