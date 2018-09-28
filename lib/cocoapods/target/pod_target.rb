@@ -512,11 +512,15 @@ module Pod
     # @param [Boolean] include_dependent_targets_for_test_spec
     #        whether to include header search paths for test dependent targets
     #
+    # @param [Boolean] include_private_headers
+    #        whether to include header search paths for private headers of this
+    #        target
+    #
     # @return [Array<String>] The set of header search paths this target uses.
     #
-    def header_search_paths(include_dependent_targets_for_test_spec: nil)
+    def header_search_paths(include_dependent_targets_for_test_spec: nil, include_private_headers: true)
       header_search_paths = []
-      header_search_paths.concat(build_headers.search_paths(platform, nil, false))
+      header_search_paths.concat(build_headers.search_paths(platform, nil, false)) if include_private_headers
       header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
       dependent_targets = recursive_dependent_targets
       dependent_targets += recursive_test_dependent_targets(include_dependent_targets_for_test_spec) if include_dependent_targets_for_test_spec
