@@ -390,8 +390,11 @@ module Pod
     # @return [Source::Aggregate] The aggregate of the {#sources}.
     #
     def aggregate_for_dependency(dependency)
+      sources_manager = Config.instance.sources_manager
       if dependency && dependency.podspec_repo
-        return Config.instance.sources_manager.aggregate_for_dependency(dependency)
+        sources_manager.aggregate_for_dependency(dependency)
+      elsif (locked_vertex = @locked_dependencies.vertex_named(dependency.name)) && (locked_dependency = locked_vertex.payload) && locked_dependency.podspec_repo
+        sources_manager.aggregate_for_dependency(locked_dependency)
       else
         @aggregate ||= Source::Aggregate.new(sources)
       end
