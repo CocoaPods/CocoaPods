@@ -1,5 +1,4 @@
 require 'molinillo'
-require 'cocoapods/resolver/lazy_specification'
 
 module Pod
   class NoSpecFoundError < Informative
@@ -12,43 +11,8 @@ module Pod
   # by target for a given Podfile.
   #
   class Resolver
-    # A small container that wraps a resolved specification for a given target definition. Additional metadata
-    # is included here such as if the specification is only used by tests.
-    #
-    class ResolverSpecification
-      # @return [Specification] the specification that was resolved
-      #
-      attr_reader :spec
-
-      # @return [Source] the spec repo source the specification came from
-      #
-      attr_reader :source
-
-      # @return [Bool] whether this resolved specification is only used by tests.
-      #
-      attr_reader :used_by_tests_only
-      alias used_by_tests_only? used_by_tests_only
-
-      def initialize(spec, used_by_tests_only, source)
-        @spec = spec
-        @used_by_tests_only = used_by_tests_only
-        @source = source
-      end
-
-      def name
-        spec.name
-      end
-
-      def root
-        spec.root
-      end
-
-      def ==(other)
-        self.class == other &&
-          spec == other.spec &&
-          used_by_tests_only == other.test_only
-      end
-    end
+    require 'cocoapods/resolver/lazy_specification'
+    require 'cocoapods/resolver/resolver_specification'
 
     include Pod::Installer::InstallationOptions::Mixin
 
