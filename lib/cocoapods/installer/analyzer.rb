@@ -789,11 +789,12 @@ module Pod
       #
       def fetch_external_sources(podfile_state)
         verify_no_pods_with_different_sources!
-        unless dependencies_to_fetch(podfile_state).empty?
-          UI.section 'Fetching external sources' do
-            dependencies_to_fetch(podfile_state).sort.each do |dependency|
-              fetch_external_source(dependency, !pods_to_fetch(podfile_state).include?(dependency.root_name))
-            end
+        deps = dependencies_to_fetch(podfile_state)
+        pods = pods_to_fetch(podfile_state)
+        return if deps.empty?
+        UI.section 'Fetching external sources' do
+          deps.sort.each do |dependency|
+            fetch_external_source(dependency, !pods.include?(dependency.root_name))
           end
         end
       end
