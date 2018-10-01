@@ -453,7 +453,7 @@ module Pod
           target_inspection = target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
           user_project = target_inspection.project
-          client_root = user_project.path.dirname.realpath
+          client_root = target_inspection.client_root
           user_target_uuids = target_inspection.project_target_uuids
           user_build_configurations = target_inspection.build_configurations
           archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : target_inspection.archs
