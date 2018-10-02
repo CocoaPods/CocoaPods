@@ -1,7 +1,7 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/DepPod" "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod"
 LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/DepPod-library" "${PODS_CONFIGURATION_BUILD_DIR}/HeaderMappingsDirPod-library"
-OTHER_CFLAGS = $(inherited) -fmodule-map-file="${PODS_ROOT}/Headers/Public/DepPod/DepPod-library.modulemap" -fmodule-map-file="${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap" -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/DepPod" -isystem "${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod"
+OTHER_CFLAGS = $(inherited) -fmodule-map-file="${PODS_ROOT}/Headers/Public/DepPod/DepPod-library.modulemap" -fmodule-map-file="${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap"
 OTHER_LDFLAGS = $(inherited) -ObjC -l"DepPod-library" -l"HeaderMappingsDirPod-library"
 OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Public/DepPod/DepPod-library.modulemap" -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Public/HeaderMappingsDirPod/HeaderMappingsDirPod-library.modulemap"
 PODS_BUILD_DIR = ${BUILD_DIR}
