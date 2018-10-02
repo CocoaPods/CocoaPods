@@ -329,7 +329,7 @@ module Pod
             target.test_spec_consumers.select(&:requires_app_host?).group_by(&:test_type).map do |test_type, test_spec_consumers|
               platform = target.platform
               name = "AppHost-#{target.label}-#{test_type.capitalize}-Tests"
-              app_host_target = AppHostInstaller.new(sandbox, project, platform, name).install!
+              app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name).install!
               # Wire test native targets to the generated app host.
               test_spec_consumers.each do |test_spec_consumer|
                 test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)

@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
   [#8097](https://github.com/CocoaPods/CocoaPods/pull/8097)
 
+* Nests test specs host apps inside that Pod's directory for cleaner project 
+  navigators.  
+  [Derek Ostrander](https://github.com/dostrander)
+   
 * mark_ruby_file_ref add indent width and tab width config  
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
 
