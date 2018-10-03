@@ -40,6 +40,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Guillaume Algis](https://github.com/guillaumealgis)
   [#6401](https://github.com/CocoaPods/CocoaPods/pull/6401)
 
+* When resolving a locked dependency, source the spec from the locked
+  specs repository.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Provide an installation option to disable usage of input/output paths.  

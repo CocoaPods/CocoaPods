@@ -53,6 +53,11 @@ module Pod
             pods_to_update.each do |u|
               dependency_graph.detach_vertex_named(u)
             end
+
+            dependency_graph.each do |vertex|
+              next unless dep = vertex.payload
+              dep.podspec_repo ||= lockfile.spec_repo(dep.root_name)
+            end
           end
 
           dependency_graph

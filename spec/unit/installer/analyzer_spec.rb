@@ -934,6 +934,48 @@ module Pod
           version.to_s.should == '2.5.1'
       end
 
+      it 'takes into account locked dependency spec repos' do
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          project 'SampleProject/SampleProject'
+          source 'https://example.com/example/specs.git'
+          source 'https://github.com/cocoapods/specs.git'
+          target 'SampleProject' do
+            pod 'JSONKit', '1.5pre'
+          end
+        end
+        hash = {}
+        hash['PODS'] = ['JSONKit (1.5pre)']
+        hash['DEPENDENCIES'] = %w(JSONKit)
+        hash['SPEC CHECKSUMS'] = {}
+        hash['SPEC REPOS'] = {
+          'https://github.com/cocoapods/specs.git' => ['JSONKit'],
+        }
+        hash['COCOAPODS'] = Pod::VERSION
+        lockfile = Pod::Lockfile.new(hash)
+        analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
+
+        example_source = MockSource.new 'example-example-specs' do
+          pod 'JSONKit', '1.5pre' do |s|
+            s.dependency 'Nope', '1.0'
+          end
+
+          pod 'Nope', '1.0' do |s|
+            s.ios.deployment_target = '8'
+          end
+        end
+        master_source = config.sources_manager.master.first
+
+        analyzer.stubs(:sources).returns([example_source, master_source])
+
+        # if we prefered the first source (the default), we also would have resolved Nope
+        analyzer.analyze.specs_by_source.
+          should == {
+            example_source => [],
+            master_source => [Pod::Spec.new(nil, 'JSONKit') { |s| s.version = '1.5pre' }],
+          }
+      end
+
       #--------------------------------------#
 
       it 'fetches the dependencies with external sources' do
