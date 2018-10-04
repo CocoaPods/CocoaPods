@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   specs repository.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Slightly improve resolution speed for Podfiles that contain multiple targets
+  with the same dependencies.  
+  [Samuel Giddins]
+
 ##### Bug Fixes
 
 * Provide an installation option to disable usage of input/output paths.  
