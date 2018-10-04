@@ -46,6 +46,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Don't generate unencrypted source warnings for localhost.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8156](https://github.com/CocoaPods/CocoaPods/issues/8156)
+
 * Provide an installation option to disable usage of input/output paths.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)
