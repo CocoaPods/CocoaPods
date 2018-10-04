@@ -566,7 +566,7 @@ module Pod
         end
 
         it 'raises for unknown test type' do
-          exception = lambda { @test_pod_target.product_type_for_test_type(:weird_test_type) }.should.raise Informative
+          exception = lambda { @test_pod_target.product_type_for_non_library_type(:weird_test_type) }.should.raise Informative
           exception.message.should.include 'Unknown test type `weird_test_type`.'
         end
 
@@ -605,8 +605,8 @@ module Pod
         end
 
         it 'returns correct whether a test spec uses Swift or not' do
-          @test_pod_target.uses_swift_for_test_spec?(@test_pod_target.test_specs[0]).should.be.true
-          @test_pod_target.uses_swift_for_test_spec?(@test_pod_target.test_specs[1]).should.be.false
+          @test_pod_target.uses_swift_for_non_library_spec?(@test_pod_target.test_specs[0]).should.be.true
+          @test_pod_target.uses_swift_for_non_library_spec?(@test_pod_target.test_specs[1]).should.be.false
         end
       end
     end

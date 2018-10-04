@@ -31,36 +31,42 @@ module Pod
           def install!
             UI.message "- Installing target `#{target.name}` #{target.platform}" do
               create_support_files_dir
-              test_file_accessors, file_accessors = target.file_accessors.partition { |fa| fa.spec.test_specification? }
+              library_file_accessors = target.file_accessors.select { |fa| fa.spec.library_specification? }
+              test_file_accessors = target.file_accessors.select { |fa| fa.spec.test_specification? }
+              app_file_accessors = target.file_accessors.select { |fa| fa.spec.app_specification? }
 
               unless target.should_build?
                 # For targets that should not be built (e.g. pre-built vendored frameworks etc), we add a placeholder
                 # PBXAggregateTarget that will be used to wire up dependencies later.
                 native_target = add_placeholder_target
-                resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
+                resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
                 create_xcconfig_file(native_target, resource_bundle_targets)
                 return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
 
               native_target = add_target
-              resource_bundle_targets = add_resources_bundle_targets(file_accessors).values.flatten
+              resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
 
               test_native_targets = add_test_targets
               test_app_host_targets = add_test_app_host_targets(test_native_targets)
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
-              add_files_to_build_phases(native_target, test_native_targets)
-              validate_targets_contain_sources(test_native_targets + [native_target])
+              app_native_targets = add_app_targets
+              app_resource_bundle_targets = add_resources_bundle_targets(app_file_accessors)
+
+              add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
+              validate_targets_contain_sources(test_native_targets + app_native_targets + [native_target])
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
+              create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
 
               if target.defines_module?
                 create_module_map(native_target) do |generator|
                   generator.headers.concat module_map_additional_headers
                 end
                 create_umbrella_header(native_target) do |generator|
-                  generator.imports += file_accessors.flat_map do |file_accessor|
+                  generator.imports += library_file_accessors.flat_map do |file_accessor|
                     header_dir = if !target.requires_frameworks? && dir = file_accessor.spec_consumer.header_dir
                                    Pathname.new(dir)
                     end
@@ -89,9 +95,9 @@ module Pod
                 add_swift_static_library_compatibility_header_phase(native_target)
               end
 
-              unless skip_pch?(target.non_test_specs)
+              unless skip_pch?(target.library_specs)
                 path = target.prefix_header_path
-                create_prefix_header(path, file_accessors, target.platform, native_target)
+                create_prefix_header(path, library_file_accessors, target.platform, native_target)
               end
               unless skip_pch?(target.test_specs)
                 target.test_specs.each do |test_spec|
@@ -101,10 +107,19 @@ module Pod
                   create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
                 end
               end
+              unless skip_pch?(target.app_specs)
+                target.app_specs.each do |app_spec|
+                  path = target.prefix_header_path_for_app_spec(app_spec)
+                  app_spec_consumer = app_spec.consumer(target.platform)
+                  app_native_target = app_native_target_from_spec_consumer(app_spec_consumer, app_native_targets)
+                  create_prefix_header(path, app_file_accessors, target.platform, app_native_target)
+                end
+              end
               create_dummy_source(native_target)
               clean_support_files_temp_dir
-              TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
-                                           test_resource_bundle_targets, test_app_host_targets)
+              TargetInstallationResult.new(target, native_target, resource_bundle_targets,
+                                           test_native_targets, test_resource_bundle_targets, test_app_host_targets,
+                                           app_native_targets, app_resource_bundle_targets)
             end
           end
 
@@ -216,14 +231,16 @@ module Pod
           #
           # @return [void]
           #
-          def add_files_to_build_phases(native_target, test_native_targets)
+          def add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
             target.file_accessors.each do |file_accessor|
               consumer = file_accessor.spec_consumer
 
-              native_target = if !consumer.spec.test_specification?
+              native_target = if consumer.spec.library_specification?
                                 native_target
-                              else
+                              elsif consumer.spec.test_specification?
                                 test_native_target_from_spec_consumer(consumer, test_native_targets)
+                              elsif consumer.spec.app_specification?
+                                app_native_target_from_spec_consumer(consumer, app_native_targets)
                               end
 
               headers = file_accessor.headers
@@ -271,7 +288,7 @@ module Pod
               product_type = target.product_type_for_test_type(test_type)
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
-              language = target.uses_swift_for_test_spec?(test_spec) ? :swift : :objc
+              language = target.uses_swift_for_non_library_spec?(test_spec) ? :swift : :objc
               test_native_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
               test_native_target.product_reference.name = name
 
@@ -329,7 +346,7 @@ module Pod
             target.test_spec_consumers.select(&:requires_app_host?).group_by(&:test_type).map do |test_type, test_spec_consumers|
               platform = target.platform
               name = "AppHost-#{target.label}-#{test_type.capitalize}-Tests"
-              app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name).install!
+              app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name, name).install!
               # Wire test native targets to the generated app host.
               test_spec_consumers.each do |test_spec_consumer|
                 test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
@@ -345,6 +362,40 @@ module Pod
                 test_native_target.add_dependency(app_host_target)
               end
               app_host_target
+            end
+          end
+
+          # Adds the app targets for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @return [Array<PBXNativeTarget>] the app native targets created.
+          #
+          def add_app_targets
+            target.app_specs.map do |app_spec|
+              spec_name = app_spec.parent.name
+              subspec_name = app_spec.name.split('/')[1..-1].join('-')
+              app_target_label = target.app_target_label(app_spec)
+              platform= target.platform
+              app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name, app_target_label).install!
+
+              target.user_build_configurations.each do |bc_name, type|
+                app_native_target.add_build_configuration(bc_name, type)
+              end
+
+              app_native_target.build_configurations.each do |configuration|
+                configuration.build_settings.merge!(custom_build_settings)
+
+                # We must codesign iOS XCTest bundles that contain binary frameworks to allow them to be launchable in the simulator
+                unless target.platform == :osx
+                  configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
+                  configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
+                end
+                # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
+                configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+              end
+
+
+              app_native_target
             end
           end
 
@@ -486,7 +537,7 @@ module Pod
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
-                spec_paths_to_include = pod_target.non_test_specs.map(&:name)
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << test_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
@@ -508,8 +559,84 @@ module Pod
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
-                spec_paths_to_include = pod_target.non_test_specs.map(&:name)
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << test_spec.name if pod_target == target
+                pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
+              end
+            end
+            generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
+          end
+
+          # Generates the contents of the xcconfig file used for each app target type and saves it to disk.
+          #
+          # @param  [Array<PBXNativeTarget>] app_native_targets
+          #         the app native target to link the xcconfig file into.
+          #
+          # @param  [Hash{String=>Array<PBXNativeTarget>}] app_resource_bundle_targets
+          #         the additional app resource bundle targets to link the xcconfig file into.
+          #
+          # @return [void]
+          #
+          def create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
+            target.app_specs.each do |app_spec|
+              spec_consumer = app_spec.consumer(target.platform)
+              path = target.xcconfig_path("#{app_spec.name.split('/')[1..-1].join('-')}")
+              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, app_spec), path)
+              app_xcconfig_file_ref = add_file_to_support_group(path)
+
+              app_native_target = app_native_target_from_spec_consumer(spec_consumer, app_native_targets)
+              app_native_target.build_configurations.each do |app_native_target_bc|
+                ## todo check if this is needed
+                # app_target_swift_debug_hack(app_spec, app_native_target_bc)
+                app_native_target_bc.base_configuration_reference = app_xcconfig_file_ref
+              end
+
+              # also apply the private config to resource bundle app targets related to this app spec.
+              scoped_app_resource_bundle_targets = app_resource_bundle_targets[app_spec.name]
+              unless scoped_app_resource_bundle_targets.empty?
+                apply_xcconfig_file_ref_to_resource_bundle_targets(scoped_app_resource_bundle_targets, app_xcconfig_file_ref)
+              end
+            end
+          end
+
+          # Creates a script that copies the resources to the bundle of the app target.
+          #
+          # @param [Specification] app_spec
+          #        The app spec to create the copy resources script for.
+          #
+          # @return [void]
+          #
+          def create_app_target_copy_resources_script(app_spec)
+            path = target.copy_resources_script_path_for_app_spec(app_spec)
+            pod_targets = target.dependent_targets_for_app_spec(app_spec)
+            resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+              resources_by_config[config] = pod_targets.flat_map do |pod_target|
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include << app_spec.name if pod_target == target
+                pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
+              end
+            end
+            generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
+          end
+
+          # Creates a script that embeds the frameworks to the bundle of the app target.
+          #
+          # @param [Specification] app_spec
+          #        The app spec to create the embed frameworks script for.
+          #
+          # @return [void]
+          #
+          def create_app_target_embed_frameworks_script(app_spec)
+            path = target.embed_frameworks_script_path_for_app_spec(app_spec)
+            pod_targets = target.dependent_targets_for_app_spec(app_spec)
+            framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
+              paths_by_config[config] = pod_targets.flat_map do |pod_target|
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include << app_spec.name if pod_target == target
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
@@ -758,6 +885,20 @@ module Pod
           def test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
             test_native_targets.find do |test_native_target|
               test_native_target.name == target.test_target_label(spec_consumer.spec)
+            end
+          end
+
+          # @param [String] name
+          #        The name of the app host.
+          # @return [Pathname] The absolute path of the Info.plist to use for an app host.
+          #
+          def app_host_info_plist_path_for_app_host(name)
+            project.path.dirname.+("#{name}/#{target.pod_name}-Info.plist")
+          end
+
+          def app_native_target_from_spec_consumer(spec_consumer, app_native_targets)
+            app_native_targets.find do |app_native_target|
+              app_native_target.name == target.app_target_label(spec_consumer.spec)
             end
           end
 

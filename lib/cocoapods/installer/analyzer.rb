@@ -483,7 +483,12 @@ module Pod
             pod_target.recursive_test_dependent_targets(test_spec)
           end
         end
-        (aggregate_target_pod_targets + test_dependent_targets).uniq
+        app_dependent_targets = aggregate_target_pod_targets.flat_map do |pod_target|
+          pod_target.app_specs.flat_map do |app_spec|
+            pod_target.recursive_app_dependent_targets(app_spec)
+          end
+        end
+        (aggregate_target_pod_targets + test_dependent_targets + app_dependent_targets).uniq
       end
 
       # Returns a filtered list of pod targets that should or should not be part of the target definition. Pod targets
@@ -511,7 +516,8 @@ module Pod
         pod_targets.each do |pod_target|
           next unless pod_target.target_definitions.include?(target_definition)
           next unless resolver_specs_by_target[target_definition].any? do |resolver_spec|
-            !resolver_spec.used_by_tests_only? && pod_target.specs.include?(resolver_spec.spec)
+            (!resolver_spec.used_by_tests_only? && pod_target.specs.include?(resolver_spec.spec)) ||
+                (!resolver_spec.used_by_apps_only? && pod_target.specs.include?(resolver_spec.spec))
           end
 
           pod_name = pod_target.pod_name
@@ -560,18 +566,21 @@ module Pod
             target_definition, dependent_specs = *dependency
             dependent_specs.group_by(&:root).each do |root_spec, resolver_specs|
               all_specs = resolver_specs.map(&:spec)
-              test_specs, specs = all_specs.partition(&:test_specification?)
-              pod_variant = PodVariant.new(specs, test_specs, target_definition.platform, target_definition.uses_frameworks?)
+              library_specs = all_specs.select(&:library_specification?)
+              test_specs = all_specs.select(&:test_specification?)
+              app_specs = all_specs.select(&:app_specification?)
+              pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, target_definition.uses_frameworks?)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
               hash[root_spec].keys.find { |k| k == pod_variant }.test_specs.concat(test_specs).uniq!
+              hash[root_spec].keys.find { |k| k == pod_variant }.app_specs.concat(app_specs).uniq!
             end
           end
 
           pod_targets = distinct_targets.flat_map do |_root, target_definitions_by_variant|
             suffixes = PodVariantSet.new(target_definitions_by_variant.keys).scope_suffixes
             target_definitions_by_variant.flat_map do |variant, target_definitions|
-              generate_pod_target(target_definitions, target_inspections, variant.specs + variant.test_specs, :scope_suffix => suffixes[variant])
+              generate_pod_target(target_definitions, target_inspections, variant.specs + variant.test_specs + variant.app_specs, :scope_suffix => suffixes[variant])
             end
           end
 
@@ -583,12 +592,18 @@ module Pod
           end
           pod_targets.each do |target|
             all_specs = all_resolver_specs.group_by(&:name)
-            dependencies = dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+            dependencies = dependencies_for_specs(target.library_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
               test_dependencies = dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
               test_dependencies.delete_if { |k| dependencies.key? k }
               hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+            end
+
+            target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
+              app_dependencies = dependencies_for_specs([app_spec], target.platform, all_specs).group_by(&:root)
+              app_dependencies.delete_if { |k| dependencies.key? k }
+              hash[app_spec.name] = filter_dependencies(app_dependencies, pod_targets_by_name, target)
             end
           end
         else
@@ -601,12 +616,17 @@ module Pod
 
             pod_targets.each do |target|
               all_specs = specs.map(&:spec).group_by(&:name)
-              dependencies = dependencies_for_specs(target.non_test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+              dependencies = dependencies_for_specs(target.library_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
                 test_dependencies = dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
                 test_dependencies.delete_if { |k| dependencies.key? k }
                 hash[test_spec.name] = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
+              end
+              target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
+                app_dependencies = dependencies_for_specs(target.app_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
+                app_dependencies.delete_if { |k| dependencies.key? k }
+                hash[app_spec.name] = pod_targets.reject { |t| app_dependencies[t.root_spec].nil? }
               end
             end
           end

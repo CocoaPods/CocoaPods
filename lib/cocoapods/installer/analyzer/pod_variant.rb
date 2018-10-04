@@ -11,6 +11,10 @@ module Pod
         #
         attr_reader :test_specs
 
+        # @return [Array<Specification>] the app specs for the target
+        #
+        attr_reader :app_specs
+
         # @return [Platform] the platform
         #
         attr_reader :platform
@@ -30,12 +34,14 @@ module Pod
         #
         # @param [Array<Specification>] specs      @see #specs
         # @param [Array<Specification>] test_specs @see #test_specs
+        # @param [Array<Specification>] app_specs  @see #app_specs
         # @param [Platform] platform               @see #platform
         # @param [Bool] requires_frameworks        @see #requires_frameworks?
         #
-        def initialize(specs, test_specs, platform, requires_frameworks = false)
+        def initialize(specs, test_specs, app_specs, platform, requires_frameworks = false)
           @specs = specs
           @test_specs = test_specs
+          @app_specs = app_specs
           @platform = platform
           @requires_frameworks = requires_frameworks
           @hash = [specs, platform, requires_frameworks].hash
@@ -51,7 +57,9 @@ module Pod
           self.class == other.class &&
             requires_frameworks == other.requires_frameworks &&
             platform == other.platform &&
-            specs == other.specs
+            specs == other.specs &&
+              app_specs == other.app_specs &&
+              test_specs == other.test_specs
         end
         alias_method :eql?, :==
 

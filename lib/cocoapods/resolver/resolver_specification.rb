@@ -17,9 +17,15 @@ module Pod
       attr_reader :used_by_tests_only
       alias used_by_tests_only? used_by_tests_only
 
-      def initialize(spec, used_by_tests_only, source)
+      # @return [Bool] whether this resolved specification is only used by apps.
+      #
+      attr_reader :used_by_apps_only
+      alias used_by_apps_only? used_by_apps_only
+
+      def initialize(spec, used_by_tests_only, used_by_apps_only, source)
         @spec = spec
         @used_by_tests_only = used_by_tests_only
+        @used_by_apps_only = used_by_apps_only
         @source = source
       end
 

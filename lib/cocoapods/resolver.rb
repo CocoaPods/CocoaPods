@@ -111,8 +111,10 @@ module Pod
               payload = vertex.payload
               test_only = (!explicit_dependencies.include?(vertex.name) || payload.test_specification?) &&
                 (vertex.recursive_predecessors & vertices).all? { |v| !explicit_dependencies.include?(v.name) || v.payload.test_specification? }
+              app_only = (!explicit_dependencies.include?(vertex.name) || payload.app_specification?) &&
+                  (vertex.recursive_predecessors & vertices).all? { |v| !explicit_dependencies.include?(v.name) || v.payload.app_specification? }
               spec_source = payload.respond_to?(:spec_source) && payload.spec_source
-              ResolverSpecification.new(payload, test_only, spec_source)
+              ResolverSpecification.new(payload, test_only, app_only, spec_source)
             end.
             sort_by(&:name)
         end

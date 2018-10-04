@@ -21,30 +21,36 @@ module Pod
           #
           attr_reader :platform
 
-          # @return [String] the name to use for this app host target.
+          # @return [String] the name of the subspec.
           #
-          attr_reader :name
+          attr_reader :subspec_name
 
-          # @return [String] the name of the pod the app host installer will be installing within.
+          # @return [String] the name of the spec the app host installer will be installing within.
           #
-          attr_reader :pod_name
+          attr_reader :spec_name
+
+          # @return [String] the name of the app target label that will be used.
+          #
+          attr_reader :app_target_label
 
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
           # @param [Pod::Project] project @see #project
           # @param [Platform] platform @see #platform
-          # @param [String] name @see #name
-          # @param [String] pod_name @see #pod_name
+          # @param [String] subspec_name @see #subspec_name
+          # @param [String] spec_name @see #spec_name
+          # @param [String] app_target_label see #app_target_label
           #
-          def initialize(sandbox, project, platform, name, pod_name)
+          def initialize(sandbox, project, platform, subspec_name, spec_name, app_target_label)
             @sandbox = sandbox
             @project = project
             @platform = platform
-            @name = name
-            @pod_name = pod_name
-            target_group = project.pod_group(pod_name)
-            @group = target_group[name] || target_group.new_group(name)
+            @subspec_name = subspec_name
+            @spec_name = spec_name
+            @app_target_label = app_target_label
+            target_group = project.pod_group(spec_name)
+            @group = target_group[subspec_name] || target_group.new_group(subspec_name)
           end
 
           # @return [PBXNativeTarget] the app host native target that was installed.
@@ -52,16 +58,16 @@ module Pod
           def install!
             platform_name = platform.name
             app_host_target = Pod::Generator::AppTargetHelper.add_app_target(project, platform_name, deployment_target,
-                                                                             name)
+                                                                             app_target_label)
             app_host_target.build_configurations.each do |configuration|
-              configuration.build_settings['PRODUCT_NAME'] = name
+              configuration.build_settings['PRODUCT_NAME'] = app_target_label
               configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
               configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if platform == :osx
               configuration.build_settings['CURRENT_PROJECT_VERSION'] = '1'
             end
 
-            Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, name)
-            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, name) if platform == :ios
+            Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, app_target_label)
+            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, app_target_label) if platform == :ios
             additional_entries = platform == :ios ? ADDITIONAL_IOS_INFO_PLIST_ENTRIES : {}
             create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
                                                 :appl, additional_entries)
@@ -89,7 +95,7 @@ module Pod
           # @return [Pathname] The absolute path of the Info.plist to use for an app host.
           #
           def app_host_info_plist_path
-            project.path.dirname.+(name).+("#{name}-Info.plist")
+            project.path.dirname.+(subspec_name).+("#{app_target_label}-Info.plist")
           end
 
           # @return [String] The deployment target.
