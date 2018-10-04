@@ -82,11 +82,14 @@ module Pod
           #
           # @return [void]
           #
-          def create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
+          def create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, xcfilelist_directory, input_paths = [], output_paths = [])
             phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + EMBED_FRAMEWORK_PHASE_NAME)
             phase.shell_script = %("#{script_path}"\n)
-            phase.input_paths = input_paths
-            phase.output_paths = output_paths
+            Xcode::ScriptPhaseInputOutputPaths.update_script_phase_paths(
+              phase, xcfilelist_directory,
+              :input_paths => input_paths,
+              :output_paths => output_paths
+            )
           end
 
           # Delete a 'Embed Pods Frameworks' Copy Files Build Phase if present
@@ -118,12 +121,15 @@ module Pod
           #
           # @return [void]
           #
-          def create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths = [], output_paths = [])
+          def create_or_update_copy_resources_script_phase_to_target(native_target, script_path, xcfilelist_directory, input_paths = [], output_paths = [])
             phase_name = COPY_PODS_RESOURCES_PHASE_NAME
             phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             phase.shell_script = %("#{script_path}"\n)
-            phase.input_paths = input_paths
-            phase.output_paths = output_paths
+            Xcode::ScriptPhaseInputOutputPaths.update_script_phase_paths(
+              phase, xcfilelist_directory,
+              :input_paths => input_paths,
+              :output_paths => output_paths
+            )
           end
 
           # Delete a 'Copy Pods Resources' script phase if present
@@ -167,7 +173,7 @@ module Pod
           #
           # @return [void]
           #
-          def create_or_update_user_script_phases(script_phases, native_target)
+          def create_or_update_user_script_phases(script_phases, native_target, target)
             script_phase_names = script_phases.map { |k| k[:name] }
             # Delete script phases no longer present in the target.
             native_target_script_phases = native_target.shell_script_build_phases.select { |bp| !bp.name.nil? && bp.name.start_with?(USER_BUILD_PHASE_PREFIX) }
@@ -179,12 +185,16 @@ module Pod
             end
             # Create or update the ones that are expected to be.
             script_phases.each do |script_phase|
-              name_with_prefix = USER_BUILD_PHASE_PREFIX + script_phase[:name]
+              name = script_phase[:name]
+              name_with_prefix = USER_BUILD_PHASE_PREFIX + name
               phase = TargetIntegrator.create_or_update_build_phase(native_target, name_with_prefix)
               phase.shell_script = script_phase[:script]
               phase.shell_path = script_phase[:shell_path] if script_phase.key?(:shell_path)
-              phase.input_paths = script_phase[:input_files] if script_phase.key?(:input_files)
-              phase.output_paths = script_phase[:output_files] if script_phase.key?(:output_files)
+              Xcode::ScriptPhaseInputOutputPaths.update_script_phase_paths(
+                phase, target.support_files_dir.join('User Script Phases', name),
+                :input_paths => Array(script_phase[:input_paths]),
+                :output_paths => Array(script_phase[:output_paths])
+              )
               phase.show_env_vars_in_log = script_phase[:show_env_vars_in_log] ? '1' : '0' if script_phase.key?(:show_env_vars_in_log)
 
               execution_position = script_phase[:execution_position]
@@ -364,7 +374,7 @@ module Pod
           native_targets.each do |native_target|
             # Static library targets cannot include resources. Skip this phase from being added instead.
             next if native_target.symbol_type == :static_library
-            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, target.support_files_dir.join("#{target.label}-Resources-File-Lists"), input_paths, output_paths)
           end
         end
 
@@ -406,7 +416,7 @@ module Pod
           end
 
           native_targets_to_embed_in.each do |native_target|
-            TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+            TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, target.support_files_dir.join("#{target.label}-Frameworks-File-Lists"), input_paths, output_paths)
           end
         end
 
@@ -417,7 +427,7 @@ module Pod
         #
         def add_user_script_phases
           native_targets.each do |native_target|
-            TargetIntegrator.create_or_update_user_script_phases(target.target_definition.script_phases, native_target)
+            TargetIntegrator.create_or_update_user_script_phases(target.target_definition.script_phases, native_target, target)
           end
         end
 

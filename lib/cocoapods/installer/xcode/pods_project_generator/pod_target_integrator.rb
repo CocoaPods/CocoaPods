@@ -35,10 +35,10 @@ module Pod
                   add_embed_frameworks_script_phase(test_native_target, test_spec)
                   add_copy_resources_script_phase(test_native_target, test_spec)
                 end
-                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), test_native_target)
+                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), test_native_target, target)
               end
               specs = target.non_test_specs
-              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target)
+              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target, target)
             end
           end
 
@@ -74,7 +74,7 @@ module Pod
               end
             end
             UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-            UserProjectIntegrator::TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+            UserProjectIntegrator::TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, target.support_files_dir.join("#{target.test_target_label(test_spec)}-Frameworks-File-Lists"), input_paths, output_paths)
           end
 
           # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
@@ -98,7 +98,7 @@ module Pod
             end
 
             UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
-            UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+            UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, target.support_files_dir.join("#{target.test_target_label(test_spec)}-Frameworks-File-Lists"), input_paths, output_paths)
           end
 
           # @return [String] the message that should be displayed for the target

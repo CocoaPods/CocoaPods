@@ -810,15 +810,19 @@ module Pod
               ditto "${PODS_ROOT}/#{relative_umbrella_header_path}" "${BUILT_PRODUCTS_DIR}"
               printf "\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\"${COMPATIBILITY_HEADER_PATH}\\"\\n  requires objc\\n}\\n" >> "${MODULE_MAP_PATH}"
             SH
-            build_phase.input_paths = %W(
-              ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
-              ${PODS_ROOT}/#{relative_module_map_path}
-              ${PODS_ROOT}/#{relative_umbrella_header_path}
-            )
-            build_phase.output_paths = %W(
-              ${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap
-              ${BUILT_PRODUCTS_DIR}/#{relative_umbrella_header_path.basename}
-              ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
+
+            Xcode::ScriptPhaseInputOutputPaths.update_script_phase_paths(
+              build_phase, target.support_files_dir.join('Copy Compatbility Header Script'),
+              :input_paths => %W(
+                ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
+                ${PODS_ROOT}/#{relative_module_map_path}
+                ${PODS_ROOT}/#{relative_umbrella_header_path}
+              ),
+              :output_paths => %W(
+                ${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap
+                ${BUILT_PRODUCTS_DIR}/#{relative_umbrella_header_path.basename}
+                ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
+              )
             )
           end
 
