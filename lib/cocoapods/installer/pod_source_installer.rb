@@ -123,7 +123,7 @@ module Pod
                    return unless git_source =~ /^#{URI.regexp}$/
                    URI(git_source)
                  end
-        if UNENCRYPTED_PROTOCOLS.include?(source.scheme)
+        if UNENCRYPTED_PROTOCOLS.include?(source.scheme) && source.host != 'localhost'
           UI.warn "'#{root_spec.name}' uses the unencrypted '#{source.scheme}' protocol to transfer the Pod. " \
                 'Please be sure you\'re in a safe network with only trusted hosts. ' \
                 'Otherwise, please reach out to the library author to notify them of this security issue.'
