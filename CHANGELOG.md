@@ -50,6 +50,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#8156](https://github.com/CocoaPods/CocoaPods/issues/8156)
 
+* Fix linting when armv7 is included but i386 isn't.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8129](https://github.com/CocoaPods/CocoaPods/issues/8129)
+
 * Provide an installation option to disable usage of input/output paths.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)
