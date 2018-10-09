@@ -50,7 +50,6 @@ module Pod
           #
           attr_reader :app_resource_bundle_targets
 
-
           # Initialize a new instance
           #
           # @param [Target] target @see #target
@@ -95,7 +94,6 @@ module Pod
             end
             test_specs_by_native_target.delete_if { |k, _| k.nil? }
           end
-
 
           # @return [Hash{PBXNativeTarget => Specification}] a hash where the keys are the test native targets and the value
           #         an array of all the test specs associated with this native target.

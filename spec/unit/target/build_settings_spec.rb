@@ -90,9 +90,9 @@ module Pod
       #---------------------------------------------------------------------#
 
       describe 'concerning settings for file accessors' do
-        it 'does not propagate framework or libraries from a test specification to an aggregate target' do
+        it 'does not propagate framework or libraries from a non-library specification to an aggregate target' do
           target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
-          spec = stub('spec', :test_specification? => true)
+          spec = stub('spec', :library_specification? => false)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
                           :frameworks => ['XCTest'],
@@ -129,7 +129,7 @@ module Pod
       describe 'concerning other_ld_flags' do
         it 'other_ld_flags should not include -ObjC when there are not static frameworks' do
           target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
-          spec = stub('spec', :test_specification? => true)
+          spec = stub('spec', :library_specification? => false)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
                           :frameworks => ['XCTest'],
@@ -161,7 +161,7 @@ module Pod
 
         it 'other_ld_flags should include -ObjC when linking static frameworks' do
           target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
-          spec = stub('spec', :test_specification? => true)
+          spec = stub('spec', :library_specification? => true)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
                           :frameworks => ['XCTest'],
@@ -172,6 +172,10 @@ module Pod
                                :spec => spec,
                                :spec_consumer => consumer,
                                :vendored_static_artifacts => [],
+                               :vendored_static_libraries => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_static_frameworks => [],
+                               :vendored_dynamic_frameworks => [],
                               )
           pod_target = stub('pod_target',
                             :file_accessors => [file_accessor],

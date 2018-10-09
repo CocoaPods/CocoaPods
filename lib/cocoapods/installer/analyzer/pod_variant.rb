@@ -57,9 +57,7 @@ module Pod
           self.class == other.class &&
             requires_frameworks == other.requires_frameworks &&
             platform == other.platform &&
-            specs == other.specs &&
-              app_specs == other.app_specs &&
-              test_specs == other.test_specs
+            specs == other.specs
         end
         alias_method :eql?, :==
 

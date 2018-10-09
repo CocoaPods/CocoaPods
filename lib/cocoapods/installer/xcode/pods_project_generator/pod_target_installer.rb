@@ -375,7 +375,7 @@ module Pod
               spec_name = app_spec.parent.name
               subspec_name = app_spec.name.split('/')[1..-1].join('-')
               app_target_label = target.app_target_label(app_spec)
-              platform= target.platform
+              platform = target.platform
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name, app_target_label).install!
 
               target.user_build_configurations.each do |bc_name, type|
@@ -393,7 +393,6 @@ module Pod
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
-
 
               app_native_target
             end
@@ -582,7 +581,7 @@ module Pod
           def create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
             target.app_specs.each do |app_spec|
               spec_consumer = app_spec.consumer(target.platform)
-              path = target.xcconfig_path("#{app_spec.name.split('/')[1..-1].join('-')}")
+              path = target.xcconfig_path(app_spec.name.split('/')[1..-1].join('-').to_s)
               update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, app_spec), path)
               app_xcconfig_file_ref = add_file_to_support_group(path)
 

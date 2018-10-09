@@ -13,7 +13,9 @@ module Pod
 
           it 'correctly installs an iOS app host target to the project' do
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
-                                             'AppHost-PodName-iOS-Unit-Tests', 'Subgroup')
+                                             'AppHost-PodName-iOS-Unit-Tests',
+                                             'Subgroup',
+                                             'AppHost-PodName-iOS-Unit-Tests')
             installer.install!
             @project.targets.map(&:name).sort.should == ['AppHost-PodName-iOS-Unit-Tests']
           end
@@ -21,7 +23,8 @@ module Pod
           it 'correctly installs an OSX app host target to the project' do
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx,
                                              'AppHost-PodName-macOS-Unit-Tests',
-                                             'Subgroup')
+                                             'Subgroup',
+                                             'AppHost-PodName-macOS-Unit-Tests')
             installer.install!
             @project.targets.map(&:name).sort.should == ['AppHost-PodName-macOS-Unit-Tests']
           end
@@ -30,7 +33,8 @@ module Pod
             name = 'AppHost-PodName-iOS-Unit-Tests'
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
                                              name,
-                                             'Subgroup')
+                                             'Subgroup',
+                                             name)
             installer.install!
             @project.pod_group('Subgroup')[name].files.map(&:name).sort.should == [
               'AppHost-PodName-iOS-Unit-Tests-Info.plist',
@@ -42,7 +46,8 @@ module Pod
           it 'sets the correct build settings for an iOS app host target' do
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
                                              'AppHost-PodName-iOS-Unit-Tests',
-                                             'Subgroup')
+                                             'Subgroup',
+                                             'AppHost-PodName-iOS-Unit-Tests')
             app_host_target = installer.install!
             build_settings = app_host_target.build_configurations.map(&:build_settings)
             build_settings.each do |build_setting|
@@ -53,10 +58,26 @@ module Pod
             end
           end
 
+          it 'sets the correct build settings for an iOS app host target with separate target label' do
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
+                                             'AppHost-PodName-iOS-Unit-Tests',
+                                             'Subgroup',
+                                             'AppName')
+            app_host_target = installer.install!
+            build_settings = app_host_target.build_configurations.map(&:build_settings)
+            build_settings.each do |build_setting|
+              build_setting['PRODUCT_NAME'].should == 'AppName'
+              build_setting['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+              build_setting['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+              build_setting['CURRENT_PROJECT_VERSION'].should == '1'
+            end
+          end
+
           it 'sets the correct build settings for an OSX app host target' do
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.osx,
                                              'AppHost-PodName-macOS-Unit-Tests',
-                                             'Subgroup')
+                                             'Subgroup',
+                                             'AppHost-PodName-macOS-Unit-Tests')
             app_host_target = installer.install!
             build_settings = app_host_target.build_configurations.map(&:build_settings)
             build_settings.each do |build_setting|

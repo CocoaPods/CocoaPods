@@ -566,7 +566,7 @@ module Pod
         end
 
         it 'raises for unknown test type' do
-          exception = lambda { @test_pod_target.product_type_for_non_library_type(:weird_test_type) }.should.raise Informative
+          exception = lambda { @test_pod_target.product_type_for_test_type(:weird_test_type) }.should.raise Informative
           exception.message.should.include 'Unknown test type `weird_test_type`.'
         end
 
