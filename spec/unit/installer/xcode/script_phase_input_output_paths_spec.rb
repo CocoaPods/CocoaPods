@@ -29,8 +29,8 @@ module Pod
             end
 
             it 'sets the paths directly' do
-              FileUtils.expects(:rm).with('input.xcfilelist')
-              FileUtils.expects(:rm).with('output.xcfilelist')
+              FileUtils.expects(:rm).with(%w(input.xcfilelist))
+              FileUtils.expects(:rm).with(%w(output.xcfilelist))
 
               input_paths = %w(input1 input2)
               output_paths = %w(output1 output2)

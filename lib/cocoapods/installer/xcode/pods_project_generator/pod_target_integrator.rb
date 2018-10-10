@@ -35,10 +35,10 @@ module Pod
                   add_embed_frameworks_script_phase(test_native_target, test_spec)
                   add_copy_resources_script_phase(test_native_target, test_spec)
                 end
-                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), test_native_target, target)
+                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), test_native_target, target.support_files_dir)
               end
               specs = target.non_test_specs
-              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target, target)
+              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target, target.support_files_dir)
             end
           end
 

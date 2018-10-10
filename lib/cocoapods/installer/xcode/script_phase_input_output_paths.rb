@@ -22,11 +22,11 @@ module Pod
             script_phase.output_file_list_paths = [output_file_list_path.to_s]
           else
             if input_file_list_paths = script_phase.input_file_list_paths
-              input_file_list_paths.each { |f| FileUtils.rm f }
+              FileUtils.rm(input_file_list_paths)
               script_phase.input_file_list_paths = nil
             end
             if output_file_list_paths = script_phase.output_file_list_paths
-              output_file_list_paths.each { |f| FileUtils.rm f }
+              FileUtils.rm(output_file_list_paths)
               script_phase.output_file_list_paths = nil
             end
 

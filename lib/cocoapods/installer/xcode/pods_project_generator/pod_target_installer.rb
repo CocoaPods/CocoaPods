@@ -812,7 +812,7 @@ module Pod
             SH
 
             Xcode::ScriptPhaseInputOutputPaths.update_script_phase_paths(
-              build_phase, target.support_files_dir.join('Copy Compatbility Header Script'),
+              build_phase, target.support_files_dir.join('Copy Compatibility Header Script'),
               :input_paths => %W(
                 ${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h
                 ${PODS_ROOT}/#{relative_module_map_path}

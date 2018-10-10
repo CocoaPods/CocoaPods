@@ -173,7 +173,7 @@ module Pod
           #
           # @return [void]
           #
-          def create_or_update_user_script_phases(script_phases, native_target, target)
+          def create_or_update_user_script_phases(script_phases, native_target, target_support_files_dir)
             script_phase_names = script_phases.map { |k| k[:name] }
             # Delete script phases no longer present in the target.
             native_target_script_phases = native_target.shell_script_build_phases.select { |bp| !bp.name.nil? && bp.name.start_with?(USER_BUILD_PHASE_PREFIX) }
@@ -191,7 +191,7 @@ module Pod
               phase.shell_script = script_phase[:script]
               phase.shell_path = script_phase[:shell_path] if script_phase.key?(:shell_path)
               Xcode::ScriptPhaseInputOutputPaths.update_script_phase_paths(
-                phase, target.support_files_dir.join('User Script Phases', name),
+                phase, target_support_files_dir.join('User Script Phases', name),
                 :input_paths => Array(script_phase[:input_paths]),
                 :output_paths => Array(script_phase[:output_paths])
               )
@@ -427,7 +427,7 @@ module Pod
         #
         def add_user_script_phases
           native_targets.each do |native_target|
-            TargetIntegrator.create_or_update_user_script_phases(target.target_definition.script_phases, native_target, target)
+            TargetIntegrator.create_or_update_user_script_phases(target.target_definition.script_phases, native_target, target.support_files_dir)
           end
         end
 
