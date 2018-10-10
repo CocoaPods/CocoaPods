@@ -68,6 +68,13 @@ module Pod
 
             native_target.build_configurations.each do |configuration|
               configuration.build_settings.merge!(custom_build_settings)
+
+              # This works around a unit test issue introduced in Xcode 10 where swift libraries
+              # required by embedded frameworks are not always added to unit test targets
+              require_xcode10_hack = configuration.debug? && target.product_type == :framework
+              if require_xcode10_hack
+                configuration.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
+              end
             end
 
             native_target

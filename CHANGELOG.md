@@ -48,6 +48,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   with the same dependencies.  
   [Samuel Giddins]
 
+* Set 'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' to YES in Debug mode  
+  [icecrystal23](https://github.com/icecrystal23)
+
 ##### Bug Fixes
 
 * Don't generate unencrypted source warnings for localhost.  

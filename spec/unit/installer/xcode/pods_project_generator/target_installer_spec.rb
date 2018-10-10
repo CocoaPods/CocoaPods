@@ -62,6 +62,16 @@ module Pod
               'AppStore' => 'staticlib',
             }
           end
+
+          it 'embeds swift libraries in Debug mode' do
+            @target.stubs(:product_type).returns(:framework)
+            @installer.send(:add_target).resolved_build_setting('ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES').should == {
+              'Release' => nil,
+              'Debug' => 'YES',
+              'Test' => nil,
+              'AppStore' => nil,
+            }
+          end
         end
       end
     end
