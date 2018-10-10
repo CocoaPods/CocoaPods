@@ -373,7 +373,7 @@ module Pod
           def add_app_targets
             target.app_specs.map do |app_spec|
               spec_name = app_spec.parent.name
-              subspec_name = app_spec.name.split('/')[1..-1].join('-')
+              subspec_name = target.subspec_label(app_spec)
               app_target_label = target.app_target_label(app_spec)
               platform = target.platform
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name, app_target_label).install!
@@ -385,12 +385,12 @@ module Pod
               app_native_target.build_configurations.each do |configuration|
                 configuration.build_settings.merge!(custom_build_settings)
 
-                # We must codesign iOS XCTest bundles that contain binary frameworks to allow them to be launchable in the simulator
+                # We must codesign iOS app bundles that contain binary frameworks to allow them to be launchable in the simulator
                 unless target.platform == :osx
                   configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
                   configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
                 end
-                # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
+                # For macOS we do not code sign the appbundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
 
@@ -506,7 +506,7 @@ module Pod
             target.test_specs.each do |test_spec|
               spec_consumer = test_spec.consumer(target.platform)
               test_type = spec_consumer.test_type
-              path = target.xcconfig_path("#{test_type.capitalize}-#{test_spec.name.split('/')[1..-1].join('-')}")
+              path = target.xcconfig_path("#{test_type.capitalize}-#{target.subspec_label(test_spec)}")
               update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, test_spec), path)
               test_xcconfig_file_ref = add_file_to_support_group(path)
 
@@ -581,14 +581,12 @@ module Pod
           def create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
             target.app_specs.each do |app_spec|
               spec_consumer = app_spec.consumer(target.platform)
-              path = target.xcconfig_path(app_spec.name.split('/')[1..-1].join('-').to_s)
+              path = target.xcconfig_path(target.subspec_label(app_spec))
               update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, app_spec), path)
               app_xcconfig_file_ref = add_file_to_support_group(path)
 
               app_native_target = app_native_target_from_spec_consumer(spec_consumer, app_native_targets)
               app_native_target.build_configurations.each do |app_native_target_bc|
-                ## todo check if this is needed
-                # app_target_swift_debug_hack(app_spec, app_native_target_bc)
                 app_native_target_bc.base_configuration_reference = app_xcconfig_file_ref
               end
 

@@ -549,7 +549,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :weak_frameworks, :memoized => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && !non_library_xcconfig?
 
           weak_frameworks = spec_consumers.flat_map(&:weak_frameworks)
           weak_frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.weak_frameworks_to_import }
@@ -611,7 +611,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && !non_library_xcconfig?
 
           libraries = libraries_to_import.dup
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }

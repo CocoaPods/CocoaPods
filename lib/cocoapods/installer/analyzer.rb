@@ -516,8 +516,7 @@ module Pod
         pod_targets.each do |pod_target|
           next unless pod_target.target_definitions.include?(target_definition)
           next unless resolver_specs_by_target[target_definition].any? do |resolver_spec|
-            (!resolver_spec.used_by_tests_only? && pod_target.specs.include?(resolver_spec.spec)) ||
-                (!resolver_spec.used_by_apps_only? && pod_target.specs.include?(resolver_spec.spec))
+            (!resolver_spec.used_by_non_library_targets_only? && pod_target.specs.include?(resolver_spec.spec))
           end
 
           pod_name = pod_target.pod_name
@@ -572,8 +571,9 @@ module Pod
               pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, target_definition.uses_frameworks?)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
-              hash[root_spec].keys.find { |k| k == pod_variant }.test_specs.concat(test_specs).uniq!
-              hash[root_spec].keys.find { |k| k == pod_variant }.app_specs.concat(app_specs).uniq!
+              pod_variant_spec = hash[root_spec].keys.find { |k| k == pod_variant }
+              pod_variant_spec.test_specs.concat(test_specs).uniq!
+              pod_variant_spec.app_specs.concat(app_specs).uniq!
             end
           end
 

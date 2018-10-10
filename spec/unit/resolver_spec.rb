@@ -362,8 +362,8 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         spec_names.should == %w(
           MainSpec MainSpec/Tests
         )
-        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_tests_only?.should.be.false
-        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_tests_only?.should.be.true
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_non_library_targets_only?.should.be.false
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_non_library_targets_only?.should.be.true
       end
 
       it 'handles test only transitive dependencies' do
@@ -388,9 +388,9 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         spec_names.should == %w(
           Expecta MainSpec MainSpec/Tests
         )
-        resolved_specs.find { |rs| rs.name == 'Expecta' }.used_by_tests_only?.should.be.true
-        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_tests_only?.should.be.false
-        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_tests_only?.should.be.true
+        resolved_specs.find { |rs| rs.name == 'Expecta' }.used_by_non_library_targets_only?.should.be.true
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.used_by_non_library_targets_only?.should.be.false
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.used_by_non_library_targets_only?.should.be.true
       end
 
       it 'handles test only dependencies when they are also required by sources' do
@@ -416,9 +416,9 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         spec_names.should == %w(
           Expecta MainSpec MainSpec/Tests
         )
-        resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_tests_only
-        resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_tests_only
-        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_tests_only
+        resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
+        resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
+        resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only
       end
 
       it 'handles test only dependencies when they are also used in a different target' do
@@ -456,13 +456,13 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
         a_specs.map(&:name).sort.should == %w(Expecta MainSpec MainSpec/Tests OCMock)
         b_specs.map(&:name).sort.should == %w(Expecta OCMock)
 
-        a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_tests_only
-        a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_tests_only
-        a_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_tests_only
-        a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_tests_only
+        a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
+        a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
+        a_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only
+        a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_non_library_targets_only
 
-        b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_tests_only
-        b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_tests_only
+        b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
+        b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_non_library_targets_only
       end
 
       it 'allows pre-release spec versions when a requirement has an ' \

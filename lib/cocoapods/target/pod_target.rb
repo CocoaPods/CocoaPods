@@ -372,13 +372,22 @@ module Pod
       "#{label}-#{bundle_name}"
     end
 
+    # @param  [Specification] subspec
+    #         The subspec to use for producing the label.
+    #
+    # @return [String] The derived name of the test target.
+    #
+    def subspec_label(subspec)
+      subspec.name.split('/')[1..-1].join('-').to_s
+    end
+
     # @param  [Specification] test_spec
     #         The test spec to use for producing the test label.
     #
     # @return [String] The derived name of the test target.
     #
     def test_target_label(test_spec)
-      "#{label}-#{test_spec.test_type.capitalize}-#{test_spec.name.split('/')[1..-1].join('-')}"
+      "#{label}-#{test_spec.test_type.capitalize}-#{subspec_label(test_spec)}"
     end
 
     # @param  [Specification] app_spec
@@ -387,8 +396,7 @@ module Pod
     # @return [String] The derived name of the test target.
     #
     def app_target_label(app_spec)
-      ## TODO: THIS NEEDS TO BE UPDATED TO SOMETHING
-      "#{label}-#{app_spec.name.split('/')[1..-1].join('-')}"
+      "#{label}-#{subspec_label(app_spec)}"
     end
 
     # @param  [Specification] test_spec
@@ -615,6 +623,9 @@ module Pod
 
     # @param [Boolean] include_dependent_targets_for_test_spec
     #        whether to include header search paths for test dependent targets
+    #
+    # @param [Boolean] include_dependent_targets_for_app_spec
+    #        whether to include header search paths for app dependent targets
     #
     # @param [Boolean] include_private_headers
     #        whether to include header search paths for private headers of this

@@ -7,6 +7,7 @@ module Pod
         before do
           @specs = [stub('Spec'), stub('Spec/Foo')]
           @testspecs = [stub('Spec/Tests')]
+          @appspecs = [stub('Spec/App')]
           @platform = Platform.ios
         end
 
@@ -51,6 +52,18 @@ module Pod
         it 'does not use testspecs for equality' do
           k0 = PodVariant.new(@specs, @testspecs, [], @platform, false)
           k1 = PodVariant.new(@specs, [], [], @platform, false)
+          k0.should == k1
+        end
+
+        it 'does not use appspecs for equality' do
+          k0 = PodVariant.new(@specs, [], @appspecs, @platform, false)
+          k1 = PodVariant.new(@specs, [], [], @platform, false)
+          k0.should == k1
+        end
+
+        it 'does not use testspecs or appspecs for equality' do
+          k0 = PodVariant.new(@specs, @testspecs, [], @platform, false)
+          k1 = PodVariant.new(@specs, [], @appspecs, @platform, false)
           k0.should == k1
         end
       end

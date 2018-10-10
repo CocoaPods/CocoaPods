@@ -313,7 +313,7 @@ module Pod
         user_targets = [target]
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        target_inspector.send(:compute_swift_version_from_targets, user_targets).should == "4.2"
+        target_inspector.send(:compute_swift_version_from_targets, user_targets).should == '4.2'
       end
 
       it 'raises if the user defined SWIFT_VERSION contains multiple unique versions are defined' do
