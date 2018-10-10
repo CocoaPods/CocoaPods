@@ -795,7 +795,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
@@ -823,8 +822,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -861,7 +858,6 @@ Targets:
           PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-framework-iOS.unit-tests.xcconfig
     - Release:
@@ -878,8 +874,6 @@ Targets:
           PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: MixedPod-framework-iOS.unit-tests.xcconfig
@@ -928,7 +922,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -959,8 +952,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -995,7 +986,6 @@ Targets:
           PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-framework-macOS.unit-tests.xcconfig
     - Release:
@@ -1012,8 +1002,6 @@ Targets:
           PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-framework-macOS.unit-tests.xcconfig
 - MixedPod-library-iOS:
@@ -1050,7 +1038,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: MixedPod-library-iOS.xcconfig
@@ -1072,8 +1059,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -1109,7 +1094,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-iOS.unit-tests.xcconfig
     - Release:
@@ -1129,8 +1113,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: MixedPod-library-iOS.unit-tests.xcconfig
@@ -1171,7 +1153,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.xcconfig
     - Release:
@@ -1195,8 +1176,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.xcconfig
 - MixedPod-library-macOS-Unit-Tests:
@@ -1230,7 +1209,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.unit-tests.xcconfig
     - Release:
@@ -1250,8 +1228,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: MixedPod-library-macOS.unit-tests.xcconfig
 - ObjCPod-framework-iOS:
@@ -1744,8 +1720,6 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -1778,8 +1752,6 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -1813,8 +1785,6 @@ Targets:
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: Pods-Abstract Target-iOS Pods-Static.debug.xcconfig
     - Release:
@@ -1835,8 +1805,6 @@ Targets:
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: Pods-Abstract Target-iOS Pods-Static.release.xcconfig
@@ -1883,8 +1851,6 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: Pods-Abstract Target-macOS Pods-Dynamic.debug.xcconfig
@@ -1919,8 +1885,6 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
         Base Configuration: Pods-Abstract Target-macOS Pods-Dynamic.release.xcconfig
@@ -1954,8 +1918,6 @@ Targets:
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
         Base Configuration: Pods-Abstract Target-macOS Pods-Static.debug.xcconfig
     - Release:
         Build Settings:
@@ -1977,8 +1939,6 @@ Targets:
           PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
         Base Configuration: Pods-Abstract Target-macOS Pods-Static.release.xcconfig
 - SwiftPod-framework-iOS:
     Build Phases:
@@ -2015,7 +1975,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
@@ -2043,8 +2002,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -2080,7 +2037,6 @@ Targets:
           PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-framework-iOS.unit-tests.xcconfig
     - Release:
@@ -2097,8 +2053,6 @@ Targets:
           PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: SwiftPod-framework-iOS.unit-tests.xcconfig
@@ -2141,7 +2095,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -2172,8 +2125,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -2207,7 +2158,6 @@ Targets:
           PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-framework-macOS.unit-tests.xcconfig
     - Release:
@@ -2224,8 +2174,6 @@ Targets:
           PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-framework-macOS.unit-tests.xcconfig
 - SwiftPod-library-iOS:
@@ -2258,7 +2206,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: SwiftPod-library-iOS.xcconfig
@@ -2280,8 +2227,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -2316,7 +2261,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-iOS.unit-tests.xcconfig
     - Release:
@@ -2336,8 +2280,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: SwiftPod-library-iOS.unit-tests.xcconfig
@@ -2374,7 +2316,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.xcconfig
     - Release:
@@ -2398,8 +2339,6 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.xcconfig
 - SwiftPod-library-macOS-Unit-Tests:
@@ -2432,7 +2371,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.unit-tests.xcconfig
     - Release:
@@ -2452,8 +2390,6 @@ Targets:
           PUBLIC_HEADERS_FOLDER_PATH: ''
           SDKROOT: macosx
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4.0'
         Base Configuration: SwiftPod-library-macOS.unit-tests.xcconfig
 
@@ -2517,6 +2453,8 @@ Build Configurations:
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+      SWIFT_VERSION: '4.2'
       SYMROOT: "${SRCROOT}/../build"
 - Release:
     Build Settings:
@@ -2570,4 +2508,7 @@ Build Configurations:
       MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_COMPILATION_MODE: wholemodule
+      SWIFT_OPTIMIZATION_LEVEL: "-O"
+      SWIFT_VERSION: '4.2'
       SYMROOT: "${SRCROOT}/../build"

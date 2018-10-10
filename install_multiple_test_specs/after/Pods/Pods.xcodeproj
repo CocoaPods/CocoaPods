@@ -136,8 +136,6 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -172,8 +170,6 @@ Targets:
           PRODUCT_NAME: "$(TARGET_NAME:c99extidentifier)"
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -218,7 +214,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
@@ -250,8 +245,6 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
@@ -287,7 +280,6 @@ Targets:
           PRODUCT_NAME: TestLib-Unit-UnitTests1
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4'
         Base Configuration: TestLib.unit-unittests1.xcconfig
     - Release:
@@ -305,8 +297,6 @@ Targets:
           PRODUCT_NAME: TestLib-Unit-UnitTests1
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: TestLib.unit-unittests1.xcconfig
@@ -339,7 +329,6 @@ Targets:
           PRODUCT_NAME: TestLib-Unit-UnitTests2
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-TestLib-Unit-Tests.app/AppHost-TestLib-Unit-Tests"
         Base Configuration: TestLib.unit-unittests2.xcconfig
@@ -358,8 +347,6 @@ Targets:
           PRODUCT_NAME: TestLib-Unit-UnitTests2
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-          SWIFT_COMPILATION_MODE: wholemodule
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-TestLib-Unit-Tests.app/AppHost-TestLib-Unit-Tests"
           VALIDATE_PRODUCT: 'YES'
@@ -424,6 +411,8 @@ Build Configurations:
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
       SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+      SWIFT_VERSION: '4.2'
       SYMROOT: "${SRCROOT}/../build"
 - Release:
     Build Settings:
@@ -476,4 +465,7 @@ Build Configurations:
       MTL_FAST_MATH: 'YES'
       PRODUCT_NAME: "$(TARGET_NAME)"
       STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_COMPILATION_MODE: wholemodule
+      SWIFT_OPTIMIZATION_LEVEL: "-O"
+      SWIFT_VERSION: '4.2'
       SYMROOT: "${SRCROOT}/../build"
