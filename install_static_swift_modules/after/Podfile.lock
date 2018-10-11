@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
     :path: SwiftPod
 
 SPEC CHECKSUMS:
-  CustomModuleMapPod: cfd26c1ad10272d3b5dd32baa145c7a4719e9153
-  MixedPod: 37ee6be735a7ab69e5ba8ffe0eb116cdc7b4ab9a
-  ObjCPod: 62f62796ec21fc9eb347d633d8854e4cae6d662f
-  SwiftPod: 95a3adf44209f991ee51e0803d98eb9051e49a9d
+  CustomModuleMapPod: f9844b30b5b367fa48047a128d282e795745e17d
+  MixedPod: 41706b57a02378b9276b6a689af71d63fb4cf8d0
+  ObjCPod: cd8c456c7857cf8e44ad8fd8f48e9008e73ac5b6
+  SwiftPod: 8f38c101ec321f4e28eb9140b461623d3d79513a
