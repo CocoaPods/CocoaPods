@@ -160,7 +160,7 @@ module Pod
     #
     def should_build?
       return @should_build if defined? @should_build
-      accessors = file_accessors.reject { |fa| fa.spec.test_specification? }
+      accessors = file_accessors.select { |fa| fa.spec.library_specification? }
       source_files = accessors.flat_map(&:source_files)
       source_files -= accessors.flat_map(&:headers)
       @should_build = !source_files.empty?
@@ -192,7 +192,7 @@ module Pod
     def uses_swift?
       return @uses_swift if defined? @uses_swift
       @uses_swift = begin
-        file_accessors.reject { |a| a.spec.test_specification? }.any? do |file_accessor|
+        file_accessors.select { |a| a.spec.library_specification? }.any? do |file_accessor|
           file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
         end
       end

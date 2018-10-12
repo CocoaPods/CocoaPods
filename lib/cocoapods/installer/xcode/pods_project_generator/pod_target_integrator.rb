@@ -37,6 +37,14 @@ module Pod
                 end
                 UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(test_specs), test_native_target)
               end
+
+              target_installation_result.app_specs_by_native_target.each do |app_native_target, app_specs|
+                app_specs.each do |app_spec|
+                  add_embed_frameworks_script_phase(app_native_target, app_spec)
+                  add_copy_resources_script_phase(app_native_target, app_spec)
+                end
+                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(app_specs), app_native_target)
+              end
               specs = target.library_specs
               UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target)
             end
@@ -57,14 +65,23 @@ module Pod
           #
           # @return [void]
           #
-          def add_copy_resources_script_phase(native_target, test_spec)
-            script_path = "${PODS_ROOT}/#{target.copy_resources_script_path_for_test_spec(test_spec).relative_path_from(target.sandbox.root)}"
+          def add_copy_resources_script_phase(native_target, spec)
+            script_path = if spec.test_specification?
+                            "${PODS_ROOT}/#{target.copy_resources_script_path_for_test_spec(spec).relative_path_from(target.sandbox.root)}"
+                          else
+                            "${PODS_ROOT}/#{target.copy_resources_script_path_for_app_spec(spec).relative_path_from(target.sandbox.root)}"
+                          end
             input_paths = []
             output_paths = []
             unless installation_options.disable_input_output_paths?
-              resource_paths = target.dependent_targets_for_test_spec(test_spec).flat_map do |dependent_target|
+              dependent_targets = if spec.test_specification?
+                                    target.dependent_targets_for_test_spec(spec)
+                                  else
+                                    target.dependent_targets_for_app_spec(spec)
+                                  end
+              resource_paths = dependent_targets.flat_map do |dependent_target|
                 spec_paths_to_include = dependent_target.library_specs.map(&:name)
-                spec_paths_to_include << test_spec.name if dependent_target == target
+                spec_paths_to_include << spec.name if dependent_target == target
                 dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
               unless resource_paths.empty?
@@ -81,14 +98,48 @@ module Pod
           #
           # @return [void]
           #
-          def add_embed_frameworks_script_phase(native_target, test_spec)
-            script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_test_spec(test_spec).relative_path_from(target.sandbox.root)}"
+          def add_embed_frameworks_script_phase(native_target, spec)
+            script_path = if spec.test_specification?
+                            "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_test_spec(spec).relative_path_from(target.sandbox.root)}"
+                          else
+                            "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_app_spec(spec).relative_path_from(target.sandbox.root)}"
+                          end
             input_paths = []
             output_paths = []
             unless installation_options.disable_input_output_paths?
-              framework_paths = target.dependent_targets_for_test_spec(test_spec).flat_map do |dependent_target|
+              dependent_targets = if spec.test_specification?
+                                    target.dependent_targets_for_test_spec(spec)
+                                  else
+                                    target.dependent_targets_for_app_spec(spec)
+                                  end
+              framework_paths = dependent_targets.flat_map do |dependent_target|
                 spec_paths_to_include = dependent_target.library_specs.map(&:name)
-                spec_paths_to_include << test_spec.name if dependent_target == target
+                spec_paths_to_include << spec.name if dependent_target == target
+                dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
+              end
+              unless framework_paths.empty?
+                input_paths = [script_path, *framework_paths.flat_map { |fw| [fw.source_path, fw.dsym_path] }.compact]
+                output_paths = UserProjectIntegrator::TargetIntegrator.framework_output_paths(framework_paths)
+              end
+            end
+
+            UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
+            UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
+          end
+
+          # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase to the given app_spec.
+          #
+          # @return [void]
+          #
+          def add_embed_frameworks_script_phase_to_app_spec(native_target, app_spec)
+            script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_app_spec(app_spec).relative_path_from(target.sandbox.root)}"
+            puts "script_path : #{script_path}"
+            input_paths = []
+            output_paths = []
+            unless installation_options.disable_input_output_paths?
+              framework_paths = target.dependent_targets_for_app_spec(app_spec).flat_map do |dependent_target|
+                spec_paths_to_include = dependent_target.library_specs.map(&:name)
+                spec_paths_to_include << app_spec.name if dependent_target == target
                 dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
               unless framework_paths.empty?

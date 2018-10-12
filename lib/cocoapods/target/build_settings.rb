@@ -717,11 +717,19 @@ module Pod
 
         # @!group Swift
 
+        # @see BuildSettings#other_swift_flags_without_swift?
+        def other_swift_flags_without_swift?
+          return false if library_xcconfig?
+
+          target.uses_swift_for_non_library_spec?(non_library_spec)
+        end
+
         # @return [Array<String>]
         define_build_settings_method :other_swift_flags, :build_setting => true, :memoized => true do
-          return unless target.uses_swift?
+          return unless target.uses_swift? || other_swift_flags_without_swift?
+
           flags = super()
-          flags << '-suppress-warnings' if target.inhibit_warnings?
+          flags << '-suppress-warnings' if target.inhibit_warnings? && library_xcconfig?
           if !target.requires_frameworks? && target.defines_module? && library_xcconfig?
             flags.concat %w( -import-underlying-module -Xcc -fmodule-map-file=${SRCROOT}/${MODULEMAP_FILE} )
           end

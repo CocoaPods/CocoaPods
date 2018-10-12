@@ -409,6 +409,9 @@ module Pod
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
 
+              create_app_target_embed_frameworks_script(app_spec)
+              create_app_target_copy_resources_script(app_spec)
+
               app_native_target
             end
           end
