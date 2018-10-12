@@ -463,8 +463,8 @@ module Pod
         attr_reader :app_xcconfig
         alias app_xcconfig? app_xcconfig
 
-        attr_reader :non_library_xcconfig
-        alias non_library_xcconfig? non_library_xcconfig
+        attr_reader :library_xcconfig
+        alias library_xcconfig? library_xcconfig
 
         # @return [Specification]
         #   The test specification these build settings are for or `nil`.
@@ -484,9 +484,10 @@ module Pod
           if @non_library_spec = non_library_spec
             @test_xcconfig = non_library_spec.test_specification?
             @app_xcconfig = non_library_spec.app_specification?
-            @non_library_xcconfig = true
+            @library_xcconfig = false
           else
-            @test_xcconfig = @app_xcconfig = @non_library_xcconfig = false
+            @test_xcconfig = @app_xcconfig = false
+            @library_xcconfig = true
           end
         end
 
@@ -521,13 +522,13 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !non_library_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && library_xcconfig?
 
           frameworks = vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
-          frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } unless non_library_xcconfig?
+          frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } if library_xcconfig?
           frameworks.concat consumer_frameworks
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
-          frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } if non_library_xcconfig?
+          frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } unless library_xcconfig?
           frameworks
         end
 
@@ -549,7 +550,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :weak_frameworks, :memoized => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !non_library_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && library_xcconfig?
 
           weak_frameworks = spec_consumers.flat_map(&:weak_frameworks)
           weak_frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.weak_frameworks_to_import }
@@ -571,7 +572,7 @@ module Pod
           paths = super().dup
           paths.concat dependent_targets.flat_map { |t| t.build_settings.framework_search_paths_to_import }
           paths.concat framework_search_paths_to_import
-          paths.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)) unless non_library_xcconfig?
+          paths.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)) if library_xcconfig?
           paths
         end
 
@@ -611,7 +612,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !non_library_xcconfig?
+          return [] if (!target.requires_frameworks? || target.static_framework?) && library_xcconfig?
 
           libraries = libraries_to_import.dup
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
@@ -721,7 +722,7 @@ module Pod
           return unless target.uses_swift?
           flags = super()
           flags << '-suppress-warnings' if target.inhibit_warnings?
-          if !target.requires_frameworks? && target.defines_module? && !non_library_xcconfig?
+          if !target.requires_frameworks? && target.defines_module? && library_xcconfig?
             flags.concat %w( -import-underlying-module -Xcc -fmodule-map-file=${SRCROOT}/${MODULEMAP_FILE} )
           end
           flags
@@ -730,7 +731,7 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
           paths = dependent_targets.flat_map { |t| t.build_settings.swift_include_paths_to_import }
-          paths.concat swift_include_paths_to_import if non_library_xcconfig?
+          paths.concat swift_include_paths_to_import unless library_xcconfig?
           paths
         end
 
@@ -762,7 +763,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :ld_runpath_search_paths, :build_setting => true, :memoized => true do
-          return unless non_library_xcconfig?
+          return if library_xcconfig?
           _ld_runpath_search_paths(:test_bundle => test_xcconfig?)
         end
 
@@ -782,7 +783,7 @@ module Pod
 
         # @return [String]
         define_build_settings_method :configuration_build_dir, :build_setting => true, :memoized => true do
-          return if non_library_xcconfig?
+          return unless library_xcconfig?
           target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
         end
 
