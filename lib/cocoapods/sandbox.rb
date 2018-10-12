@@ -254,25 +254,29 @@ module Pod
       file_name = json ? "#{name}.podspec.json" : "#{name}.podspec"
       output_path = specifications_root + file_name
 
-      case podspec
-      when String
-        output_path.open('w') { |f| f.puts(podspec) }
-      when Pathname
-        unless podspec.exist?
-          raise Informative, "No podspec found for `#{name}` in #{podspec}"
+      spec =
+        case podspec
+        when String
+          output_path.open('w') { |f| f.puts(podspec) }
+          Specification.from_file(output_path)
+        when Pathname
+          unless podspec.exist?
+            raise Informative, "No podspec found for `#{name}` in #{podspec}"
+          end
+          FileUtils.copy(podspec, output_path)
+          Specification.from_file(podspec)
+        when Specification
+          raise ArgumentError, 'can only store Specification objects as json' unless json
+          output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
+          podspec.dup
+        else
+          raise ArgumentError, "Unknown type for podspec: #{podspec.inspect}"
         end
-        spec = Specification.from_file(podspec)
-        FileUtils.copy(podspec, output_path)
-      when Specification
-        raise ArgumentError, 'can only store Specification objects as json' unless json
-        output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
-        spec = podspec.dup
-      else
-        raise ArgumentError, "Unknown type for podspec: #{podspec.inspect}"
-      end
 
-      spec ||= Specification.from_file(output_path)
-      spec.defined_in_file ||= output_path
+      # we force the file to be the file in the sandbox, so specs that have been serialized to
+      # json maintain a consistent checksum.
+      # this is safe to do because `spec` is always a clean instance
+      spec.defined_in_file = output_path
 
       unless spec.name == name
         raise Informative, "The name of the given podspec `#{spec.name}` doesn't match the expected one `#{name}`"
