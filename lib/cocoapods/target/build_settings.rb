@@ -612,11 +612,11 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && library_xcconfig?
+          return [] if library_xcconfig? && (!target.requires_frameworks? || target.static_framework?)
 
           libraries = libraries_to_import.dup
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
-          libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import } if test_xcconfig?
+          libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import } unless library_xcconfig?
           libraries
         end
 
@@ -640,14 +640,14 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+          return [] if library_xcconfig? && (!target.requires_frameworks? || target.static_framework?)
 
           vendored = library_search_paths_to_import.dup
           vendored.concat dependent_targets.flat_map { |t| t.build_settings.vendored_dynamic_library_search_paths }
-          if test_xcconfig?
-            vendored.concat dependent_targets.flat_map { |t| t.build_settings.library_search_paths_to_import }
-          else
+          if library_xcconfig?
             vendored.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE))
+          else
+            vendored.concat(dependent_targets.flat_map { |t| t.build_settings.library_search_paths_to_import })
           end
           vendored
         end

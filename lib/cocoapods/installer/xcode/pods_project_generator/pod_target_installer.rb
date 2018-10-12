@@ -385,6 +385,21 @@ module Pod
               app_native_target.build_configurations.each do |configuration|
                 configuration.build_settings.merge!(custom_build_settings)
 
+                # target_installer will automatically add an empty `OTHER_LDFLAGS`. For app
+                # targets those are set via a test xcconfig file instead.
+                configuration.build_settings.delete('OTHER_LDFLAGS')
+                # target_installer will automatically set the product name to the module name if the target
+                # requires frameworks. For apps we always use the app target name as the product name
+                # irrelevant to whether we use frameworks or not.
+                configuration.build_settings['PRODUCT_NAME'] = app_target_label
+                # target_installer sets 'MACH_O_TYPE' for static frameworks ensure this does not propagate
+                # to app target.
+                configuration.build_settings.delete('MACH_O_TYPE')
+                # Use xcode default product module name, which is $(PRODUCT_NAME:c99extidentifier)
+                # this gives us always valid name that is distinct from the parent spec module name
+                # which allow the app to use import to access the parent framework
+                configuration.build_settings.delete('PRODUCT_MODULE_NAME')
+
                 # We must codesign iOS app bundles that contain binary frameworks to allow them to be launchable in the simulator
                 unless target.platform == :osx
                   configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'YES'
