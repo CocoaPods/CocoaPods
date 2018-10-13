@@ -177,7 +177,7 @@ module Pod
               output << (string << separator)
             end
           end
-        rescue EOFError
+        rescue EOFError, IOError
           output << (buf << $/) unless buf.empty?
         end
       end
