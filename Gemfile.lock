@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: ebb41dcfe6d4bf253c664cbc1ccd7d0c08814864
+  revision: 393af3e82c7cf1a2b691b6bc30b3d25674354816
   branch: master
   specs:
     cocoapods-core (1.6.0.beta.1)
@@ -17,21 +17,21 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 73e9e58ca41ef31d4670b29b38464438a47a88f3
+  revision: 0db0e4326c6927b73c998fa9a00eeeb446b25811
   branch: master
   specs:
     molinillo (0.6.6)
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: cdd75d07a93dd51680ad75c78a40d813e67bd968
+  revision: 297484cd50feda60cdcbc303983607e622b3dba2
   branch: master
   specs:
     nanaimo (0.2.6)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: e1db734e2062d6dd028238601ff8fb07cfa81afa
+  revision: 7a2e693f52ef3eed730f871e9a518ff3e716584f
   branch: master
   specs:
     xcodeproj (1.6.0)
@@ -50,14 +50,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 9a838df2fe1e3dcdbf3b13daef3f4654f7b8ead9
+  revision: bc9e262fb441fdbea039a7d676e1193a32f50b11
   branch: master
   specs:
-    cocoapods-downloader (1.2.1)
+    cocoapods-downloader (1.2.2)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 014a4632cb1732a8fd6d0fca1993905e5e9fadf8
+  revision: c613c92db8dbcaeae15c38de478cde9159cebe6b
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -65,7 +65,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: eb60c856fc552124f5846c800fb64e5ec3938837
+  revision: 452eee08d6497c43afd4452c28f9d7b8da8686f1
   branch: master
   specs:
     cocoapods-search (1.0.0)
@@ -108,7 +108,7 @@ PATH
       claide (>= 1.0.2, < 2.0)
       cocoapods-core (= 1.6.0.beta.1)
       cocoapods-deintegrate (>= 1.0.2, < 2.0)
-      cocoapods-downloader (>= 1.2.1, < 2.0)
+      cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
       cocoapods-search (>= 1.0.0, < 2.0)
       cocoapods-stats (>= 1.0.0, < 2.0)
