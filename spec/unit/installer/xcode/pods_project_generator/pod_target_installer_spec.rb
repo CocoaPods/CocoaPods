@@ -229,7 +229,6 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.not.be.nil
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
                 end
                 snapshot_test_native_target = @project.targets[2]
@@ -244,7 +243,6 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.be.nil
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
@@ -267,7 +265,6 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.not.be.nil
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
                 end
                 snapshot_test_native_target = @project.targets[2]
@@ -282,7 +279,6 @@ module Pod
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.be.nil
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle

@@ -305,6 +305,7 @@ module Pod
 
       it 'returns nil if the version is not defined' do
         user_project = Xcodeproj::Project.new('path')
+        user_project.build_configuration_list.set_setting('SWIFT_VERSION', nil)
         target = user_project.new_target(:application, 'Target', :ios)
         target.build_configuration_list.set_setting('SWIFT_VERSION', nil)
 
