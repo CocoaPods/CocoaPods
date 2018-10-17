@@ -41,7 +41,7 @@ module Pod
           @only_subspec    = argv.option('subspec')
           @use_frameworks  = !argv.flag?('use-libraries')
           @use_modular_headers = argv.flag?('use-modular-headers')
-          @source_urls     = argv.option('sources', 'https://github.com/CocoaPods/Specs.git').split(',')
+          @source_urls     = argv.option('sources', '').split(',')
           @platforms       = argv.option('platforms', '').split(',')
           @private         = argv.flag?('private', false)
           @swift_version   = argv.option('swift-version', nil)
@@ -57,6 +57,7 @@ module Pod
 
         def run
           UI.puts
+          ensure_source_repo_available(@source_urls)
           podspecs_to_lint.each do |podspec|
             validator                = Validator.new(podspec, @source_urls, @platforms)
             validator.local          = true

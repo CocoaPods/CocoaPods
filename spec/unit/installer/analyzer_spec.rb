@@ -4,13 +4,15 @@ module Pod
   describe Installer::Analyzer do
     describe 'Analysis' do
       before do
-        repos = [Source.new(fixture('spec-repos/test_repo')), MasterSource.new(fixture('spec-repos/master'))]
+        @master_repo = MasterSource.new(fixture('spec-repos/master'))
+        repos = [Source.new(fixture('spec-repos/test_repo')), @master_repo]
         aggregate = Pod::Source::Aggregate.new(repos)
         config.sources_manager.stubs(:aggregate).returns(aggregate)
         aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
 
         @podfile = Pod::Podfile.new do
           platform :ios, '6.0'
+          source SpecHelper.test_master_repo_url
           project 'SampleProject/SampleProject'
 
           target 'SampleProject' do
@@ -27,7 +29,6 @@ module Pod
             end
           end
         end
-
         hash = {}
         hash['PODS'] = ['JSONKit (1.5pre)', 'NUI (0.2.0)', 'SVPullToRefresh (0.4)']
         hash['DEPENDENCIES'] = %w(JSONKit NUI SVPullToRefresh)
@@ -166,6 +167,7 @@ module Pod
         it 'correctly determines when a platform requires 64-bit architectures' do
           @podfile = Pod::Podfile.new do
             project 'SampleProject/SampleProject'
+            source SpecHelper.test_master_repo_url
             platform :ios, '11.0'
             use_frameworks!
             target 'TestRunner' do
@@ -185,6 +187,7 @@ module Pod
         it 'forces 64-bit architectures when required' do
           @podfile = Pod::Podfile.new do
             project 'SampleProject/SampleProject'
+            source SpecHelper.test_master_repo_url
             platform :ios, '11.0'
             use_frameworks!
             target 'TestRunner' do
@@ -205,6 +208,7 @@ module Pod
             use_frameworks!
             target 'SampleProject' do
               platform :ios, '10.0'
+              source SpecHelper.test_master_repo_url
               pod 'AFNetworking'
               target 'TestRunner' do
                 platform :ios, '11.0'
@@ -225,6 +229,7 @@ module Pod
         it 'does not specify archs value unless required' do
           @podfile = Pod::Podfile.new do
             project 'SampleProject/SampleProject'
+            source SpecHelper.test_master_repo_url
             platform :ios, '10.0'
             use_frameworks!
             target 'TestRunner' do
@@ -242,6 +247,7 @@ module Pod
       describe 'abstract targets' do
         it 'resolves' do
           @podfile = Pod::Podfile.new do
+            source SpecHelper.test_master_repo_url
             project 'SampleProject/SampleProject'
             use_frameworks!
             abstract_target 'Alpha' do
@@ -269,6 +275,7 @@ module Pod
       describe 'dependent pod targets' do
         it 'picks transitive dependencies up' do
           @podfile = Pod::Podfile.new do
+            source SpecHelper.test_master_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
             pod 'RestKit', '~> 0.23.0'
@@ -310,6 +317,7 @@ module Pod
 
         it 'does not mark transitive dependencies as dependent targets' do
           @podfile = Pod::Podfile.new do
+            source SpecHelper.test_master_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
             target 'SampleProject'
@@ -342,6 +350,7 @@ module Pod
 
         it 'does not mark transitive dependencies as dependent targets' do
           @podfile = Pod::Podfile.new do
+            source SpecHelper.test_master_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
             target 'SampleProject'
@@ -374,6 +383,7 @@ module Pod
 
         it 'does not mark transitive dependencies as dependent targets' do
           @podfile = Pod::Podfile.new do
+            source SpecHelper.test_master_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
             target 'SampleProject'
@@ -805,6 +815,7 @@ module Pod
 
       it 'unlocks all dependencies with the same root name in update mode' do
         podfile = Podfile.new do
+          source SpecHelper.test_master_repo_url
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           target 'SampleProject' do
@@ -839,6 +850,7 @@ module Pod
         local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.1', 'dependencies' => { 'Expecta' => ['~> 0.0'] })
         sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
         podfile = Podfile.new do
+          source SpecHelper.test_master_repo_url
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           target 'SampleProject' do
@@ -866,6 +878,7 @@ module Pod
         local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0', 'dependencies' => { 'Expecta' => ['0.2.2'] })
         sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
         podfile = Podfile.new do
+          source SpecHelper.test_master_repo_url
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           target 'SampleProject' do
@@ -888,6 +901,7 @@ module Pod
       it 'raises if dependencies need to be fetched but fetching is not allowed' do
         sandbox = config.sandbox
         podfile = Podfile.new do
+          source SpecHelper.test_master_repo_url
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           target 'SampleProject' do
@@ -915,6 +929,7 @@ module Pod
 
       it 'takes into account locked implicit dependencies' do
         podfile = Podfile.new do
+          source SpecHelper.test_master_repo_url
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           target 'SampleProject' do
@@ -1102,6 +1117,7 @@ module Pod
 
         it 'allows a pod that is a dependency for other pods to be whitelisted' do
           @podfile = Podfile.new do
+            source SpecHelper.test_master_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
             target 'SampleProject' do
@@ -1121,6 +1137,7 @@ module Pod
 
         it 'raises if a Pod is whitelisted for different build configurations' do
           @podfile = Podfile.new do
+            source SpecHelper.test_master_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
             target 'SampleProject' do
@@ -1440,11 +1457,11 @@ module Pod
 
       describe 'Private helpers' do
         describe '#sources' do
-          describe 'when there are no explicit sources' do
-            it 'defaults to the master spec repository' do
-              @analyzer.send(:sources).map(&:url).should ==
-                ['https://github.com/CocoaPods/Specs.git']
-            end
+          it 'raises when there are no explicit sources' do
+            @podfile.stubs(:sources).returns([])
+            should.raise Informative do
+              @analyzer.send(:sources)
+            end.message.should.match /There are no sources specified in your Podfile/
           end
 
           describe 'when there are explicit sources' do

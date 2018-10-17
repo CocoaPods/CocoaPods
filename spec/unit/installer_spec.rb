@@ -17,6 +17,7 @@ end
 #
 def generate_podfile(pods = ['JSONKit'])
   Pod::Podfile.new do
+    source SpecHelper.test_master_repo_url
     platform :ios
     project SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     target 'SampleProject' do
@@ -32,6 +33,7 @@ end
 #
 def generate_local_podfile
   Pod::Podfile.new do
+    source SpecHelper.test_master_repo_url
     platform :ios
     project SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     target 'SampleProject' do
@@ -156,6 +158,7 @@ module Pod
 
           test_source_name = 'https://github.com/artsy/CustomSpecs.git'
           plugins_hash = Installer::DEFAULT_PLUGINS.merge(plugin_name => { 'sources' => [test_source_name] })
+          @installer.podfile.stubs(:sources).returns([])
           @installer.podfile.stubs(:plugins).returns(plugins_hash)
           @installer.unstub(:resolve_dependencies)
           @installer.stubs(:validate_build_configurations)
@@ -248,6 +251,7 @@ module Pod
         fixture_path = ROOT + 'spec/fixtures'
         config.repos_dir = fixture_path + 'spec-repos'
         podfile = Pod::Podfile.new do
+          source SpecHelper.test_master_repo_url
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           use_frameworks!

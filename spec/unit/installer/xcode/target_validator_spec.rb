@@ -45,6 +45,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
               pod 'BananaLib', :path => (fixture_path + 'banana-lib').to_s
@@ -64,6 +65,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
@@ -84,6 +86,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
               use_frameworks!
@@ -101,6 +104,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               platform :ios, '9.3'
               project 'Sample Extensions Project/Sample Extensions Project'
               use_frameworks!
@@ -128,6 +132,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             @podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               install! 'cocoapods', 'integrate_targets' => false
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
@@ -181,6 +186,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             @podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               install! 'cocoapods', 'integrate_targets' => false
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
@@ -241,6 +247,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             @podfile = Pod::Podfile.new do
+              source SpecHelper.test_master_repo_url
               install! 'cocoapods', 'integrate_targets' => false
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
@@ -268,6 +275,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
+              source SpecHelper.test_master_repo_url
               project 'SampleProject/SampleProject'
               platform :ios, '8.0'
               use_frameworks!
