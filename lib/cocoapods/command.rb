@@ -92,13 +92,19 @@ module Pod
       end
     end
 
-    # Ensure that the master spec repo exists
+    # Ensure that at least one repo exists
     #
     # @return [void]
     #
-    def ensure_master_spec_repo_exists!
-      unless config.sources_manager.master_repo_functional?
-        Setup.new(CLAide::ARGV.new([])).run
+    def ensure_source_repo_available(source_urls)
+      if source_urls.empty? && config.sources_manager.all.empty?
+        raise Informative, <<-EOS
+          There are no source repositories available. Either:
+
+            a.) Setup the master repo by running `pod init`
+            b.) Specify a list of private source repos with the `--sources` option
+            c.) If the master repo exists but is incompatibile with this version of CocoaPods, run `pod repo update master`
+        EOS
       end
     end
 

@@ -155,7 +155,15 @@ module Pod
           if all_dependencies_have_sources
             sources = dependency_sources
           elsif has_dependencies? && sources.empty? && plugin_sources.empty?
-            sources = ['https://github.com/CocoaPods/Specs.git']
+            raise Informative, <<-EOS.strip_heredoc
+            There are no sources specified in your Podfile. Either: 
+              
+              a.) Add the master repo to your Podfile, ex. `source "master"`
+              b.) Add a private private repo at the source of your choosing, ex. `source "https://github.com/artsy/Specs"`
+
+            Note: The master repo is no longer included by default.
+
+            EOS
           else
             sources += dependency_sources
           end

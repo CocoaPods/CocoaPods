@@ -13,6 +13,10 @@ module SpecHelper
     'https://github.com/CocoaPods/test_repo.git'
   end
 
+  def self.test_master_repo_url
+    'https://github.com/CocoaPods/Specs.git'
+  end
+
   module Fixture
     ROOT = ::ROOT + 'spec/fixtures'
 
