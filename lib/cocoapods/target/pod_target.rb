@@ -80,9 +80,10 @@ module Pod
       @target_definitions = target_definitions
       @file_accessors = file_accessors
       @scope_suffix = scope_suffix
-      @library_specs = @specs.select(&:library_specification?)
-      @test_specs = @specs.select(&:test_specification?)
-      @app_specs = @specs.select(&:app_specification?)
+      all_specs_by_type = @specs.group_by(&:spec_type)
+      @library_specs = all_specs_by_type[:library]
+      @test_specs = all_specs_by_type[:test]
+      @app_specs = all_specs_by_type[:app]
       @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
       @dependent_targets = []
       @test_dependent_targets_by_spec_name = {}

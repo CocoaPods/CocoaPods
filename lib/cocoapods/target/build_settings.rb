@@ -467,7 +467,7 @@ module Pod
         alias library_xcconfig? library_xcconfig
 
         # @return [Specification]
-        #   The test specification these build settings are for or `nil`.
+        #   The non-library specification these build settings are for or `nil`.
         #
         attr_reader :non_library_spec
 
@@ -484,9 +484,11 @@ module Pod
           if @non_library_spec = non_library_spec
             @test_xcconfig = non_library_spec.test_specification?
             @app_xcconfig = non_library_spec.app_specification?
+            @xcconfig_spec_type = non_library_spec.spec_type
             @library_xcconfig = false
           else
             @test_xcconfig = @app_xcconfig = false
+            @xcconfig_spec_type = :library
             @library_xcconfig = true
           end
         end
@@ -759,7 +761,7 @@ module Pod
         # @note this is only true when generating build settings for a test bundle
         #
         def requires_objc_linker_flag?
-          test_xcconfig?
+          test_xcconfig? || app_xcconfig?
         end
 
         # @return [Boolean] whether the `-fobjc-arc` linker flag is required.
@@ -836,26 +838,12 @@ module Pod
 
         # @return [Array<Sandbox::FileAccessor>]
         define_build_settings_method :file_accessors, :memoized => true do
-          block = if test_xcconfig?
-                    proc { |c| c.spec.test_specification? }
-                  elsif app_xcconfig?
-                    proc { |c| c.spec.app_specification? }
-                  else
-                    proc { |c| c.spec.library_specification? }
-                  end
-          target.file_accessors.select(&block)
+          target.file_accessors.select { |c| c.spec.spec_type == @xcconfig_spec_type }
         end
 
         # @return [Array<Specification::Consumer>]
         define_build_settings_method :spec_consumers, :memoized => true do
-          block = if test_xcconfig?
-                    proc { |c| c.spec.test_specification? }
-                  elsif app_xcconfig?
-                    proc { |c| c.spec.app_specification? }
-                  else
-                    proc { |c| c.spec.library_specification? }
-                  end
-          target.spec_consumers.select(&block)
+          target.spec_consumers.select { |c| c.spec.spec_type == @xcconfig_spec_type }
         end
 
         #-------------------------------------------------------------------------#

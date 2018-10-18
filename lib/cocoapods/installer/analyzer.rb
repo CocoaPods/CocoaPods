@@ -565,9 +565,10 @@ module Pod
             target_definition, dependent_specs = *dependency
             dependent_specs.group_by(&:root).each do |root_spec, resolver_specs|
               all_specs = resolver_specs.map(&:spec)
-              library_specs = all_specs.select(&:library_specification?)
-              test_specs = all_specs.select(&:test_specification?)
-              app_specs = all_specs.select(&:app_specification?)
+              all_specs_by_type = all_specs.group_by(&:spec_type)
+              library_specs = all_specs_by_type[:library]
+              test_specs = all_specs_by_type[:test]
+              app_specs = all_specs_by_type[:app]
               pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, target_definition.uses_frameworks?)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
