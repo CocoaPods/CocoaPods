@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add documentation for the Podfile installation options  
+  [Eric Amorde](https://github.com/amorde)
+  [#8198](https://github.com/CocoaPods/CocoaPods/issues/8198)
+  [guides.cocoapods.org #142](https://github.com/CocoaPods/guides.cocoapods.org/issues/142)
+
 * None.  
 
 ##### Bug Fixes
