@@ -626,7 +626,8 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :static_libraries_to_import, :memoized => true do
-          static_libraries_to_import = vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+          static_libraries_to_import = []
+          static_libraries_to_import.concat vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') } unless target.should_build? && target.build_as_dynamic_framework?
           static_libraries_to_import << target.product_basename if target.should_build? && target.build_as_static_library?
           static_libraries_to_import
         end

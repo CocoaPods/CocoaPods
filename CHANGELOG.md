@@ -56,6 +56,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jeff Kelley](https://github.com/SlaunchaMan)
   [#8286](https://github.com/CocoaPods/CocoaPods/pull/8286)
 
+* Don't link vendored static libraries to the aggregate targets.  
+  [Wes Campaigne](https://github.com/Westacular)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8204](https://github.com/CocoaPods/CocoaPods/issues/8204)
+
 ## 1.6.0.beta.2 (2018-10-17)
 
 ##### Enhancements
