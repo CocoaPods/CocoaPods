@@ -51,5 +51,24 @@ module Pod
         }
       EOS
     end
+
+    describe 'with a pod target inhibiting warnings' do
+      before do
+        @pod_target.stubs(:inhibit_warnings?).returns(true)
+      end
+
+      it 'add the [system] attribute to the module definition' do
+        path = temporary_directory + 'BananaLib.modulemap'
+        @gen.save_as(path)
+        path.read.should == <<-EOS.strip_heredoc
+          module BananaLib [system] {
+            umbrella header "BananaLib-umbrella.h"
+
+            export *
+            module * { export * }
+          }
+        EOS
+      end
+    end
   end
 end

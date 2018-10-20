@@ -92,7 +92,11 @@ module Pod
       # The suffix attributes to `module`.
       #
       def module_declaration_attributes
-        ''
+        if (defined? target.inhibit_warnings?) && target.inhibit_warnings?
+          ' [system]'
+        else
+          ''
+        end
       end
     end
   end
