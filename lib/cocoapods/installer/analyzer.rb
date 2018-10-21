@@ -516,7 +516,7 @@ module Pod
         pod_targets.each do |pod_target|
           next unless pod_target.target_definitions.include?(target_definition)
           next unless resolver_specs_by_target[target_definition].any? do |resolver_spec|
-            (!resolver_spec.used_by_non_library_targets_only? && pod_target.specs.include?(resolver_spec.spec))
+            !resolver_spec.used_by_non_library_targets_only? && pod_target.specs.include?(resolver_spec.spec)
           end
 
           pod_name = pod_target.pod_name

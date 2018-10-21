@@ -235,13 +235,14 @@ module Pod
             target.file_accessors.each do |file_accessor|
               consumer = file_accessor.spec_consumer
 
-              native_target = if consumer.spec.library_specification?
-                                native_target
-                              elsif consumer.spec.test_specification?
-                                test_native_target_from_spec_consumer(consumer, test_native_targets)
-                              elsif consumer.spec.app_specification?
-                                app_native_target_from_spec_consumer(consumer, app_native_targets)
-                              end
+              native_target =  case consumer.spec.spec_type
+                               when :library
+                                 native_target
+                               when :test
+                                 test_native_target_from_spec_consumer(consumer, test_native_targets)
+                               when :app
+                                 app_native_target_from_spec_consumer(consumer, app_native_targets)
+                               end
 
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers.map(&:realpath)
