@@ -12,8 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Don't link aggregate targets to a pod's vendored static library when the pod
+  providing the library is being built as a dynamic framework.  
+  [Wes Campaigne](https://github.com/Westacular)
+  [#8204](https://github.com/CocoaPods/CocoaPods/issues/8204)
 
 ## 1.6.0.beta.2 (2018-10-17)
 
