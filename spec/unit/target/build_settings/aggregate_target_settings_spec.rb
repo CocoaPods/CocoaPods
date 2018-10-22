@@ -482,7 +482,7 @@ module Pod
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
-            @generator.other_ldflags.should == %w(-ObjC -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "VendoredFramework" -framework "XCTest")
+            @generator.other_ldflags.should == %w(-ObjC -l"VendoredDyld" -framework "PodTarget" -framework "VendoredFramework")
           end
 
           it 'does propagate system frameworks or system libraries from a non test specification to an aggregate target that uses static libraries' do
@@ -566,7 +566,7 @@ module Pod
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
-            @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
+            @generator.other_ldflags.should == %w(-ObjC -l"VendoredDyld" -framework "PodTarget" -framework "StaticFramework" -framework "VendoredFramework" -framework "XCTest")
           end
         end
 

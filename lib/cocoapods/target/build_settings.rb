@@ -512,8 +512,8 @@ module Pod
         define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
-          frameworks = vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
-          frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } unless test_xcconfig?
+          frameworks = vendored_dynamic_framework_linking_names.dup
+          frameworks.concat vendored_static_framework_linking_names unless test_xcconfig?
           frameworks.concat consumer_frameworks
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
           frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } if test_xcconfig?
@@ -523,17 +523,28 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :static_frameworks_to_import, :memoized => true do
           static_frameworks_to_import = []
-          static_frameworks_to_import.concat vendored_static_frameworks.map { |f| File.basename(f, '.framework') } unless target.should_build? && target.requires_frameworks? && !target.static_framework?
+          static_frameworks_to_import.concat vendored_static_framework_linking_names unless target.should_build? && target.requires_frameworks? && !target.static_framework?
           static_frameworks_to_import << target.product_basename if target.should_build? && target.requires_frameworks? && target.static_framework?
           static_frameworks_to_import
         end
 
         # @return [Array<String>]
         define_build_settings_method :dynamic_frameworks_to_import, :memoized => true do
-          dynamic_frameworks_to_import = vendored_dynamic_frameworks.map { |f| File.basename(f, '.framework') }
+          dynamic_frameworks_to_import = []
+          dynamic_frameworks_to_import.concat vendored_dynamic_framework_linking_names
           dynamic_frameworks_to_import << target.product_basename if target.should_build? && target.requires_frameworks? && !target.static_framework?
-          dynamic_frameworks_to_import.concat consumer_frameworks
+          dynamic_frameworks_to_import.concat consumer_frameworks unless target.should_build? && target.requires_frameworks? && !target.static_framework?
           dynamic_frameworks_to_import
+        end
+
+        # @return [Array<String>]
+        define_build_settings_method :vendored_static_framework_linking_names, :memoized => true do
+          vendored_static_frameworks.map { |f| File.basename(f, '.framework') }
+        end
+
+        # @return [Array<String>]
+        define_build_settings_method :vendored_dynamic_framework_linking_names, :memoized => true do
+          vendored_dynamic_frameworks.map { |f| File.basename(f, '.framework') }
         end
 
         # @return [Array<String>]
@@ -602,8 +613,9 @@ module Pod
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
-          libraries = vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+          libraries = vendored_static_library_linking_names.dup
           libraries.concat dynamic_libraries_to_import
+          libraries.concat spec_consumers.flat_map(&:libraries)
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
           libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import } if test_xcconfig?
           libraries
@@ -612,20 +624,32 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :static_libraries_to_import, :memoized => true do
           static_libraries_to_import = []
-          static_libraries_to_import.concat vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') } unless target.should_build? && target.requires_frameworks? && !target.static_framework?
+          static_libraries_to_import.concat vendored_static_library_linking_names unless target.should_build? && target.requires_frameworks?
           static_libraries_to_import << target.product_basename if target.should_build? && !target.requires_frameworks?
           static_libraries_to_import
         end
 
         # @return [Array<String>]
         define_build_settings_method :dynamic_libraries_to_import, :memoized => true do
-          vendored_dynamic_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') } +
-          spec_consumers.flat_map(&:libraries)
+          dynamic_libraries_to_import = []
+          dynamic_libraries_to_import.concat vendored_dynamic_library_linking_names
+          dynamic_libraries_to_import.concat spec_consumers.flat_map(&:libraries) unless target.should_build? && target.requires_frameworks?
+          dynamic_libraries_to_import
         end
 
         # @return [Array<String>]
         define_build_settings_method :libraries_to_import, :memoized => true, :sorted => true, :uniqued => true do
           static_libraries_to_import + dynamic_libraries_to_import
+        end
+
+        # @return [Array<String>]
+        define_build_settings_method :vendored_static_library_linking_names, :memoized => true do
+          vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+        end
+
+        # @return [Array<String>]
+        define_build_settings_method :vendored_dynamic_library_linking_names, :memoized => true do
+          vendored_dynamic_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
         end
 
         # @return [Array<String>]
