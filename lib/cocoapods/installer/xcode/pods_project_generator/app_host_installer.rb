@@ -21,13 +21,13 @@ module Pod
           #
           attr_reader :platform
 
-          # @return [String] the name of the subspec.
+          # @return [String] the name of the sub group.
           #
-          attr_reader :subspec_name
+          attr_reader :subgroup_name
 
-          # @return [String] the name of the spec the app host installer will be installing within.
+          # @return [String] the name of the group the app host installer will be installing within.
           #
-          attr_reader :spec_name
+          attr_reader :group_name
 
           # @return [String] the name of the app target label that will be used.
           #
@@ -38,19 +38,19 @@ module Pod
           # @param [Sandbox] sandbox @see #sandbox
           # @param [Pod::Project] project @see #project
           # @param [Platform] platform @see #platform
-          # @param [String] subspec_name @see #subspec_name
-          # @param [String] spec_name @see #spec_name
+          # @param [String] subgroup_name @see #subgroup_name
+          # @param [String] group_name @see #group_name
           # @param [String] app_target_label see #app_target_label
           #
-          def initialize(sandbox, project, platform, subspec_name, spec_name, app_target_label)
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label)
             @sandbox = sandbox
             @project = project
             @platform = platform
-            @subspec_name = subspec_name
-            @spec_name = spec_name
+            @subgroup_name = subgroup_name
+            @group_name = group_name
             @app_target_label = app_target_label
-            target_group = project.pod_group(spec_name)
-            @group = target_group[subspec_name] || target_group.new_group(subspec_name)
+            target_group = project.pod_group(group_name)
+            @group = target_group[subgroup_name] || target_group.new_group(subgroup_name)
           end
 
           # @return [PBXNativeTarget] the app host native target that was installed.
@@ -95,7 +95,7 @@ module Pod
           # @return [Pathname] The absolute path of the Info.plist to use for an app host.
           #
           def app_host_info_plist_path
-            project.path.dirname.+(subspec_name).+("#{app_target_label}-Info.plist")
+            project.path.dirname.+(subgroup_name).+("#{app_target_label}-Info.plist")
           end
 
           # @return [String] The deployment target.
