@@ -79,6 +79,15 @@ module Pod
             test_specs_by_native_target.delete_if { |k, _| k.nil? }
           end
 
+          # @return [Hash{PBXNativeTarget => Specification}] a hash where the keys are the app native targets and the value
+          #         an array of all the app specs associated with this native target.
+          end
+
+          # @return [Hash{PBXNativeTarget => Specification}] a hash where the keys are the native targets and the value
+          #         an array of all the non-library specs associated with this native target.
+          #
+          def non_library_specs_by_native_target
+            test_specs_by_native_target.merge(app_specs_by_native_target)
           private
 
           def test_native_target_from_spec(spec)

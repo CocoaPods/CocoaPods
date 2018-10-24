@@ -312,8 +312,8 @@ module Pod
             "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
           end
           resource_paths_by_config = {
-            'Debug' => [paths],
-            'Release' => [paths],
+            'Debug' => paths,
+            'Release' => paths,
           }
           @pod_bundle.stubs(:resource_paths_by_config => resource_paths_by_config)
           @target_integrator.integrate!

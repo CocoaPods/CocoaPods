@@ -286,10 +286,42 @@ module Pod
       support_files_dir + "#{label}-resources.sh"
     end
 
+    # @param  [String] configuration the configuration this path is for.
+    #
+    # @return [Pathname] The absolute path of the copy resources script input file list.
+    #
+    def copy_resources_script_input_files_path(configuration)
+      support_files_dir + "#{label}-resources-#{configuration}-input-files.xcfilelist"
+    end
+
+    # @param  [String] configuration the configuration this path is for.
+    #
+    # @return [Pathname] The absolute path of the copy resources script output file list.
+    #
+    def copy_resources_script_output_files_path(configuration)
+      support_files_dir + "#{label}-resources-#{configuration}-output-files.xcfilelist"
+    end
+
     # @return [Pathname] The absolute path of the embed frameworks script.
     #
     def embed_frameworks_script_path
       support_files_dir + "#{label}-frameworks.sh"
+    end
+
+    # @param  [String] configuration the configuration this path is for.
+    #
+    # @return [Pathname] The absolute path of the embed frameworks script input file list.
+    #
+    def embed_frameworks_script_input_files_path(configuration)
+      support_files_dir + "#{label}-frameworks-#{configuration}-input-files.xcfilelist"
+    end
+
+    # @param  [String] configuration the configuration this path is for.
+    #
+    # @return [Pathname] The absolute path of the embed frameworks script output file list.
+    #
+    def embed_frameworks_script_output_files_path(configuration)
+      support_files_dir + "#{label}-frameworks-#{configuration}-output-files.xcfilelist"
     end
 
     # @return [String] The output file path fo the check manifest lock script.
@@ -336,11 +368,39 @@ module Pod
       "${PODS_ROOT}/#{relative_to_pods_root(copy_resources_script_path)}"
     end
 
+    # @return [String] The path of the copy resources script input file list
+    #         relative to the root of the Pods project.
+    #
+    def copy_resources_script_input_files_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(copy_resources_script_input_files_path('${CONFIGURATION}'))}"
+    end
+
+    # @return [String] The path of the copy resources script output file list
+    #         relative to the root of the Pods project.
+    #
+    def copy_resources_script_output_files_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(copy_resources_script_output_files_path('${CONFIGURATION}'))}"
+    end
+
     # @return [String] The path of the embed frameworks relative to the
     #         root of the Pods project.
     #
     def embed_frameworks_script_relative_path
       "${PODS_ROOT}/#{relative_to_pods_root(embed_frameworks_script_path)}"
+    end
+
+    # @return [String] The path of the embed frameworks script input file list
+    #         relative to the root of the Pods project.
+    #
+    def embed_frameworks_script_input_files_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(embed_frameworks_script_input_files_path('${CONFIGURATION}'))}"
+    end
+
+    # @return [String] The path of the embed frameworks script output file list
+    #         relative to the root of the Pods project.
+    #
+    def embed_frameworks_script_output_files_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(embed_frameworks_script_output_files_path('${CONFIGURATION}'))}"
     end
 
     private

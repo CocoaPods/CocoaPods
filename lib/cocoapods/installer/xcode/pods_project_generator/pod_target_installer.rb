@@ -95,12 +95,13 @@ module Pod
               end
               unless skip_pch?(target.test_specs)
                 target.test_specs.each do |test_spec|
-                  path = target.prefix_header_path_for_test_spec(test_spec)
+                  path = target.prefix_header_path_for_spec(test_spec)
                   test_spec_consumer = test_spec.consumer(target.platform)
                   test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
                   create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
                 end
               end
+                  path = target.prefix_header_path_for_pec(app_spec)
               create_dummy_source(native_target)
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,
@@ -310,7 +311,7 @@ module Pod
               # Generate vanilla Info.plist for test target similar to the one Xcode generates for new test target.
               # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
               # defined in podspec.
-              create_info_plist_file(target.info_plist_path_for_test_spec(test_spec), test_native_target, '1.0', target.platform, :bndl)
+              create_info_plist_file(target.info_plist_path_for_spec(test_spec), test_native_target, '1.0', target.platform, :bndl)
 
               test_native_target
             end
@@ -481,7 +482,7 @@ module Pod
           # @return [void]
           #
           def create_test_target_copy_resources_script(test_spec)
-            path = target.copy_resources_script_path_for_test_spec(test_spec)
+            path = target.copy_resources_script_path_for_spec(test_spec)
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
@@ -503,7 +504,7 @@ module Pod
           # @return [void]
           #
           def create_test_target_embed_frameworks_script(test_spec)
-            path = target.embed_frameworks_script_path_for_test_spec(test_spec)
+            path = target.embed_frameworks_script_path_for_spec(test_spec)
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
@@ -741,18 +742,6 @@ module Pod
             pod_name = target.pod_name
             dir = target.support_files_dir
             project.pod_support_files_group(pod_name, dir)
-          end
-
-          # @param [String] name
-          #        The name of the app host.
-
-          # @param [Symbol] test_type
-          #        The test type this Info.plist path is for.
-          #
-          # @return [Pathname] The absolute path of the Info.plist to use for an app host.
-          #
-          def app_host_info_plist_path_for_test_type(name, test_type)
-            project.path.dirname.+("#{name}/#{target.app_host_label(test_type)}-Info.plist")
           end
 
           def test_native_target_from_spec_consumer(spec_consumer, test_native_targets)

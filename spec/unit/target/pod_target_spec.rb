@@ -571,19 +571,19 @@ module Pod
         end
 
         it 'returns correct copy resources script path for test unit test type' do
-          @test_pod_target.copy_resources_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources.sh'
+          @test_pod_target.copy_resources_script_path_for_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources.sh'
         end
 
         it 'returns correct embed frameworks script path for test unit test type' do
-          @test_pod_target.embed_frameworks_script_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks.sh'
+          @test_pod_target.embed_frameworks_script_path_for_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks.sh'
         end
 
         it 'returns correct prefix header path for test unit test type' do
-          @test_pod_target.prefix_header_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
+          @test_pod_target.prefix_header_path_for_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
         end
 
         it 'returns correct path for info plist for unit test type' do
-          @test_pod_target.info_plist_path_for_test_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
+          @test_pod_target.info_plist_path_for_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
         end
 
         it 'returns the correct resource paths' do

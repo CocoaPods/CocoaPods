@@ -383,7 +383,7 @@ module Pod
               it 'creates embed frameworks script for test target' do
                 @watermelon_pod_target.stubs(:requires_frameworks? => true)
                 @installer.install!
-                script_path = @watermelon_pod_target.embed_frameworks_script_path_for_test_spec(@watermelon_pod_target.test_specs.first)
+                script_path = @watermelon_pod_target.embed_frameworks_script_path_for_spec(@watermelon_pod_target.test_specs.first)
                 script = script_path.read
                 @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
@@ -396,7 +396,7 @@ module Pod
 
               it 'adds the resources bundles for to the copy resources script for test target' do
                 @installer.install!
-                script_path = @watermelon_pod_target.copy_resources_script_path_for_test_spec(@watermelon_spec.test_specs.first)
+                script_path = @watermelon_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.test_specs.first)
                 script = script_path.read
                 @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc

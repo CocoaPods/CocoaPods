@@ -356,42 +356,70 @@ module Pod
       "#{label}-#{test_spec.test_type.capitalize}-#{test_spec.name.split('/')[1..-1].join('-')}"
     end
 
-    # @param  [Specification] test_spec
-    #         The test spec this embed frameworks script path is for.
-    #
-    # @return [Pathname] The absolute path of the copy resources script for the given test type.
-    #
-    def copy_resources_script_path_for_test_spec(test_spec)
-      support_files_dir + "#{test_target_label(test_spec)}-resources.sh"
+    def non_library_spec_label(spec)
+      case spec.spec_type
+      when :test then test_target_label(spec)
+      when :app then app_target_label(spec)
+      else raise ArgumentError, "Unhandled spec type #{spec.spec_type.inspect} for #{spec.inspect}"
+      end
     end
 
-    # @param  [Specification] test_spec
-    #         The test spec this embed frameworks script path is for.
+    # @param  [Specification] spec
+    #         The spec this copy resources script path is for.
     #
-    # @return [Pathname] The absolute path of the embed frameworks script for the given test type.
+    # @return [Pathname] The absolute path of the copy resources script for the given spec.
     #
-    def embed_frameworks_script_path_for_test_spec(test_spec)
-      support_files_dir + "#{test_target_label(test_spec)}-frameworks.sh"
+    def copy_resources_script_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-resources.sh"
     end
 
-    # @param  [Specification] test_spec
-    #         The test spec this Info.plist path is for.
+    # @param  [Specification] spec
+    #         The spec this copy resources script path is for.
+    # @return [Pathname] The absolute path of the copy resources script input file list for the given spec.
+    def copy_resources_script_input_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-resources-input-files.xcfilelist"
+    # @param  [Specification] spec
+    #         The spec this copy resources script path is for.
     #
-    # @return [Pathname] The absolute path of the Info.plist for the given test type.
+    # @return [Pathname] The absolute path of the copy resources script output file list for the given spec.
     #
-    def info_plist_path_for_test_spec(test_spec)
-      support_files_dir + "#{test_target_label(test_spec)}-Info.plist"
+    def copy_resources_script_output_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-resources-output-files.xcfilelist"
     end
 
-    # @param  [Specification] test_spec
-    #         The test spec this prefix header path is for.
+    # @param  [Specification] spec
+    #         The spec this embed frameworks script path is for.
+    # @return [Pathname] The absolute path of the embed frameworks script for the given spec.
+    def embed_frameworks_script_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-frameworks.sh"
+    # @param  [Specification] spec
+    #         The spec this embed frameworks script path is for.
     #
-    # @return [Pathname] the absolute path of the prefix header file for the given test type.
+    # @return [Pathname] The absolute path of the embed frameworks script input file list for the given spec.
     #
-    def prefix_header_path_for_test_spec(test_spec)
-      support_files_dir + "#{test_target_label(test_spec)}-prefix.pch"
+    def embed_frameworks_script_input_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-frameworks-input-files.xcfilelist"
     end
 
+    # @param  [Specification] spec
+    #         The spec this embed frameworks script path is for.
+    # @return [Pathname] The absolute path of the embed frameworks script output file list for the given spec.
+    def embed_frameworks_script_output_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-frameworks-output-files.xcfilelist"
+    # @param  [Specification] spec
+    #         The spec this Info.plist path is for.
+    #
+    # @return [Pathname] The absolute path of the Info.plist for the given spec.
+    #
+    def info_plist_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-Info.plist"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this prefix header path is for.
+    # @return [Pathname] the absolute path of the prefix header file for the given spec.
+    def prefix_header_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-prefix.pch"
     # @return [Array<String>] The names of the Pods on which this target
     #         depends.
     #
