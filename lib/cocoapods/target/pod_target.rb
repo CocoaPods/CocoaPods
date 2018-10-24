@@ -379,7 +379,7 @@ module Pod
     # @return [String] The derived name of the test target.
     #
     def subspec_label(subspec)
-      raise ArgumentError, 'Must not be a root spec' unless subspec.root?
+      raise ArgumentError, 'Must not be a root spec' if subspec.root?
       subspec.name.split('/')[1..-1].join('-').to_s
     end
 
