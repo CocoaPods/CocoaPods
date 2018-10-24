@@ -92,7 +92,8 @@ module Pod
         @installer.unstub(:generate_pods_project)
         generator = @installer.send(:create_generator)
         @installer.stubs(:create_generator).returns(generator)
-        generator.stubs(:generate!)
+        generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, [])
+        generator.stubs(:generate!).returns(generator_result)
         generator.stubs(:share_development_pod_schemes)
 
         hooks = sequence('hooks')
