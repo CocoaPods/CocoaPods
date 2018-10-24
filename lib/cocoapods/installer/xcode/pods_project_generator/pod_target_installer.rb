@@ -387,7 +387,7 @@ module Pod
                 configuration.build_settings.merge!(custom_build_settings)
 
                 # target_installer will automatically add an empty `OTHER_LDFLAGS`. For app
-                # targets those are set via a test xcconfig file instead.
+                # targets those are set via an app xcconfig file instead.
                 configuration.build_settings.delete('OTHER_LDFLAGS')
                 # target_installer will automatically set the product name to the module name if the target
                 # requires frameworks. For apps we always use the app target name as the product name

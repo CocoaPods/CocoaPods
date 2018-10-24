@@ -838,12 +838,12 @@ module Pod
 
         # @return [Array<Sandbox::FileAccessor>]
         define_build_settings_method :file_accessors, :memoized => true do
-          target.file_accessors.select { |c| c.spec.spec_type == @xcconfig_spec_type }
+          target.file_accessors.select { |fa| fa.spec.spec_type == @xcconfig_spec_type }
         end
 
         # @return [Array<Specification::Consumer>]
         define_build_settings_method :spec_consumers, :memoized => true do
-          target.spec_consumers.select { |c| c.spec.spec_type == @xcconfig_spec_type }
+          target.spec_consumers.select { |fa| fa.spec.spec_type == @xcconfig_spec_type }
         end
 
         #-------------------------------------------------------------------------#

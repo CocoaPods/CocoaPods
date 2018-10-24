@@ -40,7 +40,7 @@ module Pod
 
           # @return [Array<PBXNativeTarget>] app_native_targets
           #         The app native targets that were produced for this target. Can be empty if there were no app
-          #         native targets created (e.g. no test specs present).
+          #         native targets created (e.g. no app specs present).
           #
           attr_reader :app_native_targets
 
