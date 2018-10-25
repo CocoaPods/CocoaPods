@@ -38,7 +38,7 @@ module Pod
       #
       #   @note this option defaults to $2.
       #
-      #   @return the $1 $0 for installation.
+      #   @return [Boolean] the $1 $0 for installation.
       #
       def self.option(name, default, boolean: true)
         name = name.to_s
@@ -101,14 +101,75 @@ module Pod
         to_h.hash
       end
 
+      # Whether to clean the sources of the pods during installation
+      #
+      # Cleaning removes any files not used by the pod as specified by the podspec and the platforms
+      # that the project supports
+      #
+      # @see {PodSourceInstaller#clean!}
+      #
       option :clean, true
+
+      # Whether to deduplicate pod targets
+      #
+      # Target deduplication adds suffixes to pod targets for the cases where a pod is included
+      # in multiple targets that have different requirements. For example, a pod named 'MyPod' with a subspec 'SubA'
+      # that is included in two targets as follows:
+      #
+      #     target 'MyTargetA' do
+      #       pod 'MyPod/SubA'
+      #     end
+      #
+      #     target 'MyTargetB' do
+      #       pod 'MyPod'
+      #     end
+      #
+      # will result in two Pod targets: `MyPod` and `MyPod-SubA`
+      #
       option :deduplicate_targets, true
+
+      # Whether to generate deterministic UUIDs when creating the Pods project
+      #
+      # @see {Xcodeproj#generate_uuid}
+      #
       option :deterministic_uuids, true
+
+      # Whether to integrate the installed pods into the user project
+      #
+      # If set to false, Pods will be downloaded and installed to the `Pods/` directory
+      # but they will not be integrated into your project.
+      #
       option :integrate_targets, true
+
+      # Whether to lock the source files of pods. Xcode will prompt to unlock the files when attempting to modify
+      # their contents
+      #
+      # @note There is a performance penalty to locking the pods during installation. If this is significantly
+      #       impacting the duration of `pod install` for your project, you can try setting this to `false`
+      #
       option :lock_pod_sources, true
+
+      # Whether to emit a warning when multiple sources contain a Pod with the same name and version
+      #
       option :warn_for_multiple_pod_sources, true
+
+      # Whether to share Xcode schemes for development pods.
+      #
+      # Schemes for development pods are created automatically but are not shared by default.
+      #
       option :share_schemes_for_development_pods, false
+
+      # Whether to disable the input & output paths of the CocoaPods script phases (Copy Frameworks & Copy Resources)
+      #
+      # @see https://github.com/CocoaPods/CocoaPods/issues/8073
+      #
       option :disable_input_output_paths, false
+
+      # Whether to preserve the file structure of all Pods, including externally sourced pods.
+      #
+      # By default, the file structure of Pod sources is preserved only for development pods. Setting
+      # `:preserve_pod_file_structure` to `true` will _always_ preserve the file structure.
+      #
       option :preserve_pod_file_structure, false
 
       module Mixin
