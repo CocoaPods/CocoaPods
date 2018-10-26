@@ -605,8 +605,8 @@ module Pod
         end
 
         it 'returns correct whether a test spec uses Swift or not' do
-          @test_pod_target.uses_swift_for_test_spec?(@test_pod_target.test_specs[0]).should.be.true
-          @test_pod_target.uses_swift_for_test_spec?(@test_pod_target.test_specs[1]).should.be.false
+          @test_pod_target.uses_swift_for_non_library_spec?(@test_pod_target.test_specs[0]).should.be.true
+          @test_pod_target.uses_swift_for_non_library_spec?(@test_pod_target.test_specs[1]).should.be.false
         end
       end
     end

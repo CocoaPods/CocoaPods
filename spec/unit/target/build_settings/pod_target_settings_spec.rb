@@ -9,7 +9,7 @@ module Pod
             @monkey_spec = fixture_spec('monkey/monkey.podspec')
             @monkey_pod_target = fixture_pod_target(@monkey_spec)
 
-            vspec = stub(:test_specification? => false)
+            vspec = stub(:library_specification? => true, :spec_type => :library)
             consumer = stub(
               "Spec Consumer (#{vspec} iOS)",
               :spec => vspec,
@@ -192,7 +192,7 @@ module Pod
           end
 
           it 'does propagate framework or libraries' do
-            spec = stub('spec', :test_specification? => false)
+            spec = stub('spec', :library_specification? => true, :spec_type => :library)
             consumer = stub('consumer',
                             :libraries => ['xml2'],
                             :frameworks => ['XCTest'],

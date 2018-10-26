@@ -208,15 +208,21 @@ module Pod
           describe 'Private Helpers' do
             describe '#file_accessors' do
               it 'returns the file accessors' do
-                pod_target_1 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [stub('Spec', :test_specification? => false)], [fixture_target_definition], [fixture_file_accessor('banana-lib/BananaLib.podspec')])
-                pod_target_2 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [stub('Spec', :test_specification? => false)], [fixture_target_definition], [fixture_file_accessor('banana-lib/BananaLib.podspec')])
+                pod_target_1 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios,
+                                             [stub('Spec', :test_specification? => false, :library_specification? => true, :app_specification? => false, :spec_type => :library)],
+                                             [fixture_target_definition],
+                                             [fixture_file_accessor('banana-lib/BananaLib.podspec')])
+                pod_target_2 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios,
+                                             [stub('Spec', :test_specification? => false, :library_specification? => true, :app_specification? => false, :spec_type => :library)],
+                                             [fixture_target_definition],
+                                             [fixture_file_accessor('banana-lib/BananaLib.podspec')])
                 installer = FileReferencesInstaller.new(config.sandbox, [pod_target_1, pod_target_2], @project)
                 roots = installer.send(:file_accessors).map { |fa| fa.path_list.root }
                 roots.should == [fixture('banana-lib'), fixture('banana-lib')]
               end
 
               it 'handles pods without file accessors' do
-                pod_target_1 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [stub('Spec', :test_specification? => false)], [fixture_target_definition], [])
+                pod_target_1 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [stub('Spec', :test_specification? => false, :library_specification? => true, :app_specification? => false, :spec_type => :library)], [fixture_target_definition], [])
                 installer = FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
                 installer.send(:file_accessors).should == []
               end

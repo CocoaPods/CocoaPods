@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Adds app spec project integration.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
+
 * Remove contraction from docs to fix rendering on the website.  
   [stevemoser](https://github.com/stevemoser)
   [#8131](https://github.com/CocoaPods/CocoaPods/pull/8131)

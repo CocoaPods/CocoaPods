@@ -12,14 +12,14 @@ module Pod
       #
       attr_reader :source
 
-      # @return [Bool] whether this resolved specification is only used by tests.
+      # @return [Bool] whether this resolved specification is by non-library targets.
       #
-      attr_reader :used_by_tests_only
-      alias used_by_tests_only? used_by_tests_only
+      attr_reader :used_by_non_library_targets_only
+      alias used_by_non_library_targets_only? used_by_non_library_targets_only
 
-      def initialize(spec, used_by_tests_only, source)
+      def initialize(spec, used_by_non_library_targets_only, source)
         @spec = spec
-        @used_by_tests_only = used_by_tests_only
+        @used_by_non_library_targets_only = used_by_non_library_targets_only
         @source = source
       end
 
@@ -33,8 +33,8 @@ module Pod
 
       def ==(other)
         self.class == other.class &&
-          spec == other.spec &&
-          used_by_tests_only? == other.used_by_tests_only?
+            spec == other.spec &&
+            used_by_non_library_targets_only? == other.used_by_non_library_targets_only?
       end
     end
   end

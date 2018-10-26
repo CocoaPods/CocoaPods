@@ -150,7 +150,7 @@ module Pod
                 added_build_headers = false
                 added_public_headers = false
 
-                file_accessors = pod_target.file_accessors.reject { |fa| fa.spec.test_specification? }
+                file_accessors = pod_target.file_accessors.reject { |fa| fa.spec.non_library_specification? }
                 file_accessors.each do |file_accessor|
                   # Private headers will always end up in Pods/Headers/Private/PodA/*.h
                   # This will allow for `""` imports to work.

@@ -362,8 +362,9 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
                                                                      [], Pod::Installer::Analyzer::SpecsState.new, [], [],
                                                                      Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
-          @spec = stub(:name => 'Spec', :test_specification? => false)
+          @spec = stub(:name => 'Spec', :test_specification? => false, :library_specification? => true, :app_specification? => false)
           @spec.stubs(:root => @spec)
+          @spec.stubs(:spec_type).returns(:library)
           @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
                                         [fixture_target_definition], nil)]
           @installer.stubs(:analysis_result).returns(@analysis_result)

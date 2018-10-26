@@ -109,10 +109,10 @@ module Pod
           resolver_specs_by_target[target] = vertices.
             map do |vertex|
               payload = vertex.payload
-              test_only = (!explicit_dependencies.include?(vertex.name) || payload.test_specification?) &&
+              non_library = (!explicit_dependencies.include?(vertex.name) || payload.test_specification? || payload.app_specification?) &&
                 (vertex.recursive_predecessors & vertices).all? { |v| !explicit_dependencies.include?(v.name) || v.payload.test_specification? }
               spec_source = payload.respond_to?(:spec_source) && payload.spec_source
-              ResolverSpecification.new(payload, test_only, spec_source)
+              ResolverSpecification.new(payload, non_library, spec_source)
             end.
             sort_by(&:name)
         end

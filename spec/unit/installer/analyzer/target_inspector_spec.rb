@@ -303,7 +303,7 @@ module Pod
         target_inspector.send(:compute_swift_version_from_targets, user_targets).should.equal '2.3'
       end
 
-      it 'returns nil if the version is not defined' do
+      it 'returns default if the version is not defined' do
         user_project = Xcodeproj::Project.new('path')
         user_project.build_configuration_list.set_setting('SWIFT_VERSION', nil)
         target = user_project.new_target(:application, 'Target', :ios)
@@ -313,7 +313,7 @@ module Pod
         user_targets = [target]
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
-        target_inspector.send(:compute_swift_version_from_targets, user_targets).should.equal nil
+        target_inspector.send(:compute_swift_version_from_targets, user_targets).should.nil?
       end
 
       it 'raises if the user defined SWIFT_VERSION contains multiple unique versions are defined' do

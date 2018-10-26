@@ -11,6 +11,10 @@ module Pod
         #
         attr_reader :test_specs
 
+        # @return [Array<Specification>] the app specs for the target
+        #
+        attr_reader :app_specs
+
         # @return [Platform] the platform
         #
         attr_reader :platform
@@ -30,19 +34,21 @@ module Pod
         #
         # @param [Array<Specification>] specs      @see #specs
         # @param [Array<Specification>] test_specs @see #test_specs
+        # @param [Array<Specification>] app_specs  @see #app_specs
         # @param [Platform] platform               @see #platform
         # @param [Bool] requires_frameworks        @see #requires_frameworks?
         #
-        def initialize(specs, test_specs, platform, requires_frameworks = false)
+        def initialize(specs, test_specs, app_specs, platform, requires_frameworks = false)
           @specs = specs
           @test_specs = test_specs
+          @app_specs = app_specs
           @platform = platform
           @requires_frameworks = requires_frameworks
           @hash = [specs, platform, requires_frameworks].hash
         end
 
         # @note Test specs are intentionally not included as part of the equality for pod variants since a
-        #       pod variant should not be affected by the number of test specs included.
+        #       pod variant should not be affected by the number of test nor app specs included.
         #
         # @return [Bool] whether the {PodVariant} is equal to another taking all
         #         all their attributes into account

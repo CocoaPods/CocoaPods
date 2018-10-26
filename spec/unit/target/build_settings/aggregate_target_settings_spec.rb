@@ -203,9 +203,9 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
           end
 
-          it 'does propagate framework or libraries from a non test specification to an aggregate target' do
+          it 'does propagate framework or libraries from a non test specification to an aggregate targetdoes propagate framework or libraries from a non test specification to an aggregate target' do
             target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
-            spec = stub('spec', :test_specification? => false)
+            spec = stub('spec', :library_specification? => true, :spec_type => :library)
             consumer = stub('consumer',
                             :libraries => ['xml2'],
                             :frameworks => ['XCTest'],
@@ -445,7 +445,7 @@ module Pod
 
           it 'does propagate framework or libraries from a non test specification to an aggregate target' do
             target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
-            spec = stub('spec', :test_specification? => false)
+            spec = stub('spec', :library_specification? => true, :spec_type => :library)
             consumer = stub('consumer',
                             :libraries => ['xml2'],
                             :frameworks => ['XCTest'],
@@ -487,7 +487,7 @@ module Pod
 
           it 'does propagate system frameworks or system libraries from a non test specification to an aggregate target that uses static libraries' do
             target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
-            spec = stub('spec', :test_specification? => false)
+            spec = stub('spec', :library_specification? => true, :spec_type => :library)
             consumer = stub('consumer',
                             :libraries => ['xml2'],
                             :frameworks => ['XCTest'],
@@ -529,7 +529,7 @@ module Pod
 
           it 'does propagate framework or libraries from a non test specification static framework to an aggregate target' do
             target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
-            spec = stub('spec', :test_specification? => false)
+            spec = stub('spec', :library_specification? => true, :spec_type => :library)
             consumer = stub('consumer',
                             :libraries => ['xml2'],
                             :frameworks => ['XCTest'],
@@ -659,7 +659,7 @@ module Pod
             it 'adds values from all subspecs' do
               @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
               consumer_c = mock('consumer_c', :user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' },
-                                              :spec => mock(:test_specification? => false), :frameworks => [],
+                                              :spec => mock(:spec_type => :library), :frameworks => [],
                                               :libraries => [], :weak_frameworks => [])
               @pod_targets[1].stubs(:spec_consumers).returns([@consumer_b, consumer_c])
               @xcconfig = @generator.generate
