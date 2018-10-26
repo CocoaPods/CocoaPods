@@ -206,15 +206,15 @@ module Pod
     #
     def generate_pods_project(generator = create_generator)
       UI.section 'Generating Pods project' do
-        @target_installation_results = generator.generate!
-        @pods_project = generator.project
+        pod_project_generation_result = generator.generate!
+        @target_installation_results = pod_project_generation_result.target_installation_results
+        @pods_project = pod_project_generation_result.project
         run_podfile_post_install_hooks
-        generator.write
-        generator.share_development_pod_schemes
+        generator.write(@pods_project, @target_installation_results)
+        generator.share_development_pod_schemes(@pods_project)
         write_lockfiles
       end
     end
-
     #-------------------------------------------------------------------------#
 
     public
