@@ -15,7 +15,7 @@
     "tag": "0.1.0"
   },
   "source_files": "TestLib/Classes/**/*",
-  "swift_version": "4",
+  "swift_versions": "4",
   "testspecs": [
     {
       "name": "UnitTests1",
