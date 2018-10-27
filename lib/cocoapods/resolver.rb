@@ -504,7 +504,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
     #
     # @param  [Dependency] dependency
     #
-    # @param  [Specification] specification
+    # @param  [Specification] spec
     #
     # @return [Bool]
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)

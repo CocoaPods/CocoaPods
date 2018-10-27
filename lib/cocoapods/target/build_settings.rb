@@ -476,8 +476,8 @@ module Pod
         # @param [PodTarget] target
         #   see {#target}
         #
-        # @param [Specification] test_spec
-        #  see {#test_spec}
+        # @param [Specification] non_library_spec
+        #  see {#non_library_spec}
         #
         def initialize(target, non_library_spec = nil)
           super(target)

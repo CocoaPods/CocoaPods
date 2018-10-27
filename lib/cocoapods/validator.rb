@@ -971,7 +971,7 @@ module Pod
     # @param  [Platform] platform
     #         The platform to check
     #
-    # @param  [Specification] specification
+    # @param  [Specification] spec
     #         The specification which must support the provided platform
     #
     # @return [Bool] Whether the platform is supported by the specification
