@@ -95,9 +95,8 @@ module Pod
             end
 
             it 'links the public headers meant for the user for a vendored framework' do
-              Target.any_instance.stubs(:requires_frameworks?).returns(true)
-              pod_target_one = fixture_pod_target('banana-lib/BananaLib.podspec')
-              pod_target_two = fixture_pod_target('monkey/monkey.podspec')
+              pod_target_one = fixture_pod_target('banana-lib/BananaLib.podspec', true)
+              pod_target_two = fixture_pod_target('monkey/monkey.podspec', true)
               project = Project.new(config.sandbox.project_path)
               project.add_pod_group('BananaLib', fixture('banana-lib'))
               project.add_pod_group('monkey', fixture('monkey'))
@@ -115,7 +114,7 @@ module Pod
             end
 
             it 'does not link public headers from vendored framework, when frameworks required' do
-              @pod_target.stubs(:requires_frameworks?).returns(true)
+              @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
               @installer.install!
               headers_root = config.sandbox.public_headers.root
               framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'

@@ -60,7 +60,6 @@
 				B47968EF64ED4169C658E405 /* Pods-AFNetworking Example.debug.xcconfig */,
 				694801CD9796D99F3BDD0D95 /* Pods-AFNetworking Example.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -117,7 +116,6 @@
 				F8129C061591061B009BFE23 /* Supporting Files */,
 			);
 			name = Classes;
-			path = "AFNetworking-Mac-Example";
 			sourceTree = "<group>";
 		};
 		F8129C061591061B009BFE23 /* Supporting Files */ = {

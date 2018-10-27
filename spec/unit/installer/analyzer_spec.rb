@@ -1180,8 +1180,8 @@ module Pod
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/Release/JSONKit',
-            'Pods-Sample Extensions Project/Release/monkey',
             'Pods-Sample Extensions Project/Release/matryoshka-Bar-Foo',
+            'Pods-Sample Extensions Project/Release/monkey',
             'Pods-Today Extension/Release/matryoshka-Bar',
             'Pods-Today Extension/Release/monkey',
           ].sort

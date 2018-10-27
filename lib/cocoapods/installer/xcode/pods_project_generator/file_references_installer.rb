@@ -144,7 +144,7 @@ module Pod
                 # frameworks, whose headers are included inside the built
                 # framework. Those headers do not need to be linked from the
                 # sandbox.
-                next if pod_target.requires_frameworks? && pod_target.should_build?
+                next if pod_target.build_as_framework? && pod_target.should_build?
 
                 headers_sandbox = Pathname.new(pod_target.pod_name)
                 added_build_headers = false

@@ -94,7 +94,6 @@
 				5723FFCCA3CB8D6E467F174B /* Pods-AFNetworking iOS Example.debug.xcconfig */,
 				0678DF4121D5956B85653CB1 /* Pods-AFNetworking iOS Example.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -182,7 +181,6 @@
 				F8E4696B1395739D00DB05C8 /* Supporting Files */,
 			);
 			name = Classes;
-			path = AFNetworkingExample;
 			sourceTree = "<group>";
 		};
 		F8E4696B1395739D00DB05C8 /* Supporting Files */ = {
@@ -214,7 +212,6 @@
 				F8FA94CD150F094D00ED4EAD /* profile-image-placeholder@2x.png */,
 			);
 			name = Images;
-			path = AFNetworkingExample/Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

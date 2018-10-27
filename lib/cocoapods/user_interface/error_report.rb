@@ -117,6 +117,9 @@ EOS
           inspector = GhInspector::Inspector.new 'cocoapods', 'cocoapods'
           message_delegate = UserInterface::InspectorReporter.new
           inspector.search_exception exception, message_delegate
+        rescue => e
+          warn "Searching for inspections failed: #{e}"
+          nil
         end
 
         private

@@ -324,7 +324,7 @@ module Pod
             build_phase = native_target.frameworks_build_phase
 
             # Find and delete possible reference for the other product type
-            old_product_name = target.requires_frameworks? ? target.static_library_name : target.framework_name
+            old_product_name = target.build_as_framework? ? target.static_library_name : target.framework_name
             old_product_ref = frameworks.files.find { |f| f.path == old_product_name }
             if old_product_ref.present?
               UI.message("Removing old Pod product reference #{old_product_name} from project.")
