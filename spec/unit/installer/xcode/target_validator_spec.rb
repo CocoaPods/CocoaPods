@@ -17,15 +17,9 @@ module Pod
 
         # @return [AnalysisResult]
         #
-        def create_validator(sandbox, podfile, lockfile, integrate_targets = false)
-          installation_options = Installer::InstallationOptions.new.tap do |options|
-            options.integrate_targets = integrate_targets
-          end
-
+        def create_validator(sandbox, podfile, lockfile)
           sandbox.specifications_root.mkpath
-          @analyzer = Analyzer.new(sandbox, podfile, lockfile).tap do |analyzer|
-            analyzer.installation_options = installation_options
-          end
+          @analyzer = Analyzer.new(sandbox, podfile, lockfile, nil, true, false)
           result = @analyzer.analyze
 
           aggregate_targets = result.targets
@@ -46,6 +40,7 @@ module Pod
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               project 'SampleProject/SampleProject'
               pod 'BananaLib', :path => (fixture_path + 'banana-lib').to_s
               target 'SampleProject'
@@ -65,6 +60,7 @@ module Pod
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               project 'SampleProject/SampleProject'
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
@@ -85,6 +81,7 @@ module Pod
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               project 'SampleProject/SampleProject'
               use_frameworks!
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
@@ -116,7 +113,7 @@ module Pod
             end
             lockfile = generate_lockfile
 
-            @validator = create_validator(config.sandbox, podfile, lockfile, true)
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             should.not.raise(Informative) { @validator.validate! }
           end
         end
@@ -270,6 +267,7 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               use_frameworks!
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
@@ -300,6 +298,7 @@ module Pod
               project 'SampleProject/SampleProject'
               use_frameworks!
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
               target 'SampleProject'
@@ -327,6 +326,7 @@ module Pod
               project 'SampleProject/SampleProject'
               use_frameworks!
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
               target 'SampleProject' do
@@ -347,6 +347,7 @@ module Pod
               project 'SampleProject/SampleProject'
               use_frameworks!
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
               target 'SampleProject' do
                 current_target_definition.swift_version = '3.0'
@@ -368,6 +369,7 @@ module Pod
               project 'SampleProject/SampleProject'
               use_frameworks!
               platform :ios, '8.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
               target 'SampleProject' do
@@ -391,6 +393,7 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
               supports_swift_versions '< 3.0'
               target 'SampleProject'
@@ -413,6 +416,7 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
               supports_swift_versions '> 3.0'
               target 'SampleProject'
@@ -432,6 +436,7 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s, :modular_headers => true
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s, :modular_headers => false
               target 'SampleProject'
@@ -455,6 +460,7 @@ module Pod
             podfile = Podfile.new do
               project 'SampleProject/SampleProject'
               platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s, :modular_headers => true
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
               target 'SampleProject' do

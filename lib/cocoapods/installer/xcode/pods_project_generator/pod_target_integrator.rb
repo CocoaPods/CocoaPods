@@ -10,18 +10,19 @@ module Pod
           #
           attr_reader :target_installation_result
 
-          # @return [InstallationOptions] the installation options from the Podfile.
+          # @return [Boolean] whether to use input/output paths for build phase scripts
           #
-          attr_reader :installation_options
+          attr_reader :use_input_output_paths
+          alias use_input_output_paths? use_input_output_paths
 
           # Initialize a new instance
           #
           # @param  [TargetInstallationResult] target_installation_result @see #target_installation_result
-          # @param  [InstallationOptions] installation_options @see #installation_options
+          # @param  [Boolean] use_input_output_paths @see #use_input_output_paths
           #
-          def initialize(target_installation_result, installation_options)
+          def initialize(target_installation_result, use_input_output_paths: true)
             @target_installation_result = target_installation_result
-            @installation_options = installation_options
+            @use_input_output_paths = use_input_output_paths
           end
 
           # Integrates the pod target.
@@ -73,7 +74,7 @@ module Pod
                           end
             input_paths = []
             output_paths = []
-            unless installation_options.disable_input_output_paths?
+            if use_input_output_paths
               dependent_targets = if spec.test_specification?
                                     target.dependent_targets_for_test_spec(spec)
                                   else
@@ -106,7 +107,7 @@ module Pod
                           end
             input_paths = []
             output_paths = []
-            unless installation_options.disable_input_output_paths?
+            if use_input_output_paths?
               dependent_targets = if spec.test_specification?
                                     target.dependent_targets_for_test_spec(spec)
                                   else
@@ -136,7 +137,7 @@ module Pod
             puts "script_path : #{script_path}"
             input_paths = []
             output_paths = []
-            unless installation_options.disable_input_output_paths?
+            if use_input_output_paths
               framework_paths = target.dependent_targets_for_app_spec(app_spec).flat_map do |dependent_target|
                 spec_paths_to_include = dependent_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if dependent_target == target

@@ -1,3 +1,5 @@
+require 'cocoapods/podfile'
+
 module Pod
   class Installer
     # Analyzes the Podfile, the Lockfile, and the sandbox manifest to generate
@@ -5,9 +7,6 @@ module Pod
     #
     class Analyzer
       include Config::Mixin
-      include InstallationOptions::Mixin
-
-      delegate_installation_options { podfile }
 
       autoload :AnalysisResult,            'cocoapods/installer/analyzer/analysis_result'
       autoload :LockingDependencyAnalyzer, 'cocoapods/installer/analyzer/locking_dependency_analyzer'
@@ -51,6 +50,10 @@ module Pod
       #
       attr_reader :pods_to_update
 
+      # @return [InstallationOptions] the installation options specified by the Podfile
+      #
+      attr_reader :installation_options
+
       # Initialize a new instance
       #
       # @param  [Sandbox] sandbox @see #sandbox
@@ -68,6 +71,7 @@ module Pod
         @plugin_sources = plugin_sources
         @has_dependencies = has_dependencies
         @pods_to_update = pods_to_update
+        @installation_options = podfile.installation_options
         @podfile_dependency_cache = PodfileDependencyCache.from_podfile(podfile)
         @result = nil
       end
