@@ -52,8 +52,8 @@ module Pod
                                              false)
             installer.install!
             @project.pod_group('Subgroup')[name].files.map(&:name).sort.should == [
-                'AppHost-PodName-iOS-Unit-Tests-Info.plist',
-                'LaunchScreen.storyboard',
+              'AppHost-PodName-iOS-Unit-Tests-Info.plist',
+              'LaunchScreen.storyboard',
             ]
           end
 
