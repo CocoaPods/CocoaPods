@@ -33,6 +33,10 @@ module Pod
           #
           attr_reader :app_target_label
 
+          # @return [Boolean] whether the app host installer should add main
+          #
+          attr_reader :add_main
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
@@ -41,14 +45,16 @@ module Pod
           # @param [String] subgroup_name @see #subgroup_name
           # @param [String] group_name @see #group_name
           # @param [String] app_target_label see #app_target_label
+          # @param [Boolean] add_main see #add_main
           #
-          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label)
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main = true)
             @sandbox = sandbox
             @project = project
             @platform = platform
             @subgroup_name = subgroup_name
             @group_name = group_name
             @app_target_label = app_target_label
+            @add_main = add_main
             target_group = project.pod_group(group_name)
             @group = target_group[subgroup_name] || target_group.new_group(subgroup_name)
           end
@@ -66,7 +72,8 @@ module Pod
               configuration.build_settings['CURRENT_PROJECT_VERSION'] = '1'
             end
 
-            Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, app_target_label)
+
+            Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, app_target_label) if add_main
             Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, app_target_label) if platform == :ios
             additional_entries = platform == :ios ? ADDITIONAL_IOS_INFO_PLIST_ENTRIES : {}
             create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
