@@ -48,7 +48,8 @@ module Pod
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
                                              name,
                                              'Subgroup',
-                                             name)
+                                             name,
+                                             false)
             installer.install!
             @project.pod_group('Subgroup')[name].files.map(&:name).sort.should == [
                 'AppHost-PodName-iOS-Unit-Tests-Info.plist',
