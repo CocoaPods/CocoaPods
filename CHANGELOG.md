@@ -16,10 +16,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Derek Ostrander](https://github.com/dostrander)
   [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
 
+* Don't add main for app specs.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8235](https://github.com/CocoaPods/CocoaPods/pull/8235)
+
 * Add documentation for the Podfile installation options  
   [Eric Amorde](https://github.com/amorde)
   [#8198](https://github.com/CocoaPods/CocoaPods/issues/8198)
   [guides.cocoapods.org #142](https://github.com/CocoaPods/guides.cocoapods.org/issues/142)
+  
+* Adds app spec project integration.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
+
 
 * None.  
 
