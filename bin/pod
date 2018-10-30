@@ -35,7 +35,7 @@ STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
 
 require 'cocoapods'
 
-if profile_filename = ENV['PROFILE']
+if profile_filename = ENV['COCOAPODS_PROFILE']
   require 'ruby-prof'
   reporter =
     case (profile_extname = File.extname(profile_filename))
