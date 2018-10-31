@@ -8,6 +8,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Multiple Swift versions support  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8191](https://github.com/CocoaPods/CocoaPods/issues/8191)
+
+* Adds app spec project integration.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
+
 * Add documentation for the Podfile installation options  
   [Eric Amorde](https://github.com/amorde)
   [#8198](https://github.com/CocoaPods/CocoaPods/issues/8198)
@@ -23,10 +31,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ## 1.6.0.beta.2 (2018-10-17)
 
 ##### Enhancements
-
-* Adds app spec project integration.  
-  [Derek Ostrander](https://github.com/dostrander)
-  [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
 
 * Remove contraction from docs to fix rendering on the website.  
   [stevemoser](https://github.com/stevemoser)

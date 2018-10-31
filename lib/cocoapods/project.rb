@@ -23,11 +23,9 @@ module Pod
 
     # Initialize a new instance
     #
-    # @param  [Pathname, String] path @see #path
-    # @param  [Bool] skip_initialization
-    #         Whether the project should be initialized from scratch.
-    # @param  [Int] object_version
-    #         Object version to use for serialization, defaults to Xcode 3.2 compatible.
+    # @param  [Pathname, String] path @see Xcodeproj::Project#path
+    # @param  [Bool] skip_initialization Whether the project should be initialized from scratch.
+    # @param  [Int] object_version Object version to use for serialization, defaults to Xcode 3.2 compatible.
     #
     def initialize(path, skip_initialization = false,
         object_version = Xcodeproj::Constants::DEFAULT_OBJECT_VERSION)
@@ -383,7 +381,7 @@ module Pod
     # Returns the name to be used for a the variant group for a file at a given path.
     # The path must be localized (within an *.lproj directory).
     #
-    # @param  [Pathname] The localized path to get a variant group name for.
+    # @param  [Pathname] path The localized path to get a variant group name for.
     #
     # @return [String] The variant group name.
     #
