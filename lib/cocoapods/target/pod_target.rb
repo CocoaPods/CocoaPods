@@ -599,7 +599,7 @@ module Pod
           'settings to inhibit warnings. CocoaPods does not currently ' \
           'support different settings and will fall back to your preference ' \
           'set in the root target definition.'
-        podfile.root_target_definitions.first.inhibits_warnings_for_pod?(root_spec.name)
+        @inhibit_warnings = podfile.root_target_definitions.first.inhibits_warnings_for_pod?(root_spec.name)
       end
     end
 
