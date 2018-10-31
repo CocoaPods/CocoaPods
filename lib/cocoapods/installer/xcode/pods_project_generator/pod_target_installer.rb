@@ -383,7 +383,7 @@ module Pod
                                                        subspec_name,
                                                        spec_name,
                                                        app_target_label,
-                                                       false).install!
+                                                       :add_main => false).install!
 
               target.user_build_configurations.each do |bc_name, type|
                 app_native_target.add_build_configuration(bc_name, type)

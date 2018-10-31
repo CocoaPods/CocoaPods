@@ -49,7 +49,7 @@ module Pod
                                              name,
                                              'Subgroup',
                                              name,
-                                             false)
+                                             :add_main => false)
             installer.install!
             @project.pod_group('Subgroup')[name].files.map(&:name).sort.should == [
               'AppHost-PodName-iOS-Unit-Tests-Info.plist',

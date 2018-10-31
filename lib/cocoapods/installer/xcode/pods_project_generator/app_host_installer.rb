@@ -33,7 +33,7 @@ module Pod
           #
           attr_reader :app_target_label
 
-          # @return [Boolean] whether the app host installer should add main
+          # @return [Boolean] whether the app host installer should add main.m
           #
           attr_reader :add_main
 
@@ -47,7 +47,7 @@ module Pod
           # @param [String] app_target_label see #app_target_label
           # @param [Boolean] add_main see #add_main
           #
-          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main = true)
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true)
             @sandbox = sandbox
             @project = project
             @platform = platform
