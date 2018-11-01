@@ -891,7 +891,6 @@ module Pod
                 target_module_path = Pathname.new('/Pods/Headers/Public/MyPod/MyPod.modulemap')
                 relative_path = Pathname.new('../../../Target Support Files/MyPod/MyPod.modulemap')
 
-
                 @pod_target.stubs(:module_map_path_to_write).returns(write_path)
                 @pod_target.stubs(:module_map_path).returns(target_module_path)
                 custom_module_map = mock(:read => '')
