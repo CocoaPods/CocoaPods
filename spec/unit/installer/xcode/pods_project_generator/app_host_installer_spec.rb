@@ -43,6 +43,20 @@ module Pod
             ]
           end
 
+          it 'does not add main to the group' do
+            name = 'AppHost-PodName-iOS-Unit-Tests'
+            installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
+                                             name,
+                                             'Subgroup',
+                                             name,
+                                             :add_main => false)
+            installer.install!
+            @project.pod_group('Subgroup')[name].files.map(&:name).sort.should == [
+              'AppHost-PodName-iOS-Unit-Tests-Info.plist',
+              'LaunchScreen.storyboard',
+            ]
+          end
+
           it 'sets the correct build settings for an iOS app host target' do
             installer = AppHostInstaller.new(config.sandbox, @project, Platform.ios,
                                              'AppHost-PodName-iOS-Unit-Tests',
