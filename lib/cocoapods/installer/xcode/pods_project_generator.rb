@@ -11,6 +11,7 @@ module Pod
         require 'cocoapods/installer/xcode/pods_project_generator/pod_target_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/file_references_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/aggregate_target_installer'
+        require 'cocoapods/installer/xcode/pods_project_generator/project_generator'
         require 'cocoapods/installer/xcode/pods_project_generator_result'
 
         # @return [Sandbox] The sandbox where the Pods should be installed.
@@ -59,7 +60,15 @@ module Pod
         end
 
         def generate!
-          project = prepare
+          project_path = sandbox.project_path
+          build_configurations = analysis_result.all_user_build_configurations
+          platforms = aggregate_targets.map(&:platform)
+          object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
+          project_generator = ProjectGenerator.new(sandbox, project_path, pod_targets, build_configurations,
+                                                   platforms, object_version, config.podfile_path)
+          project = project_generator.generate!
+          sandbox.project = project
+
           install_file_references(project)
           target_installation_results = install_targets(project)
           integrate_targets(target_installation_results.pod_target_installation_results)
@@ -135,59 +144,6 @@ module Pod
         InstallationResults = Struct.new(:pod_target_installation_results, :aggregate_target_installation_results)
 
         private
-
-        def create_project
-          if object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
-            Pod::Project.new(sandbox.project_path, false, object_version)
-          else
-            Pod::Project.new(sandbox.project_path)
-          end
-        end
-
-        # Creates the Pods project from scratch if it doesn't exists.
-        #
-        # @return [Project]
-        #
-        # @todo   Clean and modify the project if it exists.
-        #
-        def prepare
-          UI.message '- Creating Pods project' do
-            project = create_project
-            analysis_result.all_user_build_configurations.each do |name, type|
-              project.add_build_configuration(name, type)
-            end
-            # Reset symroot just in case the user has added a new build configuration other than 'Debug' or 'Release'.
-            project.symroot = Pod::Project::LEGACY_BUILD_ROOT
-
-            pod_names = pod_targets.map(&:pod_name).uniq
-            pod_names.each do |pod_name|
-              local = sandbox.local?(pod_name)
-              path = sandbox.pod_dir(pod_name)
-              was_absolute = sandbox.local_path_was_absolute?(pod_name)
-              project.add_pod_group(pod_name, path, local, was_absolute)
-            end
-
-            if config.podfile_path
-              project.add_podfile(config.podfile_path)
-            end
-
-            sandbox.project = project
-            platforms = aggregate_targets.map(&:platform)
-            osx_deployment_target = platforms.select { |p| p.name == :osx }.map(&:deployment_target).min
-            ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
-            watchos_deployment_target = platforms.select { |p| p.name == :watchos }.map(&:deployment_target).min
-            tvos_deployment_target = platforms.select { |p| p.name == :tvos }.map(&:deployment_target).min
-            project.build_configurations.each do |build_configuration|
-              build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
-              build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
-              build_configuration.build_settings['WATCHOS_DEPLOYMENT_TARGET'] = watchos_deployment_target.to_s if watchos_deployment_target
-              build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
-              build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
-              build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
-            end
-            project
-          end
-        end
 
         def install_file_references(project)
           installer = FileReferencesInstaller.new(sandbox, pod_targets, project, installation_options.preserve_pod_file_structure)
