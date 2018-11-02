@@ -89,10 +89,6 @@ module Pod
               installation_result.test_native_targets.each do |test_native_target|
                 scheme.add_test_target(test_native_target)
               end
-
-              installation_result.app_native_targets.each do |add_build_target|
-                scheme.add_build_target(add_build_target)
-              end
             end
             project.save
           end
