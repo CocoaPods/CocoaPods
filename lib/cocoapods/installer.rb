@@ -208,7 +208,10 @@ module Pod
         @target_installation_results = pod_project_generation_result.target_installation_results
         @pods_project = pod_project_generation_result.project
         run_podfile_post_install_hooks
-        Xcode::PodsProjectGenerator.write(@pods_project, target_installation_results, @sandbox.project_path, installation_options.deterministic_uuids?)
+        project_writer = Xcode::PodsProjectWriter.new(sandbox, pods_project,
+                                                      target_installation_results.pod_target_installation_results,
+                                                      installation_options)
+        project_writer.write!
         generator.share_development_pod_schemes(@pods_project)
         write_lockfiles
       end
