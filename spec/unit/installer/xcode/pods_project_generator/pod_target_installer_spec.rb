@@ -883,6 +883,28 @@ module Pod
 
             #--------------------------------------------------------------------------------#
 
+            describe '#create_module_map' do
+              it 'uses relative paths when linking umbrella headers' do
+                @installer.stubs(:update_changed_file)
+                @installer.stubs(:add_file_to_support_group)
+                write_path = Pathname.new('/Pods/Target Support Files/MyPod/MyPod.modulemap')
+                target_module_path = Pathname.new('/Pods/Headers/Public/MyPod/MyPod.modulemap')
+                relative_path = Pathname.new('../../../Target Support Files/MyPod/MyPod.modulemap')
+
+                @pod_target.stubs(:module_map_path_to_write).returns(write_path)
+                @pod_target.stubs(:module_map_path).returns(target_module_path)
+                custom_module_map = mock(:read => '')
+                @installer.stubs(:custom_module_map).returns(custom_module_map)
+                Pathname.any_instance.stubs(:mkpath)
+
+                FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
+                native_target = mock(:build_configurations => [])
+                @installer.send(:create_module_map, native_target)
+              end
+            end
+
+            #--------------------------------------------------------------------------------#
+
             describe 'concerning header_mappings_dirs' do
               before do
                 @project.add_pod_group('snake', fixture('snake'))
