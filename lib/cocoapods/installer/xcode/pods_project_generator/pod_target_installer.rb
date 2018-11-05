@@ -814,7 +814,8 @@ module Pod
               linked_path = target.module_map_path
               if path != linked_path
                 linked_path.dirname.mkpath
-                FileUtils.ln_sf(path, linked_path)
+                source = path.relative_path_from(linked_path.dirname)
+                FileUtils.ln_sf(source, linked_path)
               end
 
               relative_path = target.module_map_path.relative_path_from(sandbox.root).to_s

@@ -62,6 +62,49 @@ module Pod
               'AppStore' => 'staticlib',
             }
           end
+
+          describe '#create_module_map' do
+            it 'uses relative paths when linking umbrella headers' do
+              @installer.stubs(:update_changed_file)
+              @installer.stubs(:add_file_to_support_group)
+              write_path = Pathname.new('/Pods/Target Support Files/MyPod/MyPod.modulemap')
+              target_module_path = Pathname.new('/Pods/Headers/Public/MyPod/MyPod.modulemap')
+              relative_path = Pathname.new('../../../Target Support Files/MyPod/MyPod.modulemap')
+
+              @target.stubs(:module_map_path_to_write).returns(write_path)
+              @target.stubs(:module_map_path).returns(target_module_path)
+              Pathname.any_instance.stubs(:mkpath)
+
+              FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
+              native_target = mock(:build_configurations => [])
+              @installer.send(:create_module_map, native_target)
+            end
+          end
+
+          describe '#create_umbrella_header' do
+            it 'uses relative paths when linking umbrella headers' do
+              @installer.stubs(:update_changed_file)
+              @installer.stubs(:add_file_to_support_group)
+              write_path = Pathname.new('/Pods/Target Support Files/MyPod/MyPod-Umbrella.h')
+              target_header_path = Pathname.new('/Pods/Headers/Public/MyPod/MyPod-Umbrella.h')
+              relative_path = Pathname.new('../../../Target Support Files/MyPod/MyPod-Umbrella.h')
+
+              @target.stubs(:umbrella_header_path_to_write).returns(write_path)
+              @target.stubs(:umbrella_header_path).returns(target_header_path)
+              Pathname.any_instance.stubs(:mkpath)
+
+              mock_build_file = Struct.new(:settings).new
+              mock_build_phase = mock
+              mock_build_phase.stubs(:add_file_reference).returns(mock_build_file)
+
+              native_target = mock
+              native_target.stubs(:headers_build_phase).returns(mock_build_phase)
+
+              FileUtils.expects(:ln_sf).with(relative_path, target_header_path)
+
+              @installer.send(:create_umbrella_header, native_target)
+            end
+          end
         end
       end
     end
