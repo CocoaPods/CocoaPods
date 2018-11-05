@@ -49,18 +49,19 @@ module Pod
         #
         attr_reader :target
 
-        # @return [InstallationOptions] the installation options from the Podfile.
+        # @return [Boolean] whether to use input/output paths for build phase scripts
         #
-        attr_reader :installation_options
+        attr_reader :use_input_output_paths
+        alias use_input_output_paths? use_input_output_paths
 
         # Init a new TargetIntegrator
         #
         # @param  [AggregateTarget] target @see #target
-        # @param  [InstallationOptions] installation_options @see #installation_options
+        # @param  [Boolean] use_input_output_paths @see #use_input_output_paths
         #
-        def initialize(target, installation_options)
+        def initialize(target, use_input_output_paths: true)
           @target = target
-          @installation_options = installation_options
+          @use_input_output_paths = use_input_output_paths
         end
 
         class << self
@@ -354,7 +355,7 @@ module Pod
           script_path = target.copy_resources_script_relative_path
           input_paths = []
           output_paths = []
-          unless installation_options.disable_input_output_paths?
+          if use_input_output_paths?
             resource_paths_by_config = target.resource_paths_by_config
             resource_paths_flattened = resource_paths_by_config.values.flatten.uniq
             input_paths = [target.copy_resources_script_relative_path, *resource_paths_flattened]
@@ -397,7 +398,7 @@ module Pod
           script_path = target.embed_frameworks_script_relative_path
           input_paths = []
           output_paths = []
-          unless installation_options.disable_input_output_paths?
+          if use_input_output_paths?
             framework_paths = target.framework_paths_by_config.values.flatten.uniq
             framework_input_paths = framework_paths.flat_map { |path| [path.source_path, path.dsym_path] }.compact
             input_paths = [target.embed_frameworks_script_relative_path, *framework_input_paths]

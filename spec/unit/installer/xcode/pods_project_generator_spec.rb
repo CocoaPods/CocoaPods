@@ -401,15 +401,15 @@ module Pod
               pod_generator_result = @generator.generate!
               pod_generator_result.project.main_group.expects(:sort)
               Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-              @generator.write(pod_generator_result.project, pod_generator_result.target_installation_results)
+              PodsProjectGenerator.write(pod_generator_result.project, pod_generator_result.target_installation_results, @generator.sandbox.project_path, false)
             end
 
             it 'saves the project to the given path' do
               pod_generator_result = @generator.generate!
               Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-              temporary_directory + 'Pods/Pods.xcodeproj'
-              pod_generator_result.project.expects(:save)
-              @generator.write(pod_generator_result.project, pod_generator_result.target_installation_results)
+              path = temporary_directory + 'Pods/Pods.xcodeproj'
+              pod_generator_result.project.expects(:save).with(path)
+              PodsProjectGenerator.write(pod_generator_result.project, pod_generator_result.target_installation_results, path, false)
             end
           end
 

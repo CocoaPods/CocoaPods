@@ -67,12 +67,28 @@ module Pod
           PodsProjectGeneratorResult.new(project, target_installation_results)
         end
 
-        def write(project, target_installation_results)
-          UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
+        # Writes the project to the provided path, performing any final steps necessary before saving
+        # the project to disk
+        #
+        # @param [Pod::Project] project the project to write
+        #
+        # @param [InstallationResults] target_installation_results
+        #        the installation results to use when creating schemes
+        #
+        # @param [Pathname] destination_path
+        #        the path to which the project will be written
+        #
+        # @param [Boolean] deterministic_uuids
+        #        Whether to use deterministic UUIDs in the project. See {Xcodeproj#predictabilize_uuids}
+        #
+        # @return [void]
+        #
+        def self.write(project, target_installation_results, destination_path, deterministic_uuids)
+          UI.message "- Writing Xcode project file to #{UI.path destination_path}" do
             project.pods.remove_from_project if project.pods.empty?
             project.development_pods.remove_from_project if project.development_pods.empty?
             project.sort(:groups_position => :below)
-            if installation_options.deterministic_uuids?
+            if deterministic_uuids
               UI.message('- Generating deterministic UUIDs') { project.predictabilize_uuids }
             end
             library_product_types = [:framework, :dynamic_library, :static_library]
@@ -90,7 +106,7 @@ module Pod
                 scheme.add_test_target(test_native_target)
               end
             end
-            project.save
+            project.save(destination_path)
           end
         end
 
@@ -99,26 +115,26 @@ module Pod
         # @return [void]
         #
         def share_development_pod_schemes(project)
-          development_pod_targets.select(&:should_build?).each do |pod_target|
-            next unless share_scheme_for_development_pod?(pod_target.pod_name)
+          targets = development_pod_targets.select do |target|
+            target.should_build? && share_scheme_for_development_pod?(target.pod_name)
+          end
+          targets.each do |pod_target|
             Xcodeproj::XCScheme.share_scheme(project.path, pod_target.label)
-            if pod_target.contains_test_specifications?
-              pod_target.test_specs.each do |test_spec|
-                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_spec))
-              end
+            pod_target.test_specs.each do |test_spec|
+              Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_spec))
             end
 
-            if pod_target.contains_app_specifications?
-              pod_target.app_specs.each do |app_spec|
-                Xcodeproj::XCScheme.share_scheme(project.path, pod_target.app_target_label(app_spec))
-              end
+            pod_target.app_specs.each do |app_spec|
+              Xcodeproj::XCScheme.share_scheme(project.path, pod_target.app_target_label(app_spec))
             end
           end
         end
 
-        private
-
+        # @!attribute [Hash{String => TargetInstallationResult}] pod_target_installation_results
+        # @!attribute [Hash{String => TargetInstallationResult}] aggregate_target_installation_results
         InstallationResults = Struct.new(:pod_target_installation_results, :aggregate_target_installation_results)
+
+        private
 
         def create_project
           if object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
@@ -206,6 +222,11 @@ module Pod
           end
         end
 
+        # @param [Hash{String => InstallationResult}] pod_target_installation_results
+        #        the installations to integrate
+        #
+        # @return [void]
+        #
         def integrate_targets(pod_target_installation_results)
           pod_installations_to_integrate = pod_target_installation_results.values.select do |pod_target_installation_result|
             pod_target = pod_target_installation_result.target
@@ -213,11 +234,12 @@ module Pod
                 !pod_target_installation_result.app_native_targets.empty? ||
                 pod_target.contains_script_phases?
           end
-          unless pod_installations_to_integrate.empty?
-            UI.message '- Integrating targets' do
-              pod_installations_to_integrate.each do |pod_target_installation_result|
-                PodTargetIntegrator.new(pod_target_installation_result, installation_options).integrate!
-              end
+          return if pod_installations_to_integrate.empty?
+
+          UI.message '- Integrating targets' do
+            use_input_output_paths = !installation_options.disable_input_output_paths
+            pod_installations_to_integrate.each do |pod_target_installation_result|
+              PodTargetIntegrator.new(pod_target_installation_result, :use_input_output_paths => use_input_output_paths).integrate!
             end
           end
         end

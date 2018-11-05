@@ -171,51 +171,6 @@ module Pod
       # `:preserve_pod_file_structure` to `true` will _always_ preserve the file structure.
       #
       option :preserve_pod_file_structure, false
-
-      module Mixin
-        module ClassMethods
-          # Delegates the creation of {#installation_options} to the `Podfile`
-          # returned by the given block.
-          #
-          # @param  blk a block that returns the `Podfile` to create
-          #         installation options from.
-          #
-          # @return [Void]
-          #
-          def delegate_installation_options(&blk)
-            define_method(:installation_options) do
-              @installation_options ||= InstallationOptions.from_podfile(instance_eval(&blk))
-            end
-          end
-
-          # Delegates the installation options attributes directly to
-          # {#installation_options}.
-          #
-          # @return [Void]
-          #
-          def delegate_installation_option_attributes!
-            define_method(:respond_to_missing?) do |name, *args|
-              installation_options.respond_to?(name, *args) || super
-            end
-
-            define_method(:method_missing) do |name, *args, &blk|
-              if installation_options.respond_to?(name)
-                installation_options.send(name, *args, &blk)
-              else
-                super
-              end
-            end
-          end
-        end
-
-        # @return [InstallationOptions] The installation options.
-        #
-        attr_accessor :installation_options
-
-        def self.included(mod)
-          mod.extend(ClassMethods)
-        end
-      end
     end
   end
 end
