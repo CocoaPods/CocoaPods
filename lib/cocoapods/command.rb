@@ -44,7 +44,7 @@ module Pod
     end
 
     def self.run(argv)
-      help! 'You cannot run CocoaPods as root.' if Process.uid == 0
+      help! 'You cannot run CocoaPods as root.' if Process.uid == 0 && !Gem.win_platform?
 
       verify_minimum_git_version!
       verify_xcode_license_approved!

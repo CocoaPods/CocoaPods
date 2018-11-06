@@ -94,5 +94,26 @@ module Pod
         io.string.should == '    hello'
       end
     end
+
+    it 'fetches the correct path for ruby' do
+      ruby_path = File.basename(Executable.which('ruby'))
+      ruby_path.should == 'ruby'
+    end
+
+    it 'fetches the correct path for ruby on Windows' do
+      Gem.stubs(:win_platform?).returns(true)
+      File.stubs(:file?).returns(true)
+      File.stubs(:executable?).returns(true)
+      ruby_path = File.basename(Executable.which('ruby'))
+      ruby_path.should == 'ruby.exe'
+    end
+
+    it 'adds --force-local flag for tar on Windows' do
+      Executable.stubs(:which).returns('/usr/bin/tar.exe')
+      status = Object.new
+      status.define_singleton_method(:success?) { return true }
+      Executable.expects(:popen3).with('/usr/bin/tar.exe', ['--force-local'], [], []).returns(status)
+      Executable.execute_command('tar', [])
+    end
   end
 end
