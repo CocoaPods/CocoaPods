@@ -67,49 +67,6 @@ module Pod
           PodsProjectGeneratorResult.new(project, target_installation_results)
         end
 
-        # Writes the project to the provided path, performing any final steps necessary before saving
-        # the project to disk
-        #
-        # @param [Pod::Project] project the project to write
-        #
-        # @param [InstallationResults] target_installation_results
-        #        the installation results to use when creating schemes
-        #
-        # @param [Pathname] destination_path
-        #        the path to which the project will be written
-        #
-        # @param [Boolean] deterministic_uuids
-        #        Whether to use deterministic UUIDs in the project. See {Xcodeproj#predictabilize_uuids}
-        #
-        # @return [void]
-        #
-        def self.write(project, target_installation_results, destination_path, deterministic_uuids)
-          UI.message "- Writing Xcode project file to #{UI.path destination_path}" do
-            project.pods.remove_from_project if project.pods.empty?
-            project.development_pods.remove_from_project if project.development_pods.empty?
-            project.sort(:groups_position => :below)
-            if deterministic_uuids
-              UI.message('- Generating deterministic UUIDs') { project.predictabilize_uuids }
-            end
-            library_product_types = [:framework, :dynamic_library, :static_library]
-
-            pod_target_installation_results = target_installation_results.pod_target_installation_results
-            results_by_native_target = Hash[pod_target_installation_results.map do |_, result|
-              [result.native_target, result]
-            end]
-            project.recreate_user_schemes(false) do |scheme, target|
-              next unless target.respond_to?(:symbol_type)
-              next unless library_product_types.include? target.symbol_type
-              installation_result = results_by_native_target[target]
-              next unless installation_result
-              installation_result.test_native_targets.each do |test_native_target|
-                scheme.add_test_target(test_native_target)
-              end
-            end
-            project.save(destination_path)
-          end
-        end
-
         # Shares schemes of development Pods.
         #
         # @return [void]
@@ -129,7 +86,6 @@ module Pod
             end
           end
         end
-
         # @!attribute [Hash{String => TargetInstallationResult}] pod_target_installation_results
         # @!attribute [Hash{String => TargetInstallationResult}] aggregate_target_installation_results
         InstallationResults = Struct.new(:pod_target_installation_results, :aggregate_target_installation_results)
