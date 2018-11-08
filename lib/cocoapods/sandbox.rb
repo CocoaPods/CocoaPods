@@ -66,10 +66,8 @@ module Pod
     end
 
     # @return [Lockfile] the manifest which contains the information about the
-    #         installed pods.
+    #         installed pods or `nil` if one is not present.
     #
-    attr_accessor :manifest
-
     def manifest
       @manifest ||= begin
         Lockfile.from_file(manifest_path) if manifest_path.exist?
