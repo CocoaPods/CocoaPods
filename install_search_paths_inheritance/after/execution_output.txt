@@ -52,13 +52,14 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-  - Adding source files to Pods project
-  - Adding frameworks to Pods project
-  - Adding libraries to Pods project
-  - Adding resources to Pods project
-  - Adding development pod helper files to Pods project
-  - Linking headers
-  - Installing targets
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
     - Installing target `CocoaLumberjack` iOS 8.0
       - Generating module map file at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack-umbrella.h`
@@ -89,6 +90,7 @@ Generating Pods project
       - Generating umbrella header at `Pods/Target Support Files/testkit/testkit-umbrella.h`
       - Generating Info.plist file at `Pods/Target Support Files/testkit/testkit-Info.plist`
       - Generating dummy source at `Pods/Target Support Files/testkit/testkit-dummy.m`
+  - Installing Aggregate Targets
     - Installing target `Pods-App` iOS 8.0
       - Generating Info.plist file at `Pods/Target Support Files/Pods-App/Pods-App-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-App/Pods-App.modulemap`

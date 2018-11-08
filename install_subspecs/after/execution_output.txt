@@ -26,12 +26,13 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-  - Adding source files to Pods project
-  - Adding frameworks to Pods project
-  - Adding libraries to Pods project
-  - Adding resources to Pods project
-  - Linking headers
-  - Installing targets
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
     - Installing target `PodTest-subspec_1` iOS 4.3
       - Generating dummy source at `Pods/Target Support Files/PodTest-subspec_1/PodTest-subspec_1-dummy.m`
     - Installing target `PodTest-subspec_2` macOS 10.6
@@ -39,6 +40,7 @@ Generating Pods project
       - Generating umbrella header at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2-umbrella.h`
       - Generating Info.plist file at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2-Info.plist`
       - Generating dummy source at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2-dummy.m`
+  - Installing Aggregate Targets
     - Installing target `Pods-OS X App` macOS 10.6
       - Generating Info.plist file at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App.modulemap`
