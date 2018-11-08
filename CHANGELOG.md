@@ -29,6 +29,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Remove `manifest` attribute from sandbox.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8260](https://github.com/CocoaPods/CocoaPods/pull/8260)
+  
 * Don't have libraries build the app spec.  
   [Derek Ostrander](https://github.com/dostrander)
   [#8244](https://github.com/CocoaPods/CocoaPods/pull/8244)
