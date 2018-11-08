@@ -37,8 +37,11 @@ module Pod
         @sandbox.specifications_root.mkpath
         @sandbox.store_podspec('BananaLib', fixture('banana-lib/BananaLib.podspec'))
         specification_path = @sandbox.specification_path('BananaLib')
+        pod_project_path = @sandbox.pod_target_project_path('BananaLib')
+        pod_project_path.mkpath
         @sandbox.clean_pod('BananaLib')
         pod_root.should.not.exist
+        pod_project_path.should.not.exist
         specification_path.should.not.exist
       end
 

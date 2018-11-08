@@ -1,0 +1,24 @@
+workspace 'Examples.xcworkspace'
+platform :ios, '9.0'
+
+install! 'cocoapods',
+	 generate_multiple_pod_projects: true
+
+target 'MultiXcodeProject' do
+  pod 'Coffee', path: 'Coffee/Coffee.podspec'
+  pod 'CoffeeMachine', path: 'CoffeeMachine/CoffeeMachine.podspec'
+
+  target 'MultiXcodeProjectTests' do
+    inherit! :search_paths
+  end
+
+  target 'MultiXcodeProjectUITests' do
+    inherit! :search_paths
+  end
+end
+
+target 'MultiXcodeProjFrameworks' do
+  use_frameworks!
+  pod 'Coffee', path: 'Coffee/Coffee.podspec'
+  pod 'CoffeeMachine', path: 'CoffeeMachine/CoffeeMachine.podspec'
+end

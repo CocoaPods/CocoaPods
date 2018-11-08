@@ -1,7 +1,7 @@
 module Pod
   class Installer
     class Xcode
-      # The {PodsProjectGenerator} handles generation of the 'Pods/Pods.xcodeproj'
+      # The {PodsProjectGenerator} handles generation of CocoaPods Xcode projects.
       #
       class PodsProjectGenerator
         require 'cocoapods/installer/xcode/pods_project_generator/target_installer_helper'
@@ -59,27 +59,11 @@ module Pod
           @config = config
         end
 
-        def generate!
-          project_path = sandbox.project_path
-          build_configurations = analysis_result.all_user_build_configurations
-          platforms = aggregate_targets.map(&:platform)
-          object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
-          project_generator = ProjectGenerator.new(sandbox, project_path, pod_targets, build_configurations,
-                                                   platforms, object_version, config.podfile_path)
-          project = project_generator.generate!
-
-          install_file_references(project)
-          target_installation_results = install_targets(project)
-          integrate_targets(target_installation_results.pod_target_installation_results)
-          wire_target_dependencies(project, target_installation_results)
-          PodsProjectGeneratorResult.new(project, target_installation_results)
-        end
-
         # Shares schemes of development Pods.
         #
         # @return [void]
         #
-        def share_development_pod_schemes(project)
+        def share_development_pod_schemes(project, development_pod_targets)
           targets = development_pod_targets.select do |target|
             target.should_build? && share_scheme_for_development_pod?(target.pod_name)
           end
@@ -100,36 +84,42 @@ module Pod
 
         private
 
-        def install_file_references(project)
-          installer = FileReferencesInstaller.new(sandbox, pod_targets, project, installation_options.preserve_pod_file_structure)
-          installer.install!
+        def install_file_references(project, pod_targets)
+          UI.message "- Installing files into #{project.project_name} project" do
+            installer = FileReferencesInstaller.new(sandbox, pod_targets, project, installation_options.preserve_pod_file_structure)
+            installer.install!
+          end
         end
 
-        def install_targets(project)
-          UI.message '- Installing targets' do
-            umbrella_headers_by_dir = pod_targets.map do |pod_target|
-              next unless pod_target.should_build? && pod_target.defines_module?
-              pod_target.umbrella_header_path
-            end.compact.group_by(&:dirname)
+        def install_pod_targets(project, pod_targets)
+          umbrella_headers_by_dir = pod_targets.map do |pod_target|
+            next unless pod_target.should_build? && pod_target.defines_module?
+            pod_target.umbrella_header_path
+          end.compact.group_by(&:dirname)
 
-            pod_target_installation_results = Hash[pod_targets.sort_by(&:name).map do |pod_target|
-              umbrella_headers_in_header_dir = umbrella_headers_by_dir[pod_target.module_map_path.dirname]
-              target_installer = PodTargetInstaller.new(sandbox, project, pod_target, umbrella_headers_in_header_dir)
-              [pod_target.name, target_installer.install!]
-            end]
+          pod_target_installation_results = Hash[pod_targets.sort_by(&:name).map do |pod_target|
+            umbrella_headers_in_header_dir = umbrella_headers_by_dir[pod_target.module_map_path.dirname]
+            target_installer = PodTargetInstaller.new(sandbox, project, pod_target, umbrella_headers_in_header_dir)
+            [pod_target.name, target_installer.install!]
+          end]
 
-            # Hook up system framework dependencies for the pod targets that were just installed.
-            pod_target_installation_result_values = pod_target_installation_results.values.compact
-            unless pod_target_installation_result_values.empty?
-              add_system_framework_dependencies(pod_target_installation_result_values)
-            end
+          # Hook up system framework dependencies for the pod targets that were just installed.
+          pod_target_installation_result_values = pod_target_installation_results.values.compact
+          unless pod_target_installation_result_values.empty?
+            add_system_framework_dependencies(pod_target_installation_result_values)
+          end
 
+          pod_target_installation_results
+        end
+
+        def install_aggregate_targets(project, aggregate_targets)
+          UI.message '- Installing Aggregate Targets' do
             aggregate_target_installation_results = Hash[aggregate_targets.sort_by(&:name).map do |target|
               target_installer = AggregateTargetInstaller.new(sandbox, project, target)
               [target.name, target_installer.install!]
             end]
 
-            InstallationResults.new(pod_target_installation_results, aggregate_target_installation_results)
+            aggregate_target_installation_results
           end
         end
 
@@ -179,8 +169,7 @@ module Pod
         #
         # @return [void]
         #
-        def wire_target_dependencies(project, target_installation_results)
-          frameworks_group = project.frameworks_group
+        def wire_target_dependencies(target_installation_results)
           pod_target_installation_results_hash = target_installation_results.pod_target_installation_results
           aggregate_target_installation_results_hash = target_installation_results.aggregate_target_installation_results
 
@@ -208,6 +197,8 @@ module Pod
           pod_target_installation_results_hash.values.each do |pod_target_installation_result|
             pod_target = pod_target_installation_result.target
             native_target = pod_target_installation_result.native_target
+            project = native_target.project
+            frameworks_group = project.frameworks_group
             # First, wire up all resource bundles.
             pod_target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
               native_target.add_dependency(resource_bundle_target)
@@ -218,6 +209,10 @@ module Pod
             # Wire up all dependencies to this pod target, if any.
             dependent_targets = pod_target.dependent_targets
             dependent_targets.each do |dependent_target|
+              dependent_project = pod_target_installation_results_hash[dependent_target.name].native_target.project
+              if dependent_project != project
+                project.add_subproject_reference(dependent_project, project.dependencies_group)
+              end
               native_target.add_dependency(pod_target_installation_results_hash[dependent_target.name].native_target)
               add_framework_file_reference_to_native_target(native_target, pod_target, dependent_target, frameworks_group)
             end
@@ -232,6 +227,10 @@ module Pod
                     resource_bundle_native_targets.each do |test_resource_bundle_target|
                       test_native_target.add_dependency(test_resource_bundle_target)
                     end
+                  end
+                  dependent_test_project = pod_target_installation_results_hash[test_dependent_target.name].native_target.project
+                  if dependent_test_project != project
+                    project.add_subproject_reference(dependent_test_project, project.dependencies_group)
                   end
                   test_native_target.add_dependency(dependency_installation_result.native_target)
                   add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
@@ -274,15 +273,6 @@ module Pod
             raise Informative, 'Unable to handle share_schemes_for_development_pods ' \
               "being set to #{dev_pods_to_share.inspect} -- please set it to true, " \
               'false, or an array of pods to share schemes for.'
-          end
-        end
-
-        # @return [Array<Library>] The targets of the development pods generated by
-        #         the installation process.
-        #
-        def development_pod_targets
-          pod_targets.select do |pod_target|
-            sandbox.local?(pod_target.pod_name)
           end
         end
 

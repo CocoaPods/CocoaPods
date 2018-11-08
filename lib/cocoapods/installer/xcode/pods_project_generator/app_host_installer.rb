@@ -13,7 +13,7 @@ module Pod
           attr_reader :sandbox
 
           # @return [Pod::Project]
-          #         The `Pods/Pods.xcodeproj` to install the app host into.
+          #         The project to install the app host into.
           #
           attr_reader :project
 

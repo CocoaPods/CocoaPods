@@ -294,6 +294,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+    describe 'Integrates a project using generate_multiple_pod_projects option' do
+      behaves_like cli_spec 'install_multi_pods_project',
+                            'install --no-repo-update'
+    end
+
     describe 'Integrates a Pod using a dynamic vendored framework' do
       # We have to disable verbose mode by adding --no-verbose here,
       # otherwise curl output is included in execution output.

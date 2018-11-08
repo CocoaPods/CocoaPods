@@ -171,6 +171,11 @@ module Pod
       # `:preserve_pod_file_structure` to `true` will _always_ preserve the file structure.
       #
       option :preserve_pod_file_structure, false
+
+      # Whether to generate a project per pod target. Instead of creating 1 `Pods.xcodeproj`, this option will generate
+      # a project for every pod target that will be nested under the `Pods.xcodeproj`.
+      #
+      option :generate_multiple_pod_projects, false
     end
   end
 end

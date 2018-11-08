@@ -68,6 +68,7 @@ module Pod
           'share_schemes_for_development_pods' => false,
           'disable_input_output_paths' => false,
           'preserve_pod_file_structure' => false,
+          'generate_multiple_pod_projects' => false,
         }
       end
 

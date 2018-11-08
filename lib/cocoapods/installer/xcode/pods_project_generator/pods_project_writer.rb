@@ -38,10 +38,9 @@ module Pod
         end
 
         def write!
-          UI.message "- Writing Xcode project file to #{UI.path sandbox.project_path}" do
-            project.pods.remove_from_project if project.pods.empty?
-            project.support_files_group.remove_from_project if project.support_files_group.empty?
-            project.development_pods.remove_from_project if project.development_pods.empty?
+          UI.message "- Writing Xcode project file to #{UI.path project.path}" do
+            [project.pods, project.support_files_group,
+             project.development_pods, project.dependencies_group].each { |group| group.remove_from_project if group.empty? }
             project.sort(:groups_position => :below)
             if installation_options.deterministic_uuids?
               UI.message('- Generating deterministic UUIDs') { project.predictabilize_uuids }

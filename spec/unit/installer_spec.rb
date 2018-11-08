@@ -68,7 +68,7 @@ module Pod
         @installer.stubs(:ensure_plugins_are_installed!)
         @installer.stubs(:perform_post_install_actions)
         Installer::Xcode::PodsProjectGenerator.any_instance.stubs(:share_development_pod_schemes)
-        Installer::Xcode::PodsProjectGenerator.any_instance.stubs(:generate!)
+        Installer::Xcode::SinglePodsProjectGenerator.any_instance.stubs(:generate!)
         Installer::Xcode::PodsProjectWriter.any_instance.stubs(:write!)
       end
 
@@ -89,11 +89,12 @@ module Pod
         @installer.stubs(:run_podfile_pre_install_hooks)
         @installer.stubs(:write_lockfiles)
         @installer.stubs(:aggregate_targets).returns([])
+        @installer.stubs(:pod_targets).returns([])
         @installer.unstub(:generate_pods_project)
-        generator = @installer.send(:create_generator)
+        generator = @installer.send(:create_generator, false)
         @installer.stubs(:create_generator).returns(generator)
         target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
-        generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, target_installation_results)
+        generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, {}, target_installation_results)
         generator.stubs(:generate!).returns(generator_result)
         generator.stubs(:share_development_pod_schemes)
 

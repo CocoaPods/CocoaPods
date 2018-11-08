@@ -17,7 +17,7 @@ module Pod
           attr_reader :sandbox
 
           # @return [Pod::Project]
-          #         The `Pods/Pods.xcodeproj` to install the target into.
+          #         The project to install the target into.
           #
           attr_reader :project
 
