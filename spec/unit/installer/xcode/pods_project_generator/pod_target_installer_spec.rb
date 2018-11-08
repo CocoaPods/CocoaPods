@@ -16,7 +16,6 @@ module Pod
               @target_definition = @podfile.target_definitions['SampleProject']
               @project = Project.new(config.sandbox.project_path)
 
-              config.sandbox.project = @project
               path_list = Sandbox::PathList.new(fixture('banana-lib'))
               @spec = fixture_spec('banana-lib/BananaLib.podspec')
               file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
@@ -161,7 +160,6 @@ module Pod
                 @target_definition = @podfile.target_definitions['SampleProject']
                 @target_definition2 = @podfile.target_definitions['SampleProject2']
                 @project = Project.new(config.sandbox.project_path)
-                config.sandbox.project = @project
 
                 @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
 
@@ -421,7 +419,6 @@ module Pod
                 end
                 @target_definition = @podfile.target_definitions['SampleProject']
                 @project = Project.new(config.sandbox.project_path)
-                config.sandbox.project = @project
 
                 @minions_spec = fixture_spec('minions-lib/MinionsLib.podspec')
 
@@ -530,7 +527,6 @@ module Pod
 
                 # reset project to use symlinked dir
                 @project = Project.new(config.sandbox.project_path)
-                config.sandbox.project = @project
 
                 path_list = Sandbox::PathList.new(fixture('banana-lib-symlinked/'))
                 @spec = fixture_spec('banana-lib-symlinked/BananaLib.podspec')
@@ -1082,8 +1078,6 @@ module Pod
 
                 @project = Project.new(config.sandbox.project_path)
 
-                config.sandbox.project = @project
-
                 @spec = fixture_spec('banana-lib/BananaLib.podspec')
                 @spec.resources = ['Resources/**/*']
                 @spec.resource_bundle = nil
@@ -1142,8 +1136,6 @@ module Pod
                 config.sandbox.prepare
 
                 @project = Project.new(config.sandbox.project_path)
-
-                config.sandbox.project = @project
 
                 @spec = fixture_spec('banana-lib/BananaLib.podspec')
                 @spec.resources = nil

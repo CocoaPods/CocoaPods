@@ -26,10 +26,6 @@ module Pod
         @sandbox.manifest.should.nil?
       end
 
-      it 'returns the project' do
-        @sandbox.project.should.nil?
-      end
-
       it 'returns the public headers store' do
         @sandbox.public_headers.root.should ==
           temporary_directory + 'Sandbox/Headers/Public'

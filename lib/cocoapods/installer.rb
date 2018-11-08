@@ -497,7 +497,7 @@ module Pod
       if any_plugin_post_install_hooks?
         unlock_pod_sources
 
-        context = PostInstallHooksContext.generate(sandbox, aggregate_targets)
+        context = PostInstallHooksContext.generate(sandbox, pods_project, aggregate_targets)
         HooksManager.run(:post_install, context, plugins)
       end
 

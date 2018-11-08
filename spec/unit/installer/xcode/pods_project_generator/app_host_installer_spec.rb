@@ -7,7 +7,6 @@ module Pod
         describe AppHostInstaller do
           before do
             @project = Project.new(config.sandbox.project_path)
-            config.sandbox.project = @project
             @project.add_pod_group('Subgroup', '')
           end
 

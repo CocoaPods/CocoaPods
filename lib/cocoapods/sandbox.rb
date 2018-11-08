@@ -76,10 +76,6 @@ module Pod
       end
     end
 
-    # @return [Project] the Pods project.
-    #
-    attr_accessor :project
-
     # Removes the files of the Pod with the given name from the sandbox.
     #
     # @return [void]

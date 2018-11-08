@@ -40,6 +40,9 @@ module Pod
       # @param  [Sandbox] sandbox
       #         The sandbox
       #
+      # @param  [Project] pods_project
+      #         The pods project.
+      #
       # @param  [Array<AggregateTarget>] aggregate_targets
       #         The aggregate targets, which will been presented by an adequate
       #         {UmbrellaTargetDescription} in the generated context.
@@ -47,7 +50,7 @@ module Pod
       # @return [HooksContext] Convenience class method to generate the
       #         static context.
       #
-      def self.generate(sandbox, aggregate_targets)
+      def self.generate(sandbox, pods_project, aggregate_targets)
         umbrella_targets_descriptions = aggregate_targets.map do |umbrella|
           user_project = umbrella.user_project
           user_targets = umbrella.user_targets
@@ -58,7 +61,7 @@ module Pod
           UmbrellaTargetDescription.new(user_project, user_targets, specs, platform_name, platform_deployment_target, cocoapods_target_label)
         end
 
-        new(sandbox, sandbox.root.to_s, sandbox.project, umbrella_targets_descriptions)
+        new(sandbox, sandbox.root.to_s, pods_project, umbrella_targets_descriptions)
       end
 
       # Pure data class which describes an umbrella target.
