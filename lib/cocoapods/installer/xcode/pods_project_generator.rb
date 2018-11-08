@@ -67,7 +67,6 @@ module Pod
           project_generator = ProjectGenerator.new(sandbox, project_path, pod_targets, build_configurations,
                                                    platforms, object_version, config.podfile_path)
           project = project_generator.generate!
-          sandbox.project = project
 
           install_file_references(project)
           target_installation_results = install_targets(project)

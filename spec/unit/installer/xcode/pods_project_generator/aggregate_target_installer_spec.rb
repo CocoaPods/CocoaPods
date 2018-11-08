@@ -16,7 +16,6 @@ module Pod
               @target_definition = @podfile.target_definitions['SampleProject']
               @project = Project.new(config.sandbox.project_path)
 
-              config.sandbox.project = @project
               path_list = Sandbox::PathList.new(fixture('banana-lib'))
               @spec = fixture_spec('banana-lib/BananaLib.podspec')
               @spec.prefix_header_contents = '#import "BlocksKit.h"'
