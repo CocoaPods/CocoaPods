@@ -17,6 +17,8 @@ module Pod
       #
       attr_reader :linkage
 
+      attr_reader :hash
+
       def initialize(linkage: :static, packaging: :library)
         raise ArgumentError, "Invalid linkage option #{linkage.inspect}, valid options are #{KNOWN_LINKAGE_OPTIONS.inspect}" unless KNOWN_LINKAGE_OPTIONS.include?(linkage)
         raise ArgumentError, "Invalid packaging option #{packaging.inspect}, valid options are #{KNOWN_PACKAGING_OPTIONS.inspect}" unless KNOWN_PACKAGING_OPTIONS.include?(packaging)
@@ -119,8 +121,6 @@ module Pod
       def static_library?
         static? && library?
       end
-
-      attr_reader :hash
 
       def to_s
         "#{linkage} #{packaging}"
