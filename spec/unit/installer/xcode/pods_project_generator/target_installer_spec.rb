@@ -52,8 +52,7 @@ module Pod
           end
 
           it 'verify static framework is building a static library' do
-            @target.stubs(:requires_frameworks?).returns(true)
-            @target.stubs(:static_framework?).returns(true)
+            @target.stubs(:build_type => Target::BuildType.static_framework)
             @installer.send(:add_target).resolved_build_setting('MACH_O_TYPE').should == {
               'Release' => 'staticlib',
               'Debug' => 'staticlib',

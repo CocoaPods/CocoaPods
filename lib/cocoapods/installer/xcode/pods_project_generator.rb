@@ -162,7 +162,7 @@ module Pod
           sorted_installation_results.each do |target_installation_result|
             pod_target = target_installation_result.target
             next unless pod_target.should_build?
-            next if !pod_target.requires_frameworks? || pod_target.static_framework?
+            next if pod_target.build_as_static?
             pod_target.file_accessors.each do |file_accessor|
               native_target = target_installation_result.native_target_for_spec(file_accessor.spec)
               add_system_frameworks_to_native_target(native_target, file_accessor)
@@ -211,7 +211,7 @@ module Pod
             # First, wire up all resource bundles.
             pod_target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
               native_target.add_dependency(resource_bundle_target)
-              if pod_target.requires_frameworks? && pod_target.should_build?
+              if pod_target.build_as_dynamic_framework? && pod_target.should_build?
                 native_target.add_resources([resource_bundle_target.product_reference])
               end
             end
@@ -297,7 +297,7 @@ module Pod
         end
 
         def add_framework_file_reference_to_native_target(native_target, pod_target, dependent_target, frameworks_group)
-          if pod_target.should_build? && pod_target.requires_frameworks? && !pod_target.static_framework? && dependent_target.should_build?
+          if pod_target.should_build? && pod_target.build_as_dynamic? && dependent_target.should_build?
             product_ref = frameworks_group.files.find { |f| f.path == dependent_target.product_name } ||
                 frameworks_group.new_product_ref_for_target(dependent_target.product_basename, dependent_target.product_type)
             native_target.frameworks_build_phase.add_file_reference(product_ref, true)

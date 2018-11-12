@@ -47,11 +47,11 @@ module Pod
               file_accessors = pod_targets.flat_map(&:file_accessors)
 
               frameworks = file_accessors.flat_map(&:vendored_frameworks).uniq.map(&:basename)
-              frameworks += pod_targets.select { |pt| pt.should_build? && pt.requires_frameworks? }.map(&:product_module_name).uniq
+              frameworks += pod_targets.select { |pt| pt.should_build? && pt.build_as_framework? }.map(&:product_module_name).uniq
               verify_no_duplicate_names(frameworks, aggregate_target.label, 'frameworks')
 
               libraries = file_accessors.flat_map(&:vendored_libraries).uniq.map(&:basename)
-              libraries += pod_targets.select { |pt| pt.should_build? && !pt.requires_frameworks? }.map(&:product_name)
+              libraries += pod_targets.select { |pt| pt.should_build? && pt.build_as_library? }.map(&:product_name)
               verify_no_duplicate_names(libraries, aggregate_target.label, 'libraries')
             end
           end
@@ -68,24 +68,24 @@ module Pod
 
         def verify_no_static_framework_transitive_dependencies
           aggregate_targets.each do |aggregate_target|
-            next unless aggregate_target.requires_frameworks?
+            aggregate_target.user_build_configurations.each_key do |config|
+              pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
+              built_targets, unbuilt_targets = pod_targets.partition(&:should_build?)
+              dynamic_pod_targets = built_targets.select(&:build_as_dynamic?)
 
-            aggregate_target.user_build_configurations.keys.each do |config|
-              dynamic_pod_targets = aggregate_target.pod_targets_for_build_configuration(config).reject(&:static_framework?)
-
-              dependencies = dynamic_pod_targets.select(&:should_build?).flat_map(&:dependencies)
-              depended_upon_targets = dynamic_pod_targets.select { |t| dependencies.include?(t.pod_name) && !t.should_build? }
+              dependencies = dynamic_pod_targets.flat_map(&:dependencies)
+              depended_upon_targets = unbuilt_targets.select { |t| dependencies.include?(t.pod_name) }
 
               static_libs = depended_upon_targets.flat_map(&:file_accessors).flat_map(&:vendored_static_artifacts)
               unless static_libs.empty?
                 raise Informative, "The '#{aggregate_target.label}' target has " \
-                  "transitive dependencies that include static binaries: (#{static_libs.to_sentence})"
+                  "transitive dependencies that include statically linked binaries: (#{static_libs.to_sentence})"
               end
 
-              static_framework_deps = dynamic_pod_targets.select(&:should_build?).flat_map(&:recursive_dependent_targets).select(&:static_framework?)
-              unless static_framework_deps.empty?
+              static_deps = dynamic_pod_targets.flat_map(&:recursive_dependent_targets).select(&:build_as_static?).uniq
+              unless static_deps.empty?
                 raise Informative, "The '#{aggregate_target.label}' target has " \
-                  "transitive dependencies that include static frameworks: (#{static_framework_deps.flat_map(&:name).to_sentence})"
+                  "transitive dependencies that include statically linked binaries: (#{static_deps.flat_map(&:name).to_sentence})"
               end
             end
           end

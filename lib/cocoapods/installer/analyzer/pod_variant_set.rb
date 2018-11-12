@@ -71,8 +71,17 @@ module Pod
         # @return [Hash<PodVariant, String>]
         #
         def scope_by_build_type
-          scope_if_necessary(group_by(&:requires_frameworks).map(&:scope_by_platform)) do |variant|
-            variant.requires_frameworks? ? 'framework' : 'library'
+          scope_if_necessary(group_by { |v| v.build_type.packaging }.map(&:scope_by_linkage)) do |variant|
+            variant.build_type.packaging
+          end
+        end
+
+        # @private
+        # @return [Hash<PodVariant, String>]
+        #
+        def scope_by_linkage
+          scope_if_necessary(group_by { |v| v.build_type.linkage }.map(&:scope_by_platform)) do |variant|
+            variant.build_type.linkage
           end
         end
 

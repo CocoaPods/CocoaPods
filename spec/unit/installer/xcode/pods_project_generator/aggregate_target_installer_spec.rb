@@ -156,7 +156,7 @@ module Pod
 
             it 'does not add framework resources to copy resources script' do
               @target.stubs(:includes_resources?).returns(true)
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
               script = support_files_dir + 'Pods-SampleProject-resources.sh'
@@ -184,7 +184,7 @@ module Pod
             end
 
             it 'does add pods to the embed frameworks script' do
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
               @target.stubs(:requires_frameworks? => true)
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
@@ -209,7 +209,7 @@ module Pod
 
             it 'does not add pods to the embed frameworks script if they are not to be built' do
               @pod_target.stubs(:should_build? => false)
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
               @target.stubs(:requires_frameworks? => true)
               @target.stubs(:includes_frameworks? => true)
               @installer.install!
@@ -219,8 +219,7 @@ module Pod
             end
 
             it 'does not add pods to the embed frameworks script if they are static' do
-              @pod_target.stubs(:static_framework? => true)
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.static_framework)
               @target.stubs(:requires_frameworks? => true)
               @target.stubs(:includes_frameworks? => true)
               @installer.install!
@@ -249,7 +248,7 @@ module Pod
             end
 
             it 'creates an embed frameworks script, if the target does not require a host target' do
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
               @target.stubs(:requires_frameworks? => true)
               @installer.install!
               support_files_dir = config.sandbox.target_support_files_dir('Pods-SampleProject')
@@ -258,7 +257,7 @@ module Pod
             end
 
             it 'does not create an embed frameworks script, if the target requires a host target' do
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
               @target.stubs(:requires_frameworks? => true)
               @target.stubs(:requires_host_target? => true)
               @installer.install!
@@ -268,7 +267,7 @@ module Pod
             end
 
             it 'does not create an embed frameworks script, if the target does not have frameworks to embed' do
-              @pod_target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
               @target.stubs(:requires_frameworks? => true)
               @target.stubs(:includes_frameworks? => false)
               @installer.install!
@@ -287,8 +286,8 @@ module Pod
             end
 
             it 'installs umbrella headers for frameworks' do
-              @pod_target.stubs(:requires_frameworks? => true)
-              @target.stubs(:requires_frameworks? => true)
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+              @target.stubs(:build_type => Target::BuildType.static_framework, :host_requires_frameworks? => true)
               build_files = @installer.install!.native_target.headers_build_phase.files
               build_file = build_files.find { |bf| bf.file_ref.path.include?('Pods-SampleProject-umbrella.h') }
               build_file.should.not.be.nil

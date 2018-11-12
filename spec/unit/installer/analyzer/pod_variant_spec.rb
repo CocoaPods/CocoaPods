@@ -9,20 +9,21 @@ module Pod
           @testspecs = [stub('Spec/Tests')]
           @appspecs = [stub('Spec/App')]
           @platform = Platform.ios
+          @type = Target::BuildType.dynamic_framework
         end
 
         it 'can be initialized with specs and platform' do
           variant = PodVariant.new(@specs, [], [], @platform)
           variant.specs.should == @specs
           variant.platform.should == @platform
-          variant.requires_frameworks.should == false
+          variant.build_type.should == Target::BuildType.static_library
         end
 
         it 'can be initialized with specs, platform and whether it requires frameworks' do
-          variant = PodVariant.new(@specs, [], [], @platform, true)
+          variant = PodVariant.new(@specs, [], [], @platform, @type)
           variant.specs.should == @specs
           variant.platform.should == @platform
-          variant.requires_frameworks.should == true
+          variant.build_type.should == @type
         end
 
         it 'can return the root spec' do

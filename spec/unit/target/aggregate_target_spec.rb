@@ -149,7 +149,7 @@ module Pod
 
         it 'returns non vendored framework input and output paths by config' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
             Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
@@ -160,8 +160,7 @@ module Pod
 
         it 'checks resource paths are empty for dynamic frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:requires_frameworks?).returns(true)
-          @pod_target.stubs(:static_framework?).returns(false)
+          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
           @pod_target.stubs(:resource_paths).returns(['MyResources.bundle'])
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
@@ -171,8 +170,7 @@ module Pod
 
         it 'checks resource paths are included for static frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:requires_frameworks?).returns(true)
-          @pod_target.stubs(:static_framework?).returns(true)
+          @pod_target.stubs(:build_type => Target::BuildType.static_framework)
           @pod_target.stubs(:resource_paths).returns('BananaLib' => ['MyResources.bundle'])
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
@@ -182,9 +180,9 @@ module Pod
 
         it 'returns non vendored frameworks by config with different release and debug targets' do
           @pod_target_release.stubs(:should_build?).returns(true)
-          @pod_target_release.stubs(:requires_frameworks?).returns(true)
+          @pod_target_release.stubs(:build_type => Target::BuildType.dynamic_framework)
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
           @target.stubs(:pod_targets_for_build_configuration).with('Debug').returns([@pod_target])
           @target.stubs(:pod_targets_for_build_configuration).with('Release').returns([@pod_target, @pod_target_release])
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
@@ -214,7 +212,7 @@ module Pod
 
         it 'returns correct input and output paths for non vendored frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:requires_frameworks?).returns(true)
+          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
             Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
@@ -287,7 +285,7 @@ module Pod
 
         describe 'Host requires frameworks' do
           before do
-            @target.stubs(:host_requires_frameworks?).returns(true)
+            @target.stubs(:build_type).returns(Target::BuildType.static_framework)
           end
 
           it 'returns the product name' do

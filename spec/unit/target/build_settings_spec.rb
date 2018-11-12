@@ -91,7 +91,7 @@ module Pod
 
       describe 'concerning settings for file accessors' do
         it 'does not propagate framework or libraries from a test specification to an aggregate target' do
-          target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
           spec = stub('spec', :library_specification? => false, :spec_type => :test)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
@@ -103,7 +103,8 @@ module Pod
                                :spec => spec,
                                :spec_consumer => consumer,
                                :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
-                               :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                               :vendored_static_libraries => [config.sandbox.root + 'libStaticLibrary.a'],
+                               :vendored_static_artifacts => [config.sandbox.root + 'StaticFramework.framework', config.sandbox.root + 'libStaticLibrary.a'],
                                :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
                                :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
                               )
@@ -116,7 +117,7 @@ module Pod
                             :include_in_build_config? => true,
                             :should_build? => false,
                             :spec_consumers => [consumer],
-                            :static_framework? => false,
+                            :build_as_static? => false,
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                            )
@@ -126,7 +127,7 @@ module Pod
         end
 
         it 'does not propagate framework or libraries from a app specification to an aggregate target' do
-          target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
           spec = stub('spec', :library_specification? => false, :spec_type => :app)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
@@ -138,7 +139,8 @@ module Pod
                                :spec => spec,
                                :spec_consumer => consumer,
                                :vendored_static_frameworks => [config.sandbox.root + 'StaticFramework.framework'],
-                               :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
+                               :vendored_static_libraries => [config.sandbox.root + 'libStaticLibrary.a'],
+                               :vendored_static_artifacts => [config.sandbox.root + 'StaticFramework.framework', config.sandbox.root + 'libStaticLibrary.a'],
                                :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
                                :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
                               )
@@ -151,7 +153,7 @@ module Pod
                             :include_in_build_config? => true,
                             :should_build? => false,
                             :spec_consumers => [consumer],
-                            :static_framework? => false,
+                            :build_as_static? => false,
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                            )
@@ -163,7 +165,7 @@ module Pod
 
       describe 'concerning other_ld_flags' do
         it 'other_ld_flags should not include -ObjC when there are not static frameworks' do
-          target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
           spec = stub('spec', :library_specification? => false, :spec_type => :test)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
@@ -185,7 +187,7 @@ module Pod
                             :include_in_build_config? => true,
                             :should_build? => false,
                             :spec_consumers => [consumer],
-                            :static_framework? => false,
+                            :build_as_static? => false,
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                            )
@@ -195,7 +197,7 @@ module Pod
         end
 
         it 'other_ld_flags should include -ObjC when linking static frameworks' do
-          target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new)
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
           spec = stub('spec', :library_specification? => true, :spec_type => :library)
           consumer = stub('consumer',
                           :libraries => ['xml2'],
@@ -221,7 +223,7 @@ module Pod
                             :include_in_build_config? => true,
                             :should_build? => false,
                             :spec_consumers => [consumer],
-                            :static_framework? => true,
+                            :build_as_static? => true,
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                            )

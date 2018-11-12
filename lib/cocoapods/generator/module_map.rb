@@ -82,7 +82,7 @@ module Pod
       # Ensures that only framework targets have `framework` prepended.
       #
       def module_specifier_prefix
-        if target.requires_frameworks?
+        if target.build_as_framework?
           'framework '
         else
           ''

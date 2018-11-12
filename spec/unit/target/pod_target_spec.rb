@@ -5,7 +5,7 @@ module Pod
     before do
       @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
       @target_definition = fixture_target_definition
-      @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [@target_definition])
+      @pod_target = fixture_pod_target(@banana_spec, false, {}, [], Platform.ios, [@target_definition])
     end
 
     describe 'Meta' do
@@ -384,12 +384,12 @@ module Pod
       end
 
       it 'returns true when building as a framework' do
-        @pod_target.stubs(:requires_frameworks? => true)
+        @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
         @pod_target.should.defines_module
       end
 
       it 'returns true when building as a static framework' do
-        @pod_target.stubs(:requires_frameworks? => true, :static_framework? => true)
+        @pod_target.stubs(:build_type => Target::BuildType.static_framework)
         @pod_target.should.defines_module
       end
 
@@ -401,8 +401,8 @@ module Pod
       it 'returns false when any target definition says to' do
         @target_definition.set_use_modular_headers_for_pod('BananaLib', true)
 
-        other_target_definition = Podfile::TargetDefinition.new('Other', nil)
-        other_target_definition.abstract = false
+        other_target_definition = fixture_target_definition('Other')
+        other_target_definition.store_pod('BananaLib')
 
         @pod_target.stubs(:target_definitions).returns([@target_definition, other_target_definition])
 

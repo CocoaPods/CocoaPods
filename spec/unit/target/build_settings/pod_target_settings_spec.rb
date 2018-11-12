@@ -36,8 +36,7 @@ module Pod
               :pod_name => 'BananaLib',
               :sandbox => config.sandbox,
               :should_build? => false,
-              :requires_frameworks? => true,
-              :static_framework? => false,
+              :build_as_framework? => true,
               :dependent_targets => [],
               :_add_recursive_dependent_targets => [],
               :recursive_dependent_targets => [],
@@ -124,7 +123,7 @@ module Pod
           end
 
           it 'vendored frameworks should be added to frameworks paths if use_frameworks! isnt set' do
-            @pod_target.stubs(:requires_frameworks?).returns(false)
+            @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
             @xcconfig = @generator.generate
             @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('spec/fixtures/monkey')
             @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('${PODS_ROOT}/AAA')
@@ -179,7 +178,7 @@ module Pod
           end
 
           it 'does not have a module map to import if it is not built' do
-            @pod_target.stubs(:should_build? => false, :requires_frameworks? => false, :defines_module? => true)
+            @pod_target.stubs(:should_build? => false, :build_as_framework? => false, :defines_module? => true)
             @generator.generate
             @generator.module_map_file_to_import.should.be.nil
           end
@@ -210,8 +209,10 @@ module Pod
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
                               :spec_consumers => [consumer],
-                              :requires_frameworks? => true,
-                              :static_framework? => true,
+                              :build_as_framework? => true,
+                              :build_as_static_framework? => true,
+                              :build_as_dynamic_library? => false,
+                              :build_as_dynamic_framework? => false,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -272,7 +273,7 @@ module Pod
           end
 
           it 'includes correct other ld flags when requires frameworks' do
-            @coconut_pod_target.stubs(:requires_frameworks?).returns(true)
+            @coconut_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
             generator = PodTargetSettings.new(@coconut_pod_target, @coconut_test_spec)
             xcconfig = generator.generate
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -framework "CoconutLib"'

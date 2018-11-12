@@ -91,11 +91,9 @@ module Pod
               settings['ARCHS'] = target.archs
             end
 
-            if target.requires_frameworks?
-              if target.static_framework?
-                settings['MACH_O_TYPE'] = 'staticlib'
-              end
-            else
+            if target.build_as_static_framework?
+              settings['MACH_O_TYPE'] = 'staticlib'
+            elsif target.build_as_static_library?
               settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
             end
 
@@ -204,7 +202,7 @@ module Pod
                 FileUtils.ln_sf(source, linked_path)
               end
 
-              acl = target.requires_frameworks? ? 'Public' : 'Project'
+              acl = target.build_as_framework? ? 'Public' : 'Project'
               build_file.settings ||= {}
               build_file.settings['ATTRIBUTES'] = [acl]
             end

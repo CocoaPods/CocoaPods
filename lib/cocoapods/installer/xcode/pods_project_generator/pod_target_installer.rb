@@ -67,7 +67,7 @@ module Pod
                 end
                 create_umbrella_header(native_target) do |generator|
                   generator.imports += library_file_accessors.flat_map do |file_accessor|
-                    header_dir = if !target.requires_frameworks? && dir = file_accessor.spec_consumer.header_dir
+                    header_dir = if !target.build_as_framework? && dir = file_accessor.spec_consumer.header_dir
                                    Pathname.new(dir)
                     end
 
@@ -86,7 +86,7 @@ module Pod
                 end
               end
 
-              if target.requires_frameworks?
+              if target.build_as_dynamic_framework?
                 unless skip_info_plist?(native_target)
                   create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
@@ -153,7 +153,7 @@ module Pod
           #
           def custom_build_settings
             settings = super
-            unless target.requires_frameworks?
+            unless target.build_as_framework?
               settings['PRIVATE_HEADERS_FOLDER_PATH'] = ''
               settings['PUBLIC_HEADERS_FOLDER_PATH'] = ''
             end
@@ -268,7 +268,7 @@ module Pod
               other_file_refs = project_file_references_array(other_source_files, 'other source')
               native_target.add_file_references(other_file_refs, nil)
 
-              next unless target.requires_frameworks?
+              next unless target.build_as_dynamic_framework?
 
               filter_resource_file_references(file_accessor.resources.flatten) do |resource_phase_refs, compile_phase_refs|
                 native_target.add_file_references(compile_phase_refs, nil)
@@ -804,7 +804,7 @@ module Pod
             path = target.module_map_path_to_write
             UI.message "- Copying module map file to #{UI.path(path)}" do
               contents = custom_module_map.read
-              unless target.requires_frameworks?
+              unless target.build_as_framework?
                 contents.gsub!(/^(\s*)framework\s+(module[^{}]+){/, '\1\2{')
               end
               generator = Generator::Constant.new(contents)
@@ -862,7 +862,7 @@ module Pod
 
           def add_header(build_file, public_headers, private_headers, native_target)
             file_ref = build_file.file_ref
-            acl = if !target.requires_frameworks? # Headers are already rooted at ${PODS_ROOT}/Headers/P*/[pod]/...
+            acl = if !target.build_as_framework? # Headers are already rooted at ${PODS_ROOT}/Headers/P*/[pod]/...
                     'Project'
                   elsif public_headers.include?(file_ref.real_path)
                     'Public'
@@ -872,7 +872,7 @@ module Pod
                     'Project'
                   end
 
-            if target.requires_frameworks? && header_mappings_dir && acl != 'Project'
+            if target.build_as_framework? && header_mappings_dir && acl != 'Project'
               relative_path = file_ref.real_path.relative_path_from(header_mappings_dir)
               sub_dir = relative_path.dirname
               copy_phase_name = "Copy #{sub_dir} #{acl} Headers"

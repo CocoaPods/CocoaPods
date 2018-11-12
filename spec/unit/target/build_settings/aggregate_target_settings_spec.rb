@@ -200,10 +200,10 @@ module Pod
           it 'does not links the pod targets with the aggregate target for non-whitelisted configuration' do
             @generator = AggregateTargetSettings.new(@target, 'Debug')
             @xcconfig = @generator.dup.generate
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Pods-BananaLib"'
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
 
-          it 'does propagate framework or libraries from a non test specification to an aggregate targetdoes propagate framework or libraries from a non test specification to an aggregate target' do
+          it 'does propagate framework or libraries from a non test specification to an aggregate target' do
             target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
             spec = stub('spec', :library_specification? => true, :spec_type => :library)
             consumer = stub('consumer',
@@ -225,7 +225,12 @@ module Pod
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
                               :spec_consumers => [consumer],
-                              :requires_frameworks? => false,
+                              :build_as_framework? => false,
+                              :build_as_static_library? => true,
+                              :build_as_static? => true,
+                              :build_as_dynamic_library? => false,
+                              :build_as_dynamic_framework? => false,
+                              :build_as_static_framework? => false,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -250,7 +255,7 @@ module Pod
           end
 
           before do
-            Target.any_instance.stubs(:requires_frameworks?).returns(true)
+            Target.any_instance.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
           end
 
           behaves_like 'Aggregate'
@@ -302,7 +307,7 @@ module Pod
             end
 
             it 'includes default runpath search path list when not using frameworks but links a vendored dynamic framework' do
-              @target.stubs(:requires_frameworks?).returns(false)
+              @target.stubs(:build_type => Target::BuildType.static_library)
               @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
             end
           end
@@ -466,8 +471,12 @@ module Pod
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
                               :spec_consumers => [consumer],
-                              :requires_frameworks? => true,
-                              :static_framework? => false,
+                              :build_as_framework? => true,
+                              :build_as_static? => false,
+                              :build_as_static_library? => false,
+                              :build_as_static_framework? => false,
+                              :build_as_dynamic_library? => false,
+                              :build_as_dynamic_framework? => true,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -508,8 +517,12 @@ module Pod
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
                               :spec_consumers => [consumer],
-                              :requires_frameworks? => false,
-                              :static_framework? => false,
+                              :build_as_framework? => false,
+                              :build_as_static_library? => true,
+                              :build_as_static_framework? => false,
+                              :build_as_dynamic_framework? => false,
+                              :build_as_dynamic_library? => false,
+                              :build_as_static? => true,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -550,8 +563,12 @@ module Pod
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
                               :spec_consumers => [consumer],
-                              :requires_frameworks? => true,
-                              :static_framework? => true,
+                              :build_as_framework? => true,
+                              :build_as_static_framework? => true,
+                              :build_as_static? => true,
+                              :build_as_static_library? => false,
+                              :build_as_dynamic_library? => false,
+                              :build_as_dynamic_framework? => false,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -592,12 +609,8 @@ module Pod
             @xcconfig = @generator.generate
           end
 
-          it 'does not link with vendored frameworks' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-framework "Bananalib"'
-          end
-
-          it 'does not link with vendored libraries' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include '-l"Bananalib"'
+          it 'does not link with vendored frameworks or libraries' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
           end
         end
 
@@ -713,7 +726,7 @@ module Pod
               @target.pod_targets.each { |pt| pt.spec_consumers.each { |sc| sc.stubs(:frameworks => %w(UIKit), :libraries => %w(z c++)) } }
 
               @xcconfig = @generator.generate
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"c++" -l"z" -framework "UIKit"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -l"c++" -l"z" -framework "UIKit"'
             end
 
             it 'should not doubly link static libraries' do
@@ -723,7 +736,7 @@ module Pod
 
               @xcconfig = @generator.generate
               # -lBananaLib is not added
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"z" -framework "UIKit"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -l"z" -framework "UIKit"'
             end
           end
         end
