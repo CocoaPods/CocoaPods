@@ -1,1 +1,1 @@
-/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-umbrella.h
+../../../Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-umbrella.h

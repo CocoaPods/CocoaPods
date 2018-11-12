@@ -1,1 +1,1 @@
-/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-umbrella.h
+../../../Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-umbrella.h

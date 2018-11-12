@@ -1,1 +1,1 @@
-/Users/segiddins/Development/Rainforest/CocoaPods/tmp/install_static_swift_modules/transformed/Pods/Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-umbrella.h
+../../../Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-umbrella.h
