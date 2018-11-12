@@ -63,6 +63,10 @@ module Pod
           @installation_options = installation_options
         end
 
+        # @private
+        #
+        XCFileListConfigKey = Struct.new(:file_list_path, :file_list_relative_path)
+
         class << self
           # @param  [Xcodeproj::Project::Object::AbstractObject] object
           #
@@ -84,16 +88,16 @@ module Pod
           def set_input_output_paths(phase, input_paths_by_config, output_paths_by_config)
             if input_output_paths_use_filelist?(phase)
               [input_paths_by_config, output_paths_by_config].each do |hash|
-                hash.each do |(real_path, _relative_path), files|
+                hash.each do |file_list, files|
                   generator = Generator::FileList.new(files)
-                  Xcode::PodsProjectGenerator::TargetInstallerHelper.update_changed_file(generator, real_path)
+                  Xcode::PodsProjectGenerator::TargetInstallerHelper.update_changed_file(generator, file_list.file_list_path)
                 end
               end
 
               phase.input_paths = nil
               phase.output_paths = nil
-              phase.input_file_list_paths = input_paths_by_config.each_key.map(&:last).uniq
-              phase.output_file_list_paths = output_paths_by_config.each_key.map(&:last).uniq
+              phase.input_file_list_paths = input_paths_by_config.each_key.map(&:file_list_relative_path).uniq
+              phase.output_file_list_paths = output_paths_by_config.each_key.map(&:file_list_relative_path).uniq
             else
               input_paths = input_paths_by_config.values.flatten(1).uniq
               output_paths = output_paths_by_config.values.flatten(1).uniq
@@ -397,10 +401,10 @@ module Pod
           output_paths_by_config = {}
           if use_input_output_paths
             target.resource_paths_by_config.each do |config, resource_paths|
-              input_paths_key = [target.copy_resources_script_input_files_path(config), target.copy_resources_script_input_files_relative_path]
+              input_paths_key = XCFileListConfigKey.new(target.copy_resources_script_input_files_path(config), target.copy_resources_script_input_files_relative_path)
               input_paths_by_config[input_paths_key] = [script_path] + resource_paths
 
-              output_paths_key = [target.copy_resources_script_output_files_path(config), target.copy_resources_script_output_files_relative_path]
+              output_paths_key = XCFileListConfigKey.new(target.copy_resources_script_output_files_path(config), target.copy_resources_script_output_files_relative_path)
               output_paths_by_config[output_paths_key] = TargetIntegrator.resource_output_paths(resource_paths)
             end
           end
@@ -444,14 +448,13 @@ module Pod
           output_paths_by_config = {}
           unless installation_options.disable_input_output_paths?
             target.framework_paths_by_config.each do |config, framework_paths|
-              input_paths_key = [target.embed_frameworks_script_input_files_path(config), target.embed_frameworks_script_input_files_relative_path]
+              input_paths_key = XCFileListConfigKey.new(target.embed_frameworks_script_input_files_path(config), target.embed_frameworks_script_input_files_relative_path)
               input_paths = input_paths_by_config[input_paths_key] = [script_path]
               framework_paths.each do |path|
-                input_paths << path.source_path if path.source_path
-                input_paths << path.dsym_path if path.dsym_path
+                input_paths.concat(path.all_paths)
               end
 
-              output_paths_key = [target.embed_frameworks_script_output_files_path(config), target.embed_frameworks_script_output_files_relative_path]
+              output_paths_key = XCFileListConfigKey.new(target.embed_frameworks_script_output_files_path(config), target.embed_frameworks_script_output_files_relative_path)
               output_paths_by_config[output_paths_key] = TargetIntegrator.framework_output_paths(framework_paths)
             end
           end

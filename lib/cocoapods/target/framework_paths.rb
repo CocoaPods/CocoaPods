@@ -31,6 +31,10 @@ module Pod
           source_path.hash
         end
       end
+
+      def all_paths
+        [source_path, dsym_path].compact
+      end
     end
   end
 end
