@@ -490,6 +490,10 @@ module Pod
           phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
           phase.name.should == '[CP-User] Custom Script'
           phase.shell_script.should == 'echo "Hello World"'
+          phase.shell_path.should == '/bin/sh'
+          phase.input_paths.should.be.nil
+          phase.output_paths.should.be.nil
+          phase.show_env_vars_in_log.should == '1'
         end
 
         it 'removes outdated custom shell script phases' do

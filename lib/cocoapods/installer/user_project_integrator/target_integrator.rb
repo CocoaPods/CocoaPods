@@ -230,7 +230,7 @@ module Pod
               phase.shell_path = script_phase[:shell_path] || '/bin/sh'
               phase.input_paths = script_phase[:input_files]
               phase.output_paths = script_phase[:output_files]
-              phase.show_env_vars_in_log = script_phase[:show_env_vars_in_log] ? '1' : '0'
+              phase.show_env_vars_in_log = script_phase.fetch(:show_env_vars_in_log, true) ? '1' : '0'
 
               execution_position = script_phase[:execution_position]
               unless execution_position == :any
