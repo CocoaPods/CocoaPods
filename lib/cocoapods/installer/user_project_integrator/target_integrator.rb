@@ -227,7 +227,7 @@ module Pod
               name_with_prefix = USER_BUILD_PHASE_PREFIX + script_phase[:name]
               phase = TargetIntegrator.create_or_update_build_phase(native_target, name_with_prefix)
               phase.shell_script = script_phase[:script]
-              phase.shell_path = script_phase[:shell_path]
+              phase.shell_path = script_phase[:shell_path] || '/bin/sh'
               phase.input_paths = script_phase[:input_files]
               phase.output_paths = script_phase[:output_files]
               phase.show_env_vars_in_log = script_phase[:show_env_vars_in_log] ? '1' : '0'
