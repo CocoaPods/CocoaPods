@@ -433,11 +433,13 @@ module Pod
       #
       def select_maximal_pod_targets(pod_targets)
         subset_targets = []
-        pod_targets.uniq.combination(2) do |a, b|
-          if (a.specs - b.specs).empty?
-            subset_targets << a
-          elsif (b.specs - a.specs).empty?
-            subset_targets << b
+        pod_targets.uniq.group_by(&:pod_name).each do |_pod_name, targets|
+          targets.combination(2) do |a, b|
+            if (a.specs - b.specs).empty?
+              subset_targets << a
+            elsif (b.specs - a.specs).empty?
+              subset_targets << b
+            end
           end
         end
         pod_targets - subset_targets
