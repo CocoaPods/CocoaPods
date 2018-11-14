@@ -719,6 +719,18 @@ module Pod
       header_search_paths.uniq
     end
 
+    # @param  [Specification] spec non-library spec
+    #
+    # @return [BuildSettings::PodTargetSettings] The build settings for the given spec
+    #
+    def build_settings_for_spec(spec)
+      case spec.spec_type
+      when :test then test_spec_build_settings[spec.name]
+      when :app  then app_spec_build_settings[spec.name]
+      else            build_settings
+      end || raise ArgumentError, "No build settings for #{spec}"
+    end
+
     protected
 
     # Returns whether the pod target should use modular headers.

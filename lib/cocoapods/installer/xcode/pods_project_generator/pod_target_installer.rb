@@ -528,7 +528,7 @@ module Pod
               spec_consumer = test_spec.consumer(target.platform)
               test_type = spec_consumer.test_type
               path = target.xcconfig_path("#{test_type.capitalize}-#{target.subspec_label(test_spec)}")
-              test_spec_build_settings = target.test_spec_build_settings[test_spec.name]
+              test_spec_build_settings = target.build_settings_for_spec(test_spec)
               update_changed_file(test_spec_build_settings, path)
               test_xcconfig_file_ref = add_file_to_support_group(path)
 
@@ -602,7 +602,7 @@ module Pod
             target.app_specs.each do |app_spec|
               spec_consumer = app_spec.consumer(target.platform)
               path = target.xcconfig_path(target.subspec_label(app_spec))
-              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, app_spec), path)
+              update_changed_file(target.build_settings_for_spec(app_spec), path)
               app_xcconfig_file_ref = add_file_to_support_group(path)
 
               app_native_target = app_native_target_from_spec(spec_consumer.spec, app_native_targets)
@@ -690,6 +690,35 @@ module Pod
           ln -fs "$base/${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/}" "$base/${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
           ln -fs "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/}" "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
             eos
+          end
+
+          # Creates a prefix header file which imports `UIKit` or `Cocoa` according
+          # to the platform of the target. This file also include any prefix header
+          # content reported by the specification of the pods.
+          #
+          # @param [Pathname] path
+          #        the path to generate the prefix header for.
+          #
+          # @param [Array<Sandbox::FileAccessor>] file_accessors
+          #        the file accessors to use for this prefix header that point to a path of a prefix header.
+          #
+          # @param [Platform] platform
+          #        the platform to use for this prefix header.
+          #
+          # @param [PBXNativeTarget] native_target
+          #        the native target on which the prefix header should be configured for.
+          #
+          # @return [void]
+          #
+          def create_prefix_header(path, file_accessors, platform, native_target)
+            generator = Generator::PrefixHeader.new(file_accessors, platform)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
+
+            relative_path = path.relative_path_from(project.path.dirname)
+            native_target.build_configurations.each do |c|
+              c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
+            end
           end
 
           ENABLE_OBJECT_USE_OBJC_FROM = {
