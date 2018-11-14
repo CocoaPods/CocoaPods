@@ -443,9 +443,29 @@ module Pod
 
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
+              add_resources_to_target(target.file_accessors.find { |fa| fa.spec == app_spec }.resources, app_native_target)
 
               app_native_target
             end
+          end
+
+          # Adds the resources to the compile resources phase of the target.
+          #
+          # @param  [Array<Pathname>] paths the paths to add to the target.
+          #
+          # @param  [PBXNativeTarget] target the target resources are added to.
+          #
+          # @return [Boolean] whether any compile phase references were added.
+          #
+          def add_resources_to_target(paths, target)
+            contains_compile_phase_refs = false
+            filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|
+              # Resource bundles are only meant to have resources, so install everything
+              # into the resources phase. See note in filter_resource_file_references.
+              target.add_resources(resource_phase_refs + compile_phase_refs)
+              contains_compile_phase_refs ||= !compile_phase_refs.empty?
+            end
+            contains_compile_phase_refs
           end
 
           # Adds the resources of the Pods to the Pods project.
@@ -456,7 +476,7 @@ module Pod
           # @param  [Array<Sandbox::FileAccessor>] file_accessors
           #         the file accessors list to generate resource bundles for.
           #
-          # @return [Array<PBXNativeTarget] the resource bundle native targets created.
+          # @return [Array<PBXNativeTarget>] the resource bundle native targets created.
           #
           def add_resources_bundle_targets(file_accessors)
             file_accessors.each_with_object({}) do |file_accessor, hash|
@@ -468,13 +488,7 @@ module Pod
                   bundle_product.name = bundle_file_name
                 end
 
-                contains_compile_phase_refs = false
-                filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
-                  # Resource bundles are only meant to have resources, so install everything
-                  # into the resources phase. See note in filter_resource_file_references.
-                  resource_bundle_target.add_resources(compile_phase_refs + resource_phase_refs)
-                  contains_compile_phase_refs = !compile_phase_refs.empty?
-                end
+                contains_compile_phase_refs = add_resources_to_target(paths, resource_bundle_target)
 
                 target.user_build_configurations.each do |bc_name, type|
                   resource_bundle_target.add_build_configuration(bc_name, type)
@@ -651,7 +665,6 @@ module Pod
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
-                spec_paths_to_include << app_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
