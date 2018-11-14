@@ -429,6 +429,22 @@ module Pod
         end
       end
 
+      # Merges the spec-defined xcconfig into the derived xcconfig,
+      # overriding any singular settings and merging plural settings.
+      #
+      # @param  [Hash<String,String>] spec_xcconfig_hash the merged xcconfig defined in the spec.
+      #
+      # @param  [Xcodeproj::Config] xcconfig the config to merge into.
+      #
+      # @return [Xcodeproj::Config] the merged config.
+      #
+      def merge_spec_xcconfig_into_xcconfig(spec_xcconfig_hash, xcconfig)
+        plural_configs, singlular_configs = spec_xcconfig_hash.partition { |k, _v| PLURAL_SETTINGS.include?(k) }.map { |a| Hash[a] }
+        xcconfig.attributes.merge!(singlular_configs)
+        xcconfig.merge!(plural_configs)
+        xcconfig
+      end
+
       # Filters out pod targets whose `specs` are a subset of
       # another target's.
       #
@@ -507,7 +523,7 @@ module Pod
         # @return [Xcodeproj::Xconfig]
         define_build_settings_method :xcconfig, :memoized => true do
           xcconfig = super()
-          xcconfig.merge(merged_pod_target_xcconfigs)
+          merge_spec_xcconfig_into_xcconfig(merged_pod_target_xcconfigs, xcconfig)
         end
 
         #-------------------------------------------------------------------------#
@@ -915,7 +931,7 @@ module Pod
         # @return [Xcodeproj::Config] xcconfig
         define_build_settings_method :xcconfig, :memoized => true do
           xcconfig = super()
-          xcconfig.merge(merged_user_target_xcconfigs)
+          merge_spec_xcconfig_into_xcconfig(merged_user_target_xcconfigs, xcconfig)
         end
 
         #-------------------------------------------------------------------------#
