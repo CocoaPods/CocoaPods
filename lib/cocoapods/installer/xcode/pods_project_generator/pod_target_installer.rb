@@ -132,6 +132,23 @@ module Pod
 
           private
 
+          # Adds the target for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @note   Overrides the superclass implementation to remove settings that are set in the pod target xcconfig
+          #
+          # @return [PBXNativeTarget] the native target that was added.
+          #
+          def add_target
+            super.tap do |native_target|
+              native_target.build_configurations.each do |configuration|
+                target.build_settings.merged_pod_target_xcconfigs.each_key do |setting|
+                  configuration.build_settings.delete(setting)
+                end
+              end
+            end
+          end
+
           # @param [Array<Specification>] specs
           #        the specs to check against whether `.pch` generation should be skipped or not.
           #
@@ -325,6 +342,10 @@ module Pod
                 end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+
+                target.build_settings_for_spec(test_spec).merged_pod_target_xcconfigs.each_key do |setting|
+                  configuration.build_settings.delete(setting)
+                end
               end
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
@@ -414,6 +435,10 @@ module Pod
                 end
                 # For macOS we do not code sign the appbundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+
+                target.build_settings_for_spec(app_spec).merged_pod_target_xcconfigs.each_key do |setting|
+                  configuration.build_settings.delete(setting)
+                end
               end
 
               create_app_target_embed_frameworks_script(app_spec)
