@@ -52,7 +52,7 @@ module Pod
               UI.puts "- Type: git (#{branch_name})"
             end
           else
-            UI.puts '- Type: local'
+            UI.puts "- Type: #{source.type}"
           end
 
           UI.puts "- URL:  #{source.url}"

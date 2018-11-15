@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#8287](https://github.com/CocoaPods/CocoaPods/issues/8287)
 
+* Add CDN repo Source to allow retrieving specs from a web URL.  
+  [igor-makarov](https://github.com/igor-makarov)
+  [#8268](https://github.com/CocoaPods/CocoaPods/issues/8268) (partial beta solution)
+
 * Multi Pod Project Generation Support.  
   Support for splitting the pods project into a subproject per pod target, gated by the `generate_multiple_pod_projects` installation option.  
   [Sebastian Shanus](https://github.com/sebastianv1)
