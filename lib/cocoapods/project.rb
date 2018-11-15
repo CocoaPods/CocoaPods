@@ -22,7 +22,7 @@ module Pod
     attr_reader :development_pods
 
     # @return [PBXGroup] The group for dependencies.
-    # Used by `generate_multiple_pod_projects` installation option.
+    # Used by #generate_multiple_pod_projects installation option.
     #
     attr_reader :dependencies_group
 

@@ -109,7 +109,7 @@ module Pod
               end
               unless skip_pch?(target.app_specs)
                 target.app_specs.each do |app_spec|
-                  path = target.prefix_header_path_for_pec(app_spec)
+                  path = target.prefix_header_path_for_spec(app_spec)
                   app_spec_consumer = app_spec.consumer(target.platform)
                   app_native_target = app_native_target_from_spec_consumer(app_spec_consumer, app_native_targets)
                   create_prefix_header(path, app_file_accessors, target.platform, app_native_target)
@@ -631,7 +631,7 @@ module Pod
           # @return [void]
           #
           def create_app_target_copy_resources_script(app_spec)
-            path = target.copy_resources_script_path_for_app_spec(app_spec)
+            path = target.copy_resources_script_path_for_spec(app_spec)
             pod_targets = target.dependent_targets_for_app_spec(app_spec)
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
@@ -653,7 +653,7 @@ module Pod
           # @return [void]
           #
           def create_app_target_embed_frameworks_script(app_spec)
-            path = target.embed_frameworks_script_path_for_app_spec(app_spec)
+            path = target.embed_frameworks_script_path_for_spec(app_spec)
             pod_targets = target.dependent_targets_for_app_spec(app_spec)
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|

@@ -59,8 +59,17 @@ module Pod
                                                                        user_build_configurations, [], @osx_platform,
                                                                        [@osx_target_definition], 'macOS')
 
+            @grapefruits_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
+            @grapefruits_ios_pod_target = fixture_pod_target_with_specs([@grapefruits_spec,
+                                                                         @grapefruits_spec.app_specs.first], false,
+                                                                        user_build_configurations, [], @ios_platform,
+                                                                        [@ios_target_definition], 'iOS')
+            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
+
+            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name[@grapefruits_ios_pod_target.app_specs.first.name] = [@banana_ios_pod_target]
+
             ios_pod_targets = [@banana_ios_pod_target, @monkey_ios_pod_target, @coconut_ios_pod_target,
-                               @orangeframework_pod_target, @watermelon_ios_pod_target]
+                               @orangeframework_pod_target, @watermelon_ios_pod_target, @grapefruits_ios_pod_target]
             osx_pod_targets = [@banana_osx_pod_target, @monkey_osx_pod_target, @coconut_osx_pod_target, @watermelon_osx_pod_target]
             pod_targets = ios_pod_targets + osx_pod_targets
 
@@ -292,6 +301,13 @@ module Pod
             ]
           end
 
+          it 'installs dependencies for app specs' do
+            pod_generator_result = @generator.generate!
+            projects = pod_generator_result.projects_by_pod_targets.keys
+            grapefruits_project = projects.find { |p| p.path.basename.to_s == 'GrapefruitsLib.xcodeproj' }
+            grapefruits_project.main_group['Dependencies'].find_file_by_path('BananaLib.xcodeproj').should.not.be.nil
+          end
+
           it 'sets the pod and aggregate target dependencies' do
             pod_generator_result = @generator.generate!
             pods_project = pod_generator_result.project
@@ -314,6 +330,7 @@ module Pod
             pods_project.targets.find { |t| t.name == 'Pods-SampleApp-iOS' }.dependencies.map(&:name).sort.should == [
               'BananaLib-iOS',
               'CoconutLib-iOS',
+              'GrapefruitsLib-iOS',
               'OrangeFramework',
               'WatermelonLib-iOS',
               'monkey-iOS',
@@ -608,7 +625,7 @@ module Pod
           describe '#share_development_pod_schemes' do
             it 'does not share by default' do
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil, [])
+              @generator.share_development_pod_schemes(nil)
             end
 
             it 'can share all schemes' do
@@ -673,14 +690,14 @@ module Pod
                 returns(false)
 
             Xcodeproj::XCScheme.expects(:share_scheme).never
-            @generator.share_development_pod_schemes(nil, [])
+            @generator.share_development_pod_schemes(nil)
 
             @generator.installation_options.
                 stubs(:share_schemes_for_development_pods).
                 returns(nil)
 
             Xcodeproj::XCScheme.expects(:share_scheme).never
-            @generator.share_development_pod_schemes(nil, [])
+            @generator.share_development_pod_schemes(nil)
           end
 
           it 'allows specifying strings of pods to share' do

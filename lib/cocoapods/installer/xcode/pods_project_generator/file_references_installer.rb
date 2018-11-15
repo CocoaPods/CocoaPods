@@ -75,7 +75,7 @@ module Pod
           # @return [void]
           #
           def add_source_files_references
-            UI.message "- Adding source files" do
+            UI.message '- Adding source files' do
               add_file_accessors_paths_to_pods_group(:source_files, nil, true)
             end
           end
@@ -85,7 +85,7 @@ module Pod
           # @return [void]
           #
           def add_frameworks_bundles
-            UI.message "- Adding frameworks" do
+            UI.message '- Adding frameworks' do
               add_file_accessors_paths_to_pods_group(:vendored_frameworks, :frameworks)
             end
           end
@@ -95,7 +95,7 @@ module Pod
           # @return [void]
           #
           def add_vendored_libraries
-            UI.message "- Adding libraries" do
+            UI.message '- Adding libraries' do
               add_file_accessors_paths_to_pods_group(:vendored_libraries, :frameworks)
             end
           end
@@ -108,14 +108,14 @@ module Pod
           # @return [void]
           #
           def add_resources
-            UI.message "- Adding resources" do
+            UI.message '- Adding resources' do
               add_file_accessors_paths_to_pods_group(:resources, :resources, true)
               add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources, true)
             end
           end
 
           def add_developer_files
-            UI.message "- Adding development pod helper files" do
+            UI.message '- Adding development pod helper files' do
               file_accessors.each do |file_accessor|
                 pod_name = file_accessor.spec.name
                 next unless sandbox.local?(pod_name)

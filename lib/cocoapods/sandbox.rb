@@ -135,6 +135,7 @@ module Pod
     end
 
     # @param [PodTarget] pod_target_name
+    # Name of the pod target used to generate the path of its Xcode project.
     #
     # @return [Pathname] the path of the project for a pod target.
     #

@@ -63,7 +63,7 @@ module Pod
         #
         # @return [void]
         #
-        def share_development_pod_schemes(project, development_pod_targets)
+        def share_development_pod_schemes(project, development_pod_targets = [])
           targets = development_pod_targets.select do |target|
             target.should_build? && share_scheme_for_development_pod?(target.pod_name)
           end
@@ -249,6 +249,10 @@ module Pod
                     resource_bundle_native_targets.each do |app_resource_bundle_target|
                       app_native_target.add_dependency(app_resource_bundle_target)
                     end
+                  end
+                  dependency_project = dependency_installation_result.native_target.project
+                  if dependency_project != project
+                    project.add_subproject_reference(dependency_project, project.dependencies_group)
                   end
                   app_native_target.add_dependency(dependency_installation_result.native_target)
                   add_framework_file_reference_to_native_target(app_native_target, pod_target, app_dependent_target, frameworks_group)

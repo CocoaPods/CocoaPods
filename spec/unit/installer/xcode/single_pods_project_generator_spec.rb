@@ -419,7 +419,7 @@ module Pod
           describe '#share_development_pod_schemes' do
             it 'does not share by default' do
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil, [])
+              @generator.share_development_pod_schemes(nil)
             end
 
             it 'can share all schemes' do
@@ -477,14 +477,14 @@ module Pod
                 returns(false)
 
             Xcodeproj::XCScheme.expects(:share_scheme).never
-            @generator.share_development_pod_schemes(nil, [])
+            @generator.share_development_pod_schemes(nil)
 
             @generator.installation_options.
                 stubs(:share_schemes_for_development_pods).
                 returns(nil)
 
             Xcodeproj::XCScheme.expects(:share_scheme).never
-            @generator.share_development_pod_schemes(nil, [])
+            @generator.share_development_pod_schemes(nil)
           end
 
           it 'allows specifying strings of pods to share' do
@@ -538,7 +538,7 @@ module Pod
                 returns([/banana$/, /[^\A]BananaLib/])
 
             Xcodeproj::XCScheme.expects(:share_scheme).never
-            @generator.share_development_pod_schemes(nil, [])
+            @generator.share_development_pod_schemes(nil)
           end
 
           it 'raises when an invalid type is set' do
