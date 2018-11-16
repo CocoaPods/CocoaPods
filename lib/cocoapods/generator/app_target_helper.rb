@@ -346,7 +346,6 @@ EOS
                 </scenes>
               </document>
       XML
-
     end
   end
 end

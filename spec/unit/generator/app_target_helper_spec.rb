@@ -125,7 +125,6 @@ module Pod
             file.basename.to_s.should == 'LaunchScreen.storyboard'
             file.read.should == AppTargetHelper::LAUNCHSCREEN_STORYBOARD_CONTENTS
           end
-
         end
 
         describe 'on iOS 8' do
@@ -139,11 +138,8 @@ module Pod
             file.basename.to_s.should == 'LaunchScreen.storyboard'
             file.read.should == AppTargetHelper::LAUNCHSCREEN_STORYBOARD_CONTENTS_IOS_8
           end
-
         end
-
       end
-
     end
   end
 end
