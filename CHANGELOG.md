@@ -40,7 +40,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Derek Ostrander](https://github.com/dostrander)
   [#8244](https://github.com/CocoaPods/CocoaPods/pull/8244)
 
-* Fix running test specs that support iOS 8.
+* Fix running test specs that support iOS 8.  
   [Jeff Kelley](https://github.com/SlaunchaMan)
   [#8286](https://github.com/CocoaPods/CocoaPods/pull/8286)
 
