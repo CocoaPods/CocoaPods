@@ -91,8 +91,10 @@ module Pod
                   create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
                 end
                 create_build_phase_to_symlink_header_folders(native_target)
-              elsif target.uses_swift?
-                add_swift_static_library_compatibility_header_phase(native_target)
+              end
+
+              if target.build_as_library? && target.uses_swift?
+                add_swift_library_compatibility_header_phase(native_target)
               end
 
               unless skip_pch?(target.library_specs)
@@ -923,7 +925,7 @@ module Pod
             native_target
           end
 
-          # Adds a shell script phase, intended only for static library targets that contain swift,
+          # Adds a shell script phase, intended only for library targets that contain swift,
           # to copy the ObjC compatibility header (the -Swift.h file that the swift compiler generates)
           # to the built products directory. Additionally, the script phase copies the module map, appending a `.Swift`
           # submodule that references the (moved) compatibility header. Since the module map has been moved, the umbrella header
@@ -934,7 +936,7 @@ module Pod
           #
           # @return [Void]
           #
-          def add_swift_static_library_compatibility_header_phase(native_target)
+          def add_swift_library_compatibility_header_phase(native_target)
             if custom_module_map
               raise Informative, 'Using Swift static libraries with custom module maps is currently not supported. ' \
                                  "Please build `#{target.label}` as a framework or remove the custom module map."
