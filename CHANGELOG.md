@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Multi Pod Project Generation Support.  
+  Support for splitting the pods project into a subproject per pod target, gated by the `generate_multiple_pod_projects` installation option.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8253](https://github.com/CocoaPods/CocoaPods/issues/8253)
+
 * Don't add main for app specs.  
   [Derek Ostrander](https://github.com/dostrander)
   [#8235](https://github.com/CocoaPods/CocoaPods/pull/8235)

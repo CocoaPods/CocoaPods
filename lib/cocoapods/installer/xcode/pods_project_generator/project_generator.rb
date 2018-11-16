@@ -38,6 +38,11 @@ module Pod
         #
         attr_reader :podfile_path
 
+        # @return [Bool] Bool indicating if this project is a pod target subproject.
+        # Used by `generate_multiple_pod_projects` installation option.
+        #
+        attr_reader :pod_target_subproject
+
         # Initialize a new instance
         #
         # @param [Sandbox] sandbox @see #sandbox
@@ -49,7 +54,7 @@ module Pod
         # @param [String] podfile_path @see #podfile_path
         #
         def initialize(sandbox, path, pod_targets, build_configurations, platforms,
-                       object_version = nil, podfile_path = nil)
+                       object_version = nil, podfile_path = nil, pod_target_subproject: false)
           @sandbox = sandbox
           @path = path
           @pod_targets = pod_targets
@@ -57,6 +62,7 @@ module Pod
           @platforms = platforms
           @object_version = object_version
           @podfile_path = podfile_path
+          @pod_target_subproject = pod_target_subproject
         end
 
         public
@@ -64,20 +70,20 @@ module Pod
         # @return [Project] Generated and prepared project.
         #
         def generate!
-          project = create_project(path, object_version)
+          project = create_project(path, object_version, pod_target_subproject)
           prepare(sandbox, project, pod_targets, build_configurations, platforms, podfile_path)
           project
         end
 
         private
 
-        def create_project(path, object_version)
+        def create_project(path, object_version, pod_target_subproject)
           object_version ||= Xcodeproj::Constants::DEFAULT_OBJECT_VERSION
-          Pod::Project.new(path, false, object_version)
+          Pod::Project.new(path, false, object_version, :pod_target_subproject => pod_target_subproject)
         end
 
         def prepare(sandbox, project, pod_targets, build_configurations, platforms, podfile_path)
-          UI.message '- Creating Pods project' do
+          UI.message "- Creating #{project.project_name} project" do
             build_configurations.each do |name, type|
               project.add_build_configuration(name, type)
             end

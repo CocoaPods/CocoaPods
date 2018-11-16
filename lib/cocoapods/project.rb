@@ -21,6 +21,21 @@ module Pod
     #
     attr_reader :development_pods
 
+    # @return [PBXGroup] The group for dependencies.
+    # Used by #generate_multiple_pod_projects installation option.
+    #
+    attr_reader :dependencies_group
+
+    # @return [Bool] Bool indicating if this project is a pod target subproject.
+    # Used by `generate_multiple_pod_projects` installation option.
+    #
+    attr_reader :pod_target_subproject
+    alias pod_target_subproject? pod_target_subproject
+
+    # @return [String] The basename of the project path without .xcodeproj extension.
+    #
+    attr_reader :project_name
+
     # Initialize a new instance
     #
     # @param  [Pathname, String] path @see Xcodeproj::Project#path
@@ -28,13 +43,16 @@ module Pod
     # @param  [Int] object_version Object version to use for serialization, defaults to Xcode 3.2 compatible.
     #
     def initialize(path, skip_initialization = false,
-        object_version = Xcodeproj::Constants::DEFAULT_OBJECT_VERSION)
+                    object_version = Xcodeproj::Constants::DEFAULT_OBJECT_VERSION, pod_target_subproject: false)
       super(path, skip_initialization, object_version)
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
       @variant_groups_by_path_and_name = {}
       @pods = new_group('Pods')
       @development_pods = new_group('Development Pods')
+      @dependencies_group = new_group('Dependencies')
+      @pod_target_subproject = pod_target_subproject
+      @project_name = Pathname(path).basename('.*')
       self.symroot = LEGACY_BUILD_ROOT
     end
 
@@ -99,7 +117,12 @@ module Pod
     def add_pod_group(pod_name, path, development = false, absolute = false)
       raise '[BUG]' if pod_group(pod_name)
 
-      parent_group = development ? development_pods : pods
+      parent_group =
+        if pod_target_subproject
+          main_group
+        else
+          development ? development_pods : pods
+        end
       source_tree = absolute ? :absolute : :group
 
       group = parent_group.new_group(pod_name, path, source_tree)
@@ -109,7 +132,11 @@ module Pod
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
     #
     def pod_groups
-      pods.children.objects + development_pods.children.objects
+      if pod_target_subproject
+        main_group.children.objects
+      else
+        pods.children.objects + development_pods.children.objects
+      end
     end
 
     # Returns the group for the Pod with the given name.
@@ -208,6 +235,36 @@ module Pod
       group = group_for_path_in_group(file_path_name, group, reflect_file_system_structure, base_path)
       ref = group.new_file(file_path_name.realpath)
       @refs_by_absolute_path[file_path_name.to_s] = ref
+    end
+
+    # @!group File references
+    #-------------------------------------------------------------------------#
+
+    # Adds a file reference for a project as a child of the given group.
+    #
+    # @param  [Project] project
+    #         The project to add as a subproject reference.
+    #
+    # @param  [PBXGroup] group
+    #         The group for the new subproject reference.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_subproject_reference(project, group)
+      if ref = reference_for_path(project.path)
+        return ref
+      end
+
+      ref = Xcodeproj::Project::FileReferencesFactory.send(:new_file_reference, group, project.path, :group)
+      ref.name = project.project_name.to_s
+      ref.include_in_index = nil
+
+      attribute = PBXProject.references_by_keys_attributes.find { |attrb| attrb.name == :project_references }
+      project_reference = ObjectDictionary.new(attribute, group.project.root_object)
+      project_reference[:project_ref] = ref
+      root_object.project_references << project_reference
+      refs_by_absolute_path[project.path.to_s] = ref
+      ref
     end
 
     # Returns the file reference for the given absolute path.

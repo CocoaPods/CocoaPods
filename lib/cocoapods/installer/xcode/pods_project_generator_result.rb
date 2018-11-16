@@ -9,6 +9,10 @@ module Pod
           #
           attr_reader :project
 
+          # @return [Hash<Project, Array<PodTargets>>] Project by pod targets map
+          #
+          attr_reader :projects_by_pod_targets
+
           # @return [InstallationResults] target installation results
           #
           attr_reader :target_installation_results
@@ -18,8 +22,9 @@ module Pod
           # @param [Project] project @see #project
           # @param [InstallationResults] target_installation_results @see #target_installation_results
           #
-          def initialize(project, target_installation_results)
+          def initialize(project, projects_by_pod_targets, target_installation_results)
             @project = project
+            @projects_by_pod_targets = projects_by_pod_targets
             @target_installation_results = target_installation_results
           end
         end
