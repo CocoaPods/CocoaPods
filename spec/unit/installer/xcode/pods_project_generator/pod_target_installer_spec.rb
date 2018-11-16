@@ -407,6 +407,44 @@ module Pod
                   eos
                 end
               end
+
+              it 'adds swift compatibility header phase for swift static libraries' do
+                @watermelon_pod_target.stubs(:build_type => Target::BuildType.static_library, :uses_swift? => true)
+
+                @installer.install!
+
+                native_target = @project.targets.find { |t| t.name == @watermelon_pod_target.label }
+                compatibility_header_phase = native_target.build_phases.find { |ph| ph.display_name == 'Copy generated compatibility header' }
+                compatibility_header_phase.shell_script.should == <<-'SH'.strip_heredoc
+                  COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+                  MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+
+                  ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+                  ditto "${PODS_ROOT}/Headers/Public/WatermelonLib/WatermelonLib.modulemap" "${MODULE_MAP_PATH}"
+                  ditto "${PODS_ROOT}/Headers/Public/WatermelonLib/WatermelonLib-umbrella.h" "${BUILT_PRODUCTS_DIR}"
+                  printf "\n\nmodule ${PRODUCT_MODULE_NAME}.Swift {\n  header \"${COMPATIBILITY_HEADER_PATH}\"\n  requires objc\n}\n" >> "${MODULE_MAP_PATH}"
+                SH
+                compatibility_header_phase.input_paths.should == %w(${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h ${PODS_ROOT}/Headers/Public/WatermelonLib/WatermelonLib.modulemap ${PODS_ROOT}/Headers/Public/WatermelonLib/WatermelonLib-umbrella.h)
+                compatibility_header_phase.output_paths.should == %w(${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap ${BUILT_PRODUCTS_DIR}/WatermelonLib-umbrella.h ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h)
+              end
+
+              it 'does not add swift compatibility header phase for swift static frameworks' do
+                @watermelon_pod_target.stubs(:build_type => Target::BuildType.static_framework, :uses_swift? => true)
+
+                @installer.install!
+
+                native_target = @project.targets.find { |t| t.name == @watermelon_pod_target.label }
+                compatibility_header_phase = native_target.build_phases.find { |ph| ph.display_name == 'Copy generated compatibility header' }
+                compatibility_header_phase.should.be.nil
+              end
+
+              it 'raises for swift static libraries with custom module maps' do
+                @watermelon_pod_target.stubs(:build_type => Target::BuildType.static_library, :uses_swift? => true)
+                @installer.stubs(:custom_module_map => mock('custom_module_map', :read => ''))
+
+                e = ->() { @installer.install! }.should.raise(Informative)
+                e.message.should.include '[!] Using Swift static libraries with custom module maps is currently not supported. Please build `WatermelonLib` as a framework or remove the custom module map.'
+              end
             end
 
             describe 'test other files under sources' do
