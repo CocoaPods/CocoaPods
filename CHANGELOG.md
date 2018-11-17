@@ -13,6 +13,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Bug Fixes
 
 * None.  
+* Remove `manifest` attribute from sandbox.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8260](https://github.com/CocoaPods/CocoaPods/pull/8260)
+  
+* Don't have libraries build the app spec.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8244](https://github.com/CocoaPods/CocoaPods/pull/8244)
+
+* Fix running test specs that support iOS 8.  
+  [Jeff Kelley](https://github.com/SlaunchaMan)
+  [#8286](https://github.com/CocoaPods/CocoaPods/pull/8286)
+
 ## 1.6.0.beta.2 (2018-10-17)
 
 ##### Enhancements

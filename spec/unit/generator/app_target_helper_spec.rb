@@ -114,15 +114,30 @@ module Pod
       end
 
       describe 'creating a launchscreen storyboard' do
-        it 'creates the correct launchscreen storyboard contents' do
-          pod_target = stub('PodTarget', :uses_swift? => false, :should_build? => true,
-                                         :product_module_name => 'ModuleName', :name => 'ModuleName',
-                                         :sandbox => @sandbox)
-          project = stub('Project', :path => Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{pod_target.name}"])) + 'App.xcodeproj')
+        describe 'on iOS 9 and above' do
+          it 'creates the correct launchscreen storyboard contents' do
+            pod_target = stub('PodTarget', :uses_swift? => false, :should_build? => true,
+                                           :product_module_name => 'ModuleName', :name => 'ModuleName',
+                                           :sandbox => @sandbox)
+            project = stub('Project', :path => Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{pod_target.name}"])) + 'App.xcodeproj')
 
-          file = AppTargetHelper.create_launchscreen_storyboard_file(project)
-          file.basename.to_s.should == 'LaunchScreen.storyboard'
-          file.read.should == AppTargetHelper::LAUNCHSCREEN_STORYBOARD_CONTENTS
+            file = AppTargetHelper.create_launchscreen_storyboard_file(project, '9.0')
+            file.basename.to_s.should == 'LaunchScreen.storyboard'
+            file.read.should == AppTargetHelper::LAUNCHSCREEN_STORYBOARD_CONTENTS
+          end
+        end
+
+        describe 'on iOS 8' do
+          it 'creates the correct launchscreen storyboard contents' do
+            pod_target = stub('PodTarget', :uses_swift? => false, :should_build? => true,
+                                           :product_module_name => 'ModuleName', :name => 'ModuleName',
+                                           :sandbox => @sandbox)
+            project = stub('Project', :path => Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{pod_target.name}"])) + 'App.xcodeproj')
+
+            file = AppTargetHelper.create_launchscreen_storyboard_file(project, '8.0')
+            file.basename.to_s.should == 'LaunchScreen.storyboard'
+            file.read.should == AppTargetHelper::LAUNCHSCREEN_STORYBOARD_CONTENTS_IOS_8
+          end
         end
       end
     end
