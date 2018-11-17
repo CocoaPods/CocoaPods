@@ -870,6 +870,19 @@ module Pod
               ]
             end
 
+            it 'creates an info.plist file when static frameworks are required' do
+              @pod_target.stubs(:build_type).returns(Target::BuildType.static_framework)
+              @installer.install!
+              group = @project['Pods/BananaLib/Support Files']
+              group.children.map(&:display_name).sort.should == [
+                'BananaLib-Info.plist',
+                'BananaLib-dummy.m',
+                'BananaLib-prefix.pch',
+                'BananaLib.modulemap',
+                'BananaLib.xcconfig',
+              ]
+            end
+
             it 'does not create an Info.plist file if INFOPLIST_FILE is set' do
               @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
               @spec.pod_target_xcconfig = {
