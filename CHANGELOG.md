@@ -53,6 +53,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix --deployment flag incorrectly erroring on GoogleSignIn  
+  [igor-makarov](https://github.com/igor-makarov)
+  
 * Do not force 64-bit architectures on Xcode 10  
   [Eric Amorde](https://github.com/amorde)
   [#8242](https://github.com/CocoaPods/CocoaPods/issues/8242)
