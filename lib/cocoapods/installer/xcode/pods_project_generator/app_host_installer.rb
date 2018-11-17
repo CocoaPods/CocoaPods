@@ -73,7 +73,7 @@ module Pod
             end
 
             Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, app_target_label) if add_main
-            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, app_target_label) if platform == :ios
+            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, deployment_target, app_target_label) if platform == :ios
             additional_entries = platform == :ios ? ADDITIONAL_IOS_INFO_PLIST_ENTRIES : {}
             create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
                                                 :appl, additional_entries)
