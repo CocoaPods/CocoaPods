@@ -126,7 +126,6 @@ module Pod
           # @return [Boolean] Whether the target should build an Info.plist file
           #
           def skip_info_plist?(native_target)
-            return true if target.static_framework?
             existing_setting = native_target.resolved_build_setting('INFOPLIST_FILE', true).values.compact
             !existing_setting.empty?
           end

@@ -9,6 +9,31 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Enhancements
 
 * None.  
+* Generate Info.plist files for static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8287](https://github.com/CocoaPods/CocoaPods/issues/8287)
+
+* Multi Pod Project Generation Support.  
+  Support for splitting the pods project into a subproject per pod target, gated by the `generate_multiple_pod_projects` installation option.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8253](https://github.com/CocoaPods/CocoaPods/issues/8253)
+
+* Don't add main for app specs.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8235](https://github.com/CocoaPods/CocoaPods/pull/8235)
+
+* Multiple Swift versions support  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8191](https://github.com/CocoaPods/CocoaPods/issues/8191)
+
+* Adds app spec project integration.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
+
+* Add documentation for the Podfile installation options  
+  [Eric Amorde](https://github.com/amorde)
+  [#8198](https://github.com/CocoaPods/CocoaPods/issues/8198)
+  [guides.cocoapods.org #142](https://github.com/CocoaPods/guides.cocoapods.org/issues/142)
 
 ##### Bug Fixes
 
