@@ -44,6 +44,7 @@ module Pod
     #
     def initialize(path, skip_initialization = false,
                     object_version = Xcodeproj::Constants::DEFAULT_OBJECT_VERSION, pod_target_subproject: false)
+      @uuid_prefix = Digest('SHA256').hexdigest(File.basename(path)).upcase
       super(path, skip_initialization, object_version)
       @support_files_group = new_group('Targets Support Files')
       @refs_by_absolute_path = {}
@@ -68,7 +69,7 @@ module Pod
     #
     def generate_available_uuid_list(count = 100)
       start = @generated_uuids.size
-      uniques = Array.new(count) { |i| format('%011X0', start + i) }
+      uniques = Array.new(count) { |i| format('%.4s%07X0', @uuid_prefix, start + i) }
       @generated_uuids += uniques
       @available_uuids += uniques
     end
