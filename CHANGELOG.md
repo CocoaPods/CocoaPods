@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support for `.rb` extension for Podfiles  
+  [Eric Amorde](https://github.com/amorde)
+  [#8171](https://github.com/CocoaPods/CocoaPods/issues/8171)
+
 * Generate Info.plist files for static frameworks  
   [Paul Beusterien](https://github.com/paulb777)
   [#8287](https://github.com/CocoaPods/CocoaPods/issues/8287)
