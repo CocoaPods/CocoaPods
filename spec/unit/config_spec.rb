@@ -185,6 +185,11 @@ module Pod
         @config.podfile_path.should == temporary_directory + 'CocoaPods.podfile'
       end
 
+      it 'can detect files named `Podfile.rb`' do
+        (temporary_directory + 'Podfile.rb').open('w') { |f| f << '# Yo' }
+        @config.podfile_path.should == temporary_directory + 'Podfile.rb'
+      end
+
       it 'returns the path to the Pods directory that holds the dependencies' do
         @config.sandbox_root.should == temporary_directory + 'Pods'
       end
