@@ -1,0 +1,72 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-iOS App`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Finding Podfile changes
+  - Reachability
+  - Reachability2
+
+Fetching external sources
+-> Fetching podspec for `Reachability` from `Reachability`
+-> Fetching podspec for `Reachability2` from `Reachability2`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  - Reachability
+  - Reachability2
+
+Downloading dependencies
+
+-> Using Reachability (3.1.0)
+
+-> Using Reachability2 (3.1.0)
+  - Running pre install hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Creating Reachability project
+  - Installing files into Reachability project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Creating Reachability2 project
+  - Installing files into Reachability2 project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `Reachability` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Reachability/Reachability-dummy.m`
+    - Installing target `Reachability2` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Reachability2/Reachability2-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-iOS App` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Pods-iOS App/Pods-iOS App-dummy.m`
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+    - Generating deterministic UUIDs
+  - Writing Xcode project file to `Pods/Reachability.xcodeproj`
+    - Generating deterministic UUIDs
+  - Writing Xcode project file to `Pods/Reachability2.xcodeproj`
+    - Generating deterministic UUIDs
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+Integrating client project
+
+Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
+  - Running post install hooks
+    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
+
+-> Pod installation complete! There are 2 dependencies from the Podfile and 2 total pods installed.

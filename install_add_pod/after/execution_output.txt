@@ -45,16 +45,18 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-  - Adding source files to Pods project
-  - Adding frameworks to Pods project
-  - Adding libraries to Pods project
-  - Adding resources to Pods project
-  - Linking headers
-  - Installing targets
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
     - Installing target `JSONKit` iOS 4.3
       - Generating dummy source at `Pods/Target Support Files/JSONKit/JSONKit-dummy.m`
     - Installing target `Reachability` iOS 4.3
       - Generating dummy source at `Pods/Target Support Files/Reachability/Reachability-dummy.m`
+  - Installing Aggregate Targets
     - Installing target `Pods-SampleApp` iOS 6.0
       - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
   - Running post install hooks

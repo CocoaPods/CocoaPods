@@ -21,17 +21,19 @@ Downloading dependencies
 
 Generating Pods project
   - Creating Pods project
-  - Adding source files to Pods project
-  - Adding frameworks to Pods project
-  - Adding libraries to Pods project
-  - Adding resources to Pods project
-  - Adding development pod helper files to Pods project
-  - Linking headers
-  - Installing targets
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
     - Installing target `BananaLib` iOS 8.0
       - Copying module map file to `Pods/Target Support Files/BananaLib/BananaLib.modulemap`
       - Generating Info.plist file at `Pods/Target Support Files/BananaLib/BananaLib-Info.plist`
       - Generating dummy source at `Pods/Target Support Files/BananaLib/BananaLib-dummy.m`
+  - Installing Aggregate Targets
     - Installing target `Pods-Example` iOS 8.2
       - Generating Info.plist file at `Pods/Target Support Files/Pods-Example/Pods-Example-Info.plist`
       - Generating module map file at `Pods/Target Support Files/Pods-Example/Pods-Example.modulemap`
