@@ -40,6 +40,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not force 64-bit architectures on Xcode 10  
+  [Eric Amorde](https://github.com/amorde)
+  [#8242](https://github.com/CocoaPods/CocoaPods/issues/8242)
+
 * Remove `manifest` attribute from sandbox.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8260](https://github.com/CocoaPods/CocoaPods/pull/8260)

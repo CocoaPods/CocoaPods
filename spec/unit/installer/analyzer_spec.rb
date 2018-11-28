@@ -164,22 +164,17 @@ module Pod
 
       describe 'platform architectures' do
         it 'correctly determines when a platform requires 64-bit architectures' do
-          @podfile = Pod::Podfile.new do
-            project 'SampleProject/SampleProject'
-            platform :ios, '11.0'
-            use_frameworks!
-            target 'TestRunner' do
-              pod 'AFNetworking'
-              pod 'JSONKit'
-            end
-          end
-          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '11.0'), nil).should.be.true
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '12.0'), nil).should.be.true
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '10.0'), nil).should.be.false
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:osx), nil).should.be.true
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:tvos), nil).should.be.false
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:watchos), nil).should.be.false
+        end
 
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '11.0')).should.be.true
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '10.0')).should.be.false
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:osx)).should.be.true
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:tvos)).should.be.false
-          @analyzer.send(:requires_64_bit_archs?, Platform.new(:watchos)).should.be.false
+        it 'does not specify 64-bit architectures on Xcode 10+' do
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '11.0'), 49).should.be.true
+          Installer::Analyzer.send(:requires_64_bit_archs?, Platform.new(:ios, '11.0'), 50).should.be.false
         end
 
         it 'forces 64-bit architectures when required' do
@@ -213,6 +208,7 @@ module Pod
               end
             end
           end
+          Xcodeproj::Project.any_instance.stubs(:object_version).returns('49')
           @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
           result = @analyzer.analyze
 
@@ -220,6 +216,23 @@ module Pod
 
           non_64_bit_target.send(:archs).should == []
           result.pod_targets.map(&:archs).uniq.should == [['$(ARCHS_STANDARD_64_BIT)']]
+        end
+
+        it 'does not force 64-bit architectures on Xcode 10+' do
+          @podfile = Pod::Podfile.new do
+            project 'SampleProject/SampleProject'
+            platform :ios, '11.0'
+            use_frameworks!
+            target 'TestRunner' do
+              pod 'AFNetworking'
+              pod 'JSONKit'
+            end
+          end
+          Xcodeproj::Project.any_instance.stubs(:object_version).returns('50')
+          @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+          result = @analyzer.analyze
+
+          result.pod_targets.map(&:archs).uniq.should == [[]]
         end
 
         it 'does not specify archs value unless required' do
