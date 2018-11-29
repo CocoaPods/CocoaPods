@@ -77,20 +77,20 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
           end
 
-          it 'includes the libraries for the specifications' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-l"xml2"')
+          it 'does not include the libraries for the specifications' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-l"xml2"')
           end
 
-          it 'includes the frameworks of the specifications' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "QuartzCore"')
+          it 'should not include the frameworks of the specifications' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-framework "QuartzCore"')
           end
 
-          it 'includes the weak-frameworks of the specifications' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework "iAd"')
+          it 'does not include the weak-frameworks of the specifications' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-weak_framework "iAd"')
           end
 
-          it 'includes the vendored dynamic frameworks for dependency pods of the specification' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "dynamic-monkey"')
+          it 'does not include the vendored dynamic frameworks for dependency pods of the specification' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-framework "dynamic-monkey"')
           end
 
           it 'does not include vendored static frameworks for dependency pods of the specification' do
@@ -222,7 +222,7 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.other_ldflags.should.
-              be == %w(-l"Bananalib" -l"VendoredDyld" -l"xml2" -framework "Bananalib" -framework "VendoredFramework" -framework "XCTest" -weak_framework "iAd")
+              be == %w(-l"Bananalib" -framework "Bananalib")
           end
         end
 
