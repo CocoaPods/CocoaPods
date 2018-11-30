@@ -216,22 +216,17 @@ module Pod
         @pod_target_subprojects = pod_project_generation_result.projects_by_pod_targets.keys
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets
         run_podfile_post_install_hooks
-        pods_project_writer = Xcode::PodsProjectWriter.new(sandbox, pods_project,
-                                                           target_installation_results.pod_target_installation_results,
-                                                           installation_options)
-        pods_project_writer.write!
-        projects_by_pod_targets.each do |project, pod_targets|
-          pod_target_project_writer = Xcode::PodsProjectWriter.new(sandbox, project,
-                                                                   target_installation_results.pod_target_installation_results,
-                                                                   installation_options)
-          pod_target_project_writer.write!
+
+        generated_projects = [pods_project] + pod_target_subprojects
+        projects_writer = Xcode::PodsProjectWriter.new(sandbox, generated_projects,
+                                                       target_installation_results.pod_target_installation_results, installation_options)
+        projects_writer.write!
+
+        pods_project_pod_targets = pod_targets - projects_by_pod_targets.values.flatten
+        all_projects_by_pod_targets = { pods_project => pods_project_pod_targets }.merge(projects_by_pod_targets)
+        all_projects_by_pod_targets.each do |project, pod_targets|
           generator.share_development_pod_schemes(project, development_pod_targets(pod_targets))
         end
-
-        # Share the remaining pod targets. Generally this will be none for when `generate_multiple_pod_projects` is set to true
-        # and all pod_targets when set to false.
-        remaining_development_pods = development_pod_targets(pod_targets - projects_by_pod_targets.values.flatten)
-        generator.share_development_pod_schemes(pods_project, remaining_development_pods)
 
         write_lockfiles
       end
