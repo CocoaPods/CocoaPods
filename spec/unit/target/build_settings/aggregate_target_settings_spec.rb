@@ -230,6 +230,7 @@ module Pod
                               :build_as_static? => true,
                               :build_as_dynamic_library? => false,
                               :build_as_dynamic_framework? => false,
+                              :build_as_dynamic? => false,
                               :build_as_static_framework? => false,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
@@ -477,6 +478,7 @@ module Pod
                               :build_as_static_framework? => false,
                               :build_as_dynamic_library? => false,
                               :build_as_dynamic_framework? => true,
+                              :build_as_dynamic? => true,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
@@ -491,7 +493,7 @@ module Pod
             pod_target.stubs(:build_settings => PodTargetSettings.new(pod_target))
             aggregate_target = fixture_aggregate_target([pod_target])
             @generator = AggregateTargetSettings.new(aggregate_target, 'Release')
-            @generator.other_ldflags.should == %w(-ObjC -l"StaticLibrary" -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "VendoredFramework" -framework "XCTest")
+            @generator.other_ldflags.should == %w(-ObjC -l"VendoredDyld" -l"xml2" -framework "PodTarget" -framework "VendoredFramework" -framework "XCTest")
           end
 
           it 'does propagate system frameworks or system libraries from a non test specification to an aggregate target that uses static libraries' do
@@ -522,6 +524,7 @@ module Pod
                               :build_as_static_framework? => false,
                               :build_as_dynamic_framework? => false,
                               :build_as_dynamic_library? => false,
+                              :build_as_dynamic? => false,
                               :build_as_static? => true,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
@@ -568,6 +571,7 @@ module Pod
                               :build_as_static? => true,
                               :build_as_static_library? => false,
                               :build_as_dynamic_library? => false,
+                              :build_as_dynamic? => false,
                               :build_as_dynamic_framework? => false,
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
