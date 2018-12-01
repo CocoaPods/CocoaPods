@@ -54,6 +54,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jeff Kelley](https://github.com/SlaunchaMan)
   [#8286](https://github.com/CocoaPods/CocoaPods/pull/8286)
 
+* Remove linker flags that linked dynamic libraries & frameworks from the build
+  settings for pod targets.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#8314](https://github.com/CocoaPods/CocoaPods/pull/8314)
+
 ## 1.6.0.beta.2 (2018-10-17)
 
 ##### Enhancements

@@ -512,11 +512,15 @@ module Pod
         define_build_settings_method :frameworks, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
-          frameworks = vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
-          frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } unless test_xcconfig?
-          frameworks.concat consumer_frameworks
-          frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
-          frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.static_frameworks_to_import } if test_xcconfig?
+          frameworks = []
+          if test_xcconfig? || (target.should_build? && target.requires_frameworks? && !target.static_framework?)
+            frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
+          end
+          if test_xcconfig?
+            frameworks.concat consumer_frameworks
+            frameworks.concat vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
+            frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.frameworks_to_import }
+          end
           frameworks
         end
 
@@ -538,8 +542,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :weak_frameworks, :memoized => true do
-          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
-
+          return [] unless test_xcconfig?
           weak_frameworks = spec_consumers.flat_map(&:weak_frameworks)
           weak_frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.weak_frameworks_to_import }
           weak_frameworks
@@ -602,15 +605,24 @@ module Pod
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
-          libraries = libraries_to_import.dup
-          libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
-          libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import } if test_xcconfig?
+          libraries = []
+          if test_xcconfig? || target.requires_frameworks? && !target.static_framework?
+            libraries.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
+          end
+          if test_xcconfig?
+            libraries.concat libraries_to_import
+            libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
+            libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import }
+          end
           libraries
         end
 
         # @return [Array<String>]
         define_build_settings_method :static_libraries_to_import, :memoized => true do
-          static_libraries_to_import = vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+          static_libraries_to_import = []
+          unless target.should_build? && target.requires_frameworks? && !target.static_framework?
+            static_libraries_to_import.concat vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+          end
           static_libraries_to_import << target.product_basename if target.should_build? && !target.requires_frameworks?
           static_libraries_to_import
         end
