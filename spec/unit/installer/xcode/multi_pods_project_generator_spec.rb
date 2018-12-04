@@ -558,8 +558,8 @@ module Pod
 
             target.stubs(:user_targets).returns([user_target])
 
-            @generator = SinglePodsProjectGenerator.new(config.sandbox, [target], [],
-                                                        @analysis_result, @installation_options, config)
+            @generator = MultiPodsProjectGenerator.new(config.sandbox, [target], [],
+                                                       @analysis_result, @installation_options, config)
             pod_generator_result = @generator.generate!
             pod_generator_result.project.object_version.should == '1'
             pod_generator_result.projects_by_pod_targets.keys.each do |target_project|
@@ -574,38 +574,37 @@ module Pod
               pod_generator_result = @generator.generate!
               pods_project = pod_generator_result.project
               pods_project.main_group.expects(:sort)
-              Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-              Xcode::PodsProjectWriter.new(@generator.sandbox, pods_project,
-                                           pod_generator_result.target_installation_results.pod_target_installation_results,
-                                           @generator.installation_options).write!
               pod_generator_result.projects_by_pod_targets.keys.each do |target_project|
                 target_project.main_group.expects(:sort)
-                Xcode::PodsProjectWriter.new(@generator.sandbox, target_project,
-                                             pod_generator_result.target_installation_results.pod_target_installation_results,
-                                             @generator.installation_options).write!
               end
+              Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
+              generated_projects = [pods_project] + pod_generator_result.projects_by_pod_targets.keys
+              Xcode::PodsProjectWriter.new(@generator.sandbox, generated_projects,
+                                           pod_generator_result.target_installation_results.pod_target_installation_results,
+                                           @generator.installation_options).write!
             end
 
             it 'saves the project' do
               pod_generator_result = @generator.generate!
               Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-              pod_generator_result.project.expects(:save)
-              Xcode::PodsProjectWriter.new(@generator.sandbox, pod_generator_result.project,
+              pods_project = pod_generator_result.project
+              projects_by_pod_targets = pod_generator_result.projects_by_pod_targets
+              pods_project.expects(:save)
+              projects_by_pod_targets.keys.each do |target_project|
+                target_project.expects(:sort)
+              end
+              generated_projects = [pods_project] + projects_by_pod_targets.keys
+              Xcode::PodsProjectWriter.new(@generator.sandbox, generated_projects,
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
-              pod_generator_result.projects_by_pod_targets.keys.each do |target_project|
-                target_project.expects(:sort)
-                Xcode::PodsProjectWriter.new(@generator.sandbox, target_project,
-                                             pod_generator_result.target_installation_results.pod_target_installation_results,
-                                             @generator.installation_options).write!
-              end
             end
 
             it 'project cleans up empty groups' do
               pod_generator_result = @generator.generate!
               pods_project = pod_generator_result.project
               projects_by_pod_targets = pod_generator_result.projects_by_pod_targets
-              Xcode::PodsProjectWriter.new(@generator.sandbox, pods_project,
+              generated_projects = [pods_project] + projects_by_pod_targets.keys
+              Xcode::PodsProjectWriter.new(@generator.sandbox, generated_projects,
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
               pods_project.main_group['Pods'].should.be.nil
@@ -613,9 +612,6 @@ module Pod
               pods_project.main_group['Dependencies'].should.not.be.nil
 
               projects_by_pod_targets.keys.each do |project|
-                Xcode::PodsProjectWriter.new(@generator.sandbox, project,
-                                             pod_generator_result.target_installation_results.pod_target_installation_results,
-                                             @generator.installation_options).write!
                 project.main_group['Pods'].should.be.nil
                 project.main_group['Development Pods'].should.be.nil
               end

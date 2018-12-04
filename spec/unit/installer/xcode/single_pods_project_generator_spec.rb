@@ -401,7 +401,7 @@ module Pod
               pod_generator_result = @generator.generate!
               pod_generator_result.project.main_group.expects(:sort)
               Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
-              Xcode::PodsProjectWriter.new(@generator.sandbox, pod_generator_result.project,
+              Xcode::PodsProjectWriter.new(@generator.sandbox, [pod_generator_result.project],
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
             end
@@ -410,7 +410,7 @@ module Pod
               pod_generator_result = @generator.generate!
               Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
               pod_generator_result.project.expects(:save)
-              Xcode::PodsProjectWriter.new(@generator.sandbox, pod_generator_result.project,
+              Xcode::PodsProjectWriter.new(@generator.sandbox, [pod_generator_result.project],
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
             end
