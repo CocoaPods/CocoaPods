@@ -54,12 +54,10 @@ Generating Pods project
     - Installing target `Pods-iOS App` iOS 4.3
       - Generating dummy source at `Pods/Target Support Files/Pods-iOS App/Pods-iOS App-dummy.m`
   - Running post install hooks
+  - Generating deterministic UUIDs
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
-    - Generating deterministic UUIDs
   - Writing Xcode project file to `Pods/Reachability.xcodeproj`
-    - Generating deterministic UUIDs
   - Writing Xcode project file to `Pods/Reachability2.xcodeproj`
-    - Generating deterministic UUIDs
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
 

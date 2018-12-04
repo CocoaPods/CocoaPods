@@ -50,8 +50,8 @@ Generating Pods project
     - Installing target `Pods-SampleApp` iOS 6.0
       - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
   - Running post install hooks
+  - Generating deterministic UUIDs
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
-    - Generating deterministic UUIDs
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
 
