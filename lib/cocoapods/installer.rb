@@ -40,6 +40,7 @@ module Pod
     autoload :PodSourcePreparer,          'cocoapods/installer/pod_source_preparer'
     autoload :UserProjectIntegrator,      'cocoapods/installer/user_project_integrator'
     autoload :Xcode,                      'cocoapods/installer/xcode'
+    autoload :SandboxHeaderLinker,        'cocoapods/installer/sandbox_header_linker'
 
     include Config::Mixin
 
@@ -134,6 +135,7 @@ module Pod
       resolve_dependencies
       download_dependencies
       validate_targets
+      link_sandbox_files
       generate_pods_project
       if installation_options.integrate_targets?
         integrate_user_project
@@ -188,6 +190,13 @@ module Pod
         run_podfile_pre_install_hooks
         clean_pod_sources
       end
+    end
+
+    # Links files into the Sandbox before project generation so they exist and can be used
+    # to analyze pod target build settings that depend on the Sandbox dir (ex. HEADER_SEARCH_PATHS).
+    #
+    def link_sandbox_files
+      SandboxHeaderLinker.new(sandbox, pod_targets).link!
     end
 
     #-------------------------------------------------------------------------#
