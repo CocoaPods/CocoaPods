@@ -107,10 +107,6 @@ module Pod
               banana_headers.each { |banana_header| banana_header.should.not.exist }
               monkey_header = headers_root + 'monkey/monkey.h'
               monkey_header.should.exist # since it lives outside of the vendored framework
-              config.sandbox.public_headers.search_paths(pod_target_one.platform).should == %w(
-                ${PODS_ROOT}/Headers/Public
-                ${PODS_ROOT}/Headers/Public/monkey
-              )
             end
 
             it 'does not link public headers from vendored framework, when frameworks required' do
@@ -224,50 +220,6 @@ module Pod
                 pod_target_1 = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [stub('Spec', :test_specification? => false, :library_specification? => true, :app_specification? => false, :spec_type => :library)], [fixture_target_definition], [])
                 installer = FileReferencesInstaller.new(config.sandbox, [pod_target_1], @project)
                 installer.send(:file_accessors).should == []
-              end
-            end
-
-            describe '#header_mappings' do
-              it 'returns the correct public header mappings' do
-                headers_sandbox = Pathname.new('BananaLib')
-                headers = [Pathname.new('Banana.h')]
-                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-                mappings.should == {
-                  Pathname.new('BananaLib') => [Pathname.new('Banana.h')],
-                }
-              end
-
-              it 'takes into account the header dir specified in the spec for public headers' do
-                headers_sandbox = Pathname.new('BananaLib')
-                headers = [Pathname.new('Banana.h')]
-                @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
-                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-                mappings.should == {
-                  Pathname.new('BananaLib/Sub_dir') => [Pathname.new('Banana.h')],
-                }
-              end
-
-              it 'takes into account the header dir specified in the spec for private headers' do
-                headers_sandbox = Pathname.new('BananaLib')
-                headers = [Pathname.new('Banana.h')]
-                @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
-                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-                mappings.should == {
-                  Pathname.new('BananaLib/Sub_dir') => [Pathname.new('Banana.h')],
-                }
-              end
-
-              it 'takes into account the header mappings dir specified in the spec' do
-                headers_sandbox = Pathname.new('BananaLib')
-                header_1 = @file_accessor.root + 'BananaLib/sub_dir/dir_1/banana_1.h'
-                header_2 = @file_accessor.root + 'BananaLib/sub_dir/dir_2/banana_2.h'
-                headers = [header_1, header_2]
-                @file_accessor.spec_consumer.stubs(:header_mappings_dir).returns('BananaLib/sub_dir')
-                mappings = @installer.send(:header_mappings, headers_sandbox, @file_accessor, headers)
-                mappings.should == {
-                  (headers_sandbox + 'dir_1') => [header_1],
-                  (headers_sandbox + 'dir_2') => [header_2],
-                }
               end
             end
 

@@ -30,16 +30,18 @@ module Pod
   # source control.
   #
   class Installer
-    autoload :Analyzer,                   'cocoapods/installer/analyzer'
-    autoload :InstallationOptions,        'cocoapods/installer/installation_options'
-    autoload :PostInstallHooksContext,    'cocoapods/installer/post_install_hooks_context'
-    autoload :PreInstallHooksContext,     'cocoapods/installer/pre_install_hooks_context'
-    autoload :SourceProviderHooksContext, 'cocoapods/installer/source_provider_hooks_context'
-    autoload :PodfileValidator,           'cocoapods/installer/podfile_validator'
-    autoload :PodSourceInstaller,         'cocoapods/installer/pod_source_installer'
-    autoload :PodSourcePreparer,          'cocoapods/installer/pod_source_preparer'
-    autoload :UserProjectIntegrator,      'cocoapods/installer/user_project_integrator'
-    autoload :Xcode,                      'cocoapods/installer/xcode'
+    autoload :Analyzer,                     'cocoapods/installer/analyzer'
+    autoload :InstallationOptions,          'cocoapods/installer/installation_options'
+    autoload :PostInstallHooksContext,      'cocoapods/installer/post_install_hooks_context'
+    autoload :PreInstallHooksContext,       'cocoapods/installer/pre_install_hooks_context'
+    autoload :SourceProviderHooksContext,   'cocoapods/installer/source_provider_hooks_context'
+    autoload :PodfileValidator,             'cocoapods/installer/podfile_validator'
+    autoload :PodSourceInstaller,           'cocoapods/installer/pod_source_installer'
+    autoload :PodSourcePreparer,            'cocoapods/installer/pod_source_preparer'
+    autoload :UserProjectIntegrator,        'cocoapods/installer/user_project_integrator'
+    autoload :Xcode,                        'cocoapods/installer/xcode'
+    autoload :SandboxHeaderPathsInstaller,  'cocoapods/installer/sandbox_header_paths_installer'
+    autoload :SandboxDirCleaner,            'cocoapods/installer/sandbox_dir_cleaner'
 
     include Config::Mixin
 
@@ -171,7 +173,6 @@ module Pod
       UI.section 'Analyzing dependencies' do
         analyze(analyzer)
         validate_build_configurations
-        clean_sandbox
       end
 
       UI.section 'Verifying no changes' do
@@ -190,6 +191,20 @@ module Pod
       end
     end
 
+    # Stages the sandbox after analysis.
+    #
+    # @param [Sandbox] sandbox
+    #        The sandbox to stage.
+    #
+    # @param [Array<PodTarget>] pod_targets
+    #        The list of all pod targets.
+    #
+    # @return [void]
+    #
+    def stage_sandbox(sandbox, pod_targets)
+      SandboxHeaderPathsInstaller.new(sandbox, pod_targets).install!
+    end
+
     #-------------------------------------------------------------------------#
 
     # @!group Pods Project Generation
@@ -206,7 +221,15 @@ module Pod
 
     # Generates the Xcode project(s) that go inside the `Pods/` directory.
     #
-    def generate_pods_project(generator = create_generator(installation_options.generate_multiple_pod_projects))
+    def generate_pods_project
+      stage_sandbox(sandbox, pod_targets)
+      clean_sandbox(pod_targets)
+      create_and_save_projects
+      write_lockfiles
+      SandboxDirCleaner.new(sandbox, pod_targets, aggregate_targets).clean!
+    end
+
+    def create_and_save_projects(generator = create_generator(installation_options.generate_multiple_pod_projects))
       UI.section 'Generating Pods project' do
         pod_project_generation_result = generator.generate!
         @target_installation_results = pod_project_generation_result.target_installation_results
@@ -227,8 +250,6 @@ module Pod
         all_projects_by_pod_targets.each do |project, pod_targets|
           generator.share_development_pod_schemes(project, development_pod_targets(pod_targets))
         end
-
-        write_lockfiles
       end
     end
 
@@ -314,25 +335,14 @@ module Pod
       end
     end
 
-    # @return [void] In this step we clean all the folders that will be
-    #         regenerated from scratch and any file which might not be
-    #         overwritten.
+    # @return [void] In this step we clean all the header folders for pod targets that will be
+    #         regenerated from scratch and cleanup any pods that have been removed.
     #
-    # @todo   [#247] Clean the headers of only the pods to install.
-    #
-    def clean_sandbox
-      sandbox.public_headers.implode!
-      target_support_dirs = sandbox.target_support_files_root.children.select(&:directory?)
+    def clean_sandbox(pod_targets)
       pod_targets.each do |pod_target|
-        pod_target.build_headers.implode!
-        target_support_dirs.delete(pod_target.support_files_dir)
+        pod_target.build_headers.implode_path!(pod_target.headers_sandbox)
+        sandbox.public_headers.implode_path!(pod_target.headers_sandbox)
       end
-
-      aggregate_targets.each do |aggregate_target|
-        target_support_dirs.delete(aggregate_target.support_files_dir)
-      end
-
-      target_support_dirs.each { |dir| FileUtils.rm_rf(dir) }
 
       unless sandbox_state.deleted.empty?
         title_options = { :verbose_prefix => '-> '.red }

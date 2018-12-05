@@ -66,13 +66,24 @@ module Pod
         end.tap(&:uniq!).freeze
       end
 
-      # Removes the directory as it is regenerated from scratch during each
-      # installation.
+      # Removes the entire root directory.
       #
       # @return [void]
       #
       def implode!
         root.rmtree if root.exist?
+      end
+
+      # Removes the directory at the given path relative to the root.
+      #
+      # @param [Pathname] path
+      #        The path used to join with #root and remove.
+      #
+      # @return [void]
+      #
+      def implode_path!(path)
+        path = root.join(path)
+        path.rmtree if path.exist?
       end
 
       #-----------------------------------------------------------------------#

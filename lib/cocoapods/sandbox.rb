@@ -102,8 +102,6 @@ module Pod
     # be regenerated and ensuring that the directories exists.
     #
     def prepare
-      FileUtils.rm_rf(headers_root)
-
       FileUtils.mkdir_p(headers_root)
       FileUtils.mkdir_p(sources_root)
       FileUtils.mkdir_p(specifications_root)
