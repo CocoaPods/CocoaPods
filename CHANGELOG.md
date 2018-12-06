@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Scheme configuration support.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7577](https://github.com/CocoaPods/CocoaPods/issues/7577)
+
 * Add support for `.rb` extension for Podfiles  
   [Eric Amorde](https://github.com/amorde)
   [#8171](https://github.com/CocoaPods/CocoaPods/issues/8171)

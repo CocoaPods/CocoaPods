@@ -68,16 +68,10 @@ module Pod
             target.should_build? && share_scheme_for_development_pod?(target.pod_name)
           end
           targets.each do |pod_target|
-            Xcodeproj::XCScheme.share_scheme(project.path, pod_target.label)
-            pod_target.test_specs.each do |test_spec|
-              Xcodeproj::XCScheme.share_scheme(project.path, pod_target.test_target_label(test_spec))
-            end
-
-            pod_target.app_specs.each do |app_spec|
-              Xcodeproj::XCScheme.share_scheme(project.path, pod_target.app_target_label(app_spec))
-            end
+            configure_schemes_for_pod_target(project, pod_target)
           end
         end
+
         # @!attribute [Hash{String => TargetInstallationResult}] pod_target_installation_results
         # @!attribute [Hash{String => TargetInstallationResult}] aggregate_target_installation_results
         InstallationResults = Struct.new(:pod_target_installation_results, :aggregate_target_installation_results)
@@ -298,12 +292,33 @@ module Pod
           end
         end
 
-        # Sets the APPLICATION_EXTENSION_API_ONLY build setting to YES for all
-        # configurations of the given native target.
-        #
         def configure_app_extension_api_only_to_native_target(native_target)
           native_target.build_configurations.each do |config|
             config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
+          end
+        end
+
+        def configure_schemes_for_pod_target(project, pod_target)
+          specs = [pod_target.root_spec] + pod_target.test_specs + pod_target.app_specs
+          specs.each do |spec|
+            scheme_name = spec.spec_type == :library ? pod_target.label : pod_target.non_library_spec_label(spec)
+            scheme_configuration = pod_target.scheme_for_spec(spec)
+            unless scheme_configuration.empty?
+              scheme_path = Xcodeproj::XCScheme.user_data_dir(project.path) + "#{scheme_name}.xcscheme"
+              scheme = Xcodeproj::XCScheme.new(scheme_path)
+              command_line_arguments = scheme.launch_action.command_line_arguments
+              scheme_configuration.fetch(:launch_arguments, []).each do |launch_arg|
+                command_line_arguments.assign_argument(:argument => launch_arg, :enabled => true)
+              end
+              scheme.launch_action.command_line_arguments = command_line_arguments
+              environment_variables = scheme.launch_action.environment_variables
+              scheme_configuration.fetch(:environment_variables, {}).each do |k, v|
+                environment_variables.assign_variable(:key => k, :value => v)
+              end
+              scheme.launch_action.environment_variables = environment_variables
+              scheme.save!
+            end
+            Xcodeproj::XCScheme.share_scheme(project.path, scheme_name)
           end
         end
       end

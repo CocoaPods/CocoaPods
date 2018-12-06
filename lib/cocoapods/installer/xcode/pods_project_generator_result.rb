@@ -9,7 +9,7 @@ module Pod
           #
           attr_reader :project
 
-          # @return [Hash<Project, Array<PodTargets>>] Project by pod targets map
+          # @return [Hash{Project => Array<PodTargets>}] Project by pod targets map
           #
           attr_reader :projects_by_pod_targets
 
@@ -20,6 +20,7 @@ module Pod
           # Initialize a new instance
           #
           # @param [Project] project @see #project
+          # @param [Hash{Project => Array<PodTargets>}] projects_by_pod_targets @see #projects_by_pod_targets
           # @param [InstallationResults] target_installation_results @see #target_installation_results
           #
           def initialize(project, projects_by_pod_targets, target_installation_results)
