@@ -77,7 +77,7 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
           end
 
-          it 'does not include the libraries for the specifications' do
+          it 'does include the libraries for the specifications' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-l"xml2"')
           end
 
