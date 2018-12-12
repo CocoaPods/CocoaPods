@@ -31,16 +31,12 @@ module Pod
           #
           def integrate!
             UI.section(integration_message) do
-              target_installation_result.non_library_specs_by_native_target.each do |native_target, specs|
-                specs.each do |spec|
-                  add_embed_frameworks_script_phase(native_target, spec)
-                  add_copy_resources_script_phase(native_target, spec)
-                end
-                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), native_target)
+              target_installation_result.non_library_specs_by_native_target.each do |native_target, spec|
+                add_embed_frameworks_script_phase(native_target, spec)
+                add_copy_resources_script_phase(native_target, spec)
+                UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(spec), native_target)
               end
-
-              specs = target.library_specs
-              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(specs), target_installation_result.native_target)
+              UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(target.library_specs), target_installation_result.native_target)
             end
           end
 
@@ -145,13 +141,13 @@ module Pod
             target_installation_result.target
           end
 
-          # @param [Array<Specification] specs
+          # @param [Specification, Array<Specification>] specs
           #         the specs to return script phrases from.
           #
           # @return [Array<Hash<Symbol=>String>] an array of all combined script phases from the specs.
           #
           def script_phases_for_specs(specs)
-            specs.flat_map { |spec| spec.consumer(target.platform).script_phases }
+            Array(specs).flat_map { |spec| spec.consumer(target.platform).script_phases }
           end
         end
       end
