@@ -378,13 +378,8 @@ module Pod
               subspec_name = target.subspec_label(app_spec)
               app_target_label = target.app_target_label(app_spec)
               platform = target.platform
-              app_native_target = AppHostInstaller.new(sandbox,
-                                                       project,
-                                                       platform,
-                                                       subspec_name,
-                                                       spec_name,
-                                                       app_target_label,
-                                                       :add_main => false).install!
+              app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
+                                                       app_target_label, :add_main => false).install!
 
               target.user_build_configurations.each do |bc_name, type|
                 app_native_target.add_build_configuration(bc_name, type)

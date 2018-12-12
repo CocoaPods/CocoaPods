@@ -386,7 +386,7 @@ module Pod
     # @param  [Specification] subspec
     #         The subspec to use for producing the label.
     #
-    # @return [String] The derived name of the test target.
+    # @return [String] The derived name of the target.
     #
     def subspec_label(subspec)
       raise ArgumentError, 'Must not be a root spec' if subspec.root?
@@ -403,9 +403,9 @@ module Pod
     end
 
     # @param  [Specification] app_spec
-    #         The app spec to use for producing the test label.
+    #         The app spec to use for producing the app label.
     #
-    # @return [String] The derived name of the test target.
+    # @return [String] The derived name of the app target.
     #
     def app_target_label(app_spec)
       "#{label}-#{subspec_label(app_spec)}"
@@ -417,6 +417,15 @@ module Pod
       when :app then app_target_label(spec)
       else raise ArgumentError, "Unhandled spec type #{spec.spec_type.inspect} for #{spec.inspect}"
       end
+    end
+
+    # @param  [Specification] spec
+    #         The spec to return scheme configuration for.
+    #
+    # @return [Hash] The scheme configuration used or empty if none is specified.
+    #
+    def scheme_for_spec(spec)
+      spec.consumer(platform).scheme
     end
 
     # @param  [Specification] spec

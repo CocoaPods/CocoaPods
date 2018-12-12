@@ -577,6 +577,20 @@ module Pod
         end
       end
 
+      describe 'scheme support' do
+        before do
+          @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+          @watermelon_spec.scheme = { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
+          @watermelon_spec.test_specs.first.scheme = { :launch_arguments => ['TestArg1'] }
+          @pod_target = fixture_pod_target(@watermelon_spec)
+        end
+
+        it 'returns the correct scheme configuration for the requested spec' do
+          @pod_target.scheme_for_spec(@watermelon_spec).should == { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
+          @pod_target.scheme_for_spec(@watermelon_spec.test_specs.first).should == { :launch_arguments => ['TestArg1'] }
+        end
+      end
+
       describe 'test spec support' do
         before do
           @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
