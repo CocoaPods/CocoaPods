@@ -213,9 +213,9 @@ module Pod
             # Wire up test native targets.
             unless pod_target_installation_result.test_native_targets.empty?
               pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_spec|
-                resource_bundle_native_target = pod_target_installation_result.test_resource_bundle_targets[test_spec.name]
-                unless resource_bundle_native_target.nil?
-                  resource_bundle_native_target.each do |test_resource_bundle_target|
+                resource_bundle_native_targets = pod_target_installation_result.test_resource_bundle_targets[test_spec.name]
+                unless resource_bundle_native_targets.nil?
+                  resource_bundle_native_targets.each do |test_resource_bundle_target|
                     test_native_target.add_dependency(test_resource_bundle_target)
                   end
                 end
@@ -235,9 +235,9 @@ module Pod
             # Wire up app native targets.
             unless pod_target_installation_result.app_native_targets.empty?
               pod_target_installation_result.app_specs_by_native_target.each do |app_native_target, app_spec|
-                resource_bundle_native_target = pod_target_installation_result.app_resource_bundle_targets[app_spec.name]
-                unless resource_bundle_native_target.nil?
-                  resource_bundle_native_target.each do |app_resource_bundle_target|
+                resource_bundle_native_targets = pod_target_installation_result.app_resource_bundle_targets[app_spec.name]
+                unless resource_bundle_native_targets.nil?
+                  resource_bundle_native_targets.each do |app_resource_bundle_target|
                     app_native_target.add_dependency(app_resource_bundle_target)
                   end
                 end
