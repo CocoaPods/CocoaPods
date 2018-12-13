@@ -16,7 +16,7 @@ module Pod
               native_target = stub('native_target')
               test_native_target = stub('test_native_target', :symbol_type => :unit_test_bundle, :name => 'CoconutLib-Unit-Tests')
               result = TargetInstallationResult.new(@pod_target, native_target, [], [test_native_target])
-              result.test_specs_by_native_target.should == { test_native_target => [@coconut_test_spec] }
+              result.test_specs_by_native_target.should == { test_native_target => @coconut_test_spec }
             end
 
             it 'does not return test specs by native target which they were not integrated' do

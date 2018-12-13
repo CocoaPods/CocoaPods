@@ -212,16 +212,16 @@ module Pod
             end
             # Wire up test native targets.
             unless pod_target_installation_result.test_native_targets.empty?
-              pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
-                test_dependent_targets = test_specs.flat_map { |s| pod_target.test_dependent_targets_by_spec_name[s.name] }.compact.unshift(pod_target).uniq
+              pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_spec|
+                resource_bundle_native_target = pod_target_installation_result.test_resource_bundle_targets[test_spec.name]
+                unless resource_bundle_native_target.nil?
+                  resource_bundle_native_target.each do |test_resource_bundle_target|
+                    test_native_target.add_dependency(test_resource_bundle_target)
+                  end
+                end
+                test_dependent_targets = pod_target.test_dependent_targets_by_spec_name.fetch(test_spec.name, []).unshift(pod_target).uniq
                 test_dependent_targets.each do |test_dependent_target|
                   dependency_installation_result = pod_target_installation_results_hash[test_dependent_target.name]
-                  resource_bundle_native_targets = dependency_installation_result.test_resource_bundle_targets[test_specs.first.name]
-                  unless resource_bundle_native_targets.nil?
-                    resource_bundle_native_targets.each do |test_resource_bundle_target|
-                      test_native_target.add_dependency(test_resource_bundle_target)
-                    end
-                  end
                   dependent_test_project = pod_target_installation_results_hash[test_dependent_target.name].native_target.project
                   if dependent_test_project != project
                     project.add_subproject_reference(dependent_test_project, project.dependencies_group)
@@ -234,16 +234,16 @@ module Pod
 
             # Wire up app native targets.
             unless pod_target_installation_result.app_native_targets.empty?
-              pod_target_installation_result.app_specs_by_native_target.each do |app_native_target, app_specs|
-                app_dependent_targets = app_specs.flat_map { |s| pod_target.app_dependent_targets_by_spec_name[s.name] }.compact.unshift(pod_target).uniq
+              pod_target_installation_result.app_specs_by_native_target.each do |app_native_target, app_spec|
+                resource_bundle_native_target = pod_target_installation_result.app_resource_bundle_targets[app_spec.name]
+                unless resource_bundle_native_target.nil?
+                  resource_bundle_native_target.each do |app_resource_bundle_target|
+                    app_native_target.add_dependency(app_resource_bundle_target)
+                  end
+                end
+                app_dependent_targets = pod_target.app_dependent_targets_by_spec_name.fetch(app_spec.name, []).unshift(pod_target).uniq
                 app_dependent_targets.each do |app_dependent_target|
                   dependency_installation_result = pod_target_installation_results_hash[app_dependent_target.name]
-                  resource_bundle_native_targets = dependency_installation_result.app_resource_bundle_targets[app_specs.first.name]
-                  unless resource_bundle_native_targets.nil?
-                    resource_bundle_native_targets.each do |app_resource_bundle_target|
-                      app_native_target.add_dependency(app_resource_bundle_target)
-                    end
-                  end
                   dependency_project = dependency_installation_result.native_target.project
                   if dependency_project != project
                     project.add_subproject_reference(dependency_project, project.dependencies_group)
