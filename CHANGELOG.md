@@ -64,6 +64,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   settings for pod targets.  
   [Samuel Giddins](https://github.com/segiddins)
   [#8314](https://github.com/CocoaPods/CocoaPods/pull/8314)
+  
+* Fix HTTPs -> HTTPS in warning message  
+  [CydeWeys](https://github.com/CydeWeys)
+  [#8354](https://github.com/CocoaPods/CocoaPods/pull/8353)
 
 ## 1.6.0.beta.2 (2018-10-17)
 
