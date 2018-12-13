@@ -270,10 +270,10 @@ module Pod
             @validator.results.should.be.empty?
           end
 
-          it 'should fail validation if the source URL is not HTTPs encrypted' do
+          it 'should fail validation if the source URL is not HTTPS encrypted' do
             Specification.any_instance.stubs(:source).returns(:http => 'http://orta.io/package.zip')
             @validator.validate
-            @validator.results.map(&:to_s).first.should.match /use the encrypted HTTPs protocol./
+            @validator.results.map(&:to_s).first.should.match /use the encrypted HTTPS protocol./
           end
 
           it 'should not fail validation if the source URL is using file:///' do
