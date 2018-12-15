@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'cocoapods/command/repo/add'
+require 'cocoapods/command/repo/add_cdn'
 require 'cocoapods/command/repo/lint'
 require 'cocoapods/command/repo/list'
 require 'cocoapods/command/repo/push'
