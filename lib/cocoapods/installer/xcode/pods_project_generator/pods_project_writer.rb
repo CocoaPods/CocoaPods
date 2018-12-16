@@ -41,7 +41,7 @@ module Pod
           cleanup_projects(projects)
 
           if installation_options.deterministic_uuids?
-            UI.message('- Generating deterministic UUIDs') { Xcodeproj::Project.predictabilize_uuids(projects) }
+            UI.message('- Generating deterministic UUIDs') { projects.each(&:predictabilize_uuids) }
           end
 
           projects.each do |project|
