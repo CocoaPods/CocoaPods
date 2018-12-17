@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Podfile: Add a CDNSource automatically if it's not present, just like git Source  
+  Convenience for CDNSource when specified as `source 'https://cdn.jsdelivr.net/cocoa/'`.  
+  If source doesn't exist, it will be created.  
+  [igor-makarov](https://github.com/igor-makarov)
+
 * Scheme configuration support.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7577](https://github.com/CocoaPods/CocoaPods/issues/7577)
