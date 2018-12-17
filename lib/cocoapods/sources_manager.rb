@@ -21,8 +21,13 @@ module Pod
           previous_title_level = UI.title_level
           UI.title_level = 0
           begin
-            if name =~ /^master(-\d+)?$/
+            case
+            when name =~ /^master(-\d+)?$/
               Command::Setup.parse([]).run
+            when url =~ /\.git$/
+              Command::Repo::Add.parse([name, url]).run
+            when url =~ %r{^https:\/\/}
+              Command::Repo::AddCDN.parse([name, url]).run
             else
               Command::Repo::Add.parse([name, url]).run
             end

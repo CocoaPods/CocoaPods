@@ -47,10 +47,24 @@ module Pod
               should == 'url'
           end
 
+          it 'runs `pod setup` when there is no matching source for master repo' do
+            Command::Setup.any_instance.stubs(:run).once
+            @sources_manager.stubs(:source_with_url).returns(nil).then.returns(MasterSource.new('master'))
+            @sources_manager.find_or_create_source_with_url('https://github.com/CocoaPods/Specs.git').name.
+              should == 'master'
+          end
+
           it 'runs `pod repo add` when there is no matching source' do
             Command::Repo::Add.any_instance.stubs(:run).once
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
             @sources_manager.find_or_create_source_with_url('https://github.com/artsy/Specs.git').name.
+              should == 'Source'
+          end
+
+          it 'runs `pod repo add-cdn` when there is no matching source and url is web' do
+            Command::Repo::AddCDN.any_instance.stubs(:run).once
+            @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
+            @sources_manager.find_or_create_source_with_url('https://website.com/Specs/').name.
               should == 'Source'
           end
 
