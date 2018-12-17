@@ -78,8 +78,8 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
           end
 
-          it 'does not include the libraries for the specifications' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-l"xml2"')
+          it 'does include the libraries for the specifications' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-l"xml2"')
           end
 
           it 'should not include the frameworks of the specifications' do
@@ -221,7 +221,7 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.other_ldflags.should.
-              be == %w(-l"Bananalib" -framework "Bananalib")
+              be == %w(-l"Bananalib" -l"xml2" -framework "Bananalib")
           end
         end
 

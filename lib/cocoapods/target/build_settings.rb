@@ -608,9 +608,9 @@ module Pod
           libraries = []
           if test_xcconfig? || target.requires_frameworks? && !target.static_framework?
             libraries.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
+            libraries.concat libraries_to_import
           end
           if test_xcconfig?
-            libraries.concat libraries_to_import
             libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
             libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import }
           end
