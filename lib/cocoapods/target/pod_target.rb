@@ -131,6 +131,34 @@ module Pod
       end
     end
 
+    # @return [Pathname] the pathname for headers in the sandbox.
+    #
+    def headers_sandbox
+      Pathname.new(pod_name)
+    end
+
+    # @return [Hash{FileAccessor => Hash}] Hash of file accessors by header mappings.
+    #
+    def header_mappings_by_file_accessor
+      valid_accessors = file_accessors.reject { |fa| fa.spec.non_library_specification? }
+      Hash[valid_accessors.map do |file_accessor|
+        # Private headers will always end up in Pods/Headers/Private/PodA/*.h
+        # This will allow for `""` imports to work.
+        [file_accessor, header_mappings(file_accessor, file_accessor.headers)]
+      end]
+    end
+
+    # @return [Hash{FileAccessor => Hash}] Hash of file accessors by public header mappings.
+    #
+    def public_header_mappings_by_file_accessor
+      valid_accessors = file_accessors.reject { |fa| fa.spec.non_library_specification? }
+      Hash[valid_accessors.map do |file_accessor|
+        # Public headers on the other hand will be added in Pods/Headers/Public/PodA/PodA/*.h
+        # The extra folder is intentional in order for `<>` imports to work.
+        [file_accessor, header_mappings(file_accessor, file_accessor.public_headers)]
+      end]
+    end
+
     # @return [String] the Swift version for the target. If the pod author has provided a set of Swift versions
     #         supported by their pod then the max Swift version across all of target definitions is chosen, unless
     #         a target definition specifies explicit requirements for supported Swift versions. Otherwise the Swift
@@ -696,6 +724,40 @@ module Pod
 
     def create_build_settings
       BuildSettings::PodTargetSettings.new(self)
+    end
+
+    # Computes the destination sub-directory in the sandbox
+    #
+    # @param  [Sandbox::FileAccessor] file_accessor
+    #         The consumer file accessor for which the headers need to be
+    #         linked.
+    #
+    # @param  [Array<Pathname>] headers
+    #         The absolute paths of the headers which need to be mapped.
+    #
+    # @return [Hash{Pathname => Array<Pathname>}] A hash containing the
+    #         headers folders as the keys and the absolute paths of the
+    #         header files as the values.
+    #
+    def header_mappings(file_accessor, headers)
+      consumer = file_accessor.spec_consumer
+      header_mappings_dir = consumer.header_mappings_dir
+      dir = headers_sandbox
+      dir += consumer.header_dir if consumer.header_dir
+
+      mappings = {}
+      headers.each do |header|
+        next if header.to_s.include?('.framework/')
+
+        sub_dir = dir
+        if header_mappings_dir
+          relative_path = header.relative_path_from(file_accessor.path_list.root + header_mappings_dir)
+          sub_dir += relative_path.dirname
+        end
+        mappings[sub_dir] ||= []
+        mappings[sub_dir] << header
+      end
+      mappings
     end
   end
 end
