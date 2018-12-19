@@ -838,7 +838,8 @@ module Pod
             end
 
             it 'creates an info.plist file when static frameworks are required' do
-              @pod_target.stubs(:build_type).returns(Target::BuildType.static_framework)
+              @pod_target.stubs(:requires_frameworks?).returns(true)
+              @pod_target.stubs(:static_framework?).returns(true)
               @installer.install!
               group = @project['Pods/BananaLib/Support Files']
               group.children.map(&:display_name).sort.should == [
