@@ -268,6 +268,33 @@ module Pod
       ref
     end
 
+    # Adds a file reference for a cached project as a child of the given group.
+    #
+    # @param  [MetadataCache] metadata
+    #         The metadata holding the required properties to create a subproject reference.
+    #
+    # @param  [PBXGroup] group
+    #         The group for the new subproject reference.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_cached_subproject_reference(metadata, group)
+      if ref = reference_for_path(metadata.container_project_path)
+        return ref
+      end
+
+      ref = Xcodeproj::Project::FileReferencesFactory.send(:new_file_reference, group, metadata.container_project_path, :group)
+      ref.name = Pathname(metadata.container_project_path).basename('.*').to_s
+      ref.include_in_index = nil
+
+      attribute = PBXProject.references_by_keys_attributes.find { |attrb| attrb.name == :project_references }
+      project_reference = ObjectDictionary.new(attribute, group.project.root_object)
+      project_reference[:project_ref] = ref
+      root_object.project_references << project_reference
+      refs_by_absolute_path[metadata.container_project_path.to_s] = ref
+      ref
+    end
+
     # Returns the file reference for the given absolute path.
     #
     # @param  [#to_s] absolute_path

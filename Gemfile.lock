@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 167566c0150b8ef9de585cc7bacc664672dc0a54
+  revision: acfd38f72dedfd1956dd0fbe69d979e578efdacc
   branch: master
   specs:
     cocoapods-core (1.6.0.beta.2)
@@ -127,7 +127,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.0)
-    activesupport (4.2.10)
+    activesupport (4.2.11)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
@@ -151,7 +151,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.4)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)

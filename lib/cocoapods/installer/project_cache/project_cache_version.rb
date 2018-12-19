@@ -1,0 +1,40 @@
+module Pod
+  class Installer
+    class ProjectCache
+      # Object that stores, loads, and holds the version of the project cache.
+      #
+      class ProjectCacheVersion
+
+        # @return [Version] The version of the project cache.
+        #
+        attr_reader :version
+
+        # Initialize a new instance.
+        #
+        # @param [Version] version @see #version
+        #
+        def initialize(version = Version.create('0'))
+          @version = version
+        end
+
+        # @return [ProjectCacheVersion]
+        #
+        # @param [path] The path of the project cache
+        #
+        def from_file(path)
+          return ProjectCacheVersion.new unless File.exist?(path)
+          cached_version = Version.create(File.read(path))
+          ProjectCacheVersion.new(cached_version)
+        end
+
+        # @return [void]
+        #
+        # @param [path] The path of the project cache to save.
+        #
+        def save_as(path)
+          open(path, 'w') { |f| f.puts version.to_s }
+        end
+      end
+    end
+  end
+end

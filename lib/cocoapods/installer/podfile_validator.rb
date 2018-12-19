@@ -36,6 +36,7 @@ module Pod
       # Errors are added to the errors array
       #
       def validate
+        validate_installation_options
         validate_pod_directives
         validate_no_abstract_only_pods!
         validate_dependencies_are_present!
@@ -69,6 +70,14 @@ module Pod
 
       def add_warning(warning)
         warnings << warning
+      end
+
+      def validate_installation_options
+        installation_options = podfile.installation_options
+
+        # Validate `incremental_installation` depends on `generate_multiple_pod_projects`
+        invalid = installation_options.incremental_installation? && installation_options.incremental_installation != installation_options.generate_multiple_pod_projects
+        add_error "The installation option 'incremental_installation' requires the option 'generate_multiple_pod_projects' to also be enabled" if invalid
       end
 
       def validate_pod_directives

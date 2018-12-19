@@ -80,8 +80,8 @@ module Pod
 
             @installation_options = Pod::Installer::InstallationOptions.new
 
-            @generator = SinglePodsProjectGenerator.new(config.sandbox, aggregate_targets, pod_targets, @analysis_result,
-                                                        @installation_options, config)
+            @generator = SinglePodsProjectGenerator.new(config.sandbox, aggregate_targets, pod_targets, @analysis_result.all_user_build_configurations,
+                                                        @installation_options, config, nil)
           end
 
           it "creates build configurations for all of the user's targets" do
@@ -389,7 +389,7 @@ module Pod
             target.stubs(:user_targets).returns([user_target])
 
             @generator = SinglePodsProjectGenerator.new(config.sandbox, [target], [],
-                                                        @analysis_result, @installation_options, config)
+                                                        @analysis_result.all_user_build_configurations, @installation_options, config, "1")
             pod_generator_result = @generator.generate!
             pod_generator_result.project.object_version.should == '1'
 

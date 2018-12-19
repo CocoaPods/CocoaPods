@@ -176,6 +176,10 @@ module Pod
       # a project for every pod target that will be nested under the `Pods.xcodeproj`.
       #
       option :generate_multiple_pod_projects, false
+
+      # Whether to enable only regenerating targets and their associate projects that have changed
+      # since the previous installation.
+      option :incremental_installation, false
     end
   end
 end
