@@ -32,7 +32,7 @@ module Pod
         # @return [void]
         #
         def save_as(path)
-          path.open('w') { |f| f.puts YAMLHelper.convert_hash(to_hash, nil)}
+          path.open('w') { |f| f.puts YAMLHelper.convert_hash(to_hash, nil) }
         end
 
         # Updates the metadata cache based on installation results.
@@ -51,9 +51,8 @@ module Pod
           end
         end
 
-
         def self.from_file(path)
-          return ProjectMetadataCache.new if !File.exist?(path)
+          return ProjectMetadataCache.new unless File.exist?(path)
           contents = YAMLHelper.load_file(path)
           target_by_label_metadata = {}
           contents.each do |pod_target_label, hash|

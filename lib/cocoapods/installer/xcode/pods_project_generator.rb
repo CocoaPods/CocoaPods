@@ -215,8 +215,6 @@ module Pod
             native_target.add_system_framework(framework)
           end
         end
-          end
-        end
 
         def configure_schemes_for_pod_target(project, pod_target)
           specs = [pod_target.root_spec] + pod_target.test_specs + pod_target.app_specs
@@ -239,6 +237,8 @@ module Pod
               scheme.save!
             end
             Xcodeproj::XCScheme.share_scheme(project.path, scheme_name)
+          end
+        end
       end
     end
   end

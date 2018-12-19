@@ -4,7 +4,6 @@ module Pod
       # Represents the cache stored at Pods/.project/installation_cache
       #
       class ProjectInstallationCache
-
         require 'cocoapods/installer/project_cache/target_cache_key'
 
         # @return [Hash{String => TargetCacheKey}]
@@ -34,17 +33,11 @@ module Pod
           @project_object_version = project_object_version
         end
 
-        def cache_key_by_target_label=(cache_key_by_target_label)
-          @cache_key_by_target_label = cache_key_by_target_label
-        end
+        attr_writer :cache_key_by_target_label
 
-        def build_configurations=(build_configurations)
-          @build_configurations = build_configurations
-        end
+        attr_writer :build_configurations
 
-        def project_object_version=(project_object_version)
-          @project_object_version = project_object_version
-        end
+        attr_writer :project_object_version
 
         def save_as(path)
           Pathname(path).dirname.mkpath
@@ -58,7 +51,7 @@ module Pod
         end
 
         def self.from_file(path)
-          return ProjectInstallationCache.new if !File.exist?(path)
+          return ProjectInstallationCache.new unless File.exist?(path)
           contents = YAMLHelper.load_file(path)
           cache_key_by_target_label = Hash[contents['CACHE_KEYS'].map do |name, key_hash|
             [name, TargetCacheKey.from_cache_hash(key_hash)]

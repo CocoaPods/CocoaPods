@@ -4,7 +4,6 @@ module Pod
       # Uniquely identifies a Target.
       #
       class TargetCacheKey
-
         require 'cocoapods/target/pod_target.rb'
         require 'cocoapods/target/aggregate_target.rb'
         require 'digest'
@@ -89,7 +88,7 @@ module Pod
         #
         def self.from_pod_target(pod_target, is_local_pod: false, checkout_options: nil)
           build_settings = {}
-          build_settings["#{pod_target.label}"] = Digest::MD5.hexdigest(pod_target.build_settings.xcconfig.to_s)
+          build_settings[pod_target.label.to_s] = Digest::MD5.hexdigest(pod_target.build_settings.xcconfig.to_s)
           pod_target.test_spec_build_settings.each do |name, settings|
             build_settings[name] = Digest::MD5.hexdigest(settings.xcconfig.to_s)
           end
@@ -98,9 +97,9 @@ module Pod
           end
 
           contents = {
-              'CHECKSUM' => pod_target.root_spec.checksum,
-              'SPECS' => pod_target.specs.map { |spec| spec.to_s },
-              'BUILD_SETTINGS' => build_settings
+            'CHECKSUM' => pod_target.root_spec.checksum,
+            'SPECS' => pod_target.specs.map(&:to_s),
+            'BUILD_SETTINGS' => build_settings,
           }
           contents['FILES'] = pod_target.all_files.sort if is_local_pod
           contents['CHECKOUT_OPTIONS'] = checkout_options if checkout_options
@@ -118,7 +117,7 @@ module Pod
             build_settings[configuration] = Digest::MD5.hexdigest(aggregate_target.build_settings(configuration).xcconfig.to_s)
           end
 
-          TargetCacheKey.new(:aggregate, {'BUILD_SETTINGS' => build_settings })
+          TargetCacheKey.new(:aggregate, 'BUILD_SETTINGS' => build_settings)
         end
       end
     end

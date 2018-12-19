@@ -154,7 +154,7 @@ module Pod
       if !installation_options.incremental_installation
         # Run entire installation.
         ProjectCache::ProjectCacheAnalysisResult.new(pod_targets, aggregate_targets, {},
-                                       analysis_result.all_user_build_configurations, object_version)
+                                                     analysis_result.all_user_build_configurations, object_version)
       else
         UI.message 'Analyzing Project Cache' do
           @installation_cache = ProjectCache::ProjectInstallationCache.from_file(sandbox.project_installation_cache_path)
@@ -164,7 +164,7 @@ module Pod
           force_clean_install = clean_install || project_cache_version != Version.create(VERSION)
 
           cache_result = ProjectCache::ProjectCacheAnalyzer.new(sandbox, installation_cache, analysis_result.all_user_build_configurations,
-                                                                object_version, pod_targets, aggregate_targets, clean_install: force_clean_install).analyze
+                                                                object_version, pod_targets, aggregate_targets, :clean_install => force_clean_install).analyze
           (cache_result.aggregate_targets_to_generate + cache_result.pod_targets_to_generate).each do |target|
             UI.message "- Regenerating #{target.label}"
           end
@@ -278,7 +278,7 @@ module Pod
         # The `pod_target_subprojects` is used for backwards compatibility so that consumers can iterate over
         # all pod targets across projects without needing to open each one.
         @pod_target_subprojects = pod_project_generation_result.projects_by_pod_targets.keys
-        @generated_projects = ([pods_project] + pod_target_subprojects || []).reject { |p| p.nil? }
+        @generated_projects = ([pods_project] + pod_target_subprojects || []).reject(&:nil?)
         @generated_pod_targets = pod_targets_to_generate
         @generated_aggregate_targets = aggregate_targets_to_generate
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets
@@ -732,9 +732,9 @@ module Pod
 
     def update_project_cache(cache_analysis_result, target_installation_results)
       return unless installation_cache || metadata_cache
-      installation_cache.cache_key_by_target_label= cache_analysis_result.cache_key_by_target_label
-      installation_cache.project_object_version= cache_analysis_result.project_object_version
-      installation_cache.build_configurations= cache_analysis_result.build_configurations
+      installation_cache.cache_key_by_target_label = cache_analysis_result.cache_key_by_target_label
+      installation_cache.project_object_version = cache_analysis_result.project_object_version
+      installation_cache.build_configurations = cache_analysis_result.build_configurations
       installation_cache.save_as(sandbox.project_installation_cache_path)
 
       metadata_cache.update_metadata!(target_installation_results.pod_target_installation_results || {},

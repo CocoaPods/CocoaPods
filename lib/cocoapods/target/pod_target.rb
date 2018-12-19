@@ -145,16 +145,16 @@ module Pod
     #
     def all_files
       files = [
-          file_accessors.map(&:vendored_frameworks),
-          file_accessors.map(&:vendored_libraries),
-          file_accessors.map(&:resource_bundle_files),
-          file_accessors.map(&:license),
-          file_accessors.map(&:prefix_header),
-          file_accessors.map(&:preserve_paths),
-          file_accessors.map(&:readme),
-          file_accessors.map(&:resources),
-          file_accessors.map(&:source_files),
-          file_accessors.map(&:module_map),
+        file_accessors.map(&:vendored_frameworks),
+        file_accessors.map(&:vendored_libraries),
+        file_accessors.map(&:resource_bundle_files),
+        file_accessors.map(&:license),
+        file_accessors.map(&:prefix_header),
+        file_accessors.map(&:preserve_paths),
+        file_accessors.map(&:readme),
+        file_accessors.map(&:resources),
+        file_accessors.map(&:source_files),
+        file_accessors.map(&:module_map),
       ]
 
       files.flatten.compact.map(&:to_s).uniq

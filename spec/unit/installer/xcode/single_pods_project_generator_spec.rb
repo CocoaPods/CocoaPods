@@ -389,7 +389,7 @@ module Pod
             target.stubs(:user_targets).returns([user_target])
 
             @generator = SinglePodsProjectGenerator.new(config.sandbox, [target], [],
-                                                        @analysis_result.all_user_build_configurations, @installation_options, config, "1")
+                                                        @analysis_result.all_user_build_configurations, @installation_options, config, '1')
             pod_generator_result = @generator.generate!
             pod_generator_result.project.object_version.should == '1'
 

@@ -33,9 +33,9 @@ module Pod
 
         def to_hash
           {
-              'LABEL' => target_label,
-              'UUID' => native_target_uuid,
-              'PROJECT_PATH' => container_project_path
+            'LABEL' => target_label,
+            'UUID' => native_target_uuid,
+            'PROJECT_PATH' => container_project_path,
           }
         end
 

@@ -93,11 +93,11 @@ module Pod
         @installer.stubs(:aggregate_targets).returns([])
         @installer.stubs(:pod_targets).returns([])
         analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
-                                                                   [], Pod::Installer::Analyzer::SpecsState.new, [], [],
-                                                                   Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
+                                                                  [], Pod::Installer::Analyzer::SpecsState.new, [], [],
+                                                                  Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
         @installer.stubs(:analysis_result).returns(analysis_result)
         @installer.unstub(:generate_pods_project)
-        generator = @installer.send(:create_generator, [], [], {}, "")
+        generator = @installer.send(:create_generator, [], [], {}, '')
         @installer.stubs(:create_generator).returns(generator)
         target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
         generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, {}, target_installation_results)

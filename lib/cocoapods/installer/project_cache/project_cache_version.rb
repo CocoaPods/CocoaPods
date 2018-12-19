@@ -4,7 +4,6 @@ module Pod
       # Object that stores, loads, and holds the version of the project cache.
       #
       class ProjectCacheVersion
-
         # @return [Version] The version of the project cache.
         #
         attr_reader :version

@@ -69,7 +69,7 @@ module Pod
           'disable_input_output_paths' => false,
           'preserve_pod_file_structure' => false,
           'generate_multiple_pod_projects' => false,
-          'incremental_installation' => false
+          'incremental_installation' => false,
         }
       end
 

@@ -4,7 +4,6 @@ module Pod
       # Wires up the dependencies for aggregate targets from the target installation results
       #
       class AggregateTargetDependencyInstaller
-
         require 'cocoapods/native_target_ext.rb'
 
         # @return [TargetInstallationResult] The target installation results for pod targets.
@@ -70,7 +69,6 @@ module Pod
             config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
           end
         end
-
       end
     end
   end

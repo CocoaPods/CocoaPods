@@ -4,7 +4,6 @@ module Pod
       # Wires up the dependencies between targets from the target installation results
       #
       class PodTargetDependencyInstaller
-
         require 'cocoapods/native_target_ext.rb'
 
         # @return [TargetInstallationResults] The target installation results for pod targets.
@@ -39,7 +38,6 @@ module Pod
             # Wire up all dependencies to this pod target, if any.
             wire_target_dependencies(pod_target, native_target, project, pod_target_installation_results,
                                      metadata_cache, frameworks_group)
-
 
             # Wire up test native targets.
             unless pod_target_installation_result.test_native_targets.empty?
@@ -153,7 +151,6 @@ module Pod
             native_target.frameworks_build_phase.add_file_reference(product_ref, true)
           end
         end
-
       end
     end
   end

@@ -14,10 +14,10 @@ module Pod
           all_platforms = aggregate_targets.map(&:platform)
           # Generate container Pods.xcodeproj.
           container_project = nil
-          if aggregate_targets.size > 0
+          if !aggregate_targets.empty?
             container_project_generator = ProjectGenerator.new(sandbox, container_project_path, [],
-                                                             build_configurations, all_platforms, project_object_version,
-                                                             config.podfile_path)
+                                                               build_configurations, all_platforms, project_object_version,
+                                                               config.podfile_path)
             container_project = container_project_generator.generate!
           end
 
