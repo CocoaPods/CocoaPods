@@ -1,5 +1,4 @@
 require 'molinillo'
-require 'cocoapods/resolver/lazy_specification'
 
 module Pod
   class NoSpecFoundError < Informative
@@ -12,43 +11,8 @@ module Pod
   # by target for a given Podfile.
   #
   class Resolver
-    # A small container that wraps a resolved specification for a given target definition. Additional metadata
-    # is included here such as if the specification is only used by tests.
-    #
-    class ResolverSpecification
-      # @return [Specification] the specification that was resolved
-      #
-      attr_reader :spec
-
-      # @return [Source] the spec repo source the specification came from
-      #
-      attr_reader :source
-
-      # @return [Bool] whether this resolved specification is only used by tests.
-      #
-      attr_reader :used_by_tests_only
-      alias used_by_tests_only? used_by_tests_only
-
-      def initialize(spec, used_by_tests_only, source)
-        @spec = spec
-        @used_by_tests_only = used_by_tests_only
-        @source = source
-      end
-
-      def name
-        spec.name
-      end
-
-      def root
-        spec.root
-      end
-
-      def ==(other)
-        self.class == other &&
-          spec == other.spec &&
-          used_by_tests_only == other.test_only
-      end
-    end
+    require 'cocoapods/resolver/lazy_specification'
+    require 'cocoapods/resolver/resolver_specification'
 
     include Pod::Installer::InstallationOptions::Mixin
 
@@ -97,7 +61,11 @@ module Pod
       @specs_updated = specs_updated
       @podfile_dependency_cache = podfile_dependency_cache
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
+
       @cached_sets = {}
+      @podfile_requirements_by_root_name = @podfile_dependency_cache.podfile_dependencies.group_by(&:root_name).each_value { |a| a.map!(&:requirement) }
+      @search = {}
+      @validated_platforms = Set.new
     end
 
     #-------------------------------------------------------------------------#
@@ -167,11 +135,11 @@ module Pod
     # @param  [Dependency] dependency the dependency that is being searched for.
     #
     def search_for(dependency)
-      @search ||= {}
       @search[dependency] ||= begin
         locked_requirement = requirement_for_locked_pod_named(dependency.name)
-        additional_requirements = Array(locked_requirement)
-        specifications_for_dependency(dependency, additional_requirements)
+        podfile_deps = Array(@podfile_requirements_by_root_name[dependency.root_name])
+        podfile_deps << locked_requirement if locked_requirement
+        specifications_for_dependency(dependency, podfile_deps)
       end
       @search[dependency].dup
     end
@@ -238,7 +206,7 @@ module Pod
     end
 
     def valid_possibility_version_for_root_name?(requirement, activated, spec)
-      prerelease_requirement = requirement.prerelease? || requirement.external_source || !spec.version.prerelease?
+      return true if prerelease_requirement = requirement.prerelease? || requirement.external_source || !spec.version.prerelease?
 
       activated.each do |vertex|
         next unless vertex.payload
@@ -381,7 +349,7 @@ module Pod
     #
     def find_cached_set(dependency)
       name = dependency.root_name
-      unless cached_sets[name]
+      cached_sets[name] ||= begin
         if dependency.external_source
           spec = sandbox.specification(name)
           unless spec
@@ -392,12 +360,13 @@ module Pod
         else
           set = create_set_from_sources(dependency)
         end
-        cached_sets[name] = set
+
         unless set
           raise Molinillo::NoSuchDependencyError.new(dependency) # rubocop:disable Style/RaiseArgs
         end
+
+        set
       end
-      cached_sets[name]
     end
 
     # @return [Requirement, Nil]
@@ -426,8 +395,11 @@ module Pod
     # @return [Source::Aggregate] The aggregate of the {#sources}.
     #
     def aggregate_for_dependency(dependency)
+      sources_manager = Config.instance.sources_manager
       if dependency && dependency.podspec_repo
-        return Config.instance.sources_manager.aggregate_for_dependency(dependency)
+        sources_manager.aggregate_for_dependency(dependency)
+      elsif (locked_vertex = @locked_dependencies.vertex_named(dependency.name)) && (locked_dependency = locked_vertex.payload) && locked_dependency.podspec_repo
+        sources_manager.aggregate_for_dependency(locked_dependency)
       else
         @aggregate ||= Source::Aggregate.new(sources)
       end
@@ -441,6 +413,7 @@ module Pod
     #
     def validate_platform(spec, target)
       return unless target_platform = target.platform
+      return unless @validated_platforms.add?([spec.object_id, target_platform])
       unless spec.available_platforms.any? { |p| target_platform.to_sym == p.to_sym }
         raise Informative, "The platform of the target `#{target.name}` "     \
           "(#{target.platform}) is not compatible with `#{spec}`, which does "  \
@@ -509,6 +482,17 @@ module Pod
             end
           end,
         )
+      when Molinillo::NoSuchDependencyError
+        message += <<-EOS
+
+
+You have either:
+ * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
+ * mistyped the name or version.
+ * not added the source repo that hosts the Podspec to your Podfile.
+
+Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
+        EOS
       end
       raise type.new(message).tap { |e| e.set_backtrace(error.backtrace) }
     end
@@ -569,17 +553,26 @@ module Pod
       end
     end
 
+    EdgeAndPlatform = Struct.new(:edge, :target_platform)
+    private_constant :EdgeAndPlatform
+
     # Whether the given `edge` should be followed to find dependencies for the
     # given `target_platform`.
     #
     # @return [Bool]
     #
     def edge_is_valid_for_target_platform?(edge, target_platform)
-      requirement_name = edge.requirement.name
+      @edge_validity ||= Hash.new do |hash, edge_and_platform|
+        e = edge_and_platform.edge
+        platform = edge_and_platform.target_platform
+        requirement_name = e.requirement.name
 
-      edge.origin.payload.all_dependencies(target_platform).any? do |dep|
-        dep.name == requirement_name
+        hash[edge_and_platform] = e.origin.payload.all_dependencies(platform).any? do |dep|
+          dep.name == requirement_name
+        end
       end
+
+      @edge_validity[EdgeAndPlatform.new(edge, target_platform)]
     end
   end
 end

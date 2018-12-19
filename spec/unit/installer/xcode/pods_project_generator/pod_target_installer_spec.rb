@@ -223,12 +223,13 @@ module Pod
                 unit_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.not.be.nil
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
                 end
                 snapshot_test_native_target = @project.targets[2]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
@@ -236,12 +237,13 @@ module Pod
                 snapshot_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-snapshottests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.be.nil
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
                 installation_result.test_native_targets.count.should == 2
@@ -257,12 +259,13 @@ module Pod
                 unit_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.not.be.nil
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
                 end
                 snapshot_test_native_target = @project.targets[2]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
@@ -270,15 +273,23 @@ module Pod
                 snapshot_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-snapshottests.xcconfig'
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
                   bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
-                  bc.build_settings['SWIFT_OPTIMIZATION_LEVEL'].should.be.nil
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
                 installation_result.test_native_targets.count.should == 2
+              end
+
+              it 'raises when a test spec has no source files' do
+                @watermelon_pod_target.test_spec_consumers.first.stubs(:source_files).returns([])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.
+                    include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-Unit-Tests` target in Xcode would have no sources to compile.'
               end
 
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do

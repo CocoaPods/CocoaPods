@@ -165,14 +165,12 @@ module Pod
               build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
               build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
               build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
-              build_configuration.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
-              build_configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
             end
           end
         end
 
         def install_file_references
-          installer = FileReferencesInstaller.new(sandbox, pod_targets, project)
+          installer = FileReferencesInstaller.new(sandbox, pod_targets, project, installation_options.preserve_pod_file_structure)
           installer.install!
         end
 
@@ -212,7 +210,7 @@ module Pod
           unless pod_installations_to_integrate.empty?
             UI.message '- Integrating targets' do
               pod_installations_to_integrate.each do |pod_target_installation_result|
-                PodTargetIntegrator.new(pod_target_installation_result).integrate!
+                PodTargetIntegrator.new(pod_target_installation_result, installation_options).integrate!
               end
             end
           end

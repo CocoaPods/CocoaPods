@@ -10,12 +10,18 @@ module Pod
           #
           attr_reader :target_installation_result
 
+          # @return [InstallationOptions] the installation options from the Podfile.
+          #
+          attr_reader :installation_options
+
           # Initialize a new instance
           #
           # @param  [TargetInstallationResult] target_installation_result @see #target_installation_result
+          # @param  [InstallationOptions] installation_options @see #installation_options
           #
-          def initialize(target_installation_result)
+          def initialize(target_installation_result, installation_options)
             @target_installation_result = target_installation_result
+            @installation_options = installation_options
           end
 
           # Integrates the pod target.
@@ -53,17 +59,19 @@ module Pod
           #
           def add_copy_resources_script_phase(native_target, test_spec)
             script_path = "${PODS_ROOT}/#{target.copy_resources_script_path_for_test_spec(test_spec).relative_path_from(target.sandbox.root)}"
-            resource_paths = target.dependent_targets_for_test_spec(test_spec).flat_map do |dependent_target|
-              spec_paths_to_include = dependent_target.non_test_specs.map(&:name)
-              spec_paths_to_include << test_spec.name if dependent_target == target
-              dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
-            end
             input_paths = []
             output_paths = []
-            unless resource_paths.empty?
-              resource_paths_flattened = resource_paths.flatten.uniq
-              input_paths = [script_path, *resource_paths_flattened]
-              output_paths = UserProjectIntegrator::TargetIntegrator.resource_output_paths(resource_paths_flattened)
+            unless installation_options.disable_input_output_paths?
+              resource_paths = target.dependent_targets_for_test_spec(test_spec).flat_map do |dependent_target|
+                spec_paths_to_include = dependent_target.non_test_specs.map(&:name)
+                spec_paths_to_include << test_spec.name if dependent_target == target
+                dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
+              end
+              unless resource_paths.empty?
+                resource_paths_flattened = resource_paths.flatten.uniq
+                input_paths = [script_path, *resource_paths_flattened]
+                output_paths = UserProjectIntegrator::TargetIntegrator.resource_output_paths(resource_paths_flattened)
+              end
             end
             UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             UserProjectIntegrator::TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths, output_paths)
@@ -75,17 +83,20 @@ module Pod
           #
           def add_embed_frameworks_script_phase(native_target, test_spec)
             script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_test_spec(test_spec).relative_path_from(target.sandbox.root)}"
-            framework_paths = target.dependent_targets_for_test_spec(test_spec).flat_map do |dependent_target|
-              spec_paths_to_include = dependent_target.non_test_specs.map(&:name)
-              spec_paths_to_include << test_spec.name if dependent_target == target
-              dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
-            end
             input_paths = []
             output_paths = []
-            unless framework_paths.empty?
-              input_paths = [script_path, *framework_paths.flat_map { |fw| [fw[:input_path], fw[:dsym_input_path]] }.compact]
-              output_paths = framework_paths.flat_map { |fw| [fw[:output_path], fw[:dsym_output_path]] }.compact
+            unless installation_options.disable_input_output_paths?
+              framework_paths = target.dependent_targets_for_test_spec(test_spec).flat_map do |dependent_target|
+                spec_paths_to_include = dependent_target.non_test_specs.map(&:name)
+                spec_paths_to_include << test_spec.name if dependent_target == target
+                dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
+              end
+              unless framework_paths.empty?
+                input_paths = [script_path, *framework_paths.flat_map { |fw| [fw.source_path, fw.dsym_path] }.compact]
+                output_paths = UserProjectIntegrator::TargetIntegrator.framework_output_paths(framework_paths)
+              end
             end
+
             UserProjectIntegrator::TargetIntegrator.validate_input_output_path_limit(input_paths, output_paths)
             UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths, output_paths)
           end

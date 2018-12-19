@@ -92,7 +92,7 @@ module Pod
         project.new_target(:application, 'App', :ios)
         project.new_target(:unit_test_bundle, 'AppTests', :ios)
         project.new_target(:ui_test_bundle, 'AppFeatureTests', :ios)
-        project.new_target(:application, 'Swifty App', :osx, nil, nil, :swift)
+        project.new_target(:application, 'Swifty App', :osx, nil, nil, :swift).add_file_references([project.new_file('foo.swift')])
         project.save
 
         run_command('init')

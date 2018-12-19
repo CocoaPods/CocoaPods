@@ -88,9 +88,8 @@ module Pod
       #
       # @return [Array<PBXBuildFile>] the created build file references.
       #
-      def self.add_app_host_main_file(project, target, platform, name = 'App')
+      def self.add_app_host_main_file(project, target, platform, group, name = 'App')
         source_file = AppTargetHelper.create_app_host_main_file(project, platform, name)
-        group = project[name] || project.new_group(name, name)
         source_file_ref = group.new_file(source_file)
         target.add_file_references([source_file_ref])
       end
@@ -111,9 +110,8 @@ module Pod
       #
       # @return [PBXFileReference] the created file reference of the launchscreen storyboard.
       #
-      def self.add_launchscreen_storyboard(project, target, name = 'App')
+      def self.add_launchscreen_storyboard(project, target, group, name = 'App')
         launch_storyboard_file = AppTargetHelper.create_launchscreen_storyboard_file(project, name)
-        group = project[name] || project.new_group(name, name)
         launch_storyboard_ref = group.new_file(launch_storyboard_file)
         target.resources_build_phase.add_file_reference(launch_storyboard_ref)
       end

@@ -13,6 +13,95 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Bug Fixes
 
 * None.  
+## 1.6.0.beta.2 (2018-10-17)
+
+##### Enhancements
+
+* Remove contraction from docs to fix rendering on the website.  
+  [stevemoser](https://github.com/stevemoser)
+  [#8131](https://github.com/CocoaPods/CocoaPods/pull/8131)
+
+* Provide an installation option to preserve folder structure  
+  [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
+  [#8097](https://github.com/CocoaPods/CocoaPods/pull/8097)
+
+* Nests test specs host apps inside that Pod's directory for cleaner project 
+  navigators.  
+  [Derek Ostrander](https://github.com/dostrander)
+   
+* mark_ruby_file_ref add indent width and tab width config  
+  [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
+
+* Print an error that will show up in Xcode's issue navigator upon unexpected
+  failures in the copy resources and embed frameworks script phases.  
+  [Samuel Giddins](https://github.com/segiddins)
+  
+* Validate that all generated `PBXNativeTarget`s contain source files to build,
+  so specs (including test specs) with no source files won't fail at runtime
+  due to the lack of a generated executable.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Print better promote message when unable to find a specification.  
+  [Xinyu Zhao](https://github.com/X140Yu)
+  [#8064](https://github.com/CocoaPods/CocoaPods/issues/8064)
+
+* Silence warnings in headers for Pods with `inhibit_warnings => true`  
+  [Guillaume Algis](https://github.com/guillaumealgis)
+  [#6401](https://github.com/CocoaPods/CocoaPods/pull/6401)
+
+* When resolving a locked dependency, source the spec from the locked
+  specs repository.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Slightly improve resolution speed for Podfiles that contain multiple targets
+  with the same dependencies.  
+  [Samuel Giddins]
+
+##### Bug Fixes
+
+* Don't generate unencrypted source warnings for localhost.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8156](https://github.com/CocoaPods/CocoaPods/issues/8156)
+
+* Fix linting when armv7 is included but i386 isn't.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8129](https://github.com/CocoaPods/CocoaPods/issues/8129)
+
+* Provide an installation option to disable usage of input/output paths.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)
+
+* Scope prefix header setting to each test spec.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8046](https://github.com/CocoaPods/CocoaPods/pull/8046)
+
+* Don't add incomplete subspec subset targets for extensions.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#7850](https://github.com/CocoaPods/CocoaPods/issues/7850)
+
+* Clear out `MACH_O_TYPE` for unit test bundles that use static frameworks.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8031](https://github.com/CocoaPods/CocoaPods/issues/8031)
+
+* Fix `weak_frameworks` missing regression.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7872](https://github.com/CocoaPods/CocoaPods/issues/7872)
+
+* Fix line spacing for Swift error message.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8024](https://github.com/CocoaPods/CocoaPods/pull/8024)
+
+* Improve validation for test_specs on specific platforms  
+  [icecrystal23](https://github.com/icecrystal23)
+  [#7009](https://github.com/CocoaPods/CocoaPods/issues/7009)
+
+* Fix running `pod outdated` with externally-sourced pods.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#8025](https://github.com/CocoaPods/CocoaPods/issues/8025)
+
+* Remove codesign suppression  
+  [Jaehong Kang](https://github.com/sinoru)
+  [#7606](https://github.com/CocoaPods/CocoaPods/issues/7606)
 
 
 ## 1.6.0.beta.1 (2018-08-16)
@@ -20,13 +109,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Enhancements
 
 * Every test spec will have its own xctest bundle.  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [Jenn Kaplan](https://github.com/jkap)
   [#7908](https://github.com/CocoaPods/CocoaPods/pull/7908)
 
 * Generate a separate app host per pod.  
   [Samuel Giddins](https://github.com/segiddins)
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8005](https://github.com/CocoaPods/CocoaPods/pull/8005)
 
 * Add default launch screen storyboard to test app hosts.  
@@ -40,7 +129,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Warn instead of error when linting if `public_header_files` or
   `private_header_files` do not match any files.  
   [Eric Amorde](https://github.com/amorde)
-  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427) 
+  [#7427](https://github.com/CocoaPods/CocoaPods/issues/7427)
 
 * Add `--platforms` parameter to `pod spec lint` and `pod lib lint` to specify
   which platforms to lint.  
@@ -289,7 +378,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix `assetcatalog_generated_info.plist` path in copy resources phase.  
   [Maxime Le Moine](https://github.com/MaximeLM)
   [#7590](https://github.com/CocoaPods/CocoaPods/issues/7590)
-
 
 ## 1.5.0 (2018-04-04)
 

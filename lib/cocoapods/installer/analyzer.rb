@@ -96,10 +96,13 @@ module Pod
         podfile_state = generate_podfile_state
 
         store_existing_checkout_options
-        if allow_fetches
+        if allow_fetches == :outdated
+          # special-cased -- we're only really resolving for outdated, rather than doing a full analysis
+        elsif allow_fetches == true
           fetch_external_sources(podfile_state)
         elsif !dependencies_to_fetch(podfile_state).all?(&:local?)
-          raise Informative, 'Cannot analyze without fetching dependencies since the sandbox is not up-to-date. Run `pod install` to ensure all dependencies have been fetched.'
+          raise Informative, 'Cannot analyze without fetching dependencies since the sandbox is not up-to-date. Run `pod install` to ensure all dependencies have been fetched.' \
+            "\n    The missing dependencies are:\n    \t#{dependencies_to_fetch(podfile_state).reject(&:local?).join("\n    \t")}"
         end
 
         locked_dependencies = generate_version_locking_dependencies(podfile_state)
@@ -252,7 +255,7 @@ module Pod
         end
       end
 
-      # Copies the pod_targets of any of the app embedded aggregate targets into
+      # Copies the pod targets of any of the app embedded aggregate targets into
       # their potential host aggregate target, if that potential host aggregate target's
       # user_target hosts any of the app embedded aggregate targets' user_targets
       #
@@ -271,7 +274,6 @@ module Pod
       #
       def embedded_target_pod_targets_by_host(aggregate_target, embedded_aggregate_targets, libraries_only)
         return {} if aggregate_target.requires_host_target?
-        pod_target_names = Set.new(aggregate_target.pod_targets.map(&:name))
         aggregate_user_target_uuids = Set.new(aggregate_target.user_targets.map(&:uuid))
         embedded_pod_targets_by_build_config = Hash.new([].freeze)
         embedded_aggregate_targets.each do |embedded_aggregate_target|
@@ -289,8 +291,12 @@ module Pod
             !aggregate_user_target_uuids.intersection(host_target_uuids).empty?
           end
           embedded_aggregate_target.user_build_configurations.keys.each do |configuration_name|
+            pod_target_names = Set.new(aggregate_target.pod_targets_for_build_configuration(configuration_name).map(&:name))
             embedded_pod_targets = embedded_aggregate_target.pod_targets_for_build_configuration(configuration_name).select do |pod_target|
-              !pod_target_names.include? pod_target.name
+              if !pod_target_names.include?(pod_target.name) &&
+                 aggregate_target.pod_targets.none? { |aggregate_pod_target| (pod_target.specs - aggregate_pod_target.specs).empty? }
+                pod_target.name
+              end
             end
             embedded_pod_targets_by_build_config[configuration_name] = embedded_pod_targets
           end
@@ -447,7 +453,7 @@ module Pod
           target_inspection = target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
           user_project = target_inspection.project
-          client_root = user_project.path.dirname.realpath
+          client_root = target_inspection.client_root
           user_target_uuids = target_inspection.project_target_uuids
           user_build_configurations = target_inspection.build_configurations
           archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : target_inspection.archs
@@ -783,11 +789,12 @@ module Pod
       #
       def fetch_external_sources(podfile_state)
         verify_no_pods_with_different_sources!
-        unless dependencies_to_fetch(podfile_state).empty?
-          UI.section 'Fetching external sources' do
-            dependencies_to_fetch(podfile_state).sort.each do |dependency|
-              fetch_external_source(dependency, !pods_to_fetch(podfile_state).include?(dependency.root_name))
-            end
+        deps = dependencies_to_fetch(podfile_state)
+        pods = pods_to_fetch(podfile_state)
+        return if deps.empty?
+        UI.section 'Fetching external sources' do
+          deps.sort.each do |dependency|
+            fetch_external_source(dependency, !pods.include?(dependency.root_name))
           end
         end
       end
@@ -803,8 +810,7 @@ module Pod
       end
 
       def fetch_external_source(dependency, use_lockfile_options)
-        checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name) if lockfile
-        source = if checkout_options && use_lockfile_options
+        source = if use_lockfile_options && lockfile && checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name)
                    ExternalSources.from_params(checkout_options, dependency, podfile.defined_in_file, installation_options.clean?)
                  else
                    ExternalSources.from_dependency(dependency, podfile.defined_in_file, installation_options.clean?)

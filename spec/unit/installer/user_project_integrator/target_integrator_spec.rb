@@ -17,13 +17,16 @@ module Pod
         user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
         @pod_bundle = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, target_definition, project_path.dirname, @project, [@target.uuid], {})
         @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
-        @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [{ :input_path => '${PODS_BUILD_DIR}/Lib/Lib.framework' }])
+        @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [Target::FrameworkPaths.new('${PODS_BUILD_DIR}/Lib/Lib.framework')])
         configuration = Xcodeproj::Config.new(
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         )
         @pod_bundle.xcconfigs['Debug'] = configuration
         @pod_bundle.xcconfigs['Release'] = configuration
-        @target_integrator = TargetIntegrator.new(@pod_bundle)
+
+        @installation_options = Pod::Installer::InstallationOptions.new
+
+        @target_integrator = TargetIntegrator.new(@pod_bundle, @installation_options)
         @target_integrator.private_methods.grep(/^update_to_cocoapods_/).each do |method|
           @target_integrator.stubs(method)
         end
@@ -394,9 +397,7 @@ module Pod
         end
 
         it 'removes embed frameworks phase if it becomes empty' do
-          debug_non_vendored_framework = { :name => 'DebugCompiledFramework.framework',
-                                           :input_path => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
-                                           :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
+          debug_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework')
           framework_paths_by_config = {
             'Debug' => [debug_non_vendored_framework],
           }
@@ -417,24 +418,13 @@ module Pod
         end
 
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks' do
-          debug_vendored_framework = { :name => 'DebugVendoredFramework.framework',
-                                       :input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
-                                       :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework',
-                                       :dsym_name => 'DebugVendoredFramework.framework.dSYM',
-                                       :dsym_input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM',
-                                       :dsym_output_path => '${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM' }
+          debug_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
+                                                                '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM')
 
-          debug_non_vendored_framework = { :name => 'DebugCompiledFramework.framework',
-                                           :input_path => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework',
-                                           :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework' }
+          debug_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework')
 
-          release_vendored_framework = { :name => 'ReleaseVendoredFramework.framework',
-                                         :input_path => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
-                                         :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework',
-                                         :dsym_name => 'ReleaseVendoredFramework.framework.dSYM',
-                                         :dsym_input_path => '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM',
-                                         :dsym_output_path => '${DWARF_DSYM_FOLDER_PATH}/ReleaseVendoredFramework.framework.dSYM' }
-
+          release_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
+                                                                  '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM')
           framework_paths_by_config = {
             'Debug' => [debug_vendored_framework, debug_non_vendored_framework],
             'Release' => [release_vendored_framework],
@@ -461,27 +451,15 @@ module Pod
         end
 
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks without duplicate' do
-          debug_vendored_framework = { :name => 'SomeFramework.framework',
-                                       :input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
-                                       :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework',
-                                       :dsym_name => 'SomeFramework.framework.dSYM',
-                                       :dsym_input_path => '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM',
-                                       :dsym_output_path => '${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM' }
+          debug_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
+                                                                '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM')
 
-          debug_non_vendored_framework = { :name => 'CompiledFramework.framework',
-                                           :input_path => '${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework',
-                                           :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework' }
+          debug_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework')
 
-          release_vendored_framework = { :name => 'ReleaseVendoredFramework.framework',
-                                         :input_path => '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
-                                         :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework',
-                                         :dsym_name => 'SomeFramework.framework.dSYM',
-                                         :dsym_input_path => '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM',
-                                         :dsym_output_path => '${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM' }
+          release_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
+                                                                  '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM')
 
-          release_non_vendored_framework = { :name => 'CompiledFramework.framework',
-                                             :input_path => '${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework',
-                                             :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework' }
+          release_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework')
 
           framework_paths_by_config = {
             'Debug' => [debug_vendored_framework, debug_non_vendored_framework],
@@ -634,6 +612,47 @@ module Pod
             '[CP] Embed Pods Frameworks',
             '[CP] Copy Pods Resources',
           ]
+        end
+      end
+
+      describe 'Script paths' do
+        it 'calculates the output paths of the embed frameworks script' do
+          paths = [
+            Target::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
+                                       '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM'),
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework'),
+            Target::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
+                                       '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM'),
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework'),
+          ]
+          TargetIntegrator.framework_output_paths(paths).sort.should == %w(
+            ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM
+            ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework
+            ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework
+          )
+        end
+
+        it 'calculates the output paths of the copy resources script' do
+          resource_paths = %w(
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugAssets.xcassets
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodeld
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugDataModel.xcdatamodel
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugMappingModel.xcmappingmodel
+            ${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLib.bundle
+            ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.bundle
+            ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLibXIB.xib
+            ${PODS_CONFIGURATION_BUILD_DIR}/ReleaseLib/ReleaseLib.storyboard
+          )
+          TargetIntegrator.resource_output_paths(resource_paths).sort.should == %w(
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugDataModel.mom
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugDataModel.momd
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugLib.bundle
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DebugMappingModel.cdm
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReleaseLib.bundle
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReleaseLib.storyboardc
+            ${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReleaseLibXIB.nib
+          )
         end
       end
 

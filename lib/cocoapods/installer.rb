@@ -72,6 +72,7 @@ module Pod
 
       @use_default_plugins = true
       @has_dependencies = true
+      @pod_installers = []
     end
 
     # @return [Hash, Boolean, nil] Pods that have been requested to be
@@ -102,6 +103,19 @@ module Pod
     #
     attr_accessor :deployment
     alias_method :deployment?, :deployment
+
+    #-------------------------------------------------------------------------#
+
+    private
+
+    # @return [Array<PodSourceInstaller>] the pod installers created
+    #         while installing pod targets
+    #
+    attr_reader :pod_installers
+
+    #-------------------------------------------------------------------------#
+
+    public
 
     # Installs the Pods.
     #
@@ -244,6 +258,8 @@ module Pod
 
     # Performs the analysis.
     #
+    # @param  [Analyzer] analyzer the analyzer to use for analysis
+    #
     # @return [void]
     #
     def analyze(analyzer = create_analyzer)
@@ -369,13 +385,7 @@ module Pod
     end
 
     def create_pod_installer(pod_name)
-      specs_by_platform = {}
-      pod_targets.each do |pod_target|
-        if pod_target.root_spec.name == pod_name
-          specs_by_platform[pod_target.platform] ||= []
-          specs_by_platform[pod_target.platform].concat(pod_target.specs)
-        end
-      end
+      specs_by_platform = specs_for_pod(pod_name)
 
       if specs_by_platform.empty?
         requiring_targets = pod_targets.select { |pt| pt.recursive_dependent_targets.any? { |dt| dt.pod_name == pod_name } }
@@ -385,10 +395,24 @@ module Pod
         raise StandardError, message
       end
 
-      @pod_installers ||= []
       pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, :can_cache => installation_options.clean?)
-      @pod_installers << pod_installer
+      pod_installers << pod_installer
       pod_installer
+    end
+
+    # The specifications matching the specified pod name
+    #
+    # @param  [String] pod_name the name of the pod
+    #
+    # @return [Hash{Platform => Array<Specification>}] the specifications grouped by platform
+    #
+    def specs_for_pod(pod_name)
+      pod_targets.each_with_object({}) do |pod_target, hash|
+        if pod_target.root_spec.name == pod_name
+          hash[pod_target.platform] ||= []
+          hash[pod_target.platform].concat(pod_target.specs)
+        end
+      end
     end
 
     # Install the Pods. If the resolver indicated that a Pod should be
@@ -405,21 +429,16 @@ module Pod
 
     # Cleans the sources of the Pods if the config instructs to do so.
     #
-    # @todo Why the @pod_installers might be empty?
     #
     def clean_pod_sources
       return unless installation_options.clean?
-      return unless @pod_installers
-      @pod_installers.each(&:clean!)
+      pod_installers.each(&:clean!)
     end
 
     # Unlocks the sources of the Pods.
     #
-    # @todo Why the @pod_installers might be empty?
-    #
     def unlock_pod_sources
-      return unless @pod_installers
-      @pod_installers.each do |installer|
+      pod_installers.each do |installer|
         pod_target = pod_targets.find { |target| target.pod_name == installer.name }
         installer.unlock_files!(pod_target.file_accessors)
       end
@@ -427,12 +446,9 @@ module Pod
 
     # Locks the sources of the Pods if the config instructs to do so.
     #
-    # @todo Why the @pod_installers might be empty?
-    #
     def lock_pod_sources
       return unless installation_options.lock_pod_sources?
-      return unless @pod_installers
-      @pod_installers.each do |installer|
+      pod_installers.each do |installer|
         pod_target = pod_targets.find { |target| target.pod_name == installer.name }
         installer.lock_files!(pod_target.file_accessors)
       end
@@ -496,7 +512,7 @@ module Pod
 
     # Runs the registered callbacks for the source provider plugin hooks.
     #
-    # @return [void]
+    # @return [Array<Pod::Source>] the plugin sources
     #
     def run_source_provider_hooks
       context = SourceProviderHooksContext.generate

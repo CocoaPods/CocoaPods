@@ -61,7 +61,7 @@ module Pod
         new(sandbox, sandbox.root.to_s, sandbox.project, umbrella_targets_descriptions)
       end
 
-      # Pure data class which describes and umbrella target.
+      # Pure data class which describes an umbrella target.
       #
       class UmbrellaTargetDescription
         # @return [Xcodeproj::Project] The user project into which this target

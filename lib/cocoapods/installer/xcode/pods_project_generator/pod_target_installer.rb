@@ -50,6 +50,7 @@ module Pod
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
               add_files_to_build_phases(native_target, test_native_targets)
+              validate_targets_contain_sources(test_native_targets + [native_target])
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
@@ -90,12 +91,14 @@ module Pod
 
               unless skip_pch?(target.non_test_specs)
                 path = target.prefix_header_path
-                create_prefix_header(path, file_accessors, target.platform, [native_target])
+                create_prefix_header(path, file_accessors, target.platform, native_target)
               end
               unless skip_pch?(target.test_specs)
                 target.test_specs.each do |test_spec|
                   path = target.prefix_header_path_for_test_spec(test_spec)
-                  create_prefix_header(path, test_file_accessors, target.platform, test_native_targets)
+                  test_spec_consumer = test_spec.consumer(target.platform)
+                  test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
+                  create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
                 end
               end
               create_dummy_source(native_target)
@@ -285,6 +288,9 @@ module Pod
                 # requires frameworks. For tests we always use the test target name as the product name
                 # irrelevant to whether we use frameworks or not.
                 configuration.build_settings['PRODUCT_NAME'] = name
+                # target_installer sets 'MACH_O_TYPE' for static frameworks ensure this does not propagate
+                # to test target.
+                configuration.build_settings.delete('MACH_O_TYPE')
                 # Use xcode default product module name, which is $(PRODUCT_NAME:c99extidentifier)
                 # this gives us always valid name that is distinct from the parent spec module name
                 # which allow tests to use either import or @testable import to access the parent framework
@@ -323,7 +329,7 @@ module Pod
             target.test_spec_consumers.select(&:requires_app_host?).group_by(&:test_type).map do |test_type, test_spec_consumers|
               platform = target.platform
               name = "AppHost-#{target.label}-#{test_type.capitalize}-Tests"
-              app_host_target = AppHostInstaller.new(sandbox, project, platform, name).install!
+              app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name).install!
               # Wire test native targets to the generated app host.
               test_spec_consumers.each do |test_spec_consumer|
                 test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
@@ -560,21 +566,19 @@ module Pod
           # @param [Platform] platform
           #        the platform to use for this prefix header.
           #
-          # @param [Array<PBXNativeTarget>] native_targets
-          #        the native targets on which the prefix header should be configured for.
+          # @param [PBXNativeTarget] native_target
+          #        the native target on which the prefix header should be configured for.
           #
           # @return [void]
           #
-          def create_prefix_header(path, file_accessors, platform, native_targets)
+          def create_prefix_header(path, file_accessors, platform, native_target)
             generator = Generator::PrefixHeader.new(file_accessors, platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
 
-            native_targets.each do |native_target|
-              native_target.build_configurations.each do |c|
-                relative_path = path.relative_path_from(project.path.dirname)
-                c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
-              end
+            relative_path = path.relative_path_from(project.path.dirname)
+            native_target.build_configurations.each do |c|
+              c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
             end
           end
 
@@ -816,6 +820,13 @@ module Pod
               ${BUILT_PRODUCTS_DIR}/#{relative_umbrella_header_path.basename}
               ${BUILT_PRODUCTS_DIR}/Swift\ Compatibility\ Header/${PRODUCT_MODULE_NAME}-Swift.h
             )
+          end
+
+          def validate_targets_contain_sources(native_targets)
+            native_targets.each do |native_target|
+              next unless native_target.source_build_phase.files.empty?
+              raise Informative, "Unable to install the `#{target.label}` pod, because the `#{native_target}` target in Xcode would have no sources to compile."
+            end
           end
 
           #-----------------------------------------------------------------------#

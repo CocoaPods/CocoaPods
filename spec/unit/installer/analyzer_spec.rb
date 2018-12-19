@@ -934,6 +934,48 @@ module Pod
           version.to_s.should == '2.5.1'
       end
 
+      it 'takes into account locked dependency spec repos' do
+        podfile = Podfile.new do
+          platform :ios, '8.0'
+          project 'SampleProject/SampleProject'
+          source 'https://example.com/example/specs.git'
+          source 'https://github.com/cocoapods/specs.git'
+          target 'SampleProject' do
+            pod 'JSONKit', '1.5pre'
+          end
+        end
+        hash = {}
+        hash['PODS'] = ['JSONKit (1.5pre)']
+        hash['DEPENDENCIES'] = %w(JSONKit)
+        hash['SPEC CHECKSUMS'] = {}
+        hash['SPEC REPOS'] = {
+          'https://github.com/cocoapods/specs.git' => ['JSONKit'],
+        }
+        hash['COCOAPODS'] = Pod::VERSION
+        lockfile = Pod::Lockfile.new(hash)
+        analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
+
+        example_source = MockSource.new 'example-example-specs' do
+          pod 'JSONKit', '1.5pre' do |s|
+            s.dependency 'Nope', '1.0'
+          end
+
+          pod 'Nope', '1.0' do |s|
+            s.ios.deployment_target = '8'
+          end
+        end
+        master_source = config.sources_manager.master.first
+
+        analyzer.stubs(:sources).returns([example_source, master_source])
+
+        # if we prefered the first source (the default), we also would have resolved Nope
+        analyzer.analyze.specs_by_source.
+          should == {
+            example_source => [],
+            master_source => [Pod::Spec.new(nil, 'JSONKit') { |s| s.version = '1.5pre' }],
+          }
+      end
+
       #--------------------------------------#
 
       it 'fetches the dependencies with external sources' do
@@ -1104,9 +1146,11 @@ module Pod
             source SpecHelper.test_repo_url
             platform :ios, '6.0'
             project 'Sample Extensions Project/Sample Extensions Project'
+            pod 'matryoshka/Bar'
 
             target 'Sample Extensions Project' do
               pod 'JSONKit', '1.4'
+              pod 'matryoshka/Foo'
             end
 
             target 'Today Extension' do
@@ -1122,17 +1166,23 @@ module Pod
 
           result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/JSONKit',
+            'Pods-Sample Extensions Project/matryoshka-Bar-Foo',
             'Pods-Sample Extensions Project/monkey',
+            'Pods-Today Extension/matryoshka-Bar',
             'Pods-Today Extension/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/Debug/JSONKit',
+            'Pods-Sample Extensions Project/Debug/matryoshka-Bar-Foo',
             'Pods-Sample Extensions Project/Debug/monkey',
+            'Pods-Today Extension/Debug/matryoshka-Bar',
             'Pods-Today Extension/Debug/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/Release/JSONKit',
             'Pods-Sample Extensions Project/Release/monkey',
+            'Pods-Sample Extensions Project/Release/matryoshka-Bar-Foo',
+            'Pods-Today Extension/Release/matryoshka-Bar',
             'Pods-Today Extension/Release/monkey',
           ].sort
         end
@@ -1143,6 +1193,8 @@ module Pod
 
           result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
             'Pods-Sample Extensions Project/JSONKit',
+            'Pods-Sample Extensions Project/matryoshka-Bar-Foo',
+            'Pods-Today Extension/matryoshka-Bar',
             'Pods-Today Extension/monkey',
           ].sort
         end
@@ -1220,9 +1272,11 @@ module Pod
             source SpecHelper.test_repo_url
             platform :ios, '8.0'
             project 'SampleProject/SampleProject'
+            pod 'matryoshka/Bar'
 
             target 'SampleProject' do
               pod 'JSONKit'
+              pod 'matryoshka/Foo'
             end
 
             target 'SampleLib' do
@@ -1235,16 +1289,21 @@ module Pod
 
           result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
             JSONKit
+            matryoshka-Bar-Foo
             monkey
           ).sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Debug/matryoshka-Bar',
             'Pods-SampleLib/Debug/monkey',
             'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/matryoshka-Bar-Foo',
             'Pods-SampleProject/Debug/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
+            'Pods-SampleLib/Release/matryoshka-Bar',
             'Pods-SampleLib/Release/monkey',
             'Pods-SampleProject/Release/JSONKit',
+            'Pods-SampleProject/Release/matryoshka-Bar-Foo',
             'Pods-SampleProject/Release/monkey',
           ].sort
         end

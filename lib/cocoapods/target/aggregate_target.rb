@@ -1,3 +1,5 @@
+require 'cocoapods/target/framework_paths'
+
 module Pod
   # Stores the information relative to the target used to cluster the targets
   # of the single Pods. The client targets will then depend on this one.
@@ -222,7 +224,7 @@ module Pod
       !framework_paths_by_config.values.all?(&:empty?)
     end
 
-    # @return [Hash{String => Array<Hash{Symbol => [String]}>}] The vendored dynamic artifacts and framework target
+    # @return [Hash{String => Array<FrameworkPaths>}] The vendored dynamic artifacts and framework target
     #         input and output paths grouped by config
     #
     def framework_paths_by_config

@@ -370,6 +370,63 @@ module Pod
             validator.send(:platforms_to_lint, validator.spec)
           end
         end
+
+        it 'includes only tests supported on the current platform' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx))
+          validator.instance_variable_set(:@results, [])
+          subspec = Specification.new(validator.spec, 'Tests', true) do |s|
+            s.platform = :ios
+          end
+          validator.spec.stubs(:test_specs).returns([subspec])
+          validator.stubs(:validate_url)
+          validator.stubs(:validate_screenshots)
+          validator.stubs(:check_file_patterns)
+          validator.stubs(:install_pod)
+          validator.stubs(:add_app_project_import)
+          validator.stubs(:test_pod)
+          %i(prepare resolve_dependencies download_dependencies).each do |m|
+            Installer.any_instance.stubs(m)
+          end
+          Installer.any_instance.stubs(:aggregate_targets).returns([])
+          Installer.any_instance.stubs(:pod_targets).returns([])
+          validator.expects(:podfile_from_spec).with(:osx, nil, nil, [], nil).once.returns(stub('Podfile'))
+          validator.expects(:podfile_from_spec).with(:ios, nil, nil, ['JSONKit/Tests'], nil).once.returns(stub('Podfile'))
+          validator.validate
+        end
+
+        it 'test_pod only runs on supported platforms' do
+          file = write_podspec(stub_podspec)
+          validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx))
+          validator.instance_variable_set(:@results, [])
+
+          debug_configuration_one = stub(:build_settings => {})
+          native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+          pod_target_one = stub(:name => 'PodTarget1', :pod_name => 'JSONKit', :uses_swift? => true, :swift_version => '4.0')
+          pod_target_installation_one = stub(:target => pod_target_one, :native_target_for_spec => native_target_one,
+                                             :test_native_targets => [],
+                                             :test_specs_by_native_target => {})
+          pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one }
+
+          installer = stub(:pod_targets => [pod_target_one],
+                           :target_installation_results => [pod_target_installation_results])
+          validator.instance_variable_set(:@installer, installer)
+          subspec = Specification.new(validator.spec, 'Tests', true) do |s|
+            s.platform = :ios
+          end
+          validator.spec.stubs(:test_specs).returns([subspec])
+          validator.stubs(:parse_xcodebuild_output)
+          validator.stubs(:translate_output_to_linter_messages)
+
+          # expect only one call to xcodebuild even though we're running test_pod for two platforms
+          validator.expects(:xcodebuild).times(1)
+
+          [:ios, :osx].each do |platform|
+            consumer = validator.spec.consumer(platform)
+            validator.instance_variable_set(:@consumer, consumer)
+            validator.send(:test_pod)
+          end
+        end
       end
 
       it 'builds the pod only once if the first fails with fail_fast' do
@@ -567,6 +624,7 @@ module Pod
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
         PodTarget.any_instance.stubs(:should_build?).returns(true)
+        Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
@@ -586,7 +644,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        validator.validate
+        validator.validate.should == true
       end
 
       it 'runs xcodebuild with correct arguments for code signing' do

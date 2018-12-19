@@ -40,9 +40,7 @@ module Pod
 
       it 'returns whether it has frameworks to embed' do
         @target.stubs(:framework_paths_by_config).returns(
-          'DEBUG' => [{  :name => 'BananaLib.framework',
-                         :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-                         :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' }],
+          'DEBUG' => [Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework')],
         )
         @target.includes_frameworks?.should.be.true
         @target.stubs(:framework_paths_by_config).returns('DEBUG' => [], 'RELEASE' => [])
@@ -153,14 +151,10 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:requires_frameworks?).returns(true)
           @target.framework_paths_by_config['Debug'].should == [
-            { :name => 'BananaLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
           @target.framework_paths_by_config['Release'].should == [
-            { :name => 'BananaLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
         end
 
@@ -196,17 +190,11 @@ module Pod
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
           framework_paths_by_config = @target.framework_paths_by_config
           framework_paths_by_config['Debug'].should == [
-            { :name => 'BananaLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
           framework_paths_by_config['Release'].should == [
-            { :name => 'BananaLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
-            { :name => 'CoconutLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CoconutLib.framework' },
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework'),
           ]
         end
 
@@ -220,9 +208,7 @@ module Pod
           )
           framework_path.stubs(:relative_path_from).returns(Pathname.new('../../some/absolute/path/to/FrameworkA.framework'))
           @target.framework_paths_by_config['Debug'].should == [
-            { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../some/absolute/path/to/FrameworkA.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
+            Target::FrameworkPaths.new('${PODS_ROOT}/../../some/absolute/path/to/FrameworkA.framework'),
           ]
         end
 
@@ -230,14 +216,10 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:requires_frameworks?).returns(true)
           @target.framework_paths_by_config['Debug'].should == [
-            { :name => 'BananaLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
           @target.framework_paths_by_config['Release'].should == [
-            { :name => 'BananaLib.framework',
-              :input_path => '${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework' },
+            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
         end
 
@@ -251,9 +233,7 @@ module Pod
           )
           framework_path.stubs(:relative_path_from).returns(Pathname.new('../../absolute/path/to/FrameworkA.framework'))
           @target.framework_paths_by_config['Debug'].should == [
-            { :name => 'FrameworkA.framework',
-              :input_path => '${PODS_ROOT}/../../absolute/path/to/FrameworkA.framework',
-              :output_path => '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FrameworkA.framework' },
+            Target::FrameworkPaths.new('${PODS_ROOT}/../../absolute/path/to/FrameworkA.framework'),
           ]
         end
       end
