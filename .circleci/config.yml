@@ -21,7 +21,6 @@ jobs:
             }
             trap bundle_env ERR
 
-            sudo gem update --system
             bundle check || bundle install --path .bundle
       - save_cache:
           key: v1-gems-{{ checksum "Gemfile.lock" }}
