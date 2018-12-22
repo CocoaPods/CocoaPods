@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # Represents the metadata cache
       #
       class ProjectMetadataCache

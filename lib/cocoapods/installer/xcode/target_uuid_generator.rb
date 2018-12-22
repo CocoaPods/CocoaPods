@@ -3,7 +3,7 @@ module Pod
     # Generates stable UUIDs for Native Targets.
     #
     class TargetUUIDGenerator < Xcodeproj::Project::UUIDGenerator
-      # This method override is used to generate stable UUIDs for PBXNativeTarget instances.
+      # This method override is used to ONLY generate stable UUIDs for PBXNativeTarget instances and no other type.
       # Stable native target UUIDs are necessary for incremental installation because other projects reference the
       # target by its UUID in the remoteGlobalIDString field.
       #

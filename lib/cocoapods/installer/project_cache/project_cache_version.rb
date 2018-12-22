@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # Object that stores, loads, and holds the version of the project cache.
       #
       class ProjectCacheVersion
@@ -20,7 +20,7 @@ module Pod
         #
         # @param [path] The path of the project cache
         #
-        def from_file(path)
+        def self.from_file(path)
           return ProjectCacheVersion.new unless File.exist?(path)
           cached_version = Version.create(File.read(path))
           ProjectCacheVersion.new(cached_version)

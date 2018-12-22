@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # The result object from analyzing the project cache.
       #
       class ProjectCacheAnalysisResult

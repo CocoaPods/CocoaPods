@@ -105,6 +105,9 @@ module Pod
     attr_accessor :deployment
     alias_method :deployment?, :deployment
 
+    # @return [Boolean] Whether installation should ignore the contents of the project cache
+    # when incremental installation is enabled.
+    #
     attr_accessor :clean_install
     alias_method :clean_install?, :clean_install
 
@@ -278,7 +281,7 @@ module Pod
         # The `pod_target_subprojects` is used for backwards compatibility so that consumers can iterate over
         # all pod targets across projects without needing to open each one.
         @pod_target_subprojects = pod_project_generation_result.projects_by_pod_targets.keys
-        @generated_projects = ([pods_project] + pod_target_subprojects || []).reject(&:nil?)
+        @generated_projects = ([pods_project] + pod_target_subprojects || []).compact
         @generated_pod_targets = pod_targets_to_generate
         @generated_aggregate_targets = aggregate_targets_to_generate
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets

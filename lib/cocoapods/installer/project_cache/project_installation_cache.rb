@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # Represents the cache stored at Pods/.project/installation_cache
       #
       class ProjectInstallationCache

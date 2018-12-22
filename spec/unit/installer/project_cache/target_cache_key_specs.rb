@@ -3,7 +3,7 @@ require 'cocoapods/installer/project_cache/target_cache_key.rb'
 
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       describe TargetCacheKey do
         before do
           @banana_pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')

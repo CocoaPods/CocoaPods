@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # Uniquely identifies a Target.
       #
       class TargetCacheKey
@@ -46,8 +46,8 @@ module Pod
               return :project if other.hash['FILES'] != hash['FILES']
             end
 
-            this_build_settings = hash['BUILD_SETTINGS']
-            other_build_settings = other.hash['BUILD_SETTINGS']
+            this_build_settings = hash['BUILD_SETTINGS_CHECKSUM']
+            other_build_settings = other.hash['BUILD_SETTINGS_CHECKSUM']
             return :project if this_build_settings != other_build_settings
 
             this_checkout_options = hash['CHECKOUT_OPTIONS']
@@ -99,7 +99,7 @@ module Pod
           contents = {
             'CHECKSUM' => pod_target.root_spec.checksum,
             'SPECS' => pod_target.specs.map(&:to_s),
-            'BUILD_SETTINGS' => build_settings,
+            'BUILD_SETTINGS_CHECKSUM' => build_settings,
           }
           contents['FILES'] = pod_target.all_files.sort if is_local_pod
           contents['CHECKOUT_OPTIONS'] = checkout_options if checkout_options
@@ -117,7 +117,7 @@ module Pod
             build_settings[configuration] = Digest::MD5.hexdigest(aggregate_target.build_settings(configuration).xcconfig.to_s)
           end
 
-          TargetCacheKey.new(:aggregate, 'BUILD_SETTINGS' => build_settings)
+          TargetCacheKey.new(:aggregate, 'BUILD_SETTINGS_CHECKSUM' => build_settings)
         end
       end
     end

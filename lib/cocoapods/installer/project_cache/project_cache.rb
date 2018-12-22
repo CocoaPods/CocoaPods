@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       autoload :ProjectCacheAnalyzer,       'cocoapods/installer/project_cache/project_cache_analyzer'
       autoload :ProjectInstallationCache,   'cocoapods/installer/project_cache/project_installation_cache'
       autoload :ProjectMetadataCache,       'cocoapods/installer/project_cache/project_metadata_cache'

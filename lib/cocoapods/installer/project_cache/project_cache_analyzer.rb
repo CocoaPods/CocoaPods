@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # Analyzes the project cache and computes which pod targets need to be generated.
       #
       class ProjectCacheAnalyzer
@@ -68,7 +68,7 @@ module Pod
             elsif target.is_a?(AggregateTarget)
               [label, TargetCacheKey.from_aggregate_target(target)]
             else
-              raise '[BUG] Unknown target type'
+              raise "[BUG] Unknown target type #{target}"
             end
           end]
 

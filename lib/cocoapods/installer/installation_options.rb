@@ -179,6 +179,7 @@ module Pod
 
       # Whether to enable only regenerating targets and their associate projects that have changed
       # since the previous installation.
+      #
       option :incremental_installation, false
     end
   end

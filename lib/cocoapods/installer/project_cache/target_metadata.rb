@@ -1,6 +1,6 @@
 module Pod
   class Installer
-    class ProjectCache
+    module ProjectCache
       # Metadata used to reconstruct a PBXTargetDependency.
       #
       class TargetMetadata
