@@ -79,7 +79,6 @@ module Pod
           TargetCacheKey.new(type, hash)
         end
 
-
         # Constructs a TargetCacheKey instance from a PodTarget.
         #
         # @param [PodTarget] pod_target
