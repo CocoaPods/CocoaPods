@@ -7,6 +7,9 @@ module Pod
       # Stable native target UUIDs are necessary for incremental installation because other projects reference the
       # target by its UUID in the remoteGlobalIDString field.
       #
+      # @param [Array<Project>] projects
+      #        The list of projects used to generate stabe target UUIDs.
+      #
       def generate_all_paths_by_objects(projects)
         @paths_by_object = {}
         all_objects = projects.flat_map(&:objects)

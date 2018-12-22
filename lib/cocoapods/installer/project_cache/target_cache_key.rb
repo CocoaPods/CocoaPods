@@ -28,11 +28,13 @@ module Pod
           @hash = hash
         end
 
-        # @return [Symbol] The difference between this and another TargetCacheKey object.
-        # Symbol :none means no difference.
+        # Equality function used to compare TargetCacheKey objects to each other.
         #
         # @param [TargetCacheKey] other
         #        Other object to compare itself against.
+        #
+        # @return [Symbol] The difference between this and another TargetCacheKey object.
+        #         # Symbol :none means no difference.
         #
         def key_difference(other)
           if other.type != type
@@ -62,10 +64,12 @@ module Pod
           hash
         end
 
-        # @return [TargetCacheKey]
+        # Creates a TargetCacheKey instance from the given hash.
         #
         # @param [Hash{String => Object}] hash
         #        The hash used to construct a TargetCacheKey object.
+        #
+        # @return [TargetCacheKey]
         #
         def self.from_cache_hash(hash)
           if files = hash['FILES']
@@ -75,7 +79,8 @@ module Pod
           TargetCacheKey.new(type, hash)
         end
 
-        # @return [TargetCacheKey]
+
+        # Constructs a TargetCacheKey instance from a PodTarget.
         #
         # @param [PodTarget] pod_target
         #        The pod target used to construct a TargetCacheKey object.
@@ -85,6 +90,8 @@ module Pod
         #
         # @param [Hash] checkout_options
         #        The checkout options for this pod target.
+        #
+        # @return [TargetCacheKey]
         #
         def self.from_pod_target(pod_target, is_local_pod: false, checkout_options: nil)
           build_settings = {}
@@ -106,10 +113,12 @@ module Pod
           TargetCacheKey.new(:pod_target, contents)
         end
 
-        # @return [TargetCacheKey]
+        # Construct a TargetCacheKey instance from an AggregateTarget.
         #
         # @param [AggregateTarget] aggregate_target
         #        The aggregate target used to construct a TargetCacheKey object.
+        #
+        # @return [TargetCacheKey]
         #
         def self.from_aggregate_target(aggregate_target)
           build_settings = {}

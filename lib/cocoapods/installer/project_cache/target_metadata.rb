@@ -43,19 +43,24 @@ module Pod
           "#{target_label} : #{native_target_uuid} : #{container_project_path}"
         end
 
-        # @return [TargetMetadata]
+        # Constructs a TargetMetadata instance from a hash.
         #
         # @param [Hash] hash
         #        The hash used to construct a new TargetMetadata instance.
+        #
+        # @return [TargetMetadata]
         #
         def self.cache_metadata_from_hash(hash)
           TargetMetadata.new(hash['LABEL'], hash['UUID'], hash['PROJECT_PATH'])
         end
 
-        # @return [TargetMetadata]
+        # Constructs a TargetMetadata instance from a native target.
         #
         # @param [PBXNativeTarget] native_target
         #        The native target used to construct a TargetMetadata instance.
+        #
+        # @return [TargetMetadata]
+        #
         def self.cache_metadata_from_native_target(native_target)
           TargetMetadata.new(native_target.name, native_target.uuid, native_target.project.path.to_s)
         end

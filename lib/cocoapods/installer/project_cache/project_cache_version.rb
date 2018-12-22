@@ -16,9 +16,12 @@ module Pod
           @version = version
         end
 
-        # @return [ProjectCacheVersion]
+        # Constructs a ProjectCacheVersion from a file.
         #
-        # @param [path] The path of the project cache
+        # @param [String] path
+        #        The path of the project cache
+        #
+        # @return [ProjectCacheVersion]
         #
         def self.from_file(path)
           return ProjectCacheVersion.new unless File.exist?(path)
@@ -28,7 +31,8 @@ module Pod
 
         # @return [void]
         #
-        # @param [path] The path of the project cache to save.
+        # @param [String] path
+        #        The path of the project cache to save.
         #
         def save_as(path)
           open(path, 'w') { |f| f.puts version.to_s }
