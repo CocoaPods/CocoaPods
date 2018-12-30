@@ -53,6 +53,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix runpath_search_paths for `inherit! search_path` targets  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8337](https://github.com/CocoaPods/CocoaPods/issues/8337)
+
 * Do not force 64-bit architectures on Xcode 10  
   [Eric Amorde](https://github.com/amorde)
   [#8242](https://github.com/CocoaPods/CocoaPods/issues/8242)
