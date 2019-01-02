@@ -86,12 +86,11 @@ module Pod
 
         def wire_test_native_targets(pod_target, installation_result, pod_target_installation_results, project, frameworks_group, metadata_cache)
           installation_result.test_specs_by_native_target.each do |test_native_target, test_spec|
-            resource_bundle_native_target = installation_result.test_resource_bundle_targets[test_spec.name]
-            unless resource_bundle_native_target.nil?
-              resource_bundle_native_target.each do |test_resource_bundle_target|
-                test_native_target.add_dependency(test_resource_bundle_target)
-              end
+            resource_bundle_native_targets = installation_result.test_resource_bundle_targets[test_spec.name] || []
+            resource_bundle_native_targets.each do |test_resource_bundle_target|
+              test_native_target.add_dependency(test_resource_bundle_target)
             end
+
             test_dependent_targets = pod_target.test_dependent_targets_by_spec_name.fetch(test_spec.name, []).unshift(pod_target).uniq
             test_dependent_targets.each do |test_dependent_target|
               if dependency_installation_result = pod_target_installation_results[test_dependent_target.name]
@@ -113,12 +112,11 @@ module Pod
 
         def wire_app_native_targets(pod_target, native_target, installation_result, pod_target_installation_results, project, frameworks_group, metadata_cache)
           installation_result.app_specs_by_native_target.each do |app_native_target, app_spec|
-            resource_bundle_native_target = installation_result.app_resource_bundle_targets[app_spec.name]
-            unless resource_bundle_native_target.nil?
-              resource_bundle_native_target.each do |app_resource_bundle_target|
-                app_native_target.add_dependency(app_resource_bundle_target)
-              end
+            resource_bundle_native_targets = installation_result.app_resource_bundle_targets[app_spec.name] || []
+            resource_bundle_native_targets.each do |app_resource_bundle_target|
+              app_native_target.add_dependency(app_resource_bundle_target)
             end
+
             app_dependent_targets = pod_target.app_dependent_targets_by_spec_name.fetch(app_spec.name, []).unshift(pod_target).uniq
             app_dependent_targets.each do |app_dependent_target|
               if dependency_installation_result = pod_target_installation_results[app_dependent_target.name]

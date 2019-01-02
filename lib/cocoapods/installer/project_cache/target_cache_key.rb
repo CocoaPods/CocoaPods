@@ -72,11 +72,12 @@ module Pod
         # @return [TargetCacheKey]
         #
         def self.from_cache_hash(hash)
-          if files = hash['FILES']
-            hash['FILES'] = files.sort
+          cache_hash = hash.dup
+          if files = cache_hash['FILES']
+            cache_hash['FILES'] = files.sort
           end
-          type = hash['CHECKSUM'] ? :pod_target : :aggregate
-          TargetCacheKey.new(type, hash)
+          type = cache_hash['CHECKSUM'] ? :pod_target : :aggregate
+          TargetCacheKey.new(type, cache_hash)
         end
 
         # Constructs a TargetCacheKey instance from a PodTarget.

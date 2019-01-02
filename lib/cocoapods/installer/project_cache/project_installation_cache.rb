@@ -41,13 +41,7 @@ module Pod
 
         def save_as(path)
           Pathname(path).dirname.mkpath
-          cache_key_contents = Hash[cache_key_by_target_label.map do |label, key|
-            [label, key.to_h]
-          end]
-          contents = { 'CACHE_KEYS' => cache_key_contents }
-          contents['BUILD_CONFIGURATIONS'] = build_configurations if build_configurations
-          contents['OBJECT_VERSION'] = project_object_version if project_object_version
-          path.open('w') { |f| f.puts YAMLHelper.convert_hash(contents, nil) }
+          path.open('w') { |f| f.puts YAMLHelper.convert_hash(to_hash, nil) }
         end
 
         def self.from_file(path)
@@ -59,6 +53,16 @@ module Pod
           project_object_version = contents['OBJECT_VERSION']
           build_configurations = contents['BUILD_CONFIGURATIONS']
           ProjectInstallationCache.new(cache_key_by_target_label, build_configurations, project_object_version)
+        end
+
+        def to_hash
+          cache_key_contents = Hash[cache_key_by_target_label.map do |label, key|
+            [label, key.to_h]
+          end]
+          contents = { 'CACHE_KEYS' => cache_key_contents }
+          contents['BUILD_CONFIGURATIONS'] = build_configurations if build_configurations
+          contents['OBJECT_VERSION'] = project_object_version if project_object_version
+          contents
         end
       end
     end

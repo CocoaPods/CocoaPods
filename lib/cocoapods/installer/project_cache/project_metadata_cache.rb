@@ -37,17 +37,17 @@ module Pod
 
         # Updates the metadata cache based on installation results.
         #
-        # @param [TargetInstallationResult] pod_target_installation_results
+        # @param [Hash{String => TargetInstallationResult}] pod_target_installation_results
         #        The installation results for pod targets installed.
         #
-        # @param [TargetInstallationResult] aggregate_target_installation_results
+        # @param [Hash{String => TargetInstallationResult}] aggregate_target_installation_results
         #        The installation results for aggregate targets installed.
         #
         def update_metadata!(pod_target_installation_results, aggregate_target_installation_results)
           installation_results = (pod_target_installation_results.values || []) + (aggregate_target_installation_results.values || [])
           installation_results.each do |installation_result|
             native_target = installation_result.native_target
-            target_label_by_metadata[native_target.name] = TargetMetadata.cache_metadata_from_native_target(native_target)
+            target_label_by_metadata[native_target.name] = TargetMetadata.from_native_target(native_target)
           end
         end
 
@@ -56,7 +56,7 @@ module Pod
           contents = YAMLHelper.load_file(path)
           target_by_label_metadata = {}
           contents.each do |pod_target_label, hash|
-            target_by_label_metadata[pod_target_label] = TargetMetadata.cache_metadata_from_hash(hash)
+            target_by_label_metadata[pod_target_label] = TargetMetadata.from_hash(hash)
           end
           ProjectMetadataCache.new(target_by_label_metadata)
         end

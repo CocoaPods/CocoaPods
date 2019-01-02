@@ -50,7 +50,7 @@ module Pod
         #
         # @return [TargetMetadata]
         #
-        def self.cache_metadata_from_hash(hash)
+        def self.from_hash(hash)
           TargetMetadata.new(hash['LABEL'], hash['UUID'], hash['PROJECT_PATH'])
         end
 
@@ -61,7 +61,7 @@ module Pod
         #
         # @return [TargetMetadata]
         #
-        def self.cache_metadata_from_native_target(native_target)
+        def self.from_native_target(native_target)
           TargetMetadata.new(native_target.name, native_target.uuid, native_target.project.path.to_s)
         end
       end

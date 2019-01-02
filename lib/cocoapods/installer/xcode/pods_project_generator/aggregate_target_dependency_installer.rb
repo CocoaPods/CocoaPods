@@ -6,11 +6,11 @@ module Pod
       class AggregateTargetDependencyInstaller
         require 'cocoapods/native_target_ext.rb'
 
-        # @return [TargetInstallationResult] The target installation results for pod targets.
+        # @return [Hash{String => TargetInstallationResult}] The target installation results for pod targets.
         #
         attr_reader :pod_target_installation_results
 
-        # @return [TargetInstallationResult] The target installation results for aggregate targets.
+        # @return [Hash{String => TargetInstallationResult}] The target installation results for aggregate targets.
         #
         attr_reader :aggregate_target_installation_results
 
@@ -20,8 +20,8 @@ module Pod
 
         # Initialize a new instance.
         #
-        # @param [TargetInstallationResult] aggregate_target_installation_results @see #aggregate_target_installation_results
-        # @param [TargetInstallationResult] pod_target_installation_results @see #pod_target_installation_results
+        # @param [Hash{String => TargetInstallationResult}] aggregate_target_installation_results @see #aggregate_target_installation_results
+        # @param [Hash{String => TargetInstallationResult}] pod_target_installation_results @see #pod_target_installation_results
         # @param [ProjectMetadataCache] metadata_cache @see #metadata_cache
         #
         def initialize(aggregate_target_installation_results, pod_target_installation_results, metadata_cache)
