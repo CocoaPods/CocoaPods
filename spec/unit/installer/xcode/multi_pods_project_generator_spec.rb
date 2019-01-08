@@ -90,7 +90,7 @@ module Pod
             @installation_options = Pod::Installer::InstallationOptions.new
 
             @generator = MultiPodsProjectGenerator.new(config.sandbox, aggregate_targets, pod_targets, @analysis_result.all_user_build_configurations,
-                                                       @installation_options, config, nil)
+                                                       @installation_options, config, '1')
           end
 
           it "creates build configurations for all projects of the user's targets" do

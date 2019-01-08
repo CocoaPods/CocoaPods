@@ -13,13 +13,11 @@ module Pod
           container_project_path = sandbox.project_path
           all_platforms = aggregate_targets.map(&:platform)
           # Generate container Pods.xcodeproj.
-          container_project = nil
-          unless aggregate_targets.empty?
-            container_project_generator = ProjectGenerator.new(sandbox, container_project_path, [],
-                                                               build_configurations, all_platforms, project_object_version,
-                                                               config.podfile_path)
-            container_project = container_project_generator.generate!
-          end
+          container_project =
+            unless aggregate_targets.empty?
+              ProjectGenerator.new(sandbox, container_project_path, [], build_configurations, all_platforms,
+                                   project_object_version, config.podfile_path).generate!
+            end
 
           project_paths_by_pod_targets = pod_targets.group_by { |pod_target| sandbox.pod_target_project_path(pod_target.pod_name) }
           projects_by_pod_targets = Hash[project_paths_by_pod_targets.map do |project_path, pod_targets|
@@ -37,8 +35,7 @@ module Pod
 
           # Note: We must call `install_file_references` on all pod targets before installing them.
           pod_target_installation_results = install_all_pod_targets(projects_by_pod_targets)
-
-          aggregate_target_installation_results = install_aggregate_targets(container_project, aggregate_targets) if container_project
+          aggregate_target_installation_results = install_aggregate_targets_into_project(container_project, aggregate_targets)
           target_installation_results = InstallationResults.new(pod_target_installation_results, aggregate_target_installation_results)
 
           integrate_targets(target_installation_results.pod_target_installation_results)
@@ -54,6 +51,11 @@ module Pod
               target_installation_results.merge!(install_pod_targets(project, pod_targets))
             end
           end
+        end
+
+        def install_aggregate_targets_into_project(project, aggregate_targets)
+          return unless project
+          install_aggregate_targets(project, aggregate_targets)
         end
       end
     end

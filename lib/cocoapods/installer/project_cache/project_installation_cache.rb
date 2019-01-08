@@ -33,11 +33,17 @@ module Pod
           @project_object_version = project_object_version
         end
 
-        attr_writer :cache_key_by_target_label
+        def update_cache_key_by_target_label!(cache_key_by_target_label)
+          @cache_key_by_target_label = cache_key_by_target_label
+        end
 
-        attr_writer :build_configurations
+        def update_build_configurations!(build_configurations)
+          @build_configurations = build_configurations
+        end
 
-        attr_writer :project_object_version
+        def update_project_object_version!(project_object_version)
+          @project_object_version = project_object_version
+        end
 
         def save_as(path)
           Pathname(path).dirname.mkpath

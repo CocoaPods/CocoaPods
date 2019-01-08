@@ -10,6 +10,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Podfile: Add a `CDNSource` automatically if it's not present, just like `git` source.
   Convenience for `CDNSource` when specified as `source 'https://cdn.jsdelivr.net/cocoa/'`.
+* Incremental Pod Installation
+  Enables only regenerating projects for pod targets that have changed since the previous installation. This feature is gated by the `incremental_installation` option.  
+  [Sebastian Shanus](https://github.com/sebastianv1)  
+  [#8319](https://github.com/CocoaPods/CocoaPods/issues/8319)
+
+* Podfile: Add a CDNSource automatically if it's not present, just like git Source  
+  Convenience for CDNSource when specified as `source 'https://cdn.jsdelivr.net/cocoa/'`.  
   If source doesn't exist, it will be created.  
   [igor-makarov](https://github.com/igor-makarov)
   [#8362](https://github.com/CocoaPods/CocoaPods/pull/8362)

@@ -8,9 +8,7 @@ module Pod
         before do
           @banana_pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
           @banana_cache_key = TargetCacheKey.from_pod_target(@banana_pod_target)
-          @aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios,
-                                                  fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
-                                                  nil, {})
+          @aggregate_target = fixture_aggregate_target
           @aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(@aggregate_target)
         end
 
