@@ -54,6 +54,7 @@ Generating Pods project
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
+  Cleaning up sandbox directory
 
 Integrating client project
 
