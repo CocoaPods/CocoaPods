@@ -53,6 +53,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set `showEnvVarsInLog` for script phases only when its disabled.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8400](https://github.com/CocoaPods/CocoaPods/pull/8400)
+
 * Fix runpath_search_paths for `inherit! search_path` targets  
   [Paul Beusterien](https://github.com/paulb777)
   [#8337](https://github.com/CocoaPods/CocoaPods/issues/8337)
