@@ -86,19 +86,11 @@ module Pod
 
         app_uses_swift = app.source_build_phase.files_references.any? { |fr| File.extname(fr.path) == '.swift' }
 
-        target_module << if app_uses_swift
-                           <<-RUBY
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+        target_module << <<-RUBY
+  # Comment the following line to use static libraries. With static libraries, the startup time is better, and with dynamic libraries, the incremental compilation time is better.
   use_frameworks!
 
          RUBY
-                         else
-                           <<-RUBY
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-
-         RUBY
-        end
 
         target_module << template_contents(config.default_podfile_path, '  ', "Pods for #{app.name}\n")
 
