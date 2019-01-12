@@ -239,6 +239,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   with the same dependencies.  
   [Samuel Giddins]
 
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Use `xcfilelist`s for script phase input & output paths, to reduce churn in
+  the user Xcode project and reduce the chance of hitting `ARG_MAX`.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#8037](https://github.com/CocoaPods/CocoaPods/issues/8037)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8414](https://github.com/CocoaPods/CocoaPods/pull/8414)
+  
 ##### Bug Fixes
 
 * Don't generate unencrypted source warnings for localhost.  

@@ -70,12 +70,12 @@ module Pod
               end.uniq
 
               unless resource_paths.empty?
-                input_file_list_path = target.embed_frameworks_script_input_files_path_for_spec(spec)
+                input_file_list_path = target.copy_resources_script_input_files_path_for_spec(spec)
                 input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
                 input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
                 input_paths_by_config[input_paths_key] = [script_path] + resource_paths
 
-                output_file_list_path = target.embed_frameworks_script_output_files_path_for_spec(spec)
+                output_file_list_path = target.copy_resources_script_output_files_path_for_spec(spec)
                 output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
                 output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
                 output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.resource_output_paths(resource_paths)
