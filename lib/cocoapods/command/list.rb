@@ -27,8 +27,8 @@ module Pod
 
       def update_if_necessary!
         UI.section("\nUpdating Spec Repositories\n".yellow) do
-          Repo.new(CLAide::ARGV.new(['update'])).run
-        end if @update
+          Repo::Update.new(CLAide::ARGV.new([])).run
+        end if @update && config.verbose?
       end
 
       #-----------------------------------------------------------------------#
