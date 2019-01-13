@@ -212,9 +212,8 @@ module Pod
               ref
             end.compact.uniq
             compile_phase_matcher = lambda { |ref| !(ref.path =~ /.*\.xcdatamodeld/i).nil? }
-            resources_phase_refs = file_references.reject(&compile_phase_matcher)
-            compile_phase_refs = file_references.select(&compile_phase_matcher)
-            yield resources_phase_refs, compile_phase_refs
+            compile_phase_refs, resources_phase_refs = file_references.partition(&compile_phase_matcher)
+            yield compile_phase_refs, resources_phase_refs
           end
 
           #-----------------------------------------------------------------------#
@@ -271,7 +270,7 @@ module Pod
 
               next unless target.build_as_dynamic_framework?
 
-              filter_resource_file_references(file_accessor.resources.flatten) do |resource_phase_refs, compile_phase_refs|
+              filter_resource_file_references(file_accessor.resources.flatten) do |compile_phase_refs, resource_phase_refs|
                 native_target.add_file_references(compile_phase_refs, nil)
                 native_target.add_resources(resource_phase_refs)
               end
@@ -440,10 +439,10 @@ module Pod
                 end
 
                 contains_compile_phase_refs = false
-                filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|
+                filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
                   # Resource bundles are only meant to have resources, so install everything
                   # into the resources phase. See note in filter_resource_file_references.
-                  resource_bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
+                  resource_bundle_target.add_resources(compile_phase_refs + resource_phase_refs)
                   contains_compile_phase_refs = !compile_phase_refs.empty?
                 end
 
