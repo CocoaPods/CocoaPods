@@ -130,7 +130,7 @@ module Pod
           # @return [void]
           #
           def create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths_by_config = {}, output_paths_by_config = {})
-            phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + EMBED_FRAMEWORK_PHASE_NAME)
+            phase = TargetIntegrator.create_or_update_shell_script_build_phase(native_target, BUILD_PHASE_PREFIX + EMBED_FRAMEWORK_PHASE_NAME)
             phase.shell_script = %("#{script_path}"\n)
             TargetIntegrator.set_input_output_paths(phase, input_paths_by_config, output_paths_by_config)
           end
@@ -166,7 +166,7 @@ module Pod
           #
           def create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths_by_config = {}, output_paths_by_config = {})
             phase_name = COPY_PODS_RESOURCES_PHASE_NAME
-            phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
+            phase = TargetIntegrator.create_or_update_shell_script_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             phase.shell_script = %("#{script_path}"\n)
             TargetIntegrator.set_input_output_paths(phase, input_paths_by_config, output_paths_by_config)
           end
@@ -187,21 +187,24 @@ module Pod
           # @param [PBXNativeTarget] native_target
           #        The native target to add the script phase into.
           #
-          # @param [String] phase_name
-          #        The name of the phase to use.
+          # @param [String] script_phase_name
+          #        The name of the script phase to use.
           #
-          # @param [Class] phase_class
-          #        The class of the phase to use.
+          # @param [String] show_env_vars_in_log
+          #        The value to set for show environment variables in the log during execution of this script phase or
+          #        `nil` for not setting the value at all.
           #
           # @return [void]
           #
-          def create_or_update_build_phase(native_target, phase_name, phase_class = Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
-            build_phases = native_target.build_phases.grep(phase_class)
-            build_phases.find { |phase| phase.name && phase.name.end_with?(phase_name) }.tap { |p| p.name = phase_name if p } ||
-              native_target.project.new(phase_class).tap do |phase|
-                UI.message("Adding Build Phase '#{phase_name}' to project.") do
-                  phase.name = phase_name
-                  phase.show_env_vars_in_log = '0'
+          def create_or_update_shell_script_build_phase(native_target, script_phase_name, show_env_vars_in_log = '0')
+            build_phases = native_target.build_phases.grep(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+            build_phases.find { |phase| phase.name && phase.name.end_with?(script_phase_name) }.tap { |p| p.name = script_phase_name if p } ||
+              native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase).tap do |phase|
+                UI.message("Adding Build Phase '#{script_phase_name}' to project.") do
+                  phase.name = script_phase_name
+                  unless show_env_vars_in_log.nil?
+                    phase.show_env_vars_in_log = show_env_vars_in_log
+                  end
                   native_target.build_phases << phase
                 end
               end
@@ -225,12 +228,16 @@ module Pod
             # Create or update the ones that are expected to be.
             script_phases.each do |script_phase|
               name_with_prefix = USER_BUILD_PHASE_PREFIX + script_phase[:name]
-              phase = TargetIntegrator.create_or_update_build_phase(native_target, name_with_prefix)
+              phase = TargetIntegrator.create_or_update_shell_script_build_phase(native_target, name_with_prefix, nil)
               phase.shell_script = script_phase[:script]
               phase.shell_path = script_phase[:shell_path] || '/bin/sh'
               phase.input_paths = script_phase[:input_files]
               phase.output_paths = script_phase[:output_files]
-              phase.show_env_vars_in_log = script_phase.fetch(:show_env_vars_in_log, true) ? '1' : '0'
+              # At least with Xcode 10 `showEnvVarsInLog` is *NOT* set to any value even if it's checked and it only
+              # gets set to '0' if the user has explicitly disabled this.
+              if (show_env_vars_in_log = script_phase.fetch(:show_env_vars_in_log, '1')) == '0'
+                phase.show_env_vars_in_log = show_env_vars_in_log
+              end
 
               execution_position = script_phase[:execution_position]
               unless execution_position == :any
@@ -488,7 +495,7 @@ module Pod
         def add_check_manifest_lock_script_phase
           phase_name = CHECK_MANIFEST_PHASE_NAME
           native_targets.each do |native_target|
-            phase = TargetIntegrator.create_or_update_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
+            phase = TargetIntegrator.create_or_update_shell_script_build_phase(native_target, BUILD_PHASE_PREFIX + phase_name)
             native_target.build_phases.unshift(phase).uniq! unless native_target.build_phases.first == phase
             phase.shell_script = <<-SH.strip_heredoc
               diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null

@@ -493,7 +493,26 @@ module Pod
           phase.shell_path.should == '/bin/sh'
           phase.input_paths.should.be.nil
           phase.output_paths.should.be.nil
-          phase.show_env_vars_in_log.should == '1'
+          phase.show_env_vars_in_log.should.be.nil
+        end
+
+        it 'sets the show_env_vars_in_log value to 0 if its explicitly set' do
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"', :show_env_vars_in_log => '0'])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+          phase.show_env_vars_in_log.should == '0'
+        end
+
+        it 'does not set the show_env_vars_in_log value to 1 even if its set' do
+          # Since Xcode 10 this value never gets transcribed into the `.pbxproj` file which causes Xcode 10 to _remove_
+          # it if it's been added and causing a dirty file in git repos.
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"', :show_env_vars_in_log => '1'])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+          # Even though the user has set this to '1' we expect this to be `nil`.
+          phase.show_env_vars_in_log.should.be.nil
         end
 
         it 'removes outdated custom shell script phases' do
