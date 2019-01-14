@@ -8,6 +8,10 @@ module Pod
           Validates the Pod using the files in the working directory.
         DESC
 
+        self.arguments = [
+          CLAide::Argument.new('PODSPEC_PATHS', false, true),
+        ]
+
         def self.options
           [
             ['--quick', 'Lint skips checks that would require to download and build the spec'],
