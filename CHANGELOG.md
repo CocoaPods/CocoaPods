@@ -57,6 +57,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8400](https://github.com/CocoaPods/CocoaPods/pull/8400)
 
+* Fix error when execute pod list --update --verbose command  
+  [tripleCC](https://github.com/tripleCC)
+  [#8404](https://github.com/CocoaPods/CocoaPods/pull/8404)
+
 * Fix runpath_search_paths for `inherit! search_path` targets  
   [Paul Beusterien](https://github.com/paulb777)
   [#8337](https://github.com/CocoaPods/CocoaPods/issues/8337)
