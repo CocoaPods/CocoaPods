@@ -226,7 +226,7 @@ module Pod
 
       # @return [Array<String>]
       define_build_settings_method :framework_search_paths, :build_setting => true, :memoized => true do
-        framework_search_paths_to_import_developer_frameworks(frameworks)
+        framework_search_paths_to_import_developer_frameworks(frameworks + weak_frameworks)
       end
 
       # @param [Array<String>] frameworks
