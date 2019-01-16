@@ -311,7 +311,7 @@ module Pod
       #
       # @param [Boolean] test_bundle
       #
-      def _ld_runpath_search_paths(requires_host_target: false, test_bundle: false, inherit_search_paths: false)
+      def _ld_runpath_search_paths(requires_host_target: false, test_bundle: false)
         if target.platform.symbolic_name == :osx
           ["'@executable_path/../Frameworks'",
            test_bundle ? "'@loader_path/../Frameworks'" : "'@loader_path/Frameworks'"]
@@ -321,7 +321,6 @@ module Pod
             "'@loader_path/Frameworks'",
           ]
           paths << "'@executable_path/../../Frameworks'" if requires_host_target
-          paths.concat target.build_settings.framework_search_paths if inherit_search_paths
           paths
         end
       end
@@ -1042,15 +1041,10 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :ld_runpath_search_paths, :build_setting => true, :memoized => true, :uniqued => true do
-          inherit_search_paths = !target.search_paths_aggregate_targets.empty? &&
-                                 !target.build_settings.framework_search_paths.empty? &&
-                                 target.platform.symbolic_name != :osx
-          return unless pod_targets.any?(&:build_as_dynamic?) || any_vendored_dynamic_artifacts? || inherit_search_paths
+          return unless pod_targets.any?(&:build_as_dynamic?) || any_vendored_dynamic_artifacts?
           symbol_type = target.user_targets.map(&:symbol_type).uniq.first
           test_bundle = symbol_type == :octest_bundle || symbol_type == :unit_test_bundle || symbol_type == :ui_test_bundle
-          _ld_runpath_search_paths(:requires_host_target => target.requires_host_target?,
-                                   :test_bundle => test_bundle,
-                                   :inherit_search_paths => inherit_search_paths)
+          _ld_runpath_search_paths(:requires_host_target => target.requires_host_target?, :test_bundle => test_bundle)
         end
 
         # @return [Boolean]
