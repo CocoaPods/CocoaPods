@@ -21,7 +21,7 @@ module SpecHelper
       unless file.exist?
         archive = Pathname.new(file.to_s + '.tar.gz')
         if archive.exist?
-          Pod::Executable.capture_command('tar', ['-zxvf', archive], :capture => none, :chdir => archive.dirname.to_s)
+          Pod::Executable.capture_command('tar', ['-zxvf', archive], :capture => :none, :chdir => archive.dirname.to_s)
         end
       end
       file
