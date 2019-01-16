@@ -58,6 +58,13 @@ module Pod
           frameworks_search_paths = xcconfig.framework_search_paths
           frameworks_search_paths.should == %w($(PLATFORM_DIR)/Developer/Library/Frameworks)
         end
+
+        it 'adds the developer frameworks search paths to the xcconfig if XCTest has been detected as a weak framework' do
+          xcconfig = BuildSettings.new(stub('Target'))
+          xcconfig.stubs(:weak_frameworks => %w(XCTest))
+          frameworks_search_paths = xcconfig.framework_search_paths
+          frameworks_search_paths.should == %w($(PLATFORM_DIR)/Developer/Library/Frameworks)
+        end
       end
 
       #---------------------------------------------------------------------#
