@@ -87,7 +87,7 @@ module Pod
         app_uses_swift = app.source_build_phase.files_references.any? { |fr| File.extname(fr.path) == '.swift' }
 
         target_module << <<-RUBY
-  # Comment the following line to use static libraries. With static libraries, the startup time is better, and with dynamic libraries, the incremental compilation time is better.
+  # Comment the following line to use static libraries.
   use_frameworks!
 
          RUBY
