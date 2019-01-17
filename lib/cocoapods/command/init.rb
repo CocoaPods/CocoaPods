@@ -84,10 +84,8 @@ module Pod
       def target_module(app, tests)
         target_module = "\ntarget '#{app.name.gsub(/'/, "\\\\\'")}' do\n"
 
-        app_uses_swift = app.source_build_phase.files_references.any? { |fr| File.extname(fr.path) == '.swift' }
-
         target_module << <<-RUBY
-  # Comment the following line to use static libraries.
+  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
          RUBY
