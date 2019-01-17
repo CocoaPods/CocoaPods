@@ -84,21 +84,11 @@ module Pod
       def target_module(app, tests)
         target_module = "\ntarget '#{app.name.gsub(/'/, "\\\\\'")}' do\n"
 
-        app_uses_swift = app.source_build_phase.files_references.any? { |fr| File.extname(fr.path) == '.swift' }
-
-        target_module << if app_uses_swift
-                           <<-RUBY
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+        target_module << <<-RUBY
+  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
          RUBY
-                         else
-                           <<-RUBY
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-
-         RUBY
-        end
 
         target_module << template_contents(config.default_podfile_path, '  ', "Pods for #{app.name}\n")
 
