@@ -15,7 +15,7 @@ module Pod
         require 'cocoapods/installer/xcode/pods_project_generator_result'
         require 'cocoapods/installer/xcode/pods_project_generator/aggregate_target_dependency_installer'
         require 'cocoapods/installer/xcode/pods_project_generator/pod_target_dependency_installer'
-        require 'cocoapods/native_target_ext.rb'
+        require 'cocoapods/native_target_extension.rb'
 
         # @return [Sandbox] The sandbox where the Pods should be installed.
         #
@@ -179,8 +179,8 @@ module Pod
         # @return [void]
         #
         def wire_target_dependencies(target_installation_results)
-          pod_target_installation_results_hash = target_installation_results.pod_target_installation_results || {}
-          aggregate_target_installation_results_hash = target_installation_results.aggregate_target_installation_results || {}
+          pod_target_installation_results_hash = target_installation_results.pod_target_installation_results
+          aggregate_target_installation_results_hash = target_installation_results.aggregate_target_installation_results
 
           AggregateTargetDependencyInstaller.new(aggregate_target_installation_results_hash,
                                                  pod_target_installation_results_hash, metadata_cache).install!

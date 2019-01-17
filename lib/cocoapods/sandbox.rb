@@ -135,13 +135,13 @@ module Pod
     # @return [Pathname] the path of the installation cache.
     #
     def project_installation_cache_path
-      root.join('.project_cache', 'installation_cache')
+      root.join('.project_cache', 'installation_cache.yaml')
     end
 
     # @return [Pathname] the path of the metadata cache.
     #
     def project_metadata_cache_path
-      root.join('.project_cache', 'metadata_cache')
+      root.join('.project_cache', 'metadata_cache.yaml')
     end
 
     # @return [Pathname] the path of the version cache.

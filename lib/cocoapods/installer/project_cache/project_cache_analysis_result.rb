@@ -10,7 +10,9 @@ module Pod
         attr_reader :pod_targets_to_generate
 
         # @return [Array<AggregateTarget>]
-        #         The list of aggregate targets that need to be regenerated.
+        #         The list of aggregate targets that need to be regenerated. This can be nil if we don't want to
+        #         generate ANY aggregate targets since we still want to be able to generate an empty list of aggregate
+        #         targets.
         #
         attr_reader :aggregate_targets_to_generate
 

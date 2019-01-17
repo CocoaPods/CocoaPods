@@ -120,6 +120,18 @@ module Pod
     #
     attr_reader :pod_installers
 
+    # @return [ProjectInstallationCache] The installation cache stored in Pods/.project_cache/installation_cache
+    #
+    attr_reader :installation_cache
+
+    # @return [ProjectMetadataCache] The metadata cache stored in Pods/.project_cache/metadata_cache
+    #
+    attr_reader :metadata_cache
+
+    # @return [ProjectCacheVersion] The version of the project cache stored in Pods/.project_cache/version
+    #
+    attr_reader :project_cache_version
+
     #-------------------------------------------------------------------------#
 
     public
@@ -153,7 +165,9 @@ module Pod
     end
 
     def analyze_project_cache
-      object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
+      user_projects = aggregate_targets.map(&:user_project).compact
+      object_version = user_projects.min_by { |p| p.object_version.to_i }.object_version.to_i unless user_projects.empty?
+
       if !installation_options.incremental_installation
         # Run entire installation.
         ProjectCache::ProjectCacheAnalysisResult.new(pod_targets, aggregate_targets, {},
@@ -164,10 +178,12 @@ module Pod
           @metadata_cache = ProjectCache::ProjectMetadataCache.from_file(sandbox.project_metadata_cache_path)
           @project_cache_version = ProjectCache::ProjectCacheVersion.from_file(sandbox.project_version_cache_path)
 
-          force_clean_install = clean_install || project_cache_version.version != Version.create(VERSION)
+          force_clean_install = clean_install || project_cache_version.version != Version.create(VersionMetadata.gem_version)
           cache_result = ProjectCache::ProjectCacheAnalyzer.new(sandbox, installation_cache, analysis_result.all_user_build_configurations,
                                                                 object_version, pod_targets, aggregate_targets, :clean_install => force_clean_install).analyze
-          (cache_result.aggregate_targets_to_generate + cache_result.pod_targets_to_generate).each do |target|
+          aggregate_targets_to_generate = cache_result.aggregate_targets_to_generate || []
+          pod_targets_to_generate = cache_result.pod_targets_to_generate
+          (aggregate_targets_to_generate + pod_targets_to_generate).each do |target|
             UI.message "- Regenerating #{target.label}"
           end
           cache_result
@@ -282,7 +298,7 @@ module Pod
         @pod_target_subprojects = pod_project_generation_result.projects_by_pod_targets.keys
         @generated_projects = ([pods_project] + pod_target_subprojects || []).compact
         @generated_pod_targets = pod_targets_to_generate
-        @generated_aggregate_targets = aggregate_targets_to_generate
+        @generated_aggregate_targets = aggregate_targets_to_generate || []
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets
         run_podfile_post_install_hooks
 
@@ -335,18 +351,6 @@ module Pod
     #         generated as result of the analyzer.
     #
     attr_reader :pod_targets
-
-    # @return [ProjectInstallationCache] The installation cache stored in Pods/.project_cache/installation_cache
-    #
-    attr_reader :installation_cache
-
-    # @return [ProjectMetadataCache] The metadata cache stored in Pods/.project_cache/metadata_cache
-    #
-    attr_reader :metadata_cache
-
-    # @return [ProjectCacheVersion] The version of the project cache stored in Pods/.project_cache/version
-    #
-    attr_reader :project_cache_version
 
     # @return [Array<Project>] The list of projects generated from the installation.
     #
@@ -743,7 +747,7 @@ module Pod
                                       target_installation_results.aggregate_target_installation_results || {})
       metadata_cache.save_as(sandbox.project_metadata_cache_path)
 
-      cache_version = ProjectCache::ProjectCacheVersion.new(VERSION)
+      cache_version = ProjectCache::ProjectCacheVersion.new(VersionMetadata.gem_version)
       cache_version.save_as(sandbox.project_version_cache_path)
     end
 

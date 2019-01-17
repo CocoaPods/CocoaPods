@@ -182,7 +182,7 @@ module Pod
       # @param [Array<FileAccessor>] file_accessors
       #        The list of all file accessors to compute.
       #
-      # @return [Array<FileAccessor>] The list of all file accessors that a target will integrate into the project.
+      # @return [Array<String>] The list of all file accessors that a target will integrate into the project.
       #
       def self.all_files(file_accessors)
         files = [

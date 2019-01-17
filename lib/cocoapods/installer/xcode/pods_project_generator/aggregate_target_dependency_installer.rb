@@ -4,7 +4,7 @@ module Pod
       # Wires up the dependencies for aggregate targets from the target installation results
       #
       class AggregateTargetDependencyInstaller
-        require 'cocoapods/native_target_ext.rb'
+        require 'cocoapods/native_target_extension.rb'
 
         # @return [Hash{String => TargetInstallationResult}] The target installation results for pod targets.
         #
@@ -53,7 +53,7 @@ module Pod
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[pod_target.label]
                 project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
-                aggregate_native_target.add_cached_dependency(cached_dependency)
+                Project.add_cached_dependency(aggregate_native_target, cached_dependency)
               end
             end
           end

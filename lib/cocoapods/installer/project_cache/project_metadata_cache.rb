@@ -44,7 +44,7 @@ module Pod
         #        The installation results for aggregate targets installed.
         #
         def update_metadata!(pod_target_installation_results, aggregate_target_installation_results)
-          installation_results = (pod_target_installation_results.values || []) + (aggregate_target_installation_results.values || [])
+          installation_results = pod_target_installation_results.values + aggregate_target_installation_results.values
           installation_results.each do |installation_result|
             native_target = installation_result.native_target
             target_label_by_metadata[native_target.name] = TargetMetadata.from_native_target(native_target)
@@ -54,10 +54,7 @@ module Pod
         def self.from_file(path)
           return ProjectMetadataCache.new unless File.exist?(path)
           contents = YAMLHelper.load_file(path)
-          target_by_label_metadata = {}
-          contents.each do |pod_target_label, hash|
-            target_by_label_metadata[pod_target_label] = TargetMetadata.from_hash(hash)
-          end
+          target_by_label_metadata = Hash[contents.map { |target_label, hash| [target_label, TargetMetadata.from_hash(hash)] }]
           ProjectMetadataCache.new(target_by_label_metadata)
         end
       end

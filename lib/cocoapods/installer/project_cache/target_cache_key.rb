@@ -105,7 +105,7 @@ module Pod
 
           contents = {
             'CHECKSUM' => pod_target.root_spec.checksum,
-            'SPECS' => pod_target.specs.map(&:to_s),
+            'SPECS' => pod_target.specs.map(&:to_s).sort,
             'BUILD_SETTINGS_CHECKSUM' => build_settings,
           }
           contents['FILES'] = pod_target.all_files.sort if is_local_pod

@@ -77,7 +77,7 @@ module Pod
 
         # Validate `incremental_installation` depends on `generate_multiple_pod_projects`
         invalid = installation_options.incremental_installation? && installation_options.incremental_installation != installation_options.generate_multiple_pod_projects
-        add_error "The installation option `incremental_installation` requires the option 'generate_multiple_pod_projects' to also be enabled." if invalid
+        add_error 'The installation option `incremental_installation` requires the option `generate_multiple_pod_projects` to also be enabled.' if invalid
       end
 
       def validate_pod_directives

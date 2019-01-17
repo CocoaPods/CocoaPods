@@ -569,6 +569,20 @@ module Pod
             FileUtils.rm_rf(tmp_directory)
           end
 
+          it 'allows generating a Pods project with an empty list of aggregate targets' do
+            @generator = MultiPodsProjectGenerator.new(config.sandbox, [], [], @analysis_result.all_user_build_configurations,
+                                                       @installation_options, config, '1')
+            @generator.expects(:create_container_project).returns(Pod::Project.any_instance)
+            @generator.generate!
+          end
+
+          it 'will not create container project for nil parameter to aggregate targets' do
+            @generator = MultiPodsProjectGenerator.new(config.sandbox, nil, [@monkey_ios_pod_target], @analysis_result.all_user_build_configurations,
+                                                       @installation_options, config, '1')
+            @generator.expects(:create_container_project).returns(nil)
+            @generator.generate!
+          end
+
           describe '#write' do
             it 'recursively sorts the project' do
               pod_generator_result = @generator.generate!

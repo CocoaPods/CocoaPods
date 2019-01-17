@@ -4,7 +4,7 @@ module Pod
       # Wires up the dependencies between targets from the target installation results
       #
       class PodTargetDependencyInstaller
-        require 'cocoapods/native_target_ext.rb'
+        require 'cocoapods/native_target_extension.rb'
 
         # @return [TargetInstallationResults] The target installation results for pod targets.
         #
@@ -79,7 +79,7 @@ module Pod
               # Hit the cache
               cached_dependency = metadata_cache.target_label_by_metadata[dependent_target.label]
               project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
-              native_target.add_cached_dependency(cached_dependency)
+              Project.add_cached_dependency(native_target, cached_dependency)
             end
           end
         end
@@ -104,7 +104,7 @@ module Pod
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[test_dependent_target.label]
                 project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
-                test_native_target.add_cached_dependency(cached_dependency)
+                Project.add_cached_dependency(test_native_target, cached_dependency)
               end
             end
           end
@@ -136,7 +136,7 @@ module Pod
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[app_dependent_target.label]
                 project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
-                native_target.add_cached_dependency(cached_dependency)
+                Project.add_cached_dependency(native_target, cached_dependency)
               end
             end
           end

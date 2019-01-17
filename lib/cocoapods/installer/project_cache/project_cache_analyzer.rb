@@ -61,11 +61,12 @@ module Pod
         def analyze
           target_by_label = Hash[(pod_targets + aggregate_targets).map { |target| [target.label, target] }]
           cache_key_by_target_label = Hash[target_by_label.map do |label, target|
-            if target.is_a?(PodTarget)
+            case target
+            when PodTarget
               local = sandbox.local?(target.pod_name)
               checkout_options = sandbox.checkout_sources[target.pod_name]
               [label, TargetCacheKey.from_pod_target(target, :is_local_pod => local, :checkout_options => checkout_options)]
-            elsif target.is_a?(AggregateTarget)
+            when AggregateTarget
               [label, TargetCacheKey.from_aggregate_target(target)]
             else
               raise "[BUG] Unknown target type #{target}"
@@ -81,8 +82,12 @@ module Pod
           added_targets = (cache_key_by_target_label.keys - cache.cache_key_by_target_label.keys).map do |label|
             target_by_label[label]
           end
-          added_pod_targets = added_targets.select { |target| target.is_a?(PodTarget) }
-          added_aggregate_targets = added_targets.select { |target| target.is_a?(AggregateTarget) }
+          removed_targets = (cache.cache_key_by_target_label.keys - cache_key_by_target_label.keys).map do |label|
+            target_by_label[label]
+          end
+
+          added_pod_targets, added_aggregate_targets = added_targets.partition { |target| target.is_a?(PodTarget) }
+          removed_aggregate_targets = removed_targets.select { |target| target.is_a?(AggregateTarget) }
 
           changed_targets = []
           cache_key_by_target_label.each do |label, cache_key|
@@ -92,19 +97,16 @@ module Pod
             end
           end
 
-          changed_pod_targets = changed_targets.select { |target| target.is_a?(PodTarget) }
-          changed_aggregate_targets = changed_targets.select { |target| target.is_a?(AggregateTarget) }
+          changed_pod_targets, changed_aggregate_targets = changed_targets.partition { |target| target.is_a?(PodTarget) }
 
           pod_targets_to_generate = changed_pod_targets + added_pod_targets
 
           # We either return the full list of aggregate targets or none since the aggregate targets go into the Pods.xcodeproj
           # and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
           aggregate_target_to_generate =
-            if !(changed_aggregate_targets + added_aggregate_targets).empty?
+            unless (changed_aggregate_targets + added_aggregate_targets + removed_aggregate_targets).empty?
               aggregate_targets
-            else
-              []
-              end
+            end
 
           ProjectCacheAnalysisResult.new(pod_targets_to_generate, aggregate_target_to_generate, cache_key_by_target_label,
                                          build_configurations, project_object_version)
