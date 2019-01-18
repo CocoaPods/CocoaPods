@@ -53,6 +53,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not generate default `Info.plist` file for test targets if one is already specified.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8432](https://github.com/CocoaPods/CocoaPods/pull/8432)
+
 * Set `showEnvVarsInLog` for script phases only when its disabled.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8400](https://github.com/CocoaPods/CocoaPods/pull/8400)

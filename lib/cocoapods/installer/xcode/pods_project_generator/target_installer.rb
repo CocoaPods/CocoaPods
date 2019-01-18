@@ -138,7 +138,7 @@ module Pod
           # @return [void]
           #
           def create_info_plist_file(path, native_target, version, platform, bundle_package_type = :fmwk)
-            create_info_plist_file_with_sandbox(@sandbox, path, native_target, version, platform, bundle_package_type)
+            create_info_plist_file_with_sandbox(sandbox, path, native_target, version, platform, bundle_package_type)
             add_file_to_support_group(path)
           end
 

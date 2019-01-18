@@ -97,10 +97,22 @@ module Pod
                 add_swift_library_compatibility_header_phase(native_target)
               end
 
+              target.test_spec_consumers.each do |test_spec_consumer|
+                test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
+                unless skip_info_plist?(test_native_target)
+                  # Generate vanilla Info.plist for test target similar to the one Xcode generates for new test target.
+                  # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
+                  # defined in podspec.
+                  create_info_plist_file(target.info_plist_path_for_spec(test_spec_consumer.spec), test_native_target,
+                                         '1.0', target.platform, :bndl)
+                end
+              end
+
               unless skip_pch?(target.library_specs)
                 path = target.prefix_header_path
                 create_prefix_header(path, library_file_accessors, target.platform, native_target)
               end
+
               unless skip_pch?(target.test_specs)
                 target.test_specs.each do |test_spec|
                   path = target.prefix_header_path_for_spec(test_spec)
@@ -109,6 +121,7 @@ module Pod
                   create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
                 end
               end
+
               unless skip_pch?(target.app_specs)
                 target.app_specs.each do |app_spec|
                   path = target.prefix_header_path_for_spec(app_spec)
@@ -136,11 +149,14 @@ module Pod
             specs.any? { |spec| spec.prefix_header_file.is_a?(FalseClass) }
           end
 
-          # True if info.plist generation should be skipped
+          # True if default Info.plist generation should be skipped
           #
           # @param [PXNativeTarget] native_target
+          #        The native target to check whether it already has `INFOPLIST_FILE` set.
           #
-          # @return [Boolean] Whether the target should build an Info.plist file
+          # @return [Boolean]
+          #         Whether the target should skip generating a default Info.plist file because one is already specified
+          #         in the target build settings.
           #
           def skip_info_plist?(native_target)
             existing_setting = native_target.resolved_build_setting('INFOPLIST_FILE', true).values.compact
@@ -325,11 +341,6 @@ module Pod
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
               create_test_target_embed_frameworks_script(test_spec)
               create_test_target_copy_resources_script(test_spec)
-
-              # Generate vanilla Info.plist for test target similar to the one Xcode generates for new test target.
-              # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
-              # defined in podspec.
-              create_info_plist_file(target.info_plist_path_for_spec(test_spec), test_native_target, '1.0', target.platform, :bndl)
 
               test_native_target
             end
