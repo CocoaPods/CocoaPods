@@ -53,7 +53,8 @@ module Pod
         def self.from_file(path)
           return ProjectInstallationCache.new unless File.exist?(path)
           contents = YAMLHelper.load_file(path)
-          cache_key_by_target_label = Hash[contents['CACHE_KEYS'].map do |name, key_hash|
+          cache_keys = contents.fetch('CACHE_KEYS', {})
+          cache_key_by_target_label = Hash[cache_keys.map do |name, key_hash|
             [name, TargetCacheKey.from_cache_hash(key_hash)]
           end]
           project_object_version = contents['OBJECT_VERSION']

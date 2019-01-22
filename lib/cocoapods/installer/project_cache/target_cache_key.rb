@@ -16,16 +16,16 @@ module Pod
         # @return [Hash{String => Object}]
         #         The hash containing key-value pairs that identify the target.
         #
-        attr_reader :hash
+        attr_reader :key_hash
 
         # Initialize a new instance.
         #
         # @param [Symbol] type @see #type
-        # @param [Hash{String => Object}] hash @see #hash
+        # @param [Hash{String => Object}] key_hash @see #key_hash
         #
-        def initialize(type, hash)
+        def initialize(type, key_hash)
           @type = type
-          @hash = hash
+          @key_hash = key_hash
         end
 
         # Equality function used to compare TargetCacheKey objects to each other.
@@ -42,18 +42,18 @@ module Pod
           else
             case type
             when :pod_target
-              return :project if (other.hash.keys - hash.keys).any?
-              return :project if other.hash['CHECKSUM'] != hash['CHECKSUM']
-              return :project if other.hash['SPECS'] != hash['SPECS']
-              return :project if other.hash['FILES'] != hash['FILES']
+              return :project if (other.key_hash.keys - key_hash.keys).any?
+              return :project if other.key_hash['CHECKSUM'] != key_hash['CHECKSUM']
+              return :project if other.key_hash['SPECS'] != key_hash['SPECS']
+              return :project if other.key_hash['FILES'] != key_hash['FILES']
             end
 
-            this_build_settings = hash['BUILD_SETTINGS_CHECKSUM']
-            other_build_settings = other.hash['BUILD_SETTINGS_CHECKSUM']
+            this_build_settings = key_hash['BUILD_SETTINGS_CHECKSUM']
+            other_build_settings = other.key_hash['BUILD_SETTINGS_CHECKSUM']
             return :project if this_build_settings != other_build_settings
 
-            this_checkout_options = hash['CHECKOUT_OPTIONS']
-            other_checkout_options = other.hash['CHECKOUT_OPTIONS']
+            this_checkout_options = key_hash['CHECKOUT_OPTIONS']
+            other_checkout_options = other.key_hash['CHECKOUT_OPTIONS']
             return :project if this_checkout_options != other_checkout_options
 
             :none
@@ -61,18 +61,18 @@ module Pod
         end
 
         def to_h
-          hash
+          key_hash
         end
 
         # Creates a TargetCacheKey instance from the given hash.
         #
-        # @param [Hash{String => Object}] hash
+        # @param [Hash{String => Object}] key_hash
         #        The hash used to construct a TargetCacheKey object.
         #
         # @return [TargetCacheKey]
         #
-        def self.from_cache_hash(hash)
-          cache_hash = hash.dup
+        def self.from_cache_hash(key_hash)
+          cache_hash = key_hash.dup
           if files = cache_hash['FILES']
             cache_hash['FILES'] = files.sort
           end
