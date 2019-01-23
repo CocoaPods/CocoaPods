@@ -73,10 +73,17 @@ module Pod
             end
           end]
 
+          full_install_results = ProjectCacheAnalysisResult.new(pod_targets, aggregate_targets, cache_key_by_target_label,
+                                                                build_configurations, project_object_version)
+          if clean_install
+            UI.message 'Ignoring project cache from the provided `--clean-install` flag.'
+            return full_install_results
+          end
+
           # Bail out early since these properties affect all targets and their associate projects.
-          if cache.build_configurations != build_configurations || cache.project_object_version != project_object_version || clean_install
-            return ProjectCacheAnalysisResult.new(pod_targets, aggregate_targets, cache_key_by_target_label,
-                                                  build_configurations, project_object_version)
+          if cache.build_configurations != build_configurations || cache.project_object_version != project_object_version
+            UI.message 'Ignoring project cache due to project configuration changes.'
+            return full_install_results
           end
 
           added_targets = (cache_key_by_target_label.keys - cache.cache_key_by_target_label.keys).map do |label|
