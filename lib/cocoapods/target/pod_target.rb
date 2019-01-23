@@ -58,6 +58,14 @@ module Pod
     #
     attr_accessor :app_dependent_targets_by_spec_name
 
+    # @return [Hash{String => BuildSettings}] the test spec build settings for this target.
+    #
+    attr_reader :test_spec_build_settings
+
+    # @return [Hash{String => BuildSettings}] the app spec build settings for this target.
+    #
+    attr_reader :app_spec_build_settings
+
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
@@ -92,6 +100,8 @@ module Pod
       @test_dependent_targets_by_spec_name = {}
       @app_dependent_targets_by_spec_name = {}
       @build_config_cache = {}
+      @test_spec_build_settings = create_test_build_settings
+      @app_spec_build_settings = create_app_build_settings
     end
 
     # Scopes the current target based on the existing pod targets within the cache.
@@ -129,6 +139,12 @@ module Pod
       else
         "#{root_spec.name}-#{scope_suffix}"
       end
+    end
+
+    # @return [Array<FileAccessor>] The list of all files tracked.
+    #
+    def all_files
+      Sandbox::FileAccessor.all_files(file_accessors)
     end
 
     # @return [Pathname] the pathname for headers in the sandbox.
@@ -724,6 +740,18 @@ module Pod
 
     def create_build_settings
       BuildSettings::PodTargetSettings.new(self)
+    end
+
+    def create_test_build_settings
+      Hash[test_specs.map do |test_spec|
+        [test_spec.name, BuildSettings::PodTargetSettings.new(self, test_spec)]
+      end]
+    end
+
+    def create_app_build_settings
+      Hash[app_specs.map do |app_spec|
+        [app_spec.name, BuildSettings::PodTargetSettings.new(self, app_spec)]
+      end]
     end
 
     # Computes the destination sub-directory in the sandbox

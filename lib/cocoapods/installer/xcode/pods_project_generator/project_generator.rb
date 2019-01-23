@@ -54,7 +54,7 @@ module Pod
         # @param [String] podfile_path @see #podfile_path
         #
         def initialize(sandbox, path, pod_targets, build_configurations, platforms,
-                       object_version = nil, podfile_path = nil, pod_target_subproject: false)
+                       object_version, podfile_path = nil, pod_target_subproject: false)
           @sandbox = sandbox
           @path = path
           @pod_targets = pod_targets

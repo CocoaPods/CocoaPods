@@ -252,20 +252,21 @@ module Pod
     # @return [PBXFileReference] The new file reference.
     #
     def add_subproject_reference(project, group)
-      if ref = reference_for_path(project.path)
-        return ref
-      end
+      new_subproject_file_reference(project.path, group)
+    end
 
-      ref = Xcodeproj::Project::FileReferencesFactory.send(:new_file_reference, group, project.path, :group)
-      ref.name = project.project_name.to_s
-      ref.include_in_index = nil
-
-      attribute = PBXProject.references_by_keys_attributes.find { |attrb| attrb.name == :project_references }
-      project_reference = ObjectDictionary.new(attribute, group.project.root_object)
-      project_reference[:project_ref] = ref
-      root_object.project_references << project_reference
-      refs_by_absolute_path[project.path.to_s] = ref
-      ref
+    # Adds a file reference for a cached project as a child of the given group.
+    #
+    # @param  [MetadataCache] metadata
+    #         The metadata holding the required properties to create a subproject reference.
+    #
+    # @param  [PBXGroup] group
+    #         The group for the new subproject reference.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_cached_subproject_reference(metadata, group)
+      new_subproject_file_reference(metadata.container_project_path, group)
     end
 
     # Returns the file reference for the given absolute path.
@@ -465,6 +466,27 @@ module Pod
       end
 
       path.basename.to_s
+    end
+
+    def new_subproject_file_reference(project_path, group)
+      if ref = reference_for_path(project_path)
+        return ref
+      end
+
+      # We call into the private function `FileReferencesFactory.new_file_reference` instead of `FileReferencesFactory.new_reference`
+      # because it delegates into `FileReferencesFactory.new_subproject` which has the extra behavior of opening the Project which
+      # is an expensive operation for large projects.
+      #
+      ref = Xcodeproj::Project::FileReferencesFactory.send(:new_file_reference, group, project_path, :group)
+      ref.name = Pathname(project_path).basename('.*').to_s
+      ref.include_in_index = nil
+
+      attribute = PBXProject.references_by_keys_attributes.find { |attrb| attrb.name == :project_references }
+      project_reference = ObjectDictionary.new(attribute, group.project.root_object)
+      project_reference[:project_ref] = ref
+      root_object.project_references << project_reference
+      refs_by_absolute_path[project_path.to_s] = ref
+      ref
     end
 
     #-------------------------------------------------------------------------#

@@ -10,11 +10,9 @@ module Pod
         #
         def generate!
           project_path = sandbox.project_path
-          build_configurations = analysis_result.all_user_build_configurations
           platforms = aggregate_targets.map(&:platform)
-          object_version = aggregate_targets.map(&:user_project).compact.map { |p| p.object_version.to_i }.min
           project_generator = ProjectGenerator.new(sandbox, project_path, pod_targets, build_configurations,
-                                                   platforms, object_version, config.podfile_path)
+                                                   platforms, project_object_version, config.podfile_path)
           project = project_generator.generate!
           install_file_references(project, pod_targets)
 

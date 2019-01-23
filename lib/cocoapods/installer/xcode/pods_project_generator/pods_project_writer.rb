@@ -3,6 +3,8 @@ module Pod
     class Xcode
       # Responsible for cleaning the project and writing to disk.
       #
+      require 'cocoapods/installer/xcode/target_uuid_generator'
+
       class PodsProjectWriter
         # @return [Sandbox] sandbox
         #         The Pods sandbox instance.
@@ -43,6 +45,8 @@ module Pod
           if installation_options.deterministic_uuids?
             UI.message('- Generating deterministic UUIDs') { Xcodeproj::Project.predictabilize_uuids(projects) }
           end
+
+          UI.message('- Stabilizing target UUIDs') { TargetUUIDGenerator.new(projects).generate! }
 
           projects.each do |project|
             UI.message "- Writing Xcode project file to #{UI.path project.path}" do

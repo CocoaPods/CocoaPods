@@ -19,6 +19,7 @@ module Pod
   require 'tmpdir'
 
   require 'cocoapods/gem_version'
+  require 'cocoapods/version_metadata'
   require 'cocoapods-core'
   require 'cocoapods/config'
   require 'cocoapods/downloader'

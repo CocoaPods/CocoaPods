@@ -24,6 +24,7 @@ module Pod
           ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to update dependent pods. ' \
            'Multiple sources must be comma-delimited. The master repo will not be included by default with this option.'],
           ['--exclude-pods=podName', 'Pods to exclude during update. Multiple pods must be comma-delimited.'],
+          ['--clean-install', 'Ignore the contents of the project cache and force a full pod installation. This only applies to projects that have enabled incremental installation.'],
         ].concat(super)
       end
 
@@ -32,6 +33,7 @@ module Pod
 
         source_urls = argv.option('sources', '').split(',')
         excluded_pods = argv.option('exclude-pods', '').split(',')
+        @clean_install = argv.flag?('clean-install', false)
         unless source_urls.empty?
           source_pods = source_urls.flat_map { |url| config.sources_manager.source_with_name_or_url(url).pods }
           unless source_pods.empty?
@@ -86,6 +88,7 @@ module Pod
 
         installer = installer_for_config
         installer.repo_update = repo_update?(:default => true)
+        installer.clean_install = @clean_install
         if @pods
           verify_lockfile_exists!
           verify_pods_are_installed!

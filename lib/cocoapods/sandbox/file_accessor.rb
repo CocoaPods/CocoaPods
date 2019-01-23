@@ -179,6 +179,27 @@ module Pod
         vendored_frameworks - vendored_dynamic_frameworks
       end
 
+      # @param [Array<FileAccessor>] file_accessors
+      #        The list of all file accessors to compute.
+      #
+      # @return [Array<String>] The list of all file accessors that a target will integrate into the project.
+      #
+      def self.all_files(file_accessors)
+        files = [
+          file_accessors.map(&:vendored_frameworks),
+          file_accessors.map(&:vendored_libraries),
+          file_accessors.map(&:resource_bundle_files),
+          file_accessors.map(&:license),
+          file_accessors.map(&:prefix_header),
+          file_accessors.map(&:preserve_paths),
+          file_accessors.map(&:readme),
+          file_accessors.map(&:resources),
+          file_accessors.map(&:source_files),
+          file_accessors.map(&:module_map),
+        ]
+        files.flatten.compact.map(&:to_s).uniq
+      end
+
       # @param  [Pathname] framework
       #         The vendored framework to search into.
       # @return [Pathname] The path of the header directory of the
