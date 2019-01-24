@@ -9,7 +9,7 @@ A lot changes with Xcode releases that are not backwards compatible.
 Not an issue about the CocoaPods command line app? Please file an issue in the appropriate repo - https://github.com/CocoaPods
 Issues are for feature requests, and bugs; questions should go to Stack Overflow
 
-Using CocoaPods <= 0.39: http://blog.cocoapods.org/Sharding/
+Using CocoaPods <= 0.39: https://blog.cocoapods.org/Sharding/
 
 Using Xcode 8: Requires CocoaPods 1.1.0 or above.
 

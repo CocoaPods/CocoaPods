@@ -84,7 +84,7 @@ module Pod
         UI.puts ''
       end
 
-      # Taken from http://stackoverflow.com/questions/195740/how-do-you-do-relative-time-in-rails
+      # Taken from https://stackoverflow.com/questions/195740/how-do-you-do-relative-time-in-rails
       def pretty_date(date_string)
         date = Time.parse(date_string)
         a = (Time.now - date).to_i

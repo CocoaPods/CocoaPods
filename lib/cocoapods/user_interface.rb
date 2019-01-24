@@ -397,7 +397,7 @@ module Pod
 
       # @return [String] Wraps a string taking into account the width of the
       # terminal and an option indent. Adapted from
-      # http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
+      # https://macromates.com/blog/2006/wrapping-text-with-regular-expressions/
       #
       # @param [String] string  The string to wrap
       #
