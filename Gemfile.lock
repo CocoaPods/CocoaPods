@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: d395c5c4f632757b69d2506c8695d0b45bc751b8
+  revision: 68db2ec42f8a46ebb2f50124213d8ae5e4dd2478
   branch: 1-6-stable
   specs:
     cocoapods-core (1.6.0.beta.2)
@@ -17,21 +17,21 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 0db0e4326c6927b73c998fa9a00eeeb446b25811
+  revision: 03fe8ae1f1b84a2f2d68156992b68d5e123e61c1
   branch: master
   specs:
     molinillo (0.6.6)
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 297484cd50feda60cdcbc303983607e622b3dba2
+  revision: 0935cf68ed21bc0b0a4b16e47cb79be7762bd16f
   branch: master
   specs:
     nanaimo (0.2.6)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: acfb037c34c6ce17e38386b27ca3514ae4016d5b
+  revision: 1924827462fae4579107ec10bca150d11c62724b
   branch: master
   specs:
     xcodeproj (1.7.0)
@@ -57,7 +57,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: c613c92db8dbcaeae15c38de478cde9159cebe6b
+  revision: 7008b756dcfb8fdd70192a9af5ef11490ceef227
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -72,10 +72,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-stats.git
-  revision: af01b7add46aa0ca6ff35a4cf30cd87bb7f00a13
+  revision: ad869b620a46c6ba5048b54d5772e1956d2d9d83
   branch: master
   specs:
-    cocoapods-stats (1.0.0)
+    cocoapods-stats (1.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
@@ -127,7 +127,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.0)
-    activesupport (4.2.10)
+    activesupport (4.2.11)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
@@ -151,7 +151,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.4)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)
