@@ -164,7 +164,7 @@ module Pod
           if all_dependencies_have_sources
             sources = dependency_sources
           elsif has_dependencies? && sources.empty? && plugin_sources.empty?
-            sources = ['https://github.com/CocoaPods/Specs.git']
+            sources = ['https://github.com/CocoaPods/Specs.git'] + dependency_sources
           else
             sources += dependency_sources
           end
