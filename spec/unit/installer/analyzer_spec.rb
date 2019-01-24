@@ -128,6 +128,28 @@ module Pod
         analyzer.update_repositories
       end
 
+      it 'includes master if not all dependencies have a source' do
+        repo_url = 'https://url/to/specs.git'
+        podfile = Podfile.new do
+          pod 'BananaLib', '1.0'
+          pod 'JSONKit', :source => repo_url
+        end
+        config.verbose = true
+
+        source = mock
+        source.stubs(:name).returns('repo_2')
+        source.stubs(:repo).returns('/repo/cache/path')
+        config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
+        config.sources_manager.expects(:find_or_create_source_with_url).with('https://github.com/CocoaPods/Specs.git').returns(config.sources_manager.master.first)
+        source.stubs(:git?).returns(true)
+        config.sources_manager.expects(:update).once.with(source.name, true)
+        config.sources_manager.expects(:update).once.with('master', true)
+
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        analyzer.sources.should == [config.sources_manager.master.first, source]
+        analyzer.update_repositories
+      end
+
       #--------------------------------------#
 
       it 'generates the model to represent the target definitions' do

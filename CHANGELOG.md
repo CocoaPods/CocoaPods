@@ -53,6 +53,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Always update sources specified with the `:source` option when `--repo-update` is specified  
+  [Eric Amorde](https://github.com/amorde)
+  [#8421](https://github.com/CocoaPods/CocoaPods/issues/8421) 
+
 * Set `showEnvVarsInLog` for script phases only when its disabled.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8400](https://github.com/CocoaPods/CocoaPods/pull/8400)
