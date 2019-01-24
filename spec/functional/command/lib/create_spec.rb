@@ -42,7 +42,7 @@ module Pod
       @sut.any_instance.stubs(:clone_template)
       @sut.any_instance.stubs(:configure_template)
       output = run_command('lib', 'create', 'TestPod')
-      output.should.include? 'http://guides.cocoapods.org/making/making-a-cocoapod'
+      output.should.include? 'https://guides.cocoapods.org/making/making-a-cocoapod'
     end
 
     before do

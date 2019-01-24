@@ -8,7 +8,7 @@ module OpenURI
   # Whether {#open} should follow a redirect.
   #
   # Inspiration from: https://gist.github.com/1271420
-  # Relevant issue:   http://redmine.ruby-lang.org/issues/3719
+  # Relevant issue:   https://bugs.ruby-lang.org/issues/3719
   # Source here:      https://github.com/ruby/ruby/blob/trunk/lib/open-uri.rb
   #
   # This test is intended to forbid a redirection from http://... to

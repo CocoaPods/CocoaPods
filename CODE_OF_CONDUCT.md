@@ -26,7 +26,7 @@ Finally, don't forget that it is human to make mistakes! We all do. Let’s work
 
 ### Thanks
 
-Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/e3ce14f5ecd9b729338435c8689553ef209d83aa/CODE_OF_CONDUCT.md), [JSConf Code of Conduct](http://jsconf.com/codeofconduct.html), [Fedora Code of Conduct](http://fedoraproject.org/code-of-conduct), and [Contributor Covenant](http://contributor-covenant.org), version 1.2.0 for inspiration and ideas.
+Thanks to the [Bundler Code of Conduct](https://github.com/bundler/bundler/blob/e3ce14f5ecd9b729338435c8689553ef209d83aa/CODE_OF_CONDUCT.md), [JSConf Code of Conduct](https://jsconf.com/codeofconduct.html), [Fedora Code of Conduct](https://docs.fedoraproject.org/en-US/project/code-of-conduct/), and [Contributor Covenant](https://www.contributor-covenant.org/), version 1.2.0 for inspiration and ideas.
 
 ### License
 

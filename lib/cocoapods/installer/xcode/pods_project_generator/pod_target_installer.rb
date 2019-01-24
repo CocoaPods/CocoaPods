@@ -761,7 +761,7 @@ module Pod
           #   **Note:** libraries that do *not* specify a platform version are
           #             assumed to have a deployment target of < iOS 6.0 or OS X 10.8.
           #
-          #  For more information, see: http://opensource.apple.com/source/libdispatch/libdispatch-228.18/os/object.h
+          #  For more information, see: https://opensource.apple.com/source/libdispatch/libdispatch-228.18/os/object.h
           #
           # @param  [Specification::Consumer] consumer
           #         The consumer for the specification for which the compiler flags
