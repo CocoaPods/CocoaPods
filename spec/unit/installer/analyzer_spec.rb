@@ -114,15 +114,11 @@ module Pod
           pod 'BananaLib', '1.0', :source => repo_url
           pod 'JSONKit', :source => repo_url
         end
-        config.verbose = true
 
         # Note that we are explicitly ignoring 'repo_1' since it isn't used.
-        source = mock
-        source.stubs(:name).returns('repo_2')
-        source.stubs(:repo).returns('/repo/cache/path')
+        source = mock('source', :name => 'repo_2', :git? => true)
         config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
-        source.stubs(:git?).returns(true)
-        config.sources_manager.expects(:update).once.with(source.name, true)
+        config.sources_manager.expects(:update).once.with('repo_2', true)
 
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.update_repositories
@@ -134,15 +130,11 @@ module Pod
           pod 'BananaLib', '1.0'
           pod 'JSONKit', :source => repo_url
         end
-        config.verbose = true
 
-        source = mock
-        source.stubs(:name).returns('repo_2')
-        source.stubs(:repo).returns('/repo/cache/path')
+        source = mock('source', :name => 'mock_repo', :git? => true)
         config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
         config.sources_manager.expects(:find_or_create_source_with_url).with('https://github.com/CocoaPods/Specs.git').returns(config.sources_manager.master.first)
-        source.stubs(:git?).returns(true)
-        config.sources_manager.expects(:update).once.with(source.name, true)
+        config.sources_manager.expects(:update).once.with('mock_repo', true)
         config.sources_manager.expects(:update).once.with('master', true)
 
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
