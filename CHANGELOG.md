@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+Added gc pruning to reduce local repo size  
+  [mattpaletta](https://github.com/mattpaletta)
+  [#issue_number](https://github.com/CocoaPods/CocoaPods/pull/8448)
+
 * Set the path of development pod groups to the top-most shared directory  
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
