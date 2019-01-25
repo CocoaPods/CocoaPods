@@ -32,10 +32,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#8171](https://github.com/CocoaPods/CocoaPods/issues/8171)
 
-* Generate Info.plist files for static frameworks  
-  [Paul Beusterien](https://github.com/paulb777)
-  [#8287](https://github.com/CocoaPods/CocoaPods/issues/8287)
-
 * Add CDN repo Source to allow retrieving specs from a web URL.  
   [igor-makarov](https://github.com/igor-makarov)
   [#8268](https://github.com/CocoaPods/CocoaPods/issues/8268) (partial beta solution)
@@ -76,10 +72,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [tripleCC](https://github.com/tripleCC)
   [#8404](https://github.com/CocoaPods/CocoaPods/pull/8404)
 
-* Do not force 64-bit architectures on Xcode 10  
-  [Eric Amorde](https://github.com/amorde)
-  [#8242](https://github.com/CocoaPods/CocoaPods/issues/8242)
-
 * Remove `manifest` attribute from sandbox.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8260](https://github.com/CocoaPods/CocoaPods/pull/8260)
@@ -87,15 +79,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Don't have libraries build the app spec.  
   [Derek Ostrander](https://github.com/dostrander)
   [#8244](https://github.com/CocoaPods/CocoaPods/pull/8244)
-
-* Fix running test specs that support iOS 8.  
-  [Jeff Kelley](https://github.com/SlaunchaMan)
-  [#8286](https://github.com/CocoaPods/CocoaPods/pull/8286)
-
-* Remove linker flags that linked dynamic libraries & frameworks from the build
-  settings for pod targets.  
-  [Samuel Giddins](https://github.com/segiddins)
-  [#8314](https://github.com/CocoaPods/CocoaPods/pull/8314)
   
 * Fix HTTPs -> HTTPS in warning message  
   [CydeWeys](https://github.com/CydeWeys)
@@ -109,6 +92,29 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#8451](https://github.com/CocoaPods/CocoaPods/issues/8451)
 
+
+## 1.6.0.rc.1 (2019-01-25)
+
+##### Enhancements
+
+* Generate Info.plist files for static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8287](https://github.com/CocoaPods/CocoaPods/issues/8287)
+
+##### Bug Fixes
+
+* Do not force 64-bit architectures on Xcode 10  
+  [Eric Amorde](https://github.com/amorde)
+  [#8242](https://github.com/CocoaPods/CocoaPods/issues/8242)
+
+* Fix running test specs that support iOS 8.  
+  [Jeff Kelley](https://github.com/SlaunchaMan)
+  [#8286](https://github.com/CocoaPods/CocoaPods/pull/8286)
+
+* Remove linker flags that linked dynamic libraries & frameworks from the build
+  settings for pod targets.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#8314](https://github.com/CocoaPods/CocoaPods/pull/8314)
 
 ## 1.6.0.beta.2 (2018-10-17)
 
