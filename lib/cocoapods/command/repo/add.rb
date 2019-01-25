@@ -81,7 +81,7 @@ module Pod
 
           config.with_changes(changes) do
             Dir.chdir(config.repos_dir) do
-              command = ['clone', @url, @name]
+              command = ['clone', "--depth 1", @url, @name]
               if @progress
                 command << '--progress'
               end

@@ -6,7 +6,7 @@ task :bootstrap, :use_bundle_dir? do |_, args|
   title 'Environment bootstrap'
 
   puts 'Updating submodules'
-  execute_command 'git submodule update --init --recursive'
+  execute_command 'git submodule update --init --recursive --shallow-submodules'
 
   if system('which bundle')
     puts 'Installing gems'
@@ -62,6 +62,8 @@ begin
       puts Dir.pwd
       sh "git checkout #{specs_branch}"
       sh 'git pull'
+      sh 'git pull'
+      sh 'git gc --prune=now'
 
       yaml_file = 'CocoaPods-version.yml'
       unless File.exist?(yaml_file)
