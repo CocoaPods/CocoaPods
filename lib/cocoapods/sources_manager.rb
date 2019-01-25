@@ -114,7 +114,7 @@ module Pod
         git!(args)
         current_branch = git!(%W(-C #{repo} rev-parse --abbrev-ref HEAD)).strip
         git!(%W(-C #{repo} reset --hard origin/#{current_branch}))
-        sh 'git gc --auto'
+        system 'git gc --auto'
       end
     rescue
       raise Informative, 'CocoaPods was not able to update the ' \
@@ -129,7 +129,7 @@ module Pod
       if repo.join('.git', 'shallow').file?
         UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
           git!(%W(-C #{repo} fetch --unshallow))
-          sh 'git gc --auto'
+          system 'git gc --auto'
         end
       end
       super
