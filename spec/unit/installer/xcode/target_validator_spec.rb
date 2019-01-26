@@ -40,20 +40,23 @@ module Pod
           end
 
           it 'detects duplicate library names' do
-            Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([Pathname('a/libBananalib.a')])
+            Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).
+              returns([Pathname('a/libBananaStaticLib.a')]).then.
+              returns([Pathname('b/libBananaStaticLib.a')])
             Pod::Specification.any_instance.stubs(:dependencies).returns([])
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
               project 'SampleProject/SampleProject'
+              pod 'monkey',    :path => (fixture_path + 'monkey').to_s
               pod 'BananaLib', :path => (fixture_path + 'banana-lib').to_s
               target 'SampleProject'
             end
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
-            should.raise(Informative) { @validator.validate! }.message.should.match /conflict.*bananalib/
+            should.raise(Informative) { @validator.validate! }.message.should.match /conflict.*bananastaticlib/
           end
 
           it 'detects duplicate framework names' do
