@@ -743,7 +743,7 @@ module Pod
         def other_swift_flags_without_swift?
           return false if library_xcconfig?
 
-          target.uses_swift_for_non_library_spec?(non_library_spec)
+          target.uses_swift_for_spec?(non_library_spec)
         end
 
         # @return [Array<String>]

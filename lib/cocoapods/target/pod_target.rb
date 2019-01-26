@@ -248,31 +248,31 @@ module Pod
       app_specs.map { |app_spec| app_spec.consumer(platform) }
     end
 
-    # @return [Boolean] Whether the target uses Swift code. This excludes source files from test specs.
+    # @return [Boolean] Whether the target uses Swift code. This excludes source files from non library specs.
     #
     def uses_swift?
       return @uses_swift if defined? @uses_swift
       @uses_swift = begin
         file_accessors.select { |a| a.spec.library_specification? }.any? do |file_accessor|
-          file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
+          uses_swift_for_spec?(file_accessor.spec)
         end
       end
     end
 
-    # Checks whether a non library specification uses Swift or not.
+    # Checks whether a specification uses Swift or not.
     #
-    # @param  [Specification] non_library_spec
-    #         The non library spec to query against.
+    # @param  [Specification] spec
+    #         The spec to query against.
     #
     # @return [Boolean] Whether the target uses Swift code within the requested non library spec.
     #
-    def uses_swift_for_non_library_spec?(non_library_spec)
+    def uses_swift_for_spec?(spec)
       @uses_swift_for_non_library_type ||= {}
-      return @uses_swift_for_non_library_type[non_library_spec.name] if @uses_swift_for_non_library_type.key?(non_library_spec.name)
-      @uses_swift_for_non_library_type[non_library_spec.name] = begin
-        file_accessors.select { |a| a.spec.non_library_specification? && a.spec == non_library_spec }.any? do |file_accessor|
-          file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
-        end
+      return @uses_swift_for_non_library_type[spec.name] if @uses_swift_for_non_library_type.key?(spec.name)
+      @uses_swift_for_non_library_type[spec.name] = begin
+        file_accessor = file_accessors.find { |fa| fa.spec == spec }
+        raise "[Bug] Unable to find file accessor for spec `#{spec.inspect}` in pod target `#{label}`" unless file_accessor
+        file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
       end
     end
 
