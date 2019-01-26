@@ -480,7 +480,7 @@ module Pod
                                                                                        resolver_specs_by_target,
                                                                                        build_configurations)
 
-        build_type = target_definition.uses_frameworks? ? Target::BuildType.static_framework : Target::BuildType.static_library
+        build_type = target_definition.uses_frameworks? ? Target::BuildType.dynamic_framework : Target::BuildType.static_library
         AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
                             target_definition, client_root, user_project, user_target_uuids,
                             pod_targets_for_build_configuration, :build_type => build_type)
