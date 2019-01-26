@@ -7,7 +7,12 @@ module Pod
   class AggregateTarget < Target
     # Product types where the product's frameworks must be embedded in a host target
     #
-    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :static_library, :messages_extension, :watch_extension, :xpc_service].freeze
+    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :static_library, :messages_extension,
+                                             :watch_extension, :xpc_service].freeze
+
+    # TODO
+    #
+    attr_accessor :xcassets_paths
 
     # @return [TargetDefinition] the target definition of the Podfile that
     #         generated this target.
@@ -96,6 +101,7 @@ module Pod
       end
       AggregateTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
                           target_definition, client_root, user_project, user_target_uuids, merged, :build_type => build_type).tap do |aggregate_target|
+        aggregate_target.xcassets_paths = xcassets_paths
         aggregate_target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
       end
     end
@@ -258,8 +264,16 @@ module Pod
             resource_paths << bridge_support_file
             resource_paths.compact.uniq
           end
+          resources_by_config[config]
         end
       end
+    end
+
+    def shit
+
+      x = resource_paths_by_config.values.select { |v| v.select { |x| x.end_with?('.xcassets') } }.flatten
+      puts "=== #{x}"
+      x
     end
 
     # @return [Pathname] the path of the bridge support file relative to the
@@ -286,6 +300,12 @@ module Pod
     #
     def copy_resources_script_path
       support_files_dir + "#{label}-resources.sh"
+    end
+
+    # TODO
+    #
+    def combine_xcassets_script_path
+      support_files_dir + "#{label}-combine-xcassets.sh"
     end
 
     # @param  [String] configuration the configuration this path is for.
@@ -368,6 +388,12 @@ module Pod
     #
     def copy_resources_script_relative_path
       "${PODS_ROOT}/#{relative_to_pods_root(copy_resources_script_path)}"
+    end
+
+    # TODO
+    #
+    def combine_xcassets_script_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(combine_xcassets_script_path)}"
     end
 
     # @return [String] The path of the copy resources script input file list

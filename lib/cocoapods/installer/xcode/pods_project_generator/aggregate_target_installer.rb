@@ -33,6 +33,7 @@ module Pod
               create_embed_frameworks_script if target.includes_frameworks? && !target.requires_host_target?
               create_bridge_support_file(native_target)
               create_copy_resources_script if target.includes_resources?
+              create_combine_xcassets_script # if target.something?
               create_acknowledgements
               create_dummy_source(native_target)
               clean_support_files_temp_dir
@@ -137,7 +138,16 @@ module Pod
           #
           def create_copy_resources_script
             path = target.copy_resources_script_path
-            generator = Generator::CopyResourcesScript.new(target.resource_paths_by_config, target.platform)
+            generator = Pod::Generator::CopyResourcesScript.new(target.resource_paths_by_config, target.platform)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
+          end
+
+          # TODO
+          #
+          def create_combine_xcassets_script
+            path = target.combine_xcassets_script_path
+            generator = Pod::Generator::CombineXCAssetsScript.new(target.shit)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
           end

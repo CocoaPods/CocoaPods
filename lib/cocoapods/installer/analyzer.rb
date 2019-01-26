@@ -457,8 +457,8 @@ module Pod
       # @return [AggregateTarget]
       #
       def generate_aggregate_target(target_definition, target_inspections, pod_targets, resolver_specs_by_target)
+        target_inspection = target_inspections[target_definition]
         if installation_options.integrate_targets?
-          target_inspection = target_inspections[target_definition]
           raise "missing inspection: #{target_definition.name}" unless target_inspection
           target_requires_64_bit = Analyzer.requires_64_bit_archs?(target_definition.platform, target_inspection.project.object_version)
           user_project = target_inspection.project
@@ -481,9 +481,11 @@ module Pod
                                                                                        build_configurations)
 
         build_type = target_definition.uses_frameworks? ? Target::BuildType.static_framework : Target::BuildType.static_library
-        AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
+        x = AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
                             target_definition, client_root, user_project, user_target_uuids,
                             pod_targets_for_build_configuration, :build_type => build_type)
+        x.xcassets_paths = target_inspection.user_xcassets_paths
+        x
       end
 
       # @return [Array<PodTarget>] The model representations of pod targets.

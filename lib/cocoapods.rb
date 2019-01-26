@@ -60,6 +60,7 @@ module Pod
     autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
     autoload :Constant,                'cocoapods/generator/constant'
     autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
+    autoload :CombineXCAssetsScript,   'cocoapods/generator/combine_xcassets_script'
     autoload :DummySource,             'cocoapods/generator/dummy_source'
     autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
     autoload :FileList,                'cocoapods/generator/file_list'

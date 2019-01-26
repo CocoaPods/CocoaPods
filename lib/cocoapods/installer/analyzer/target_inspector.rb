@@ -43,9 +43,10 @@ module Pod
           platform = compute_platform(targets)
           archs = compute_archs(targets)
           swift_version = compute_swift_version_from_targets(targets)
+          xcassets_paths = compute_xcassets_paths(targets)
 
           result = TargetInspectionResult.new(target_definition, user_project, project_target_uuids,
-                                              build_configurations, platform, archs)
+                                              build_configurations, platform, archs, xcassets_paths)
           result.target_definition.swift_version = swift_version
           result
         end
@@ -206,6 +207,25 @@ module Pod
               file_predicate.call(build_file.file_ref)
             end
           end
+        end
+
+        # Computes the `.xcassets` paths relevant for the user's targets. This is to be used for combining the
+        # `.xcassets` files during the copy resources phases during compilation.
+        #
+        # @param  [Array<PBXNativeTarget>] targets the user's targets of the project of
+        #         #target_definition which needs to be integrated.
+        #
+        # @return [Array<String>] The paths of all `.xcassets` references relevant to the user's targets.
+        #
+        def compute_xcassets_paths(targets)
+          targets.flat_map do |t|
+            bp = t.build_phases.find { |bp| bp.class == Xcodeproj::Project::PBXResourcesBuildPhase }
+            unless bp.nil?
+              bp.files_references.select do |file_ref|
+                file_ref.extname = '.xcassets'
+              end
+            end
+          end.compact
         end
 
         # Compute the Swift version for the target build configurations. If more
