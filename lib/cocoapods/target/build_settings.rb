@@ -601,13 +601,24 @@ module Pod
 
         # @!group Libraries
 
+        # Converts array of library path references to just the names to use
+        # link each library, e.g. from '/path/to/libSomething.a' to 'Something'
+        #
+        # @param [Array<String>] libraries
+        #
+        # @return [Array<String>]
+        #
+        def extract_linking_names(libraries)
+          libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+        end
+
         # @return [Array<String>]
         define_build_settings_method :libraries, :memoized => true, :sorted => true, :uniqued => true do
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
           libraries = []
           if test_xcconfig? || target.requires_frameworks? && !target.static_framework?
-            libraries.concat vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+            libraries.concat extract_linking_names(vendored_static_libraries)
             libraries.concat libraries_to_import
           end
           if test_xcconfig?
@@ -621,7 +632,7 @@ module Pod
         define_build_settings_method :static_libraries_to_import, :memoized => true do
           static_libraries_to_import = []
           unless target.should_build? && target.requires_frameworks? && !target.static_framework?
-            static_libraries_to_import.concat vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+            static_libraries_to_import.concat extract_linking_names(vendored_static_libraries)
           end
           static_libraries_to_import << target.product_basename if target.should_build? && !target.requires_frameworks?
           static_libraries_to_import
@@ -629,7 +640,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :dynamic_libraries_to_import, :memoized => true do
-          vendored_dynamic_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') } +
+          extract_linking_names(vendored_dynamic_libraries) +
           spec_consumers.flat_map(&:libraries)
         end
 
