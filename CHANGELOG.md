@@ -12,7 +12,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Fix linking of vendored libraries and frameworks in pod targets
+* Fix linking of vendored libraries and frameworks in pod targets  
   [Wes Campaigne](https://github.com/Westacular)
   [#8453](https://github.com/CocoaPods/CocoaPods/issues/8453)
 
