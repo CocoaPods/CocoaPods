@@ -607,7 +607,7 @@ module Pod
 
           libraries = []
           if test_xcconfig? || target.requires_frameworks? && !target.static_framework?
-            libraries.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
+            libraries.concat vendored_static_libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
             libraries.concat libraries_to_import
           end
           if test_xcconfig?
