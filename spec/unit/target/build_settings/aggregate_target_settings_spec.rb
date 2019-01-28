@@ -120,11 +120,11 @@ module Pod
           end
 
           it 'does link with vendored frameworks' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-framework "Bananalib"'
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-framework "BananaFramework"'
           end
 
           it 'does link with vendored libraries' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"Bananalib"'
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaStaticLib"'
           end
         end
 
