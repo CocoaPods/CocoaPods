@@ -31,16 +31,16 @@ module Pod
 
             it 'adds the file references of the frameworks of the project' do
               @installer.install!
-              file_ref = @installer.pods_project['Pods/BananaLib/Frameworks/Bananalib.framework']
+              file_ref = @installer.pods_project['Pods/BananaLib/Frameworks/BananaFramework.framework']
               file_ref.should.be.not.nil
-              file_ref.path.should == 'Bananalib.framework'
+              file_ref.path.should == 'BananaFramework.framework'
             end
 
             it 'adds the file references of the libraries of the project' do
               @installer.install!
-              file_ref = @installer.pods_project['Pods/BananaLib/Frameworks/libBananalib.a']
+              file_ref = @installer.pods_project['Pods/BananaLib/Frameworks/libBananaStaticLib.a']
               file_ref.should.be.not.nil
-              file_ref.path.should == 'libBananalib.a'
+              file_ref.path.should == 'libBananaStaticLib.a'
             end
 
             it 'adds files references for the resources of the Pods project' do
@@ -75,7 +75,7 @@ module Pod
               headers_root = @pod_target.build_headers.root
               public_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
               private_header = headers_root + 'BananaLib/BananaPrivate.h'
-              framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
+              framework_header = headers_root + 'BananaLib/BananaFramework/BananaFramework.h'
               public_headers.each { |public_header| public_header.should.exist }
               private_header.should.exist
               framework_header.should.not.exist
@@ -86,8 +86,8 @@ module Pod
               headers_root = config.sandbox.public_headers.root
               public_headers = [headers_root + 'BananaLib/Banana.h', headers_root + 'BananaLib/MoreBanana.h']
               private_header = headers_root + 'BananaLib/BananaPrivate.h'
-              framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
-              framework_subdir_header = headers_root + 'BananaLib/Bananalib/SubDir/SubBananalib.h'
+              framework_header = headers_root + 'BananaLib/BananaFramework/BananaFramework.h'
+              framework_subdir_header = headers_root + 'BananaLib/BananaFramework/SubDir/SubBananaFramework.h'
               public_headers.each { |public_header| public_header.should.exist }
               private_header.should.not.exist
               framework_header.should.not.exist
@@ -113,7 +113,7 @@ module Pod
               @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
               @installer.install!
               headers_root = config.sandbox.public_headers.root
-              framework_header = headers_root + 'BananaLib/Bananalib/Bananalib.h'
+              framework_header = headers_root + 'BananaLib/BananaFramework/BananaFramework.h'
               framework_header.should.not.exist
             end
 

@@ -14,9 +14,9 @@ module Pod
         end
         expected = %w(
           Banana.modulemap
+          BananaFramework.framework/Versions/A/Headers/BananaFramework.h
+          BananaFramework.framework/Versions/A/Headers/SubDir/SubBananaFramework.h
           BananaLib.podspec
-          Bananalib.framework/Versions/A/Headers/Bananalib.h
-          Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h
           Classes/Banana.h
           Classes/Banana.m
           Classes/BananaLib.pch
@@ -40,7 +40,7 @@ module Pod
           docs/guide1.md
           docs/subdir/guide2.md
           framework/Source/MoreBanana.h
-          libBananalib.a
+          libBananaStaticLib.a
           preserve_me.txt
           sub-dir/sub-dir-2/somefile.txt
         )
@@ -54,13 +54,13 @@ module Pod
           f.include?('libPusher') || f.include?('.git')
         end
         dirs.sort.should == %w(
-          Bananalib.framework
-          Bananalib.framework/Headers
-          Bananalib.framework/Versions
-          Bananalib.framework/Versions/A
-          Bananalib.framework/Versions/A/Headers
-          Bananalib.framework/Versions/A/Headers/SubDir
-          Bananalib.framework/Versions/Current
+          BananaFramework.framework
+          BananaFramework.framework/Headers
+          BananaFramework.framework/Versions
+          BananaFramework.framework/Versions/A
+          BananaFramework.framework/Versions/A/Headers
+          BananaFramework.framework/Versions/A/Headers/SubDir
+          BananaFramework.framework/Versions/Current
           Classes
           Resources
           Resources/Base.lproj
@@ -194,9 +194,9 @@ module Pod
       end
 
       it 'can glob for exact matches' do
-        paths = @path_list.relative_glob('libBananalib.a').map(&:to_s)
+        paths = @path_list.relative_glob('libBananaStaticLib.a').map(&:to_s)
         paths.sort.should == %w(
-          libBananalib.a
+          libBananaStaticLib.a
         )
       end
 

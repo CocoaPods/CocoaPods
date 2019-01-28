@@ -105,8 +105,8 @@ module Pod
 
       it 'includes the vendored framework headers if requested' do
         @accessor.public_headers(true).sort.should == [
-          @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
-          @root + 'Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h',
+          @root + 'BananaFramework.framework/Versions/A/Headers/BananaFramework.h',
+          @root + 'BananaFramework.framework/Versions/A/Headers/SubDir/SubBananaFramework.h',
           @root + 'Classes/Banana.h',
           @root + 'framework/Source/MoreBanana.h',
         ]
@@ -141,23 +141,23 @@ module Pod
       end
 
       it 'returns the paths of the framework bundles' do
-        @accessor.vendored_frameworks.should.include?(@root + 'Bananalib.framework')
+        @accessor.vendored_frameworks.should.include?(@root + 'BananaFramework.framework')
       end
 
       it 'returns the paths of the framework headers' do
         @accessor.vendored_frameworks_headers.sort.should == [
-          @root + 'Bananalib.framework/Versions/A/Headers/Bananalib.h',
-          @root + 'Bananalib.framework/Versions/A/Headers/SubDir/SubBananalib.h',
+          @root + 'BananaFramework.framework/Versions/A/Headers/BananaFramework.h',
+          @root + 'BananaFramework.framework/Versions/A/Headers/SubDir/SubBananaFramework.h',
         ].sort
       end
 
       it 'handles when the framework headers directory does not exist' do
         Pathname.any_instance.stubs(:directory?).returns(false)
-        FileAccessor.vendored_frameworks_headers_dir(@root + 'Bananalib.framework').should == @root + 'Bananalib.framework/Headers'
+        FileAccessor.vendored_frameworks_headers_dir(@root + 'BananaFramework.framework').should == @root + 'BananaFramework.framework/Headers'
       end
 
       it 'returns the paths of the library files' do
-        @accessor.vendored_libraries.should.include?(@root + 'libBananalib.a')
+        @accessor.vendored_libraries.should.include?(@root + 'libBananaStaticLib.a')
       end
 
       it 'returns the resource bundles of the pod' do
