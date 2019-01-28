@@ -221,7 +221,7 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.other_ldflags.should.
-              be == %w(-l"Bananalib" -l"xml2" -framework "Bananalib")
+              be == %w(-l"BananaStaticLib" -l"xml2" -framework "BananaFramework")
           end
         end
 

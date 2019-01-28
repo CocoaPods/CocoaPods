@@ -38,7 +38,7 @@ module Pod
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
       relative_paths.sort.should == %w(
         Banana.modulemap
-        Bananalib.framework
+        BananaFramework.framework
         Classes/Banana.h
         Classes/Banana.m
         Classes/BananaLib.pch
@@ -55,7 +55,7 @@ module Pod
         Resources/logo-sidebar.png
         Resources/sub_dir
         framework/Source/MoreBanana.h
-        libBananalib.a
+        libBananaStaticLib.a
         preserve_me.txt
       )
     end
@@ -74,7 +74,7 @@ module Pod
       relative_paths = paths.map { |p| p.gsub("#{@root}/", '') }
       relative_paths.sort.should == %w(
         Banana.modulemap
-        Bananalib.framework
+        BananaFramework.framework
         Classes/Banana.h
         Classes/Banana.m
         Classes/BananaLib.pch
@@ -89,7 +89,7 @@ module Pod
         Resources/en.lproj
         Resources/logo-sidebar.png
         Resources/sub_dir
-        libBananalib.a
+        libBananaStaticLib.a
         preserve_me.txt
       )
     end
