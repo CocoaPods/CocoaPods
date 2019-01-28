@@ -60,6 +60,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix linking of vendored libraries and frameworks in pod targets  
+  [Wes Campaigne](https://github.com/Westacular)
+  [#8453](https://github.com/CocoaPods/CocoaPods/issues/8453)
+
 * Always update sources specified with the `:source` option when `--repo-update` is specified  
   [Eric Amorde](https://github.com/amorde)
   [#8421](https://github.com/CocoaPods/CocoaPods/issues/8421) 
@@ -102,10 +106,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#8287](https://github.com/CocoaPods/CocoaPods/issues/8287)
 
 ##### Bug Fixes
-
-* Fix linking of vendored libraries and frameworks in pod targets  
-  [Wes Campaigne](https://github.com/Westacular)
-  [#8453](https://github.com/CocoaPods/CocoaPods/issues/8453)
 
 * Do not force 64-bit architectures on Xcode 10  
   [Eric Amorde](https://github.com/amorde)
