@@ -788,6 +788,28 @@ module Pod
           @validator.instance_variable_set(:@installer, installer)
           @validator.send(:add_app_project_import)
         end
+
+        it 'should share pod target xcscheme' do
+          @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          pod_target = fixture_pod_target('coconut-lib/CoconutLib.podspec')
+          installer = stub(:pod_targets => [pod_target])
+          installer.stubs(:pods_project).returns(pods_project)
+          File.stubs(:exist?).returns(true)
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:shares_pod_target_xcscheme?, pod_target).should == true
+        end
+
+        it 'should not share pod target xcscheme' do
+          @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          pod_target = fixture_pod_target('coconut-lib/CoconutLib.podspec')
+          installer = stub(:pod_targets => [pod_target])
+          installer.stubs(:pods_project).returns(pods_project)
+          File.stubs(:exist?).returns(false)
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:shares_pod_target_xcscheme?, pod_target).should == false
+        end
       end
 
       describe 'file pattern validation' do
