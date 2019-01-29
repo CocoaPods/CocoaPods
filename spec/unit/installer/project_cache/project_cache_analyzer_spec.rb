@@ -14,6 +14,14 @@ module Pod
           @pod_targets = [@banana_lib, @orange_lib, @monkey_lib]
           @main_aggregate_target = fixture_aggregate_target(@pod_targets)
           @secondary_aggregate_target = fixture_aggregate_target([@banana_lib, @monkey_lib])
+
+          @sandbox.project_path.mkpath
+          @main_aggregate_target.support_files_dir.mkpath
+          @secondary_aggregate_target.support_files_dir.mkpath
+          @pod_targets.each do |target|
+            @sandbox.pod_target_project_path(target.pod_name).mkpath
+            target.support_files_dir.mkpath
+          end
         end
 
         describe 'in general' do
@@ -117,6 +125,26 @@ module Pod
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal([])
+          end
+
+          it 'returns a pod if its target support dir is dirty' do
+            FileUtils.rm_rf @orange_lib.support_files_dir
+            cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(pod_target)] }]
+            cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, @pod_targets, [])
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal([@orange_lib])
+            result.aggregate_targets_to_generate.should.be.nil
+          end
+
+          it 'returns a pod if its project file is dirty' do
+            FileUtils.rm_rf @sandbox.pod_target_project_path(@orange_lib.pod_name)
+            cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(pod_target)] }]
+            cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, @pod_targets, [])
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal([@orange_lib])
+            result.aggregate_targets_to_generate.should.be.nil
           end
         end
       end

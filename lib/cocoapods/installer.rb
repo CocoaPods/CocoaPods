@@ -279,9 +279,10 @@ module Pod
 
       create_and_save_projects(pod_targets_to_generate, aggregate_targets_to_generate,
                                cache_analysis_result.build_configurations, cache_analysis_result.project_object_version)
+      SandboxDirCleaner.new(sandbox, pod_targets, aggregate_targets).clean!
+
       update_project_cache(cache_analysis_result, target_installation_results)
       write_lockfiles
-      SandboxDirCleaner.new(sandbox, pod_targets, aggregate_targets).clean!
     end
 
     def create_and_save_projects(pod_targets_to_generate, aggregate_targets_to_generate, build_configurations, project_object_version)
