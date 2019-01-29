@@ -5,29 +5,6 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
-## Master
-
-##### Enhancements
-
-* None.  
-
-##### Bug Fixes
-
-* None.  
-
-
-## 1.6.0.rc.2 (2019-01-29)
-
-##### Enhancements
-
-* None.  
-
-##### Bug Fixes
-
-* None.  
-
-
-## 1.6.0.rc.2 (2019-01-29)
 
 ##### Enhancements
 
@@ -83,10 +60,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Fix linking of vendored libraries and frameworks in pod targets  
-  [Wes Campaigne](https://github.com/Westacular)
-  [#8453](https://github.com/CocoaPods/CocoaPods/issues/8453)
-
 * Always update sources specified with the `:source` option when `--repo-update` is specified  
   [Eric Amorde](https://github.com/amorde)
   [#8421](https://github.com/CocoaPods/CocoaPods/issues/8421) 
@@ -118,6 +91,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Treat `USER_HEADER_SEARCH_PATHS` as a plural build setting.  
   [Samuel Giddins](https://github.com/segiddins)
   [#8451](https://github.com/CocoaPods/CocoaPods/issues/8451)
+
+
+## 1.6.0.rc.2 (2019-01-29)
+
+##### Enhancements
+
+* None. 
+
+##### Bug Fixes
+
+* Fix linking of vendored libraries and frameworks in pod targets  
+  [Wes Campaigne](https://github.com/Westacular)
+  [#8453](https://github.com/CocoaPods/CocoaPods/issues/8453)
 
 
 ## 1.6.0.rc.1 (2019-01-25)
