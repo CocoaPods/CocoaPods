@@ -60,18 +60,7 @@ module Pod
         #
         def analyze
           target_by_label = Hash[(pod_targets + aggregate_targets).map { |target| [target.label, target] }]
-          cache_key_by_target_label = Hash[target_by_label.map do |label, target|
-            case target
-            when PodTarget
-              local = sandbox.local?(target.pod_name)
-              checkout_options = sandbox.checkout_sources[target.pod_name]
-              [label, TargetCacheKey.from_pod_target(target, :is_local_pod => local, :checkout_options => checkout_options)]
-            when AggregateTarget
-              [label, TargetCacheKey.from_aggregate_target(target)]
-            else
-              raise "[BUG] Unknown target type #{target}"
-            end
-          end]
+          cache_key_by_target_label = create_cache_key_mappings(target_by_label)
 
           full_install_results = ProjectCacheAnalysisResult.new(pod_targets, aggregate_targets, cache_key_by_target_label,
                                                                 build_configurations, project_object_version)
@@ -86,37 +75,80 @@ module Pod
             return full_install_results
           end
 
-          added_targets = (cache_key_by_target_label.keys - cache.cache_key_by_target_label.keys).map do |label|
-            target_by_label[label]
-          end
-          removed_targets = (cache.cache_key_by_target_label.keys - cache_key_by_target_label.keys).map do |label|
-            target_by_label[label]
-          end
-
+          added_targets, removed_targets = compute_added_and_removed_targets(target_by_label,
+                                                                             cache_key_by_target_label.keys,
+                                                                             cache.cache_key_by_target_label.keys)
           added_pod_targets, added_aggregate_targets = added_targets.partition { |target| target.is_a?(PodTarget) }
           removed_aggregate_targets = removed_targets.select { |target| target.is_a?(AggregateTarget) }
 
-          changed_targets = []
-          cache_key_by_target_label.each do |label, cache_key|
-            next unless cache.cache_key_by_target_label[label]
-            if cache_key.key_difference(cache.cache_key_by_target_label[label]) == :project
-              changed_targets << target_by_label[label]
-            end
-          end
-
+          changed_targets = compute_changed_targets_from_cache(cache_key_by_target_label, target_by_label, cache)
           changed_pod_targets, changed_aggregate_targets = changed_targets.partition { |target| target.is_a?(PodTarget) }
 
-          pod_targets_to_generate = changed_pod_targets + added_pod_targets
+          dirty_targets = compute_dirty_targets(pod_targets + aggregate_targets)
+          dirty_pod_targets, dirty_aggregate_targets = dirty_targets.partition { |target| target.is_a?(PodTarget) }
+
+          pod_targets_to_generate = changed_pod_targets + added_pod_targets + dirty_pod_targets
 
           # We either return the full list of aggregate targets or none since the aggregate targets go into the Pods.xcodeproj
           # and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
           aggregate_target_to_generate =
-            unless (changed_aggregate_targets + added_aggregate_targets + removed_aggregate_targets).empty?
+            unless (changed_aggregate_targets + added_aggregate_targets + removed_aggregate_targets + dirty_aggregate_targets).empty?
               aggregate_targets
             end
 
           ProjectCacheAnalysisResult.new(pod_targets_to_generate, aggregate_target_to_generate, cache_key_by_target_label,
                                          build_configurations, project_object_version)
+        end
+
+        private
+
+        def create_cache_key_mappings(target_by_label)
+          Hash[target_by_label.map do |label, target|
+            case target
+            when PodTarget
+              local = sandbox.local?(target.pod_name)
+              checkout_options = sandbox.checkout_sources[target.pod_name]
+              [label, TargetCacheKey.from_pod_target(target, :is_local_pod => local, :checkout_options => checkout_options)]
+            when AggregateTarget
+              [label, TargetCacheKey.from_aggregate_target(target)]
+            else
+              raise "[BUG] Unknown target type #{target}"
+            end
+          end]
+        end
+
+        def compute_added_and_removed_targets(target_by_label, target_labels, cached_target_labels)
+          added_targets = (target_labels - cached_target_labels).map do |label|
+            target_by_label[label]
+          end
+          removed_targets = (cached_target_labels - target_labels).map do |label|
+            target_by_label[label]
+          end
+          [added_targets, removed_targets]
+        end
+
+        def compute_changed_targets_from_cache(cache_key_by_target_label, target_by_label, cache)
+          cache_key_by_target_label.each_with_object([]) do |(label, cache_key), changed_targets|
+            next unless cache.cache_key_by_target_label[label]
+            if cache_key.key_difference(cache.cache_key_by_target_label[label]) == :project
+              changed_targets << target_by_label[label]
+            end
+          end
+        end
+
+        def compute_dirty_targets(targets)
+          targets.reject do |target|
+            support_files_dir_exists = File.exist? target.support_files_dir
+            xcodeproj_exists = case target
+                               when PodTarget
+                                 File.exist? sandbox.pod_target_project_path(target.pod_name)
+                               when AggregateTarget
+                                 File.exist? sandbox.project_path
+                               else
+                                 raise "[BUG] Unknown target type #{target}"
+                               end
+            support_files_dir_exists && xcodeproj_exists
+          end
         end
       end
     end
