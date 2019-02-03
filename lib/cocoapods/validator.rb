@@ -554,7 +554,7 @@ module Pod
     def add_app_project_import
       app_project = Xcodeproj::Project.open(validation_dir + 'App.xcodeproj')
       app_target = app_project.targets.first
-      pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
+      pod_target = validation_pod_target
       Pod::Generator::AppTargetHelper.add_app_project_import(app_project, app_target, pod_target, consumer.platform_name)
       Pod::Generator::AppTargetHelper.add_xctest_search_paths(app_target) if @installer.pod_targets.any? { |pt| pt.spec_consumers.any? { |c| c.frameworks.include?('XCTest') } }
       Pod::Generator::AppTargetHelper.add_empty_swift_file(app_project, app_target) if @installer.pod_targets.any?(&:uses_swift?)
@@ -562,6 +562,12 @@ module Pod
       Xcodeproj::XCScheme.share_scheme(app_project.path, 'App')
       # Share the pods xcscheme only if it exists. For pre-built vendored pods there is no xcscheme generated.
       Xcodeproj::XCScheme.share_scheme(@installer.pods_project.path, pod_target.label) if shares_pod_target_xcscheme?(pod_target)
+    end
+
+    # Returns the pod target for the pod being validated. Installation must have occurred before this can be invoked.
+    #
+    def validation_pod_target
+      @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
     end
 
     # It creates a podfile in memory and builds a library containing the pod
@@ -582,12 +588,20 @@ module Pod
         native_target = pod_target_installation_result.native_target
         native_target.build_configuration_list.build_configurations.each do |build_configuration|
           (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
-          build_configuration.build_settings['SWIFT_VERSION'] = (pod_target.swift_version || derived_swift_version) if pod_target.uses_swift?
+          if pod_target.uses_swift?
+            # The Swift version for the target being validated can be overridden by `--swift-version` or the
+            # `.swift-version` file so we always use the derived Swift version. For dependencies, we always use the
+            # Swift version they specify, unless they don't in which case it will be inferred by the target that is
+            # integrating them.
+            swift_version = pod_target == validation_pod_target ? derived_swift_version : pod_target.swift_version
+            build_configuration.build_settings['SWIFT_VERSION'] = swift_version
+          end
         end
-        pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_specs|
-          if pod_target.uses_swift_for_spec?(test_specs.first)
+        pod_target_installation_result.test_specs_by_native_target.each do |test_native_target, test_spec|
+          if pod_target.uses_swift_for_spec?(test_spec)
             test_native_target.build_configuration_list.build_configurations.each do |build_configuration|
-              build_configuration.build_settings['SWIFT_VERSION'] = derived_swift_version
+              swift_version = pod_target == validation_pod_target ? derived_swift_version : pod_target.swift_version
+              build_configuration.build_settings['SWIFT_VERSION'] = swift_version
             end
           end
         end
@@ -628,8 +642,7 @@ module Pod
       else
         UI.message "\nBuilding with `xcodebuild`.\n".yellow do
           scheme = if skip_import_validation?
-                     pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
-                     pod_target.label if pod_target.should_build?
+                     validation_pod_target.label if validation_pod_target.should_build?
                    else
                      'App'
                    end
@@ -656,7 +669,7 @@ module Pod
         UI.warn "Skipping test validation with `xcodebuild` because it can't be found.\n".yellow
       else
         UI.message "\nTesting with `xcodebuild`.\n".yellow do
-          pod_target = @installer.pod_targets.find { |pt| pt.pod_name == spec.root.name }
+          pod_target = validation_pod_target
           consumer.spec.test_specs.each do |test_spec|
             if !test_spec.supported_on_platform?(consumer.platform_name)
               UI.warn "Skipping test spec `#{test_spec.name}` on platform `#{consumer.platform_name}` since it is not supported.\n".yellow
