@@ -1082,7 +1082,7 @@ module Pod
 
         result = validator.results.first
         result.type.should == :error
-        result.message.should == 'Specification `JSONKit` specifies inconsistent `swift_versions` (`3.0`, `4.0`) compared to the one present in your `.swift-version` file (`3.2`). ' \
+        result.message.should == 'Specification `JSONKit` specifies inconsistent `swift_versions` (`3.0` and `4.0`) compared to the one present in your `.swift-version` file (`3.2`). ' \
                                'Please remove the `.swift-version` file which is now deprecated and only use the `swift_versions` attribute within your podspec.'
       end
 
@@ -1105,7 +1105,7 @@ module Pod
 
         result = validator.results.first
         result.type.should == :error
-        result.message.should == 'Specification `JSONKit` specifies inconsistent `swift_versions` (`3.0`, `4.0`) compared to the one passed during lint (`3.2`).'
+        result.message.should == 'Specification `JSONKit` specifies inconsistent `swift_versions` (`3.0` and `4.0`) compared to the one passed during lint (`3.2`).'
       end
 
       it 'does not error when swift version spec attribute matches parameter based swift version' do
