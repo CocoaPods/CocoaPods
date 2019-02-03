@@ -97,24 +97,29 @@ module Pod
                 add_swift_library_compatibility_header_phase(native_target)
               end
 
+              project_directory = project.path.dirname
+
               unless skip_pch?(target.library_specs)
                 path = target.prefix_header_path
-                create_prefix_header(path, library_file_accessors, target.platform, native_target)
+                create_prefix_header(path, library_file_accessors, target.platform, native_target, project_directory)
+                add_file_to_support_group(path)
               end
               unless skip_pch?(target.test_specs)
                 target.test_specs.each do |test_spec|
                   path = target.prefix_header_path_for_spec(test_spec)
                   test_spec_consumer = test_spec.consumer(target.platform)
-                  test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
-                  create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
+                  test_native_target = test_native_target_from_spec(test_spec_consumer.spec, test_native_targets)
+                  create_prefix_header(path, test_file_accessors, target.platform, test_native_target, project_directory)
+                  add_file_to_support_group(path)
                 end
               end
               unless skip_pch?(target.app_specs)
                 target.app_specs.each do |app_spec|
                   path = target.prefix_header_path_for_spec(app_spec)
                   app_spec_consumer = app_spec.consumer(target.platform)
-                  app_native_target = app_native_target_from_spec_consumer(app_spec_consumer, app_native_targets)
-                  create_prefix_header(path, app_file_accessors, target.platform, app_native_target)
+                  app_native_target = app_native_target_from_spec(app_spec_consumer.spec, app_native_targets)
+                  create_prefix_header(path, app_file_accessors, target.platform, app_native_target, project_directory)
+                  add_file_to_support_group(path)
                 end
               end
               create_dummy_source(native_target)
@@ -239,9 +244,9 @@ module Pod
                                when :library
                                  native_target
                                when :test
-                                 test_native_target_from_spec_consumer(consumer, test_native_targets)
+                                 test_native_target_from_spec(consumer.spec, test_native_targets)
                                when :app
-                                 app_native_target_from_spec_consumer(consumer, app_native_targets)
+                                 app_native_target_from_spec(consumer.spec, app_native_targets)
                                end
 
               headers = file_accessor.headers
@@ -350,7 +355,7 @@ module Pod
               app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name, name).install!
               # Wire test native targets to the generated app host.
               test_spec_consumers.each do |test_spec_consumer|
-                test_native_target = test_native_target_from_spec_consumer(test_spec_consumer, test_native_targets)
+                test_native_target = test_native_target_from_spec(test_spec_consumer.spec, test_native_targets)
                 test_native_target.build_configurations.each do |configuration|
                   test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target.name}.app/"
                   test_host << 'Contents/MacOS/' if platform == :osx
@@ -504,12 +509,8 @@ module Pod
             update_changed_file(target.build_settings, path)
             xcconfig_file_ref = add_file_to_support_group(path)
 
-            native_target.build_configurations.each do |c|
-              c.base_configuration_reference = xcconfig_file_ref
-            end
-
             # also apply the private config to resource bundle targets.
-            apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
+            apply_xcconfig_file_ref_to_targets([native_target] + resource_bundle_targets, xcconfig_file_ref)
           end
 
           # Generates the contents of the xcconfig file used for each test target type and saves it to disk.
@@ -531,7 +532,7 @@ module Pod
               update_changed_file(test_spec_build_settings, path)
               test_xcconfig_file_ref = add_file_to_support_group(path)
 
-              test_native_target = test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
+              test_native_target = test_native_target_from_spec(spec_consumer.spec, test_native_targets)
               test_native_target.build_configurations.each do |test_native_target_bc|
                 test_target_swift_debug_hack(test_spec, test_native_target_bc)
                 test_native_target_bc.base_configuration_reference = test_xcconfig_file_ref
@@ -539,9 +540,7 @@ module Pod
 
               # also apply the private config to resource bundle test targets related to this test spec.
               scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
-              unless scoped_test_resource_bundle_targets.empty?
-                apply_xcconfig_file_ref_to_resource_bundle_targets(scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
-              end
+              apply_xcconfig_file_ref_to_targets(scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
             end
           end
 
@@ -606,16 +605,11 @@ module Pod
               update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, app_spec), path)
               app_xcconfig_file_ref = add_file_to_support_group(path)
 
-              app_native_target = app_native_target_from_spec_consumer(spec_consumer, app_native_targets)
-              app_native_target.build_configurations.each do |app_native_target_bc|
-                app_native_target_bc.base_configuration_reference = app_xcconfig_file_ref
-              end
+              app_native_target = app_native_target_from_spec(spec_consumer.spec, app_native_targets)
 
               # also apply the private config to resource bundle app targets related to this app spec.
               scoped_app_resource_bundle_targets = app_resource_bundle_targets[app_spec.name]
-              unless scoped_app_resource_bundle_targets.empty?
-                apply_xcconfig_file_ref_to_resource_bundle_targets(scoped_app_resource_bundle_targets, app_xcconfig_file_ref)
-              end
+              apply_xcconfig_file_ref_to_targets([app_native_target] + scoped_app_resource_bundle_targets, app_xcconfig_file_ref)
             end
           end
 
@@ -698,35 +692,6 @@ module Pod
             eos
           end
 
-          # Creates a prefix header file which imports `UIKit` or `Cocoa` according
-          # to the platform of the target. This file also include any prefix header
-          # content reported by the specification of the pods.
-          #
-          # @param [Pathname] path
-          #        the path to generate the prefix header for.
-          #
-          # @param [Array<Sandbox::FileAccessor>] file_accessors
-          #        the file accessors to use for this prefix header that point to a path of a prefix header.
-          #
-          # @param [Platform] platform
-          #        the platform to use for this prefix header.
-          #
-          # @param [PBXNativeTarget] native_target
-          #        the native target on which the prefix header should be configured for.
-          #
-          # @return [void]
-          #
-          def create_prefix_header(path, file_accessors, platform, native_target)
-            generator = Generator::PrefixHeader.new(file_accessors, platform)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
-
-            relative_path = path.relative_path_from(project.path.dirname)
-            native_target.build_configurations.each do |c|
-              c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
-            end
-          end
-
           ENABLE_OBJECT_USE_OBJC_FROM = {
             :ios => Version.new('6'),
             :osx => Version.new('10.8'),
@@ -786,10 +751,10 @@ module Pod
             flags * ' '
           end
 
-          def apply_xcconfig_file_ref_to_resource_bundle_targets(resource_bundle_targets, xcconfig_file_ref)
-            resource_bundle_targets.each do |rsrc_target|
-              rsrc_target.build_configurations.each do |rsrc_bc|
-                rsrc_bc.base_configuration_reference = xcconfig_file_ref
+          def apply_xcconfig_file_ref_to_targets(targets, xcconfig_file_ref)
+            targets.each do |config_target|
+              config_target.build_configurations.each do |configuration|
+                configuration.base_configuration_reference = xcconfig_file_ref
               end
             end
           end
@@ -889,15 +854,17 @@ module Pod
             project.pod_support_files_group(pod_name, dir)
           end
 
-          def test_native_target_from_spec_consumer(spec_consumer, test_native_targets)
+          def test_native_target_from_spec(spec, test_native_targets)
+            test_target_label = target.test_target_label(spec)
             test_native_targets.find do |test_native_target|
-              test_native_target.name == target.test_target_label(spec_consumer.spec)
+              test_native_target.name == test_target_label
             end
           end
 
-          def app_native_target_from_spec_consumer(spec_consumer, app_native_targets)
+          def app_native_target_from_spec(spec, app_native_targets)
+            app_target_label = target.app_target_label(spec)
             app_native_targets.find do |app_native_target|
-              app_native_target.name == target.app_target_label(spec_consumer.spec)
+              app_native_target.name == app_target_label
             end
           end
 
