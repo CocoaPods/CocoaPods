@@ -409,7 +409,7 @@ module Pod
               @validator.validate!
             end
             e.message.should.match /Unable to determine Swift version for the following pods:/
-            e.message.should.include 'MultiSwift` does not specify a Swift version (3.2, 4.0) that is satisfied by ' \
+            e.message.should.include 'MultiSwift` does not specify a Swift version (`3.2` and `4.0`) that is satisfied by ' \
               'any of targets (`SampleProject` and `TestRunner`) integrating it.'
           end
 

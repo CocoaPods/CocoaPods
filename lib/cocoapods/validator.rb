@@ -490,10 +490,10 @@ module Pod
       unless spec_swift_versions.empty?
         message = nil
         if !dot_swift_version.nil? && !spec_swift_versions.include?(dot_swift_version)
-          message = "Specification `#{spec.name}` specifies inconsistent `swift_versions` (#{spec_swift_versions.map { |s| "`#{s}`" }.join(', ')}) compared to the one present in your `.swift-version` file (`#{dot_swift_version}`). " \
+          message = "Specification `#{spec.name}` specifies inconsistent `swift_versions` (#{spec_swift_versions.map { |s| "`#{s}`" }.to_sentence}) compared to the one present in your `.swift-version` file (`#{dot_swift_version}`). " \
                     'Please remove the `.swift-version` file which is now deprecated and only use the `swift_versions` attribute within your podspec.'
         elsif !swift_version.nil? && !spec_swift_versions.include?(swift_version)
-          message = "Specification `#{spec.name}` specifies inconsistent `swift_versions` (#{spec_swift_versions.map { |s| "`#{s}`" }.join(', ')}) compared to the one passed during lint (`#{swift_version}`)."
+          message = "Specification `#{spec.name}` specifies inconsistent `swift_versions` (#{spec_swift_versions.map { |s| "`#{s}`" }.to_sentence}) compared to the one passed during lint (`#{swift_version}`)."
         end
         unless message.nil?
           error('swift', message)
