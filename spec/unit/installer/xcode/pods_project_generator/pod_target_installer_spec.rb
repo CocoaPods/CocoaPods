@@ -502,6 +502,32 @@ module Pod
                 end
               end
 
+              it 'allows pod target xcconfigs to override values normally set directly on the target' do
+                @watermelon_pod_target.root_spec.pod_target_xcconfig = { 'PRODUCT_MODULE_NAME' => 'FOOBAR' }
+                @watermelon_pod_target.test_specs.each { |s| s.pod_target_xcconfig = { 'PRODUCT_NAME' => 'FOOBAR_TEST' } }
+                @installer.install!
+
+                library_target = @project.targets.find { |t| t.name == 'WatermelonLib' }
+                library_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_MODULE_NAME'] }.uniq.should == [nil]
+                library_target.resolved_build_setting('PRODUCT_MODULE_NAME', true).values.uniq.should == %w(FOOBAR)
+
+                unit_test_target = @project.targets.find { |t| t.name == 'WatermelonLib-Unit-Tests' }
+                unit_test_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                unit_test_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(FOOBAR_TEST)
+
+                test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
+                test_resource_bundle_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                test_resource_bundle_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(FOOBAR_TEST)
+
+                test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
+                test_resource_bundle_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                test_resource_bundle_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(FOOBAR_TEST)
+
+                app_target = @project.targets.find { |t| t.name == 'WatermelonLib-App' }
+                app_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                app_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(ExampleApp)
+              end
+
               it 'adds swift compatibility header phase for swift static libraries' do
                 @watermelon_pod_target.stubs(:build_type => Target::BuildType.static_library, :uses_swift? => true)
 
