@@ -417,6 +417,7 @@ module Pod
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false).install!
 
+              app_native_target.product_reference.name = app_target_label
               target.user_build_configurations.each do |bc_name, type|
                 app_native_target.add_build_configuration(bc_name, type)
               end
