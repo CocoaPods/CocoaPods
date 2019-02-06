@@ -141,10 +141,23 @@ module Pod
           #
           def add_target
             super.tap do |native_target|
-              native_target.build_configurations.each do |configuration|
-                target.build_settings.merged_pod_target_xcconfigs.each_key do |setting|
-                  configuration.build_settings.delete(setting)
-                end
+              remove_pod_target_xcconfig_overrides_from_target(target.build_settings, native_target)
+            end
+          end
+
+          # Removes overrides of the `pod_target_xcconfig` settings from the target's
+          # build configurations.
+          #
+          # @return [Void]
+          #
+          # @param [Target::BuildSettings] build_settings
+          #
+          # @param [PBXNativeTarget] native_target
+          #
+          def remove_pod_target_xcconfig_overrides_from_target(build_settings, native_target)
+            native_target.build_configurations.each do |configuration|
+              build_settings.merged_pod_target_xcconfigs.each_key do |setting|
+                configuration.build_settings.delete(setting)
               end
             end
           end
@@ -342,11 +355,9 @@ module Pod
                 end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
-
-                target.build_settings_for_spec(test_spec).merged_pod_target_xcconfigs.each_key do |setting|
-                  configuration.build_settings.delete(setting)
-                end
               end
+
+              remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(test_spec), test_native_target)
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
               create_test_target_embed_frameworks_script(test_spec)
@@ -435,11 +446,9 @@ module Pod
                 end
                 # For macOS we do not code sign the appbundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
-
-                target.build_settings_for_spec(app_spec).merged_pod_target_xcconfigs.each_key do |setting|
-                  configuration.build_settings.delete(setting)
-                end
               end
+
+              remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(app_spec), app_native_target)
 
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
@@ -526,6 +535,8 @@ module Pod
                   end
                 end
 
+                remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(file_accessor.spec), resource_bundle_target)
+
                 resource_bundle_target
               end
             end
@@ -572,12 +583,11 @@ module Pod
               test_native_target = test_native_target_from_spec(spec_consumer.spec, test_native_targets)
               test_native_target.build_configurations.each do |test_native_target_bc|
                 test_target_swift_debug_hack(test_spec, test_native_target_bc)
-                test_native_target_bc.base_configuration_reference = test_xcconfig_file_ref
               end
 
               # also apply the private config to resource bundle test targets related to this test spec.
               scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
-              apply_xcconfig_file_ref_to_targets(scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
+              apply_xcconfig_file_ref_to_targets([test_native_target] + scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
             end
           end
 
