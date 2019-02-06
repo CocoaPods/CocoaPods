@@ -243,19 +243,21 @@ module Pod
           end
 
           it 'does not merge pod target xcconfig of test specifications for a non test xcconfig' do
-            @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1' }
-            @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1' }
+            @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1', 'PODS_ROOT' => 'OVERRIDDEN' }
+            @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1', 'PODS_ROOT' => 'OVERRIDDEN2' }
             generator = PodTargetSettings.new(@coconut_pod_target)
             xcconfig = generator.generate
             xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1'
+            xcconfig.to_hash['PODS_ROOT'].should == 'OVERRIDDEN'
           end
 
           it 'merges pod target xcconfig settings from subspecs' do
-            @matryoshka_spec.subspecs[0].pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FIRST_SUBSPEC_FLAG=1' }
+            @matryoshka_spec.subspecs[0].pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'FIRST_SUBSPEC_FLAG=1', 'PODS_ROOT' => 'OVERRIDDEN' }
             @matryoshka_spec.subspecs[1].pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'SECOND_SUBSPEC_FLAG=1' }
             generator = PodTargetSettings.new(@matryoshka_pod_target)
             xcconfig = generator.generate
             xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 FIRST_SUBSPEC_FLAG=1 SECOND_SUBSPEC_FLAG=1'
+            xcconfig.to_hash['PODS_ROOT'].should == 'OVERRIDDEN'
           end
 
           it 'merges the pod target xcconfig of non test specifications for test xcconfigs' do
