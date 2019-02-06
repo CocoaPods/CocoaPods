@@ -458,14 +458,12 @@ module Pod
           # @return [Boolean] whether any compile phase references were added.
           #
           def add_resources_to_target(paths, target)
-            contains_compile_phase_refs = false
-            filter_resource_file_references(paths) do |resource_phase_refs, compile_phase_refs|
+            filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
               # Resource bundles are only meant to have resources, so install everything
               # into the resources phase. See note in filter_resource_file_references.
               target.add_resources(resource_phase_refs + compile_phase_refs)
-              contains_compile_phase_refs ||= !compile_phase_refs.empty?
+              !compile_phase_refs.empty?
             end
-            contains_compile_phase_refs
           end
 
           # Adds the resources of the Pods to the Pods project.
@@ -512,7 +510,7 @@ module Pod
 
                   # Set the `SWIFT_VERSION` build setting for resource bundles that could have resources that get
                   # compiled such as an `xcdatamodeld` file which has 'Swift' as its code generation language.
-                  if contains_compile_phase_refs && target.uses_swift?
+                  if contains_compile_phase_refs && file_accessors.any? { |fa| target.uses_swift_for_spec?(fa.spec) }
                     configuration.build_settings['SWIFT_VERSION'] = target.swift_version
                   end
 
@@ -728,35 +726,6 @@ module Pod
           ln -fs "$base/${PUBLIC_HEADERS_FOLDER_PATH\#$WRAPPER_NAME/}" "$base/${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
           ln -fs "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$WRAPPER_NAME/}" "$base/${PRIVATE_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
             eos
-          end
-
-          # Creates a prefix header file which imports `UIKit` or `Cocoa` according
-          # to the platform of the target. This file also include any prefix header
-          # content reported by the specification of the pods.
-          #
-          # @param [Pathname] path
-          #        the path to generate the prefix header for.
-          #
-          # @param [Array<Sandbox::FileAccessor>] file_accessors
-          #        the file accessors to use for this prefix header that point to a path of a prefix header.
-          #
-          # @param [Platform] platform
-          #        the platform to use for this prefix header.
-          #
-          # @param [PBXNativeTarget] native_target
-          #        the native target on which the prefix header should be configured for.
-          #
-          # @return [void]
-          #
-          def create_prefix_header(path, file_accessors, platform, native_target)
-            generator = Generator::PrefixHeader.new(file_accessors, platform)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
-
-            relative_path = path.relative_path_from(project.path.dirname)
-            native_target.build_configurations.each do |c|
-              c.build_settings['GCC_PREFIX_HEADER'] = relative_path.to_s
-            end
           end
 
           ENABLE_OBJECT_USE_OBJC_FROM = {

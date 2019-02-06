@@ -719,7 +719,7 @@ module Pod
       header_search_paths.uniq
     end
 
-    # @param  [Specification] spec non-library spec
+    # @param  [Specification] spec
     #
     # @return [BuildSettings::PodTargetSettings] The build settings for the given spec
     #
@@ -728,7 +728,7 @@ module Pod
       when :test then test_spec_build_settings[spec.name]
       when :app  then app_spec_build_settings[spec.name]
       else            build_settings
-      end || raise ArgumentError, "No build settings for #{spec}"
+      end || raise(ArgumentError, "No build settings for #{spec}")
     end
 
     protected

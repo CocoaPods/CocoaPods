@@ -730,6 +730,7 @@ module Pod
                   @spec.resource_bundles = { 'banana_bundle' => ['Resources/**/*'] }
                   @spec.module_map = nil
                   @pod_target.stubs(:uses_swift?).returns(true)
+                  @pod_target.stubs(:uses_swift_for_spec?).returns(true)
                   @pod_target.stubs(:swift_version).returns('3.2')
                   @installer.install!
                   @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-SampleProject-banana_bundle' }
@@ -738,11 +739,12 @@ module Pod
                   end
                 end
 
-                it 'does not set the Swift version build setting when resources bundle contains sources and target has Swift' do
+                it 'does not set the Swift version build setting when resources bundle does not contain sources and target has Swift' do
                   @spec.resource_bundles = { 'banana_bundle' => ['Resources/**/*.png'] }
                   @spec.module_map = nil
                   @pod_target.stubs(:uses_swift?).returns(true)
-                  @pod_target.stubs(:swift_version).returns('3.2')
+                  @pod_target.stubs(:uses_swift_for_spec?).returns(true)
+                  @pod_target.stubs(:swift_version).returns('4.2')
                   @installer.install!
                   @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-SampleProject-banana_bundle' }
                   @bundle_target.build_configurations.each do |bc|
