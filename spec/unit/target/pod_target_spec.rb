@@ -99,12 +99,12 @@ module Pod
         before do
           @watermelon_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
           @pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
-                                                           true, {}, [], Platform.new(:ios, '6.0'),
-                                                           [@target_definition])
+                                                      true, {}, [], Platform.new(:ios, '6.0'),
+                                                      [@target_definition])
         end
 
         it 'raises when the target does not contain the spec' do
-          -> { @pod_target.build_settings_for_spec(stub('spec', spec_type: :test, name: 'Test/Test')) }.should.raise(ArgumentError, /No build settings for/)
+          -> { @pod_target.build_settings_for_spec(stub('spec', :spec_type => :test, :name => 'Test/Test')) }.should.raise(ArgumentError, /No build settings for/)
         end
 
         it 'returns the build settings for a library spec' do
@@ -112,12 +112,12 @@ module Pod
         end
 
         it 'returns the build settings for a test spec' do
-          test_spec = @watermelon_spec.recursive_subspecs.find { |s| s.name == 'GrapefruitsLib/Tests'}
+          test_spec = @watermelon_spec.recursive_subspecs.find { |s| s.name == 'GrapefruitsLib/Tests' }
           @pod_target.build_settings_for_spec(test_spec).non_library_spec.should == test_spec
         end
 
         it 'returns the build settings for an app spec' do
-          app_spec = @watermelon_spec.recursive_subspecs.find { |s| s.name == 'GrapefruitsLib/App'}
+          app_spec = @watermelon_spec.recursive_subspecs.find { |s| s.name == 'GrapefruitsLib/App' }
           @pod_target.build_settings_for_spec(app_spec).non_library_spec.should == app_spec
         end
       end
