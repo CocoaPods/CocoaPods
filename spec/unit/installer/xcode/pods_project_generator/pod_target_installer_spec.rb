@@ -223,6 +223,7 @@ module Pod
               end
 
               it 'adds the native test target to the project for iOS targets with correct build settings' do
+                @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
                 installation_result = @installer.install!
                 @project.targets.count.should == 7
                 @project.targets.first.name.should == 'WatermelonLib'
@@ -255,10 +256,29 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                app_native_target = @project.targets[5]
+                app_native_target.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.app.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
+                  bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'App/WatermelonLib-App-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
+                end
+                app_native_target.symbol_type.should == :application
                 installation_result.test_native_targets.count.should == 2
+                installation_result.app_native_targets.count.should == 1
               end
 
               it 'adds the native test target to the project for OSX targets with correct build settings' do
+                @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
                 installation_result = @installer2.install!
                 @project.targets.count.should == 7
                 @project.targets.first.name.should == 'WatermelonLib'
@@ -291,7 +311,24 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                app_native_target = @project.targets[5]
+                app_native_target.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.app.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
+                  bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
+                  bc.build_settings['INFOPLIST_FILE'].should == 'App/WatermelonLib-App-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
+                end
+                app_native_target.symbol_type.should == :application
                 installation_result.test_native_targets.count.should == 2
+                installation_result.app_native_targets.count.should == 1
               end
 
               it 'raises when a test spec has no source files' do
@@ -299,6 +336,13 @@ module Pod
                 e = ->() { @installer.install! }.should.raise Informative
                 e.message.should.
                     include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-Unit-Tests` target in Xcode would have no sources to compile.'
+              end
+
+              it 'raises when an app spec has no source files' do
+                @watermelon_pod_target.app_spec_consumers.first.stubs(:source_files).returns([])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.
+                    include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-App` target in Xcode would have no sources to compile.'
               end
 
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
@@ -334,6 +378,11 @@ module Pod
                 snapshot_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
                   'WatermelonSnapshotTests.m',
                 ]
+                app_native_target = @project.targets[5]
+                app_native_target.source_build_phase.files.count.should == 1
+                app_native_target.source_build_phase.files.map(&:display_name).sort.should == [
+                  'main.swift',
+                ]
               end
 
               it 'adds xcconfig file reference for test native targets' do
@@ -342,6 +391,13 @@ module Pod
                 group = @project['Pods/WatermelonLib/Support Files']
                 group.children.map(&:display_name).sort.should.include 'WatermelonLib.unit-tests.xcconfig'
                 group.children.map(&:display_name).sort.should.include 'WatermelonLib.unit-snapshottests.xcconfig'
+              end
+
+              it 'adds xcconfig file reference for app native targets' do
+                @installer.install!
+                @project.support_files_group
+                group = @project['Pods/WatermelonLib/Support Files']
+                group.children.map(&:display_name).sort.should.include 'WatermelonLib.app.xcconfig'
               end
 
               it 'does not add test header imports to umbrella header' do
@@ -406,6 +462,20 @@ module Pod
                 end
               end
 
+              it 'creates embed frameworks script for app target' do
+                @watermelon_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                @installer.install!
+                script_path = @watermelon_pod_target.embed_frameworks_script_path_for_spec(@watermelon_pod_target.app_specs.first)
+                script = script_path.read
+                @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
+        fi
+                  eos
+                end
+              end
+
               it 'adds the resources bundles for to the copy resources script for test target' do
                 @installer.install!
                 script_path = @watermelon_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.test_specs.first)
@@ -414,6 +484,19 @@ module Pod
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
           install_resource "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle"
+        fi
+                  eos
+                end
+              end
+
+              it 'adds the resources bundles for to the copy resources script for app target' do
+                @installer.install!
+                script_path = @watermelon_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.app_specs.first)
+                script = script_path.read
+                @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_resource "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle"
         fi
                   eos
                 end
