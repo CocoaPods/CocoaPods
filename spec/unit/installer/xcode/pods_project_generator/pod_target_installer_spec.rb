@@ -145,7 +145,7 @@ module Pod
               end
             end
 
-            describe 'test target generation' do
+            describe 'non-library target generation' do
               before do
                 config.sandbox.prepare
                 @podfile = Podfile.new do
@@ -198,9 +198,20 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
+                app_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
+                                                              @watermelon_spec.app_specs.first.consumer(:ios))
+                @project.add_pod_group('WatermelonLibApp', fixture('watermelon-lib'))
+                group = @project.group_for_spec('WatermelonLibApp')
+                app_file_accessor.source_files.each do |file|
+                  @project.add_file_reference(file, group)
+                end
+                app_file_accessor.resources.each do |resource|
+                  @project.add_file_reference(resource, group)
+                end
+
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
-                file_accessors = [file_accessor, unit_test_file_accessor, snapshot_test_file_accessor]
+                file_accessors = [file_accessor, unit_test_file_accessor, snapshot_test_file_accessor, app_file_accessor]
                 @watermelon_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
                                                        Platform.new(:ios, '6.0'), all_specs, [@target_definition],
                                                        file_accessors)
@@ -213,7 +224,7 @@ module Pod
 
               it 'adds the native test target to the project for iOS targets with correct build settings' do
                 installation_result = @installer.install!
-                @project.targets.count.should == 5
+                @project.targets.count.should == 7
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -249,7 +260,7 @@ module Pod
 
               it 'adds the native test target to the project for OSX targets with correct build settings' do
                 installation_result = @installer2.install!
-                @project.targets.count.should == 5
+                @project.targets.count.should == 7
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -305,7 +316,7 @@ module Pod
 
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
-                @project.targets.count.should == 5
+                @project.targets.count.should == 7
                 native_target = @project.targets[0]
                 native_target.source_build_phase.files.count.should == 2
                 native_target.source_build_phase.files.map(&:display_name).sort.should == [

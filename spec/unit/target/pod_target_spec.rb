@@ -710,6 +710,7 @@ module Pod
             'WatermelonLib' => [],
             'WatermelonLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
             'WatermelonLib/SnapshotTests' => [],
+            'WatermelonLib/App' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
           }
         end
 
@@ -720,6 +721,9 @@ module Pod
             ],
             'WatermelonLib/Tests' => [],
             'WatermelonLib/SnapshotTests' => [],
+            'WatermelonLib/App' => [
+              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
+            ],
           }
         end
 
