@@ -983,8 +983,11 @@ module Pod
     end
 
     describe 'swift validation' do
-      def test_swiftpod(swift_version = '3.1.0')
-        podspec = stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
+      def stub_swift_podspec
+        stub_podspec(/.*source_files.*/, '"source_files": "*.swift",')
+      end
+
+      def test_validator(podspec)
         file = write_podspec(podspec)
         pathname = Pathname.new('/Foo.swift')
         pathname.stubs(:realpath).returns(pathname)
@@ -995,19 +998,33 @@ module Pod
         Pod::Installer::PodSourceInstaller.any_instance.stubs(:unlock_files!)
         validator = Validator.new(file, config.sources_manager.master.map(&:url))
         validator.stubs(:build_pod)
-        validator.swift_version = swift_version
         validator.stubs(:validate_url)
         validator
       end
 
-      def test_swiftpod_with_dot_swift_version(dot_swift_version = '3.1.0')
-        validator = test_swiftpod(nil)
+      # Creates a test fixture using the `--swift-version` parameter.
+      def test_swiftpod_with_swift_version_parameter(swift_version = '3.1.0')
+        validator = test_validator(stub_swift_podspec)
+        validator.swift_version = swift_version
+        validator
+      end
+
+      # Creates a test fixture using a `.swift-version` file.
+      def test_swiftpod_with_dot_swift_version_file(dot_swift_version = '3.1.0')
+        validator = test_validator(stub_swift_podspec)
         validator.stubs(:dot_swift_version).returns(dot_swift_version)
         validator
       end
 
+      # Creates a test fixture using the `swift_versions` DSL.
+      def test_swiftpod_with_swift_version_dsl(swift_versions = ['3.1.0'])
+        podspec = stub_swift_podspec
+        podspec.gsub!(/.*requires_arc.*/, "\"swift_versions\": [ #{swift_versions.map { |v| "\"#{v}\"" }.join(', ')} ], \"requires_arc\": false")
+        test_validator(podspec)
+      end
+
       it 'fails on deployment target < iOS 8 for Swift Pods' do
-        validator = test_swiftpod_with_dot_swift_version
+        validator = test_swiftpod_with_dot_swift_version_file
         validator.validate
 
         validator.results.map(&:to_s).first.should.match /dynamic frameworks.*iOS > 8/
@@ -1017,7 +1034,7 @@ module Pod
       it 'succeeds on deployment target < iOS 8 for Swift Pods using XCTest' do
         Specification::Consumer.any_instance.stubs(:frameworks).returns(%w(XCTest))
 
-        validator = test_swiftpod_with_dot_swift_version
+        validator = test_swiftpod_with_dot_swift_version_file
         validator.validate
         validator.results.count.should == 0
       end
@@ -1025,7 +1042,7 @@ module Pod
       it 'succeeds on deployment targets >= iOS 8 for Swift Pods' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod_with_dot_swift_version
+        validator = test_swiftpod_with_dot_swift_version_file
         validator.validate
 
         validator.results.count.should == 0
@@ -1034,7 +1051,7 @@ module Pod
       it 'succeeds with a --swift-version provided value' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod('3.1.0')
+        validator = test_swiftpod_with_swift_version_parameter('3.1.0')
         validator.validate
         validator.results.count.should == 0
       end
@@ -1042,7 +1059,7 @@ module Pod
       it 'succeeds with a .swift-version file' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod_with_dot_swift_version
+        validator = test_swiftpod_with_dot_swift_version_file
         validator.validate
         validator.results.count.should == 0
       end
@@ -1050,7 +1067,7 @@ module Pod
       it 'warns that the default swift version was used if none was provided' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod(nil)
+        validator = test_validator(stub_swift_podspec)
         validator.validate
         validator.results.count.should == 1
 
@@ -1065,7 +1082,7 @@ module Pod
       it 'warns when a dot swift version file is used instead of the swift_versions attribute' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod_with_dot_swift_version('3.2')
+        validator = test_swiftpod_with_dot_swift_version_file('3.2')
         validator.validate
 
         UI.warnings.should.include 'Usage of the `.swift_version` file has been deprecated! Please delete the ' \
@@ -1076,7 +1093,7 @@ module Pod
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
         Specification.any_instance.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
 
-        validator = test_swiftpod_with_dot_swift_version('3.2')
+        validator = test_swiftpod_with_dot_swift_version_file('3.2')
         validator.validate
         validator.results.count.should == 1
 
@@ -1090,7 +1107,7 @@ module Pod
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
         Specification.any_instance.stubs(:swift_versions).returns([Version.new('4.0')])
 
-        validator = test_swiftpod_with_dot_swift_version('4.0')
+        validator = test_swiftpod_with_dot_swift_version_file('4.0')
         validator.validate
         validator.results.count.should == 0
       end
@@ -1099,7 +1116,7 @@ module Pod
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
         Specification.any_instance.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
 
-        validator = test_swiftpod('3.2')
+        validator = test_swiftpod_with_swift_version_parameter('3.2')
         validator.validate
         validator.results.count.should == 1
 
@@ -1112,7 +1129,7 @@ module Pod
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
         Specification.any_instance.stubs(:swift_versions).returns([Version.new('4.0')])
 
-        validator = test_swiftpod('4.0')
+        validator = test_swiftpod_with_swift_version_parameter('4.0')
         validator.validate
         validator.results.count.should == 0
       end
@@ -1120,7 +1137,7 @@ module Pod
       it 'does not warn for Swift if version was set by a dot swift version file' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod_with_dot_swift_version
+        validator = test_swiftpod_with_dot_swift_version_file
         validator.validate
         validator.results.count.should == 0
       end
@@ -1128,7 +1145,7 @@ module Pod
       it 'does not warn for Swift if version was set as a parameter' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
-        validator = test_swiftpod('3.1.0')
+        validator = test_swiftpod_with_swift_version_parameter('3.1.0')
         validator.stubs(:dot_swift_version).returns(nil)
         validator.validate
         validator.results.count.should == 0
@@ -1136,31 +1153,31 @@ module Pod
 
       describe '#derived_swift_version' do
         it 'defaults to Swift 4.0' do
-          validator = test_swiftpod(nil)
+          validator = test_swiftpod_with_swift_version_parameter(nil)
           validator.stubs(:dot_swift_version).returns(nil)
           validator.derived_swift_version.should == '4.0'
         end
 
         it 'uses the Swift version specified by the swift_version attribute in the spec' do
-          validator = test_swiftpod(nil)
+          validator = test_swiftpod_with_swift_version_parameter(nil)
           validator.spec.swift_version = '4.0'
           validator.derived_swift_version.should == '4.0'
         end
 
         it 'allows the user to set the Swift version using a .swift-version file' do
-          validator = test_swiftpod('4.0')
+          validator = test_swiftpod_with_swift_version_parameter('4.0')
           validator.stubs(:dot_swift_version).returns('3.0')
           validator.derived_swift_version.should == '4.0'
         end
 
         it 'checks for dot_swift_version' do
-          validator = test_swiftpod(nil)
+          validator = test_swiftpod_with_swift_version_parameter(nil)
           validator.expects(:dot_swift_version)
           validator.derived_swift_version
         end
 
         it 'uses the result of dot_swift_version if not nil' do
-          validator = test_swiftpod(nil)
+          validator = test_swiftpod_with_swift_version_parameter(nil)
           validator.stubs(:dot_swift_version).returns('1.0')
           validator.derived_swift_version.should == '1.0'
         end
@@ -1168,20 +1185,20 @@ module Pod
 
       describe '#dot_swift_version' do
         it 'looks for a .swift-version file' do
-          validator = test_swiftpod
+          validator = test_validator(stub_swift_podspec)
           Pathname.any_instance.expects(:exist?)
           validator.dot_swift_version
         end
 
         it 'uses the .swift-version file if present' do
-          validator = test_swiftpod
+          validator = test_validator(stub_swift_podspec)
           Pathname.any_instance.stubs(:exist?).returns(true)
           Pathname.any_instance.expects(:read).returns('1.0')
           validator.dot_swift_version.should == '1.0'
         end
 
         it 'strips newlines from .swift-version files' do
-          validator = test_swiftpod
+          validator = test_validator(stub_swift_podspec)
           Pathname.any_instance.stubs(:exist?).returns(true)
           Pathname.any_instance.stubs(:read).returns("2.1\n")
           validator.dot_swift_version.should == '2.1'
@@ -1190,7 +1207,7 @@ module Pod
 
       describe 'Getting the Swift value used by the validator' do
         it 'passes nil when no targets have used Swift' do
-          validator = test_swiftpod
+          validator = test_swiftpod_with_swift_version_parameter
           pod_target = stub(:uses_swift? => true)
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
@@ -1200,7 +1217,7 @@ module Pod
         end
 
         it 'returns the swift_version when a target has used Swift' do
-          validator = test_swiftpod
+          validator = test_swiftpod_with_swift_version_parameter
           pod_target = stub(:uses_swift? => false)
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
@@ -1208,16 +1225,115 @@ module Pod
           validator.uses_swift?.should.be.false
         end
 
-        it 'honors swift version set by the pod target for dependencies' do
-          validator = test_swiftpod
+        it 'honors the swift version DSL by the pod target' do
+          validator = test_swiftpod_with_swift_version_dsl(['3.0', '4.0'])
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration = stub(:build_settings => {})
+          native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
+          pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
+                                             :test_native_targets => [],
+                                             :test_specs_by_native_target => {})
+          pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
+          aggregate_target = stub(:pod_targets => [pod_target])
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          debug_configuration.build_settings['SWIFT_VERSION'].should == '4.0'
+        end
+
+        it 'honors the swift version parameter above DSL and .swift-version file if set' do
+          validator = test_swiftpod_with_swift_version_dsl(['3.0', '4.0'])
+          validator.stubs(:dot_swift_version).returns('4.1')
+          validator.swift_version = '4.2'
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration = stub(:build_settings => {})
+          native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
+          pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
+                                             :test_native_targets => [],
+                                             :test_specs_by_native_target => {})
+          pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
+          aggregate_target = stub(:pod_targets => [pod_target])
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          debug_configuration.build_settings['SWIFT_VERSION'].should == '4.2'
+        end
+
+        it 'does not honor the .swift-version file if the DSL is set' do
+          validator = test_swiftpod_with_swift_version_dsl(['3.0', '4.0'])
+          validator.stubs(:dot_swift_version).returns('4.2')
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration = stub(:build_settings => {})
+          native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
+          pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
+                                             :test_native_targets => [],
+                                             :test_specs_by_native_target => {})
+          pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
+          aggregate_target = stub(:pod_targets => [pod_target])
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          debug_configuration.build_settings['SWIFT_VERSION'].should == '4.0'
+        end
+
+        it 'does not honor the .swift-version file if the swift version parameter is set' do
+          validator = test_swiftpod_with_swift_version_parameter('4.0')
+          validator.stubs(:dot_swift_version).returns('4.2')
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration = stub(:build_settings => {})
+          native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
+          pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
+                                             :test_native_targets => [],
+                                             :test_specs_by_native_target => {})
+          pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
+          aggregate_target = stub(:pod_targets => [pod_target])
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          debug_configuration.build_settings['SWIFT_VERSION'].should == '4.0'
+        end
+
+        it 'honors swift version DSL into test specifications' do
+          test_podspec = stub_swift_podspec
+          validator = test_swiftpod_with_swift_version_dsl(['3.0', '4.2'])
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration = stub(:build_settings => {})
+          test_debug_configuration = stub(:build_settings => {})
+          native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
+          test_native_target = stub(:build_configuration_list => stub(:build_configurations => [test_debug_configuration]))
+          pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target.stubs(:uses_swift_for_spec?).with(test_podspec).returns(true)
+          pod_target_installation = stub(:target => pod_target, :native_target => native_target,
+                                         :test_native_targets => [test_native_target],
+                                         :test_specs_by_native_target => { test_native_target => test_podspec })
+          pod_target_installation_results = { 'PodTarget' => pod_target_installation }
+          aggregate_target = stub(:pod_targets => [pod_target])
+          installer = stub(:pod_targets => [pod_target])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          debug_configuration.build_settings['SWIFT_VERSION'].should == '4.2'
+          test_debug_configuration.build_settings['SWIFT_VERSION'].should == '4.2'
+        end
+
+        it 'honors the swift version set for dependencies ignoring swift version of the target being validated' do
+          validator = test_swiftpod_with_swift_version_parameter('4.0')
           consumer = stub(:platform_name => 'iOS')
           validator.instance_variable_set(:@consumer, consumer)
           debug_configuration_one = stub(:build_settings => {})
           debug_configuration_two = stub(:build_settings => {})
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
-          pod_target_one = stub(:name => 'PodTarget1', :uses_swift? => true, :swift_version => '4.0')
-          pod_target_two = stub(:name => 'PodTarget2', :uses_swift? => true, :swift_version => '3.2')
+          pod_target_one = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target_two = stub(:name => 'Dependency', :uses_swift? => true, :pod_name => 'Dependency', :swift_version => '3.2')
           pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
                                              :test_native_targets => [],
                                              :test_specs_by_native_target => {})
@@ -1226,31 +1342,6 @@ module Pod
                                              :test_specs_by_native_target => {})
           pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
           aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
-          installer = stub(:pod_targets => [pod_target_one, pod_target_two])
-          validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
-          debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
-          debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
-        end
-
-        it 'honors swift version set by the pod target for dependencies that are not part of the aggregate target' do
-          validator = test_swiftpod
-          consumer = stub(:platform_name => 'iOS')
-          validator.instance_variable_set(:@consumer, consumer)
-          debug_configuration_one = stub(:build_settings => {})
-          debug_configuration_two = stub(:build_settings => {})
-          native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
-          native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
-          pod_target_one = stub(:name => 'PodTarget1', :uses_swift? => true, :swift_version => '4.0')
-          pod_target_two = stub(:name => 'PodTarget2', :uses_swift? => true, :swift_version => '3.2')
-          pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
-          pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
-          pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
-          aggregate_target = stub(:pod_targets => [pod_target_one])
           installer = stub(:pod_targets => [pod_target_one, pod_target_two])
           validator.instance_variable_set(:@installer, installer)
           validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
