@@ -92,6 +92,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#8451](https://github.com/CocoaPods/CocoaPods/issues/8451)
 
+* Fixed test host delegate methods to not warn about unused arguments.
+  [Jacek Suliga](https://github.com/jmkk)
 
 ## 1.6.0 (2019-02-07)
 
