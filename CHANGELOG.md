@@ -8,17 +8,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
-
-##### Bug Fixes
-
-* None.  
-
-
-## 1.6.0 (2019-02-07)
-
-##### Enhancements
-
 * Set the path of development pod groups to the top-most shared directory  
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
@@ -102,6 +91,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Treat `USER_HEADER_SEARCH_PATHS` as a plural build setting.  
   [Samuel Giddins](https://github.com/segiddins)
   [#8451](https://github.com/CocoaPods/CocoaPods/issues/8451)
+
+
+## 1.6.0 (2019-02-07)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
 
 
 ## 1.6.0.rc.2 (2019-01-29)
