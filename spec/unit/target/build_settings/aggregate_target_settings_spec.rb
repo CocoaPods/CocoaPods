@@ -713,7 +713,7 @@ module Pod
               @target.pod_targets.each { |pt| pt.spec_consumers.each { |sc| sc.stubs(:frameworks => %w(UIKit), :libraries => %w(z c++)) } }
 
               @xcconfig = @generator.generate
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"c++" -l"z" -framework "UIKit"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -no_compact_unwind -l"c++" -l"z" -framework "UIKit"'
             end
 
             it 'should not doubly link static libraries' do
