@@ -78,16 +78,16 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-no_compact_unwind')
           end
 
-          it 'does include the libraries for the specifications' do
+          it 'does include the system libraries for the specifications' do
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-l"xml2"')
           end
 
-          it 'should not include the frameworks of the specifications' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-framework "QuartzCore"')
+          it 'does include the system frameworks of the specifications' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "QuartzCore"')
           end
 
-          it 'does not include the weak-frameworks of the specifications' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-weak_framework "iAd"')
+          it 'does include the system weak frameworks of the specifications' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework "iAd"')
           end
 
           it 'does not include the vendored dynamic frameworks for dependency pods of the specification' do
@@ -221,7 +221,7 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.other_ldflags.should.
-              be == %w(-l"BananaStaticLib" -l"xml2" -framework "BananaFramework")
+              be == %w(-l"BananaStaticLib" -l"xml2" -framework "BananaFramework" -weak_framework "iAd")
           end
         end
 

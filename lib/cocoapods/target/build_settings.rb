@@ -513,11 +513,11 @@ module Pod
           return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
 
           frameworks = []
+          frameworks.concat consumer_frameworks
           if test_xcconfig? || (target.should_build? && target.requires_frameworks? && !target.static_framework?)
             frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
           end
           if test_xcconfig?
-            frameworks.concat consumer_frameworks
             frameworks.concat vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
             frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.frameworks_to_import }
           end
@@ -541,8 +541,9 @@ module Pod
         end
 
         # @return [Array<String>]
-        define_build_settings_method :weak_frameworks, :memoized => true do
-          return [] unless test_xcconfig?
+        define_build_settings_method :weak_frameworks, :memoized => true, :sorted => true, :uniqued => true do
+          return [] if (!target.requires_frameworks? || target.static_framework?) && !test_xcconfig?
+
           weak_frameworks = spec_consumers.flat_map(&:weak_frameworks)
           weak_frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.weak_frameworks_to_import }
           weak_frameworks
