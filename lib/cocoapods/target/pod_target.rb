@@ -360,6 +360,7 @@ module Pod
       @resource_paths ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
           resource_paths = file_accessor.resources.map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project_path.dirname)}" }
+          resource_paths = [] if file_accessor.spec.app_specification?
           prefix = Pod::Target::BuildSettings::CONFIGURATION_BUILD_DIR_VARIABLE
           prefix = configuration_build_dir unless file_accessor.spec.test_specification?
           resource_bundle_paths = file_accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
@@ -717,6 +718,18 @@ module Pod
         header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
       header_search_paths.uniq
+    end
+
+    # @param  [Specification] spec
+    #
+    # @return [BuildSettings::PodTargetSettings] The build settings for the given spec
+    #
+    def build_settings_for_spec(spec)
+      case spec.spec_type
+      when :test then test_spec_build_settings[spec.name]
+      when :app  then app_spec_build_settings[spec.name]
+      else            build_settings
+      end || raise(ArgumentError, "No build settings for #{spec}")
     end
 
     protected

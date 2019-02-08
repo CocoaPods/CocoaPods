@@ -145,7 +145,7 @@ module Pod
               end
             end
 
-            describe 'test target generation' do
+            describe 'non-library target generation' do
               before do
                 config.sandbox.prepare
                 @podfile = Podfile.new do
@@ -198,9 +198,20 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
+                app_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
+                                                              @watermelon_spec.app_specs.first.consumer(:ios))
+                @project.add_pod_group('WatermelonLibApp', fixture('watermelon-lib'))
+                group = @project.group_for_spec('WatermelonLibApp')
+                app_file_accessor.source_files.each do |file|
+                  @project.add_file_reference(file, group)
+                end
+                app_file_accessor.resources.each do |resource|
+                  @project.add_file_reference(resource, group)
+                end
+
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
-                file_accessors = [file_accessor, unit_test_file_accessor, snapshot_test_file_accessor]
+                file_accessors = [file_accessor, unit_test_file_accessor, snapshot_test_file_accessor, app_file_accessor]
                 @watermelon_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
                                                        Platform.new(:ios, '6.0'), all_specs, [@target_definition],
                                                        file_accessors)
@@ -212,8 +223,9 @@ module Pod
               end
 
               it 'adds the native test target to the project for iOS targets with correct build settings' do
+                @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
                 installation_result = @installer.install!
-                @project.targets.count.should == 5
+                @project.targets.count.should == 7
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -244,12 +256,31 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                app_native_target = @project.targets[5]
+                app_native_target.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.app.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
+                  bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'App/WatermelonLib-App-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
+                end
+                app_native_target.symbol_type.should == :application
                 installation_result.test_native_targets.count.should == 2
+                installation_result.app_native_targets.count.should == 1
               end
 
               it 'adds the native test target to the project for OSX targets with correct build settings' do
+                @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
                 installation_result = @installer2.install!
-                @project.targets.count.should == 5
+                @project.targets.count.should == 7
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -280,7 +311,24 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                app_native_target = @project.targets[5]
+                app_native_target.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.app.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
+                  bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
+                  bc.build_settings['INFOPLIST_FILE'].should == 'App/WatermelonLib-App-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
+                end
+                app_native_target.symbol_type.should == :application
                 installation_result.test_native_targets.count.should == 2
+                installation_result.app_native_targets.count.should == 1
               end
 
               it 'raises when a test spec has no source files' do
@@ -288,6 +336,13 @@ module Pod
                 e = ->() { @installer.install! }.should.raise Informative
                 e.message.should.
                     include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-Unit-Tests` target in Xcode would have no sources to compile.'
+              end
+
+              it 'raises when an app spec has no source files' do
+                @watermelon_pod_target.app_spec_consumers.first.stubs(:source_files).returns([])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.
+                    include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-App` target in Xcode would have no sources to compile.'
               end
 
               it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
@@ -305,7 +360,7 @@ module Pod
 
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
-                @project.targets.count.should == 5
+                @project.targets.count.should == 7
                 native_target = @project.targets[0]
                 native_target.source_build_phase.files.count.should == 2
                 native_target.source_build_phase.files.map(&:display_name).sort.should == [
@@ -323,6 +378,11 @@ module Pod
                 snapshot_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
                   'WatermelonSnapshotTests.m',
                 ]
+                app_native_target = @project.targets[5]
+                app_native_target.source_build_phase.files.count.should == 1
+                app_native_target.source_build_phase.files.map(&:display_name).sort.should == [
+                  'main.swift',
+                ]
               end
 
               it 'adds xcconfig file reference for test native targets' do
@@ -331,6 +391,13 @@ module Pod
                 group = @project['Pods/WatermelonLib/Support Files']
                 group.children.map(&:display_name).sort.should.include 'WatermelonLib.unit-tests.xcconfig'
                 group.children.map(&:display_name).sort.should.include 'WatermelonLib.unit-snapshottests.xcconfig'
+              end
+
+              it 'adds xcconfig file reference for app native targets' do
+                @installer.install!
+                @project.support_files_group
+                group = @project['Pods/WatermelonLib/Support Files']
+                group.children.map(&:display_name).sort.should.include 'WatermelonLib.app.xcconfig'
               end
 
               it 'does not add test header imports to umbrella header' do
@@ -395,6 +462,20 @@ module Pod
                 end
               end
 
+              it 'creates embed frameworks script for app target' do
+                @watermelon_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                @installer.install!
+                script_path = @watermelon_pod_target.embed_frameworks_script_path_for_spec(@watermelon_pod_target.app_specs.first)
+                script = script_path.read
+                @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
+        fi
+                  eos
+                end
+              end
+
               it 'adds the resources bundles for to the copy resources script for test target' do
                 @installer.install!
                 script_path = @watermelon_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.test_specs.first)
@@ -406,6 +487,45 @@ module Pod
         fi
                   eos
                 end
+              end
+
+              it 'adds the resources bundles for to the copy resources script for app target' do
+                @installer.install!
+                script_path = @watermelon_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.app_specs.first)
+                script = script_path.read
+                @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_resource "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle"
+        fi
+                  eos
+                end
+              end
+
+              it 'allows pod target xcconfigs to override values normally set directly on the target' do
+                @watermelon_pod_target.root_spec.pod_target_xcconfig = { 'PRODUCT_MODULE_NAME' => 'FOOBAR' }
+                @watermelon_pod_target.test_specs.each { |s| s.pod_target_xcconfig = { 'PRODUCT_NAME' => 'FOOBAR_TEST' } }
+                @installer.install!
+
+                library_target = @project.targets.find { |t| t.name == 'WatermelonLib' }
+                library_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_MODULE_NAME'] }.uniq.should == [nil]
+                library_target.resolved_build_setting('PRODUCT_MODULE_NAME', true).values.uniq.should == %w(FOOBAR)
+
+                unit_test_target = @project.targets.find { |t| t.name == 'WatermelonLib-Unit-Tests' }
+                unit_test_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                unit_test_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(FOOBAR_TEST)
+
+                test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
+                test_resource_bundle_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                test_resource_bundle_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(FOOBAR_TEST)
+
+                test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
+                test_resource_bundle_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                test_resource_bundle_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(FOOBAR_TEST)
+
+                app_target = @project.targets.find { |t| t.name == 'WatermelonLib-App' }
+                app_target.build_configurations.map { |bc| bc.build_settings['PRODUCT_NAME'] }.uniq.should == [nil]
+                app_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(ExampleApp)
               end
 
               it 'adds swift compatibility header phase for swift static libraries' do
@@ -730,6 +850,7 @@ module Pod
                   @spec.resource_bundles = { 'banana_bundle' => ['Resources/**/*'] }
                   @spec.module_map = nil
                   @pod_target.stubs(:uses_swift?).returns(true)
+                  @pod_target.stubs(:uses_swift_for_spec?).returns(true)
                   @pod_target.stubs(:swift_version).returns('3.2')
                   @installer.install!
                   @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-SampleProject-banana_bundle' }
@@ -738,11 +859,12 @@ module Pod
                   end
                 end
 
-                it 'does not set the Swift version build setting when resources bundle contains sources and target has Swift' do
+                it 'does not set the Swift version build setting when resources bundle does not contain sources and target has Swift' do
                   @spec.resource_bundles = { 'banana_bundle' => ['Resources/**/*.png'] }
                   @spec.module_map = nil
                   @pod_target.stubs(:uses_swift?).returns(true)
-                  @pod_target.stubs(:swift_version).returns('3.2')
+                  @pod_target.stubs(:uses_swift_for_spec?).returns(true)
+                  @pod_target.stubs(:swift_version).returns('4.2')
                   @installer.install!
                   @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-SampleProject-banana_bundle' }
                   @bundle_target.build_configurations.each do |bc|

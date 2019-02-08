@@ -132,6 +132,36 @@ module Pod
 
           private
 
+          # Adds the target for the library to the Pods project with the
+          # appropriate build configurations.
+          #
+          # @note   Overrides the superclass implementation to remove settings that are set in the pod target xcconfig
+          #
+          # @return [PBXNativeTarget] the native target that was added.
+          #
+          def add_target
+            super.tap do |native_target|
+              remove_pod_target_xcconfig_overrides_from_target(target.build_settings, native_target)
+            end
+          end
+
+          # Removes overrides of the `pod_target_xcconfig` settings from the target's
+          # build configurations.
+          #
+          # @return [Void]
+          #
+          # @param [Target::BuildSettings] build_settings
+          #
+          # @param [PBXNativeTarget] native_target
+          #
+          def remove_pod_target_xcconfig_overrides_from_target(build_settings, native_target)
+            native_target.build_configurations.each do |configuration|
+              build_settings.merged_pod_target_xcconfigs.each_key do |setting|
+                configuration.build_settings.delete(setting)
+              end
+            end
+          end
+
           # @param [Array<Specification>] specs
           #        the specs to check against whether `.pch` generation should be skipped or not.
           #
@@ -327,6 +357,8 @@ module Pod
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
 
+              remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(test_spec), test_native_target)
+
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
               create_test_target_embed_frameworks_script(test_spec)
               create_test_target_copy_resources_script(test_spec)
@@ -385,6 +417,7 @@ module Pod
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false).install!
 
+              app_native_target.product_reference.name = app_target_label
               target.user_build_configurations.each do |bc_name, type|
                 app_native_target.add_build_configuration(bc_name, type)
               end
@@ -416,10 +449,30 @@ module Pod
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
 
+              remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(app_spec), app_native_target)
+
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
+              add_resources_to_target(target.file_accessors.find { |fa| fa.spec == app_spec }.resources, app_native_target)
 
               app_native_target
+            end
+          end
+
+          # Adds the resources to the compile resources phase of the target.
+          #
+          # @param  [Array<Pathname>] paths the paths to add to the target.
+          #
+          # @param  [PBXNativeTarget] target the target resources are added to.
+          #
+          # @return [Boolean] whether any compile phase references were added.
+          #
+          def add_resources_to_target(paths, target)
+            filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
+              # Resource bundles are only meant to have resources, so install everything
+              # into the resources phase. See note in filter_resource_file_references.
+              target.add_resources(resource_phase_refs + compile_phase_refs)
+              !compile_phase_refs.empty?
             end
           end
 
@@ -431,7 +484,7 @@ module Pod
           # @param  [Array<Sandbox::FileAccessor>] file_accessors
           #         the file accessors list to generate resource bundles for.
           #
-          # @return [Array<PBXNativeTarget] the resource bundle native targets created.
+          # @return [Array<PBXNativeTarget>] the resource bundle native targets created.
           #
           def add_resources_bundle_targets(file_accessors)
             file_accessors.each_with_object({}) do |file_accessor, hash|
@@ -443,13 +496,7 @@ module Pod
                   bundle_product.name = bundle_file_name
                 end
 
-                contains_compile_phase_refs = false
-                filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
-                  # Resource bundles are only meant to have resources, so install everything
-                  # into the resources phase. See note in filter_resource_file_references.
-                  resource_bundle_target.add_resources(compile_phase_refs + resource_phase_refs)
-                  contains_compile_phase_refs = !compile_phase_refs.empty?
-                end
+                contains_compile_phase_refs = add_resources_to_target(paths, resource_bundle_target)
 
                 target.user_build_configurations.each do |bc_name, type|
                   resource_bundle_target.add_build_configuration(bc_name, type)
@@ -473,7 +520,7 @@ module Pod
 
                   # Set the `SWIFT_VERSION` build setting for resource bundles that could have resources that get
                   # compiled such as an `xcdatamodeld` file which has 'Swift' as its code generation language.
-                  if contains_compile_phase_refs && target.uses_swift?
+                  if contains_compile_phase_refs && file_accessors.any? { |fa| target.uses_swift_for_spec?(fa.spec) }
                     configuration.build_settings['SWIFT_VERSION'] = target.swift_version
                   end
 
@@ -488,6 +535,8 @@ module Pod
                     configuration.build_settings['TARGETED_DEVICE_FAMILY'] = family
                   end
                 end
+
+                remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(file_accessor.spec), resource_bundle_target)
 
                 resource_bundle_target
               end
@@ -528,19 +577,18 @@ module Pod
               spec_consumer = test_spec.consumer(target.platform)
               test_type = spec_consumer.test_type
               path = target.xcconfig_path("#{test_type.capitalize}-#{target.subspec_label(test_spec)}")
-              test_spec_build_settings = target.test_spec_build_settings[test_spec.name]
+              test_spec_build_settings = target.build_settings_for_spec(test_spec)
               update_changed_file(test_spec_build_settings, path)
               test_xcconfig_file_ref = add_file_to_support_group(path)
 
               test_native_target = test_native_target_from_spec(spec_consumer.spec, test_native_targets)
               test_native_target.build_configurations.each do |test_native_target_bc|
                 test_target_swift_debug_hack(test_spec, test_native_target_bc)
-                test_native_target_bc.base_configuration_reference = test_xcconfig_file_ref
               end
 
               # also apply the private config to resource bundle test targets related to this test spec.
               scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
-              apply_xcconfig_file_ref_to_targets(scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
+              apply_xcconfig_file_ref_to_targets([test_native_target] + scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
             end
           end
 
@@ -602,7 +650,7 @@ module Pod
             target.app_specs.each do |app_spec|
               spec_consumer = app_spec.consumer(target.platform)
               path = target.xcconfig_path(target.subspec_label(app_spec))
-              update_changed_file(Target::BuildSettings::PodTargetSettings.new(target, app_spec), path)
+              update_changed_file(target.build_settings_for_spec(app_spec), path)
               app_xcconfig_file_ref = add_file_to_support_group(path)
 
               app_native_target = app_native_target_from_spec(spec_consumer.spec, app_native_targets)

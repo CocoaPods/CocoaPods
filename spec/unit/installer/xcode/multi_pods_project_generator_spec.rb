@@ -270,12 +270,16 @@ module Pod
               'AppHost-WatermelonLib-iOS-Unit-Tests',
               'AppHost-WatermelonLib-macOS-Unit-Tests',
               'WatermelonLib-iOS',
+              'WatermelonLib-iOS-App',
               'WatermelonLib-iOS-Unit-SnapshotTests',
               'WatermelonLib-iOS-Unit-Tests',
+              'WatermelonLib-iOS-WatermelonLibExampleAppResources',
               'WatermelonLib-iOS-WatermelonLibTestResources',
               'WatermelonLib-macOS',
+              'WatermelonLib-macOS-App',
               'WatermelonLib-macOS-Unit-SnapshotTests',
               'WatermelonLib-macOS-Unit-Tests',
+              'WatermelonLib-macOS-WatermelonLibExampleAppResources',
               'WatermelonLib-macOS-WatermelonLibTestResources',
             ]
 

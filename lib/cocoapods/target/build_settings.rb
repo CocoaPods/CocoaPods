@@ -20,9 +20,11 @@ module Pod
         GCC_PREPROCESSOR_DEFINITIONS
         GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS
         HEADER_SEARCH_PATHS
+        INCLUDED_SOURCE_FILE_NAMES
         INFOPLIST_PREPROCESSOR_DEFINITIONS
         LD_RUNPATH_SEARCH_PATHS
         LIBRARY_SEARCH_PATHS
+        LOCALIZED_STRING_MACRO_NAMES
         OTHER_CFLAGS
         OTHER_CPLUSPLUSFLAGS
         OTHER_LDFLAGS
@@ -31,6 +33,8 @@ module Pod
         SECTORDER_FLAGS
         SWIFT_ACTIVE_COMPILATION_CONDITIONS
         SWIFT_INCLUDE_PATHS
+        SYSTEM_FRAMEWORK_SEARCH_PATHS
+        SYSTEM_HEADER_SEARCH_PATHS
         USER_HEADER_SEARCH_PATHS
         WARNING_CFLAGS
         WARNING_LDFLAGS
@@ -425,6 +429,22 @@ module Pod
         end
       end
 
+      # Merges the spec-defined xcconfig into the derived xcconfig,
+      # overriding any singular settings and merging plural settings.
+      #
+      # @param  [Hash<String,String>] spec_xcconfig_hash the merged xcconfig defined in the spec.
+      #
+      # @param  [Xcodeproj::Config] xcconfig the config to merge into.
+      #
+      # @return [Xcodeproj::Config] the merged config.
+      #
+      def merge_spec_xcconfig_into_xcconfig(spec_xcconfig_hash, xcconfig)
+        plural_configs, singlular_configs = spec_xcconfig_hash.partition { |k, _v| PLURAL_SETTINGS.include?(k) }.map { |a| Hash[a] }
+        xcconfig.attributes.merge!(singlular_configs)
+        xcconfig.merge!(plural_configs)
+        xcconfig
+      end
+
       # Filters out pod targets whose `specs` are a subset of
       # another target's.
       #
@@ -503,7 +523,7 @@ module Pod
         # @return [Xcodeproj::Xconfig]
         define_build_settings_method :xcconfig, :memoized => true do
           xcconfig = super()
-          xcconfig.merge(merged_pod_target_xcconfigs)
+          merge_spec_xcconfig_into_xcconfig(merged_pod_target_xcconfigs, xcconfig)
         end
 
         #-------------------------------------------------------------------------#
@@ -911,7 +931,7 @@ module Pod
         # @return [Xcodeproj::Config] xcconfig
         define_build_settings_method :xcconfig, :memoized => true do
           xcconfig = super()
-          xcconfig.merge(merged_user_target_xcconfigs)
+          merge_spec_xcconfig_into_xcconfig(merged_user_target_xcconfigs, xcconfig)
         end
 
         #-------------------------------------------------------------------------#

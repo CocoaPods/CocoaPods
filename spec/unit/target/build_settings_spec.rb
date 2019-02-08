@@ -96,6 +96,26 @@ module Pod
 
       #---------------------------------------------------------------------#
 
+      describe '#merge_spec_xcconfig_into_xcconfig' do
+        before do
+          @build_settings = BuildSettings.new(stub('Target'))
+          @xcconfig = Xcodeproj::Config.new
+        end
+
+        it 'merges into an empty xcconfig' do
+          @build_settings.send(:merge_spec_xcconfig_into_xcconfig, { 'A' => 'A', 'OTHER_LDFLAGS' => '-f Frame', 'EMPTY' => '' }, @xcconfig)
+          @xcconfig.to_hash.should == { 'A' => 'A', 'OTHER_LDFLAGS' => '-f Frame', 'EMPTY' => '' }
+        end
+
+        it 'merges into an xcconfig with overlapping settings' do
+          @xcconfig.merge!('A' => 'NOT A', 'OTHER_LDFLAGS' => '-lLib', 'B' => 'B', 'FRAMEWORK_SEARCH_PATHS' => 'FWSP')
+          @build_settings.send(:merge_spec_xcconfig_into_xcconfig, { 'A' => 'A', 'OTHER_LDFLAGS' => %w(-f Frame), 'EMPTY' => [] }, @xcconfig)
+          @xcconfig.to_hash.should == { 'A' => 'A', 'B' => 'B', 'FRAMEWORK_SEARCH_PATHS' => 'FWSP', 'OTHER_LDFLAGS' => '-f Frame -l"Lib"', 'EMPTY' => [] }
+        end
+      end
+
+      #---------------------------------------------------------------------#
+
       describe 'concerning settings for file accessors' do
         it 'does not propagate framework or libraries from a test specification to an aggregate target' do
           target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
