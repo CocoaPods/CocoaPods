@@ -42,6 +42,7 @@ module Pod
           #
           def install!
             refresh_file_accessors
+            prepare_pod_groups
             add_source_files_references
             add_frameworks_bundles
             add_vendored_libraries
@@ -65,6 +66,19 @@ module Pod
           #
           def refresh_file_accessors
             file_accessors.map(&:path_list).uniq.each(&:read_file_system)
+          end
+
+          # Prepares the main groups to which all files will be added for the respective target
+          #
+          def prepare_pod_groups
+            file_accessors.each do |file_accessor|
+              pod_name = file_accessor.spec.name
+              next unless sandbox.local?(pod_name)
+              root_name = Specification.root_name(pod_name)
+              path = file_accessor.root
+              group = pods_project.group_for_spec(root_name)
+              group.set_path(path) unless group.path == path
+            end
           end
 
           # Adds the source files of the Pods to the Pods project.
@@ -199,11 +213,11 @@ module Pod
               next if paths.empty?
 
               pod_name = file_accessor.spec.name
-              preserve_pod_file_structure_flag = (sandbox.local?(pod_name) || preserve_pod_file_structure)
+              preserve_pod_file_structure_flag = (sandbox.local?(pod_name) || preserve_pod_file_structure) && reflect_file_system_structure
               base_path = preserve_pod_file_structure_flag ? common_path(paths) : nil
               group = pods_project.group_for_spec(pod_name, group_key)
               paths.each do |path|
-                pods_project.add_file_reference(path, group, preserve_pod_file_structure_flag && reflect_file_system_structure, base_path)
+                pods_project.add_file_reference(path, group, preserve_pod_file_structure_flag, base_path)
               end
             end
           end
