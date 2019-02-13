@@ -77,14 +77,13 @@ module Pod
                       { :verbose => true }
                     else
                       {}
-          end
+                    end
 
           config.with_changes(changes) do
             Dir.chdir(config.repos_dir) do
-              command = ['clone', @url, @name]
-              if @progress
-                command << '--progress'
-              end
+              command = ['clone', @url]
+              command << '--progress' if @progress
+              command << '--' << @name
               git!(command)
             end
           end
