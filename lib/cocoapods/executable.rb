@@ -136,17 +136,17 @@ module Pod
     #         The desired captured output from the command, and the status from
     #         running the command.
     #
-    def self.capture_command(executable, command, capture: :merge, **kwargs)
+    def self.capture_command(executable, command, capture: :merge, env: {}, **kwargs)
       bin = which!(executable)
 
       require 'open3'
       command = command.map(&:to_s)
       case capture
-      when :merge then Open3.capture2e(bin, *command, **kwargs)
-      when :both then Open3.capture3(bin, *command, **kwargs)
-      when :out then Open3.capture3(bin, *command, **kwargs).values_at(0, -1)
-      when :err then Open3.capture3(bin, *command, **kwargs).drop(1)
-      when :none then Open3.capture3(bin, *command, **kwargs).last
+      when :merge then Open3.capture2e(env, [bin, bin], *command, **kwargs)
+      when :both then Open3.capture3(env, [bin, bin], *command, **kwargs)
+      when :out then Open3.capture3(env, [bin, bin], *command, **kwargs).values_at(0, -1)
+      when :err then Open3.capture3(env, [bin, bin], *command, **kwargs).drop(1)
+      when :none then Open3.capture3(env, [bin, bin], *command, **kwargs).last
       end
     end
 
