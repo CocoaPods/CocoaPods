@@ -19,10 +19,10 @@ module SpecHelper
       path = repo_path(name)
       path.mkpath
       Dir.chdir(path) do
-        `git init`
+        Pod::Executable.capture_command!('git', %w(init))
         repo_make_readme_change(name, 'Added')
-        `git add .`
-        `git commit -m "Initialized."`
+        Pod::Executable.capture_command!('git', %w(add .))
+        Pod::Executable.capture_command!('git', %w(commit -nm Initialized.))
       end
       path
     end
@@ -30,7 +30,7 @@ module SpecHelper
     # Clones a repo to the given name.
     #
     def repo_clone(from_name, to_name)
-      Dir.chdir(tmp_repos_path) { `git clone #{from_name} #{to_name} 2>&1 > /dev/null` }
+      Dir.chdir(tmp_repos_path) { Pod::Executable.capture_command!('git', %W(clone #{from_name} -- #{to_name})) }
       repo_path(to_name)
     end
 

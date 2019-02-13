@@ -107,7 +107,7 @@ module Pod
         # specs to the master repo.
         #
         def check_if_master_repo
-          remotes = `git -C "#{repo_dir}" remote -v 2>&1`
+          remotes, = Executable.capture_command('git', %w(remote --verbose), :capture => :merge, :chdir => repo_dir)
           master_repo_urls = [
             'git@github.com:CocoaPods/Specs.git',
             'https://github.com/CocoaPods/Specs.git',
@@ -160,7 +160,8 @@ module Pod
         # @return [void]
         #
         def check_repo_status
-          clean = `git -C "#{repo_dir}" status --porcelain  2>&1` == ''
+          porcelain_status, = Executable.capture_command('git', %w(status --porcelain), :capture => :merge, :chdir => repo_dir)
+          clean = porcelain_status == ''
           raise Informative, "The repo `#{@repo}` at #{UI.path repo_dir} is not clean" unless clean
         end
 
@@ -170,7 +171,7 @@ module Pod
         #
         def update_repo
           UI.puts "Updating the `#{@repo}' repo\n".yellow
-          UI.puts `git -C "#{repo_dir}" pull 2>&1`
+          git!(%W(-C #{repo_dir} pull))
         end
 
         # Commits the podspecs to the source, which should be a git repo.
@@ -226,7 +227,7 @@ module Pod
         #
         def push_repo
           UI.puts "\nPushing the `#{@repo}' repo\n".yellow
-          repo_git('-C', repo_dir, 'push', 'origin', 'master')
+          repo_git('push', 'origin', 'master')
         end
 
         #---------------------------------------------------------------------#

@@ -24,10 +24,10 @@ module Pod
       upstream = SpecHelper.temporary_directory + 'upstream'
       FileUtils.cp_r(test_repo_path, upstream)
       Dir.chdir(test_repo_path) do
-        `git remote add origin #{upstream}`
-        `git remote -v`
-        `git fetch -q`
-        `git branch --set-upstream-to=origin/master master`
+        Pod::Executable.capture_command!('git', %W(remote add origin #{upstream}))
+        Pod::Executable.capture_command!('git', %w(remote -v))
+        Pod::Executable.capture_command!('git', %w(fetch -q))
+        Pod::Executable.capture_command!('git', %w(branch --set-upstream-to=origin/master master))
       end
       config.sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
       lambda { command('repo', 'update').run }.should.not.raise
