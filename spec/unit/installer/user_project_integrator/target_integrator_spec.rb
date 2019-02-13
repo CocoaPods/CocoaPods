@@ -15,7 +15,8 @@ module Pod
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.abstract = false
         user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
-        @pod_bundle = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, target_definition, project_path.dirname, @project, [@target.uuid], {})
+        @pod_bundle = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios,
+                                          target_definition, project_path.dirname, @project, [@target.uuid], {})
         @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
         @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [Target::FrameworkPaths.new('${PODS_BUILD_DIR}/Lib/Lib.framework')])
         configuration = Xcodeproj::Config.new(
@@ -25,9 +26,7 @@ module Pod
         @pod_bundle.xcconfigs['Release'] = configuration
 
         @target_integrator = TargetIntegrator.new(@pod_bundle)
-        @target_integrator.private_methods.grep(/^update_to_cocoapods_/).each do |method|
-          @target_integrator.stubs(method)
-        end
+
         @phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX
         @user_phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::USER_BUILD_PHASE_PREFIX
         @embed_framework_phase_name = @phase_prefix +
@@ -61,6 +60,32 @@ module Pod
           phase = target.frameworks_build_phase
           build_file = phase.files.find { |f| f.file_ref.path == 'libPods.a' }
           build_file.should.not.be.nil
+        end
+
+        it 'deletes old product type references if the product type has changed' do
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.frameworks_build_phase
+          phase.files.find { |f| f.file_ref.path == 'libPods.a' }.should.not.be.nil
+          phase.files.find { |f| f.file_ref.path == 'Pods.framework' }.should.be.nil
+          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @target_integrator.integrate!
+          phase.files.find { |f| f.file_ref.path == 'libPods.a' }.should.be.nil
+          phase.files.find { |f| f.file_ref.path == 'Pods.framework' }.should.not.be.nil
+        end
+
+        it 'cleans up linked libraries and frameworks from the frameworks build phase' do
+          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.frameworks_build_phase
+          phase.files.find { |f| f.file_ref.path == 'Pods.framework' }.should.not.be.nil
+          phase.files.find { |f| f.file_ref.path == 'Pods-Something.framework' }.should.be.nil
+          @pod_bundle.stubs(:product_name => 'Pods-Something.framework')
+          @pod_bundle.stubs(:product_basename => 'Pods-Something')
+          @target_integrator.integrate!
+          phase.files.find { |f| f.file_ref.path == 'Pods.framework' }.should.be.nil
+          phase.files.find { |f| f.file_ref.path == 'Pods-Something.framework' }.should.not.be.nil
         end
 
         it 'adds references to the Pods static framework to the Frameworks group' do

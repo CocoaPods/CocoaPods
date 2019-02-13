@@ -373,22 +373,25 @@ module Pod
           frameworks = user_project.frameworks_group
           native_targets.each do |native_target|
             build_phase = native_target.frameworks_build_phase
+            product_name = target.product_name
 
-            # Find and delete possible reference for the other product type
-            old_product_name = target.build_as_framework? ? target.static_library_name : target.framework_name
-            old_product_ref = frameworks.files.find { |f| f.path == old_product_name }
-            if old_product_ref.present?
-              UI.message("Removing old Pod product reference #{old_product_name} from project.")
-              build_phase.remove_file_reference(old_product_ref)
-              frameworks.remove_reference(old_product_ref)
+            # Delete previously integrated references.
+            product_build_files = build_phase.files.select do |build_file|
+              build_file.display_name =~ Pod::Deintegrator::FRAMEWORK_NAMES
+            end
+
+            product_build_files.each do |product_file|
+              next unless product_name != product_file.display_name
+              UI.message("Removing old product reference `#{product_file.display_name}` from project.")
+              frameworks.remove_reference(product_file.file_ref)
+              build_phase.remove_build_file(product_file)
             end
 
             # Find or create and add a reference for the current product type
-            target_basename = target.product_basename
-            new_product_ref = frameworks.files.find { |f| f.path == target.product_name } ||
-              frameworks.new_product_ref_for_target(target_basename, target.product_type)
+            new_product_ref = frameworks.files.find { |f| f.path == product_name } ||
+                frameworks.new_product_ref_for_target(target.product_basename, target.product_type)
             build_phase.build_file(new_product_ref) ||
-              build_phase.add_file_reference(new_product_ref, true)
+                build_phase.add_file_reference(new_product_ref, true)
           end
         end
 
