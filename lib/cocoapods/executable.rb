@@ -150,6 +150,21 @@ module Pod
       end
     end
 
+    # (see Executable.capture_command)
+    #
+    # @raise  If running the command fails
+    #
+    def self.capture_command!(executable, command, **kwargs)
+      capture_command(executable, command, **kwargs).tap do |result|
+        result = Array(result)
+        status = result.last
+        unless status.success?
+          output = result[0..-2].join
+          raise Informative, "#{bin} #{command.join(' ')}\n\n#{output}".strip
+        end
+      end
+    end
+
     private
 
     def self.popen3(bin, command, stdout, stderr)
