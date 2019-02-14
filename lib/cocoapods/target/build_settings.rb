@@ -1093,7 +1093,8 @@ module Pod
         # @return [Hash{String,Hash{Target,String}]
         #
         def user_target_xcconfig_values_by_consumer_by_key
-          pod_targets.each_with_object({}) do |target, hash|
+          targets = (pod_targets + target.search_paths_aggregate_targets.flat_map(&:pod_targets)).uniq
+          targets.each_with_object({}) do |target, hash|
             target.spec_consumers.each do |spec_consumer|
               spec_consumer.user_target_xcconfig.each do |k, v|
                 # TODO: Need to decide how we are going to ensure settings like these
