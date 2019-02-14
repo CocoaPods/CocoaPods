@@ -46,11 +46,10 @@ module Pod
         #
         def print_source(source)
           if source.git?
-            Dir.chdir(source.repo) do
-              branch_name = `git name-rev --name-only HEAD 2>/dev/null`.strip
-              branch_name = 'unknown' if branch_name.empty?
-              UI.puts "- Type: git (#{branch_name})"
-            end
+            branch_name, = Executable.capture_command('git', %w(name-rev --name-only HEAD), :capture => :out, :chdir => source.repo)
+            branch_name.strip!
+            branch_name = 'unknown' if branch_name.empty?
+            UI.puts "- Type: git (#{branch_name})"
           else
             UI.puts "- Type: #{source.type}"
           end

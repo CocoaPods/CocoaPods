@@ -92,6 +92,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
   [#8451](https://github.com/CocoaPods/CocoaPods/issues/8451)
 
+* Trying to add a spec repo with a `file://` URL on Ruby 2.6 won't fail with a
+  a git unknown option error.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.6.0 (2019-02-07)
 

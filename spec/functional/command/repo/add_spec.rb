@@ -17,6 +17,13 @@ module Pod
       end
     end
 
+    it 'adds a spec-repo with a name that starts with a -' do
+      run_command('repo', 'add', '-tmp', test_repo_path)
+      Dir.chdir(config.repos_dir + '-tmp') do
+        `git config --get remote.origin.url`.chomp.should == test_repo_path.to_s
+      end
+    end
+
     it 'adds a spec-repo with a specified branch' do
       repo1 = repo_make('repo1')
       Dir.chdir(repo1) do

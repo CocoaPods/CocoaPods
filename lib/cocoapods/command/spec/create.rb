@@ -51,17 +51,17 @@ module Pod
         # @todo The template is outdated.
 
         def default_data_for_template(name)
-          data = {}
-          data[:name]          = name
-          data[:version]       = '0.0.1'
-          data[:summary]       = "A short description of #{name}."
-          data[:homepage]      = "http://EXAMPLE/#{name}"
-          data[:author_name]   = `git config --get user.name`.strip
-          data[:author_email]  = `git config --get user.email`.strip
-          data[:source_url]    = "http://EXAMPLE/#{name}.git"
-          data[:ref_type]      = ':tag'
-          data[:ref]           = '#{spec.version}'
-          data
+          {
+            :name => name,
+            :version => '0.0.1',
+            :summary =>  "A short description of #{name}.",
+            :homepage => "http://EXAMPLE/#{name}",
+            :author_name => Executable.capture_command('git', %w(config --get user.name), :capture => :out).first.strip,
+            :author_email => Executable.capture_command('git', %w(config --get user.email), :capture => :out).first.strip,
+            :source_url => "http://EXAMPLE/#{name}.git",
+            :ref_type => ':tag',
+            :ref => '#{spec.version}',
+          }
         end
 
         def github_data_for_template(repo_id)

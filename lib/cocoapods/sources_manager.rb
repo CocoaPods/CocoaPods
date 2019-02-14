@@ -103,8 +103,11 @@ module Pod
     extend Executable
     executable :git
 
-    def git(args, include_error: false)
-      Executable.capture_command('git', args, :capture => include_error ? :merge : :out).first.strip
+    def repo_git(args, include_error: false)
+      Executable.capture_command('git', ['-C', repo] + args,
+                                 :capture => include_error ? :merge : :out,
+                                 :env => { 'GIT_CONFIG' => nil }).
+        first.strip
     end
 
     def update_git_repo(show_output = false)

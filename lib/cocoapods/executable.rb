@@ -121,7 +121,7 @@ module Pod
 
     # Runs the given command, capturing the desired output.
     #
-    # @param  [String] bin
+    # @param  [String] executable
     #         The binary to use.
     #
     # @param  [Array<#to_s>] command
@@ -130,23 +130,41 @@ module Pod
     # @param  [Symbol] capture
     #         Whether it should raise if the command fails.
     #
+    # @param  [Hash] env
+    #         Environment variables to be set for the command.
+    #
     # @raise  If the executable could not be located.
     #
     # @return [(String, Process::Status)]
     #         The desired captured output from the command, and the status from
     #         running the command.
     #
-    def self.capture_command(executable, command, capture: :merge, **kwargs)
+    def self.capture_command(executable, command, capture: :merge, env: {}, **kwargs)
       bin = which!(executable)
 
       require 'open3'
       command = command.map(&:to_s)
       case capture
-      when :merge then Open3.capture2e(bin, *command, **kwargs)
-      when :both then Open3.capture3(bin, *command, **kwargs)
-      when :out then Open3.capture3(bin, *command, **kwargs).values_at(0, -1)
-      when :err then Open3.capture3(bin, *command, **kwargs).drop(1)
-      when :none then Open3.capture3(bin, *command, **kwargs).last
+      when :merge then Open3.capture2e(env, [bin, bin], *command, **kwargs)
+      when :both then Open3.capture3(env, [bin, bin], *command, **kwargs)
+      when :out then Open3.capture3(env, [bin, bin], *command, **kwargs).values_at(0, -1)
+      when :err then Open3.capture3(env, [bin, bin], *command, **kwargs).drop(1)
+      when :none then Open3.capture3(env, [bin, bin], *command, **kwargs).last
+      end
+    end
+
+    # (see Executable.capture_command)
+    #
+    # @raise  If running the command fails
+    #
+    def self.capture_command!(executable, command, **kwargs)
+      capture_command(executable, command, **kwargs).tap do |result|
+        result = Array(result)
+        status = result.last
+        unless status.success?
+          output = result[0..-2].join
+          raise Informative, "#{bin} #{command.join(' ')}\n\n#{output}".strip
+        end
       end
     end
 
