@@ -280,6 +280,21 @@ module Pod
           end
 
           #-------------------------------------------------------------------------#
+
+          describe 'Installation With Development Pods' do
+            before do
+              @project = Project.new(config.sandbox.project_path)
+              @project.add_pod_group('BananaLib', fixture('banana-lib'), true)
+            end
+
+            it 'sets the path of the Pod group to the installation root' do
+              @installer.install!
+              group = @project.group_for_spec('BananaLib')
+              group.path.should == '../../spec/fixtures/banana-lib'
+            end
+          end
+
+          #-------------------------------------------------------------------------#
         end
       end
     end

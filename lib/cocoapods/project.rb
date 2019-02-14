@@ -416,7 +416,6 @@ module Pod
       # Add subgroups for directories, but treat .lproj as a file
       if reflect_file_system_structure
         path = relative_base
-        group.set_path(path) unless group.path == path
         relative_dir.each_filename do |name|
           break if name.to_s.downcase.include? '.lproj'
           next if name == '.'

@@ -8,9 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Set the path of development pod groups to the top-most shared directory  
+* Set the path of development pod groups to root directory of the Pod 
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
+  [#8503](https://github.com/CocoaPods/CocoaPods/pull/8503)
 
 * Incremental Pod Installation
   Enables only regenerating projects for pod targets that have changed since the previous installation. 
