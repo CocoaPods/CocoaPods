@@ -121,7 +121,7 @@ module Pod
 
     # Runs the given command, capturing the desired output.
     #
-    # @param  [String] bin
+    # @param  [String] executable
     #         The binary to use.
     #
     # @param  [Array<#to_s>] command
@@ -129,6 +129,9 @@ module Pod
     #
     # @param  [Symbol] capture
     #         Whether it should raise if the command fails.
+    #
+    # @param  [Hash] env
+    #         Environment variables to be set for the command.
     #
     # @raise  If the executable could not be located.
     #
