@@ -290,7 +290,7 @@ module Pod
             it 'sets the path of the Pod group to the installation root' do
               @installer.install!
               group = @project.group_for_spec('BananaLib')
-              group.path.should == fixture('banana-lib').relative_path_from(config.sandbox.root).to_s
+              group.path.should == '../../spec/fixtures/banana-lib'
             end
           end
 
