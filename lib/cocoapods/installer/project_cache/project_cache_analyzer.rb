@@ -87,7 +87,7 @@ module Pod
           dirty_targets = compute_dirty_targets(pod_targets + aggregate_targets)
           dirty_pod_targets, dirty_aggregate_targets = dirty_targets.partition { |target| target.is_a?(PodTarget) }
 
-          pod_targets_to_generate = changed_pod_targets + added_pod_targets + dirty_pod_targets
+          pod_targets_to_generate = (changed_pod_targets + added_pod_targets + dirty_pod_targets).uniq
 
           # We either return the full list of aggregate targets or none since the aggregate targets go into the Pods.xcodeproj
           # and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.

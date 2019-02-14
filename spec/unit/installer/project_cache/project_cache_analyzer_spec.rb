@@ -146,6 +146,21 @@ module Pod
             result.pod_targets_to_generate.should.equal([@orange_lib])
             result.aggregate_targets_to_generate.should.be.nil
           end
+
+          it 'returns the correct set of pod targets when adding a new one' do
+            cache_pod_targets = [@banana_lib, @orange_lib]
+            FileUtils.rm_rf @sandbox.pod_target_project_path(@monkey_lib.pod_name)
+
+            cache_key_by_pod_target_labels = Hash[cache_pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@main_aggregate_target) }
+            cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
+            cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
+
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, @pod_targets, [@main_aggregate_target])
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal([@monkey_lib])
+            result.aggregate_targets_to_generate.should.equal(nil)
+          end
         end
       end
     end
