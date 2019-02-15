@@ -111,6 +111,54 @@ module Pod
         @installer.install!
       end
 
+      it 'injects all generated projects into #share_development_pod_schemes for single project generation' do
+        @installer.unstub(:generate_pods_project)
+        Installer::SandboxDirCleaner.any_instance.stubs(:clean!)
+        @installer.stubs(:pod_targets).returns([])
+        @installer.stubs(:aggregate_targets).returns([])
+
+        analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
+                                                                  [], Pod::Installer::Analyzer::SpecsState.new, [], [],
+                                                                  Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
+        @installer.stubs(:analysis_result).returns(analysis_result)
+
+        generator = @installer.send(:create_generator, [], [], {}, '')
+        @installer.stubs(:create_generator).returns(generator)
+
+        target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
+        pods_project = fixture('Pods.xcodeproj')
+        generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(pods_project, {}, target_installation_results)
+        generator.stubs(:generate!).returns(generator_result)
+        generator.expects(:share_development_pod_schemes).once
+
+        @installer.install!
+      end
+
+      it 'injects all generated projects into #share_development_pod_schemes for multi project generation' do
+        @installer.unstub(:generate_pods_project)
+        Installer::SandboxDirCleaner.any_instance.stubs(:clean!)
+
+        @installer.stubs(:pod_targets).returns([])
+        @installer.stubs(:aggregate_targets).returns([])
+
+        analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
+                                                                  [], Pod::Installer::Analyzer::SpecsState.new, [], [],
+                                                                  Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
+        @installer.stubs(:analysis_result).returns(analysis_result)
+
+        generator = @installer.send(:create_generator, @pod_targets, [], {}, '', true)
+        @installer.stubs(:create_generator).returns(generator)
+
+        target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
+        pods_project = fixture('Pods.xcodeproj')
+        projects_by_pod_targets = { fixture('Subproject.xcodeproj') => [] }
+        generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(pods_project, projects_by_pod_targets, target_installation_results)
+        generator.stubs(:generate!).returns(generator_result)
+        generator.expects(:share_development_pod_schemes).twice
+
+        @installer.install!
+      end
+
       describe 'handling spec sources' do
         before do
           @hooks_manager = Pod::HooksManager

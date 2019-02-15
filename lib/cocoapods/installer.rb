@@ -310,8 +310,8 @@ module Pod
         pods_project_pod_targets = pod_targets_to_generate - projects_by_pod_targets.values.flatten
         all_projects_by_pod_targets = {}
         pods_project_by_targets = { pods_project => pods_project_pod_targets } if pods_project
-        all_projects_by_pod_targets.merge(pods_project_by_targets) if pods_project_by_targets
-        all_projects_by_pod_targets.merge(projects_by_pod_targets) if projects_by_pod_targets
+        all_projects_by_pod_targets.merge!(pods_project_by_targets) if pods_project_by_targets
+        all_projects_by_pod_targets.merge!(projects_by_pod_targets) if projects_by_pod_targets
         all_projects_by_pod_targets.each do |project, pod_targets|
           generator.share_development_pod_schemes(project, development_pod_targets(pod_targets))
         end
