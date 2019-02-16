@@ -554,11 +554,11 @@ module Pod
           return [] if target.build_as_static? && library_xcconfig?
 
           frameworks = []
+          frameworks.concat consumer_frameworks
           if non_library_xcconfig? || (target.should_build? && target.build_as_dynamic?)
             frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
           end
           if non_library_xcconfig?
-            frameworks.concat consumer_frameworks
             frameworks.concat vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
             frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.frameworks_to_import }
           end
@@ -583,7 +583,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :weak_frameworks, :memoized => true do
-          return [] if library_xcconfig?
+          return [] if target.build_as_static? && library_xcconfig?
 
           weak_frameworks = spec_consumers.flat_map(&:weak_frameworks)
           weak_frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.weak_frameworks_to_import }
@@ -1152,7 +1152,8 @@ module Pod
         # @return [Hash{String,Hash{Target,String}]
         #
         def user_target_xcconfig_values_by_consumer_by_key
-          pod_targets.each_with_object({}) do |target, hash|
+          targets = (pod_targets + target.search_paths_aggregate_targets.flat_map(&:pod_targets)).uniq
+          targets.each_with_object({}) do |target, hash|
             target.spec_consumers.each do |spec_consumer|
               spec_consumer.user_target_xcconfig.each do |k, v|
                 # TODO: Need to decide how we are going to ensure settings like these
