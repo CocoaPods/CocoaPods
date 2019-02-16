@@ -101,6 +101,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jacek Suliga](https://github.com/jmkk)
   [#8521](https://github.com/CocoaPods/CocoaPods/pull/8521)
 
+* Properly link system frameworks and weak frameworks into dynamic framework targets.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8493](https://github.com/CocoaPods/CocoaPods/issues/8493)
+
 
 ## 1.6.0 (2019-02-07)
 
