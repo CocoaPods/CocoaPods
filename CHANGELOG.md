@@ -97,6 +97,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   a git unknown option error.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fixed test host delegate methods to not warn about unused arguments.  
+  [Jacek Suliga](https://github.com/jmkk)
+  [#8521](https://github.com/CocoaPods/CocoaPods/pull/8521)
+
 
 ## 1.6.0 (2019-02-07)
 
