@@ -154,6 +154,14 @@ module Pod
             fi
           }
 
+          # Copies the bcsymbolmap files of a vendored framework
+          install_bcsymbolmap() {
+              local bcsymbolmap_path = "$1"
+              local destination="${TARGET_BUILD_DIR}"
+              echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers\" --filter \"- PrivateHeaders\" --filter \"- Modules\" \"${bcsymbolmap_path}\" \"${destination}\""
+              rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${bcsymbolmap_path}" "${destination}"
+          }
+
           # Signs a framework with the provided identity
           code_sign_if_enabled() {
             if [ -n "${EXPANDED_CODE_SIGN_IDENTITY:-}" -a "${CODE_SIGNING_REQUIRED:-}" != "NO" -a "${CODE_SIGNING_ALLOWED}" != "NO" ]; then
@@ -206,6 +214,11 @@ module Pod
             # Vendored frameworks might have a dSYM file next to them so ensure its copied. Frameworks built from
             # sources will have their dSYM generated and copied by Xcode.
             script << %(  install_dsym "#{framework_with_dsym.dsym_path}"\n) unless framework_with_dsym.dsym_path.nil?
+            unless framework_with_dsym.bcsymbolmap_paths.nil?
+              framework_with_dsym.bcsymbolmap_paths.each do |bcsymbolmap_path|
+                script << %(  install_bcsymbolmap "#{bcsymbolmap_path}"\n)
+              end
+            end
           end
           script << "fi\n"
         end
