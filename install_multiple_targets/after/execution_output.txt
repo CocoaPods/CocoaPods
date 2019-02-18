@@ -71,9 +71,9 @@ Generating Pods project
       - Generating dummy source at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-dummy.m`
     - Installing target `Pods-SampleApp_2` iOS 6.0
       - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp_2/Pods-SampleApp_2-dummy.m`
-  - Running post install hooks
   - Generating deterministic UUIDs
   - Stabilizing target UUIDs
+  - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   Cleaning up sandbox directory
   - Writing Lockfile in `Podfile.lock`

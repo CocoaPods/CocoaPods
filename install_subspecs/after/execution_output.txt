@@ -48,9 +48,9 @@ Generating Pods project
       - Generating dummy source at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App-dummy.m`
     - Installing target `Pods-iOS App` iOS 4.3
       - Generating dummy source at `Pods/Target Support Files/Pods-iOS App/Pods-iOS App-dummy.m`
-  - Running post install hooks
   - Generating deterministic UUIDs
   - Stabilizing target UUIDs
+  - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   Cleaning up sandbox directory
   - Writing Lockfile in `Podfile.lock`
