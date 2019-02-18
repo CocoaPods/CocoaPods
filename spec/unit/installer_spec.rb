@@ -168,15 +168,15 @@ module Pod
           Installer::SandboxDirCleaner.any_instance.stubs(:clean!)
           @installer.stubs(:pod_targets).returns([])
           @installer.stubs(:aggregate_targets).returns([])
-  
+
           analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
                                                                     [], Pod::Installer::Analyzer::SpecsState.new, [], [],
                                                                     Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
           @installer.stubs(:analysis_result).returns(analysis_result)
-  
+
           generator = @installer.send(:create_generator, [], [], {}, '')
           @installer.stubs(:create_generator).returns(generator)
-  
+
           target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
           pods_project = fixture('Pods.xcodeproj')
           generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(pods_project, {}, target_installation_results)
@@ -184,9 +184,9 @@ module Pod
         end
 
         it 'predictabilizes UUIDs if the corresponding config is true' do
-          @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new())
+          @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
           @installer.expects(:predictabilize_uuids).once
-  
+
           @installer.install!
         end
 
@@ -194,17 +194,16 @@ module Pod
           @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:deterministic_uuids => false))
           @installer.expects(:create_and_save_projects).once
           @installer.expects(:predictabilize_uuids).never
- 
+
           @installer.install!
         end
 
         it 'stabilizes target UUIDs' do
-          @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new())
+          @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
           @installer.expects(:stabilize_target_uuids).once
-  
+
           @installer.install!
         end
-
       end
 
       describe 'handling spec sources' do
