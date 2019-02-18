@@ -8,6 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Move pre-save UUID manipulations to be before the post-install hooks  
+  [igor-makarov](https://github.com/igor-makarov)
+
 * Set the path of development pod groups to root directory of the Pod 
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
