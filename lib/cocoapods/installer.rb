@@ -43,7 +43,7 @@ module Pod
     autoload :SandboxHeaderPathsInstaller,  'cocoapods/installer/sandbox_header_paths_installer'
     autoload :SandboxDirCleaner,            'cocoapods/installer/sandbox_dir_cleaner'
     autoload :ProjectCache,                 'cocoapods/installer/project_cache/project_cache'
-    autoload :TargetUUIDGenerator,          'cocoapods/installer/xcode/target_uuid_generator'
+    autoload :TargetUUIDGenerator,          'cocoapods/installer/target_uuid_generator'
 
     include Config::Mixin
 
