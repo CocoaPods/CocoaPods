@@ -303,8 +303,8 @@ module Pod
         @generated_aggregate_targets = aggregate_targets_to_generate || []
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets
 
-        predictabilize_uuids if installation_options.deterministic_uuids?
-        stabilize_target_uuids
+        predictabilize_uuids(generated_projects) if installation_options.deterministic_uuids?
+        stabilize_target_uuids(generated_projects)
 
         run_podfile_post_install_hooks
 
@@ -323,12 +323,12 @@ module Pod
       end
     end
 
-    def predictabilize_uuids
-      UI.message('- Generating deterministic UUIDs') { Xcodeproj::Project.predictabilize_uuids(generated_projects) }
+    def predictabilize_uuids(projects)
+      UI.message('- Generating deterministic UUIDs') { Xcodeproj::Project.predictabilize_uuids(projects) }
     end
 
-    def stabilize_target_uuids
-      UI.message('- Stabilizing target UUIDs') { TargetUUIDGenerator.new(generated_projects).generate! }
+    def stabilize_target_uuids(projects)
+      UI.message('- Stabilizing target UUIDs') { TargetUUIDGenerator.new(projects).generate! }
     end
 
     #-------------------------------------------------------------------------#

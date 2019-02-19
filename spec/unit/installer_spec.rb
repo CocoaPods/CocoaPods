@@ -185,7 +185,7 @@ module Pod
 
         it 'predictabilizes UUIDs if the corresponding config is true' do
           @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
-          @installer.expects(:predictabilize_uuids).once
+          @installer.expects(:predictabilize_uuids).with([fixture('Pods.xcodeproj')]).once
 
           @installer.install!
         end
@@ -200,7 +200,7 @@ module Pod
 
         it 'stabilizes target UUIDs' do
           @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
-          @installer.expects(:stabilize_target_uuids).once
+          @installer.expects(:stabilize_target_uuids).with([fixture('Pods.xcodeproj')]).once
 
           @installer.install!
         end
