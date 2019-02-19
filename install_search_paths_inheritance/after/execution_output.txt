@@ -101,9 +101,9 @@ Generating Pods project
       - Generating module map file at `Pods/Target Support Files/Pods-Test/Pods-Test.modulemap`
       - Generating umbrella header at `Pods/Target Support Files/Pods-Test/Pods-Test-umbrella.h`
       - Generating dummy source at `Pods/Target Support Files/Pods-Test/Pods-Test-dummy.m`
-  - Running post install hooks
   - Generating deterministic UUIDs
   - Stabilizing target UUIDs
+  - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   Cleaning up sandbox directory
   - Writing Lockfile in `Podfile.lock`
