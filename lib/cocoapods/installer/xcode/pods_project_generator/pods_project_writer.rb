@@ -44,13 +44,15 @@ module Pod
               results_by_native_target = Hash[pod_target_installation_results.map do |_, result|
                 [result.native_target, result]
               end]
-              project.recreate_user_schemes(false) do |scheme, target|
-                next unless target.respond_to?(:symbol_type)
-                next unless library_product_types.include? target.symbol_type
-                installation_result = results_by_native_target[target]
-                next unless installation_result
-                installation_result.test_native_targets.each do |test_native_target|
-                  scheme.add_test_target(test_native_target)
+              if installation_options.generate_pod_schemes?
+                project.recreate_user_schemes(false) do |scheme, target|
+                  next unless target.respond_to?(:symbol_type)
+                  next unless library_product_types.include? target.symbol_type
+                  installation_result = results_by_native_target[target]
+                  next unless installation_result
+                  installation_result.test_native_targets.each do |test_native_target|
+                    scheme.add_test_target(test_native_target)
+                  end
                 end
               end
               project.save

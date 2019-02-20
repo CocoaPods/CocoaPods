@@ -65,6 +65,7 @@ module Pod
           'integrate_targets' => true,
           'lock_pod_sources' => true,
           'warn_for_multiple_pod_sources' => true,
+          'generate_pod_schemes' => true,
           'share_schemes_for_development_pods' => false,
           'disable_input_output_paths' => false,
           'preserve_pod_file_structure' => false,

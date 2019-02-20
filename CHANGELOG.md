@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Installation option to skip generating pod schemes.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8528](https://github.com/CocoaPods/CocoaPods/pull/8528)
+
 * Set the path of development pod groups to root directory of the Pod 
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)

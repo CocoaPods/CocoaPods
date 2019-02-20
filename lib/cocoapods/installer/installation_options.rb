@@ -153,6 +153,10 @@ module Pod
       #
       option :warn_for_multiple_pod_sources, true
 
+      # Whether to generate schemes for the targets for each Pod that was installed.
+      #
+      option :generate_pod_schemes, true
+
       # Whether to share Xcode schemes for development pods.
       #
       # Schemes for development pods are created automatically but are not shared by default.
