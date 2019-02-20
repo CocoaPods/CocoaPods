@@ -43,6 +43,7 @@ module Pod
     autoload :SandboxHeaderPathsInstaller,  'cocoapods/installer/sandbox_header_paths_installer'
     autoload :SandboxDirCleaner,            'cocoapods/installer/sandbox_dir_cleaner'
     autoload :ProjectCache,                 'cocoapods/installer/project_cache/project_cache'
+    autoload :TargetUUIDGenerator,          'cocoapods/installer/target_uuid_generator'
 
     include Config::Mixin
 
@@ -301,6 +302,10 @@ module Pod
         @generated_pod_targets = pod_targets_to_generate
         @generated_aggregate_targets = aggregate_targets_to_generate || []
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets
+
+        predictabilize_uuids(generated_projects) if installation_options.deterministic_uuids?
+        stabilize_target_uuids(generated_projects)
+
         run_podfile_post_install_hooks
 
         projects_writer = Xcode::PodsProjectWriter.new(sandbox, generated_projects,
@@ -316,6 +321,14 @@ module Pod
           generator.share_development_pod_schemes(project, development_pod_targets(pod_targets))
         end
       end
+    end
+
+    def predictabilize_uuids(projects)
+      UI.message('- Generating deterministic UUIDs') { Xcodeproj::Project.predictabilize_uuids(projects) }
+    end
+
+    def stabilize_target_uuids(projects)
+      UI.message('- Stabilizing target UUIDs') { TargetUUIDGenerator.new(projects).generate! }
     end
 
     #-------------------------------------------------------------------------#
