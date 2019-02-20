@@ -198,7 +198,7 @@ module Pod
 
     #-------------------------------------------------------------------------#
 
-    #  @!group Configuration
+    #  @!group Configuration
 
     # @return [Bool] whether the validation should skip the checks that
     #         requires the download of the library.
@@ -252,6 +252,16 @@ module Pod
     #         Bool be skipped.
     #
     attr_accessor :ignore_public_only_results
+
+    # @return [String] A glob for podspecs to be used during building of
+    #         the local Podfile via :path.
+    #
+    attr_accessor :include_podspecs
+
+    # @return [String] A glob for podspecs to be used during building of
+    #         the local Podfile via :podspec.
+    #
+    attr_accessor :external_podspecs
 
     attr_accessor :skip_import_validation
     alias_method :skip_import_validation?, :skip_import_validation
@@ -896,6 +906,11 @@ module Pod
       podspec  = file.realpath
       local    = local?
       urls     = source_urls
+
+      # TODO: Needs to remove the main spec if it's included
+      additional_podspec_pods = Dir.glob(external_podspecs)
+      additional_path_pods = Dir.glob(include_podspecs) - additional_podspec_pods
+
       Pod::Podfile.new do
         install! 'cocoapods', :deterministic_uuids => false
         # By default inhibit warnings for all pods, except the one being validated.
@@ -910,6 +925,17 @@ module Pod
           else
             pod name, :podspec => podspec.to_s, :inhibit_warnings => false
           end
+
+          additional_path_pods.each do |podspec_path|
+            podspec_name = File.basename(podspec_path, ".podspec")
+            pod podspec_name, :path => File.dirname(podspec_path), :inhibit_warnings => false
+          end
+
+          additional_podspec_pods.each do |podspec_path|
+            podspec_name = File.basename(podspec_path, ".podspec")
+            pod podspec_name, :podspec => podspec_path, :inhibit_warnings => false
+          end
+
           test_spec_names.each do |test_spec_name|
             if local
               pod test_spec_name, :path => podspec.dirname.to_s, :inhibit_warnings => false
