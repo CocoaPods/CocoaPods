@@ -58,10 +58,12 @@ module Pod
           # @param [Array<PBXNativeTarget>] test_native_targets @see #test_native_targets
           # @param [Hash{String=>Array<PBXNativeTarget>}] test_resource_bundle_targets @see #test_resource_bundle_targets
           # @param [Array<PBXNativeTarget>] test_app_host_targets @see #test_app_host_targets
+          # @param [Array<PBXNativeTarget>] app_native_targets @see #app_native_targets
+          # @param [Hash{String=>Array<PBXNativeTarget>}] app_resource_bundle_targets @see #app_resource_bundle_targets
           #
           def initialize(target, native_target, resource_bundle_targets = [], test_native_targets = [],
                          test_resource_bundle_targets = {}, test_app_host_targets = [],
-                         app_native_targets = [], app_resource_bundle_targets = [])
+                         app_native_targets = [], app_resource_bundle_targets = {})
             @target = target
             @native_target = native_target
             @resource_bundle_targets = resource_bundle_targets
