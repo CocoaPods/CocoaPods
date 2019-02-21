@@ -70,6 +70,7 @@ Generating Pods project
 Integrating client project
 
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Removing old product reference `libPods.a` from project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
