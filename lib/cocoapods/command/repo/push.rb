@@ -36,7 +36,7 @@ module Pod
             'Opens default editor if no commit message is specified.'],
             ['--use-json', 'Push JSON spec to repo'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used when linting the spec. ' \
-             'This takes precedence over a .swift-version file.'],
+             'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file.'],
             ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec.'],
           ].concat(super)
         end
