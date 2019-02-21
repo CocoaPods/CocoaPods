@@ -34,7 +34,7 @@ module Pod
       end
 
       def all_paths
-        [source_path, dsym_path].compact
+        [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
       end
     end
   end

@@ -662,6 +662,50 @@ module Pod
         end
       end
 
+      describe 'resource and framework paths' do
+        before do
+          @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+          @monkey_spec = fixture_spec('monkey/monkey.podspec')
+          @target_definition = Podfile::TargetDefinition.new('Pods', nil)
+          @target_definition.abstract = false
+          @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
+                                                                 true, {}, [], Platform.new(:ios, '6.0'),
+                                                                 [@target_definition])
+          @monkey_pod_target = fixture_pod_target(@monkey_spec, true, {}, [], Platform.new(:ios, '6.0'),
+                                                  [@target_definition])
+        end
+
+        it 'returns the correct resource paths' do
+          @watermelon_pod_target.resource_paths.should == {
+            'WatermelonLib' => [],
+            'WatermelonLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
+            'WatermelonLib/SnapshotTests' => [],
+            'WatermelonLib/App' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
+          }
+        end
+
+        it 'returns the correct framework paths' do
+          @watermelon_pod_target.framework_paths.should == {
+            'WatermelonLib' => [
+              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
+            ],
+            'WatermelonLib/Tests' => [],
+            'WatermelonLib/SnapshotTests' => [],
+            'WatermelonLib/App' => [
+              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
+            ],
+          }
+        end
+
+        it 'returns correct vendored framework paths' do
+          @monkey_pod_target.framework_paths.should == {
+            'monkey' => [
+              Target::FrameworkPaths.new('${PODS_ROOT}/../../spec/fixtures/monkey/dynamic-monkey.framework', nil, []),
+            ],
+          }
+        end
+      end
+
       describe 'test spec support' do
         before do
           @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
@@ -703,28 +747,6 @@ module Pod
 
         it 'returns correct path for info plist for unit test type' do
           @test_pod_target.info_plist_path_for_spec(@test_pod_target.test_specs.first).to_s.should.include 'Pods/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
-        end
-
-        it 'returns the correct resource paths' do
-          @test_pod_target.resource_paths.should == {
-            'WatermelonLib' => [],
-            'WatermelonLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
-            'WatermelonLib/SnapshotTests' => [],
-            'WatermelonLib/App' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
-          }
-        end
-
-        it 'returns the correct framework paths' do
-          @test_pod_target.framework_paths.should == {
-            'WatermelonLib' => [
-              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
-            ],
-            'WatermelonLib/Tests' => [],
-            'WatermelonLib/SnapshotTests' => [],
-            'WatermelonLib/App' => [
-              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
-            ],
-          }
         end
 
         it 'returns correct whether a test spec uses Swift or not' do
