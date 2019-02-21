@@ -982,7 +982,6 @@ module Pod
       end
     end
 
-
     describe 'additional podspecs' do
       it 'supports providing ancillary :path based pods via a glob' do
         @validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
@@ -991,10 +990,10 @@ module Pod
         @validator.include_podspecs = coconut_spec_path
 
         podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
-        
+
         coconut_dep = podfile.target_definitions['App'].dependencies[1]
-        coconut_dep.name.should == "CoconutLib"
-        coconut_dep.local?.should != nil
+        coconut_dep.name.should == 'CoconutLib'
+        coconut_dep.local?.should.not.nil?
       end
 
       it 'supports providing ancillary :podspec based pods via a glob' do
@@ -1004,11 +1003,11 @@ module Pod
         @validator.external_podspecs = coconut_spec_path
 
         podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
-        
+
         coconut_dep = podfile.target_definitions['App'].dependencies[1]
-        coconut_dep.name.should == "CoconutLib"
-        coconut_dep.local?.should == nil
-        coconut_dep.external?.should == true
+        coconut_dep.name.should == 'CoconutLib'
+        coconut_dep.local?.should.nil?
+        coconut_dep.external?.should.not.nil?
       end
 
       it 'does not include the main spec in include_podspecs' do
@@ -1016,19 +1015,19 @@ module Pod
         @validator.include_podspecs = podspec_path
 
         podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
-        
+
         puts podfile.target_definitions['App'].dependencies
         podfile.target_definitions['App'].dependencies.length.should == 1
       end
 
       it 'removes external_podspecs from include_podspecs to ensure they only turn up once' do
         @validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
-        
+
         @validator.include_podspecs = podspec_path
         @validator.external_podspecs = podspec_path
 
         podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
-        
+
         puts podfile.target_definitions['App'].dependencies
         podfile.target_definitions['App'].dependencies.length.should == 2
       end
