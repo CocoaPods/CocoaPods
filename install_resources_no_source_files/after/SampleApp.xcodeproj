@@ -19,7 +19,6 @@ File References:
     - AppKit.framework
     - CoreData.framework
     - Foundation.framework
-  - libPods.a
   - libPods-SampleApp.a
 - Products:
   - SampleApp.app
@@ -38,7 +37,6 @@ Targets:
       - CPAppDelegate.m
     - Frameworks:
       - Cocoa.framework
-      - libPods.a
       - libPods-SampleApp.a
     - Resources:
       - InfoPlist.strings
