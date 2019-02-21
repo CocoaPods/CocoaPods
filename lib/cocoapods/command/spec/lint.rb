@@ -32,7 +32,7 @@ module Pod
               'Multiple platforms must be comma-delimited'],
             ['--private', 'Lint skips checks that apply only to public specs'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
-             'This takes precedence over a .swift-version file.'],
+             'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file.'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
           ].concat(super)
