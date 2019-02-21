@@ -343,7 +343,20 @@ module Pod
             dsym_source = if dsym_path.exist?
                             "${PODS_ROOT}/#{relative_path_to_sandbox}.dSYM"
                           end
-            FrameworkPaths.new(framework_source, dsym_source)
+            dirname = framework_path.dirname
+            bcsymbolmap_paths = []
+
+            if dirname.exist?
+              Dir.chdir(dirname) do
+                bcsymbolmap_paths = Dir.glob('*.bcsymbolmap').map { |bcsymbolmap_file_name| dirname + bcsymbolmap_file_name }
+              end
+              bcsymbolmap_paths.map! do |bcsymbolmap_path|
+                bcsymbolmap_relative_path_to_sandbox = bcsymbolmap_path.relative_path_from(sandbox_root)
+                "${PODS_ROOT}/#{bcsymbolmap_relative_path_to_sandbox}"
+              end
+              bcsymbolmap_source = bcsymbolmap_paths unless bcsymbolmap_paths.empty?
+            end
+            FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_source)
           end
           if !file_accessor.spec.test_specification? && should_build? && build_as_dynamic_framework?
             frameworks << FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))

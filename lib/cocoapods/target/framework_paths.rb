@@ -9,14 +9,19 @@ module Pod
       #
       attr_reader :dsym_path
 
-      def initialize(source_path, dsym_path = nil)
+      # @return [Array, Nil] the bcsymbolmap files path array, if one exists
+      #
+      attr_reader :bcsymbolmap_paths
+
+      def initialize(source_path, dsym_path = nil, bcsymbolmap_paths = nil)
         @source_path = source_path
         @dsym_path = dsym_path
+        @bcsymbolmap_paths = bcsymbolmap_paths
       end
 
       def ==(other)
         if other.class == self.class
-          other.source_path == @source_path && other.dsym_path == @dsym_path
+          other.source_path == @source_path && other.dsym_path == @dsym_path && other.bcsymbolmap_paths == @bcsymbolmap_paths
         else
           false
         end
@@ -25,11 +30,7 @@ module Pod
       alias eql? ==
 
       def hash
-        if (dsym = dsym_path)
-          [source_path, dsym].hash
-        else
-          source_path.hash
-        end
+        [source_path, dsym_path, bcsymbolmap_paths].hash
       end
 
       def all_paths
