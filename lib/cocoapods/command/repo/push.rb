@@ -37,6 +37,9 @@ module Pod
             ['--use-json', 'Push JSON spec to repo'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used when linting the spec. ' \
              'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file.'],
+             ['--include-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting via :path.'],
+             ['--external-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting '\
+               'via :podspec. If there are --include-podspecs, then these are removed from them.'], 
             ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec.'],
           ].concat(super)
         end
@@ -55,6 +58,8 @@ module Pod
           @commit_message = argv.flag?('commit-message', false)
           @use_json = argv.flag?('use-json')
           @swift_version = argv.option('swift-version', nil)
+          @include_podspecs    = argv.option('include-podspecs', '')
+          @external_podspecs   = argv.option('external-podspecs', '')
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
           @allow_overwrite = argv.flag?('overwrite', true)
@@ -138,6 +143,8 @@ module Pod
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
+            validator.include_podspecs = @include_podspecs
+            validator.external_podspecs = @external_podspecs
             begin
               validator.validate
             rescue => e
