@@ -43,7 +43,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: 52ddf33ae55195b8e7ea41eb6094755d0a3aacb5
+  revision: 1ab611bc066122b03a6229c0ea2988245aef14de
   branch: master
   specs:
     cocoapods-deintegrate (1.0.2)
