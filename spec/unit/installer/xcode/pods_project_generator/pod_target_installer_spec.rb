@@ -297,10 +297,7 @@ module Pod
                 @installer.install!
                 test_native_target = @project.targets[1]
                 debug_configuration = test_native_target.build_configurations.find(&:debug?)
-                debug_configuration.build_settings['OTHER_LDFLAGS'].sort.should == [
-                  '$(inherited)',
-                  '-lswiftSwiftOnoneSupport',
-                ]
+                debug_configuration.build_settings['OTHER_LDFLAGS'].should == '$(inherited) -lswiftSwiftOnoneSupport'
                 release_configuration = test_native_target.build_configurations.find { |bc| bc.type == :release }
                 release_configuration.build_settings['OTHER_LDFLAGS'].should.be.nil
               end
