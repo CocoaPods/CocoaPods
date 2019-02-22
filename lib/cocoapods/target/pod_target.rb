@@ -267,9 +267,9 @@ module Pod
     # @return [Boolean] Whether the target uses Swift code within the requested non library spec.
     #
     def uses_swift_for_spec?(spec)
-      @uses_swift_for_non_library_type ||= {}
-      return @uses_swift_for_non_library_type[spec.name] if @uses_swift_for_non_library_type.key?(spec.name)
-      @uses_swift_for_non_library_type[spec.name] = begin
+      @uses_swift_for_spec_cache ||= {}
+      return @uses_swift_for_spec_cache[spec.name] if @uses_swift_for_spec_cache.key?(spec.name)
+      @uses_swift_for_spec_cache[spec.name] = begin
         file_accessor = file_accessors.find { |fa| fa.spec == spec }
         raise "[Bug] Unable to find file accessor for spec `#{spec.inspect}` in pod target `#{label}`" unless file_accessor
         file_accessor.source_files.any? { |sf| sf.extname == '.swift' }
