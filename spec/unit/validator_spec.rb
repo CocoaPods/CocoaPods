@@ -1016,7 +1016,6 @@ module Pod
 
         podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
 
-        puts podfile.target_definitions['App'].dependencies
         podfile.target_definitions['App'].dependencies.length.should == 1
       end
 
@@ -1028,7 +1027,6 @@ module Pod
 
         podfile = @validator.send(:podfile_from_spec, :ios, '5.0')
 
-        puts podfile.target_definitions['App'].dependencies
         podfile.target_definitions['App'].dependencies.length.should == 2
       end
     end

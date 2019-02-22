@@ -24,11 +24,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
   [#8461](https://github.com/CocoaPods/CocoaPods/issues/8461)
 
-* Adds support for referring to other podspecs during validation 
+* Adds support for referring to other podspecs during validation  
   [Orta Therox](https://github.com/orta)
   [#8536](https://github.com/CocoaPods/CocoaPods/pull/8536)
 
-* Set the path of development pod groups to root directory of the Pod 
+* Set the path of development pod groups to root directory of the Pod  
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
   [#8503](https://github.com/CocoaPods/CocoaPods/pull/8503)
