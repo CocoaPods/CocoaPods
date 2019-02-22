@@ -88,6 +88,8 @@ module Pod
         end
 
         changed_spec_paths = {}
+        # Ceate the Spec_Lock file if needed and lock it so that concurrent
+        # repo updates do not cause each other to fail
         f = File.open("#{Config.instance.repos_dir}/Spec_Lock", File::CREAT)
         f.flock(File::LOCK_EX)
         sources.each do |source|
