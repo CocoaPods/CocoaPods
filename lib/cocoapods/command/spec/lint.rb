@@ -33,9 +33,6 @@ module Pod
             ['--private', 'Lint skips checks that apply only to public specs'],
             ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
              'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file.'],
-            ['--include-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting via :path.'],
-            ['--external-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting '\
-              'via :podspec. If there are --include-podspecs, then these are removed from them.'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
           ].concat(super)
@@ -54,8 +51,6 @@ module Pod
           @platforms       = argv.option('platforms', '').split(',')
           @private         = argv.flag?('private', false)
           @swift_version   = argv.option('swift-version', nil)
-          @include_podspecs    = argv.option('include-podspecs', '')
-          @external_podspecs   = argv.option('external-podspecs', '')
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
           @podspecs_paths = argv.arguments!
@@ -79,8 +74,6 @@ module Pod
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
-            validator.include_podspecs = @include_podspecs
-            validator.external_podspecs = @external_podspecs
             validator.validate
             failure_reasons << validator.failure_reason
 
