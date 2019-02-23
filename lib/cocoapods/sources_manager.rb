@@ -90,16 +90,16 @@ module Pod
         changed_spec_paths = {}
         # Ceate the Spec_Lock file if needed and lock it so that concurrent
         # repo updates do not cause each other to fail
-        f = File.open("#{Config.instance.repos_dir}/Spec_Lock", File::CREAT)
-        f.flock(File::LOCK_EX)
-        sources.each do |source|
-          UI.section "Updating spec repo `#{source.name}`" do
-            changed_source_paths = source.update(show_output)
-            changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
-            source.verify_compatibility!
+        File.open("#{Config.instance.repos_dir}/Spec_Lock", File::CREAT) do |f|
+          f.flock(File::LOCK_EX)
+          sources.each do |source|
+            UI.section "Updating spec repo `#{source.name}`" do
+              changed_source_paths = source.update(show_output)
+              changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
+              source.verify_compatibility!
+            end
           end
         end
-        f.close
         # Perform search index update operation in background.
         update_search_index_if_needed_in_background(changed_spec_paths)
       end
