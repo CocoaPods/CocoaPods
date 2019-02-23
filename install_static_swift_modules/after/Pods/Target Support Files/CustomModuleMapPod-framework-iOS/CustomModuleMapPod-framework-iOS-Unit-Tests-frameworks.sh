@@ -111,7 +111,7 @@ install_dsym() {
 
 # Copies the bcsymbolmap files of a vendored framework
 install_bcsymbolmap() {
-    local bcsymbolmap_path = "$1"
+    local bcsymbolmap_path="$1"
     local destination="${TARGET_BUILD_DIR}"
     echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${bcsymbolmap_path}" "${destination}""
     rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${bcsymbolmap_path}" "${destination}"
