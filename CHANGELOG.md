@@ -76,6 +76,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not use spaces around variable assignment in generated embed framework script
+  [florianbuerger](https://github.com/florianbuerger)
+  [#8548](https://github.com/CocoaPods/CocoaPods/issues/8548)
+
 * Clean up old integrated framework references.  
   [Dimitris Koutsogiorgas](https://github.com/dnkouts)
   [#8296](https://github.com/CocoaPods/CocoaPods/issues/8296)
