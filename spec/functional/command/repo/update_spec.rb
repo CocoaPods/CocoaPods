@@ -52,7 +52,7 @@ module Pod
       repo1 = repo_make('repo1')
       repo_clone('repo1', 'repo2')
       repo_make_readme_change(repo1, 'Updated')
-      Dir.chdir(repo1) { `git commit -a -m "Update"` }
+      Dir.chdir(repo1) { Pod::Executable.capture_command!('git', %w(commit -a -m Update)) }
       thread1 = Thread.new do
         lambda { command('repo', 'update', 'repo2').run }.should.not.raise
       end
