@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [florianbuerger](https://github.com/florianbuerger)
   [#8558](https://github.com/CocoaPods/CocoaPods/pull/8558)
 
+* Fix: unset GIT_DIR and GIT_WORK_TREE for git operations  
+  [tripleCC](https://github.com/tripleCC)
+  [#7958](https://github.com/CocoaPods/CocoaPods/issues/7958)
+
 * Do not use spaces around variable assignment in generated embed framework script  
   [florianbuerger](https://github.com/florianbuerger)
   [#8548](https://github.com/CocoaPods/CocoaPods/pull/8548)

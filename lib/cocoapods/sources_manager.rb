@@ -106,7 +106,12 @@ module Pod
     def repo_git(args, include_error: false)
       Executable.capture_command('git', ['-C', repo] + args,
                                  :capture => include_error ? :merge : :out,
-                                 :env => { 'GIT_CONFIG' => nil }).
+                                 :env => {
+                                   'GIT_CONFIG' => nil,
+                                   'GIT_DIR' => nil,
+                                   'GIT_WORK_TREE' => nil,
+                                 }
+                                ).
         first.strip
     end
 
