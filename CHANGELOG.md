@@ -72,6 +72,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Do not link specs into user targets that are only used by app specs.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fix set `cache_root` from config file error  
+  [tripleCC](https://github.com/tripleCC)
+  [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
+
 
 ## 1.7.0.beta.1 (2019-02-22)
 
