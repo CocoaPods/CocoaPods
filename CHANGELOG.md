@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Do not use spaces around variable assignment in generated embed framework script  
+  [florianbuerger](https://github.com/florianbuerger)
+  [#8548](https://github.com/CocoaPods/CocoaPods/pull/8548) 
 
 ## 1.7.0.beta.1 (2019-02-22)
 
@@ -75,10 +76,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [guides.cocoapods.org #142](https://github.com/CocoaPods/guides.cocoapods.org/issues/142)
 
 ##### Bug Fixes
-
-* Do not use spaces around variable assignment in generated embed framework script
-  [florianbuerger](https://github.com/florianbuerger)
-  [#8548](https://github.com/CocoaPods/CocoaPods/issues/8548)
 
 * Clean up old integrated framework references.  
   [Dimitris Koutsogiorgas](https://github.com/dnkouts)
