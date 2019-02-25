@@ -43,7 +43,7 @@ module Pod
 
         # @return [Integer] the maximum number of input and output paths to use for a script phase
         #
-        MAX_INPUT_OUTPUT_PATHS = 1000
+        MAX_INPUT_OUTPUT_PATHS = 10000
 
         # @return [AggregateTarget] the target that should be integrated.
         #
