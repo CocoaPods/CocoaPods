@@ -52,8 +52,8 @@ module Pod
           @platforms           = argv.option('platforms', '').split(',')
           @private             = argv.flag?('private', false)
           @swift_version       = argv.option('swift-version', nil)
-          @include_podspecs    = argv.option('include-podspecs', '')
-          @external_podspecs   = argv.option('external-podspecs', '')
+          @include_podspecs    = argv.option('include-podspecs', nil)
+          @external_podspecs   = argv.option('external-podspecs', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
           @podspecs_paths = argv.arguments!

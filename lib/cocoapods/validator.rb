@@ -907,8 +907,8 @@ module Pod
       local    = local?
       urls     = source_urls
 
-      additional_podspec_pods = Dir.glob(external_podspecs || '')
-      additional_path_pods = Dir.glob(include_podspecs || '').select { |path| spec.name != Specification.from_file(path).name } - additional_podspec_pods
+      additional_podspec_pods = external_podspecs ? Dir.glob(external_podspecs) : []
+      additional_path_pods = (include_podspecs ? Dir.glob(include_podspecs) : []) .select { |path| spec.name != Specification.from_file(path).name } - additional_podspec_pods
 
       Pod::Podfile.new do
         install! 'cocoapods', :deterministic_uuids => false
@@ -927,12 +927,12 @@ module Pod
 
           additional_path_pods.each do |podspec_path|
             podspec_name = File.basename(podspec_path, '.*')
-            pod podspec_name, :path => File.dirname(podspec_path), :inhibit_warnings => false
+            pod podspec_name, :path => File.dirname(podspec_path)
           end
 
           additional_podspec_pods.each do |podspec_path|
             podspec_name = File.basename(podspec_path, '.*')
-            pod podspec_name, :podspec => podspec_path, :inhibit_warnings => false
+            pod podspec_name, :podspec => podspec_path
           end
 
           test_spec_names.each do |test_spec_name|
