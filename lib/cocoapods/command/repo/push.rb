@@ -30,6 +30,7 @@ module Pod
              'Multiple sources must be comma-delimited.'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
+            ['--no-subspecs', 'Lint skips validation of subspecs'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
             ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
@@ -51,6 +52,7 @@ module Pod
           @use_frameworks = !argv.flag?('use-libraries')
           @use_modular_headers = argv.flag?('use-modular-headers', false)
           @private = argv.flag?('private', true)
+          @subspecs = argv.flag?('subspecs', true)
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
           @use_json = argv.flag?('use-json')
@@ -135,6 +137,7 @@ module Pod
             validator.use_frameworks = @use_frameworks
             validator.use_modular_headers = @use_modular_headers
             validator.ignore_public_only_results = @private
+            validator.no_subspecs = !@subspecs
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
