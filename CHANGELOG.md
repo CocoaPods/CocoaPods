@@ -12,7 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Copy `bcsymbolmap` files into correct destination to avoid invalid app archives    
+* Include `bcsymbolmap` file output paths into script phase.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8563](https://github.com/CocoaPods/CocoaPods/pull/8563)
+
+* Copy `bcsymbolmap` files into correct destination to avoid invalid app archives  
   [florianbuerger](https://github.com/florianbuerger)
   [#8558](https://github.com/CocoaPods/CocoaPods/pull/8558)
 
