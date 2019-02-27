@@ -56,9 +56,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Copy `bcsymbolmap` files into correct destination to avoid invalid app archives  
   [florianbuerger](https://github.com/florianbuerger)
   [#8558](https://github.com/CocoaPods/CocoaPods/pull/8558)
-* Resolved an issue that could cause spec repo updates to fail on CI servers.  
-  [rpecka](https://github.com/rpecka)
-  [#7317](https://github.com/CocoaPods/CocoaPods/issues/7317)
 
 * Fix: unset GIT_DIR and GIT_WORK_TREE for git operations  
   [tripleCC](https://github.com/tripleCC)
@@ -75,6 +72,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Do not link specs into user targets that are only used by app specs.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Resolved an issue that could cause spec repo updates to fail on CI servers.  
+  [rpecka](https://github.com/rpecka)
+  [#7317](https://github.com/CocoaPods/CocoaPods/issues/7317)
 
 ## 1.7.0.beta.1 (2019-02-22)
 
