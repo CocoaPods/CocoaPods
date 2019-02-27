@@ -775,7 +775,8 @@ module Pod
     def integrate_user_project
       UI.section "Integrating client #{'project'.pluralize(aggregate_targets.map(&:user_project_path).uniq.count)}" do
         installation_root = config.installation_root
-        integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, generated_aggregate_targets, :use_input_output_paths => !installation_options.disable_input_output_paths?)
+        integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, aggregate_targets, generated_aggregate_targets,
+                                               :use_input_output_paths => !installation_options.disable_input_output_paths?)
         integrator.integrate!
       end
     end

@@ -16,9 +16,17 @@ module Pod
           end
         end
         user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
-        @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, @podfile.target_definitions['SampleProject'], sample_project_path.dirname, Xcodeproj::Project.open(@sample_project_path), ['A346496C14F9BE9A0080D870'], {})
-        @empty_library = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios, @podfile.target_definitions[:empty], sample_project_path.dirname, @target.user_project, ['C0C495321B9E5C47004F9854'], {})
-        @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target, @empty_library])
+        @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [],
+                                      Platform.ios, @podfile.target_definitions['SampleProject'],
+                                      sample_project_path.dirname,
+                                      Xcodeproj::Project.open(@sample_project_path), ['A346496C14F9BE9A0080D870'], {})
+        @empty_library = AggregateTarget.new(config.sandbox, false, user_build_configurations, [],
+                                             Platform.ios, @podfile.target_definitions[:empty],
+                                             sample_project_path.dirname, @target.user_project,
+                                             ['C0C495321B9E5C47004F9854'], {})
+        targets = [@target, @empty_library]
+        targets_to_integrate = targets.dup
+        @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, targets, targets_to_integrate)
       end
 
       #-----------------------------------------------------------------------#
@@ -29,7 +37,6 @@ module Pod
         end
 
         it 'adds the Pods project to the workspace' do
-          UserProjectIntegrator::TargetIntegrator.any_instance.stubs(:integrate!)
           @integrator.integrate!
           workspace_path = @integrator.send(:workspace_path)
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
@@ -54,7 +61,21 @@ module Pod
           end
           @integrator.stubs(:user_projects).returns([additional_project, user_project])
 
-          @integrator.send(:integrate_user_targets)
+          @integrator.send(:deintegrate_removed_targets)
+        end
+
+        it 'deintegrates targets that are not associated with the podfile even with incremental installation on' do
+          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target, @empty_library], [])
+          additional_project = Xcodeproj::Project.new('Project.xcodeproj')
+          Deintegrator.any_instance.expects(:deintegrate_target).with additional_project.new_target(:application, 'Other App', :ios)
+          user_project = @target.user_project
+          user_project.native_targets.each do |target|
+            next if %w(SampleProject SampleProjectTests).include?(target.name)
+            Deintegrator.any_instance.expects(:deintegrate_target).with(target)
+          end
+          @integrator.stubs(:user_projects).returns([additional_project, user_project])
+
+          @integrator.send(:deintegrate_removed_targets)
         end
 
         describe '#warn_about_xcconfig_overrides' do
@@ -64,7 +85,7 @@ module Pod
             @target.stubs(:user_targets).returns([user_target])
 
             @target.xcconfigs['Release'] = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'COCOAPODS=1' }
-            @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target])
+            @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, [@target], [@target])
 
             @integrator.unstub(:warn_about_xcconfig_overrides)
             @integrator.send(:warn_about_xcconfig_overrides)
@@ -185,12 +206,12 @@ module Pod
         end
 
         it 'raises if no workspace could be selected' do
-          @integrator.expects(:user_project_paths).returns(%w( project1 project2          ))
+          @integrator.expects(:user_project_paths).returns(%w( project1 project2 ))
           lambda { @integrator.send(:workspace_path) }.should.raise Informative
         end
 
         it 'returns the paths of the user projects' do
-          @integrator.send(:user_project_paths).should == [@sample_project_path]
+          @integrator.send(:user_project_paths_to_integrate).should == [@sample_project_path]
         end
 
         it 'does not skip libraries with empty target definitions' do
@@ -204,10 +225,9 @@ module Pod
           project.expects(:dirty?).returns(false)
           project.expects(:save).never
 
-          @integrator.stubs(:user_projects).returns([project])
           FileUtils.expects(:touch).with(project.path + 'project.pbxproj')
 
-          @integrator.send(:save_projects)
+          @integrator.send(:save_projects, [project])
         end
 
         it 'saves projects that are dirty' do
@@ -216,10 +236,9 @@ module Pod
           project.expects(:dirty?).returns(true)
           project.expects(:save).once
 
-          @integrator.stubs(:user_projects).returns([project])
           FileUtils.expects(:touch).never
 
-          @integrator.send(:save_projects)
+          @integrator.send(:save_projects, [project])
         end
       end
 
