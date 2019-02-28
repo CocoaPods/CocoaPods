@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [tripleCC](https://github.com/tripleCC)
   [#7958](https://github.com/CocoaPods/CocoaPods/issues/7958)
 
+* Fix crash when exec pod update with --sources and --project-directory  
+  [tripleCC](https://github.com/tripleCC)
+  [#8565](https://github.com/CocoaPods/CocoaPods/issues/8565)
+
 * Do not use spaces around variable assignment in generated embed framework script  
   [florianbuerger](https://github.com/florianbuerger)
   [#8548](https://github.com/CocoaPods/CocoaPods/pull/8548)

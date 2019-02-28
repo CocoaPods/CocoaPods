@@ -108,9 +108,21 @@ module Pod
         end
       end
 
-      it 'tells the user that no Lockfile was found in the project dir' do
-        exception = lambda { run_command('update', 'BananaLib', '--no-repo-update') }.should.raise Informative
-        exception.message.should.include "No `Podfile.lock' found in the project directory"
+      describe 'tells the user that no lockfile was found in the project dir' do
+        it 'for --no-repo-update' do
+          exception = lambda { run_command('update', 'BananaLib', '--no-repo-update') }.should.raise Informative
+          exception.message.should.include "No `Podfile.lock' found in the project directory"
+        end
+
+        it 'for --exclude-pods' do
+          exception = lambda { run_command('update', '--exclude-pods=BananaLib') }.should.raise Informative
+          exception.message.should.include "No `Podfile.lock' found in the project directory"
+        end
+
+        it 'for --sources' do
+          exception = lambda { run_command('update', '--sources=master') }.should.raise Informative
+          exception.message.should.include "No `Podfile.lock' found in the project directory"
+        end
       end
 
       describe 'tells the user that the Pods cannot be updated unless they are installed' do
