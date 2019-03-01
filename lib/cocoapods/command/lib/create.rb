@@ -25,12 +25,14 @@ module Pod
         def initialize(argv)
           @name = argv.shift_argument
           @template_url = argv.option('template-url', TEMPLATE_REPO)
+          @help = argv.flag?('help')
           super
           @additional_args = argv.remainder!
         end
 
         def validate!
           super
+          banner! if @help
           help! 'A name for the Pod is required.' unless @name
           help! 'The Pod name cannot contain spaces.' if @name =~ /\s/
           help! 'The Pod name cannot contain plusses.' if @name =~ /\+/
