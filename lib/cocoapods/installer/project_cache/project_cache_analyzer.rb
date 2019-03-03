@@ -89,6 +89,10 @@ module Pod
 
           pod_targets_to_generate = (changed_pod_targets + added_pod_targets + dirty_pod_targets).uniq
 
+          # If one target in a pod needs generation, then all of the targets do.
+          # Otherwise we end up with the rest of the targets ungenerated.
+          pod_targets_to_generate += compute_sibling_pod_targets(pod_targets, pod_targets_to_generate)
+
           # We either return the full list of aggregate targets or none since the aggregate targets go into the Pods.xcodeproj
           # and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
           aggregate_target_to_generate =
@@ -148,6 +152,13 @@ module Pod
                                  raise "[BUG] Unknown target type #{target}"
                                end
             support_files_dir_exists && xcodeproj_exists
+          end
+        end
+
+        def compute_sibling_pod_targets(all_pod_targets, targets)
+          pod_names = targets.map(&:pod_name)
+          all_pod_targets.select do |target|
+            pod_names.include?(target.pod_name) && !targets.include?(target)
           end
         end
       end
