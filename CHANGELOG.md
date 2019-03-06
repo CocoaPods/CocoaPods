@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Integrate `xcfilelist` input/output paths for script phases.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8585](https://github.com/CocoaPods/CocoaPods/pull/8585)
 
 ##### Bug Fixes
 
