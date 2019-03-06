@@ -521,11 +521,35 @@ module Pod
           phase.shell_path.should == '/bin/sh'
           phase.input_paths.should.be.nil
           phase.output_paths.should.be.nil
+          phase.input_file_list_paths.should.be.nil
+          phase.output_file_list_paths.should.be.nil
+          phase.show_env_vars_in_log.should.be.nil
+        end
+
+        it 'adds a custom shell script phase with input/output paths' do
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script',
+                                                                       :script => 'echo "Hello World"',
+                                                                       :input_files => ['/path/to/input_file.txt'],
+                                                                       :output_files => ['/path/to/output_file.txt'],
+                                                                       :input_file_lists => ['/path/to/input_file.xcfilelist'],
+                                                                       :output_file_lists => ['/path/to/output_file.xcfilelist']])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+          phase.name.should == '[CP-User] Custom Script'
+          phase.shell_script.should == 'echo "Hello World"'
+          phase.shell_path.should == '/bin/sh'
+          phase.input_paths.should == ['/path/to/input_file.txt']
+          phase.output_paths.should == ['/path/to/output_file.txt']
+          phase.input_file_list_paths == ['/path/to/input_file.xcfilelist']
+          phase.output_file_list_paths.should == ['/path/to/output_file.xcfilelist']
           phase.show_env_vars_in_log.should.be.nil
         end
 
         it 'sets the show_env_vars_in_log value to 0 if its explicitly set' do
-          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"', :show_env_vars_in_log => '0'])
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script',
+                                                                       :script => 'echo "Hello World"',
+                                                                       :show_env_vars_in_log => '0'])
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
@@ -535,7 +559,9 @@ module Pod
         it 'does not set the show_env_vars_in_log value to 1 even if its set' do
           # Since Xcode 10 this value never gets transcribed into the `.pbxproj` file which causes Xcode 10 to _remove_
           # it if it's been added and causing a dirty file in git repos.
-          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script', :script => 'echo "Hello World"', :show_env_vars_in_log => '1'])
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script',
+                                                                       :script => 'echo "Hello World"',
+                                                                       :show_env_vars_in_log => '1'])
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
