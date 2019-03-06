@@ -4,6 +4,138 @@ To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* Integrate `xcfilelist` input/output paths for script phases.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8585](https://github.com/CocoaPods/CocoaPods/pull/8585)
+
+##### Bug Fixes
+
+* Include `bcsymbolmap` file output paths into script phase.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8563](https://github.com/CocoaPods/CocoaPods/pull/8563)
+
+* Copy `bcsymbolmap` files into correct destination to avoid invalid app archives  
+  [florianbuerger](https://github.com/florianbuerger)
+  [#8558](https://github.com/CocoaPods/CocoaPods/pull/8558)
+
+* Fix: unset GIT_DIR and GIT_WORK_TREE for git operations  
+  [tripleCC](https://github.com/tripleCC)
+  [#7958](https://github.com/CocoaPods/CocoaPods/issues/7958)
+
+* Do not use spaces around variable assignment in generated embed framework script  
+  [florianbuerger](https://github.com/florianbuerger)
+  [#8548](https://github.com/CocoaPods/CocoaPods/pull/8548)
+
+## 1.7.0.beta.1 (2019-02-22)
+
+##### Enhancements
+
+* Copy `bcsymbolmap` files of a vendored framework.  
+  [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
+  [#8461](https://github.com/CocoaPods/CocoaPods/issues/8461)
+
+* Set the path of development pod groups to root directory of the Pod 
+  [Eric Amorde](https://github.com/amorde)
+  [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
+  [#8503](https://github.com/CocoaPods/CocoaPods/pull/8503)
+
+* Incremental Pod Installation
+  Enables only regenerating projects for pod targets that have changed since the previous installation. 
+  This feature is gated by the `incremental_installation` option.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8319](https://github.com/CocoaPods/CocoaPods/issues/8319)
+
+* Podfile: Add a CDNSource automatically if it's not present, just like git source.  
+  Convenience for CDNSource when specified as `source 'https://cdn.jsdelivr.net/cocoa/'`.  
+  If source doesn't exist, it will be created.  
+  [igor-makarov](https://github.com/igor-makarov)
+  [#8362](https://github.com/CocoaPods/CocoaPods/pull/8362)
+
+* Scheme configuration support.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#7577](https://github.com/CocoaPods/CocoaPods/issues/7577)
+
+* Add support for `.rb` extension for Podfiles  
+  [Eric Amorde](https://github.com/amorde)
+  [#8171](https://github.com/CocoaPods/CocoaPods/issues/8171)
+
+* Add CDN repo Source to allow retrieving specs from a web URL.  
+  [igor-makarov](https://github.com/igor-makarov)
+  [#8268](https://github.com/CocoaPods/CocoaPods/issues/8268) (partial beta solution)
+
+* Multi Pod Project Generation Support.  
+  Support for splitting the pods project into a subproject per pod target, gated by the `generate_multiple_pod_projects` installation option.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8253](https://github.com/CocoaPods/CocoaPods/issues/8253)
+
+* Don't add main for app specs.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8235](https://github.com/CocoaPods/CocoaPods/pull/8235)
+
+* Multiple Swift versions support  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8191](https://github.com/CocoaPods/CocoaPods/issues/8191)
+
+* Adds app spec project integration.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8158](https://github.com/CocoaPods/CocoaPods/pull/8158)
+
+* Add documentation for the Podfile installation options  
+  [Eric Amorde](https://github.com/amorde)
+  [#8198](https://github.com/CocoaPods/CocoaPods/issues/8198)
+  [guides.cocoapods.org #142](https://github.com/CocoaPods/guides.cocoapods.org/issues/142)
+
+##### Bug Fixes
+
+* Clean up old integrated framework references.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkouts)
+  [#8296](https://github.com/CocoaPods/CocoaPods/issues/8296)
+
+* Always update sources specified with the `:source` option when `--repo-update` is specified  
+  [Eric Amorde](https://github.com/amorde)
+  [#8421](https://github.com/CocoaPods/CocoaPods/issues/8421) 
+
+* Set `showEnvVarsInLog` for script phases only when its disabled.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8400](https://github.com/CocoaPods/CocoaPods/pull/8400)
+
+* Fix error when execute pod list --update --verbose command  
+  [tripleCC](https://github.com/tripleCC)
+  [#8404](https://github.com/CocoaPods/CocoaPods/pull/8404)
+
+* Remove `manifest` attribute from sandbox.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8260](https://github.com/CocoaPods/CocoaPods/pull/8260)
+  
+* Don't have libraries build the app spec.  
+  [Derek Ostrander](https://github.com/dostrander)
+  [#8244](https://github.com/CocoaPods/CocoaPods/pull/8244)
+  
+* Fix HTTPs -> HTTPS in warning message  
+  [CydeWeys](https://github.com/CydeWeys)
+  [#8354](https://github.com/CocoaPods/CocoaPods/issues/8354)
+
+* Add the `FRAMEWORK_SEARCH_PATHS` necessary to import `XCTest` when it is
+  linked as a weak framework.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Treat `USER_HEADER_SEARCH_PATHS` as a plural build setting.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [#8451](https://github.com/CocoaPods/CocoaPods/issues/8451)
+
+* Trying to add a spec repo with a `file://` URL on Ruby 2.6 won't fail with a
+  a git unknown option error.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Fixed test host delegate methods to not warn about unused arguments.  
+  [Jacek Suliga](https://github.com/jmkk)
+  [#8521](https://github.com/CocoaPods/CocoaPods/pull/8521)
+
+
 ## 1.6.1 (2019-02-21)
 
 ##### Enhancements
