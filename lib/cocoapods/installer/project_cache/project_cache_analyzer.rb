@@ -75,28 +75,42 @@ module Pod
             return full_install_results
           end
 
+          pod_targets_to_generate = Set[]
+          aggregate_targets_to_generate = Set[]
           added_targets, removed_targets = compute_added_and_removed_targets(target_by_label,
                                                                              cache_key_by_target_label.keys,
                                                                              cache.cache_key_by_target_label.keys)
           added_pod_targets, added_aggregate_targets = added_targets.partition { |target| target.is_a?(PodTarget) }
           removed_aggregate_targets = removed_targets.select { |target| target.is_a?(AggregateTarget) }
+          pod_targets_to_generate.merge(added_pod_targets)
+          aggregate_targets_to_generate.merge(added_aggregate_targets + removed_aggregate_targets)
 
           changed_targets = compute_changed_targets_from_cache(cache_key_by_target_label, target_by_label, cache)
           changed_pod_targets, changed_aggregate_targets = changed_targets.partition { |target| target.is_a?(PodTarget) }
+          pod_targets_to_generate.merge(changed_pod_targets)
+          aggregate_targets_to_generate.merge(changed_aggregate_targets)
 
           dirty_targets = compute_dirty_targets(pod_targets + aggregate_targets)
           dirty_pod_targets, dirty_aggregate_targets = dirty_targets.partition { |target| target.is_a?(PodTarget) }
+          pod_targets_to_generate.merge(dirty_pod_targets)
+          aggregate_targets_to_generate.merge(dirty_aggregate_targets)
 
-          pod_targets_to_generate = (changed_pod_targets + added_pod_targets + dirty_pod_targets).uniq
+          # Since multi xcodeproj will group targets by PodTarget#pod_name into individual projects, we
+          # need to append these "sibling" targets to the list of targets we need to generate before finalizing the total list,
+          # otherwise we will end up with missing targets.
+          #
+          sibling_pod_targets = compute_sibling_pod_targets(pod_targets, pod_targets_to_generate)
+          pod_targets_to_generate.merge(sibling_pod_targets)
 
           # We either return the full list of aggregate targets or none since the aggregate targets go into the Pods.xcodeproj
           # and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
-          aggregate_target_to_generate =
-            unless (changed_aggregate_targets + added_aggregate_targets + removed_aggregate_targets + dirty_aggregate_targets).empty?
+
+          total_aggregate_targets_to_generate =
+            unless aggregate_targets_to_generate.empty?
               aggregate_targets
             end
 
-          ProjectCacheAnalysisResult.new(pod_targets_to_generate, aggregate_target_to_generate, cache_key_by_target_label,
+          ProjectCacheAnalysisResult.new(pod_targets_to_generate.to_a, total_aggregate_targets_to_generate, cache_key_by_target_label,
                                          build_configurations, project_object_version)
         end
 
@@ -149,6 +163,11 @@ module Pod
                                end
             support_files_dir_exists && xcodeproj_exists
           end
+        end
+
+        def compute_sibling_pod_targets(pod_targets, pod_targets_to_generate)
+          pod_targets_by_name = pod_targets.group_by(&:pod_name)
+          pod_targets_to_generate.flat_map { |t| pod_targets_by_name[t.pod_name] }
         end
       end
     end
