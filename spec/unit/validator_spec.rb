@@ -961,7 +961,15 @@ module Pod
         setup_validator
         subspec = Specification.new(@validator.spec, 'Tests', true)
         @validator.send(:perform_extensive_analysis, subspec)
-        @validator.results.map(&:to_s).first.should.include 'Validating a test spec (`JSONKit/Tests`) is not supported.'
+        @validator.results.map(&:to_s).first.should.include 'Validating a non library spec (`JSONKit/Tests`) is not supported.'
+        @validator.result_type.should == :error
+      end
+
+      it 'shows an error when performing extensive analysis on an app spec' do
+        setup_validator
+        subspec = Specification.new(@validator.spec, 'App', :app_specification => true)
+        @validator.send(:perform_extensive_analysis, subspec)
+        @validator.results.map(&:to_s).first.should.include 'Validating a non library spec (`JSONKit/App`) is not supported.'
         @validator.result_type.should == :error
       end
     end
