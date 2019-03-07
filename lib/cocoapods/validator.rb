@@ -506,7 +506,7 @@ module Pod
                 'The validator used ' \
                 "Swift `#{DEFAULT_SWIFT_VERSION}` by default because no Swift version was specified. " \
                 'To specify a Swift version during validation, add the `swift_versions` attribute in your podspec. ' \
-                'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.')
+                'Note that usage of a `.swift-version` file is now deprecated.')
       end
     end
 

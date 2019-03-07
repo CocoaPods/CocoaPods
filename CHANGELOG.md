@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not warn that `--swift-version` parameter is deprecated.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8586](https://github.com/CocoaPods/CocoaPods/pull/8586)
+
 * Include `bcsymbolmap` file output paths into script phase.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8563](https://github.com/CocoaPods/CocoaPods/pull/8563)
