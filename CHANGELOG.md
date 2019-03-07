@@ -34,6 +34,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [florianbuerger](https://github.com/florianbuerger)
   [#8548](https://github.com/CocoaPods/CocoaPods/pull/8548)
 
+* Do not link specs into user targets that are only used by app specs.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ## 1.7.0.beta.1 (2019-02-22)
 
 ##### Enhancements

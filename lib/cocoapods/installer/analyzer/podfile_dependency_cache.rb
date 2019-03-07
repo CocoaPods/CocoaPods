@@ -37,6 +37,7 @@ module Pod
         #         A warmed, immutable cache of all the dependencies in the {Podfile}
         #
         def self.from_podfile(podfile)
+          raise ArgumentError, 'Must be initialized with a podfile' unless podfile
           podfile_dependencies = []
           dependencies_by_target_definition = {}
           podfile.target_definition_list.each do |target_definition|
