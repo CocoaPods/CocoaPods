@@ -1076,7 +1076,7 @@ module Pod
         result.message.should == 'The validator used ' \
         'Swift `4.0` by default because no Swift version was specified. ' \
         'To specify a Swift version during validation, add the `swift_versions` attribute in your podspec. ' \
-        'Note that usage of the `--swift-version` parameter or a `.swift-version` file is now deprecated.'
+        'Note that usage of a `.swift-version` file is now deprecated.'
       end
 
       it 'warns when a dot swift version file is used instead of the swift_versions attribute' do
