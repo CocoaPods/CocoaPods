@@ -12,7 +12,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Do not link specs into user targets that are only used by app specs.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 
 ## 1.7.0.beta.1 (2019-02-22)
