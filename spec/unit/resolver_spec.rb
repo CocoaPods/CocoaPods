@@ -557,7 +557,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
 
     #-------------------------------------------------------------------------#
 
-    describe "non-library only specs" do
+    describe 'non-library only specs' do
       describe 'test specs' do
         def create_resolver(podfile = @podfile, locked_deps = empty_graph, specs_updated = false)
           @resolver = Resolver.new(config.sandbox, podfile, locked_deps, config.sources_manager.all, specs_updated)
