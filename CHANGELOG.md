@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Validator should filter our app specs from subspec analysis.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8592](https://github.com/CocoaPods/CocoaPods/pull/8592)
+
 * Do not warn that `--swift-version` parameter is deprecated.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8586](https://github.com/CocoaPods/CocoaPods/pull/8586)

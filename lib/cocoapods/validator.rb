@@ -364,8 +364,8 @@ module Pod
     # Perform analysis for a given spec (or subspec)
     #
     def perform_extensive_analysis(spec)
-      if spec.test_specification?
-        error('spec', "Validating a test spec (`#{spec.name}`) is not supported.")
+      if spec.non_library_specification?
+        error('spec', "Validating a non library spec (`#{spec.name}`) is not supported.")
         return false
       end
       validate_homepage(spec)
@@ -407,7 +407,7 @@ module Pod
     # Recursively perform the extensive analysis on all subspecs
     #
     def perform_extensive_subspec_analysis(spec)
-      spec.subspecs.reject(&:test_specification?).send(fail_fast ? :all? : :each) do |subspec|
+      spec.subspecs.reject(&:non_library_specification?).send(fail_fast ? :all? : :each) do |subspec|
         @subspec_name = subspec.name
         perform_extensive_analysis(subspec)
       end
