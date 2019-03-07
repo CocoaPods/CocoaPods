@@ -12,8 +12,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Filter out specs that are used by app specs only from linking into user
-  targets.  
+* Do not link specs into user targets that are only used by app specs.  
   [Samuel Giddins](https://github.com/segiddins)
 
 
