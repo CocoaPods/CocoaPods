@@ -125,7 +125,6 @@ module Pod
       $stdout.flush
 
       perform_linting
-      warn_for_dot_swift_file_deprecation
       perform_extensive_analysis(a_spec) if a_spec && !quick
 
       UI.puts ' -> '.send(result_color) << (a_spec ? a_spec.to_s : file.basename.to_s)
@@ -350,17 +349,6 @@ module Pod
       @results.concat(linter.results.to_a)
     end
 
-    # Warns the user to delete the `.swift-version` file in favor of the `swift_versions` DSL attribute. This is
-    # intentionally not a lint warning since we do not want to break existing setups and instead just soft deprecate
-    # this slowly.
-    #
-    def warn_for_dot_swift_file_deprecation
-      if swift_version.nil? && (!spec.nil? && spec.swift_versions.empty?) && !dot_swift_version.nil?
-        UI.warn 'Usage of the `.swift_version` file has been deprecated! Please delete the file and use the ' \
-          "`swift_versions` attribute within your podspec instead.\n".yellow
-      end
-    end
-
     # Perform analysis for a given spec (or subspec)
     #
     def perform_extensive_analysis(spec)
@@ -487,6 +475,7 @@ module Pod
     def validate_swift_version
       return unless uses_swift?
       spec_swift_versions = spec.swift_versions.map(&:to_s)
+
       unless spec_swift_versions.empty?
         message = nil
         if !dot_swift_version.nil? && !spec_swift_versions.include?(dot_swift_version)
@@ -501,12 +490,21 @@ module Pod
         end
       end
 
-      if swift_version.nil? && spec_swift_versions.empty? && dot_swift_version.nil?
-        warning('swift',
-                'The validator used ' \
-                "Swift `#{DEFAULT_SWIFT_VERSION}` by default because no Swift version was specified. " \
-                'To specify a Swift version during validation, add the `swift_versions` attribute in your podspec. ' \
-                'Note that usage of a `.swift-version` file is now deprecated.')
+      if swift_version.nil? && spec.swift_versions.empty?
+        if !dot_swift_version.nil?
+          # The user will be warned to delete the `.swift-version` file in favor of the `swift_versions` DSL attribute.
+          # This is intentionally not a lint warning since we do not want to break existing setups and instead just soft
+          # deprecate this slowly.
+          #
+          UI.warn 'Usage of the `.swift_version` file has been deprecated! Please delete the file and use the ' \
+            "`swift_versions` attribute within your podspec instead.\n".yellow
+        else
+          warning('swift',
+                  'The validator used ' \
+                  "Swift `#{DEFAULT_SWIFT_VERSION}` by default because no Swift version was specified. " \
+                  'To specify a Swift version during validation, add the `swift_versions` attribute in your podspec. ' \
+                  'Note that usage of a `.swift-version` file is now deprecated.')
+        end
       end
     end
 
