@@ -161,6 +161,52 @@ module Pod
             result.pod_targets_to_generate.should.equal([@monkey_lib])
             result.aggregate_targets_to_generate.should.equal(nil)
           end
+
+          it 'returns all pod targets that share the same #pod_name' do
+            subspec_target_1 = fixture_pod_target('matryoshka/matryoshka.podspec', false,
+                                                  {}, [], Pod::Platform.new(:ios, '6.0'), [], 'Foo')
+            subspec_target_2 = fixture_pod_target('matryoshka/matryoshka.podspec', false,
+                                                  {}, [], Pod::Platform.new(:ios, '6.0'), [], 'Bar')
+            subspec_pods = [subspec_target_2, subspec_target_1]
+            subspec_pods.each do |target|
+              @sandbox.pod_target_project_path(target.pod_name).mkpath
+              target.support_files_dir.mkpath
+            end
+
+            cache_key_by_aggregate_target_labels = {
+              subspec_target_1.label => TargetCacheKey.from_pod_target(subspec_target_1),
+              subspec_target_2.label => TargetCacheKey.from_cache_hash('BUILD_SETTINGS_CHECKSUM' => 'Blah'),
+            }
+            cache = ProjectInstallationCache.new(cache_key_by_aggregate_target_labels, @build_configurations, @project_object_version)
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, subspec_pods, [])
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal(subspec_pods)
+            result.aggregate_targets_to_generate.should.equal(nil)
+          end
+
+          it 'returns sibling pod target when adding a new subspec' do
+            original_subspec = fixture_pod_target('matryoshka/matryoshka.podspec', false,
+                                                  {}, [], Pod::Platform.new(:ios, '6.0'), [])
+            subspec_target_1 = fixture_pod_target('matryoshka/matryoshka.podspec', false,
+                                                  {}, [], Pod::Platform.new(:ios, '6.0'), [], 'Foo')
+            subspec_target_2 = fixture_pod_target('matryoshka/matryoshka.podspec', false,
+                                                  {}, [], Pod::Platform.new(:ios, '6.0'), [], 'Bar')
+            subspec_pods = [subspec_target_2, subspec_target_1]
+            subspec_pods.each do |target|
+              @sandbox.pod_target_project_path(target.pod_name).mkpath
+              target.support_files_dir.mkpath
+            end
+
+            cache_key_by_aggregate_target_labels = {
+              subspec_target_1.label => TargetCacheKey.from_pod_target(original_subspec),
+            }
+
+            cache = ProjectInstallationCache.new(cache_key_by_aggregate_target_labels, @build_configurations, @project_object_version)
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, subspec_pods, [])
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal(subspec_pods)
+            result.aggregate_targets_to_generate.should.equal(nil)
+          end
         end
       end
     end

@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Generate sibling targets for incremental installation.  
+  [Sebastian Shanus](https://github.com/sebastianv1) & [Igor Makarov](https://github.com/igor-makarov)
+  [#8577](https://github.com/CocoaPods/CocoaPods/issues/8577)
+
 * Validator should filter our app specs from subspec analysis.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8592](https://github.com/CocoaPods/CocoaPods/pull/8592)
