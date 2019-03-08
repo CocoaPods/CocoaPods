@@ -8,6 +8,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.7.0.beta.2 (2019-03-08)
+
+##### Enhancements
+
 * Integrate `xcfilelist` input/output paths for script phases.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8585](https://github.com/CocoaPods/CocoaPods/pull/8585)
