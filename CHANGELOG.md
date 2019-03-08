@@ -24,7 +24,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [tripleCC](https://github.com/tripleCC)
   [#7958](https://github.com/CocoaPods/CocoaPods/issues/7958)
 
-* Fix crash when exec pod update with --sources and --project-directory  
+* Fix crash when running `pod update` with `--sources` and `--project-directory`  
   [tripleCC](https://github.com/tripleCC)
   [#8565](https://github.com/CocoaPods/CocoaPods/issues/8565)
 
