@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not warn of `.swift-version` file being deprecated if pod does not use Swift.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8593](https://github.com/CocoaPods/CocoaPods/pull/8593)
+
 * Generate sibling targets for incremental installation.  
   [Sebastian Shanus](https://github.com/sebastianv1) & [Igor Makarov](https://github.com/igor-makarov)
   [#8577](https://github.com/CocoaPods/CocoaPods/issues/8577)

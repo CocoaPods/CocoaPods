@@ -1072,6 +1072,18 @@ module Pod
         validator.results.count.should == 0
       end
 
+      it 'does not warn to use swift_versions attribute if the pod does not use Swift' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+
+        validator = test_validator(stub_podspec)
+        Pod::Sandbox::FileAccessor.any_instance.unstub(:source_files)
+        validator.stubs(:dot_swift_version).returns('3.2')
+        validator.validate
+
+        validator.results.count.should == 0
+        UI.warnings.should.be.empty
+      end
+
       it 'warns that the default swift version was used if none was provided' do
         Specification.any_instance.stubs(:deployment_target).returns('9.0')
 
