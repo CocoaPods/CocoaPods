@@ -26,6 +26,8 @@ module Pod
 
           integrate_targets(target_installation_results.pod_target_installation_results)
           wire_target_dependencies(target_installation_results)
+
+          container_project ||= Pod::Project.new(sandbox.project_path)
           PodsProjectGeneratorResult.new(container_project, projects_by_pod_targets, target_installation_results)
         end
 
