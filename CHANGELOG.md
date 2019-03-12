@@ -25,6 +25,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix post_install hooks when incremental_installation is enabled.  
+  [giginet](https://github.com/giginet)
+
 * Do not warn of `.swift-version` file being deprecated if pod does not use Swift.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8593](https://github.com/CocoaPods/CocoaPods/pull/8593)
