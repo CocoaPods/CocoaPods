@@ -580,7 +580,6 @@ module Pod
             @generator.generate!
           end
 
-
           it 'will not create container project for nil parameter to aggregate targets' do
             @generator = MultiPodsProjectGenerator.new(config.sandbox, nil, [@monkey_ios_pod_target], @analysis_result.all_user_build_configurations,
                                                        @installation_options, config, '1')
