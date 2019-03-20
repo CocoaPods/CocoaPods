@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Using `repo push` now pushes to the current repo branch (`HEAD`) instead of `master`  
+  [Jhonatan Avalos](https://github.com/baguio)
+  [#8630](https://github.com/CocoaPods/CocoaPods/pull/8630)  
+
 * Add support for UI test specs with `test_type` value `:ui`  
   [Yavuz Nuzumlali](https://github.com/manuyavuz)
   [#9002](https://github.com/CocoaPods/CocoaPods/pull/9002)
