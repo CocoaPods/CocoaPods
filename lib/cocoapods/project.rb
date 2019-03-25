@@ -69,7 +69,7 @@ module Pod
     #
     def generate_available_uuid_list(count = 100)
       start = @generated_uuids.size
-      uniques = Array.new(count) { |i| format('%.4s%07X0', @uuid_prefix, start + i) }
+      uniques = Array.new(count) { |i| format('%.6s%07X0', @uuid_prefix, start + i) }
       @generated_uuids += uniques
       @available_uuids += uniques
     end
