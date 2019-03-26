@@ -138,7 +138,7 @@ module Pod
         @podfile_dependency_cache.target_definition_list.group_by { |td| [td.name, td.user_project_path] }.
           each do |(name, project), definitions|
           next unless definitions.size > 1
-          error = "The target `#{name}` is declared twice"
+          error = "The target `#{name}` is declared multiple times"
           error << " for the project `#{project}`" if project
           add_error(error << '.')
         end
