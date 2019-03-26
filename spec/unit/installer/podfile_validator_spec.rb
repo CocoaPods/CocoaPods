@@ -183,7 +183,7 @@ module Pod
       end
     end
 
-    describe 'duplicated targets' do
+    describe 'multiple targets' do
       it 'errors when the same target is declared twice' do
         podfile = Pod::Podfile.new do
           pod 'Alamofire'
@@ -194,7 +194,7 @@ module Pod
         validator.validate
 
         validator.should.not.be.valid
-        validator.errors.should == ['The target `Target` is declared twice.']
+        validator.errors.should == ['The target `Target` is declared multiple times.']
       end
 
       it 'errors when the same target is declared twice when using a custom xcodeproj' do
@@ -211,7 +211,37 @@ module Pod
         validator.validate
 
         validator.should.not.be.valid
-        validator.errors.should == ['The target `Target` is declared twice for the project `Project.xcodeproj`.']
+        validator.errors.should == ['The target `Target` is declared multiple times for the project `Project.xcodeproj`.']
+      end
+
+      it 'errors when the same target is declared 3 times' do
+        podfile = Pod::Podfile.new do
+          pod 'Alamofire'
+          target 'Target'
+          target 'Target'
+        end
+        validator = Installer::PodfileValidator.new(podfile)
+        validator.validate
+
+        validator.should.not.be.valid
+        validator.errors.should == ['The target `Target` is declared multiple times.']
+      end
+
+      it 'errors when the same target is declared 3 times when using a custom xcodeproj' do
+        podfile = Pod::Podfile.new do
+          pod 'Alamofire'
+          target 'Target' do
+            xcodeproj 'Project.xcodeproj'
+          end
+          target 'Target' do
+            xcodeproj 'Project.xcodeproj'
+          end
+        end
+        validator = Installer::PodfileValidator.new(podfile)
+        validator.validate
+
+        validator.should.not.be.valid
+        validator.errors.should == ['The target `Target` is declared multiple times for the project `Project.xcodeproj`.']
       end
 
       it 'does not error when the same target is declared twice for different projects' do
