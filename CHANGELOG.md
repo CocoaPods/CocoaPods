@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Reduce the probability of multiple project UUID collisions.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8636](https://github.com/CocoaPods/CocoaPods/pull/8636)
 
 
 ## 1.7.0.beta.2 (2019-03-08)
