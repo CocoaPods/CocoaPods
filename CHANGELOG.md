@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Adds support for referring to other podspecs during validation  
+  [Orta Therox](https://github.com/orta)
+  [#8536](https://github.com/CocoaPods/CocoaPods/pull/8536)
 
 ##### Bug Fixes
 
@@ -66,6 +68,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Do not link specs into user targets that are only used by app specs.  
   [Samuel Giddins](https://github.com/segiddins)
 
+
 ## 1.7.0.beta.1 (2019-02-22)
 
 ##### Enhancements
@@ -74,7 +77,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
   [#8461](https://github.com/CocoaPods/CocoaPods/issues/8461)
 
-* Set the path of development pod groups to root directory of the Pod 
+* Set the path of development pod groups to root directory of the Pod  
   [Eric Amorde](https://github.com/amorde)
   [#8445](https://github.com/CocoaPods/CocoaPods/pull/8445)
   [#8503](https://github.com/CocoaPods/CocoaPods/pull/8503)
