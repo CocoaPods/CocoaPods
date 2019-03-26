@@ -179,7 +179,7 @@ module Pod
           @metadata_cache = ProjectCache::ProjectMetadataCache.from_file(sandbox.project_metadata_cache_path)
           @project_cache_version = ProjectCache::ProjectCacheVersion.from_file(sandbox.project_version_cache_path)
 
-          force_clean_install = clean_install || project_cache_version.version != Version.create(VersionMetadata.gem_version)
+          force_clean_install = clean_install || project_cache_version.version != Version.create(VersionMetadata.project_cache_version)
           cache_result = ProjectCache::ProjectCacheAnalyzer.new(sandbox, installation_cache, analysis_result.all_user_build_configurations,
                                                                 object_version, pod_targets, aggregate_targets, :clean_install => force_clean_install).analyze
           aggregate_targets_to_generate = cache_result.aggregate_targets_to_generate || []
@@ -761,7 +761,7 @@ module Pod
                                       target_installation_results.aggregate_target_installation_results || {})
       metadata_cache.save_as(sandbox.project_metadata_cache_path)
 
-      cache_version = ProjectCache::ProjectCacheVersion.new(VersionMetadata.gem_version)
+      cache_version = ProjectCache::ProjectCacheVersion.new(VersionMetadata.project_cache_version)
       cache_version.save_as(sandbox.project_version_cache_path)
     end
 
