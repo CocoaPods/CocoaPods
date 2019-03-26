@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Deintegrate deleted targets even if `incremental_installation` is turned on.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso) & [Doug Mead](https://github.com/dmead28)
+  [#8638](https://github.com/CocoaPods/CocoaPods/pull/8638)
+
 * Reduce the probability of multiple project UUID collisions.  
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#8636](https://github.com/CocoaPods/CocoaPods/pull/8636)
