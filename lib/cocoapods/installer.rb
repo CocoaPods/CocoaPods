@@ -459,7 +459,7 @@ module Pod
       new_lockfile = generate_lockfile
       return if new_lockfile == lockfile
 
-      diff = Xcodeproj::Differ.hash_diff(lockfile.to_hash, new_lockfile.to_hash, :key_1 => 'Old Lockfile', :key_2 => 'New Lockfile')
+      return unless diff = Xcodeproj::Differ.hash_diff(lockfile.to_hash, new_lockfile.to_hash, :key_1 => 'Old Lockfile', :key_2 => 'New Lockfile')
       pretty_diff = YAMLHelper.convert_hash(diff, Lockfile::HASH_KEY_ORDER, "\n\n")
       pretty_diff.gsub!(':diff:', 'diff:'.yellow)
 
