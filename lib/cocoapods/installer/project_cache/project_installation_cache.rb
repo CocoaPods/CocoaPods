@@ -16,7 +16,7 @@ module Pod
         #
         attr_reader :build_configurations
 
-        # @return [String]
+        # @return [Integer]
         #         Project object stored in the cache.
         #
         attr_reader :project_object_version
@@ -25,7 +25,7 @@ module Pod
         #
         # @param [Hash{String => TargetCacheKey}] cache_key_by_target_label @see #cache_key_by_target_label
         # @param [Hash{String => Symbol}] build_configurations @see #build_configurations
-        # @param [String] project_object_version @see #project_object_version
+        # @param [Integer] project_object_version @see #project_object_version
         #
         def initialize(cache_key_by_target_label = {}, build_configurations = nil, project_object_version = nil)
           @cache_key_by_target_label = cache_key_by_target_label

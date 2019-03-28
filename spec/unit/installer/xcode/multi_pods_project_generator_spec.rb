@@ -90,7 +90,7 @@ module Pod
             @installation_options = Pod::Installer::InstallationOptions.new
 
             @generator = MultiPodsProjectGenerator.new(config.sandbox, aggregate_targets, pod_targets, @analysis_result.all_user_build_configurations,
-                                                       @installation_options, config, '1')
+                                                       @installation_options, config, 51)
           end
 
           it "creates build configurations for all projects of the user's targets" do
@@ -549,7 +549,7 @@ module Pod
           it "uses the user project's object version for the all projects" do
             tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
             FileUtils.mkdir_p(tmp_directory)
-            proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 1)
+            proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 51)
             proj.save
 
             user_target = stub('SampleApp-iOS-User-Target', :symbol_type => :application)
@@ -563,11 +563,11 @@ module Pod
             target.stubs(:user_targets).returns([user_target])
 
             @generator = MultiPodsProjectGenerator.new(config.sandbox, [target], [],
-                                                       @analysis_result.all_user_build_configurations, @installation_options, config, '1')
+                                                       @analysis_result.all_user_build_configurations, @installation_options, config, 51)
             pod_generator_result = @generator.generate!
-            pod_generator_result.project.object_version.should == '1'
+            pod_generator_result.project.object_version.should == '51'
             pod_generator_result.projects_by_pod_targets.keys.each do |target_project|
-              target_project.object_version.should == '1'
+              target_project.object_version.should == '51'
             end
 
             FileUtils.rm_rf(tmp_directory)
@@ -582,7 +582,7 @@ module Pod
 
           it 'will not create container project for nil parameter to aggregate targets' do
             @generator = MultiPodsProjectGenerator.new(config.sandbox, nil, [@monkey_ios_pod_target], @analysis_result.all_user_build_configurations,
-                                                       @installation_options, config, '1')
+                                                       @installation_options, config, 51)
             @generator.expects(:create_container_project).returns(nil)
             @generator.generate!
           end

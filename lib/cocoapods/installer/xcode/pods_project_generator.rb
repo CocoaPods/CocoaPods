@@ -43,7 +43,7 @@ module Pod
         #
         attr_reader :config
 
-        # @return [String] the object version for the projects we will generate.
+        # @return [Integer] the object version for the projects we will generate.
         #
         attr_reader :project_object_version
 
@@ -59,7 +59,7 @@ module Pod
         # @param  [Hash{String => Symbol}] build_configurations   @see #build_configurations
         # @param  [InstallationOptions]    installation_options   @see #installation_options
         # @param  [Config]                 config                 @see #config
-        # @param  [String]                 project_object_version @see #project_object_version
+        # @param  [Integer]                project_object_version @see #project_object_version
         # @param  [ProjectMetadataCache]   metadata_cache         @see #metadata_cache
         #
         def initialize(sandbox, aggregate_targets, pod_targets, build_configurations, installation_options, config,

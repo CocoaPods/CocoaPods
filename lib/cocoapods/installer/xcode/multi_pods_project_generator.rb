@@ -40,8 +40,7 @@ module Pod
 
         def create_pods_project(pod_targets, path, parent_project)
           platforms = pod_targets.map(&:platform)
-          project = ProjectGenerator.new(sandbox, path,
-                                         pod_targets, build_configurations, platforms,
+          project = ProjectGenerator.new(sandbox, path, pod_targets, build_configurations, platforms,
                                          project_object_version, false, :pod_target_subproject => true).generate!
           # Instead of saving every subproject to disk, we can optimize this by creating a temporary folder
           # the file reference can use so that we only have to call `save` once for all projects.
