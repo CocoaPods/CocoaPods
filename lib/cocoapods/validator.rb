@@ -555,7 +555,7 @@ module Pod
       app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
       app_target = Pod::Generator::AppTargetHelper.add_app_target(app_project, consumer.platform_name, deployment_target)
       Pod::Generator::AppTargetHelper.add_swift_version(app_target, derived_swift_version)
-      if consumer.platform_name == :ios ||  consumer.platform_name == :tvos
+      if consumer.platform_name == :ios || consumer.platform_name == :tvos
         # Lint will fail if a AppIcon is set but no image is found with such name
         app_target.build_configurations.each do |config|
           config.build_settings.delete('ASSETCATALOG_COMPILER_APPICON_NAME')
