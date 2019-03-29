@@ -76,28 +76,31 @@ module Pod
     end
 
     describe 'abstract-only dependencies' do
-      it 'errors when there is only a root target' do
+      it 'warns when there is only a root target' do
         podfile = Pod::Podfile.new do
+          platform :ios, '11'
           pod 'Alamofire'
         end
         validator = Installer::PodfileValidator.new(podfile)
         validator.validate
 
-        validator.should.not.be.valid
-        validator.errors.should == ['The dependency `Alamofire` is not used in any concrete target.']
+        validator.should.be.valid
+        validator.warnings.should == ["The abstract target Pods is not inherited by a concrete target, so the following dependencies won't make it into any targets in your project:\n    - Alamofire"]
       end
 
-      it 'errors when there are only abstract targets' do
+      it 'warns when there are only abstract targets' do
         podfile = Pod::Podfile.new do
           abstract_target 'Abstract' do
             pod 'Alamofire'
+            pod 'AFNetworking'
           end
         end
         validator = Installer::PodfileValidator.new(podfile)
         validator.validate
 
         validator.should.not.be.valid
-        validator.errors.should == ['The dependency `Alamofire` is not used in any concrete target.']
+        validator.warnings.should == ["The abstract target Abstract is not inherited by a concrete target, so the following dependencies won't make it into any targets in your project:\n    - AFNetworking\n    - Alamofire"]
+        validator.errors.should == ['The abstract target Abstract must specify a platform since its dependencies are not inherited by a concrete target.']
       end
 
       it 'does not error when an abstract target has concrete children with complete inheritance' do
@@ -114,7 +117,7 @@ module Pod
         validator.errors.should.be.empty
       end
 
-      it 'errors when an abstract target has concrete children with no inheritance' do
+      it 'warns when an abstract target has concrete children with no inheritance' do
         podfile = Pod::Podfile.new do
           abstract_target 'Abstract' do
             pod 'Alamofire'
@@ -127,10 +130,11 @@ module Pod
         validator.validate
 
         validator.should.not.be.valid
-        validator.errors.should == ['The dependency `Alamofire` is not used in any concrete target.']
+        validator.warnings.should == ["The abstract target Abstract is not inherited by a concrete target, so the following dependencies won't make it into any targets in your project:\n    - Alamofire"]
+        validator.errors.should == ['The abstract target Abstract must specify a platform since its dependencies are not inherited by a concrete target.']
       end
 
-      it 'errors when an abstract target has concrete children with only search_paths inheritance' do
+      it 'warns when an abstract target has concrete children with only search_paths inheritance' do
         podfile = Pod::Podfile.new do
           abstract_target 'Abstract' do
             pod 'Alamofire'
@@ -143,7 +147,8 @@ module Pod
         validator.validate
 
         validator.should.not.be.valid
-        validator.errors.should == ['The dependency `Alamofire` is not used in any concrete target.']
+        validator.warnings.should == ["The abstract target Abstract is not inherited by a concrete target, so the following dependencies won't make it into any targets in your project:\n    - Alamofire"]
+        validator.errors.should == ['The abstract target Abstract must specify a platform since its dependencies are not inherited by a concrete target.']
       end
 
       it 'does not error when an abstract target has multiple children with varied inheritance' do

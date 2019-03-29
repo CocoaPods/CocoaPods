@@ -42,9 +42,9 @@ module Pod
 
         def verify_no_duplicate_framework_and_library_names
           aggregate_targets.each do |aggregate_target|
-            aggregate_target.user_build_configurations.keys.each do |config|
+            aggregate_target.user_build_configurations.each_key do |config|
               pod_targets = aggregate_target.pod_targets_for_build_configuration(config)
-              file_accessors = pod_targets.flat_map(&:file_accessors)
+              file_accessors = pod_targets.flat_map(&:file_accessors).select { |fa| fa.spec.library_specification? }
 
               frameworks = file_accessors.flat_map(&:vendored_frameworks).uniq.map(&:basename)
               frameworks += pod_targets.select { |pt| pt.should_build? && pt.build_as_framework? }.map(&:product_module_name).uniq
@@ -58,7 +58,7 @@ module Pod
         end
 
         def verify_no_duplicate_names(names, label, type)
-          duplicates = names.map { |n| n.to_s.downcase }.group_by { |f| f }.select { |_, v| v.size > 1 }.keys
+          duplicates = names.group_by { |n| n.to_s.downcase }.select { |_, v| v.size > 1 }.keys
 
           unless duplicates.empty?
             raise Informative, "The '#{label}' target has " \
