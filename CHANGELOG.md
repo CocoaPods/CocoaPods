@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Use app spec as app host for test specs.  
+  [jkap](https://github.com/jkap)
+  [#8654](https://github.com/CocoaPods/CocoaPods/pull/8654) 
 
 ##### Bug Fixes
 
