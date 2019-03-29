@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix set `cache_root` from config file error  
+  [tripleCC](https://github.com/tripleCC)
+  [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
+
 * Deintegrate deleted targets even if `incremental_installation` is turned on.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso) & [Doug Mead](https://github.com/dmead28)
   [#8638](https://github.com/CocoaPods/CocoaPods/pull/8638)
@@ -71,10 +75,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Do not link specs into user targets that are only used by app specs.  
   [Samuel Giddins](https://github.com/segiddins)
-
-* Fix set `cache_root` from config file error  
-  [tripleCC](https://github.com/tripleCC)
-  [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
 
 
 ## 1.7.0.beta.1 (2019-02-22)
