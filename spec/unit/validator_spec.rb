@@ -1441,7 +1441,7 @@ module Pod
 
         it 'ios platform deletes AppIcon key' do
           consumer = Specification.from_file(podspec_path).consumer(:ios)
-          target = create_target_with_validator_consumer(@validator,consumer)
+          target = create_target_with_validator_consumer(@validator, consumer)
 
           target.build_configurations.each do |config|
             config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
@@ -1450,7 +1450,7 @@ module Pod
 
         it 'tvos platform deletes AppIcon key' do
           consumer = Specification.from_file(podspec_path).consumer(:tvos)
-          target = create_target_with_validator_consumer(@validator,consumer)
+          target = create_target_with_validator_consumer(@validator, consumer)
 
           target.build_configurations.each do |config|
             config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
@@ -1459,7 +1459,7 @@ module Pod
 
         it 'osx platform deletes AppIcon key' do
           consumer = Specification.from_file(podspec_path).consumer(:osx)
-          target = create_target_with_validator_consumer(@validator,consumer)
+          target = create_target_with_validator_consumer(@validator, consumer)
 
           target.build_configurations.each do |config|
             config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
@@ -1468,13 +1468,12 @@ module Pod
 
         it 'watchos platform deletes AppIcon key' do
           consumer = Specification.from_file(podspec_path).consumer(:watchos)
-          target = create_target_with_validator_consumer(@validator,consumer)
+          target = create_target_with_validator_consumer(@validator, consumer)
 
           target.build_configurations.each do |config|
             config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
           end
         end
-
       end
     end
 
