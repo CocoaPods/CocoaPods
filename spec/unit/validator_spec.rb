@@ -1418,6 +1418,64 @@ module Pod
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
         end
       end
+
+      # Given a validator and a consumer, creates an App project and returns it's main target
+      def create_target_with_validator_consumer(validator, consumer)
+        validator.instance_variable_set(:@consumer, consumer)
+        validator.send(:setup_validation_environment)
+        validator.send(:create_app_project)
+        project = Xcodeproj::Project.open(validator.validation_dir + 'App.xcodeproj')
+
+        project.native_targets.find { |t| t.name == 'App' }
+      end
+
+      describe 'check appicon key deleted' do
+        before do
+          @validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
+          @validator.stubs(:validate_url)
+        end
+
+        after do
+          @validator.send(:tear_down_validation_environment)
+        end
+
+        it 'ios platform deletes AppIcon key' do
+          consumer = Specification.from_file(podspec_path).consumer(:ios)
+          target = create_target_with_validator_consumer(@validator,consumer)
+
+          target.build_configurations.each do |config|
+            config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
+          end
+        end
+
+        it 'tvos platform deletes AppIcon key' do
+          consumer = Specification.from_file(podspec_path).consumer(:tvos)
+          target = create_target_with_validator_consumer(@validator,consumer)
+
+          target.build_configurations.each do |config|
+            config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
+          end
+        end
+
+        it 'osx platform deletes AppIcon key' do
+          consumer = Specification.from_file(podspec_path).consumer(:osx)
+          target = create_target_with_validator_consumer(@validator,consumer)
+
+          target.build_configurations.each do |config|
+            config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
+          end
+        end
+
+        it 'watchos platform deletes AppIcon key' do
+          consumer = Specification.from_file(podspec_path).consumer(:watchos)
+          target = create_target_with_validator_consumer(@validator,consumer)
+
+          target.build_configurations.each do |config|
+            config.build_settings.key?('ASSETCATALOG_COMPILER_APPICON_NAME').should.be.false
+          end
+        end
+
+      end
     end
 
     #-------------------------------------------------------------------------#
