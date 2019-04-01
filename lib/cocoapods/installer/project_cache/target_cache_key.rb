@@ -76,6 +76,7 @@ module Pod
           if files = cache_hash['FILES']
             cache_hash['FILES'] = files.sort
           end
+          cache_hash['SPECS'] = cache_hash['SPECS'].sort_by(&:downcase)
           type = cache_hash['CHECKSUM'] ? :pod_target : :aggregate
           TargetCacheKey.new(type, cache_hash)
         end
@@ -105,7 +106,7 @@ module Pod
 
           contents = {
             'CHECKSUM' => pod_target.root_spec.checksum,
-            'SPECS' => pod_target.specs.map(&:to_s).sort,
+            'SPECS' => pod_target.specs.map(&:to_s).sort_by(&:downcase),
             'BUILD_SETTINGS_CHECKSUM' => build_settings,
           }
           contents['FILES'] = pod_target.all_files.sort if is_local_pod

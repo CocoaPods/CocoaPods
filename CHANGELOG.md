@@ -25,6 +25,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix target cache key SPECS key ordering.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8657](https://github.com/CocoaPods/CocoaPods/issues/8657)
+
 * Deintegrate deleted targets even if `incremental_installation` is turned on.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso) & [Doug Mead](https://github.com/dmead28)
   [#8638](https://github.com/CocoaPods/CocoaPods/pull/8638)
