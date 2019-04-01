@@ -15,8 +15,8 @@ module Pod
         describe 'cache key structure' do
           it 'should order subspecs alphabetically' do
             root_spec = fixture_spec('banana-lib/BananaLib.podspec')
-            subspec1 = Pod::Specification.new(root_spec, "MUS")
-            subspec2 = Pod::Specification.new(root_spec, "Module")
+            subspec1 = Pod::Specification.new(root_spec, 'MUS')
+            subspec2 = Pod::Specification.new(root_spec, 'Module')
 
             pod_target = fixture_pod_target_with_specs([root_spec, subspec1, subspec2], true)
             cache_key = TargetCacheKey.from_pod_target(pod_target)

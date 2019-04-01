@@ -74,9 +74,11 @@ module Pod
         def self.from_cache_hash(key_hash)
           cache_hash = key_hash.dup
           if files = cache_hash['FILES']
-            cache_hash['FILES'] = files.sort
+            cache_hash['FILES'] = files.sort_by(&:downcase)
           end
-          cache_hash['SPECS'] = cache_hash['SPECS'].sort_by(&:downcase)
+          if specs = cache_hash['SPECS']
+            cache_hash['SPECS'] = specs.sort_by(&:downcase)
+          end
           type = cache_hash['CHECKSUM'] ? :pod_target : :aggregate
           TargetCacheKey.new(type, cache_hash)
         end
@@ -109,7 +111,7 @@ module Pod
             'SPECS' => pod_target.specs.map(&:to_s).sort_by(&:downcase),
             'BUILD_SETTINGS_CHECKSUM' => build_settings,
           }
-          contents['FILES'] = pod_target.all_files.sort if is_local_pod
+          contents['FILES'] = pod_target.all_files.sort_by(&:downcase) if is_local_pod
           contents['CHECKOUT_OPTIONS'] = checkout_options if checkout_options
           TargetCacheKey.new(:pod_target, contents)
         end
