@@ -6,6 +6,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+* Add an error message for :podspec pods not matching the version in Pods and on disk  
+  [orta](https://github.com/orta)
+  [#8676](https://github.com/CocoaPods/CocoaPods/issues/8676)
+
 ##### Enhancements
 
 * None.  
