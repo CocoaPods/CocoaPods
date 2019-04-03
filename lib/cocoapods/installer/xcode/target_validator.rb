@@ -14,18 +14,20 @@ module Pod
         #
         attr_reader :pod_targets
 
-        # Create a new TargetValidator with aggregate and pod targets to
-        # validate.
+        # @return [InstallationOptions] installation_options
         #
-        # @param [Array<AggregateTarget>] aggregate_targets
-        #                                 The aggregate targets to validate.
+        attr_reader :installation_options
+
+        # Initialize a new instance
         #
-        # @param [Array<PodTarget>] pod_targets
-        #                           The pod targets to validate.
+        # @param [Array<AggregateTarget>] aggregate_targets @see #aggregate_targets
+        # @param [Array<PodTarget>] pod_targets @see #pod_targets
+        # @param [InstallationOptions] installation_options @see #installation_options
         #
-        def initialize(aggregate_targets, pod_targets)
+        def initialize(aggregate_targets, pod_targets, installation_options)
           @aggregate_targets = aggregate_targets
           @pod_targets = pod_targets
+          @installation_options = installation_options
         end
 
         # Perform the validation steps for the provided aggregate and pod
@@ -101,8 +103,10 @@ module Pod
             # they are integrated with. An error is displayed if the target definition Swift versions collide or none
             # of target definitions specify the `SWIFT_VERSION` attribute.
             if swift_pod_target.spec_swift_versions.empty?
-              swift_target_definitions = swift_pod_target.target_definitions.reject { |target| target.swift_version.blank? }
-              next if swift_target_definitions.uniq(&:swift_version).count == 1
+              swift_target_definitions = swift_pod_target.target_definitions.reject do |target_definition|
+                target_definition.swift_version.blank?
+              end
+              next if swift_target_definitions.uniq(&:swift_version).count == 1 || !installation_options.integrate_targets?
               if swift_target_definitions.empty?
                 "- `#{swift_pod_target.name}` does not specify a Swift version and none of the targets " \
                   "(#{swift_pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence}) integrating it have the " \

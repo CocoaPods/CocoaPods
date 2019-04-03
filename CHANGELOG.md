@@ -22,6 +22,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#8702](https://github.com/CocoaPods/CocoaPods/issues/8702)
 
+* Do not verify pod Swift version from integrated targets if integration is disabled.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8653](https://github.com/CocoaPods/CocoaPods/issues/8653)
+
+
 ## 1.7.0.beta.3 (2019-03-28)
 
 ##### Enhancements
