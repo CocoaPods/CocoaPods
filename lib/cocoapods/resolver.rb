@@ -439,14 +439,14 @@ module Pod
               # Conflict was caused by a requirement from a local dependency.
               # Tell user to use `pod update`.
               o << "\nIt seems like you've changed the constraints of dependency `#{name}` " \
-              "inside your development pod `#{local_pod_parent.name}`.\nYou should run `pod update #{name}` to apply " \
+              "inside your development pod `#{local_pod_parent.name}`.\nYou should run `pod update #{name}` to apply "\
               "changes you've made."
-            elsif !conflict.possibility && conflict.locked_requirement && conflict.locked_requirement.external_source && conflict.locked_requirement.external_source[:podspec] && 
+            elsif !conflict.possibility && conflict.locked_requirement && conflict.locked_requirement.external_source && conflict.locked_requirement.external_source[:podspec] &&
                                            conflict.requirement && conflict.requirement.external_source && conflict.requirement.external_source[:podspec]
               # The internal version of the Podspec doesn't match the external definition of a podspec
               o << "\nIt seems like you've changed the version of the dependency `#{name}` " \
-              "and it differs from the version stored in `Pods/Local Podspecs`.\nk  You should run `pod update #{name} --no-repo-update` to apply " \
-              "changes made locally."
+              "and it differs from the version stored in `Pods/Local Podspecs`.\nYou should run `pod update #{name} --no-repo-update` to apply " \
+              'changes made locally.'
             elsif (conflict.possibility && conflict.possibility.version.prerelease?) &&
                 (conflict.requirement && !(
                 conflict.requirement.prerelease? ||
