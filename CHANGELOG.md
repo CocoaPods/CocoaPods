@@ -37,6 +37,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#8636](https://github.com/CocoaPods/CocoaPods/pull/8636)
 
+* Fix: AppIcon not found when executing `pod lib lint`
+  [Itay Brenner](https://github.com/itaybre)
+  [#8648](https://github.com/CocoaPods/CocoaPods/issues/8648)
+
 
 ## 1.7.0.beta.2 (2019-03-08)
 
