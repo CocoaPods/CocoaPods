@@ -11,7 +11,8 @@ CocoaPods manages dependencies for your Xcode projects.
 You specify the dependencies for your project in a simple text file: your `Podfile`. 
 CocoaPods recursively resolves dependencies between libraries, fetches 
 source code for all dependencies, and creates and maintains an Xcode 
-workspace to build your project.
+workspace to build your project. The latest released Xcode versions and the 
+prior version are supported.
 
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](https://guides.cocoapods.org/using/getting-started.html#installation) and the
