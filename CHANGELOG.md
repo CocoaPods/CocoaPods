@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Orta Therox](https://github.com/orta)
   [#8536](https://github.com/CocoaPods/CocoaPods/pull/8536)
 
+* Speed up dependency resolution when there are many requirements for the same pod
+  or many versions that do not satisfy the given requirements.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
