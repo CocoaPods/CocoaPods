@@ -8,15 +8,32 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Adds support for referring to other podspecs during validation  
-  [Orta Therox](https://github.com/orta)
-  [#8536](https://github.com/CocoaPods/CocoaPods/pull/8536)
+* None.  
 
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
   [tripleCC](https://github.com/tripleCC)
   [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
+
+* Fix target cache key SPECS key ordering.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8657](https://github.com/CocoaPods/CocoaPods/issues/8657)  
+
+* Fix: AppIcon not found when executing `pod lib lint`
+  [Itay Brenner](https://github.com/itaybre)
+  [#8648](https://github.com/CocoaPods/CocoaPods/issues/8648)
+
+
+## 1.7.0.beta.3 (2019-03-28)
+
+##### Enhancements
+
+* Adds support for referring to other podspecs during validation  
+  [Orta Therox](https://github.com/orta)
+  [#8536](https://github.com/CocoaPods/CocoaPods/pull/8536)
+
+##### Bug Fixes
 
 * Deintegrate deleted targets even if `incremental_installation` is turned on.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso) & [Doug Mead](https://github.com/dmead28)

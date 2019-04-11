@@ -18,7 +18,7 @@ module Pod
         #
         attr_reader :build_configurations
 
-        # @return [String] The object version from the user project.
+        # @return [Integer] The object version from the user project.
         #
         attr_reader :project_object_version
 
@@ -39,7 +39,7 @@ module Pod
         # @param [Sandbox] sandbox @see #sandbox
         # @param [ProjectInstallationCache] cache @see #cache
         # @param [Hash{String => Symbol}] build_configurations @see #build_configurations
-        # @param [String] project_object_version @see #project_object_version
+        # @param [Integer] project_object_version @see #project_object_version
         # @param [Array<PodTarget>] pod_targets @see #pod_targets
         # @param [Array<AggregateTarget>] aggregate_targets @see #aggregate_targets
         # @param [Bool] clean_install @see #clean_install
