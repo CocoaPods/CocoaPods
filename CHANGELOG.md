@@ -17,6 +17,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   or many versions that do not satisfy the given requirements.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Add support for pods in abstract-only targets to be installed.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
