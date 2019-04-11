@@ -1,16 +1,16 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: 989df9f0cbd9a2dc35be22aa936637f4f024973a
+  revision: 896d82a4dff73d80da565b0caa77c6ed74c9c6f8
   branch: master
   specs:
     claide (1.0.2)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 4f8d7285cb9ee6a50e482a006790fea71dca4279
+  revision: 6b72b57c4ea6c740aedaf387994cde2e31595aad
   branch: master
   specs:
-    cocoapods-core (1.7.0.beta.2)
+    cocoapods-core (1.7.0.beta.3)
       activesupport (>= 4.0.2, < 6)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
@@ -31,10 +31,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 2f9015f102abe6e73eb4fc32bd0c62a7aa82a32c
+  revision: 81d8ba5acea5130e82b418456f93a4a7ac4ca9c2
   branch: master
   specs:
-    xcodeproj (1.8.1)
+    xcodeproj (1.8.2)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -43,10 +43,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: f0b5281cafe0b31b74ecf9a59524c301359d5c49
+  revision: c3372a2ea2c2134db78fc6f8d157ebb9bb943a83
   branch: master
   specs:
-    cocoapods-deintegrate (1.0.3)
+    cocoapods-deintegrate (1.0.4)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
@@ -103,10 +103,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.7.0.beta.2)
+    cocoapods (1.7.0.beta.3)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.7.0.beta.2)
+      cocoapods-core (= 1.7.0.beta.3)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -121,13 +121,13 @@ PATH
       molinillo (~> 0.6.6)
       nap (~> 1.0)
       ruby-macho (~> 1.4)
-      xcodeproj (>= 1.8.1, < 2.0)
+      xcodeproj (>= 1.8.2, < 2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.0)
-    activesupport (4.2.11)
+    activesupport (4.2.11.1)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
@@ -151,7 +151,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.1.4)
+    concurrent-ruby (1.1.5)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)

@@ -12,6 +12,18 @@ module Pod
           @aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(@aggregate_target)
         end
 
+        describe 'cache key structure' do
+          it 'should order subspecs alphabetically' do
+            root_spec = fixture_spec('banana-lib/BananaLib.podspec')
+            subspec1 = Pod::Specification.new(root_spec, 'MUS')
+            subspec2 = Pod::Specification.new(root_spec, 'Module')
+
+            pod_target = fixture_pod_target_with_specs([root_spec, subspec1, subspec2], true)
+            cache_key = TargetCacheKey.from_pod_target(pod_target)
+            cache_key.to_h['SPECS'].should.equal(['BananaLib (1.0)', 'BananaLib/Module (1.0)', 'BananaLib/MUS (1.0)'])
+          end
+        end
+
         describe 'key_difference with pod targets' do
           it 'should return equality for the same pod targets' do
             @banana_cache_key.key_difference(@banana_cache_key).should.equal(:none)

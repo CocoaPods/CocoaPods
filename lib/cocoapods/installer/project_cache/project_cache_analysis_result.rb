@@ -26,7 +26,7 @@ module Pod
         #
         attr_reader :build_configurations
 
-        # @return [String]
+        # @return [Integer]
         #         The project object version to install with each target.
         #
         attr_reader :project_object_version
@@ -37,7 +37,7 @@ module Pod
         # @param [Array<AggregateTarget] aggregate_targets_to_generate @see #aggregate_targets_to_generate
         # @param [Hash{String => TargetCacheKey}] cache_key_by_target_label @see #cache_key_by_target_label
         # @param [Hash{String => Symbol}] build_configurations @see #build_configurations
-        # @param [String] project_object_version @see #project_object_version
+        # @param [Integer] project_object_version @see #project_object_version
         #
         def initialize(pod_targets_to_generate, aggregate_targets_to_generate, cache_key_by_target_label,
                        build_configurations, project_object_version)
