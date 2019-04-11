@@ -155,12 +155,13 @@ module Pod
     #         Podfile is located.
     #
     def installation_root
-      current_dir = ActiveSupport::Multibyte::Unicode.normalize(Dir.pwd)
-      current_path = Pathname.new(current_dir)
-      unless @installation_root
+      @installation_root ||= begin
+        installation_root = nil
+        current_dir = ActiveSupport::Multibyte::Unicode.normalize(Dir.pwd)
+        current_path = Pathname.new(current_dir)
         until current_path.root?
           if podfile_path_in_dir(current_path)
-            @installation_root = current_path
+            installation_root = current_path
             unless current_path == Pathname.pwd
               UI.puts("[in #{current_path}]")
             end
@@ -169,9 +170,8 @@ module Pod
             current_path = current_path.parent
           end
         end
-        @installation_root ||= Pathname.pwd
+        installation_root ||= Pathname.pwd
       end
-      @installation_root
     end
 
     attr_writer :installation_root
