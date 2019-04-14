@@ -95,6 +95,17 @@ module Pod
         @pod_target.should_build?.should == false
       end
 
+      describe '#headers_sandbox' do
+        it 'returns the correct path' do
+          @pod_target.headers_sandbox.should == Pathname.new('BananaLib')
+        end
+
+        it 'returns the correct path when a custom module name is set' do
+          @pod_target.stubs(:product_module_name).returns('BananaLibModule')
+          @pod_target.headers_sandbox.should == Pathname.new('BananaLibModule')
+        end
+      end
+
       describe '#build_settings_for_spec' do
         before do
           @watermelon_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')

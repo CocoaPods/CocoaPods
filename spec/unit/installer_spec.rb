@@ -470,6 +470,7 @@ module Pod
           @spec = stub(:name => 'Spec', :test_specification? => false, :library_specification? => true, :non_library_specification? => false, :app_specification? => false)
           @spec.stubs(:root => @spec)
           @spec.stubs(:spec_type).returns(:library)
+          @spec.stubs(:module_name => 'Spec')
           @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
                                         [fixture_target_definition], nil)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
