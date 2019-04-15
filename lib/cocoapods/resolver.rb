@@ -573,7 +573,21 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
       end
     end
 
-    EdgeAndPlatform = Struct.new(:edge, :target_platform)
+    class EdgeAndPlatform
+      def initialize(edge, target_platform)
+        @edge = edge
+        @target_platform = target_platform
+      end
+      attr_reader :edge, :target_platform
+
+      def eql?(other)
+        edge.equal?(other.edge) && target_platform.eql?(other.target_platform)
+      end
+
+      def hash
+        edge.object_id ^ target_platform.hash
+      end
+    end
     private_constant :EdgeAndPlatform
 
     # Whether the given `edge` should be followed to find dependencies for the
