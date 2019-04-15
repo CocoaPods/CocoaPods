@@ -166,7 +166,7 @@ module Pod
     end
 
     def analyze_project_cache
-      user_projects = aggregate_targets.map(&:user_project).compact
+      user_projects = aggregate_targets.map(&:user_project).compact.uniq
       object_version = user_projects.min_by { |p| p.object_version.to_i }.object_version.to_i unless user_projects.empty?
 
       if !installation_options.incremental_installation
