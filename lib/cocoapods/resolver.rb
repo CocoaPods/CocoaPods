@@ -348,7 +348,9 @@ module Pod
     # @return [Array<Specification>] List of specifications satisfying given requirements.
     #
     def specifications_for_dependency(dependency, additional_requirements = [])
-      requirement = Requirement.new(dependency.requirement.as_list + additional_requirements.flat_map(&:as_list))
+      requirement_list = dependency.requirement.as_list + additional_requirements.flat_map(&:as_list)
+      requirement_list.uniq!
+      requirement = Requirement.new(requirement_list)
       find_cached_set(dependency).
         all_specifications(warn_for_multiple_pod_sources, requirement).
         map { |s| s.subspec_by_name(dependency.name, false, true) }.
