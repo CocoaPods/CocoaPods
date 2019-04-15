@@ -99,6 +99,8 @@ module Pod
     def resolver_specs_by_target
       @resolver_specs_by_target ||= {}.tap do |resolver_specs_by_target|
         @podfile_dependency_cache.target_definition_list.each do |target|
+          next if target.abstract? && !target.platform
+
           # can't use vertex.root? since that considers _all_ targets
           explicit_dependencies = @podfile_dependency_cache.target_definition_dependencies(target).map(&:name).to_set
           vertices = valid_dependencies_for_target(target)
