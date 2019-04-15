@@ -150,15 +150,10 @@ module Pod
     #
     def search_for(dependency)
       @search[dependency] ||= begin
-        podfile_requirements = @podfile_requirements_by_root_name[dependency.root_name]
         additional_requirements = if locked_requirement = requirement_for_locked_pod_named(dependency.name)
-                                    if podfile_requirements
-                                      podfile_requirements + [locked_requirement]
-                                    else
-                                      [locked_requirement]
-                                    end
+                                    [locked_requirement]
                                   else
-                                    Array(podfile_requirements)
+                                    Array(@podfile_requirements_by_root_name[dependency.root_name])
                                   end
 
         specifications_for_dependency(dependency, additional_requirements)
