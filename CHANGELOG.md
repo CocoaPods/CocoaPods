@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Properly escape path  
+  [SatbirTanda](https://github.com/SatbirTanda)
+  [#issue_number](https://github.com/CocoaPods/CocoaPods/issues/issue_number/8703)
+
 * Fix set `cache_root` from config file error  
   [tripleCC](https://github.com/tripleCC)
   [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
