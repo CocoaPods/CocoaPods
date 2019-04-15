@@ -73,8 +73,8 @@ module Pod
               built_targets, unbuilt_targets = pod_targets.partition(&:should_build?)
               dynamic_pod_targets = built_targets.select(&:build_as_dynamic?)
 
-              dependencies = dynamic_pod_targets.flat_map(&:dependencies)
-              depended_upon_targets = unbuilt_targets.select { |t| dependencies.include?(t.pod_name) }
+              dependencies = dynamic_pod_targets.flat_map(&:dependent_targets).uniq
+              depended_upon_targets = unbuilt_targets & dependencies
 
               static_libs = depended_upon_targets.flat_map(&:file_accessors).flat_map(&:vendored_static_artifacts)
               unless static_libs.empty?
@@ -82,7 +82,7 @@ module Pod
                   "transitive dependencies that include statically linked binaries: (#{static_libs.to_sentence})"
               end
 
-              static_deps = dynamic_pod_targets.flat_map(&:recursive_dependent_targets).select(&:build_as_static?).uniq
+              static_deps = dynamic_pod_targets.flat_map(&:recursive_dependent_targets).uniq.select(&:build_as_static?)
               unless static_deps.empty?
                 raise Informative, "The '#{aggregate_target.label}' target has " \
                   "transitive dependencies that include statically linked binaries: (#{static_deps.flat_map(&:name).to_sentence})"
