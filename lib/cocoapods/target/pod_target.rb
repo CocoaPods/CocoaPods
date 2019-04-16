@@ -66,6 +66,10 @@ module Pod
     #
     attr_reader :app_spec_build_settings
 
+    # @return [Hash{String => (String,PodTarget)}]
+    #
+    attr_accessor :test_app_hosts_by_spec_name
+
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
@@ -99,6 +103,7 @@ module Pod
       @dependent_targets = []
       @test_dependent_targets_by_spec_name = {}
       @app_dependent_targets_by_spec_name = {}
+      @test_app_hosts_by_spec_name = {}
       @build_config_cache = {}
       @test_spec_build_settings = create_test_build_settings
       @app_spec_build_settings = create_app_build_settings
@@ -119,7 +124,9 @@ module Pod
         else
           target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, [target_definition], file_accessors, target_definition.label,
                                  :build_type => build_type)
-          target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
+          target.dependent_targets = dependent_targets.flat_map do |pod_target|
+            pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
+          end
           target.test_dependent_targets_by_spec_name = Hash[test_dependent_targets_by_spec_name.map do |spec_name, test_pod_targets|
             scoped_test_pod_targets = test_pod_targets.flat_map do |test_pod_target|
               test_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
@@ -127,6 +134,12 @@ module Pod
             [spec_name, scoped_test_pod_targets]
           end]
           target.app_dependent_targets_by_spec_name = Hash[app_dependent_targets_by_spec_name.map do |spec_name, app_pod_targets|
+            scoped_app_pod_targets = app_pod_targets.flat_map do |app_pod_target|
+              app_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
+            end
+            [spec_name, scoped_app_pod_targets]
+          end]
+          target.test_app_hosts_by_spec_name = Hash[test_app_hosts_by_spec_name.map do |spec_name, app_pod_targets|
             scoped_app_pod_targets = app_pod_targets.flat_map do |app_pod_target|
               app_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
             end
@@ -469,6 +482,16 @@ module Pod
     #
     def app_target_label(app_spec)
       "#{label}-#{subspec_label(app_spec)}"
+    end
+
+    def app_host_target_label(test_spec)
+      app_spec, app_target = test_app_hosts_by_spec_name[test_spec.name]
+
+      if app_spec
+        [app_target.name, app_target.app_target_label(app_spec)]
+      elsif test_spec.consumer(platform).requires_app_host?
+        [name, "AppHost-#{label}-#{test_spec.test_type.capitalize}-Tests"]
+      end
     end
 
     def non_library_spec_label(spec)

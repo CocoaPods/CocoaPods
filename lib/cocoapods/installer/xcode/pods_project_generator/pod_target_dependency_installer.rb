@@ -91,7 +91,7 @@ module Pod
               test_native_target.add_dependency(test_resource_bundle_target)
             end
 
-            test_dependent_targets = pod_target.test_dependent_targets_by_spec_name.fetch(test_spec.name, []).unshift(pod_target).uniq
+            test_dependent_targets = pod_target.test_dependent_targets_by_spec_name.fetch(test_spec.name, []).+([pod_target]).uniq
             test_dependent_targets.each do |test_dependent_target|
               if dependency_installation_result = pod_target_installation_results[test_dependent_target.name]
                 dependent_test_project = dependency_installation_result.native_target.project
@@ -103,6 +103,36 @@ module Pod
               else
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[test_dependent_target.label]
+                project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
+                Project.add_cached_dependency(test_native_target, cached_dependency)
+              end
+            end
+
+            if app_target_label = pod_target.app_host_target_label(test_spec)
+              top_label, app_target_label = *app_target_label
+              if dependency_installation_result = pod_target_installation_results[top_label]
+                unless app_native_target = dependency_installation_result.app_host_target_labelled(app_target_label)
+                  raise "Did not find target with label #{app_target_label} in #{dependency_installation_result.inspect}"
+                end
+                dependent_test_project = app_native_target.project
+                if dependent_test_project != project
+                  project.add_subproject_reference(dependent_test_project, project.dependencies_group)
+                end
+
+                test_native_target.build_configurations.each do |configuration|
+                  test_host = "$(BUILT_PRODUCTS_DIR)/#{app_native_target.name}.app/"
+                  test_host << 'Contents/MacOS/' if pod_target.platform == :osx
+                  test_host << app_native_target.name.to_s
+                  configuration.build_settings['BUNDLE_LOADER'] = '$(TEST_HOST)'
+                  configuration.build_settings['TEST_HOST'] = test_host
+                end
+                target_attributes = project.root_object.attributes['TargetAttributes'] || {}
+                target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_native_target.uuid.to_s }
+                project.root_object.attributes['TargetAttributes'] = target_attributes
+                test_native_target.add_dependency(app_native_target)
+              else
+                # Hit the cache
+                cached_dependency = metadata_cache.target_label_by_metadata[app_target_label]
                 project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
                 Project.add_cached_dependency(test_native_target, cached_dependency)
               end

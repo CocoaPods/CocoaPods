@@ -406,25 +406,10 @@ module Pod
               raise Informative "`#{target.label}-#{test_spec_consumer.test_type}-Tests` manually specifies an app host but has `test_spec.requires_app_host = false`! Please set `test_spec.requires_app_host = true`"
             end
 
-            target.test_spec_consumers.select(&:requires_app_host?).select(&:app_host_name).each do |test_spec_consumer|
-              name = test_spec_consumer.app_host_name.split('/').join('-')
-              app_native_target = app_native_targets.find { |target| target.name == name }
-              raise Informative "Couldn't find app spec matching #{name}" unless app_native_target
-
-              test_native_target = test_native_target_from_spec(test_spec_consumer.spec, test_native_targets)
-              attach_app_host_target_to_test_native_target(app_native_target, test_native_target)
-            end
-
-            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by(&:test_type).map do |test_type, test_spec_consumers|
-              platform = target.platform
-              name = "AppHost-#{target.label}-#{test_type.capitalize}-Tests"
-              app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name, name).install!
-              # Wire test native targets to the generated app host.
-              test_spec_consumers.each do |test_spec_consumer|
-                test_native_target = test_native_target_from_spec(test_spec_consumer.spec, test_native_targets)
-                attach_app_host_target_to_test_native_target(app_host_target, test_native_target)
+            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by(&:test_type).flat_map do |test_type, test_spec_consumers|
+              test_spec_consumers.group_by { |consumer| target.app_host_target_label(consumer.spec) }.map do |(_, target_name), _|
+                AppHostInstaller.new(sandbox, project, target.platform, target_name, target.pod_name, target_name).install!
               end
-              app_host_target
             end
           end
 

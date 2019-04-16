@@ -110,6 +110,14 @@ module Pod
             test_specs_by_native_target.merge(app_specs_by_native_target)
           end
 
+          def app_host_target_labelled(label)
+            app_native_targets.find do |app_native_target|
+              app_native_target.name == label
+            end || test_app_host_targets.find do |app_native_target|
+              app_native_target.name == label
+            end
+          end
+
           private
 
           def test_native_target_from_spec(spec)
