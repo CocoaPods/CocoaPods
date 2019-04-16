@@ -609,13 +609,13 @@ module Pod
             target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
             target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
               test_dependencies = dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
-              test_dependencies.delete_if { |k| dependencies.key? k }
+              test_dependencies.delete_if { |k, _| dependencies.key? k }
               hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
             end
 
             target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
               app_dependencies = dependencies_for_specs([app_spec], target.platform, all_specs).group_by(&:root)
-              app_dependencies.delete_if { |k| dependencies.key? k }
+              app_dependencies.delete_if { |k, _| dependencies.key? k }
               hash[app_spec.name] = filter_dependencies(app_dependencies, pod_targets_by_name, target)
             end
 
@@ -641,12 +641,12 @@ module Pod
               target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
               target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
                 test_dependencies = dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-                test_dependencies.delete_if { |k| dependencies.key? k }
+                test_dependencies.delete_if { |k, _| dependencies.key? k }
                 hash[test_spec.name] = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
               end
               target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
                 app_dependencies = dependencies_for_specs(target.app_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-                app_dependencies.delete_if { |k| dependencies.key? k }
+                app_dependencies.delete_if { |k, _| dependencies.key? k }
                 hash[app_spec.name] = pod_targets.reject { |t| app_dependencies[t.root_spec].nil? }
               end
             end
