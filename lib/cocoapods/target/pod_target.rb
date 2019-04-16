@@ -150,7 +150,7 @@ module Pod
     # @return [Pathname] the pathname for headers in the sandbox.
     #
     def headers_sandbox
-      Pathname.new(pod_name)
+      Pathname.new(product_module_name)
     end
 
     # @return [Hash{FileAccessor => Hash}] Hash of file accessors by header mappings.

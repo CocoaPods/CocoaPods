@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix a regression for static libraries with a custom module name  
+  [Eric Amorde](https://github.com/amorde)
+  [#8695](https://github.com/CocoaPods/CocoaPods/issues/8695)
 
 
 ## 1.7.0.beta.3 (2019-03-28)
