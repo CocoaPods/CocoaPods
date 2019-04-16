@@ -21,4 +21,8 @@ Pod::Spec.new do |s|
     test_spec.requires_app_host = true
     test_spec.source_files = 'TestLib/UnitTests2/**/*'
   end
+
+  s.app_spec 'App' do |app_spec|
+    app_spec.source_files = 'TestLib/App/**/*'
+  end
 end

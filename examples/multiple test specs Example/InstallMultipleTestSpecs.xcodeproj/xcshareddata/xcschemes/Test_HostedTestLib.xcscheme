@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "09A26949C70A0A9776D6237D791960C9"
-               BuildableName = "TestLib.framework"
-               BlueprintName = "TestLib"
+               BlueprintIdentifier = "C72756DAA3DAE9236BFDC7EABA6351A3"
+               BuildableName = "HostedTestLib.framework"
+               BlueprintName = "HostedTestLib"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D0BE50B728971E85AEA1D90D04EDEDFA"
-               BuildableName = "TestLib-Unit-UnitTests1.xctest"
-               BlueprintName = "TestLib-Unit-UnitTests1"
+               BlueprintIdentifier = "B87FBE85C318B63718B897BA1D5BEF7B"
+               BuildableName = "HostedTestLib-Unit-UnitTests3.xctest"
+               BlueprintName = "HostedTestLib-Unit-UnitTests3"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,22 +42,13 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "24F70FE3AEFB1838B068BFBF3642D3FF"
-               BuildableName = "TestLib-Unit-UnitTests2.xctest"
-               BlueprintName = "TestLib-Unit-UnitTests2"
+               BlueprintIdentifier = "74B6F4A22B498276716131B04560A0AD"
+               BuildableName = "HostedTestLib-Unit-UnitTests4.xctest"
+               BlueprintName = "HostedTestLib-Unit-UnitTests4"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "09A26949C70A0A9776D6237D791960C9"
-            BuildableName = "TestLib.framework"
-            BlueprintName = "TestLib"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -74,9 +65,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "09A26949C70A0A9776D6237D791960C9"
-            BuildableName = "TestLib.framework"
-            BlueprintName = "TestLib"
+            BlueprintIdentifier = "C72756DAA3DAE9236BFDC7EABA6351A3"
+            BuildableName = "HostedTestLib.framework"
+            BlueprintName = "HostedTestLib"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -89,15 +80,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "09A26949C70A0A9776D6237D791960C9"
-            BuildableName = "TestLib.framework"
-            BlueprintName = "TestLib"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
