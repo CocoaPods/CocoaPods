@@ -555,12 +555,11 @@ module Pod
 
           frameworks = []
           frameworks.concat consumer_frameworks
-          if non_library_xcconfig? || (target.should_build? && target.build_as_dynamic?)
+          if library_xcconfig? && (target.should_build? && target.build_as_dynamic?)
             frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
           end
           if non_library_xcconfig?
-            frameworks.concat vendored_dynamic_frameworks.map { |l| File.basename(l, '.framework') }
-            frameworks.concat dependent_targets.flat_map { |pt| pt.build_settings.frameworks_to_import }
+            frameworks.concat dependent_targets_to_link.flat_map { |pt| pt.build_settings.frameworks_to_import }
           end
           frameworks
         end
@@ -665,7 +664,7 @@ module Pod
           end
           if non_library_xcconfig?
             libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.dynamic_libraries_to_import }
-            libraries.concat dependent_targets.flat_map { |pt| pt.build_settings.static_libraries_to_import }
+            libraries.concat dependent_targets_to_link.flat_map { |pt| pt.build_settings.static_libraries_to_import }
           end
           libraries
         end
@@ -865,6 +864,18 @@ module Pod
           )
         end
 
+        # @return [Array<PodTarget>]
+        define_build_settings_method :dependent_targets_to_link, :memoized => true do
+          if test_xcconfig? && app_host_info = target.test_app_hosts_by_spec_name[non_library_spec.name]
+            # we're embedding into an app defined by an app spec
+            app_spec, app_target = *app_host_info
+            host_targets = app_target.dependent_targets_for_app_spec(app_spec)
+            dependent_targets - host_targets
+          else
+            dependent_targets
+          end
+        end
+
         # Returns the +pod_target_xcconfig+ for the pod target and its spec
         # consumers grouped by keys
         #
@@ -889,12 +900,20 @@ module Pod
 
         # @return [Array<Sandbox::FileAccessor>]
         define_build_settings_method :file_accessors, :memoized => true do
-          target.file_accessors.select { |fa| fa.spec.spec_type == @xcconfig_spec_type }
+          if non_library_xcconfig?
+            target.file_accessors.select { |fa| non_library_spec == fa.spec }
+          else
+            target.file_accessors.select { |fa| fa.spec.spec_type == @xcconfig_spec_type }
+          end
         end
 
         # @return [Array<Specification::Consumer>]
         define_build_settings_method :spec_consumers, :memoized => true do
-          target.spec_consumers.select { |fa| fa.spec.spec_type == @xcconfig_spec_type }
+          if non_library_xcconfig?
+            target.spec_consumers.select { |sc| non_library_spec == sc.spec }
+          else
+            target.spec_consumers.select { |sc| sc.spec.spec_type == @xcconfig_spec_type }
+          end
         end
 
         #-------------------------------------------------------------------------#
