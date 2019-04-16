@@ -598,34 +598,8 @@ module Pod
             end
           end
 
-          pod_targets_by_name = pod_targets.group_by(&:pod_name).each_with_object({}) do |(name, values), hash|
-            # Sort the target by the number of activated subspecs, so that
-            # we prefer a minimal target as transitive dependency.
-            hash[name] = values.sort_by { |pt| pt.specs.count }
-          end
           all_specs = resolver_specs_by_target.values.flatten.map(&:spec).uniq.group_by(&:name)
-          pod_targets.each do |target|
-            dependencies = dependencies_for_specs(target.library_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-            target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
-            target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
-              test_dependencies = dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
-              test_dependencies.delete_if { |k, _| dependencies.key? k }
-              hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
-            end
-
-            target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
-              app_dependencies = dependencies_for_specs([app_spec], target.platform, all_specs).group_by(&:root)
-              app_dependencies.delete_if { |k, _| dependencies.key? k }
-              hash[app_spec.name] = filter_dependencies(app_dependencies, pod_targets_by_name, target)
-            end
-
-            target.test_app_hosts_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
-              next unless app_host_name = test_spec.consumer(target.platform).app_host_name
-              app_host_spec = pod_targets_by_name[Specification.root_name(app_host_name)].flat_map(&:app_specs).find { |pt| pt.name == app_host_name }
-              app_host_dependencies = { app_host_spec.root => [app_host_spec] }
-              hash[test_spec.name] = [app_host_spec, filter_dependencies(app_host_dependencies, pod_targets_by_name, target).first]
-            end
-          end
+          compute_pod_target_dependencies(pod_targets, all_specs)
         else
           dedupe_cache = {}
           resolver_specs_by_target.flat_map do |target_definition, specs|
@@ -635,21 +609,48 @@ module Pod
               generate_pod_target([target_definition], target_inspections, pod_specs.map(&:spec), :build_type => target_type).scoped(dedupe_cache)
             end
 
-            pod_targets.each do |target|
-              all_specs = specs.map(&:spec).group_by(&:name)
-              dependencies = dependencies_for_specs(target.library_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-              target.dependent_targets = pod_targets.reject { |t| dependencies[t.root_spec].nil? }
-              target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
-                test_dependencies = dependencies_for_specs(target.test_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-                test_dependencies.delete_if { |k, _| dependencies.key? k }
-                hash[test_spec.name] = pod_targets.reject { |t| test_dependencies[t.root_spec].nil? }
-              end
-              target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
-                app_dependencies = dependencies_for_specs(target.app_specs.to_set, target.platform, all_specs.dup).group_by(&:root)
-                app_dependencies.delete_if { |k, _| dependencies.key? k }
-                hash[app_spec.name] = pod_targets.reject { |t| app_dependencies[t.root_spec].nil? }
-              end
-            end
+            compute_pod_target_dependencies(pod_targets, specs.map(&:spec).group_by(&:name))
+          end
+        end
+      end
+
+      # Compute the dependencies for the set of pod targets.
+      #
+      # @param  [Array<PodTarget>] pod_targets
+      #         pod targets.
+      #
+      # @param  [Hash{String => Array<Specification>}] specs_by_name
+      #         specifications grouped by name.
+      #
+      # @return [Array<PodTarget>]
+      #
+      def compute_pod_target_dependencies(pod_targets, all_specs)
+        pod_targets_by_name = pod_targets.group_by(&:pod_name).each_with_object({}) do |(name, values), hash|
+          # Sort the target by the number of activated subspecs, so that
+          # we prefer a minimal target as transitive dependency.
+          hash[name] = values.sort_by { |pt| pt.specs.count }
+        end
+
+        pod_targets.each do |target|
+          dependencies = dependencies_for_specs(target.library_specs.to_set, target.platform, all_specs).group_by(&:root)
+          target.dependent_targets = filter_dependencies(dependencies, pod_targets_by_name, target)
+          target.test_dependent_targets_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
+            test_dependencies = dependencies_for_specs([test_spec], target.platform, all_specs).group_by(&:root)
+            test_dependencies.delete_if { |k, _| dependencies.key? k }
+            hash[test_spec.name] = filter_dependencies(test_dependencies, pod_targets_by_name, target)
+          end
+
+          target.app_dependent_targets_by_spec_name = target.app_specs.each_with_object({}) do |app_spec, hash|
+            app_dependencies = dependencies_for_specs([app_spec], target.platform, all_specs).group_by(&:root)
+            app_dependencies.delete_if { |k, _| dependencies.key? k }
+            hash[app_spec.name] = filter_dependencies(app_dependencies, pod_targets_by_name, target)
+          end
+
+          target.test_app_hosts_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
+            next unless app_host_name = test_spec.consumer(target.platform).app_host_name
+            app_host_spec = pod_targets_by_name[Specification.root_name(app_host_name)].flat_map(&:app_specs).find { |pt| pt.name == app_host_name }
+            app_host_dependencies = { app_host_spec.root => [app_host_spec] }
+            hash[test_spec.name] = [app_host_spec, filter_dependencies(app_host_dependencies, pod_targets_by_name, target).first]
           end
         end
       end
