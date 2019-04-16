@@ -126,6 +126,12 @@ module Pod
             end
             [spec_name, scoped_test_pod_targets]
           end]
+          target.app_dependent_targets_by_spec_name = Hash[app_dependent_targets_by_spec_name.map do |spec_name, app_pod_targets|
+            scoped_app_pod_targets = app_pod_targets.flat_map do |app_pod_target|
+              app_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
+            end
+            [spec_name, scoped_app_pod_targets]
+          end]
           cache[cache_key] = target
         end
       end
