@@ -285,19 +285,22 @@ begin
           workspace.schemes.each do |scheme_name, project_path|
             next if scheme_name == 'Pods'
             next if project_path.end_with? 'Pods.xcodeproj'
-            puts "    Building scheme: #{scheme_name}"
+            build_action = scheme_name.start_with?('Test') ? 'test' : 'build'
+            puts "    #{build_action.capitalize}ing scheme: #{scheme_name}"
 
             project = Xcodeproj::Project.open(project_path)
             target = project.targets.first
 
-            platform = target.platform_name
-            case platform
-            when :osx
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build"
-            when :ios
-              test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
+            xcodebuild_args = %W[
+              xcodebuild -workspace #{workspace_path} -scheme #{scheme_name} clean #{build_action}
+            ]
 
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Xs'"
+            case platform = target.platform_name
+            when :osx
+              execute_command(*xcodebuild_args)
+            when :ios
+              xcodebuild_args.concat ["ONLY_ACTIVE_ARCH=NO", '-destination', 'platform=iOS Simulator,name=iPhone Xs']
+              execute_command(*xcodebuild_args)
             else
               raise "Unknown platform #{platform}"
             end
@@ -341,11 +344,12 @@ end
 # Helpers
 #-----------------------------------------------------------------------------#
 
-def execute_command(command)
+def execute_command(*command)
   if ENV['VERBOSE']
-    sh(command)
+    sh(*command)
   else
-    output = `#{command} 2>&1`
+    args = command.size == 1 ? "#{command.first} 2>&1" : [*command, err: %i[child out]]
+    output = IO.popen(args, &:read)
     raise output unless $?.success?
   end
 end
