@@ -689,6 +689,13 @@ module Pod
         specs.each do |s|
           s.dependencies(platform).each do |dep|
             all_specs[dep.name].each do |spec|
+              if spec.non_library_specification?
+                if s.test_specification? && spec.name == s.consumer(platform).app_host_name
+                  # This needs to be handled separately, since we _don't_ want to treat this as a "normal" dependency
+                  next
+                end
+                raise Informative, "#{s} depends upon #{spec}, which is a #{spec.spec_type} spec"
+              end
               dependent_specs << spec
             end
           end
