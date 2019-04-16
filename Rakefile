@@ -297,7 +297,7 @@ begin
             when :ios
               test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
 
-              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 7'"
+              execute_command "xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone Xs'"
             else
               raise "Unknown platform #{platform}"
             end
