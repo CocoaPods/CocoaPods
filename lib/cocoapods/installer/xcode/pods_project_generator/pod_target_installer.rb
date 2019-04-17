@@ -48,7 +48,7 @@ module Pod
               resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
 
               test_native_targets = add_test_targets
-              test_app_host_targets = add_test_app_host_targets(test_native_targets, [])
+              test_app_host_targets = add_test_app_host_targets
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
               app_native_targets = add_app_targets
@@ -401,12 +401,12 @@ module Pod
           #
           # @return [Array<PBXNativeTarget>] the app host targets created.
           #
-          def add_test_app_host_targets(test_native_targets, app_native_targets)
+          def add_test_app_host_targets
             target.test_spec_consumers.reject(&:requires_app_host?).select(&:app_host_name).each do |test_spec_consumer|
               raise Informative "`#{target.label}-#{test_spec_consumer.test_type}-Tests` manually specifies an app host but has `test_spec.requires_app_host = false`! Please set `test_spec.requires_app_host = true`"
             end
 
-            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by(&:test_type).flat_map do |test_type, test_spec_consumers|
+            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).flat_map do |test_spec_consumers|
               test_spec_consumers.group_by { |consumer| target.app_host_target_label(consumer.spec) }.map do |(_, target_name), _|
                 AppHostInstaller.new(sandbox, project, target.platform, target_name, target.pod_name, target_name).install!
               end
