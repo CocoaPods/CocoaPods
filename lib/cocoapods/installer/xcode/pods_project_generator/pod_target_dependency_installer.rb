@@ -114,15 +114,18 @@ module Pod
                 unless app_native_target = dependency_installation_result.app_host_target_labelled(app_target_label)
                   raise "Did not find target with label #{app_target_label} in #{dependency_installation_result.inspect}"
                 end
+
                 dependent_test_project = app_native_target.project
                 if dependent_test_project != project
                   project.add_subproject_reference(dependent_test_project, project.dependencies_group)
                 end
 
+                app_host_target_names = app_native_target.resolved_build_setting('PRODUCT_NAME', true)
                 test_native_target.build_configurations.each do |configuration|
-                  test_host = "$(BUILT_PRODUCTS_DIR)/#{app_native_target.name}.app/"
+                  app_host_target_name = app_host_target_names[configuration.name] || target.name
+                  test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target_name}.app/"
                   test_host << 'Contents/MacOS/' if pod_target.platform == :osx
-                  test_host << app_native_target.name.to_s
+                  test_host << app_host_target_name.to_s
                   configuration.build_settings['BUNDLE_LOADER'] = '$(TEST_HOST)'
                   configuration.build_settings['TEST_HOST'] = test_host
                 end

@@ -31,5 +31,8 @@ Pod::Spec.new do |s|
 
   s.app_spec 'App' do |app_spec|
     app_spec.source_files = 'App/**/*'
+    app_spec.pod_target_xcconfig = {
+      'PRODUCT_NAME' => 'App Host'
+    }
   end
 end
