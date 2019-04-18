@@ -228,11 +228,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire-framework-macOS/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CustomModuleMapPod-framework-macOS/CustomModuleMapPod.framework",
-				"${BUILT_PRODUCTS_DIR}/MixedPod-framework-macOS/MixedPod.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjCPod-framework-macOS/ObjCPod.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftPod-framework-macOS/SwiftPod.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire-framework-macOS/Alamofire.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/CustomModuleMapPod-framework-macOS/CustomModuleMapPod.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MixedPod-framework-macOS/MixedPod.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ObjCPod-framework-macOS/ObjCPod.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/SwiftPod-framework-macOS/SwiftPod.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

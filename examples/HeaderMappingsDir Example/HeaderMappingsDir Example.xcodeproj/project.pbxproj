@@ -172,7 +172,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/HeaderMappingsDirPod/HeaderMappingsDirPod.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/HeaderMappingsDirPod/HeaderMappingsDirPod.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

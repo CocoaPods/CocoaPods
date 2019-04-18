@@ -453,7 +453,7 @@ module Pod
                 @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
-          install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
+          install_framework "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLib.framework"
         fi
                   eos
                 end
@@ -467,7 +467,7 @@ module Pod
                 @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
-          install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
+          install_framework "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLib.framework"
         fi
                   eos
                 end

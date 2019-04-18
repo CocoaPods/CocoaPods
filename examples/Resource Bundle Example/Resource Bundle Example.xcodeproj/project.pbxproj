@@ -197,10 +197,10 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Resource Bundle Example/Pods-Resource Bundle Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/ResourceAssetsExample/ResourceAssetsExample.framework",
-				"${BUILT_PRODUCTS_DIR}/ResourceExample/ResourceExample.framework",
-				"${BUILT_PRODUCTS_DIR}/ResourcesBundleExample/ResourcesBundleExample.framework",
-				"${BUILT_PRODUCTS_DIR}/ResourcesExample/ResourcesExample.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ResourceAssetsExample/ResourceAssetsExample.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ResourceExample/ResourceExample.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ResourcesBundleExample/ResourcesBundleExample.framework",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ResourcesExample/ResourcesExample.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

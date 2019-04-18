@@ -40,6 +40,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8916](https://github.com/CocoaPods/CocoaPods/pull/8916)
 
+* Support overriding the pod build directory by overriding `PODS_BUILD_DIR`  
+  [Philippe Latulippe](https://github.com/philippelatulippe)
+  [#issue_number](https://github.com/CocoaPods/CocoaPods/pull/8722)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  

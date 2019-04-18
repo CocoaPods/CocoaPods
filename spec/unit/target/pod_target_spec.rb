@@ -739,12 +739,12 @@ module Pod
         it 'returns the correct framework paths' do
           @watermelon_pod_target.framework_paths.should == {
             'WatermelonLib' => [
-              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
+              Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLib.framework'),
             ],
             'WatermelonLib/Tests' => [],
             'WatermelonLib/SnapshotTests' => [],
             'WatermelonLib/App' => [
-              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
+              Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLib.framework'),
             ],
           }
         end

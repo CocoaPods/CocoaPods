@@ -151,10 +151,10 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/BananaLib.framework'),
           ]
           @target.framework_paths_by_config['Release'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/BananaLib.framework'),
           ]
         end
 
@@ -188,11 +188,11 @@ module Pod
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
           framework_paths_by_config = @target.framework_paths_by_config
           framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/BananaLib.framework'),
           ]
           framework_paths_by_config['Release'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/CoconutLib/CoconutLib.framework'),
           ]
         end
 
@@ -214,10 +214,10 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/BananaLib.framework'),
           ]
           @target.framework_paths_by_config['Release'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Target::FrameworkPaths.new('${PODS_CONFIGURATION_BUILD_DIR}/BananaLib/BananaLib.framework'),
           ]
         end
 
