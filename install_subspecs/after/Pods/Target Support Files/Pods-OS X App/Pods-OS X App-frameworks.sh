@@ -30,10 +30,10 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 # Copies and strips a vendored framework
 install_framework()
 {
-  if [ -r "${BUILT_PRODUCTS_DIR}/$1" ]; then
-    local source="${BUILT_PRODUCTS_DIR}/$1"
-  elif [ -r "${BUILT_PRODUCTS_DIR}/$(basename "$1")" ]; then
-    local source="${BUILT_PRODUCTS_DIR}/$(basename "$1")"
+  if [ -r "${PODS_CONFIGURATION_BUILD_DIR}/$1" ]; then
+    local source="${PODS_CONFIGURATION_BUILD_DIR}/$1"
+  elif [ -r "${PODS_CONFIGURATION_BUILD_DIR}/$(basename "$1")" ]; then
+    local source="${PODS_CONFIGURATION_BUILD_DIR}/$(basename "$1")"
   elif [ -r "$1" ]; then
     local source="$1"
   fi
@@ -112,7 +112,7 @@ install_dsym() {
 # Copies the bcsymbolmap files of a vendored framework
 install_bcsymbolmap() {
     local bcsymbolmap_path="$1"
-    local destination="${BUILT_PRODUCTS_DIR}"
+    local destination="${PODS_CONFIGURATION_BUILD_DIR}"
     echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${bcsymbolmap_path}" "${destination}""
     rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${bcsymbolmap_path}" "${destination}"
 }
@@ -161,10 +161,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/PodTest-subspec_2/PodTest.framework"
+  install_framework "${PODS_CONFIGURATION_BUILD_DIR}/PodTest-subspec_2/PodTest.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/PodTest-subspec_2/PodTest.framework"
+  install_framework "${PODS_CONFIGURATION_BUILD_DIR}/PodTest-subspec_2/PodTest.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
