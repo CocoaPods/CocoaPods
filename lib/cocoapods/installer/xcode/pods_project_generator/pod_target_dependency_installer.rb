@@ -118,7 +118,7 @@ module Pod
         def wire_test_native_target_app_host(test_native_target, pod_target, pod_target_installation_results, project, metadata_cache, app_host_pod_target_label, app_host_target_label)
           if dependency_installation_result = pod_target_installation_results[app_host_pod_target_label]
             unless app_native_target = dependency_installation_result.app_host_target_labelled(app_host_target_label)
-              raise "Did not find target with label #{app_host_target_label} in #{dependency_installation_result.inspect}"
+              raise Informative, "Did not find target with label #{app_host_target_label} in the set of targets installed for #{app_host_pod_target_label}"
             end
 
             dependent_test_project = app_native_target.project
