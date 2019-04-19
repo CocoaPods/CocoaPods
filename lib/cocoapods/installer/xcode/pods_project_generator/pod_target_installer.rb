@@ -403,7 +403,7 @@ module Pod
           #
           def add_test_app_host_targets
             target.test_spec_consumers.reject(&:requires_app_host?).select(&:app_host_name).each do |test_spec_consumer|
-              raise Informative "`#{target.label}-#{test_spec_consumer.test_type}-Tests` manually specifies an app host but has `test_spec.requires_app_host = false`! Please set `test_spec.requires_app_host = true`"
+              raise Informative, "`#{target.label}-#{test_spec_consumer.test_type}-Tests` manually specifies an app host but has `test_spec.requires_app_host = false`! Please set `test_spec.requires_app_host = true`"
             end
 
             target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by { |consumer| target.app_host_target_label(consumer.spec) }.
