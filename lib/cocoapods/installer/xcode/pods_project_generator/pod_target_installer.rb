@@ -406,11 +406,10 @@ module Pod
               raise Informative "`#{target.label}-#{test_spec_consumer.test_type}-Tests` manually specifies an app host but has `test_spec.requires_app_host = false`! Please set `test_spec.requires_app_host = true`"
             end
 
-            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).flat_map do |test_spec_consumers|
-              test_spec_consumers.group_by { |consumer| target.app_host_target_label(consumer.spec) }.map do |(_, target_name), _|
+            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by { |consumer| target.app_host_target_label(consumer.spec) }.
+              map do |(_, target_name), _|
                 AppHostInstaller.new(sandbox, project, target.platform, target_name, target.pod_name, target_name).install!
               end
-            end
           end
 
           # Adds the app targets for the library to the Pods project with the
