@@ -691,7 +691,7 @@ module Pod
           s.dependencies(platform).each do |dep|
             all_specs[dep.name].each do |spec|
               if spec.non_library_specification?
-                if s.test_specification? && spec.name == s.consumer(platform).app_host_name
+                if s.test_specification? && spec.name == s.consumer(platform).app_host_name && spec.app_specification?
                   # This needs to be handled separately, since we _don't_ want to treat this as a "normal" dependency
                   next
                 end
