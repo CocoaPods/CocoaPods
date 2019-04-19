@@ -9,7 +9,7 @@ class MockSource < Pod::Source
     super('/mock/repo')
   end
 
-  def pod(name, version = '1.0', platform: [[:ios, '9.0']], test_spec: false, app_spec: false, &_blk)
+  def pod(name, version = '1.0', platform: [[:ios, '9.0'], [:macos, '10.12']], test_spec: false, app_spec: false, &_blk)
     cp = @_current_pod
     Pod::Specification.new(cp, name, test_spec, :app_specification => app_spec) do |spec|
       @_current_pod = spec
