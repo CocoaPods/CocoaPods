@@ -110,6 +110,10 @@ module Pod
             test_specs_by_native_target.merge(app_specs_by_native_target)
           end
 
+          # @param label [String]
+          #
+          # @return [PBXNativeTarget] the app host target with the given target label.
+          #
           def app_host_target_labelled(label)
             app_native_targets.find do |app_native_target|
               app_native_target.name == label

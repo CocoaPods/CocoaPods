@@ -477,6 +477,11 @@ module Pod
       "#{label}-#{subspec_label(app_spec)}"
     end
 
+    # @param test_spec [Specification]
+    #
+    # @return [(String,String)] a tuple, where the first item is the PodTarget#label of the pod target that defines the app host,
+    #                           and the second item is the target name of the app host
+    #
     def app_host_target_label(test_spec)
       app_spec, app_target = test_app_hosts_by_spec_name[test_spec.name]
 

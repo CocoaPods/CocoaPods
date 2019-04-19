@@ -372,25 +372,6 @@ module Pod
             end
           end
 
-          # Attaches an app host target to a given test target
-          #
-          # @param [PBXNativeTarget] app_host_target
-          # @param [PBXNativeTarget] test_native_target
-          #
-          def attach_app_host_target_to_test_native_target(app_host_target, test_native_target)
-            test_native_target.build_configurations.each do |configuration|
-              test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target.name}.app/"
-              test_host << 'Contents/MacOS/' if target.platform == :osx
-              test_host << app_host_target.name.to_s
-              configuration.build_settings['BUNDLE_LOADER'] = '$(TEST_HOST)'
-              configuration.build_settings['TEST_HOST'] = test_host
-            end
-            target_attributes = project.root_object.attributes['TargetAttributes'] || {}
-            target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
-            project.root_object.attributes['TargetAttributes'] = target_attributes
-            test_native_target.add_dependency(app_host_target)
-          end
-
           # Adds the test app host targets for the library to the Pods project with the
           # appropriate build configurations.
           #
