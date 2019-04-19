@@ -291,15 +291,15 @@ begin
             project = Xcodeproj::Project.open(project_path)
             target = project.targets.first
 
-            xcodebuild_args = %W[
+            xcodebuild_args = %W(
               xcodebuild -workspace #{workspace_path} -scheme #{scheme_name} clean #{build_action}
-            ]
+            )
 
             case platform = target.platform_name
             when :osx
               execute_command(*xcodebuild_args)
             when :ios
-              xcodebuild_args.concat ["ONLY_ACTIVE_ARCH=NO", '-destination', 'platform=iOS Simulator,name=iPhone Xs']
+              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', '-destination', 'platform=iOS Simulator,name=iPhone Xs']
               execute_command(*xcodebuild_args)
             else
               raise "Unknown platform #{platform}"
@@ -348,7 +348,7 @@ def execute_command(*command)
   if ENV['VERBOSE']
     sh(*command)
   else
-    args = command.size == 1 ? "#{command.first} 2>&1" : [*command, err: %i[child out]]
+    args = command.size == 1 ? "#{command.first} 2>&1" : [*command, :err => %i(child out)]
     output = IO.popen(args, &:read)
     raise output unless $?.success?
   end
