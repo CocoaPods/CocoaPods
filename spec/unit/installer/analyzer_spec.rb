@@ -294,6 +294,56 @@ module Pod
       end
 
       describe 'dependent pod targets' do
+        it 'raises when a pod depends on a non-library spec' do
+          @podfile = Pod::Podfile.new do
+            platform :ios, '10.0'
+            project 'SampleProject/SampleProject'
+
+            # The order of target definitions is important for this test.
+            target 'SampleProject' do
+              pod 'a', :testspecs => %w(Tests), :appspecs => %w(App), :git => '.'
+              pod 'b', :testspecs => %w(Tests), :appspecs => %w(App), :git => '.'
+            end
+          end
+
+          pod_a = Pod::Spec.new do |s|
+            s.name = 'a'
+            s.version = '1.0'
+            s.test_spec 'Tests'
+            s.app_spec 'App'
+          end
+          pod_b = Pod::Spec.new do |s|
+            s.name = 'b'
+            s.version = '1.0'
+            s.dependency 'a/Tests'
+            s.test_spec 'Tests'
+            s.app_spec 'App'
+          end
+
+          analyze = -> do
+            sandbox = Pod::Sandbox.new(config.sandbox.root)
+            @analyzer = Pod::Installer::Analyzer.new(sandbox, @podfile, nil)
+            @analyzer.expects(:fetch_external_source).twice
+            @analyzer.sandbox.expects(:specification).with('a').returns(pod_a)
+            @analyzer.sandbox.expects(:specification).with('b').returns(pod_b)
+            @analyzer.analyze
+          end
+
+          analyze.should.raise(Informative).
+            message.should.include 'b (1.0) depends upon a/Tests (1.0), which is a test spec'
+
+          pod_b = Pod::Spec.new do |s|
+            s.name = 'b'
+            s.version = '1.0'
+            s.test_spec 'Tests' do |ts|
+              ts.dependency 'b/App'
+            end
+            s.app_spec 'App'
+          end
+          analyze.should.raise(Informative).
+            message.should.include 'b/Tests (1.0) depends upon b/App (1.0), which is a app spec'
+        end
+
         describe 'with deduplicate targets as true' do
           before { Installer::InstallationOptions.any_instance.stubs(:deduplicate_targets? => true) }
 
