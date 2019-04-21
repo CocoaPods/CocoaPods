@@ -16,6 +16,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#8695](https://github.com/CocoaPods/CocoaPods/issues/8695)
 
+* Fix regression not compiling xcdatamodeld files in static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8702](https://github.com/CocoaPods/CocoaPods/issues/8702)
 
 ## 1.7.0.beta.3 (2019-03-28)
 
