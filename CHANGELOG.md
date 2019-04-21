@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix regression not compiling xcdatamodeld files in static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8702](https://github.com/CocoaPods/CocoaPods/issues/8702)
+
 * Fix set `cache_root` from config file error  
   [tripleCC](https://github.com/tripleCC)
   [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
