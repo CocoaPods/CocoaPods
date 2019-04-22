@@ -695,7 +695,7 @@ module Pod
                   # This needs to be handled separately, since we _don't_ want to treat this as a "normal" dependency
                   next
                 end
-                raise Informative, "#{s} depends upon #{spec}, which is a #{spec.spec_type} spec"
+                raise Informative, "#{s} depends upon `#{spec}`, which is a `#{spec.spec_type}` spec."
               end
               dependent_specs << spec
             end

@@ -110,7 +110,7 @@ module Pod
             test_specs_by_native_target.merge(app_specs_by_native_target)
           end
 
-          # @param label [String]
+          # @param label [String] the label of the app host target.
           #
           # @return [PBXNativeTarget] the app host target with the given target label.
           #
