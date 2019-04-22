@@ -1,20 +1,38 @@
 PODS:
+  - DepPod (1.0.0)
+  - HostedTestLib (0.1.0):
+    - TestLib
+  - HostedTestLib/App (0.1.0):
+    - TestLib
+  - HostedTestLib/UnitTests3 (0.1.0):
+    - HostedTestLib/App
+    - DepPod
+    - TestLib
+  - HostedTestLib/UnitTests4 (0.1.0):
+    - TestLib
+    - TestLib/App
   - TestLib (0.1.0)
-  - TestLib/UnitTests1 (0.1.0)
+  - TestLib/App (0.1.0)
+  - TestLib/UnitTests1 (0.1.0):
+    - DepPod
   - TestLib/UnitTests2 (0.1.0)
 
 DEPENDENCIES:
+  - DepPod (from `DepPod`)
+  - HostedTestLib (from `HostedTestLib`)
+  - HostedTestLib/UnitTests3 (from `HostedTestLib`)
+  - HostedTestLib/UnitTests4 (from `HostedTestLib`)
   - TestLib (from `TestLib`)
   - TestLib/UnitTests1 (from `TestLib`)
   - TestLib/UnitTests2 (from `TestLib`)
 
 EXTERNAL SOURCES:
+  DepPod:
+    :path: DepPod
+  HostedTestLib:
+    :path: HostedTestLib
   TestLib:
     :path: TestLib
 
-SPEC CHECKSUMS:
-  TestLib: eaaea9d3d9d13606c8b6dcce246c5050950c19ae
+COCOAPODS: 1.7.0.beta.3
 
-PODFILE CHECKSUM: 6c052923ecac6fca3fc56dad297ff8405ac2502a
-
-COCOAPODS: 1.5.3

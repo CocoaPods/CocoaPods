@@ -9,13 +9,29 @@ File References:
   - LaunchScreen.storyboard:
     - Base
   - Info.plist
+- Other:
+  - AppDelegate.h
+  - AppDelegate.m
+  - ViewController.h
+  - ViewController.m
+  - Main.storyboard:
+    - Base
+  - Assets.xcassets
+  - LaunchScreen.storyboard:
+    - Base
+  - Info.plist
+  - main.m
 - Products:
   - InstallMultipleTestSpecs.app
+  - Other.app
 - Pods:
   - Pods-InstallMultipleTestSpecs.debug.xcconfig
   - Pods-InstallMultipleTestSpecs.release.xcconfig
+  - Pods-Other.debug.xcconfig
+  - Pods-Other.release.xcconfig
 - Frameworks:
   - Pods_InstallMultipleTestSpecs.framework
+  - Pods_Other.framework
 
 
 
@@ -60,6 +76,48 @@ Targets:
           SWIFT_VERSION: '4.0'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: Pods-InstallMultipleTestSpecs.release.xcconfig
+- Other:
+    Build Phases:
+    - "[CP] Check Pods Manifest.lock": []
+    - Sources:
+      - ViewController.m
+      - main.m
+      - AppDelegate.m
+    - Frameworks:
+      - Pods_Other.framework
+    - Resources:
+      - LaunchScreen.storyboard
+      - Assets.xcassets
+      - Main.storyboard
+    - "[CP] Embed Pods Frameworks": []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          CODE_SIGN_STYLE: Automatic
+          INFOPLIST_FILE: Other/Info.plist
+          LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/Frameworks"
+          MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+          MTL_FAST_MATH: 'YES'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.Other
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          TARGETED_DEVICE_FAMILY: '1,2'
+        Base Configuration: Pods-Other.debug.xcconfig
+    - Release:
+        Build Settings:
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          CODE_SIGN_STYLE: Automatic
+          INFOPLIST_FILE: Other/Info.plist
+          LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/Frameworks"
+          MTL_FAST_MATH: 'YES'
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.Other
+          PRODUCT_NAME: "$(TARGET_NAME)"
+          TARGETED_DEVICE_FAMILY: '1,2'
+        Base Configuration: Pods-Other.release.xcconfig
 
 
 
