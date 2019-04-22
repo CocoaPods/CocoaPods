@@ -11,7 +11,7 @@ Issues are for feature requests, and bugs; questions should go to Stack Overflow
 
 Using CocoaPods <= 0.39: https://blog.cocoapods.org/Sharding/
 
-Using Xcode 8: Requires CocoaPods 1.1.0 or above.
+Using Xcode 10.1: Requires CocoaPods 1.6.0 or above.
 
 Issue with Nanaimo not loading:
 Please run `[sudo] gem uninstall nanaimo` and remove all but the latest version.
