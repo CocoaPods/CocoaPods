@@ -449,7 +449,7 @@ module Pod
             @coconut_test_spec.ios.requires_app_host = false
             @coconut_test_spec.ios.app_host_name = @grapefruits_app_spec.name + '/Foo'
             -> { @generator.generate! }.should.raise(Informative).
-              message.should.include '`CoconutLib-iOS-unit-Tests` manually specifies an app host but has `test_spec.requires_app_host = false`'
+              message.should.include '`CoconutLib-iOS-unit-Tests` manually specifies an app host but has not specified `requires_app_host = true`.'
           end
 
           it 'adds framework file references for framework pod targets that require building' do
