@@ -42,17 +42,26 @@ module Pod
       end
 
       class External
-        def all_specifications(_warn_for_multiple_pod_sources)
-          [specification]
+        def all_specifications(_warn_for_multiple_pod_sources, requirement)
+          if requirement.satisfied_by? specification.version
+            [specification]
+          else
+            []
+          end
         end
       end
 
       # returns the highest versioned spec last
-      def all_specifications(warn_for_multiple_pod_sources)
-        @all_specifications ||= begin
+      def all_specifications(warn_for_multiple_pod_sources, requirement)
+        @all_specifications ||= {}
+        @all_specifications[requirement] ||= begin
           sources_by_version = {}
           versions_by_source.each do |source, versions|
-            versions.each { |v| (sources_by_version[v] ||= []) << source }
+            versions.each do |v|
+              next unless requirement.satisfied_by?(v)
+
+              (sources_by_version[v] ||= []) << source
+            end
           end
 
           if warn_for_multiple_pod_sources

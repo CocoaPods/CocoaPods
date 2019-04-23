@@ -60,7 +60,7 @@ module Pod
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
 
       @cached_sets = {}
-      @podfile_requirements_by_root_name = @podfile_dependency_cache.podfile_dependencies.group_by(&:root_name).each_value { |a| a.map!(&:requirement) }
+      @podfile_requirements_by_root_name = @podfile_dependency_cache.podfile_dependencies.group_by(&:root_name).each_value { |a| a.map!(&:requirement).freeze }.freeze
       @search = {}
       @validated_platforms = Set.new
     end
@@ -83,7 +83,7 @@ module Pod
           next unless target.platform
           @platforms_by_dependency[dep].push(target.platform)
         end
-      end
+      end.uniq
       @platforms_by_dependency.each_value(&:uniq!)
       @activated = Molinillo::Resolver.new(self, self).resolve(dependencies, locked_dependencies)
       resolver_specs_by_target
@@ -133,10 +133,18 @@ module Pod
     #
     def search_for(dependency)
       @search[dependency] ||= begin
-        locked_requirement = requirement_for_locked_pod_named(dependency.name)
-        podfile_deps = Array(@podfile_requirements_by_root_name[dependency.root_name])
-        podfile_deps << locked_requirement if locked_requirement
-        specifications_for_dependency(dependency, podfile_deps)
+        podfile_requirements = @podfile_requirements_by_root_name[dependency.root_name]
+        additional_requirements = if locked_requirement = requirement_for_locked_pod_named(dependency.name)
+                                    if podfile_requirements
+                                      podfile_requirements + [locked_requirement]
+                                    else
+                                      [locked_requirement]
+                                    end
+                                  else
+                                    Array(podfile_requirements)
+                                  end
+
+        specifications_for_dependency(dependency, additional_requirements)
       end
       @search[dependency].dup
     end
@@ -330,8 +338,7 @@ module Pod
     def specifications_for_dependency(dependency, additional_requirements = [])
       requirement = Requirement.new(dependency.requirement.as_list + additional_requirements.flat_map(&:as_list))
       find_cached_set(dependency).
-        all_specifications(warn_for_multiple_pod_sources).
-        select { |s| requirement.satisfied_by? s.version }.
+        all_specifications(warn_for_multiple_pod_sources, requirement).
         map { |s| s.subspec_by_name(dependency.name, false, true) }.
         compact
     end
@@ -542,6 +549,7 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
     end
 
     def add_valid_dependencies_from_node(node, target, dependencies)
+      raise "Missing payload for #{node.name}" unless node.payload
       return unless dependencies.add?(node)
       validate_platform(node.payload, target)
       node.outgoing_edges.each do |edge|
