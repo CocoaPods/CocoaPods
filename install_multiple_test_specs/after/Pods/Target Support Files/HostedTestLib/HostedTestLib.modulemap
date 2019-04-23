@@ -1,0 +1,6 @@
+framework module HostedTestLib {
+  umbrella header "HostedTestLib-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "summary": "A short description of TestLib.",
   "platforms": {
-    "ios": "9.0"
+    "ios": "10.0"
   },
   "authors": {
     "Jeff Overwatch": "jeff@overwatch.com"
@@ -27,6 +27,12 @@
       "test_type": "unit",
       "requires_app_host": true,
       "source_files": "TestLib/UnitTests2/**/*"
+    }
+  ],
+  "appspecs": [
+    {
+      "name": "App",
+      "source_files": "TestLib/App/**/*"
     }
   ]
 }

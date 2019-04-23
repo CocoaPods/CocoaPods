@@ -1,16 +1,51 @@
 PODS:
+  - DepPod (1.0.0)
+  - HostedTestLib (0.1.0):
+    - TestLib
+  - HostedTestLib/App (0.1.0):
+    - TestLib
+  - HostedTestLib/AppWithDep (0.1.0):
+    - DepPod
+    - TestLib
+  - HostedTestLib/UnitTests3 (0.1.0):
+    - DepPod
+    - HostedTestLib/App
+    - TestLib
+  - HostedTestLib/UnitTests4 (0.1.0):
+    - TestLib
+    - TestLib/App
+  - HostedTestLib/UnitTests5 (0.1.0):
+    - HostedTestLib/AppWithDep
+    - TestLib
+  - HostedTestLib/UnitTests6 (0.1.0):
+    - DepPod
+    - HostedTestLib/AppWithDep
+    - TestLib
   - TestLib (0.1.0)
+  - TestLib/App (0.1.0)
   - TestLib/UnitTests1 (0.1.0)
   - TestLib/UnitTests2 (0.1.0)
 
 DEPENDENCIES:
+  - DepPod (from `DepPod`)
+  - HostedTestLib (from `HostedTestLib`)
+  - HostedTestLib/UnitTests3 (from `HostedTestLib`)
+  - HostedTestLib/UnitTests4 (from `HostedTestLib`)
+  - HostedTestLib/UnitTests5 (from `HostedTestLib`)
+  - HostedTestLib/UnitTests6 (from `HostedTestLib`)
   - TestLib (from `TestLib`)
   - TestLib/UnitTests1 (from `TestLib`)
   - TestLib/UnitTests2 (from `TestLib`)
 
 EXTERNAL SOURCES:
+  DepPod:
+    :path: DepPod
+  HostedTestLib:
+    :path: HostedTestLib
   TestLib:
     :path: TestLib
 
 SPEC CHECKSUMS:
-  TestLib: 2f82f39d4754f10856a4091a80aa9ab2969b34b7
+  DepPod: 85731d8447cfb4a2683e8dd2f4112db9418f08c1
+  HostedTestLib: c976f7daffb4a30df236f290a8283d85d654d2b6
+  TestLib: 60fadf2fc4bcc635b3a98eeea69ca90211d10ecd

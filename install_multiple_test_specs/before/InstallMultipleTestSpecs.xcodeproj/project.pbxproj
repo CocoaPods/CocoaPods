@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C051E339226E176400F7E74A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C051E338226E176400F7E74A /* AppDelegate.m */; };
+		C051E33C226E176400F7E74A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C051E33B226E176400F7E74A /* ViewController.m */; };
+		C051E33F226E176400F7E74A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C051E33D226E176400F7E74A /* Main.storyboard */; };
+		C051E341226E176600F7E74A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C051E340226E176600F7E74A /* Assets.xcassets */; };
+		C051E344226E176600F7E74A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C051E342226E176600F7E74A /* LaunchScreen.storyboard */; };
+		C051E347226E176600F7E74A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C051E346226E176600F7E74A /* main.m */; };
 		CF4250802118CCEA0068701E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF42507F2118CCEA0068701E /* AppDelegate.swift */; };
 		CF4250822118CCEA0068701E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4250812118CCEA0068701E /* ViewController.swift */; };
 		CF4250852118CCEA0068701E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4250832118CCEA0068701E /* Main.storyboard */; };
@@ -15,6 +21,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C051E335226E176400F7E74A /* Other.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Other.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C051E337226E176400F7E74A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C051E338226E176400F7E74A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C051E33A226E176400F7E74A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C051E33B226E176400F7E74A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C051E33E226E176400F7E74A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C051E340226E176600F7E74A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C051E343226E176600F7E74A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C051E345226E176600F7E74A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C051E346226E176600F7E74A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CF42507C2118CCEA0068701E /* InstallMultipleTestSpecs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstallMultipleTestSpecs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF42507F2118CCEA0068701E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF4250812118CCEA0068701E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -25,6 +41,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C051E332226E176400F7E74A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF4250792118CCEA0068701E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -35,10 +58,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C051E336226E176400F7E74A /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				C051E337226E176400F7E74A /* AppDelegate.h */,
+				C051E338226E176400F7E74A /* AppDelegate.m */,
+				C051E33A226E176400F7E74A /* ViewController.h */,
+				C051E33B226E176400F7E74A /* ViewController.m */,
+				C051E33D226E176400F7E74A /* Main.storyboard */,
+				C051E340226E176600F7E74A /* Assets.xcassets */,
+				C051E342226E176600F7E74A /* LaunchScreen.storyboard */,
+				C051E345226E176600F7E74A /* Info.plist */,
+				C051E346226E176600F7E74A /* main.m */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		CF4250732118CCEA0068701E = {
 			isa = PBXGroup;
 			children = (
 				CF42507E2118CCEA0068701E /* InstallMultipleTestSpecs */,
+				C051E336226E176400F7E74A /* Other */,
 				CF42507D2118CCEA0068701E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				CF42507C2118CCEA0068701E /* InstallMultipleTestSpecs.app */,
+				C051E335226E176400F7E74A /* Other.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,6 +108,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C051E334226E176400F7E74A /* Other */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C051E34A226E176600F7E74A /* Build configuration list for PBXNativeTarget "Other" */;
+			buildPhases = (
+				C051E331226E176400F7E74A /* Sources */,
+				C051E332226E176400F7E74A /* Frameworks */,
+				C051E333226E176400F7E74A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Other;
+			productName = Other;
+			productReference = C051E335226E176400F7E74A /* Other.app */;
+			productType = "com.apple.product-type.application";
+		};
 		CF42507B2118CCEA0068701E /* InstallMultipleTestSpecs */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CF42508E2118CCEC0068701E /* Build configuration list for PBXNativeTarget "InstallMultipleTestSpecs" */;
@@ -94,6 +152,9 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
+					C051E334226E176400F7E74A = {
+						CreatedOnToolsVersion = 10.2;
+					};
 					CF42507B2118CCEA0068701E = {
 						CreatedOnToolsVersion = 9.4.1;
 					};
@@ -113,11 +174,22 @@
 			projectRoot = "";
 			targets = (
 				CF42507B2118CCEA0068701E /* InstallMultipleTestSpecs */,
+				C051E334226E176400F7E74A /* Other */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C051E333226E176400F7E74A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C051E344226E176600F7E74A /* LaunchScreen.storyboard in Resources */,
+				C051E341226E176600F7E74A /* Assets.xcassets in Resources */,
+				C051E33F226E176400F7E74A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF42507A2118CCEA0068701E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -131,6 +203,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C051E331226E176400F7E74A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C051E33C226E176400F7E74A /* ViewController.m in Sources */,
+				C051E347226E176600F7E74A /* main.m in Sources */,
+				C051E339226E176400F7E74A /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF4250782118CCEA0068701E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,6 +225,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		C051E33D226E176400F7E74A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C051E33E226E176400F7E74A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C051E342226E176600F7E74A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C051E343226E176600F7E74A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		CF4250832118CCEA0068701E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -162,6 +260,41 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C051E348226E176600F7E74A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Other/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.Other;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C051E349226E176600F7E74A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Other/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.Other;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		CF42508C2118CCEC0068701E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -313,6 +446,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C051E34A226E176600F7E74A /* Build configuration list for PBXNativeTarget "Other" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C051E348226E176600F7E74A /* Debug */,
+				C051E349226E176600F7E74A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CF4250772118CCEA0068701E /* Build configuration list for PBXProject "InstallMultipleTestSpecs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
