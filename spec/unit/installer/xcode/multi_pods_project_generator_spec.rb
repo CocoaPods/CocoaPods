@@ -618,6 +618,7 @@ module Pod
             end
 
             it 'project cleans up empty groups' do
+              @generator.sandbox.store_local_path('BananaLib', fixture('banana-lib/BananaLib.podspec'))
               pod_generator_result = @generator.generate!
               pods_project = pod_generator_result.project
               projects_by_pod_targets = pod_generator_result.projects_by_pod_targets
@@ -625,9 +626,9 @@ module Pod
               Xcode::PodsProjectWriter.new(@generator.sandbox, generated_projects,
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
-              pods_project.main_group['Pods'].should.be.nil
-              pods_project.main_group['Development Pods'].should.be.nil
-              pods_project.main_group['Dependencies'].should.not.be.nil
+              pods_project.main_group['Pods'].should.not.be.nil
+              pods_project.main_group['Development Pods'].should.not.be.nil
+              pods_project.main_group['Dependencies'].should.be.nil
 
               projects_by_pod_targets.keys.each do |project|
                 project.main_group['Pods'].should.be.nil

@@ -182,10 +182,10 @@ module Pod
           pod_target_installation_results_hash = target_installation_results.pod_target_installation_results
           aggregate_target_installation_results_hash = target_installation_results.aggregate_target_installation_results
 
-          AggregateTargetDependencyInstaller.new(aggregate_target_installation_results_hash,
+          AggregateTargetDependencyInstaller.new(sandbox, aggregate_target_installation_results_hash,
                                                  pod_target_installation_results_hash, metadata_cache).install!
 
-          PodTargetDependencyInstaller.new(pod_target_installation_results_hash, metadata_cache).install!
+          PodTargetDependencyInstaller.new(sandbox, pod_target_installation_results_hash, metadata_cache).install!
         end
 
         # @param  [String] pod The root name of the development pod.

@@ -130,6 +130,50 @@ module Pod
       group
     end
 
+    # Creates a new subproject reference for the given project and configures its
+    # group location.
+    #
+    # @param [Project] project
+    #        The subproject to be added.
+    #
+    # @param [Bool] development
+    #        Whether the project should be added to the Development Pods group.
+    #        For projects where `pod_target_subproject` is enabled, all subprojects are added into the Dependencies group.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_pod_subproject(project, development = false)
+      parent_group =
+        if pod_target_subproject
+          dependencies_group
+        else
+          development ? development_pods : pods
+        end
+      add_subproject_reference(project, parent_group)
+    end
+
+    # Creates a new subproject reference for the given cached metadata and configures its
+    # group location.
+    #
+    # @param [ProjectMetadataCache] metadata
+    #        The project metadata to be added.
+    #
+    # @param [Bool] development
+    #        Whether the project should be added to the Development Pods group.
+    #        For projects where `pod_target_subproject` is enabled, all subprojects are added into the Dependencies group.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_cached_pod_subproject(metadata, development = false)
+      parent_group =
+        if pod_target_subproject
+          dependencies_group
+        else
+          development ? development_pods : pods
+        end
+      add_cached_subproject_reference(metadata.container_project_path, parent_group)
+    end
+
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
     #
     def pod_groups

@@ -18,13 +18,19 @@ module Pod
         #
         attr_reader :metadata_cache
 
+        # @return [Sandbox] The sandbox used for this installation.
+        #
+        attr_reader :sandbox
+
         # Initialize a new instance.
         #
+        # @param [Sandbox] sandbox @see #sandbox
         # @param [Hash{String => TargetInstallationResult}] aggregate_target_installation_results @see #aggregate_target_installation_results
         # @param [Hash{String => TargetInstallationResult}] pod_target_installation_results @see #pod_target_installation_results
         # @param [ProjectMetadataCache] metadata_cache @see #metadata_cache
         #
-        def initialize(aggregate_target_installation_results, pod_target_installation_results, metadata_cache)
+        def initialize(sandbox, aggregate_target_installation_results, pod_target_installation_results, metadata_cache)
+          @sandbox = sandbox
           @aggregate_target_installation_results = aggregate_target_installation_results
           @pod_target_installation_results = pod_target_installation_results
           @metadata_cache = metadata_cache
@@ -45,6 +51,7 @@ module Pod
             end
             # Wire up all pod target dependencies to aggregate target.
             aggregate_target.pod_targets.each do |pod_target|
+              is_local = sandbox.local?(pod_target.pod_name)
               if pod_target_installation_result = pod_target_installation_results[pod_target.name]
                 pod_target_native_target = pod_target_installation_result.native_target
                 aggregate_native_target.add_dependency(pod_target_native_target)
@@ -52,7 +59,7 @@ module Pod
               else
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[pod_target.label]
-                project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
+                project.add_cached_pod_subproject(cached_dependency, is_local)
                 Project.add_cached_dependency(aggregate_native_target, cached_dependency)
               end
             end
