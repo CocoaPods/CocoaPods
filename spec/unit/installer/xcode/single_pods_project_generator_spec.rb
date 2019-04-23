@@ -59,8 +59,18 @@ module Pod
                                                                        user_build_configurations, [], @osx_platform,
                                                                        [@osx_target_definition], 'macOS')
 
+            @grapefruits_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
+            @grapefruits_app_spec = @grapefruits_spec.app_specs.first
+            @grapefruits_ios_pod_target = fixture_pod_target_with_specs([@grapefruits_spec,
+                                                                         @grapefruits_app_spec], false,
+                                                                        user_build_configurations, [], @ios_platform,
+                                                                        [@ios_target_definition], 'iOS')
+            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
+
+            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name[@grapefruits_ios_pod_target.app_specs.first.name] = [@banana_ios_pod_target]
+
             ios_pod_targets = [@banana_ios_pod_target, @monkey_ios_pod_target, @coconut_ios_pod_target,
-                               @orangeframework_pod_target, @watermelon_ios_pod_target]
+                               @orangeframework_pod_target, @watermelon_ios_pod_target, @grapefruits_ios_pod_target]
             osx_pod_targets = [@banana_osx_pod_target, @monkey_osx_pod_target, @coconut_osx_pod_target, @watermelon_osx_pod_target]
             pod_targets = ios_pod_targets + osx_pod_targets
 
@@ -159,6 +169,8 @@ module Pod
               'CoconutLib-iOS-Unit-Tests',
               'CoconutLib-macOS',
               'CoconutLib-macOS-Unit-Tests',
+              'GrapefruitsLib-iOS',
+              'GrapefruitsLib-iOS-App',
               'OrangeFramework',
               'Pods-SampleApp-iOS',
               'Pods-SampleApp-macOS',
@@ -192,6 +204,7 @@ module Pod
             pod_generator_result.project.targets.find { |t| t.name == 'Pods-SampleApp-iOS' }.dependencies.map(&:name).sort.should == [
               'BananaLib-iOS',
               'CoconutLib-iOS',
+              'GrapefruitsLib-iOS',
               'OrangeFramework',
               'WatermelonLib-iOS',
               'monkey-iOS',
@@ -271,6 +284,31 @@ module Pod
             pod_generator_result.project.targets.find { |t| t.name == 'CoconutLib-macOS-Unit-Tests' }.dependencies.map(&:name).should == [
               'CoconutLib-macOS',
             ]
+          end
+
+          it 'sets the app host app spec dependency for the tests that need it' do
+            @coconut_test_spec.ios.requires_app_host = true
+            @coconut_test_spec.ios.app_host_name = @grapefruits_app_spec.name
+            @coconut_ios_pod_target.test_app_hosts_by_spec_name = { @coconut_test_spec.name => [@grapefruits_app_spec, @grapefruits_ios_pod_target] }
+            pod_generator_result = @generator.generate!
+            coconut_project = pod_generator_result.project
+            coconut_project.should.not.be.nil
+            coconut_project.targets.find { |t| t.name == 'AppHost-CoconutLib-iOS-Unit-Tests' }.should.be.nil
+            coconut_project.targets.find { |t| t.name == 'CoconutLib-iOS-Unit-Tests' }.dependencies.map(&:name).sort.should == [
+              'CoconutLib-iOS',
+              'GrapefruitsLib-iOS-App',
+            ]
+            coconut_project.targets.find { |t| t.name == 'AppHost-CoconutLib-macOS-Unit-Tests' }.should.be.nil
+            coconut_project.targets.find { |t| t.name == 'CoconutLib-macOS-Unit-Tests' }.dependencies.map(&:name).should == [
+              'CoconutLib-macOS',
+            ]
+          end
+
+          it 'raises when a test spec has an app_host_name with requires_app_host = false' do
+            @coconut_test_spec.ios.requires_app_host = false
+            @coconut_test_spec.ios.app_host_name = @grapefruits_app_spec.name + '/Foo'
+            -> { @generator.generate! }.should.raise(Informative).
+              message.should.include '`CoconutLib-iOS-unit-Tests` manually specifies an app host but has not specified `requires_app_host = true`.'
           end
 
           it 'adds framework file references for framework pod targets that require building' do

@@ -48,7 +48,7 @@ module Pod
               resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
 
               test_native_targets = add_test_targets
-              test_app_host_targets = add_test_app_host_targets(test_native_targets)
+              test_app_host_targets = add_test_app_host_targets
               test_resource_bundle_targets = add_resources_bundle_targets(test_file_accessors)
 
               app_native_targets = add_app_targets
@@ -375,32 +375,17 @@ module Pod
           # Adds the test app host targets for the library to the Pods project with the
           # appropriate build configurations.
           #
-          # @param  [Array<PBXNativeTarget>] test_native_targets
-          #         the test native targets that have been created to use as a lookup when linking the app host to.
-          #
           # @return [Array<PBXNativeTarget>] the app host targets created.
           #
-          def add_test_app_host_targets(test_native_targets)
-            target.test_spec_consumers.select(&:requires_app_host?).group_by(&:test_type).map do |test_type, test_spec_consumers|
-              platform = target.platform
-              name = "AppHost-#{target.label}-#{test_type.capitalize}-Tests"
-              app_host_target = AppHostInstaller.new(sandbox, project, platform, name, target.pod_name, name).install!
-              # Wire test native targets to the generated app host.
-              test_spec_consumers.each do |test_spec_consumer|
-                test_native_target = test_native_target_from_spec(test_spec_consumer.spec, test_native_targets)
-                test_native_target.build_configurations.each do |configuration|
-                  test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target.name}.app/"
-                  test_host << 'Contents/MacOS/' if platform == :osx
-                  test_host << app_host_target.name.to_s
-                  configuration.build_settings['TEST_HOST'] = test_host
-                end
-                target_attributes = project.root_object.attributes['TargetAttributes'] || {}
-                target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_host_target.uuid.to_s }
-                project.root_object.attributes['TargetAttributes'] = target_attributes
-                test_native_target.add_dependency(app_host_target)
-              end
-              app_host_target
+          def add_test_app_host_targets
+            target.test_spec_consumers.reject(&:requires_app_host?).select(&:app_host_name).each do |test_spec_consumer|
+              raise Informative, "`#{target.label}-#{test_spec_consumer.test_type}-Tests` manually specifies an app host but has not specified `requires_app_host = true`."
             end
+
+            target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by { |consumer| target.app_host_target_label(consumer.spec) }.
+              map do |(_, target_name), _|
+                AppHostInstaller.new(sandbox, project, target.platform, target_name, target.pod_name, target_name).install!
+              end
           end
 
           # Adds the app targets for the library to the Pods project with the

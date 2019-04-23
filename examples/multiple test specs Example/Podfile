@@ -9,5 +9,5 @@ target 'InstallMultipleTestSpecs' do
 
   # Pods for InstallMultipleTestSpecs
   pod 'TestLib', :path => 'TestLib', :testspecs => %w[UnitTests1 UnitTests2]
-
+  pod 'HostedTestLib', :path => 'HostedTestLib', :testspecs => %w[UnitTests3 UnitTests4]
 end

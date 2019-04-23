@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 6b72b57c4ea6c740aedaf387994cde2e31595aad
+  revision: 49ed318c3956bd5701badf864d8c7ff1bcb2b06b
   branch: master
   specs:
     cocoapods-core (1.7.0.beta.3)
@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 81d8ba5acea5130e82b418456f93a4a7ac4ca9c2
+  revision: b48b020559bfccbeb992b82350fec439fe3dc641
   branch: master
   specs:
     xcodeproj (1.8.2)
@@ -296,4 +296,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.17.2
+   1.17.3

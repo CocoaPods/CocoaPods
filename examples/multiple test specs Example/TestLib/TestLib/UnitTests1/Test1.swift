@@ -9,6 +9,7 @@ import XCTest
 
 class Test1: XCTestCase {    
     func testExample() {
+        XCTAssert(["xctest", nil].contains(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String))
         XCTAssertTrue(true)
     }
 }

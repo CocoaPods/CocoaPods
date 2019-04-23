@@ -9,9 +9,9 @@ class MockSource < Pod::Source
     super('/mock/repo')
   end
 
-  def pod(name, version = nil, platform: [[:ios, '9.0']], test_spec: false, &_blk)
+  def pod(name, version = '1.0', platform: [[:ios, '9.0'], [:macos, '10.12']], test_spec: false, app_spec: false, &_blk)
     cp = @_current_pod
-    Pod::Specification.new(cp, name, test_spec) do |spec|
+    Pod::Specification.new(cp, name, test_spec, :app_specification => app_spec) do |spec|
       @_current_pod = spec
       if cp
         cp.subspecs << spec
@@ -28,6 +28,10 @@ class MockSource < Pod::Source
 
   def test_spec(name: 'Tests', &blk)
     pod(name, :test_spec => true, &blk)
+  end
+
+  def app_spec(name: 'App', &blk)
+    pod(name, :app_spec => true, &blk)
   end
 
   def all_specs

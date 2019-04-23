@@ -686,6 +686,58 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
           b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
           b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_non_library_targets_only
         end
+
+        it 'handles test only dependencies when they are an app spec' do
+          @podfile = Podfile.new do
+            platform :ios, '10'
+
+            target 'A' do
+              pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests'], :appspecs => ['App']
+            end
+            target 'B' do
+              pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests']
+            end
+            target 'C' do
+              pod 'MainSpec', :git => 'GIT-URL', :appspecs => ['App']
+            end
+          end
+          spec = Spec.new do |s|
+            s.name         = 'MainSpec'
+            s.version      = '1.2.3'
+            s.platform     = :ios
+
+            s.test_spec 'Tests' do |tss|
+              tss.source_files = 'some/file'
+              tss.dependency 'MainSpec/App'
+            end
+
+            s.app_spec 'App' do |as|
+              as.source_files = 'some/file'
+            end
+          end
+          config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+          resolver = create_resolver
+          resolved_specs = resolver.resolve
+
+          a_specs = resolved_specs[@podfile.target_definitions['A']]
+          b_specs = resolved_specs[@podfile.target_definitions['B']]
+          c_specs = resolved_specs[@podfile.target_definitions['C']]
+
+          a_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only] }.should == [
+            ['MainSpec', false],
+            ['MainSpec/App', true],
+            ['MainSpec/Tests', true],
+          ]
+          b_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only] }.should == [
+            ['MainSpec', false],
+            ['MainSpec/App', true],
+            ['MainSpec/Tests', true],
+          ]
+          c_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only] }.should == [
+            ['MainSpec', false],
+            ['MainSpec/App', true],
+          ]
+        end
       end
 
       describe 'app specs' do
