@@ -375,11 +375,6 @@ module Pod
           # Adds the test app host targets for the library to the Pods project with the
           # appropriate build configurations.
           #
-          # @param  [Array<PBXNativeTarget>] test_native_targets
-          #         the test native targets that have been created to use as a lookup when linking the app host to.
-          # @param  [Array<PBXNativeTarget>] app_native_targets
-          #         the app native targets that have been created to use as a lookup when linking the app host to.
-          #
           # @return [Array<PBXNativeTarget>] the app host targets created.
           #
           def add_test_app_host_targets
