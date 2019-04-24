@@ -71,7 +71,7 @@ module Pod
         def pod_name_from_grouping(pod_targets)
           # The presumption here for multi pods project is that we group by `pod_name`, thus the grouping of `pod_targets`
           # should share the same `pod_name`.
-          raise '[BUG] Expected at least 1 pod target' if pod_targets.size == 0
+          raise '[BUG] Expected at least 1 pod target' if pod_targets.empty?
           pod_targets.first.pod_name
         end
       end

@@ -51,13 +51,13 @@ module Pod
             end
             # Wire up all pod target dependencies to aggregate target.
             aggregate_target.pod_targets.each do |pod_target|
-              is_local = sandbox.local?(pod_target.pod_name)
               if pod_target_installation_result = pod_target_installation_results[pod_target.name]
                 pod_target_native_target = pod_target_installation_result.native_target
                 aggregate_native_target.add_dependency(pod_target_native_target)
                 configure_app_extension_api_only_to_native_target(pod_target_native_target) if is_app_extension
               else
                 # Hit the cache
+                is_local = sandbox.local?(pod_target.pod_name)
                 cached_dependency = metadata_cache.target_label_by_metadata[pod_target.label]
                 project.add_cached_pod_subproject(cached_dependency, is_local)
                 Project.add_cached_dependency(aggregate_native_target, cached_dependency)

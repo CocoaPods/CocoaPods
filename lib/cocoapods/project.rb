@@ -143,19 +143,14 @@ module Pod
     # @return [PBXFileReference] The new file reference.
     #
     def add_pod_subproject(project, development = false)
-      parent_group =
-        if pod_target_subproject
-          dependencies_group
-        else
-          development ? development_pods : pods
-        end
+      parent_group = group_for_subproject_reference(development)
       add_subproject_reference(project, parent_group)
     end
 
     # Creates a new subproject reference for the given cached metadata and configures its
     # group location.
     #
-    # @param [ProjectMetadataCache] metadata
+    # @param [TargetMetadata] metadata
     #        The project metadata to be added.
     #
     # @param [Bool] development
@@ -165,13 +160,8 @@ module Pod
     # @return [PBXFileReference] The new file reference.
     #
     def add_cached_pod_subproject(metadata, development = false)
-      parent_group =
-        if pod_target_subproject
-          dependencies_group
-        else
-          development ? development_pods : pods
-        end
-      add_cached_subproject_reference(metadata.container_project_path, parent_group)
+      parent_group = group_for_subproject_reference(development)
+      add_cached_subproject_reference(metadata, parent_group)
     end
 
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
@@ -531,6 +521,16 @@ module Pod
       root_object.project_references << project_reference
       refs_by_absolute_path[project_path.to_s] = ref
       ref
+    end
+
+    # Returns the parent group a new subproject reference should belong to.
+    #
+    def group_for_subproject_reference(development)
+      if pod_target_subproject
+        dependencies_group
+      else
+        development ? development_pods : pods
+      end
     end
 
     #-------------------------------------------------------------------------#

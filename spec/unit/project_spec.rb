@@ -1,4 +1,5 @@
 require File.expand_path('../../spec_helper', __FILE__)
+require 'cocoapods/installer/project_cache/target_metadata.rb'
 
 module Pod
   # Expose to unit test file
@@ -77,6 +78,49 @@ module Pod
           group.source_tree.should == '<absolute>'
           group.path.should == @path.to_s
           Pathname.new(group.path).should.be.absolute
+        end
+      end
+
+      describe '#add_pod_subproject' do
+        it 'adds subprojects to the Development and Pods groups for Pods.xcodeproj' do
+          subproject1_path = config.sandbox.pod_target_project_path('SubprojA')
+          subproject2_path = config.sandbox.pod_target_project_path('SubprojB')
+          subproject1_path.mkpath
+          subproject2_path.mkpath
+          subproject1 = Project.new(subproject1_path)
+          subproject2 = Project.new(subproject2_path)
+          ref_a = @project.add_pod_subproject(subproject1)
+          ref_b = @project.add_pod_subproject(subproject2, true)
+
+          @project.main_group['Pods'].children.should.equal([ref_a])
+          @project.main_group['Development Pods'].children.should.equal([ref_b])
+          @project.main_group['Dependencies'].children.count.should.equal(0)
+        end
+
+        it 'adds subprojects to the Dependencies group if #pod_target_subproject is true' do
+          @project = Project.new(config.sandbox.project_path, false, Xcodeproj::Constants::DEFAULT_OBJECT_VERSION, :pod_target_subproject => true)
+          subproject1_path = config.sandbox.pod_target_project_path('SubprojA')
+          subproject2_path = config.sandbox.pod_target_project_path('SubprojB')
+          subproject1_path.mkpath
+          subproject2_path.mkpath
+          subproject1 = Project.new(subproject1_path)
+          subproject2 = Project.new(subproject2_path)
+          ref_a = @project.add_pod_subproject(subproject1)
+          ref_b = @project.add_pod_subproject(subproject2, true)
+
+          @project.main_group['Dependencies'].children.should.equal([ref_a, ref_b])
+          @project.main_group['Development Pods'].children.count.should.equal(0)
+          @project.main_group['Pods'].children.count.should.equal(0)
+        end
+      end
+
+      describe '#add_cached_pod_subproject' do
+        it 'adds cached subproject references' do
+          subproject_path = config.sandbox.pod_target_project_path('SubprojA')
+          subproject_path.mkpath
+          metadata = Installer::ProjectCache::TargetMetadata.new('LabelA', '0000', subproject_path)
+          ref = @project.add_cached_pod_subproject(metadata)
+          @project.main_group['Pods'].children.should.equal([ref])
         end
       end
 
