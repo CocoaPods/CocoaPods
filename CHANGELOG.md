@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Replace Pods project `Dependencies` group with `Development Pods` and `Pods` groups.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8659](https://github.com/CocoaPods/CocoaPods/issues/8659)
+
 * Adds support for referring to other podspecs during validation  
   [Orta Therox](https://github.com/orta)
   [#8536](https://github.com/CocoaPods/CocoaPods/pull/8536)
