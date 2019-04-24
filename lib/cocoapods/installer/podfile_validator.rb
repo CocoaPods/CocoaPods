@@ -122,15 +122,35 @@ module Pod
       end
 
       # Verifies that no dependencies in the Podfile will end up not being built
-      # at all. In other words, all dependencies _must_ belong to a non-abstract
+      # at all. In other words, all dependencies should belong to a non-abstract
       # target, or be inherited by a target where `inheritance == complete`.
       #
       def validate_no_abstract_only_pods!
-        all_dependencies = @podfile_dependency_cache.podfile_dependencies
-        concrete_dependencies = @podfile_dependency_cache.target_definition_list.reject(&:abstract?).flat_map { |td| @podfile_dependency_cache.target_definition_dependencies(td) }
-        abstract_only_dependencies = all_dependencies - concrete_dependencies
-        abstract_only_dependencies.each do |dep|
-          add_error "The dependency `#{dep}` is not used in any concrete target."
+        @podfile_dependency_cache.target_definition_list.each do |target_definition|
+          dependencies = @podfile_dependency_cache.target_definition_dependencies(target_definition)
+          next if dependencies.empty?
+          next unless target_definition.abstract?
+
+          children = target_definition.recursive_children
+          next if children.any? { |child_target_definition| target_definition_inherits?(:parent => target_definition, :child => child_target_definition) }
+
+          add_warning "The abstract target #{target_definition.name} is not inherited by a concrete target, " \
+            "so the following dependencies won't make it into any targets in your project:" \
+            "\n    - #{dependencies.map(&:to_s).sort.join("\n    - ")}"
+
+          next if target_definition.platform
+
+          add_error "The abstract target #{target_definition.name} must specify a platform since its dependencies are not inherited by a concrete target."
+        end
+      end
+
+      def target_definition_inherits?(parent: nil, child: nil)
+        if parent == child
+          true
+        elsif child.exclusive?
+          false
+        else
+          target_definition_inherits?(:parent => parent, :child => child.parent)
         end
       end
 

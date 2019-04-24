@@ -378,16 +378,6 @@ module Pod
             restkit_target.dependent_targets.all?(&:scoped).should.be.true
           end
 
-          it 'includes pod targets from test dependent targets' do
-            pod_target_one = stub('PodTarget1', :test_specs => [], :app_specs => [])
-            pod_target_three = stub('PodTarget2', :test_specs => [], :app_specs => [])
-            pod_target_two = stub('PodTarget3', :test_specs => [stub('test_spec', :name => 'TestSpec1')]).tap { |pt2| pt2.expects(:recursive_test_dependent_targets => [pod_target_three], :app_specs => []) }
-            aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
-
-            @analyzer.send(:calculate_pod_targets, [aggregate_target]).
-              should == [pod_target_one, pod_target_two, pod_target_three]
-          end
-
           it 'does not mark transitive dependencies as dependent targets' do
             @podfile = Pod::Podfile.new do
               platform :ios, '8.0'
@@ -836,16 +826,6 @@ module Pod
               TransitionKit
             )
             restkit_target.dependent_targets.all?(&:scoped).should.be.true
-          end
-
-          it 'includes pod targets from test dependent targets' do
-            pod_target_one = stub('PodTarget1', :test_specs => [], :app_specs => [])
-            pod_target_three = stub('PodTarget2', :test_specs => [], :app_specs => [])
-            pod_target_two = stub('PodTarget3', :test_specs => [stub('test_spec', :name => 'TestSpec1')]).tap { |pt2| pt2.expects(:recursive_test_dependent_targets => [pod_target_three], :app_specs => []) }
-            aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
-
-            @analyzer.send(:calculate_pod_targets, [aggregate_target]).
-              should == [pod_target_one, pod_target_two, pod_target_three]
           end
 
           it 'does not mark transitive dependencies as dependent targets' do
@@ -1589,33 +1569,35 @@ module Pod
 
       #-------------------------------------------------------------------------#
 
-      describe '#filter_pod_targets_for_target_definition' do
+      describe '#group_pod_targets_by_target_definition' do
         it 'does include pod target if any spec is not used by tests only and is part of target definition' do
-          spec1 = Resolver::ResolverSpecification.new(stub, false, nil)
-          spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
+          spec1 = Resolver::ResolverSpecification.new(stub(:root => stub(:name => 'Pod1')), false, nil)
+          spec2 = Resolver::ResolverSpecification.new(stub(:root => stub(:name => 'Pod1')), true, nil)
           target_definition = @podfile.target_definitions['SampleProject']
           pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec], :pod_name => 'Pod1')
           resolver_specs_by_target = { target_definition => [spec1, spec2] }
-          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [pod_target] }
+          @analyzer.send(:group_pod_targets_by_target_definition, [pod_target], resolver_specs_by_target).should == { target_definition => [pod_target] }
         end
 
         it 'does not include pod target if its used by tests only' do
-          spec1 = Resolver::ResolverSpecification.new(stub, true, nil)
-          spec2 = Resolver::ResolverSpecification.new(stub, true, nil)
+          spec1 = Resolver::ResolverSpecification.new(stub(:root => stub(:name => 'Pod1')), true, nil)
+          spec2 = Resolver::ResolverSpecification.new(stub(:root => stub(:name => 'Pod1')), true, nil)
           target_definition = stub('TargetDefinition')
-          pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec])
+          pod_target = stub(:name => 'Pod1', :target_definitions => [target_definition], :specs => [spec1.spec, spec2.spec], :pod_name => 'Pod1')
           resolver_specs_by_target = { target_definition => [spec1, spec2] }
-          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [] }
+          @analyzer.send(:group_pod_targets_by_target_definition, [pod_target], resolver_specs_by_target).should == { target_definition => [] }
         end
 
         it 'does not include pod target if its not part of the target definition' do
-          spec = Resolver::ResolverSpecification.new(stub, false, nil)
+          spec = Resolver::ResolverSpecification.new(stub(:root => stub(:name => 'Pod1')), false, nil)
           target_definition = stub
           pod_target = stub(:name => 'Pod1', :target_definitions => [], :specs => [spec.spec])
           resolver_specs_by_target = { target_definition => [spec] }
-          @analyzer.send(:filter_pod_targets_for_target_definition, target_definition, [pod_target], resolver_specs_by_target, %w(Release)).should == { 'Release' => [] }
+          @analyzer.send(:group_pod_targets_by_target_definition, [pod_target], resolver_specs_by_target).should == { target_definition => [] }
         end
+      end
 
+      describe '#filter_pod_targets_for_target_definition' do
         it 'returns whether it is whitelisted in a build configuration' do
           target_definition = @podfile.target_definitions['SampleProject']
           target_definition.whitelist_pod_for_configuration('JSONKit', 'Debug')
