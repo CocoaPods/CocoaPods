@@ -545,34 +545,6 @@ Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by
       end
     end
 
-    # Returns the target-appropriate nodes that are `successors` of `node`,
-    # rejecting those that are scoped by target platform and have incompatible
-    # targets.
-    #
-    # @return [Array<Molinillo::DependencyGraph::Vertex>]
-    #         An array of target-appropriate nodes whose `payload`s are
-    #         dependencies for `target`.
-    #
-    def valid_dependencies_for_target(target)
-      dependencies = {}
-      @podfile_dependency_cache.target_definition_dependencies(target).each do |dep|
-        node = @activated.vertex_named(dep.name)
-        add_valid_dependencies_from_node(node, target, dependencies)
-      end
-      dependencies.values.to_set
-    end
-
-    def add_valid_dependencies_from_node(node, target, dependencies)
-      return if dependencies.key?(node.name)
-      raise "Missing payload for #{node.name}" unless node.payload
-      dependencies[node.name] = node
-      validate_platform(node.payload, target)
-      node.outgoing_edges.each do |edge|
-        next unless edge_is_valid_for_target_platform?(edge, target.platform)
-        add_valid_dependencies_from_node(edge.destination, target, dependencies)
-      end
-    end
-
     class EdgeAndPlatform
       def initialize(edge, target_platform)
         @edge = edge
