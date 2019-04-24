@@ -8,7 +8,7 @@ module Pod
       #
       def fetch(sandbox)
         title = "Fetching podspec for `#{name}` #{description}"
-        UI.titled_section(title,  :verbose_prefix => '-> ') do
+        UI.section(title, '-> ') do
           podspec = podspec_path
           unless podspec.exist?
             raise Informative, "No podspec found for `#{name}` in " \

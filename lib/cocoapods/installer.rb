@@ -496,7 +496,7 @@ module Pod
             install_source_of_pod(spec.name)
           end
         else
-          UI.titled_section("Using #{spec}", title_options) do
+          UI.section("Using #{spec}", title_options[:verbose_prefix]) do
             create_pod_installer(spec.name)
           end
         end
