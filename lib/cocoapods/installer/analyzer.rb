@@ -718,10 +718,10 @@ module Pod
       # @return [PodTarget]
       #
       def generate_pod_target(target_definitions, target_inspections, specs, scope_suffix: nil, build_type: nil)
-        object_version = target_inspections.values.map { |ti| ti.project.object_version }.min
+        target_inspections = target_inspections.select { |t, _| target_definitions.include?(t) }.values
+        object_version = target_inspections.map { |ti| ti.project.object_version }.min
         target_requires_64_bit = target_definitions.all? { |td| Analyzer.requires_64_bit_archs?(td.platform, object_version) }
-        if installation_options.integrate_targets?
-          target_inspections = target_inspections.select { |t, _| target_definitions.include?(t) }.values
+        if !target_inspections.empty?
           user_build_configurations = target_inspections.map(&:build_configurations).reduce({}, &:merge)
           archs = if target_requires_64_bit
                     ['$(ARCHS_STANDARD_64_BIT)']
