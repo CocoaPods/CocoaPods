@@ -1213,6 +1213,9 @@ module Pod
         target.user_target_uuids.should == []
         target.user_build_configurations.should == { 'Release' => :release, 'Debug' => :debug }
         target.platform.to_s.should == 'iOS 6.0'
+
+        pod_target = target.pod_targets.first
+        pod_target.user_build_configurations.should == { 'Release' => :release, 'Debug' => :debug }
       end
 
       describe 'no-integrate platform validation' do
