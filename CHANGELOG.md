@@ -34,6 +34,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Itay Brenner](https://github.com/itaybre)
   [#8648](https://github.com/CocoaPods/CocoaPods/issues/8648)
 
+* Set default build configurations for app / test specs when installing with
+  `integrate_targets: false`, ensuring the `Embed Frameworks` and
+  `Copy Resources` scripts will copy the necessary build artifacts.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.7.0.beta.3 (2019-03-28)
 
