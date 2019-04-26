@@ -194,7 +194,7 @@ module Pod
     #
     def specs_by_build_configuration
       result = {}
-      user_build_configurations.keys.each do |build_configuration|
+      user_build_configurations.each_key do |build_configuration|
         result[build_configuration] = pod_targets_for_build_configuration(build_configuration).
           flat_map(&:specs)
       end
@@ -232,7 +232,7 @@ module Pod
     def framework_paths_by_config
       @framework_paths_by_config ||= begin
         framework_paths_by_config = {}
-        user_build_configurations.keys.each do |config|
+        user_build_configurations.each_key do |config|
           relevant_pod_targets = pod_targets_for_build_configuration(config)
           framework_paths_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
             library_specs = pod_target.library_specs.map(&:name)
@@ -250,7 +250,7 @@ module Pod
         relevant_pod_targets = pod_targets.reject do |pod_target|
           pod_target.should_build? && pod_target.build_as_dynamic_framework?
         end
-        user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+        user_build_configurations.each_key.each_with_object({}) do |config, resources_by_config|
           targets = relevant_pod_targets & pod_targets_for_build_configuration(config)
           resources_by_config[config] = targets.flat_map do |pod_target|
             library_specs = pod_target.library_specs.map(&:name)

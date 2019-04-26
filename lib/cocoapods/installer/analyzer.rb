@@ -298,7 +298,7 @@ module Pod
             host_target_uuids = Set.new(aggregate_target.user_project.host_targets_for_embedded_target(embedded_user_target).map(&:uuid))
             !aggregate_user_target_uuids.intersection(host_target_uuids).empty?
           end
-          embedded_aggregate_target.user_build_configurations.keys.each do |configuration_name|
+          embedded_aggregate_target.user_build_configurations.each_key do |configuration_name|
             pod_target_names = Set.new(aggregate_target.pod_targets_for_build_configuration(configuration_name).map(&:name))
             embedded_pod_targets = embedded_aggregate_target.pod_targets_for_build_configuration(configuration_name).select do |pod_target|
               if !pod_target_names.include?(pod_target.name) &&
