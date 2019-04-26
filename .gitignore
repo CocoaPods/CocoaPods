@@ -22,6 +22,7 @@ spec/fixtures/chameleon
 spec/fixtures/integration/Headers/
 spec/fixtures/snake
 spec/fixtures/vcr
+spec/fixtures/spec-repos/Spec_Lock
 tmp
 
 # Examples

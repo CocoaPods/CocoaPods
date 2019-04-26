@@ -47,5 +47,21 @@ module Pod
       run_command('repo', 'update', 'repo2')
       (repo2 + 'README').read.should.include 'Updated'
     end
+
+    it 'repo updates do not fail when executed in parallel' do
+      repo1 = repo_make('repo1')
+      repo_clone('repo1', 'repo2')
+      repo_make_readme_change(repo1, 'Updated')
+      Dir.chdir(repo1) { Pod::Executable.capture_command!('git', %w(commit -a -m Update)) }
+      thread1 = Thread.new do
+        lambda { command('repo', 'update', 'repo2').run }.should.not.raise
+      end
+      thread2 = Thread.new do
+        lambda { command('repo', 'update', 'repo2').run }.should.not.raise
+      end
+
+      thread1.join
+      thread2.join
+    end
   end
 end

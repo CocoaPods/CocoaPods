@@ -53,6 +53,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#8636](https://github.com/CocoaPods/CocoaPods/pull/8636)
 
+* Resolved an issue that could cause spec repo updates to fail on CI servers.  
+  [rpecka](https://github.com/rpecka)
+  [#7317](https://github.com/CocoaPods/CocoaPods/issues/7317)
+
 
 ## 1.7.0.beta.2 (2019-03-08)
 

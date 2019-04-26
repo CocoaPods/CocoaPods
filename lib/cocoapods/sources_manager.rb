@@ -88,11 +88,16 @@ module Pod
         end
 
         changed_spec_paths = {}
-        sources.each do |source|
-          UI.section "Updating spec repo `#{source.name}`" do
-            changed_source_paths = source.update(show_output)
-            changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
-            source.verify_compatibility!
+        # Ceate the Spec_Lock file if needed and lock it so that concurrent
+        # repo updates do not cause each other to fail
+        File.open("#{Config.instance.repos_dir}/Spec_Lock", File::CREAT) do |f|
+          f.flock(File::LOCK_EX)
+          sources.each do |source|
+            UI.section "Updating spec repo `#{source.name}`" do
+              changed_source_paths = source.update(show_output)
+              changed_spec_paths[source] = changed_source_paths if changed_source_paths.count > 0
+              source.verify_compatibility!
+            end
           end
         end
         # Perform search index update operation in background.
