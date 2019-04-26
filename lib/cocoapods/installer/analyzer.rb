@@ -729,7 +729,7 @@ module Pod
                     target_inspections.flat_map(&:archs).compact.uniq.sort
                   end
         else
-          user_build_configurations = {}
+          user_build_configurations = Target::DEFAULT_BUILD_CONFIGURATIONS
           archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : []
         end
         host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
