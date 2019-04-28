@@ -39,6 +39,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `Copy Resources` scripts will copy the necessary build artifacts.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fix a bug that prevented Podspec deployment targets from being
+  treated as a minimum  
+  [Eric Amorde](https://github.com/amorde)
+  [#7314](https://github.com/CocoaPods/CocoaPods/issues/7314)
+
 
 ## 1.7.0.beta.3 (2019-03-28)
 
