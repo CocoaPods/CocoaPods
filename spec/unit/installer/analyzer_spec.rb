@@ -344,6 +344,28 @@ module Pod
             message.should.include 'b/Tests (1.0) depends upon `b/App (1.0)`, which is a `app` spec'
         end
 
+        describe '#determine_platform' do
+          it 'respects the minimum deployment target' do
+            spec1 = stub('spec1')
+            spec1.stubs(:deployment_target).returns(Pod::Version.new('7.0'))
+            spec2 = stub('spec2')
+            spec2.stubs(:deployment_target).returns(Pod::Version.new('7.0'))
+            specs = [spec1, spec2]
+            result = Installer::Analyzer.send(:determine_platform, specs, :ios, false, Pod::Version.new('9.0'))
+            result.should == Pod::Platform.new(:ios, '9.0')
+          end
+
+          it 'returns 8.0 on iOS when host requires frameworks' do
+            spec1 = stub('spec1')
+            spec1.stubs(:deployment_target).returns(Pod::Version.new('6.0'))
+            spec2 = stub('spec2')
+            spec2.stubs(:deployment_target).returns(Pod::Version.new('6.0'))
+            specs = [spec1, spec2]
+            result = Installer::Analyzer.send(:determine_platform, specs, :ios, true, nil)
+            result.should == Pod::Platform.new(:ios, '8.0')
+          end
+        end
+
         describe 'with deduplicate targets as true' do
           before { Installer::InstallationOptions.any_instance.stubs(:deduplicate_targets? => true) }
 

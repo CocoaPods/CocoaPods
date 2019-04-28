@@ -733,7 +733,9 @@ module Pod
           archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : []
         end
         host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
-        platform = determine_platform(specs, target_definitions, host_requires_frameworks)
+        min_deployment_target = target_inspections.map { |ti| ti.platform.deployment_target }.min
+        platform_name = target_definitions.first.platform.name
+        platform = Analyzer.determine_platform(specs, platform_name, host_requires_frameworks, min_deployment_target)
         file_accessors = create_file_accessors(specs, platform)
         PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
                       target_definitions, file_accessors, scope_suffix, :build_type => build_type)
@@ -756,32 +758,6 @@ module Pod
         specs.map do |spec|
           Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
         end
-      end
-
-      # Calculates and returns the platform to use for the given list of specs and target definitions.
-      #
-      # @param [Array<Specification>] specs
-      #        the specs to inspect and calculate the platform for.
-      #
-      # @param [Array<TargetDefinition>] target_definitions
-      #        the target definitions these specs are part of.
-      #
-      # @param [Boolean] host_requires_frameworks
-      #        whether the platform is calculated for a target that needs to be packaged as a framework.
-      #
-      # @return [Platform]
-      #
-      def determine_platform(specs, target_definitions, host_requires_frameworks)
-        platform_name = target_definitions.first.platform.name
-        default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
-        deployment_target = specs.map do |spec|
-          Version.new(spec.deployment_target(platform_name) || default)
-        end.max
-        if platform_name == :ios && host_requires_frameworks
-          minimum = Version.new('8.0')
-          deployment_target = [deployment_target, minimum].max
-        end
-        Platform.new(platform_name, deployment_target)
       end
 
       # Generates dependencies that require the specific version of the Pods
@@ -1022,6 +998,37 @@ module Pod
           when :tvos
             false
           end
+        end
+
+        # Calculates and returns the platform to use for the given list of specs and target definitions.
+        #
+        # @param [Array<Specification>] specs
+        #        the specs to inspect and calculate the platform for.
+        #
+        # @param [Symbol] platform_name
+        #        the platform name for which the specs will be installed
+        #
+        # @param [Boolean] host_requires_frameworks
+        #        whether the platform is calculated for a target that needs to be packaged as a framework.
+        #
+        # @param [Platform] min_deployment_target
+        #        The minimum deployment target for all specs
+        #
+        # @return [Platform]
+        #
+        def determine_platform(specs, platform_name, host_requires_frameworks, min_deployment_target)
+          default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
+          deployment_target = specs.map do |spec|
+            Version.new(spec.deployment_target(platform_name) || default)
+          end.max
+          if platform_name == :ios && host_requires_frameworks
+            minimum = Version.new('8.0')
+            deployment_target = [deployment_target, minimum].max
+          end
+          unless min_deployment_target.nil?
+            deployment_target = [deployment_target, min_deployment_target].max
+          end
+          Platform.new(platform_name, deployment_target)
         end
       end
 
