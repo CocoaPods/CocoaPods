@@ -451,6 +451,7 @@ module Pod
                 script_path = @watermelon_pod_target.embed_frameworks_script_path_for_spec(@watermelon_pod_target.test_specs.first)
                 script = script_path.read
                 @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
+                  next if configuration == "Debug"
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
           install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
@@ -465,6 +466,7 @@ module Pod
                 script_path = @watermelon_pod_target.embed_frameworks_script_path_for_spec(@watermelon_pod_target.app_specs.first)
                 script = script_path.read
                 @watermelon_pod_target.user_build_configurations.keys.each do |configuration|
+                  next if configuration == "Debug"
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
           install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"

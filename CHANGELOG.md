@@ -19,6 +19,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Add support for pods in abstract-only targets to be installed.  
   [Samuel Giddins](https://github.com/segiddins)
+  
+  * Skip the "install_framework" step for "Debug" configuration  
+  [icecrystal23](https://github.com/icecrystal23)
 
 ##### Bug Fixes
 

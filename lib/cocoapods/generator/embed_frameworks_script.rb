@@ -207,7 +207,7 @@ module Pod
         SH
         script << "\n" unless frameworks_by_config.values.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks_with_dsyms|
-          next if frameworks_with_dsyms.empty?
+          next if frameworks_with_dsyms.empty? || config == "Debug"
           script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
           frameworks_with_dsyms.each do |framework_with_dsym|
             script << %(  install_framework "#{framework_with_dsym.source_path}"\n)
