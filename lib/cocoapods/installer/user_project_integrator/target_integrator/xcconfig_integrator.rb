@@ -112,7 +112,7 @@ module Pod
             regex = %r{
               ^(
                 (\s*                                  # Possible, but unlikely, space before include statement
-                  \#include\s+                        # Include statement
+                  \#include(\?)?\s+                   # Include statement
                   ['"]                                # Open quote
                   (.*\/)?                             # Possible prefix to path
                   #{Regexp.quote(target_config_path)} # The path should end in the target_config_path
