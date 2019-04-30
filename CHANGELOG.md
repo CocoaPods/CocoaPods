@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Allow insecure loads in requires_app_host's Info.plist  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8747](https://github.com/CocoaPods/CocoaPods/pull/8747)
+
 * Fix a regression for static libraries with a custom module name  
   [Eric Amorde](https://github.com/amorde)
   [#8695](https://github.com/CocoaPods/CocoaPods/issues/8695)
