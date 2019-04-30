@@ -39,6 +39,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   `Copy Resources` scripts will copy the necessary build artifacts.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* No longer show a warning when using an optional include (`#include?`) to
+  include the Pods .xcconfig from the base .xcconfig file
+  [Rob Hudson](https://github.com/robtimp)
 
 ## 1.7.0.beta.3 (2019-03-28)
 
