@@ -14,12 +14,18 @@ module Pod
         #
         attr_reader :metadata_cache
 
+        # @return [Sandbox] The sandbox used for this installation.
+        #
+        attr_reader :sandbox
+
         # Initialize a new instance.
         #
+        # @param [Sandbox] sandbox @see #sandbox
         # @param [TargetInstallationResults] pod_target_installation_results @see #pod_target_installation_results
         # @param [ProjectMetadataCache] metadata_cache @see #metadata_cache
         #
-        def initialize(pod_target_installation_results, metadata_cache)
+        def initialize(sandbox, pod_target_installation_results, metadata_cache)
+          @sandbox = sandbox
           @pod_target_installation_results = pod_target_installation_results
           @metadata_cache = metadata_cache
         end
@@ -68,17 +74,18 @@ module Pod
                                      pod_target_installation_results, metadata_cache, frameworks_group)
           dependent_targets = pod_target.dependent_targets
           dependent_targets.each do |dependent_target|
+            is_local = sandbox.local?(dependent_target.pod_name)
             if installation_result = pod_target_installation_results[dependent_target.name]
               dependent_project = installation_result.native_target.project
               if dependent_project != project
-                project.add_subproject_reference(dependent_project, project.dependencies_group)
+                project.add_pod_subproject(dependent_project, is_local)
               end
               native_target.add_dependency(installation_result.native_target)
               add_framework_file_reference_to_native_target(native_target, pod_target, dependent_target, frameworks_group)
             else
               # Hit the cache
               cached_dependency = metadata_cache.target_label_by_metadata[dependent_target.label]
-              project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
+              project.add_cached_pod_subproject(cached_dependency, is_local)
               Project.add_cached_dependency(native_target, cached_dependency)
             end
           end
@@ -93,17 +100,18 @@ module Pod
 
             test_dependent_targets = pod_target.test_dependent_targets_by_spec_name.fetch(test_spec.name, []).+([pod_target]).uniq
             test_dependent_targets.each do |test_dependent_target|
+              is_local = sandbox.local?(test_dependent_target.pod_name)
               if dependency_installation_result = pod_target_installation_results[test_dependent_target.name]
                 dependent_test_project = dependency_installation_result.native_target.project
                 if dependent_test_project != project
-                  project.add_subproject_reference(dependent_test_project, project.dependencies_group)
+                  project.add_pod_subproject(dependent_test_project, is_local)
                 end
                 test_native_target.add_dependency(dependency_installation_result.native_target)
                 add_framework_file_reference_to_native_target(test_native_target, pod_target, test_dependent_target, frameworks_group)
               else
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[test_dependent_target.label]
-                project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
+                project.add_cached_pod_subproject(cached_dependency, is_local)
                 Project.add_cached_dependency(test_native_target, cached_dependency)
               end
             end
@@ -156,6 +164,7 @@ module Pod
 
             app_dependent_targets = pod_target.app_dependent_targets_by_spec_name.fetch(app_spec.name, []).unshift(pod_target).uniq
             app_dependent_targets.each do |app_dependent_target|
+              is_local = sandbox.local?(app_dependent_target.pod_name)
               if dependency_installation_result = pod_target_installation_results[app_dependent_target.name]
                 resource_bundle_native_targets = dependency_installation_result.app_resource_bundle_targets[app_spec.name]
                 unless resource_bundle_native_targets.nil?
@@ -165,14 +174,14 @@ module Pod
                 end
                 dependency_project = dependency_installation_result.native_target.project
                 if dependency_project != project
-                  project.add_subproject_reference(dependency_project, project.dependencies_group)
+                  project.add_pod_subproject(dependency_project, is_local)
                 end
                 app_native_target.add_dependency(dependency_installation_result.native_target)
                 add_framework_file_reference_to_native_target(app_native_target, pod_target, app_dependent_target, frameworks_group)
               else
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[app_dependent_target.label]
-                project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
+                project.add_cached_pod_subproject(cached_dependency, is_local)
                 Project.add_cached_dependency(native_target, cached_dependency)
               end
             end

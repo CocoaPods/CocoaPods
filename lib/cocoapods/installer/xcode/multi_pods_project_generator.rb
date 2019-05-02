@@ -46,7 +46,9 @@ module Pod
           # the file reference can use so that we only have to call `save` once for all projects.
           project.path.mkpath
           if parent_project
-            parent_project.add_subproject_reference(project, parent_project.dependencies_group)
+            pod_name = pod_name_from_grouping(pod_targets)
+            is_local = sandbox.local?(pod_name)
+            parent_project.add_pod_subproject(project, is_local)
           end
 
           install_file_references(project, pod_targets)
@@ -64,6 +66,13 @@ module Pod
         def install_aggregate_targets_into_project(project, aggregate_targets)
           return {} unless project
           install_aggregate_targets(project, aggregate_targets)
+        end
+
+        def pod_name_from_grouping(pod_targets)
+          # The presumption here for multi pods project is that we group by `pod_name`, thus the grouping of `pod_targets`
+          # should share the same `pod_name`.
+          raise '[BUG] Expected at least 1 pod target' if pod_targets.empty?
+          pod_targets.first.pod_name
         end
       end
     end
