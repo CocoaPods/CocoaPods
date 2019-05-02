@@ -1,7 +1,7 @@
 
 File References:
 - Podfile
-- Dependencies:
+- Development Pods:
   - Reachability
   - Reachability2
 - Frameworks: []
