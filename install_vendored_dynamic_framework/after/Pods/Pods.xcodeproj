@@ -285,7 +285,7 @@ Build Configurations:
       STRIP_INSTALLED_PRODUCT: 'NO'
       SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
       SWIFT_OPTIMIZATION_LEVEL: "-Onone"
-      SWIFT_VERSION: '4.2'
+      SWIFT_VERSION: '5.0'
       SYMROOT: "${SRCROOT}/../build"
 - Release:
     Build Settings:
@@ -340,5 +340,5 @@ Build Configurations:
       STRIP_INSTALLED_PRODUCT: 'NO'
       SWIFT_COMPILATION_MODE: wholemodule
       SWIFT_OPTIMIZATION_LEVEL: "-O"
-      SWIFT_VERSION: '4.2'
+      SWIFT_VERSION: '5.0'
       SYMROOT: "${SRCROOT}/../build"
