@@ -105,6 +105,26 @@ module Pod
       PLIST
     end
 
+    it 'includes boolean values' do
+      generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'))
+      generator.send(:to_plist, 'MyDictionary' => { 'MyTrue' => true, 'MyFalse' => false
+                                                  }).should == <<-PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>MyDictionary</key>
+  <dict>
+    <key>MyFalse</key>
+    <false/>
+    <key>MyTrue</key>
+    <true/>
+  </dict>
+</dict>
+</plist>
+      PLIST
+    end
+
     it 'uses the specified bundle_package_type' do
       generator = Generator::InfoPlistFile.new('1.0.0', Platform.new(:ios, '6.0'), :bndl)
       file = temporary_directory + 'Info.plist'

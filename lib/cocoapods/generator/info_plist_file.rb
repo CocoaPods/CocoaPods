@@ -94,6 +94,10 @@ module Pod
           output << indent << "</dict>\n"
         when String
           output << indent << "<string>#{value}</string>\n"
+        when true
+          output << indent << "<true/>\n"
+        when false
+          output << indent << "<false/>\n"
         end
         output
       end

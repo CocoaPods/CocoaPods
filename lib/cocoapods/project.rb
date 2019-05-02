@@ -130,6 +130,40 @@ module Pod
       group
     end
 
+    # Creates a new subproject reference for the given project and configures its
+    # group location.
+    #
+    # @param [Project] project
+    #        The subproject to be added.
+    #
+    # @param [Bool] development
+    #        Whether the project should be added to the Development Pods group.
+    #        For projects where `pod_target_subproject` is enabled, all subprojects are added into the Dependencies group.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_pod_subproject(project, development = false)
+      parent_group = group_for_subproject_reference(development)
+      add_subproject_reference(project, parent_group)
+    end
+
+    # Creates a new subproject reference for the given cached metadata and configures its
+    # group location.
+    #
+    # @param [TargetMetadata] metadata
+    #        The project metadata to be added.
+    #
+    # @param [Bool] development
+    #        Whether the project should be added to the Development Pods group.
+    #        For projects where `pod_target_subproject` is enabled, all subprojects are added into the Dependencies group.
+    #
+    # @return [PBXFileReference] The new file reference.
+    #
+    def add_cached_pod_subproject(metadata, development = false)
+      parent_group = group_for_subproject_reference(development)
+      add_cached_subproject_reference(metadata, parent_group)
+    end
+
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
     #
     def pod_groups
@@ -487,6 +521,16 @@ module Pod
       root_object.project_references << project_reference
       refs_by_absolute_path[project_path.to_s] = ref
       ref
+    end
+
+    # Returns the parent group a new subproject reference should belong to.
+    #
+    def group_for_subproject_reference(development)
+      if pod_target_subproject
+        dependencies_group
+      else
+        development ? development_pods : pods
+      end
     end
 
     #-------------------------------------------------------------------------#

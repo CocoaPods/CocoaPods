@@ -303,7 +303,7 @@ module Pod
               other_file_refs = project_file_references_array(other_source_files, 'other source')
               native_target.add_file_references(other_file_refs, nil)
 
-              next unless target.build_as_dynamic_framework?
+              next unless target.build_as_framework?
 
               filter_resource_file_references(file_accessor.resources.flatten) do |compile_phase_refs, resource_phase_refs|
                 native_target.add_file_references(compile_phase_refs, nil)

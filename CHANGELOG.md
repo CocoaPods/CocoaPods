@@ -26,14 +26,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [tripleCC](https://github.com/tripleCC)
   [#8515](https://github.com/CocoaPods/CocoaPods/issues/8515)
 
-* Fix target cache key SPECS key ordering.  
-  [Sebastian Shanus](https://github.com/sebastianv1)
-  [#8657](https://github.com/CocoaPods/CocoaPods/issues/8657)  
-
-* Fix: AppIcon not found when executing `pod lib lint`
-  [Itay Brenner](https://github.com/itaybre)
-  [#8648](https://github.com/CocoaPods/CocoaPods/issues/8648)
-
 * Set default build configurations for app / test specs when installing with
   `integrate_targets: false`, ensuring the `Embed Frameworks` and
   `Copy Resources` scripts will copy the necessary build artifacts.  
@@ -42,6 +34,40 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * No longer show a warning when using an optional include (`#include?`) to
   include the Pods .xcconfig from the base .xcconfig file
   [Rob Hudson](https://github.com/robtimp)
+
+## 1.7.0.rc.1 (2019-05-02)
+
+##### Enhancements
+
+* Replace Pods project `Dependencies` group with `Development Pods` and `Pods` groups.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8659](https://github.com/CocoaPods/CocoaPods/issues/8659)
+
+* Add an error message for :podspec pods not matching the version in Pods and on disk  
+  [orta](https://github.com/orta)
+  [#8676](https://github.com/CocoaPods/CocoaPods/issues/8676)
+
+##### Bug Fixes
+
+* Allow insecure loads in requires_app_host's Info.plist  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8747](https://github.com/CocoaPods/CocoaPods/pull/8747)
+
+* Fix a regression for static libraries with a custom module name  
+  [Eric Amorde](https://github.com/amorde)
+  [#8695](https://github.com/CocoaPods/CocoaPods/issues/8695)
+
+* Fix target cache key SPECS key ordering.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8657](https://github.com/CocoaPods/CocoaPods/issues/8657)
+
+* Fix regression not compiling xcdatamodeld files in static frameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8702](https://github.com/CocoaPods/CocoaPods/issues/8702)
+
+* Fix: AppIcon not found when executing `pod lib lint`  
+  [Itay Brenner](https://github.com/itaybre)
+  [#8648](https://github.com/CocoaPods/CocoaPods/issues/8648)
 
 ## 1.7.0.beta.3 (2019-03-28)
 
