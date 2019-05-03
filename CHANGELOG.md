@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Ensure all embedded pod targets are copied over to the host target.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8608](https://github.com/CocoaPods/CocoaPods/issues/8608) 
 
 
 ## 1.6.1 (2019-02-21)
