@@ -307,7 +307,7 @@ module Pod
                 pod_target.name
               end
             end
-            embedded_pod_targets_by_build_config[configuration_name] = embedded_pod_targets
+            embedded_pod_targets_by_build_config[configuration_name] += embedded_pod_targets
           end
         end
         embedded_pod_targets_by_build_config
