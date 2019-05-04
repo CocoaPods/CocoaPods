@@ -620,10 +620,15 @@ module Pod
 
       describe 'With dependencies' do
         before do
-          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', false, {}, [], Platform.ios, @pod_target.target_definitions)
-          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [], Platform.ios, @pod_target.target_definitions)
+          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', false, {}, [], Platform.ios,
+                                               @pod_target.target_definitions)
+          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [], Platform.ios,
+                                                    @pod_target.target_definitions)
+          @app_pod_dependency = fixture_pod_target('monkey/monkey.podspec', false, {}, [], Platform.ios,
+                                                   @pod_target.target_definitions)
           @pod_target.dependent_targets = [@pod_dependency]
           @pod_target.test_dependent_targets_by_spec_name = { @pod_dependency.name => [@test_pod_dependency] }
+          @pod_target.app_dependent_targets_by_spec_name = { @pod_dependency.name => [@app_pod_dependency] }
         end
 
         it 'resolves simple dependencies' do
@@ -636,6 +641,8 @@ module Pod
           scoped_pod_target.first.dependent_targets.first.name.should == 'OrangeFramework-Pods'
           scoped_pod_target.first.test_dependent_targets_by_spec_name.count.should == 1
           scoped_pod_target.first.test_dependent_targets_by_spec_name['OrangeFramework'].first.name.should == 'matryoshka-Pods'
+          scoped_pod_target.first.app_dependent_targets_by_spec_name.count.should == 1
+          scoped_pod_target.first.app_dependent_targets_by_spec_name['OrangeFramework'].first.name.should == 'monkey-Pods'
         end
 
         describe 'With cyclic dependencies' do

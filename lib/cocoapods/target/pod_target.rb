@@ -117,15 +117,18 @@ module Pod
         if cache[cache_key]
           cache[cache_key]
         else
-          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, [target_definition], file_accessors, target_definition.label,
-                                 :build_type => build_type)
-          target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select { |pt| pt.target_definitions == [target_definition] }
-          target.test_dependent_targets_by_spec_name = Hash[test_dependent_targets_by_spec_name.map do |spec_name, test_pod_targets|
-            scoped_test_pod_targets = test_pod_targets.flat_map do |test_pod_target|
-              test_pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
-            end
-            [spec_name, scoped_test_pod_targets]
-          end]
+          target_definitions = [target_definition]
+          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
+                                 [target_definition], file_accessors, target_definition.label, :build_type => build_type)
+          target.dependent_targets = dependent_targets.flat_map { |pt| pt.scoped(cache) }.select do |pt|
+            pt.target_definitions == target_definitions
+          end
+          target.test_dependent_targets_by_spec_name = scope_dependent_pod_targets(cache,
+                                                                                   test_dependent_targets_by_spec_name,
+                                                                                   target_definitions)
+          target.app_dependent_targets_by_spec_name = scope_dependent_pod_targets(cache,
+                                                                                  app_dependent_targets_by_spec_name,
+                                                                                  target_definitions)
           cache[cache_key] = target
         end
       end
@@ -763,6 +766,15 @@ module Pod
     end
 
     private
+
+    def scope_dependent_pod_targets(cache, dependent_targets, target_definitions)
+      Hash[dependent_targets.map do |spec_name, pod_targets|
+        scoped_pod_targets = pod_targets.flat_map do |pod_target|
+          pod_target.scoped(cache).select { |pt| pt.target_definitions == target_definitions }
+        end
+        [spec_name, scoped_pod_targets]
+      end]
+    end
 
     def create_build_settings
       BuildSettings::PodTargetSettings.new(self)
