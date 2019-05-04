@@ -659,6 +659,11 @@ module Pod
           @pod_target.uses_swift?.should == true
         end
 
+        it 'returns that it uses swift with a pre built vendored framework and specifying swift_versions' do
+          pod_target = fixture_pod_target('prebuilt-swift-framework/VendoredSwiftFramework.podspec', true)
+          pod_target.uses_swift?.should == true
+        end
+
         it 'returns the product module name' do
           @pod_target.product_module_name.should == 'OrangeFramework'
         end

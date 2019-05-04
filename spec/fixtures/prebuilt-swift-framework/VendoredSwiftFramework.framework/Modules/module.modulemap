@@ -1,0 +1,11 @@
+framework module VendoredSwiftFramework {
+  umbrella header "VendoredSwiftFramework"
+
+  export *
+  module * { export * }
+}
+
+module VendoredSwiftFramework.Swift {
+    header "VendoredSwiftFramework-Swift.h"
+    requires objc
+}

@@ -277,15 +277,15 @@ module Pod
       app_specs.map { |app_spec| app_spec.consumer(platform) }
     end
 
-    # @return [Boolean] Whether the target uses Swift code. This excludes source files from non library specs.
+    # @return [Boolean] Whether the target uses Swift code. If the pod author has set the `swift_versions` attribute
+    #         then it is assumed that this pod uses Swift, otherwise for pod targets that require building we inspect
+    #         the sources.
     #
     def uses_swift?
       return @uses_swift if defined? @uses_swift
-      @uses_swift = begin
-        file_accessors.select { |a| a.spec.library_specification? }.any? do |file_accessor|
-          uses_swift_for_spec?(file_accessor.spec)
-        end
-      end
+      @uses_swift = !spec_swift_versions.empty? || (should_build? && file_accessors.any? do |fa|
+        fa.spec.library_specification? && uses_swift_for_spec?(fa.spec)
+      end)
     end
 
     # Checks whether a specification uses Swift or not.
