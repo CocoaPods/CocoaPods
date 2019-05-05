@@ -222,7 +222,7 @@ module Pod
     # @return [Boolean] Whether the target contains any resources
     #
     def includes_resources?
-      !resource_paths_by_config.values.all?(&:empty?)
+      !resource_paths_by_config.values.flatten.reject { |r| File.extname(r) == '.xcassets' }.empty?
     end
 
     # @return [Boolean] Whether the target contains framework to be embedded into
@@ -269,9 +269,8 @@ module Pod
       end
     end
 
-    def shit
-
-      x = resource_paths_by_config.values.select { |v| v.select { |x| x.end_with?('.xcassets') } }.flatten
+    def asset_catalog_paths_by_config
+      x = resource_paths_by_config.values.flatten.select { |f| f.end_with?('.xcassets') }
       puts "=== #{x}"
       x
     end

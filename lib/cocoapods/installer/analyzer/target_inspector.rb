@@ -220,10 +220,10 @@ module Pod
         def compute_xcassets_paths(targets)
           targets.flat_map do |t|
             bp = t.build_phases.find { |bp| bp.class == Xcodeproj::Project::PBXResourcesBuildPhase }
-            unless bp.nil?
-              bp.files_references.select do |file_ref|
-                file_ref.extname = '.xcassets'
-              end
+            next if bp.nil?
+            bp.files_references.select do |file_ref|
+              next false unless file_ref.path
+              Pathname.new(file_ref.path).extname == '.xcassets'
             end
           end.compact
         end

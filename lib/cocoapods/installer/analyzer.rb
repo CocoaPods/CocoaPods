@@ -481,11 +481,11 @@ module Pod
                                                                                        build_configurations)
 
         build_type = target_definition.uses_frameworks? ? Target::BuildType.static_framework : Target::BuildType.static_library
-        x = AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
+        AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
                             target_definition, client_root, user_project, user_target_uuids,
-                            pod_targets_for_build_configuration, :build_type => build_type)
-        x.xcassets_paths = target_inspection.user_xcassets_paths
-        x
+                            pod_targets_for_build_configuration, :build_type => build_type).tap do |target|
+          target.xcassets_paths = target_inspection.user_xcassets_paths
+        end
       end
 
       # @return [Array<PodTarget>] The model representations of pod targets.

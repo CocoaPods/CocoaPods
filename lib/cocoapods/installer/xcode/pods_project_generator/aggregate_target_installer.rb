@@ -147,7 +147,7 @@ module Pod
           #
           def create_combine_xcassets_script
             path = target.combine_xcassets_script_path
-            generator = Pod::Generator::CombineXCAssetsScript.new(target.shit)
+            generator = Pod::Generator::CombineXCAssetsScript.new(target.asset_catalog_paths_by_config)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
           end
