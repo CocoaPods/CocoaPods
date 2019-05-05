@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07A18F88227EC4C300C2168C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A18F87227EC4C300C2168C /* main.swift */; };
 		135286D11D0B010C007FC288 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135286D01D0B010C007FC288 /* AppDelegate.swift */; };
 		135286D31D0B010C007FC288 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135286D21D0B010C007FC288 /* ViewController.swift */; };
 		135286D61D0B010C007FC288 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 135286D41D0B010C007FC288 /* Main.storyboard */; };
@@ -29,6 +30,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		07A18F83227EC4C300C2168C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		135286F71D0B015E007FC288 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -43,6 +53,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07A18F85227EC4C300C2168C /* SampleCommandLineTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SampleCommandLineTool; sourceTree = BUILT_PRODUCTS_DIR; };
+		07A18F87227EC4C300C2168C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		135286CD1D0B010C007FC288 /* Sample Extensions Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sample Extensions Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		135286D01D0B010C007FC288 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		135286D21D0B010C007FC288 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -58,6 +70,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		07A18F82227EC4C300C2168C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		135286CA1D0B010C007FC288 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -76,11 +95,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07A18F86227EC4C300C2168C /* SampleCommandLineTool */ = {
+			isa = PBXGroup;
+			children = (
+				07A18F87227EC4C300C2168C /* main.swift */,
+			);
+			path = SampleCommandLineTool;
+			sourceTree = "<group>";
+		};
 		135286C41D0B010C007FC288 = {
 			isa = PBXGroup;
 			children = (
 				135286CF1D0B010C007FC288 /* Sample Extensions Project */,
 				135286EA1D0B015D007FC288 /* Today Extension */,
+				07A18F86227EC4C300C2168C /* SampleCommandLineTool */,
 				135286E71D0B015D007FC288 /* Frameworks */,
 				135286CE1D0B010C007FC288 /* Products */,
 			);
@@ -91,6 +119,7 @@
 			children = (
 				135286CD1D0B010C007FC288 /* Sample Extensions Project.app */,
 				135286E61D0B015D007FC288 /* Today Extension.appex */,
+				07A18F85227EC4C300C2168C /* SampleCommandLineTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -129,6 +158,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		07A18F84227EC4C300C2168C /* SampleCommandLineTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07A18F8B227EC4C300C2168C /* Build configuration list for PBXNativeTarget "SampleCommandLineTool" */;
+			buildPhases = (
+				07A18F81227EC4C300C2168C /* Sources */,
+				07A18F82227EC4C300C2168C /* Frameworks */,
+				07A18F83227EC4C300C2168C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SampleCommandLineTool;
+			productName = SampleCommandLineTool;
+			productReference = 07A18F85227EC4C300C2168C /* SampleCommandLineTool */;
+			productType = "com.apple.product-type.tool";
+		};
 		135286CC1D0B010C007FC288 /* Sample Extensions Project */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 135286DF1D0B010C007FC288 /* Build configuration list for PBXNativeTarget "Sample Extensions Project" */;
@@ -171,10 +217,14 @@
 		135286C51D0B010C007FC288 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
+					07A18F84227EC4C300C2168C = {
+						CreatedOnToolsVersion = 10.2;
+						ProvisioningStyle = Automatic;
+					};
 					135286CC1D0B010C007FC288 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -188,6 +238,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -198,6 +249,7 @@
 			targets = (
 				135286CC1D0B010C007FC288 /* Sample Extensions Project */,
 				135286E51D0B015D007FC288 /* Today Extension */,
+				07A18F84227EC4C300C2168C /* SampleCommandLineTool */,
 			);
 		};
 /* End PBXProject section */
@@ -224,6 +276,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		07A18F81227EC4C300C2168C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07A18F88227EC4C300C2168C /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		135286C91D0B010C007FC288 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -279,6 +339,67 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		07A18F89227EC4C300C2168C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		07A18F8A227EC4C300C2168C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		135286DD1D0B010C007FC288 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -411,6 +532,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		07A18F8B227EC4C300C2168C /* Build configuration list for PBXNativeTarget "SampleCommandLineTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A18F89227EC4C300C2168C /* Debug */,
+				07A18F8A227EC4C300C2168C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		135286C81D0B010C007FC288 /* Build configuration list for PBXProject "Sample Extensions Project" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -427,6 +557,7 @@
 				135286E11D0B010C007FC288 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		135286F41D0B015E007FC288 /* Build configuration list for PBXNativeTarget "Today Extension" */ = {
 			isa = XCConfigurationList;
@@ -435,6 +566,7 @@
 				135286F61D0B015E007FC288 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

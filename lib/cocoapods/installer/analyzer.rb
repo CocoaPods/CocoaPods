@@ -324,11 +324,16 @@ module Pod
       #
       def analyze_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
         target_definitions_by_uuid = {}
+        cli_host_with_frameworks = []
+        cli_product_type = 'com.apple.product-type.tool'
         # Collect aggregate target definitions by uuid to later lookup host target
         # definitions and verify their compatiblity with their embedded targets
         aggregate_targets.each do |target|
-          target.user_targets.map(&:uuid).each do |uuid|
-            target_definitions_by_uuid[uuid] = target.target_definition
+          target.user_targets.each do |user_target|
+            target_definitions_by_uuid[user_target.uuid] = target.target_definition
+            if user_target.product_type == cli_product_type
+              cli_host_with_frameworks << user_target
+            end
           end
         end
         aggregate_target_user_projects = aggregate_targets.map(&:user_project)
@@ -336,9 +341,8 @@ module Pod
         host_uuid_to_embedded_target_definitions = {}
         # Search all of the known user projects for each embedded target's hosts
         embedded_aggregate_targets.each do |target|
-          host_uuids = []
-          aggregate_target_user_projects.product(target.user_targets).each do |user_project, user_target|
-            host_uuids += user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
+          host_uuids = aggregate_target_user_projects.product(target.user_targets).flat_map do |user_project, user_target|
+            user_project.host_targets_for_embedded_target(user_target).map(&:uuid)
           end
           # For each host, keep track of its embedded target definitions
           # to later verify each embedded target's compatiblity with its host,
@@ -352,6 +356,12 @@ module Pod
           embedded_targets_missing_hosts << target unless host_uuids.any? do |uuid|
             target_definitions_by_uuid.key? uuid
           end
+        end
+
+        unless cli_host_with_frameworks.empty?
+          UI.warn "The Podfile contains command line tool target(s) (#{cli_host_with_frameworks.map(&:name).to_sentence}) which are attempting to integrate dynamic frameworks." \
+            "\n" \
+            'This may not behave as expected, because command line tools are usually distributed as a single binary and cannot contain their own dynamic frameworks.'
         end
 
         unless embedded_targets_missing_hosts.empty?

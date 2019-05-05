@@ -1911,19 +1911,20 @@ module Pod
           UI.warnings.should.match /The Podfile contains framework or static library targets \(SampleLib\), for which the Podfile does not contain host targets \(targets which embed the framework\)\./
         end
 
-        it 'warns when using a Podfile for framework-only projects' do
+        it 'warns when using dynamic frameworks with CLI targets' do
+          project_path = fixture('Sample Extensions Project/Sample Extensions Project')
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
-            use_frameworks!
             platform :ios, '8.0'
-            target 'SampleFramework' do
-              project 'SampleProject/Sample Lib/Sample Lib'
+            project project_path
+            target 'SampleCommandLineTool' do
+              use_frameworks!
               pod 'monkey'
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           analyzer.analyze
-          UI.warnings.should.match /The Podfile contains framework or static library targets \(SampleFramework\), for which the Podfile does not contain host targets \(targets which embed the framework\)\./
+          UI.warnings.should.match /The Podfile contains command line tool target\(s\) \(SampleCommandLineTool\) which are attempting to integrate dynamic frameworks\./
         end
 
         it 'raises when the extension calls use_frameworks!, but the host target does not' do
