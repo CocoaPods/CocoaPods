@@ -107,7 +107,8 @@ module Pod
 
         it 'returns the correct path when headers_dir is set' do
           @pod_target.stubs(:product_module_name).returns('BananaLibModule')
-          @banana_spec.attributes_hash.stubs(:key?).returns(true)
+          @file_accessor = @pod_target.file_accessors.first
+          @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
           @pod_target.headers_sandbox.should == Pathname.new('BananaLib')
         end
       end

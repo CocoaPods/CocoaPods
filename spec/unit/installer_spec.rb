@@ -467,8 +467,9 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
                                                                      [], Pod::Installer::Analyzer::SpecsState.new, [], [],
                                                                      Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
+          @consumer = stub(:header_dir => 'myDir')
           @spec = stub(:name => 'Spec', :test_specification? => false, :library_specification? => true, :non_library_specification? => false,
-                       :app_specification? => false, :attributes_hash => {})
+                       :app_specification? => false, :consumer => @consumer)
           @spec.stubs(:root => @spec)
           @spec.stubs(:spec_type).returns(:library)
           @spec.stubs(:module_name => 'Spec')
