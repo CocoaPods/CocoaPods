@@ -104,6 +104,13 @@ module Pod
           @pod_target.stubs(:product_module_name).returns('BananaLibModule')
           @pod_target.headers_sandbox.should == Pathname.new('BananaLibModule')
         end
+
+        it 'returns the correct path when headers_dir is set' do
+          @pod_target.stubs(:product_module_name).returns('BananaLibModule')
+          @file_accessor = @pod_target.file_accessors.first
+          @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
+          @pod_target.headers_sandbox.should == Pathname.new('BananaLib')
+        end
       end
 
       describe '#build_settings_for_spec' do
