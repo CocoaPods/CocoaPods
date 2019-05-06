@@ -28,6 +28,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#6493](https://github.com/CocoaPods/CocoaPods/issues/6493)
 
+* Always suggest `pod repo update` on dependency resolution conflict,
+  unless repo update was specifically requested.
+  [Artem Sheremet](https://github.com/dotdoom)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
