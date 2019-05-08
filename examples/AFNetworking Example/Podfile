@@ -1,3 +1,7 @@
+if (repo = ENV['COCOAPODS_SPEC_REPO'])
+    source "#{repo}"
+end
+
 ### Implicit target definition :-/
 project "AFNetworking Mac Example.xcodeproj"
 ####

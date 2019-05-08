@@ -1,3 +1,7 @@
+if (repo = ENV['COCOAPODS_SPEC_REPO'])
+    source "#{repo}"
+end
+
 workspace 'Examples.xcworkspace'
 
 abstract_target 'Abstract Target' do
