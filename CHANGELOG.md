@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add support for pods in abstract-only targets to be installed.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Emit a warning when attempting to integrate dynamic frameworks into command line tool targets  
+  [Eric Amorde](https://github.com/amorde)
+  [#6493](https://github.com/CocoaPods/CocoaPods/issues/6493)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  

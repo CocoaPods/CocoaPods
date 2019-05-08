@@ -41,7 +41,7 @@ module Pod
     #
     attr_reader :build_settings
 
-    # @return [Type] the build type for this target.
+    # @return [Target::BuildType] the build type for this target.
     #
     attr_reader :build_type
     private :build_type
