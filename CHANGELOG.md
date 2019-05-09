@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Don't add resources to a second test_spec pod target build phase  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8173](https://github.com/CocoaPods/CocoaPods/issues/8173)
+
 * Fix 1.7.0.rc.1 static library regression for pods with `header_dir` attribute  
   [Paul Beusterien](https://github.com/paulb777)
   [#8765](https://github.com/CocoaPods/CocoaPods/issues/8765)
