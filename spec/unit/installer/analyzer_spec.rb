@@ -1711,7 +1711,7 @@ module Pod
           ].sort
         end
 
-        it "copy a framework's pod target, when the framework is in a sub project" do
+        it 'copies pod targets of frameworks and libraries from within sub projects' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
             use_frameworks!
@@ -1726,22 +1726,32 @@ module Pod
               project 'SampleProject/Sample Lib/Sample Lib'
               pod 'monkey'
             end
+
+            target 'SampleLib' do
+              project 'SampleProject/Sample Lib/Sample Lib'
+              pod 'matryoshka'
+            end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           result = analyzer.analyze
 
           result.targets.select { |at| at.name == 'Pods-SampleProject' }.flat_map(&:pod_targets).map(&:name).sort.uniq.should == %w(
             JSONKit
+            matryoshka
             monkey
           ).sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Debug').map { |pt| "#{at.name}/Debug/#{pt.name}" } }.sort.should == [
             'Pods-SampleFramework/Debug/monkey',
+            'Pods-SampleLib/Debug/matryoshka',
             'Pods-SampleProject/Debug/JSONKit',
+            'Pods-SampleProject/Debug/matryoshka',
             'Pods-SampleProject/Debug/monkey',
           ].sort
           result.targets.flat_map { |at| at.pod_targets_for_build_configuration('Release').map { |pt| "#{at.name}/Release/#{pt.name}" } }.sort.should == [
             'Pods-SampleFramework/Release/monkey',
+            'Pods-SampleLib/Release/matryoshka',
             'Pods-SampleProject/Release/JSONKit',
+            'Pods-SampleProject/Release/matryoshka',
             'Pods-SampleProject/Release/monkey',
           ].sort
         end

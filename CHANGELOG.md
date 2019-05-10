@@ -39,6 +39,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   include the Pods .xcconfig from the base .xcconfig file
   [Rob Hudson](https://github.com/robtimp)
 
+* Fix 1.7.0.rc.1 static library regression for pods with `header_dir` attribute  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8765](https://github.com/CocoaPods/CocoaPods/issues/8765)
+
+* Ensure all embedded pod targets are copied over to the host target.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8608](https://github.com/CocoaPods/CocoaPods/issues/8608)
+
+* Scope app spec dependent targets when no dedup'ing targets.
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8585](https://github.com/CocoaPods/CocoaPods/pull/8585)
+
+
 ## 1.7.0.rc.1 (2019-05-02)
 
 ##### Enhancements
