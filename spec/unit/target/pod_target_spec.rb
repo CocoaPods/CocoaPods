@@ -104,6 +104,13 @@ module Pod
           @pod_target.stubs(:product_module_name).returns('BananaLibModule')
           @pod_target.headers_sandbox.should == Pathname.new('BananaLibModule')
         end
+
+        it 'returns the correct path when headers_dir is set' do
+          @pod_target.stubs(:product_module_name).returns('BananaLibModule')
+          @file_accessor = @pod_target.file_accessors.first
+          @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
+          @pod_target.headers_sandbox.should == Pathname.new('BananaLib')
+        end
       end
 
       describe '#build_settings_for_spec' do
@@ -613,11 +620,15 @@ module Pod
 
       describe 'With dependencies' do
         before do
-          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', false, {}, [], Platform.ios, @pod_target.target_definitions)
-          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [], Platform.ios, @pod_target.target_definitions)
+          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', false, {}, [], Platform.ios,
+                                               @pod_target.target_definitions)
+          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [], Platform.ios,
+                                                    @pod_target.target_definitions)
+          @app_pod_dependency = fixture_pod_target('monkey/monkey.podspec', false, {}, [], Platform.ios,
+                                                   @pod_target.target_definitions)
           @pod_target.dependent_targets = [@pod_dependency]
           @pod_target.test_dependent_targets_by_spec_name = { @pod_dependency.name => [@test_pod_dependency] }
-          @pod_target.app_dependent_targets_by_spec_name = { @pod_dependency.name => [@test_pod_dependency] }
+          @pod_target.app_dependent_targets_by_spec_name = { @pod_dependency.name => [@app_pod_dependency] }
           @pod_target.test_app_hosts_by_spec_name = { @pod_dependency.name => [@test_pod_dependency.specs.first, @test_pod_dependency] }
         end
 
@@ -631,14 +642,8 @@ module Pod
           scoped_pod_target.first.dependent_targets.first.name.should == 'OrangeFramework-Pods'
           scoped_pod_target.first.test_dependent_targets_by_spec_name.count.should == 1
           scoped_pod_target.first.test_dependent_targets_by_spec_name['OrangeFramework'].first.name.should == 'matryoshka-Pods'
-        end
-
-        it 'scopes app dependencies' do
-          scoped_pod_target = @pod_target.scoped
-          scoped_pod_target.first.dependent_targets.count.should == 1
-          scoped_pod_target.first.dependent_targets.first.name.should == 'OrangeFramework-Pods'
           scoped_pod_target.first.app_dependent_targets_by_spec_name.count.should == 1
-          scoped_pod_target.first.app_dependent_targets_by_spec_name['OrangeFramework'].first.name.should == 'matryoshka-Pods'
+          scoped_pod_target.first.app_dependent_targets_by_spec_name['OrangeFramework'].first.name.should == 'monkey-Pods'
         end
 
         it 'scopes test app host dependencies' do
