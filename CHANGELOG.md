@@ -6,6 +6,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+* Performance optimization for large number of files
+  [#8797](https://github.com/CocoaPods/CocoaPods/issues/8797)
+
 ##### Enhancements
 
 * Allow using an application defined by an app spec as the app host for a test spec.  
