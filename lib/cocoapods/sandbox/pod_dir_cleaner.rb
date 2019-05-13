@@ -48,14 +48,21 @@ module Pod
       # @return [Array<Strings>] The paths that can be deleted.
       #
       def clean_paths
-        cached_used = used_files
+        cached_used = used_files.map do |path|
+          path.downcase
+        end
         glob_options = File::FNM_DOTMATCH | File::FNM_CASEFOLD
-        files = Pathname.glob(root + '**/*', glob_options).map(&:to_s)
+        files = Pathname.glob(root + "**/*", glob_options).map(&:to_s)
 
+        # create a set for optimization reasons
+        # if file path exists in cached_used
+        # then we can find it in constant speed
+        # otherwise we will fallback to iterate on all cached_used files
+        # which will have linear speed
+        cached_used_set = cached_used.to_set
         files.reject do |candidate|
           candidate = candidate.downcase
-          candidate.end_with?('.', '..') || cached_used.any? do |path|
-            path = path.downcase
+          candidate.end_with?(".", "..") || cached_used_set.include?(candidate) || cached_used.any? do |path|
             path.include?(candidate) || candidate.include?(path)
           end
         end
