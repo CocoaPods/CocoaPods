@@ -6,7 +6,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
-* Performance optimization for large number of files
+* Performance optimization for large number of files related to cleaning sandbox directory during installation
+  [hovox](https://github.com/hovox)
   [#8797](https://github.com/CocoaPods/CocoaPods/issues/8797)
 
 ##### Enhancements
