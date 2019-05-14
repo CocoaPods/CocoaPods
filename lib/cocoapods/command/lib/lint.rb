@@ -36,6 +36,7 @@ module Pod
               'via :podspec. If there are --include-podspecs, then these are removed from them.'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
+            ['--analyze', 'Validate with the Xcode Static Analysis tool'],
           ].concat(super)
         end
 
@@ -56,6 +57,7 @@ module Pod
           @external_podspecs   = argv.option('external-podspecs', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
+          @analyze = argv.flag?('analyze', false)
           @podspecs_paths = argv.arguments!
           super
         end
@@ -81,6 +83,7 @@ module Pod
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
+            validator.analyze = @analyze
             validator.include_podspecs = @include_podspecs
             validator.external_podspecs = @external_podspecs
             validator.validate

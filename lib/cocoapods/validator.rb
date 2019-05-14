@@ -239,6 +239,10 @@ module Pod
     #
     attr_accessor :skip_tests
 
+    # @return [Bool] Whether the validator should run Xcode Static Analysis.
+    #
+    attr_accessor :analyze
+
     # @return [Bool] Whether frameworks should be used for the installation.
     #
     attr_accessor :use_frameworks
@@ -662,7 +666,18 @@ module Pod
           if scheme.nil?
             UI.warn "Skipping compilation with `xcodebuild` because target contains no sources.\n".yellow
           else
-            output = xcodebuild('build', scheme, 'Release')
+            if analyze
+              output = xcodebuild('analyze', scheme, 'Release')
+              find_output = Executable.execute_command('find', [validation_dir, '-name', '*.html'], false)
+              if find_output != ''
+                message = 'Static Analysis failed.'
+                message += ' You can use `--verbose` for more information.' unless config.verbose?
+                message += ' You can use `--no-clean` to save a reproducible buid environment.' unless no_clean
+                error('build_pod', message)
+              end
+            else
+              output = xcodebuild('build', scheme, 'Release')
+            end
             parsed_output = parse_xcodebuild_output(output)
             translate_output_to_linter_messages(parsed_output)
           end
@@ -998,6 +1013,10 @@ module Pod
       when :tvos
         command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
+      end
+
+      if analyze
+        command += %w(CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer)
       end
 
       begin

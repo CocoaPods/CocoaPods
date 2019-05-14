@@ -273,7 +273,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add `--analyze` option for the linters.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8792](https://github.com/CocoaPods/CocoaPods/issues/8792)
 
 ##### Bug Fixes
 
