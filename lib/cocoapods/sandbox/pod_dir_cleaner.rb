@@ -48,14 +48,13 @@ module Pod
       # @return [Array<Strings>] The paths that can be deleted.
       #
       def clean_paths
-        cached_used = used_files
+        cached_used = used_files.map(&:downcase)
         glob_options = File::FNM_DOTMATCH | File::FNM_CASEFOLD
         files = Pathname.glob(root + '**/*', glob_options).map(&:to_s)
-
+        cached_used_set = cached_used.to_set
         files.reject do |candidate|
           candidate = candidate.downcase
-          candidate.end_with?('.', '..') || cached_used.any? do |path|
-            path = path.downcase
+          candidate.end_with?('.', '..') || cached_used_set.include?(candidate) || cached_used.any? do |path|
             path.include?(candidate) || candidate.include?(path)
           end
         end
