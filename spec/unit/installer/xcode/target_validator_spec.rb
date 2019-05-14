@@ -43,7 +43,7 @@ module Pod
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               pod 'monkey',    :path => (fixture_path + 'monkey').to_s
               pod 'BananaLib', :path => (fixture_path + 'banana-lib').to_s
               target 'SampleProject'
@@ -64,7 +64,7 @@ module Pod
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
@@ -85,7 +85,7 @@ module Pod
             podfile = Pod::Podfile.new do
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
               pod 'monkey',          :path => (fixture_path + 'monkey').to_s
@@ -102,7 +102,7 @@ module Pod
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do
               platform :ios, '9.3'
-              project 'Sample Extensions Project/Sample Extensions Project'
+              project(fixture_path + 'Sample Extensions Project/Sample Extensions Project').to_s
               use_frameworks!
 
               target 'Sample Extensions Project' do
@@ -130,7 +130,7 @@ module Pod
             @podfile = Pod::Podfile.new do
               install! 'cocoapods', 'integrate_targets' => false
               platform :ios, '8.0'
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
               pod 'CoconutLib',      :path => (fixture_path + 'coconut-lib').to_s
@@ -183,7 +183,7 @@ module Pod
             @podfile = Pod::Podfile.new do
               install! 'cocoapods', 'integrate_targets' => false
               platform :ios, '8.0'
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               pod 'BananaLib',       :path => (fixture_path + 'banana-lib').to_s
               pod 'CoconutLib',      :path => (fixture_path + 'coconut-lib').to_s
@@ -243,7 +243,7 @@ module Pod
             @podfile = Pod::Podfile.new do
               install! 'cocoapods', 'integrate_targets' => false
               platform :ios, '8.0'
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               pod 'matryoshka',      :path => (fixture_path + 'static-matryoshka').to_s
               pod 'monkey',          :path => (fixture_path + 'monkey').to_s
@@ -268,25 +268,24 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
               use_frameworks!
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject' do
-                current_target_definition.swift_version = '3.0'
-              end
-              target 'TestRunner' do
-                current_target_definition.swift_version = '2.3'
-              end
+              target 'SampleProject'
+              target 'TestRunner'
             end
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
+            podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
+            podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '2.3'
             e = should.raise Informative do
               @validator.validate!
             end
+
             e.message.should.match /Unable to determine Swift version for the following pods:/
             e.message.should.include '`OrangeFramework` is integrated by multiple targets that use a different Swift version: ' \
               '`SampleProject` (Swift 3.0) and `TestRunner` (Swift 2.3).'
@@ -298,7 +297,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
@@ -347,21 +346,19 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
-              pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject' do
-                current_target_definition.swift_version = '3.0'
-              end
-              target 'TestRunner' do
-                current_target_definition.swift_version = '2.3'
-              end
+              pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
             end
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
+            podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
+            podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '2.3'
             lambda { @validator.validate! }.should.not.raise
           end
 
@@ -369,22 +366,20 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               use_frameworks!
               platform :ios, '8.0'
               install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject' do
-                current_target_definition.swift_version = '3.0'
-              end
-              target 'TestRunner' do
-                current_target_definition.swift_version = '2.3'
-              end
+              target 'SampleProject'
+              target 'TestRunner'
             end
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
+            podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
+            podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '2.3'
             @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:spec_swift_versions).returns(['4.0'])
             @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:spec_swift_versions).returns(['3.2'])
             lambda { @validator.validate! }.should.not.raise
@@ -394,7 +389,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               platform :ios, '10.0'
               install! 'cocoapods', :integrate_targets => false
               pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
@@ -417,7 +412,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               platform :ios, '10.0'
               install! 'cocoapods', :integrate_targets => false
               pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
@@ -437,7 +432,7 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               platform :ios, '10.0'
               install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s, :modular_headers => true
@@ -461,21 +456,19 @@ module Pod
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Podfile.new do
-              project 'SampleProject/SampleProject'
+              project(fixture_path + 'SampleProject/SampleProject').to_s
               platform :ios, '10.0'
               install! 'cocoapods', :integrate_targets => false
               pod 'OrangeFramework', :path => (fixture_path + 'orange-framework').to_s, :modular_headers => true
               pod 'matryoshka',      :path => (fixture_path + 'matryoshka').to_s
-              target 'SampleProject' do
-                current_target_definition.swift_version = '3.0'
-              end
-              target 'TestRunner' do
-                current_target_definition.swift_version = '3.0'
-              end
+              target 'SampleProject'
+              target 'TestRunner'
             end
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
+            podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
+            podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '3.0'
             @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:should_build?).returns(false)
             lambda { @validator.validate! }.should.not.raise
           end
