@@ -34,5 +34,6 @@
       "name": "App",
       "source_files": "TestLib/App/**/*"
     }
-  ]
+  ],
+  "swift_version": "4"
 }

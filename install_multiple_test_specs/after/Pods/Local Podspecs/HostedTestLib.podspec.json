@@ -97,5 +97,6 @@
         "PRODUCT_NAME": "App Host w/ Dep"
       }
     }
-  ]
+  ],
+  "swift_version": "4"
 }
