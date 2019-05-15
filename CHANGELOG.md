@@ -43,17 +43,30 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   include the Pods .xcconfig from the base .xcconfig file
   [Rob Hudson](https://github.com/robtimp)
 
+
+## 1.7.0.rc.2 (2019-05-15)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Don't add resources to a second test_spec pod target build phase  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8173](https://github.com/CocoaPods/CocoaPods/issues/8173)
+
 * Fix 1.7.0.rc.1 static library regression for pods with `header_dir` attribute  
   [Paul Beusterien](https://github.com/paulb777)
   [#8765](https://github.com/CocoaPods/CocoaPods/issues/8765)
 
-* Ensure all embedded pod targets are copied over to the host target.  
+* Scope app spec dependent targets when no dedup'ing targets.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#8608](https://github.com/CocoaPods/CocoaPods/issues/8608)
+  [#8770](https://github.com/CocoaPods/CocoaPods/pull/8770)
 
-* Scope app spec dependent targets when no dedup'ing targets.
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#8585](https://github.com/CocoaPods/CocoaPods/pull/8585)
+* Fix embedding static frameworks in extensions while using `use_frameworks!`  
+  [Martin Fiebig](https://github.com/mfiebig)
+  [#8798](https://github.com/CocoaPods/CocoaPods/pull/8798)
 
 
 ## 1.7.0.rc.1 (2019-05-02)
@@ -89,6 +102,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix: AppIcon not found when executing `pod lib lint`  
   [Itay Brenner](https://github.com/itaybre)
   [#8648](https://github.com/CocoaPods/CocoaPods/issues/8648)
+
 
 ## 1.7.0.beta.3 (2019-03-28)
 
@@ -267,6 +281,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fixed test host delegate methods to not warn about unused arguments.  
   [Jacek Suliga](https://github.com/jmkk)
   [#8521](https://github.com/CocoaPods/CocoaPods/pull/8521)
+
+
+## 1.6.2 (2019-05-15)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Ensure all embedded pod targets are copied over to the host target.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8608](https://github.com/CocoaPods/CocoaPods/issues/8608)
 
 
 ## 1.6.1 (2019-02-21)
