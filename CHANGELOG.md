@@ -22,7 +22,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Scope app spec dependent targets when no dedup'ing targets.
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#8585](https://github.com/CocoaPods/CocoaPods/pull/8585)
+  [#8770](https://github.com/CocoaPods/CocoaPods/pull/8770)
 
 
 ## 1.7.0.rc.1 (2019-05-02)
