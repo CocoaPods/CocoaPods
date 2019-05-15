@@ -28,5 +28,6 @@
       "requires_app_host": true,
       "source_files": "TestLib/UnitTests2/**/*"
     }
-  ]
+  ],
+  "swift_version": "4"
 }
