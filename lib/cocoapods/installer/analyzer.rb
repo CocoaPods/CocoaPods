@@ -302,7 +302,8 @@ module Pod
             pod_target_names = Set.new(aggregate_target.pod_targets_for_build_configuration(configuration_name).map(&:name))
             embedded_pod_targets = embedded_aggregate_target.pod_targets_for_build_configuration(configuration_name).select do |pod_target|
               if !pod_target_names.include?(pod_target.name) &&
-                 aggregate_target.pod_targets.none? { |aggregate_pod_target| (pod_target.specs - aggregate_pod_target.specs).empty? }
+                 aggregate_target.pod_targets.none? { |aggregate_pod_target| (pod_target.specs - aggregate_pod_target.specs).empty? } &&
+                 (libraries_only || pod_target.build_as_dynamic?)
                 pod_target.name
               end
             end

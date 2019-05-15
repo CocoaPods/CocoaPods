@@ -1711,6 +1711,37 @@ module Pod
           ].sort
         end
 
+        it 'does not copy extension pod targets to host target, when use_frameworks! but contained pod is static' do
+          SpecHelper.create_sample_app_copy_from_fixture('Sample Extensions Project')
+          fixture_path = ROOT + 'spec/fixtures'
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '6.0'
+            project 'Sample Extensions Project/Sample Extensions Project'
+            use_frameworks!
+
+            target 'Sample Extensions Project' do
+              pod 'JSONKit', '1.4'
+            end
+
+            target 'Today Extension' do
+              pod 'matryoshka', :path => (fixture_path + 'static-matryoshka').to_s
+            end
+          end
+
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          # Create 'Local Podspecs' folder within target project
+          Dir.mkdir(File.join(config.sandbox.root, 'Local Podspecs'))
+          result = analyzer.analyze
+
+          result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == [
+            'Pods-Sample Extensions Project/JSONKit',
+            'Pods-Sample Extensions Project/monkey',
+            'Pods-Today Extension/monkey',
+            'Pods-Today Extension/matryoshka',
+          ].sort
+        end
+
         it 'copies pod targets of frameworks and libraries from within sub projects' do
           podfile = Pod::Podfile.new do
             source SpecHelper.test_repo_url
