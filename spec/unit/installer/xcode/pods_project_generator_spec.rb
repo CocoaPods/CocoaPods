@@ -375,7 +375,7 @@ module Pod
           it "uses the user project's object version for the pods project" do
             tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
             FileUtils.mkdir_p(tmp_directory)
-            proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 1)
+            proj = Xcodeproj::Project.new(tmp_directory + 'Yolo.xcodeproj', false, 51)
             proj.save
 
             user_target = stub('SampleApp-iOS-User-Target', :symbol_type => :application)
@@ -391,7 +391,7 @@ module Pod
             @generator = PodsProjectGenerator.new(config.sandbox, [target], [],
                                                   @analysis_result, @installation_options, config)
             @generator.generate!
-            @generator.project.object_version.should == '1'
+            @generator.project.object_version.should == '51'
 
             FileUtils.rm_rf(tmp_directory)
           end
