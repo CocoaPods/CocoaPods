@@ -24,6 +24,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8770](https://github.com/CocoaPods/CocoaPods/pull/8770)
 
+* Fix embedding static frameworks in extensions while using `use_frameworks!`  
+  [Martin Fiebig](https://github.com/mfiebig)
+  [#8798](https://github.com/CocoaPods/CocoaPods/pull/8798)
 
 ## 1.7.0.rc.1 (2019-05-02)
 
