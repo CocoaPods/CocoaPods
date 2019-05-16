@@ -1353,7 +1353,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6762](https://github.com/CocoaPods/CocoaPods/pull/6762)
 
-* Use unique temp folder during lint for parallel execution    
+* Use unique temp folder during lint for parallel execution  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5117](https://github.com/CocoaPods/CocoaPods/issues/5117)
 
@@ -1377,11 +1377,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6700](https://github.com/CocoaPods/CocoaPods/pull/6700) 
 
-* Make copy resources echoes always return true to work around issue where Xcode stops handling build script output greater than ~440 characters (rdar://30607704).  
+* Make copy resources echoes always return true to work around issue where Xcode stops handling build script output greater than \~440 characters (rdar://30607704).  
   [postmechanical](https://github.com/postmechanical)
   [#6595](https://github.com/CocoaPods/CocoaPods/issues/6595)
 
-* Inherit pod defined values for `SWIFT_ACTIVE_COMPILATION_CONDITIONS`.    
+* Inherit pod defined values for `SWIFT_ACTIVE_COMPILATION_CONDITIONS`.  
   [Louis D'hauwe](https://github.com/louisdh)
   [#6629](https://github.com/CocoaPods/CocoaPods/pull/6629)
   
@@ -1841,11 +1841,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5491](https://github.com/CocoaPods/CocoaPods/issues/5491)
 
-* Fix codesigning identity on watchOS and tvOS targets.    
+* Fix codesigning identity on watchOS and tvOS targets.  
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5686](https://github.com/CocoaPods/CocoaPods/issues/5686)
 
-* Fix SWIFT_VERSION not being read when only defined at the project level.    
+* Fix SWIFT_VERSION not being read when only defined at the project level.  
   [Ben Asher](https://github.com/benasher44)
   [#5700](https://github.com/CocoaPods/CocoaPods/issues/5700) and [#5737](https://github.com/CocoaPods/CocoaPods/issues/5737)
 
@@ -3013,7 +3013,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   * They have any dependency which needs to be duplicated.
 
   You can opt-out of this behavior installation-wise, by setting the following
-  option in your ``~/.cocoapods/config.yaml`:
+  option in your `~/.cocoapods/config.yaml`:
   ```yaml
   deduplicate_targets: false
   ```
@@ -4380,8 +4380,8 @@ For more details, see 📝 [CocoaPods 0.33](https://blog.cocoapods.org/CocoaPods
   (d). If auto-completion is enabled for your shell you can configure it for
   CocoaPods with the following command:
 
-      rm -f /usr/local/share/zsh/site-functions/_pod
-      dpod --completion-script > /usr/local/share/zsh/site-functions/_pod
+      rm -f /usr/local/share/zsh/site-functions/\_pod
+      dpod --completion-script > /usr/local/share/zsh/site-functions/\_pod
       exec zsh
 
   Currently only the Z shell is supported.  
@@ -6476,7 +6476,7 @@ CocoaPods can now integrate all the targets specified in your `Podfile`.
 To specify which target, in your Xcode project, a Pods target should be linked
 with, use the `link_with` method like so:
 
-``ruby
+```ruby
 platform :ios
 
 workspace 'MyWorkspace'
@@ -6489,7 +6489,7 @@ target :test, :exclusive => true do
   link_with 'TestRunnerTarget'
   dependency 'Kiwi'
 end
-``
+```
 
 _NOTE: As you can see it can take either one target name, or an array of names._
 
