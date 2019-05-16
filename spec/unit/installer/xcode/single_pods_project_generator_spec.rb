@@ -424,7 +424,7 @@ module Pod
           describe '#share_development_pod_schemes' do
             it 'does not share by default' do
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
             end
 
             it 'can share all schemes' do
@@ -443,8 +443,7 @@ module Pod
                 pod_generator_result.project.path,
                 'BananaLib-macOS')
 
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-              @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets)
+              @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets)
             end
 
             it 'shares test schemes' do
@@ -471,8 +470,7 @@ module Pod
                 pod_generator_result.project.path,
                 'CoconutLib-macOS-Unit-Tests')
 
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-              @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets)
+              @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets)
             end
 
             it 'correctly configures schemes for all specs' do
@@ -484,13 +482,12 @@ module Pod
               @generator.sandbox.stubs(:development_pods).returns('CoconutLib' => fixture('CoconutLib'))
 
               pod_generator_result = @generator.generate!
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
 
               Xcode::PodsProjectWriter.new(config.sandbox, [pod_generator_result.project],
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
 
-              @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets)
+              @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets)
 
               scheme_path = Xcodeproj::XCScheme.shared_data_dir(pod_generator_result.project.path) + 'CoconutLib-iOS.xcscheme'
               scheme = Xcodeproj::XCScheme.new(scheme_path)
@@ -513,14 +510,14 @@ module Pod
                   returns(false)
 
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
 
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(nil)
 
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
             end
 
             it 'allows specifying strings of pods to share' do
@@ -539,15 +536,14 @@ module Pod
                 pod_generator_result.project.path,
                 'BananaLib-macOS')
 
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-              @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets)
+              @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets)
 
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(%w(orange-framework))
 
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets)
+              @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets)
             end
 
             it 'allows specifying regular expressions of pods to share' do
@@ -566,15 +562,14 @@ module Pod
                 pod_generator_result.project.path,
                 'BananaLib-macOS')
 
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-              @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets)
+              @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets)
 
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns([/banana$/, /[^\A]BananaLib/])
 
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
             end
 
             it 'raises when an invalid type is set' do
@@ -584,9 +579,8 @@ module Pod
 
               pod_generator_result = @generator.generate!
               @generator.sandbox.stubs(:development_pods).returns('BananaLib' => fixture('BananaLib'))
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              e = should.raise(Informative) { @generator.share_development_pod_schemes(pod_generator_result.project, development_pod_targets) }
+              e = should.raise(Informative) { @generator.configure_schemes(pod_generator_result.project, @generator.pod_targets) }
               e.message.should.match /share_schemes_for_development_pods.*set it to true, false, or an array of pods to share schemes for/
             end
           end
