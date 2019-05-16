@@ -318,7 +318,7 @@ module Pod
         all_projects_by_pod_targets.merge!(pods_project_by_targets) if pods_project_by_targets
         all_projects_by_pod_targets.merge!(projects_by_pod_targets) if projects_by_pod_targets
         all_projects_by_pod_targets.each do |project, pod_targets|
-          generator.share_development_pod_schemes(project, development_pod_targets(pod_targets))
+          generator.configure_schemes(project, pod_targets)
         end
       end
     end
