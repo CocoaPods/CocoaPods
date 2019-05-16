@@ -371,13 +371,13 @@ module Pod
 
     # @return [Hash{String=>Array<String>}] The resource and resource bundle paths this target depends upon keyed by
     #         spec name. Resources for app specs and test specs are directly added to “Copy Bundle Resources” phase
-    #         from the generated targets therefore they are not part of the resource paths.
+    #         from the generated targets for frameworks, but not libraries. Therefore they are not part of the resource paths.
     #
     def resource_paths
       @resource_paths ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
           resource_paths = file_accessor.resources.map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project_path.dirname)}" }
-          resource_paths = [] if file_accessor.spec.non_library_specification?
+          resource_paths = [] if file_accessor.spec.non_library_specification? && build_as_framework?
           prefix = Pod::Target::BuildSettings::CONFIGURATION_BUILD_DIR_VARIABLE
           prefix = configuration_build_dir unless file_accessor.spec.test_specification?
           resource_bundle_paths = file_accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }

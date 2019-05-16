@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix 1.7.0.rc.2 regression - Resources need to be added for test specs in library builds  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#8812](https://github.com/CocoaPods/CocoaPods/pull/8812)
 
 
 ## 1.7.0.rc.2 (2019-05-15)
