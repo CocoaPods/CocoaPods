@@ -709,6 +709,18 @@ module Pod
           }
         end
 
+        it 'returns the correct resource paths for use_libraries' do
+          @watermelon_pod_target.stubs(:build_as_framework?).returns(false)
+          @watermelon_pod_target.resource_paths.should == {
+            'WatermelonLib' => [],
+            'WatermelonLib/Tests' => ['${PODS_ROOT}/../../spec/fixtures/watermelon-lib/App/resource.txt',
+                                      '${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
+            'WatermelonLib/SnapshotTests' => [],
+            'WatermelonLib/App' => ['${PODS_ROOT}/../../spec/fixtures/watermelon-lib/App/resource.txt',
+                                    '${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
+          }
+        end
+
         it 'returns the correct framework paths' do
           @watermelon_pod_target.framework_paths.should == {
             'WatermelonLib' => [
