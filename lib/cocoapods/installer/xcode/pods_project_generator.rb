@@ -74,16 +74,18 @@ module Pod
           @metadata_cache = metadata_cache
         end
 
-        # Shares schemes of development Pods.
+        # Configure schemes for the specified project and pod targets. Schemes for development pods will be shared
+        # if requested by the integration.
+        #
+        # @param [PBXProject] project The project to configure schemes for.
+        # @param [Array<PodTarget>] pod_targets The pod targets within that project to configure their schemes.
         #
         # @return [void]
         #
-        def share_development_pod_schemes(project, development_pod_targets = [])
-          targets = development_pod_targets.select do |target|
-            target.should_build? && share_scheme_for_development_pod?(target.pod_name)
-          end
-          targets.each do |pod_target|
-            configure_schemes_for_pod_target(project, pod_target)
+        def configure_schemes(project, pod_targets)
+          pod_targets.each do |pod_target|
+            share_scheme = pod_target.should_build? && share_scheme_for_development_pod?(pod_target.pod_name) && sandbox.local?(pod_target.pod_name)
+            configure_schemes_for_pod_target(project, pod_target, share_scheme)
           end
         end
 
@@ -216,7 +218,7 @@ module Pod
           end
         end
 
-        def configure_schemes_for_pod_target(project, pod_target)
+        def configure_schemes_for_pod_target(project, pod_target, share_scheme)
           specs = [pod_target.root_spec] + pod_target.test_specs + pod_target.app_specs
           specs.each do |spec|
             scheme_name = spec.spec_type == :library ? pod_target.label : pod_target.non_library_spec_label(spec)
@@ -236,7 +238,7 @@ module Pod
               scheme.launch_action.environment_variables = environment_variables
               scheme.save!
             end
-            Xcodeproj::XCScheme.share_scheme(project.path, scheme_name)
+            Xcodeproj::XCScheme.share_scheme(project.path, scheme_name) if share_scheme
           end
         end
       end

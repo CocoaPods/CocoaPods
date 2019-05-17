@@ -72,7 +72,7 @@ module Pod
         @installer.stubs(:predictabilize_uuids)
         @installer.stubs(:stabilize_target_uuids)
 
-        Installer::Xcode::PodsProjectGenerator.any_instance.stubs(:share_development_pod_schemes)
+        Installer::Xcode::PodsProjectGenerator.any_instance.stubs(:configure_schemes)
         Installer::Xcode::SinglePodsProjectGenerator.any_instance.stubs(:generate!)
         Installer::Xcode::PodsProjectWriter.any_instance.stubs(:write!)
       end
@@ -105,7 +105,7 @@ module Pod
         target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
         generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, {}, target_installation_results)
         generator.stubs(:generate!).returns(generator_result)
-        generator.stubs(:share_development_pod_schemes)
+        generator.stubs(:configure_schemes)
 
         hooks = sequence('hooks')
         @installer.expects(:run_podfile_post_install_hooks).once.in_sequence(hooks)
@@ -132,7 +132,7 @@ module Pod
         pods_project = fixture('Pods.xcodeproj')
         generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(pods_project, {}, target_installation_results)
         generator.stubs(:generate!).returns(generator_result)
-        generator.expects(:share_development_pod_schemes).once
+        generator.expects(:configure_schemes).once
 
         @installer.install!
       end
@@ -157,7 +157,7 @@ module Pod
         projects_by_pod_targets = { fixture('Subproject.xcodeproj') => [] }
         generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(pods_project, projects_by_pod_targets, target_installation_results)
         generator.stubs(:generate!).returns(generator_result)
-        generator.expects(:share_development_pod_schemes).twice
+        generator.expects(:configure_schemes).twice
 
         @installer.install!
       end
