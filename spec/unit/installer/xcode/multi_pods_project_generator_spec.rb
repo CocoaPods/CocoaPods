@@ -666,7 +666,7 @@ module Pod
           describe '#share_development_pod_schemes' do
             it 'does not share by default' do
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
             end
 
             it 'can share all schemes' do
@@ -689,7 +689,7 @@ module Pod
                 'BananaLib-macOS')
 
               banana_development_pods = project_by_target_map[banana_project].select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-              @generator.share_development_pod_schemes(banana_project, banana_development_pods)
+              @generator.configure_schemes(banana_project, banana_development_pods)
             end
 
             it 'shares test schemes' do
@@ -719,9 +719,7 @@ module Pod
                 coconut_project.path,
                 'CoconutLib-macOS-Unit-Tests')
 
-              coconut_development_pod_targets = projects_by_pod_targets[coconut_project].select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-
-              @generator.share_development_pod_schemes(coconut_project, coconut_development_pod_targets)
+              @generator.configure_schemes(coconut_project, projects_by_pod_targets[coconut_project])
             end
 
             it 'correctly configures schemes for all specs' do
@@ -733,7 +731,6 @@ module Pod
               @generator.sandbox.stubs(:development_pods).returns('CoconutLib' => fixture('CoconutLib'))
 
               pod_generator_result = @generator.generate!
-              development_pod_targets = @generator.pod_targets.select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
 
               projects_by_pod_targets = pod_generator_result.projects_by_pod_targets
               coconut_project = projects_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
@@ -742,7 +739,7 @@ module Pod
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
                                            @generator.installation_options).write!
 
-              @generator.share_development_pod_schemes(coconut_project, development_pod_targets)
+              @generator.configure_schemes(coconut_project, @generator.pod_targets)
 
               scheme_path = Xcodeproj::XCScheme.shared_data_dir(coconut_project.path) + 'CoconutLib-iOS.xcscheme'
               scheme = Xcodeproj::XCScheme.new(scheme_path)
@@ -765,14 +762,14 @@ module Pod
                   returns(false)
 
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
 
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(nil)
 
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(nil)
+              @generator.configure_schemes(nil, [])
             end
 
             it 'allows specifying strings of pods to share' do
@@ -795,8 +792,7 @@ module Pod
                 banana_project.path,
                 'BananaLib-macOS')
 
-              banana_development_pod_targets = project_by_pod_targets[banana_project].select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
-              @generator.share_development_pod_schemes(banana_project, banana_development_pod_targets)
+              @generator.configure_schemes(banana_project, project_by_pod_targets[banana_project])
 
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
@@ -804,9 +800,8 @@ module Pod
 
               orange_project = project_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'OrangeFramework.xcodeproj' }
               orange_project.should.not.be.nil
-              orange_development_pod_targets = project_by_pod_targets[orange_project].select { |pod_target| @generator.sandbox.local?(pod_target.pod_name) }
               Xcodeproj::XCScheme.expects(:share_scheme).never
-              @generator.share_development_pod_schemes(orange_project, orange_development_pod_targets)
+              @generator.configure_schemes(orange_project, project_by_pod_targets[orange_project])
             end
           end
         end
