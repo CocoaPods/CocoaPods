@@ -50,6 +50,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Configure schemes regardless if they are being shared or not.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8815](https://github.com/CocoaPods/CocoaPods/pull/8815)
+* Remove stale podspecs from 'Local Podspecs' when installing non-local counterparts.
+  [Pär Strindevall](https://github.com/parski)
 
 
 ## 1.7.0.rc.2 (2019-05-15)
