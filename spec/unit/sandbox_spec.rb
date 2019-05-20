@@ -175,6 +175,13 @@ module Pod
         @sandbox.checkout_sources.should == { 'BananaLib' => source }
       end
 
+      it 'removes local podspec of a Pod' do
+        local_podspec_path = 'Some Path/Local Pods/BananaLib.podspec'
+        @sandbox.stubs(:specification_path).returns(local_podspec_path)
+        FileUtils.expects(:rm).with(local_podspec_path).once
+        @sandbox.remove_local_podspec('BananaLib')
+      end
+
       #--------------------------------------#
 
       it 'stores the local path of a Pod' do
