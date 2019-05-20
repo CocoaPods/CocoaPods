@@ -28,6 +28,12 @@ module Pod
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
         end
+
+        it 'removes local podspec' do
+          @spec.source = { :git => SpecHelper.fixture('banana-lib'), :tag => 'v1.0' }
+          config.sandbox.expects(:remove_local_podspec).with('BananaLib').once
+          @installer.install!
+        end
       end
 
       it 'does not show warning if the source is encrypted using https' do
