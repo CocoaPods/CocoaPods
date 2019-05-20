@@ -14,6 +14,11 @@ module Pod
       #
       attr_reader :sandbox
 
+      # @return [Podfile] the podfile that should be integrated with the user
+      #         projects.
+      #
+      attr_reader :podfile
+
       # @return [Hash{Symbol=>Array}] The specifications that need to be
       #         installed grouped by platform.
       #
@@ -27,11 +32,13 @@ module Pod
       # Initialize a new instance
       #
       # @param [Sandbox] sandbox @see #sandbox
+      # @param [Podfile] podfile @see #podfile
       # @param [Hash{Symbol=>Array}] specs_by_platform @see #specs_by_platform
       # @param [Boolean] can_cache @see #can_cache
       #
-      def initialize(sandbox, specs_by_platform, can_cache: true)
+      def initialize(sandbox, podfile, specs_by_platform, can_cache: true)
         @sandbox = sandbox
+        @podfile = podfile
         @specs_by_platform = specs_by_platform
         @can_cache = can_cache
       end
@@ -61,6 +68,7 @@ module Pod
       def install!
         download_source unless predownloaded? || local?
         PodSourcePreparer.new(root_spec, root).prepare! if local?
+        sandbox.remove_local_podspec(name) unless predownloaded? || local? || external?
       end
 
       # Cleans the installations if appropriate.
@@ -189,6 +197,14 @@ module Pod
       #
       def local?
         sandbox.local?(root_spec.name)
+      end
+
+      # @return [Boolean] whether the pod uses an external source (e.g. :podspec) in the
+      #         resolution process to retrieve its podspec.
+      #
+      def external?
+        @dependencies ||= podfile.dependencies.select(&:external?).map(&:name)
+        @dependencies.include?(root_spec.name)
       end
 
       def released?
