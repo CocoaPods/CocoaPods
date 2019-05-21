@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8815](https://github.com/CocoaPods/CocoaPods/pull/8815)
 
+* Update dSYM stripping string matcher for 64-bit only dSYMs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8827](https://github.com/CocoaPods/CocoaPods/issues/8827)
+
 
 ## 1.7.0.rc.2 (2019-05-15)
 
