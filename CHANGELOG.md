@@ -43,6 +43,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   include the Pods .xcconfig from the base .xcconfig file
   [Rob Hudson](https://github.com/robtimp)
 
+
+## 1.7.0 (2019-05-22)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
 * Fix 1.7.0.rc.2 regression - Resources need to be added for test specs in library builds  
   [Paul Beusterien](https://github.com/paulb777)
   [#8812](https://github.com/CocoaPods/CocoaPods/pull/8812)
@@ -50,6 +59,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Configure schemes regardless if they are being shared or not.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8815](https://github.com/CocoaPods/CocoaPods/pull/8815)
+
+* Update dSYM stripping string matcher for 64-bit only dSYMs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8827](https://github.com/CocoaPods/CocoaPods/issues/8827)
 
 
 ## 1.7.0.rc.2 (2019-05-15)
