@@ -1,13 +1,18 @@
 This project is licensed under the MIT license.
 
-Copyright (c) 2011 - 2017 Eloy Durán <eloy.de.enige@gmail.com>,
-                          Fabio Pelosin <fabiopelosin@gmail.com>,
-                          Samuel Giddins <segiddins@segiddins.me>,
-                          Marius Rackwitz <git@mariusrackwitz.de>,
-                          Kyle Fuller <kyle@fuller.li>,
-                          Boris Bügling <boris@buegling.com>,
-                          Orta Therox <orta.therox@gmail.com>, and
-                          Olivier Halligon <olivier@halligon.net>.
+Copyright (c) 2011 Eloy Durán <eloy.de.enige@gmail.com>,
+                   Fabio Pelosin <fabiopelosin@gmail.com>,
+                   Samuel Giddins <segiddins@segiddins.me>,
+                   Marius Rackwitz <git@mariusrackwitz.de>,
+                   Kyle Fuller <kyle@fuller.li>,
+                   Boris Bügling <boris@buegling.com>,
+                   Orta Therox <orta.therox@gmail.com>,
+                   Olivier Halligon <olivier@halligon.net>,
+                   Danielle Tomlinson <dan@tomlinson.io>,
+                   Dimitris Koutsogiorgas <dnkoutso@gmail.com>,
+                   Paul Beusterien <paulbeusterien@google.com>, and
+                   Eric Amorde <eric.amorde@gmail.com>.
+
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
