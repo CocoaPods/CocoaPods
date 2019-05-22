@@ -40,7 +40,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 * No longer show a warning when using an optional include (`#include?`) to
-  include the Pods .xcconfig from the base .xcconfig file
+  include the Pods .xcconfig from the base .xcconfig file  
   [Rob Hudson](https://github.com/robtimp)
 
 
