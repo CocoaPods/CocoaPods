@@ -50,7 +50,10 @@ module Pod
             if pod_target.public_header_mappings_by_file_accessor.empty?
               []
             else
-              [sandbox.public_headers.root.join(pod_target.headers_sandbox)]
+              [
+                sandbox.public_headers.root.join(pod_target.headers_sandbox),
+                pod_target.module_map_path.dirname,
+              ].uniq
             end
           end
 

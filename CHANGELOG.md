@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix a 1.7.0 regression in header directory paths when using static libraries  
+  [Eric Amorde](https://github.com/amorde)
+  [#8836](https://github.com/CocoaPods/CocoaPods/issues/8836)
 
 
 ## 1.7.0 (2019-05-22)
