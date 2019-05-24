@@ -20,8 +20,7 @@ module Pod
           project.targets.each do |target|
             @paths_by_object[target] = Digest::MD5.hexdigest(project_basename + target.name).upcase
             if target.is_a? Xcodeproj::Project::Object::PBXNativeTarget
-              target_product_reference = target.product_reference
-              @paths_by_object[target_product_reference] = Digest::MD5.hexdigest(project_basename + 'product_reference' + target_product_reference.display_name).upcase
+              @paths_by_object[target.product_reference] = Digest::MD5.hexdigest(project_basename + 'product_reference' + target.name).upcase
             end
           end
         end
