@@ -3,9 +3,9 @@ module Pod
     # Generates stable UUIDs for Native Targets.
     #
     class TargetUUIDGenerator < Xcodeproj::Project::UUIDGenerator
-      # This method override is used to ONLY generate stable UUIDs for PBXNativeTarget instances and no other type.
-      # Stable native target UUIDs are necessary for incremental installation because other projects reference the
-      # target by its UUID in the remoteGlobalIDString field.
+      # This method override is used to ONLY generate stable UUIDs for PBXNativeTarget instances and their sibling PBXFileReference
+      # product reference in the project. Stable native target UUIDs are necessary for incremental installation
+      # because other projects reference the target and product reference by its UUID in the remoteGlobalIDString field.
       #
       # @param [Array<Project>] projects
       #        The list of projects used to generate stabe target UUIDs.
@@ -15,11 +15,14 @@ module Pod
         projects.each do |project|
           project_basename = project.path.basename.to_s
           project.objects.each do |object|
-            @paths_by_object[object] = if object.is_a? Xcodeproj::Project::Object::AbstractTarget
-                                         Digest::MD5.hexdigest(project_basename + object.name).upcase
-                                       else
-                                         object.uuid
-                                       end
+            @paths_by_object[object] = object.uuid
+          end
+          project.targets.each do |target|
+            @paths_by_object[target] = Digest::MD5.hexdigest(project_basename + target.name).upcase
+            if target.is_a? Xcodeproj::Project::Object::PBXNativeTarget
+              target_product_reference = target.product_reference
+              @paths_by_object[target_product_reference] = Digest::MD5.hexdigest(project_basename + 'product_reference' + target_product_reference.display_name).upcase
+            end
           end
         end
       end
