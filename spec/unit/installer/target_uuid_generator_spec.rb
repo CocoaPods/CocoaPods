@@ -10,7 +10,9 @@ module Pod
       end
 
       it 'generates stable UUIDs for native targets and its product references' do
-        Digest::MD5.stubs(:hexdigest).returns('CLEANSOAP')
+        Digest('MD5').expects(:hexdigest).with('Project.xcodeprojNativeTarget1').returns('CLEANSOAP')
+        Digest('MD5').expects(:hexdigest).with('Project.xcodeprojproduct_referenceNativeTarget1').returns('CLEANSOAP')
+
         @target_uuid_generator.generate!
         @project.targets.each do |target|
           target.uuid.should.equal 'CLEANSOAP'
