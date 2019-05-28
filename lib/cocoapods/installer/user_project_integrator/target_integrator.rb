@@ -325,15 +325,11 @@ module Pod
           def framework_output_paths(framework_input_paths)
             framework_input_paths.flat_map do |framework_path|
               framework_output_path = "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{File.basename(framework_path.source_path)}"
-              dsym_output_path = if (dsym_input_path = framework_path.dsym_path)
-                                   "${DWARF_DSYM_FOLDER_PATH}/#{File.basename(dsym_input_path)}"
-                                 end
-              bcsymbol_output_paths = unless framework_path.bcsymbolmap_paths.nil?
-                                        framework_path.bcsymbolmap_paths.map do |bcsymbolmap_path|
-                                          "${BUILT_PRODUCTS_DIR}/#{File.basename(bcsymbolmap_path)}"
-                                        end
-                                      end
-              [framework_output_path, dsym_output_path, *bcsymbol_output_paths]
+              dsym_path = if (dsym_input_path = framework_path.dsym_path)
+                "${DWARF_DSYM_FOLDER_PATH}/#{File.basename(dsym_input_path)}"
+              end
+              
+              [framework_output_path, dsym_path]
             end.compact.uniq
           end
         end

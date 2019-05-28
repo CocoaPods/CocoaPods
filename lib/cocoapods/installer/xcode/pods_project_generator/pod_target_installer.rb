@@ -101,7 +101,6 @@ module Pod
                   create_prefix_header(path, test_file_accessors, target.platform, test_native_target)
                 end
               end
-                  path = target.prefix_header_path_for_pec(app_spec)
               create_dummy_source(native_target)
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets, test_native_targets,

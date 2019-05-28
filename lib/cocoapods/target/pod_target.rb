@@ -378,6 +378,7 @@ module Pod
     # @return [Pathname] The absolute path of the copy resources script input file list for the given spec.
     def copy_resources_script_input_files_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-resources-input-files.xcfilelist"
+    end
     # @param  [Specification] spec
     #         The spec this copy resources script path is for.
     #
@@ -392,6 +393,7 @@ module Pod
     # @return [Pathname] The absolute path of the embed frameworks script for the given spec.
     def embed_frameworks_script_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-frameworks.sh"
+    end
     # @param  [Specification] spec
     #         The spec this embed frameworks script path is for.
     #
@@ -406,6 +408,7 @@ module Pod
     # @return [Pathname] The absolute path of the embed frameworks script output file list for the given spec.
     def embed_frameworks_script_output_files_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-frameworks-output-files.xcfilelist"
+    end
     # @param  [Specification] spec
     #         The spec this Info.plist path is for.
     #
@@ -420,6 +423,7 @@ module Pod
     # @return [Pathname] the absolute path of the prefix header file for the given spec.
     def prefix_header_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-prefix.pch"
+    end
     # @return [Array<String>] The names of the Pods on which this target
     #         depends.
     #

@@ -91,9 +91,18 @@ module Pod
           #
           def add_embed_frameworks_script_phase(native_target, test_spec)
             script_path = "${PODS_ROOT}/#{target.embed_frameworks_script_path_for_spec(spec).relative_path_from(target.sandbox.root)}"
-
+	
             input_paths_by_config = {}
             output_paths_by_config = {}
+            unless installation_options.disable_input_output_paths?
+              dependent_targets = if spec.test_specification?
+                                    target.dependent_targets_for_test_spec(spec)
+                                  else
+                                    target.dependent_targets_for_app_spec(spec)
+                                  end
+              framework_paths = dependent_targets.flat_map do |dependent_target|
+                spec_paths_to_include = dependent_target.library_specs.map(&:name)
+                spec_paths_to_include << spec.name if dependent_target == target
                 dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact
               end.uniq
               unless framework_paths.empty?
