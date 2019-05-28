@@ -49,19 +49,18 @@ module Pod
         #
         attr_reader :target
 
-        # @return [Boolean] whether to use input/output paths for build phase scripts
+        # @return [InstallationOptions] the installation options from the Podfile.
         #
-        attr_reader :use_input_output_paths
-        alias use_input_output_paths? use_input_output_paths
+        attr_reader :installation_options
 
         # Init a new TargetIntegrator
         #
         # @param  [AggregateTarget] target @see #target
-        # @param  [Boolean] use_input_output_paths @see #use_input_output_paths
+        # @param  [InstallationOptions] installation_options @see #installation_options
         #
-        def initialize(target, use_input_output_paths: true)
+        def initialize(target, installation_options)
           @target = target
-          @use_input_output_paths = use_input_output_paths
+          @installation_options = installation_options
         end
 
         # @private
@@ -417,7 +416,7 @@ module Pod
           script_path = target.copy_resources_script_relative_path
           input_paths_by_config = {}
           output_paths_by_config = {}
-          if use_input_output_paths
+          unless installation_options.disable_input_output_paths?
             target.resource_paths_by_config.each do |config, resource_paths|
               input_paths_key = XCFileListConfigKey.new(target.copy_resources_script_input_files_path(config), target.copy_resources_script_input_files_relative_path)
               input_paths_by_config[input_paths_key] = [script_path] + resource_paths
@@ -464,7 +463,7 @@ module Pod
           script_path = target.embed_frameworks_script_relative_path
           input_paths_by_config = {}
           output_paths_by_config = {}
-          if use_input_output_paths?
+          unless installation_options.disable_input_output_paths?
             target.framework_paths_by_config.each do |config, framework_paths|
               input_paths_key = XCFileListConfigKey.new(target.embed_frameworks_script_input_files_path(config), target.embed_frameworks_script_input_files_relative_path)
               input_paths = input_paths_by_config[input_paths_key] = [script_path]
