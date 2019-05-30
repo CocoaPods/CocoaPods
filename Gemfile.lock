@@ -7,17 +7,17 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 1e0479d5577f1dbc78d559162c4012cbb2bb9f32
+  revision: bf9033669622d64a655edca9eb75215db97fcbe3
   branch: master
   specs:
-    cocoapods-core (1.7.0)
+    cocoapods-core (1.7.1)
       activesupport (>= 4.0.2, < 6)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 7295a34689059d33bd3ba97849f915e86b2cd8a7
+  revision: dd4274e0fb0792cbf52d441a93799470d88e38d8
   branch: master
   specs:
     molinillo (0.6.6)
@@ -103,10 +103,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.7.0)
+    cocoapods (1.7.1)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.7.0)
+      cocoapods-core (= 1.7.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
