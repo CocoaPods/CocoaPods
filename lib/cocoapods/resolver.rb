@@ -448,6 +448,9 @@ module Pod
     def handle_resolver_error(error)
       message = error.message
       type = Informative
+      unless specs_updated?
+        specs_update_message = "\n * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`."
+      end
       case error
       when Molinillo::VersionConflict
         message = error.message_with_trees(
@@ -459,9 +462,9 @@ module Pod
             if local_pod_parent && !specifications_for_dependency(conflict.requirement).empty? && !conflict.possibility && conflict.locked_requirement
               # Conflict was caused by a requirement from a local dependency.
               # Tell user to use `pod update`.
-              o << "\nIt seems like you've changed the constraints of dependency `#{name}` " \
-              "inside your development pod `#{local_pod_parent.name}`.\nYou should run `pod update #{name}` to apply "\
-              "changes you've made."
+              o << "\n\nYou have either:#{specs_update_message}" \
+                   " * changed the constraints of dependency `#{name}` inside your development pod `#{local_pod_parent.name}`." \
+                   "\n   You should run `pod update #{name}` to apply changes you've made."
             elsif !conflict.possibility && conflict.locked_requirement && conflict.locked_requirement.external_source && conflict.locked_requirement.external_source[:podspec] &&
                                            conflict.requirement && conflict.requirement.external_source && conflict.requirement.external_source[:podspec]
               # The internal version of the Podspec doesn't match the external definition of a podspec
@@ -491,13 +494,9 @@ module Pod
                 dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'
                 o << "\nNone of your spec sources contain a spec satisfying "\
                   "the #{dependencies}: `#{conflicts.join(', ')}`." \
-                  "\n\nYou have either:"
-                unless specs_updated?
-                  o << "\n * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`."
-                end
-                o << "\n * mistyped the name or version." \
-                  "\n * not added the source repo that hosts the Podspec to your Podfile." \
-                  "\n\nNote: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default."
+                  "\n\nYou have either:#{specs_update_message}" \
+                  "\n * mistyped the name or version." \
+                  "\n * not added the source repo that hosts the Podspec to your Podfile."
 
               else
                 o << "\nSpecs satisfying the `#{conflicts.join(', ')}` dependency were found, " \
@@ -510,12 +509,9 @@ module Pod
         message += <<-EOS
 
 
-You have either:
- * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
+You have either:#{specs_update_message}
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
-
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
       end
       raise type.new(message).tap { |e| e.set_backtrace(error.backtrace) }

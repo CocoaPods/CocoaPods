@@ -258,8 +258,6 @@ You have either:
  * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
-
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
       end
 
@@ -438,8 +436,6 @@ You have either:
  * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
-
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
         e.exit_status.should.equal(31)
       end
@@ -461,8 +457,6 @@ None of your spec sources contain a spec satisfying the dependency: `AFNetworkin
 You have either:
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
-
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
         e.exit_status.should.equal(31)
       end
@@ -490,8 +484,6 @@ You have either:
  * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
  * mistyped the name or version.
  * not added the source repo that hosts the Podspec to your Podfile.
-
-Note: as of CocoaPods 1.0, `pod repo update` does not happen on `pod install` by default.
         EOS
         e.exit_status.should.equal(31)
       end
