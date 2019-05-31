@@ -47,6 +47,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   include the Pods .xcconfig from the base .xcconfig file  
   [Rob Hudson](https://github.com/robtimp)
 
+
+## 1.7.1 (2019-05-30)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
 * Stabilize product reference UUIDs to fix Xcode crashing with incremental installation.  
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#8845](https://github.com/CocoaPods/CocoaPods/pull/8845)
