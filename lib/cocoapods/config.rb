@@ -290,6 +290,8 @@ module Pod
       'CocoaPods.podfile',
       'Podfile',
       'Podfile.rb',
+      'Podfile.yaml',
+      'Podfile.json',
     ].freeze
 
     public
