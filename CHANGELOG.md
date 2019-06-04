@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Support for JSON formats of the Podfile.
+  [Itay Brenner](https://github.com/itaybre)
+  [#8874](https://github.com/CocoaPods/CocoaPods/pull/8874)
+
 * Allow using an application defined by an app spec as the app host for a test spec.  
   [jkap](https://github.com/jkap)
   [Samuel Giddins](https://github.com/segiddins)
