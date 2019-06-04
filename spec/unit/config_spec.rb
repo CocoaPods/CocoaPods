@@ -273,6 +273,13 @@ module Pod
           path.should == expected
         end
 
+        it 'detects the Podfile.json file' do
+          expected = temporary_directory + 'Podfile.json'
+          File.open(expected, 'w') {}
+          path = @config.send(:podfile_path_in_dir, temporary_directory)
+          path.should == expected
+        end
+
         it 'returns nils if the Podfile is not available' do
           path = @config.send(:podfile_path_in_dir, temporary_directory)
           path.should.nil?
