@@ -483,6 +483,7 @@ module Pod
     # @return [Hash] The scheme configuration used or empty if none is specified.
     #
     def scheme_for_spec(spec)
+      return {} if spec.library_specification? && !spec.root?
       spec.consumer(platform).scheme
     end
 

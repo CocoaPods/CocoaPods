@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Prevent crash when configuring schemes for subspecs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8880](https://github.com/CocoaPods/CocoaPods/issues/8880)
 
 
 ## 1.7.1 (2019-05-30)
