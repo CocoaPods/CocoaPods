@@ -32,6 +32,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   unless repo update was specifically requested.
   [Artem Sheremet](https://github.com/dotdoom)
 
+* Set Default Module for Storyboards in resource bundle targets.  
+   [James Treanor](https://github.com/jtreanor)
+   [#8890](https://github.com/CocoaPods/CocoaPods/pull/8890)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
