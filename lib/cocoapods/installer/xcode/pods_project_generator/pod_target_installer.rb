@@ -503,6 +503,10 @@ module Pod
                     configuration.build_settings['CONFIGURATION_BUILD_DIR'] = target.configuration_build_dir('$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)')
                   end
 
+                  # Set the 'IBSC_MODULE' build settings for resource bundles so that Storyboards and Xibs can load
+                  # classes from the parent module.
+                  configuration.build_settings['IBSC_MODULE'] = target.product_module_name
+
                   # Set the `SWIFT_VERSION` build setting for resource bundles that could have resources that get
                   # compiled such as an `xcdatamodeld` file which has 'Swift' as its code generation language.
                   if contains_compile_phase_refs && file_accessors.any? { |fa| target.uses_swift_for_spec?(fa.spec) }
