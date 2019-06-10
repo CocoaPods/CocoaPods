@@ -108,6 +108,7 @@ Targets:
           CODE_SIGN_IDENTITY: "-"
           COMBINE_HIDPI_IMAGES: 'YES'
           CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
+          IBSC_MODULE: res
           INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-res-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Bundles"
           MACOSX_DEPLOYMENT_TARGET: '10.0'
@@ -121,6 +122,7 @@ Targets:
           CODE_SIGN_IDENTITY: "-"
           COMBINE_HIDPI_IMAGES: 'YES'
           CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
+          IBSC_MODULE: res
           INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-res-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Bundles"
           MACOSX_DEPLOYMENT_TARGET: '10.0'
