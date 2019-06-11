@@ -857,6 +857,14 @@ module Pod
                   end
                 end
 
+                it 'sets the correct default module for storyboards in resource bundle targets' do
+                  @installer.install!
+                  @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-SampleProject-banana_bundle' }
+                  @bundle_target.build_configurations.each do |bc|
+                    bc.build_settings['IBSC_MODULE'].should == 'BananaLib'
+                  end
+                end
+
                 it 'sets the Swift version build setting when resources bundle contains sources and target has Swift' do
                   @spec.resource_bundles = { 'banana_bundle' => ['Resources/**/*'] }
                   @spec.module_map = nil
