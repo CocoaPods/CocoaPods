@@ -1302,8 +1302,7 @@ module Pod
           native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
           pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
           aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
@@ -1322,8 +1321,7 @@ module Pod
           native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
           pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
           aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
@@ -1341,8 +1339,7 @@ module Pod
           native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
           pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
           aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
@@ -1360,8 +1357,7 @@ module Pod
           native_target = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration]))
           pod_target = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
           aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
@@ -1402,13 +1398,12 @@ module Pod
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
           pod_target_one = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
-          pod_target_two = stub(:name => 'Dependency', :uses_swift? => true, :pod_name => 'Dependency', :swift_version => '3.2')
+          pod_target_two = stub(:name => 'Dependency', :uses_swift? => true, :pod_name => 'Dependency',
+                                :spec_swift_versions => [], :target_definition_swift_version => '3.2')
           pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
-                                             :test_native_targets => [],
-                                             :test_specs_by_native_target => {})
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
           aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
           installer = stub(:pod_targets => [pod_target_one, pod_target_two])
@@ -1416,6 +1411,30 @@ module Pod
           validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
           debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
+        end
+
+        it 'honors the swift version set for dependencies if they support it' do
+          validator = test_swiftpod_with_swift_version_parameter('4.0')
+          consumer = stub(:platform_name => 'iOS')
+          validator.instance_variable_set(:@consumer, consumer)
+          debug_configuration_one = stub(:build_settings => {})
+          debug_configuration_two = stub(:build_settings => {})
+          native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+          native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
+          pod_target_one = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target_two = stub(:name => 'Dependency', :uses_swift? => true, :pod_name => 'Dependency',
+                                :spec_swift_versions => ['4.0'], :target_definition_swift_version => '3.2')
+          pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
+          pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
+                                             :test_native_targets => [], :test_specs_by_native_target => {})
+          pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
+          aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
+          installer = stub(:pod_targets => [pod_target_one, pod_target_two])
+          validator.instance_variable_set(:@installer, installer)
+          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
+          debug_configuration_two.build_settings['SWIFT_VERSION'].should == '4.0'
         end
       end
 

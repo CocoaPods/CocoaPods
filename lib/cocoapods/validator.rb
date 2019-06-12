@@ -603,10 +603,17 @@ module Pod
           (build_configuration.build_settings['OTHER_CFLAGS'] ||= '$(inherited)') << ' -Wincomplete-umbrella'
           if pod_target.uses_swift?
             # The Swift version for the target being validated can be overridden by `--swift-version` or the
-            # `.swift-version` file so we always use the derived Swift version. For dependencies, we always use the
-            # Swift version they specify, unless they don't in which case it will be inferred by the target that is
-            # integrating them.
-            swift_version = pod_target == validation_pod_target ? derived_swift_version : pod_target.swift_version
+            # `.swift-version` file so we always use the derived Swift version.
+            #
+            # For dependencies, if the derived Swift version is supported then it is the one used. Otherwise, the Swift
+            # version for dependencies is inferred by the target that is integrating them.
+            swift_version = if pod_target == validation_pod_target
+                              derived_swift_version
+                            else
+                              pod_target.spec_swift_versions.map(&:to_s).find do |v|
+                                v == derived_swift_version
+                              end || pod_target.target_definition_swift_version
+                            end
             build_configuration.build_settings['SWIFT_VERSION'] = swift_version
           end
         end
