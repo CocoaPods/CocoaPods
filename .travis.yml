@@ -1,4 +1,7 @@
 language: ruby
+
+dist: trusty
+
 cache:
   bundler: true
 

@@ -683,6 +683,8 @@ module Pod
 
       describe 'scheme support' do
         before do
+          @matryoshka_spec = fixture_spec('matryoshka/matryoshka.podspec')
+          @matryoshka_spec.scheme = { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
           @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
           @watermelon_spec.scheme = { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
           @watermelon_spec.test_specs.first.scheme = { :launch_arguments => ['TestArg1'] }
@@ -692,6 +694,11 @@ module Pod
         it 'returns the correct scheme configuration for the requested spec' do
           @pod_target.scheme_for_spec(@watermelon_spec).should == { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
           @pod_target.scheme_for_spec(@watermelon_spec.test_specs.first).should == { :launch_arguments => ['TestArg1'] }
+        end
+
+        it 'returns an empty scheme configuration for the requested sub spec' do
+          @pod_target.scheme_for_spec(@matryoshka_spec).should == { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
+          @pod_target.scheme_for_spec(@matryoshka_spec.subspecs.first).should == {}
         end
       end
 

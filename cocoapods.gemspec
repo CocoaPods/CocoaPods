@@ -38,13 +38,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'cocoapods-trunk',       '>= 1.3.1', '< 2.0'
   s.add_runtime_dependency 'cocoapods-try',         '>= 1.1.0', '< 2.0'
   s.add_runtime_dependency 'molinillo',             '~> 0.6.6'
-  s.add_runtime_dependency 'xcodeproj',             '>= 1.8.2', '< 2.0'
+  s.add_runtime_dependency 'xcodeproj',             '>= 1.10.0', '< 2.0'
 
   ## Version 5 needs Ruby 2.2, so we specify an upper bound to stay compatible with system ruby
   s.add_runtime_dependency 'activesupport', '>= 4.0.2', '< 5'
   s.add_runtime_dependency 'colored2',       '~> 3.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
-  s.add_runtime_dependency 'fourflusher',   '>= 2.2.0', '< 3.0'
+  s.add_runtime_dependency 'fourflusher',   '>= 2.3.0', '< 3.0'
   s.add_runtime_dependency 'gh_inspector',  '~> 1.0'
   s.add_runtime_dependency 'nap',           '~> 1.0'
   s.add_runtime_dependency 'ruby-macho',    '~> 1.4'
