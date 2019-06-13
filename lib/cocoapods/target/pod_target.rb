@@ -194,7 +194,7 @@ module Pod
     def swift_version
       @swift_version ||= begin
         if spec_swift_versions.empty?
-          target_definitions.map(&:swift_version).compact.uniq.first
+          target_definition_swift_version
         else
           spec_swift_versions.sort.reverse_each.find do |swift_version|
             target_definitions.all? do |td|
@@ -203,6 +203,13 @@ module Pod
           end.to_s
         end
       end
+    end
+
+    # @return [String] the Swift version derived from the target definitions that integrate this pod. This is used for
+    #         legacy reasons and only if the pod author has not specified the Swift versions their pod supports.
+    #
+    def target_definition_swift_version
+      target_definitions.map(&:swift_version).compact.uniq.first
     end
 
     # @return [Array<Version>] the Swift versions supported. Might be empty if the author has not
@@ -506,6 +513,7 @@ module Pod
     # @return [Hash] The scheme configuration used or empty if none is specified.
     #
     def scheme_for_spec(spec)
+      return {} if spec.library_specification? && !spec.root?
       spec.consumer(platform).scheme
     end
 

@@ -219,6 +219,8 @@ module Pod
         end
 
         def configure_schemes_for_pod_target(project, pod_target, share_scheme)
+          # Ignore subspecs because they do not provide a scheme configuration due to the fact that they are always
+          # merged with the root spec scheme.
           specs = [pod_target.root_spec] + pod_target.test_specs + pod_target.app_specs
           specs.each do |spec|
             scheme_name = spec.spec_type == :library ? pod_target.label : pod_target.non_library_spec_label(spec)
