@@ -36,7 +36,7 @@ module Pod
           # @param  [PBXNativeTarget] native_target
           #         the native target to link the generated Info.plist file into.
           #
-          # @param  [Version] version
+          # @param  [String] version
           #         the version to use for when generating this Info.plist file.
           #
           # @param  [Platform] platform
@@ -51,7 +51,7 @@ module Pod
           # @return [void]
           #
           def create_info_plist_file_with_sandbox(sandbox, path, native_target, version, platform,
-                                                  bundle_package_type = :fmwk, additional_entries = {})
+                                                  bundle_package_type = :fmwk, additional_entries: {})
             UI.message "- Generating Info.plist file at #{UI.path(path)}" do
               generator = Generator::InfoPlistFile.new(version, platform, bundle_package_type, additional_entries)
               update_changed_file(generator, path)

@@ -5,7 +5,7 @@ module Pod
     # framework. It states public attributes.
     #
     class InfoPlistFile
-      # @return [Version] version The version to use for when generating this Info.plist file.
+      # @return [String] version The version to use for when generating this Info.plist file.
       #
       attr_reader :version
 
@@ -24,7 +24,7 @@ module Pod
 
       # Initialize a new instance
       #
-      # @param  [Version] version @see #version
+      # @param  [String] version @see #version
       # @param  [Platform] platform @see #platform
       # @param  [Symbol] bundle_package_type @see #bundle_package_type
       # @param  [Hash] additional_entries @see #additional_entries

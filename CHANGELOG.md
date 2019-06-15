@@ -17,6 +17,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [hovox](https://github.com/hovox)
   [#8797](https://github.com/CocoaPods/CocoaPods/issues/8797)
 
+##### Enhancements
+
+* Add support for Specification Info.plist DSL  
+  [Eric Amorde](https://github.com/amorde)
+  [#8753](https://github.com/CocoaPods/CocoaPods/issues/8753)
+  [#3032](https://github.com/CocoaPods/CocoaPods/issues/3032)
+
 * Fix target definition display name for inhibit warnings message.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8935](https://github.com/CocoaPods/CocoaPods/pull/8935)

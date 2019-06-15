@@ -135,10 +135,14 @@ module Pod
           # @param  [Symbol] bundle_package_type
           #         the CFBundlePackageType of the target this Info.plist file is for.
           #
+          # @param  [Hash] additional_entries
+          #         additional entries for the generated Info.plist
+          #
           # @return [void]
           #
-          def create_info_plist_file(path, native_target, version, platform, bundle_package_type = :fmwk)
-            create_info_plist_file_with_sandbox(@sandbox, path, native_target, version, platform, bundle_package_type)
+          def create_info_plist_file(path, native_target, version, platform, bundle_package_type = :fmwk, additional_entries: {})
+            create_info_plist_file_with_sandbox(@sandbox, path, native_target, version, platform, bundle_package_type,
+                                                :additional_entries => additional_entries)
             add_file_to_support_group(path)
           end
 

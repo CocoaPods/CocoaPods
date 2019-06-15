@@ -745,6 +745,40 @@ module Pod
               resource.should.be.not.nil
             end
 
+            it 'includes spec info_plist entries for dynamic frameworks' do
+              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+              expected_entries = {
+                'SOME_VAR' => 'SOME_VALUE',
+              }
+              @spec.info_plist = expected_entries
+              @installer.expects(:create_info_plist_file_with_sandbox).
+                with do |sandbox, _, _, version, platform, bundle_type, other_args|
+                sandbox.should == config.sandbox
+                version.should == '1.0.0'
+                platform.should == :ios
+                bundle_type.should == :fmwk
+                other_args[:additional_entries].should == expected_entries
+              end
+              @installer.install!
+            end
+
+            it 'includes spec info_plist entries for static frameworks' do
+              @pod_target.stubs(:build_type => Target::BuildType.static_framework)
+              expected_entries = {
+                'SOME_VAR' => 'SOME_VALUE',
+              }
+              @spec.info_plist = expected_entries
+              @installer.expects(:create_info_plist_file_with_sandbox).
+                with do |sandbox, _, _, version, platform, bundle_type, other_args|
+                sandbox.should == config.sandbox
+                version.should == '1.0.0'
+                platform.should == :ios
+                bundle_type.should == :fmwk
+                other_args[:additional_entries].should == expected_entries
+              end
+              @installer.install!
+            end
+
             #--------------------------------------#
 
             describe 'with a scoped pod target' do

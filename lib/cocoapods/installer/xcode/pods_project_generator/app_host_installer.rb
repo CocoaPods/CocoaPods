@@ -37,6 +37,10 @@ module Pod
           #
           attr_reader :add_main
 
+          # @return [Hash] Info.plist entries for the app host
+          #
+          attr_reader :info_plist_entries
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
@@ -46,8 +50,9 @@ module Pod
           # @param [String] group_name @see #group_name
           # @param [String] app_target_label see #app_target_label
           # @param [Boolean] add_main see #add_main
+          # @param [Hash] info_plist_entries see #info_plist_entries
           #
-          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true)
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, info_plist_entries: {})
             @sandbox = sandbox
             @project = project
             @platform = platform
@@ -55,6 +60,7 @@ module Pod
             @group_name = group_name
             @app_target_label = app_target_label
             @add_main = add_main
+            @info_plist_entries = info_plist_entries
             target_group = project.pod_group(group_name)
             @group = target_group[subgroup_name] || target_group.new_group(subgroup_name)
           end
@@ -74,9 +80,8 @@ module Pod
 
             Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, app_target_label) if add_main
             Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, deployment_target, app_target_label) if platform == :ios
-            additional_entries = ADDITIONAL_INFO_PLIST_ENTRIES.merge(platform == :ios ? ADDITIONAL_IOS_INFO_PLIST_ENTRIES : {})
             create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
-                                                :appl, additional_entries)
+                                                :appl, :additional_entries => additional_info_plist_entries)
             @group.new_file(app_host_info_plist_path)
             app_host_target
           end
@@ -103,6 +108,16 @@ module Pod
               UIInterfaceOrientationLandscapeRight
             ),
           }.freeze
+
+          # @return [Hash] the additional Info.plist entries to be included
+          #
+          def additional_info_plist_entries
+            result = {}
+            result.merge!(ADDITIONAL_INFO_PLIST_ENTRIES)
+            result.merge!(ADDITIONAL_IOS_INFO_PLIST_ENTRIES) if platform == :ios
+            result.merge!(info_plist_entries) if info_plist_entries
+            result
+          end
 
           # @return [Pathname] The absolute path of the Info.plist to use for an app host.
           #
