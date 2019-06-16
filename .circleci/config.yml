@@ -32,10 +32,24 @@ jobs:
             git config --global user.email "tests@cocoapods.org"
             git config --global user.name "CocoaPods Tests"
       - run: bundle exec pod env
+      - restore_cache:
+          keys:
+            - v1-spec-repo-cache-{{ arch }}-{{ .Branch }}
+            - v1-spec-repo-cache
+      - run:
+          name: Update CDN spec repo
+          command: |
+            if [ -d ~/".cocoapods/repos/cocoapods-" ]; then
+              bundle exec pod repo update cocoapods-
+            fi
       - run:
           name: Run Examples
           command: bundle exec rake spec:all
           environment:
-           VERBOSE: true
-           COCOAPODS_CI_TASKS: EXAMPLES
-           COCOAPODS_SPEC_REPO: https://cdn.cocoapods.org/
+            VERBOSE: true
+            COCOAPODS_CI_TASKS: EXAMPLES
+            COCOAPODS_SPEC_REPO: https://cdn.cocoapods.org/
+      - save_cache:
+          key: v1-spec-repo-cache-{{ arch }}-{{ .Branch }}
+          paths:
+            - ~/.cocoapods/repos/cocoapods-
