@@ -27,9 +27,6 @@ jobs:
           paths:
             - ".bundle"
       - run:
-          name: Fetch CocoaPods Specs
-          command: .circle-scripts/fetch-cocoapods-repo-from-s3.sh
-      - run:
           name: Setup Git
           command: |
             git config --global user.email "tests@cocoapods.org"
@@ -40,3 +37,4 @@ jobs:
           command: bundle exec rake spec:all
           environment:
            COCOAPODS_CI_TASKS: EXAMPLES
+           COCOAPODS_SPEC_REPO: https://cdn.cocoapods.org/

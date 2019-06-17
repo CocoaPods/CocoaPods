@@ -1,4 +1,6 @@
-source 'https://github.com/CocoaPods/Specs.git'
+if (repo = ENV['COCOAPODS_SPEC_REPO'])
+    source "#{repo}"
+end
 
 workspace 'Examples.xcworkspace'
 project 'iOS Example.xcodeproj'

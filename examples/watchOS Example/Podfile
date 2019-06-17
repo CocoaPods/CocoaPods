@@ -1,3 +1,7 @@
+if (repo = ENV['COCOAPODS_SPEC_REPO'])
+    source "#{repo}"
+end
+
 use_frameworks!
 
 workspace 'Examples.xcworkspace'

@@ -1,3 +1,7 @@
+if (repo = ENV['COCOAPODS_SPEC_REPO'])
+    source "#{repo}"
+end
+
 platform :ios, '8.0'
 use_frameworks!
 
