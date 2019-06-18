@@ -53,4 +53,4 @@ Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
 
 -> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
 
-[!] Automatically assigning platform `osx` with version `10.8` on target `SampleApp` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
+[!] Automatically assigning platform `macOS` with version `10.8` on target `SampleApp` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.
