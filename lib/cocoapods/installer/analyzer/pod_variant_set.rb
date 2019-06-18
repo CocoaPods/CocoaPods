@@ -98,7 +98,16 @@ module Pod
             # => Platform name + SDK version
             platform_name_proc = proc { |v| v.platform.to_s.tr(' ', '') }
           end
-          scope_if_necessary(grouped_variants.map(&:scope_without_suffix), &platform_name_proc)
+          scope_if_necessary(grouped_variants.map(&:scope_by_swift_version), &platform_name_proc)
+        end
+
+        # @private
+        # @return [Hash<PodVariant, String>]
+        #
+        def scope_by_swift_version
+          scope_if_necessary(group_by(&:swift_version).map(&:scope_without_suffix)) do |variant|
+            variant.swift_version ? "Swift#{variant.swift_version}" : ''
+          end
         end
 
         # @private
@@ -113,7 +122,7 @@ module Pod
                      root_spec.default_subspecs.map do |subspec_name|
                        root_spec.subspec_by_name("#{root_spec.name}/#{subspec_name}")
                      end
-          end
+                   end
           default_specs = Set.new(specs)
           grouped_variants = group_by(&:specs)
           all_spec_variants = grouped_variants.map { |set| set.variants.first.specs }

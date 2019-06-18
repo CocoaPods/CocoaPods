@@ -337,7 +337,7 @@ module Pod
         cli_host_with_frameworks = []
         cli_product_type = 'com.apple.product-type.tool'
         # Collect aggregate target definitions by uuid to later lookup host target
-        # definitions and verify their compatiblity with their embedded targets
+        # definitions and verify their compatibility with their embedded targets
         aggregate_targets.each do |target|
           target.user_targets.each do |user_target|
             target_definitions_by_uuid[user_target.uuid] = target.target_definition
@@ -615,14 +615,25 @@ module Pod
             end
           end
 
+          # Remap pod variants to a new instance that includes the Swift version since we now have the full set
+          # of target definitions.
+          distinct_targets = Hash[distinct_targets.map do |root, target_definitions_by_variant|
+            variants = Hash[target_definitions_by_variant.map do |variant, target_definitions|
+              swift_version = determine_swift_version(variant.root_spec, target_definitions)
+              [variant.scoped_with_swift_version(swift_version), target_definitions]
+            end]
+            [root, variants]
+          end]
+
           pod_targets = distinct_targets.flat_map do |_root, target_definitions_by_variant|
             target_definitions_by_variant.each_value do |target_definitions|
               target_definitions.reject!(&:abstract?) unless target_definitions.all?(&:abstract?)
             end
             suffixes = PodVariantSet.new(target_definitions_by_variant.keys).scope_suffixes
             target_definitions_by_variant.map do |variant, target_definitions|
-              generate_pod_target(target_definitions, variant.build_type, target_inspections, variant.specs +
-                  variant.test_specs + variant.app_specs, :scope_suffix => suffixes[variant])
+              all_specs = variant.specs + variant.test_specs + variant.app_specs
+              generate_pod_target(target_definitions, variant.build_type, target_inspections, all_specs,
+                                  :scope_suffix => suffixes[variant], :swift_version => variant.swift_version)
             end
           end
 
@@ -750,9 +761,13 @@ module Pod
       # @param  [String] scope_suffix
       #         @see PodTarget#scope_suffix
       #
+      # @param  [String] swift_version
+      #         @see PodTarget#swift_version
+      #
       # @return [PodTarget]
       #
-      def generate_pod_target(target_definitions, build_type, target_inspections, specs, scope_suffix: nil)
+      def generate_pod_target(target_definitions, build_type, target_inspections, specs, scope_suffix: nil,
+                              swift_version: nil)
         target_inspections = target_inspections.select { |t, _| target_definitions.include?(t) }.values
         object_version = target_inspections.map { |ti| ti.project.object_version }.min
         target_requires_64_bit = target_definitions.all? { |td| Analyzer.requires_64_bit_archs?(td.platform, object_version) }
@@ -770,7 +785,7 @@ module Pod
         platform = determine_platform(specs, target_definitions, build_type)
         file_accessors = create_file_accessors(specs, platform)
         PodTarget.new(sandbox, build_type, user_build_configurations, archs, platform, specs, target_definitions,
-                      file_accessors, scope_suffix)
+                      file_accessors, scope_suffix, swift_version)
       end
 
       # Creates the file accessors for a given pod.
@@ -821,6 +836,31 @@ module Pod
           deployment_target = [deployment_target, minimum].max
         end
         Platform.new(platform_name, deployment_target)
+      end
+
+      # Determines the Swift version for the given spec within a list of target definitions. If the pod author has
+      # provided a set of Swift versions supported by their pod then the max Swift version is chosen, unless the target
+      # definitions specify explicit requirements for supported Swift versions. Otherwise the Swift version is derived
+      # by the target definitions that integrate this pod.
+      #
+      # @param [Specification] spec
+      #        the specs to inspect and determine what Swift version to use.
+      #
+      # @param [Array<TargetDefinition>] target_definitions
+      #        the target definitions the spec is part of.
+      #
+      # @return [String, nil] the computed Swift version or `nil` if the Swift version could not be determined.
+      #
+      def determine_swift_version(spec, target_definitions)
+        if spec.swift_versions.empty?
+          target_definitions.map(&:swift_version).compact.uniq.first
+        else
+          spec.swift_versions.sort.reverse_each.find do |swift_version|
+            target_definitions.all? do |td|
+              td.supports_swift_version?(swift_version)
+            end
+          end.to_s
+        end
       end
 
       # Calculates and returns the #BuildType to use for the given spec. If the spec specifies `static_framework` then

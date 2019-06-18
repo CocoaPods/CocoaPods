@@ -2299,6 +2299,60 @@ module Pod
       end
     end
 
+    describe 'swift version' do
+      before do
+        @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+        @podfile = Podfile.new
+        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile)
+      end
+
+      it 'returns the swift version with the given requirements from the target definition' do
+        target_definition = fixture_target_definition('App')
+        target_definition.store_swift_version_requirements('>= 4.0')
+        @banana_spec.swift_versions = ['3.0', '4.0']
+        @analyzer.send(:determine_swift_version, @banana_spec, [target_definition]).should == '4.0'
+      end
+
+      it 'returns the swift version with the given requirements from all target definitions' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.store_swift_version_requirements('>= 4.0')
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_swift_version_requirements('= 4.2')
+        @banana_spec.swift_versions = ['3.0', '4.0', '4.2']
+        @analyzer.send(:determine_swift_version, @banana_spec, [target_definition_one, target_definition_two]).should == '4.2'
+      end
+
+      it 'returns an empty swift version if none of the requirements match' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.store_swift_version_requirements('>= 4.0')
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_swift_version_requirements('= 4.2')
+        @banana_spec.swift_versions = ['3.0', '4.0']
+        @analyzer.send(:determine_swift_version, @banana_spec, [target_definition_one, target_definition_two]).should == ''
+      end
+
+      it 'uses the swift version defined in the specification' do
+        @banana_spec.swift_versions = ['3.0']
+        target_definition = fixture_target_definition('App1')
+        target_definition.swift_version = '2.3'
+        @analyzer.send(:determine_swift_version, @banana_spec, [target_definition]).should == '3.0'
+      end
+
+      it 'uses the max swift version defined in the specification' do
+        @banana_spec.swift_versions = ['3.0', '4.0']
+        target_definition = fixture_target_definition('App1')
+        target_definition.swift_version = '2.3'
+        @analyzer.send(:determine_swift_version, @banana_spec, [target_definition]).should == '4.0'
+      end
+
+      it 'uses the swift version defined by the target definitions if no swift version is specified in the spec' do
+        @banana_spec.swift_versions = []
+        target_definition = fixture_target_definition('App1')
+        target_definition.swift_version = '2.3'
+        @analyzer.send(:determine_swift_version, @banana_spec, [target_definition]).should == '2.3'
+      end
+    end
+
     describe 'using lockfile checkout options' do
       before do
         @podfile = Pod::Podfile.new do

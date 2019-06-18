@@ -162,6 +162,17 @@ module Pod
           framework-static
         )
       end
+
+      it 'returns scopes based on Swift version' do
+        variants = PodVariantSet.new([
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios, BuildType.dynamic_framework, '3.2'),
+          PodVariant.new([@root_spec, @default_subspec], [], [], Platform.ios, BuildType.dynamic_framework, '4.0'),
+        ])
+        variants.scope_suffixes.values.should == %w(
+          Swift3.2
+          Swift4.0
+        )
+      end
     end
   end
 end

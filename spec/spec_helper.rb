@@ -118,20 +118,20 @@ end
 
 def fixture_pod_target(spec_or_name, build_type = Pod::BuildType.static_library, user_build_configurations = {},
                        archs = [], platform = Pod::Platform.new(:ios, '6.0'), target_definitions = [],
-                       scope_suffix = nil)
+                       scope_suffix = nil, swift_version = nil)
   spec = spec_or_name.is_a?(Pod::Specification) ? spec_or_name : fixture_spec(spec_or_name)
   fixture_pod_target_with_specs([spec], build_type, user_build_configurations, archs, platform, target_definitions,
-                                scope_suffix)
+                                scope_suffix, swift_version)
 end
 
 def fixture_pod_target_with_specs(specs, build_type = Pod::BuildType.static_library, user_build_configurations = {},
                                   archs = [], platform = Pod::Platform.new(:ios, '6.0'), target_definitions = [],
-                                  scope_suffix = nil)
+                                  scope_suffix = nil, swift_version = nil)
   target_definitions << fixture_target_definition if target_definitions.empty?
   target_definitions.each { |td| specs.each { |spec| td.store_pod(spec.name) } }
   file_accessors = specs.map { |spec| fixture_file_accessor(spec, platform) }
   Pod::PodTarget.new(config.sandbox, build_type, user_build_configurations, archs, platform, specs, target_definitions,
-                     file_accessors, scope_suffix)
+                     file_accessors, scope_suffix, swift_version)
 end
 
 def fixture_aggregate_target(pod_targets = [], build_type = Pod::BuildType.static_library,
