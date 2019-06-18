@@ -36,6 +36,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
    [James Treanor](https://github.com/jtreanor)
    [#8890](https://github.com/CocoaPods/CocoaPods/pull/8890)
 
+* Print correct platform name when inferring target platform.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8916](https://github.com/CocoaPods/CocoaPods/pull/8916)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
