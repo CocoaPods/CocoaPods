@@ -585,8 +585,16 @@ module Pod
               library_specs = all_specs_by_type[:library] || []
               test_specs = all_specs_by_type[:test] || []
               app_specs = all_specs_by_type[:app] || []
-              target_type = Target::BuildType.infer_from_spec(root_spec, :host_requires_frameworks => target_definition.uses_frameworks?)
-              pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, target_type)
+              build_type = Target::BuildType.infer_from_spec(root_spec, :host_requires_frameworks => target_definition.uses_frameworks?)
+              swift_version = if root_spec.swift_versions.empty?
+                                target_definition.swift_version
+                              else
+                                root_spec.swift_versions.sort.reverse_each.find do |swift_version|
+                                  target_definition.supports_swift_version?(swift_version)
+                                end.to_s
+                              end
+              pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, build_type,
+                                           swift_version)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
               pod_variant_spec = hash[root_spec].keys.find { |k| k == pod_variant }
@@ -601,7 +609,9 @@ module Pod
             end
             suffixes = PodVariantSet.new(target_definitions_by_variant.keys).scope_suffixes
             target_definitions_by_variant.map do |variant, target_definitions|
-              generate_pod_target(target_definitions, target_inspections, variant.specs + variant.test_specs + variant.app_specs, :build_type => variant.build_type, :scope_suffix => suffixes[variant])
+              all_specs = variant.specs + variant.test_specs + variant.app_specs
+              generate_pod_target(target_definitions, target_inspections, all_specs, :build_type => variant.build_type,
+                                  :scope_suffix => suffixes[variant], :swift_version => variant.swift_version)
             end
           end
 
@@ -612,8 +622,8 @@ module Pod
           resolver_specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by(&:root).values.uniq
             pod_targets = grouped_specs.flat_map do |pod_specs|
-              target_type = Target::BuildType.infer_from_spec(pod_specs.first, :host_requires_frameworks => target_definition.uses_frameworks?)
-              generate_pod_target([target_definition], target_inspections, pod_specs.map(&:spec), :build_type => target_type).scoped(dedupe_cache)
+              build_type = Target::BuildType.infer_from_spec(pod_specs.first, :host_requires_frameworks => target_definition.uses_frameworks?)
+              generate_pod_target([target_definition], target_inspections, pod_specs.map(&:spec), :build_type => build_type).scoped(dedupe_cache)
             end
 
             compute_pod_target_dependencies(pod_targets, specs.map(&:spec).group_by(&:name))
@@ -626,7 +636,7 @@ module Pod
       # @param  [Array<PodTarget>] pod_targets
       #         pod targets.
       #
-      # @param  [Hash{String => Array<Specification>}] specs_by_name
+      # @param  [Hash{String => Array<Specification>}] all_specs
       #         specifications grouped by name.
       #
       # @return [Array<PodTarget>]
@@ -724,11 +734,18 @@ module Pod
       #         the specifications of an equal root.
       #
       # @param  [String] scope_suffix
-      #         @see PodTarget#scope_suffix
+      #                 @see PodTarget#scope_suffix
+      #
+      # @param  [Target::BuildType] build_type
+      #                 @see PodTarget#build_type
+      #
+      # @param  [String] swift_version
+      #                 @see PodTarget#swift_version
       #
       # @return [PodTarget]
       #
-      def generate_pod_target(target_definitions, target_inspections, specs, scope_suffix: nil, build_type: nil)
+      def generate_pod_target(target_definitions, target_inspections, specs, scope_suffix: nil, build_type: nil,
+                              swift_version: nil)
         target_inspections = target_inspections.select { |t, _| target_definitions.include?(t) }.values
         object_version = target_inspections.map { |ti| ti.project.object_version }.min
         target_requires_64_bit = target_definitions.all? { |td| Analyzer.requires_64_bit_archs?(td.platform, object_version) }
@@ -747,7 +764,8 @@ module Pod
         platform = determine_platform(specs, target_definitions, host_requires_frameworks)
         file_accessors = create_file_accessors(specs, platform)
         PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
-                      target_definitions, file_accessors, scope_suffix, :build_type => build_type)
+                      target_definitions, file_accessors, scope_suffix, :build_type => build_type,
+                      :swift_version => swift_version)
       end
 
       # Creates the file accessors for a given pod.
