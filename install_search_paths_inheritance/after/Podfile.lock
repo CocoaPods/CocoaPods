@@ -12,7 +12,7 @@ PODS:
   - logger (0.0.1):
     - logger/Core (= 0.0.1)
   - logger/Core (0.0.1):
-    - CocoaLumberjack
+    - CocoaLumberjack (= 3.0.0)
   - sharedlib/Core (0.0.1):
     - asserts
     - logger
@@ -29,7 +29,7 @@ DEPENDENCIES:
   - testkit (from `testkit`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - CocoaLumberjack
 
 EXTERNAL SOURCES:
@@ -45,6 +45,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   asserts: cdb8f1318ddf6d68ae8ddc0bb9b506d8df6d556e
   CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
-  logger: a83dfb27371c8fba24104a1d156bb2a8c9336087
+  logger: fec205745589b5883665e954c3e56a602ad28c3a
   sharedlib: 96a90f21e91e9a25c9f47c3a8f65cd06883cab94
   testkit: 994a8781f993b6dc13c40c4cf43fa67f3678453e

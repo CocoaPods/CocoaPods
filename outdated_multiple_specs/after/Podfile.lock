@@ -13,7 +13,7 @@ DEPENDENCIES:
   - Reachability (from `Reachability`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - AFNetworking
 
 EXTERNAL SOURCES:
