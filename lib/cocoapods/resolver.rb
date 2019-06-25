@@ -463,7 +463,7 @@ module Pod
               # Conflict was caused by a requirement from a local dependency.
               # Tell user to use `pod update`.
               o << "\n\nYou have either:#{specs_update_message}" \
-                   " * changed the constraints of dependency `#{name}` inside your development pod `#{local_pod_parent.name}`." \
+                   "\n * changed the constraints of dependency `#{name}` inside your development pod `#{local_pod_parent.name}`." \
                    "\n   You should run `pod update #{name}` to apply changes you've made."
             elsif !conflict.possibility && conflict.locked_requirement && conflict.locked_requirement.external_source && conflict.locked_requirement.external_source[:podspec] &&
                                            conflict.requirement && conflict.requirement.external_source && conflict.requirement.external_source[:podspec]
