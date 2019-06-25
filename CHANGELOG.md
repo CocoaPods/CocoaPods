@@ -55,6 +55,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   include the Pods .xcconfig from the base .xcconfig file  
   [Rob Hudson](https://github.com/robtimp)
 
+* Remove stale podspecs from 'Local Podspecs' when installing non-local counterparts.  
+  [Pär Strindevall](https://github.com/parski)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8914](https://github.com/CocoaPods/CocoaPods/pull/8914)
+  
 
 ## 1.7.2 (2019-06-13)
 

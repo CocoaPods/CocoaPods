@@ -379,6 +379,18 @@ module Pod
       checkout_sources.delete(root_name)
     end
 
+    # Removes local podspec a Pod.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [void]
+    #
+    def remove_local_podspec(name)
+      local_podspec = specification_path(name)
+      FileUtils.rm(local_podspec) if local_podspec
+    end
+
     # @return [Hash{String=>Hash}] The options necessary to recreate the exact
     #         checkout of a given Pod grouped by its name.
     #

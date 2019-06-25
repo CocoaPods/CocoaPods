@@ -5,10 +5,11 @@ module Pod
     FIXTURE_HEAD = Dir.chdir(SpecHelper.fixture('banana-lib')) { `git rev-parse HEAD`.chomp }
 
     before do
+      @podfile = Podfile.new
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @spec.source = { :git => SpecHelper.fixture('banana-lib') }
       specs_by_platform = { :ios => [@spec] }
-      @installer = Installer::PodSourceInstaller.new(config.sandbox, specs_by_platform)
+      @installer = Installer::PodSourceInstaller.new(config.sandbox, @podfile, specs_by_platform)
     end
 
     #-------------------------------------------------------------------------#
@@ -27,6 +28,18 @@ module Pod
           @installer.install!
           pod_folder = config.sandbox.pod_dir('BananaLib')
           pod_folder.should.exist
+        end
+
+        it 'tries to remove stale local podspec if the source is not predownloaded, local or external' do
+          config.sandbox.expects(:remove_local_podspec).with('BananaLib').once
+          @installer.install!
+        end
+
+        it 'does not remove the local podspec if the source is local path' do
+          @spec.source = { :path => 'BananaLib.podspec' }
+          config.sandbox.store_local_path('BananaLib', 'BananaLib.podspec')
+          config.sandbox.expects(:remove_local_podspec).with('BananaLib').never
+          @installer.install!
         end
       end
 

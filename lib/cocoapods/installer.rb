@@ -514,7 +514,7 @@ module Pod
         raise StandardError, message
       end
 
-      pod_installer = PodSourceInstaller.new(sandbox, specs_by_platform, :can_cache => installation_options.clean?)
+      pod_installer = PodSourceInstaller.new(sandbox, podfile, specs_by_platform, :can_cache => installation_options.clean?)
       pod_installers << pod_installer
       pod_installer
     end
