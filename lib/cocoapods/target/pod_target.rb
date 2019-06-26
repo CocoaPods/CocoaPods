@@ -698,7 +698,7 @@ module Pod
         whitelists.first
       else
         UI.warn "The pod `#{pod_name}` is linked to different targets " \
-          "(#{target_definitions.map { |td| "`#{td.label}`" }.to_sentence}), which contain different " \
+          "(#{target_definitions.map { |td| "`#{td.name}`" }.to_sentence}), which contain different " \
           'settings to inhibit warnings. CocoaPods does not currently ' \
           'support different settings and will fall back to your preference ' \
           'set in the root target definition.'
