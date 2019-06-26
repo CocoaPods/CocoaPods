@@ -117,8 +117,7 @@ module Pod
         before do
           @watermelon_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
           @pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
-                                                      true, {}, [], Platform.new(:ios, '6.0'),
-                                                      [@target_definition])
+                                                      true, {}, [], Platform.new(:ios, '6.0'), [@target_definition])
         end
 
         it 'raises when the target does not contain the spec' do
@@ -177,8 +176,8 @@ module Pod
         target_definition_one.store_swift_version_requirements('>= 4.0')
         target_definition_two = fixture_target_definition('App2')
         target_definition_two.store_swift_version_requirements('= 4.2')
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition_one,
-                                                                                                 target_definition_two])
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+                                   [target_definition_one, target_definition_two])
         @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0'),
                                                               Version.new('4.2')])
         pod_target.swift_version.should == '4.2'
@@ -189,8 +188,8 @@ module Pod
         target_definition_one.store_swift_version_requirements('>= 4.0')
         target_definition_two = fixture_target_definition('App2')
         target_definition_two.store_swift_version_requirements('= 4.2')
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition_one,
-                                                                                                 target_definition_two])
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+                                   [target_definition_one, target_definition_two])
         @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
         pod_target.swift_version.should == ''
       end
@@ -211,6 +210,54 @@ module Pod
         @pod_target.root_spec.stubs(:swift_versions).returns([])
         @target_definition.stubs(:swift_version).returns('2.3')
         @pod_target.swift_version.should == '2.3'
+      end
+    end
+
+    describe 'Inhibit warnings' do
+      it 'should inhibit warnings for pods that are part of the target definition and require it' do
+        target_definition = fixture_target_definition('App1')
+        target_definition.store_pod('BananaLib', :inhibit_warnings => true)
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition])
+        pod_target.inhibit_warnings?.should.be.true
+      end
+
+      it "should not inhibit warnings for pods that are part of the target definition but don't require it" do
+        target_definition = fixture_target_definition('App1')
+        target_definition.store_pod('BananaLib', :inhibit_warnings => false)
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition])
+        pod_target.inhibit_warnings?.should.be.false
+      end
+
+      it 'should not inhibit warnings for pods that do not belong into the target definition' do
+        target_definition = fixture_target_definition('App1')
+        target_definition.store_pod('CoconutLib', :inhibit_warnings => true)
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition])
+        pod_target.inhibit_warnings?.should.be.false
+      end
+
+      it 'should not warn for pods that belong into multiple target definitions but have the same setting' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.store_pod('BananaLib', :inhibit_warnings => true)
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_pod('BananaLib', :inhibit_warnings => true)
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+                                   [target_definition_one, target_definition_two])
+        pod_target.inhibit_warnings?.should.be.true
+        UI.warnings.should.be.empty
+      end
+
+      it 'warns and picks the root target definition setting if inhibit warnings values collide' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.podfile.root_target_definitions = [target_definition_one]
+        target_definition_one.store_pod('BananaLib', :inhibit_warnings => true)
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_pod('BananaLib', :inhibit_warnings => false)
+        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+                                   [target_definition_one, target_definition_two])
+        pod_target.inhibit_warnings?.should.be.true
+        UI.warnings.should.include 'The pod `BananaLib` is linked to different targets (`App1` and `App2`), which ' \
+          'contain different settings to inhibit warnings. CocoaPods does not currently support different settings ' \
+          "and will fall back to your preference set in the root target definition.\n"
       end
     end
 
@@ -692,12 +739,14 @@ module Pod
         end
 
         it 'returns the correct scheme configuration for the requested spec' do
-          @pod_target.scheme_for_spec(@watermelon_spec).should == { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
+          @pod_target.scheme_for_spec(@watermelon_spec).should == { :launch_arguments => %w(Arg1 Arg2),
+                                                                    :environment_variables => { 'Key1' => 'Val1' } }
           @pod_target.scheme_for_spec(@watermelon_spec.test_specs.first).should == { :launch_arguments => ['TestArg1'] }
         end
 
         it 'returns an empty scheme configuration for the requested sub spec' do
-          @pod_target.scheme_for_spec(@matryoshka_spec).should == { :launch_arguments => %w(Arg1 Arg2), :environment_variables => { 'Key1' => 'Val1' } }
+          @pod_target.scheme_for_spec(@matryoshka_spec).should == { :launch_arguments => %w(Arg1 Arg2),
+                                                                    :environment_variables => { 'Key1' => 'Val1' } }
           @pod_target.scheme_for_spec(@matryoshka_spec.subspecs.first).should == {}
         end
       end

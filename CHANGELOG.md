@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Fix target definition display name for inhibit warnings message.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8935](https://github.com/CocoaPods/CocoaPods/pull/8935)
+
 * Allow using an application defined by an app spec as the app host for a test spec.  
   [jkap](https://github.com/jkap)
   [Samuel Giddins](https://github.com/segiddins)
