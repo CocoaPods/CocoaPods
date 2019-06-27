@@ -43,6 +43,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Print correct platform name when inferring target platform.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8916](https://github.com/CocoaPods/CocoaPods/pull/8916)
+  
+* Add the installation option 'treat_warnings_as_errors' which causes the installer to
+  terminate with an error if a warning occurs.  
+  [Ezra Berch](https://github.com/ezraberch)
+  [#8155](https://github.com/CocoaPods/CocoaPods/issues/8155)
 
 ##### Bug Fixes
 
