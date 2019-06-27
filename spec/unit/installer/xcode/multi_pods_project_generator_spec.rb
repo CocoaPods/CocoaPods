@@ -474,6 +474,21 @@ module Pod
             coconut_project.main_group['Dependencies'].find_file_by_path('OrangeFramework.xcodeproj').should.not.be.nil
           end
 
+          it 'generates a different project name if the pod target has one specified' do
+            @coconut_ios_pod_target.stubs(:project_name => 'CustomProjectName')
+            pod_generator_result = @generator.generate!
+            coconut_project = pod_generator_result.projects_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'CustomProjectName.xcodeproj' }
+            coconut_project.should.not.be.nil
+          end
+
+          it 'adds dependency project references for pods with custom project names' do
+            @orangeframework_pod_target.stubs(:project_name => 'OrangeFrameworkCustomProjectName')
+            pod_generator_result = @generator.generate!
+            coconut_project = pod_generator_result.projects_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
+            coconut_project.should.not.be.nil
+            coconut_project.main_group['Dependencies'].find_file_by_path('OrangeFrameworkCustomProjectName.xcodeproj').should.not.be.nil
+          end
+
           it 'does not add framework references for framework pod targets that do not require building' do
             @orangeframework_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
             @coconut_ios_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)

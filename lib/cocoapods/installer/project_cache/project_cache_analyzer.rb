@@ -75,6 +75,11 @@ module Pod
             return full_install_results
           end
 
+          if project_names_changed?(pod_targets, cache)
+            UI.message 'Ignoring project cache due to project name changes.'
+            return full_install_results
+          end
+
           pod_targets_to_generate = Set[]
           aggregate_targets_to_generate = Set[]
           added_targets, removed_targets = compute_added_and_removed_targets(target_by_label,
@@ -95,23 +100,22 @@ module Pod
           pod_targets_to_generate.merge(dirty_pod_targets)
           aggregate_targets_to_generate.merge(dirty_aggregate_targets)
 
-          # Since multi xcodeproj will group targets by PodTarget#pod_name into individual projects, we
-          # need to append these "sibling" targets to the list of targets we need to generate before finalizing the total list,
+          # Since multi xcodeproj will group targets by PodTarget#project_name into individual projects, we need to
+          # append these "sibling" targets to the list of targets we need to generate before finalizing the total list,
           # otherwise we will end up with missing targets.
           #
           sibling_pod_targets = compute_sibling_pod_targets(pod_targets, pod_targets_to_generate)
           pod_targets_to_generate.merge(sibling_pod_targets)
 
-          # We either return the full list of aggregate targets or none since the aggregate targets go into the Pods.xcodeproj
-          # and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
+          # We either return the full list of aggregate targets or none since the aggregate targets go into the
+          # Pods.xcodeproj and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
 
-          total_aggregate_targets_to_generate =
-            unless aggregate_targets_to_generate.empty?
-              aggregate_targets
-            end
+          total_aggregate_targets_to_generate = unless aggregate_targets_to_generate.empty?
+                                                  aggregate_targets
+                                                end
 
-          ProjectCacheAnalysisResult.new(pod_targets_to_generate.to_a, total_aggregate_targets_to_generate, cache_key_by_target_label,
-                                         build_configurations, project_object_version)
+          ProjectCacheAnalysisResult.new(pod_targets_to_generate.to_a, total_aggregate_targets_to_generate,
+                                         cache_key_by_target_label, build_configurations, project_object_version)
         end
 
         private
@@ -155,7 +159,7 @@ module Pod
             support_files_dir_exists = File.exist? target.support_files_dir
             xcodeproj_exists = case target
                                when PodTarget
-                                 File.exist? sandbox.pod_target_project_path(target.pod_name)
+                                 File.exist? sandbox.pod_target_project_path(target.project_name)
                                when AggregateTarget
                                  File.exist? sandbox.project_path
                                else
@@ -166,8 +170,15 @@ module Pod
         end
 
         def compute_sibling_pod_targets(pod_targets, pod_targets_to_generate)
-          pod_targets_by_name = pod_targets.group_by(&:pod_name)
-          pod_targets_to_generate.flat_map { |t| pod_targets_by_name[t.pod_name] }
+          pod_targets_by_project_name = pod_targets.group_by(&:project_name)
+          pod_targets_to_generate.flat_map { |t| pod_targets_by_project_name[t.project_name] }
+        end
+
+        def project_names_changed?(pod_targets, cache)
+          pod_targets.any? do |pod_target|
+            next unless (target_cache_key = cache.cache_key_by_target_label[pod_target.label])
+            target_cache_key.project_name != pod_target.project_name
+          end
         end
       end
     end

@@ -25,7 +25,7 @@ module Pod
           aggregate_targets = result.targets
           pod_targets = aggregate_targets.flat_map(&:pod_targets).uniq
 
-          TargetValidator.new(aggregate_targets, pod_targets)
+          TargetValidator.new(aggregate_targets, pod_targets, podfile.installation_options)
         end
 
         describe '#verify_no_duplicate_framework_and_library_names' do
@@ -470,6 +470,90 @@ module Pod
             podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
             podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '3.0'
             @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:should_build?).returns(false)
+            lambda { @validator.validate! }.should.not.raise
+          end
+        end
+
+        describe '#verify_no_multiple_project_names' do
+          it 'does not raise if the project name of a pod is only set once' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false, :generate_multiple_pod_projects => true
+              pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'CustomProjectName'
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            lambda { @validator.validate! }.should.not.raise
+          end
+
+          it 'does not when the same project name is used across all targets' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false, :generate_multiple_pod_projects => true
+              target 'SampleProject' do
+                pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'ProjectName1'
+              end
+              target 'TestRunner' do
+                pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'ProjectName1'
+              end
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            lambda { @validator.validate! }.should.not.raise
+          end
+
+          it 'raises when two different project names for a pod are specified with multiple projects option enabled' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false, :generate_multiple_pod_projects => true
+              target 'SampleProject' do
+                pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'ProjectName1'
+              end
+              target 'TestRunner' do
+                pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'ProjectName2'
+              end
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            e = lambda { @validator.validate! }.should.raise Informative
+            e.message.should.include <<-EOS.strip_heredoc.strip
+              [!] The following pods cannot be integrated:
+
+              - `matryoshka` specifies multiple project names (`ProjectName1` and `ProjectName2`) in different targets (`SampleProject` and `TestRunner`).
+            EOS
+          end
+
+          it 'does not raise when two different project names for a pod are specified with multiple project option disabled' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false, :generate_multiple_pod_projects => false
+              target 'SampleProject' do
+                pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'ProjectName1'
+              end
+              target 'TestRunner' do
+                pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s, :project_name => 'ProjectName2'
+              end
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
             lambda { @validator.validate! }.should.not.raise
           end
         end

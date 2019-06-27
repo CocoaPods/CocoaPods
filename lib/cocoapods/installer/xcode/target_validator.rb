@@ -5,8 +5,7 @@ module Pod
       # configuration is valid for installation.
       #
       class TargetValidator
-        # @return [Array<AggregateTarget>] The aggregate targets that should be
-        #                                  validated.
+        # @return [Array<AggregateTarget>] The aggregate targets that should be validated.
         #
         attr_reader :aggregate_targets
 
@@ -14,18 +13,21 @@ module Pod
         #
         attr_reader :pod_targets
 
+        # @return [InstallationOptions] The installation options used during this installation.
+        #
+        attr_reader :installation_options
+
         # Create a new TargetValidator with aggregate and pod targets to
         # validate.
         #
-        # @param [Array<AggregateTarget>] aggregate_targets
-        #                                 The aggregate targets to validate.
+        # @param [Array<AggregateTarget>] aggregate_targets #see #aggregate_targets
+        # @param [Array<PodTarget>] pod_targets see #pod_targets
+        # @param [InstallationOptions] installation_options see #installation_options
         #
-        # @param [Array<PodTarget>] pod_targets
-        #                           The pod targets to validate.
-        #
-        def initialize(aggregate_targets, pod_targets)
+        def initialize(aggregate_targets, pod_targets, installation_options)
           @aggregate_targets = aggregate_targets
           @pod_targets = pod_targets
+          @installation_options = installation_options
         end
 
         # Perform the validation steps for the provided aggregate and pod
@@ -36,6 +38,7 @@ module Pod
           verify_no_static_framework_transitive_dependencies
           verify_swift_pods_swift_version
           verify_swift_pods_have_module_dependencies
+          verify_no_multiple_project_names if installation_options.generate_multiple_pod_projects?
         end
 
         private
@@ -147,6 +150,19 @@ module Pod
 
           raise Informative, 'The following Swift pods cannot yet be integrated '\
                              "as static libraries:\n\n#{error_messages.join("\n\n")}"
+        end
+
+        def verify_no_multiple_project_names
+          error_messages = pod_targets.map do |pod_target|
+            project_names = pod_target.target_definitions.map { |td| td.project_name_for_pod(pod_target.pod_name) }.compact.uniq
+            next unless project_names.count > 1
+            "- `#{pod_target.name}` specifies multiple project names (#{project_names.map { |pn| "`#{pn}`" }.to_sentence}) " \
+            "in different targets (#{pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence})."
+          end.compact
+          return if error_messages.empty?
+
+          raise Informative, 'The following pods cannot be integrated:' \
+                             "\n\n#{error_messages.join("\n\n")}"
         end
       end
     end

@@ -62,6 +62,14 @@ module Pod
 
           removed_sandbox_private_headers = sandbox_private_headers(pod_targets) - sandbox_private_headers_to_install
           removed_sandbox_private_headers.each { |path| remove_dir(path) }
+
+          project_dir_names_to_install = pod_targets.map do |pod_target|
+            sandbox.pod_target_project_path(pod_target.project_name)
+          end
+          project_dir_names = sandbox_project_dir_names - [sandbox.project_path]
+
+          removed_project_dir_names = project_dir_names - project_dir_names_to_install
+          removed_project_dir_names.each { |dir| remove_dir(dir) }
         end
       end
 
@@ -73,6 +81,10 @@ module Pod
 
       def sandbox_private_headers(pod_targets)
         pod_targets.flat_map { |pod_target| child_directories_of(pod_target.build_headers.root) }.uniq
+      end
+
+      def sandbox_project_dir_names
+        child_directories_of(sandbox.root).select { |d| d.extname == '.xcodeproj' }
       end
 
       def sandbox_public_headers

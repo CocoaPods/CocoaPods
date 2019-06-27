@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#8923](https://github.com/CocoaPods/CocoaPods/pull/8923)
   [Core#552](https://github.com/CocoaPods/Core/pull/552)
 
+* Integrate a pod into a custom project name if specified.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso) & [Sebastian Shanus](https://github.com/sebastianv1)
+  [#8939](https://github.com/CocoaPods/CocoaPods/pull/8939)
+
 * Performance optimization for large number of files related to cleaning sandbox directory during installation  
   [hovox](https://github.com/hovox)
   [#8797](https://github.com/CocoaPods/CocoaPods/issues/8797)
