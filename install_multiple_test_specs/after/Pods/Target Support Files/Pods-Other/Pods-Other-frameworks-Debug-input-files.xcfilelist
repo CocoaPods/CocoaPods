@@ -1,2 +1,2 @@
 ${PODS_ROOT}/Target Support Files/Pods-Other/Pods-Other-frameworks.sh
-${PODS_CONFIGURATION_BUILD_DIR}/DepPod/DepPod.framework
+${BUILT_PRODUCTS_DIR}/DepPod/DepPod.framework
