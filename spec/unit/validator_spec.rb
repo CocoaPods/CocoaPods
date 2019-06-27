@@ -1399,7 +1399,7 @@ module Pod
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
           pod_target_one = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
           pod_target_two = stub(:name => 'Dependency', :uses_swift? => true, :pod_name => 'Dependency',
-                                :spec_swift_versions => [], :target_definition_swift_version => '3.2')
+                                :spec_swift_versions => [], :swift_version => '3.2')
           pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
@@ -1423,7 +1423,7 @@ module Pod
           native_target_two = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_two]))
           pod_target_one = stub(:name => 'JSONKit', :uses_swift? => true, :pod_name => 'JSONKit')
           pod_target_two = stub(:name => 'Dependency', :uses_swift? => true, :pod_name => 'Dependency',
-                                :spec_swift_versions => ['4.0'], :target_definition_swift_version => '3.2')
+                                :spec_swift_versions => ['4.0'], :swift_version => '3.2')
           pod_target_installation_one = stub(:target => pod_target_one, :native_target => native_target_one,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
