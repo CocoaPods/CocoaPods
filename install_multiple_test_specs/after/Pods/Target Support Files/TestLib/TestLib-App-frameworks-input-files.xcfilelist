@@ -1,2 +1,2 @@
 ${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-frameworks.sh
-${PODS_CONFIGURATION_BUILD_DIR}/TestLib/TestLib.framework
+${BUILT_PRODUCTS_DIR}/TestLib/TestLib.framework
