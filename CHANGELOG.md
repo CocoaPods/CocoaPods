@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Honor the Swift version set by a dependency pod during lint.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8940](https://github.com/CocoaPods/CocoaPods/issues/8940)
 
 
 ## 1.7.2 (2019-06-13)
