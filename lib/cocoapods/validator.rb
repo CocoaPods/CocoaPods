@@ -616,7 +616,7 @@ module Pod
                             else
                               pod_target.spec_swift_versions.map(&:to_s).find do |v|
                                 v == derived_swift_version
-                              end || pod_target.target_definition_swift_version
+                              end || pod_target.swift_version
                             end
             build_configuration.build_settings['SWIFT_VERSION'] = swift_version
           end
