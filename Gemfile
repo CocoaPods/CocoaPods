@@ -1,4 +1,16 @@
+require 'yaml'
+
 SKIP_UNRELEASED_VERSIONS = false
+PULL_REQUEST_BRANCH = if ENV['TRAVIS_BRANCH']
+                        ENV['TRAVIS_BRANCH'].freeze
+                      elsif ENV['DEVELOPMENT_BRANCH']
+                        ENV['DEVELOPMENT_BRANCH'].freeze
+                      elsif ENV['CIRCLE_PR_NUMBER']
+                        json = YAML.load(`curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER}`)
+                        json["base"]["ref"].freeze
+                      else
+                        nil
+                      end
 
 # Declares a dependency to the git repo of CocoaPods gem. This declaration is
 # compatible with the local git repos feature of Bundler.
@@ -25,7 +37,10 @@ gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7
 
 group :development do
   cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
+  # `cocoapods-core` is special as its version is locked to `cocoapods`.
+  # This ensures that `master` will build with `master` and `1-7-stable`
+  # will build with `1-7-stable`.
+  cp_gem 'cocoapods-core',        'Core', PULL_REQUEST_BRANCH || `git rev-parse --abbrev-ref HEAD`.chomp 
   cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
   cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
