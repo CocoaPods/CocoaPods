@@ -44,3 +44,7 @@ coverage/
 
 # Bundler files
 /.bundle
+
+# trunk source
+spec/fixtures/spec-repos/trunk/**
+!spec/fixtures/spec-repos/trunk/.url
