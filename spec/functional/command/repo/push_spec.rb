@@ -97,6 +97,16 @@ module Pod
       e.message.should.match(/use the `pod trunk push` command/)
     end
 
+    it 'refuses to push if the repo is CDN' do
+      Dir.chdir(test_repo_path) do
+        `rm -rf .git`
+        File.open('.url', 'w') { |f| f.write(Pod::TrunkSource::TRUNK_REPO_URL) }
+      end
+      cmd = command('repo', 'push', 'master')
+      e = lambda { cmd.run }.should.raise Pod::Informative
+      e.message.should.match(/Cannot push to a CDN source/)
+    end
+
     it 'refuses to push if the repo is not clean' do
       Dir.chdir(test_repo_path) do
         `touch DIRTY_FILE`
