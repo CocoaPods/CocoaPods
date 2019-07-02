@@ -48,10 +48,6 @@ module Pod
       master = command('repo', 'add', 'master', 'https://github.com/foo/bar.git')
       should.raise(Informative) { master.validate! }.message.should.
         include('Master repo via git has been replaced with a CDN-based solution.')
-
-      master = command('repo', 'add', 'foo-bar', 'https://github.com/CocoaPods/Specs.git')
-      should.raise(Informative) { master.validate! }.message.should.
-        include('Master repo via git has been replaced with a CDN-based solution.')
     end
   end
 end

@@ -34,7 +34,7 @@ module Pod
           unless @name && @url
             help! 'Adding a repo needs a `NAME` and a `URL`.'
           end
-          if @name == 'master' || @url =~ %r{github.com[:/]+cocoapods/specs}i
+          if @name == 'master'
             raise Informative,
                   'Master repo via git has been replaced with a CDN-based solution.'
           end
