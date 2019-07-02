@@ -25,7 +25,7 @@ module Pod
             ['--use-libraries', 'Lint uses static libraries to install the spec'],
             ['--use-modular-headers', 'Lint uses modular headers during installation'],
             ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
-             '(defaults to https://github.com/CocoaPods/Specs.git). ' \
+             "(defaults to #{TrunkSource::TRUNK_REPO_URL}). " \
              'Multiple sources must be comma-delimited.'],
             ['--platforms=ios,macos', 'Lint against specific platforms' \
               '(defaults to all platforms supported by the podspec).' \
