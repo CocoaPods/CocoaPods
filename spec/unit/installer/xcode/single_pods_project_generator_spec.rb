@@ -92,6 +92,8 @@ module Pod
 
             @generator = SinglePodsProjectGenerator.new(config.sandbox, aggregate_targets, pod_targets, @analysis_result.all_user_build_configurations,
                                                         @installation_options, config, nil)
+
+            Pod::Installer::Xcode::PodsProjectGenerator::TargetInstallerHelper.stubs(:update_changed_file)
           end
 
           it "creates build configurations for all of the user's targets" do
@@ -193,11 +195,11 @@ module Pod
 
           it 'sets the pod and aggregate target dependencies' do
             pod_generator_result = @generator.generate!
-            pod_generator_result.project.targets.find { |t| t.name == 'BananaLib-iOS' }.dependencies.map(&:name).should.be.empty
-            pod_generator_result.project.targets.find { |t| t.name == 'BananaLib-macOS' }.dependencies.map(&:name).should.be.empty
-            pod_generator_result.project.targets.find { |t| t.name == 'CoconutLib-macOS' }.dependencies.map(&:name).should.be.empty
-            pod_generator_result.project.targets.find { |t| t.name == 'monkey-iOS' }.dependencies.map(&:name).should.be.empty
-            pod_generator_result.project.targets.find { |t| t.name == 'monkey-macOS' }.dependencies.map(&:name).should.be.empty
+            pod_generator_result.project.targets.find { |t| t.name == 'BananaLib-iOS' }.dependencies.should.be.empty
+            pod_generator_result.project.targets.find { |t| t.name == 'BananaLib-macOS' }.dependencies.should.be.empty
+            pod_generator_result.project.targets.find { |t| t.name == 'CoconutLib-macOS' }.dependencies.should.be.empty
+            pod_generator_result.project.targets.find { |t| t.name == 'monkey-iOS' }.dependencies.should.be.empty
+            pod_generator_result.project.targets.find { |t| t.name == 'monkey-macOS' }.dependencies.should.be.empty
             pod_generator_result.project.targets.find { |t| t.name == 'CoconutLib-iOS' }.dependencies.map(&:name).sort.should == [
               'OrangeFramework',
             ]
@@ -245,7 +247,7 @@ module Pod
           end
 
           it 'sets resource bundle target dependencies' do
-            @banana_spec.resource_bundles = { 'BananaLibResourcesBundle' => '**/*' }
+            @banana_spec.resource_bundles = { 'BananaLibResourcesBundle' => 'Resources/logo-sidebar.png' }
             pod_generator_result = @generator.generate!
             pod_generator_result.project.targets.find { |t| t.name == 'BananaLib-iOS-BananaLibResourcesBundle' }.should.not.be.nil
             pod_generator_result.project.targets.find { |t| t.name == 'BananaLib-macOS-BananaLibResourcesBundle' }.should.not.be.nil
@@ -258,7 +260,7 @@ module Pod
           end
 
           it 'sets test resource bundle dependencies' do
-            @coconut_test_spec.resource_bundles = { 'CoconutLibTestResourcesBundle' => '**/*' }
+            @coconut_test_spec.resource_bundles = { 'CoconutLibTestResourcesBundle' => 'Coconut.h' }
             pod_generator_result = @generator.generate!
             pod_generator_result.project.targets.find { |t| t.name == 'CoconutLib-iOS-CoconutLibTestResourcesBundle' }.should.not.be.nil
             pod_generator_result.project.targets.find { |t| t.name == 'CoconutLib-macOS-CoconutLibTestResourcesBundle' }.should.not.be.nil
