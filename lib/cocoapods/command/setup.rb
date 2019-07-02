@@ -3,19 +3,15 @@ require 'fileutils'
 module Pod
   class Command
     class Setup < Command
-      self.summary = 'Setup the CocoaPods environment'
+      self.summary = 'Legacy command present for compatibility reasons - deprecated in 1.8.0'
 
       self.description = <<-DESC
-        Creates a directory at `#{Config.instance.repos_dir}` which will hold your spec-repos.
-        This is where it will create a clone of the public `master` spec-repo from:
-
-            https://github.com/CocoaPods/Specs
-
-        If the clone already exists, it will ensure that it is up-to-date.
+        Legacy command that is present for compatibility reasons.
+        The new CDN-based trunk repo does not need any specific setup steps.
       DESC
 
       def run
-        UI.puts 'Setup was deprecated in 1.8.0, as it is no longer necessary!'.green
+        UI.puts '`pod setup` was deprecated in 1.8.0, because new CDN trunk does not need any specific setup steps.'.green
       end
     end
   end

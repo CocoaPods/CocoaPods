@@ -11,7 +11,7 @@ module Pod
     end
 
     it 'Displays deprecation notice' do
-      UI.expects(:puts).with('Setup was deprecated in 1.8.0, as it is no longer necessary!').once
+      UI.expects(:puts).with('`pod setup` was deprecated in 1.8.0, because new CDN trunk does not need any specific setup steps.').once
       run_command('setup')
     end
   end
