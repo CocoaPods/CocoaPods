@@ -33,15 +33,6 @@ branches:
 before_install:
   - |
       if [ "$COCOAPODS_CI_TASKS" != "LINT" ]; then
-        master_sha="$(ruby -e "puts '`git submodule status spec/fixtures/spec-repos/master`'.strip.sub(/^-/, '').split(/\s/, 2).first")"
-        curl -ssL "https://github.com/CocoaPods/Specs/archive/$master_sha.tar.gz" | tar xz -C spec/fixtures/spec-repos
-        git rm spec/fixtures/spec-repos/master
-        mv "spec/fixtures/spec-repos/Specs-$master_sha" spec/fixtures/spec-repos/master
-        (
-          cd spec/fixtures/spec-repos/master
-          git init
-          git remote add origin https://github.com/CocoaPods/Specs.git
-        )
         git submodule update --init
       fi
   # There is a bug in travis. When using system ruby, bundler is not
