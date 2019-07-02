@@ -167,6 +167,10 @@ describe_cli 'pod' do
       ^\s* Dload \s* Upload .* \n
       (^\s* [[:cntrl:]] .* \n)+
     }iox, "\\1\n"
+
+    # ignore lines in the vein of `CDN: trunk Relative path: all_pods_versions_1_3_f.txt exists!`
+    # they are somewhat non-deteministic and non-essential to testing integration
+    s.replace_pattern /.*CDN:.*\n/, ''
   end
 
   describe 'Pod install' do
