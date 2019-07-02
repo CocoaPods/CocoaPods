@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: bbde7cb7d688d4805a3a771dbc41f1308b668cae
+  revision: cb6a1bff21d17b85e4ed5a0707aa19da9478c8ef
   branch: master
   specs:
     cocoapods-core (1.7.3)
