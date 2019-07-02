@@ -9,11 +9,6 @@ module Pod
     before do
       set_up_test_repo
       config.repos_dir = SpecHelper.tmp_repos_path
-
-      TrunkSource.any_instance.stubs(:git_commit_hash).returns('commit hash')
-      WebMock.stub_request(:get, 'https://api.github.com/repos/CocoaPods/Specs/commits/master').
-        with(:headers => { 'Accept' => 'application/vnd.github.chitauri-preview+sha', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'If-None-Match' => '"commit hash"', 'User-Agent' => 'CocoaPods' }).
-        to_return(:status => 200, :body => '', :headers => {})
     end
 
     it 'updates a repository' do
