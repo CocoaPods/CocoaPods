@@ -4,7 +4,7 @@ module Pod
   describe Installer::Analyzer do
     describe 'Analysis' do
       before do
-        repos = [Source.new(fixture('spec-repos/test_repo')), MasterSource.new(fixture('spec-repos/master'))]
+        repos = [Source.new(fixture('spec-repos/test_repo')), TrunkSource.new(fixture('spec-repos/trunk'))]
         aggregate = Pod::Source::Aggregate.new(repos)
         config.sources_manager.stubs(:aggregate).returns(aggregate)
         aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
@@ -65,13 +65,13 @@ module Pod
 
       it 'does not update unused sources' do
         @analyzer.stubs(:sources).returns(config.sources_manager.master)
-        config.sources_manager.expects(:update).once.with('master', true)
+        config.sources_manager.expects(:update).once.with('trunk', true)
         @analyzer.update_repositories
       end
 
       it 'does not update sources if there are no dependencies' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source TrunkSource::TRUNK_REPO_URL
           # No dependencies specified
         end
         config.verbose = true
@@ -133,9 +133,9 @@ module Pod
 
         source = mock('source', :name => 'mock_repo', :git? => true)
         config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
-        config.sources_manager.expects(:find_or_create_source_with_url).with('https://github.com/CocoaPods/Specs.git').returns(config.sources_manager.master.first)
+        config.sources_manager.expects(:find_or_create_source_with_url).with(TrunkSource::TRUNK_REPO_URL).returns(config.sources_manager.master.first)
         config.sources_manager.expects(:update).once.with('mock_repo', true)
-        config.sources_manager.expects(:update).once.with('master', true)
+        config.sources_manager.expects(:update).once.with('trunk', true)
 
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
         analyzer.sources.should == [config.sources_manager.master.first, source]
@@ -1341,7 +1341,7 @@ module Pod
 
         analyzer.analyze.specifications.
           find { |s| s.name == 'AFNetworking' }.
-          version.to_s.should == '2.6.3'
+          version.to_s.should == '2.7.0'
       end
 
       it 'unlocks only local pod when specification checksum changes' do
@@ -1449,7 +1449,7 @@ module Pod
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           source 'https://example.com/example/specs.git'
-          source 'https://github.com/cocoapods/specs.git'
+          source TrunkSource::TRUNK_REPO_URL
           target 'SampleProject' do
             pod 'JSONKit', '1.5pre'
           end
@@ -1459,7 +1459,7 @@ module Pod
         hash['DEPENDENCIES'] = %w(JSONKit)
         hash['SPEC CHECKSUMS'] = {}
         hash['SPEC REPOS'] = {
-          'https://github.com/cocoapods/specs.git' => ['JSONKit'],
+          TrunkSource::TRUNK_REPO_URL => ['JSONKit'],
         }
         hash['COCOAPODS'] = Pod::VERSION
         lockfile = Pod::Lockfile.new(hash)
@@ -1477,7 +1477,6 @@ module Pod
         master_source = config.sources_manager.master.first
 
         analyzer.stubs(:sources).returns([example_source, master_source])
-
         # if we prefered the first source (the default), we also would have resolved Nope
         analyzer.analyze.specs_by_source.
           should == {
@@ -1540,7 +1539,6 @@ module Pod
 
       it 'warns when a dependency is duplicated' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
           project 'SampleProject/SampleProject'
           platform :ios, '8.0'
           target 'SampleProject' do
@@ -1996,8 +1994,7 @@ module Pod
         describe '#sources' do
           describe 'when there are no explicit sources' do
             it 'defaults to the master spec repository' do
-              @analyzer.send(:sources).map(&:url).should ==
-                ['https://github.com/CocoaPods/Specs.git']
+              @analyzer.send(:sources).map(&:url).should == [TrunkSource::TRUNK_REPO_URL]
             end
           end
 
@@ -2035,7 +2032,7 @@ module Pod
       it 'raises when dependencies with the same name have different ' \
         'external sources' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source TrunkSource::TRUNK_REPO_URL
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
@@ -2054,7 +2051,7 @@ module Pod
       it 'raises when dependencies with the same root name have different ' \
         'external sources' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source TrunkSource::TRUNK_REPO_URL
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
@@ -2073,7 +2070,7 @@ module Pod
       it 'raises when dependencies with the same name have different ' \
         'external sources with one being nil' do
         podfile = Podfile.new do
-          source 'https://github.com/CocoaPods/Specs.git'
+          source TrunkSource::TRUNK_REPO_URL
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do

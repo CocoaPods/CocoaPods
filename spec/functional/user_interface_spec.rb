@@ -15,7 +15,7 @@ module Pod
       output.should.include? 'CocoaLumberjack'
       output.should.include? '1.0'
       output.should.include? '1.1'
-      output.should.include? '[master repo]'
+      output.should.include? '[trunk repo]'
       output.should.include? 'A fast & simple, yet powerful & flexible logging framework for Mac and iOS.'
       output.should.include? 'https://github.com/CocoaLumberjack/CocoaLumberjack'
       output.should.include? 'https://github.com/CocoaLumberjack/CocoaLumberjack.git'
@@ -41,6 +41,7 @@ module Pod
     end
 
     it 'presents the stats of a specification set' do
+      Specification::Set::Presenter.any_instance.expects(:platform).returns('iOS 5.0 - macOS 10.7')
       Specification::Set::Presenter.any_instance.expects(:github_stargazers).returns('318')
       Specification::Set::Presenter.any_instance.expects(:github_forks).returns('42')
       UI.pod(@set, :stats)

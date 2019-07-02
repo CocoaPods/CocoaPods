@@ -120,7 +120,7 @@ module Pod
         end
 
         it 'for --sources' do
-          exception = lambda { run_command('update', '--sources=master') }.should.raise Informative
+          exception = lambda { run_command('update', '--sources=trunk') }.should.raise Informative
           exception.message.should.include "No `Podfile.lock' found in the project directory"
         end
       end

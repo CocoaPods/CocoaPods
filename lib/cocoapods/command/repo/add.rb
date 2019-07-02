@@ -36,7 +36,7 @@ module Pod
           end
           if @name == 'master' || @url =~ %r{github.com[:/]+cocoapods/specs}i
             raise Informative,
-                  'To setup the master specs repo, please run `pod setup`.'
+                  'Master repo via git has been replaced with a CDN-based solution.'
           end
         end
 

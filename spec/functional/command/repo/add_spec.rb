@@ -44,14 +44,14 @@ module Pod
       e.message.should.match /Could not create '#{tmp_repos_path}', the CocoaPods repo cache directory./
     end
 
-    it 'raises an informative error when attempting to add the master repo' do
+    it 'raises an informative error when attempting to add the old master repo' do
       master = command('repo', 'add', 'master', 'https://github.com/foo/bar.git')
       should.raise(Informative) { master.validate! }.message.should.
-        include('To setup the master specs repo, please run `pod setup`')
+        include('Master repo via git has been replaced with a CDN-based solution.')
 
       master = command('repo', 'add', 'foo-bar', 'https://github.com/CocoaPods/Specs.git')
       should.raise(Informative) { master.validate! }.message.should.
-        include('To setup the master specs repo, please run `pod setup`')
+        include('Master repo via git has been replaced with a CDN-based solution.')
     end
   end
 end

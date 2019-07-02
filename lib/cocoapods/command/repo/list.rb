@@ -19,10 +19,10 @@ module Pod
 
         # @output  Examples:
         #
-        #          master
-        #          - type: git (master)
-        #          - URL:  https://github.com/CocoaPods/Specs.git
-        #          - path: /Users/lascorbe/.cocoapods/repos/master
+        #          trunk
+        #          - type: CDN
+        #          - URL:  https://cdn.cocoapods.org/
+        #          - path: /Users/lascorbe/.cocoapods/repos/trunk
         #
         #          test
         #          - type: local copy
@@ -45,7 +45,9 @@ module Pod
         # @return [void]
         #
         def print_source(source)
-          if source.git?
+          if source.is_a?(Pod::CDNSource)
+            UI.puts '- Type: CDN'
+          elsif source.git?
             branch_name, = Executable.capture_command('git', %w(name-rev --name-only HEAD), :capture => :out, :chdir => source.repo)
             branch_name.strip!
             branch_name = 'unknown' if branch_name.empty?
