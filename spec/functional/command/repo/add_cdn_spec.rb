@@ -25,11 +25,6 @@ YAML
                                                                                                 :headers => {})
     end
 
-    after do
-      WebMock.reset!
-      WebMock.disable!
-    end
-
     it 'adds a spec-repo' do
       run_command('repo', 'add-cdn', 'private', TEST_REPO_URL)
       Dir.chdir(config.repos_dir + 'private') do

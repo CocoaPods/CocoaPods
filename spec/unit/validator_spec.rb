@@ -11,11 +11,6 @@ module Pod
       WebMock.disable_net_connect!
     end
 
-    after do
-      WebMock.reset!
-      WebMock.disable!
-    end
-
     before do
       Validator.any_instance.stubs(:xcodebuild).returns('')
       Validator.any_instance.stubs(:xcodebuild_available?).returns(true)

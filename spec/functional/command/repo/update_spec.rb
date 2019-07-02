@@ -16,10 +16,6 @@ module Pod
         to_return(:status => 200, :body => '', :headers => {})
     end
 
-    after do
-      WebMock.reset!
-    end
-
     it 'updates a repository' do
       upstream = SpecHelper.temporary_directory + 'upstream'
       FileUtils.cp_r(test_repo_path, upstream)
