@@ -435,7 +435,7 @@ module Pod
       unless spec.available_platforms.any? { |p| target_platform.to_sym == p.to_sym }
         raise Informative, "The platform of the target `#{target.name}` "     \
           "(#{target.platform}) is not compatible with `#{spec}`, which does "  \
-          "not support `#{target.platform.name}`."
+          "not support `#{target.platform.string_name}`."
       end
     end
 
