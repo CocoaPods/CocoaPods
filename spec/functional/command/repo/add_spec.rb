@@ -44,10 +44,10 @@ module Pod
       e.message.should.match /Could not create '#{tmp_repos_path}', the CocoaPods repo cache directory./
     end
 
-    it 'raises an informative error when attempting to add the old master repo' do
-      master = command('repo', 'add', 'master', 'https://github.com/foo/bar.git')
+    it 'raises an informative error when attempting to add `trunk`' do
+      master = command('repo', 'add', 'trunk', 'https://github.com/foo/bar.git')
       should.raise(Informative) { master.validate! }.message.should.
-        include('Master repo via git has been replaced with a CDN-based solution.')
+        include("Repo name `trunk` is reserved for CocoaPods' main spec repo accessed via CDN.")
     end
   end
 end
