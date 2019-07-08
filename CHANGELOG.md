@@ -17,8 +17,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [hovox](https://github.com/hovox)
   [#8797](https://github.com/CocoaPods/CocoaPods/issues/8797)
 
-##### Enhancements
-
 * Add support for Specification Info.plist DSL  
   [Eric Amorde](https://github.com/amorde)
   [#8753](https://github.com/CocoaPods/CocoaPods/issues/8753)
@@ -47,6 +45,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Always suggest `pod repo update` on dependency resolution conflict,
   unless repo update was specifically requested.
   [Artem Sheremet](https://github.com/dotdoom)
+  [#8768](https://github.com/CocoaPods/CocoaPods/pull/8768)
 
 * Set Default Module for Storyboards in resource bundle targets.  
    [James Treanor](https://github.com/jtreanor)
