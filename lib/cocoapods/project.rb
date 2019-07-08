@@ -53,7 +53,7 @@ module Pod
       @development_pods = new_group('Development Pods')
       @dependencies_group = new_group('Dependencies')
       @pod_target_subproject = pod_target_subproject
-      @project_name = Pathname(path).basename('.*')
+      @project_name = Pathname(path).basename('.*').to_s
       self.symroot = LEGACY_BUILD_ROOT
     end
 

@@ -301,13 +301,24 @@ module Pod
         end
       end
 
-      it 'respects the no clean option' do
+      it 'respects the no clean option when set to true' do
         file = write_podspec(stub_podspec)
         validator = Validator.new(file, config.sources_manager.master.map(&:url))
         validator.stubs(:validate_url)
+        validator.stubs(:download_pod)
         validator.no_clean = true
+        validator.expects(:clean!).never
         validator.validate
-        validator.validation_dir.should.exist
+      end
+
+      it 'respects the no clean option when set to false' do
+        file = write_podspec(stub_podspec)
+        validator = Validator.new(file, config.sources_manager.master.map(&:url))
+        validator.stubs(:validate_url)
+        validator.stubs(:download_pod)
+        validator.no_clean = false
+        validator.expects(:clean!).once
+        validator.validate
       end
 
       describe 'Platforms' do
@@ -765,8 +776,7 @@ module Pod
           app_project_path = @validator.validation_dir + 'App.xcodeproj'
           pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
           pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
-          installer = stub(:pod_targets => [pod_target])
-          installer.stubs(:pods_project).returns(pods_project)
+          installer = stub('Installer', :pod_targets => [pod_target], :pods_project => pods_project)
           Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
           Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
           @validator.stubs(:shares_pod_target_xcscheme?).returns(true)
@@ -788,8 +798,7 @@ module Pod
           pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
           pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
           pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
-          installer = stub(:pod_targets => [pod_target])
-          installer.stubs(:pods_project).returns(pods_project)
+          installer = stub('Installer', :pod_targets => [pod_target], :pods_project => pods_project)
           Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
           Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
           @validator.stubs(:shares_pod_target_xcscheme?).returns(true)
@@ -809,8 +818,7 @@ module Pod
           pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
           pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
           pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
-          installer = stub(:pod_targets => [pod_target])
-          installer.stubs(:pods_project).returns(pods_project)
+          installer = stub('Installer', :pod_targets => [pod_target], :pods_project => pods_project)
           Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
           Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').never
           @validator.stubs(:shares_pod_target_xcscheme?).returns(false)
@@ -1333,10 +1341,9 @@ module Pod
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
-          aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration.build_settings['SWIFT_VERSION'].should == '4.0'
         end
 
@@ -1352,10 +1359,9 @@ module Pod
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
-          aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration.build_settings['SWIFT_VERSION'].should == '4.2'
         end
 
@@ -1370,10 +1376,9 @@ module Pod
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
-          aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration.build_settings['SWIFT_VERSION'].should == '4.0'
         end
 
@@ -1388,10 +1393,9 @@ module Pod
           pod_target_installation_one = stub(:target => pod_target, :native_target => native_target,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'JSONKit' => pod_target_installation_one }
-          aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration.build_settings['SWIFT_VERSION'].should == '4.0'
         end
 
@@ -1410,18 +1414,15 @@ module Pod
                                          :test_native_targets => [test_native_target],
                                          :test_specs_by_native_target => { test_native_target => test_podspec })
           pod_target_installation_results = { 'PodTarget' => pod_target_installation }
-          aggregate_target = stub(:pod_targets => [pod_target])
           installer = stub(:pod_targets => [pod_target])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration.build_settings['SWIFT_VERSION'].should == '4.2'
           test_debug_configuration.build_settings['SWIFT_VERSION'].should == '4.2'
         end
 
         it 'honors the swift version set for dependencies ignoring swift version of the target being validated' do
           validator = test_swiftpod_with_swift_version_parameter('4.0')
-          consumer = stub(:platform_name => 'iOS')
-          validator.instance_variable_set(:@consumer, consumer)
           debug_configuration_one = stub(:build_settings => {})
           debug_configuration_two = stub(:build_settings => {})
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
@@ -1434,18 +1435,15 @@ module Pod
           pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
-          aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
           installer = stub(:pod_targets => [pod_target_one, pod_target_two])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '3.2'
         end
 
         it 'honors the swift version set for dependencies if they support it' do
           validator = test_swiftpod_with_swift_version_parameter('4.0')
-          consumer = stub(:platform_name => 'iOS')
-          validator.instance_variable_set(:@consumer, consumer)
           debug_configuration_one = stub(:build_settings => {})
           debug_configuration_two = stub(:build_settings => {})
           native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
@@ -1458,10 +1456,9 @@ module Pod
           pod_target_installation_two = stub(:target => pod_target_two, :native_target => native_target_two,
                                              :test_native_targets => [], :test_specs_by_native_target => {})
           pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one, 'PodTarget2' => pod_target_installation_two }
-          aggregate_target = stub(:pod_targets => [pod_target_one, pod_target_two])
           installer = stub(:pod_targets => [pod_target_one, pod_target_two])
           validator.instance_variable_set(:@installer, installer)
-          validator.send(:configure_pod_targets, [aggregate_target], [pod_target_installation_results], '9.0')
+          validator.send(:configure_pod_targets, [pod_target_installation_results])
           debug_configuration_one.build_settings['SWIFT_VERSION'].should == '4.0'
           debug_configuration_two.build_settings['SWIFT_VERSION'].should == '4.0'
         end

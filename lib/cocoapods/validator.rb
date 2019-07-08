@@ -415,7 +415,12 @@ module Pod
       end
     end
 
+    # @return [Consumer] the consumer for the current platform being validated
+    #
     attr_accessor :consumer
+
+    # @return [String, Nil] the name of the current subspec being validated, or nil if none
+    #
     attr_accessor :subspec_name
 
     # Performs validation of a URL
@@ -531,8 +536,12 @@ module Pod
     end
 
     def tear_down_validation_environment
-      validation_dir.rmtree unless no_clean
+      clean! unless no_clean
       Config.instance = @original_config
+    end
+
+    def clean!
+      validation_dir.rmtree
     end
 
     def deployment_target
@@ -595,11 +604,15 @@ module Pod
          perform_post_install_actions).each { |m| @installer.send(m) }
 
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
-      configure_pod_targets(@installer.aggregate_targets, @installer.target_installation_results, deployment_target)
+      configure_pod_targets(@installer.target_installation_results)
+      validate_dynamic_framework_support(@installer.aggregate_targets, deployment_target)
       @installer.pods_project.save
     end
 
-    def configure_pod_targets(targets, target_installation_results, deployment_target)
+    # @param [Array<Hash{String, TargetInstallationResult}>] target_installation_results
+    #        The installation results to configure
+    #
+    def configure_pod_targets(target_installation_results)
       target_installation_results.first.values.each do |pod_target_installation_result|
         pod_target = pod_target_installation_result.target
         native_target = pod_target_installation_result.native_target
@@ -630,9 +643,21 @@ module Pod
           end
         end
       end
-      targets.each do |target|
-        if target.pod_targets.any?(&:uses_swift?) && consumer.platform_name == :ios &&
-            (deployment_target.nil? || Version.new(deployment_target).major < 8)
+    end
+
+    # Produces an error of dynamic frameworks were requested but are not supported by the deployment target
+    #
+    # @param [Array<AggregateTarget>] aggregate_targets
+    #        The aggregate targets installed by the installer
+    #
+    # @param [String,Version] deployment_target
+    #        The deployment target of the installation
+    #
+    def validate_dynamic_framework_support(aggregate_targets, deployment_target)
+      return unless consumer.platform_name == :ios
+      return unless deployment_target.nil? || Version.new(deployment_target).major < 8
+      aggregate_targets.each do |target|
+        if target.pod_targets.any?(&:uses_swift?)
           uses_xctest = target.spec_consumers.any? { |c| (c.frameworks + c.weak_frameworks).include? 'XCTest' }
           error('swift', 'Swift support uses dynamic frameworks and is therefore only supported on iOS > 8.') unless uses_xctest
         end

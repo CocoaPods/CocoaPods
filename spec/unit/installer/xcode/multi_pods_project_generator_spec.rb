@@ -209,7 +209,7 @@ module Pod
             projects_by_pod_targets = pod_generator_result.projects_by_pod_targets
             pods_project = pod_generator_result.project
             projects = projects_by_pod_targets.keys
-            banana_project = projects.find { |p| p.path.basename.to_s == 'BananaLib.xcodeproj' }
+            banana_project = projects.find { |p| p.project_name == 'BananaLib' }
             banana_project.should.be.not.nil
             banana_group = banana_project.group_for_spec('BananaLib')
             banana_group.files.map(&:name).sort.should == [
@@ -220,19 +220,19 @@ module Pod
               'MoreBanana.h',
             ]
 
-            monkey_project = projects.find { |p| p.path.basename.to_s == 'monkey.xcodeproj' }
+            monkey_project = projects.find { |p| p.project_name == 'monkey' }
             monkey_project.should.not.be.nil
             monkey_group = monkey_project.group_for_spec('monkey')
             monkey_group.files.map(&:name).sort.should.be.empty # pre-built pod
 
-            orange_project = projects.find { |p| p.path.basename.to_s == 'OrangeFramework.xcodeproj' }
+            orange_project = projects.find { |p| p.project_name == 'OrangeFramework' }
             orange_project.should.not.be.nil
             organge_framework_group = orange_project.group_for_spec('OrangeFramework')
             organge_framework_group.files.map(&:name).sort.should. == [
               'Juicer.swift',
             ]
 
-            coconut_project = projects.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
+            coconut_project = projects.find { |p| p.project_name == 'CoconutLib' }
             coconut_project.should.not.be.nil
             coconut_group = coconut_project.group_for_spec('CoconutLib')
             coconut_group.files.map(&:name).sort.should == [
@@ -251,11 +251,11 @@ module Pod
             pod_generator_result = @generator.generate!
             pods_project = pod_generator_result.project
             projects = pod_generator_result.projects_by_pod_targets.keys
-            banana_project = projects.find { |p| p.path.basename.to_s == 'BananaLib.xcodeproj' }
-            coconut_project = projects.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
-            monkey_project = projects.find { |p| p.path.basename.to_s == 'monkey.xcodeproj' }
-            orange_project = projects.find { |p| p.path.basename.to_s == 'OrangeFramework.xcodeproj' }
-            watermelon_project = projects.find { |p| p.path.basename.to_s == 'WatermelonLib.xcodeproj' }
+            banana_project = projects.find { |p| p.project_name == 'BananaLib' }
+            coconut_project = projects.find { |p| p.project_name == 'CoconutLib' }
+            monkey_project = projects.find { |p| p.project_name == 'monkey' }
+            orange_project = projects.find { |p| p.project_name == 'OrangeFramework' }
+            watermelon_project = projects.find { |p| p.project_name == 'WatermelonLib' }
             banana_project.should.not.be.nil
             coconut_project.should.not.be.nil
             monkey_project.should.not.be.nil
@@ -309,7 +309,7 @@ module Pod
           it 'installs dependencies for app specs' do
             pod_generator_result = @generator.generate!
             projects = pod_generator_result.projects_by_pod_targets.keys
-            grapefruits_project = projects.find { |p| p.path.basename.to_s == 'GrapefruitsLib.xcodeproj' }
+            grapefruits_project = projects.find { |p| p.project_name == 'GrapefruitsLib' }
             grapefruits_project.main_group['Dependencies'].find_file_by_path('BananaLib.xcodeproj').should.not.be.nil
           end
 
@@ -317,18 +317,18 @@ module Pod
             pod_generator_result = @generator.generate!
             pods_project = pod_generator_result.project
             projects = pod_generator_result.projects_by_pod_targets.keys
-            banana_project = projects.find { |p| p.path.basename.to_s == 'BananaLib.xcodeproj' }
-            coconut_project = projects.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
-            monkey_project = projects.find { |p| p.path.basename.to_s == 'monkey.xcodeproj' }
+            banana_project = projects.find { |p| p.project_name == 'BananaLib' }
+            coconut_project = projects.find { |p| p.project_name == 'CoconutLib' }
+            monkey_project = projects.find { |p| p.project_name == 'monkey' }
             banana_project.should.not.be.nil
             coconut_project.should.not.be.nil
             monkey_project.should.not.be.nil
 
-            banana_project.targets.find { |t| t.name == 'BananaLib-iOS' }.dependencies.map(&:name).should.be.empty
-            banana_project.targets.find { |t| t.name == 'BananaLib-macOS' }.dependencies.map(&:name).should.be.empty
-            coconut_project.targets.find { |t| t.name == 'CoconutLib-macOS' }.dependencies.map(&:name).should.be.empty
-            monkey_project.targets.find { |t| t.name == 'monkey-iOS' }.dependencies.map(&:name).should.be.empty
-            monkey_project.targets.find { |t| t.name == 'monkey-macOS' }.dependencies.map(&:name).should.be.empty
+            banana_project.targets.find { |t| t.name == 'BananaLib-iOS' }.dependencies.should.be.empty
+            banana_project.targets.find { |t| t.name == 'BananaLib-macOS' }.dependencies.should.be.empty
+            coconut_project.targets.find { |t| t.name == 'CoconutLib-macOS' }.dependencies.should.be.empty
+            monkey_project.targets.find { |t| t.name == 'monkey-iOS' }.dependencies.should.be.empty
+            monkey_project.targets.find { |t| t.name == 'monkey-macOS' }.dependencies.should.be.empty
             coconut_project.targets.find { |t| t.name == 'CoconutLib-iOS' }.dependencies.map(&:name).sort.should == [
               'OrangeFramework',
             ]
@@ -380,7 +380,7 @@ module Pod
           end
 
           it 'sets resource bundle target dependencies' do
-            @banana_spec.resource_bundles = { 'BananaLibResourcesBundle' => '**/*' }
+            @banana_spec.resource_bundles = { 'BananaLibResourcesBundle' => 'Resources/logo-sidebar.png' }
             pod_generator_result = @generator.generate!
             banana_project = pod_generator_result.projects_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'BananaLib.xcodeproj' }
             banana_project.should.not.be.nil
@@ -395,7 +395,7 @@ module Pod
           end
 
           it 'sets test resource bundle dependencies' do
-            @coconut_test_spec.resource_bundles = { 'CoconutLibTestResourcesBundle' => '**/*' }
+            @coconut_test_spec.resource_bundles = { 'CoconutLibTestResourcesBundle' => 'Coconut.h' }
             pod_generator_result = @generator.generate!
             coconut_project = pod_generator_result.projects_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
             coconut_project.should.not.be.nil
@@ -614,6 +614,11 @@ module Pod
           end
 
           describe '#write' do
+            before do
+              Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
+              Xcodeproj::Project.any_instance.stubs(:save)
+            end
+
             it 'recursively sorts the project' do
               pod_generator_result = @generator.generate!
               pods_project = pod_generator_result.project
@@ -621,7 +626,6 @@ module Pod
               pod_generator_result.projects_by_pod_targets.keys.each do |target_project|
                 target_project.main_group.expects(:sort)
               end
-              Xcodeproj::Project.any_instance.stubs(:recreate_user_schemes)
               generated_projects = [pods_project] + pod_generator_result.projects_by_pod_targets.keys
               Xcode::PodsProjectWriter.new(@generator.sandbox, generated_projects,
                                            pod_generator_result.target_installation_results.pod_target_installation_results,
@@ -733,7 +737,7 @@ module Pod
               pod_generator_result = @generator.generate!
 
               projects_by_pod_targets = pod_generator_result.projects_by_pod_targets
-              coconut_project = projects_by_pod_targets.keys.find { |p| p.path.basename.to_s == 'CoconutLib.xcodeproj' }
+              coconut_project = projects_by_pod_targets.keys.find { |p| p.project_name == 'CoconutLib' }
 
               Xcode::PodsProjectWriter.new(config.sandbox, [coconut_project],
                                            pod_generator_result.target_installation_results.pod_target_installation_results,

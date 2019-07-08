@@ -460,11 +460,8 @@ module Pod
       # @param  [Hash{TargetDefinition => TargetInspectionResult}] target_inspections
       #         the user target inspections used to construct the aggregate and pod targets.
       #
-      # @param  [Array<PodTarget>] pod_targets
-      #         the pod targets, which were generated.
-      #
-      # @param  [Hash{Podfile::TargetDefinition => Array<ResolvedSpecification>}] resolver_specs_by_target
-      #         the resolved specifications grouped by target.
+      # @param  [Hash{Podfile::TargetDefinition => Array<PodTarget>}] pod_targets_by_target_definition
+      #         the pod targets grouped by target.
       #
       # @return [AggregateTarget]
       #
@@ -499,6 +496,9 @@ module Pod
 
       # Returns a filtered list of pod targets that should or should not be part of the target definition. Pod targets
       # used by tests only are filtered.
+      #
+      # @return [Hash{TargetDefinition => Array<PodTarget>}]
+      #
       def group_pod_targets_by_target_definition(pod_targets, resolver_specs_by_target)
         pod_targets_by_target_definition = Hash.new { |h, td| h[td] = [] }
         pod_targets.each do |pod_target|
@@ -626,7 +626,7 @@ module Pod
       # @param  [Array<PodTarget>] pod_targets
       #         pod targets.
       #
-      # @param  [Hash{String => Array<Specification>}] specs_by_name
+      # @param  [Hash{String => Array<Specification>}] all_specs
       #         specifications grouped by name.
       #
       # @return [Array<PodTarget>]
