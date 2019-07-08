@@ -5,16 +5,10 @@ dist: trusty
 cache:
   bundler: true
 
-git:
-  # we do these manually to just download a tarball of the master submodule
-  submodules: false
-
 matrix:
   include:
   - rvm: 2.4.1
     env: COCOAPODS_CI_TASKS=LINT
-    git:
-      submodules: false
 
 rvm:
   - 2.0.0-p647
@@ -31,10 +25,6 @@ branches:
     - /.+-stable$/
 
 before_install:
-  - |
-      if [ "$COCOAPODS_CI_TASKS" != "LINT" ]; then
-        git submodule update --init
-      fi
   # There is a bug in travis. When using system ruby, bundler is not
   # installed and causes the default install action to fail.
   - if [ "$TRAVIS_RUBY_VERSION" = "system" ]; then sudo gem install "bundler:~> 1.15.0"; else gem install "bundler:~> 1.15.0"; fi
