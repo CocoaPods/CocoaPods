@@ -40,6 +40,7 @@ require 'claide'
 
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
 require 'spec_helper/fixture'         # Provides access to the fixtures and unpacks them if needed.
+require 'spec_helper/temporary_directory' # Allows to create and modify temporary directories.
 require 'spec_helper/temporary_repos' # Allows to create and modify temporary spec repositories.
 require 'spec_helper/temporary_cache' # Allows to create temporary cache directory.
 require 'spec_helper/user_interface'  # Redirects UI to UI.output & UI.warnings.
