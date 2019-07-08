@@ -88,7 +88,7 @@ module Pod
 
               if target.build_as_framework?
                 unless skip_info_plist?(native_target)
-                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
+                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform, :additional_entries => target.info_plist_entries)
                 end
                 create_build_phase_to_symlink_header_folders(native_target)
               end
@@ -366,7 +366,9 @@ module Pod
               # Generate vanilla Info.plist for test target similar to the one Xcode generates for new test target.
               # This creates valid test bundle accessible at the runtime, allowing tests to load bundle resources
               # defined in podspec.
-              create_info_plist_file(target.info_plist_path_for_spec(test_spec), test_native_target, '1.0', target.platform, :bndl)
+              additional_entries = spec_consumer.info_plist
+              path = target.info_plist_path_for_spec(test_spec)
+              create_info_plist_file(path, test_native_target, '1.0', target.platform, :bndl, :additional_entries => additional_entries)
 
               test_native_target
             end
@@ -395,12 +397,15 @@ module Pod
           #
           def add_app_targets
             target.app_specs.map do |app_spec|
+              spec_consumer = app_spec.consumer(target.platform)
               spec_name = app_spec.parent.name
               subspec_name = target.subspec_label(app_spec)
               app_target_label = target.app_target_label(app_spec)
               platform = target.platform
+              info_plist_entries = spec_consumer.info_plist
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
-                                                       app_target_label, :add_main => false).install!
+                                                       app_target_label, :add_main => false,
+                                                                         :info_plist_entries => info_plist_entries).install!
 
               app_native_target.product_reference.name = app_target_label
               target.user_build_configurations.each do |bc_name, type|

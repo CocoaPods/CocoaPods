@@ -447,6 +447,12 @@ module Pod
       support_files_dir + "#{label}-prefix.pch"
     end
 
+    # @return [Hash] the additional entries to add to the generated Info.plist
+    #
+    def info_plist_entries
+      root_spec.info_plist
+    end
+
     # @param  [String] bundle_name
     #         The name of the bundle product, which is given by the +spec+.
     #
