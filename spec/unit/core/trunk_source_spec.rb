@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe TrunkSource do
     before do
-      @path = fixture('spec-repos/trunk')
+      @path = fixture('spec-repos-core/trunk')
       @source = TrunkSource.new(@path)
     end
 

@@ -8,7 +8,7 @@ module Pod
 
     describe 'In general' do
       before do
-        fixture_path = 'spec-repos/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
+        fixture_path = 'spec-repos-core/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
         @podspec_path = fixture(fixture_path)
       end
 
@@ -48,7 +48,7 @@ module Pod
       end
 
       before do
-        fixture_path = 'spec-repos/test_repo/Specs/BananaLib/1.1/BananaLib.podspec'
+        fixture_path = 'spec-repos-core/test_repo/Specs/BananaLib/1.1/BananaLib.podspec'
         @podspec_path = fixture(fixture_path)
         @linter = Specification::Linter.new(@podspec_path)
       end
@@ -61,7 +61,7 @@ module Pod
 
       describe 'with a spec loaded from json' do
         before do
-          fixture_path = 'spec-repos/test_repo/Specs/BananaLib/1.1/BananaLib.podspec'
+          fixture_path = 'spec-repos-core/test_repo/Specs/BananaLib/1.1/BananaLib.podspec'
           podspec_path = fixture(fixture_path)
           podspec = Pod::Specification.from_file(podspec_path)
           json = podspec.to_pretty_json
@@ -153,7 +153,7 @@ module Pod
 
     describe 'Root spec' do
       before do
-        @fixture_path = 'spec-repos/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
+        @fixture_path = 'spec-repos-core/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
       end
 
       behaves_like 'Linter'

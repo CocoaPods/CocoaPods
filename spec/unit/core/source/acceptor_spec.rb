@@ -12,7 +12,7 @@ module Pod
       @spec_path = fixture('BananaLib.podspec')
       @spec = Specification.from_file(@spec_path)
       Specification.any_instance.stubs(:dependencies).returns([])
-      @repo = fixture('spec-repos/test_repo')
+      @repo = fixture('spec-repos-core/test_repo')
       @acceptor = Source::Acceptor.new(@repo)
     end
 

@@ -85,7 +85,7 @@ module Pod
     end
 
     def self.specs
-      repo_path      = 'spec-repos/test_repo/'
+      repo_path      = 'spec-repos-core/test_repo/'
       bananalib_path = repo_path + 'Specs/BananaLib/1.0/BananaLib.podspec'
       jsonkit_path   = repo_path + 'Specs/JSONKit/1.4/JSONKit.podspec'
 
@@ -110,8 +110,8 @@ module Pod
 
     def self.specs_by_source
       {
-        TrunkSource.new(fixture('spec-repos/trunk')) => specs.reject { |s| s.name == 'JSONKit' },
-        Source.new(fixture('spec-repos/test_repo')) => [],
+        TrunkSource.new(fixture('spec-repos-core/trunk')) => specs.reject { |s| s.name == 'JSONKit' },
+        Source.new(fixture('spec-repos-core/test_repo')) => [],
       }
     end
   end
@@ -217,12 +217,12 @@ module Pod
       end
 
       it 'only includes root names in spec repo sources' do
-        @lockfile = Lockfile.generate(Sample.podfile, [], {}, TrunkSource.new(fixture('spec-repos/trunk')) => Pod::Spec.new do |s|
-                                                                                                                s.name = 'foo'
-                                                                                                                s.version = '1.0.0'
-                                                                                                                s.subspec 'Core'
-                                                                                                                s.subspec 'NotCore'
-                                                                                                              end.recursive_subspecs)
+        @lockfile = Lockfile.generate(Sample.podfile, [], {}, TrunkSource.new(fixture('spec-repos-core/trunk')) => Pod::Spec.new do |s|
+                                                                                                                     s.name = 'foo'
+                                                                                                                     s.version = '1.0.0'
+                                                                                                                     s.subspec 'Core'
+                                                                                                                     s.subspec 'NotCore'
+                                                                                                                   end.recursive_subspecs)
         @lockfile.pods_by_spec_repo.should == {
           'trunk' => %w(foo),
         }
@@ -450,7 +450,7 @@ module Pod
         checkout_options = {
           'BananaLib' => { :git => 'www.example.com', :tag => '1.0' },
         }
-        specs_by_source = { TrunkSource.new(fixture('spec-repos/trunk')) => specs.select { |s| s.name == 'monkey' } }
+        specs_by_source = { TrunkSource.new(fixture('spec-repos-core/trunk')) => specs.select { |s| s.name == 'monkey' } }
         lockfile = Lockfile.generate(podfile, specs, checkout_options, specs_by_source)
         lockfile.internal_data['DEPENDENCIES'][0].should == 'BananaLib (from `www.example.com`, tag `1.0`)'
         lockfile.internal_data['EXTERNAL SOURCES']['BananaLib'].should == { :git => 'www.example.com', :tag => '1.0' }
@@ -598,7 +598,7 @@ module Pod
       describe '#generate_spec_repos' do
         it 'sorts specs per spec repo by lowercase' do
           spec_repos = {
-            TrunkSource.new(fixture('spec-repos/trunk')) => [
+            TrunkSource.new(fixture('spec-repos-core/trunk')) => [
               Specification.new do |s|
                 s.name = 'a'
                 s.version = '1.0'

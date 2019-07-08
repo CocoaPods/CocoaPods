@@ -4,7 +4,7 @@ module Pod
   describe Specification::Set::Presenter do
     describe 'Set Information' do
       before do
-        sources = [TrunkSource.new(fixture('spec-repos/trunk')), Source.new(fixture('spec-repos/test_repo'))]
+        sources = [TrunkSource.new(fixture('spec-repos-core/trunk')), Source.new(fixture('spec-repos-core/test_repo'))]
         sets = Source::Aggregate.new(sources).search_by_name('JSONKit')
         set = sets.find { |s| s.name == 'JSONKit' }
         @presenter = Spec::Set::Presenter.new(set)
@@ -47,7 +47,7 @@ module Pod
 
     describe 'Specification Information' do
       before do
-        @source = TrunkSource.new(fixture('spec-repos/trunk'))
+        @source = TrunkSource.new(fixture('spec-repos-core/trunk'))
         set = Spec::Set.new('CocoaLumberjack', @source)
         @presenter = Spec::Set::Presenter.new(set)
       end
@@ -107,7 +107,7 @@ module Pod
 
     describe 'Statistics' do
       before do
-        @source = TrunkSource.new(fixture('spec-repos/trunk'))
+        @source = TrunkSource.new(fixture('spec-repos-core/trunk'))
         set = Spec::Set.new('CocoaLumberjack', @source)
         metrics = {
           'github' => {

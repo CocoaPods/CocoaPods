@@ -4,7 +4,7 @@ module Pod
   describe Specification::Linter::Analyzer do
     describe 'File patterns & Build settings' do
       before do
-        fixture_path = 'spec-repos/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
+        fixture_path = 'spec-repos-core/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
         podspec_path = fixture(fixture_path)
         linter = Specification::Linter.new(podspec_path)
         @spec = linter.spec

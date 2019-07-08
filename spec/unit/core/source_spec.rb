@@ -3,7 +3,7 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe Source do
     before do
-      @path = fixture('spec-repos/test_repo')
+      @path = fixture('spec-repos-core/test_repo')
       @source = Source.new(@path)
     end
 
@@ -34,7 +34,7 @@ module Pod
       end
 
       it "raises if the repo doesn't exists" do
-        @path = fixture('spec-repos/non_existing')
+        @path = fixture('spec-repos-core/non_existing')
         @source = Source.new(@path)
         should.raise Informative do
           @source.pods
@@ -142,7 +142,7 @@ module Pod
 
       describe '#search_by_name' do
         it 'properly configures the sources of a set in search by name' do
-          source = Source.new(fixture('spec-repos/test_repo'))
+          source = Source.new(fixture('spec-repos-core/test_repo'))
           sets = source.search_by_name('monkey', true)
           sets.count.should == 1
           set = sets.first
@@ -151,7 +151,7 @@ module Pod
         end
 
         it 'can use regular expressions' do
-          source = Source.new(fixture('spec-repos/test_repo'))
+          source = Source.new(fixture('spec-repos-core/test_repo'))
           sets = source.search_by_name('mon[ijk]ey', true)
           sets.first.name.should == 'BananaLib'
         end
@@ -219,7 +219,7 @@ module Pod
         before do
           # The master source repo uses GitHub, so we recycle that here. Note
           # that we initialize it as just a `Source`, though.
-          @path = fixture('spec-repos/artsy')
+          @path = fixture('spec-repos-core/artsy')
           @source = Source.new(@path)
         end
 
@@ -318,7 +318,7 @@ module Pod
     #-------------------------------------------------------------------------#
 
     before do
-      path = fixture('spec-repos/test_repo')
+      path = fixture('spec-repos-core/test_repo')
       @source = Source.new(path)
     end
 
@@ -338,7 +338,7 @@ module Pod
       end
 
       it 'raises if the repo does not exist' do
-        path = fixture('spec-repos/non_existing')
+        path = fixture('spec-repos-core/non_existing')
         @source = Source.new(path)
         should.raise Informative do
           @source.pods
@@ -361,7 +361,7 @@ module Pod
       end
 
       it 'uses the root of the repo as the specs dir if the `Specs` folder is not present' do
-        repo = fixture('spec-repos/test_repo_without_specs_dir')
+        repo = fixture('spec-repos-core/test_repo_without_specs_dir')
         @source = Source.new(repo)
         @source.send(:specs_dir).to_s.should.end_with('test_repo_without_specs_dir')
       end
@@ -458,7 +458,7 @@ module Pod
 
     describe 'with non-empty prefix lengths' do
       before do
-        @path = fixture('spec-repos/test_prefixed_repo')
+        @path = fixture('spec-repos-core/test_prefixed_repo')
         @source = Source.new(@path)
       end
 

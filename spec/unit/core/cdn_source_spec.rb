@@ -31,7 +31,7 @@ module Pod
 
       @remote_dir = fixture('mock_cdn_repo_remote')
 
-      @path = fixture('spec-repos/test_cdn_repo_local')
+      @path = fixture('spec-repos-core/test_cdn_repo_local')
       cleanup
       save_url('http://localhost:4321/')
 
@@ -86,7 +86,7 @@ module Pod
       end
 
       it "raises if the repo doesn't exist" do
-        path = fixture('spec-repos/non_existing')
+        path = fixture('spec-repos-core/non_existing')
         @source = CDNSource.new(path)
         @source.metadata.should.be.nil?
       end

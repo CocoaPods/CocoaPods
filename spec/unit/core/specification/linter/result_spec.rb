@@ -62,7 +62,7 @@ module Pod
     end
 
     it 'specifies the platform on the result when there is a consumer' do
-      fixture_path = 'spec-repos/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
+      fixture_path = 'spec-repos-core/test_repo/Specs/BananaLib/1.0/BananaLib.podspec'
       podspec_path = fixture(fixture_path)
       linter = Specification::Linter.new(podspec_path)
       @results.consumer = Specification::Consumer.new(linter.spec, :ios)

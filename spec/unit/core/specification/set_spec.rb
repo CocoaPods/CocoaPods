@@ -4,7 +4,7 @@ module Pod
   describe Specification::Set do
     describe 'In general' do
       before do
-        @source = TrunkSource.new(fixture('spec-repos/trunk'))
+        @source = TrunkSource.new(fixture('spec-repos-core/trunk'))
         @set = Spec::Set.new('ReactiveObjC', @source)
       end
 
@@ -46,7 +46,7 @@ module Pod
 
       it 'ignores dot files when getting the version directories' do
         @set.versions
-        `touch #{fixture('spec-repos/trunk/2/2/2/DfPodTest/.DS_Store')}`
+        `touch #{fixture('spec-repos-core/trunk/2/2/2/DfPodTest/.DS_Store')}`
         should.not.raise do
           @set.versions
         end
@@ -58,7 +58,7 @@ module Pod
     describe 'Concerning multiple sources' do
       before do
         # JSONKit is in test repo has version 1.4 (duplicated) and the 999.999.999.
-        repos = [Source.new(fixture('spec-repos/test_repo')), TrunkSource.new(fixture('spec-repos/trunk'))]
+        repos = [Source.new(fixture('spec-repos-core/test_repo')), TrunkSource.new(fixture('spec-repos-core/trunk'))]
         @set = Source::Aggregate.new(repos).search_by_name('JSONKit').find { |set| set.name == 'JSONKit' }
       end
 
@@ -109,7 +109,7 @@ module Pod
 
   describe 'Handling empty directories' do
     before do
-      repos = [Source.new(fixture('spec-repos/test_empty_dir_repo'))]
+      repos = [Source.new(fixture('spec-repos-core/test_empty_dir_repo'))]
       @set = Source::Aggregate.new(repos).search_by_name('EmptyDir_spec').first
     end
 

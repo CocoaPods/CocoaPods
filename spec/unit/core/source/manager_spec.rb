@@ -5,13 +5,13 @@ module Pod
     extend SpecHelper::TemporaryDirectory
 
     before do
-      @test_source = Source.new(fixture('spec-repos/test_repo'))
-      @sources_manager = Source::Manager.new(fixture('spec-repos'))
+      @test_source = Source.new(fixture('spec-repos-core/test_repo'))
+      @sources_manager = Source::Manager.new(fixture('spec-repos-core'))
       @sources_manager.search_index_path = SpecHelper.temporary_directory + 'search_index.json'
     end
 
     after do
-      test_cdn_repo_local_path = fixture('spec-repos/test_cdn_repo_local')
+      test_cdn_repo_local_path = fixture('spec-repos-core/test_cdn_repo_local')
       Pathname.glob(test_cdn_repo_local_path.join('*')).each(&:rmtree)
     end
 
@@ -296,7 +296,7 @@ module Pod
 
     describe 'Master repo' do
       it 'returns the master repo dir' do
-        @sources_manager.master_repo_dir.to_s.should.match %r{fixtures/spec-repos/trunk}
+        @sources_manager.master_repo_dir.to_s.should.match %r{fixtures/spec-repos-core/trunk}
       end
 
       it 'returns an empty array for master sources when the master repo has not been set up' do
