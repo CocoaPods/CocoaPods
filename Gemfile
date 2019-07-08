@@ -39,7 +39,7 @@ group :development do
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 
-  gem 'bacon'
+  gem 'bacon', :git => 'https://github.com/leahneukirchen/bacon.git'
   gem 'mocha'
   gem 'mocha-on-bacon'
   gem 'prettybacon'
