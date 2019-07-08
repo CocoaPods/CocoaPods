@@ -48,6 +48,21 @@ require 'spec_helper/pre_flight'      # Cleans the temporary directory, the conf
 require 'spec_helper/webmock'         # Cleans up mocks after each spec
 require 'spec_helper/mock_source'     # Allows building a mock source from Spec objects.
 
+# CDN repo
+#--------------------------------------#
+
+require 'webrick'
+CDN_MOCK_SERVER = WEBrick::HTTPServer.new(:BindAddress => '0.0.0.0',
+                                          :Port => 4321,
+                                          :DocumentRoot => ROOT + 'spec/fixtures/mock_cdn_repo_remote',
+                                          :Logger => ENV['WEBRICK_DEBUG'].nil? ? WEBrick::Log.new('/dev/null') : nil,
+                                          :AccessLog => ENV['WEBRICK_DEBUG'].nil? ? [] : nil,
+                                         )
+Thread.new do
+  CDN_MOCK_SERVER.start
+  Thread.current.exit
+end
+
 #-----------------------------------------------------------------------------#
 
 ENV['SKIP_SETUP'] = 'true'
