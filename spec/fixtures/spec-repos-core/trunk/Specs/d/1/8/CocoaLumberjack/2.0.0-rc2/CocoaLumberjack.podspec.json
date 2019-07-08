@@ -1,0 +1,62 @@
+{
+  "name": "CocoaLumberjack",
+  "version": "2.0.0-rc2",
+  "license": "BSD",
+  "summary": "A fast & simple, yet powerful & flexible logging framework for Mac and iOS.",
+  "homepage": "https://github.com/CocoaLumberjack/CocoaLumberjack",
+  "authors": {
+    "Robbie Hanson": "robbiehanson@deusty.com"
+  },
+  "source": {
+    "git": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+    "tag": "2.0.0-rc2"
+  },
+  "description": "It is similar in concept to other popular logging frameworks such as log4j, yet is designed specifically for objective-c, and takes advantage of features such as multi-threading, grand central dispatch (if available), lockless atomic operations, and the dynamic nature of the objective-c runtime.",
+  "requires_arc": true,
+  "preserve_paths": [
+    "README.md",
+    "Classes/CocoaLumberjack.{swift,modulemap}"
+  ],
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "public_header_files": "Classes/*.h",
+  "default_subspecs": [
+    "Default",
+    "Extensions"
+  ],
+  "subspecs": [
+    {
+      "name": "Default",
+      "source_files": "Classes/CocoaLumberjack.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Core",
+      "source_files": "Classes/DD*.{h,m}"
+    },
+    {
+      "name": "Extensions",
+      "source_files": "Classes/Extensions/*.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack/Default": [
+
+        ]
+      }
+    },
+    {
+      "name": "CLI",
+      "source_files": "Classes/CLI/*.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack/Default": [
+
+        ]
+      }
+    }
+  ]
+}

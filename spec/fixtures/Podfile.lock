@@ -1,0 +1,71 @@
+PODS:
+  - AFNetworking (2.0.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+    - AFNetworking/UIKit
+  - AFNetworking/NSURLConnection (2.0.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.0.3):
+    - AFNetworking/NSURLConnection
+  - AFNetworking/Reachability (2.0.3)
+  - AFNetworking/Security (2.0.3)
+  - AFNetworking/Serialization (2.0.3)
+  - AFNetworking/UIKit (2.0.3):
+    - AFNetworking/NSURLConnection
+  - AGPhotoBrowser (1.0.6)
+  - BButton (3.2.3)
+  - Bolts (1.1.0)
+  - Facebook-iOS-SDK (3.15.0):
+    - Bolts
+  - FXBlurView (1.4.4)
+  - HPGrowingTextView (1.0.1)
+  - MBProgressHUD (0.8)
+  - Mixpanel (2.3.6)
+  - pop (1.0.5)
+  - SBJson (3.2)
+  - SDWebImage (3.5.4):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.5.4)
+  - SVProgressHUD (HEAD based on 1.0)
+  - SVPullToRefresh (0.4.1)
+  - TestFlightSDK (3.0.2)
+
+DEPENDENCIES:
+  - AFNetworking (~> 2.0.1)
+  - AGPhotoBrowser (~> 1.0.2)
+  - BButton (~> 3.2.3)
+  - Facebook-iOS-SDK (~> 3.14)
+  - FXBlurView (~> 1.4.4)
+  - HPGrowingTextView (~> 1.0.1)
+  - MBProgressHUD (~> 0.8)
+  - Mixpanel (~> 2.3.1)
+  - pop (~> 1.0)
+  - SBJson (~> 3.2)
+  - SDWebImage (~> 3.5.2)
+  - SVProgressHUD (HEAD)
+  - SVPullToRefresh (~> 0.4)
+  - TestFlightSDK (~> 3.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: a4d0e9a64de9242986620dafd1b3cee3b413ac5c
+  AGPhotoBrowser: 04ae5368da3ab003e2c27ac1058bd01d64858893
+  BButton: 3aa14643d262a5ca62012462d3e27c6bbe843c85
+  Bolts: 91c2af8eae1d44e1dd75946a5b0ae04a43ea43e4
+  Facebook-iOS-SDK: d67a9aa373f28b581e00cefdfd5a1ab8f883ac14
+  FXBlurView: 74d89486a2c93dbfed58f8e06ce5ae8b4c2ff92b
+  HPGrowingTextView: 58b5caa61ff7f3d53b197d9da0361b1c7e09b110
+  MBProgressHUD: c356980b0cd097f19acec959b49dca5eb8ec31be
+  Mixpanel: 9aba38257fc4d2777ab5db1afc55e22bdfd57a4a
+  pop: 75fa2b33934200a8a68abb449ac1726fcf7e43b9
+  SBJson: 72d7da8a5bf6c236e87194abb10ac573a8bccbef
+  SDWebImage: 571295c8acbb699505a0f68e54506147c3de9ea7
+  SVProgressHUD: 5034c6e22b8c2ca3e09402e48d41ed0340aa1c50
+  SVPullToRefresh: d5161ebc833a38b465364412e5e307ca80bbb190
+  TestFlightSDK: 0c24c533748d0d84bfe7a3cb6036fa79124d84ee
+
+COCOAPODS: 0.33.1

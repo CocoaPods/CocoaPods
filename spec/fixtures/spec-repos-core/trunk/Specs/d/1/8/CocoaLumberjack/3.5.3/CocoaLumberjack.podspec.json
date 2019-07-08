@@ -1,0 +1,50 @@
+{
+  "name": "CocoaLumberjack",
+  "version": "3.5.3",
+  "license": "BSD",
+  "summary": "A fast & simple, yet powerful & flexible logging framework for Mac and iOS.",
+  "homepage": "https://github.com/CocoaLumberjack/CocoaLumberjack",
+  "authors": {
+    "Robbie Hanson": "robbiehanson@deusty.com"
+  },
+  "source": {
+    "git": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+    "tag": "3.5.3"
+  },
+  "description": "It is similar in concept to other popular logging frameworks such as log4j, yet is designed specifically for objective-c, and takes advantage of features such as multi-threading, grand central dispatch (if available), lockless atomic operations, and the dynamic nature of the objective-c runtime.",
+  "requires_arc": true,
+  "preserve_paths": "README.md",
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.10",
+    "watchos": "3.0",
+    "tvos": "9.0"
+  },
+  "swift_version": "5.0",
+  "default_subspecs": "Core",
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": [
+        "Classes/CocoaLumberjack.h",
+        "Classes/DD*.{h,m}",
+        "Classes/Extensions/*.{h,m}",
+        "Classes/CLI/*.{h,m}"
+      ],
+      "private_header_files": "Classes/DD*Internal.{h}"
+    },
+    {
+      "name": "Swift",
+      "dependencies": {
+        "CocoaLumberjack/Core": [
+
+        ]
+      },
+      "source_files": [
+        "Classes/CocoaLumberjack.swift",
+        "Classes/DDAssert.swift",
+        "Classes/SwiftLogLevel.h"
+      ]
+    }
+  ]
+}

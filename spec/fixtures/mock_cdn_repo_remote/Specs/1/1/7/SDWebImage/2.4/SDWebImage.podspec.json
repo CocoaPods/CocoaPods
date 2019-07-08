@@ -1,0 +1,19 @@
+{
+  "name": "SDWebImage",
+  "version": "2.4",
+  "platforms": {
+    "ios": null
+  },
+  "license": "MIT",
+  "summary": "UIImageView category adding suppport for remote images coming from the web asynchronously with caching.",
+  "homepage": "https://github.com/rs/SDWebImage",
+  "authors": {
+    "Olivier Poitrey": "rs@dailymotion.com"
+  },
+  "source": {
+    "git": "https://github.com/rs/SDWebImage.git",
+    "tag": "2.4"
+  },
+  "source_files": "*.[mh]",
+  "requires_arc": false
+}

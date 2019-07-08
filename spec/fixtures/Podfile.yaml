@@ -1,0 +1,17 @@
+---
+sources:
+  - 'myrepo1'
+  - 'myrepo2'
+target_definitions:
+  - name: Pods
+    abstract: true
+    platform: ios
+
+    dependencies:
+    - SSZipArchive:
+      - '>= 1'
+    - ASIHTTPRequest:
+      - ~> 1.8.0
+    - Reachability
+    - ASIWebPageRequest:
+      - < 1.8.2

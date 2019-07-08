@@ -1,0 +1,568 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/users/CocoaPods
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 02 Dec 2013 03:19:43 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '47'
+      X-Ratelimit-Reset:
+      - '1385957280'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Mon, 02 Dec 2013 03:19:21 GMT
+      Etag:
+      - '"d040a6623bb6f261d536d7b096f6425d"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.beta
+      X-Content-Type-Options:
+      - nosniff
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4F00B20F:5406:C3DA37D:529BFC4F
+    body:
+      encoding: UTF-8
+      string: '{"login":"CocoaPods","id":1189714,"avatar_url":"https://0.gravatar.com/avatar/8b374a26ac900a5c7b83a8767faff333?d=https%3A%2F%2Fidenticons.github.com%2F1fd372e5b4f8bdd18cd73236213f3abb.png&r=x","gravatar_id":"8b374a26ac900a5c7b83a8767faff333","url":"https://api.github.com/users/CocoaPods","html_url":"https://github.com/CocoaPods","followers_url":"https://api.github.com/users/CocoaPods/followers","following_url":"https://api.github.com/users/CocoaPods/following{/other_user}","gists_url":"https://api.github.com/users/CocoaPods/gists{/gist_id}","starred_url":"https://api.github.com/users/CocoaPods/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/CocoaPods/subscriptions","organizations_url":"https://api.github.com/users/CocoaPods/orgs","repos_url":"https://api.github.com/users/CocoaPods/repos","events_url":"https://api.github.com/users/CocoaPods/events{/privacy}","received_events_url":"https://api.github.com/users/CocoaPods/received_events","type":"Organization","site_admin":false,"name":"","company":null,"blog":"http://twitter.com/CocoaPods","location":"","email":null,"hireable":null,"bio":null,"public_repos":21,"followers":0,"following":0,"created_at":"2011-11-12T01:44:28Z","updated_at":"2013-12-02T03:19:21Z","public_gists":0}'
+    http_version:
+  recorded_at: Mon, 02 Dec 2013 03:19:43 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/CocoaPods
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 02 Dec 2013 03:19:44 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '46'
+      X-Ratelimit-Reset:
+      - '1385957280'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Sun, 01 Dec 2013 22:30:59 GMT
+      Etag:
+      - '"d3e819c6c16641dab7afc83a9d5b5ad3"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.beta
+      X-Content-Type-Options:
+      - nosniff
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4F00B20F:5406:C3DA474:529BFC4F
+    body:
+      encoding: UTF-8
+      string: '{"id":2203645,"name":"CocoaPods","full_name":"CocoaPods/CocoaPods","owner":{"login":"CocoaPods","id":1189714,"avatar_url":"https://2.gravatar.com/avatar/8b374a26ac900a5c7b83a8767faff333?d=https%3A%2F%2Fidenticons.github.com%2F1fd372e5b4f8bdd18cd73236213f3abb.png&r=x","gravatar_id":"8b374a26ac900a5c7b83a8767faff333","url":"https://api.github.com/users/CocoaPods","html_url":"https://github.com/CocoaPods","followers_url":"https://api.github.com/users/CocoaPods/followers","following_url":"https://api.github.com/users/CocoaPods/following{/other_user}","gists_url":"https://api.github.com/users/CocoaPods/gists{/gist_id}","starred_url":"https://api.github.com/users/CocoaPods/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/CocoaPods/subscriptions","organizations_url":"https://api.github.com/users/CocoaPods/orgs","repos_url":"https://api.github.com/users/CocoaPods/repos","events_url":"https://api.github.com/users/CocoaPods/events{/privacy}","received_events_url":"https://api.github.com/users/CocoaPods/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/CocoaPods/CocoaPods","description":"The
+        Objective-C library dependency manager.","fork":false,"url":"https://api.github.com/repos/CocoaPods/CocoaPods","forks_url":"https://api.github.com/repos/CocoaPods/CocoaPods/forks","keys_url":"https://api.github.com/repos/CocoaPods/CocoaPods/keys{/key_id}","collaborators_url":"https://api.github.com/repos/CocoaPods/CocoaPods/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/CocoaPods/CocoaPods/teams","hooks_url":"https://api.github.com/repos/CocoaPods/CocoaPods/hooks","issue_events_url":"https://api.github.com/repos/CocoaPods/CocoaPods/issues/events{/number}","events_url":"https://api.github.com/repos/CocoaPods/CocoaPods/events","assignees_url":"https://api.github.com/repos/CocoaPods/CocoaPods/assignees{/user}","branches_url":"https://api.github.com/repos/CocoaPods/CocoaPods/branches{/branch}","tags_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tags","blobs_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/refs{/sha}","trees_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees{/sha}","statuses_url":"https://api.github.com/repos/CocoaPods/CocoaPods/statuses/{sha}","languages_url":"https://api.github.com/repos/CocoaPods/CocoaPods/languages","stargazers_url":"https://api.github.com/repos/CocoaPods/CocoaPods/stargazers","contributors_url":"https://api.github.com/repos/CocoaPods/CocoaPods/contributors","subscribers_url":"https://api.github.com/repos/CocoaPods/CocoaPods/subscribers","subscription_url":"https://api.github.com/repos/CocoaPods/CocoaPods/subscription","commits_url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits{/sha}","git_commits_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/commits{/sha}","comments_url":"https://api.github.com/repos/CocoaPods/CocoaPods/comments{/number}","issue_comment_url":"https://api.github.com/repos/CocoaPods/CocoaPods/issues/comments/{number}","contents_url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/{+path}","compare_url":"https://api.github.com/repos/CocoaPods/CocoaPods/compare/{base}...{head}","merges_url":"https://api.github.com/repos/CocoaPods/CocoaPods/merges","archive_url":"https://api.github.com/repos/CocoaPods/CocoaPods/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/CocoaPods/CocoaPods/downloads","issues_url":"https://api.github.com/repos/CocoaPods/CocoaPods/issues{/number}","pulls_url":"https://api.github.com/repos/CocoaPods/CocoaPods/pulls{/number}","milestones_url":"https://api.github.com/repos/CocoaPods/CocoaPods/milestones{/number}","notifications_url":"https://api.github.com/repos/CocoaPods/CocoaPods/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/CocoaPods/CocoaPods/labels{/name}","releases_url":"https://api.github.com/repos/CocoaPods/CocoaPods/releases{/id}","created_at":"2011-08-14T00:10:53Z","updated_at":"2013-12-01T22:30:59Z","pushed_at":"2013-11-29T13:12:21Z","git_url":"git://github.com/CocoaPods/CocoaPods.git","ssh_url":"git@github.com:CocoaPods/CocoaPods.git","clone_url":"https://github.com/CocoaPods/CocoaPods.git","svn_url":"https://github.com/CocoaPods/CocoaPods","homepage":"cocoapods.org","size":41271,"stargazers_count":3394,"watchers_count":3394,"language":"Ruby","has_issues":true,"has_downloads":true,"has_wiki":true,"forks_count":486,"mirror_url":null,"open_issues_count":140,"forks":486,"open_issues":140,"watchers":3394,"default_branch":"master","master_branch":"master","organization":{"login":"CocoaPods","id":1189714,"avatar_url":"https://2.gravatar.com/avatar/8b374a26ac900a5c7b83a8767faff333?d=https%3A%2F%2Fidenticons.github.com%2F1fd372e5b4f8bdd18cd73236213f3abb.png&r=x","gravatar_id":"8b374a26ac900a5c7b83a8767faff333","url":"https://api.github.com/users/CocoaPods","html_url":"https://github.com/CocoaPods","followers_url":"https://api.github.com/users/CocoaPods/followers","following_url":"https://api.github.com/users/CocoaPods/following{/other_user}","gists_url":"https://api.github.com/users/CocoaPods/gists{/gist_id}","starred_url":"https://api.github.com/users/CocoaPods/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/CocoaPods/subscriptions","organizations_url":"https://api.github.com/users/CocoaPods/orgs","repos_url":"https://api.github.com/users/CocoaPods/repos","events_url":"https://api.github.com/users/CocoaPods/events{/privacy}","received_events_url":"https://api.github.com/users/CocoaPods/received_events","type":"Organization","site_admin":false},"network_count":486,"subscribers_count":236}'
+    http_version:
+  recorded_at: Mon, 02 Dec 2013 03:19:44 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/CocoaPods/tags
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 02 Dec 2013 03:19:44 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '45'
+      X-Ratelimit-Reset:
+      - '1385957280'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Sun, 01 Dec 2013 22:30:59 GMT
+      Etag:
+      - '"d3e819c6c16641dab7afc83a9d5b5ad3"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.beta
+      X-Content-Type-Options:
+      - nosniff
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4F00B20F:5406:C3DA576:529BFC50
+    body:
+      encoding: UTF-8
+      string: '[{"name":"0.28.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.28.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.28.0","commit":{"sha":"9f03ab9797ab7219aa7a5e0a85c0094d48ad2faa","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9f03ab9797ab7219aa7a5e0a85c0094d48ad2faa"}},{"name":"0.27.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.27.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.27.1","commit":{"sha":"18f71e5310e6418d47cf490357e890b0f71e246f","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/18f71e5310e6418d47cf490357e890b0f71e246f"}},{"name":"0.27.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.27.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.27.0","commit":{"sha":"9bbfed7406f733fb01fa7f84486355ddfccb89a4","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9bbfed7406f733fb01fa7f84486355ddfccb89a4"}},{"name":"0.26.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.26.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.26.2","commit":{"sha":"92fbcc54b6436036ddfd13e9d95bf0bf9e608ecd","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/92fbcc54b6436036ddfd13e9d95bf0bf9e608ecd"}},{"name":"0.26.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.26.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.26.1","commit":{"sha":"54607a2d59e944b06777466f4cc312f82275e46e","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/54607a2d59e944b06777466f4cc312f82275e46e"}},{"name":"0.26.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.26.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.26.0","commit":{"sha":"509254050bad7c141bb23455c7f0f2350f0e52b2","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/509254050bad7c141bb23455c7f0f2350f0e52b2"}},{"name":"0.25.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.25.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.25.0","commit":{"sha":"29012fd4c6434b37127aa86a81895c5a1e9f698e","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/29012fd4c6434b37127aa86a81895c5a1e9f698e"}},{"name":"0.24.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.24.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.24.0","commit":{"sha":"3c53800b739900c68ef2f47efe2a3c9be0178504","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/3c53800b739900c68ef2f47efe2a3c9be0178504"}},{"name":"0.23.0.rc1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.23.0.rc1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.23.0.rc1","commit":{"sha":"e0c97ae709e8762598e14a0650324d37f1bd678b","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/e0c97ae709e8762598e14a0650324d37f1bd678b"}},{"name":"0.23.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.23.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.23.0","commit":{"sha":"62fa623e948ae170920eb141f572f8b033114304","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/62fa623e948ae170920eb141f572f8b033114304"}},{"name":"0.22.3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.22.3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.22.3","commit":{"sha":"d083e9ad8cf637cbabc74145a53e8f695daf071e","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/d083e9ad8cf637cbabc74145a53e8f695daf071e"}},{"name":"0.22.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.22.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.22.2","commit":{"sha":"c2bb7cb3f38fad4e6117cb8b87fb625e5761f720","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/c2bb7cb3f38fad4e6117cb8b87fb625e5761f720"}},{"name":"0.22.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.22.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.22.1","commit":{"sha":"86a3c386899844148a53146abddd8aa2bc5c83b4","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/86a3c386899844148a53146abddd8aa2bc5c83b4"}},{"name":"0.22.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.22.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.22.0","commit":{"sha":"accc87263f5ab1a4d87521a16d01fcea9966232d","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/accc87263f5ab1a4d87521a16d01fcea9966232d"}},{"name":"0.21.0.rc1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.21.0.rc1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.21.0.rc1","commit":{"sha":"80555219d726eebf2c55a415c361bd366f99a4c5","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/80555219d726eebf2c55a415c361bd366f99a4c5"}},{"name":"0.21.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.21.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.21.0","commit":{"sha":"38613d3dbaa914ab9ddcf41d9bc8c46712bd6d32","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/38613d3dbaa914ab9ddcf41d9bc8c46712bd6d32"}},{"name":"0.20.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.20.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.20.2","commit":{"sha":"6c5687114abf487291c9fac8f6d2198d7b893cf3","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/6c5687114abf487291c9fac8f6d2198d7b893cf3"}},{"name":"0.20.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.20.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.20.1","commit":{"sha":"b78b48678ddefc0120e821cd61f4b5ab6800e0ef","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/b78b48678ddefc0120e821cd61f4b5ab6800e0ef"}},{"name":"0.20.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.20.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.20.0","commit":{"sha":"4a84aa3c84c961feb6ccd3dd26683db93618c15d","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/4a84aa3c84c961feb6ccd3dd26683db93618c15d"}},{"name":"0.19.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.19.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.19.1","commit":{"sha":"11dca2a847826c340943dd814dc0933cad4042b5","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/11dca2a847826c340943dd814dc0933cad4042b5"}},{"name":"0.19.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.19.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.19.0","commit":{"sha":"1fecb84588f63e112c2c17350e80f00895a32647","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/1fecb84588f63e112c2c17350e80f00895a32647"}},{"name":"0.18.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.18.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.18.1","commit":{"sha":"fdac8fb97c7140144d04c584d2361088d238e596","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/fdac8fb97c7140144d04c584d2361088d238e596"}},{"name":"0.18.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.18.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.18.0","commit":{"sha":"c42cbaafe98b8bc9fa81e6991a555b9ed5691140","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/c42cbaafe98b8bc9fa81e6991a555b9ed5691140"}},{"name":"0.17.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.2","commit":{"sha":"6215ab0d5297cf4f1a00a6df652808a9d9087b4c","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/6215ab0d5297cf4f1a00a6df652808a9d9087b4c"}},{"name":"0.17.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.1","commit":{"sha":"7f9ef2bac55c934b2ec6b66b3d3e9e360c4b6109","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/7f9ef2bac55c934b2ec6b66b3d3e9e360c4b6109"}},{"name":"0.17.0.rc7","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc7","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc7","commit":{"sha":"80de2e3f5f5982853157612a91fc5207f6beabac","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/80de2e3f5f5982853157612a91fc5207f6beabac"}},{"name":"0.17.0.rc6","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc6","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc6","commit":{"sha":"199d829031f7f08ded1067e3c5df2f2cd033fc7d","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/199d829031f7f08ded1067e3c5df2f2cd033fc7d"}},{"name":"0.17.0.rc5","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc5","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc5","commit":{"sha":"7557a4ec79eb811fcfeabedca7f1abb609a04673","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/7557a4ec79eb811fcfeabedca7f1abb609a04673"}},{"name":"0.17.0.rc4","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc4","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc4","commit":{"sha":"5ac6ea4e22c42c27928b9651c75c32c1b9546d12","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/5ac6ea4e22c42c27928b9651c75c32c1b9546d12"}},{"name":"0.17.0.rc3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc3","commit":{"sha":"9e41e52c59a0097f1b3e8c66191ce089ddfe8b4f","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9e41e52c59a0097f1b3e8c66191ce089ddfe8b4f"}},{"name":"0.17.0.rc2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc2","commit":{"sha":"767be7283f34569760bd8bb115da87afd35e0b63","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/767be7283f34569760bd8bb115da87afd35e0b63"}},{"name":"0.17.0.rc1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17.0.rc1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17.0.rc1","commit":{"sha":"1fac3ce97c27e772842d587d0e94cd91b7a1a861","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/1fac3ce97c27e772842d587d0e94cd91b7a1a861"}},{"name":"0.17","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.17","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.17","commit":{"sha":"f211d33a99165ead8715a8883b73e5a5e50440ea","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/f211d33a99165ead8715a8883b73e5a5e50440ea"}},{"name":"0.16.4","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.4","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.4","commit":{"sha":"f610a1806f4951bf95801de2ad0d78ac993d787f","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/f610a1806f4951bf95801de2ad0d78ac993d787f"}},{"name":"0.16.3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.3","commit":{"sha":"0e40a6c175aef40dc7e5b2b82cc9a311ad97ad72","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/0e40a6c175aef40dc7e5b2b82cc9a311ad97ad72"}},{"name":"0.16.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.2","commit":{"sha":"0be241d8dfb496c37b4a4b82cc8cda39748ef998","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/0be241d8dfb496c37b4a4b82cc8cda39748ef998"}},{"name":"0.16.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.1","commit":{"sha":"fbb58e4fa812da799383e76de6d538007542d7d7","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/fbb58e4fa812da799383e76de6d538007542d7d7"}},{"name":"0.16.0.rc5","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.0.rc5","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.0.rc5","commit":{"sha":"4948cda5d75060c8d932b1a95ccd399fff8e3112","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/4948cda5d75060c8d932b1a95ccd399fff8e3112"}},{"name":"0.16.0.rc4","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.0.rc4","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.0.rc4","commit":{"sha":"1ea7946882230556412f1f1d14ce4fc3119740d7","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/1ea7946882230556412f1f1d14ce4fc3119740d7"}},{"name":"0.16.0.rc3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.0.rc3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.0.rc3","commit":{"sha":"ebfaa7aeb66f2e4dcdbdbfdfe98e332f437f6e2e","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/ebfaa7aeb66f2e4dcdbdbfdfe98e332f437f6e2e"}},{"name":"0.16.0.rc2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.0.rc2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.0.rc2","commit":{"sha":"835a0faf69ab495f37307f5ce8926a99c39d4589","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/835a0faf69ab495f37307f5ce8926a99c39d4589"}},{"name":"0.16.0.rc1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.0.rc1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.0.rc1","commit":{"sha":"6ad31dd47c392995b80d396d23d07491527719a0","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/6ad31dd47c392995b80d396d23d07491527719a0"}},{"name":"0.16.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.16.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.16.0","commit":{"sha":"dc84ad04ec814c1b73c08de0b6f21afd381c0464","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/dc84ad04ec814c1b73c08de0b6f21afd381c0464"}},{"name":"0.15.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.15.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.15.2","commit":{"sha":"7ea1d46c11bbad971e484770ec130e226757b91c","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/7ea1d46c11bbad971e484770ec130e226757b91c"}},{"name":"0.15.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.15.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.15.1","commit":{"sha":"fe96a9785d1af98d8e61d42c5dd2c5f29b817a4e","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/fe96a9785d1af98d8e61d42c5dd2c5f29b817a4e"}},{"name":"0.15.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.15.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.15.0","commit":{"sha":"d434ccf4e8490c221ec4f402557f58c7bbf254ab","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/d434ccf4e8490c221ec4f402557f58c7bbf254ab"}},{"name":"0.14.0.rc2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.14.0.rc2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.14.0.rc2","commit":{"sha":"9986aa4c05d23c7461e0cdc0ba72efcfc48680d7","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9986aa4c05d23c7461e0cdc0ba72efcfc48680d7"}},{"name":"0.14.0.rc1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.14.0.rc1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.14.0.rc1","commit":{"sha":"dce44e9399f1994d4809a2bbe9012f32f624a41a","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/dce44e9399f1994d4809a2bbe9012f32f624a41a"}},{"name":"0.14.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.14.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.14.0","commit":{"sha":"a2a9eab54f9a9e194f0457d9ef689944c902174d","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/a2a9eab54f9a9e194f0457d9ef689944c902174d"}},{"name":"0.13.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.13.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.13.0","commit":{"sha":"79089b43fa12bfb571d7471de83902feb295a5db","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/79089b43fa12bfb571d7471de83902feb295a5db"}},{"name":"0.12.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.12.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.12.0","commit":{"sha":"ac655b65fe80a87eb74bee94696b64bc0d0ad79f","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/ac655b65fe80a87eb74bee94696b64bc0d0ad79f"}},{"name":"0.11.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.11.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.11.1","commit":{"sha":"9f2992c452271045ffe0bed568aaafa189744f80","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9f2992c452271045ffe0bed568aaafa189744f80"}},{"name":"0.11.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.11.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.11.0","commit":{"sha":"f6d08b079060b4e83aed7e1658bb8c9613caf0d8","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/f6d08b079060b4e83aed7e1658bb8c9613caf0d8"}},{"name":"0.10.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.10.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.10.0","commit":{"sha":"e74c3b01afaebd076969702e12fa611088f3adab","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/e74c3b01afaebd076969702e12fa611088f3adab"}},{"name":"0.9.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.9.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.9.2","commit":{"sha":"0920c423772defe8687d93943465fddecd333dab","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/0920c423772defe8687d93943465fddecd333dab"}},{"name":"0.9.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.9.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.9.1","commit":{"sha":"ea64987a655dd4812ded169d9057ebaa54094b18","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/ea64987a655dd4812ded169d9057ebaa54094b18"}},{"name":"0.9.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.9.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.9.0","commit":{"sha":"79bd3e24126ed93f10da969bae52c623d95fc4da","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/79bd3e24126ed93f10da969bae52c623d95fc4da"}},{"name":"0.8.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.8.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.8.0","commit":{"sha":"fd57c5c95cc84170879b303f0de1256e7b4c81e4","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/fd57c5c95cc84170879b303f0de1256e7b4c81e4"}},{"name":"0.7.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.7.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.7.0","commit":{"sha":"ae87f69afc608aef58704b81a12c72471302ceb3","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/ae87f69afc608aef58704b81a12c72471302ceb3"}},{"name":"0.6.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.1","commit":{"sha":"ebd1176cf85c60de9540072961e8a882aa856b4d","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/ebd1176cf85c60de9540072961e8a882aa856b4d"}},{"name":"0.6.0.rc5","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.0.rc5","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.0.rc5","commit":{"sha":"35b7495634a69ae926c9470ee99ba4045e9c77f8","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/35b7495634a69ae926c9470ee99ba4045e9c77f8"}},{"name":"0.6.0.rc4","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.0.rc4","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.0.rc4","commit":{"sha":"82c35f9f3bc57bb4529cd2858ad469c420de660a","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/82c35f9f3bc57bb4529cd2858ad469c420de660a"}},{"name":"0.6.0.rc3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.0.rc3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.0.rc3","commit":{"sha":"c7c61af57479e2661a6e41a4006a4900682d8491","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/c7c61af57479e2661a6e41a4006a4900682d8491"}},{"name":"0.6.0.rc2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.0.rc2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.0.rc2","commit":{"sha":"3c34ade2b88625a94711ecf254d07723178cf18b","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/3c34ade2b88625a94711ecf254d07723178cf18b"}},{"name":"0.6.0.rc1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.0.rc1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.0.rc1","commit":{"sha":"cc32737e4f67e7f357de4ad26ec3b3ce27836138","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/cc32737e4f67e7f357de4ad26ec3b3ce27836138"}},{"name":"0.6.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.6.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.6.0","commit":{"sha":"9a5b3de5381233a881285c5c504f3a36a0ec0b75","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9a5b3de5381233a881285c5c504f3a36a0ec0b75"}},{"name":"0.5.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.5.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.5.1","commit":{"sha":"f760473133f56ec6d1dcbc415f0c712f4b4b7d27","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/f760473133f56ec6d1dcbc415f0c712f4b4b7d27"}},{"name":"0.5.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.5.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.5.0","commit":{"sha":"5614a12cfbc392fb314b54c3a1001bf7665740da","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/5614a12cfbc392fb314b54c3a1001bf7665740da"}},{"name":"0.3.10","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.10","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.10","commit":{"sha":"5d420f52471c8594c3d3e609ec53851fc0c5e241","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/5d420f52471c8594c3d3e609ec53851fc0c5e241"}},{"name":"0.3.9","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.9","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.9","commit":{"sha":"c5214dbd2374669901feb12c122f8688cd796d94","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/c5214dbd2374669901feb12c122f8688cd796d94"}},{"name":"0.3.8","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.8","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.8","commit":{"sha":"412f4e74340c77bd8fd04860320f91b1bde28f9c","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/412f4e74340c77bd8fd04860320f91b1bde28f9c"}},{"name":"0.3.7","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.7","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.7","commit":{"sha":"685cbb02f20831c63f1ddbd569aa87e36936288a","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/685cbb02f20831c63f1ddbd569aa87e36936288a"}},{"name":"0.3.6","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.6","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.6","commit":{"sha":"36361198dbd5f85881ffe6eee9cfe97bc25ed349","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/36361198dbd5f85881ffe6eee9cfe97bc25ed349"}},{"name":"0.3.5","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.5","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.5","commit":{"sha":"c068650adc785c9f56db6aad652ee8aa815c99a1","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/c068650adc785c9f56db6aad652ee8aa815c99a1"}},{"name":"0.3.4","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.4","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.4","commit":{"sha":"a9950ce4b0b7561d4f9e611a79b893ad27e61171","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/a9950ce4b0b7561d4f9e611a79b893ad27e61171"}},{"name":"0.3.3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.3","commit":{"sha":"5b99fbedc937e20a65fa07e90f103014a342cd6a","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/5b99fbedc937e20a65fa07e90f103014a342cd6a"}},{"name":"0.3.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.2","commit":{"sha":"7061b9eb372c00319ae21612b811e25c04a4a34c","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/7061b9eb372c00319ae21612b811e25c04a4a34c"}},{"name":"0.3.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.1","commit":{"sha":"dcdc3af2c34c42ee517c36528c2f05840140573d","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/dcdc3af2c34c42ee517c36528c2f05840140573d"}},{"name":"0.3.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.3.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.3.0","commit":{"sha":"bb3535afeca43a3b386ab2fc25a49f06193a07d6","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/bb3535afeca43a3b386ab2fc25a49f06193a07d6"}},{"name":"0.2.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.2.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.2.0","commit":{"sha":"9bde29429529b7baea096e3bd9bfab7f0ce44b41","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/9bde29429529b7baea096e3bd9bfab7f0ce44b41"}},{"name":"0.1.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.1.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.1.1","commit":{"sha":"a691224a01fc01e2c7e46bb3515f4a91cc85d9c3","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/a691224a01fc01e2c7e46bb3515f4a91cc85d9c3"}},{"name":"0.1.0","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.1.0","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.1.0","commit":{"sha":"ecbb384d796421cb2edfae0fab23a38c83b9e83b","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/ecbb384d796421cb2edfae0fab23a38c83b9e83b"}},{"name":"0.0.8","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.8","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.8","commit":{"sha":"7c8ac07b7be6920fb4ea5c5a1a4179f167aad793","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/7c8ac07b7be6920fb4ea5c5a1a4179f167aad793"}},{"name":"0.0.7","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.7","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.7","commit":{"sha":"a0c7f1d5856ba55e0aad87f9d150ffec0c544287","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/a0c7f1d5856ba55e0aad87f9d150ffec0c544287"}},{"name":"0.0.5","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.5","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.5","commit":{"sha":"7c86f72a012e3bbfb9e95bf0660f5933437fdd64","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/7c86f72a012e3bbfb9e95bf0660f5933437fdd64"}},{"name":"0.0.4","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.4","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.4","commit":{"sha":"925a613babbb3be0ccf6d0790ff11f51daeae184","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/925a613babbb3be0ccf6d0790ff11f51daeae184"}},{"name":"0.0.3","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.3","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.3","commit":{"sha":"8d362ece90b494552b79f7ba8f9910b00213451f","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/8d362ece90b494552b79f7ba8f9910b00213451f"}},{"name":"0.0.2","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.2","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.2","commit":{"sha":"28ab0e31a7b49bf607b58feeeb62b2f319bc6003","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/28ab0e31a7b49bf607b58feeeb62b2f319bc6003"}},{"name":"0.0.1","zipball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/zipball/0.0.1","tarball_url":"https://api.github.com/repos/CocoaPods/CocoaPods/tarball/0.0.1","commit":{"sha":"f263e298be120bde6b7102967bb3a727a4ef2b07","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/f263e298be120bde6b7102967bb3a727a4ef2b07"}}]'
+    http_version:
+  recorded_at: Mon, 02 Dec 2013 03:19:45 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/CocoaPods/branches
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 02 Dec 2013 03:19:45 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '44'
+      X-Ratelimit-Reset:
+      - '1385957280'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Sun, 01 Dec 2013 22:30:59 GMT
+      Etag:
+      - '"d3e819c6c16641dab7afc83a9d5b5ad3"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.beta
+      X-Content-Type-Options:
+      - nosniff
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4F00B20F:5405:C061C43:529BFC51
+    body:
+      encoding: UTF-8
+      string: '[{"name":"local_repos","commit":{"sha":"4064048df16c203554f6630626b4c5c239ee8fe1","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/4064048df16c203554f6630626b4c5c239ee8fe1"}},{"name":"master","commit":{"sha":"0e1d101dc18ee569d0a181c2e7f39940c7b598d1","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/0e1d101dc18ee569d0a181c2e7f39940c7b598d1"}},{"name":"pods-project-edit-feature","commit":{"sha":"93b38c13ec3a084a71bc18717745208577f49cc9","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/93b38c13ec3a084a71bc18717745208577f49cc9"}},{"name":"refactor-target","commit":{"sha":"4ce0471a93629128d26f8b147f55600e6e87a89b","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/4ce0471a93629128d26f8b147f55600e6e87a89b"}},{"name":"ruby-trace-experiment","commit":{"sha":"efe30b868865af10d810f5b5c908cf634ce7d8c0","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/efe30b868865af10d810f5b5c908cf634ce7d8c0"}},{"name":"sandbox_reorganization_544","commit":{"sha":"e3cfdfd612eefc79e835f71c3a15e93a7a1701eb","url":"https://api.github.com/repos/CocoaPods/CocoaPods/commits/e3cfdfd612eefc79e835f71c3a15e93a7a1701eb"}}]'
+    http_version:
+  recorded_at: Mon, 02 Dec 2013 03:19:45 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/CocoaPods/contents
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 02 Dec 2013 03:19:46 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '43'
+      X-Ratelimit-Reset:
+      - '1385957280'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Sun, 01 Dec 2013 22:30:59 GMT
+      Etag:
+      - '"d3e819c6c16641dab7afc83a9d5b5ad3"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.beta
+      X-Content-Type-Options:
+      - nosniff
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4F00B20F:5406:C3DA7A1:529BFC51
+    body:
+      encoding: UTF-8
+      string: '[{"name":".gitignore","path":".gitignore","sha":"4ec13d347ae0a8655522723678a60e7c6462aca0","size":448,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.gitignore?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/.gitignore","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/4ec13d347ae0a8655522723678a60e7c6462aca0","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.gitignore?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/4ec13d347ae0a8655522723678a60e7c6462aca0","html":"https://github.com/CocoaPods/CocoaPods/blob/master/.gitignore"}},{"name":".gitmodules","path":".gitmodules","sha":"e435d7445a3919e32f7677629c079becb625e297","size":1052,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.gitmodules?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/.gitmodules","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/e435d7445a3919e32f7677629c079becb625e297","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.gitmodules?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/e435d7445a3919e32f7677629c079becb625e297","html":"https://github.com/CocoaPods/CocoaPods/blob/master/.gitmodules"}},{"name":".kick","path":".kick","sha":"272ded35472ac0cc05db4552633fafaf03dfe65c","size":600,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.kick?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/.kick","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/272ded35472ac0cc05db4552633fafaf03dfe65c","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.kick?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/272ded35472ac0cc05db4552633fafaf03dfe65c","html":"https://github.com/CocoaPods/CocoaPods/blob/master/.kick"}},{"name":".travis.yml","path":".travis.yml","sha":"80b927b13b3d7fcedc38f95101f5d448ea2db242","size":1286,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.travis.yml?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/.travis.yml","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/80b927b13b3d7fcedc38f95101f5d448ea2db242","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.travis.yml?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/80b927b13b3d7fcedc38f95101f5d448ea2db242","html":"https://github.com/CocoaPods/CocoaPods/blob/master/.travis.yml"}},{"name":".yardopts","path":".yardopts","sha":"133908fe17f75eeb618f2e03c59573729b7514a7","size":28,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.yardopts?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/.yardopts","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/133908fe17f75eeb618f2e03c59573729b7514a7","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/.yardopts?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/133908fe17f75eeb618f2e03c59573729b7514a7","html":"https://github.com/CocoaPods/CocoaPods/blob/master/.yardopts"}},{"name":"CHANGELOG.md","path":"CHANGELOG.md","sha":"b64fdf8765b24d0f3627114a2084d8a4798343ff","size":81508,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/CHANGELOG.md?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/b64fdf8765b24d0f3627114a2084d8a4798343ff","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/CHANGELOG.md?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/b64fdf8765b24d0f3627114a2084d8a4798343ff","html":"https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md"}},{"name":"CONTRIBUTING.md","path":"CONTRIBUTING.md","sha":"cdd2b22f8434432c15de482e97320834d9df868a","size":2230,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/CONTRIBUTING.md?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/cdd2b22f8434432c15de482e97320834d9df868a","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/CONTRIBUTING.md?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/cdd2b22f8434432c15de482e97320834d9df868a","html":"https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md"}},{"name":"Gemfile","path":"Gemfile","sha":"962066de9d458cc045b6a0623b05a31521585193","size":1476,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/Gemfile?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/Gemfile","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/962066de9d458cc045b6a0623b05a31521585193","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/Gemfile?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/962066de9d458cc045b6a0623b05a31521585193","html":"https://github.com/CocoaPods/CocoaPods/blob/master/Gemfile"}},{"name":"Gemfile.lock","path":"Gemfile.lock","sha":"5d3cbe1663638e4e05a1e239caa0aa5311bc8fe0","size":3378,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/Gemfile.lock?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/Gemfile.lock","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/5d3cbe1663638e4e05a1e239caa0aa5311bc8fe0","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/Gemfile.lock?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/5d3cbe1663638e4e05a1e239caa0aa5311bc8fe0","html":"https://github.com/CocoaPods/CocoaPods/blob/master/Gemfile.lock"}},{"name":"LICENSE","path":"LICENSE","sha":"f1a4dd2e29a3b0f6381f8cf1ad2f4f1388400e11","size":1202,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/LICENSE?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/LICENSE","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/f1a4dd2e29a3b0f6381f8cf1ad2f4f1388400e11","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/LICENSE?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/f1a4dd2e29a3b0f6381f8cf1ad2f4f1388400e11","html":"https://github.com/CocoaPods/CocoaPods/blob/master/LICENSE"}},{"name":"README.md","path":"README.md","sha":"8395a750936225ef0f3c5dc86398b65aa6a71dc0","size":4077,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/README.md?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/README.md","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/8395a750936225ef0f3c5dc86398b65aa6a71dc0","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/README.md?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/8395a750936225ef0f3c5dc86398b65aa6a71dc0","html":"https://github.com/CocoaPods/CocoaPods/blob/master/README.md"}},{"name":"Rakefile","path":"Rakefile","sha":"98c1f88827d6109ab5d8de5f31ece44b56f06441","size":12054,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/Rakefile?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/Rakefile","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/98c1f88827d6109ab5d8de5f31ece44b56f06441","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/Rakefile?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/98c1f88827d6109ab5d8de5f31ece44b56f06441","html":"https://github.com/CocoaPods/CocoaPods/blob/master/Rakefile"}},{"name":"bin","path":"bin","sha":"682d4904eceb0c53d7e894336f835604b2d33e34","size":null,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/bin?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/tree/master/bin","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/682d4904eceb0c53d7e894336f835604b2d33e34","type":"dir","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/bin?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/682d4904eceb0c53d7e894336f835604b2d33e34","html":"https://github.com/CocoaPods/CocoaPods/tree/master/bin"}},{"name":"cocoapods.gemspec","path":"cocoapods.gemspec","sha":"24b2eb901e1f90450a556d75bca57bf1d52b3fa5","size":3107,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/cocoapods.gemspec?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/blob/master/cocoapods.gemspec","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/24b2eb901e1f90450a556d75bca57bf1d52b3fa5","type":"file","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/cocoapods.gemspec?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs/24b2eb901e1f90450a556d75bca57bf1d52b3fa5","html":"https://github.com/CocoaPods/CocoaPods/blob/master/cocoapods.gemspec"}},{"name":"examples","path":"examples","sha":"1768e9fade88a9bbb715c77e032ce2086431a768","size":null,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/examples?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/tree/master/examples","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/1768e9fade88a9bbb715c77e032ce2086431a768","type":"dir","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/examples?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/1768e9fade88a9bbb715c77e032ce2086431a768","html":"https://github.com/CocoaPods/CocoaPods/tree/master/examples"}},{"name":"lib","path":"lib","sha":"539a5e9e8c07bfd098882b910fe70936c47dcaca","size":null,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/lib?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/tree/master/lib","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/539a5e9e8c07bfd098882b910fe70936c47dcaca","type":"dir","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/lib?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/539a5e9e8c07bfd098882b910fe70936c47dcaca","html":"https://github.com/CocoaPods/CocoaPods/tree/master/lib"}},{"name":"spec","path":"spec","sha":"5c5febb53b8931e84e8d1e9b7bfde30bf1aa5a00","size":null,"url":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/spec?ref=master","html_url":"https://github.com/CocoaPods/CocoaPods/tree/master/spec","git_url":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/5c5febb53b8931e84e8d1e9b7bfde30bf1aa5a00","type":"dir","_links":{"self":"https://api.github.com/repos/CocoaPods/CocoaPods/contents/spec?ref=master","git":"https://api.github.com/repos/CocoaPods/CocoaPods/git/trees/5c5febb53b8931e84e8d1e9b7bfde30bf1aa5a00","html":"https://github.com/CocoaPods/CocoaPods/tree/master/spec"}}]'
+    http_version:
+  recorded_at: Mon, 02 Dec 2013 03:19:46 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/Missing_Repo
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 02 Dec 2013 03:19:46 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 404 Not Found
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '42'
+      X-Ratelimit-Reset:
+      - '1385957280'
+      X-Github-Media-Type:
+      - github.beta
+      X-Content-Type-Options:
+      - nosniff
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4F00B20F:5406:C3DA8C7:529BFC52
+    body:
+      encoding: UTF-8
+      string: '{"message":"Not Found","documentation_url":"http://developer.github.com/v3"}'
+    http_version:
+  recorded_at: Mon, 02 Dec 2013 03:19:46 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/contentful/contentful.objc
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 08 Apr 2014 14:25:21 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '45'
+      X-Ratelimit-Reset:
+      - '1396968436'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Tue, 08 Apr 2014 11:04:26 GMT
+      Etag:
+      - '"67d75da27c6c75797e7f4d3a94e47275"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.beta
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4E359872:6646:DD2F:534406D0
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - a1d8c69b807c8e21f06cad9da377d1b0
+    body:
+      encoding: UTF-8
+      string: '{"id":17830008,"name":"contentful.objc","full_name":"contentful/contentful.objc","owner":{"login":"contentful","id":472182,"avatar_url":"https://avatars.githubusercontent.com/u/472182?","gravatar_id":"e56de7e4f179bef19f5faa9771f5e085","url":"https://api.github.com/users/contentful","html_url":"https://github.com/contentful","followers_url":"https://api.github.com/users/contentful/followers","following_url":"https://api.github.com/users/contentful/following{/other_user}","gists_url":"https://api.github.com/users/contentful/gists{/gist_id}","starred_url":"https://api.github.com/users/contentful/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/contentful/subscriptions","organizations_url":"https://api.github.com/users/contentful/orgs","repos_url":"https://api.github.com/users/contentful/repos","events_url":"https://api.github.com/users/contentful/events{/privacy}","received_events_url":"https://api.github.com/users/contentful/received_events","type":"Organization","site_admin":false},"private":false,"html_url":"https://github.com/contentful/contentful.objc","description":"","fork":false,"url":"https://api.github.com/repos/contentful/contentful.objc","forks_url":"https://api.github.com/repos/contentful/contentful.objc/forks","keys_url":"https://api.github.com/repos/contentful/contentful.objc/keys{/key_id}","collaborators_url":"https://api.github.com/repos/contentful/contentful.objc/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/contentful/contentful.objc/teams","hooks_url":"https://api.github.com/repos/contentful/contentful.objc/hooks","issue_events_url":"https://api.github.com/repos/contentful/contentful.objc/issues/events{/number}","events_url":"https://api.github.com/repos/contentful/contentful.objc/events","assignees_url":"https://api.github.com/repos/contentful/contentful.objc/assignees{/user}","branches_url":"https://api.github.com/repos/contentful/contentful.objc/branches{/branch}","tags_url":"https://api.github.com/repos/contentful/contentful.objc/tags","blobs_url":"https://api.github.com/repos/contentful/contentful.objc/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/contentful/contentful.objc/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/contentful/contentful.objc/git/refs{/sha}","trees_url":"https://api.github.com/repos/contentful/contentful.objc/git/trees{/sha}","statuses_url":"https://api.github.com/repos/contentful/contentful.objc/statuses/{sha}","languages_url":"https://api.github.com/repos/contentful/contentful.objc/languages","stargazers_url":"https://api.github.com/repos/contentful/contentful.objc/stargazers","contributors_url":"https://api.github.com/repos/contentful/contentful.objc/contributors","subscribers_url":"https://api.github.com/repos/contentful/contentful.objc/subscribers","subscription_url":"https://api.github.com/repos/contentful/contentful.objc/subscription","commits_url":"https://api.github.com/repos/contentful/contentful.objc/commits{/sha}","git_commits_url":"https://api.github.com/repos/contentful/contentful.objc/git/commits{/sha}","comments_url":"https://api.github.com/repos/contentful/contentful.objc/comments{/number}","issue_comment_url":"https://api.github.com/repos/contentful/contentful.objc/issues/comments/{number}","contents_url":"https://api.github.com/repos/contentful/contentful.objc/contents/{+path}","compare_url":"https://api.github.com/repos/contentful/contentful.objc/compare/{base}...{head}","merges_url":"https://api.github.com/repos/contentful/contentful.objc/merges","archive_url":"https://api.github.com/repos/contentful/contentful.objc/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/contentful/contentful.objc/downloads","issues_url":"https://api.github.com/repos/contentful/contentful.objc/issues{/number}","pulls_url":"https://api.github.com/repos/contentful/contentful.objc/pulls{/number}","milestones_url":"https://api.github.com/repos/contentful/contentful.objc/milestones{/number}","notifications_url":"https://api.github.com/repos/contentful/contentful.objc/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/contentful/contentful.objc/labels{/name}","releases_url":"https://api.github.com/repos/contentful/contentful.objc/releases{/id}","created_at":"2014-03-17T14:05:15Z","updated_at":"2014-04-08T11:04:26Z","pushed_at":"2014-04-08T11:04:25Z","git_url":"git://github.com/contentful/contentful.objc.git","ssh_url":"git@github.com:contentful/contentful.objc.git","clone_url":"https://github.com/contentful/contentful.objc.git","svn_url":"https://github.com/contentful/contentful.objc","homepage":null,"size":12976,"stargazers_count":3,"watchers_count":3,"language":"Objective-C","has_issues":true,"has_downloads":true,"has_wiki":true,"forks_count":0,"mirror_url":null,"open_issues_count":0,"forks":0,"open_issues":0,"watchers":3,"default_branch":"master","master_branch":"master","organization":{"login":"contentful","id":472182,"avatar_url":"https://avatars.githubusercontent.com/u/472182?","gravatar_id":"e56de7e4f179bef19f5faa9771f5e085","url":"https://api.github.com/users/contentful","html_url":"https://github.com/contentful","followers_url":"https://api.github.com/users/contentful/followers","following_url":"https://api.github.com/users/contentful/following{/other_user}","gists_url":"https://api.github.com/users/contentful/gists{/gist_id}","starred_url":"https://api.github.com/users/contentful/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/contentful/subscriptions","organizations_url":"https://api.github.com/users/contentful/orgs","repos_url":"https://api.github.com/users/contentful/repos","events_url":"https://api.github.com/users/contentful/events{/privacy}","received_events_url":"https://api.github.com/users/contentful/received_events","type":"Organization","site_admin":false},"network_count":0,"subscribers_count":6}'
+    http_version:
+  recorded_at: Tue, 08 Apr 2014 14:25:15 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/CocoaPods/commits/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept:
+      - application/vnd.github.v3.sha
+      If-None-Match:
+      - '"6a0ba68e4f0c0229b46f311687cfc81209efd5b9"'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 09 Mar 2016 17:51:36 GMT
+      Content-Type:
+      - application/vnd.github.v3.sha; charset=utf-8
+      Content-Length:
+      - '40'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '55'
+      X-Ratelimit-Reset:
+      - '1457549026'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding
+      Etag:
+      - '"436c0e2f71bd2c129ef607a40d57068e6f31ceb7"'
+      Last-Modified:
+      - Tue, 08 Mar 2016 05:37:50 GMT
+      X-Github-Media-Type:
+      - github.v3; param=chitauri-preview; format=sha
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Served-By:
+      - 7b641bda7ec2ca7cd9df72d2578baf75
+      X-Github-Request-Id:
+      - 50C04692:CD1C:562C67:56E062A7
+    body:
+      encoding: UTF-8
+      string: 436c0e2f71bd2c129ef607a40d57068e6f31ceb7
+    http_version:
+  recorded_at: Wed, 09 Mar 2016 17:51:36 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/CocoaPods/CocoaPods/commits/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept:
+      - application/vnd.github.v3.sha
+      If-None-Match:
+      - '"436c0e2f71bd2c129ef607a40d57068e6f31ceb7"'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 304
+      message: Not Modified
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 09 Mar 2016 17:51:36 GMT
+      Status:
+      - 304 Not Modified
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '55'
+      X-Ratelimit-Reset:
+      - '1457549026'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding
+      Etag:
+      - '"436c0e2f71bd2c129ef607a40d57068e6f31ceb7"'
+      Last-Modified:
+      - Tue, 08 Mar 2016 05:37:50 GMT
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Served-By:
+      - 7f48e2f7761567e923121f17538d7a6d
+      X-Github-Request-Id:
+      - 50C04692:CD22:2812CC2:56E062A8
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Wed, 09 Mar 2016 17:51:36 GMT
+recorded_with: VCR 2.9.3

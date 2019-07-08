@@ -1,0 +1,39 @@
+{
+  "name": "SDWebImage",
+  "version": "3.0",
+  "platforms": {
+    "ios": null
+  },
+  "license": "MIT",
+  "summary": "Asynchronous image downloader with cache support with an UIImageView category.",
+  "homepage": "https://github.com/rs/SDWebImage",
+  "authors": {
+    "Olivier Poitrey": "rs@dailymotion.com"
+  },
+  "source": {
+    "git": "https://github.com/rs/SDWebImage.git",
+    "tag": "3.0"
+  },
+  "description": "This library provides a category for UIImageVIew with support for remote images coming from the web. It provides an UIImageView category adding web image and cache management to the Cocoa Touch framework, an asynchronous image downloader, an asynchronous memory + disk image caching with automatic cache expiration handling, a guarantee that the same URL won't be downloaded several times, a guarantee that bogus URLs won't be retried again and again, and performances!",
+  "default_subspecs": [
+    "Main"
+  ],
+  "requires_arc": true,
+  "subspecs": [
+    {
+      "name": "Main",
+      "source_files": "SDWebImage/{SD,UI}*.{h,m}",
+      "frameworks": "ImageIO"
+    },
+    {
+      "name": "MapKit",
+      "dependencies": {
+        "SDWebImage/Main": [
+
+        ]
+      },
+      "source_files": "SDWebImage/MKAnnotationView+WebCache.*",
+      "frameworks": "MapKit"
+    }
+  ]
+}
