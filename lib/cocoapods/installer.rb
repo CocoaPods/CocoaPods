@@ -750,6 +750,12 @@ module Pod
       end
     end
 
+    # @param [ProjectCacheAnalysisResult] cache_analysis_result
+    #        The cache analysis result for the current installation.
+    #
+    # @param [Hash{String => TargetInstallationResult}] target_installation_results
+    #        The installation results for pod targets installed.
+    #
     def update_project_cache(cache_analysis_result, target_installation_results)
       return unless installation_cache || metadata_cache
       installation_cache.update_cache_key_by_target_label!(cache_analysis_result.cache_key_by_target_label)
