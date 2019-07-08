@@ -42,6 +42,7 @@ group :development do
   gem 'mocha'
   gem 'mocha-on-bacon'
   gem 'prettybacon'
+  gem 'vcr'
   gem 'webmock'
 
   # Integration tests
