@@ -60,6 +60,11 @@ GuardClause:
 Next:
   Enabled: false
 
+# Autocorrect makes this cop much more useful, taking away needless guessing
+Lint/EndAlignment:
+  AutoCorrect: true
+
+
 # Arbitrary max lengths for classes simply do not work and enabling this will
 # lead to a never ending stream of annoyance and changes.
 Metrics/ClassLength:
