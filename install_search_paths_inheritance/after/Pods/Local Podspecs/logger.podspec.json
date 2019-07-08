@@ -24,7 +24,7 @@
       "source_files": "Classes/**/*.{h,m}",
       "dependencies": {
         "CocoaLumberjack": [
-
+          "3.0.0"
         ]
       }
     },

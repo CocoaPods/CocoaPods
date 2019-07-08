@@ -6,10 +6,10 @@ PODS:
   - SocketRocket (0.5.1)
 
 DEPENDENCIES:
-  - libPusher
+  - libPusher (= 1.6.2)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - libPusher
     - SocketRocket
 

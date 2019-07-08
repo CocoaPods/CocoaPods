@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.subspec 'Core' do |c|
     c.source_files  = "Classes/**/*.{h,m}"
 
-    c.dependency "CocoaLumberjack"
+    c.dependency "CocoaLumberjack", '3.0.0'
   end
 
   s.subspec 'Crashlytics' do |cr|
