@@ -64,7 +64,6 @@ module Pod
 
         lambda { @subject.fetch(config.sandbox) }.should.raise(Informative).
           message.should.match(/Failed to fetch podspec for/)
-        WebMock.reset!
       end
     end
   end

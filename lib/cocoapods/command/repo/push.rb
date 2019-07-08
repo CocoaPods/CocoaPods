@@ -73,7 +73,7 @@ module Pod
 
         def run
           open_editor if @commit_message && @message.nil?
-          check_if_master_repo
+          check_if_push_allowed
           validate_podspec_files
           check_repo_status
           update_repo
@@ -106,7 +106,11 @@ module Pod
         # Temporary check to ensure that users do not push accidentally private
         # specs to the master repo.
         #
-        def check_if_master_repo
+        def check_if_push_allowed
+          if @source.is_a?(CDNSource)
+            raise Informative, 'Cannot push to a CDN source, as it is read-only.'
+          end
+
           remotes, = Executable.capture_command('git', %w(remote --verbose), :capture => :merge, :chdir => repo_dir)
           master_repo_urls = [
             'git@github.com:CocoaPods/Specs.git',

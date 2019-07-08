@@ -1,9 +1,6 @@
 [submodule "spec/fixtures/integration/JSONKit"]
 	path = spec/fixtures/integration/JSONKit
 	url = https://github.com/johnezang/JSONKit.git
-[submodule "spec/fixtures/spec-repos/master"]
-	path = spec/fixtures/spec-repos/master
-	url = https://github.com/CocoaPods/Specs.git
 [submodule "spec/fixtures/integration/Reachability"]
 	path = spec/fixtures/integration/Reachability
 	url = https://github.com/tonymillion/Reachability.git

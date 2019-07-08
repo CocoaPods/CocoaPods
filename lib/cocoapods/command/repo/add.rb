@@ -34,9 +34,9 @@ module Pod
           unless @name && @url
             help! 'Adding a repo needs a `NAME` and a `URL`.'
           end
-          if @name == 'master' || @url =~ %r{github.com[:/]+cocoapods/specs}i
+          if @name == 'trunk'
             raise Informative,
-                  'To setup the master specs repo, please run `pod setup`.'
+                  "Repo name `trunk` is reserved for CocoaPods' main spec repo accessed via CDN."
           end
         end
 

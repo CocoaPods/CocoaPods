@@ -108,7 +108,7 @@ module Pod
 
     it "updates the Podfile's sources by default" do
       podfile = Podfile.new do
-        source 'https://github.com/CocoaPods/Specs.git'
+        source TrunkSource::TRUNK_REPO_URL
         pod 'AFNetworking'
       end
       config.stubs(:podfile).returns(podfile)
@@ -122,7 +122,7 @@ module Pod
 
     it "doesn't updates the Podfile's sources with --no-repo-update" do
       config.stubs(:podfile).returns Podfile.new do
-        source 'https://github.com/CocoaPods/Specs.git'
+        source TrunkSource::TRUNK_REPO_URL
         pod 'AFNetworking'
       end
       lockfile = mock

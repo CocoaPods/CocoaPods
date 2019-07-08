@@ -47,11 +47,11 @@ module Pod
               should == 'url'
           end
 
-          it 'runs `pod setup` when there is no matching source for master repo' do
-            Command::Setup.any_instance.stubs(:run).once
-            @sources_manager.stubs(:source_with_url).returns(nil).then.returns(MasterSource.new('master'))
-            @sources_manager.find_or_create_source_with_url('https://github.com/CocoaPods/Specs.git').name.
-              should == 'master'
+          it 'runs `pod repo add` when there is no matching source for CocoaPods Trunk' do
+            Command::Repo::AddCDN.any_instance.stubs(:run).once
+            @sources_manager.stubs(:source_with_url).returns(nil).then.returns(TrunkSource.new('trunk'))
+            @sources_manager.find_or_create_source_with_url(TrunkSource::TRUNK_REPO_URL).name.
+              should == 'trunk'
           end
 
           it 'runs `pod repo add` when there is no matching source' do
@@ -98,7 +98,7 @@ module Pod
       extend SpecHelper::TemporaryRepos
 
       before do
-        MasterSource.any_instance.stubs(:unchanged_github_repo?).returns(false)
+        Source.any_instance.stubs(:unchanged_github_repo?).returns(false)
       end
 
       it 'updates source backed by a git repository' do
@@ -106,18 +106,18 @@ module Pod
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
 
         repo_update = sequence('repo update')
-        MasterSource.any_instance.
+        Source.any_instance.
           expects(:git!).
           with(%W(-C #{test_repo_path} fetch origin --progress)).
           in_sequence(repo_update)
 
-        MasterSource.any_instance.
+        Source.any_instance.
           expects(:git!).
           with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
           returns("my-special-branch\n").
           in_sequence(repo_update)
 
-        MasterSource.any_instance.
+        Source.any_instance.
           expects(:git!).
           with(%W(-C #{test_repo_path} reset --hard origin/my-special-branch)).
           in_sequence(repo_update)
@@ -130,55 +130,23 @@ module Pod
         @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
 
         repo_update = sequence('repo update --silent')
-        MasterSource.any_instance.
+        Source.any_instance.
           expects(:git!).
           with(%W(-C #{test_repo_path} fetch origin)).
           in_sequence(repo_update)
 
-        MasterSource.any_instance.
+        Source.any_instance.
           expects(:git!).
           with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
           returns("my-special-branch\n").
           in_sequence(repo_update)
 
-        MasterSource.any_instance.
+        Source.any_instance.
           expects(:git!).
           with(%W(-C #{test_repo_path} reset --hard origin/my-special-branch)).
           in_sequence(repo_update)
 
         @sources_manager.update(test_repo_path.basename.to_s, false)
-      end
-
-      it 'unshallows if the git repo is shallow' do
-        set_up_test_repo_for_update
-        test_repo_path.join('.git', 'shallow').open('w') { |f| f << 'a' * 40 }
-        @sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
-
-        repo_update = sequence('repo update')
-        MasterSource.any_instance.
-          expects(:git!).
-          with(%W(-C #{test_repo_path} fetch --unshallow)).
-          in_sequence(repo_update)
-
-        MasterSource.any_instance.
-          expects(:git!).
-          with(%W(-C #{test_repo_path} fetch origin --progress)).
-          in_sequence(repo_update)
-
-        MasterSource.any_instance.
-          expects(:git!).
-          with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
-          returns("master\n").
-          in_sequence(repo_update)
-
-        MasterSource.any_instance.
-          expects(:git!).
-          with(%W(-C #{test_repo_path} reset --hard origin/master)).
-          in_sequence(repo_update)
-
-        @sources_manager.update(test_repo_path.basename.to_s, true)
-
-        UI.output.should.match /deep fetch.+`master`.+improve future performance/
       end
 
       it 'prints a warning if the update failed' do
@@ -189,7 +157,7 @@ module Pod
         Source.any_instance.stubs(:git).with do |options|
           options.join(' ') == %W(-C #{test_repo_path} diff --name-only aabbccd..HEAD).join(' ')
         end.returns('')
-        MasterSource.any_instance.expects(:git!).with(%W(-C #{test_repo_path} fetch origin --progress)).raises(<<-EOS)
+        Source.any_instance.expects(:git!).with(%W(-C #{test_repo_path} fetch origin --progress)).raises(<<-EOS)
 fatal: '/dev/null' does not appear to be a git repository
 fatal: Could not read from remote repository.
 

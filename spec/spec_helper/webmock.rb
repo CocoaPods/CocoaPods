@@ -3,13 +3,15 @@ require 'webmock'
 
 module Bacon
   class Context
-    module AfterWebMock
-      def after(&block)
-        super
+    alias webmock_initialize initialize
+
+    def initialize(name, &block)
+      webmock_initialize(name, &block)
+      after do
         WebMock.reset!
+        WebMock.allow_net_connect!
+        WebMock.disable!
       end
     end
-
-    include AfterWebMock
   end
 end

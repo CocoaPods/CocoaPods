@@ -6,11 +6,16 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* Replace git-based `MasterSource` with CDN-based `TrunkSource`  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#8923](https://github.com/CocoaPods/CocoaPods/pull/8923)
+  [Core#552](https://github.com/CocoaPods/Core/pull/552)
+
 * Performance optimization for large number of files related to cleaning sandbox directory during installation  
   [hovox](https://github.com/hovox)
   [#8797](https://github.com/CocoaPods/CocoaPods/issues/8797)
-
-##### Enhancements
 
 * Fix target definition display name for inhibit warnings message.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)

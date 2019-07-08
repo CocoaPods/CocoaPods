@@ -4,13 +4,11 @@ require 'webmock'
 module Pod
   describe Validator do
     before do
+      # get these in before mock activates
+      podspec_path
+      podspec_path('RestKit', '0.22.0')
       WebMock.enable!
       WebMock.disable_net_connect!
-    end
-
-    after do
-      WebMock.reset!
-      WebMock.disable!
     end
 
     before do
@@ -39,7 +37,7 @@ module Pod
     # @return [Pathname]
     #
     def podspec_path(name = 'JSONKit', version = '1.4')
-      Config.instance.sources_manager.master.first.pod_path(name).join("#{version}/#{name}.podspec.json")
+      Config.instance.sources_manager.master.first.specification_path(name, version)
     end
 
     #-------------------------------------------------------------------------#
@@ -519,7 +517,7 @@ module Pod
       end
 
       it 'empties sources when no dependencies' do
-        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(podspec_path, sources)
         validator.stubs(:validate_url)
@@ -541,12 +539,12 @@ module Pod
 
         spec = Specification.from_file(file)
 
-        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(spec, sources)
         validator.stubs(:validate_url)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        podfile.sources.should == %w(https://github.com/CocoaPods/Specs.git)
+        podfile.sources.should == [TrunkSource::TRUNK_REPO_URL]
       end
 
       it 'respects the source_urls parameter when there are dependencies within subspecs' do
@@ -563,16 +561,16 @@ module Pod
 
         spec = Specification.from_file(file)
 
-        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(spec, sources)
         validator.stubs(:validate_url)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        podfile.sources.should == %w(https://github.com/CocoaPods/Specs.git)
+        podfile.sources.should == [TrunkSource::TRUNK_REPO_URL]
       end
 
       it 'avoids creation of sources when no dependencies' do
-        sources = %w(master https://github.com/CocoaPods/Specs.git)
+        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
         config.sources_manager.expects(:find_or_create_source_with_url).never
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(podspec_path, sources)

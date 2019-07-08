@@ -895,13 +895,13 @@ You have either:
           pod 'JSONKit', '> 2'
         end
         file = fixture('spec-repos/test_repo/JSONKit/999.999.999/JSONKit.podspec')
-        sources = config.sources_manager.sources(%w(master test_repo))
+        sources = config.sources_manager.sources(%w(trunk test_repo))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '999.999.999'
         spec.defined_in_file.should == file
 
-        sources = config.sources_manager.sources(%w(test_repo master))
+        sources = config.sources_manager.sources(%w(test_repo trunk))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '999.999.999'
@@ -914,13 +914,13 @@ You have either:
           platform :ios
           pod 'JSONKit', '1.4'
         end
-        sources = config.sources_manager.sources(%w(master test_repo))
+        sources = config.sources_manager.sources(%w(trunk test_repo))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.4'
-        spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json')
+        spec.defined_in_file.should == fixture('spec-repos/trunk/Specs/1/3/f/JSONKit/1.4/JSONKit.podspec.json')
 
-        sources = config.sources_manager.sources(%w(test_repo master))
+        sources = config.sources_manager.sources(%w(test_repo trunk))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.4'
@@ -985,7 +985,7 @@ You have either:
           pod 'JSONKit', '1.4', :source => test_repo_url
         end
 
-        sources = config.sources_manager.sources(%w(master test_repo))
+        sources = config.sources_manager.sources(%w(trunk test_repo))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve
 
@@ -1000,7 +1000,7 @@ You have either:
           pod 'JSONKit', '1.5pre', :source => test_repo_url
         end
 
-        sources = config.sources_manager.sources(%w(master))
+        sources = config.sources_manager.sources(%w(trunk))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         e = lambda { resolver.resolve }.should.raise Informative
         e.message.should.match(/None of your spec sources contain a spec/)
@@ -1010,7 +1010,7 @@ You have either:
 
       it 'resolves a dependency with an explicit source even if it can\'t be ' \
          'resolved using the global sources' do
-        master_repo_url = config.sources_manager.source_with_name_or_url('master').url
+        master_repo_url = config.sources_manager.source_with_name_or_url('trunk').url
         podfile = Podfile.new do
           platform :ios
           pod 'JSONKit', '1.5pre', :source => master_repo_url
@@ -1021,11 +1021,11 @@ You have either:
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         spec = resolver.resolve.values.flatten.first.spec
         spec.version.to_s.should == '1.5pre'
-        spec.defined_in_file.should == fixture('spec-repos/master/Specs/1/3/f/JSONKit/1.5pre/JSONKit.podspec.json')
+        spec.defined_in_file.should == fixture('spec-repos/trunk/Specs/1/3/f/JSONKit/1.5pre/JSONKit.podspec.json')
       end
 
       it 'uses explicit source repos for a dependency even when it\'s transitive' do
-        master_repo_url = config.sources_manager.source_with_name_or_url('master').url
+        master_repo_url = config.sources_manager.source_with_name_or_url('trunk').url
         test_repo_url = config.sources_manager.source_with_name_or_url('test_repo').url
 
         podfile = Podfile.new do
@@ -1035,7 +1035,7 @@ You have either:
           pod 'JSONKit', '1.4', :source => test_repo_url
         end
 
-        sources = config.sources_manager.sources(%w(master test_repo))
+        sources = config.sources_manager.sources(%w(trunk test_repo))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve
 
@@ -1056,7 +1056,7 @@ You have either:
         end
 
         # CrossRepoDependent depends on AFNetworking which is only available in the master repo.
-        sources = config.sources_manager.sources(%w(master))
+        sources = config.sources_manager.sources(%w(trunk))
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         resolver.resolve
 
@@ -1068,7 +1068,7 @@ You have either:
 
         afnetworking_spec = specs.find { |s| s.name == 'AFNetworking' }
         afnetworking_spec.should.not.be.nil
-        afnetworking_spec.defined_in_file.should == fixture('spec-repos/master/Specs/a/7/5/AFNetworking/2.4.0/AFNetworking.podspec.json')
+        afnetworking_spec.defined_in_file.should == fixture('spec-repos/trunk/Specs/a/7/5/AFNetworking/2.4.0/AFNetworking.podspec.json')
 
         # Check that if the master source is not available the dependency cannot be resolved.
         sources = config.sources_manager.sources(%w(test_repo))

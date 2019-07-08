@@ -15,9 +15,9 @@ end
 
 # @return [Podfile]
 #
-def generate_podfile(pods = ['JSONKit'])
+def generate_podfile(pods = ['DfPodTest'])
   Pod::Podfile.new do
-    platform :ios
+    platform :ios, 8.0
     install! 'cocoapods', :integrate_targets => false
     project SpecHelper.fixture('SampleProject/SampleProject'), 'Test' => :debug, 'App Store' => :release
     target 'SampleProject' do
@@ -422,13 +422,13 @@ module Pod
 
         it 'analyzes the Podfile, the Lockfile and the Sandbox' do
           @installer.send(:analyze)
-          @installer.analysis_result.sandbox_state.added.should == Set.new(%w(JSONKit))
+          @installer.analysis_result.sandbox_state.added.should == Set.new(%w(DfPodTest FMDB))
         end
 
         it 'stores the targets created by the analyzer' do
           @installer.send(:analyze)
           @installer.aggregate_targets.map(&:name).sort.should == ['Pods-SampleProject', 'Pods-SampleProjectTests']
-          @installer.pod_targets.map(&:name).sort.should == ['JSONKit']
+          @installer.pod_targets.map(&:name).sort.should == %w(DfPodTest FMDB)
         end
 
         it 'configures the analyzer to use update mode if appropriate' do
@@ -443,7 +443,7 @@ module Pod
       describe '#validate_whitelisted_configurations' do
         it "raises when a whitelisted configuration doesn’t exist in the user's project" do
           target_definition = @installer.podfile.target_definitions.values.first
-          target_definition.whitelist_pod_for_configuration('JSONKit', 'YOLO')
+          target_definition.whitelist_pod_for_configuration('DfPodTest', 'YOLO')
           @installer.send(:analyze)
           should.raise Informative do
             @installer.send(:validate_build_configurations)
@@ -452,7 +452,7 @@ module Pod
 
         it "does not raise if all whitelisted configurations exist in the user's project" do
           target_definition = @installer.podfile.target_definitions.values.first
-          target_definition.whitelist_pod_for_configuration('JSONKit', 'Test')
+          target_definition.whitelist_pod_for_configuration('DfPodTest', 'Test')
           @installer.send(:analyze)
           should.not.raise do
             @installer.send(:validate_build_configurations)
@@ -769,7 +769,7 @@ module Pod
       before do
         @installer.send(:analyze)
         @specs = @installer.pod_targets.map(&:specs).flatten
-        @spec = @specs.find { |spec| spec && spec.name == 'JSONKit' }
+        @spec = @specs.find { |spec| spec && spec.name == 'DfPodTest' }
         @installer.stubs(:installed_specs).returns(@specs)
       end
 
@@ -900,7 +900,7 @@ module Pod
         end.message.should.include 'The `Pods` directory is out-of-date, you must run `pod install`'
       end
 
-      it 'returns the aggregate targets without performing installation' do
+      it 'returns the aggregate targets without performing installation with trunk pod' do
         podfile = generate_podfile
         lockfile = generate_lockfile
 
@@ -917,13 +917,13 @@ module Pod
 
         aggregate_targets.last.pod_targets.should == []
         sample_project_target = aggregate_targets.first
-        sample_project_target.pod_targets.map(&:label).should == %w(JSONKit)
+        sample_project_target.pod_targets.map(&:label).should == %w(DfPodTest FMDB)
 
-        jsonkit = sample_project_target.pod_targets.first
+        dfpodtest = sample_project_target.pod_targets.first
 
-        jsonkit.sandbox.should == config.sandbox
-        jsonkit.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('JSONKit')]
-        jsonkit.archs.should == []
+        dfpodtest.sandbox.should == config.sandbox
+        dfpodtest.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('DfPodTest')]
+        dfpodtest.archs.should == []
       end
 
       it 'returns the aggregate targets without performing installation with local pods' do
@@ -946,11 +946,11 @@ module Pod
         sample_project_target = aggregate_targets.first
         sample_project_target.pod_targets.map(&:label).should == %w(Reachability)
 
-        jsonkit = sample_project_target.pod_targets.first
+        dfpodtest = sample_project_target.pod_targets.first
 
-        jsonkit.sandbox.should == config.sandbox
-        jsonkit.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('Reachability')]
-        jsonkit.archs.should == []
+        dfpodtest.sandbox.should == config.sandbox
+        dfpodtest.file_accessors.flat_map(&:root).should == [config.sandbox.pod_dir('Reachability')]
+        dfpodtest.archs.should == []
       end
     end
   end

@@ -22,8 +22,6 @@ module Pod
           UI.title_level = 0
           begin
             case
-            when name =~ /^master(-\d+)?$/
-              Command::Setup.parse([]).run
             when url =~ /\.git$/
               Command::Repo::Add.parse([name, url]).run
             when url =~ %r{^https:\/\/}
@@ -136,16 +134,7 @@ module Pod
     end
   end
 
-  class MasterSource
-    def update_git_repo(show_output = false)
-      if repo.join('.git', 'shallow').file?
-        UI.info "Performing a deep fetch of the `#{name}` specs repo to improve future performance" do
-          git!(%W(-C #{repo} fetch --unshallow))
-        end
-      end
-      super
-    end
-
+  class TrunkSource
     def verify_compatibility!
       super
       latest_cocoapods_version = metadata.latest_cocoapods_version && Gem::Version.create(metadata.latest_cocoapods_version)
