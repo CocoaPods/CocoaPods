@@ -10,3 +10,6 @@
 [submodule "spec/fixtures/spec-repos/test_repo"]
 	path = spec/fixtures/spec-repos/test_repo
 	url = https://github.com/CocoaPods/cocoapods-test-specs.git
+[submodule "spec/fixtures/spec-repos-core/artsy"]
+	path = spec/fixtures/spec-repos-core/artsy
+	url = https://github.com/artsy/Specs.git
