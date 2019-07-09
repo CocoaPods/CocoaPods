@@ -430,10 +430,21 @@ module Pod
       repo_git(%w(rev-parse HEAD))
     end
 
+    extend Executable
+    executable :git
+
     def update_git_repo(show_output = false)
-      repo_git(['checkout', git_tracking_branch])
-      output = repo_git(%w(pull --ff-only), :include_error => true)
-      CoreUI.puts output if show_output
+      Config.instance.with_changes(:verbose => show_output) do
+        args = %W(-C #{repo} fetch origin)
+        args.push('--progress') if show_output
+        git!(args)
+        git!(%W(-C #{repo} reset --hard origin/#{git_tracking_branch}))
+      end
+    rescue
+      raise Informative, 'CocoaPods was not able to update the ' \
+        "`#{name}` repo. If this is an unexpected issue " \
+        'and persists you can inspect it running ' \
+        '`pod repo update --verbose`'
     end
 
     def git_tracking_branch

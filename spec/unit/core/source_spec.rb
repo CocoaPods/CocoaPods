@@ -257,20 +257,59 @@ module Pod
         end
       end
 
-      it 'uses the only fast forward git option' do
-        @source.expects(:`).with("env -u GIT_CONFIG git -C \"#{@path}\" checkout master")
-        @source.expects(:`).with("env -u GIT_CONFIG git -C \"#{@path}\" pull --ff-only 2>&1")
+      it 'updates source backed by a git repository' do
+        repo_update = sequence('repo update')
+        @source.
+          expects(:git!).
+          with(%W(-C #{@path} fetch origin)).
+          in_sequence(repo_update)
+
+        @source.
+          expects(:git_tracking_branch).
+          returns('my-special-branch').
+          in_sequence(repo_update)
+
+        @source.
+          expects(:git!).
+          with(%W(-C #{@path} reset --hard origin/my-special-branch)).
+          in_sequence(repo_update)
+
         @source.send :update_git_repo
       end
 
-      it 'checks out the appropriate branch' do
+      it 'uses the default branch if `cocoapods_branch` doesn\'t exist' do
+        repo_update = sequence('repo update')
+        @source.
+          expects(:git!).
+          with(%W(-C #{@path} fetch origin)).
+          in_sequence(repo_update)
+
+        @source.
+          expects(:git!).
+          with(%W(-C #{@path} reset --hard origin/#{Source::DEFAULT_SPECS_BRANCH})).
+          in_sequence(repo_update)
+
+        @source.send :update_git_repo
+      end
+
+      it 'uses the branch listed in `cocoapods_branch`' do
         path = @source.repo.join('.git', 'cocoapods_branch')
         path.dirname.mkpath
         path.open('w') { |f| f << 'random_branch' }
-        @source.expects(:`).with("env -u GIT_CONFIG git -C \"#{@path}\" checkout random_branch")
-        @source.expects(:`).with("env -u GIT_CONFIG git -C \"#{@path}\" pull --ff-only 2>&1")
+
+        repo_update = sequence('repo update')
+        @source.
+          expects(:git!).
+          with(%W(-C #{@path} fetch origin)).
+          in_sequence(repo_update)
+
+        @source.
+          expects(:git!).
+          with(%W(-C #{@path} reset --hard origin/random_branch)).
+          in_sequence(repo_update)
+
         begin
-          @source.send(:update_git_repo)
+          @source.send :update_git_repo
         ensure
           path.delete if path.file?
         end

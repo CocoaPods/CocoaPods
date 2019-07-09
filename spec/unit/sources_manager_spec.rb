@@ -112,9 +112,8 @@ module Pod
           in_sequence(repo_update)
 
         Source.any_instance.
-          expects(:git!).
-          with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
-          returns("my-special-branch\n").
+          expects(:git_tracking_branch).
+          returns('my-special-branch').
           in_sequence(repo_update)
 
         Source.any_instance.
@@ -136,9 +135,8 @@ module Pod
           in_sequence(repo_update)
 
         Source.any_instance.
-          expects(:git!).
-          with(%W(-C #{test_repo_path} rev-parse --abbrev-ref HEAD)).
-          returns("my-special-branch\n").
+          expects(:git_tracking_branch).
+          returns('my-special-branch').
           in_sequence(repo_update)
 
         Source.any_instance.
