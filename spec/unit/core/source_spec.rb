@@ -221,6 +221,7 @@ module Pod
           # that we initialize it as just a `Source`, though.
           @path = fixture('spec-repos-core/artsy')
           @source = Source.new(@path)
+          WebMock.enable!
         end
 
         it 'does not git fetch if the GitHub API returns not-modified' do

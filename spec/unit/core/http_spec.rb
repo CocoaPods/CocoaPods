@@ -2,8 +2,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe HTTP do
-    after do
-      WebMock.reset!
+    before do
+      WebMock.enable!
     end
 
     describe 'In general' do

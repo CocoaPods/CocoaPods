@@ -149,17 +149,17 @@ module Pod
 
       it 'raises when setting an unknown inheritance mode' do
         exception = should.raise(Informative) { @child.inheritance = :unknown }
-        exception.message.should == 'Unrecognized inheritance option `unknown` specified for target `MyAppTests`.'
+        exception.message.should.include 'Unrecognized inheritance option `unknown` specified for target `MyAppTests`.'
       end
 
       it 'raises when setting an inheritance mode on a root target definition' do
         exception = should.raise(Informative) { @root.inheritance = :none }
-        exception.message.should == 'Cannot set inheritance for the root target definition.'
+        exception.message.should.include 'Cannot set inheritance for the root target definition.'
       end
 
       it 'raises when setting an inheritance mode on a abstract target definition' do
         exception = should.raise(Informative) { @abstract.inheritance = :none }
-        exception.message.should == 'Cannot set inheritance for abstract target definition.'
+        exception.message.should.include 'Cannot set inheritance for abstract target definition.'
       end
 
       #--------------------------------------#

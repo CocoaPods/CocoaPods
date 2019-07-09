@@ -405,7 +405,7 @@ module Pod
         DSL
         podfile = Podfile.from_ruby(fixture('Podfile'), dsl)
         podfile.dependencies.should == [Dependency.new('AFNetworking', '~> 2.0')]
-        CoreUI.warnings.should.match /smart quotes/
+        UI.warnings.should.match /smart quotes/
       end
 
       it 'handles the `podfile` extension' do

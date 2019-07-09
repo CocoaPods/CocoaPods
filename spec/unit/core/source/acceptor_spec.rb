@@ -3,6 +3,7 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 module Pod
   describe Source::Acceptor do
     before do
+      WebMock.enable!
       WebMock::API.stub_request(:head, %r{http://banana-corp.local/banana-lib.git}).to_return(
         :status => 301, :headers => { 'Location' => 'http://NEW-URL/banana-lib.git' })
       WebMock::API.stub_request(:head, %r{http://evil-gorilla-fork/banana-lib.git}).to_return(

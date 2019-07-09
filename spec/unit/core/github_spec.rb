@@ -2,6 +2,10 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe GitHub do
+    before do
+      WebMock.enable!
+    end
+
     describe 'In general' do
       it 'returns the information of a user' do
         VCR.use_cassette('GitHub', :record => :new_episodes) do
@@ -107,8 +111,8 @@ module Pod
       it 'prints a warning for failed requests' do
         VCR.use_cassette('GitHub', :record => :new_episodes) do
           GitHub.repo('https://github.com/CocoaPods/Missing_Repo')
-          CoreUI.warnings.should.match /Request to https:.*Missing_Repo failed - 404/
-          CoreUI.warnings.should.match /Not Found/
+          UI.warnings.should.match /Request to https:.*Missing_Repo failed - 404/
+          UI.warnings.should.match /Not Found/
         end
       end
 

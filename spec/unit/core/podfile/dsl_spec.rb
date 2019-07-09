@@ -542,7 +542,7 @@ module Pod
                 inherit! 'foo'
               end
             end
-          end.message.should == 'Unrecognized inheritance option `foo` specified for target `App`.'
+          end.message.should.include 'Unrecognized inheritance option `foo` specified for target `App`.'
         end
       end
 
@@ -645,7 +645,7 @@ module Pod
               end
             end
           end
-        end.message.should == 'Specifying multiple `post_install` hooks is unsupported.'
+        end.message.should.include 'Specifying multiple `post_install` hooks is unsupported.'
       end
     end
 
@@ -673,7 +673,7 @@ module Pod
               install! 'method'
             end
           end
-        end.message.should == 'The installation method can only be set at the root level of the Podfile.'
+        end.message.should.include 'The installation method can only be set at the root level of the Podfile.'
       end
     end
 
@@ -685,14 +685,14 @@ module Pod
           Podfile.new do
             link_with 'App'
           end
-        end.message.should == 'The specification of `link_with` in the Podfile is now unsupported, please use target blocks instead.'
+        end.message.should.include 'The specification of `link_with` in the Podfile is now unsupported, please use target blocks instead.'
       end
 
       it 'warns when using the #xcodeproj method' do
         podfile = Podfile.new { xcodeproj 'App.xcodeproj', 'Test' => :debug }
         podfile.target_definitions['Pods'].user_project_path.should == 'App.xcodeproj'
         podfile.target_definitions['Pods'].build_configurations.should == { 'Test' => :debug }
-        CoreUI.warnings.should == '`xcodeproj` was renamed to `project`. Please update your Podfile accordingly.'
+        UI.warnings.should.include '`xcodeproj` was renamed to `project`. Please update your Podfile accordingly.'
       end
     end
 
@@ -702,7 +702,7 @@ module Pod
           Podfile.new do
             script_phase :name => 'PhaseName', :script => 'echo "Hello World"'
           end
-        end.message.should == 'Script phases can only be added within target definitions.'
+        end.message.should.include 'Script phases can only be added within target definitions.'
       end
 
       it 'raises when adding a script phase to an abstract target' do
@@ -712,7 +712,7 @@ module Pod
               script_phase :name => 'PhaseName', :script => 'echo "Hello World"'
             end
           end
-        end.message.should == 'Script phases cannot be added to abstract targets.'
+        end.message.should.include 'Script phases cannot be added to abstract targets.'
       end
     end
 

@@ -3,14 +3,9 @@ require File.expand_path('../../../spec_helper', __FILE__)
 module Pod
   describe 'In general' do
     before do
-      @good_podfile_lock      = File.open(
-        File.expand_path('../fixtures/Podfile.lock', __FILE__))
-
-      @bad_yaml_podfile_lock  = File.open(
-        File.expand_path('../fixtures/PodfileWithIncorrectYAML.lock', __FILE__))
-
-      @conflict_podfile_lock  = File.open(
-        File.expand_path('../fixtures/PodfileWithMergeConflicts.lock', __FILE__))
+      @good_podfile_lock = File.open(fixture('Podfile.lock'))
+      @bad_yaml_podfile_lock = File.open(fixture('PodfileWithIncorrectYAML.lock'))
+      @conflict_podfile_lock = File.open(fixture('PodfileWithMergeConflicts.lock'))
     end
 
     after do
