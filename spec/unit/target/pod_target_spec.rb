@@ -760,6 +760,13 @@ module Pod
                                                                     :environment_variables => { 'Key1' => 'Val1' } }
           @pod_target.scheme_for_spec(@matryoshka_spec.subspecs.first).should == {}
         end
+
+        it 'returns an empty scheme configuration for a spec with an unsupported platform' do
+          @matryoshka_spec.ios.deployment_target = '7.0'
+          @matryoshka_spec.subspecs.first.watchos.deployment_target = '4.2'
+          pod_target = fixture_pod_target(@matryoshka_spec.subspecs.first, true, [], {}, Platform.watchos)
+          pod_target.scheme_for_spec(@matryoshka_spec).should == {}
+        end
       end
 
       describe 'resource and framework paths' do
