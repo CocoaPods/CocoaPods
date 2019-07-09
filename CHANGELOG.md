@@ -80,6 +80,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#8914](https://github.com/CocoaPods/CocoaPods/pull/8914)
   
 
+## 1.7.4 (2019-07-09)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Handle scheme configuration for specs with unsupported platforms.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8850](https://github.com/CocoaPods/CocoaPods/issues/8850)
+
+
 ## 1.7.3 (2019-06-28)
 
 ##### Enhancements
