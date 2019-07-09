@@ -13,7 +13,9 @@ module Pod
           # Generate container Pods.xcodeproj.
           container_project = create_container_project(aggregate_targets, sandbox.project_path)
 
-          project_paths_by_pod_targets = pod_targets.group_by { |pod_target| sandbox.pod_target_project_path(pod_target.pod_name) }
+          project_paths_by_pod_targets = pod_targets.group_by do |pod_target|
+            sandbox.pod_target_project_path(pod_target.project_name)
+          end
           projects_by_pod_targets = Hash[project_paths_by_pod_targets.map do |project_path, pod_targets|
             project = create_pods_project(pod_targets, project_path, container_project)
             [project, pod_targets]

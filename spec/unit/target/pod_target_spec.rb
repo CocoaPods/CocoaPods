@@ -164,6 +164,17 @@ module Pod
       end
     end
 
+    describe 'project name' do
+      it 'returns the project name from the target definition if one is specified' do
+        @target_definition.store_pod('BananaLib', :project_name => 'SomeProject')
+        @pod_target.project_name.should == 'SomeProject'
+      end
+
+      it 'returns the project name from the pod target by default' do
+        @pod_target.project_name.should == 'BananaLib'
+      end
+    end
+
     describe 'swift version' do
       it 'returns the swift version with the given requirements from the target definition' do
         @target_definition.store_swift_version_requirements('>= 4.0')

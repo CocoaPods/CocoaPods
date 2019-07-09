@@ -574,7 +574,7 @@ module Pod
     end
 
     def validate_targets
-      validator = Xcode::TargetValidator.new(aggregate_targets, pod_targets)
+      validator = Xcode::TargetValidator.new(aggregate_targets, pod_targets, installation_options)
       validator.validate!
     end
 

@@ -119,7 +119,8 @@ module Pod
       target_definitions.map do |target_definition|
         cache_key = [specs, target_definition]
         cache[cache_key] ||= begin
-          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs, [target_definition], file_accessors, target_definition.label,
+          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
+                                 specs, [target_definition], file_accessors, target_definition.label,
                                  :build_type => build_type)
           scope_dependent_targets = ->(dependent_targets) do
             dependent_targets.flat_map do |pod_target|
@@ -223,6 +224,16 @@ module Pod
     #
     def podfile
       target_definitions.first.podfile
+    end
+
+    # @return [String] the project name derived from the target definitions that integrate this pod. If none is
+    #         specified then the name of the pod is used by default.
+    #
+    # @note   The name is guaranteed to be the same across all target definitions and is validated by the target
+    #         validator during installation.
+    #
+    def project_name
+      target_definitions.first.project_name_for_pod(pod_name) || pod_name
     end
 
     # @return [String] The name to use for the source code module constructed

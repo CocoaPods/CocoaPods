@@ -109,6 +109,18 @@ module Pod
             @banana_cache_key.key_difference(changed_build_settings_cache_key).should.equal(:project)
             changed_build_settings_cache_key.key_difference(@banana_cache_key).should.equal(:project)
           end
+
+          it 'should return inequality if the project name changed' do
+            banana_project_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+            @banana_cache_key = TargetCacheKey.from_pod_target(@banana_pod_target)
+            banana_project_target.stubs(:project_name).returns('SomeProject')
+
+            added_banana_cache_key = TargetCacheKey.from_pod_target(banana_project_target)
+            diff = added_banana_cache_key.key_difference(@banana_cache_key)
+            inverse_diff = @banana_cache_key.key_difference(added_banana_cache_key)
+            diff.should.equal(:project)
+            inverse_diff.should.equal(:project)
+          end
         end
 
         describe 'key_difference with hash objects' do

@@ -46,6 +46,7 @@ module Pod
               return :project if other.key_hash['CHECKSUM'] != key_hash['CHECKSUM']
               return :project if other.key_hash['SPECS'] != key_hash['SPECS']
               return :project if other.key_hash['FILES'] != key_hash['FILES']
+              return :project if other.key_hash['PROJECT_NAME'] != key_hash['PROJECT_NAME']
             end
 
             this_build_settings = key_hash['BUILD_SETTINGS_CHECKSUM']
@@ -62,6 +63,13 @@ module Pod
 
         def to_h
           key_hash
+        end
+
+        # @return [String]
+        #         The name of the project the target belongs to.
+        #
+        def project_name
+          key_hash['PROJECT_NAME']
         end
 
         # Creates a TargetCacheKey instance from the given hash.
@@ -110,6 +118,7 @@ module Pod
             'CHECKSUM' => pod_target.root_spec.checksum,
             'SPECS' => pod_target.specs.map(&:to_s).sort_by(&:downcase),
             'BUILD_SETTINGS_CHECKSUM' => build_settings,
+            'PROJECT_NAME' => pod_target.project_name,
           }
           contents['FILES'] = pod_target.all_files.sort_by(&:downcase) if is_local_pod
           contents['CHECKOUT_OPTIONS'] = checkout_options if checkout_options
