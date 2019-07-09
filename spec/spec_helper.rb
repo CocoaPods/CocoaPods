@@ -48,6 +48,11 @@ require 'spec_helper/pre_flight'      # Cleans the temporary directory, the conf
 require 'spec_helper/webmock'         # Cleans up mocks after each spec
 require 'spec_helper/mock_source'     # Allows building a mock source from Spec objects.
 
+# disable Colored2 in tests so that error comparison works
+#--------------------------------------#
+
+Colored2.disable!
+
 # VCR
 #--------------------------------------#
 
