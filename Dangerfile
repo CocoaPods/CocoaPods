@@ -2,13 +2,11 @@
 # ensuring that we don't get green builds based on a subset of tests
 (git.modified_files + git.added_files - %w(Dangerfile)).each do |file|
   next unless File.file?(file)
-  next unless file.end_with? '.rb'
+  next unless file =~ /^spec.*\.rb/
 
   contents = File.read(file)
-  if file.start_with?('spec')
-    fail("`xit` or `fit` left in tests (#{file})") if contents =~ /^\w*[xf]it/
-    fail("`fdescribe` left in tests (#{file})") if contents =~ /^\w*fdescribe/
-  end
+  fail("`xit` or `fit` left in tests (#{file})") if contents =~ /^\s*[xf]it/
+  fail("`fdescribe` left in tests (#{file})") if contents =~ /^\s*fdescribe/
 end
 
 # Ensure a clean commits history

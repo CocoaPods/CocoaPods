@@ -169,6 +169,11 @@ begin
 
         title 'Running Inch'
         Rake::Task['inch'].invoke
+
+        unless ENV['CI'].nil?
+          title 'Running Danger'
+          Rake::Task['danger'].invoke
+        end
       end
     end
 
@@ -328,6 +333,15 @@ begin
 
   require 'inch_by_inch/rake_task'
   InchByInch::RakeTask.new
+
+  #-- Danger -----------------------------------------------------------------#
+
+  desc 'Run Danger to check PRs'
+  task :danger do
+    sh 'bundle exec danger' do |ok, _status|
+      raise 'Danger has found errors. Please refer to your PR for more information.' unless ok
+    end
+  end
 
 rescue LoadError, NameError => e
   $stderr.puts "\033[0;31m" \
