@@ -48,7 +48,7 @@ module Pod
       private
 
       # @param  [Xcodeproj::Project] project
-      #         The xcode project to generate a podfile for.
+      #         The Xcode project to generate a podfile for.
       #
       # @return [String] the text of the Podfile for the provided project
       #
@@ -61,9 +61,7 @@ module Pod
         PLATFORM
 
         # Split out the targets into app and test targets
-        test_targets, app_targets = project.native_targets.
-                              sort_by { |t| t.name.downcase }.
-                              partition(&:test_target_type?)
+        test_targets, app_targets = project.native_targets.sort_by { |t| t.name.downcase }.partition(&:test_target_type?)
 
         app_targets.each do |app_target|
           test_targets_for_app = test_targets.select do |target|
@@ -75,14 +73,14 @@ module Pod
         podfile
       end
 
-      # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain related test targets
+      # @param [PBXNativeTarget] host the native host target for the module.
       #
-      # @return [String] the text for the target module
+      # @param [Array<PBXNativeTarget>] tests the native test targets for the module.
       #
-      def target_module(app, tests)
-        target_module = "\ntarget '#{app.name.gsub(/'/, "\\\\\'")}' do\n"
+      # @return [String] the text for the target module.
+      #
+      def target_module(host, tests)
+        target_module = "\ntarget '#{host.name.gsub(/'/, "\\\\\'")}' do\n"
 
         target_module << <<-RUBY
   # Comment the next line if you don't want to use dynamic frameworks
@@ -90,11 +88,13 @@ module Pod
 
          RUBY
 
-        target_module << template_contents(config.default_podfile_path, '  ', "Pods for #{app.name}\n")
+        target_module << template_contents(config.default_podfile_path, '  ', "Pods for #{host.name}\n")
 
         tests.each do |test|
           target_module << "\n  target '#{test.name.gsub(/'/, "\\\\\'")}' do\n"
-          target_module << "    inherit! :search_paths\n"
+          unless Pod::AggregateTarget::EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include?(host.symbol_type) || test.symbol_type == :ui_test_bundle
+            target_module << "    inherit! :search_paths\n"
+          end
           target_module << template_contents(config.default_test_podfile_path, '    ', 'Pods for testing')
           target_module << "\n  end\n"
         end
@@ -102,11 +102,13 @@ module Pod
         target_module << "\nend\n"
       end
 
-      # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain a second target as its test target
+      # @param [Pathname] path the path of the template to load contents from.
       #
-      # @return [String] the text for the target module
+      # @param [String] prefix the prefix to use for each line.
+      #
+      # @param [String] fallback the fallback contents to use if the path for the template does not exist.
+      #
+      # @return [String] the template contents for the given path.
       #
       def template_contents(path, prefix, fallback)
         if path.exist?

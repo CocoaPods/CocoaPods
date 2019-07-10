@@ -35,7 +35,7 @@ module Pod
     # @param  [Array<String>] source_urls
     #         the Source URLs to use in creating a {Podfile}.
     #
-    # @param. [Array<String>] platforms
+    # @param  [Array<String>] platforms
     #         the platforms to lint.
     #
     def initialize(spec_or_path, source_urls, platforms = [])

@@ -78,7 +78,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Pär Strindevall](https://github.com/parski)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8914](https://github.com/CocoaPods/CocoaPods/pull/8914)
-  
+
+* Fix inheriting search paths for test targets in `init` command.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8868](https://github.com/CocoaPods/CocoaPods/issues/8868)
 
 ## 1.7.4 (2019-07-09)
 

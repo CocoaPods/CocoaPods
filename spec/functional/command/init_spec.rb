@@ -86,7 +86,7 @@ module Pod
       end
     end
 
-    it 'handles hooking up mulitple test targets based on an xcodeproj project' do
+    it 'handles hooking up multiple test targets based on an xcodeproj project' do
       Dir.chdir(temporary_directory) do
         project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
         project.new_target(:application, 'App', :ios)
@@ -108,7 +108,6 @@ module Pod
             # Pods for App
 
             target 'AppFeatureTests' do
-              inherit! :search_paths
               # Pods for testing
             end
 
@@ -124,6 +123,70 @@ module Pod
             use_frameworks!
 
             # Pods for Swifty App
+
+          end
+        RUBY
+
+        File.read('Podfile').should == expected_podfile
+      end
+    end
+
+    it 'embeds pods into test targets since their parent requires it' do
+      Dir.chdir(temporary_directory) do
+        project = Xcodeproj::Project.new(temporary_directory + 'test.xcodeproj')
+        project.new_target(:application, 'App', :ios)
+        project.new_target(:framework, 'Framework', :ios)
+        project.new_target(:static_library, 'Library', :ios)
+        project.new_target(:unit_test_bundle, 'AppTests', :ios)
+        project.new_target(:ui_test_bundle, 'AppUITests', :ios)
+        project.new_target(:unit_test_bundle, 'FrameworkTests', :ios)
+        project.new_target(:unit_test_bundle, 'LibraryTests', :ios)
+        project.save
+
+        run_command('init')
+
+        expected_podfile = <<-RUBY.strip_heredoc
+          # Uncomment the next line to define a global platform for your project
+          # platform :ios, '9.0'
+
+          target 'App' do
+            # Comment the next line if you don't want to use dynamic frameworks
+            use_frameworks!
+
+            # Pods for App
+
+            target 'AppTests' do
+              inherit! :search_paths
+              # Pods for testing
+            end
+
+            target 'AppUITests' do
+              # Pods for testing
+            end
+
+          end
+
+          target 'Framework' do
+            # Comment the next line if you don't want to use dynamic frameworks
+            use_frameworks!
+
+            # Pods for Framework
+
+            target 'FrameworkTests' do
+              # Pods for testing
+            end
+
+          end
+
+          target 'Library' do
+            # Comment the next line if you don't want to use dynamic frameworks
+            use_frameworks!
+
+            # Pods for Library
+
+            target 'LibraryTests' do
+              # Pods for testing
+            end
 
           end
         RUBY
