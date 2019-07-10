@@ -32,7 +32,7 @@ module Pod
         # @return [void]
         #
         def save_as(path)
-          path.open('w') { |f| f.puts YAMLHelper.convert_hash(to_hash, nil) }
+          Sandbox.update_changed_file(path, YAMLHelper.convert_hash(to_hash, nil))
         end
 
         # Updates the metadata cache based on installation results.

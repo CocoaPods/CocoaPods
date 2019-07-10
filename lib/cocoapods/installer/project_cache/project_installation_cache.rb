@@ -47,7 +47,7 @@ module Pod
 
         def save_as(path)
           Pathname(path).dirname.mkpath
-          path.open('w') { |f| f.puts YAMLHelper.convert(to_hash) }
+          Sandbox.update_changed_file(path, YAMLHelper.convert(to_hash))
         end
 
         def self.from_file(path)

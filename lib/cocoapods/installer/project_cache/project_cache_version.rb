@@ -35,7 +35,7 @@ module Pod
         #        The path of the project cache to save.
         #
         def save_as(path)
-          open(path, 'w') { |f| f.puts version.to_s }
+          Sandbox.update_changed_file(path, version.to_s)
         end
       end
     end

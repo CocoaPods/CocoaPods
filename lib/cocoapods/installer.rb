@@ -740,13 +740,15 @@ module Pod
       @lockfile = generate_lockfile
 
       UI.message "- Writing Lockfile in #{UI.path config.lockfile_path}" do
+        # No need to invoke Sandbox#update_changed_file here since this logic already handles checking if the
+        # contents of the file are the same.
         @lockfile.write_to_disk(config.lockfile_path)
       end
 
       UI.message "- Writing Manifest in #{UI.path sandbox.manifest_path}" do
-        sandbox.manifest_path.open('w') do |f|
-          f.write config.lockfile_path.read
-        end
+        # No need to invoke Sandbox#update_changed_file here since this logic already handles checking if the
+        # contents of the file are the same.
+        @lockfile.write_to_disk(sandbox.manifest_path)
       end
     end
 
