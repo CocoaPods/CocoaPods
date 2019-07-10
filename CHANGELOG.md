@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Move all the code from [CocoaPods/Core](https://github.com/CocoaPods/Core) to this repo.   
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#8980](https://github.com/CocoaPods/CocoaPods/pull/8980)
+
 * Replace git-based `MasterSource` with CDN-based `TrunkSource`  
   [Igor Makarov](https://github.com/igor-makarov)
   [#8923](https://github.com/CocoaPods/CocoaPods/pull/8923)
