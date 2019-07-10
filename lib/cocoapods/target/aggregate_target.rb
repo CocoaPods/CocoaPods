@@ -7,7 +7,8 @@ module Pod
   class AggregateTarget < Target
     # Product types where the product's frameworks must be embedded in a host target
     #
-    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :static_library, :messages_extension, :watch_extension, :xpc_service].freeze
+    EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES = [:app_extension, :framework, :static_library, :messages_extension,
+                                             :watch_extension, :xpc_service].freeze
 
     # @return [TargetDefinition] the target definition of the Podfile that
     #         generated this target.
@@ -118,7 +119,9 @@ module Pod
       # that this is a library
       return false if user_project.nil?
       symbol_types = user_targets.map(&:symbol_type).uniq
-      raise ArgumentError, "Expected single kind of user_target for #{name}. Found #{symbol_types.join(', ')}." unless symbol_types.count == 1
+      unless symbol_types.count == 1
+        raise ArgumentError, "Expected single kind of user_target for #{name}. Found #{symbol_types.join(', ')}."
+      end
       [:framework, :dynamic_library, :static_library].include? symbol_types.first
     end
 
@@ -134,7 +137,9 @@ module Pod
       # target that would require a host target
       return false if user_project.nil?
       symbol_types = user_targets.map(&:symbol_type).uniq
-      raise ArgumentError, "Expected single kind of user_target for #{name}. Found #{symbol_types.join(', ')}." unless symbol_types.count == 1
+      unless symbol_types.count == 1
+        raise ArgumentError, "Expected single kind of user_target for #{name}. Found #{symbol_types.join(', ')}."
+      end
       EMBED_FRAMEWORKS_IN_HOST_TARGET_TYPES.include?(symbol_types[0])
     end
 
