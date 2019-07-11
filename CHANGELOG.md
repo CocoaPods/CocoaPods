@@ -59,6 +59,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8916](https://github.com/CocoaPods/CocoaPods/pull/8916)
 
+* Do not re-write sandbox files if they have not changed.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8983](https://github.com/CocoaPods/CocoaPods/pull/8983)
+
 ##### Bug Fixes
 
 * Fix set `cache_root` from config file error  
@@ -82,6 +86,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix inheriting search paths for test targets in `init` command.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8868](https://github.com/CocoaPods/CocoaPods/issues/8868)
+
 
 ## 1.7.4 (2019-07-09)
 

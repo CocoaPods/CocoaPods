@@ -286,7 +286,7 @@ module Pod
       spec =
         case podspec
         when String
-          output_path.open('w') { |f| f.puts(podspec) }
+          Sandbox.update_changed_file(output_path, podspec)
           Specification.from_file(output_path)
         when Pathname
           unless podspec.exist?
@@ -296,7 +296,7 @@ module Pod
           Specification.from_file(podspec)
         when Specification
           raise ArgumentError, 'can only store Specification objects as json' unless json
-          output_path.open('w') { |f| f.puts(podspec.to_pretty_json) }
+          Sandbox.update_changed_file(output_path, podspec.to_pretty_json)
           podspec.dup
         else
           raise ArgumentError, "Unknown type for podspec: #{podspec.inspect}"
@@ -442,6 +442,27 @@ module Pod
     def local_podspec(name)
       root_name = Specification.root_name(name)
       development_pods[root_name]
+    end
+
+    # @!group Convenience Methods
+
+    # Writes a file if it does not exist or if its contents have changed.
+    #
+    # @param  [Pathname] path
+    #         The path to read from and write to.
+    #
+    # @param  [String] contents
+    #         The contents to write if they do not match or the file does not exist.
+    #
+    # @return [void]
+    #
+    def self.update_changed_file(path, contents)
+      if path.exist?
+        content_stream = StringIO.new(contents)
+        identical = File.open(path, 'rb') { |f| FileUtils.compare_stream(f, content_stream) }
+        return if identical
+      end
+      File.open(path, 'w') { |f| f.write(contents) }
     end
 
     #-------------------------------------------------------------------------#
