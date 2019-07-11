@@ -48,6 +48,16 @@ require 'spec_helper/pre_flight'      # Cleans the temporary directory, the conf
 require 'spec_helper/webmock'         # Cleans up mocks after each spec
 require 'spec_helper/mock_source'     # Allows building a mock source from Spec objects.
 
+# VCR
+#--------------------------------------#
+
+require 'vcr'
+VCR.configure do |c|
+  c.cassette_library_dir = ROOT + 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+  c.ignore_hosts 'codeclimate.com', 'localhost', 'cdn.cocoapods.org', 'raw.githubusercontent.com'
+end
+
 # CDN repo
 #--------------------------------------#
 
