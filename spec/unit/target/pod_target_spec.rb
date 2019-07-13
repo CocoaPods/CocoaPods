@@ -841,6 +841,7 @@ module Pod
 
         it 'returns test label based on test type' do
           @test_pod_target.test_target_label(@test_pod_target.test_specs.first).should == 'WatermelonLib-Unit-Tests'
+          @test_pod_target.test_target_label(@test_pod_target.test_specs[1]).should == 'WatermelonLib-UI-SnapshotTests'
         end
 
         it 'returns the correct product type for test type' do

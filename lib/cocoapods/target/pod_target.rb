@@ -421,6 +421,8 @@ module Pod
       case test_type
       when :unit
         :unit_test_bundle
+      when :ui
+        :ui_test_bundle
       else
         raise ArgumentError, "Unknown test type `#{test_type}`."
       end
@@ -489,7 +491,13 @@ module Pod
     # @return [String] The derived name of the test target.
     #
     def test_target_label(test_spec)
-      "#{label}-#{test_spec.test_type.capitalize}-#{subspec_label(test_spec)}"
+      type_string = case test_spec.test_type
+                    when :unit
+                      'Unit'
+                    when :ui
+                      'UI'
+                    end
+      "#{label}-#{type_string}-#{subspec_label(test_spec)}"
     end
 
     # @param  [Specification] app_spec
