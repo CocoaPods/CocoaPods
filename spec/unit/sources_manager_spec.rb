@@ -47,8 +47,9 @@ module Pod
               should == 'url'
           end
 
-          it 'runs `pod repo add` when there is no matching source for CocoaPods Trunk' do
+          it 'runs `pod repo add-cdn` when there is no matching source for CocoaPods Trunk' do
             Command::Repo::AddCDN.any_instance.stubs(:run).once
+            REST.stubs(:head).returns(REST::Response.new(200, {}, ''))
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(TrunkSource.new('trunk'))
             @sources_manager.find_or_create_source_with_url(TrunkSource::TRUNK_REPO_URL).name.
               should == 'trunk'
@@ -56,16 +57,34 @@ module Pod
 
           it 'runs `pod repo add` when there is no matching source' do
             Command::Repo::Add.any_instance.stubs(:run).once
+            REST.stubs(:head).returns(REST::Response.new(404, {}, ''))
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
             @sources_manager.find_or_create_source_with_url('https://github.com/artsy/Specs.git').name.
               should == 'Source'
           end
 
+          it 'runs `pod repo add` when the url doesn\'t end in `.git`' do
+            Command::Repo::Add.any_instance.stubs(:run).once
+            REST.stubs(:head).returns(REST::Response.new(404, {}, ''))
+            @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
+            @sources_manager.find_or_create_source_with_url('https://github.com/artsy/Specs').name.
+              should == 'Source'
+          end
+
           it 'runs `pod repo add-cdn` when there is no matching source and url is web' do
             Command::Repo::AddCDN.any_instance.stubs(:run).once
+            REST.stubs(:head).returns(REST::Response.new(200, {}, ''))
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
             @sources_manager.find_or_create_source_with_url('https://website.com/Specs/').name.
               should == 'Source'
+          end
+
+          it 'raises informative exception on network error' do
+            REST.stubs(:head).raises(StandardError.new('some network error'))
+            @sources_manager.stubs(:source_with_url).returns(nil)
+            should.raise(Informative) do
+              @sources_manager.find_or_create_source_with_url('https://website.com/Specs/')
+            end.message.should.include "Couldn't determine repo type for URL: `https://website.com/Specs/`: some network error"
           end
 
           it 'handles repositories without a remote url' do # for #2965
@@ -84,6 +103,7 @@ module Pod
 
           it 'tries by url when there is no matching name' do
             Command::Repo::Add.any_instance.stubs(:run).once
+            REST.stubs(:head).returns(REST::Response.new(404, {}, ''))
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns('Source')
             @sources_manager.source_with_name_or_url('https://github.com/artsy/Specs.git').
               should == 'Source'

@@ -1,5 +1,6 @@
 require 'cocoapods-core/source'
 require 'set'
+require 'rest'
 
 module Pod
   class Source
@@ -15,36 +16,62 @@ module Pod
       #         The URL of the source.
       #
       def find_or_create_source_with_url(url)
-        unless source = source_with_url(url)
-          name = name_for_url(url)
-          # Hack to ensure that `repo add` output is shown.
-          previous_title_level = UI.title_level
-          UI.title_level = 0
-          begin
-            case
-            when url =~ /\.git$/
-              Command::Repo::Add.parse([name, url]).run
-            when url =~ %r{^https:\/\/}
-              Command::Repo::AddCDN.parse([name, url]).run
-            else
-              Command::Repo::Add.parse([name, url]).run
-            end
-          rescue Informative => e
-            message = "Unable to add a source with url `#{url}` " \
-              "named `#{name}`.\n"
-            message << "(#{e})\n" if Config.instance.verbose?
-            message << 'You can try adding it manually in ' \
-              "`#{Config.instance.repos_dir}` or via `pod repo add`."
-            raise Informative, message
-          ensure
-            UI.title_level = previous_title_level
+        source_with_url(url) || create_source_with_url(url)
+      end
+
+      # Adds the source whose {Source#url} is equal to `url`,
+      # in a manner similarly to `pod repo add` if it is not found.
+      #
+      # @raise  If no source with the given `url` could be created,
+      #
+      # @return [Source] The source whose {Source#url} is equal to `url`,
+      #
+      # @param  [String] url
+      #         The URL of the source.
+      #
+      def create_source_with_url(url)
+        name = name_for_url(url)
+        is_cdn = cdn_url?(url)
+
+        # Hack to ensure that `repo add` output is shown.
+        previous_title_level = UI.title_level
+        UI.title_level = 0
+
+        begin
+          if is_cdn
+            Command::Repo::AddCDN.parse([name, url]).run
+          else
+            Command::Repo::Add.parse([name, url]).run
           end
-          source = source_with_url(url)
+        rescue Informative => e
+          message = "Unable to add a source with url `#{url}` " \
+            "named `#{name}`.\n"
+          message << "(#{e})\n" if Config.instance.verbose?
+          message << 'You can try adding it manually in ' \
+            "`#{Config.instance.repos_dir}` or via `pod repo add`."
+          raise Informative, message
+        ensure
+          UI.title_level = previous_title_level
         end
+        source = source_with_url(url)
 
         raise "Unable to create a source with URL #{url}" unless source
 
         source
+      end
+
+      # Determines whether `url` is a CocoaPods CDN URL.
+      #
+      # @return [Boolean] whether `url` is a CocoaPods CDN URL,
+      #
+      # @param  [String] url
+      #         The URL of the source.
+      #
+      def cdn_url?(url)
+        url =~ %r{^https:\/\/} &&
+          REST.head(url + '/all_pods.txt').ok?
+      rescue => e
+        raise Informative, "Couldn't determine repo type for URL: `#{url}`: #{e}"
       end
 
       # Returns the source whose {Source#name} or {Source#url} is equal to the
