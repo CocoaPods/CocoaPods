@@ -13,8 +13,8 @@ module Pod
           @monkey_lib = fixture_pod_target('monkey/monkey.podspec')
           @pod_targets = [@banana_lib, @orange_lib, @monkey_lib]
           @main_aggregate_target = fixture_aggregate_target(@pod_targets)
-          @secondary_aggregate_target = fixture_aggregate_target([@banana_lib, @monkey_lib])
-
+          secondary_target_definition = fixture_target_definition('Pods2')
+          @secondary_aggregate_target = fixture_aggregate_target([@banana_lib, @monkey_lib], false, Pod::Target::DEFAULT_BUILD_CONFIGURATIONS, [], Pod::Platform.new(:ios, '6.0'), secondary_target_definition)
           @sandbox.project_path.mkpath
           @main_aggregate_target.support_files_dir.mkpath
           @secondary_aggregate_target.support_files_dir.mkpath
@@ -109,14 +109,15 @@ module Pod
             cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(pod_target)] }]
             cache_key_by_aggregate_target_labels = {
               @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@main_aggregate_target),
+              @secondary_aggregate_target.label => TargetCacheKey.from_aggregate_target(@secondary_aggregate_target),
             }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
 
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, [], [@main_aggregate_target, @secondary_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, @pod_targets, [@main_aggregate_target])
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
-            result.aggregate_targets_to_generate.should.equal([@main_aggregate_target, @secondary_aggregate_target])
+            result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
           end
 
           it 'returns all aggregate targets if one has been added' do

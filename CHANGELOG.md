@@ -65,6 +65,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix regenerating aggregate targets for incremental installation.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#9009](https://github.com/CocoaPods/CocoaPods/pull/9009)
+
 * Fix heuristic for determining whether the source URL to be added is CDN  
   [Igor Makarov](https://github.com/igor-makarov)
   [#9000](https://github.com/CocoaPods/CocoaPods/issues/9000)
