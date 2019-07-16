@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support for UI test specs with `test_type` value `:ui`  
+  [Yavuz Nuzumlali](https://github.com/manuyavuz)
+  [#9002](https://github.com/CocoaPods/CocoaPods/pull/9002)
+  [Core#562](https://github.com/CocoaPods/Core/pull/562)
+
 * Replace git-based `MasterSource` with CDN-based `TrunkSource`  
   [Igor Makarov](https://github.com/igor-makarov)
   [#8923](https://github.com/CocoaPods/CocoaPods/pull/8923)
