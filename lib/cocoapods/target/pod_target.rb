@@ -233,7 +233,7 @@ module Pod
     #         validator during installation.
     #
     def project_name
-      target_definitions.first.project_name_for_pod(pod_name) || pod_name
+      target_definitions.map { |td| td.project_name_for_pod(pod_name) }.compact.first || pod_name
     end
 
     # @return [String] The name to use for the source code module constructed
