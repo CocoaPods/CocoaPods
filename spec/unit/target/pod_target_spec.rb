@@ -173,6 +173,15 @@ module Pod
       it 'returns the project name from the pod target by default' do
         @pod_target.project_name.should == 'BananaLib'
       end
+
+      it 'returns the correct project name across multiple target definitions' do
+        target_definition_one = fixture_target_definition
+        target_definition_two = fixture_target_definition
+        target_definition_two.store_pod('BananaLib', :project_name => 'SomeProject')
+        pod_target = fixture_pod_target(@banana_spec, false, {}, [], Platform.ios,
+                                        [target_definition_one, target_definition_two])
+        pod_target.project_name.should == 'SomeProject'
+      end
     end
 
     describe 'swift version' do
