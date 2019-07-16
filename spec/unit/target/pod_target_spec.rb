@@ -841,11 +841,15 @@ module Pod
 
         it 'returns test label based on test type' do
           @test_pod_target.test_target_label(@test_pod_target.test_specs.first).should == 'WatermelonLib-Unit-Tests'
-          @test_pod_target.test_target_label(@test_pod_target.test_specs[1]).should == 'WatermelonLib-UI-SnapshotTests'
+          @test_pod_target.test_target_label(@test_pod_target.test_specs[1]).should == 'WatermelonLib-UI-UITests'
         end
 
-        it 'returns the correct product type for test type' do
+        it 'returns the correct product type for unit test type' do
           @test_pod_target.product_type_for_test_type(:unit).should == :unit_test_bundle
+        end
+
+        it 'returns the correct product type for ui test type' do
+          @test_pod_target.product_type_for_test_type(:ui).should == :ui_test_bundle
         end
 
         it 'raises for unknown test type' do
@@ -870,8 +874,9 @@ module Pod
         end
 
         it 'returns correct whether a test spec uses Swift or not' do
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs[0]).should.be.true
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs[1]).should.be.false
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.name == 'Tests'}).should.be.true
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.name == 'UITests'}).should.be.false
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.name == 'SnapshotTests'}).should.be.false
         end
       end
     end

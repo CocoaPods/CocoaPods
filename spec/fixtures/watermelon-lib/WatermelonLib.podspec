@@ -23,6 +23,13 @@ Pod::Spec.new do |s|
     test_spec.resource_bundle = { 'WatermelonLibTestResources' => ['Tests/Resources/**/*'] }
   end
 
+  s.test_spec 'UITests' do |test_spec|
+    test_spec.test_type = :ui
+    test_spec.requires_app_host = true
+    test_spec.source_files = 'UITests/*.{h,m}'
+    test_spec.dependency 'KIF'
+  end
+
   s.test_spec 'SnapshotTests' do |test_spec|
     test_spec.requires_app_host = true
     test_spec.source_files = 'SnapshotTests/*.{h,m}'
