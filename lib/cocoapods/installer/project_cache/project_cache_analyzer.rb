@@ -82,13 +82,12 @@ module Pod
 
           pod_targets_to_generate = Set[]
           aggregate_targets_to_generate = Set[]
-          added_targets, removed_targets = compute_added_and_removed_targets(target_by_label,
-                                                                             cache_key_by_target_label.keys,
-                                                                             cache.cache_key_by_target_label.keys)
+          added_targets = compute_added_targets(target_by_label, cache_key_by_target_label.keys, cache.cache_key_by_target_label.keys)
           added_pod_targets, added_aggregate_targets = added_targets.partition { |target| target.is_a?(PodTarget) }
-          removed_aggregate_targets = removed_targets.select { |target| target.is_a?(AggregateTarget) }
           pod_targets_to_generate.merge(added_pod_targets)
-          aggregate_targets_to_generate.merge(added_aggregate_targets + removed_aggregate_targets)
+          aggregate_targets_to_generate.merge(added_aggregate_targets)
+
+          removed_aggregate_target_labels = compute_removed_targets(cache_key_by_target_label.keys, cache.cache_key_by_target_label.keys)
 
           changed_targets = compute_changed_targets_from_cache(cache_key_by_target_label, target_by_label, cache)
           changed_pod_targets, changed_aggregate_targets = changed_targets.partition { |target| target.is_a?(PodTarget) }
@@ -109,8 +108,7 @@ module Pod
 
           # We either return the full list of aggregate targets or none since the aggregate targets go into the
           # Pods.xcodeproj and so we need to regenerate all aggregate targets when regenerating Pods.xcodeproj.
-
-          total_aggregate_targets_to_generate = unless aggregate_targets_to_generate.empty?
+          total_aggregate_targets_to_generate = unless aggregate_targets_to_generate.empty? && removed_aggregate_target_labels.empty?
                                                   aggregate_targets
                                                 end
 
@@ -135,14 +133,14 @@ module Pod
           end]
         end
 
-        def compute_added_and_removed_targets(target_by_label, target_labels, cached_target_labels)
-          added_targets = (target_labels - cached_target_labels).map do |label|
+        def compute_added_targets(target_by_label, target_labels, cached_target_labels)
+          (target_labels - cached_target_labels).map do |label|
             target_by_label[label]
           end
-          removed_targets = (cached_target_labels - target_labels).map do |label|
-            target_by_label[label]
-          end
-          [added_targets, removed_targets]
+        end
+
+        def compute_removed_targets(target_labels, cached_target_labels)
+          cached_target_labels - target_labels
         end
 
         def compute_changed_targets_from_cache(cache_key_by_target_label, target_by_label, cache)
