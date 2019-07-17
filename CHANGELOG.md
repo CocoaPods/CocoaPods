@@ -96,6 +96,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8868](https://github.com/CocoaPods/CocoaPods/issues/8868)
 
+* Allow detecting `SWIFT_VERSION` build settings from user targets when some
+  xcconfig files are missing.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.7.4 (2019-07-09)
 
