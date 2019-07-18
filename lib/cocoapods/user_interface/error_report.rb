@@ -171,12 +171,16 @@ EOS
 
         def repo_information
           Config.instance.sources_manager.all.map do |source|
-            next unless source.type == 'file system'
             repo = source.repo
-            Dir.chdir(repo) do
-              url = `git config --get remote.origin.url 2>&1`.strip
-              sha = `git rev-parse HEAD 2>&1`.strip
-              "#{repo.basename} - #{url} @ #{sha}"
+            if source.is_a?(Pod::CDNSource)
+              "#{repo.basename} - CDN - #{source.url}"
+            elsif source.git?
+              Dir.chdir(repo) do
+                sha = `git rev-parse HEAD 2>&1`.strip
+                "#{repo.basename} - git - #{source.url} @ #{sha}"
+              end
+            else
+              "#{repo.basename} - #{source.type}"
             end
           end
         end
