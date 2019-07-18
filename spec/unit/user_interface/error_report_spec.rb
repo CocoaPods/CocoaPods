@@ -2,6 +2,8 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
   describe UserInterface::ErrorReport do
+    extend SpecHelper::TemporaryRepos
+
     def remove_color(string)
       string.gsub(/\e\[(\d+)m/, '')
     end
@@ -11,9 +13,17 @@ module Pod
         @exception = Informative.exception('at - (~/code.rb):')
         @exception.stubs(:backtrace).returns(['Line 1', 'Line 2'])
         @report = UserInterface::ErrorReport
+        set_up_test_repo
+        config.repos_dir = SpecHelper.tmp_repos_path
+        FileUtils.mkdir_p(SpecHelper.tmp_repos_path.join('trunk'))
+        FileUtils.cp(fixture('spec-repos/trunk').join('.url'), SpecHelper.tmp_repos_path.join('trunk/.url'))
       end
 
       it 'returns a well-structured report' do
+        source = Source.new(SpecHelper.tmp_repos_path.join('master'))
+        git_url = source.url
+        git_commit_hash = source.send(:git_commit_hash)
+
         expected = <<-EOS
 
 ――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
@@ -43,8 +53,8 @@ module Pod
        Xcode : :xcode_information
          Git : :git_information
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
-Repositories : repo_1
-               repo_2
+Repositories : master - git - #{git_url} @ #{git_commit_hash}
+               trunk - CDN - #{TrunkSource::TRUNK_REPO_URL}
 ```
 
 ### Plugins
@@ -96,7 +106,6 @@ EOS
         @report.stubs(:host_information).returns(':host_information')
         @report.stubs(:xcode_information).returns(':xcode_information')
         @report.stubs(:git_information).returns(':git_information')
-        @report.stubs(:repo_information).returns(%w(repo_1 repo_2))
         @report.stubs(:installed_plugins).returns('cocoapods' => Pod::VERSION,
                                                   'cocoapods-core' => Pod::VERSION,
                                                   'cocoapods-plugins' => '1.2.3')
