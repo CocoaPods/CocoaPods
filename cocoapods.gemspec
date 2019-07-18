@@ -26,9 +26,6 @@ Gem::Specification.new do |s|
   s.executables   = %w{ pod sandbox-pod }
   s.require_paths = %w{ lib }
 
-  # Link with the version of CocoaPods-Core
-  s.add_runtime_dependency 'cocoapods-core',        "= #{Pod::VERSION}"
-
   s.add_runtime_dependency 'claide',                '>= 1.0.2', '< 2.0'
   s.add_runtime_dependency 'cocoapods-deintegrate', '>= 1.0.3', '< 2.0'
   s.add_runtime_dependency 'cocoapods-downloader',  '>= 1.2.2', '< 2.0'
@@ -42,11 +39,12 @@ Gem::Specification.new do |s|
 
   ## Version 5 needs Ruby 2.2, so we specify an upper bound to stay compatible with system ruby
   s.add_runtime_dependency 'activesupport', '>= 4.0.2', '< 5'
-  s.add_runtime_dependency 'colored2',       '~> 3.1'
+  s.add_runtime_dependency 'colored2',      '~> 3.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
-  s.add_runtime_dependency 'fourflusher',   '>= 2.3.0', '< 3.0'
+  s.add_runtime_dependency 'fourflusher',    '>= 2.3.0', '< 3.0'
   s.add_runtime_dependency 'gh_inspector',  '~> 1.0'
   s.add_runtime_dependency 'nap',           '~> 1.0'
+  s.add_runtime_dependency 'fuzzy_match',   '~> 2.0.4'
   s.add_runtime_dependency 'ruby-macho',    '~> 1.4'
 
   s.add_development_dependency 'bacon', '~> 1.1'

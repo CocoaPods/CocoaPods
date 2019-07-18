@@ -1,0 +1,16 @@
+APHelperCategory/0.0.2
+CBPic2ker/1.0.0/1.0.1
+ColorHex/2.0.0/2.0.1/2.1.0/2.1.1
+DDCalendarPicker/1.0.0/1.0.1
+DeskKit/1.2.1/1.2.2/1.2.3/2.0.0/3.0.0/3.0.1/3.0.2/3.0.3/4.0.0/4.0.1
+FATabScroller/1.0.0/1.0.1/2.0.0
+LEMUtility/0.0.1/0.0.2/0.0.3/0.0.4/0.0.5/0.0.7/0.0.8/0.0.9/0.1.0/0.1.1/0.1.2
+LFLineChartView/0.1.1
+MMQRCodeReaderViewControllerModule/0.0.1/0.0.2/0.0.3
+MSColorPicker/0.2.0/0.2.1/1.0.0/1.0.1
+Mozi/0.1.0
+NBSegment/0.1.0/0.2.0
+NRLocationManager/1.0.0/1.0.1/1.0.2/1.1.0
+ReactiveObjC/1.0.1/1.0.2/2.0.0/2.1.0/2.1.1/2.1.2/3.0.0/3.1.0/3.1.1
+XJTools/1.0.0/1.0.10/1.0.11/1.0.3/1.0.5/1.0.6/1.0.8
+ZPlaceholderTextView/0.1.0/0.2.0/0.2.1/0.2.2/0.3.0/0.3.1/0.4.0/1.4.0

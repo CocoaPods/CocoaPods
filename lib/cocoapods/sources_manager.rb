@@ -129,36 +129,6 @@ module Pod
         update_search_index_if_needed_in_background(changed_spec_paths)
       end
     end
-
-    extend Executable
-    executable :git
-
-    def repo_git(args, include_error: false)
-      Executable.capture_command('git', ['-C', repo] + args,
-                                 :capture => include_error ? :merge : :out,
-                                 :env => {
-                                   'GIT_CONFIG' => nil,
-                                   'GIT_DIR' => nil,
-                                   'GIT_WORK_TREE' => nil,
-                                 }
-                                ).
-        first.strip
-    end
-
-    def update_git_repo(show_output = false)
-      Config.instance.with_changes(:verbose => show_output) do
-        args = %W(-C #{repo} fetch origin)
-        args.push('--progress') if show_output
-        git!(args)
-        current_branch = git!(%W(-C #{repo} rev-parse --abbrev-ref HEAD)).strip
-        git!(%W(-C #{repo} reset --hard origin/#{current_branch}))
-      end
-    rescue
-      raise Informative, 'CocoaPods was not able to update the ' \
-        "`#{name}` repo. If this is an unexpected issue " \
-        'and persists you can inspect it running ' \
-        '`pod repo update --verbose`'
-    end
   end
 
   class TrunkSource

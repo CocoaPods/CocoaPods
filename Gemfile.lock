@@ -6,16 +6,6 @@ GIT
     claide (1.0.2)
 
 GIT
-  remote: https://github.com/CocoaPods/Core.git
-  revision: 30650685f697518f0dc8e8edd8d26d853cccb738
-  branch: master
-  specs:
-    cocoapods-core (1.7.4)
-      activesupport (>= 4.0.2, < 6)
-      fuzzy_match (~> 2.0.4)
-      nap (~> 1.0)
-
-GIT
   remote: https://github.com/CocoaPods/Molinillo.git
   revision: dd4274e0fb0792cbf52d441a93799470d88e38d8
   branch: master
@@ -112,7 +102,6 @@ PATH
     cocoapods (1.7.4)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.7.4)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -123,6 +112,7 @@ PATH
       colored2 (~> 3.1)
       escape (~> 0.0.4)
       fourflusher (>= 2.3.0, < 3.0)
+      fuzzy_match (~> 2.0.4)
       gh_inspector (~> 1.0)
       molinillo (~> 0.6.6)
       nap (~> 1.0)
@@ -257,7 +247,8 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (0.3.1)
-    webmock (2.3.1)
+    vcr (3.0.3)
+    webmock (3.5.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -273,7 +264,6 @@ DEPENDENCIES
   claide!
   clintegracon
   cocoapods!
-  cocoapods-core!
   cocoapods-deintegrate!
   cocoapods-dependencies (~> 1.0.beta.1)
   cocoapods-downloader!
@@ -297,6 +287,7 @@ DEPENDENCIES
   rb-fsevent
   rubocop
   ruby-prof
+  vcr
   webmock
   xcodeproj!
 

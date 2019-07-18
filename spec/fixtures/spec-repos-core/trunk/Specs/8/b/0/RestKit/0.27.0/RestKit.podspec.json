@@ -1,0 +1,150 @@
+{
+  "name": "RestKit",
+  "version": "0.27.0",
+  "summary": "RestKit is a framework for consuming and modeling RESTful web resources on iOS and OS X.",
+  "homepage": "https://github.com/RestKit/RestKit",
+  "social_media_url": "https://twitter.com/RestKit",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/RestKit/RestKit.git",
+    "tag": "v0.27.0"
+  },
+  "license": "Apache License, Version 2.0",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9"
+  },
+  "default_subspecs": "Core",
+  "subspecs": [
+    {
+      "name": "Core",
+      "dependencies": {
+        "RestKit/ObjectMapping": [
+
+        ],
+        "RestKit/Network": [
+
+        ],
+        "RestKit/CoreData": [
+
+        ]
+      }
+    },
+    {
+      "name": "ObjectMapping",
+      "source_files": [
+        "Code/ObjectMapping.h",
+        "Code/ObjectMapping/**/*"
+      ],
+      "dependencies": {
+        "RestKit/Support": [
+
+        ],
+        "RKValueTransformers": [
+          "~> 1.1.0"
+        ],
+        "ISO8601DateFormatterValueTransformer": [
+          "~> 0.6.1"
+        ]
+      }
+    },
+    {
+      "name": "Network",
+      "source_files": [
+        "Code/Network.h",
+        "Code/Network/**/*"
+      ],
+      "ios": {
+        "frameworks": [
+          "CFNetwork",
+          "Security",
+          "MobileCoreServices",
+          "SystemConfiguration"
+        ]
+      },
+      "osx": {
+        "frameworks": [
+          "CoreServices",
+          "Security",
+          "SystemConfiguration"
+        ]
+      },
+      "dependencies": {
+        "SOCKit": [
+
+        ],
+        "RestKit/ObjectMapping": [
+
+        ],
+        "RestKit/Support": [
+
+        ]
+      }
+    },
+    {
+      "name": "CoreData",
+      "source_files": [
+        "Code/CoreData.h",
+        "Code/CoreData/**/*"
+      ],
+      "frameworks": "CoreData",
+      "dependencies": {
+        "RestKit/ObjectMapping": [
+
+        ]
+      }
+    },
+    {
+      "name": "Testing",
+      "source_files": [
+        "Code/Testing.h",
+        "Code/Testing"
+      ],
+      "dependencies": {
+        "RestKit/Network": [
+
+        ]
+      }
+    },
+    {
+      "name": "Search",
+      "source_files": [
+        "Code/Search.h",
+        "Code/Search"
+      ],
+      "dependencies": {
+        "RestKit/CoreData": [
+
+        ]
+      }
+    },
+    {
+      "name": "Support",
+      "source_files": [
+        "Code/RestKit.h",
+        "Code/Support.h",
+        "Code/Support"
+      ],
+      "dependencies": {
+        "TransitionKit": [
+          "~> 2.2"
+        ]
+      }
+    },
+    {
+      "name": "CocoaLumberjack",
+      "source_files": "Code/CocoaLumberjack/RKLumberjackLogger.*",
+      "dependencies": {
+        "CocoaLumberjack": [
+
+        ],
+        "RestKit/Support": [
+
+        ]
+      }
+    }
+  ]
+}

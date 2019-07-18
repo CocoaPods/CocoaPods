@@ -97,6 +97,11 @@ begin
 
     #--------------------------------------#
 
+    desc 'Run the Core specs'
+    task :core => 'fixture_tarballs:unpack' do
+      sh "bundle exec bacon #{specs('unit/core/**/*')}"
+    end
+
     unit_specs_command = "bundle exec bacon #{specs('unit/**/*')}"
 
     desc 'Run the unit specs'

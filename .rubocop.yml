@@ -10,12 +10,19 @@ AllCops:
   Exclude:
     - spec/fixtures/**/*.rb
     - spec/fixtures/banana-lib/libPusher/Scripts/pusher
+    - lib/cocoapods-core/vendor/**/*
 
 Style/FileName:
   Exclude:
+    - lib/cocoapods-core.rb
     - bin/*
     - Rakefile
 
 Style/SignalException:
   Exclude:
     - Dangerfile
+
+Style/TrivialAccessors:
+  Exclude:
+    - lib/cocoapods-core/*/dsl.rb
+    - lib/cocoapods-core/*/dsl/*

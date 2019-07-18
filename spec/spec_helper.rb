@@ -40,12 +40,43 @@ require 'claide'
 
 require 'spec_helper/command'         # Allows to run Pod commands and returns their output.
 require 'spec_helper/fixture'         # Provides access to the fixtures and unpacks them if needed.
+require 'spec_helper/temporary_directory' # Allows to create and modify temporary directories.
 require 'spec_helper/temporary_repos' # Allows to create and modify temporary spec repositories.
 require 'spec_helper/temporary_cache' # Allows to create temporary cache directory.
 require 'spec_helper/user_interface'  # Redirects UI to UI.output & UI.warnings.
 require 'spec_helper/pre_flight'      # Cleans the temporary directory, the config & the UI.output before every test.
 require 'spec_helper/webmock'         # Cleans up mocks after each spec
 require 'spec_helper/mock_source'     # Allows building a mock source from Spec objects.
+
+# disable Colored2 in tests so that error comparison works
+#--------------------------------------#
+
+Colored2.disable!
+
+# VCR
+#--------------------------------------#
+
+require 'vcr'
+VCR.configure do |c|
+  c.cassette_library_dir = ROOT + 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+  c.ignore_hosts 'codeclimate.com', 'localhost', 'cdn.cocoapods.org', 'raw.githubusercontent.com'
+end
+
+# CDN repo
+#--------------------------------------#
+
+require 'webrick'
+CDN_MOCK_SERVER = WEBrick::HTTPServer.new(:BindAddress => '0.0.0.0',
+                                          :Port => 4321,
+                                          :DocumentRoot => ROOT + 'spec/fixtures/mock_cdn_repo_remote',
+                                          :Logger => ENV['WEBRICK_DEBUG'].nil? ? WEBrick::Log.new('/dev/null') : nil,
+                                          :AccessLog => ENV['WEBRICK_DEBUG'].nil? ? [] : nil,
+                                         )
+Thread.new do
+  CDN_MOCK_SERVER.start
+  Thread.current.exit
+end
 
 #-----------------------------------------------------------------------------#
 

@@ -1,0 +1,48 @@
+{
+  "name": "ReactiveObjC",
+  "version": "1.0.1",
+  "summary": "The 2.x ReactiveCocoa Objective-C API: Streams of values over time",
+  "description": "ReactiveObjC (formally ReactiveCocoa or RAC) is an Objective-C\nframework inspired by [Functional Reactive Programming](\nhttp://en.wikipedia.org/wiki/Functional_reactive_programming).\nIt provides APIs for composing and **transforming streams of values**.",
+  "homepage": "https://reactivecocoa.io",
+  "screenshots": "https://reactivecocoa.io/img/logo.png",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE.md"
+  },
+  "documentation_url": "https://github.com/ReactiveCocoa/ReactiveObjC/tree/master/Documentation#readme",
+  "authors": "ReactiveCocoa",
+  "social_media_url": "https://twitter.com/ReactiveCocoa",
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9",
+    "watchos": "2.0",
+    "tvos": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveObjC.git",
+    "tag": "1.0.1"
+  },
+  "source_files": [
+    "ReactiveObjC/*.{h,m,d}",
+    "ReactiveObjC/extobjc/*.{h,m}"
+  ],
+  "private_header_files": [
+    "**/*Private.h",
+    "**/*EXTRuntimeExtensions.h",
+    "**/RACEmpty*.h"
+  ],
+  "ios": {
+    "exclude_files": "ReactiveObjC/**/*{AppKit,NSControl,NSText,NSTable}*"
+  },
+  "osx": {
+    "exclude_files": "ReactiveObjC/**/*{UIActionSheet,UIAlertView,UIBarButtonItem,UIButton,UICollectionReusableView,UIControl,UIDatePicker,UIGestureRecognizer,UIImagePicker,UIRefreshControl,UISegmentedControl,UISlider,UIStepper,UISwitch,UITableViewCell,UITableViewHeaderFooterView,UIText,MK}*"
+  },
+  "tvos": {
+    "exclude_files": "ReactiveObjC/**/*{AppKit,NSControl,NSText,NSTable,UIActionSheet,UIAlertView,UIDatePicker,UIImagePicker,UIRefreshControl,UISlider,UIStepper,UISwitch,MK}*"
+  },
+  "watchos": {
+    "exclude_files": "ReactiveObjC/**/*{UIActionSheet,UIAlertView,UIBarButtonItem,UIButton,UICollectionReusableView,UIControl,UIDatePicker,UIGestureRecognizer,UIImagePicker,UIRefreshControl,UISegmentedControl,UISlider,UIStepper,UISwitch,UITableViewCell,UITableViewHeaderFooterView,UIText,MK,AppKit,NSControl,NSText,NSTable,NSURLConnection}*"
+  },
+  "requires_arc": true,
+  "frameworks": "Foundation"
+}

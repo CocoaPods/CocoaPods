@@ -1,0 +1,60 @@
+{
+  "name": "BananaLib",
+  "version": "1.0",
+  "authors": [
+    "Banana Corp",
+    {
+      "Monkey Boy": "monkey@banana-corp.local"
+    }
+  ],
+  "homepage": "http://banana-corp.local/banana-lib.html",
+  "summary": "Chunky bananas!",
+  "description": "Full of chunky bananas.",
+  "source": {
+    "git": "http://banana-corp.local/banana-lib.git",
+    "tag": "v1.0"
+  },
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE",
+    "text": "Permission is hereby granted ..."
+  },
+  "platforms": {
+    "ios": "4.3"
+  },
+  "source_files": [
+    "Classes/*.{h,m}",
+    "Vendor"
+  ],
+  "ios": {
+    "source_files": "Classes_ios/*.{h,m}"
+  },
+  "resources": "Resources/*.png",
+  "xcconfig": {
+    "OTHER_LDFLAGS": "-framework SystemConfiguration"
+  },
+  "prefix_header_file": "Classes/BananaLib.pch",
+  "requires_arc": true,
+  "dependencies": {
+    "monkey": [
+      "~> 1.0.1",
+      "< 1.0.9"
+    ]
+  },
+  "subspecs": [
+    {
+      "name": "GreenBanana",
+      "source_files": "GreenBanana",
+      "dependencies": {
+        "AFNetworking": []
+      }
+    },
+    {
+      "name": "YellowBanana",
+      "source_files": "YellowBanana",
+      "dependencies": {
+        "SDWebImage": []
+      }
+    }
+  ]
+}

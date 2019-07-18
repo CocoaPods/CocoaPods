@@ -1,0 +1,116 @@
+{
+  "name": "RestKit",
+  "version": "0.20.3",
+  "summary": "RestKit is a framework for consuming and modeling RESTful web resources on iOS and OS X.",
+  "homepage": "http://www.restkit.org",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/RestKit/RestKit.git",
+    "tag": "v0.20.3"
+  },
+  "license": "Apache License, Version 2.0",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "default_subspecs": [
+    "Core"
+  ],
+  "prefix_header_contents": "#ifdef __OBJC__\n#import <CoreData/CoreData.h>\n#endif /* __OBJC__*/\n",
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": [
+        "Code/*.h",
+        "Vendor/LibComponentLogging/Core",
+        "Vendor/LibComponentLogging/NSLog"
+      ],
+      "header_dir": "RestKit",
+      "dependencies": {
+        "RestKit/ObjectMapping": [
+
+        ],
+        "RestKit/Network": [
+
+        ],
+        "RestKit/CoreData": [
+
+        ]
+      }
+    },
+    {
+      "name": "ObjectMapping",
+      "header_dir": "RestKit/ObjectMapping",
+      "source_files": "Code/ObjectMapping"
+    },
+    {
+      "name": "Network",
+      "header_dir": "RestKit/Network",
+      "source_files": "Code/Network",
+      "ios": {
+        "frameworks": [
+          "CFNetwork",
+          "Security",
+          "MobileCoreServices",
+          "SystemConfiguration"
+        ]
+      },
+      "osx": {
+        "frameworks": [
+          "CoreServices",
+          "Security",
+          "SystemConfiguration"
+        ]
+      },
+      "dependencies": {
+        "SOCKit": [
+
+        ],
+        "AFNetworking": [
+          "~> 1.3.0"
+        ],
+        "RestKit/ObjectMapping": [
+
+        ],
+        "RestKit/Support": [
+
+        ]
+      },
+      "prefix_header_contents": "#import <Availability.h>\n\n#define _AFNETWORKING_PIN_SSL_CERTIFICATES_\n\n#if __IPHONE_OS_VERSION_MIN_REQUIRED\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <MobileCoreServices/MobileCoreServices.h>\n  #import <Security/Security.h>\n#else\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <CoreServices/CoreServices.h>\n  #import <Security/Security.h>\n#endif\n"
+    },
+    {
+      "name": "CoreData",
+      "header_dir": "RestKit/CoreData",
+      "source_files": "Code/CoreData",
+      "frameworks": "CoreData"
+    },
+    {
+      "name": "Testing",
+      "header_dir": "RestKit/Testing",
+      "source_files": "Code/Testing"
+    },
+    {
+      "name": "Search",
+      "header_dir": "RestKit/Search",
+      "source_files": "Code/Search",
+      "dependencies": {
+        "RestKit/CoreData": [
+
+        ]
+      }
+    },
+    {
+      "name": "Support",
+      "header_dir": "RestKit/Support",
+      "source_files": "Code/Support",
+      "dependencies": {
+        "TransitionKit": [
+          "1.1.1"
+        ]
+      }
+    }
+  ]
+}

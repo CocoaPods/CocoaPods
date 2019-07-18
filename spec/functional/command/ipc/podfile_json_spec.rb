@@ -9,7 +9,10 @@ module Pod
     it 'converts a Podfile to JSON and prints it to STDOUT' do
       out = run_command('ipc', 'podfile-json', fixture('Podfile'))
       parsed_hash = JSON.parse(out)
-      parsed_hash.should == { 'target_definitions' => [{ 'name' => 'Pods', 'abstract' => true, 'platform' => 'ios', 'dependencies' => [{ 'SSZipArchive' => ['>= 1'] }, { 'ASIHTTPRequest' => ['~> 1.8.0'] }, 'Reachability', { 'ASIWebPageRequest' => ['< 1.8.2'] }] }] }
+      parsed_hash.should == {
+        'target_definitions' => [{ 'name' => 'Pods', 'abstract' => true, 'platform' => 'ios', 'dependencies' => [{ 'SSZipArchive' => ['>= 1'] }, { 'ASIHTTPRequest' => ['~> 1.8.0'] }, 'Reachability', { 'ASIWebPageRequest' => ['< 1.8.2'] }] }],
+        'sources' => %w(myrepo1 myrepo2),
+      }
     end
   end
 end

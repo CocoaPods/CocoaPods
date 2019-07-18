@@ -1,0 +1,146 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/artsy/Specs/commits/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept:
+      - application/vnd.github.v3.sha
+      If-None-Match:
+      - '"e8e31ca9304385f57ceeb030a29ddd0398660173"'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 304
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 09 Mar 2016 21:44:04 GMT
+      Content-Type:
+      - application/vnd.github.v3.sha; charset=utf-8
+      Content-Length:
+      - '40'
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '59'
+      X-Ratelimit-Reset:
+      - '1457563444'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding
+      Etag:
+      - '"570c31dea8def019ec563be2326e053cc937e084"'
+      Last-Modified:
+      - Wed, 09 Mar 2016 21:34:06 GMT
+      X-Github-Media-Type:
+      - github.v3; param=chitauri-preview; format=sha
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Served-By:
+      - e724c57ebb9961c772a91e2dd7421c8d
+      X-Github-Request-Id:
+      - 50C04692:CD23:3542B94:56E09924
+    body:
+      encoding: UTF-8
+      string: 570c31dea8def019ec563be2326e053cc937e084
+    http_version: 
+  recorded_at: Wed, 09 Mar 2016 21:44:04 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/igor-makarov/Core/commits/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - CocoaPods
+      Accept:
+      - application/vnd.github.v3.sha
+      If-None-Match:
+      - '"13224f92da337c262eebb344d1ee7b0a853323a0"'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 23 Jun 2019 11:51:08 GMT
+      Content-Type:
+      - application/vnd.github.v3.sha; charset=utf-8
+      Content-Length:
+      - '40'
+      Server:
+      - GitHub.com
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '59'
+      X-Ratelimit-Reset:
+      - '1561294268'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept
+      - Accept-Encoding
+      Etag:
+      - '"acfd38f72dedfd1956dd0fbe69d979e578efdacc"'
+      Last-Modified:
+      - Wed, 19 Dec 2018 07:07:09 GMT
+      X-Github-Media-Type:
+      - github.v3; param=sha
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
+        X-GitHub-Media-Type
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - AC92:35F85:5C13E9B:731929E:5D0F67AC
+    body:
+      encoding: UTF-8
+      string: acfd38f72dedfd1956dd0fbe69d979e578efdacc
+    http_version: 
+  recorded_at: Sun, 23 Jun 2019 11:51:08 GMT
+recorded_with: VCR 3.0.3
