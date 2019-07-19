@@ -198,7 +198,6 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
-
                 snapshot_test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
                                                                         @watermelon_spec.test_specs[2].consumer(:ios))
                 @project.add_pod_group('WatermelonLibSnapshotTests', fixture('watermelon-lib'))
@@ -488,7 +487,7 @@ module Pod
               it 'adds test xcconfig file reference for test resource bundle targets' do
                 installation_result = @installer.install!
                 installation_result.resource_bundle_targets.count.should == 0
-                installation_result.test_resource_bundle_targets.count.should == 1
+                installation_result.test_resource_bundle_targets.count.should == 3
                 unit_test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
                 unit_test_resource_bundle_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'

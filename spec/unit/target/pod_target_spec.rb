@@ -877,9 +877,9 @@ module Pod
         end
 
         it 'returns correct whether a test spec uses Swift or not' do
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.base_name == 'Tests'}).should.be.true
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.base_name == 'UITests'}).should.be.false
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.base_name == 'SnapshotTests'}).should.be.false
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find { |t| t.base_name == 'Tests' }).should.be.true
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find { |t| t.base_name == 'UITests' }).should.be.false
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find { |t| t.base_name == 'SnapshotTests' }).should.be.false
         end
       end
     end
