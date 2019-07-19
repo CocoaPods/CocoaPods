@@ -428,12 +428,16 @@ module Pod
       end
     end
 
+    # @return [String] The label to use for the given test type.
+    #
     def label_for_test_type(test_type)
       case test_type
       when :unit
         'Unit'
       when :ui
         'UI'
+      else
+        raise ArgumentError, "Unknown test type `#{test_type}`."
       end
     end
 
