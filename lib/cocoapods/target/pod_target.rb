@@ -428,7 +428,13 @@ module Pod
       end
     end
 
-    # @return [String] The label to use for the given test type.
+    # Returns the label to use for the given test type.
+    # This is used to generate native target names for test specs.
+    #
+    # @param  [Symbol] test_type
+    #         The test type to map to provided by the test specification DSL.
+    #
+    # @return [String] The native product type to use.
     #
     def label_for_test_type(test_type)
       case test_type
