@@ -786,6 +786,7 @@ module Pod
           @watermelon_pod_target.resource_paths.should == {
             'WatermelonLib' => [],
             'WatermelonLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
+            'WatermelonLib/UITests' => [],
             'WatermelonLib/SnapshotTests' => [],
             'WatermelonLib/App' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
           }
@@ -797,6 +798,7 @@ module Pod
             'WatermelonLib' => [],
             'WatermelonLib/Tests' => ['${PODS_ROOT}/../../spec/fixtures/watermelon-lib/App/resource.txt',
                                       '${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
+            'WatermelonLib/UITests' => [],
             'WatermelonLib/SnapshotTests' => [],
             'WatermelonLib/App' => ['${PODS_ROOT}/../../spec/fixtures/watermelon-lib/App/resource.txt',
                                     '${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
@@ -809,6 +811,7 @@ module Pod
               Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
             ],
             'WatermelonLib/Tests' => [],
+            'WatermelonLib/UITests' => [],
             'WatermelonLib/SnapshotTests' => [],
             'WatermelonLib/App' => [
               Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
@@ -874,9 +877,9 @@ module Pod
         end
 
         it 'returns correct whether a test spec uses Swift or not' do
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.name == 'Tests'}).should.be.true
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.name == 'UITests'}).should.be.false
-          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.name == 'SnapshotTests'}).should.be.false
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.base_name == 'Tests'}).should.be.true
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.base_name == 'UITests'}).should.be.false
+          @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find{ |t| t.base_name == 'SnapshotTests'}).should.be.false
         end
       end
     end
