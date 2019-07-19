@@ -110,6 +110,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 
+## 1.7.5 (2019-07-19)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Do not pass inhibit warnings compiler flags for Swift source files.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9013](https://github.com/CocoaPods/CocoaPods/issues/9013)
+
+
 ## 1.7.4 (2019-07-09)
 
 ##### Enhancements
