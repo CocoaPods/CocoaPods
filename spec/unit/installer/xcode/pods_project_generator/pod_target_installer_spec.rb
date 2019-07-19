@@ -187,8 +187,19 @@ module Pod
                   @project.add_file_reference(resource, group)
                 end
 
+                ui_test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
+                                                                  @watermelon_spec.test_specs[1].consumer(:ios))
+                @project.add_pod_group('WatermelonLibUITests', fixture('watermelon-lib'))
+                group = @project.group_for_spec('WatermelonLibUITests')
+                ui_test_file_accessor.source_files.each do |file|
+                  @project.add_file_reference(file, group)
+                end
+                ui_test_file_accessor.resources.each do |resource|
+                  @project.add_file_reference(resource, group)
+                end
+
                 snapshot_test_file_accessor = Sandbox::FileAccessor.new(Sandbox::PathList.new(fixture('watermelon-lib')),
-                                                                        @watermelon_spec.test_specs[1].consumer(:ios))
+                                                                        @watermelon_spec.test_specs[2].consumer(:ios))
                 @project.add_pod_group('WatermelonLibSnapshotTests', fixture('watermelon-lib'))
                 group = @project.group_for_spec('WatermelonLibSnapshotTests')
                 snapshot_test_file_accessor.source_files.each do |file|
@@ -211,7 +222,8 @@ module Pod
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
-                file_accessors = [file_accessor, unit_test_file_accessor, snapshot_test_file_accessor, app_file_accessor]
+                file_accessors = [file_accessor, unit_test_file_accessor, ui_test_file_accessor,
+                                  snapshot_test_file_accessor, app_file_accessor]
                 @watermelon_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
                                                        Platform.new(:ios, '6.0'), all_specs, [@target_definition],
                                                        file_accessors)
@@ -225,7 +237,7 @@ module Pod
               it 'adds the native test target to the project for iOS targets with correct build settings' do
                 @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
                 installation_result = @installer.install!
-                @project.targets.count.should == 7
+                @project.targets.count.should == 9
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -241,7 +253,25 @@ module Pod
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
                 end
-                snapshot_test_native_target = @project.targets[2]
+                unit_test_native_target.symbol_type.should == :unit_test_bundle
+
+                ui_test_native_target = @project.targets[2]
+                ui_test_native_target.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.product_reference.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.ui-uitests.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-UI-UITests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-UI-UITests-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-UI-UITests-prefix.pch'
+                end
+                ui_test_native_target.symbol_type.should == :ui_test_bundle
+
+                snapshot_test_native_target = @project.targets[3]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
                 snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
                 snapshot_test_native_target.build_configurations.each do |bc|
@@ -256,7 +286,7 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
-                app_native_target = @project.targets[5]
+                app_native_target = @project.targets[7]
                 app_native_target.name.should == 'WatermelonLib-App'
                 app_native_target.product_reference.name.should == 'WatermelonLib-App'
                 app_native_target.build_configurations.each do |bc|
@@ -273,14 +303,14 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
                 end
                 app_native_target.symbol_type.should == :application
-                installation_result.test_native_targets.count.should == 2
+                installation_result.test_native_targets.count.should == 3
                 installation_result.app_native_targets.count.should == 1
               end
 
               it 'adds the native test target to the project for OSX targets with correct build settings' do
                 @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
                 installation_result = @installer2.install!
-                @project.targets.count.should == 7
+                @project.targets.count.should == 9
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
@@ -296,7 +326,24 @@ module Pod
                   bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
                 end
-                snapshot_test_native_target = @project.targets[2]
+
+                ui_test_native_target = @project.targets[2]
+                ui_test_native_target.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.product_reference.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.ui-uitests.xcconfig'
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-UI-UITests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == ''
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-UI-UITests-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-UI-UITests-prefix.pch'
+                end
+                ui_test_native_target.symbol_type.should == :ui_test_bundle
+
+                snapshot_test_native_target = @project.targets[3]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
                 snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
                 snapshot_test_native_target.build_configurations.each do |bc|
@@ -311,7 +358,7 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
                 end
                 snapshot_test_native_target.symbol_type.should == :unit_test_bundle
-                app_native_target = @project.targets[5]
+                app_native_target = @project.targets[7]
                 app_native_target.name.should == 'WatermelonLib-App'
                 app_native_target.product_reference.name.should == 'WatermelonLib-App'
                 app_native_target.build_configurations.each do |bc|
@@ -327,7 +374,7 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
                 end
                 app_native_target.symbol_type.should == :application
-                installation_result.test_native_targets.count.should == 2
+                installation_result.test_native_targets.count.should == 3
                 installation_result.app_native_targets.count.should == 1
               end
 
@@ -357,7 +404,7 @@ module Pod
 
               it 'adds files to build phases correctly depending on the native target' do
                 @installer.install!
-                @project.targets.count.should == 7
+                @project.targets.count.should == 9
                 native_target = @project.targets[0]
                 native_target.source_build_phase.files.count.should == 2
                 native_target.source_build_phase.files.map(&:display_name).sort.should == [
@@ -370,12 +417,17 @@ module Pod
                   'WatermelonSwiftTests.swift',
                   'WatermelonTests.m',
                 ]
-                snapshot_test_native_target = @project.targets[2]
+                ui_test_native_target = @project.targets[2]
+                ui_test_native_target.source_build_phase.files.count.should == 1
+                ui_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
+                  'WatermelonUITests.m',
+                ]
+                snapshot_test_native_target = @project.targets[3]
                 snapshot_test_native_target.source_build_phase.files.count.should == 1
                 snapshot_test_native_target.source_build_phase.files.map(&:display_name).sort.should == [
                   'WatermelonSnapshotTests.m',
                 ]
-                app_native_target = @project.targets[5]
+                app_native_target = @project.targets[7]
                 app_native_target.source_build_phase.files.count.should == 1
                 app_native_target.source_build_phase.files.map(&:display_name).sort.should == [
                   'main.swift',
@@ -436,7 +488,7 @@ module Pod
               it 'adds test xcconfig file reference for test resource bundle targets' do
                 installation_result = @installer.install!
                 installation_result.resource_bundle_targets.count.should == 0
-                installation_result.test_resource_bundle_targets.count.should == 2
+                installation_result.test_resource_bundle_targets.count.should == 3
                 unit_test_resource_bundle_target = @project.targets.find { |t| t.name == 'WatermelonLib-WatermelonLibTestResources' }
                 unit_test_resource_bundle_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == 'WatermelonLib.unit-tests.xcconfig'

@@ -137,11 +137,16 @@ module Pod
             app_host_target_names = app_native_target.resolved_build_setting('PRODUCT_NAME', true)
             test_native_target.build_configurations.each do |configuration|
               app_host_target_name = app_host_target_names[configuration.name] || target.name
-              test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target_name}.app/"
-              test_host << 'Contents/MacOS/' if pod_target.platform == :osx
-              test_host << app_host_target_name.to_s
-              configuration.build_settings['BUNDLE_LOADER'] = '$(TEST_HOST)'
-              configuration.build_settings['TEST_HOST'] = test_host
+              case test_native_target.symbol_type
+              when :unit_test_bundle
+                test_host = "$(BUILT_PRODUCTS_DIR)/#{app_host_target_name}.app/"
+                test_host << 'Contents/MacOS/' if pod_target.platform == :osx
+                test_host << app_host_target_name.to_s
+                configuration.build_settings['BUNDLE_LOADER'] = '$(TEST_HOST)'
+                configuration.build_settings['TEST_HOST'] = test_host
+              when :ui_test_bundle
+                configuration.build_settings['TEST_TARGET_NAME'] = app_host_target_name
+              end
             end
             target_attributes = project.root_object.attributes['TargetAttributes'] || {}
             target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_native_target.uuid.to_s }

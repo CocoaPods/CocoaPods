@@ -421,6 +421,27 @@ module Pod
       case test_type
       when :unit
         :unit_test_bundle
+      when :ui
+        :ui_test_bundle
+      else
+        raise ArgumentError, "Unknown test type `#{test_type}`."
+      end
+    end
+
+    # Returns the label to use for the given test type.
+    # This is used to generate native target names for test specs.
+    #
+    # @param  [Symbol] test_type
+    #         The test type to map to provided by the test specification DSL.
+    #
+    # @return [String] The native product type to use.
+    #
+    def label_for_test_type(test_type)
+      case test_type
+      when :unit
+        'Unit'
+      when :ui
+        'UI'
       else
         raise ArgumentError, "Unknown test type `#{test_type}`."
       end
@@ -489,7 +510,7 @@ module Pod
     # @return [String] The derived name of the test target.
     #
     def test_target_label(test_spec)
-      "#{label}-#{test_spec.test_type.capitalize}-#{subspec_label(test_spec)}"
+      "#{label}-#{label_for_test_type(test_spec.test_type)}-#{subspec_label(test_spec)}"
     end
 
     # @param  [Specification] app_spec
@@ -512,7 +533,7 @@ module Pod
       if app_spec
         [app_target.name, app_target.app_target_label(app_spec)]
       elsif test_spec.consumer(platform).requires_app_host?
-        [name, "AppHost-#{label}-#{test_spec.test_type.capitalize}-Tests"]
+        [name, "AppHost-#{label}-#{label_for_test_type(test_spec.test_type)}-Tests"]
       end
     end
 

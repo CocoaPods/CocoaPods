@@ -163,7 +163,9 @@ module Pod
           it 'installs the correct targets in the project' do
             pod_generator_result = @generator.generate!
             pod_generator_result.project.targets.map(&:name).sort.should == [
+              'AppHost-WatermelonLib-iOS-UI-Tests',
               'AppHost-WatermelonLib-iOS-Unit-Tests',
+              'AppHost-WatermelonLib-macOS-UI-Tests',
               'AppHost-WatermelonLib-macOS-Unit-Tests',
               'BananaLib-iOS',
               'BananaLib-macOS',
@@ -178,12 +180,14 @@ module Pod
               'Pods-SampleApp-macOS',
               'WatermelonLib-iOS',
               'WatermelonLib-iOS-App',
+              'WatermelonLib-iOS-UI-UITests',
               'WatermelonLib-iOS-Unit-SnapshotTests',
               'WatermelonLib-iOS-Unit-Tests',
               'WatermelonLib-iOS-WatermelonLibExampleAppResources',
               'WatermelonLib-iOS-WatermelonLibTestResources',
               'WatermelonLib-macOS',
               'WatermelonLib-macOS-App',
+              'WatermelonLib-macOS-UI-UITests',
               'WatermelonLib-macOS-Unit-SnapshotTests',
               'WatermelonLib-macOS-Unit-Tests',
               'WatermelonLib-macOS-WatermelonLibExampleAppResources',

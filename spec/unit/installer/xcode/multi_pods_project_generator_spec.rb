@@ -268,16 +268,20 @@ module Pod
             ]
 
             watermelon_project.targets.map(&:name).sort.should == [
+              'AppHost-WatermelonLib-iOS-UI-Tests',
               'AppHost-WatermelonLib-iOS-Unit-Tests',
+              'AppHost-WatermelonLib-macOS-UI-Tests',
               'AppHost-WatermelonLib-macOS-Unit-Tests',
               'WatermelonLib-iOS',
               'WatermelonLib-iOS-App',
+              'WatermelonLib-iOS-UI-UITests',
               'WatermelonLib-iOS-Unit-SnapshotTests',
               'WatermelonLib-iOS-Unit-Tests',
               'WatermelonLib-iOS-WatermelonLibExampleAppResources',
               'WatermelonLib-iOS-WatermelonLibTestResources',
               'WatermelonLib-macOS',
               'WatermelonLib-macOS-App',
+              'WatermelonLib-macOS-UI-UITests',
               'WatermelonLib-macOS-Unit-SnapshotTests',
               'WatermelonLib-macOS-Unit-Tests',
               'WatermelonLib-macOS-WatermelonLibExampleAppResources',
