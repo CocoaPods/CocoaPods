@@ -7,17 +7,17 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 30650685f697518f0dc8e8edd8d26d853cccb738
+  revision: e9967503122ace79f43dd22defa5634374e95bb0
   branch: master
   specs:
-    cocoapods-core (1.7.4)
+    cocoapods-core (1.7.5)
       activesupport (>= 4.0.2, < 6)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: dd4274e0fb0792cbf52d441a93799470d88e38d8
+  revision: 1e7763f8762ecc83d38d9e0c7ebadefc71bf654b
   branch: master
   specs:
     molinillo (0.6.6)
@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: db20399b21bbc0b51d5979cf1145f2c261dc2970
+  revision: d450eb9389a178d10e8248ef9556e018e0701d32
   branch: master
   specs:
     xcodeproj (1.11.0)
@@ -50,7 +50,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: bc9e262fb441fdbea039a7d676e1193a32f50b11
+  revision: bea449fdf0bc74c42599f8d2be4e16d424399296
   branch: master
   specs:
     cocoapods-downloader (1.2.2)
@@ -109,10 +109,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.7.4)
+    cocoapods (1.7.5)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.7.4)
+      cocoapods-core (= 1.7.5)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)

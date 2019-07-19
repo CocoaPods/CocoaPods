@@ -287,12 +287,18 @@ module Pod
               {
                 true => file_accessor.arc_source_files,
                 false => file_accessor.non_arc_source_files,
-              }.each do |arc, files|
-                next if files.empty?
-                files = files - headers - other_source_files
-                flags = compiler_flags_for_consumer(consumer, arc)
-                regular_file_refs = project_file_references_array(files, 'source')
-                native_target.add_file_references(regular_file_refs, flags)
+              }.each do |arc, source_files|
+                next if source_files.empty?
+                source_files = source_files - headers - other_source_files
+                swift_source_files, non_swift_source_files = source_files.partition { |file| file.extname == '.swift' }
+                {
+                  :objc => non_swift_source_files,
+                  :swift => swift_source_files,
+                }.each do |language, files|
+                  compiler_flags = compiler_flags_for_consumer(consumer, arc, language)
+                  file_refs = project_file_references_array(files, 'source')
+                  native_target.add_file_references(file_refs, compiler_flags)
+                end
               end
 
               header_file_refs = project_file_references_array(headers, 'header')
@@ -774,11 +780,17 @@ module Pod
           #         The consumer for the specification for which the compiler flags
           #         are needed.
           #
+          # @param  [Boolean] arc
+          #         Whether the arc is enabled or not.
+          #
+          # @param  [Symbol] language
+          #         The language these compiler warnings are for. Can be either :objc or :swift.
+          #
           # @return [String] The compiler flags.
           #
-          def compiler_flags_for_consumer(consumer, arc)
+          def compiler_flags_for_consumer(consumer, arc, language)
             flags = consumer.compiler_flags.dup
-            if !arc
+            if !arc && language == :objc
               flags << '-fno-objc-arc'
             else
               platform_name = consumer.platform_name
@@ -787,7 +799,7 @@ module Pod
                 flags << '-DOS_OBJECT_USE_OBJC=0'
               end
             end
-            if target.inhibit_warnings?
+            if target.inhibit_warnings? && language == :objc
               flags << '-w -Xanalyzer -analyzer-disable-all-checks'
             end
             flags * ' '
