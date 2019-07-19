@@ -222,7 +222,8 @@ module Pod
 
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
-                file_accessors = [file_accessor, unit_test_file_accessor, ui_test_file_accessor, snapshot_test_file_accessor, app_file_accessor]
+                file_accessors = [file_accessor, unit_test_file_accessor, ui_test_file_accessor,
+                                  snapshot_test_file_accessor, app_file_accessor]
                 @watermelon_pod_target = PodTarget.new(config.sandbox, false, user_build_configurations, [],
                                                        Platform.new(:ios, '6.0'), all_specs, [@target_definition],
                                                        file_accessors)
