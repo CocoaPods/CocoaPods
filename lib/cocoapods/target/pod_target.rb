@@ -428,6 +428,15 @@ module Pod
       end
     end
 
+    def label_for_test_type(test_type)
+      case test_spec.test_type
+      when :unit
+        'Unit'
+      when :ui
+        'UI'
+      end
+    end
+
     # @return [Specification] The root specification for the target.
     #
     def root_spec
@@ -491,13 +500,7 @@ module Pod
     # @return [String] The derived name of the test target.
     #
     def test_target_label(test_spec)
-      type_string = case test_spec.test_type
-                    when :unit
-                      'Unit'
-                    when :ui
-                      'UI'
-                    end
-      "#{label}-#{type_string}-#{subspec_label(test_spec)}"
+      "#{label}-#{label_for_test_type(test_spec.test_type)}-#{subspec_label(test_spec)}"
     end
 
     # @param  [Specification] app_spec
@@ -520,7 +523,7 @@ module Pod
       if app_spec
         [app_target.name, app_target.app_target_label(app_spec)]
       elsif test_spec.consumer(platform).requires_app_host?
-        [name, "AppHost-#{label}-#{test_spec.test_type.capitalize}-Tests"]
+        [name, "AppHost-#{label}-#{label_for_test_type(test_spec.test_type)}-Tests"]
       end
     end
 
