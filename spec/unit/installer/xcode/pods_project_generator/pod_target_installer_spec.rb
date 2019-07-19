@@ -374,7 +374,7 @@ module Pod
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
                 end
                 app_native_target.symbol_type.should == :application
-                installation_result.test_native_targets.count.should == 2
+                installation_result.test_native_targets.count.should == 3
                 installation_result.app_native_targets.count.should == 1
               end
 
