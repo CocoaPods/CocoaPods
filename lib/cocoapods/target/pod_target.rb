@@ -429,7 +429,7 @@ module Pod
     end
 
     def label_for_test_type(test_type)
-      case test_spec.test_type
+      case test_type
       when :unit
         'Unit'
       when :ui
