@@ -65,6 +65,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Use correct `header_mappings_dir` for subspecs  
+  [Alex Coomans](https://github.com/drcapulet)
+  [#9019](https://github.com/CocoaPods/CocoaPods/pull/9019)
+
 * Make CDNSource show up in `pod repo env`  
   [Igor Makarov](https://github.com/igor-makarov)
   [#9016](https://github.com/CocoaPods/CocoaPods/pull/9016)
