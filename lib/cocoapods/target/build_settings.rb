@@ -402,8 +402,8 @@ module Pod
       #
       # @return [Hash<String, String>]
       #
-      def merged_xcconfigs(xcconfig_values_by_consumer_by_key, attribute)
-        xcconfig_values_by_consumer_by_key.each_with_object({}) do |(key, values_by_consumer), xcconfig|
+      def merged_xcconfigs(xcconfig_values_by_consumer_by_key, attribute, overriding: {})
+        xcconfig_values_by_consumer_by_key.each_with_object(overriding.dup) do |(key, values_by_consumer), xcconfig|
           uniq_values = values_by_consumer.values.uniq
           values_are_bools = uniq_values.all? { |v| v =~ /\A(yes|no)\z/i }
           if values_are_bools
@@ -417,7 +417,9 @@ module Pod
             end
           elsif PLURAL_SETTINGS.include? key
             # Plural build settings
-            xcconfig[key] = uniq_values.join(' ')
+            overridden = xcconfig[key]
+            uniq_values.prepend(overridden) if overridden
+            xcconfig[key] = uniq_values.uniq.join(' ')
           elsif uniq_values.count > 1
             # Singular build settings
             UI.warn "Can't merge #{attribute} for pod targets: " \
@@ -895,7 +897,8 @@ module Pod
         # @return [Hash{String, String}]
         #
         define_build_settings_method :merged_pod_target_xcconfigs, :memoized => true do
-          merged_xcconfigs(pod_target_xcconfig_values_by_consumer_by_key, :pod_target_xcconfig)
+          merged_xcconfigs(pod_target_xcconfig_values_by_consumer_by_key, :pod_target_xcconfig,
+                           :overriding => non_library_xcconfig? ? target.build_settings.merged_pod_target_xcconfigs : {})
         end
 
         # @return [Array<Sandbox::FileAccessor>]
