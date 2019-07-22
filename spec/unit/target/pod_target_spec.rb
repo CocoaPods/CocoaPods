@@ -822,9 +822,7 @@ module Pod
             'WatermelonLib/Tests' => [],
             'WatermelonLib/UITests' => [],
             'WatermelonLib/SnapshotTests' => [],
-            'WatermelonLib/App' => [
-              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
-            ],
+            'WatermelonLib/App' => [],
           }
         end
 
