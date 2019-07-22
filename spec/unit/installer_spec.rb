@@ -313,6 +313,20 @@ module Pod
         end
       end
 
+      it 'treats warnings as errors if the corresponding config is set' do
+        @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:treat_warnings_as_errors => true))
+        @installer.send(:prepare)
+        UI.treat_warnings_as_errors.should.be.true
+      end
+
+      it "doesn't treat warnings as errors if the corresponing config is not set" do
+        @installer.send(:prepare)
+        UI.treat_warnings_as_errors.should.be.false
+        @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:treat_warnings_as_errors => false))
+        @installer.send(:prepare)
+        UI.treat_warnings_as_errors.should.be.false
+      end
+
       describe 'handling CocoaPods version updates' do
         it 'does not deintegrate when there is no lockfile' do
           installer = Pod::Installer.new(config.sandbox, generate_podfile, nil)

@@ -12,6 +12,7 @@ module Pod
     @title_level       =  0
     @indentation_level =  2
     @treat_titles_as_messages = false
+    @treat_warnings_as_errors = false
     @warnings = []
 
     class << self
@@ -20,6 +21,7 @@ module Pod
       attr_accessor :indentation_level
       attr_accessor :title_level
       attr_accessor :warnings
+      attr_accessor :treat_warnings_as_errors
 
       # @return [IO] IO object to which UI output will be directed.
       #
@@ -372,7 +374,11 @@ module Pod
       # return [void]
       #
       def warn(message, actions = [], verbose_only = false)
-        warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
+        if treat_warnings_as_errors
+          raise Informative, message
+        else
+          warnings << { :message => message, :actions => actions, :verbose_only => verbose_only }
+        end
       end
 
       # Pipes all output inside given block to a pager.

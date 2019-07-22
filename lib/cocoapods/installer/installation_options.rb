@@ -181,6 +181,10 @@ module Pod
       # since the previous installation.
       #
       option :incremental_installation, false
+
+      # Whether to treat all warnings as though they were errors.
+      #
+      option :treat_warnings_as_errors, false
     end
   end
 end

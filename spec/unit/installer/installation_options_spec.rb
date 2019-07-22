@@ -11,6 +11,7 @@ module Pod
         'lock_pod_sources' => true,
         'share_schemes_for_development_pods' => false,
         'preserve_pod_file_structure' => false,
+        'treat_warnings_as_errors' => false,
       }.each do |option, default|
         it "includes `#{option}` defaulting to `#{default}`" do
           Installer::InstallationOptions.defaults.fetch(option).should == default
@@ -70,6 +71,7 @@ module Pod
           'preserve_pod_file_structure' => false,
           'generate_multiple_pod_projects' => false,
           'incremental_installation' => false,
+          'treat_warnings_as_errors' => false,
         }
       end
 

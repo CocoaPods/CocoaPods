@@ -193,6 +193,7 @@ module Pod
     end
 
     def prepare
+      UI.treat_warnings_as_errors = installation_options.treat_warnings_as_errors
       # Raise if pwd is inside Pods
       if Dir.pwd.start_with?(sandbox.root.to_path)
         message = 'Command should be run from a directory outside Pods directory.'
