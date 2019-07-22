@@ -383,7 +383,7 @@ module Pod
                                 end
             FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_paths)
           end
-          if !file_accessor.spec.test_specification? && should_build? && build_as_dynamic_framework?
+          if file_accessor.spec.library_specification? && should_build? && build_as_dynamic_framework?
             frameworks << FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))
           end
           hash[file_accessor.spec.name] = frameworks
