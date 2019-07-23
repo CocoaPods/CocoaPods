@@ -156,13 +156,26 @@ module Pod
       resolve_dependencies
       download_dependencies
       validate_targets
+      if installation_options.skip_pods_project_generation?
+        show_skip_pods_project_generation_message
+      else
+        integrate
+      end
+      perform_post_install_actions
+    end
+
+    def show_skip_pods_project_generation_message
+      UI.section 'Skipping Pods Project Creation'
+      UI.section 'Skipping User Project Integration'
+    end
+
+    def integrate
       generate_pods_project
       if installation_options.integrate_targets?
         integrate_user_project
       else
         UI.section 'Skipping User Project Integration'
       end
-      perform_post_install_actions
     end
 
     def analyze_project_cache
