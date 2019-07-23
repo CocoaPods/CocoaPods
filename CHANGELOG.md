@@ -68,6 +68,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8983](https://github.com/CocoaPods/CocoaPods/pull/8983)
 
+* Added option to skip Pods.xcodeproj generation
+  [Itay Brenner](https://github.com/itaybre)
+  [8872](https://github.com/CocoaPods/CocoaPods/pull/8872)
+
 ##### Bug Fixes
 
 * Make CDNSource show up in `pod repo env`  
@@ -118,7 +122,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* None.
 
 ##### Bug Fixes
 

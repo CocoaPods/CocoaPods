@@ -70,6 +70,7 @@ module Pod
           'preserve_pod_file_structure' => false,
           'generate_multiple_pod_projects' => false,
           'incremental_installation' => false,
+          'skip_pods_project_generation' => false,
         }
       end
 

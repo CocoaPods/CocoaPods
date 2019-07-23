@@ -286,6 +286,21 @@ module Pod
         UI.output.should.include 'Skipping User Project Integration'
       end
 
+      it "doesn't generate Pods.xcodeproj if skip_pods_project_generation is true" do
+        @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:skip_pods_project_generation => true))
+        @installer.expects(:regular_intergration).never
+        @installer.install!
+        UI.output.should.include 'Just Download option enabled'
+        UI.output.should.include 'Skipping Pods Project Creation'
+        UI.output.should.include 'Skipping User Project Integration'
+      end
+
+      it 'generates Pods.xcodeproj if skip_pods_project_generation is not set' do
+        @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
+        @installer.expects(:regular_intergration).once
+        @installer.install!
+      end
+
       it 'prints a list of deprecated pods' do
         spec = Spec.new
         spec.name = 'RestKit'

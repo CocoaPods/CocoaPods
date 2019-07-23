@@ -181,6 +181,10 @@ module Pod
       # since the previous installation.
       #
       option :incremental_installation, false
+
+      # Whether to skip generating the `Pods.xcodeproj` and perform only dependency resolution and downloading.
+      #
+      option :skip_pods_project_generation, false
     end
   end
 end
