@@ -23,7 +23,24 @@ File References:
 Targets:
 - Static:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-Abstract Target-macOS Pods-Static-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
     - Sources:
       - ViewController.swift
       - ModelThing.m
@@ -61,7 +78,24 @@ Targets:
         Base Configuration: Pods-Abstract Target-macOS Pods-Static.release.xcconfig
 - Dynamic:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-Abstract Target-macOS Pods-Dynamic-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
     - Sources:
       - ViewController.swift
       - ModelThing.m
@@ -69,7 +103,26 @@ Targets:
     - Frameworks:
       - Pods_Abstract_Target_macOS_Pods_Dynamic.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract
+          Target-macOS Pods-Dynamic-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/CustomModuleMapPod-framework-macOS/CustomModuleMapPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/MixedPod-framework-macOS/MixedPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/ObjCPod-framework-macOS/ObjCPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-framework-macOS/SwiftPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CustomModuleMapPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MixedPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjCPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS
+          Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:

@@ -31,7 +31,24 @@ File References:
 Targets:
 - SampleApp:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-SampleApp-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
     - Sources:
       - main.m
       - CPAppDelegate.m
@@ -42,7 +59,20 @@ Targets:
       - InfoPlist.strings
       - Credits.rtf
       - MainMenu.xib
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/Pods-SampleApp/Pods-SampleApp-resources.sh"
+        - "${PODS_ROOT}/../res/troll.png"
+        - "${PODS_CONFIGURATION_BUILD_DIR}/res/res.bundle"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/troll.png"
+        - "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/res.bundle"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-SampleApp/Pods-SampleApp-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:

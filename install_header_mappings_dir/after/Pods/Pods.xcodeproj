@@ -219,7 +219,10 @@ Targets:
       - Foundation.framework
     - Resources: []
     - Copy com/company/foo Public Headers:
-      - HMDP.h
+        Destination Path: "$(PUBLIC_HEADERS_FOLDER_PATH)/com/company/foo"
+        Destination Subfolder: products_directory
+        Files:
+        - HMDP.h
     Build Configurations:
     - Debug:
         Build Settings:
