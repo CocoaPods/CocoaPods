@@ -74,6 +74,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Update symlink script to prevent duplicate files  
+  [Alex Coomans](https://github.com/drcapulet)
+  [#9035](https://github.com/CocoaPods/CocoaPods/pull/9035)
+
 * Use correct `header_mappings_dir` for subspecs  
   [Alex Coomans](https://github.com/drcapulet)
   [#9019](https://github.com/CocoaPods/CocoaPods/pull/9019)
