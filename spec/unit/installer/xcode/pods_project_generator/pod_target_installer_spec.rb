@@ -1262,6 +1262,151 @@ module Pod
               end
             end
 
+            describe 'concerning header_mappings_dirs in subspecs' do
+              before do
+                @project.add_pod_group('HeadersMappingSubspec', fixture('HeadersMappingSubspec'))
+
+                @pod_spec = fixture_spec('HeadersMappingSubspec/HeadersMappingSubspec.podspec')
+              end
+
+              describe 'depending on the root' do
+                before do
+                  @pod_target = fixture_pod_target_with_specs([@pod_spec, *@pod_spec.subspecs], false,
+                                                              { 'Debug' => :debug, 'Release' => :release },
+                                                              [@target_definition])
+                  @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                  group = @project.group_for_spec('HeadersMappingSubspec')
+                  @pod_target.file_accessors.each do |file_accessor|
+                    file_accessor.source_files.each do |file|
+                      @project.add_file_reference(file, group)
+                    end
+                  end
+                  @installer.stubs(:target).returns(@pod_target)
+                end
+
+                it 'creates custom copy files phases for framework pods' do
+                  @installer.install!
+
+                  target = @project.native_targets.first
+                  target.name.should == 'HeadersMappingSubspec'
+
+                  header_build_phase_file_refs = target.headers_build_phase.files.
+                    reject { |build_file| build_file.settings.nil? }.
+                    map { |build_file| build_file.file_ref.path }
+                  header_build_phase_file_refs.should.be.empty
+
+                  copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
+                  copy_files_build_phases.map(&:name).should == [
+                    'Copy . Public Headers',
+                    'Copy external/magic Private Headers',
+                  ]
+
+                  copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(2, :products_directory)
+
+                  copy_files_build_phases.map(&:dst_path).should == [
+                    '$(PUBLIC_HEADERS_FOLDER_PATH)/.',
+                    '$(PRIVATE_HEADERS_FOLDER_PATH)/external/magic',
+                  ]
+
+                  copy_files_build_phases.map { |phase| phase.files_references.map(&:path) }.should == [
+                    ['include/mapping/all.h', 'include/mapping/umbrella.h'],
+                    ['external/magic/beans.h'],
+                  ]
+                end
+
+                it 'creates a build phase to symlink header folders on OS X' do
+                  @pod_target.stubs(:platform).returns(Platform.osx)
+
+                  @installer.install!
+
+                  target = @project.native_targets.first
+                  build_phase = target.shell_script_build_phases.find do |bp|
+                    bp.name == 'Create Symlinks to Header Folders'
+                  end
+                  build_phase.should.not.be.nil
+                end
+
+                it 'verifies that headers in build phase for static libraries are all Project headers' do
+                  @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+
+                  @installer.install!
+
+                  @project.targets.first.headers_build_phase.files.find do |hf|
+                    hf.settings['ATTRIBUTES'].should == ['Project']
+                  end
+                end
+              end
+
+              describe 'depending on a subspec' do
+                before do
+                  @pod_spec.subspecs.last.name.should == 'HeadersMappingSubspec/Implementation'
+                  @pod_target = fixture_pod_target_with_specs(@pod_spec.subspecs.reverse, false,
+                                                              { 'Debug' => :debug, 'Release' => :release },
+                                                              [@target_definition])
+                  @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                  group = @project.group_for_spec('HeadersMappingSubspec')
+                  @pod_target.file_accessors.each do |file_accessor|
+                    file_accessor.source_files.each do |file|
+                      @project.add_file_reference(file, group)
+                    end
+                  end
+                  @installer.stubs(:target).returns(@pod_target)
+                end
+
+                it 'alexc creates custom copy files phases for framework pods' do
+                  @installer.install!
+
+                  target = @project.native_targets.first
+                  target.name.should == 'HeadersMappingSubspec'
+
+                  header_build_phase_file_refs = target.headers_build_phase.files.
+                    reject { |build_file| build_file.settings.nil? }.
+                    map { |build_file| build_file.file_ref.path }
+                  header_build_phase_file_refs.should.be.empty
+
+                  copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
+                  copy_files_build_phases.map(&:name).should == [
+                    'Copy . Public Headers',
+                    'Copy external/magic Private Headers',
+                  ]
+
+                  copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(2, :products_directory)
+
+                  copy_files_build_phases.map(&:dst_path).should == [
+                    '$(PUBLIC_HEADERS_FOLDER_PATH)/.',
+                    '$(PRIVATE_HEADERS_FOLDER_PATH)/external/magic',
+                  ]
+
+                  copy_files_build_phases.map { |phase| phase.files_references.map(&:path) }.should == [
+                    ['include/mapping/all.h', 'include/mapping/umbrella.h'],
+                    ['external/magic/beans.h'],
+                  ]
+                end
+
+                it 'creates a build phase to symlink header folders on OS X' do
+                  @pod_target.stubs(:platform).returns(Platform.osx)
+
+                  @installer.install!
+
+                  target = @project.native_targets.first
+                  build_phase = target.shell_script_build_phases.find do |bp|
+                    bp.name == 'Create Symlinks to Header Folders'
+                  end
+                  build_phase.should.not.be.nil
+                end
+
+                it 'verifies that headers in build phase for static libraries are all Project headers' do
+                  @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+
+                  @installer.install!
+
+                  @project.targets.first.headers_build_phase.files.find do |hf|
+                    hf.settings['ATTRIBUTES'].should == ['Project']
+                  end
+                end
+              end
+            end
+
             it "doesn't create a build phase to symlink header folders by default on OS X" do
               @pod_target.stubs(:platform).returns(Platform.osx)
 

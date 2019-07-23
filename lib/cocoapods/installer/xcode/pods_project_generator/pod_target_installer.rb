@@ -72,8 +72,8 @@ module Pod
                     end
 
                     file_accessor.public_headers.map do |public_header|
-                      public_header = if header_mappings_dir
-                                        public_header.relative_path_from(header_mappings_dir)
+                      public_header = if header_mappings_dir(file_accessor)
+                                        public_header.relative_path_from(header_mappings_dir(file_accessor))
                                       else
                                         public_header.basename
                                       end
@@ -303,7 +303,7 @@ module Pod
 
               header_file_refs = project_file_references_array(headers, 'header')
               native_target.add_file_references(header_file_refs) do |build_file|
-                add_header(build_file, public_headers, private_headers, native_target)
+                add_header(file_accessor, build_file, public_headers, private_headers, native_target)
               end
 
               other_file_refs = project_file_references_array(other_source_files, 'other source')
@@ -730,7 +730,7 @@ module Pod
           # @return [void]
           #
           def create_build_phase_to_symlink_header_folders(native_target)
-            return unless target.platform.name == :osx && header_mappings_dir
+            return unless target.platform.name == :osx && any_header_mapping_dirs?
 
             build_phase = native_target.new_shell_script_build_phase('Create Symlinks to Header Folders')
             build_phase.shell_script = <<-eos.strip_heredoc
@@ -867,15 +867,20 @@ module Pod
             end
           end
 
-          def header_mappings_dir
-            return @header_mappings_dir if defined?(@header_mappings_dir)
-            file_accessor = target.file_accessors.first
-            @header_mappings_dir = if dir = file_accessor.spec_consumer.header_mappings_dir
-                                     file_accessor.path_list.root + dir
-                                   end
+          def any_header_mapping_dirs?
+            return @any_header_mapping_dirs if defined?(@any_header_mapping_dirs)
+            @any_header_mapping_dirs = target.file_accessors.any? { |fa| fa.spec_consumer.header_mappings_dir }
           end
 
-          def add_header(build_file, public_headers, private_headers, native_target)
+          def header_mappings_dir(file_accessor)
+            @header_mappings_dirs ||= {}
+            return @header_mappings_dirs[file_accessor] if @header_mappings_dirs.key?(file_accessor)
+            @header_mappings_dirs[file_accessor] = if dir = file_accessor.spec_consumer.header_mappings_dir
+                                                     file_accessor.path_list.root + dir
+                                                   end
+          end
+
+          def add_header(file_accessor, build_file, public_headers, private_headers, native_target)
             file_ref = build_file.file_ref
             acl = if !target.build_as_framework? # Headers are already rooted at ${PODS_ROOT}/Headers/P*/[pod]/...
                     'Project'
@@ -887,8 +892,12 @@ module Pod
                     'Project'
                   end
 
-            if target.build_as_framework? && header_mappings_dir && acl != 'Project'
-              relative_path = file_ref.real_path.relative_path_from(header_mappings_dir)
+            if target.build_as_framework? && any_header_mapping_dirs? && acl != 'Project'
+              relative_path = if mapping_dir = header_mappings_dir(file_accessor)
+                                file_ref.real_path.relative_path_from(mapping_dir)
+                              else
+                                file_ref.real_path.relative_path_from(file_accessor.path_list.root)
+                              end
               sub_dir = relative_path.dirname
               copy_phase_name = "Copy #{sub_dir} #{acl} Headers"
               copy_phase = native_target.copy_files_build_phases.find { |bp| bp.name == copy_phase_name } ||
