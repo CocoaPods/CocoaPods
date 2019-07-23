@@ -48,7 +48,24 @@ File References:
 Targets:
 - iOS App:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-iOS App-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
     - Sources:
       - main.m
       - CPAppDelegate.m

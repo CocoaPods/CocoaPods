@@ -352,8 +352,26 @@ Targets:
       - HostedTestLib.framework
     - Resources:
       - LaunchScreen.storyboard
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-App-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-App-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-App-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-App-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -412,8 +430,26 @@ Targets:
       - HostedTestLib.framework
     - Resources:
       - LaunchScreen.storyboard
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -471,8 +507,26 @@ Targets:
       - Foundation.framework
       - HostedTestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -524,8 +578,26 @@ Targets:
       - Foundation.framework
       - HostedTestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -577,8 +649,26 @@ Targets:
       - Foundation.framework
       - HostedTestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -631,8 +721,26 @@ Targets:
       - Foundation.framework
       - HostedTestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -919,8 +1027,26 @@ Targets:
       - TestLib.framework
     - Resources:
       - LaunchScreen.storyboard
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -979,8 +1105,26 @@ Targets:
       - Foundation.framework
       - TestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests1-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests1-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests1-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests1-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1028,8 +1172,26 @@ Targets:
       - Foundation.framework
       - TestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests2-frameworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests2-frameworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests2-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests2-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:

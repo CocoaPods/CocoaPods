@@ -33,7 +33,24 @@ File References:
 Targets:
 - App:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-App-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
     - Sources:
       - ViewController.m
       - AppDelegate.m
@@ -44,7 +61,24 @@ Targets:
       - LaunchScreen.storyboard
       - Assets.xcassets
       - Main.storyboard
-    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
+        - "${BUILT_PRODUCTS_DIR}/asserts/asserts.framework"
+        - "${BUILT_PRODUCTS_DIR}/logger/logger.framework"
+        - "${BUILT_PRODUCTS_DIR}/sharedlib-Core/sharedlib.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/asserts.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/logger.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sharedlib.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -64,13 +98,49 @@ Targets:
         Base Configuration: Pods-App.release.xcconfig
 - Test:
     Build Phases:
-    - "[CP] Check Pods Manifest.lock": []
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-Test-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
     - Sources:
       - Test.m
     - Frameworks:
       - Pods_Test.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/Pods-Test/Pods-Test-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework"
+        - "${BUILT_PRODUCTS_DIR}/asserts/asserts.framework"
+        - "${BUILT_PRODUCTS_DIR}/logger/logger.framework"
+        - "${BUILT_PRODUCTS_DIR}/sharedlib-Testing/sharedlib.framework"
+        - "${BUILT_PRODUCTS_DIR}/testkit/testkit.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/asserts.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/logger.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/sharedlib.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/testkit.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-Test/Pods-Test-frameworks.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:

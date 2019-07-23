@@ -375,8 +375,27 @@ Targets:
       - Foundation.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/CustomModuleMapPod-framework-iOS/CustomModuleMapPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CustomModuleMapPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -499,8 +518,27 @@ Targets:
       - CustomModuleMapPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/CustomModuleMapPod-framework-macOS/CustomModuleMapPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CustomModuleMapPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -601,8 +639,24 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -713,8 +767,24 @@ Targets:
     - Frameworks:
       - Cocoa.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -838,8 +908,31 @@ Targets:
       - MixedPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/MixedPod-framework-iOS/MixedPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/ObjCPod-framework-iOS/ObjCPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-framework-iOS/SwiftPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MixedPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjCPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -966,8 +1059,31 @@ Targets:
       - MixedPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/MixedPod-framework-macOS/MixedPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/ObjCPod-framework-macOS/ObjCPod.framework"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-framework-macOS/SwiftPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MixedPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjCPod.framework"
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1018,7 +1134,26 @@ Targets:
       - foo.swift
       - MixedPod-library-iOS-dummy.m
     - Frameworks: []
-    - Copy generated compatibility header: []
+    - Copy generated compatibility header:
+        Input File List Paths: []
+        Input Paths:
+        - "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h"
+        - "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-iOS.modulemap"
+        - "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-iOS-umbrella.h"
+        Output File List Paths: []
+        Output Paths:
+        - "${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+        - "${BUILT_PRODUCTS_DIR}/MixedPod-library-iOS-umbrella.h"
+        - "${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+          MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+
+          ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-iOS.modulemap" "${MODULE_MAP_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-iOS-umbrella.h" "${BUILT_PRODUCTS_DIR}"
+          printf "\n\nmodule ${PRODUCT_MODULE_NAME}.Swift {\n  header \"${COMPATIBILITY_HEADER_PATH}\"\n  requires objc\n}\n" >> "${MODULE_MAP_PATH}"
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1071,8 +1206,24 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1130,7 +1281,26 @@ Targets:
       - foo.swift
       - MixedPod-library-macOS-dummy.m
     - Frameworks: []
-    - Copy generated compatibility header: []
+    - Copy generated compatibility header:
+        Input File List Paths: []
+        Input Paths:
+        - "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h"
+        - "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-macOS.modulemap"
+        - "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-macOS-umbrella.h"
+        Output File List Paths: []
+        Output Paths:
+        - "${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+        - "${BUILT_PRODUCTS_DIR}/MixedPod-library-macOS-umbrella.h"
+        - "${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+          MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+
+          ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-macOS.modulemap" "${MODULE_MAP_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/MixedPod/MixedPod-library-macOS-umbrella.h" "${BUILT_PRODUCTS_DIR}"
+          printf "\n\nmodule ${PRODUCT_MODULE_NAME}.Swift {\n  header \"${COMPATIBILITY_HEADER_PATH}\"\n  requires objc\n}\n" >> "${MODULE_MAP_PATH}"
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1186,8 +1356,24 @@ Targets:
     - Frameworks:
       - Cocoa.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1310,8 +1496,27 @@ Targets:
       - ObjCPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/ObjCPod-framework-iOS/ObjCPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjCPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1431,8 +1636,27 @@ Targets:
       - ObjCPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/ObjCPod-framework-macOS/ObjCPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjCPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1530,8 +1754,24 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1639,8 +1879,24 @@ Targets:
     - Frameworks:
       - Cocoa.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2017,8 +2273,27 @@ Targets:
       - SwiftPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-framework-iOS/SwiftPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2138,8 +2413,27 @@ Targets:
       - SwiftPod.framework
       - XCTest.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-framework-macOS/SwiftPod.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftPod.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2186,7 +2480,26 @@ Targets:
       - SwiftPod-library-iOS-dummy.m
       - xyz.swift
     - Frameworks: []
-    - Copy generated compatibility header: []
+    - Copy generated compatibility header:
+        Input File List Paths: []
+        Input Paths:
+        - "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h"
+        - "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-iOS.modulemap"
+        - "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-iOS-umbrella.h"
+        Output File List Paths: []
+        Output Paths:
+        - "${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-library-iOS-umbrella.h"
+        - "${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+          MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+
+          ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-iOS.modulemap" "${MODULE_MAP_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-iOS-umbrella.h" "${BUILT_PRODUCTS_DIR}"
+          printf "\n\nmodule ${PRODUCT_MODULE_NAME}.Swift {\n  header \"${COMPATIBILITY_HEADER_PATH}\"\n  requires objc\n}\n" >> "${MODULE_MAP_PATH}"
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2238,8 +2551,24 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2293,7 +2622,26 @@ Targets:
       - SwiftPod-library-macOS-dummy.m
       - xyz.swift
     - Frameworks: []
-    - Copy generated compatibility header: []
+    - Copy generated compatibility header:
+        Input File List Paths: []
+        Input Paths:
+        - "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h"
+        - "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-macOS.modulemap"
+        - "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-macOS-umbrella.h"
+        Output File List Paths: []
+        Output Paths:
+        - "${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+        - "${BUILT_PRODUCTS_DIR}/SwiftPod-library-macOS-umbrella.h"
+        - "${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          COMPATIBILITY_HEADER_PATH="${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h"
+          MODULE_MAP_PATH="${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap"
+
+          ditto "${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h" "${COMPATIBILITY_HEADER_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-macOS.modulemap" "${MODULE_MAP_PATH}"
+          ditto "${PODS_ROOT}/Headers/Public/SwiftPod/SwiftPod-library-macOS-umbrella.h" "${BUILT_PRODUCTS_DIR}"
+          printf "\n\nmodule ${PRODUCT_MODULE_NAME}.Swift {\n  header \"${COMPATIBILITY_HEADER_PATH}\"\n  requires objc\n}\n" >> "${MODULE_MAP_PATH}"
     Build Configurations:
     - Debug:
         Build Settings:
@@ -2348,8 +2696,24 @@ Targets:
     - Frameworks:
       - Cocoa.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks": []
-    - "[CP] Copy Pods Resources": []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-frameworks.sh"
+
+'
+    - "[CP] Copy Pods Resources":
+        Input File List Paths: []
+        Input Paths: []
+        Output File List Paths: []
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-resources.sh"
+
+'
     Build Configurations:
     - Debug:
         Build Settings:
