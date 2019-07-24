@@ -231,7 +231,7 @@ module Pod
         #
         def push_repo
           UI.puts "\nPushing the `#{@repo}' repo\n".yellow
-          repo_git('push', 'origin', 'master')
+          repo_git('push', 'origin', 'HEAD')
         end
 
         #---------------------------------------------------------------------#
