@@ -6,6 +6,10 @@ module Pod
       class PodTargetDependencyInstaller
         require 'cocoapods/native_target_extension.rb'
 
+        # @return [Sandbox] The sandbox used for this installation.
+        #
+        attr_reader :sandbox
+
         # @return [TargetInstallationResults] The target installation results for pod targets.
         #
         attr_reader :pod_target_installation_results
@@ -13,10 +17,6 @@ module Pod
         # @return [ProjectMetadataCache] The metadata cache for targets.
         #
         attr_reader :metadata_cache
-
-        # @return [Sandbox] The sandbox used for this installation.
-        #
-        attr_reader :sandbox
 
         # Initialize a new instance.
         #
@@ -85,8 +85,8 @@ module Pod
             else
               # Hit the cache
               cached_dependency = metadata_cache.target_label_by_metadata[dependent_target.label]
-              project.add_cached_pod_subproject(cached_dependency, is_local)
-              Project.add_cached_dependency(native_target, cached_dependency)
+              project.add_cached_pod_subproject(sandbox, cached_dependency, is_local)
+              Project.add_cached_dependency(sandbox, native_target, cached_dependency)
             end
           end
         end
@@ -111,8 +111,8 @@ module Pod
               else
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[test_dependent_target.label]
-                project.add_cached_pod_subproject(cached_dependency, is_local)
-                Project.add_cached_dependency(test_native_target, cached_dependency)
+                project.add_cached_pod_subproject(sandbox, cached_dependency, is_local)
+                Project.add_cached_dependency(sandbox, test_native_target, cached_dependency)
               end
             end
 
@@ -155,8 +155,8 @@ module Pod
           else
             # Hit the cache
             cached_dependency = metadata_cache.target_label_by_metadata[app_host_target_label]
-            project.add_cached_subproject_reference(cached_dependency, project.dependencies_group)
-            Project.add_cached_dependency(test_native_target, cached_dependency)
+            project.add_cached_subproject_reference(sandbox, cached_dependency, project.dependencies_group)
+            Project.add_cached_dependency(sandbox, test_native_target, cached_dependency)
           end
         end
 
@@ -186,8 +186,8 @@ module Pod
               else
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[app_dependent_target.label]
-                project.add_cached_pod_subproject(cached_dependency, is_local)
-                Project.add_cached_dependency(native_target, cached_dependency)
+                project.add_cached_pod_subproject(sandbox, cached_dependency, is_local)
+                Project.add_cached_dependency(sandbox, native_target, cached_dependency)
               end
             end
           end

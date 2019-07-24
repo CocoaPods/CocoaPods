@@ -119,7 +119,7 @@ module Pod
           subproject_path = config.sandbox.pod_target_project_path('SubprojA')
           subproject_path.mkpath
           metadata = Installer::ProjectCache::TargetMetadata.new('LabelA', '0000', subproject_path)
-          ref = @project.add_cached_pod_subproject(metadata)
+          ref = @project.add_cached_pod_subproject(config.sandbox, metadata)
           @project.main_group['Pods'].children.should.equal([ref])
         end
       end

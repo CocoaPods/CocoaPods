@@ -50,12 +50,12 @@ module Pod
           Sandbox.update_changed_file(path, YAMLHelper.convert(to_hash))
         end
 
-        def self.from_file(path)
+        def self.from_file(sandbox, path)
           return ProjectInstallationCache.new unless File.exist?(path)
           contents = YAMLHelper.load_file(path)
           cache_keys = contents.fetch('CACHE_KEYS', {})
           cache_key_by_target_label = Hash[cache_keys.map do |name, key_hash|
-            [name, TargetCacheKey.from_cache_hash(key_hash)]
+            [name, TargetCacheKey.from_cache_hash(sandbox, key_hash)]
           end]
           project_object_version = contents['OBJECT_VERSION']
           build_configurations = contents['BUILD_CONFIGURATIONS']

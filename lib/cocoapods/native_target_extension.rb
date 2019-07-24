@@ -2,6 +2,9 @@ module Pod
   class Project
     # Adds a dependency on the given metadata cache.
     #
+    # @param  [Sandbox] sandbox
+    #         The sandbox used for this installation.
+    #
     # @param  [AbstractTarget] target
     #         The parent target used to add a cached dependency.
     #
@@ -10,11 +13,11 @@ module Pod
     #
     # @return [void]
     #
-    def self.add_cached_dependency(target, metadata)
-      return if dependency_for_cached_target?(target, metadata)
+    def self.add_cached_dependency(sandbox, target, metadata)
+      return if dependency_for_cached_target?(sandbox, target, metadata)
       container_proxy = target.project.new(Xcodeproj::Project::PBXContainerItemProxy)
 
-      subproject_reference = target.project.reference_for_path(metadata.container_project_path)
+      subproject_reference = target.project.reference_for_path(sandbox.root + metadata.container_project_path)
       raise ArgumentError, "add_dependency received target (#{target}) that belongs to a project that is not this project (#{self}) and is not a subproject of this project" unless subproject_reference
       container_proxy.container_portal = subproject_reference.uuid
 
@@ -31,6 +34,9 @@ module Pod
 
     # Checks whether this target has a dependency on the given target.
     #
+    # @param  [Sandbox] sandbox
+    #         The sandbox used for this installation.
+    #
     # @param  [AbstractTarget] target
     #         The parent target used to add a cached dependency.
     #
@@ -39,10 +45,10 @@ module Pod
     #
     # @return [Bool]
     #
-    def self.dependency_for_cached_target?(target, cached_target)
+    def self.dependency_for_cached_target?(sandbox, target, cached_target)
       target.dependencies.find do |dep|
         if dep.target_proxy.remote?
-          subproject_reference = target.project.reference_for_path(cached_target.container_project_path)
+          subproject_reference = target.project.reference_for_path(sandbox.root + cached_target.container_project_path)
           uuid = subproject_reference.uuid if subproject_reference
           dep.target_proxy.remote_global_id_string == cached_target.native_target_uuid && dep.target_proxy.container_portal == uuid
         else

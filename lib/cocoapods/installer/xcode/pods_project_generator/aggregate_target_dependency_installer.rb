@@ -59,8 +59,8 @@ module Pod
                 # Hit the cache
                 is_local = sandbox.local?(pod_target.pod_name)
                 cached_dependency = metadata_cache.target_label_by_metadata[pod_target.label]
-                project.add_cached_pod_subproject(cached_dependency, is_local)
-                Project.add_cached_dependency(aggregate_native_target, cached_dependency)
+                project.add_cached_pod_subproject(sandbox, cached_dependency, is_local)
+                Project.add_cached_dependency(sandbox, aggregate_native_target, cached_dependency)
               end
             end
           end
