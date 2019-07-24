@@ -778,7 +778,11 @@ module Pod
         end
       end
 
-      # Calculates and returns the platform to use for the given list of specs and target definitions.
+      # Calculates and returns the platform to use for the given list specs and target definitions.
+      #
+      # @note The platform is only determined by all library specs and ignores non library ones. Subspecs are always
+      #       integrated in the same target as the root spec therefore the max deployment target is always returned
+      #       across the specs passed.
       #
       # @param [Array<Specification>] specs
       #        the specs to inspect and calculate the platform for.
@@ -792,10 +796,11 @@ module Pod
       # @return [Platform]
       #
       def determine_platform(specs, target_definitions, host_requires_frameworks)
+        library_specs = specs.select(&:library_specification?)
         platform_name = target_definitions.first.platform.name
         default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
-        deployment_target = specs.map do |spec|
-          Version.new(spec.deployment_target(platform_name) || default)
+        deployment_target = library_specs.map do |library_spec|
+          Version.new(library_spec.deployment_target(platform_name) || default)
         end.max
         if platform_name == :ios && host_requires_frameworks
           minimum = Version.new('8.0')

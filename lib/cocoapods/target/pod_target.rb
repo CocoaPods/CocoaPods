@@ -413,6 +413,16 @@ module Pod
       end
     end
 
+    # @param [Specification] spec The non library spec to calculate the deployment target for.
+    #
+    # @return [String] The deployment target to use for the non library spec. If the spec provides one then that is the
+    #         one used otherwise the one for the whole target is used.
+    #
+    def deployment_target_for_non_library_spec(spec)
+      raise ArgumentError, 'Must be a non library spec.' unless spec.non_library_specification?
+      spec.deployment_target(platform.name)
+    end
+
     # Returns the corresponding native product type to use given the test type.
     # This is primarily used when creating the native targets in order to produce the correct test bundle target
     # based on the type of tests included.

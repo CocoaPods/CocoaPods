@@ -733,6 +733,28 @@ module Pod
         end
       end
 
+      describe 'Deployment target' do
+        before do
+          @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+          @pod_target = fixture_pod_target(@watermelon_spec, false, {}, [], Platform.new(:ios, '9.0'))
+        end
+
+        it 'returns the correct deployment target it was initialized with' do
+          @pod_target.platform.deployment_target.to_s.should == '9.0'
+        end
+
+        it 'returns the correct non library spec deployment target that is inherited from parent' do
+          @pod_target.deployment_target_for_non_library_spec(@watermelon_spec.app_specs.first).to_s.should == '9.0'
+        end
+
+        it 'returns the overridden non library spec deployment target that is inherited from parent' do
+          @watermelon_spec.test_specs.first.ios.deployment_target = '8.0'
+          @watermelon_spec.app_specs.first.ios.deployment_target = '8.0'
+          @pod_target.deployment_target_for_non_library_spec(@watermelon_spec.test_specs.first).to_s.should == '8.0'
+          @pod_target.deployment_target_for_non_library_spec(@watermelon_spec.app_specs.first).to_s.should == '8.0'
+        end
+      end
+
       describe 'script phases support' do
         before do
           @pod_target = fixture_pod_target('coconut-lib/CoconutLib.podspec')

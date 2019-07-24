@@ -886,6 +886,25 @@ module Pod
                     bc.base_configuration_reference.real_path.should == file
                   end
                 end
+
+                it 'uses the deployment target specified by a non library spec' do
+                  watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+                  project = Project.new(config.sandbox.project_path)
+                  project.add_pod_group('WatermelonLib', fixture('watermelon-lib'))
+                  target_definition = fixture_target_definition('SampleProject', Platform.new(:ios, '6.0'))
+                  user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                  all_specs = [watermelon_spec, *watermelon_spec.recursive_subspecs]
+                  test_spec = all_specs.find { |s| s.name == 'WatermelonLib/Tests' }
+                  test_spec.ios.deployment_target = '12.0'
+                  watermelon_pod_target = fixture_pod_target_with_specs(all_specs, false, user_build_configurations, [],
+                                                                        Platform.new(:ios, '6.0'), [target_definition])
+                  FileReferencesInstaller.new(config.sandbox, [watermelon_pod_target], project).install!
+                  PodTargetInstaller.new(config.sandbox, project, watermelon_pod_target).install!
+                  test_resource_bundle = project.targets.find { |t| t.name == 'WatermelonLib-Unit-Tests' }
+                  test_resource_bundle.build_configurations.each do |bc|
+                    bc.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].should == '12.0'
+                  end
+                end
               end
             end
 

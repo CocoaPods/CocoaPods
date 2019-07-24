@@ -331,7 +331,9 @@ module Pod
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
               language = target.uses_swift_for_spec?(test_spec) ? :swift : :objc
-              test_native_target = project.new_target(product_type, name, platform_name, deployment_target, nil, language)
+              test_native_target = project.new_target(product_type, name, platform_name,
+                                                      target.deployment_target_for_non_library_spec(test_spec), nil,
+                                                      language)
               test_native_target.product_reference.name = name
 
               target.user_build_configurations.each do |bc_name, type|
@@ -407,7 +409,7 @@ module Pod
               spec_name = app_spec.parent.name
               subspec_name = target.subspec_label(app_spec)
               app_target_label = target.app_target_label(app_spec)
-              platform = target.platform
+              platform = Platform.new(target.platform.symbolic_name, target.deployment_target_for_non_library_spec(app_spec))
               info_plist_entries = spec_consumer.info_plist
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
@@ -497,8 +499,11 @@ module Pod
                 target.user_build_configurations.each do |bc_name, type|
                   resource_bundle_target.add_build_configuration(bc_name, type)
                 end
-                resource_bundle_target.deployment_target = deployment_target
-
+                resource_bundle_target.deployment_target = if file_accessor.spec.non_library_specification?
+                                                             target.deployment_target_for_non_library_spec(file_accessor.spec)
+                                                           else
+                                                             deployment_target
+                                                           end
                 # Create Info.plist file for bundle
                 path = target.info_plist_path
                 path.dirname.mkdir unless path.dirname.exist?
