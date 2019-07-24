@@ -797,7 +797,7 @@ module Pod
             'WatermelonLib/Tests' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibTestResources.bundle'],
             'WatermelonLib/UITests' => [],
             'WatermelonLib/SnapshotTests' => [],
-            'WatermelonLib/App' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
+            'WatermelonLib/App' => ['${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibExampleAppResources.bundle'],
           }
         end
 
@@ -810,7 +810,7 @@ module Pod
             'WatermelonLib/UITests' => [],
             'WatermelonLib/SnapshotTests' => [],
             'WatermelonLib/App' => ['${PODS_ROOT}/../../spec/fixtures/watermelon-lib/App/resource.txt',
-                                    '${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle'],
+                                    '${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLibExampleAppResources.bundle'],
           }
         end
 

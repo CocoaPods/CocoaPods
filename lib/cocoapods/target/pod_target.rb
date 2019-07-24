@@ -398,10 +398,15 @@ module Pod
     def resource_paths
       @resource_paths ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
-          resource_paths = file_accessor.resources.map { |res| "${PODS_ROOT}/#{res.relative_path_from(sandbox.project_path.dirname)}" }
-          resource_paths = [] if file_accessor.spec.non_library_specification? && build_as_framework?
+          resource_paths = if file_accessor.spec.non_library_specification? && build_as_framework?
+                             []
+                           else
+                             file_accessor.resources.map do |res|
+                               "${PODS_ROOT}/#{res.relative_path_from(sandbox.project_path.dirname)}"
+                             end
+                           end
           prefix = Pod::Target::BuildSettings::CONFIGURATION_BUILD_DIR_VARIABLE
-          prefix = configuration_build_dir unless file_accessor.spec.test_specification?
+          prefix = configuration_build_dir unless file_accessor.spec.non_library_specification?
           resource_bundle_paths = file_accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
           hash[file_accessor.spec.name] = resource_paths + resource_bundle_paths
         end
