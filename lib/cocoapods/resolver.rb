@@ -39,6 +39,10 @@ module Pod
     attr_reader :specs_updated
     alias specs_updated? specs_updated
 
+    # @return [Source::Manager] the manager to use for dependency resolution
+    #
+    attr_reader :sources_manager
+
     # Init a new Resolver
     #
     # @param  [Sandbox] sandbox @see sandbox
@@ -50,13 +54,15 @@ module Pod
     #         within this Resolver.
     #
     def initialize(sandbox, podfile, locked_dependencies, sources, specs_updated,
-                   podfile_dependency_cache: Installer::Analyzer::PodfileDependencyCache.from_podfile(podfile))
+                   podfile_dependency_cache: Installer::Analyzer::PodfileDependencyCache.from_podfile(podfile),
+                   sources_manager: Config.instance.sources_manager)
       @sandbox = sandbox
       @podfile = podfile
       @locked_dependencies = locked_dependencies
       @sources = Array(sources)
       @specs_updated = specs_updated
       @podfile_dependency_cache = podfile_dependency_cache
+      @sources_manager = sources_manager
       @platforms_by_dependency = Hash.new { |h, k| h[k] = [] }
 
       @cached_sets = {}
@@ -413,7 +419,6 @@ module Pod
     # @return [Source::Aggregate] The aggregate of the {#sources}.
     #
     def aggregate_for_dependency(dependency)
-      sources_manager = Config.instance.sources_manager
       if dependency && dependency.podspec_repo
         sources_manager.aggregate_for_dependency(dependency)
       elsif (locked_vertex = @locked_dependencies.vertex_named(dependency.name)) && (locked_dependency = locked_vertex.payload) && locked_dependency.podspec_repo

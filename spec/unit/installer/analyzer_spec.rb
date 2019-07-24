@@ -6,7 +6,8 @@ module Pod
       before do
         repos = [Source.new(fixture('spec-repos/test_repo')), TrunkSource.new(fixture('spec-repos/trunk'))]
         aggregate = Pod::Source::Aggregate.new(repos)
-        config.sources_manager.stubs(:aggregate).returns(aggregate)
+        @sources_manager = Source::Manager.new(config.repos_dir)
+        @sources_manager.stubs(:aggregate).returns(aggregate)
         aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
 
         @podfile = Pod::Podfile.new do
@@ -36,7 +37,7 @@ module Pod
         @lockfile = Pod::Lockfile.new(hash)
 
         SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
-        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, @lockfile)
+        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, @lockfile, [], true, false, @sources_manager)
       end
 
       it 'returns whether an installation should be performed' do
@@ -64,8 +65,8 @@ module Pod
       #--------------------------------------#
 
       it 'does not update unused sources' do
-        @analyzer.stubs(:sources).returns(config.sources_manager.master)
-        config.sources_manager.expects(:update).once.with('trunk', true)
+        @analyzer.stubs(:sources).returns(@sources_manager.master)
+        @sources_manager.expects(:update).once.with('trunk', true)
         @analyzer.update_repositories
       end
 
@@ -117,29 +118,69 @@ module Pod
 
         # Note that we are explicitly ignoring 'repo_1' since it isn't used.
         source = mock('source', :name => 'repo_2', :git? => true)
-        config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
-        config.sources_manager.expects(:update).once.with('repo_2', true)
+        sources_manager = Source::Manager.new(config.repos_dir)
+        sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
+        sources_manager.expects(:update).once.with('repo_2', true)
 
-        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil, [],
+                                                true, false, sources_manager)
         analyzer.update_repositories
       end
 
-      it 'includes master if not all dependencies have a source' do
+      it 'includes trunk if not all dependencies have a source' do
         repo_url = 'https://url/to/specs.git'
         podfile = Podfile.new do
           pod 'BananaLib', '1.0'
           pod 'JSONKit', :source => repo_url
         end
 
-        source = mock('source', :name => 'mock_repo', :git? => true)
-        config.sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
-        config.sources_manager.expects(:find_or_create_source_with_url).with(TrunkSource::TRUNK_REPO_URL).returns(config.sources_manager.master.first)
-        config.sources_manager.expects(:update).once.with('mock_repo', true)
-        config.sources_manager.expects(:update).once.with('trunk', true)
+        source = mock('source')
+        mock_master = mock('source')
+        sources_manager = Source::Manager.new(config.repos_dir)
+        sources_manager.stubs(:master).returns([mock_master])
+        sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
+        sources_manager.expects(:find_or_create_source_with_url).with(TrunkSource::TRUNK_REPO_URL).returns(mock_master)
 
-        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil)
-        analyzer.sources.should == [config.sources_manager.master.first, source]
-        analyzer.update_repositories
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil, [], true, false, sources_manager)
+        analyzer.sources.should == [mock_master, source]
+      end
+
+      it 'registers plugin sources with the sources manager' do
+        podfile = Podfile.new do
+          pod 'BananaLib', '1.0'
+          pod 'JSONKit'
+          pod 'PrivatePod'
+        end
+
+        spec = Pod::Specification.new do |s|
+          s.name = 'PrivatePod'
+          s.version = '1.0.0'
+          s.source_files = '**/*.swift'
+        end
+
+        repo_dir = SpecHelper.temporary_directory + 'repos'
+        repo_dir.mkpath
+
+        source_repo_dir = repo_dir + 'my-specs'
+        source_repo_dir.mkpath
+
+        plugin_source = Pod::Source.new(source_repo_dir)
+        plugin_source.stubs(:all_specs).returns([spec])
+        plugin_source.stubs(:url).returns('protocol://special-source.org/my-specs')
+        plugin_source.stubs(:git?).returns(false)
+
+        sources_manager = Source::Manager.new(repo_dir)
+        sources_manager.stubs(:cdn_url?).returns(false)
+
+        analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil, [plugin_source], true, false, sources_manager)
+        analyzer.send(:sources)
+
+        dependency = Pod::Dependency.new('PrivatePod', '1.0.0', :source => 'protocol://special-source.org/my-specs')
+
+        result = sources_manager.aggregate_for_dependency(dependency)
+        result.sources.map(&:name).should == ['my-specs']
+
+        FileUtils.rm_rf(repo_dir.dirname)
       end
 
       #--------------------------------------#
@@ -497,6 +538,7 @@ module Pod
                 end
               end
             end
+            config.verbose = true
 
             @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
             @analyzer.stubs(:sources).returns([source])
@@ -663,7 +705,7 @@ module Pod
               end
             end
 
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             @analyzer.stubs(:sources).returns([source])
             result = @analyzer.analyze
 
@@ -754,7 +796,7 @@ module Pod
                 pod 'OrangeFramework'
               end
             end
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             result = @analyzer.analyze
 
             result.targets.count.should == 2
@@ -782,7 +824,7 @@ module Pod
                 pod 'CoconutLib'
               end
             end
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             result = @analyzer.analyze
 
             result.targets.count.should == 2
@@ -806,7 +848,7 @@ module Pod
                 pod 'RestKit/Testing', '~> 0.23.0'
               end
             end
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             result = @analyzer.analyze
             result.targets.count.should == 1
             target = result.targets.first
@@ -836,7 +878,7 @@ module Pod
               pod 'Firebase', '3.9.0'
               pod 'ARAnalytics', '4.0.0', :subspecs => %w(Firebase)
             end
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             result = @analyzer.analyze
             result.targets.count.should == 1
             target = result.targets.first
@@ -948,7 +990,7 @@ module Pod
               end
             end
 
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             @analyzer.stubs(:sources).returns([source])
             result = @analyzer.analyze
 
@@ -1037,7 +1079,7 @@ module Pod
                 pod 'OrangeFramework'
               end
             end
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             result = @analyzer.analyze
 
             result.targets.count.should == 2
@@ -1074,7 +1116,7 @@ module Pod
                 pod 'CoconutLib'
               end
             end
-            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil)
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
             result = @analyzer.analyze
 
             result.targets.count.should == 2
@@ -1109,6 +1151,7 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           result = analyzer.analyze
 
           pod_targets = result.targets.flat_map(&:pod_targets).uniq
@@ -1135,6 +1178,7 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           result = analyzer.analyze
 
           pod_targets = result.targets.flat_map(&:pod_targets).uniq.sort_by(&:name)
@@ -1163,6 +1207,7 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           result = analyzer.analyze
 
           result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
@@ -1192,6 +1237,7 @@ module Pod
             end
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           result = analyzer.analyze
 
           result.targets.flat_map { |at| at.pod_targets.map { |pt| "#{at.name}/#{pt.name}" } }.sort.should == %w(
@@ -1219,13 +1265,6 @@ module Pod
       end
 
       describe 'no-integrate platform validation' do
-        before do
-          repos = [Source.new(fixture('spec-repos/test_repo'))]
-          aggregate = Pod::Source::Aggregate.new(repos)
-          config.sources_manager.stubs(:aggregate).returns(aggregate)
-          aggregate.sources.first.stubs(:url).returns(SpecHelper.test_repo_url)
-        end
-
         it 'does not require a platform for an empty target' do
           podfile = Pod::Podfile.new do
             install! 'cocoapods', :integrate_targets => false
@@ -1238,6 +1277,7 @@ module Pod
           end
 
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           lambda { analyzer.analyze }.should.not.raise
         end
 
@@ -1253,6 +1293,7 @@ module Pod
           end
 
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           lambda { analyzer.analyze }.should.not.raise
         end
 
@@ -1267,6 +1308,7 @@ module Pod
           end
 
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.stubs(:sources_manager).returns(@sources_manager)
           lambda { analyzer.analyze }.should.raise Informative
         end
       end
@@ -1464,7 +1506,7 @@ module Pod
         hash['COCOAPODS'] = Pod::VERSION
         lockfile = Pod::Lockfile.new(hash)
         analyzer = Installer::Analyzer.new(config.sandbox, podfile, lockfile)
-
+        analyzer.stubs(:sources_manager).returns(@sources_manager)
         example_source = MockSource.new 'example-example-specs' do
           pod 'JSONKit', '1.5pre' do |s|
             s.dependency 'Nope', '1.0'
@@ -1474,7 +1516,7 @@ module Pod
             s.ios.deployment_target = '8'
           end
         end
-        master_source = config.sources_manager.master.first
+        master_source = analyzer.sources_manager.master.first
 
         analyzer.stubs(:sources).returns([example_source, master_source])
         # if we prefered the first source (the default), we also would have resolved Nope
@@ -1667,6 +1709,7 @@ module Pod
               pod 'monkey'
             end
           end
+          Pod::Installer::Analyzer.any_instance.stubs(:sources_manager).returns(@sources_manager)
         end
 
         it 'copies extension pod targets to host target, when use_frameworks!' do
@@ -2016,7 +2059,7 @@ module Pod
                 pod 'JSONKit', '1.4'
               end
               @analyzer.instance_variable_set(:@podfile, podfile)
-              config.sources_manager.expects(:find_or_create_source_with_url).once
+              @analyzer.sources_manager.expects(:find_or_create_source_with_url).once
               @analyzer.send(:sources)
             end
           end

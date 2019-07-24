@@ -350,8 +350,7 @@ module Pod
 
     # @!group Installation results
 
-    # @return [Analyzer] the analyzer which provides the information about what
-    #         needs to be installed.
+    # @return [Analyzer::AnalysisResult] the result of the analysis performed during installation
     #
     attr_reader :analysis_result
 

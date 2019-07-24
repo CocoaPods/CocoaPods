@@ -116,7 +116,7 @@ module Pod
       lockfile.stubs(:version).returns(Version.new('1.0'))
       lockfile.stubs(:pod_names).returns(%w(AFNetworking))
       Command::Outdated.any_instance.stubs(:lockfile).returns(lockfile)
-      config.sources_manager.expects(:update).once
+      Source::Manager.any_instance.expects(:update).once
       run_command('outdated')
     end
 

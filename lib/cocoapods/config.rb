@@ -140,6 +140,8 @@ module Pod
 
     attr_writer :repos_dir
 
+    # @return [Source::Manager] the source manager for the spec repos in `repos_dir`
+    #
     def sources_manager
       return @sources_manager if @sources_manager && @sources_manager.repos_dir == repos_dir
       @sources_manager = Source::Manager.new(repos_dir)

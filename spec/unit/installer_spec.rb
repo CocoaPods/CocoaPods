@@ -273,6 +273,34 @@ module Pod
         end
       end
 
+      it 'installs Pods from plugin sources' do
+        path = fixture('SampleProject/SampleProject')
+        podfile = Podfile.new do
+          install! 'cocoapods', :integrate_targets => false
+          project path
+
+          plugin 'my-plugin'
+
+          target 'SampleProject' do
+            platform :ios, '10.0'
+            pod 'CoconutLib'
+            pod 'monkey'
+          end
+        end
+        podfile.stubs(:plugins).returns('my-plugin' => {})
+
+        plugin_source = Pod::Source.new(fixture('spec-repos/test_repo'))
+
+        Pod::HooksManager.register('my-plugin', :source_provider) do |context, _|
+          context.add_source(plugin_source)
+        end
+
+        @installer = Installer.new(config.sandbox, podfile, generate_lockfile)
+        @installer.stubs(:ensure_plugins_are_installed!)
+        @installer.resolve_dependencies
+        @installer.analysis_result.pod_targets.map(&:name).sort.should == %w(CoconutLib monkey)
+      end
+
       it 'integrates the user targets if the corresponding config is set' do
         @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:integrate_targets => true))
         @installer.expects(:integrate_user_project)
@@ -413,7 +441,7 @@ module Pod
         it 'updates the repositories if that was requested' do
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           @installer.repo_update = true
-          config.sources_manager.expects(:update).once
+          Source::Manager.any_instance.expects(:update).once
           @installer.send(:resolve_dependencies)
         end
 
