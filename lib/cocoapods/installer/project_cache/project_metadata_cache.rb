@@ -6,6 +6,10 @@ module Pod
       class ProjectMetadataCache
         require 'cocoapods/installer/project_cache/target_metadata.rb'
 
+        # @return [Sandbox] The sandbox where the Pods should be installed.
+        #
+        attr_reader :sandbox
+
         # @return [Hash{String => TargetMetadata}]
         #         Hash of string by target metadata.
         #
@@ -13,9 +17,11 @@ module Pod
 
         # Initialize a new instance.
         #
+        # @param [Sandbox] sandbox see #sandbox
         # @param [Hash{String => TargetMetadata}] target_label_by_metadata @see #target_label_by_metadata
         #
-        def initialize(target_label_by_metadata = {})
+        def initialize(sandbox, target_label_by_metadata = {})
+          @sandbox = sandbox
           @target_label_by_metadata = target_label_by_metadata
         end
 
@@ -47,15 +53,15 @@ module Pod
           installation_results = pod_target_installation_results.values + aggregate_target_installation_results.values
           installation_results.each do |installation_result|
             native_target = installation_result.native_target
-            target_label_by_metadata[native_target.name] = TargetMetadata.from_native_target(native_target)
+            target_label_by_metadata[native_target.name] = TargetMetadata.from_native_target(sandbox, native_target)
           end
         end
 
-        def self.from_file(path)
-          return ProjectMetadataCache.new unless File.exist?(path)
+        def self.from_file(sandbox, path)
+          return ProjectMetadataCache.new(sandbox) unless File.exist?(path)
           contents = YAMLHelper.load_file(path)
           target_by_label_metadata = Hash[contents.map { |target_label, hash| [target_label, TargetMetadata.from_hash(hash)] }]
-          ProjectMetadataCache.new(target_by_label_metadata)
+          ProjectMetadataCache.new(sandbox, target_by_label_metadata)
         end
       end
     end

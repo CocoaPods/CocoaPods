@@ -188,8 +188,8 @@ module Pod
                                                      analysis_result.all_user_build_configurations, object_version)
       else
         UI.message 'Analyzing Project Cache' do
-          @installation_cache = ProjectCache::ProjectInstallationCache.from_file(sandbox.project_installation_cache_path)
-          @metadata_cache = ProjectCache::ProjectMetadataCache.from_file(sandbox.project_metadata_cache_path)
+          @installation_cache = ProjectCache::ProjectInstallationCache.from_file(sandbox, sandbox.project_installation_cache_path)
+          @metadata_cache = ProjectCache::ProjectMetadataCache.from_file(sandbox, sandbox.project_metadata_cache_path)
           @project_cache_version = ProjectCache::ProjectCacheVersion.from_file(sandbox.project_version_cache_path)
 
           force_clean_install = clean_install || project_cache_version.version != Version.create(VersionMetadata.project_cache_version)

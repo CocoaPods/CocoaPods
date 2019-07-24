@@ -56,13 +56,17 @@ module Pod
 
         # Constructs a TargetMetadata instance from a native target.
         #
+        # @param [Sandbox] sandbox
+        #        The sandbox used for this installation.
+        #
         # @param [PBXNativeTarget] native_target
         #        The native target used to construct a TargetMetadata instance.
         #
         # @return [TargetMetadata]
         #
-        def self.from_native_target(native_target)
-          TargetMetadata.new(native_target.name, native_target.uuid, native_target.project.path.to_s)
+        def self.from_native_target(sandbox, native_target)
+          TargetMetadata.new(native_target.name, native_target.uuid,
+                             native_target.project.path.relative_path_from(sandbox.root).to_s)
         end
       end
     end

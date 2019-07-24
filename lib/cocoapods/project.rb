@@ -150,6 +150,9 @@ module Pod
     # Creates a new subproject reference for the given cached metadata and configures its
     # group location.
     #
+    # @param [Sandbox] sandbox
+    #        The sandbox used for installation.
+    #
     # @param [TargetMetadata] metadata
     #        The project metadata to be added.
     #
@@ -159,9 +162,9 @@ module Pod
     #
     # @return [PBXFileReference] The new file reference.
     #
-    def add_cached_pod_subproject(metadata, development = false)
+    def add_cached_pod_subproject(sandbox, metadata, development = false)
       parent_group = group_for_subproject_reference(development)
-      add_cached_subproject_reference(metadata, parent_group)
+      add_cached_subproject_reference(sandbox, metadata, parent_group)
     end
 
     # @return [Array<PBXGroup>] Returns all the group of the Pods.
@@ -291,6 +294,9 @@ module Pod
 
     # Adds a file reference for a cached project as a child of the given group.
     #
+    # @param  [Sandbox] sandbox
+    #         The sandbox used for installation.
+    #
     # @param  [MetadataCache] metadata
     #         The metadata holding the required properties to create a subproject reference.
     #
@@ -299,8 +305,8 @@ module Pod
     #
     # @return [PBXFileReference] The new file reference.
     #
-    def add_cached_subproject_reference(metadata, group)
-      new_subproject_file_reference(metadata.container_project_path, group)
+    def add_cached_subproject_reference(sandbox, metadata, group)
+      new_subproject_file_reference(sandbox.root + metadata.container_project_path, group)
     end
 
     # Returns the file reference for the given absolute path.

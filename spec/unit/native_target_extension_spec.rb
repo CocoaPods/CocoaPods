@@ -12,7 +12,7 @@ module Pod
     end
 
     it 'adds a cached dependency correctly' do
-      Project.add_cached_dependency(@native_target, @metadata)
+      Project.add_cached_dependency(config.sandbox, @native_target, @metadata)
       @native_target.dependencies.count.should.be.equal 1
       @native_target.dependencies.first.name.should.equal 'Bubba'
     end
