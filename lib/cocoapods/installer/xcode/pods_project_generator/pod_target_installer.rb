@@ -870,7 +870,7 @@ module Pod
           def project_file_references_array(files, file_type)
             files.map do |sf|
               project.reference_for_path(sf).tap do |ref|
-                raise Informative, "Unable to find #{file_type} ref for #{sf} for target #{target.name}." unless ref
+                raise Informative, "Unable to find #{file_type} ref for `#{sf.basename}` for target `#{target.name}`." unless ref
               end
             end
           end
