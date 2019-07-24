@@ -417,8 +417,10 @@ module Pod
             end
           elsif PLURAL_SETTINGS.include? key
             # Plural build settings
-            overridden = xcconfig[key]
-            uniq_values.prepend(overridden) if overridden
+            if xcconfig.key?(key)
+              overridden = xcconfig[key]
+              uniq_values.prepend(overridden)
+            end
             xcconfig[key] = uniq_values.uniq.join(' ')
           elsif uniq_values.count > 1
             # Singular build settings
