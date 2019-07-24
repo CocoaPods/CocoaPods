@@ -110,6 +110,14 @@ module Pod
           end
         end
       end
+
+      describe '#add_source' do
+        it 'adds the source to the list of sources' do
+          source = Source.new(fixture('spec-repos/test_repo1'))
+          @sources_manager.add_source(source)
+          @sources_manager.all.should == [@test_source, source]
+        end
+      end
     end
 
     #-------------------------------------------------------------------------#

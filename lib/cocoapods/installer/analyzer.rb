@@ -59,6 +59,10 @@ module Pod
       #
       attr_reader :installation_options
 
+      # @return [Source::Manager] the sources manager to use when resolving dependencies
+      #
+      attr_reader :sources_manager
+
       # Initialize a new instance
       #
       # @param  [Sandbox] sandbox @see #sandbox
@@ -67,9 +71,10 @@ module Pod
       # @param  [Array<Source>] plugin_sources @see #plugin_sources
       # @param  [Boolean] has_dependencies @see #has_dependencies
       # @param  [Hash, Boolean, nil] pods_to_update @see #pods_to_update
+      # @param  [Source::Manager] sources_manager @see #sources_manager
       #
       def initialize(sandbox, podfile, lockfile = nil, plugin_sources = nil, has_dependencies = true,
-                     pods_to_update = false)
+                     pods_to_update = false, sources_manager = Source::Manager.new(config.repos_dir))
         @sandbox  = sandbox
         @podfile  = podfile
         @lockfile = lockfile
@@ -78,6 +83,7 @@ module Pod
         @pods_to_update = pods_to_update
         @installation_options = podfile.installation_options
         @podfile_dependency_cache = PodfileDependencyCache.from_podfile(podfile)
+        @sources_manager = sources_manager
         @result = nil
       end
 
@@ -136,7 +142,7 @@ module Pod
       def update_repositories
         sources.each do |source|
           if source.git?
-            config.sources_manager.update(source.name, true)
+            sources_manager.update(source.name, true)
           else
             UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
           end
@@ -169,10 +175,13 @@ module Pod
           end
 
           result = sources.uniq.map do |source_url|
-            config.sources_manager.find_or_create_source_with_url(source_url)
+            sources_manager.find_or_create_source_with_url(source_url)
           end
           unless plugin_sources.empty?
             result.insert(0, *plugin_sources)
+            plugin_sources.each do |source|
+              sources_manager.add_source(source)
+            end
           end
           result
         end
@@ -956,7 +965,7 @@ module Pod
 
         resolver_specs_by_target = nil
         UI.section "Resolving dependencies of #{UI.path(podfile.defined_in_file) || 'Podfile'}" do
-          resolver = Pod::Resolver.new(sandbox, podfile, locked_dependencies, sources, @specs_updated)
+          resolver = Pod::Resolver.new(sandbox, podfile, locked_dependencies, sources, @specs_updated, :sources_manager => sources_manager)
           resolver_specs_by_target = resolver.resolve
           resolver_specs_by_target.values.flatten(1).map(&:spec).each(&:validate_cocoapods_version)
         end

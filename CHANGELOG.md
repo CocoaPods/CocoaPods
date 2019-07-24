@@ -124,6 +124,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Only return library itself as a framework path for library specs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9029](https://github.com/CocoaPods/CocoaPods/pull/9029)
+  
+ * Fix a bug that prevented dependencies in a plugin source from resolving  
+  [Eric Amorde](https://github.com/amorde)
+  [#8540](https://github.com/CocoaPods/CocoaPods/issues/8540)
 
 
 ## 1.7.5 (2019-07-19)
