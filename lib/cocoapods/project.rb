@@ -108,10 +108,10 @@ module Pod
     #         The path to the root of the Pod.
     #
     # @param  [Bool] development
-    #         Wether the group should be added to the Development Pods group.
+    #         Whether the group should be added to the Development Pods group.
     #
     # @param  [Bool] absolute
-    #         Wether the path of the group should be set as absolute.
+    #         Whether the path of the group should be set as absolute.
     #
     # @return [PBXGroup] The new group.
     #

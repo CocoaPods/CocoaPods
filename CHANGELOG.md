@@ -137,6 +137,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9041](https://github.com/CocoaPods/CocoaPods/pull/9041)
 
+* Use correct deployment target for test specs and app specs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9040](https://github.com/CocoaPods/CocoaPods/pull/9040)
+
 
 ## 1.7.5 (2019-07-19)
 
