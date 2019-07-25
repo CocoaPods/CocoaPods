@@ -141,6 +141,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9040](https://github.com/CocoaPods/CocoaPods/pull/9040)
 
+* Allow overriding custom xcconfig entries set for compiling a library when
+  specifying an app or test spec.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.7.5 (2019-07-19)
 

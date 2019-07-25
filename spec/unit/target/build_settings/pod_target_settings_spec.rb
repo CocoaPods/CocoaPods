@@ -243,12 +243,24 @@ module Pod
           end
 
           it 'does not merge pod target xcconfig of test specifications for a non test xcconfig' do
-            @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1', 'PODS_ROOT' => 'OVERRIDDEN' }
-            @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1', 'PODS_ROOT' => 'OVERRIDDEN2' }
+            @coconut_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'NON_TEST_FLAG=1', 'PODS_ROOT' => 'OVERRIDDEN', 'GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED' => 'YES', 'GCC_TREAT_WARNINGS_AS_ERRORS' => 'YES' }
+            @coconut_test_spec.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'TEST_ONLY=1', 'PODS_ROOT' => 'OVERRIDDEN2', 'GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED' => 'YES', 'GCC_TREAT_WARNINGS_AS_ERRORS' => 'NO' }
+
             generator = PodTargetSettings.new(@coconut_pod_target)
             xcconfig = generator.generate
             xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1'
             xcconfig.to_hash['PODS_ROOT'].should == 'OVERRIDDEN'
+            xcconfig.to_hash['GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED'].should == 'YES'
+            xcconfig.to_hash['GCC_TREAT_WARNINGS_AS_ERRORS'].should == 'YES'
+
+            generator = PodTargetSettings.new(@coconut_pod_target, @coconut_test_spec)
+            xcconfig = generator.generate
+            xcconfig.to_hash['GCC_PREPROCESSOR_DEFINITIONS'].should == '$(inherited) COCOAPODS=1 NON_TEST_FLAG=1 TEST_ONLY=1'
+            xcconfig.to_hash['PODS_ROOT'].should == 'OVERRIDDEN2'
+            xcconfig.to_hash['GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED'].should == 'YES'
+            xcconfig.to_hash['GCC_TREAT_WARNINGS_AS_ERRORS'].should == 'NO'
+
+            UI.warnings.should.be.empty
           end
 
           it 'merges pod target xcconfig settings from subspecs' do
