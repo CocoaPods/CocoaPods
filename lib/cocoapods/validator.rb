@@ -425,7 +425,7 @@ module Pod
 
     # Performs validation of a URL
     #
-    def validate_url(url)
+    def validate_url(url, user_agent=nil)
       resp = Pod::HTTP.validate_url(url)
 
       if !resp
@@ -459,7 +459,7 @@ module Pod
     # Performs validations related to the `social_media_url` attribute.
     #
     def validate_social_media_url(spec)
-      validate_url(spec.social_media_url) if spec.social_media_url
+      validate_url(spec.social_media_url, 'Not a Browser') if spec.social_media_url
     end
 
     # Performs validations related to the `documentation_url` attribute.
