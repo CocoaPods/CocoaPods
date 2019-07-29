@@ -107,9 +107,9 @@ module Pod
       #
       def update(source_name = nil, show_output = false)
         if source_name
-          sources = [git_source_named(source_name)]
+          sources = [updateable_source_named(source_name)]
         else
-          sources = git_sources
+          sources = updateable_sources
         end
 
         changed_spec_paths = {}

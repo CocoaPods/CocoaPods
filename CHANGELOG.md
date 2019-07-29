@@ -8,6 +8,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Allow Algolia search for CDNSource  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#9015](https://github.com/CocoaPods/CocoaPods/issues/9015)
+  [#9046](https://github.com/CocoaPods/CocoaPods/pull/9046)
+  [Core#569](https://github.com/CocoaPods/Core/pull/569)
+
 * Using `repo push` now pushes to the current repo branch (`HEAD`) instead of `master`  
   [Jhonatan Avalos](https://github.com/baguio)
   [#8630](https://github.com/CocoaPods/CocoaPods/pull/8630)  

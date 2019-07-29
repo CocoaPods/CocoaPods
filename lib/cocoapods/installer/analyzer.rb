@@ -141,10 +141,10 @@ module Pod
       #
       def update_repositories
         sources.each do |source|
-          if source.git?
+          if source.updateable?
             sources_manager.update(source.name, true)
           else
-            UI.message "Skipping `#{source.name}` update because the repository is not a git source repository."
+            UI.message "Skipping `#{source.name}` update because the repository is not an updateable repository."
           end
         end
         @specs_updated = true

@@ -82,7 +82,7 @@ module Pod
         analyzer.update_repositories
       end
 
-      it 'does not update non-git repositories' do
+      it 'does not update non-updateable repositories' do
         tmp_directory = Pathname(Dir.tmpdir) + 'CocoaPods'
         FileUtils.mkdir_p(tmp_directory)
         FileUtils.cp_r(ROOT + 'spec/fixtures/spec-repos/test_repo/', tmp_directory)
@@ -103,7 +103,7 @@ module Pod
         analyzer.stubs(:sources).returns([source])
         analyzer.update_repositories
 
-        UI.output.should.match /Skipping `#{source.name}` update because the repository is not a git source repository./
+        UI.output.should.match /Skipping `#{source.name}` update because the repository is not an updateable repository./
 
         FileUtils.rm_rf(non_git_repo)
       end
@@ -117,7 +117,7 @@ module Pod
         end
 
         # Note that we are explicitly ignoring 'repo_1' since it isn't used.
-        source = mock('source', :name => 'repo_2', :git? => true)
+        source = mock('source', :name => 'repo_2', :updateable? => true)
         sources_manager = Source::Manager.new(config.repos_dir)
         sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
         sources_manager.expects(:update).once.with('repo_2', true)
@@ -167,7 +167,7 @@ module Pod
         plugin_source = Pod::Source.new(source_repo_dir)
         plugin_source.stubs(:all_specs).returns([spec])
         plugin_source.stubs(:url).returns('protocol://special-source.org/my-specs')
-        plugin_source.stubs(:git?).returns(false)
+        plugin_source.stubs(:updateable?).returns(false)
 
         sources_manager = Source::Manager.new(repo_dir)
         sources_manager.stubs(:cdn_url?).returns(false)
