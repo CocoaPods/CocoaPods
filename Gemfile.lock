@@ -1,20 +1,20 @@
 GIT
-  remote: https://github.com/CocoaPods/CLAide.git
-  revision: 896d82a4dff73d80da565b0caa77c6ed74c9c6f8
-  branch: master
-  specs:
-    claide (1.0.2)
-
-GIT
-  remote: https://github.com/CocoaPods/Core.git
-  revision: 5c62627fd1f5d64610b7a9a2bad27b986075a8c1
-  branch: master
+  remote: git://github.com/abbeycode/Core.git
+  revision: 3cefc3a22b2ecfffe7aa43507cb30cb2eb8a7761
+  branch: issue9049
   specs:
     cocoapods-core (1.7.5)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
+
+GIT
+  remote: https://github.com/CocoaPods/CLAide.git
+  revision: 896d82a4dff73d80da565b0caa77c6ed74c9c6f8
+  branch: master
+  specs:
+    claide (1.0.2)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git

@@ -25,7 +25,9 @@ gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7
 
 group :development do
   cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
+# Will revert this change before merging (after merging Core into master)
+#   cp_gem 'cocoapods-core',        'Core'
+  gem 'cocoapods-core', :github => 'abbeycode/Core', :branch => 'issue9049'
   cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
   cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
