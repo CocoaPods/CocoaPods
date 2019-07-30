@@ -528,7 +528,7 @@ module Pod
       end
 
       it 'empties sources when no dependencies' do
-        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
+        sources = ['trunk', Pod::TrunkSource::TRUNK_REPO_URL]
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(podspec_path, sources)
         validator.stubs(:validate_url)
@@ -550,12 +550,12 @@ module Pod
 
         spec = Specification.from_file(file)
 
-        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
+        sources = ['trunk', Pod::TrunkSource::TRUNK_REPO_URL]
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(spec, sources)
         validator.stubs(:validate_url)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        podfile.sources.should == [TrunkSource::TRUNK_REPO_URL]
+        podfile.sources.should == [Pod::TrunkSource::TRUNK_REPO_URL]
       end
 
       it 'respects the source_urls parameter when there are dependencies within subspecs' do
@@ -572,16 +572,16 @@ module Pod
 
         spec = Specification.from_file(file)
 
-        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
+        sources = ['trunk', Pod::TrunkSource::TRUNK_REPO_URL]
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(spec, sources)
         validator.stubs(:validate_url)
         podfile = validator.send(:podfile_from_spec, :ios, '5.0')
-        podfile.sources.should == [TrunkSource::TRUNK_REPO_URL]
+        podfile.sources.should == [Pod::TrunkSource::TRUNK_REPO_URL]
       end
 
       it 'avoids creation of sources when no dependencies' do
-        sources = ['trunk', TrunkSource::TRUNK_REPO_URL]
+        sources = ['trunk', Pod::TrunkSource::TRUNK_REPO_URL]
         config.sources_manager.expects(:find_or_create_source_with_url).never
         Command::Repo::Add.any_instance.stubs(:run)
         validator = Validator.new(podspec_path, sources)

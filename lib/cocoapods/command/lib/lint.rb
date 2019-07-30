@@ -22,18 +22,16 @@ module Pod
             ['--fail-fast', 'Lint stops on the first failing platform or subspec'],
             ['--use-libraries', 'Lint uses static libraries to install the spec'],
             ['--use-modular-headers', 'Lint uses modular headers during installation'],
-            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
-             "(defaults to #{TrunkSource::TRUNK_REPO_URL}). " \
-             'Multiple sources must be comma-delimited.'],
-            ['--platforms=ios,macos', 'Lint against specific platforms' \
-              '(defaults to all platforms supported by the podspec).' \
-              'Multiple platforms must be comma-delimited'],
+            ["--sources=#{Pod::TrunkSource::TRUNK_REPO_URL}", 'The sources from which to pull dependent pods ' \
+              "(defaults to #{Pod::TrunkSource::TRUNK_REPO_URL}). Multiple sources must be comma-delimited"],
+            ['--platforms=ios,macos', 'Lint against specific platforms (defaults to all platforms supported by the ' \
+              'podspec). Multiple platforms must be comma-delimited'],
             ['--private', 'Lint skips checks that apply only to public specs'],
-            ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used to lint the spec. ' \
-             'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file.'],
-            ['--include-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting via :path.'],
+            ['--swift-version=VERSION', 'The `SWIFT_VERSION` that should be used to lint the spec. ' \
+             'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file'],
+            ['--include-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting via :path'],
             ['--external-podspecs=**/*.podspec', 'Additional ancillary podspecs which are used for linting '\
-              'via :podspec. If there are --include-podspecs, then these are removed from them.'],
+              'via :podspec. If there are --include-podspecs, then these are removed from them'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
             ['--analyze', 'Validate with the Xcode Static Analysis tool'],
@@ -49,7 +47,7 @@ module Pod
           @only_subspec        = argv.option('subspec')
           @use_frameworks      = !argv.flag?('use-libraries')
           @use_modular_headers = argv.flag?('use-modular-headers')
-          @source_urls         = argv.option('sources', TrunkSource::TRUNK_REPO_URL).split(',')
+          @source_urls         = argv.option('sources', Pod::TrunkSource::TRUNK_REPO_URL).split(',')
           @platforms           = argv.option('platforms', '').split(',')
           @private             = argv.flag?('private', false)
           @swift_version       = argv.option('swift-version', nil)

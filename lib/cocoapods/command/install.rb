@@ -31,7 +31,8 @@ module Pod
         [
           ['--repo-update', 'Force running `pod repo update` before install'],
           ['--deployment', 'Disallow any changes to the Podfile or the Podfile.lock during installation'],
-          ['--clean-install', 'Ignore the contents of the project cache and force a full pod installation. This only applies to projects that have enabled incremental installation.'],
+          ['--clean-install', 'Ignore the contents of the project cache and force a full pod installation. This only ' \
+            'applies to projects that have enabled incremental installation'],
         ].concat(super).reject { |(name, _)| name == '--no-repo-update' }
       end
 

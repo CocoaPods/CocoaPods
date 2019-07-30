@@ -21,10 +21,11 @@ module Pod
 
       def self.options
         [
-          ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to update dependent pods. ' \
-           'Multiple sources must be comma-delimited. The master repo will not be included by default with this option.'],
-          ['--exclude-pods=podName', 'Pods to exclude during update. Multiple pods must be comma-delimited.'],
-          ['--clean-install', 'Ignore the contents of the project cache and force a full pod installation. This only applies to projects that have enabled incremental installation.'],
+          ["--sources=#{Pod::TrunkSource::TRUNK_REPO_URL}", 'The sources from which to update dependent pods. ' \
+           'Multiple sources must be comma-delimited'],
+          ['--exclude-pods=podName', 'Pods to exclude during update. Multiple pods must be comma-delimited'],
+          ['--clean-install', 'Ignore the contents of the project cache and force a full pod installation. This only ' \
+           'applies to projects that have enabled incremental installation'],
         ].concat(super)
       end
 

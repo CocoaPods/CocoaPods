@@ -54,7 +54,7 @@ module Pod
          Git : :git_information
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
 Repositories : master - git - #{git_url} @ #{git_commit_hash}
-               trunk - CDN - #{TrunkSource::TRUNK_REPO_URL}
+               trunk - CDN - #{Pod::TrunkSource::TRUNK_REPO_URL}
 ```
 
 ### Plugins
