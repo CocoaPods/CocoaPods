@@ -459,7 +459,7 @@ module Pod
     # Performs validations related to the `social_media_url` attribute.
     #
     def validate_social_media_url(spec)
-      validate_url(spec.social_media_url, 'Not a Browser') if spec.social_media_url
+      validate_url(spec.social_media_url, 'CocoaPods') if spec.social_media_url
     end
 
     # Performs validations related to the `documentation_url` attribute.
