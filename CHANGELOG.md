@@ -151,6 +151,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   specifying an app or test spec.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Pass a non-browser user agent for social media validation  
+  [Dov Frankel](https://github.com/abbeycode)
+  [CocoaPods/Core#571](https://github.com/CocoaPods/Core/pull/571)
+  [#9053](https://github.com/CocoaPods/Cocoapods/pull/9053)
+  [#9049](https://github.com/CocoaPods/CocoaPods/issues/9049)
+
 
 ## 1.7.5 (2019-07-19)
 
