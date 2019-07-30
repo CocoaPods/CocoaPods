@@ -59,7 +59,7 @@ module Pod
     describe '#compute_targets' do
       it 'returns the targets specified in the target definition' do
         target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
-        user_project = Xcodeproj::Project.new('path')
+        user_project = Xcodeproj::Project.new('UserProject.xcodeproj')
         user_project.new_target(:application, 'FirstTarget', :ios)
         user_project.new_target(:application, 'UserTarget', :ios)
 
@@ -70,11 +70,11 @@ module Pod
 
       it 'raises if it is unable to find the targets specified by the target definition' do
         target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
-        user_project = Xcodeproj::Project.new('path')
+        user_project = Xcodeproj::Project.new('UserProject.xcodeproj')
 
         target_inspector = TargetInspector.new(target_definition, config.installation_root)
         e = lambda { target_inspector.send(:compute_targets, user_project) }.should.raise Informative
-        e.message.should.match /Unable to find a target named `UserTarget`/
+        e.message.should.match /Unable to find a target named `UserTarget` in project `UserProject.xcodeproj`/
       end
 
       it 'suggests project native target names if the target cannot be found' do
