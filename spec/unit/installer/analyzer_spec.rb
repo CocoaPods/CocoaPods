@@ -72,7 +72,7 @@ module Pod
 
       it 'does not update sources if there are no dependencies' do
         podfile = Podfile.new do
-          source TrunkSource::TRUNK_REPO_URL
+          source Pod::TrunkSource::TRUNK_REPO_URL
           # No dependencies specified
         end
         config.verbose = true
@@ -139,7 +139,7 @@ module Pod
         sources_manager = Source::Manager.new(config.repos_dir)
         sources_manager.stubs(:master).returns([mock_master])
         sources_manager.expects(:find_or_create_source_with_url).with(repo_url).returns(source)
-        sources_manager.expects(:find_or_create_source_with_url).with(TrunkSource::TRUNK_REPO_URL).returns(mock_master)
+        sources_manager.expects(:find_or_create_source_with_url).with(Pod::TrunkSource::TRUNK_REPO_URL).returns(mock_master)
 
         analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile, nil, [], true, false, sources_manager)
         analyzer.sources.should == [mock_master, source]
@@ -1491,7 +1491,7 @@ module Pod
           platform :ios, '8.0'
           project 'SampleProject/SampleProject'
           source 'https://example.com/example/specs.git'
-          source TrunkSource::TRUNK_REPO_URL
+          source Pod::TrunkSource::TRUNK_REPO_URL
           target 'SampleProject' do
             pod 'JSONKit', '1.5pre'
           end
@@ -1501,7 +1501,7 @@ module Pod
         hash['DEPENDENCIES'] = %w(JSONKit)
         hash['SPEC CHECKSUMS'] = {}
         hash['SPEC REPOS'] = {
-          TrunkSource::TRUNK_REPO_URL => ['JSONKit'],
+          Pod::TrunkSource::TRUNK_REPO_URL => ['JSONKit'],
         }
         hash['COCOAPODS'] = Pod::VERSION
         lockfile = Pod::Lockfile.new(hash)
@@ -2037,7 +2037,7 @@ module Pod
         describe '#sources' do
           describe 'when there are no explicit sources' do
             it 'defaults to the master spec repository' do
-              @analyzer.send(:sources).map(&:url).should == [TrunkSource::TRUNK_REPO_URL]
+              @analyzer.send(:sources).map(&:url).should == [Pod::TrunkSource::TRUNK_REPO_URL]
             end
           end
 
@@ -2075,7 +2075,7 @@ module Pod
       it 'raises when dependencies with the same name have different ' \
         'external sources' do
         podfile = Podfile.new do
-          source TrunkSource::TRUNK_REPO_URL
+          source Pod::TrunkSource::TRUNK_REPO_URL
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
@@ -2094,7 +2094,7 @@ module Pod
       it 'raises when dependencies with the same root name have different ' \
         'external sources' do
         podfile = Podfile.new do
-          source TrunkSource::TRUNK_REPO_URL
+          source Pod::TrunkSource::TRUNK_REPO_URL
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do
@@ -2113,7 +2113,7 @@ module Pod
       it 'raises when dependencies with the same name have different ' \
         'external sources with one being nil' do
         podfile = Podfile.new do
-          source TrunkSource::TRUNK_REPO_URL
+          source Pod::TrunkSource::TRUNK_REPO_URL
           project 'SampleProject/SampleProject'
           platform :ios
           target 'SampleProject' do

@@ -169,7 +169,7 @@ module Pod
           if all_dependencies_have_sources
             sources = dependency_sources
           elsif has_dependencies? && sources.empty? && plugin_sources.empty?
-            sources = [TrunkSource::TRUNK_REPO_URL] + dependency_sources
+            sources = [Pod::TrunkSource::TRUNK_REPO_URL] + dependency_sources
           else
             sources += dependency_sources
           end

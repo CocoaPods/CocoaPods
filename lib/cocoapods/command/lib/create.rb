@@ -17,8 +17,7 @@ module Pod
 
         def self.options
           [
-            ['--template-url=URL', 'The URL of the git repo containing a ' \
-                                  'compatible template'],
+            ['--template-url=URL', 'The URL of the git repo containing a compatible template'],
           ].concat(super)
         end
 

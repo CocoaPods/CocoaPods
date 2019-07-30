@@ -51,7 +51,7 @@ module Pod
             Command::Repo::AddCDN.any_instance.stubs(:run).once
             REST.stubs(:head).returns(REST::Response.new(200, {}, ''))
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(TrunkSource.new('trunk'))
-            @sources_manager.find_or_create_source_with_url(TrunkSource::TRUNK_REPO_URL).name.
+            @sources_manager.find_or_create_source_with_url(Pod::TrunkSource::TRUNK_REPO_URL).name.
               should == 'trunk'
           end
 

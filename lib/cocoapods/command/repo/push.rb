@@ -25,19 +25,18 @@ module Pod
             ['--allow-warnings', 'Allows pushing even if there are warnings'],
             ['--use-libraries', 'Linter uses static libraries to install the spec'],
             ['--use-modular-headers', 'Lint uses modular headers during installation'],
-            ['--sources=https://github.com/artsy/Specs,master', 'The sources from which to pull dependent pods ' \
-             '(defaults to all available repos). ' \
-             'Multiple sources must be comma-delimited.'],
+            ["--sources=#{Pod::TrunkSource::TRUNK_REPO_URL}", 'The sources from which to pull dependent pods ' \
+             '(defaults to all available repos). Multiple sources must be comma-delimited'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
-            ['--commit-message="Fix bug in pod"', 'Add custom commit message. ' \
-            'Opens default editor if no commit message is specified.'],
-            ['--use-json', 'Push JSON spec to repo'],
-            ['--swift-version=VERSION', 'The SWIFT_VERSION that should be used when linting the spec. ' \
-             'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file.'],
-            ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec.'],
+            ['--commit-message="Fix bug in pod"', 'Add custom commit message. Opens default editor if no commit ' \
+              'message is specified'],
+            ['--use-json', 'Convert the podspec to JSON before pushing it to the repo'],
+            ['--swift-version=VERSION', 'The `SWIFT_VERSION` that should be used when linting the spec. ' \
+             'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file'],
+            ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec'],
           ].concat(super)
         end
 
