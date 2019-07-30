@@ -425,8 +425,8 @@ module Pod
 
     # Performs validation of a URL
     #
-    def validate_url(url, user_agent=nil)
-      resp = Pod::HTTP.validate_url(url)
+    def validate_url(url, user_agent = nil)
+      resp = Pod::HTTP.validate_url(url, user_agent)
 
       if !resp
         warning('url', "There was a problem validating the URL #{url}.", true)
