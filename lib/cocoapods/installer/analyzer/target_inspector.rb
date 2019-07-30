@@ -105,7 +105,7 @@ module Pod
           target = native_targets.find { |t| t.name == target_definition.name.to_s }
           unless target
             found = native_targets.map { |t| "`#{t.name}`" }.to_sentence
-            raise Informative, "Unable to find a target named `#{target_definition.name}`, did find #{found}."
+            raise Informative, "Unable to find a target named `#{target_definition.name}` in project `#{Pathname(user_project.path).basename}`, did find #{found}."
           end
           [target]
         end
