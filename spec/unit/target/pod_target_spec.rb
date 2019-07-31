@@ -804,8 +804,7 @@ module Pod
         before do
           @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
           @monkey_spec = fixture_spec('monkey/monkey.podspec')
-          @target_definition = Podfile::TargetDefinition.new('Pods', nil)
-          @target_definition.abstract = false
+          @target_definition = fixture_target_definition('Pods')
           @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
                                                                  true, {}, [], Platform.new(:ios, '6.0'),
                                                                  [@target_definition])
@@ -860,8 +859,7 @@ module Pod
       describe 'test spec support' do
         before do
           @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
-          @test_spec_target_definition = Podfile::TargetDefinition.new('Pods', nil)
-          @test_spec_target_definition.abstract = false
+          @test_spec_target_definition = fixture_target_definition('Pods')
           @test_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
                                                            true, {}, [], Platform.new(:ios, '6.0'),
                                                            [@test_spec_target_definition])
@@ -909,6 +907,40 @@ module Pod
           @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find { |t| t.base_name == 'Tests' }).should.be.true
           @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find { |t| t.base_name == 'UITests' }).should.be.false
           @test_pod_target.uses_swift_for_spec?(@test_pod_target.test_specs.find { |t| t.base_name == 'SnapshotTests' }).should.be.false
+        end
+
+        it 'returns the app host dependent targets of a unit test type test spec that specifies an app host' do
+          pineapple_spec = fixture_spec('pineapple-lib/PineappleLib.podspec')
+          target_definition = fixture_target_definition('Pods')
+          pineapple_pod_target = fixture_pod_target_with_specs([pineapple_spec, *pineapple_spec.recursive_subspecs],
+                                                               true, {}, [], Platform.new(:ios, '6.0'),
+                                                               [target_definition])
+          app_host_spec = pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
+          test_spec = pineapple_pod_target.test_specs.find { |t| t.base_name == 'Tests' }
+          pineapple_pod_target.test_app_hosts_by_spec_name = { 'PineappleLib/Tests' => [app_host_spec, pineapple_pod_target] }
+          pineapple_pod_target.app_host_dependent_targets_for_spec(test_spec).map(&:name).should == ['PineappleLib']
+        end
+
+        it 'returns empty app host dependent targets for ui test types' do
+          pineapple_spec = fixture_spec('pineapple-lib/PineappleLib.podspec')
+          target_definition = fixture_target_definition('Pods')
+          pineapple_pod_target = fixture_pod_target_with_specs([pineapple_spec, *pineapple_spec.recursive_subspecs],
+                                                               true, {}, [], Platform.new(:ios, '6.0'),
+                                                               [target_definition])
+          app_host_spec = pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
+          test_spec = pineapple_pod_target.test_specs.find { |t| t.base_name == 'UI' }
+          pineapple_pod_target.test_app_hosts_by_spec_name = { 'PineappleLib/UI' => [app_host_spec, pineapple_pod_target] }
+          pineapple_pod_target.app_host_dependent_targets_for_spec(test_spec).map(&:name).should == []
+        end
+
+        it 'return empty app host dependent targets for non unit test specs' do
+          pineapple_spec = fixture_spec('pineapple-lib/PineappleLib.podspec')
+          target_definition = fixture_target_definition('Pods')
+          pineapple_pod_target = fixture_pod_target_with_specs([pineapple_spec, *pineapple_spec.recursive_subspecs],
+                                                               true, {}, [], Platform.new(:ios, '6.0'),
+                                                               [target_definition])
+          app_host_spec = pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
+          pineapple_pod_target.app_host_dependent_targets_for_spec(app_host_spec).map(&:name).should == []
         end
       end
     end

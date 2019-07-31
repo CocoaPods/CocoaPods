@@ -66,8 +66,12 @@ module Pod
                                 else
                                   target.dependent_targets_for_app_spec(spec)
                                 end
+            host_target_spec_names = target.app_host_dependent_targets_for_spec(spec).flat_map do |pt|
+              pt.specs.map(&:name)
+            end.uniq
             resource_paths = dependent_targets.flat_map do |dependent_target|
               spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include -= host_target_spec_names
               spec_paths_to_include << spec.name if dependent_target == target
               dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
             end.uniq
@@ -107,8 +111,12 @@ module Pod
                                 else
                                   target.dependent_targets_for_app_spec(spec)
                                 end
+            host_target_spec_names = target.app_host_dependent_targets_for_spec(spec).flat_map do |pt|
+              pt.specs.map(&:name)
+            end.uniq
             framework_paths = dependent_targets.flat_map do |dependent_target|
               spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include -= host_target_spec_names
               spec_paths_to_include << spec.name if dependent_target == target
               dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact
             end.uniq

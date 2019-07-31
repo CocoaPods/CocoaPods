@@ -870,10 +870,9 @@ module Pod
 
         # @return [Array<PodTarget>]
         define_build_settings_method :dependent_targets_to_link, :memoized => true do
-          if test_xcconfig? && app_host_info = target.test_app_hosts_by_spec_name[non_library_spec.name]
+          if test_xcconfig?
             # we're embedding into an app defined by an app spec
-            app_spec, app_target = *app_host_info
-            host_targets = app_target.dependent_targets_for_app_spec(app_spec)
+            host_targets = target.app_host_dependent_targets_for_spec(non_library_spec)
             dependent_targets - host_targets
           else
             dependent_targets
