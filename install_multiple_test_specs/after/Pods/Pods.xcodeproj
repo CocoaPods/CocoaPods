@@ -42,10 +42,8 @@ File References:
       - HostedTestLib-Unit-UnitTests4-frameworks.sh
       - HostedTestLib-Unit-UnitTests4-Info.plist
       - HostedTestLib-Unit-UnitTests4-prefix.pch
-      - HostedTestLib-Unit-UnitTests5-frameworks.sh
       - HostedTestLib-Unit-UnitTests5-Info.plist
       - HostedTestLib-Unit-UnitTests5-prefix.pch
-      - HostedTestLib-Unit-UnitTests6-frameworks.sh
       - HostedTestLib-Unit-UnitTests6-Info.plist
       - HostedTestLib-Unit-UnitTests6-prefix.pch
       - HostedTestLib.app.xcconfig
@@ -604,17 +602,6 @@ Targets:
       - Foundation.framework
       - HostedTestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks":
-        Input File List Paths:
-        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks-input-files.xcfilelist"
-        Input Paths: []
-        Output File List Paths:
-        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks-output-files.xcfilelist"
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks.sh"
-
-          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -667,17 +654,6 @@ Targets:
       - Foundation.framework
       - HostedTestLib.framework
     - Resources: []
-    - "[CP] Embed Pods Frameworks":
-        Input File List Paths:
-        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks-input-files.xcfilelist"
-        Input Paths: []
-        Output File List Paths:
-        - "${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks-output-files.xcfilelist"
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks.sh"
-
-          '
     Build Configurations:
     - Debug:
         Build Settings:
