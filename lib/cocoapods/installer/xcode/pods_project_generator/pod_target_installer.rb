@@ -607,9 +607,13 @@ module Pod
           def create_test_target_copy_resources_script(test_spec)
             path = target.copy_resources_script_path_for_spec(test_spec)
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
+            host_target_spec_names = target.app_host_dependent_targets_for_spec(test_spec).flat_map do |pt|
+              pt.specs.map(&:name)
+            end.uniq
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include -= host_target_spec_names
                 spec_paths_to_include << test_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
@@ -631,9 +635,13 @@ module Pod
           def create_test_target_embed_frameworks_script(test_spec)
             path = target.embed_frameworks_script_path_for_spec(test_spec)
             pod_targets = target.dependent_targets_for_test_spec(test_spec)
+            host_target_spec_names = target.app_host_dependent_targets_for_spec(test_spec).flat_map do |pt|
+              pt.specs.map(&:name)
+            end.uniq
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include -= host_target_spec_names
                 spec_paths_to_include << test_spec.name if pod_target == target
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end

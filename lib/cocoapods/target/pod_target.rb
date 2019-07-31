@@ -537,10 +537,11 @@ module Pod
       "#{label}-#{subspec_label(app_spec)}"
     end
 
-    # @param test_spec [Specification]
+    # @param  [Specification] test_spec
+    #         the test spec to use for producing the app host target label.
     #
-    # @return [(String,String)] a tuple, where the first item is the PodTarget#label of the pod target that defines the app host,
-    #                           and the second item is the target name of the app host
+    # @return [(String,String)] a tuple, where the first item is the PodTarget#label of the pod target that defines the
+    #         app host, and the second item is the target name of the app host
     #
     def app_host_target_label(test_spec)
       app_spec, app_target = test_app_hosts_by_spec_name[test_spec.name]
@@ -549,6 +550,22 @@ module Pod
         [app_target.name, app_target.app_target_label(app_spec)]
       elsif test_spec.consumer(platform).requires_app_host?
         [name, "AppHost-#{label}-#{label_for_test_type(test_spec.test_type)}-Tests"]
+      end
+    end
+
+    # @param [Specification] spec
+    #        the spec to return app host dependencies for
+    #
+    # @return [Array<PodTarget>] the app host dependent targets for the given spec.
+    #
+    def app_host_dependent_targets_for_spec(spec)
+      return [] unless spec.test_specification? && spec.consumer(platform).test_type == :unit
+      app_host_info = test_app_hosts_by_spec_name[spec.name]
+      if app_host_info.nil?
+        []
+      else
+        app_spec, app_target = *app_host_info
+        app_target.dependent_targets_for_app_spec(app_spec)
       end
     end
 

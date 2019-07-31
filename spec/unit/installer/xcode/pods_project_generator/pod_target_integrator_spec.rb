@@ -151,6 +151,56 @@ module Pod
                 @native_target.build_phases[0].display_name.should == '[CP-User] Hello World'
                 @native_target.build_phases[0].shell_script.should == 'echo "Hello World"'
               end
+
+              describe 'integrating paths with custom app host' do
+                before do
+                  @pineapple_spec = fixture_spec('pineapple-lib/PineappleLib.podspec')
+                  @pineapple_pod_target = fixture_pod_target_with_specs([@pineapple_spec,
+                                                                         *@pineapple_spec.recursive_subspecs], true, {},
+                                                                        [], Platform.ios, [@target_definition])
+
+                  @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [],
+                                                        :project => @project)
+
+                  @test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
+                                                                 :shell_script_build_phases => [], :project => @project,
+                                                                 :name => 'PineappleLib-Unit-Tests')
+
+                  @ui_test_native_target = stub('UITestNativeTarget', :symbol_type => :unit_test_bundle,
+                                                                      :build_phases => [], :shell_script_build_phases => [],
+                                                                      :project => @project, :name => 'PineappleLib-UI-UI')
+
+                  @target_installation_result = TargetInstallationResult.new(@pineapple_pod_target, @native_target, [],
+                                                                             [@test_native_target, @ui_test_native_target])
+
+                  @app_host_spec = @pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
+
+                  @pineapple_pod_target.test_app_hosts_by_spec_name = {
+                    'PineappleLib/Tests' => [@app_host_spec, @pineapple_pod_target],
+                    'PineappleLib/UI' => [@app_host_spec, @pineapple_pod_target],
+                  }
+                end
+
+                it 'excludes framework paths for unit type test specs' do
+                  PodTargetIntegrator.new(@target_installation_result).integrate!
+                  @test_native_target.build_phases.count.should == 0
+                end
+
+                it 'includes framework paths for ui type test specs' do
+                  PodTargetIntegrator.new(@target_installation_result).integrate!
+                  @ui_test_native_target.build_phases.count.should == 1
+                  @ui_test_native_target.build_phases.map(&:display_name).should == [
+                    '[CP] Embed Pods Frameworks',
+                  ]
+                  @ui_test_native_target.build_phases[0].input_paths.should == [
+                    '${PODS_ROOT}/Target Support Files/PineappleLib/PineappleLib-UI-UI-frameworks.sh',
+                    '${BUILT_PRODUCTS_DIR}/PineappleLib/PineappleLib.framework',
+                  ]
+                  @ui_test_native_target.build_phases[0].output_paths.should == [
+                    '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PineappleLib.framework',
+                  ]
+                end
+              end
             end
           end
         end
