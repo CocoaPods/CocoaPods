@@ -614,9 +614,11 @@ module Pod
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
-            generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
+            unless resource_paths_by_config.values.all?(&:empty?)
+              generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+            end
           end
 
           # Creates a script that embeds the frameworks to the bundle of the test target.
@@ -636,9 +638,11 @@ module Pod
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
-            generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
+            unless framework_paths_by_config.values.all?(&:empty?)
+              generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+            end
           end
 
           # Generates the contents of the xcconfig file used for each app target type and saves it to disk.
@@ -683,9 +687,11 @@ module Pod
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
-            generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
+            unless resource_paths_by_config.values.all?(&:empty?)
+              generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+            end
           end
 
           # Creates a script that embeds the frameworks to the bundle of the app target.
@@ -705,9 +711,11 @@ module Pod
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
-            generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
+            unless framework_paths_by_config.values.all?(&:empty?)
+              generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+            end
           end
 
           # Manually add `libswiftSwiftOnoneSupport.dylib` as it seems there is an issue with tests that do not include it for Debug configurations.

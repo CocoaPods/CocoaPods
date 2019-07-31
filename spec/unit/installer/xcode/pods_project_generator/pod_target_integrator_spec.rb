@@ -12,12 +12,13 @@ module Pod
               @target_definition = fixture_target_definition
 
               @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
-              @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
-                                                                     false, {}, [], Platform.ios, [@target_definition])
+              @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec,
+                                                                      *@watermelon_spec.recursive_subspecs], true, {},
+                                                                     [], Platform.ios, [@target_definition])
 
               @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
               @coconut_pod_target = fixture_pod_target_with_specs([@coconut_spec, *@coconut_spec.recursive_subspecs],
-                                                                  false, {}, [], Platform.ios, [@target_definition])
+                                                                  true, {}, [], Platform.ios, [@target_definition])
 
               @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [],
                                                     :project => @project)
@@ -25,20 +26,18 @@ module Pod
                                                              :shell_script_build_phases => [], :project => @project,
                                                              :name => 'CoconutLib-Unit-Tests')
 
-              @target_installation_result = TargetInstallationResult.new(@coconut_pod_target, @native_target, [],
-                                                                         [@test_native_target])
+              @coconut_target_installation_result = TargetInstallationResult.new(@coconut_pod_target, @native_target,
+                                                                                 [], [@test_native_target])
             end
 
             describe '#integrate!' do
-              it 'integrates test native targets with frameworks and resources script phases' do
-                PodTargetIntegrator.new(@target_installation_result).integrate!
-                @test_native_target.build_phases.count.should == 2
+              it 'integrates test native targets with framework script phase' do
+                PodTargetIntegrator.new(@coconut_target_installation_result).integrate!
+                @test_native_target.build_phases.count.should == 1
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
-                  '[CP] Copy Pods Resources',
                 ]
                 @test_native_target.build_phases[0].shell_script.should == "\"${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks.sh\"\n"
-                @test_native_target.build_phases[1].shell_script.should == "\"${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources.sh\"\n"
               end
 
               it 'clears input and output paths from script phase if it exceeds limit' do
@@ -48,7 +47,7 @@ module Pod
                   "${PODS_CONFIGURATION_BUILD_DIR}/DebugLib/DebugLibPng#{i}.png"
                 end
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
-                PodTargetIntegrator.new(@target_installation_result).integrate!
+                PodTargetIntegrator.new(@coconut_target_installation_result).integrate!
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
                   '[CP] Copy Pods Resources',
@@ -62,7 +61,7 @@ module Pod
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
-                PodTargetIntegrator.new(@target_installation_result, :use_input_output_paths => true).integrate!
+                PodTargetIntegrator.new(@coconut_target_installation_result, :use_input_output_paths => true).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
@@ -90,7 +89,7 @@ module Pod
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
-                PodTargetIntegrator.new(@target_installation_result, :use_input_output_paths => true).integrate!
+                PodTargetIntegrator.new(@coconut_target_installation_result, :use_input_output_paths => true).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
@@ -115,8 +114,8 @@ module Pod
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
-                PodTargetIntegrator.new(@target_installation_result, :use_input_output_paths => false).integrate!
-                PodTargetIntegrator.new(@target_installation_result, :use_input_output_paths => false).integrate!
+                PodTargetIntegrator.new(@coconut_target_installation_result, :use_input_output_paths => false).integrate!
+                PodTargetIntegrator.new(@coconut_target_installation_result, :use_input_output_paths => false).integrate!
                 @test_native_target.build_phases.count.should == 2
                 @test_native_target.build_phases.map(&:display_name).should == [
                   '[CP] Embed Pods Frameworks',
@@ -128,32 +127,26 @@ module Pod
                 @test_native_target.build_phases[1].output_paths.should.be.empty
               end
 
-              it 'excludes test framework and resource paths from dependent targets' do
+              it 'excludes test framework and resource paths from dependent targets when using static libraries' do
+                @watermelon_pod_target.stubs(:build_type).returns(Pod::Target::BuildType.static_library)
+                @coconut_pod_target.stubs(:build_type).returns(Pod::Target::BuildType.static_library)
                 @coconut_pod_target.stubs(:dependent_targets).returns([@watermelon_pod_target])
-                PodTargetIntegrator.new(@target_installation_result).integrate!
-                @test_native_target.build_phases.count.should == 2
-                @test_native_target.build_phases.map(&:display_name).should == [
-                  '[CP] Embed Pods Frameworks',
-                  '[CP] Copy Pods Resources',
-                ]
-                @test_native_target.build_phases[0].input_paths.should.be.empty
-                @test_native_target.build_phases[0].output_paths.should.be.empty
-                @test_native_target.build_phases[1].input_paths.should.be.empty
-                @test_native_target.build_phases[1].output_paths.should.should.be.empty
+                PodTargetIntegrator.new(@coconut_target_installation_result).integrate!
+                @test_native_target.build_phases.count.should == 0
               end
 
               it 'integrates test native target with shell script phases' do
                 @coconut_spec.test_specs.first.script_phase = { :name => 'Hello World',
                                                                 :script => 'echo "Hello World"' }
-                PodTargetIntegrator.new(@target_installation_result).integrate!
-                @test_native_target.build_phases.count.should == 3
-                @test_native_target.build_phases[2].display_name.should == '[CP-User] Hello World'
-                @test_native_target.build_phases[2].shell_script.should == 'echo "Hello World"'
+                PodTargetIntegrator.new(@coconut_target_installation_result).integrate!
+                @test_native_target.build_phases.count.should == 2
+                @test_native_target.build_phases[1].display_name.should == '[CP-User] Hello World'
+                @test_native_target.build_phases[1].shell_script.should == 'echo "Hello World"'
               end
 
               it 'integrates native target with shell script phases' do
                 @coconut_spec.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-                PodTargetIntegrator.new(@target_installation_result).integrate!
+                PodTargetIntegrator.new(@coconut_target_installation_result).integrate!
                 @native_target.build_phases.count.should == 1
                 @native_target.build_phases[0].display_name.should == '[CP-User] Hello World'
                 @native_target.build_phases[0].shell_script.should == 'echo "Hello World"'

@@ -157,6 +157,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#9053](https://github.com/CocoaPods/Cocoapods/pull/9053)
   [#9049](https://github.com/CocoaPods/CocoaPods/issues/9049)
 
+* Do not add CocoaPods script phases to targets that have no paths to embed.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9069](https://github.com/CocoaPods/CocoaPods/pull/9069)
+
 
 ## 1.7.5 (2019-07-19)
 
