@@ -205,7 +205,7 @@ module Pod
           }
 
         SH
-        script << "\n" unless frameworks_by_config.values.all?(&:empty?)
+        script << "\n" unless frameworks_by_config.each_value.all?(&:empty?)
         frameworks_by_config.each do |config, frameworks_with_dsyms|
           next if frameworks_with_dsyms.empty?
           script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
