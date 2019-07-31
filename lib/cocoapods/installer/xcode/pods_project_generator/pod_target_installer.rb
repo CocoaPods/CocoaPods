@@ -618,7 +618,7 @@ module Pod
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
-            unless resource_paths_by_config.values.all?(&:empty?)
+            unless resource_paths_by_config.each_value.all?(&:empty?)
               generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
@@ -646,7 +646,7 @@ module Pod
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
-            unless framework_paths_by_config.values.all?(&:empty?)
+            unless framework_paths_by_config.each_value.all?(&:empty?)
               generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
@@ -695,7 +695,7 @@ module Pod
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end
             end
-            unless resource_paths_by_config.values.all?(&:empty?)
+            unless resource_paths_by_config.each_value.all?(&:empty?)
               generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
@@ -719,7 +719,7 @@ module Pod
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
-            unless framework_paths_by_config.values.all?(&:empty?)
+            unless framework_paths_by_config.each_value.all?(&:empty?)
               generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
               update_changed_file(generator, path)
               add_file_to_support_group(path)

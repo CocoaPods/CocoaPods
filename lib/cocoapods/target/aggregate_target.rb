@@ -221,14 +221,14 @@ module Pod
     # @return [Boolean] Whether the target contains any resources
     #
     def includes_resources?
-      !resource_paths_by_config.values.all?(&:empty?)
+      !resource_paths_by_config.each_value.all?(&:empty?)
     end
 
     # @return [Boolean] Whether the target contains framework to be embedded into
     #         the user target
     #
     def includes_frameworks?
-      !framework_paths_by_config.values.all?(&:empty?)
+      !framework_paths_by_config.each_value.all?(&:empty?)
     end
 
     # @return [Hash{String => Array<FrameworkPaths>}] The vendored dynamic artifacts and framework target
