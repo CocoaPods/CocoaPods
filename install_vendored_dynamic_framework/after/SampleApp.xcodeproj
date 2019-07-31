@@ -72,7 +72,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-SampleApp/Pods-SampleApp-frameworks.sh"
 
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:

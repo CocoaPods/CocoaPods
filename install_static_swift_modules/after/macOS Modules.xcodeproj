@@ -122,7 +122,7 @@ Targets:
         Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS
           Pods-Dynamic/Pods-Abstract Target-macOS Pods-Dynamic-frameworks.sh"
 
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
