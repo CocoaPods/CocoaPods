@@ -3,6 +3,12 @@ A list of terms used in the [CocoaPods](https://github.com/CocoaPods/CocoaPods) 
 
 ## Glossary
 
+### Aggregate Target
+The target generated to aide the integration of the Pod targets with the user targets, prefixed with `Pods-`. Example: `Pods-MyApp.framework`
+
+### App Spec
+A Subspec which describes the details for creating an Application target, rather than a library or test target.
+
 ### Build
 A package generated after the code in your project has been compiled.
 
@@ -45,6 +51,9 @@ A virtual space where your code is stored.
 ### Shared Library
 A Shared Library is a Library that is not copied into the project, instead, it is referenced by the project.
 
+### Static Framework
+A `.framework` bundle which wraps a statically linked library. Similar to a Static Library, but wrapped within the structure of a `.framework`
+
 ### Static Library
 A Static Library is a Library that statically linked into the build.
 
@@ -63,11 +72,11 @@ Represents specification for a module within the library.
 ### Target
 A target specifies a product to build and contains the instructions for building the product from a set of files in a project or workspace.
 
+### Test Spec
+A Subspec which defines a test bundle meant for testing the library in which it is defined.
+
 ### Trunk
 The CocoaPods Trunk is an authentication and CocoaPods API service used for the distribution of public pods.
-
-### Umbrella target
-The target generated to aide the integration of the Pod targets with the user targets.
 
 ### User target
 The target being integrated (part of the user's project outside of CocoaPods).
