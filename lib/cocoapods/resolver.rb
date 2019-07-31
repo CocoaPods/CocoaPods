@@ -519,7 +519,7 @@ You have either:#{specs_update_message}
  * not added the source repo that hosts the Podspec to your Podfile.
         EOS
       end
-      raise type.new(message).tap { |e| e.set_backtrace(error.backtrace) }
+      raise type.new(message.dup).tap { |e| e.set_backtrace(error.backtrace) }
     end
 
     # Returns whether the given spec is platform-compatible with the dependency
