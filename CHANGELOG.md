@@ -156,6 +156,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [CocoaPods/Core#571](https://github.com/CocoaPods/Core/pull/571)
   [#9053](https://github.com/CocoaPods/Cocoapods/pull/9053)
   [#9049](https://github.com/CocoaPods/CocoaPods/issues/9049)
+  
+ * Respect the configuration whitelist for transitive dependencies  
+  [Eric Amorde](https://github.com/amorde)
+  [#6838](https://github.com/CocoaPods/CocoaPods/issues/6838)
 
 
 ## 1.7.5 (2019-07-19)

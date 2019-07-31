@@ -15,17 +15,20 @@ module Pod
           @dependencies_by_target_definition = dependencies_by_target_definition
         end
 
-        # Returns the dependencies for the given target definition
+        # @param  [Podfile::TargetDefinition] target_definition
+        #         the target definition for which dependencies will be returned
+        #
+        # @return [Array<Pod::Dependency>] The dependencies for the given target definition
         #
         def target_definition_dependencies(target_definition)
-          @dependencies_by_target_definition[target_definition] ||
+          dependencies_by_target_definition[target_definition] ||
             raise(ArgumentError, "dependencies for #{target_definition.inspect} do not exist in the cache")
         end
 
-        # Returns a list of all of the target definitions in the Podfile
+        # @return [Array<Pod::TargetDefinition>] A list of all of the target definitions in the Podfile
         #
         def target_definition_list
-          @dependencies_by_target_definition.keys
+          dependencies_by_target_definition.keys
         end
 
         # Creates a {PodfileDependencyCache} from the given {Podfile}
@@ -49,6 +52,13 @@ module Pod
 
           new(podfile_dependencies.freeze, dependencies_by_target_definition.freeze)
         end
+
+        private
+
+        # @return [Hash{TargetDefinition => Array<Pod::Dependency>}]
+        #         dependencies keyed by their target definition
+        #
+        attr_reader :dependencies_by_target_definition
       end
     end
   end
