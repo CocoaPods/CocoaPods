@@ -67,7 +67,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${SRCROOT}/Pods/Pods-SampleApp_2-resources.sh"
 
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:

@@ -155,7 +155,7 @@ Targets:
         Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-OS X App/Pods-OS X
           App-frameworks.sh"
 
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:

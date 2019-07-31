@@ -84,25 +84,16 @@ Generating Pods project
 
 Integrating target `HostedTestLib`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
 
 Integrating target `TestLib`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Copy Pods Resources' to project.
   - Generating deterministic UUIDs
   - Stabilizing target UUIDs
   - Running post install hooks

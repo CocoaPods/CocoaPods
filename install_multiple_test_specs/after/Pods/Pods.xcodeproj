@@ -30,10 +30,8 @@ File References:
       - HostedTestLib.xcconfig
       - HostedTestLib-App-frameworks.sh
       - HostedTestLib-App-prefix.pch
-      - HostedTestLib-App-resources.sh
       - HostedTestLib-AppWithDep-frameworks.sh
       - HostedTestLib-AppWithDep-prefix.pch
-      - HostedTestLib-AppWithDep-resources.sh
       - HostedTestLib-dummy.m
       - HostedTestLib-Info.plist
       - HostedTestLib-prefix.pch
@@ -41,19 +39,15 @@ File References:
       - HostedTestLib-Unit-UnitTests3-frameworks.sh
       - HostedTestLib-Unit-UnitTests3-Info.plist
       - HostedTestLib-Unit-UnitTests3-prefix.pch
-      - HostedTestLib-Unit-UnitTests3-resources.sh
       - HostedTestLib-Unit-UnitTests4-frameworks.sh
       - HostedTestLib-Unit-UnitTests4-Info.plist
       - HostedTestLib-Unit-UnitTests4-prefix.pch
-      - HostedTestLib-Unit-UnitTests4-resources.sh
       - HostedTestLib-Unit-UnitTests5-frameworks.sh
       - HostedTestLib-Unit-UnitTests5-Info.plist
       - HostedTestLib-Unit-UnitTests5-prefix.pch
-      - HostedTestLib-Unit-UnitTests5-resources.sh
       - HostedTestLib-Unit-UnitTests6-frameworks.sh
       - HostedTestLib-Unit-UnitTests6-Info.plist
       - HostedTestLib-Unit-UnitTests6-prefix.pch
-      - HostedTestLib-Unit-UnitTests6-resources.sh
       - HostedTestLib.app.xcconfig
       - HostedTestLib.appwithdep.xcconfig
       - HostedTestLib.unit-unittests3.xcconfig
@@ -83,7 +77,6 @@ File References:
       - TestLib.xcconfig
       - TestLib-App-frameworks.sh
       - TestLib-App-prefix.pch
-      - TestLib-App-resources.sh
       - TestLib-dummy.m
       - TestLib-Info.plist
       - TestLib-prefix.pch
@@ -91,11 +84,9 @@ File References:
       - TestLib-Unit-UnitTests1-frameworks.sh
       - TestLib-Unit-UnitTests1-Info.plist
       - TestLib-Unit-UnitTests1-prefix.pch
-      - TestLib-Unit-UnitTests1-resources.sh
       - TestLib-Unit-UnitTests2-frameworks.sh
       - TestLib-Unit-UnitTests2-Info.plist
       - TestLib-Unit-UnitTests2-prefix.pch
-      - TestLib-Unit-UnitTests2-resources.sh
       - TestLib.app.xcconfig
       - TestLib.unit-unittests1.xcconfig
       - TestLib.unit-unittests2.xcconfig
@@ -362,16 +353,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-App-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-App-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -440,16 +422,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -517,16 +490,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -588,16 +552,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -659,16 +614,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -731,16 +677,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1037,16 +974,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-App-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1115,16 +1043,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests1-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests1-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
@@ -1182,16 +1101,7 @@ Targets:
         Shell Path: "/bin/sh"
         Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests2-frameworks.sh"
 
-'
-    - "[CP] Copy Pods Resources":
-        Input File List Paths: []
-        Input Paths: []
-        Output File List Paths: []
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/TestLib/TestLib-Unit-UnitTests2-resources.sh"
-
-'
+          '
     Build Configurations:
     - Debug:
         Build Settings:
