@@ -60,32 +60,36 @@ module Pod
 
             input_paths_by_config = {}
             output_paths_by_config = {}
-            if use_input_output_paths
-              dependent_targets = if spec.test_specification?
-                                    target.dependent_targets_for_test_spec(spec)
-                                  else
-                                    target.dependent_targets_for_app_spec(spec)
-                                  end
-              resource_paths = dependent_targets.flat_map do |dependent_target|
-                spec_paths_to_include = dependent_target.library_specs.map(&:name)
-                spec_paths_to_include << spec.name if dependent_target == target
-                dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
-              end.uniq
 
-              unless resource_paths.empty?
-                input_file_list_path = target.copy_resources_script_input_files_path_for_spec(spec)
-                input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
-                input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
-                input_paths_by_config[input_paths_key] = [script_path] + resource_paths
+            dependent_targets = if spec.test_specification?
+                                  target.dependent_targets_for_test_spec(spec)
+                                else
+                                  target.dependent_targets_for_app_spec(spec)
+                                end
+            resource_paths = dependent_targets.flat_map do |dependent_target|
+              spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include << spec.name if dependent_target == target
+              dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
+            end.uniq
 
-                output_file_list_path = target.copy_resources_script_output_files_path_for_spec(spec)
-                output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
-                output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
-                output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.resource_output_paths(resource_paths)
-              end
+            if use_input_output_paths? && !resource_paths.empty?
+              input_file_list_path = target.copy_resources_script_input_files_path_for_spec(spec)
+              input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
+              input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
+              input_paths_by_config[input_paths_key] = [script_path] + resource_paths
+
+              output_file_list_path = target.copy_resources_script_output_files_path_for_spec(spec)
+              output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
+              output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
+              output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.resource_output_paths(resource_paths)
             end
 
-            UserProjectIntegrator::TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths_by_config, output_paths_by_config)
+            if resource_paths.empty?
+              UserProjectIntegrator::TargetIntegrator.remove_copy_resources_script_phase_from_target(native_target)
+            else
+              UserProjectIntegrator::TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(
+                native_target, script_path, input_paths_by_config, output_paths_by_config)
+            end
           end
 
           # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
@@ -97,35 +101,39 @@ module Pod
 
             input_paths_by_config = {}
             output_paths_by_config = {}
-            if use_input_output_paths?
-              dependent_targets = if spec.test_specification?
-                                    target.dependent_targets_for_test_spec(spec)
-                                  else
-                                    target.dependent_targets_for_app_spec(spec)
-                                  end
-              framework_paths = dependent_targets.flat_map do |dependent_target|
-                spec_paths_to_include = dependent_target.library_specs.map(&:name)
-                spec_paths_to_include << spec.name if dependent_target == target
-                dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact
-              end.uniq
 
-              unless framework_paths.empty?
-                input_file_list_path = target.embed_frameworks_script_input_files_path_for_spec(spec)
-                input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
-                input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
-                input_paths = input_paths_by_config[input_paths_key] = [script_path]
-                framework_paths.each do |path|
-                  input_paths.concat(path.all_paths)
-                end
+            dependent_targets = if spec.test_specification?
+                                  target.dependent_targets_for_test_spec(spec)
+                                else
+                                  target.dependent_targets_for_app_spec(spec)
+                                end
+            framework_paths = dependent_targets.flat_map do |dependent_target|
+              spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include << spec.name if dependent_target == target
+              dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact
+            end.uniq
 
-                output_file_list_path = target.embed_frameworks_script_output_files_path_for_spec(spec)
-                output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
-                output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
-                output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.framework_output_paths(framework_paths)
+            if use_input_output_paths? && !framework_paths.empty?
+              input_file_list_path = target.embed_frameworks_script_input_files_path_for_spec(spec)
+              input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
+              input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
+              input_paths = input_paths_by_config[input_paths_key] = [script_path]
+              framework_paths.each do |path|
+                input_paths.concat(path.all_paths)
               end
+
+              output_file_list_path = target.embed_frameworks_script_output_files_path_for_spec(spec)
+              output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
+              output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
+              output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.framework_output_paths(framework_paths)
             end
 
-            UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(native_target, script_path, input_paths_by_config, output_paths_by_config)
+            if framework_paths.empty?
+              UserProjectIntegrator::TargetIntegrator.remove_embed_frameworks_script_phase_from_target(native_target)
+            else
+              UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(
+                native_target, script_path, input_paths_by_config, output_paths_by_config)
+            end
           end
 
           # @return [String] the message that should be displayed for the target
