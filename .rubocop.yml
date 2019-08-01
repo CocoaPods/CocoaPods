@@ -5,13 +5,14 @@ inherit_from:
 #- CocoaPods ------------------------------------------------------------------
 
 AllCops:
-  Include:
-    - Dangerfile
+  TargetRubyVersion: 2.0
   Exclude:
-    - spec/fixtures/**/*.rb
-    - spec/fixtures/banana-lib/libPusher/Scripts/pusher
+    - spec/fixtures/**/*
+    - spec/cocoapods-integration-specs/**/*
+    - vendor/bundle/**/*
+    - examples/**/*
 
-Style/FileName:
+Naming/FileName:
   Exclude:
     - bin/*
     - Rakefile

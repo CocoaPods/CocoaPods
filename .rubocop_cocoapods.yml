@@ -1,16 +1,3 @@
-AllCops:
-  Include:
-    - ./Rakefile
-    - ./Gemfile
-    - ./*.gemspec
-  Exclude:
-    - ./spec/fixtures/**/*
-    - ./vendor/bundle/**/*
-
-# At the moment not ready to be used
-# https://github.com/bbatsov/rubocop/issues/947
-Documentation:
-  Enabled: false
 
 #- CocoaPods -----------------------------------------------------------------#
 
@@ -49,8 +36,15 @@ Style/TrailingCommaInArguments:
 Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
 
 # Clashes with CLAide Command#validate!
 GuardClause:
@@ -119,6 +113,10 @@ AmbiguousRegexpLiteral:
     - spec/**/*
 
 Performance/RedundantMatch:
+  Exclude:
+    - spec/**/*
+
+Performance/Count:
   Exclude:
     - spec/**/*
 
