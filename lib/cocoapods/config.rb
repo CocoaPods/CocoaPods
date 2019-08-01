@@ -205,7 +205,7 @@ module Pod
     # @return [Nil] If no Lockfile is available.
     #
     def lockfile
-      @lockfile ||= Lockfile.from_file(lockfile_path) if lockfile_path
+      @lockfile ||= Lockfile.from_file(lockfile_path, true) if lockfile_path
     end
 
     # Returns the path of the Podfile.
