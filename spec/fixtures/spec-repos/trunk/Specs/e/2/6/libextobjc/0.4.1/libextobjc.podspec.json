@@ -1,0 +1,119 @@
+{
+  "name": "libextobjc",
+  "version": "0.4.1",
+  "summary": "A Cocoa library to extend the Objective-C programming language.",
+  "homepage": "https://github.com/jspahrsummers/libextobjc",
+  "authors": {
+    "Justin Spahr-Summers": "jspahrsummers@github.com"
+  },
+  "source": {
+    "git": "https://github.com/jspahrsummers/libextobjc.git",
+    "tag": "0.4.1"
+  },
+  "requires_arc": true,
+  "description": "The Extended Objective-C library extends the dynamism of the Objective-C programming language to support additional patterns present in other dynamic programming languages (including those that are not necessarily object-oriented).\nlibextobjc is meant to be very modular – most of its classes and modules can be used with no more than one or two dependencies.",
+  "license": "MIT",
+  "subspecs": [
+    {
+      "name": "UmbrellaHeader",
+      "source_files": "extobjc/extobjc.h"
+    },
+    {
+      "name": "RuntimeExtensions",
+      "source_files": [
+        "extobjc/metamacros.h",
+        "extobjc/EXTRuntimeExtensions.{h,m}"
+      ]
+    },
+    {
+      "name": "EXTADT",
+      "source_files": "extobjc/EXTADT.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTConcreteProtocol",
+      "source_files": "extobjc/EXTConcreteProtocol.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTKeyPathCoding",
+      "source_files": "extobjc/EXTKeyPathCoding.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTNil",
+      "source_files": "extobjc/EXTNil.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTSafeCategory",
+      "source_files": "extobjc/EXTSafeCategory.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTScope",
+      "source_files": "extobjc/EXTScope.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTSelectorChecking",
+      "source_files": "extobjc/EXTSelectorChecking.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTSynthesize",
+      "source_files": "extobjc/EXTSynthesize.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "NSInvocation+EXT",
+      "source_files": "extobjc/NSInvocation+EXT.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    },
+    {
+      "name": "NSMethodSignature+EXT",
+      "source_files": "extobjc/NSMethodSignature+EXT.{h,m}",
+      "dependencies": {
+        "libextobjc/RuntimeExtensions": [
+
+        ]
+      }
+    }
+  ]
+}

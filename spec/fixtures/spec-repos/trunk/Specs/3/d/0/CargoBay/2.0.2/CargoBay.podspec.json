@@ -1,0 +1,29 @@
+{
+  "name": "CargoBay",
+  "version": "2.0.2",
+  "license": "MIT",
+  "summary": "The Essential StoreKit Companion.",
+  "homepage": "https://github.com/mattt/CargoBay",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/mattt/CargoBay.git",
+    "tag": "2.0.2"
+  },
+  "source_files": "CargoBay",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8"
+  },
+  "frameworks": [
+    "StoreKit",
+    "Security"
+  ],
+  "dependencies": {
+    "AFNetworking": [
+      "~> 2.0"
+    ]
+  }
+}

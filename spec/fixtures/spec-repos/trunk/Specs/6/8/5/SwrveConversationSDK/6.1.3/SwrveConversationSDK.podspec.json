@@ -1,0 +1,43 @@
+{
+  "name": "SwrveConversationSDK",
+  "version": "6.1.3",
+  "summary": "iOS Conversation SDK for Swrve.",
+  "homepage": "http://www.swrve.com",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "SwrveConversationSDK/LICENSE"
+  },
+  "authors": "Swrve Mobile Inc or its licensors",
+  "source": {
+    "git": "https://github.com/Swrve/swrve-ios-sdk.git",
+    "tag": "6.1.3"
+  },
+  "social_media_url": "https://twitter.com/Swrve_Inc",
+  "documentation_url": "https://docs.swrve.com/developer-documentation/integration/ios/",
+  "platforms": {
+    "ios": "6.0",
+    "tvos": "9.0"
+  },
+  "requires_arc": true,
+  "tvos": {
+    "pod_target_xcconfig": {
+      "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) SWRVE_NO_PUSH"
+    },
+    "user_target_xcconfig": {
+      "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) SWRVE_NO_PUSH"
+    },
+    "exclude_files": "**/*Conversation.storyboard"
+  },
+  "ios": {
+    "exclude_files": "**/*Conversation-tvos.storyboard"
+  },
+  "source_files": "SwrveConversationSDK/Conversation/**/*.{m,h}",
+  "public_header_files": "SwrveConversationSDK/Conversation/**/*.h",
+  "resources": "SwrveConversationSDK/Resources/**/*.*",
+  "dependencies": {
+    "SwrveSDKCommon": [
+      "6.1.3"
+    ]
+  },
+  "compiler_flags": "-DSWRVE_CONVERSATION_SDK"
+}

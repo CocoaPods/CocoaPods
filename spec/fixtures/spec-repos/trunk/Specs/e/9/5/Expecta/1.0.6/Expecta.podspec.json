@@ -1,0 +1,35 @@
+{
+  "name": "Expecta",
+  "version": "1.0.6",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "summary": "A matcher framework for Objective-C & Cocoa.",
+  "homepage": "http://github.com/petejkim/expecta",
+  "authors": {
+    "Peter Jihoon Kim": "raingrove@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/specta/expecta.git",
+    "tag": "v1.0.6"
+  },
+  "description": "Expecta is a matcher framework for Objective-C and Cocoa. The main\nadvantage of using Expecta over other matcher frameworks is that you do not\nhave to specify the data types. Also, the syntax of Expecta matchers is\nmuch more readable and does not suffer from parenthesitis. If you have used\nJasmine before, you will feel right at home!",
+  "source_files": "Expecta/**/*.{h,m}",
+  "requires_arc": false,
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8",
+    "tvos": "9.0"
+  },
+  "frameworks": [
+    "Foundation",
+    "XCTest"
+  ],
+  "pod_target_xcconfig": {
+    "ENABLE_BITCODE": "NO"
+  },
+  "user_target_xcconfig": {
+    "FRAMEWORK_SEARCH_PATHS": "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+  }
+}

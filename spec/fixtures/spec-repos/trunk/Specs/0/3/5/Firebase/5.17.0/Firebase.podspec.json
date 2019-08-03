@@ -1,0 +1,304 @@
+{
+  "authors": "Google, Inc.",
+  "default_subspecs": [
+    "Core"
+  ],
+  "description": "Simplify your iOS development, grow your user base, and monetize more effectively with Firebase.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "text": "Copyright 2019 Google",
+    "type": "Copyright"
+  },
+  "name": "Firebase",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "preserve_paths": [
+    ".cocoapods.yml",
+    "CHANGELOG.md",
+    "NOTICES",
+    "README.md"
+  ],
+  "source": {
+    "http": "https://dl.google.com/dl/cpdc/c12d89199db1d8cd/Firebase-5.17.0.tar.gz"
+  },
+  "summary": "Firebase for iOS",
+  "version": "5.17.0",
+  "subspecs": [
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseAnalytics": "5.6.0"
+      },
+      "name": "Core"
+    },
+    {
+      "dependencies": {
+        "FirebaseCore": "5.3.0"
+      },
+      "name": "CoreOnly",
+      "preserve_paths": [
+        "CoreOnly/Sources/module.modulemap"
+      ],
+      "source_files": [
+        "CoreOnly/Sources/Firebase.h"
+      ],
+      "user_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "$(inherited) ${PODS_ROOT}/Firebase/CoreOnly/Sources"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ]
+      },
+      "name": "Analytics"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseABTesting": "2.0.0"
+      },
+      "name": "ABTesting"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseCrash": "3.1.1"
+      },
+      "name": "Crash"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLCommon": "0.14.0"
+      },
+      "name": "MLCommon",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLModelInterpreter": "0.14.0"
+      },
+      "name": "MLModelInterpreter",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLNLLanguageID": "0.14.0"
+      },
+      "name": "MLNLLanguageID",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLNaturalLanguage": "0.14.0"
+      },
+      "name": "MLNaturalLanguage",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVision": "0.14.0"
+      },
+      "name": "MLVision",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionBarcodeModel": "0.14.0"
+      },
+      "name": "MLVisionBarcodeModel",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionFaceModel": "0.14.0"
+      },
+      "name": "MLVisionFaceModel",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionLabelModel": "0.14.0"
+      },
+      "name": "MLVisionLabelModel",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionTextModel": "0.14.0"
+      },
+      "name": "MLVisionTextModel",
+      "platforms": {
+        "ios": "9.0"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebasePerformance": "2.2.3"
+      },
+      "name": "Performance"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseRemoteConfig": "3.1.0"
+      },
+      "name": "RemoteConfig"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "Google-Mobile-Ads-SDK": "~> 7.39"
+      },
+      "name": "AdMob"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseAuth": "5.3.1"
+      },
+      "name": "Auth"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseDatabase": "5.1.0"
+      },
+      "name": "Database"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseDynamicLinks": "3.4.0"
+      },
+      "name": "DynamicLinks"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseFirestore": "1.0.1"
+      },
+      "name": "Firestore"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseFunctions": "2.2.1"
+      },
+      "name": "Functions"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseInAppMessaging": "0.12.1"
+      },
+      "name": "InAppMessaging"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseInAppMessagingDisplay": "0.12.2"
+      },
+      "name": "InAppMessagingDisplay"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseInvites": "3.0.1"
+      },
+      "name": "Invites"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMessaging": "3.3.1"
+      },
+      "name": "Messaging"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseStorage": "3.1.0"
+      },
+      "name": "Storage"
+    }
+  ]
+}

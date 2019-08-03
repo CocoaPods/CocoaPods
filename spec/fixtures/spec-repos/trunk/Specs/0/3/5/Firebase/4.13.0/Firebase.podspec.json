@@ -1,0 +1,170 @@
+{
+  "authors": "Google, Inc.",
+  "default_subspecs": [
+    "Core"
+  ],
+  "description": "Simplify your iOS development, grow your user base, and monetize more effectively with Firebase.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "text": "Copyright 2018 Google",
+    "type": "Copyright"
+  },
+  "name": "Firebase",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "preserve_paths": [
+    ".cocoapods.yml",
+    "CHANGELOG.md",
+    "NOTICES",
+    "README.md"
+  ],
+  "source": {
+    "http": "https://dl.google.com/dl/cpdc/b64ddeea923b5ab5/Firebase-4.13.0.tar.gz"
+  },
+  "summary": "Firebase for iOS",
+  "version": "4.13.0",
+  "subspecs": [
+    {
+      "dependencies": {
+        "FirebaseAnalytics": "4.2.0",
+        "FirebaseCore": "4.0.20"
+      },
+      "name": "Core",
+      "preserve_paths": [
+        "Core/Sources/module.modulemap"
+      ],
+      "source_files": [
+        "Core/Sources/Firebase.h"
+      ],
+      "user_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "$(inherited) ${PODS_ROOT}/Firebase/Core/Sources"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ]
+      },
+      "name": "Analytics"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "Google-Mobile-Ads-SDK": "7.30.0"
+      },
+      "name": "AdMob"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseAuth": "4.6.1"
+      },
+      "name": "Auth"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseABTesting": "1.0.0"
+      },
+      "name": "ABTesting"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseCrash": "2.0.2"
+      },
+      "name": "Crash"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseDatabase": "4.1.5"
+      },
+      "name": "Database"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseDynamicLinks": "2.3.2"
+      },
+      "name": "DynamicLinks"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseFirestore": "0.11.0"
+      },
+      "name": "Firestore"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseFunctions": "1.0.0"
+      },
+      "name": "Functions"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseInvites": "2.0.2"
+      },
+      "name": "Invites"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseMessaging": "2.2.0"
+      },
+      "name": "Messaging"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebasePerformance": "1.1.3"
+      },
+      "name": "Performance"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseRemoteConfig": "2.1.3"
+      },
+      "name": "RemoteConfig"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseStorage": "2.2.0"
+      },
+      "name": "Storage"
+    }
+  ]
+}

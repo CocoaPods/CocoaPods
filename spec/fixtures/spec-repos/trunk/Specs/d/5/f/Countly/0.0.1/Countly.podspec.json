@@ -1,0 +1,23 @@
+{
+  "name": "Countly",
+  "version": "0.0.1",
+  "license": {
+    "type": "COMMUNITY",
+    "text": "              COUNTLY MOBILE ANALYTICS COMMUNITY EDITION LICENSE\n              --------------------------------------------------\n\n              Copyright (C) 2011-2012 Countly, www.count.ly\n\n              Permission to use and modify this software and its documentation for any\n              purpose, without fee, and without a written agreement is hereby granted,\n              provided that this copyright notice including this paragraph and\n              following two paragraphs appear in all copies.\n\n              1. You may copy and distribute the Software in unmodified form provided\n              that the entire package, including - but not restricted to - copyright,\n              trademark notices and disclaimers, as released by the initial developer\n              of the Software, is distributed.\n\n              2. You may make modifications to the Software and distribute your\n              modifications, in a form that is separate from the Software, such as\n              patches. Modifications must not alter or remove any copyright notices in\n              the Software.\n\n              3. You may develop application programs, reusable components and other\n              software items that link with the original or modified versions of the\n              Software.\n\n              4. You cannot, under any conditions, rebrand and claim ownership, or\n              bundle this Software with another product or Software. You cannot remove\n              Countly logo and footer link of the Software. This License does not\n              grant any rights to use the trademarks Countly and the Countly logos.\n\n              THE SOFTWARE IS PROVIDED \"AS IS,\" WITHOUT WARRANTY OF ANY KIND, EXPRESS\n              OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\n              MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\n              IN NO EVENT SHALL COUNTLY INC. OR THE AUTHORS OR COPYRIGHT HOLDERS IN\n              THE SOFTWARE BE LIABLE FOR ANY CLAIM, DAMAGES (INCLUDING, WITHOUT\n              LIMITATION, DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES) OR OTHER\n              LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\n              FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\n              DEALINGS IN THE SOFTWARE.\n"
+  },
+  "summary": "Countly is an innovative, real-time, open source mobile analytics application.",
+  "homepage": "https://github.com/Countly/countly-sdk-ios",
+  "authors": {
+    "Countly": "hello@count.ly"
+  },
+  "source": {
+    "git": "https://github.com/Countly/countly-sdk-ios.git",
+    "commit": "2bf94518f04a7e531a25e34524c6ef140a435ce2"
+  },
+  "source_files": "*.{h,m}",
+  "requires_arc": false,
+  "platforms": {
+    "ios": "4.3"
+  },
+  "frameworks": "CoreTelephony"
+}

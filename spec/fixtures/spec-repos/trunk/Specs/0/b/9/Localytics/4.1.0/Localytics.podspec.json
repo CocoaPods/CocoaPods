@@ -1,0 +1,30 @@
+{
+  "name": "Localytics",
+  "version": "4.1.0",
+  "summary": "Localytics iOS SDK",
+  "description": "Localytics analytics and marketing platform",
+  "homepage": "http://www.localytics.com",
+  "license": {
+    "type": "Copyright",
+    "file": "Localytics-iOS-4.1.0/LICENSE"
+  },
+  "authors": {
+    "Char Software, Inc. d/b/a Localytics": "support@localytics.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "http": "http://downloads.localytics.com/SDKs/iOS/Localytics-iOS-4.1.0.dynamic.zip"
+  },
+  "vendored_frameworks": "Localytics-iOS-4.1.0/Localytics.framework",
+  "frameworks": [
+    "SystemConfiguration",
+    "AdSupport",
+    "CoreLocation"
+  ],
+  "libraries": [
+    "z",
+    "sqlite3"
+  ]
+}

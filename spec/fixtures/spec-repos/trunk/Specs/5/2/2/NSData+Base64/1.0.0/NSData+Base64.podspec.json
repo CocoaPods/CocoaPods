@@ -1,0 +1,19 @@
+{
+  "name": "NSData+Base64",
+  "version": "1.0.0",
+  "summary": "Base64 for NSData.",
+  "homepage": "https://github.com/l4u/NSData-Base64",
+  "authors": {
+    "Matt Gallagher": "matt@projectswithlove.com"
+  },
+  "source": {
+    "git": "https://github.com/l4u/NSData-Base64.git",
+    "tag": "1.0.0"
+  },
+  "source_files": "*.{h,m}",
+  "license": {
+    "type": "Zlib",
+    "text": "                  This software is provided 'as-is', without any express or implied\n                  warranty. In no event will the authors be held liable for any damages\n                  arising from the use of this software. Permission is granted to anyone to\n                  use this software for any purpose, including commercial applications, and to\n                  alter it and redistribute it freely, subject to the following restrictions:\n\n                  1. The origin of this software must not be misrepresented; you must not\n                     claim that you wrote the original software. If you use this software\n                     in a product, an acknowledgment in the product documentation would be\n                     appreciated but is not required.\n                  2. Altered source versions must be plainly marked as such, and must not be\n                     misrepresented as being the original software.\n                  3. This notice may not be removed or altered from any source\n                     distribution.\n"
+  },
+  "requires_arc": false
+}

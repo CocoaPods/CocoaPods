@@ -1,0 +1,20 @@
+{
+  "name": "A2DynamicDelegate",
+  "version": "1.0.5",
+  "license": "BSD",
+  "summary": "Blocks are to functions as A2DynamicDelegate is to delegates.",
+  "homepage": "https://github.com/pandamonia/A2DynamicDelegate",
+  "authors": {
+    "Alexsander Akers": "a2@pandamonia.us",
+    "Zachary Waldowski": "zwaldowski@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/pandamonia/A2DynamicDelegate.git",
+    "tag": "v1.0.5"
+  },
+  "source_files": [
+    "A2DynamicDelegate.{h,m}",
+    "A2BlockDelegate.{h,m}"
+  ],
+  "requires_arc": false
+}

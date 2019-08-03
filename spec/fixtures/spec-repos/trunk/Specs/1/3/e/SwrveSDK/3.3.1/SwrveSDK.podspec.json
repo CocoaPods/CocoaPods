@@ -1,0 +1,30 @@
+{
+  "name": "SwrveSDK",
+  "version": "3.3.1",
+  "summary": "iOS SDK for Swrve.",
+  "homepage": "http://www.swrve.com",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "LICENSE"
+  },
+  "authors": "Swrve Mobile Inc or its licensors",
+  "source": {
+    "git": "https://github.com/Swrve/swrve-ios-sdk.git",
+    "tag": "3.3.1"
+  },
+  "social_media_url": "https://twitter.com/Swrve_Inc",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": true,
+  "source_files": "Sdk/**/*.{m,h}",
+  "public_header_files": "Sdk/**/*.h",
+  "frameworks": [
+    "UIKit",
+    "QuartzCore",
+    "CFNetwork",
+    "StoreKit",
+    "Security",
+    "CoreTelephony"
+  ]
+}

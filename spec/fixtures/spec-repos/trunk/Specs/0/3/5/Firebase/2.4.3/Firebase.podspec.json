@@ -1,0 +1,41 @@
+{
+  "name": "Firebase",
+  "version": "2.4.3",
+  "summary": "The official iOS client library for Firebase.",
+  "description": "This is the official iOS client library for Firebase. Build extraordinary native iOS apps in minutes with Firebase. The Firebase platform can power your app’s backend, user authentication, static hosting, and more.",
+  "homepage": "https://www.firebase.com/",
+  "license": {
+    "type": "Commercial",
+    "text": "https://www.firebase.com/terms/terms-of-service.html"
+  },
+  "authors": {
+    "Firebase": "support@firebase.com"
+  },
+  "source": {
+    "http": "https://cdn.firebase.com/ObjC/Firebase.framework-2.4.3.zip"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": [
+    "Empty.m",
+    "*.h"
+  ],
+  "public_header_files": "*.h",
+  "preserve_paths": "Firebase.framework/Firebase",
+  "vendored_libraries": "libFirebaseStatic.a",
+  "prepare_command": "touch Empty.m && cp Firebase.framework/Firebase libFirebaseStatic.a && cp Firebase.framework/Headers/* .",
+  "frameworks": [
+    "CFNetwork",
+    "Security",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "icucore",
+    "c++"
+  ],
+  "requires_arc": true,
+  "xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  }
+}

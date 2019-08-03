@@ -1,0 +1,30 @@
+{
+  "name": "Bugsnag",
+  "version": "3.1.2",
+  "summary": "Cocoa notifier for SDK for bugsnag.com",
+  "homepage": "https://bugsnag.com",
+  "license": "MIT",
+  "authors": {
+    "Bugsnag": "notifiers@bugsnag.com"
+  },
+  "source": {
+    "git": "https://github.com/bugsnag/bugsnag-cocoa.git",
+    "tag": "3.1.2"
+  },
+  "source_files": [
+    "bugsnag/*.{h,m}"
+  ],
+  "requires_arc": true,
+  "frameworks": "SystemConfiguration",
+  "ios": {
+    "source_files": "bugsnag/iOS/*.{h,m}"
+  },
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.6"
+  },
+  "osx": {
+    "source_files": "bugsnag/OSX/*.{h,m}",
+    "frameworks": "ExceptionHandling"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Heap",
+  "version": "5.4.1",
+  "summary": "Capture everything - iOS analytics library for Heap.",
+  "description": "Heap is a modern take on analytics. There's no need to ship event tracking\ncode, no need to wait days or weeks for data to accumulate, no need to muddle\nyour codebase, and no need to fumble with rigid reports.\n\nFor the first time, meaningful product questions can be answered just as soon\nas they're asked.",
+  "homepage": "https://heapanalytics.com",
+  "documentation_url": "https://docs.heapanalytics.com/docs",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://heapanalytics.com/terms"
+  },
+  "authors": {
+    "Heap": "team@heapanalytics.com"
+  },
+  "source": {
+    "http": "https://cdn.heapanalytics.com/ios/heap-ios-5.4.1.zip",
+    "flatten": true
+  },
+  "social_media_url": "https://twitter.com/heap",
+  "source_files": "Heap.h",
+  "preserve_paths": [
+    "libHeap.a",
+    "CHANGELOG.md"
+  ],
+  "libraries": [
+    "Heap",
+    "icucore"
+  ],
+  "frameworks": [
+    "CFNetwork",
+    "Security",
+    "SystemConfiguration",
+    "UIKit"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Heap\""
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "6.0"
+  }
+}

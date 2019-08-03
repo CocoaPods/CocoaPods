@@ -1,0 +1,29 @@
+{
+  "name": "InstagramKit",
+  "version": "0.1.0",
+  "summary": "Objective C Instagram Engine",
+  "description": "  \n* A neat little blocks-based Objective C wrapper for the Instagram API.\n* It readily parses the JSON responses on a background thread and does the dirty work for you \nso you just have to deal with Instagram model objects. \n* Harnesses the power of AFNetworking under the hood.\n",
+  "homepage": "https://github.com/shyambhat/InstagramKit",
+  "license": "MIT",
+  "authors": {
+    "Shyam Bhat": "shyambhat@me.com"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source": {
+    "git": "https://github.com/shyambhat/InstagramKit.git",
+    "tag": "0.1.0"
+  },
+  "source_files": [
+    "InstagramKit",
+    "InstagramKit/**/*.{h,m}"
+  ],
+  "exclude_files": "InstagramKitDemo",
+  "requires_arc": true,
+  "dependencies": {
+    "AFNetworking": [
+      "~>1.3.3"
+    ]
+  }
+}

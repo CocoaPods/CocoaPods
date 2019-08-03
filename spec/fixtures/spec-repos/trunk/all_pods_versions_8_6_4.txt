@@ -1,0 +1,12 @@
+ASFoundation/0.0.1/0.0.2/0.0.3/0.0.4
+CROCOValidationForms/1.0.0/1.0.1
+CoviuSDKiOS/0.0.1/0.0.2/0.0.3/0.0.4/0.0.5/0.0.6/0.0.7
+DiagnosticReportGenerator/1.0.0/1.0.1
+GQURLDispatcher/0.1/0.2/0.3/0.4.1/0.4.3
+HFCardCollectionViewLayout/0.1/0.1.1/0.1.2/0.1.3/0.1.4/0.1.5/0.2/0.2.1/0.2.2/0.3/0.3.1/0.3.2/0.3.3/0.4.1/0.4.2
+KISSmetrics/1.0.0/1.1.3/1.2.0
+LARefresh/3.0.0/3.0.1
+SimulatorRemoteNotifications/0.0.1/0.0.2/0.0.3
+TTPayManager/0.0.1/0.0.2
+TestDemo_hu/0.0.1/0.0.2/0.0.3/0.0.4
+UIView+Add/0.0.1

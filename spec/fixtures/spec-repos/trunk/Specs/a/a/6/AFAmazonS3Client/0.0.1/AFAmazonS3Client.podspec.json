@@ -1,0 +1,26 @@
+{
+  "name": "AFAmazonS3Client",
+  "version": "0.0.1",
+  "summary": "AFNetworking Client for the Amazon S3 API.",
+  "description": "                    AFAmazonS3Client is an AFHTTPClient subclass for interacting with the Amazon S3 API.\n                    As the S3 API returns XML responses, you may find it useful to include AFKissXMLRequestOperation (just remember to do -registerHTTPOperationClass:)\n                    Caution: This code is still in its early stages of development, so exercise caution when incorporating this into production code.\n",
+  "homepage": "https://github.com/AFNetworking/AFAmazonS3Client",
+  "license": "MIT",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFAmazonS3Client.git",
+    "commit": "f092a1e960e628b07b1bfc2cc24a0d66eff55280"
+  },
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "source_files": "*.{h,m}",
+  "dependencies": {
+    "AFNetworking": [
+      "~> 1.0RC1"
+    ]
+  },
+  "requires_arc": false
+}

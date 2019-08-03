@@ -1,0 +1,255 @@
+{
+  "name": "Parse",
+  "version": "1.17.0-alpha.1",
+  "license": {
+    "type": "BSD",
+    "file": "LICENSE"
+  },
+  "homepage": "http://parseplatform.org/",
+  "summary": "A library that gives you access to the powerful Parse cloud platform from your iOS/OS X/watchOS/tvOS app.",
+  "authors": "Parse Community",
+  "social_media_url": "https://twitter.com/ParsePlatform",
+  "source": {
+    "git": "https://github.com/parse-community/Parse-SDK-iOS-OSX.git",
+    "tag": "1.17.0-alpha.1"
+  },
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9",
+    "tvos": "9.0",
+    "watchos": "2.0"
+  },
+  "default_subspecs": "Core",
+  "prepare_command": "ruby ParseUI/Scripts/convert_images.rb         ParseUI/Resources/Images/         ParseUI/Generated/PFResources",
+  "subspecs": [
+    {
+      "name": "Core",
+      "requires_arc": true,
+      "source_files": [
+        "Parse/Parse/*.{h,m}",
+        "Parse/Parse/Internal/**/*.{h,m}"
+      ],
+      "public_header_files": "Parse/Parse/*.h",
+      "ios": {
+        "exclude_files": "Parse/Parse/Internal/PFMemoryEventuallyQueue.{h,m}",
+        "frameworks": [
+          "AudioToolbox",
+          "CFNetwork",
+          "CoreGraphics",
+          "CoreLocation",
+          "QuartzCore",
+          "Security",
+          "StoreKit",
+          "SystemConfiguration"
+        ],
+        "weak_frameworks": [
+          "Accounts",
+          "Social"
+        ]
+      },
+      "osx": {
+        "exclude_files": [
+          "Parse/Parse/PFNetworkActivityIndicatorManager.{h,m}",
+          "Parse/Parse/PFProduct.{h,m}",
+          "Parse/Parse/PFPurchase.{h,m}",
+          "Parse/Parse/Internal/PFAlertView.{h,m}",
+          "Parse/Parse/Internal/Product/**/*.{h,m}",
+          "Parse/Parse/Internal/Purchase/**/*.{h,m}",
+          "Parse/Parse/Internal/PFMemoryEventuallyQueue.{h,m}"
+        ],
+        "frameworks": [
+          "ApplicationServices",
+          "CFNetwork",
+          "CoreGraphics",
+          "CoreLocation",
+          "QuartzCore",
+          "Security",
+          "SystemConfiguration"
+        ]
+      },
+      "tvos": {
+        "exclude_files": [
+          "Parse/Parse/PFNetworkActivityIndicatorManager.{h,m}",
+          "Parse/Parse/PFPush.{h,m}",
+          "Parse/Parse/PFPush+Synchronous.{h,m}",
+          "Parse/Parse/PFPush+Deprecated.{h,m}",
+          "Parse/Parse/PFInstallation.{h,m}",
+          "Parse/Parse/Internal/PFAlertView.{h,m}",
+          "Parse/Parse/Internal/Push/**/*.{h,m}",
+          "Parse/Parse/Internal/Installation/Controller/*.{h,m}",
+          "Parse/Parse/Internal/Installation/Constants/*.{h,m}",
+          "Parse/Parse/Internal/Installation/CurrentInstallationController/*.{h,m}",
+          "Parse/Parse/Internal/Installation/PFInstallationPrivate.h",
+          "Parse/Parse/Internal/Commands/PFRESTPushCommand.{h,m}"
+        ],
+        "frameworks": [
+          "CoreLocation",
+          "StoreKit",
+          "SystemConfiguration",
+          "Security"
+        ]
+      },
+      "watchos": {
+        "exclude_files": [
+          "Parse/Parse/PFNetworkActivityIndicatorManager.{h,m}",
+          "Parse/Parse/PFProduct.{h,m}",
+          "Parse/Parse/PFPurchase.{h,m}",
+          "Parse/Parse/PFPush.{h,m}",
+          "Parse/Parse/PFPush+Synchronous.{h,m}",
+          "Parse/Parse/PFPush+Deprecated.{h,m}",
+          "Parse/Parse/PFInstallation.{h,m}",
+          "Parse/Parse/Internal/PFAlertView.{h,m}",
+          "Parse/Parse/Internal/PFReachability.{h,m}",
+          "Parse/Parse/Internal/Product/**/*.{h,m}",
+          "Parse/Parse/Internal/Purchase/**/*.{h,m}",
+          "Parse/Parse/Internal/Push/**/*.{h,m}",
+          "Parse/Parse/Internal/Installation/Controller/*.{h,m}",
+          "Parse/Parse/Internal/Installation/Constants/*.{h,m}",
+          "Parse/Parse/Internal/Installation/CurrentInstallationController/*.{h,m}",
+          "Parse/Parse/Internal/Installation/PFInstallationPrivate.h",
+          "Parse/Parse/Internal/Commands/PFRESTPushCommand.{h,m}",
+          "Parse/Parse/Internal/PFMemoryEventuallyQueue.{h,m}"
+        ]
+      },
+      "resource_bundles": {
+        "Parse": "Parse/Parse/Resources/en.lproj"
+      },
+      "libraries": [
+        "z",
+        "sqlite3"
+      ],
+      "dependencies": {
+        "Bolts/Tasks": [
+          "~> 1.9"
+        ]
+      }
+    },
+    {
+      "name": "FacebookUtils",
+      "platforms": {
+        "ios": "9.0",
+        "tvos": "9.0"
+      },
+      "public_header_files": "ParseFacebookUtils/ParseFacebookUtils/*.h",
+      "source_files": "ParseFacebookUtils/ParseFacebookUtils/**/*.{h,m}",
+      "exclude_files": "ParseFacebookUtils/ParseFacebookUtils/ParseFacebookUtilsV4.h",
+      "ios": {
+        "exclude_files": "ParseFacebookUtils/ParseFacebookUtils/Internal/AuthenticationProvider/tvOS/**/*.{h,m}",
+        "weak_frameworks": [
+          "Accounts",
+          "Social"
+        ],
+        "dependencies": {
+          "FBSDKLoginKit": [
+            "~> 4.28.0"
+          ]
+        }
+      },
+      "tvos": {
+        "exclude_files": "ParseFacebookUtils/ParseFacebookUtils/Internal/AuthenticationProvider/iOS/**/*.{h,m}",
+        "dependencies": {
+          "FBSDKTVOSKit": [
+            "~> 4.28.0"
+          ],
+          "FBSDKShareKit": [
+            "~> 4.28.0"
+          ]
+        }
+      },
+      "frameworks": [
+        "AudioToolbox",
+        "CFNetwork",
+        "CoreGraphics",
+        "CoreLocation",
+        "QuartzCore",
+        "Security",
+        "SystemConfiguration"
+      ],
+      "libraries": [
+        "z",
+        "sqlite3"
+      ],
+      "dependencies": {
+        "Parse/Core": [
+
+        ],
+        "FBSDKCoreKit": [
+          "~> 4.28.0"
+        ]
+      }
+    },
+    {
+      "name": "TwitterUtils",
+      "platforms": {
+        "ios": "8.0"
+      },
+      "public_header_files": "ParseTwitterUtils/ParseTwitterUtils/*.h",
+      "source_files": "ParseTwitterUtils/ParseTwitterUtils/**/*.{h,m}",
+      "exclude_files": "ParseTwitterUtils/ParseTwitterUtils/ParseTwitterUtils.h",
+      "resource_bundles": {
+        "TwitterUtils": "ParseTwitterUtils/Resources/en.lproj"
+      },
+      "frameworks": [
+        "AudioToolbox",
+        "CFNetwork",
+        "CoreGraphics",
+        "CoreLocation",
+        "QuartzCore",
+        "Security",
+        "StoreKit",
+        "SystemConfiguration"
+      ],
+      "weak_frameworks": [
+        "Accounts",
+        "Social"
+      ],
+      "libraries": [
+        "z",
+        "sqlite3"
+      ],
+      "dependencies": {
+        "Parse/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "UI",
+      "platforms": {
+        "ios": "9.0"
+      },
+      "requires_arc": true,
+      "source_files": "ParseUI/**/*.{h,m}",
+      "exclude_files": [
+        "ParseUI/ParseUIDemo/**/*",
+        "ParseUI/Other/ParseUI.h"
+      ],
+      "public_header_files": [
+        "ParseUI/Classes/LogInViewController/*.h",
+        "ParseUI/Classes/SignUpViewController/*.h",
+        "ParseUI/Classes/QueryTableViewController/*.h",
+        "ParseUI/Classes/QueryCollectionViewController/*.h",
+        "ParseUI/Classes/ProductTableViewController/*.h",
+        "ParseUI/Classes/Views/*.h",
+        "ParseUI/Classes/Cells/*.h",
+        "ParseUI/Other/*.h"
+      ],
+      "resource_bundles": {
+        "ParseUI": [
+          "ParseUI/Resources/Localization/*.lproj"
+        ]
+      },
+      "frameworks": [
+        "Foundation",
+        "UIKit",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "dependencies": {
+        "Parse/Core": [
+
+        ]
+      }
+    }
+  ]
+}

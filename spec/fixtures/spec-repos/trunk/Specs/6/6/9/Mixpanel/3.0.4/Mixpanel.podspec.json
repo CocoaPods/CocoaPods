@@ -1,0 +1,175 @@
+{
+  "name": "Mixpanel",
+  "version": "3.0.4",
+  "summary": "iPhone tracking library for Mixpanel Analytics",
+  "homepage": "https://mixpanel.com",
+  "license": "Apache License, Version 2.0",
+  "authors": {
+    "Mixpanel, Inc": "support@mixpanel.com"
+  },
+  "source": {
+    "git": "https://github.com/mixpanel/mixpanel-iphone.git",
+    "tag": "v3.0.4"
+  },
+  "requires_arc": true,
+  "default_subspecs": "Mixpanel",
+  "platforms": {
+    "ios": "8.0",
+    "tvos": "9.0",
+    "watchos": "2.0",
+    "osx": ""
+  },
+  "subspecs": [
+    {
+      "name": "Mixpanel",
+      "source_files": "Mixpanel/**/*.{m,h}",
+      "exclude_files": [
+        "Mixpanel/MixpanelWatchOS.{m,h}",
+        "Mixpanel/Mixpanel+HostWatchOS.{m,h}"
+      ],
+      "private_header_files": [
+        "Mixpanel/MixpanelPrivate.h",
+        "Mixpanel/MixpanelPeoplePrivate.h",
+        "Mixpanel/MPNetworkPrivate.h",
+        "Mixpanel/MPLogger.h"
+      ],
+      "resources": [
+        "Mixpanel/**/*.{png,storyboard}"
+      ],
+      "frameworks": [
+        "UIKit",
+        "Foundation",
+        "SystemConfiguration",
+        "CoreTelephony",
+        "Accelerate",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "libraries": "icucore",
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "MixpanelHostWatchOS",
+      "source_files": [
+        "Mixpanel/**/*.{m,h}",
+        "Mixpanel/**/*.swift"
+      ],
+      "exclude_files": "Mixpanel/MixpanelWatchOS.{m,h}",
+      "private_header_files": [
+        "Mixpanel/MixpanelPrivate.h",
+        "Mixpanel/MixpanelPeoplePrivate.h",
+        "Mixpanel/MPNetworkPrivate.h",
+        "Mixpanel/MPLogger.h"
+      ],
+      "resources": [
+        "Mixpanel/**/*.{png,storyboard}"
+      ],
+      "frameworks": [
+        "WatchConnectivity",
+        "WatchKit",
+        "UIKit",
+        "Foundation",
+        "SystemConfiguration",
+        "CoreTelephony",
+        "Accelerate",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "libraries": "icucore",
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "tvOS",
+      "source_files": [
+        "Mixpanel/NSInvocation+MPHelpers.{m,h}",
+        "Mixpanel/UIColor+MPColor.{m,h}",
+        "Mixpanel/MixpanelPrivate.h",
+        "Mixpanel/MixpanelPeoplePrivate.h",
+        "Mixpanel/Mixpanel.{m,h}",
+        "Mixpanel/UIImage+MPAverageColor.{m,h}",
+        "Mixpanel/MPNetwork.{m,h}",
+        "Mixpanel/MixpanelExceptionHandler.{m,h}",
+        "Mixpanel/UIImage+MPImageEffects.{m,h}",
+        "Mixpanel/MixpanelPeople.{m,h}",
+        "Mixpanel/MPLogger.h",
+        "Mixpanel/MPNetworkPrivate.h",
+        "Mixpanel/MPFoundation.h"
+      ],
+      "private_header_files": [
+        "Mixpanel/MixpanelPrivate.h",
+        "Mixpanel/MixpanelPeoplePrivate.h",
+        "Mixpanel/MPNetworkPrivate.h",
+        "Mixpanel/MPLogger.h"
+      ],
+      "frameworks": [
+        "UIKit",
+        "Foundation",
+        "SystemConfiguration",
+        "Accelerate",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) MIXPANEL_TVOS_EXTENSION"
+      },
+      "libraries": "icucore",
+      "platforms": {
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "WatchOS",
+      "source_files": [
+        "Mixpanel/MixpanelWatchOS.{m,h}",
+        "Mixpanel/MPLogger.h"
+      ],
+      "private_header_files": "Mixpanel/MPLogger.h",
+      "frameworks": [
+        "WatchConnectivity",
+        "Foundation"
+      ],
+      "platforms": {
+        "watchos": "2.0"
+      }
+    },
+    {
+      "name": "AppExtension",
+      "source_files": [
+        "Mixpanel/Mixpanel.{m,h}",
+        "Mixpanel/MixpanelPrivate.h",
+        "Mixpanel/MixpanelPeople.{h,m}",
+        "Mixpanel/MixpanelPeoplePrivate.h",
+        "Mixpanel/MPNetwork.{h,m}",
+        "Mixpanel/MPNetworkPrivate.h",
+        "Mixpanel/MPLogger.h",
+        "Mixpanel/MPFoundation.h",
+        "Mixpanel/Mixpanel+AutomaticEvents.h",
+        "Mixpanel/AutomaticEventsConstants.h"
+      ],
+      "private_header_files": [
+        "Mixpanel/MixpanelPrivate.h",
+        "Mixpanel/MixpanelPeoplePrivate.h",
+        "Mixpanel/MPNetworkPrivate.h",
+        "Mixpanel/MPLogger.h"
+      ],
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) MIXPANEL_APP_EXTENSION"
+      },
+      "frameworks": [
+        "UIKit",
+        "Foundation",
+        "Accelerate",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "libraries": "icucore",
+      "platforms": {
+        "ios": "8.0"
+      }
+    }
+  ]
+}

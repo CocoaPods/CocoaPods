@@ -1,0 +1,146 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "3.13.0",
+  "summary": "This is the Braze iOS SDK for Mobile Marketing Automation",
+  "homepage": "http://www.braze.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.braze.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "3.13.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "requires_arc": true,
+  "documentation_url": "http://documentation.braze.com/",
+  "exclude_files": "AppboyKit/**/*.txt",
+  "preserve_paths": "AppboyKit/**/*.*",
+  "pod_target_xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  },
+  "default_subspecs": "UI",
+  "subspecs": [
+    {
+      "name": "Core",
+      "ios": {
+        "libraries": "z"
+      },
+      "frameworks": [
+        "SystemConfiguration",
+        "QuartzCore",
+        "CoreText",
+        "WebKit"
+      ],
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/ABKIdentifierForAdvertisingProvider.m",
+        "AppboyKit/ABKModalWebViewController.m",
+        "AppboyKit/ABKNoConnectionLocalization.m",
+        "AppboyKit/ABKLocationManagerProvider.m"
+      ],
+      "resources": "AppboyKit/Appboy.bundle",
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "weak_frameworks": [
+        "CoreTelephony",
+        "Social",
+        "Accounts",
+        "AdSupport",
+        "UserNotifications"
+      ]
+    },
+    {
+      "name": "UI",
+      "dependencies": {
+        "Appboy-iOS-SDK/NewsFeed": [
+
+        ],
+        "Appboy-iOS-SDK/Feedback": [
+
+        ],
+        "Appboy-iOS-SDK/InAppMessage": [
+
+        ],
+        "Appboy-iOS-SDK/ContentCards": [
+
+        ],
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Feedback",
+      "source_files": [
+        "AppboyUI/ABKFeedback/ViewControllers/*.*",
+        "AppboyUI/ABKFeedback/AppboyFeedback.h",
+        "AppboyUI/ABKUIUtils/**/*.*"
+      ],
+      "resources": "AppboyUI/ABKFeedback/Resources/**/*.*",
+      "dependencies": {
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "NewsFeed",
+      "source_files": [
+        "AppboyUI/ABKNewsFeed/*.*",
+        "AppboyUI/ABKNewsFeed/ViewControllers/**/*.*",
+        "AppboyUI/ABKUIUtils/**/*.*",
+        "AppboyKit/ABKSDWebImageProxy.m"
+      ],
+      "resources": "AppboyUI/ABKNewsFeed/Resources/**/*.*",
+      "dependencies": {
+        "Appboy-iOS-SDK/Core": [
+
+        ],
+        "SDWebImage/GIF": [
+          "~>4.0"
+        ]
+      }
+    },
+    {
+      "name": "InAppMessage",
+      "source_files": [
+        "AppboyUI/ABKUIUtils/**/*.*",
+        "AppboyUI/ABKInAppMessage/*.*",
+        "AppboyUI/ABKInAppMessage/ViewControllers/*.*",
+        "AppboyKit/ABKSDWebImageProxy.m"
+      ],
+      "resources": "AppboyUI/ABKInAppMessage/Resources/*.*",
+      "dependencies": {
+        "Appboy-iOS-SDK/Core": [
+
+        ],
+        "SDWebImage/GIF": [
+          "~>4.0"
+        ]
+      }
+    },
+    {
+      "name": "ContentCards",
+      "source_files": [
+        "AppboyUI/ABKContentCards/*.*",
+        "AppboyUI/ABKContentCards/ViewControllers/**/*.*",
+        "AppboyUI/ABKUIUtils/**/*.*",
+        "AppboyKit/ABKSDWebImageProxy.m"
+      ],
+      "resources": "AppboyUI/ABKContentCards/Resources/**/*.*",
+      "dependencies": {
+        "Appboy-iOS-SDK/Core": [
+
+        ],
+        "SDWebImage/GIF": [
+          "~>4.0"
+        ]
+      }
+    }
+  ]
+}

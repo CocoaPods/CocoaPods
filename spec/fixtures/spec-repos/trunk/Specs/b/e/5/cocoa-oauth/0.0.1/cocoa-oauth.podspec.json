@@ -1,0 +1,21 @@
+{
+  "name": "cocoa-oauth",
+  "version": "0.0.1",
+  "license": "BSD",
+  "summary": "Cocoa library for creating signed requests according to the OAuth 1.0a standard.",
+  "homepage": "https://github.com/guicocoa/cocoa-oauth",
+  "authors": {
+    "Caleb Davenport": "caleb@guicocoa.com"
+  },
+  "source": {
+    "git": "https://github.com/guicocoa/cocoa-oauth.git",
+    "commit": "51b2db258219d200a7cf968587c15777f0f63be6"
+  },
+  "source_files": "GCOAuth.{h,m}",
+  "dependencies": {
+    "NSData+Base64": [
+      "~> 1.0"
+    ]
+  },
+  "requires_arc": false
+}

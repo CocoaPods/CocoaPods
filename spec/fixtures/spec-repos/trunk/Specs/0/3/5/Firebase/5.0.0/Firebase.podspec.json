@@ -1,0 +1,241 @@
+{
+  "authors": "Google, Inc.",
+  "default_subspecs": [
+    "Core"
+  ],
+  "description": "Simplify your iOS development, grow your user base, and monetize more effectively with Firebase.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "text": "Copyright 2018 Google",
+    "type": "Copyright"
+  },
+  "name": "Firebase",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "preserve_paths": [
+    ".cocoapods.yml",
+    "CHANGELOG.md",
+    "NOTICES",
+    "README.md"
+  ],
+  "source": {
+    "http": "https://dl.google.com/dl/cpdc/81a4965e144d75b6/Firebase-5.0.0.tar.gz"
+  },
+  "summary": "Firebase for iOS",
+  "version": "5.0.0",
+  "subspecs": [
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseAnalytics": "5.0.0"
+      },
+      "name": "Core"
+    },
+    {
+      "dependencies": {
+        "FirebaseCore": "5.0.0"
+      },
+      "name": "CoreOnly",
+      "preserve_paths": [
+        "CoreOnly/Sources/module.modulemap"
+      ],
+      "source_files": [
+        "CoreOnly/Sources/Firebase.h"
+      ],
+      "user_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "$(inherited) ${PODS_ROOT}/Firebase/CoreOnly/Sources"
+      }
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ]
+      },
+      "name": "Analytics"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "Google-Mobile-Ads-SDK": "7.30.0"
+      },
+      "name": "AdMob"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseABTesting": "2.0.0"
+      },
+      "name": "ABTesting"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseCrash": "3.0.0"
+      },
+      "name": "Crash"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseDynamicLinks": "3.0.0"
+      },
+      "name": "DynamicLinks"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseInvites": "3.0.0"
+      },
+      "name": "Invites"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLCommon": "0.9.0"
+      },
+      "name": "MLCommon"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLModelInterpreter": "0.9.0"
+      },
+      "name": "MLModelInterpreter"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVision": "0.9.0"
+      },
+      "name": "MLVision"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionBarcodeModel": "0.9.0"
+      },
+      "name": "MLVisionBarcodeModel"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionFaceModel": "0.9.0"
+      },
+      "name": "MLVisionFaceModel"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionLabelModel": "0.9.0"
+      },
+      "name": "MLVisionLabelModel"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMLVisionTextModel": "0.9.0"
+      },
+      "name": "MLVisionTextModel"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebasePerformance": "2.0.0"
+      },
+      "name": "Performance"
+    },
+    {
+      "dependencies": {
+        "Firebase/Core": [
+
+        ],
+        "FirebaseRemoteConfig": "3.0.0"
+      },
+      "name": "RemoteConfig"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseAuth": "5.0.0"
+      },
+      "name": "Auth"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseDatabase": "5.0.0"
+      },
+      "name": "Database"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseFirestore": "0.12.0"
+      },
+      "name": "Firestore"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseFunctions": "2.0.0"
+      },
+      "name": "Functions"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseMessaging": "3.0.0"
+      },
+      "name": "Messaging"
+    },
+    {
+      "dependencies": {
+        "Firebase/CoreOnly": [
+
+        ],
+        "FirebaseStorage": "3.0.0"
+      },
+      "name": "Storage"
+    }
+  ]
+}

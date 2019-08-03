@@ -1,0 +1,43 @@
+{
+  "authors": "Twitter",
+  "homepage": "https://fabric.io",
+  "license": {
+    "text": "Fabric: Copyright 2016 Twitter, Inc. All Rights Reserved. Use of this software is subject to the terms and conditions of the Fabric Software and Services Agreement located at https://fabric.io/terms. OSS: http://get.fabric.io/terms/opensource.txt",
+    "type": "Commercial"
+  },
+  "name": "Fabric",
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.7",
+    "tvos": "9.0"
+  },
+  "preserve_paths": [
+    "uploadDSYM",
+    "run",
+    "upload-symbols",
+    "Fabric.framework/*"
+  ],
+  "requires_arc": true,
+  "source": {
+    "http": "https://kit-downloads.fabric.io/cocoapods/fabric/1.6.10/fabric.zip"
+  },
+  "summary": "Fabric by Twitter, Inc.",
+  "version": "1.6.10",
+  "ios": {
+    "source_files": "iOS/Fabric.framework/Headers/*.h",
+    "public_header_files": "iOS/Fabric.framework/Headers/*.h",
+    "vendored_frameworks": "iOS/Fabric.framework",
+    "frameworks": "UIKit"
+  },
+  "osx": {
+    "source_files": "OSX/Fabric.framework/Versions/A/Headers/*.h",
+    "public_header_files": "OSX/Fabric.framework/Versions/A/Headers/*.h",
+    "vendored_frameworks": "OSX/Fabric.framework"
+  },
+  "tvos": {
+    "source_files": "tvOS/Fabric.framework/Headers/*.h",
+    "public_header_files": "tvOS/Fabric.framework/Headers/*.h",
+    "vendored_frameworks": "tvOS/Fabric.framework",
+    "frameworks": "UIKit"
+  }
+}

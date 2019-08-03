@@ -1,0 +1,15 @@
+AyGridView/0.0.1/0.0.2
+BaiduBCEPlayerLSS/1.6.1/1.6.2/1.6.3/1.6.3.1/1.6.4/1.6.5/2.0.0/2.0.1/2.1.0/2.1.1/2.2.1/2.2.2/2.2.4/2.2.5/2.2.6/2.2.8/2.2.9/2.3.0
+CHParallaxHeaderView/1.0.0/1.0.1/1.0.2/1.1.1
+DroiFeedbackSDK/0.1.3/0.1.8/1.0.1
+FileMD5Hash/0.0.1/2.0.0
+IFLYMSCC/1.0.7/1.1.0/1.1.1/1.1.3/1.1.4
+JIMEnvironments/1.0.0/1.0.1
+JxbPickTool/1.0
+RatingControl/4.0/4.0.1
+SugarLumpFoundation/0.0.1/0.0.2/0.0.3
+SwiftyGraph/0.1/0.2/0.3
+TPLMaps/0.1/1.0/1.2/1.3.1/1.3.3/1.4/1.5
+WMAlertController/0.1.0/0.2.0/0.3.0
+WZZSecret/1.0.4/1.0.5
+YMValidator/0.1.0/0.2.0/0.2.1

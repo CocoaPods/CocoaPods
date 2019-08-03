@@ -1,0 +1,148 @@
+{
+  "name": "RestKit",
+  "version": "0.10.0",
+  "summary": "RestKit is a framework for consuming and modeling RESTful web resources on iOS and OS X.",
+  "homepage": "http://www.restkit.org",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/RestKit/RestKit.git",
+    "tag": "v0.10.0"
+  },
+  "license": "Apache License, Version 2.0",
+  "source_files": "Code/RestKit.h",
+  "default_subspecs": [
+    "JSON"
+  ],
+  "requires_arc": false,
+  "subspecs": [
+    {
+      "name": "JSON",
+      "dependencies": {
+        "RestKit/Network": [
+
+        ],
+        "RestKit/ObjectMapping/JSON": [
+
+        ],
+        "RestKit/ObjectMapping/CoreData": [
+
+        ],
+        "RestKit/UI": [
+
+        ]
+      }
+    },
+    {
+      "name": "XML",
+      "dependencies": {
+        "RestKit/Network": [
+
+        ],
+        "RestKit/ObjectMapping/XML": [
+
+        ],
+        "RestKit/ObjectMapping/CoreData": [
+
+        ],
+        "RestKit/UI": [
+
+        ]
+      }
+    },
+    {
+      "name": "Network",
+      "source_files": [
+        "Code/Network",
+        "Code/Support"
+      ],
+      "ios": {
+        "frameworks": [
+          "CFNetwork",
+          "Security",
+          "MobileCoreServices",
+          "SystemConfiguration"
+        ]
+      },
+      "osx": {
+        "frameworks": [
+          "CoreServices",
+          "Security",
+          "SystemConfiguration"
+        ]
+      },
+      "dependencies": {
+        "LibComponentLogging-NSLog": [
+          ">= 1.0.4"
+        ],
+        "cocoa-oauth": [
+
+        ],
+        "FileMD5Hash": [
+
+        ],
+        "SOCKit": [
+
+        ]
+      }
+    },
+    {
+      "name": "UI",
+      "ios": {
+        "source_files": "Code/UI",
+        "frameworks": "QuartzCore",
+        "dependencies": {
+          "UDTableView": [
+
+          ]
+        }
+      },
+      "osx": {
+        "source_files": "Code/UI/UIImage+RKAdditions.{h,m}"
+      }
+    },
+    {
+      "name": "ObjectMapping",
+      "source_files": "Code/ObjectMapping",
+      "dependencies": {
+        "ISO8601DateFormatter": [
+          ">= 0.6"
+        ],
+        "RestKit/Network": [
+
+        ]
+      },
+      "subspecs": [
+        {
+          "name": "JSON",
+          "source_files": "Code/Support/Parsers/JSON/RKJSONParserJSONKit.{h,m}",
+          "dependencies": {
+            "JSONKit": [
+              ">= 1.5pre"
+            ]
+          }
+        },
+        {
+          "name": "XML",
+          "source_files": "Code/Support/Parsers/XML/RKXMLParserXMLReader.{h,m}",
+          "libraries": "xml2",
+          "dependencies": {
+            "XMLReader": [
+
+            ]
+          }
+        },
+        {
+          "name": "CoreData",
+          "source_files": "Code/CoreData",
+          "frameworks": "CoreData"
+        }
+      ]
+    },
+    {
+      "name": "Testing",
+      "source_files": "Code/Testing"
+    }
+  ]
+}

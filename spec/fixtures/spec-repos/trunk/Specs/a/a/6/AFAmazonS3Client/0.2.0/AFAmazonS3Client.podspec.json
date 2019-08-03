@@ -1,0 +1,21 @@
+{
+  "name": "AFAmazonS3Client",
+  "version": "0.2.0",
+  "summary": "AFNetworking Client for the Amazon S3 API.",
+  "homepage": "https://github.com/AFNetworking/AFAmazonS3Client",
+  "license": "MIT",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFAmazonS3Client.git",
+    "tag": "0.2.0"
+  },
+  "source_files": "AFAmazonS3Client",
+  "requires_arc": true,
+  "dependencies": {
+    "AFNetworking": [
+      "~> 1.0"
+    ]
+  }
+}

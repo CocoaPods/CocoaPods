@@ -1,0 +1,99 @@
+{
+  "name": "BlocksKit",
+  "version": "2.2.3",
+  "license": "MIT",
+  "summary": "The Objective-C block utilities you always wish you had.",
+  "homepage": "https://zwaldowski.github.io/BlocksKit",
+  "authors": {
+    "Zachary Waldowski": "zach@waldowski.me",
+    "Alexsander Akers": "a2@pnd.mn"
+  },
+  "source": {
+    "git": "https://github.com/zwaldowski/BlocksKit.git",
+    "tag": "v2.2.3"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "osx": "10.8",
+    "ios": "6.0"
+  },
+  "default_subspecs": [
+    "All"
+  ],
+  "subspecs": [
+    {
+      "name": "All",
+      "dependencies": {
+        "BlocksKit/Core": [
+
+        ],
+        "BlocksKit/DynamicDelegate": [
+
+        ]
+      },
+      "ios": {
+        "dependencies": {
+          "BlocksKit/MessageUI": [
+
+          ],
+          "BlocksKit/UIKit": [
+
+          ]
+        }
+      }
+    },
+    {
+      "name": "Core",
+      "source_files": [
+        "BlocksKit/BlocksKit.h",
+        "BlocksKit/Core/*.{h,m}"
+      ]
+    },
+    {
+      "name": "DynamicDelegate",
+      "source_files": [
+        "BlocksKit/DynamicDelegate/*.{h,m}",
+        "BlocksKit/DynamicDelegate/Foundation/*.{h,m}"
+      ]
+    },
+    {
+      "name": "MessageUI",
+      "dependencies": {
+        "BlocksKit/Core": [
+
+        ],
+        "BlocksKit/DynamicDelegate": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      },
+      "source_files": [
+        "BlocksKit/BlocksKit+MessageUI.h",
+        "BlocksKit/MessageUI/*.{h,m}"
+      ],
+      "ios": {
+        "frameworks": "MessageUI"
+      }
+    },
+    {
+      "name": "UIKit",
+      "dependencies": {
+        "BlocksKit/Core": [
+
+        ],
+        "BlocksKit/DynamicDelegate": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      },
+      "source_files": [
+        "BlocksKit/BlocksKit+UIKit.h",
+        "BlocksKit/UIKit/*.{h,m}"
+      ]
+    }
+  ]
+}

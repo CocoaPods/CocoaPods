@@ -1,0 +1,52 @@
+{
+  "name": "GoogleUtilities",
+  "version": "1.2.0",
+  "summary": "Shared utility methods for Google libraries. Not intended for direct use.",
+  "description": "Utility methods that are shared between Google libraries. This pod does not expose any headers and isn't intended for direct use, but rather as a dependency of some Google libraries.",
+  "homepage": "https://developers.google.com/",
+  "license": {
+    "type": "Copyright",
+    "text": "Copyright 2015 Google Inc."
+  },
+  "authors": "Google Inc.",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "vendored_libraries": [
+    "Libraries/libGTM_iPhone_external.a",
+    "Libraries/libGTM_core_external.a",
+    "Libraries/libGTM_UIFont+LineHeight_external.a",
+    "Libraries/libGTM_SystemVersion_external.a",
+    "Libraries/libGTM_StringEncoding_external.a",
+    "Libraries/libGTM_RoundedRectPath_external.a",
+    "Libraries/libGTM_Regex_external.a",
+    "Libraries/libGTM_NSStringXML_external.a",
+    "Libraries/libGTM_NSStringHTML_external.a",
+    "Libraries/libGTM_NSScannerJSON_external.a",
+    "Libraries/libGTM_NSDictionary+URLArguments_external.a",
+    "Libraries/libGTM_NSData+zlib_external.a",
+    "Libraries/libGTM_KVO_external.a",
+    "Libraries/libGTM_GTMURLBuilder_external.a",
+    "Libraries/libGTM_DebugUtils_external.a",
+    "Libraries/libGTM_AddressBook_external.a",
+    "Libraries/libGTMStackTrace_external.a"
+  ],
+  "source_files": [
+
+  ],
+  "frameworks": [
+    "AddressBook",
+    "CoreGraphics"
+  ],
+  "libraries": [
+    "z"
+  ],
+  "dependencies": {
+    "GoogleSymbolUtilities": [
+      "~> 1.0"
+    ]
+  },
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/5a907179e75e34cf-GoogleUtilities-1.2.0.tar.gz"
+  }
+}

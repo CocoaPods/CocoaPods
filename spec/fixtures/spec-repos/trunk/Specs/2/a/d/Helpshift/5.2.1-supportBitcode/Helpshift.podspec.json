@@ -1,0 +1,54 @@
+{
+  "name": "Helpshift",
+  "version": "5.2.1-supportBitcode",
+  "summary": "Customer service helpdesk for mobile applications.",
+  "license": {
+    "type": "Commercial",
+    "text": "See http://www.helpshift.com/terms/"
+  },
+  "homepage": "http://www.helpshift.com/",
+  "authors": {
+    "Helpshift": "support@helpshift.com"
+  },
+  "source": {
+    "http": "https://d3e51fp79zp4el.cloudfront.net/library/ios/v5.2/helpshift-sdk-ios-v5.2.1-support.zip"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "helpshift-sdk-ios-v5.2.1-support/*.h",
+  "resources": [
+    "helpshift-sdk-ios-v5.2.1-support/HelpshiftAssetCatalog.xcassets",
+    "helpshift-sdk-ios-v5.2.1-support/HSLocalization/*.lproj",
+    "helpshift-sdk-ios-v5.2.1-support/HSThemes/*.plist"
+  ],
+  "preserve_paths": [
+    "helpshift-sdk-ios-v5.2.1-support/libSupport-bitcode.a",
+    "helpshift-sdk-ios-v5.2.1-support/HSLocalization/*.lproj",
+    "helpshift-sdk-ios-v5.2.1-support/HSThemes/*.plist",
+    "helpshift-sdk-ios-v5.2.1-support/HelpshiftAssetCatalog.xcassets"
+  ],
+  "frameworks": [
+    "CoreGraphics",
+    "QuartzCore",
+    "CoreText",
+    "SystemConfiguration",
+    "CoreTelephony",
+    "Foundation",
+    "UIKit",
+    "Security",
+    "QuickLook",
+    "MobileCoreServices",
+    "CoreSpotlight"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "z",
+    "Support-bitcode"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Helpshift/helpshift-sdk-ios-v5.2.1-support\""
+  },
+  "documentation_url": "http://developers.helpshift.com/ios/",
+  "requires_arc": false
+}

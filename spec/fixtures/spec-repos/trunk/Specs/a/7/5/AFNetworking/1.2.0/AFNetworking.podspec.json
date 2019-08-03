@@ -1,0 +1,34 @@
+{
+  "name": "AFNetworking",
+  "version": "1.2.0",
+  "license": "MIT",
+  "summary": "A delightful iOS and OS X networking framework.",
+  "homepage": "https://github.com/AFNetworking/AFNetworking",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me",
+    "Scott Raymond": "sco@gowalla.com"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFNetworking.git",
+    "tag": "1.2.0"
+  },
+  "source_files": "AFNetworking",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "ios": {
+    "frameworks": [
+      "MobileCoreServices",
+      "SystemConfiguration"
+    ]
+  },
+  "osx": {
+    "frameworks": [
+      "CoreServices",
+      "SystemConfiguration"
+    ]
+  },
+  "prefix_header_contents": "#ifdef __OBJC__\n#import <Availability.h>\n#if __IPHONE_OS_VERSION_MIN_REQUIRED\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <MobileCoreServices/MobileCoreServices.h>\n#else\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <CoreServices/CoreServices.h>\n#endif\n#endif /* __OBJC__*/\n"
+}

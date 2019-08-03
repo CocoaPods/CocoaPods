@@ -1,0 +1,42 @@
+{
+  "name": "Leanplum-iOS-SDK",
+  "version": "1.4.0.1",
+  "summary": "Mobile Marketing Platform. Integrated. ROI Engine.",
+  "description": "Leanplum’s integrated solution delivers meaningful engagement across messaging and the in-app experience. We offer Messaging, Automation, App Editing, Personalization, A/B Testing, and Analytics.",
+  "homepage": "https://www.leanplum.com",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://www.leanplum.com/tos"
+  },
+  "authors": {
+    "Leanplum": "support@leanplum.com"
+  },
+  "social_media_url": "https://twitter.com/leanplum",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "source": {
+    "git": "https://github.com/Leanplum/Leanplum-iOS-SDK.git",
+    "tag": "1.4.0.1"
+  },
+  "frameworks": [
+    "CFNetwork",
+    "Foundation",
+    "Security",
+    "SystemConfiguration",
+    "UIKit"
+  ],
+  "weak_frameworks": [
+    "AdSupport",
+    "StoreKit"
+  ],
+  "xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  },
+  "preserve_paths": "Leanplum.framework",
+  "documentation_url": "https://www.leanplum.com/docs#/docs",
+  "source_files": "Leanplum.framework/Headers/*.h",
+  "public_header_files": "Leanplum.framework/Headers/*.h",
+  "vendored_frameworks": "Leanplum.framework"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "LibComponentLogging-NSLog",
+  "version": "1.0.3",
+  "source": {
+    "git": "https://github.com/aharren/LibComponentLogging-NSLog.git",
+    "tag": "1.0.3"
+  },
+  "homepage": "http://0xc0.de/LibComponentLogging",
+  "authors": {
+    "Arne Harren": "ah@0xc0.de"
+  },
+  "license": "MIT",
+  "summary": "LibComponentLogging logging back-end which redirects logging to NSLog.",
+  "description": "LibComponentLogging-NSLog is a very simple logging back-end for LibComponentLogging which redirects log messages to NSLog, but adds information about the log level, the log component, and the log statement's location (file name and line number).",
+  "prepare_command": "echo '{\"name\": \"NSLog\", \"type\": \"logger\", \"main_header\": \"LCLNSLog.h\"}' > pod.lcl_configure",
+  "source_files": [
+    "LCLNSLog*.{h,m}"
+  ],
+  "preserve_paths": [
+    "*.lcl_configure"
+  ],
+  "requires_arc": false,
+  "dependencies": {
+    "LibComponentLogging-Core": [
+      ">= 1.1.5"
+    ]
+  }
+}

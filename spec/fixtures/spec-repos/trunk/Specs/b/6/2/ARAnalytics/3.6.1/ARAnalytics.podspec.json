@@ -1,0 +1,988 @@
+{
+  "name": "ARAnalytics",
+  "version": "3.6.1",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "homepage": "https://github.com/orta/ARAnalytics",
+  "authors": {
+    "orta": "orta.therox@gmail.com",
+    "Daniel Haight": "confidence.designed@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/orta/ARAnalytics.git",
+    "tag": "3.6.1"
+  },
+  "platforms": {
+    "ios": "7.0",
+    "osx": "10.7"
+  },
+  "social_media_url": "https://twitter.com/orta",
+  "requires_arc": true,
+  "summary": "Using subspecs you can define your analytics provider with the same API on iOS and OS X.",
+  "default_subspecs": "no_clash_HockeyApp",
+  "description": "ARAnalytics is a analytics abstraction library offering a sane API for tracking events and user data. It currently supports on iOS: Mixpanel, Localytics, Flurry, GoogleAnalytics, KISSmetrics, Crittercism, Crashlytics, Fabric, Bugsnag, Countly, Helpshift, Tapstream, NewRelic, Amplitude, HockeyApp, HockeyAppLib, ParseAnalytics, HeapAnalytics, Chartbeat, UMengAnalytics, Librato, Segmentio, Swrve, YandexMobileMetrica, Adjust, AppsFlyer, Branch, Snowplow, Sentry, Intercom, Keen and Adobe. And for OS X: KISSmetrics, Mixpanel and HockeyApp. It does this by using CocoaPods subspecs to let you decide which libraries you'd like to use. You are free to also use the official API for any provider too. Also, comes with an amazing DSL to clear up your methods.",
+  "subspecs": [
+    {
+      "name": "CoreMac",
+      "source_files": [
+        "*.{h,m}",
+        "Providers/ARAnalyticalProvider.{h,m}",
+        "Providers/ARAnalyticsProviders.h"
+      ],
+      "exclude_files": [
+        "ARDSL.{h,m}",
+        "ARNavigationControllerDelegateProxy.{h,m}"
+      ],
+      "platforms": {
+        "osx": null
+      }
+    },
+    {
+      "name": "CoreIOS",
+      "source_files": [
+        "*.{h,m}",
+        "Providers/ARAnalyticalProvider.{h,m}",
+        "Providers/ARAnalyticsProviders.h"
+      ],
+      "exclude_files": [
+        "ARDSL.{h,m}"
+      ],
+      "private_header_files": "ARNavigationControllerDelegateProxy.h",
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "DSL",
+      "source_files": [
+        "ARDSL.{h,m}"
+      ],
+      "dependencies": {
+        "RSSwizzle": [
+          "~> 0.1.0"
+        ],
+        "ReactiveCocoa": [
+          "~> 2.0"
+        ]
+      }
+    },
+    {
+      "name": "Mixpanel",
+      "prefix_header_contents": "#define AR_MIXPANEL_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/MixpanelProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Mixpanel": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Localytics",
+      "prefix_header_contents": "#define AR_LOCALYTICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/LocalyticsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Localytics": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Flurry",
+      "prefix_header_contents": "#define AR_FLURRY_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/FlurryProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "FlurrySDK": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "GoogleAnalytics",
+      "prefix_header_contents": "#define AR_GOOGLEANALYTICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/GoogleAnalyticsProvider.{h,m}",
+          "Extensions/*+GoogleAnalytics.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "GoogleAnalytics": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "KISSmetrics",
+      "prefix_header_contents": "#define AR_KISSMETRICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/KISSmetricsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "KISSmetrics": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Crittercism",
+      "prefix_header_contents": "#define AR_CRITTERCISM_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/CrittercismProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "CrittercismSDK": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Crashlytics",
+      "prefix_header_contents": "#define AR_CRASHLYTICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/CrashlyticsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Fabric",
+      "prefix_header_contents": "#define AR_FABRIC_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/FabricProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Bugsnag",
+      "prefix_header_contents": "#define AR_BUGSNAG_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/BugsnagProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Bugsnag": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Countly",
+      "prefix_header_contents": "#define AR_COUNTLY_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/CountlyProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Countly": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Helpshift",
+      "prefix_header_contents": "#define AR_HELPSHIFT_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/HelpshiftProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Helpshift": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "KISSmetricsOSX",
+      "prefix_header_contents": "#define AR_KISSMETRICS_EXISTS 1",
+      "osx": {
+        "source_files": [
+          "Providers/KISSmetricsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreMac": [
+
+        ],
+        "KISSmetrics": [
+
+        ]
+      },
+      "platforms": {
+        "osx": null
+      }
+    },
+    {
+      "name": "MixpanelOSX",
+      "prefix_header_contents": "#define AR_MIXPANEL_EXISTS 1",
+      "osx": {
+        "source_files": [
+          "Providers/MixpanelProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreMac": [
+
+        ],
+        "Mixpanel-OSX-Community": [
+
+        ]
+      },
+      "platforms": {
+        "osx": null
+      }
+    },
+    {
+      "name": "Tapstream",
+      "prefix_header_contents": "#define AR_TAPSTREAM_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/TapstreamProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Tapstream": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "NewRelic",
+      "prefix_header_contents": "#define AR_NEWRELIC_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/NewRelicProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "NewRelicAgent": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Amplitude",
+      "prefix_header_contents": "#define AR_AMPLITUDE_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/AmplitudeProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Amplitude-iOS": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "HockeyApp",
+      "prefix_header_contents": "#define AR_HOCKEYAPP_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/HockeyAppProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "HockeySDK-Source": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "HockeyAppLib",
+      "prefix_header_contents": "#define AR_HOCKEYAPPLIB_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/HockeyAppLibProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "HockeySDK": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "HockeyAppOSX",
+      "prefix_header_contents": "#define AR_HOCKEYAPP_EXISTS 1",
+      "osx": {
+        "source_files": [
+          "Providers/HockeyAppProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreMac": [
+
+        ],
+        "HockeySDK-Mac": [
+
+        ]
+      },
+      "platforms": {
+        "osx": null
+      }
+    },
+    {
+      "name": "ParseAnalytics",
+      "prefix_header_contents": "#define AR_PARSEANALYTICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/ParseAnalyticsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Parse": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "HeapAnalytics",
+      "prefix_header_contents": "#define AR_HEAPANALYTICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/HeapAnalyticsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Heap": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Chartbeat",
+      "prefix_header_contents": "#define AR_CHARTBEAT_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/ChartbeatProvider.{h,m}",
+          "Extensions/*+Chartbeat.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Chartbeat": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "UMengAnalytics",
+      "prefix_header_contents": "#define AR_UMENGANALYTICS_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/UMengAnalyticsProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "UMengAnalytics": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Librato",
+      "prefix_header_contents": "#define AR_LIBRATO_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/LibratoProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Segmentio",
+      "prefix_header_contents": "#define AR_SEGMENTIO_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/SegmentioProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Swrve",
+      "prefix_header_contents": "#define AR_SWRVE_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/SwrveProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "SwrveSDK": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "YandexMobileMetrica",
+      "prefix_header_contents": "#define AR_YANDEXMOBILEMETRICA_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/YandexMobileMetricaProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "YandexMobileMetrica": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Adjust",
+      "prefix_header_contents": "#define AR_ADJUST_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/AdjustProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Adjust": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "AppsFlyer",
+      "prefix_header_contents": "#define AR_APPSFLYER_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/AppsFlyerProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "AppsFlyer-SDK": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Branch",
+      "prefix_header_contents": "#define AR_BRANCH_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/BranchProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Branch": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Snowplow",
+      "prefix_header_contents": "#define AR_SNOWPLOW_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/SnowplowProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "SnowplowTracker": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Sentry",
+      "prefix_header_contents": "#define AR_SENTRY_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/SentryProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Raven": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Intercom",
+      "prefix_header_contents": "#define AR_INTERCOM_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/IntercomProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "Intercom": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Keen",
+      "prefix_header_contents": "#define AR_KEEN_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/KeenProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "KeenClient": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "Adobe",
+      "prefix_header_contents": "#define AR_ADOBE_EXISTS 1",
+      "ios": {
+        "source_files": [
+          "Providers/AdobeProvider.{h,m}"
+        ]
+      },
+      "dependencies": {
+        "ARAnalytics/CoreIOS": [
+
+        ],
+        "AdobeMobileSDK": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      }
+    },
+    {
+      "name": "no_clash_HockeyApp",
+      "ios": {
+        "dependencies": {
+          "ARAnalytics/Mixpanel": [
+
+          ],
+          "ARAnalytics/Localytics": [
+
+          ],
+          "ARAnalytics/Flurry": [
+
+          ],
+          "ARAnalytics/GoogleAnalytics": [
+
+          ],
+          "ARAnalytics/KISSmetrics": [
+
+          ],
+          "ARAnalytics/Crashlytics": [
+
+          ],
+          "ARAnalytics/Fabric": [
+
+          ],
+          "ARAnalytics/Bugsnag": [
+
+          ],
+          "ARAnalytics/Countly": [
+
+          ],
+          "ARAnalytics/Helpshift": [
+
+          ],
+          "ARAnalytics/Tapstream": [
+
+          ],
+          "ARAnalytics/NewRelic": [
+
+          ],
+          "ARAnalytics/Amplitude": [
+
+          ],
+          "ARAnalytics/HockeyApp": [
+
+          ],
+          "ARAnalytics/HockeyAppLib": [
+
+          ],
+          "ARAnalytics/ParseAnalytics": [
+
+          ],
+          "ARAnalytics/HeapAnalytics": [
+
+          ],
+          "ARAnalytics/Chartbeat": [
+
+          ],
+          "ARAnalytics/UMengAnalytics": [
+
+          ],
+          "ARAnalytics/Librato": [
+
+          ],
+          "ARAnalytics/Segmentio": [
+
+          ],
+          "ARAnalytics/Swrve": [
+
+          ],
+          "ARAnalytics/YandexMobileMetrica": [
+
+          ],
+          "ARAnalytics/Adjust": [
+
+          ],
+          "ARAnalytics/AppsFlyer": [
+
+          ],
+          "ARAnalytics/Branch": [
+
+          ],
+          "ARAnalytics/Snowplow": [
+
+          ],
+          "ARAnalytics/Sentry": [
+
+          ],
+          "ARAnalytics/Intercom": [
+
+          ],
+          "ARAnalytics/Keen": [
+
+          ],
+          "ARAnalytics/Adobe": [
+
+          ]
+        }
+      },
+      "osx": {
+        "dependencies": {
+          "ARAnalytics/KISSmetricsOSX": [
+
+          ],
+          "ARAnalytics/MixpanelOSX": [
+
+          ],
+          "ARAnalytics/HockeyAppOSX": [
+
+          ]
+        }
+      }
+    },
+    {
+      "name": "no_clash_Crittercism",
+      "ios": {
+        "dependencies": {
+          "ARAnalytics/Mixpanel": [
+
+          ],
+          "ARAnalytics/Localytics": [
+
+          ],
+          "ARAnalytics/Flurry": [
+
+          ],
+          "ARAnalytics/GoogleAnalytics": [
+
+          ],
+          "ARAnalytics/KISSmetrics": [
+
+          ],
+          "ARAnalytics/Crashlytics": [
+
+          ],
+          "ARAnalytics/Fabric": [
+
+          ],
+          "ARAnalytics/Bugsnag": [
+
+          ],
+          "ARAnalytics/Countly": [
+
+          ],
+          "ARAnalytics/Helpshift": [
+
+          ],
+          "ARAnalytics/Tapstream": [
+
+          ],
+          "ARAnalytics/NewRelic": [
+
+          ],
+          "ARAnalytics/Amplitude": [
+
+          ],
+          "ARAnalytics/HockeyAppLib": [
+
+          ],
+          "ARAnalytics/ParseAnalytics": [
+
+          ],
+          "ARAnalytics/HeapAnalytics": [
+
+          ],
+          "ARAnalytics/Chartbeat": [
+
+          ],
+          "ARAnalytics/UMengAnalytics": [
+
+          ],
+          "ARAnalytics/Librato": [
+
+          ],
+          "ARAnalytics/Segmentio": [
+
+          ],
+          "ARAnalytics/Swrve": [
+
+          ],
+          "ARAnalytics/YandexMobileMetrica": [
+
+          ],
+          "ARAnalytics/Adjust": [
+
+          ],
+          "ARAnalytics/AppsFlyer": [
+
+          ],
+          "ARAnalytics/Branch": [
+
+          ],
+          "ARAnalytics/Snowplow": [
+
+          ],
+          "ARAnalytics/Sentry": [
+
+          ],
+          "ARAnalytics/Intercom": [
+
+          ],
+          "ARAnalytics/Keen": [
+
+          ],
+          "ARAnalytics/Adobe": [
+
+          ]
+        }
+      },
+      "osx": {
+        "dependencies": {
+          "ARAnalytics/KISSmetricsOSX": [
+
+          ],
+          "ARAnalytics/MixpanelOSX": [
+
+          ],
+          "ARAnalytics/HockeyAppOSX": [
+
+          ]
+        }
+      }
+    }
+  ]
+}

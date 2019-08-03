@@ -1,0 +1,95 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "2.31.0",
+  "summary": "This is the Appboy iOS SDK for Mobile Marketing Automation",
+  "homepage": "http://www.appboy.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.appboy.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "2.31.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "documentation_url": "http://documentation.appboy.com/",
+  "exclude_files": "AppboyKit/**/*.txt",
+  "preserve_paths": "AppboyKit/**/*.*",
+  "pod_target_xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  },
+  "default_subspecs": "UI",
+  "subspecs": [
+    {
+      "name": "Core",
+      "ios": {
+        "libraries": "z"
+      },
+      "frameworks": [
+        "SystemConfiguration",
+        "QuartzCore",
+        "CoreText",
+        "WebKit"
+      ],
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/ABKIdentifierForAdvertisingProvider.m",
+        "AppboyKit/ABKModalWebViewController.m",
+        "AppboyKit/ABKNoConnectionLocalization.m"
+      ],
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "weak_frameworks": [
+        "CoreTelephony",
+        "Social",
+        "Accounts",
+        "AdSupport",
+        "StoreKit",
+        "UserNotifications"
+      ]
+    },
+    {
+      "name": "UI",
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/*.m",
+        "AppboyUI/ABKFeedbackViewController/FeedbackViewController/*.*",
+        "AppboyUI/ABKUIUtils/**/*.*"
+      ],
+      "resources": [
+        "AppboyKit/Appboy.bundle",
+        "AppboyUI/ABKFeedbackViewController/Feedback_Resources/**/*.*"
+      ],
+      "dependencies": {
+        "SDWebImage/GIF": [
+          "~>4.0"
+        ],
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Feedback",
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/ABKIdentifierForAdvertisingProvider.m",
+        "AppboyKit/ABKModalWebViewController.m",
+        "AppboyKit/ABKNoConnectionLocalization.m",
+        "AppboyUI/ABKFeedbackViewController/FeedbackViewController/*.*",
+        "AppboyUI/ABKUIUtils/**/*.*"
+      ],
+      "resources": "AppboyUI/ABKFeedbackViewController/Feedback_Resources/**/*.*",
+      "dependencies": {
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    }
+  ]
+}

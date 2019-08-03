@@ -1,0 +1,21 @@
+{
+  "name": "RKValueTransformers",
+  "version": "1.1.1",
+  "license": "Apache2",
+  "summary": "A powerful value transformation API extracted from RestKit.",
+  "homepage": "https://github.com/RestKit/RKValueTransformers",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com",
+    "Samuel E. Giddins": "segiddins@segiddins.me"
+  },
+  "source": {
+    "git": "https://github.com/RestKit/RKValueTransformers.git",
+    "tag": "v1.1.1"
+  },
+  "source_files": "Code",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.1.1",
+    "osx": "10.7"
+  }
+}

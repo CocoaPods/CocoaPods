@@ -1,0 +1,129 @@
+{
+  "name": "Flurry-iOS-SDK",
+  "version": "7.6.3",
+  "summary": "Flurry SDK for iOS",
+  "license": {
+    "type": "Commercial",
+    "file": "Licenses/Flurry-LICENSE.txt"
+  },
+  "description": "FlurrySDK consists of: Flurry for analytics tracking and reporting. Flurry Ads for Native, Full Screen Ads integration",
+  "homepage": "http://developer.yahoo.com/flurry",
+  "authors": {
+    "Flurry": "integration@flurry.com"
+  },
+  "source": {
+    "git": "https://github.com/flurry/Flurry-iOS-SDK.git",
+    "tag": "7.6.3"
+  },
+  "requires_arc": false,
+  "platforms": {
+    "ios": "6.0",
+    "watchos": "2.0"
+  },
+  "default_subspecs": "FlurrySDK",
+  "resource_bundles": {
+    "Flurry-iOS-SDK": [
+      "Pod/Assets/*.png"
+    ]
+  },
+  "subspecs": [
+    {
+      "name": "FlurrySDK",
+      "source_files": [
+        "Flurry/Flurry.h",
+        "Flurry/FlurryEmpty.m"
+      ],
+      "platforms": {
+        "ios": "6.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "SystemConfiguration",
+        "UIKit",
+        "Security"
+      ],
+      "weak_frameworks": "WatchConnectivity",
+      "vendored_libraries": "Flurry/libFlurry_7.6.3.a"
+    },
+    {
+      "name": "FlurryWatchSDK",
+      "source_files": [
+        "Flurry/FlurryWatch.h",
+        "Flurry/Flurry.h",
+        "Flurry/FlurryEmpty.m"
+      ],
+      "platforms": {
+        "ios": "6.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "WatchConnectivity",
+        "SystemConfiguration",
+        "UIKit",
+        "Security"
+      ],
+      "vendored_libraries": "Flurry/libFlurry_7.6.3.a"
+    },
+    {
+      "name": "FlurryWatchOSSDK",
+      "source_files": [
+        "Flurry/FlurryWatch.h",
+        "Flurry/Flurry.h"
+      ],
+      "platforms": {
+        "watchos": "2.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "WatchConnectivity"
+      ],
+      "vendored_libraries": "Flurry/libFlurryWatch_7.6.3.a"
+    },
+    {
+      "name": "FlurryAds",
+      "source_files": [
+        "FlurryAds/**/*.h",
+        "FlurryAds/FlurryAdsEmpty.m"
+      ],
+      "libraries": "z",
+      "platforms": {
+        "ios": "6.0"
+      },
+      "frameworks": [
+        "CoreGraphics",
+        "CoreMedia",
+        "MediaPlayer",
+        "AVFoundation"
+      ],
+      "weak_frameworks": [
+        "AdSupport",
+        "StoreKit"
+      ],
+      "vendored_libraries": "FlurryAds/libFlurryAds_7.6.3.a",
+      "dependencies": {
+        "Flurry-iOS-SDK/FlurrySDK": [
+
+        ]
+      }
+    },
+    {
+      "name": "TumblrAPI",
+      "source_files": [
+        "FlurryTumblrAPI/FlurryTumblr.h",
+        "FlurryTumblrAPI/FlurryTumblrDelegate.h",
+        "FlurryAds/FlurryAdsEmpty.m"
+      ],
+      "platforms": {
+        "ios": "6.0"
+      },
+      "dependencies": {
+        "Flurry-iOS-SDK/FlurrySDK": [
+
+        ],
+        "Flurry-iOS-SDK/FlurryAds": [
+
+        ]
+      }
+    }
+  ]
+}

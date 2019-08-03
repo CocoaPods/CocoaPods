@@ -1,0 +1,114 @@
+{
+  "name": "Parse",
+  "version": "1.11.0",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://www.parse.com/about/terms"
+  },
+  "homepage": "https://www.parse.com/",
+  "summary": "Parse is a complete technology stack to power your app's backend.",
+  "authors": "Parse",
+  "source": {
+    "git": "https://github.com/ParsePlatform/Parse-SDK-iOS-OSX.git",
+    "tag": "1.11.0"
+  },
+  "platforms": {
+    "ios": "7.0",
+    "osx": "10.9",
+    "tvos": "9.0",
+    "watchos": "2.0"
+  },
+  "requires_arc": true,
+  "source_files": [
+    "Parse/*.{h,m}",
+    "Parse/Internal/**/*.{h,m}"
+  ],
+  "public_header_files": "Parse/*.h",
+  "ios": {
+    "exclude_files": "Parse/Internal/PFMemoryEventuallyQueue.{h,m}",
+    "frameworks": [
+      "AudioToolbox",
+      "CFNetwork",
+      "CoreGraphics",
+      "CoreLocation",
+      "QuartzCore",
+      "Security",
+      "StoreKit",
+      "SystemConfiguration"
+    ],
+    "weak_frameworks": [
+      "Accounts",
+      "Social"
+    ]
+  },
+  "osx": {
+    "exclude_files": [
+      "Parse/PFNetworkActivityIndicatorManager.{h,m}",
+      "Parse/PFProduct.{h,m}",
+      "Parse/PFPurchase.{h,m}",
+      "Parse/Internal/PFAlertView.{h,m}",
+      "Parse/Internal/Product/**/*.{h,m}",
+      "Parse/Internal/Purchase/**/*.{h,m}",
+      "Parse/Internal/PFMemoryEventuallyQueue.{h,m}"
+    ],
+    "frameworks": [
+      "ApplicationServices",
+      "CFNetwork",
+      "CoreGraphics",
+      "CoreLocation",
+      "QuartzCore",
+      "Security",
+      "SystemConfiguration"
+    ]
+  },
+  "tvos": {
+    "exclude_files": [
+      "Parse/PFNetworkActivityIndicatorManager.{h,m}",
+      "Parse/PFPush.{h,m}",
+      "Parse/PFInstallation.{h,m}",
+      "Parse/Internal/PFAlertView.{h,m}",
+      "Parse/Internal/Push/**/*.{h,m}",
+      "Parse/Internal/Installation/Controller/*.{h,m}",
+      "Parse/Internal/Installation/Constants/*.{h,m}",
+      "Parse/Internal/Installation/CurrentInstallationController/*.{h,m}",
+      "Parse/Internal/Installation/PFInstallationPrivate.h",
+      "Parse/Internal/Commands/PFRESTPushCommand.{h,m}"
+    ],
+    "frameworks": [
+      "CoreLocation",
+      "StoreKit",
+      "SystemConfiguration",
+      "Security"
+    ]
+  },
+  "watchos": {
+    "exclude_files": [
+      "Parse/PFNetworkActivityIndicatorManager.{h,m}",
+      "Parse/PFProduct.{h,m}",
+      "Parse/PFPurchase.{h,m}",
+      "Parse/PFPush.{h,m}",
+      "Parse/PFInstallation.{h,m}",
+      "Parse/Internal/PFAlertView.{h,m}",
+      "Parse/Internal/PFReachability.{h,m}",
+      "Parse/Internal/Product/**/*.{h,m}",
+      "Parse/Internal/Purchase/**/*.{h,m}",
+      "Parse/Internal/Push/**/*.{h,m}",
+      "Parse/Internal/Installation/Controller/*.{h,m}",
+      "Parse/Internal/Installation/Constants/*.{h,m}",
+      "Parse/Internal/Installation/CurrentInstallationController/*.{h,m}",
+      "Parse/Internal/Installation/PFInstallationPrivate.h",
+      "Parse/Internal/Commands/PFRESTPushCommand.{h,m}",
+      "Parse/Internal/PFMemoryEventuallyQueue.{h,m}"
+    ]
+  },
+  "resources": "Parse/Resources/en.lproj",
+  "libraries": [
+    "z",
+    "sqlite3"
+  ],
+  "dependencies": {
+    "Bolts/Tasks": [
+      "~> 1.5"
+    ]
+  }
+}

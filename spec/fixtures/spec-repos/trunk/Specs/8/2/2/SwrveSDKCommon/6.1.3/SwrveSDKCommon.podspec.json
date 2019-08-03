@@ -1,0 +1,33 @@
+{
+  "name": "SwrveSDKCommon",
+  "version": "6.1.3",
+  "summary": "iOS Common library for Swrve.",
+  "homepage": "http://www.swrve.com",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "SwrveSDKCommon/LICENSE"
+  },
+  "authors": "Swrve Mobile Inc or its licensors",
+  "source": {
+    "git": "https://github.com/Swrve/swrve-ios-sdk.git",
+    "tag": "6.1.3"
+  },
+  "social_media_url": "https://twitter.com/Swrve_Inc",
+  "documentation_url": "https://docs.swrve.com/developer-documentation/integration/ios/",
+  "platforms": {
+    "ios": "6.0",
+    "tvos": "9.0"
+  },
+  "requires_arc": true,
+  "tvos": {
+    "pod_target_xcconfig": {
+      "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) SWRVE_NO_PUSH"
+    },
+    "user_target_xcconfig": {
+      "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) SWRVE_NO_PUSH"
+    }
+  },
+  "source_files": "SwrveSDKCommon/Common/**/*.{m,h}",
+  "public_header_files": "SwrveSDKCommon/Common/**/*.h",
+  "compiler_flags": "-DSWRVE_SDK_COMMON"
+}

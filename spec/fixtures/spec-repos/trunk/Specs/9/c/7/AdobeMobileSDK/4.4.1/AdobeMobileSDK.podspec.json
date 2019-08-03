@@ -1,0 +1,33 @@
+{
+  "name": "AdobeMobileSDK",
+  "version": "4.4.1",
+  "summary": "Adobe Mobile Services SDK. Written and Supported by Adobe and is the only official Adobe Pod for the Adobe Mobile Services SDK.",
+  "description": "                   The Adobe Marketing Cloud Mobile libraries allow you to capture native app activity (user, usage, behavior, gestures, etc.) and forward that data to Adobe collection servers for use in Analytics reporting. Many of the libraries also include Test&Target mbox capability for A/B and multivariate testing within your mobile app, and audience measurement capabilities through Adobe AudienceManager.\n",
+  "homepage": "https://github.com/Adobe-Marketing-Cloud/mobile-services/releases",
+  "license": {
+    "type": "Commercial",
+    "text": "Adobe Systems Incorporated All Rights Reserved"
+  },
+  "authors": "Adobe Mobile SDK Team",
+  "source": {
+    "git": "https://github.com/Adobe-Marketing-Cloud/mobile-services.git",
+    "tag": "v4.4.1-cocoapod"
+  },
+  "source_files": "AdobeMobileLibrary/*.h",
+  "preserve_paths": [
+    "AdobeMobileLibrary/libAdobeMobile.a",
+    "AdobeMobileLibrary/ADBMobileConfig.json"
+  ],
+  "frameworks": [
+    "UIKit",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "AdobeMobile",
+    "sqlite3.0"
+  ],
+  "requires_arc": false,
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/AdobeMobileSDK/AdobeMobileLibrary\""
+  }
+}

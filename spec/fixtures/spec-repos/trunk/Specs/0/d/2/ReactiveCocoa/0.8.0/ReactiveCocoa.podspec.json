@@ -1,0 +1,50 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "0.8.0",
+  "summary": "A framework for composing and transforming sequences of values.",
+  "homepage": "https://github.com/blog/1107-reactivecocoa-is-now-open-source",
+  "authors": {
+    "Josh Abernathy": "josh@github.com"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "v0.8.0"
+  },
+  "license": "Simplified BSD License",
+  "description": "ReactiveCocoa (RAC) is a framework for composing and transforming sequences of values.",
+  "requires_arc": true,
+  "compiler_flags": "-DOS_OBJECT_USE_OBJC=0",
+  "source_files": "ReactiveCocoaFramework/ReactiveCocoa/*.{h,m}",
+  "ios": {
+    "exclude_files": "**/*{NSButton,AppKit}*"
+  },
+  "osx": {
+    "exclude_files": "**/*{UIControl,UIText,Event,DelegateProxy}*"
+  },
+  "subspecs": [
+    {
+      "name": "Core",
+      "header_dir": "ReactiveCocoa",
+      "dependencies": {
+        "JRSwizzle": [
+          "~> 1.0"
+        ],
+        "libextobjc/EXTConcreteProtocol": [
+          "~> 0.1.0"
+        ]
+      }
+    },
+    {
+      "name": "RACExtensions",
+      "source_files": "RACExtensions/*.{h,m}",
+      "ios": {
+        "exclude_files": "**/*{NSTask}*"
+      },
+      "dependencies": {
+        "ReactiveCocoa/Core": [
+
+        ]
+      }
+    }
+  ]
+}

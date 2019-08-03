@@ -1,0 +1,142 @@
+{
+  "name": "Firebase",
+  "version": "3.6.0",
+  "summary": "Firebase for iOS",
+  "description": "Simplify your iOS development, grow your user base, and monetize more effectively with Firebase.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "type": "Copyright",
+    "text": "Copyright 2016 Google"
+  },
+  "authors": "Google, Inc.",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/acf621ffca387dea/Firebase-3.6.0.tar.gz"
+  },
+  "preserve_paths": [
+    ".cocoapods.yml",
+    "CHANGELOG.md",
+    "NOTICES",
+    "README.md"
+  ],
+  "default_subspecs": [
+    "Core"
+  ],
+  "subspecs": [
+    {
+      "name": "Analytics",
+      "source_files": [
+        "Analytics/Sources/Firebase.h"
+      ],
+      "preserve_paths": [
+        "Analytics/Sources/module.modulemap"
+      ],
+      "dependencies": {
+        "FirebaseAnalytics": "3.4.2"
+      },
+      "user_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "$(inherited) ${PODS_ROOT}/Firebase/Analytics/Sources"
+      }
+    },
+    {
+      "name": "AdMob",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ],
+        "Google-Mobile-Ads-SDK": "7.11.0"
+      }
+    },
+    {
+      "name": "AppIndexing",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ],
+        "FirebaseAppIndexing": "1.1.0"
+      }
+    },
+    {
+      "name": "Auth",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ],
+        "FirebaseAuth": "3.0.5"
+      }
+    },
+    {
+      "name": "Core",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ]
+      }
+    },
+    {
+      "name": "Crash",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ],
+        "FirebaseCrash": "1.0.7"
+      }
+    },
+    {
+      "name": "Database",
+      "dependencies": {
+        "FirebaseDatabase": "3.0.3",
+        "Firebase/Analytics": [
+
+        ]
+      }
+    },
+    {
+      "name": "DynamicLinks",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ],
+        "FirebaseDynamicLinks": "1.3.0"
+      }
+    },
+    {
+      "name": "Invites",
+      "dependencies": {
+        "FirebaseInvites": "1.2.1",
+        "Firebase/Analytics": [
+
+        ]
+      }
+    },
+    {
+      "name": "Messaging",
+      "dependencies": {
+        "FirebaseMessaging": "1.2.0",
+        "Firebase/Analytics": [
+
+        ]
+      }
+    },
+    {
+      "name": "RemoteConfig",
+      "dependencies": {
+        "FirebaseRemoteConfig": "1.3.0",
+        "Firebase/Analytics": [
+
+        ]
+      }
+    },
+    {
+      "name": "Storage",
+      "dependencies": {
+        "Firebase/Analytics": [
+
+        ],
+        "FirebaseStorage": "1.0.3"
+      }
+    }
+  ]
+}

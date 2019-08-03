@@ -1,0 +1,28 @@
+{
+  "name": "AFAmazonS3Client",
+  "version": "2.0.1",
+  "summary": "AFNetworking extension for the Amazon S3 API.",
+  "homepage": "https://github.com/AFNetworking/AFAmazonS3Client",
+  "social_media_url": "https://twitter.com/AFNetworking",
+  "license": "MIT",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFAmazonS3Client.git",
+    "tag": "2.0.1"
+  },
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8"
+  },
+  "source_files": "AFAmazonS3Client",
+  "requires_arc": true,
+  "deprecated": true,
+  "deprecated_in_favor_of": "AFAmazonS3Manager",
+  "dependencies": {
+    "AFNetworking": [
+      "~>2.2"
+    ]
+  }
+}

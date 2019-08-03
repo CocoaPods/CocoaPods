@@ -1,0 +1,83 @@
+{
+  "name": "FMDB",
+  "version": "2.5",
+  "summary": "A Cocoa / Objective-C wrapper around SQLite.",
+  "homepage": "https://github.com/ccgus/fmdb",
+  "license": "MIT",
+  "authors": {
+    "August Mueller": "gus@flyingmeat.com"
+  },
+  "source": {
+    "git": "https://github.com/ccgus/fmdb.git",
+    "tag": "v2.5"
+  },
+  "requires_arc": true,
+  "default_subspecs": "standard",
+  "subspecs": [
+    {
+      "name": "common",
+      "source_files": "src/fmdb/FM*.{h,m}",
+      "exclude_files": "src/fmdb.m"
+    },
+    {
+      "name": "standard",
+      "libraries": "sqlite3",
+      "dependencies": {
+        "FMDB/common": [
+
+        ]
+      }
+    },
+    {
+      "name": "FTS",
+      "source_files": "src/extra/fts3/*.{h,m}",
+      "dependencies": {
+        "FMDB/standard": [
+
+        ]
+      }
+    },
+    {
+      "name": "standalone",
+      "default_subspecs": "default",
+      "dependencies": {
+        "FMDB/common": [
+
+        ]
+      },
+      "subspecs": [
+        {
+          "name": "default",
+          "dependencies": {
+            "sqlite3": [
+
+            ]
+          }
+        },
+        {
+          "name": "FTS",
+          "source_files": "src/extra/fts3/*.{h,m}",
+          "dependencies": {
+            "sqlite3/unicode61": [
+
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SQLCipher",
+      "dependencies": {
+        "SQLCipher": [
+
+        ],
+        "FMDB/common": [
+
+        ]
+      },
+      "xcconfig": {
+        "OTHER_CFLAGS": "$(inherited) -DSQLITE_HAS_CODEC"
+      }
+    }
+  ]
+}

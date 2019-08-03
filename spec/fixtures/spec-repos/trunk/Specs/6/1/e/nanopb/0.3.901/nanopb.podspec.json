@@ -1,0 +1,62 @@
+{
+  "name": "nanopb",
+  "version": "0.3.901",
+  "summary": "Protocol buffers with small code size.",
+  "description": "Nanopb is a small code-size Protocol Buffers implementation\nin ansi C. It is especially suitable for use in\nmicrocontrollers, but fits any memory restricted system.",
+  "homepage": "https://github.com/nanopb/nanopb",
+  "license": {
+    "type": "zlib",
+    "file": "LICENSE.txt"
+  },
+  "authors": {
+    "Petteri Aimonen": "jpa@nanopb.mail.kapsi.fi"
+  },
+  "source": {
+    "git": "https://github.com/nanopb/nanopb.git",
+    "tag": "0.3.9.1"
+  },
+  "requires_arc": false,
+  "xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PB_FIELD_32BIT=1 PB_NO_PACKED_STRUCTS=1 PB_ENABLE_MALLOC=1"
+  },
+  "source_files": "*.{h,c}",
+  "public_header_files": "*.h",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  },
+  "subspecs": [
+    {
+      "name": "encode",
+      "public_header_files": [
+        "pb.h",
+        "pb_encode.h",
+        "pb_common.h"
+      ],
+      "source_files": [
+        "pb.h",
+        "pb_common.h",
+        "pb_common.c",
+        "pb_encode.h",
+        "pb_encode.c"
+      ]
+    },
+    {
+      "name": "decode",
+      "public_header_files": [
+        "pb.h",
+        "pb_decode.h",
+        "pb_common.h"
+      ],
+      "source_files": [
+        "pb.h",
+        "pb_common.h",
+        "pb_common.c",
+        "pb_decode.h",
+        "pb_decode.c"
+      ]
+    }
+  ]
+}

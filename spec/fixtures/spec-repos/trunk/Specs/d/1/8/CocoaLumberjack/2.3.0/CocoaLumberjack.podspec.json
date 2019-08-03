@@ -1,0 +1,84 @@
+{
+  "name": "CocoaLumberjack",
+  "version": "2.3.0",
+  "license": "BSD",
+  "summary": "A fast & simple, yet powerful & flexible logging framework for Mac and iOS.",
+  "homepage": "https://github.com/CocoaLumberjack/CocoaLumberjack",
+  "authors": {
+    "Robbie Hanson": "robbiehanson@deusty.com"
+  },
+  "source": {
+    "git": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+    "tag": "2.3.0"
+  },
+  "description": "It is similar in concept to other popular logging frameworks such as log4j, yet is designed specifically for objective-c, and takes advantage of features such as multi-threading, grand central dispatch (if available), lockless atomic operations, and the dynamic nature of the objective-c runtime.",
+  "requires_arc": true,
+  "preserve_paths": [
+    "README.md",
+    "Classes/CocoaLumberjack.swift",
+    "Framework/Lumberjack/CocoaLumberjack.modulemap"
+  ],
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7",
+    "watchos": "2.0",
+    "tvos": "9.0"
+  },
+  "public_header_files": "Classes/*.h",
+  "module_map": "Framework/Lumberjack/CocoaLumberjack.modulemap",
+  "default_subspecs": [
+    "Default",
+    "Extensions"
+  ],
+  "subspecs": [
+    {
+      "name": "Default",
+      "source_files": "Classes/CocoaLumberjack.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Core",
+      "source_files": "Classes/DD*.{h,m}"
+    },
+    {
+      "name": "Extensions",
+      "source_files": "Classes/Extensions/*.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack/Default": [
+
+        ]
+      }
+    },
+    {
+      "name": "CLI",
+      "platforms": {
+        "osx": "10.7"
+      },
+      "source_files": "Classes/CLI/*.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack/Default": [
+
+        ]
+      }
+    },
+    {
+      "name": "Swift",
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.10",
+        "watchos": "2.0",
+        "tvos": "9.0"
+      },
+      "source_files": "Classes/CocoaLumberjack.swift",
+      "dependencies": {
+        "CocoaLumberjack/Extensions": [
+
+        ]
+      }
+    }
+  ]
+}

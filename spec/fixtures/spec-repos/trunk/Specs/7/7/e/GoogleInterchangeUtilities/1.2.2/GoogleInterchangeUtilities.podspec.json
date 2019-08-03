@@ -1,0 +1,24 @@
+{
+  "name": "GoogleInterchangeUtilities",
+  "version": "1.2.2",
+  "summary": "Shared interchange utility methods for Google libraries. Not intended for direct use.",
+  "description": "Application utility methods that are shared between Google libraries. This pod does not expose any headers and isn't intended for direct use, but rather as a dependency of some Google libraries.",
+  "homepage": "https://developers.google.com/ios",
+  "license": {
+    "type": "Copyright",
+    "text": "Copyright 2016 Google"
+  },
+  "authors": "Google, Inc.",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "http": "https://dl.google.com/dl/cpdc/1a7f7ba905b2c029/GoogleInterchangeUtilities-1.2.2.tar.gz"
+  },
+  "vendored_frameworks": [
+    "Frameworks/frameworks/GoogleInterchangeUtilities.framework"
+  ],
+  "dependencies": {
+    "GoogleSymbolUtilities": "~> 1.1"
+  }
+}

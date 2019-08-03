@@ -1,0 +1,38 @@
+{
+  "name": "Expecta",
+  "version": "0.4.0",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "summary": "A matcher framework for Objective-C & Cocoa.",
+  "homepage": "http://github.com/petejkim/expecta",
+  "authors": {
+    "Peter Jihoon Kim": "raingrove@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/specta/expecta.git",
+    "tag": "v0.4.0"
+  },
+  "description": "\n    Expecta is a matcher framework for Objective-C and Cocoa. The main\n    advantage of using Expecta over other matcher frameworks is that you do not\n    have to specify the data types. Also, the syntax of Expecta matchers is\n    much more readable and does not suffer from parenthesitis. If you have used\n    Jasmine before, you will feel right at home!\n  ",
+  "source_files": "Expecta/**/*.{h,m}",
+  "requires_arc": false,
+  "platforms": {
+    "ios": "5.1.1",
+    "osx": "10.7"
+  },
+  "frameworks": [
+    "Foundation",
+    "XCTest"
+  ],
+  "osx": {
+    "xcconfig": {
+      "FRAMEWORK_SEARCH_PATHS": "$(inherited) $(DEVELOPER_FRAMEWORKS_DIR) \"$(PLATFORM_DIR)/Developer/Library/Frameworks\" \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\""
+    }
+  },
+  "ios": {
+    "xcconfig": {
+      "FRAMEWORK_SEARCH_PATHS": "$(inherited) $(DEVELOPER_FRAMEWORKS_DIR) \"$(PLATFORM_DIR)/Developer/Library/Frameworks\" \"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks\""
+    }
+  }
+}

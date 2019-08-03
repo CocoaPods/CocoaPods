@@ -1,0 +1,17 @@
+{
+  "name": "OCMock",
+  "version": "2.0.1",
+  "homepage": "http://ocmock.org",
+  "authors": {
+    "Erik Doernenburg": "erik@doernenburg.com"
+  },
+  "source": {
+    "git": "https://github.com/erikdoe/ocmock.git",
+    "tag": "v2.0.1"
+  },
+  "summary": "OCMock is an Objective-C implementation of mock objects.",
+  "description": "This implementation fully utilises the dynamic nature of Objective-C. It creates mock objects on the fly and uses the trampoline pattern so that you can define expectations and stubs using the same syntax that you use to call methods. No strings, no @selector, just method invocations.",
+  "source_files": "Source/OCMock/*.[mh]",
+  "license": "https://github.com/erikdoe/ocmock/blob/master/Source/License.txt",
+  "requires_arc": false
+}

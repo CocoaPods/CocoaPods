@@ -1,0 +1,28 @@
+{
+  "name": "KeenClient",
+  "version": "3.2.4",
+  "license": "MIT",
+  "platforms": {
+    "ios": null
+  },
+  "summary": "Keen iOS client library.",
+  "homepage": "https://github.com/keenlabs/KeenClient-iOS",
+  "authors": {
+    "Daniel Kador": "dan@keen.io"
+  },
+  "source": {
+    "git": "https://github.com/keenlabs/KeenClient-iOS.git",
+    "tag": "v3.2.4"
+  },
+  "description": "The Keen iOS client is designed to be simple to develop with, yet incredibly flexible.  Our goal is to let you decide what events are important to you, use your own vocabulary to describe them, and decide when you want to send them to Keen service.",
+  "source_files": "KeenClient",
+  "ios": {
+    "frameworks": "CoreLocation"
+  },
+  "dependencies": {
+    "ISO8601DateFormatter": [
+      "0.6"
+    ]
+  },
+  "requires_arc": false
+}

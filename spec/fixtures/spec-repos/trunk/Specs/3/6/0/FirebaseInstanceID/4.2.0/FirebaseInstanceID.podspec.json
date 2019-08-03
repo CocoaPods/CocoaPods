@@ -1,0 +1,66 @@
+{
+  "name": "FirebaseInstanceID",
+  "version": "4.2.0",
+  "summary": "Firebase InstanceID for iOS",
+  "description": "Instance ID provides a unique ID per instance of your iOS apps. In addition to providing\nunique IDs for authentication,Instance ID can generate security tokens for use with other\nservices.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "type": "Apache",
+    "file": "LICENSE"
+  },
+  "authors": "Google, Inc.",
+  "source": {
+    "git": "https://github.com/firebase/firebase-ios-sdk.git",
+    "tag": "InstanceID-4.2.0"
+  },
+  "social_media_url": "https://twitter.com/Firebase",
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.11",
+    "tvos": "10.0"
+  },
+  "cocoapods_version": ">= 1.4.0",
+  "static_framework": true,
+  "prefix_header_file": false,
+  "source_files": "Firebase/InstanceID/**/*.[mh]",
+  "requires_arc": "Firebase/InstanceID/*.m",
+  "public_header_files": [
+    "Firebase/InstanceID/Public/*.h",
+    "Firebase/InstanceID/Private/*.h"
+  ],
+  "private_header_files": "Firebase/InstanceID/Private/*.h",
+  "pod_target_xcconfig": {
+    "GCC_C_LANGUAGE_STANDARD": "c99",
+    "GCC_PREPROCESSOR_DEFINITIONS": "FIRInstanceID_LIB_VERSION=4.2.0"
+  },
+  "frameworks": "Security",
+  "dependencies": {
+    "FirebaseCore": [
+      "~> 6.0"
+    ],
+    "GoogleUtilities/UserDefaults": [
+      "~> 6.0"
+    ],
+    "GoogleUtilities/Environment": [
+      "~> 6.0"
+    ]
+  },
+  "testspecs": [
+    {
+      "name": "unit",
+      "test_type": "unit",
+      "source_files": "Example/InstanceID/Tests/*.[mh]",
+      "requires_app_host": true,
+      "dependencies": {
+        "OCMock": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "\"${PODS_TARGET_SRCROOT}\"",
+        "OTHER_LDFLAGS": "-Xlinker -no_objc_category_merging",
+        "CLANG_ENABLE_OBJC_WEAK": "YES"
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "OCMock",
+  "version": "3.1.2",
+  "summary": "Mock objects for Objective-C",
+  "description": "                        OCMock is an Objective-C implementation of mock objects. It provides\n                        stubs that return pre-determined values for specific method invocations,\n                        dynamic mocks that can be used to verify interaction patterns, and\n                        partial mocks to overwrite selected methods of existing objects.\n",
+  "homepage": "http://ocmock.org",
+  "license": {
+    "type": "Apache 2.0",
+    "file": "Source/License.txt"
+  },
+  "authors": {
+    "Erik Doernenburg": "erik@doernenburg.com"
+  },
+  "social_media_url": "http://twitter.com/erikdoe",
+  "source": {
+    "git": "https://github.com/erikdoe/ocmock.git",
+    "tag": "v3.1.2"
+  },
+  "source_files": "Source/OCMock/*.{h,m}",
+  "public_header_files": [
+    "Source/OCMock/OCMock.h",
+    "Source/OCMock/OCMockObject.h",
+    "Source/OCMock/OCMArg.h",
+    "Source/OCMock/OCMConstraint.h",
+    "Source/OCMock/OCMLocation.h",
+    "Source/OCMock/OCMMacroState.h",
+    "Source/OCMock/OCMRecorder.h",
+    "Source/OCMock/OCMStubRecorder.h",
+    "Source/OCMock/NSNotificationCenter+OCMAdditions.h"
+  ],
+  "requires_arc": false
+}

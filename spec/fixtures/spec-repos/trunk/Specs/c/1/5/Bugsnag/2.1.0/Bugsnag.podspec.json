@@ -1,0 +1,20 @@
+{
+  "name": "Bugsnag",
+  "version": "2.1.0",
+  "summary": "iOS notifier for SDK for bugsnag.com.",
+  "homepage": "https://bugsnag.com",
+  "license": "MIT",
+  "authors": {
+    "Bugsnag": "notifiers@bugsnag.com"
+  },
+  "source": {
+    "git": "https://github.com/bugsnag/bugsnag-ios.git",
+    "tag": "2.1.0"
+  },
+  "platforms": {
+    "ios": "4.0"
+  },
+  "source_files": "Bugsnag Plugin",
+  "frameworks": "SystemConfiguration",
+  "requires_arc": false
+}

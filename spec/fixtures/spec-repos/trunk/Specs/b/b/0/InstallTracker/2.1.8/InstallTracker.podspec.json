@@ -1,0 +1,27 @@
+{
+  "name": "InstallTracker",
+  "version": "2.1.8",
+  "summary": "InstallTracker SDK for analytics tracking and reporting",
+  "homepage": "http://installtracker.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Developer's use of the SDK is governed by the license in the applicable InstallTracker Terms of Service.\n"
+  },
+  "authors": {
+    "InstallTracker": "http://installtracker.com"
+  },
+  "source": {
+    "http": "http://installtracker.com/sdk/InstallTrackerSDK-iOS_2.1.8.zip"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": "InstallTrackerSDK-iOS/InstallTracker.h",
+  "vendored_libraries": "InstallTrackerSDK-iOS/libInstallTracker.a",
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "AdSupport"
+  ]
+}

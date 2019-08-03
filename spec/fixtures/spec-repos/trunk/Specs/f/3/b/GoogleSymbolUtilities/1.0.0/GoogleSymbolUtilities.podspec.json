@@ -1,0 +1,21 @@
+{
+  "name": "GoogleSymbolUtilities",
+  "version": "1.0.0",
+  "summary": "Shared Google library for renamed symbols to avoid duplicate symbol errors. Not intended for direct use.",
+  "description": "Common dependency of Google libraries that use renamed symbols to avoid duplicate symbol error. Not intended to be used directly, but rather as a transitive dependency of some Google libaries.",
+  "homepage": "https://developers.google.com/",
+  "authors": "Google Inc.",
+  "license": {
+    "text": "Copyright 2015 Google Inc.",
+    "type": "Copyright"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "vendored_libraries": [
+    "Libraries/libGSDK_Overload.a"
+  ],
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/50c7dd6831442193-GoogleSymbolUtilities-1.0.0.tar.gz"
+  }
+}

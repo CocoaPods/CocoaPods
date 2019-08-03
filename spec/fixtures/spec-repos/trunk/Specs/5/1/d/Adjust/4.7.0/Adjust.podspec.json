@@ -1,0 +1,69 @@
+{
+  "name": "Adjust",
+  "version": "4.7.0",
+  "summary": "This is the iOS SDK of adjust. You can read more about it at http://adjust.com.",
+  "homepage": "http://adjust.com",
+  "license": {
+    "type": "MIT",
+    "file": "MIT-LICENSE"
+  },
+  "authors": {
+    "Christian Wellenbrock": "welle@adjust.com"
+  },
+  "source": {
+    "git": "https://github.com/adjust/ios_sdk.git",
+    "tag": "v4.7.0"
+  },
+  "platforms": {
+    "ios": "6.0",
+    "tvos": "9.0"
+  },
+  "frameworks": "SystemConfiguration",
+  "ios": {
+    "weak_frameworks": [
+      "AdSupport",
+      "iAd"
+    ]
+  },
+  "tvos": {
+    "weak_frameworks": "AdSupport"
+  },
+  "requires_arc": true,
+  "default_subspecs": "Core",
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": [
+        "Adjust/*.{h,m}",
+        "Adjust/ADJAdditions/*.{h,m}"
+      ]
+    },
+    {
+      "name": "Sociomantic",
+      "source_files": "plugin/Sociomantic/*.{h,m}",
+      "dependencies": {
+        "Adjust/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Criteo",
+      "source_files": "plugin/Criteo/*.{h,m}",
+      "dependencies": {
+        "Adjust/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Trademob",
+      "source_files": "plugin/Trademob/*.{h,m}",
+      "dependencies": {
+        "Adjust/Core": [
+
+        ]
+      }
+    }
+  ]
+}

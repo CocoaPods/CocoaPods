@@ -1,0 +1,30 @@
+{
+  "name": "HockeySDK-Mac",
+  "version": "2.0.0b1",
+  "license": {
+    "type": "MIT",
+    "file": "HockeySDK-Mac/LICENSE.txt"
+  },
+  "platforms": {
+    "osx": "10.5"
+  },
+  "summary": "Collect crash reports with HockeyApp.",
+  "homepage": "http://hockeyapp.net/",
+  "authors": {
+    "Andreas Linde": "mail@andreaslinde.de",
+    "Thomas Dohmke": "thomas@dohmke.de"
+  },
+  "description": "HockeyApp is a server to distribute beta apps, collect crash reports andcommunicate with your app users.It improves the testing process dramatically and can be used for both beta and App Store builds. Only crash reporting is supported for OS X apps atthe moment.",
+  "source": {
+    "http": "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-2.0.0b1.zip"
+  },
+  "public_header_files": "HockeySDK-Mac/HockeySDK.framework/Headers/*.h",
+  "preserve_paths": "HockeySDK-Mac/HockeySDK.framework",
+  "frameworks": "HockeySDK",
+  "resources": "HockeySDK-Mac/HockeySDK.framework",
+  "xcconfig": {
+    "FRAMEWORK_SEARCH_PATHS": "\"${PODS_ROOT}/HockeySDK-Mac/HockeySDK-Mac\"",
+    "HEADER_SEARCH_PATHS": "\"${PODS_ROOT}/HockeySDK-Mac/HockeySDK-Mac/HockeySDK-framework/Headers\""
+  },
+  "requires_arc": false
+}

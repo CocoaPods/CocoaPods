@@ -1,0 +1,167 @@
+{
+  "name": "Flurry-iOS-SDK",
+  "version": "9.3.1.xcode9",
+  "summary": "Flurry SDK for iOS",
+  "license": {
+    "type": "Commercial",
+    "file": "Licenses/Flurry-LICENSE.txt"
+  },
+  "description": "FlurrySDK consists of: Flurry for analytics tracking and reporting. Flurry Ads for Native, Full Screen Ads integration",
+  "homepage": "http://developer.yahoo.com/flurry",
+  "authors": {
+    "Flurry": "integration@flurry.com"
+  },
+  "source": {
+    "git": "https://github.com/flurry/Flurry-iOS-SDK.git",
+    "tag": "9.3.1.xcode9"
+  },
+  "requires_arc": false,
+  "platforms": {
+    "ios": "8.0",
+    "watchos": "2.0"
+  },
+  "default_subspecs": "FlurrySDK",
+  "subspecs": [
+    {
+      "name": "FlurrySDK",
+      "source_files": [
+        "Flurry/Flurry.h",
+        "Flurry/FlurrySessionBuilder.h",
+        "Flurry/FlurryConsent.h",
+        "Flurry/FlurryEmpty.m"
+      ],
+      "platforms": {
+        "ios": "8.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "SystemConfiguration",
+        "UIKit",
+        "Security"
+      ],
+      "vendored_libraries": "Flurry/libFlurry_9.3.1.xcode9.a"
+    },
+    {
+      "name": "FlurryWatchSDK",
+      "source_files": [
+        "Flurry/Flurry.h",
+        "Flurry/FlurryWatch.h",
+        "Flurry/FlurryConsent.h",
+        "Flurry/FlurrySessionBuilder.h",
+        "Flurry/FlurryWatchEmpty.m",
+        "Flurry/FlurryEmpty.m"
+      ],
+      "platforms": {
+        "ios": "8.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "WatchConnectivity",
+        "SystemConfiguration",
+        "UIKit",
+        "Security"
+      ],
+      "vendored_libraries": "Flurry/libFlurry_9.3.1.xcode9.a"
+    },
+    {
+      "name": "FlurryWatchOSSDK",
+      "source_files": [
+        "Flurry/FlurryWatch.h",
+        "Flurry/Flurry.h",
+        "Flurry/FlurryConsent.h",
+        "Flurry/FlurrySessionBuilder.h",
+        "Flurry/FlurryWatchEmpty.m"
+      ],
+      "platforms": {
+        "watchos": "2.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "WatchConnectivity"
+      ],
+      "vendored_libraries": "Flurry/libFlurryWatch_9.3.1.xcode9.a"
+    },
+    {
+      "name": "FlurryTVOS",
+      "source_files": [
+        "Flurry/Flurry.h",
+        "Flurry/FlurryConsent.h",
+        "Flurry/FlurrySessionBuilder.h",
+        "Flurry/FlurryEmpty.m"
+      ],
+      "platforms": {
+        "tvos": "9.0"
+      },
+      "frameworks": [
+        "Foundation",
+        "SystemConfiguration",
+        "UIKit",
+        "Security"
+      ],
+      "vendored_libraries": "Flurry/libFlurryTVOS_9.3.1.xcode9.a"
+    },
+    {
+      "name": "FlurryAds",
+      "source_files": [
+        "FlurryAds/**/*.h",
+        "FlurryAds/FlurryAdsEmpty.m"
+      ],
+      "libraries": "z",
+      "platforms": {
+        "ios": "8.0"
+      },
+      "frameworks": [
+        "CoreGraphics",
+        "CoreMedia",
+        "MediaPlayer",
+        "AVFoundation",
+        "CoreTelephony",
+        "WebKit",
+        "SystemConfiguration"
+      ],
+      "weak_frameworks": [
+        "AdSupport",
+        "StoreKit",
+        "SafariServices"
+      ],
+      "vendored_libraries": "FlurryAds/libFlurryAds_1.1.0.a",
+      "dependencies": {
+        "Flurry-iOS-SDK/FlurrySDK": [
+
+        ]
+      }
+    },
+    {
+      "name": "FlurryMessaging",
+      "source_files": [
+        "FlurryMessaging/FlurryMessaging.h",
+        "FlurryMessaging/FlurryMessagingEmpty.m"
+      ],
+      "platforms": {
+        "ios": "8.0"
+      },
+      "vendored_libraries": "FlurryMessaging/libFlurryMessaging_9.3.1.xcode9.a",
+      "dependencies": {
+        "Flurry-iOS-SDK/FlurrySDK": [
+
+        ]
+      }
+    },
+    {
+      "name": "FlurryConfig",
+      "source_files": [
+        "FlurryConfig/FConfig.h",
+        "FlurryConfig/FConfigEmpty.m"
+      ],
+      "platforms": {
+        "ios": "8.0"
+      },
+      "vendored_libraries": "FlurryConfig/libFlurryConfig_9.3.1.xcode9.a",
+      "dependencies": {
+        "Flurry-iOS-SDK/FlurrySDK": [
+
+        ]
+      }
+    }
+  ]
+}

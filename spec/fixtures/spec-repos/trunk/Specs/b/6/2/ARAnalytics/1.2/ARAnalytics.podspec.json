@@ -1,0 +1,179 @@
+{
+  "name": "ARAnalytics",
+  "version": "1.2",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "summary": "Use multiple major analytics platforms with one clean simple API.",
+  "homepage": "http://github.com/orta/ARAnalytics",
+  "authors": {
+    "orta": "orta.therox@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/orta/ARAnalytics.git",
+    "tag": "1.2"
+  },
+  "description": "Using subspecs you can define your analytics provider with the same API.",
+  "platforms": {
+    "ios": null
+  },
+  "requires_arc": false,
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": [
+        "*.{h,m}",
+        "Providers/ARAnalyticalProvider.{h,m}",
+        "Providers/ARAnalyticsProviders.h"
+      ]
+    },
+    {
+      "name": "TestFlight",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "TestFlightSDK": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_TESTFLIGHT_EXISTS 1",
+      "source_files": [
+        "Providers/TestFlightProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Mixpanel",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "Mixpanel": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_MIXPANEL_EXISTS 1",
+      "source_files": [
+        "Providers/MixpanelProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Localytics",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "Localytics-iOS-Client": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_LOCALYTICS_EXISTS 1",
+      "source_files": [
+        "Providers/LocalyticsProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Flurry",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "FlurrySDK": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_FLURRY_EXISTS 1",
+      "source_files": [
+        "Providers/FlurryProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "GoogleAnalytics",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "GoogleAnalytics-iOS-SDK": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_GOOGLEANALYTICS_EXISTS 1",
+      "source_files": [
+        "Providers/GoogleAnalyticsProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "KISSmetrics",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "KISSmetrics": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_KISSMETRICS_EXISTS 1",
+      "source_files": [
+        "Providers/KISSmetricsProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Crittercism",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "CrittercismSDK": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_CRITTERCISM_EXISTS 1",
+      "source_files": [
+        "Providers/CrittercismProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Crashlytics",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_CRASHLYTICS_EXISTS 1",
+      "source_files": [
+        "Providers/CrashlyticsProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Bugsnag",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "Bugsnag": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_BUGSNAG_EXISTS 1",
+      "source_files": [
+        "Providers/BugsnagProvider.{h,m}"
+      ]
+    },
+    {
+      "name": "Countly",
+      "dependencies": {
+        "ARAnalytics/Core": [
+
+        ],
+        "Countly": [
+
+        ]
+      },
+      "prefix_header_contents": "#define AR_COUNTLY_EXISTS 1",
+      "source_files": [
+        "Providers/CountlyProvider.{h,m}"
+      ]
+    }
+  ]
+}

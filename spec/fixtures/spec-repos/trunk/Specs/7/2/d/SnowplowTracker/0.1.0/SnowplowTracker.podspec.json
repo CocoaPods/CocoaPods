@@ -1,0 +1,42 @@
+{
+  "name": "SnowplowTracker",
+  "version": "0.1.0",
+  "summary": "Snowplow event tracker for iOS 7+. Add analytics to your iOS apps and games.",
+  "description": "  Snowplow is a mobile and event analytics platform with a difference: rather than tell our users how they should analyze their data, we deliver their event-level data in their own data warehouse, on their own Amazon Redshift or Postgres database, so they can analyze it any way they choose. Snowplow mobile is used by data-savvy games companies and app developers to better understand their users and how they engage with their games and applications. Snowplow is open source using the business-friendly Apache License, Version 2.0 and scales horizontally to many billions of events.\n",
+  "homepage": "http://snowplowanalytics.com",
+  "screenshots": "https://d3i6fms1cm1j0i.cloudfront.net/github-wiki/images/snowplow-logo-large.png",
+  "license": "Apache License, Version 2.0",
+  "authors": {
+    "Jonathan Almeida": "support@snowplowanalytics.com"
+  },
+  "source": {
+    "git": "https://github.com/snowplow/snowplow-ios-tracker.git",
+    "tag": "0.1.0"
+  },
+  "social_media_url": "https://twitter.com/SnowPlowData",
+  "docset_url": "https://github.com/snowplow/snowplow/wiki/iOS-Tracker",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": "Snowplow/*.{m,h}",
+  "public_header_files": [
+    "Snowplow/SnowplowTracker.h",
+    "Snowplow/SnowplowPayload.h",
+    "Snowplow/SnowplowRequest.h"
+  ],
+  "frameworks": [
+    "CoreTelephony",
+    "UIKit",
+    "Foundation"
+  ],
+  "dependencies": {
+    "FMDB": [
+      "~> 2.3"
+    ],
+    "AFNetworking": [
+      "~> 2.0"
+    ]
+  },
+  "prefix_header_contents": "#ifdef DEBUG\n#    define DLog(...) NSLog(__VA_ARGS__)\n#else\n#    define DLog(...)\n#endif\n#define ALog(...) NSLog(__VA_ARGS__)\n"
+}

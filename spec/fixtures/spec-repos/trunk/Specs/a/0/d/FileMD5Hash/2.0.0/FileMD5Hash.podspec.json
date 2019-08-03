@@ -1,0 +1,16 @@
+{
+  "name": "FileMD5Hash",
+  "version": "2.0.0",
+  "license": "Apache License, Version 2.0",
+  "summary": "Library for computing MD5 hashes of files with small memory usage.",
+  "homepage": "https://github.com/JoeKun/FileMD5Hash",
+  "authors": {
+    "Joel Lopes Da Silva": "joel@lopes-da-silva.com"
+  },
+  "source": {
+    "git": "https://github.com/JoeKun/FileMD5Hash.git",
+    "tag": "2.0.0"
+  },
+  "source_files": "Library/*.{h,m}",
+  "requires_arc": false
+}

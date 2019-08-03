@@ -1,0 +1,31 @@
+{
+  "name": "NewRelicAgent",
+  "version": "4.155",
+  "summary": "Real-time performance data with your next iOS app release.",
+  "homepage": "http://newrelic.com/mobile-monitoring",
+  "license": {
+    "type": "Commercial",
+    "file": "NewRelic_iOS_Agent_4.155/LICENSE"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "authors": {
+    "New Relic, Inc.": "support@newrelic.com"
+  },
+  "source": {
+    "http": "https://download.newrelic.com/ios_agent/NewRelic_iOS_Agent_4.155.zip"
+  },
+  "public_header_files": "NewRelic_iOS_Agent_4.155/NewRelicAgent.framework/**/*.h",
+  "vendored_frameworks": "NewRelic_iOS_Agent_4.155/NewRelicAgent.framework",
+  "preserve_paths": "NewRelic_iOS_Agent_4.155/*.framework",
+  "frameworks": [
+    "SystemConfiguration",
+    "CoreTelephony"
+  ],
+  "libraries": [
+    "z",
+    "c++"
+  ],
+  "requires_arc": false
+}

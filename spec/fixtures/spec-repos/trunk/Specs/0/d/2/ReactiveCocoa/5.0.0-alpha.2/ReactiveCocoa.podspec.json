@@ -1,0 +1,41 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "5.0.0-alpha.2",
+  "summary": "Streams of values over time",
+  "description": "ReactiveCocoa (RAC) is a Cocoa framework built on top of ReactiveSwift. It provides APIs for using ReactiveSwift with Apple's Cocoa frameworks.",
+  "homepage": "https://github.com/ReactiveCocoa/ReactiveCocoa",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE.md"
+  },
+  "authors": "ReactiveCocoa",
+  "platforms": {
+    "osx": "10.9",
+    "ios": "8.0",
+    "tvos": "9.0",
+    "watchos": "2.0"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "5.0.0-alpha.2"
+  },
+  "source_files": "ReactiveCocoa/*.{swift,h,m}",
+  "private_header_files": "ReactiveCocoa/RACObjCRuntimeUtilities.h",
+  "osx": {
+    "source_files": "ReactiveCocoa/AppKit/*.{swift}"
+  },
+  "ios": {
+    "source_files": "ReactiveCocoa/UIKit/*.{swift}"
+  },
+  "tvos": {
+    "source_files": "ReactiveCocoa/UIKit/*.{swift}",
+    "exclude_files": "ReactiveCocoa/UIKit/*{UIDatePicker,UISwitch}*"
+  },
+  "module_map": "ReactiveCocoa/module.modulemap",
+  "dependencies": {
+    "ReactiveSwift": [
+      "~> 1.0.0-alpha.3"
+    ]
+  },
+  "pushed_with_swift_version": "3.0"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "ISO8601DateFormatterValueTransformer",
+  "version": "0.6.1",
+  "license": "Apache2",
+  "summary": "A small library that integrates ISO8601DateFormatter with RKValueTransformers",
+  "homepage": "https://github.com/blakewatters/ISO8601DateFormatterValueTransformer",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/blakewatters/ISO8601DateFormatterValueTransformer.git",
+    "tag": "v0.6.1"
+  },
+  "source_files": "Code",
+  "requires_arc": true,
+  "dependencies": {
+    "RKValueTransformers": [
+      "~> 1.1.0"
+    ]
+  },
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  }
+}

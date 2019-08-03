@@ -1,0 +1,46 @@
+{
+  "name": "HockeySDK",
+  "version": "3.5.3",
+  "summary": "Collect live crash reports, get feedback from your users, distribute your betas, and analyze your test coverage with HockeyApp.",
+  "description": "                        HockeyApp is a service to distribute beta apps, collect crash reports and\n                        communicate with your app's users.\n                        \n                        It improves the testing process dramatically and can be used for both beta\n                        and App Store builds.\n",
+  "homepage": "http://hockeyapp.net/",
+  "documentation_url": "http://hockeyapp.net/help/sdk/ios/3.5.3/",
+  "license": "MIT",
+  "authors": {
+    "Andreas Linde": "mail@andreaslinde.de",
+    "Thomas Dohmke": "thomas@dohmke.de"
+  },
+  "source": {
+    "git": "https://github.com/bitstadium/HockeySDK-iOS.git",
+    "tag": "3.5.3"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source_files": "Classes",
+  "requires_arc": true,
+  "frameworks": [
+    "CoreText",
+    "QuartzCore",
+    "SystemConfiguration",
+    "CoreGraphics",
+    "UIKit",
+    "Security"
+  ],
+  "ios": {
+    "vendored_frameworks": "Vendor/CrashReporter.framework"
+  },
+  "xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) BITHOCKEY_VERSION=\"@\\\"3.5.3\\\"\" BITHOCKEY_BUILD=\"@\\\"26\\\"\""
+  },
+  "resource_bundles": {
+    "HockeySDKResources": [
+      "Resources/*.png",
+      "Resources/*.lproj"
+    ]
+  },
+  "preserve_paths": [
+    "Resources",
+    "Support"
+  ]
+}

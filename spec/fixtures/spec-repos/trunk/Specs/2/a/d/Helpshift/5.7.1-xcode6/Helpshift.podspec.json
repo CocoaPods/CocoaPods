@@ -1,0 +1,54 @@
+{
+  "name": "Helpshift",
+  "version": "5.7.1-xcode6",
+  "summary": "Customer service helpdesk for mobile applications.",
+  "license": {
+    "type": "Commercial",
+    "text": "See http://www.helpshift.com/terms/"
+  },
+  "homepage": "http://www.helpshift.com/",
+  "authors": {
+    "Helpshift": "support@helpshift.com"
+  },
+  "source": {
+    "http": "https://d3e51fp79zp4el.cloudfront.net/library/ios/v5.7/helpshift-sdk-ios-v5.7.1.zip",
+    "type": "zip"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "helpshift-sdk-ios-v5.7.1/*.h",
+  "resources": [
+    "helpshift-sdk-ios-v5.7.1/HsUIResourceBundle.bundle",
+    "helpshift-sdk-ios-v5.7.1/HsLocalization.bundle",
+    "helpshift-sdk-ios-v5.7.1/HSThemes/*.plist"
+  ],
+  "preserve_paths": [
+    "helpshift-sdk-ios-v5.7.1/libHelpshift-xcode6.a",
+    "helpshift-sdk-ios-v5.7.1/HsLocalization.bundle",
+    "helpshift-sdk-ios-v5.7.1/HSThemes/*.plist"
+  ],
+  "frameworks": [
+    "CoreGraphics",
+    "QuartzCore",
+    "CoreText",
+    "SystemConfiguration",
+    "CoreTelephony",
+    "Foundation",
+    "UIKit",
+    "Security",
+    "QuickLook",
+    "CoreLocation",
+    "MobileCoreServices"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "z",
+    "Helpshift-xcode6"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Helpshift/helpshift-sdk-ios-v5.7.1\""
+  },
+  "documentation_url": "http://developers.helpshift.com/ios/",
+  "requires_arc": false
+}

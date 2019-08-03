@@ -1,0 +1,36 @@
+{
+  "name": "Parse",
+  "version": "1.3.0",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://parse.com/about/terms"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "summary": "Parse iOS SDK for developing apps using the Parse cloud app platform.",
+  "description": "The Parse iOS SDK enables access to the parse.com cloud app platform. Requires an account with parse.com. To integrate after adding this pod, continue with step 9 in the QuickStart: (https://parse.com/apps/quickstart).",
+  "homepage": "http://parse.com",
+  "authors": "Parse",
+  "source": {
+    "http": "http://parse-ios.s3.amazonaws.com/fe7d5b5421b322d1f8fb96ac8ae65b24/parse-library-1.3.0.zip"
+  },
+  "vendored_frameworks": "Parse.framework",
+  "requires_arc": true,
+  "frameworks": [
+    "AudioToolbox",
+    "CFNetwork",
+    "CoreGraphics",
+    "CoreLocation",
+    "MobileCoreServices",
+    "QuartzCore",
+    "Security",
+    "StoreKit",
+    "SystemConfiguration"
+  ],
+  "dependencies": {
+    "Facebook-iOS-SDK": [
+      "~> 3.17"
+    ]
+  }
+}

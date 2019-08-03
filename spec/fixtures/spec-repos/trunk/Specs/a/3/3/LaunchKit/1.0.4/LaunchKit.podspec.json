@@ -1,0 +1,21 @@
+{
+  "name": "LaunchKit",
+  "version": "1.0.4",
+  "summary": "Useful tools you need to launch your app.",
+  "description": "We provide tools for launching your app like\nmeasuring app installs, capturing light data\nabout how the app is being used, etc.",
+  "homepage": "https://github.com/LaunchKit/launchkit-ios",
+  "license": "Apache 2.0",
+  "authors": {
+    "Cluster Labs, Inc.": "info@getcluster.com"
+  },
+  "source": {
+    "git": "https://github.com/LaunchKit/launchkit-ios.git",
+    "tag": "1.0.4"
+  },
+  "social_media_url": "https://twitter.com/launchkit",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": "LaunchKit/Classes/**/*.{h,m,c}"
+}

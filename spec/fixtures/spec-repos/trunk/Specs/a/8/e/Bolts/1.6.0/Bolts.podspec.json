@@ -1,0 +1,67 @@
+{
+  "name": "Bolts",
+  "version": "1.6.0",
+  "summary": "Bolts is a collection of low-level libraries designed to make developing mobile apps easier.",
+  "description": "Bolts was designed by Parse and Facebook for our own internal use, and we have decided to open source these libraries to make them available to others. Using these libraries does not require using any Parse services. Nor do they require having a Parse or Facebook developer account.\n\nThe first component in Bolts is \"tasks\", which make organization of complex asynchronous code more manageable. A task is kind of like a JavaScript Promise, but available for iOS and Android.\n\nFor more information, see the [Bolts iOS API Reference](http://boltsframework.github.io/docs/ios/).",
+  "homepage": "https://github.com/BoltsFramework",
+  "license": "BSD",
+  "authors": "Parse",
+  "source": {
+    "git": "https://github.com/BoltsFramework/Bolts-iOS.git",
+    "tag": "1.6.0"
+  },
+  "documentation_url": "http://boltsframework.github.io/docs/ios/",
+  "social_media_url": "https://twitter.com/ParseIt",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8",
+    "watchos": "2.0",
+    "tvos": "9.0"
+  },
+  "subspecs": [
+    {
+      "name": "Tasks",
+      "ios": {
+        "source_files": "Bolts/Common/*.[hm]",
+        "public_header_files": "Bolts/Common/*.h"
+      },
+      "osx": {
+        "source_files": "Bolts/Common/*.[hm]",
+        "public_header_files": "Bolts/Common/*.h"
+      },
+      "watchos": {
+        "source_files": "Bolts/Common/*.[hm]",
+        "public_header_files": "Bolts/Common/*.h"
+      },
+      "tvos": {
+        "source_files": "Bolts/Common/*.[hm]",
+        "public_header_files": "Bolts/Common/*.h"
+      }
+    },
+    {
+      "name": "AppLinks",
+      "platforms": {
+        "ios": "6.0"
+      },
+      "dependencies": {
+        "Bolts/Tasks": [
+
+        ]
+      },
+      "ios": {
+        "source_files": "Bolts/iOS/*.[hm]",
+        "public_header_files": "Bolts/iOS/*.h"
+      },
+      "osx": {
+        "source_files": ""
+      },
+      "watchos": {
+        "source_files": ""
+      },
+      "tvos": {
+        "source_files": ""
+      }
+    }
+  ]
+}

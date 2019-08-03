@@ -1,0 +1,48 @@
+{
+  "name": "Parse",
+  "version": "1.8.0",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://www.parse.com/about/terms"
+  },
+  "homepage": "https://www.parse.com/",
+  "summary": "Parse is a complete technology stack to power your app's backend.",
+  "authors": "Parse",
+  "source": {
+    "git": "https://github.com/ParsePlatform/Parse-SDK-iOS-OSX.git",
+    "tag": "1.8.0"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": [
+    "Parse/*.{h,m}",
+    "Parse/Internal/**/*.{h,m}"
+  ],
+  "public_header_files": "Parse/*.h",
+  "resources": "Parse/Resources/Localizable.strings",
+  "frameworks": [
+    "AudioToolbox",
+    "CFNetwork",
+    "CoreGraphics",
+    "CoreLocation",
+    "QuartzCore",
+    "Security",
+    "StoreKit",
+    "SystemConfiguration"
+  ],
+  "weak_frameworks": [
+    "Accounts",
+    "Social"
+  ],
+  "libraries": [
+    "z",
+    "sqlite3"
+  ],
+  "dependencies": {
+    "Bolts/Tasks": [
+      ">= 1.2.0"
+    ]
+  }
+}

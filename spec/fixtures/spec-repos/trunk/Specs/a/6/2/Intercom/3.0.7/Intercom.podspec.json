@@ -1,0 +1,44 @@
+{
+  "name": "Intercom",
+  "version": "3.0.7",
+  "summary": "The Intercom iOS SDK, for integrating Intercom into your iOS application.",
+  "license": {
+    "type": "Apache 2.0",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Adam McCarthy": "adam@intercom.io",
+    "Brian Boyle": "brian.boyle@intercom.io",
+    "Conor O’Donnell": "conor.odonnell@intercom.io",
+    "James Treanor": "james@intercom.io"
+  },
+  "homepage": "https://github.com/intercom/intercom-ios",
+  "description": "The Intercom iOS SDK, for integrating Intercom into your iOS application. The SDK supports iOS 8 and iOS 9.",
+  "frameworks": [
+    "Foundation",
+    "UIKit",
+    "Accelerate",
+    "Security",
+    "SystemConfiguration",
+    "MobileCoreServices",
+    "ImageIO",
+    "AudioToolbox",
+    "QuartzCore",
+    "CoreGraphics",
+    "AssetsLibrary",
+    "Accelerate"
+  ],
+  "libraries": [
+    "icucore",
+    "xml2"
+  ],
+  "requires_arc": true,
+  "source": {
+    "git": "https://github.com/intercom/intercom-ios.git",
+    "tag": "3.0.7"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "vendored_frameworks": "Intercom.framework"
+}

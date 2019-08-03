@@ -1,0 +1,27 @@
+{
+  "name": "Crashlytics",
+  "version": "3.1.0",
+  "summary": "Best and lightest-weight crash reporting for mobile.",
+  "homepage": "https://get.fabric.io/crashlytics",
+  "authors": "Twitter",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source": {
+    "http": "https://kit-downloads.fabric.io/ios/com.twitter.crashlytics.ios/3.1.0/com.twitter.crashlytics.ios-default.zip"
+  },
+  "vendored_frameworks": "Crashlytics.framework",
+  "public_header_files": "Crashlytics.framework/Headers/*.h",
+  "license": {
+    "type": "Commercial",
+    "text": "Fabric: Copyright 2015 Twitter, Inc. All Rights Reserved. Use of this software is subject to the terms and conditions of the Fabric Software and Services Agreement located at https://fabric.io/terms. Crashlytics Kit: Copyright 2015 Crashlytics, Inc. All Rights Reserved. Use of this software is subject to the terms and conditions of the Crashlytics Terms of Service located at http://try.crashlytics.com/terms/terms-of-service.pdf and the Crashlytics Privacy Policy located at http://try.crashlytics.com/terms/privacy-policy.pdf. OSS: http://get.fabric.io/terms/opensource.txt"
+  },
+  "frameworks": [
+    "Security",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "z",
+    "c++"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Intercom",
+  "version": "2.0.6",
+  "summary": "The Intercom iOS SDK, for integrating Intercom into your iOS application.",
+  "description": "                         The Intercom iOS SDK currently supports iOS 7.X and iOS 8. For iOS6 support you should check version 1.9 of the SDK. \n",
+  "homepage": "https://github.com/intercom/intercom-ios",
+  "license": {
+    "type": "Apache license",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Adam McCarthy": "adam@intercom.io",
+    "Gavin Rooney": "gavin@intercom.io",
+    "Dale Cantwell": "dale@intercom.io",
+    "Ignacio Delgado": "ignacio@intercom.io",
+    "Roland Gropmair": "roland@intercom.io",
+    "James Treanor": "james@intercom.io"
+  },
+  "source": {
+    "git": "https://github.com/intercom/intercom-ios.git",
+    "tag": "2.0.6"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "Intercom/Intercom.h",
+  "vendored_libraries": [
+    "Intercom/libIntercom.a"
+  ],
+  "requires_arc": true,
+  "frameworks": [
+    "Foundation",
+    "UIKit",
+    "Security",
+    "SystemConfiguration",
+    "MobileCoreServices",
+    "ImageIO",
+    "AVFoundation",
+    "QuartzCore",
+    "CoreGraphics"
+  ]
+}

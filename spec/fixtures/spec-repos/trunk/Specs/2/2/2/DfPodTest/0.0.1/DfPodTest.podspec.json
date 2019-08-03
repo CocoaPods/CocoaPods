@@ -1,0 +1,24 @@
+{
+  "name": "DfPodTest",
+  "version": "0.0.1",
+  "summary": "Just testing",
+  "homepage": "https://github.com/ongfei/DfPodTest",
+  "license": "MIT",
+  "authors": {
+    "ongfei": "ong_fei@163.com"
+  },
+  "source": {
+    "git": "https://github.com/ongfei/DfPodTest.git",
+    "tag": "0.0.1"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "ToolTest/*.{h,m}",
+  "requires_arc": true,
+  "dependencies": {
+    "FMDB": [
+      "~> 2.5"
+    ]
+  }
+}

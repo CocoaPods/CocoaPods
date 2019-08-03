@@ -1,0 +1,34 @@
+{
+  "name": "FLAnimatedImage",
+  "version": "1.0.1",
+  "summary": "Performant animated GIF engine for iOS",
+  "description": "                        - Plays multiple GIFs simultaneously with a playback speed comparable to desktop browsers\n                        - Honors variable frame delays\n                        - Behaves gracefully under memory pressure\n                        - Eliminates delays or blocking during the first playback loop\n                        - Interprets the frame delays of fast GIFs the same way modern browsers do\n                        \n                        It's a well-tested [component that powers all GIFs in Flipboard](http://engineering.flipboard.com/2014/05/animated-gif/).\n",
+  "homepage": "https://github.com/Flipboard/FLAnimatedImage",
+  "screenshots": "https://github.com/Flipboard/FLAnimatedImage/raw/master/images/flanimatedimage-demo-player.gif",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Raphael Schaad": "raphael.schaad@gmail.com"
+  },
+  "social_media_url": "https://twitter.com/raphaelschaad",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source": {
+    "git": "https://github.com/Flipboard/FLAnimatedImage.git",
+    "tag": "1.0.1"
+  },
+  "source_files": [
+    "FLAnimatedImageDemo/FLAnimatedImage",
+    "FLAnimatedImageDemo/FLAnimatedImage/**/*.{h,m}"
+  ],
+  "frameworks": [
+    "QuartzCore",
+    "ImageIO",
+    "MobileCoreServices",
+    "CoreGraphics"
+  ],
+  "requires_arc": true
+}

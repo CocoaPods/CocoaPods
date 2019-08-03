@@ -1,0 +1,17 @@
+{
+  "name": "FileMD5Hash",
+  "version": "0.0.1",
+  "license": "Apache",
+  "summary": "Library for computing MD5 hashes of files with small memory usage.",
+  "homepage": "http://www.joel.lopes-da-silva.com/2010/09/07/compute-md5-or-sha-hash-of-large-file-efficiently-on-ios-and-mac-os-x/",
+  "authors": {
+    "Joel Lopes Da Silva": "joel@lopes-da-silva.com"
+  },
+  "source": {
+    "git": "https://github.com/JoeKun/FileMD5Hash.git",
+    "commit": "d00c0c51c6d0955d9daf94c30cfd95a219d4914e"
+  },
+  "prefix_header_file": "Common/FileMD5Hash_Prefix.pch",
+  "source_files": "Common/*.{h,c}",
+  "requires_arc": false
+}

@@ -1,0 +1,16 @@
+{
+  "name": "CocoaLumberjack",
+  "version": "1.2",
+  "license": "BSD",
+  "summary": "A fast & simple, yet powerful & flexible logging framework for Mac and iOS.",
+  "homepage": "http://code.google.com/p/cocoalumberjack/",
+  "authors": {
+    "Robbie Hanson": "robbiehanson@deusty.com"
+  },
+  "source": {
+    "git": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+    "tag": "1.2"
+  },
+  "source_files": "Lumberjack",
+  "requires_arc": false
+}

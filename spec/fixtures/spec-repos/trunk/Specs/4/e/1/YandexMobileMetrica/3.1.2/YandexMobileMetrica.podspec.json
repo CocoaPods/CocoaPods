@@ -1,0 +1,51 @@
+{
+  "name": "YandexMobileMetrica",
+  "version": "3.1.2",
+  "summary": "This library is designed to be a part of mobile apps and provide app usage stats to Yandex AppMetrica",
+  "homepage": "http://appmetrica.yandex.com/",
+  "license": {
+    "type": "PROPRIETARY",
+    "file": "LICENSE.md"
+  },
+  "authors": {
+    "Yandex LLC": "appmetrica@yandex-team.com"
+  },
+  "source": {
+    "http": "https://storage.mds.yandex.net/get-appmetrica-mobile-sdk/128534/YandexMobileMetrica-3.1.2-ios-0ed40305-b027-4c82-9401-865906c14d3f.zip",
+    "sha1": "9a0e9ae1b23f3f14723c7fc279a380ec1ce555a3"
+  },
+  "libraries": [
+    "c++",
+    "z",
+    "sqlite3"
+  ],
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "CoreTelephony",
+    "CoreLocation",
+    "CoreGraphics",
+    "AdSupport"
+  ],
+  "requires_arc": true,
+  "default_subspecs": "Static",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "subspecs": [
+    {
+      "name": "Static",
+      "preserve_paths": "static/YandexMobileMetrica.framework",
+      "source_files": "static/YandexMobileMetrica.framework/Versions/A/Headers/*.h",
+      "public_header_files": "static/YandexMobileMetrica.framework/Versions/A/Headers/*.h",
+      "vendored_frameworks": "static/YandexMobileMetrica.framework"
+    },
+    {
+      "name": "Dynamic",
+      "preserve_paths": "dynamic/YandexMobileMetrica.framework",
+      "source_files": "dynamic/YandexMobileMetrica.framework/Headers/*.h",
+      "public_header_files": "dynamic/YandexMobileMetrica.framework/Headers/*.h",
+      "vendored_frameworks": "dynamic/YandexMobileMetrica.framework"
+    }
+  ]
+}

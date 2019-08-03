@@ -1,0 +1,28 @@
+{
+  "name": "HockeySDK-Mac",
+  "version": "3.2.1",
+  "summary": "Collect crash reports with HockeyApp.",
+  "description": "HockeyApp is a service to distribute beta apps, collect crash reports and\ncommunicate with your app's users.\n\nIt improves the testing process dramatically and can be used for both beta\nand App Store builds.",
+  "homepage": "http://www.hockeyapp.net/",
+  "documentation_url": "http://www.hockeyapp.net/help/sdk/mac/3.2.1/",
+  "license": {
+    "type": "MIT",
+    "file": "HockeySDK-Mac/LICENSE.txt"
+  },
+  "authors": {
+    "Microsoft": "support@hockeyapp.net"
+  },
+  "source": {
+    "http": "http://download.hockeyapp.net/sdk/mac/HockeySDK-Mac-3.2.1.zip"
+  },
+  "platforms": {
+    "osx": "10.7"
+  },
+  "requires_arc": false,
+  "vendored_frameworks": "HockeySDK-Mac/HockeySDK.framework",
+  "public_header_files": "HockeySDK-Mac/HockeySDK.framework/Versions/A/Headers/*.h*",
+  "resources": "HockeySDK-Mac/HockeySDK.framework",
+  "xcconfig": {
+    "LD_RUNPATH_SEARCH_PATHS": "@executable_path/../Frameworks"
+  }
+}

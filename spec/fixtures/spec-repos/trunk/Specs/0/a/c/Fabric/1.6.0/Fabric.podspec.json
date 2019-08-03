@@ -1,0 +1,27 @@
+{
+  "name": "Fabric",
+  "version": "1.6.0",
+  "summary": "Fabric by Twitter, Inc.",
+  "homepage": "https://fabric.io",
+  "authors": "Twitter",
+  "license": {
+    "type": "Commercial",
+    "text": "Fabric: Copyright 2015 Twitter, Inc. All Rights Reserved. Use of this software is subject to the terms and conditions of the Fabric Software and Services Agreement located at https://fabric.io/terms. OSS: http://get.fabric.io/terms/opensource.txt"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "http": "https://kit-downloads.fabric.io/ios/io.fabric.sdk.ios/1.6.0/io.fabric.sdk.ios-default.zip"
+  },
+  "requires_arc": true,
+  "default_subspecs": "Base",
+  "frameworks": "UIKit",
+  "subspecs": [
+    {
+      "name": "Base",
+      "vendored_frameworks": "Fabric.framework",
+      "public_header_files": "Fabric.framework/Headers/*.h"
+    }
+  ]
+}

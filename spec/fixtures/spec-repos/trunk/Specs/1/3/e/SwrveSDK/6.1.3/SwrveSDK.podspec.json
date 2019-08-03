@@ -1,0 +1,63 @@
+{
+  "name": "SwrveSDK",
+  "version": "6.1.3",
+  "summary": "iOS SDK for Swrve.",
+  "homepage": "http://www.swrve.com",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "SwrveSDK/LICENSE"
+  },
+  "authors": "Swrve Mobile Inc or its licensors",
+  "source": {
+    "git": "https://github.com/Swrve/swrve-ios-sdk.git",
+    "tag": "6.1.3"
+  },
+  "social_media_url": "https://twitter.com/Swrve_Inc",
+  "documentation_url": "https://docs.swrve.com/developer-documentation/integration/ios/",
+  "platforms": {
+    "ios": "6.0",
+    "tvos": "9.0"
+  },
+  "requires_arc": true,
+  "tvos": {
+    "pod_target_xcconfig": {
+      "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) SWRVE_NO_PUSH"
+    },
+    "user_target_xcconfig": {
+      "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) SWRVE_NO_PUSH"
+    }
+  },
+  "source_files": "SwrveSDK/SDK/**/*.{m,h}",
+  "public_header_files": "SwrveSDK/SDK/**/*.h",
+  "dependencies": {
+    "SwrveSDKCommon": [
+      "6.1.3"
+    ],
+    "SwrveConversationSDK": [
+      "6.1.3"
+    ]
+  },
+  "frameworks": [
+    "UIKit",
+    "QuartzCore",
+    "CFNetwork",
+    "StoreKit",
+    "Security",
+    "AVFoundation",
+    "CoreText"
+  ],
+  "ios": {
+    "weak_frameworks": "Contacts",
+    "frameworks": [
+      "MessageUI",
+      "CoreTelephony",
+      "CoreLocation",
+      "Contacts",
+      "AssetsLibrary",
+      "Photos",
+      "AddressBook",
+      "UserNotifications"
+    ]
+  },
+  "libraries": "sqlite3"
+}
