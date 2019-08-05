@@ -78,8 +78,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#8768](https://github.com/CocoaPods/CocoaPods/pull/8768)
 
 * Set Default Module for Storyboards in resource bundle targets.  
-   [James Treanor](https://github.com/jtreanor)
-   [#8890](https://github.com/CocoaPods/CocoaPods/pull/8890)
+  [James Treanor](https://github.com/jtreanor)
+  [#8890](https://github.com/CocoaPods/CocoaPods/pull/8890)
 
 * Print correct platform name when inferring target platform.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -146,7 +146,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9029](https://github.com/CocoaPods/CocoaPods/pull/9029)
   
- * Fix a bug that prevented dependencies in a plugin source from resolving  
+* Fix a bug that prevented dependencies in a plugin source from resolving  
   [Eric Amorde](https://github.com/amorde)
   [#8540](https://github.com/CocoaPods/CocoaPods/issues/8540)
 
