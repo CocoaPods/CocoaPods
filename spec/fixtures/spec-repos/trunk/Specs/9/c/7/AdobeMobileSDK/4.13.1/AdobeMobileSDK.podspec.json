@@ -1,0 +1,79 @@
+{
+  "name": "AdobeMobileSDK",
+  "version": "4.13.1",
+  "summary": "Adobe Mobile Services SDK. Written and Supported by Adobe and is the only official Adobe Pod for the Adobe Mobile Services SDK.",
+  "description": "The Adobe Marketing Cloud Mobile libraries allow you to capture native app activity (user, usage, behavior, gestures, etc.) and forward that data to Adobe collection servers for use in Analytics reporting. Many of the libraries also include Test&Target mbox capability for A/B and multivariate testing within your mobile app, and audience measurement capabilities through Adobe AudienceManager.",
+  "homepage": "https://github.com/Adobe-Marketing-Cloud/mobile-services/releases",
+  "license": {
+    "type": "Commercial",
+    "text": "Adobe Systems Incorporated All Rights Reserved"
+  },
+  "authors": "Adobe Mobile SDK Team",
+  "source": {
+    "git": "https://github.com/Adobe-Marketing-Cloud/mobile-services.git",
+    "tag": "v4.13.1-cocoapod"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "default_subspecs": "iOS",
+  "subspecs": [
+    {
+      "name": "iOS",
+      "source_files": [
+        "AdobeMobileLibrary/*.h",
+        "AdobeMobileLibrary/Empty.m"
+      ],
+      "frameworks": [
+        "UIKit",
+        "SystemConfiguration"
+      ],
+      "libraries": "sqlite3.0",
+      "vendored_libraries": "AdobeMobileLibrary/libAdobeMobile.a"
+    },
+    {
+      "name": "Extension",
+      "platforms": {
+        "ios": "5.0"
+      },
+      "source_files": [
+        "AdobeMobileLibrary/*.h",
+        "AdobeMobileLibrary/Empty.m"
+      ],
+      "frameworks": [
+        "UIKit",
+        "SystemConfiguration"
+      ],
+      "libraries": "sqlite3.0",
+      "vendored_libraries": "AdobeMobileLibrary/libAdobeMobile_extension.a"
+    },
+    {
+      "name": "WatchOS2",
+      "platforms": {
+        "watchos": "2.0"
+      },
+      "source_files": [
+        "AdobeMobileLibrary/*.h",
+        "AdobeMobileLibrary/Empty.m"
+      ],
+      "libraries": "sqlite3.0",
+      "vendored_libraries": "AdobeMobileLibrary/libAdobeMobile_watch.a"
+    },
+    {
+      "name": "TVOS",
+      "platforms": {
+        "tvos": "9.0"
+      },
+      "source_files": [
+        "AdobeMobileLibrary/*.h",
+        "AdobeMobileLibrary/Empty.m"
+      ],
+      "frameworks": [
+        "UIKit",
+        "SystemConfiguration"
+      ],
+      "libraries": "sqlite3.0",
+      "vendored_libraries": "AdobeMobileLibrary/libAdobeMobile_TV.a"
+    }
+  ]
+}

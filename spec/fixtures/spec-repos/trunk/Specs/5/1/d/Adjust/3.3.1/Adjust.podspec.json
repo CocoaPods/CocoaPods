@@ -1,0 +1,30 @@
+{
+  "name": "Adjust",
+  "version": "3.3.1",
+  "summary": "This is the iOS SDK of Adjust. You can read more about it at http://adjust.io.",
+  "homepage": "http://adjust.io",
+  "license": {
+    "type": "MIT",
+    "file": "MIT-LICENSE"
+  },
+  "authors": {
+    "Christian Wellenbrock": "welle@adjust.com"
+  },
+  "source": {
+    "git": "https://github.com/adeven/adjust_ios_sdk.git",
+    "tag": "v3.3.1"
+  },
+  "platforms": {
+    "ios": "4.3"
+  },
+  "frameworks": "SystemConfiguration",
+  "weak_frameworks": [
+    "AdSupport",
+    "iAd"
+  ],
+  "source_files": [
+    "Adjust/*.{h,m}",
+    "Adjust/AIAdditions/*.{h,m}"
+  ],
+  "requires_arc": true
+}

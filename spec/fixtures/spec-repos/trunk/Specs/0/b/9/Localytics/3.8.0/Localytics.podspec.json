@@ -1,0 +1,37 @@
+{
+  "name": "Localytics",
+  "version": "3.8.0",
+  "summary": "Localytics iOS SDK",
+  "description": "Localytics analytics and marketing platform",
+  "homepage": "http://www.localytics.com",
+  "license": {
+    "type": "Copyright",
+    "file": "Localytics-iOS-3.8.0/LICENSE"
+  },
+  "authors": {
+    "Char Software, Inc. d/b/a Localytics": "support@localytics.com"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "http": "http://downloads.localytics.com/SDKs/iOS/Localytics-iOS-3.8.0.zip"
+  },
+  "source_files": "Localytics-iOS-3.8.0/*.h",
+  "public_header_files": "Localytics-iOS-3.8.0/*.h",
+  "preserve_paths": "Localytics-iOS-3.8.0/libLocalytics.a",
+  "ios": {
+    "vendored_libraries": "Localytics-iOS-3.8.0/libLocalytics.a"
+  },
+  "weak_frameworks": "AdSupport",
+  "frameworks": "SystemConfiguration",
+  "libraries": [
+    "Localytics",
+    "z",
+    "sqlite3"
+  ],
+  "requires_arc": true,
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Localytics/Localytics-iOS-3.8.0\""
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "MobileAppTracker",
+  "version": "3.11.0",
+  "summary": "SDK for TUNE MobileAppTracking platform",
+  "description": "The TUNE MobileAppTracking SDK for iOS provides app session measurement, in-app event measurement, and app cross-promotion advertisement capabilities.",
+  "homepage": "https://developers.mobileapptracking.com/ios-sdk",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "TUNE, Inc.": "support@mobileapptracking.com"
+  },
+  "source": {
+    "git": "https://github.com/MobileAppTracking/cocoapod.git",
+    "tag": "3.11.0"
+  },
+  "platforms": {
+    "ios": "5.1.1"
+  },
+  "preserve_paths": "MobileAppTracker.framework",
+  "vendored_frameworks": "MobileAppTracker.framework",
+  "frameworks": [
+    "AdSupport",
+    "CoreTelephony",
+    "iAd",
+    "MobileCoreServices",
+    "StoreKit",
+    "SystemConfiguration",
+    "UIKit"
+  ],
+  "requires_arc": false
+}

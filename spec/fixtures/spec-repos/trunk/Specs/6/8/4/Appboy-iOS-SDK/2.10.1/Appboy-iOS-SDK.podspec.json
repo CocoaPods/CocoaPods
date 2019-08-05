@@ -1,0 +1,70 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "2.10.1",
+  "summary": "This is the Appboy iOS SDK for Mobile Marketing Automation",
+  "homepage": "http://www.appboy.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.appboy.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "2.10.1"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": false,
+  "documentation_url": "http://documentation.appboy.com/",
+  "frameworks": [
+    "SystemConfiguration",
+    "QuartzCore",
+    "CoreImage"
+  ],
+  "weak_frameworks": [
+    "CoreTelephony",
+    "Social",
+    "Accounts",
+    "AdSupport",
+    "StoreKit"
+  ],
+  "source_files": [
+    "AppboyKit/headers/AppboyKitLibrary/*.h",
+    "AppboyKit/*.m"
+  ],
+  "exclude_files": "AppboyKit/**/*.txt",
+  "resources": "AppboyKit/Appboy.bundle",
+  "preserve_paths": "AppboyKit/**/*.*",
+  "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+  "dependencies": {
+    "SDWebImage": [
+      "~>3.7.0"
+    ]
+  },
+  "default_subspecs": "AppboyKit",
+  "subspecs": [
+    {
+      "name": "AppboyKit",
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/*.m"
+      ],
+      "resources": "AppboyKit/Appboy.bundle",
+      "preserve_paths": "AppboyKit/**/*.*",
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a"
+    },
+    {
+      "name": "AppboyKitWithoutFacebookSupport",
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/*.m"
+      ],
+      "resources": "AppboyKit/Appboy.bundle",
+      "preserve_paths": "AppboyKit/**/*.*",
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a"
+    }
+  ]
+}

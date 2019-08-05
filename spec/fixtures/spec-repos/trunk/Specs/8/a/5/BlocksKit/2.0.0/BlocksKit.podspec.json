@@ -1,0 +1,104 @@
+{
+  "name": "BlocksKit",
+  "version": "2.0.0",
+  "license": "MIT",
+  "summary": "The Objective-C block utilities you always wish you had.",
+  "homepage": "https://github.com/zwaldowski/BlocksKit",
+  "authors": {
+    "Zachary Waldowski": "zach@waldowski.me",
+    "Alexsander Akers": "a2@pnd.mn"
+  },
+  "source": {
+    "git": "https://github.com/zwaldowski/BlocksKit.git",
+    "tag": "v2.0.0"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "osx": "10.7",
+    "ios": "5.0"
+  },
+  "default_subspecs": [
+    "All"
+  ],
+  "subspecs": [
+    {
+      "name": "All",
+      "dependencies": {
+        "BlocksKit/Core": [
+
+        ],
+        "BlocksKit/DynamicDelegate": [
+
+        ]
+      },
+      "ios": {
+        "dependencies": {
+          "BlocksKit/MessageUI": [
+
+          ],
+          "BlocksKit/UIKit": [
+
+          ]
+        }
+      }
+    },
+    {
+      "name": "Core",
+      "source_files": [
+        "BlocksKit/BlocksKit.h",
+        "BlocksKit/Core/*.{h,m}"
+      ]
+    },
+    {
+      "name": "DynamicDelegate",
+      "source_files": [
+        "BlocksKit/BlocksKit.h",
+        "BlocksKit/Dynamic Delegate/*.{h,m}",
+        "BlocksKit/Dynamic Delegate/Foundation/*.{h,m}"
+      ],
+      "ios": {
+        "dependencies": {
+          "libffi": [
+
+          ]
+        }
+      },
+      "osx": {
+        "libraries": "ffi"
+      }
+    },
+    {
+      "name": "MessageUI",
+      "dependencies": {
+        "BlocksKit/DynamicDelegate": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      },
+      "source_files": [
+        "BlocksKit/BlocksKit+MessageUI.h",
+        "BlocksKit/MessageUI/*.{h,m}"
+      ],
+      "ios": {
+        "frameworks": "MessageUI"
+      }
+    },
+    {
+      "name": "UIKit",
+      "dependencies": {
+        "BlocksKit/DynamicDelegate": [
+
+        ]
+      },
+      "platforms": {
+        "ios": null
+      },
+      "source_files": [
+        "BlocksKit/BlocksKit+UIKit.h",
+        "BlocksKit/UIKit/*.{h,m}"
+      ]
+    }
+  ]
+}

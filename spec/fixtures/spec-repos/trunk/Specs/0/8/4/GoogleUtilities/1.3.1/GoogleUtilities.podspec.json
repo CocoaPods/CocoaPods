@@ -1,0 +1,36 @@
+{
+  "name": "GoogleUtilities",
+  "version": "1.3.1",
+  "summary": "Shared utility methods for Google libraries. Not intended for direct use.",
+  "description": "Utility methods that are shared between Google libraries. This pod does not expose any headers and isn't intended for direct use, but rather as a dependency of some Google libraries.",
+  "homepage": "https://developers.google.com/",
+  "license": {
+    "type": "Copyright",
+    "text": "Copyright 2015 Google Inc."
+  },
+  "authors": "Google Inc.",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "vendored_frameworks": [
+    "Frameworks/GoogleUtilities.framework"
+  ],
+  "source_files": [
+
+  ],
+  "frameworks": [
+    "AddressBook",
+    "CoreGraphics"
+  ],
+  "libraries": [
+    "z"
+  ],
+  "dependencies": {
+    "GoogleSymbolUtilities": [
+      "~> 1.0"
+    ]
+  },
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/732a619a9bd45fa5-GoogleUtilities-1.3.1.tar.gz"
+  }
+}

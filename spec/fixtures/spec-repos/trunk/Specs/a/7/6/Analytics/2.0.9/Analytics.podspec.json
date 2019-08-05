@@ -1,0 +1,474 @@
+{
+  "name": "Analytics",
+  "version": "2.0.9",
+  "summary": "Segment analytics and marketing tools library for iOS.",
+  "homepage": "https://segment.com/libraries/ios",
+  "license": {
+    "type": "MIT",
+    "file": "License.md"
+  },
+  "authors": {
+    "Segment": "friends@segment.io"
+  },
+  "source": {
+    "git": "https://github.com/segmentio/analytics-ios.git",
+    "tag": "2.0.9"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "ANALYTICS_VERSION=2.0.9"
+  },
+  "subspecs": [
+    {
+      "name": "Core-iOS",
+      "public_header_files": [
+        "Analytics/*.h",
+        "Analytics/Helpers/*.h",
+        "Analytics/Integrations/SEGAnalyticsIntegrations.h"
+      ],
+      "source_files": [
+        "Analytics/*.{h,m}",
+        "Analytics/Helpers/*.{h,m}",
+        "Analytics/Integrations/SEGAnalyticsIntegrations.h"
+      ],
+      "platforms": {
+        "ios": "7.0"
+      },
+      "weak_frameworks": [
+        "CoreBluetooth",
+        "SystemConfiguration",
+        "CoreLocation"
+      ],
+      "dependencies": {
+        "TRVSDictionaryWithCaseInsensitivity": [
+          "0.0.2"
+        ]
+      }
+    },
+    {
+      "name": "Amplitude",
+      "prefix_header_contents": "#define USE_ANALYTICS_AMPLITUDE 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Amplitude/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Amplitude/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Amplitude-iOS": [
+          "3.0.0"
+        ]
+      }
+    },
+    {
+      "name": "AppsFlyer",
+      "prefix_header_contents": "#define USE_ANALYTICS_APPSFLYER 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/AppsFlyer/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/AppsFlyer/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "AppsFlyer-SDK": [
+          "2.5.3.15.1"
+        ]
+      }
+    },
+    {
+      "name": "Apptimize",
+      "prefix_header_contents": "#define USE_ANALYTICS_APPTIMIZE 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Apptimize/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Apptimize/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Apptimize": [
+          "2.11.0.1"
+        ]
+      }
+    },
+    {
+      "name": "Bugsnag",
+      "prefix_header_contents": "#define USE_ANALYTICS_BUGSNAG 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Bugsnag/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Bugsnag/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Bugsnag": [
+          "4.0.7"
+        ]
+      }
+    },
+    {
+      "name": "Countly",
+      "prefix_header_contents": "#define USE_ANALYTICS_COUNTLY 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Countly/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Countly/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Countly": [
+          "15.06.01"
+        ]
+      }
+    },
+    {
+      "name": "Crittercism",
+      "prefix_header_contents": "#define USE_ANALYTICS_CRITTERCISM 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Crittercism/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Crittercism/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "CrittercismSDK": [
+          "5.2.0"
+        ]
+      }
+    },
+    {
+      "name": "Flurry",
+      "prefix_header_contents": "#define USE_ANALYTICS_FLURRY 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Flurry/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Flurry/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "FlurrySDK": [
+          "6.5.0"
+        ]
+      }
+    },
+    {
+      "name": "GoogleAnalytics",
+      "prefix_header_contents": "#define USE_ANALYTICS_GOOGLEANALYTICS 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/GoogleAnalytics/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/GoogleAnalytics/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "GoogleAnalytics": [
+          "3.13.0"
+        ],
+        "GoogleIDFASupport": [
+          "3.12.0"
+        ]
+      }
+    },
+    {
+      "name": "Kahuna",
+      "prefix_header_contents": "#define USE_ANALYTICS_KAHUNA 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Kahuna/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Kahuna/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Kahuna": [
+          "2.0.3"
+        ]
+      }
+    },
+    {
+      "name": "Localytics",
+      "prefix_header_contents": "#define USE_ANALYTICS_LOCALYTICS 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Localytics/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Localytics/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Localytics": [
+          "3.3.0"
+        ]
+      }
+    },
+    {
+      "name": "Mixpanel",
+      "prefix_header_contents": "#define USE_ANALYTICS_MIXPANEL 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Mixpanel/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Mixpanel/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Mixpanel": [
+          "2.8.2"
+        ]
+      }
+    },
+    {
+      "name": "MoEngage",
+      "prefix_header_contents": "#define USE_ANALYTICS_MOENGAGE 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/MoEngage/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/MoEngage/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "MoEngage-iOS-SDK": [
+          "1.4.3"
+        ]
+      }
+    },
+    {
+      "name": "Optimizely",
+      "prefix_header_contents": "#define USE_ANALYTICS_OPTIMIZELY 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Optimizely/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Optimizely/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Optimizely-iOS-SDK": [
+          "1.0.86"
+        ]
+      }
+    },
+    {
+      "name": "Quantcast",
+      "prefix_header_contents": "#define USE_ANALYTICS_QUANTCAST 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Quantcast/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Quantcast/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Quantcast-Measure": [
+          "1.4.7"
+        ]
+      }
+    },
+    {
+      "name": "Segmentio",
+      "prefix_header_contents": "#define USE_ANALYTICS_SEGMENTIO 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Segmentio/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Segmentio/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ]
+      }
+    },
+    {
+      "name": "Taplytics",
+      "prefix_header_contents": "#define USE_ANALYTICS_TAPLYTICS 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Taplytics/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Taplytics/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Taplytics": [
+          "2.4.0"
+        ]
+      }
+    },
+    {
+      "name": "Tapstream",
+      "prefix_header_contents": "#define USE_ANALYTICS_TAPSTREAM 1",
+      "public_header_files": [
+        "Analytics/Integrations/*.h",
+        "Analytics/Integrations/Tapstream/*.h"
+      ],
+      "ios": {
+        "source_files": "Analytics/Integrations/Tapstream/*.{h,m}"
+      },
+      "platforms": {
+        "ios": "7.0"
+      },
+      "dependencies": {
+        "Analytics/Core-iOS": [
+
+        ],
+        "Analytics/Segmentio": [
+
+        ],
+        "Tapstream": [
+          "2.9.0"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "NewRelicAgent",
+  "version": "5.8.3",
+  "summary": "Real-time performance data with your next iOS app release.",
+  "homepage": "http://newrelic.com/mobile-monitoring",
+  "license": {
+    "type": "Commercial",
+    "file": "NewRelicAgent/LICENSE"
+  },
+  "authors": {
+    "New Relic, Inc.": "support@newrelic.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "http": "https://download.newrelic.com/ios_agent/NewRelic_iOS_Agent_5.8.3.zip"
+  },
+  "source_files": "NewRelicAgent/NewRelicAgent.framework/**/*.h",
+  "public_header_files": "NewRelicAgent/NewRelicAgent.framework/**/*.h",
+  "vendored_frameworks": "NewRelicAgent/NewRelicAgent.framework",
+  "preserve_paths": "NewRelicAgent/*.framework",
+  "frameworks": [
+    "SystemConfiguration",
+    "CoreTelephony"
+  ],
+  "libraries": [
+    "z",
+    "c++"
+  ],
+  "requires_arc": false
+}

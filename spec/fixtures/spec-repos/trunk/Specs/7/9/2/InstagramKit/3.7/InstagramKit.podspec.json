@@ -1,0 +1,46 @@
+{
+  "name": "InstagramKit",
+  "version": "3.7",
+  "summary": "Instagram iOS SDK.",
+  "description": "* An extensive blocks-based Objective C wrapper for the Instagram API.",
+  "homepage": "https://github.com/shyambhat/InstagramKit",
+  "license": "MIT",
+  "authors": {
+    "Shyam Bhat": "shyambhat@me.com"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "git": "https://github.com/shyambhat/InstagramKit.git",
+    "tag": "3.7"
+  },
+  "source_files": [
+    "InstagramKit",
+    "InstagramKit/**/*.{h,m}"
+  ],
+  "exclude_files": "InstagramKitDemo",
+  "requires_arc": true,
+  "dependencies": {
+    "AFNetworking": [
+      "~>2.0"
+    ]
+  },
+  "default_subspecs": "Exclude-UICKeyChainStore",
+  "subspecs": [
+    {
+      "name": "Exclude-UICKeyChainStore"
+    },
+    {
+      "name": "UICKeyChainStore",
+      "xcconfig": {
+        "OTHER_CFLAGS": "$(inherited) -INSTAGRAMKIT_INCLUDE_UICKEYCHAINSTORE"
+      },
+      "dependencies": {
+        "UICKeyChainStore": [
+          "~>2.0"
+        ]
+      }
+    }
+  ]
+}

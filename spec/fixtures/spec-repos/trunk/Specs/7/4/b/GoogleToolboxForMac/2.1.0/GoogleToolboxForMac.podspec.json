@@ -1,0 +1,311 @@
+{
+  "name": "GoogleToolboxForMac",
+  "version": "2.1.0",
+  "authors": "Google Inc.",
+  "license": {
+    "type": "Apache",
+    "file": "LICENSE"
+  },
+  "homepage": "https://github.com/google/google-toolbox-for-mac",
+  "source": {
+    "git": "https://github.com/google/google-toolbox-for-mac.git",
+    "tag": "v2.1.0"
+  },
+  "summary": "Google utilities for iOS and OSX development.",
+  "description": "A collection of source from different Google projects that may be of use\nto developers working on iOS or OS X projects.",
+  "platforms": {
+    "osx": "10.6",
+    "ios": "5.0"
+  },
+  "requires_arc": false,
+  "subspecs": [
+    {
+      "name": "Defines",
+      "public_header_files": "GTMDefines.h",
+      "source_files": "GTMDefines.h"
+    },
+    {
+      "name": "Core",
+      "source_files": [
+        "DebugUtils/GTMTypeCasting.h",
+        "Foundation/GTMLocalizedString.h",
+        "Foundation/GTMLogger.h"
+      ],
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "AddressBook",
+      "source_files": "AddressBook/GTMABAddressBook.{h,m}",
+      "frameworks": "AddressBook",
+      "dependencies": {
+        "GoogleToolboxForMac/Core": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "DebugUtils",
+      "source_files": [
+        "DebugUtils/GTMDebugSelectorValidation.{h,m}",
+        "DebugUtils/GTMDebugThreadValidation.h",
+        "DebugUtils/GTMMethodCheck.h"
+      ],
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "GeometryUtils",
+      "source_files": "Foundation/GTMGeometryUtils.{h,m}",
+      "frameworks": "CoreGraphics",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "KVO",
+      "source_files": "Foundation/GTMNSObject+KeyValueObserving.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Core": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/DebugUtils": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "Logger",
+      "source_files": "Foundation/GTMLogger.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "Regex",
+      "source_files": "Foundation/GTMRegex.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "StackTrace",
+      "source_files": "Foundation/GTMStackTrace.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "StringEncoding",
+      "source_files": "Foundation/GTMStringEncoding.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "SystemVersion",
+      "source_files": "Foundation/GTMSystemVersion.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "URLBuilder",
+      "source_files": "Foundation/GTMURLBuilder.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Core": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/NSDictionary+URLArguments": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/NSString+URLArguments": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSData+zlib",
+      "source_files": "Foundation/GTMNSData+zlib.{h,m}",
+      "requires_arc": "Foundation/GTMNSData+zlib.{h,m}",
+      "libraries": "z",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSDictionary+URLArguments",
+      "source_files": "Foundation/GTMNSDictionary+URLArguments.{h,m}",
+      "requires_arc": "Foundation/GTMNSDictionary+URLArguments.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/DebugUtils": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/NSString+URLArguments": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSFileHandle+UniqueName",
+      "source_files": "Foundation/GTMNSFileHandle+UniqueName.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSScanner+JSON",
+      "source_files": "Foundation/GTMNSScanner+JSON.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSString+HTML",
+      "source_files": "Foundation/GTMNSString+HTML.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Core": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSString+URLArguments",
+      "source_files": "Foundation/GTMNSString+URLArguments.{h,m}"
+    },
+    {
+      "name": "NSString+XML",
+      "source_files": "Foundation/GTMNSString+XML.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "NSThread+Blocks",
+      "source_files": "Foundation/GTMNSThread+Blocks.{h,m}",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "iPhone",
+      "platforms": {
+        "ios": "5.0"
+      },
+      "requires_arc": "iPhone/GTMUIImage+Resize.{h,m}",
+      "source_files": [
+        "iPhone/GTMFadeTruncatingLabel.{h,m}",
+        "iPhone/GTMUIImage+Resize.{h,m}",
+        "iPhone/GTMUILocalizer.{h,m}",
+        "iPhone/GTMUIImage+Resize.{h,m}"
+      ],
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "RoundedRectPath",
+      "platforms": {
+        "ios": "5.0"
+      },
+      "source_files": "iPhone/GTMRoundedRectPath.{h,m}",
+      "requires_arc": "iPhone/GTMRoundedRectPath.{h,m}",
+      "frameworks": "CoreGraphics",
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "UIFont+LineHeight",
+      "platforms": {
+        "ios": "5.0"
+      },
+      "source_files": "iPhone/GTMUIFont+LineHeight.{h,m}",
+      "requires_arc": "iPhone/GTMUIFont+LineHeight.{h,m}"
+    },
+    {
+      "name": "UnitTesting",
+      "platforms": {
+        "ios": "5.0"
+      },
+      "frameworks": "CoreGraphics",
+      "source_files": [
+        "UnitTesting/GTMFoundationUnitTestingUtilities.{h,m}",
+        "UnitTesting/GTMSenTestCase.{h,m}",
+        "UnitTesting/GTMTestTimer.h",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/Regex": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/SystemVersion": [
+          "2.1.0"
+        ]
+      }
+    },
+    {
+      "name": "UnitTestingAppLib",
+      "platforms": {
+        "ios": "5.0"
+      },
+      "source_files": [
+        "UnitTesting/GTMCodeCoverageApp.h",
+        "UnitTesting/GTMIPhoneUnitTestDelegate.{h,m}"
+      ],
+      "dependencies": {
+        "GoogleToolboxForMac/Defines": [
+          "2.1.0"
+        ],
+        "GoogleToolboxForMac/UnitTesting": [
+          "2.1.0"
+        ]
+      }
+    }
+  ]
+}

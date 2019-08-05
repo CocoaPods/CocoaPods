@@ -1,0 +1,36 @@
+{
+  "name": "MobileAppTracker",
+  "version": "3.0.3",
+  "summary": "SDK for MobileAppTracking platform",
+  "description": "The MobileAppTracking SDK for iOS provides app session and in-app event tracking capabilities.",
+  "homepage": "http://support.mobileapptracking.com/entries/23745301-iOS-SDK-v3-0-3",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "HasOffers, Inc.": "support@mobileapptracking.com"
+  },
+  "source": {
+    "git": "https://github.com/MobileAppTracking/cocoapod.git",
+    "tag": "3.0.3"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source_files": "*.h",
+  "preserve_paths": "*.a",
+  "public_header_files": "*.h",
+  "libraries": "MobileAppTracker-3.0.3",
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/MobileAppTracker\""
+  },
+  "frameworks": [
+    "CoreTelephony",
+    "MobileCoreServices",
+    "SystemConfiguration",
+    "UIKit",
+    "iAd"
+  ],
+  "requires_arc": false
+}

@@ -1,0 +1,52 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "6.0.0",
+  "summary": "Streams of values over time",
+  "description": "ReactiveCocoa (RAC) is a Cocoa framework built on top of ReactiveSwift. It provides APIs for using ReactiveSwift with Apple's Cocoa frameworks.",
+  "homepage": "https://github.com/ReactiveCocoa/ReactiveCocoa",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE.md"
+  },
+  "authors": "ReactiveCocoa",
+  "platforms": {
+    "osx": "10.9",
+    "ios": "8.0",
+    "tvos": "9.0",
+    "watchos": "2.0"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "6.0.0"
+  },
+  "source_files": [
+    "ReactiveCocoa/*.{swift,h,m}",
+    "ReactiveCocoa/Shared/*.{swift}"
+  ],
+  "private_header_files": "ReactiveCocoa/ObjCRuntimeAliases.h",
+  "osx": {
+    "source_files": "ReactiveCocoa/AppKit/*.{swift}"
+  },
+  "ios": {
+    "source_files": [
+      "ReactiveCocoa/UIKit/*.{swift}",
+      "ReactiveCocoa/UIKit/iOS/*.{swift}"
+    ]
+  },
+  "tvos": {
+    "source_files": "ReactiveCocoa/UIKit/*.{swift}"
+  },
+  "watchos": {
+    "exclude_files": "ReactiveCocoa/Shared/*.{swift}"
+  },
+  "module_map": "ReactiveCocoa/module.modulemap",
+  "dependencies": {
+    "ReactiveSwift": [
+      "~> 2.0"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "OTHER_SWIFT_FLAGS[config=Release]": "-suppress-warnings"
+  },
+  "pushed_with_swift_version": "3.0"
+}

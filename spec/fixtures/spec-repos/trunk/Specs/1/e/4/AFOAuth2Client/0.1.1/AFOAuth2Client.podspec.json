@@ -1,0 +1,25 @@
+{
+  "name": "AFOAuth2Client",
+  "version": "0.1.1",
+  "license": "MIT",
+  "summary": "AFNetworking Extension for OAuth 2 Authentication.",
+  "homepage": "https://github.com/AFNetworking/AFOAuth2Client",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFOAuth2Client.git",
+    "tag": "0.1.1"
+  },
+  "source_files": "AFOAuth2Client",
+  "requires_arc": true,
+  "dependencies": {
+    "AFNetworking": [
+      "~>1.0"
+    ]
+  },
+  "ios": {
+    "frameworks": "Security"
+  },
+  "prefix_header_contents": "#ifdef __OBJC__\n  #import <Security/Security.h>\n#endif /* __OBJC__*/\n"
+}

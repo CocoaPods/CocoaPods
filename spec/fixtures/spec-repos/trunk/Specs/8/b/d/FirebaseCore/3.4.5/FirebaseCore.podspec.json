@@ -1,0 +1,31 @@
+{
+  "authors": "Google, Inc.",
+  "dependencies": {
+    "GoogleInterchangeUtilities": "~> 1.2",
+    "GoogleToolboxForMac/NSData+zlib": "~> 2.1"
+  },
+  "description": "Firebase Core includes FIRApp and FIROptions which provide central configuration for other Firebase services.",
+  "frameworks": [
+    "SystemConfiguration"
+  ],
+  "homepage": "https://firebase.google.com",
+  "libraries": [
+    "c++"
+  ],
+  "license": {
+    "text": "Copyright 2016 Google",
+    "type": "Copyright"
+  },
+  "name": "FirebaseCore",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "http": "https://dl.google.com/dl/cpdc/23ffbc519fdeb8d5/FirebaseCore-3.4.5.tar.gz"
+  },
+  "summary": "Firebase Core for iOS",
+  "vendored_frameworks": [
+    "Frameworks/frameworks/FirebaseCore.framework"
+  ],
+  "version": "3.4.5"
+}

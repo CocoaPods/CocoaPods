@@ -1,0 +1,20 @@
+{
+  "name": "TransitionKit",
+  "version": "2.2.1",
+  "license": "Apache2",
+  "summary": "A block-based State Machine API for Objective-C.",
+  "homepage": "https://github.com/blakewatters/TransitionKit",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/blakewatters/TransitionKit.git",
+    "tag": "2.2.1"
+  },
+  "source_files": "Code",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  }
+}

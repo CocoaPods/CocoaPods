@@ -1,0 +1,61 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "1.9.7",
+  "summary": "A framework for composing and transforming streams of values.",
+  "homepage": "https://github.com/blog/1107-reactivecocoa-is-now-open-source",
+  "authors": {
+    "Josh Abernathy": "josh@github.com"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "v1.9.7"
+  },
+  "license": "MIT",
+  "description": "ReactiveCocoa (RAC) is an Objective-C framework for Functional Reactive Programming. It provides APIs for composing and transforming streams of values.",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "compiler_flags": "-DOS_OBJECT_USE_OBJC=0",
+  "prepare_command": "    find . \\( -name '*.h' -o -name '*.m' \\) \\\n      -exec sed -i '' -E 's@<ReactiveCocoa/(EXTKeyPathCoding|EXTScope|metamacros)\\.h>@<\\1.h>@' {} +\n",
+  "source_files": "ReactiveCocoaFramework/ReactiveCocoa/*.{h,m}",
+  "ios": {
+    "exclude_files": "**/*{NSButton,AppKit,NSText,NSControl}*"
+  },
+  "osx": {
+    "exclude_files": "**/*{UIBarButtonItem,UIControl,UIGestureRecognizer,UIText,RACEventTrampoline,RACDelegateProxy}*"
+  },
+  "subspecs": [
+    {
+      "name": "Core",
+      "header_dir": "ReactiveCocoa",
+      "dependencies": {
+        "JRSwizzle": [
+          "~> 1.0"
+        ],
+        "libextobjc/EXTKeyPathCoding": [
+          "~> 0.3.0"
+        ],
+        "libextobjc/EXTConcreteProtocol": [
+          "~> 0.3.0"
+        ],
+        "libextobjc/EXTScope": [
+          "~> 0.3.0"
+        ]
+      }
+    },
+    {
+      "name": "RACExtensions",
+      "source_files": "RACExtensions/*.{h,m}",
+      "ios": {
+        "exclude_files": "**/*{NSTask}*"
+      },
+      "dependencies": {
+        "ReactiveCocoa/Core": [
+
+        ]
+      }
+    }
+  ]
+}

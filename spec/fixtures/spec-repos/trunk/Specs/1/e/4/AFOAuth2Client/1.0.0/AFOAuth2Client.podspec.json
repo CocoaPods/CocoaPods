@@ -1,0 +1,32 @@
+{
+  "name": "AFOAuth2Client",
+  "version": "1.0.0",
+  "license": "MIT",
+  "summary": "AFNetworking Extension for OAuth 2 Authentication.",
+  "homepage": "https://github.com/AFNetworking/AFOAuth2Client",
+  "social_media_url": "https://twitter.com/AFNetworking",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFOAuth2Client.git",
+    "tag": "1.0.0"
+  },
+  "source_files": "AFOAuth2Client",
+  "requires_arc": true,
+  "dependencies": {
+    "AFNetworking": [
+      "~>1.3"
+    ]
+  },
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "deprecated": true,
+  "deprecated_in_favor_of": "AFOAuth2Manager",
+  "ios": {
+    "frameworks": "Security"
+  },
+  "prefix_header_contents": "#ifdef __OBJC__\n  #import <Security/Security.h>\n  #if __IPHONE_OS_VERSION_MIN_REQUIRED\n    #import <SystemConfiguration/SystemConfiguration.h>\n    #import <MobileCoreServices/MobileCoreServices.h>\n  #else\n    #import <SystemConfiguration/SystemConfiguration.h>\n    #import <CoreServices/CoreServices.h>\n  #endif\n#endif /* __OBJC__*/\n"
+}

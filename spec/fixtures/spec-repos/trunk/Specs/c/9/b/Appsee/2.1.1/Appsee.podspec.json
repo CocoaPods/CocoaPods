@@ -1,0 +1,30 @@
+{
+  "name": "Appsee",
+  "version": "2.1.1",
+  "license": {
+    "type": "Commercial",
+    "text": "                Copyright (c) 2013, Shift 6 LTD. Appsee\n                All rights reserved.\n\n                Redistribution and use in source and binary forms, with or without\n                modification, are permitted provided that the following conditions are met:\n                * Redistributions of source code must retain the above copyright\n                notice, this list of conditions and the following disclaimer.\n                * Neither the name of Shift 6 LTD, Appsee nor the names of its \n                contributors may be used to endorse or promote products derived from this\n                software without specific prior written permission.\n\n                THE SERVICE, THE SITE, THE APPSEE SDK, THE REPORTS AND/OR THE CONTENT ARE ALL PROVIDED ON AN \"AS IS\" BASIS, WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, \n                RELIABILITY AND/OR QUALITY OF SERVICE, WARRANTIES OF TITLE OR NON-INFRINGEMENT OR IMPLIED WARRANTIES OF USE, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE OR USE.\n\n                The Service, the Site, the Software, Appsee SDK, the Report, the Content and any and all intellectual property rights pertaining thereto, including, but not limited to, inventions, \n                patents and patent applications, trademarks, trade names, logos, copyrightable materials, graphics, text, images, designs (including the \"look and feel\" of the Site), specifications, methods, \n                procedures, information, know-how, algorithms, data, technical data, interactive features, source and object code, files, interface and trade secrets, \n                whether or not registered or capable of being registered (collectively, \"Intellectual Property\"), are owned and/or licensed to Shift 6 and subject to copyright and other applicable intellectual property rights \n                under Israeli laws, foreign laws and international conventions.\n\n                You may not copy, distribute, display, execute publicly, make available to the public, reduce to human readable form, resale, lease, decompile, disassemble, adapt, sublicense, make any commercial use, \n                sell, rent, lend, process, compile, reverse engineer, combine with other software, translate, modify or create derivative works of any material that is subject to Shift 6's proprietary rights, \n                including Shift 6's Intellectual Property, either by Yourself or by anyone on Your behalf, in any way or by any means, unless expressly permitted in the Terms. \n\n                Shift 6 has no obligation to provide support, maintenance, upgrades, modifications, or new releases of the Appsee SDK under this Agreement, \n                unless agreed in writing otherwise between You and us.\n"
+  },
+  "summary": "Appsee SDK for UIKit applications",
+  "homepage": "http://www.appsee.com",
+  "authors": {
+    "Appsee": "contact@appsee.com"
+  },
+  "source": {
+    "http": "http://www.appsee.com/sdk/appsee_ios_2.1.1.zip"
+  },
+  "platforms": {
+    "ios": 5.0
+  },
+  "requires_arc": true,
+  "frameworks": [
+    "AVFoundation",
+    "CoreGraphics",
+    "CoreMedia",
+    "CoreVideo",
+    "QuartzCore",
+    "SystemConfiguration"
+  ],
+  "public_header_files": "Appsee/Appsee.framework/Headers/*.h*",
+  "vendored_frameworks": "Appsee/Appsee.framework"
+}

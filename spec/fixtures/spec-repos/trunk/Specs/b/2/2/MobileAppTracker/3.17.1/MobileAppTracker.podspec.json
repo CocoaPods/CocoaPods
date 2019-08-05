@@ -1,0 +1,46 @@
+{
+  "name": "MobileAppTracker",
+  "version": "3.17.1",
+  "summary": "SDK for TUNE MobileAppTracking platform",
+  "description": "The TUNE MobileAppTracking SDK for iOS/tvOS provides app session measurement, in-app event measurement, and app cross-promotion advertisement capabilities.",
+  "homepage": "https://developers.mobileapptracking.com/ios-sdk",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "TUNE, Inc.": "support@mobileapptracking.com"
+  },
+  "source": {
+    "git": "https://github.com/MobileAppTracking/cocoapod.git",
+    "tag": "3.17.1"
+  },
+  "platforms": {
+    "ios": "6.0",
+    "tvos": "9.0"
+  },
+  "ios": {
+    "frameworks": [
+      "AdSupport",
+      "CoreTelephony",
+      "iAd",
+      "MobileCoreServices",
+      "StoreKit",
+      "SystemConfiguration",
+      "UIKit"
+    ],
+    "preserve_paths": "MobileAppTracker.framework",
+    "vendored_frameworks": "MobileAppTracker.framework"
+  },
+  "tvos": {
+    "frameworks": [
+      "AdSupport",
+      "MobileCoreServices",
+      "StoreKit",
+      "SystemConfiguration",
+      "UIKit"
+    ],
+    "preserve_paths": "MobileAppTracker_tvOS.framework",
+    "vendored_frameworks": "MobileAppTracker_tvOS.framework"
+  }
+}

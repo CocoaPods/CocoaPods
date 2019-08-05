@@ -1,0 +1,23 @@
+{
+  "name": "Analytics",
+  "version": "3.2.5",
+  "summary": "The hassle-free way to add analytics to your iOS app.",
+  "description": "Analytics for iOS provides a single API that lets you\nintegrate with over 100s of tools.",
+  "homepage": "http://segment.com/",
+  "license": {
+    "type": "MIT"
+  },
+  "authors": {
+    "Segment": "friends@segment.com"
+  },
+  "source": {
+    "git": "https://github.com/segmentio/analytics-ios.git",
+    "tag": "3.2.5"
+  },
+  "social_media_url": "https://twitter.com/segment",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "source_files": "Pod/Classes/**/*"
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "2.19.3",
+  "summary": "This is the Appboy iOS SDK for Mobile Marketing Automation",
+  "homepage": "http://www.appboy.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.appboy.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "2.19.3"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": true,
+  "documentation_url": "http://documentation.appboy.com/",
+  "libraries": "z",
+  "frameworks": [
+    "SystemConfiguration",
+    "QuartzCore",
+    "CoreImage",
+    "CoreText"
+  ],
+  "weak_frameworks": [
+    "CoreTelephony",
+    "Social",
+    "Accounts",
+    "AdSupport",
+    "StoreKit"
+  ],
+  "source_files": [
+    "AppboyKit/headers/AppboyKitLibrary/*.h",
+    "AppboyKit/*.m"
+  ],
+  "exclude_files": "AppboyKit/**/*.txt",
+  "resources": "AppboyKit/Appboy.bundle",
+  "preserve_paths": "AppboyKit/**/*.*",
+  "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+  "dependencies": {
+    "SDWebImage": [
+      "~>3.7.0"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "KeenClient",
+  "version": "3.7.0",
+  "license": {
+    "type": "MIT"
+  },
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.9"
+  },
+  "homepage": "https://github.com/keenlabs/KeenClient-iOS",
+  "authors": {
+    "Daniel Kador": "dan@keen.io",
+    "Terry Horner": "terry@keen.io",
+    "Claire Young": "claire@keen.io",
+    "Heitor Sergent": "heitor@keen.io",
+    "Brian Baumhover": "b.baumhover@gmail.com"
+  },
+  "summary": "Keen iOS client library.",
+  "description": "The Keen client is designed to be simple to develop with, yet incredibly flexible.  Our goal is to let you decide what events are important to you, use your own vocabulary to describe them, and decide when you want to send them to Keen service.",
+  "source": {
+    "git": "https://github.com/keenlabs/KeenClient-iOS.git",
+    "tag": "3.7.0"
+  },
+  "source_files": [
+    "KeenClient/*.{h,m}",
+    "Library/Reachability/*.{h,m}"
+  ],
+  "public_header_files": "KeenClient/*.h",
+  "requires_arc": true,
+  "frameworks": [
+    "SystemConfiguration",
+    "CoreLocation",
+    "CFNetwork"
+  ],
+  "subspecs": [
+    {
+      "name": "keen_sqlite",
+      "source_files": "Library/sqlite-amalgamation/*.{h,c}",
+      "private_header_files": "Library/sqlite-amalgamation/*.h",
+      "compiler_flags": [
+        "-w",
+        "-Xanalyzer",
+        "-analyzer-disable-all-checks"
+      ]
+    }
+  ]
+}

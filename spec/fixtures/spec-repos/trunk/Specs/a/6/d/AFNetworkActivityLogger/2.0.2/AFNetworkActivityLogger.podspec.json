@@ -1,0 +1,24 @@
+{
+  "name": "AFNetworkActivityLogger",
+  "version": "2.0.2",
+  "license": "MIT",
+  "summary": "AFNetworking 2.0 Extension for Network Request Logging",
+  "homepage": "https://github.com/AFNetworking/AFNetworkActivityLogger",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFNetworkActivityLogger.git",
+    "tag": "2.0.2"
+  },
+  "source_files": "AFNetworkActivityLogger.{h,m}",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "6.0"
+  },
+  "dependencies": {
+    "AFNetworking/NSURLSession": [
+      "~> 2.0"
+    ]
+  }
+}

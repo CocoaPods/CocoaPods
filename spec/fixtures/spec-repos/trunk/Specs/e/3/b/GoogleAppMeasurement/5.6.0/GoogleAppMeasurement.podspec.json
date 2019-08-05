@@ -1,0 +1,36 @@
+{
+  "authors": "Google, Inc.",
+  "dependencies": {
+    "GoogleUtilities/AppDelegateSwizzler": "~> 5.2",
+    "GoogleUtilities/MethodSwizzler": "~> 5.2",
+    "GoogleUtilities/NSData+zlib": "~> 5.2",
+    "GoogleUtilities/Network": "~> 5.2",
+    "nanopb": "~> 0.3"
+  },
+  "description": "Measurement methods that are shared between Google libraries. This pod does not expose any headers and isn't intended for direct use, but rather as a dependency of some Google libraries.",
+  "frameworks": [
+    "StoreKit"
+  ],
+  "homepage": "https://developers.google.com/ios",
+  "libraries": [
+    "c++",
+    "sqlite3",
+    "z"
+  ],
+  "license": {
+    "text": "Copyright 2019 Google",
+    "type": "Copyright"
+  },
+  "name": "GoogleAppMeasurement",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "http": "https://dl.google.com/dl/cpdc/5df9071ab03dbb74/GoogleAppMeasurement-5.6.0.tar.gz"
+  },
+  "summary": "Shared measurement methods for Google libraries. Not intended for direct use.",
+  "vendored_frameworks": [
+    "Frameworks/GoogleAppMeasurement.framework"
+  ],
+  "version": "5.6.0"
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Parse",
+  "version": "1.5.0",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://www.parse.com/about/terms"
+  },
+  "homepage": "https://www.parse.com/",
+  "summary": "Parse is a complete technology stack to power your app's backend.",
+  "authors": "Parse",
+  "source": {
+    "http": "http://parse-ios.s3.amazonaws.com/616b81c14b1d1f97146b0cfa57a7b307/parse-library-1.5.0.zip"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": false,
+  "vendored_frameworks": "Parse.framework",
+  "public_header_files": "Parse.framework/**/*.h",
+  "frameworks": [
+    "AudioToolbox",
+    "CFNetwork",
+    "CoreGraphics",
+    "CoreLocation",
+    "MobileCoreServices",
+    "QuartzCore",
+    "Security",
+    "StoreKit",
+    "SystemConfiguration"
+  ],
+  "weak_frameworks": [
+    "Accounts",
+    "Social"
+  ],
+  "libraries": [
+    "z",
+    "sqlite3"
+  ],
+  "dependencies": {
+    "Bolts": [
+      "~> 1.1.3"
+    ]
+  }
+}

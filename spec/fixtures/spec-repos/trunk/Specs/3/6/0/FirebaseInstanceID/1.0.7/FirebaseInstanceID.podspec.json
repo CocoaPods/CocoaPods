@@ -1,0 +1,31 @@
+{
+  "name": "FirebaseInstanceID",
+  "version": "1.0.7",
+  "summary": "Firebase InstanceID for iOS",
+  "description": "Instance ID provides a unique ID per instance of your iOS apps, with support for Android as well. In addition to providing unique IDs for authentication, Instance ID can generate security tokens for use with other services.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "text": "Copyright 2016 Google Inc.",
+    "type": "Copyright"
+  },
+  "authors": "Google Inc.",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "vendored_frameworks": [
+    "Frameworks/FirebaseInstanceID.framework"
+  ],
+  "public_header_files": [
+    "Headers/Public/*.h"
+  ],
+  "source_files": [
+    "Headers/Public/*.h"
+  ],
+  "preserve_paths": [
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/46b87f251519815b-FirebaseInstanceID-1.0.7.tar.gz"
+  }
+}

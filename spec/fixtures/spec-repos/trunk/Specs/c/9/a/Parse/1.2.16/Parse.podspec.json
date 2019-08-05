@@ -1,0 +1,43 @@
+{
+  "name": "Parse",
+  "version": "1.2.16",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://parse.com/about/terms"
+  },
+  "platforms": {
+    "ios": null
+  },
+  "summary": "iOS framework for developing apps using the Parse cloud app platform.",
+  "description": "To integrate after adding this pod, continue with step 9 in the QuickStart: (https://parse.com/apps/quickstart).",
+  "homepage": "http://parse.com",
+  "authors": {
+    "Parse": "support@parse.com"
+  },
+  "source": {
+    "git": "https://github.com/jessbowers/Parse.git",
+    "tag": "1.2.16"
+  },
+  "requires_arc": true,
+  "frameworks": [
+    "AudioToolbox",
+    "CFNetwork",
+    "CoreGraphics",
+    "CoreLocation",
+    "MobileCoreServices",
+    "QuartzCore",
+    "Security",
+    "StoreKit",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "z",
+    "sqlite3"
+  ],
+  "vendored_frameworks": "Parse.framework",
+  "dependencies": {
+    "Facebook-iOS-SDK": [
+      "~> 3.9"
+    ]
+  }
+}

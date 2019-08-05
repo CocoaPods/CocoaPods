@@ -1,0 +1,30 @@
+{
+  "name": "UMengAnalytics",
+  "version": "4.1.2",
+  "summary": "UMeng's official Analytics SDK for iOS.",
+  "description": "                   UMeng Analytics SDK for analytics tracking and reporting.\n\n                   * Think: Why did you write this? What is the focus? What does it do?\n                   * CocoaPods will be using this to generate tags, and improve search results.\n                   * Try to keep it short, snappy and to the point.\n                   * Finally, don't worry about the indent, CocoaPods strips it!\n",
+  "homepage": "http://dev.umeng.com/analytics/ios/quick-start",
+  "license": {
+    "type": "Copyright",
+    "text": "      Copyright 2011 - 2015 UMeng.com. All rights reserved.\n"
+  },
+  "authors": {
+    "UMeng": "support@umeng.com"
+  },
+  "platforms": {
+    "ios": "4.3"
+  },
+  "source": {
+    "http": "http://dev.umeng.com/system/resources/W1siZiIsIjIwMTYvMTAvMTMvMTNfMjlfMzNfMjQ5X3Vtc2RrX0lPU19hbmFseWljc19pZGZhX3Y0LjEuMi56aXAiXV0/umsdk_IOS_analyics_idfa_v4.1.2.zip"
+  },
+  "vendored_frameworks": "*/UMMobClick.framework",
+  "frameworks": "CoreTelephony",
+  "libraries": [
+    "sqlite3",
+    "z"
+  ],
+  "requires_arc": false,
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/UMengAnalytics/**\""
+  }
+}

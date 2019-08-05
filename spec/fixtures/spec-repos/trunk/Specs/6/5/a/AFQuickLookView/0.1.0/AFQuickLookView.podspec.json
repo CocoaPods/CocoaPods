@@ -1,0 +1,28 @@
+{
+  "name": "AFQuickLookView",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "version": "0.1.0",
+  "license": "MIT",
+  "summary": "AFNetworking Extension for document previews of remote files.",
+  "homepage": "https://github.com/ursachec/AFQuickLookView",
+  "authors": {
+    "Claudiu-Vlad Ursache": "claudiu@cvursache.com"
+  },
+  "source": {
+    "git": "https://github.com/ursachec/AFQuickLookView.git",
+    "tag": "0.1.0"
+  },
+  "source_files": [
+    "AFQuickLookViewHTTPClient.{h,m}",
+    "AFQuickLookView.{h,m}"
+  ],
+  "requires_arc": true,
+  "frameworks": "QuickLook",
+  "dependencies": {
+    "AFNetworking": [
+      ">= 0.9.0"
+    ]
+  }
+}

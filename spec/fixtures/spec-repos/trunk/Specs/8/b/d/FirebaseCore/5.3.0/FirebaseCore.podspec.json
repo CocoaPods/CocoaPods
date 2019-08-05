@@ -1,0 +1,42 @@
+{
+  "name": "FirebaseCore",
+  "version": "5.3.0",
+  "summary": "Firebase Core for iOS (plus community support for macOS and tvOS)",
+  "description": "Firebase Core includes FIRApp and FIROptions which provide central configuration for other Firebase services.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "type": "Apache",
+    "file": "LICENSE"
+  },
+  "authors": "Google, Inc.",
+  "source": {
+    "git": "https://github.com/firebase/firebase-ios-sdk.git",
+    "tag": "Core-5.3.0"
+  },
+  "social_media_url": "https://twitter.com/Firebase",
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.10",
+    "tvos": "10.0"
+  },
+  "cocoapods_version": ">= 1.4.0",
+  "static_framework": true,
+  "prefix_header_file": false,
+  "source_files": "Firebase/Core/**/*.[mh]",
+  "public_header_files": [
+    "Firebase/Core/Public/*.h",
+    "Firebase/Core/Private/*.h"
+  ],
+  "private_header_files": "Firebase/Core/Private/*.h",
+  "frameworks": "Foundation",
+  "dependencies": {
+    "GoogleUtilities/Logger": [
+      "~> 5.2"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "GCC_C_LANGUAGE_STANDARD": "c99",
+    "GCC_PREPROCESSOR_DEFINITIONS": "FIRCore_VERSION=5.3.0 Firebase_VERSION=5.17.0",
+    "OTHER_CFLAGS": "-fno-autolink"
+  }
+}

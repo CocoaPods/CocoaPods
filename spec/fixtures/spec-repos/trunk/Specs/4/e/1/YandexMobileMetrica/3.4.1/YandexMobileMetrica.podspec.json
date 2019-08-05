@@ -1,0 +1,86 @@
+{
+  "name": "YandexMobileMetrica",
+  "version": "3.4.1",
+  "summary": "This library is designed to be a part of mobile apps and provide app usage stats to Yandex AppMetrica",
+  "homepage": "http://appmetrica.yandex.com/",
+  "license": {
+    "type": "PROPRIETARY",
+    "file": "LICENSE.md"
+  },
+  "authors": {
+    "Yandex LLC": "appmetrica@yandex-team.com"
+  },
+  "source": {
+    "http": "https://storage.mds.yandex.net/get-appmetrica-mobile-sdk/128534/YandexMobileMetrica-3.4.1-ios-17403b29-3ad3-494b-9793-f2c38628edc7.zip",
+    "sha1": "fa2cf3c31d339c638c22a1099f9422be42c9031e"
+  },
+  "libraries": [
+    "c++",
+    "z",
+    "sqlite3"
+  ],
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "CoreTelephony",
+    "CoreLocation",
+    "CoreGraphics",
+    "AdSupport",
+    "SystemConfiguration"
+  ],
+  "requires_arc": true,
+  "default_subspecs": "Static",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "subspecs": [
+    {
+      "name": "Static",
+      "subspecs": [
+        {
+          "name": "Core",
+          "preserve_paths": "static/YandexMobileMetrica.framework",
+          "source_files": "static/YandexMobileMetrica.framework/Versions/A/Headers/*.h",
+          "public_header_files": "static/YandexMobileMetrica.framework/Versions/A/Headers/*.h",
+          "vendored_frameworks": "static/YandexMobileMetrica.framework"
+        },
+        {
+          "name": "Crashes",
+          "dependencies": {
+            "YandexMobileMetrica/Static/Core": [
+
+            ]
+          },
+          "preserve_paths": "static/YandexMobileMetricaCrashes.framework",
+          "source_files": "static/YandexMobileMetricaCrashes.framework/Versions/A/Headers/*.h",
+          "public_header_files": "static/YandexMobileMetricaCrashes.framework/Versions/A/Headers/*.h",
+          "vendored_frameworks": "static/YandexMobileMetricaCrashes.framework"
+        }
+      ]
+    },
+    {
+      "name": "Dynamic",
+      "subspecs": [
+        {
+          "name": "Core",
+          "preserve_paths": "dynamic/YandexMobileMetrica.framework",
+          "source_files": "dynamic/YandexMobileMetrica.framework/Headers/*.h",
+          "public_header_files": "dynamic/YandexMobileMetrica.framework/Headers/*.h",
+          "vendored_frameworks": "dynamic/YandexMobileMetrica.framework"
+        },
+        {
+          "name": "Crashes",
+          "dependencies": {
+            "YandexMobileMetrica/Dynamic/Core": [
+
+            ]
+          },
+          "preserve_paths": "dynamic/YandexMobileMetricaCrashes.framework",
+          "source_files": "dynamic/YandexMobileMetricaCrashes.framework/Headers/*.h",
+          "public_header_files": "dynamic/YandexMobileMetricaCrashes.framework/Headers/*.h",
+          "vendored_frameworks": "dynamic/YandexMobileMetricaCrashes.framework"
+        }
+      ]
+    }
+  ]
+}

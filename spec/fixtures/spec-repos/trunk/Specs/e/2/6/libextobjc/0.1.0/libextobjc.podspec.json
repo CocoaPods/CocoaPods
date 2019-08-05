@@ -1,0 +1,138 @@
+{
+  "name": "libextobjc",
+  "version": "0.1.0",
+  "summary": "A Cocoa library to extend the Objective-C programming language.",
+  "homepage": "https://github.com/jspahrsummers/libextobjc",
+  "authors": {
+    "Justin Spahr-Summers": "jspahrsummers@github.com"
+  },
+  "source": {
+    "git": "https://github.com/jspahrsummers/libextobjc.git",
+    "tag": "0.1.0"
+  },
+  "source_files": [
+    "extobjc/metamacros.h",
+    "extobjc/EXTRuntimeExtensions.{h,m}"
+  ],
+  "requires_arc": true,
+  "description": "                    The Extended Objective-C library extends the dynamism of the Objective-C programming language to support additional patterns present in other dynamic programming languages (including those that are not necessarily object-oriented).\n\n                    libextobjc is meant to be very modular – most of its classes and modules can be used with no more than one or two dependencies.\n",
+  "license": {
+    "type": "MIT",
+    "text": "                      Copyright (c) 2012 Justin Spahr-Summers\n\n                      Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\n                      The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\n                      THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+  },
+  "subspecs": [
+    {
+      "name": "UmbrellaHeader",
+      "source_files": "extobjc/extobjc.h"
+    },
+    {
+      "name": "EXTADT",
+      "source_files": "extobjc/EXTADT.{h,m}"
+    },
+    {
+      "name": "EXTAnnotation",
+      "source_files": "extobjc/EXTAnnotation.{h,m}"
+    },
+    {
+      "name": "EXTAspect",
+      "source_files": "extobjc/EXTAspect.{h,m}",
+      "dependencies": {
+        "libffi": [
+
+        ]
+      }
+    },
+    {
+      "name": "EXTBlockMethod",
+      "source_files": "extobjc/EXTBlockMethod.{h,m}"
+    },
+    {
+      "name": "EXTBlockTarget",
+      "source_files": "extobjc/EXTBlockTarget.{h,m}"
+    },
+    {
+      "name": "EXTConcreteProtocol",
+      "source_files": "extobjc/EXTConcreteProtocol.{h,m}"
+    },
+    {
+      "name": "EXTDispatchObject",
+      "source_files": "extobjc/EXTDispatchObject.{h,m}"
+    },
+    {
+      "name": "EXTFinalMethod",
+      "source_files": "extobjc/EXTFinalMethod.{h,m}"
+    },
+    {
+      "name": "EXTKeyPathCoding",
+      "source_files": "extobjc/EXTKeyPathCoding.{h,m}"
+    },
+    {
+      "name": "EXTMaybe",
+      "source_files": "extobjc/EXTMaybe.{h,m}"
+    },
+    {
+      "name": "EXTMixin",
+      "source_files": "extobjc/EXTMixin.{h,m}"
+    },
+    {
+      "name": "EXTMultimethod",
+      "source_files": "extobjc/EXTMultimethod.{h,m}"
+    },
+    {
+      "name": "EXTMultiObject",
+      "source_files": "extobjc/EXTMultiObject.{h,m}"
+    },
+    {
+      "name": "EXTNil",
+      "source_files": "extobjc/EXTNil.{h,m}"
+    },
+    {
+      "name": "EXTPassthrough",
+      "source_files": "extobjc/EXTPassthrough.{h,m}"
+    },
+    {
+      "name": "EXTPrivateMethod",
+      "source_files": "extobjc/EXTPrivateMethod.{h,m}"
+    },
+    {
+      "name": "EXTProtocolCategory",
+      "source_files": "extobjc/EXTProtocolCategory.{h,m}"
+    },
+    {
+      "name": "EXTSafeCategory",
+      "source_files": "extobjc/EXTSafeCategory.{h,m}"
+    },
+    {
+      "name": "EXTScope",
+      "source_files": "extobjc/EXTScope.{h,m}"
+    },
+    {
+      "name": "EXTSelectorChecking",
+      "source_files": "extobjc/EXTSelectorChecking.{h,m}"
+    },
+    {
+      "name": "EXTSynthesize",
+      "source_files": "extobjc/EXTSynthesize.{h,m}"
+    },
+    {
+      "name": "EXTSwizzle",
+      "source_files": "extobjc/EXTSwizzle.{h,m}"
+    },
+    {
+      "name": "EXTTuple",
+      "source_files": "extobjc/EXTTuple.{h,m}"
+    },
+    {
+      "name": "EXTVarargs",
+      "source_files": "extobjc/EXTVarargs.{h,m}"
+    },
+    {
+      "name": "NSInvocation+EXT",
+      "source_files": "extobjc/NSInvocation+EXT.{h,m}"
+    },
+    {
+      "name": "NSMethodSignature+EXT",
+      "source_files": "extobjc/NSMethodSignature+EXT.{h,m}"
+    }
+  ]
+}

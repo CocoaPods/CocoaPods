@@ -1,0 +1,104 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "3.3.4",
+  "summary": "This is the Braze iOS SDK for Mobile Marketing Automation",
+  "homepage": "http://www.braze.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.braze.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "3.3.4"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "documentation_url": "http://documentation.braze.com/",
+  "exclude_files": "AppboyKit/**/*.txt",
+  "preserve_paths": "AppboyKit/**/*.*",
+  "pod_target_xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  },
+  "default_subspecs": "UI",
+  "subspecs": [
+    {
+      "name": "Core",
+      "ios": {
+        "libraries": "z"
+      },
+      "frameworks": [
+        "SystemConfiguration",
+        "QuartzCore",
+        "CoreText",
+        "WebKit"
+      ],
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/ABKIdentifierForAdvertisingProvider.m",
+        "AppboyKit/ABKModalWebViewController.m",
+        "AppboyKit/ABKNoConnectionLocalization.m"
+      ],
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "weak_frameworks": [
+        "CoreTelephony",
+        "Social",
+        "Accounts",
+        "AdSupport",
+        "StoreKit",
+        "UserNotifications"
+      ]
+    },
+    {
+      "name": "UI",
+      "resources": "AppboyKit/Appboy.bundle",
+      "dependencies": {
+        "Appboy-iOS-SDK/Feedback": [
+
+        ],
+        "Appboy-iOS-SDK/InAppMessage": [
+
+        ],
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "Feedback",
+      "source_files": [
+        "AppboyUI/ABKFeedbackViewController/FeedbackViewController/*.*",
+        "AppboyUI/ABKFeedbackViewController/AppboyFeedback.h",
+        "AppboyUI/ABKUIUtils/**/*.*"
+      ],
+      "resources": "AppboyUI/ABKFeedbackViewController/Feedback_Resources/**/*.*",
+      "dependencies": {
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    },
+    {
+      "name": "InAppMessage",
+      "source_files": [
+        "AppboyUI/ABKUIUtils/**/*.*",
+        "AppboyUI/InAppMessage/*.*",
+        "AppboyUI/InAppMessage/ViewControllers/*.*",
+        "AppboyKit/ABKSDWebImageProxy.m"
+      ],
+      "resources": "AppboyUI/InAppMessage/Resources/*.*",
+      "dependencies": {
+        "SDWebImage/GIF": [
+          "~>4.0"
+        ],
+        "Appboy-iOS-SDK/Core": [
+
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "1.9.5",
+  "summary": "A framework for composing and transforming streams of values.",
+  "homepage": "https://github.com/blog/1107-reactivecocoa-is-now-open-source",
+  "authors": {
+    "Josh Abernathy": "josh@github.com"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "v1.9.5"
+  },
+  "license": "MIT",
+  "description": "ReactiveCocoa (RAC) is an Objective-C framework for Functional Reactive Programming. It provides APIs for composing and transforming streams of values.",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "compiler_flags": "-DOS_OBJECT_USE_OBJC=0",
+  "source_files": "ReactiveCocoaFramework/ReactiveCocoa/*.{h,m}",
+  "ios": {
+    "exclude_files": "**/*{NSButton,AppKit,NSText,NSControl}*"
+  },
+  "osx": {
+    "exclude_files": "**/*{UIBarButtonItem,UIControl,UIGestureRecognizer,UIText,RACEventTrampoline,RACDelegateProxy}*"
+  },
+  "prepare_command": "echo \"This Pod relies on the removed \\`pre_install\\` or \\`post_install\\` hooks and therefore will no longer continue to work. Please try updating to the latest version of this Pod or updating the Pod specification. See http://blog.cocoapods.org/CocoaPods-Trunk/ for more details.\" && exit 1",
+  "subspecs": [
+    {
+      "name": "Core",
+      "header_dir": "ReactiveCocoa",
+      "dependencies": {
+        "JRSwizzle": [
+          "~> 1.0"
+        ],
+        "libextobjc/EXTKeyPathCoding": [
+          "~> 0.2.5"
+        ],
+        "libextobjc/EXTConcreteProtocol": [
+          "~> 0.2.5"
+        ],
+        "libextobjc/EXTScope": [
+          "~> 0.2.5"
+        ]
+      }
+    },
+    {
+      "name": "RACExtensions",
+      "source_files": "RACExtensions/*.{h,m}",
+      "ios": {
+        "exclude_files": "**/*{NSTask}*"
+      },
+      "dependencies": {
+        "ReactiveCocoa/Core": [
+
+        ]
+      }
+    }
+  ]
+}

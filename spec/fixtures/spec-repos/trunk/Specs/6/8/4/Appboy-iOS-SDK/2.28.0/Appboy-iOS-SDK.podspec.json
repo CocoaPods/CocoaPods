@@ -1,0 +1,86 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "2.28.0",
+  "summary": "This is the Appboy iOS SDK for Mobile Marketing Automation",
+  "homepage": "http://www.appboy.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.appboy.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "2.28.0"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "requires_arc": true,
+  "documentation_url": "http://documentation.appboy.com/",
+  "exclude_files": "AppboyKit/**/*.txt",
+  "preserve_paths": "AppboyKit/**/*.*",
+  "pod_target_xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  },
+  "default_subspecs": "UI",
+  "subspecs": [
+    {
+      "name": "Core",
+      "ios": {
+        "libraries": "z"
+      },
+      "frameworks": [
+        "SystemConfiguration",
+        "QuartzCore",
+        "CoreText"
+      ],
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/ABKIdentifierForAdvertisingProvider.m"
+      ],
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "weak_frameworks": [
+        "CoreTelephony",
+        "Social",
+        "Accounts",
+        "AdSupport",
+        "StoreKit",
+        "UserNotifications"
+      ],
+      "resources": "AppboyKit/Appboy.bundle"
+    },
+    {
+      "name": "UI",
+      "ios": {
+        "libraries": "z"
+      },
+      "frameworks": [
+        "SystemConfiguration",
+        "QuartzCore",
+        "CoreImage",
+        "CoreText"
+      ],
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/*.m"
+      ],
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "weak_frameworks": [
+        "CoreTelephony",
+        "Social",
+        "Accounts",
+        "AdSupport",
+        "StoreKit",
+        "UserNotifications"
+      ],
+      "resources": "AppboyKit/Appboy.bundle",
+      "dependencies": {
+        "SDWebImage/GIF": [
+          "~>4.0"
+        ]
+      }
+    }
+  ]
+}

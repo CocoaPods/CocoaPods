@@ -1,0 +1,190 @@
+{
+  "name": "HockeySDK-Source",
+  "version": "3.7.0",
+  "summary": "Collect live crash reports, get feedback from your users, distribute your betas, and analyze your test coverage with HockeyApp.",
+  "description": "                        HockeyApp is a service to distribute beta apps, collect crash reports and\n                        communicate with your app's users.\n                        \n                        It improves the testing process dramatically and can be used for both beta\n                        and App Store builds.\n",
+  "homepage": "http://hockeyapp.net/",
+  "documentation_url": "http://hockeyapp.net/help/sdk/ios/3.7.0/",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Andreas Linde": "mail@andreaslinde.de",
+    "Thomas Dohmke": "thomas@dohmke.de"
+  },
+  "source": {
+    "git": "https://github.com/bitstadium/HockeySDK-iOS.git",
+    "tag": "3.7.0"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": true,
+  "prepare_command": "cp -f Classes/HockeySDKFeatureConfig_CP.h Classes/HockeySDKFeatureConfig.h",
+  "resource_bundles": {
+    "HockeySDKResources": [
+      "Resources/*.lproj"
+    ]
+  },
+  "preserve_paths": "README.md",
+  "private_header_files": "Classes/*Private.h",
+  "xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) BITHOCKEY_VERSION=\"@\\\"3.7.0\\\"\" BITHOCKEY_C_VERSION=\"\\\"3.7.0\\\"\" BITHOCKEY_BUILD=\"@\\\"40\\\"\" BITHOCKEY_C_BUILD=\"\\\"40\\\"\""
+  },
+  "default_subspecs": "AllFeatures",
+  "subspecs": [
+    {
+      "name": "SharedRequirements",
+      "source_files": [
+        "Classes/HockeySDK*.{h,m}",
+        "Classes/BITHockeyManager*.{h,m}",
+        "Classes/BITHockeyAppClient.{h,m}",
+        "Classes/BITHTTPOperation.{h,m}",
+        "Classes/BITHockeyHelper.{h,m}",
+        "Classes/BITKeychain*.{h,m}",
+        "Classes/BITHockeyBaseManager*.{h,m}"
+      ]
+    },
+    {
+      "name": "UserInterface",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ]
+      },
+      "frameworks": "UIKit",
+      "source_files": "Classes/BITHockeyBaseViewController.{h,m}"
+    },
+    {
+      "name": "Extendable",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ]
+      },
+      "source_files": "Classes/BITHockeyAttachment.{h,m}"
+    },
+    {
+      "name": "CrashReporter",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ],
+        "HockeySDK-Source/Extendable": [
+
+        ]
+      },
+      "vendored_frameworks": "Vendor/CrashReporter.framework",
+      "frameworks": "SystemConfiguration",
+      "libraries": "c++",
+      "source_files": "Classes/BITCrash*.{h,m,mm}",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) HOCKEYSDK_FEATURE_CRASH_REPORTER=1"
+      }
+    },
+    {
+      "name": "UserFeedback",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ],
+        "HockeySDK-Source/Extendable": [
+
+        ],
+        "HockeySDK-Source/UserInterface": [
+
+        ]
+      },
+      "frameworks": [
+        "AssetsLibrary",
+        "MobileCoreServices",
+        "QuickLook",
+        "CoreText"
+      ],
+      "source_files": [
+        "Classes/BITFeedback*.{h,m}",
+        "Classes/BIT*ImageAnnotation.{h,m}",
+        "Classes/BITImageAnnotationViewController.{h,m}",
+        "Classes/BITAttributedLabel.{h,m}",
+        "Classes/BITActivityIndicatorButton.{h,m}"
+      ],
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) HOCKEYSDK_FEATURE_FEEDBACK=1"
+      }
+    },
+    {
+      "name": "StoreUpdates",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ]
+      },
+      "source_files": "Classes/BITStoreUpdate*.{h,m}",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) HOCKEYSDK_FEATURE_STORE_UPDATES=1"
+      }
+    },
+    {
+      "name": "Authenticator",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ],
+        "HockeySDK-Source/UserInterface": [
+
+        ]
+      },
+      "source_files": "Classes/BITAuthentica*.{h,m}",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) HOCKEYSDK_FEATURE_AUTHENTICATOR=1"
+      }
+    },
+    {
+      "name": "AdHocUpdates",
+      "dependencies": {
+        "HockeySDK-Source/SharedRequirements": [
+
+        ],
+        "HockeySDK-Source/UserInterface": [
+
+        ]
+      },
+      "source_files": [
+        "Classes/BITUpdate*.{h,m}",
+        "Classes/BITAppVersionMetaInfo.{h,m}",
+        "Classes/BITStoreButton.{h,m}",
+        "Classes/BITAppStoreHeader.{h,m}",
+        "Classes/BITWebTableViewCell.{h,m}"
+      ],
+      "frameworks": [
+        "CoreGraphics",
+        "QuartzCore",
+        "Security"
+      ],
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) HOCKEYSDK_FEATURE_UPDATES=1"
+      }
+    },
+    {
+      "name": "AllFeatures",
+      "dependencies": {
+        "HockeySDK-Source/CrashReporter": [
+
+        ],
+        "HockeySDK-Source/UserFeedback": [
+
+        ],
+        "HockeySDK-Source/StoreUpdates": [
+
+        ],
+        "HockeySDK-Source/Authenticator": [
+
+        ],
+        "HockeySDK-Source/AdHocUpdates": [
+
+        ]
+      }
+    }
+  ]
+}

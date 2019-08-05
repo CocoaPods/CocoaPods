@@ -1,0 +1,33 @@
+{
+  "name": "AFNetworking",
+  "version": "0.5.1",
+  "license": "MIT",
+  "summary": "A delightful iOS networking library with NSOperations and block-based callbacks.",
+  "homepage": "https://github.com/gowalla/AFNetworking",
+  "authors": {
+    "Gowalla": "live@gowalla.com"
+  },
+  "source": {
+    "git": "https://github.com/gowalla/AFNetworking.git",
+    "tag": "0.5.1"
+  },
+  "ios": {
+    "source_files": "AFNetworking"
+  },
+  "osx": {
+    "source_files": [
+      "AFNetworking/AFHTTPRequestOperation.h",
+      "AFNetworking/AFJSONRequestOperation.h",
+      "AFNetworking/NSData+AFNetworking.h",
+      "AFNetworking/NSMutableURLRequest+AFNetworking.h",
+      "AFNetworking/NSString+AFNetworking.h"
+    ]
+  },
+  "libraries": "z",
+  "dependencies": {
+    "JSONKit": [
+
+    ]
+  },
+  "requires_arc": false
+}

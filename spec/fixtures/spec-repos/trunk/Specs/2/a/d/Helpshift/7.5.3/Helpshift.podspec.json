@@ -1,0 +1,56 @@
+{
+  "name": "Helpshift",
+  "version": "7.5.3",
+  "summary": "Customer service helpdesk for mobile applications.",
+  "license": {
+    "type": "Commercial",
+    "text": "See http://www.helpshift.com/terms/"
+  },
+  "homepage": "http://www.helpshift.com/",
+  "authors": {
+    "Helpshift": "support@helpshift.com"
+  },
+  "source": {
+    "http": "https://d3e51fp79zp4el.cloudfront.net/library/ios/v7.5/helpshift-sdk-ios-v7.5.3.zip",
+    "type": "zip"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "helpshift-sdk-ios-v7.5.3/*.h",
+  "resources": [
+    "helpshift-sdk-ios-v7.5.3/HsUIResources.bundle",
+    "helpshift-sdk-ios-v7.5.3/HsLocalization.bundle",
+    "helpshift-sdk-ios-v7.5.3/HSThemes/*.plist"
+  ],
+  "preserve_paths": [
+    "helpshift-sdk-ios-v7.5.3/libSupport.a",
+    "helpshift-sdk-ios-v7.5.3/HsLocalization.bundle",
+    "helpshift-sdk-ios-v7.5.3/HSThemes/*.plist",
+    "helpshift-sdk-ios-v7.5.3/HelpshiftDefaultLocalizations/*.lproj"
+  ],
+  "frameworks": [
+    "CoreGraphics",
+    "QuartzCore",
+    "CoreText",
+    "SystemConfiguration",
+    "CoreTelephony",
+    "Foundation",
+    "UIKit",
+    "Security",
+    "QuickLook",
+    "CoreLocation",
+    "MobileCoreServices",
+    "CoreSpotlight",
+    "WebKit",
+    "Photos"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "z",
+    "icucore"
+  ],
+  "vendored_libraries": "helpshift-sdk-ios-v7.5.3/libSupport.a",
+  "documentation_url": "http://developers.helpshift.com/ios/",
+  "requires_arc": false
+}

@@ -1,0 +1,23 @@
+{
+  "name": "ReachabilitySwift",
+  "version": "2.1",
+  "homepage": "https://github.com/ashleymills/Reachability.swift",
+  "authors": {
+    "Ashley Mills": "ashleymills@mac.com"
+  },
+  "summary": "Replacement for Apple's Reachability re-written in Swift with callbacks.",
+  "license": {
+    "type": "MIT"
+  },
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9"
+  },
+  "source": {
+    "git": "https://github.com/ashleymills/Reachability.swift.git",
+    "tag": "v2.1"
+  },
+  "source_files": "Reachability.swift",
+  "frameworks": "SystemConfiguration",
+  "requires_arc": true
+}

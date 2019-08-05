@@ -1,0 +1,50 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "2.1.1",
+  "summary": "A framework for composing and transforming streams of values.",
+  "homepage": "https://github.com/blog/1107-reactivecocoa-is-now-open-source",
+  "authors": {
+    "Josh Abernathy": "josh@github.com"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "v2.1.1"
+  },
+  "license": "MIT",
+  "description": "ReactiveCocoa (RAC) is an Objective-C framework for Functional Reactive Programming. It provides APIs for composing and transforming streams of values.",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "compiler_flags": "-DOS_OBJECT_USE_OBJC=0",
+  "prepare_command": "    find . \\( -regex '.*EXT.*\\.[mh]$' -o -regex '.*metamacros\\.[mh]$' \\) -execdir mv {} RAC{} \\;\n    find . -regex '.*\\.[hm]' -exec sed -i '' -E 's@\"(EXT.*|metamacros)\\.h\"@\"RAC\\1.h\"@' {} \\;\n    find . -regex '.*\\.[hm]' -exec sed -i '' -E 's@<ReactiveCocoa/(EXT.*)\\.h>@<ReactiveCocoa/RAC\\1.h>@' {} \\;\n",
+  "subspecs": [
+    {
+      "name": "no-arc",
+      "source_files": "ReactiveCocoaFramework/ReactiveCocoa/RACObjCRuntime.{h,m}",
+      "requires_arc": false
+    },
+    {
+      "name": "Core",
+      "dependencies": {
+        "ReactiveCocoa/no-arc": [
+
+        ]
+      },
+      "source_files": "ReactiveCocoaFramework/ReactiveCocoa/**/*.{d,h,m}",
+      "private_header_files": [
+        "**/*Private.h",
+        "**/*EXTRuntimeExtensions.h"
+      ],
+      "exclude_files": "ReactiveCocoaFramework/ReactiveCocoa/RACObjCRuntime.{h,m}",
+      "ios": {
+        "exclude_files": "**/*{AppKit,NSControl,NSText}*"
+      },
+      "osx": {
+        "exclude_files": "**/*{UIActionSheet,UIAlertView,UIBarButtonItem,UIButton,UICollectionViewCell,UIControl,UIDatePicker,UIGestureRecognizer,UISegmentedControl,UISlider,UIStepper,UISwitch,UITableViewCell,UIText}*"
+      },
+      "header_dir": "ReactiveCocoa"
+    }
+  ]
+}

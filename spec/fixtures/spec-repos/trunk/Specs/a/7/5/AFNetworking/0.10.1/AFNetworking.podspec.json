@@ -1,0 +1,19 @@
+{
+  "name": "AFNetworking",
+  "version": "0.10.1",
+  "license": "MIT",
+  "summary": "A delightful iOS and OS X networking framework.",
+  "homepage": "https://github.com/AFNetworking/AFNetworking",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me",
+    "Scott Raymond": "sco@scottraymond.net"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFNetworking.git",
+    "tag": "0.10.1"
+  },
+  "source_files": "AFNetworking",
+  "frameworks": "SystemConfiguration",
+  "prefix_header_contents": "#import <SystemConfiguration/SystemConfiguration.h>",
+  "requires_arc": false
+}

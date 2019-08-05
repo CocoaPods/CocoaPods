@@ -1,0 +1,53 @@
+{
+  "name": "HockeySDK-Source",
+  "version": "4.1.2",
+  "summary": "Collect live crash reports, get feedback from your users, distribute your betas, and analyze your test coverage with HockeyApp.",
+  "description": "HockeyApp is a service to distribute beta apps, collect crash reports and\ncommunicate with your app's users.\n\nIt improves the testing process dramatically and can be used for both beta\nand App Store builds.",
+  "homepage": "http://hockeyapp.net/",
+  "documentation_url": "http://hockeyapp.net/help/sdk/ios/4.1.2/",
+  "license": "MIT",
+  "authors": {
+    "Microsoft": "support@hockeyapp.net"
+  },
+  "source": {
+    "git": "https://github.com/bitstadium/HockeySDK-iOS.git",
+    "tag": "4.1.2"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source_files": "Classes",
+  "requires_arc": true,
+  "frameworks": [
+    "AssetsLibrary",
+    "CoreGraphics",
+    "CoreTelephony",
+    "CoreText",
+    "MobileCoreServices",
+    "Photos",
+    "QuartzCore",
+    "QuickLook",
+    "Security",
+    "SystemConfiguration",
+    "UIKit"
+  ],
+  "libraries": [
+    "c++",
+    "z"
+  ],
+  "vendored_frameworks": "Vendor/CrashReporter.framework",
+  "pod_target_xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) BITHOCKEY_VERSION=\"@\\\"4.1.2\\\"\" BITHOCKEY_C_VERSION=\"\\\"4.1.2\\\"\" BITHOCKEY_BUILD=\"@\\\"97\\\"\" BITHOCKEY_C_BUILD=\"\\\"97\\\"\""
+  },
+  "resource_bundles": {
+    "HockeySDKResources": [
+      "Resources/*.png",
+      "Resources/*.lproj"
+    ]
+  },
+  "preserve_paths": [
+    "Resources",
+    "Support"
+  ],
+  "private_header_files": "Classes/*Private.h"
+}

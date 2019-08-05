@@ -1,0 +1,39 @@
+{
+  "name": "Analytics",
+  "version": "0.5.1",
+  "summary": "Segment.io Analytics library for iOS.",
+  "homepage": "https://segment.io/libraries/ios",
+  "license": {
+    "type": "MIT",
+    "file": "License.md"
+  },
+  "authors": {
+    "Segment.io": "friends@segment.io"
+  },
+  "source": {
+    "http": "https://github.com/segmentio/analytics-ios/raw/master/Releases/Analytics.framework.zip",
+    "flatten": true
+  },
+  "source_files": "Analytics.framework/Headers/*.h",
+  "preserve_paths": "Analytics.framework/Analytics",
+  "frameworks": [
+    "Foundation",
+    "CoreData",
+    "SystemConfiguration",
+    "CoreTelephony",
+    "UIKit",
+    "QuartzCore",
+    "CFNetwork",
+    "AdSupport"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "z",
+    "Analytics"
+  ],
+  "xcconfig": {
+    "OTHER_LDFLAGS": "-lObjC",
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Analytics.framework\""
+  },
+  "requires_arc": false
+}

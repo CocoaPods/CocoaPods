@@ -1,0 +1,29 @@
+{
+  "name": "ReactiveCocoa",
+  "version": "0.6.0",
+  "summary": "A framework for composing and transforming sequences of values.",
+  "homepage": "https://github.com/blog/1107-reactivecocoa-is-now-open-source",
+  "authors": {
+    "Josh Abernathy": "josh@github.com"
+  },
+  "source": {
+    "git": "https://github.com/ReactiveCocoa/ReactiveCocoa.git",
+    "tag": "v0.6.0"
+  },
+  "license": "Simplified BSD License",
+  "description": "ReactiveCocoa offers:\n1. The ability to compose operations on future data.\n2. An approach to minimizing state and mutability.\n3. A declarative way to define behaviors and the relationships between properties.\n4. A unified, high-level interface for asynchronous operations.\n5. A lovely API on top of KVO.\n",
+  "source_files": "ReactiveCocoaFramework/ReactiveCocoa/*.{h,m}",
+  "ios": {
+    "exclude_files": "**/*{NSButton,AppKit,NSTask}*"
+  },
+  "osx": {
+    "exclude_files": "**/*{UIControl,UIText,Event,DelegateProxy}*"
+  },
+  "requires_arc": true,
+  "dependencies": {
+    "JRSwizzle": [
+      "~> 1.0"
+    ]
+  },
+  "compiler_flags": "-DOS_OBJECT_USE_OBJC=0"
+}

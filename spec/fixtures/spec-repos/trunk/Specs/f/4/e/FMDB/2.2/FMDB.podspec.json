@@ -1,0 +1,59 @@
+{
+  "name": "FMDB",
+  "version": "2.2",
+  "summary": "A Cocoa / Objective-C wrapper around SQLite.",
+  "homepage": "https://github.com/ccgus/fmdb",
+  "license": "MIT",
+  "authors": {
+    "August Mueller": "gus@flyingmeat.com"
+  },
+  "source": {
+    "git": "https://github.com/ccgus/fmdb.git",
+    "tag": "2.2-pod"
+  },
+  "default_subspecs": [
+    "standard"
+  ],
+  "requires_arc": false,
+  "subspecs": [
+    {
+      "name": "common",
+      "source_files": "src/FM*.{h,m}",
+      "exclude_files": "src/fmdb.m"
+    },
+    {
+      "name": "standard",
+      "libraries": "sqlite3",
+      "dependencies": {
+        "FMDB/common": [
+
+        ]
+      }
+    },
+    {
+      "name": "standalone",
+      "dependencies": {
+        "sqlite3/fts": [
+
+        ],
+        "FMDB/common": [
+
+        ]
+      }
+    },
+    {
+      "name": "SQLCipher",
+      "dependencies": {
+        "SQLCipher": [
+
+        ],
+        "FMDB/common": [
+
+        ]
+      },
+      "xcconfig": {
+        "OTHER_CFLAGS": "$(inherited) -DSQLITE_HAS_CODEC"
+      }
+    }
+  ]
+}

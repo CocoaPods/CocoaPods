@@ -1,0 +1,30 @@
+{
+  "name": "CargoBay",
+  "version": "1.0.0",
+  "license": "MIT",
+  "summary": "The Essential StoreKit Companion.",
+  "homepage": "https://github.com/mattt/CargoBay",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me"
+  },
+  "source": {
+    "git": "https://github.com/mattt/CargoBay.git",
+    "tag": "1.0.0"
+  },
+  "source_files": "CargoBay",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.0",
+    "osx": "10.7"
+  },
+  "frameworks": [
+    "StoreKit",
+    "Security"
+  ],
+  "dependencies": {
+    "AFNetworking": [
+      "~> 1.0"
+    ]
+  },
+  "prefix_header_contents": "    #import <Availability.h>\n\n    #if __IPHONE_OS_VERSION_MIN_REQUIRED\n      #import <SystemConfiguration/SystemConfiguration.h>\n      #import <MobileCoreServices/MobileCoreServices.h>\n      #import <Security/Security.h>\n    #else\n      #import <SystemConfiguration/SystemConfiguration.h>\n      #import <CoreServices/CoreServices.h>\n      #import <Security/Security.h>\n    #endif\n"
+}

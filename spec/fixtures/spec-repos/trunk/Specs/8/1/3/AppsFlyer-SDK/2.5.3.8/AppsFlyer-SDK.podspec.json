@@ -1,0 +1,23 @@
+{
+  "name": "AppsFlyer-SDK",
+  "version": "2.5.3.8",
+  "license": {
+    "type": "Copyright",
+    "text": "      Copyright 2014 AppsFlyer Ltd. All rights reserved.\n"
+  },
+  "homepage": "http://www.appsflyer.com",
+  "authors": "AppsFlyer Ltd.",
+  "summary": "The AppsFlyer provides application installation and event tracking functionality.",
+  "description": "    AppsFlyer's NativeTrack allows you to find what attracts new users to your app, measure all your app marketing activities on one dashboard, and add new traffic sources in minutes, all without having to update SDK's.\n",
+  "source": {
+    "http": "http://support.appsflyer.com/attachments/token/CN9TVAlQGd7v6rkn4fgxhNDh6/?name=AF-iOS-SDK-v2.5.3.8.zip",
+    "flatten": true
+  },
+  "platforms": {
+    "ios": "3.1"
+  },
+  "requires_arc": true,
+  "source_files": "AppsFlyerTracker.h",
+  "vendored_libraries": "libAppsFlyerLib.a",
+  "preserve_paths": "libAppsFlyerLib.a"
+}

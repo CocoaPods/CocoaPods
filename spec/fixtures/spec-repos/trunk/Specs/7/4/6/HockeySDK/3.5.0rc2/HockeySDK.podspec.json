@@ -1,0 +1,45 @@
+{
+  "name": "HockeySDK",
+  "version": "3.5.0rc2",
+  "license": "MIT",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "summary": "Distribute beta apps and collect crash reports with HockeyApp.",
+  "homepage": "http://hockeyapp.net/",
+  "authors": {
+    "Andreas Linde": "mail@andreaslinde.de",
+    "Thomas Dohmke": "thomas@dohmke.de"
+  },
+  "source": {
+    "git": "https://github.com/bitstadium/HockeySDK-iOS.git",
+    "tag": "3.5.0rc2"
+  },
+  "description": "HockeyApp is a server to distribute beta apps, collect crash reports and communicate with your app users.It improves the testing process dramatically and can be used for both beta and App Store builds. Only beta builds will notify users about a new version. NOTE: If you want the framework to try again when a network is available, add a dependency on Reachability and send a notification with the name `BITHockeyNetworkDidBecomeReachable` yourself when the network becomes reachable.",
+  "source_files": "Classes",
+  "requires_arc": true,
+  "preserve_paths": [
+    "Resources",
+    "Support",
+    "Vendor"
+  ],
+  "frameworks": [
+    "CoreText",
+    "QuartzCore",
+    "SystemConfiguration",
+    "CrashReporter",
+    "CoreGraphics",
+    "UIKit",
+    "Security"
+  ],
+  "xcconfig": {
+    "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_ROOT)/HockeySDK/Vendor\"",
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) BITHOCKEY_VERSION=\"@\\\"3.5.0rc2\\\"\""
+  },
+  "resource_bundles": {
+    "HockeySDKResources": [
+      "Resources/*.png",
+      "Resources/*.lproj"
+    ]
+  }
+}

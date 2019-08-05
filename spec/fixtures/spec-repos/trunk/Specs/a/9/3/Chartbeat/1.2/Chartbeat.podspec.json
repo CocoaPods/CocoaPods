@@ -1,0 +1,27 @@
+{
+  "name": "Chartbeat",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "summary": "This is the Chartbeat iOS SDK -- providing a library for iOS applications so they can send tracking events to Chartbeat.",
+  "requires_arc": true,
+  "version": "1.2",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Chartbeat": "support@chartbeat.com"
+  },
+  "homepage": "https://chartbeat.com/",
+  "vendored_frameworks": "Chartbeat.framework",
+  "source": {
+    "git": "https://github.com/GiarcEnoredlac/cbiossdk.git",
+    "tag": "1.2"
+  },
+  "frameworks": [
+    "SystemConfiguration",
+    "MediaPlayer"
+  ],
+  "module_name": "Chartbeat"
+}

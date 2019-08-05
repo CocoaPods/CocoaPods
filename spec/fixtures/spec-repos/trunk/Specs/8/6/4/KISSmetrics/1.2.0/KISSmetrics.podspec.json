@@ -1,0 +1,19 @@
+{
+  "name": "KISSmetrics",
+  "version": "1.2.0",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "summary": "Library for KISSmetrics.",
+  "homepage": "http://www.kissmetrics.com",
+  "authors": {
+    "kissmetrics": "support@kissmetrics.com"
+  },
+  "source": {
+    "git": "https://github.com/kissmetrics/KISSmetrics-iOS-Mac-OS-X-Library.git",
+    "tag": "v1.2.0"
+  },
+  "source_files": "*.{h,m}",
+  "requires_arc": false
+}

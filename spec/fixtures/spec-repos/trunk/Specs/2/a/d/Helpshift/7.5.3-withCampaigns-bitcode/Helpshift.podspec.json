@@ -1,0 +1,56 @@
+{
+  "name": "Helpshift",
+  "version": "7.5.3-withCampaigns-bitcode",
+  "summary": "Customer service helpdesk for mobile applications.",
+  "license": {
+    "type": "Commercial",
+    "text": "See http://www.helpshift.com/terms/"
+  },
+  "homepage": "http://www.helpshift.com/",
+  "authors": {
+    "Helpshift": "support@helpshift.com"
+  },
+  "source": {
+    "http": "https://d3e51fp79zp4el.cloudfront.net/library/ios/v7.5/helpshift-sdk-ios-v7.5.3-withCampaigns.zip",
+    "type": "zip"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "helpshift-sdk-ios-v7.5.3-withCampaigns/*.h",
+  "resources": [
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/HsUIResources.bundle",
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/HsLocalization.bundle",
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/HSThemes/*.plist"
+  ],
+  "preserve_paths": [
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/libHelpshift-bitcode.a",
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/HsLocalization.bundle",
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/HSThemes/*.plist",
+    "helpshift-sdk-ios-v7.5.3-withCampaigns/HelpshiftDefaultLocalizations/*.lproj"
+  ],
+  "frameworks": [
+    "CoreGraphics",
+    "QuartzCore",
+    "CoreText",
+    "SystemConfiguration",
+    "CoreTelephony",
+    "Foundation",
+    "UIKit",
+    "Security",
+    "QuickLook",
+    "CoreLocation",
+    "MobileCoreServices",
+    "CoreSpotlight",
+    "WebKit",
+    "Photos"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "z",
+    "icucore"
+  ],
+  "vendored_libraries": "helpshift-sdk-ios-v7.5.3-withCampaigns/libHelpshift-bitcode.a",
+  "documentation_url": "http://developers.helpshift.com/ios/",
+  "requires_arc": false
+}

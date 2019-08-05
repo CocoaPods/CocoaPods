@@ -1,0 +1,29 @@
+{
+  "name": "SwrveConversationSDK",
+  "version": "4.5.2",
+  "summary": "iOS Conversation SDK for Swrve.",
+  "homepage": "http://www.swrve.com",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "SwrveConversationSDK/LICENSE"
+  },
+  "authors": "Swrve Mobile Inc or its licensors",
+  "source": {
+    "git": "https://github.com/Swrve/swrve-ios-sdk.git",
+    "tag": "4.5.2"
+  },
+  "social_media_url": "https://twitter.com/Swrve_Inc",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": true,
+  "source_files": "SwrveConversationSDK/Conversation/**/*.{m,h}",
+  "public_header_files": "SwrveConversationSDK/Conversation/**/*.h",
+  "resources": "SwrveConversationSDK/Resources/**/*.*",
+  "dependencies": {
+    "SwrveSDKCommon": [
+      "4.5.2"
+    ]
+  },
+  "compiler_flags": "-DSWRVE_CONVERSATION_SDK"
+}

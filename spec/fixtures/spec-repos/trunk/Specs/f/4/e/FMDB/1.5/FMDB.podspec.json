@@ -1,0 +1,17 @@
+{
+  "name": "FMDB",
+  "version": "1.5",
+  "summary": "A Cocoa / Objective-C wrapper around SQLite.",
+  "homepage": "https://github.com/ccgus/fmdb",
+  "license": "MIT",
+  "authors": {
+    "August Mueller": "gus@flyingmeat.com"
+  },
+  "source": {
+    "git": "https://github.com/ccgus/fmdb.git",
+    "tag": "v1.5"
+  },
+  "source_files": "src/FM*.*",
+  "libraries": "sqlite3",
+  "requires_arc": false
+}

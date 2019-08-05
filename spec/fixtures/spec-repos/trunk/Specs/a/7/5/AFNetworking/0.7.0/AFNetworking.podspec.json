@@ -1,0 +1,23 @@
+{
+  "name": "AFNetworking",
+  "version": "0.7.0",
+  "license": "MIT",
+  "summary": "A delightful iOS networking library with NSOperations and block-based callbacks.",
+  "homepage": "https://github.com/AFNetworking/AFNetworking",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me",
+    "Scott Raymond": "sco@gowalla.com"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFNetworking.git",
+    "tag": "0.7.0"
+  },
+  "source_files": "AFNetworking",
+  "libraries": "z",
+  "dependencies": {
+    "JSONKit": [
+
+    ]
+  },
+  "requires_arc": false
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Parse",
+  "version": "1.2.0",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://parse.com/about/terms"
+  },
+  "platforms": {
+    "ios": null
+  },
+  "summary": "iOS framework for developing apps using the Parse BaaS.",
+  "description": "To integrate after adding this pod, continue with step 8 here: https://parse.com/apps/quickstart .",
+  "homepage": "http://parse.com",
+  "authors": {
+    "Parse": "support@parse.com"
+  },
+  "source": {
+    "git": "https://github.com/jessbowers/Parse.git",
+    "tag": "1.2.0"
+  },
+  "source_files": "ParseDummy.{m,h}",
+  "preserve_paths": "Parse.framework",
+  "requires_arc": true,
+  "frameworks": [
+    "StoreKit",
+    "AudioToolbox",
+    "CFNetwork",
+    "SystemConfiguration",
+    "MobileCoreServices",
+    "CoreGraphics",
+    "Security",
+    "QuartzCore",
+    "CoreLocation",
+    "Parse"
+  ],
+  "weak_frameworks": [
+    "AdSupport",
+    "Social",
+    "Accounts"
+  ],
+  "xcconfig": {
+    "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_ROOT)/Parse\""
+  },
+  "libraries": [
+    "z",
+    "sqlite3"
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "name": "RestKit",
+  "version": "0.24.1",
+  "summary": "RestKit is a framework for consuming and modeling RESTful web resources on iOS and OS X.",
+  "homepage": "http://www.restkit.org",
+  "social_media_url": "https://twitter.com/RestKit",
+  "authors": {
+    "Blake Watters": "blakewatters@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/RestKit/RestKit.git",
+    "tag": "v0.24.1"
+  },
+  "license": "Apache License, Version 2.0",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "5.1.1",
+    "osx": "10.7"
+  },
+  "default_subspecs": "Core",
+  "prefix_header_contents": "#if __has_include(\"RKCoreData.h\")\n    #import <CoreData/CoreData.h>\n#endif\n",
+  "header_mappings_dir": "Code",
+  "subspecs": [
+    {
+      "name": "Core",
+      "dependencies": {
+        "RestKit/ObjectMapping": [
+
+        ],
+        "RestKit/Network": [
+
+        ],
+        "RestKit/CoreData": [
+
+        ]
+      }
+    },
+    {
+      "name": "ObjectMapping",
+      "source_files": [
+        "Code/ObjectMapping.h",
+        "Code/ObjectMapping"
+      ],
+      "dependencies": {
+        "RestKit/Support": [
+
+        ],
+        "RKValueTransformers": [
+          "~> 1.1.0"
+        ],
+        "ISO8601DateFormatterValueTransformer": [
+          "~> 0.6.0"
+        ]
+      }
+    },
+    {
+      "name": "Network",
+      "source_files": [
+        "Code/Network.h",
+        "Code/Network"
+      ],
+      "ios": {
+        "frameworks": [
+          "CFNetwork",
+          "Security",
+          "MobileCoreServices",
+          "SystemConfiguration"
+        ]
+      },
+      "osx": {
+        "frameworks": [
+          "CoreServices",
+          "Security",
+          "SystemConfiguration"
+        ]
+      },
+      "dependencies": {
+        "SOCKit": [
+
+        ],
+        "AFNetworking": [
+          "~> 1.3.0"
+        ],
+        "RestKit/ObjectMapping": [
+
+        ],
+        "RestKit/Support": [
+
+        ]
+      },
+      "prefix_header_contents": "#import <Availability.h>\n\n#define _AFNETWORKING_PIN_SSL_CERTIFICATES_\n\n#if __IPHONE_OS_VERSION_MIN_REQUIRED\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <MobileCoreServices/MobileCoreServices.h>\n  #import <Security/Security.h>\n#else\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <CoreServices/CoreServices.h>\n  #import <Security/Security.h>\n#endif\n"
+    },
+    {
+      "name": "CoreData",
+      "source_files": [
+        "Code/CoreData.h",
+        "Code/CoreData"
+      ],
+      "frameworks": "CoreData",
+      "dependencies": {
+        "RestKit/ObjectMapping": [
+
+        ]
+      }
+    },
+    {
+      "name": "Testing",
+      "source_files": [
+        "Code/Testing.h",
+        "Code/Testing"
+      ],
+      "dependencies": {
+        "RestKit/Network": [
+
+        ]
+      },
+      "prefix_header_contents": "#import <Availability.h>\n\n#define _AFNETWORKING_PIN_SSL_CERTIFICATES_\n\n#if __IPHONE_OS_VERSION_MIN_REQUIRED\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <MobileCoreServices/MobileCoreServices.h>\n  #import <Security/Security.h>\n#else\n  #import <SystemConfiguration/SystemConfiguration.h>\n  #import <CoreServices/CoreServices.h>\n  #import <Security/Security.h>\n#endif\n"
+    },
+    {
+      "name": "Search",
+      "source_files": [
+        "Code/Search.h",
+        "Code/Search"
+      ],
+      "dependencies": {
+        "RestKit/CoreData": [
+
+        ]
+      }
+    },
+    {
+      "name": "Support",
+      "source_files": [
+        "Code/RestKit.h",
+        "Code/Support.h",
+        "Code/Support",
+        "Vendor/LibComponentLogging/Core"
+      ],
+      "dependencies": {
+        "TransitionKit": [
+          "~> 2.1.0"
+        ]
+      }
+    }
+  ]
+}

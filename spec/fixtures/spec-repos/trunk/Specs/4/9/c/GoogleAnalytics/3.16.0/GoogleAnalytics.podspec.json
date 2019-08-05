@@ -1,0 +1,41 @@
+{
+  "name": "GoogleAnalytics",
+  "version": "3.16.0",
+  "summary": "Google Analytics - measure your app performance",
+  "description": "Google Analytics lets you track application events you care about and gain insights from discovery and installation to conversion and engagement.",
+  "homepage": "https://www.google.com/analytics",
+  "license": {
+    "text": "Copyright 2016 Google",
+    "type": "Copyright"
+  },
+  "authors": "Google, Inc.",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/6f640c997e8d7455/GoogleAnalytics-3.16.0.tar.gz"
+  },
+  "vendored_libraries": [
+    "Libraries/libGoogleAnalytics.a"
+  ],
+  "source_files": [
+    "Sources/GAI.h",
+    "Sources/GAIDictionaryBuilder.h",
+    "Sources/GAIEcommerceFields.h",
+    "Sources/GAIEcommerceProduct.h",
+    "Sources/GAIEcommerceProductAction.h",
+    "Sources/GAIEcommercePromotion.h",
+    "Sources/GAIFields.h",
+    "Sources/GAILogger.h",
+    "Sources/GAITrackedViewController.h",
+    "Sources/GAITracker.h"
+  ],
+  "frameworks": [
+    "CoreData",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "z",
+    "sqlite3"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "BlocksKit",
+  "version": "0.5.0",
+  "license": "MIT",
+  "summary": "The Objective-C block utilities you always wish you had.",
+  "homepage": "https://github.com/zwaldowski/BlocksKit",
+  "authors": {
+    "Zachary Waldowski": "zach@waldowski.me"
+  },
+  "source": {
+    "git": "https://github.com/zwaldowski/BlocksKit.git",
+    "tag": "v0.5.0"
+  },
+  "source_files": "BlocksKit",
+  "prefix_header_file": "BlocksKit/BlocksKit-Prefix.pch",
+  "frameworks": "MessageUI",
+  "requires_arc": true
+}

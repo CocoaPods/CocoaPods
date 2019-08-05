@@ -1,0 +1,31 @@
+{
+  "name": "Heap",
+  "version": "0.9.0",
+  "summary": "Capture everything - iOS analytics library for Heap.",
+  "homepage": "https://heapanalytics.com",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://heapanalytics.com/terms"
+  },
+  "authors": {
+    "Heap": "team@heapanalytics.com"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "http": "https://cdn.heapanalytics.com/heapiOS.zip",
+    "flatten": true
+  },
+  "source_files": "Heap.h",
+  "preserve_paths": "libHeap.a",
+  "libraries": "Heap",
+  "frameworks": [
+    "SystemConfiguration",
+    "UIKit"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Heap\""
+  },
+  "requires_arc": true
+}

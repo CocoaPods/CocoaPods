@@ -1,0 +1,39 @@
+{
+  "name": "FirebaseAnalytics",
+  "version": "3.3.0",
+  "summary": "Firebase Analytics for iOS",
+  "description": "Firebase Analytics is a free, out-of-the-box analytics solution that inspires actionable insights based on app usage and user engagement.",
+  "homepage": "https://firebase.google.com",
+  "license": {
+    "type": "Copyright",
+    "text": "Copyright 2016 Google"
+  },
+  "authors": "Google, Inc.",
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/d44a6599dc81f4db/FirebaseAnalytics-3.3.0.tar.gz"
+  },
+  "vendored_frameworks": [
+    "Frameworks/frameworks/FirebaseAnalytics.framework"
+  ],
+  "frameworks": [
+    "AddressBook",
+    "AdSupport",
+    "SafariServices",
+    "StoreKit",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "c++",
+    "sqlite3",
+    "z"
+  ],
+  "dependencies": {
+    "FirebaseInstanceID": "~> 1.0",
+    "GoogleSymbolUtilities": "~> 1.1",
+    "GoogleUtilities": "~> 1.2",
+    "GoogleInterchangeUtilities": "~> 1.2"
+  }
+}

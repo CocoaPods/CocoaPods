@@ -1,0 +1,28 @@
+{
+  "name": "Chartbeat",
+  "version": "0.0.1",
+  "license": "Commercial",
+  "summary": "Chartbeat analytics library for iOS.",
+  "homepage": "https://chartbeat.com/docs/ios/",
+  "authors": {
+    "Chartbeat": "https://chartbeat.com"
+  },
+  "source": {
+    "git": "https://github.com/segmentio/chartbeat.git",
+    "tag": "0.0.1"
+  },
+  "source_files": "CBTracker.h",
+  "preserve_paths": "libChartbeat-iOS-SDK.a",
+  "libraries": "Chartbeat-iOS-SDK",
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Chartbeat\""
+  },
+  "requires_arc": false,
+  "deprecated": true,
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  }
+}

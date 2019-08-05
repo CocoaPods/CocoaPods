@@ -1,0 +1,48 @@
+{
+  "name": "SwrveSDK",
+  "version": "4.5.2",
+  "summary": "iOS SDK for Swrve.",
+  "homepage": "http://www.swrve.com",
+  "license": {
+    "type": "Apache License, Version 2.0",
+    "file": "SwrveSDK/LICENSE"
+  },
+  "authors": "Swrve Mobile Inc or its licensors",
+  "source": {
+    "git": "https://github.com/Swrve/swrve-ios-sdk.git",
+    "tag": "4.5.2"
+  },
+  "social_media_url": "https://twitter.com/Swrve_Inc",
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": true,
+  "source_files": "SwrveSDK/SDK/**/*.{m,h}",
+  "public_header_files": "SwrveSDK/SDK/**/*.h",
+  "dependencies": {
+    "SwrveSDKCommon": [
+      "4.5.2"
+    ],
+    "SwrveConversationSDK": [
+      "4.5.2"
+    ]
+  },
+  "frameworks": [
+    "UIKit",
+    "QuartzCore",
+    "CFNetwork",
+    "StoreKit",
+    "Security",
+    "CoreTelephony",
+    "MessageUI",
+    "CoreLocation",
+    "AVFoundation"
+  ],
+  "weak_frameworks": [
+    "Contacts",
+    "Photos",
+    "AssetsLibrary",
+    "AddressBook"
+  ],
+  "libraries": "sqlite3"
+}

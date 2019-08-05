@@ -1,0 +1,37 @@
+{
+  "name": "HockeySDK",
+  "version": "2.2.6",
+  "platforms": {
+    "ios": null
+  },
+  "summary": "Distribute beta apps and collect crash reports with HockeyApp.",
+  "homepage": "http://hockeyapp.net/",
+  "authors": {
+    "Andreas Linde": "mail@andreaslinde.de",
+    "Thomas Dohmke": "thomas@dohmke.de"
+  },
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE.txt"
+  },
+  "source": {
+    "git": "https://github.com/codenauts/HockeySDK-iOS.git",
+    "tag": "2.2.6"
+  },
+  "description": "HockeyApp is a server to distribute beta apps and collect crash reports. It improves the testing process dramatically and can be used for both beta and App Store builds. Only beta builds will notify users about a new version  NOTE: You will need to add a dependency on JSONKit or SBJson yourself. If you want the framework to try again when a network is available, add a dependency on Reachability and send a notification with the name `NetworkDidBecomeReachable` yourself when the network becomes reachable.",
+  "source_files": "Classes",
+  "resources": [
+    "Resources/Hockey.bundle",
+    "Resources/Quincy.bundle"
+  ],
+  "frameworks": [
+    "QuartzCore",
+    "SystemConfiguration",
+    "CrashReporter"
+  ],
+  "xcconfig": {
+    "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_ROOT)/HockeySDK/Vendor\""
+  },
+  "preserve_paths": "Vendor/CrashReporter.framework",
+  "requires_arc": false
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "2.3.1",
+  "summary": "This is the Appboy iOS SDK for Mobile Marketing Automation",
+  "description": "                    This pod has two subspecs, please ensure you only choose one of them when you are adding Appboy-iOS-SDK pod to your podfile by:\n\n                    pod 'Appboy-iOS-SDK/AppboyKit'\n                    * This requires Facebook-iOS-SDK in the workspace. Installing this pod will automatically install Facebook-iOS-SDK is it's not incluced in the workspace.\n\n\n                    pod 'Appboy-iOS-SDK/AppboyKitWithoutFacebookSupport'\n\n\n                    Warning: Integrating both pods will cause the SDK to be integrated twice which will cause errors!\n",
+  "homepage": "http://www.appboy.com",
+  "license": {
+    "type": "Commercial",
+    "text": "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+  },
+  "authors": {
+    "Appboy": "http://www.appboy.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "v2.3.1"
+  },
+  "platforms": {
+    "ios": null
+  },
+  "documentation_url": "http://documentation.appboy.com/",
+  "frameworks": [
+    "SystemConfiguration",
+    "QuartzCore",
+    "CoreImage"
+  ],
+  "weak_frameworks": [
+    "CoreTelephony",
+    "Social",
+    "Twitter",
+    "Accounts",
+    "AdSupport",
+    "StoreKit"
+  ],
+  "requires_arc": false,
+  "subspecs": [
+    {
+      "name": "AppboyKit",
+      "source_files": "AppboyKit/**/*.h",
+      "exclude_files": "AppboyKit/**/*.txt",
+      "xcconfig": {
+        "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Appboy-iOS-SDK/AppboyKit\"",
+        "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_ROOT)/Appboy-iOS-SDK/AppboyKit\""
+      },
+      "libraries": "AppboyKitLibrary",
+      "resource_bundles": {
+        "AppboyKit.framework": "AppboyKit/AppboyKit.framework"
+      },
+      "preserve_paths": "AppboyKit/**/*.*",
+      "public_header_files": "AppboyKit/*.h",
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "dependencies": {
+        "Facebook-iOS-SDK": [
+
+        ]
+      }
+    },
+    {
+      "name": "AppboyKitWithoutFacebookSupport",
+      "source_files": "AppboyKitWithoutFacebookSupport/**/*.h",
+      "exclude_files": "AppboyKitWithoutFacebookSupport/**/*.txt",
+      "xcconfig": {
+        "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Appboy-iOS-SDK/AppboyKitWithoutFacebookSupport\"",
+        "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_ROOT)/Appboy-iOS-SDK/AppboyKitWithoutFacebookSupport\""
+      },
+      "libraries": "AppboyKitLibrary",
+      "resource_bundles": {
+        "AppboyKit.framework": "AppboyKitWithoutFacebookSupport/AppboyKit.framework"
+      },
+      "preserve_paths": "AppboyKitWithoutFacebookSupport/**/*.*",
+      "public_header_files": "AppboyKitWithoutFacebookSupport/*.h",
+      "vendored_libraries": "AppboyKitWithoutFacebookSupport/libAppboyKitLibrary.a"
+    }
+  ]
+}

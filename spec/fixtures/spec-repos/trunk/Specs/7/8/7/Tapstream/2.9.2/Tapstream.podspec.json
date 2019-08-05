@@ -1,0 +1,34 @@
+{
+  "name": "Tapstream",
+  "version": "2.9.2",
+  "summary": "Tapstream marketing analytics.",
+  "homepage": "https://tapstream.com/",
+  "license": "MIT",
+  "authors": {
+    "Benjamin Fox": "support@tapstream.com"
+  },
+  "source": {
+    "git": "https://github.com/tapstream/tapstream-sdk.git",
+    "tag": "v2.9.2-objc"
+  },
+  "platforms": {
+    "ios": "4.3",
+    "osx": "10.6"
+  },
+  "source_files": [
+    "objc/Tapstream",
+    "objc/Core"
+  ],
+  "ios": {
+    "frameworks": [
+      "Foundation",
+      "UIKit"
+    ]
+  },
+  "osx": {
+    "frameworks": [
+      "Foundation",
+      "AppKit"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "name": "nanopb",
+  "version": "0.3.8",
+  "summary": "Protocol buffers with small code size.",
+  "description": "Nanopb is a plain-C implementation of Google's\n[Protocol Buffers][pb] data format. It is targeted at\n32 bit microcontrollers, but is also fit for\nother embedded systems with tight (2-10 kB ROM,\n<1 kB RAM) memory constraints.\n\n [pb]: https://developers.google.com/protocol-buffers/",
+  "homepage": "https://github.com/nanopb/nanopb",
+  "license": {
+    "type": "zlib",
+    "file": "LICENSE.txt"
+  },
+  "authors": {
+    "Petteri Aimonen": "jpa@nanopb.mail.kapsi.fi"
+  },
+  "source": {
+    "http": "https://github.com/nanopb/nanopb/archive/0.3.8.tar.gz"
+  },
+  "requires_arc": false,
+  "xcconfig": {
+    "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PB_FIELD_32BIT=1 PB_NO_PACKED_STRUCTS=1"
+  },
+  "source_files": "*.{h,c}",
+  "public_header_files": "*.h",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  },
+  "subspecs": [
+    {
+      "name": "encode",
+      "public_header_files": [
+        "pb.h",
+        "pb_encode.h",
+        "pb_common.h"
+      ],
+      "source_files": [
+        "pb.h",
+        "pb_common.h",
+        "pb_common.c",
+        "pb_encode.h",
+        "pb_encode.c"
+      ]
+    },
+    {
+      "name": "decode",
+      "public_header_files": [
+        "pb.h",
+        "pb_decode.h",
+        "pb_common.h"
+      ],
+      "source_files": [
+        "pb.h",
+        "pb_common.h",
+        "pb_common.c",
+        "pb_decode.h",
+        "pb_decode.c"
+      ]
+    }
+  ]
+}

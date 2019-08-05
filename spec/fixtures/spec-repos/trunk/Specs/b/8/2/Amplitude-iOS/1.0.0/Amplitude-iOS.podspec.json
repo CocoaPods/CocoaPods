@@ -1,0 +1,22 @@
+{
+  "name": "Amplitude-iOS",
+  "version": "1.0.0",
+  "summary": "Amplitude mobile analytics iOS SDK.",
+  "homepage": "https://amplitude.com",
+  "license": {
+    "type": "Copyright",
+    "text": "      Copyright (c) 2012 Sonalight, Inc. All rights reserved.\n"
+  },
+  "authors": {
+    "Amplitude": "dev@amplitude.com"
+  },
+  "source": {
+    "git": "https://github.com/amplitude/Amplitude-iOS.git",
+    "tag": "v1.0.0"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source_files": "*.{h,m}",
+  "requires_arc": false
+}

@@ -1,0 +1,34 @@
+{
+  "name": "BlocksKit",
+  "version": "1.0.6",
+  "summary": "The Objective-C block utilities you always wish you had.",
+  "homepage": "https://github.com/zwaldowski/BlocksKit",
+  "authors": {
+    "Zachary Waldowski": "zach@waldowski.me",
+    "Alexsander Akers": "a2@pnd.mn"
+  },
+  "license": {
+    "type": "MIT"
+  },
+  "source": {
+    "git": "https://github.com/zwaldowski/BlocksKit.git",
+    "tag": "v1.0.6"
+  },
+  "ios": {
+    "frameworks": "MessageUI",
+    "source_files": [
+      "BlocksKit/*.{h,m}",
+      "BlocksKit/UIKit/*.{h,m}",
+      "BlocksKit/MessageUI/*.{h,m}"
+    ]
+  },
+  "osx": {
+    "source_files": "BlocksKit/*.{h,m}"
+  },
+  "dependencies": {
+    "A2DynamicDelegate": [
+
+    ]
+  },
+  "requires_arc": false
+}

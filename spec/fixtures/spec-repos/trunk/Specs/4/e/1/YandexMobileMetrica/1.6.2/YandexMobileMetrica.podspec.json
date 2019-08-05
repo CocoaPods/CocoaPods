@@ -1,0 +1,60 @@
+{
+  "name": "YandexMobileMetrica",
+  "version": "1.6.2",
+  "summary": "This library is designed to be a part of mobile apps and provide app usage stats to Yandex.Metrica",
+  "homepage": "http://appmetrica.yandex.com/",
+  "license": {
+    "type": "PROPRIETARY",
+    "file": "LICENSE.txt"
+  },
+  "authors": {
+    "Andrey Shender": "ashender@yandex-team.ru",
+    "Yury Vasileuski": "vasileuski@yandex-team.ru",
+    "Kanstantsin Charnukha": "xardas@yandex-team.ru"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "git": "https://github.com/yandexmobile/metrica-sdk-ios.git",
+    "tag": "1.6.2"
+  },
+  "source_files": "YandexMobileMetrica/**/*.h",
+  "header_mappings_dir": "YandexMobileMetrica",
+  "public_header_files": "**/*.h",
+  "preserve_paths": "libYandexMobileMetrica.a",
+  "libraries": [
+    "YandexMobileMetrica",
+    "z",
+    "sqlite3"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/YandexMobileMetrica/\"",
+    "HEADER_SEARCH_PATHS": "\"${PODS_ROOT}/Headers\""
+  },
+  "dependencies": {
+    "KSCrash/Recording": [
+      "~>0.0.3"
+    ],
+    "KSCrash/Reporting/Filters/AppleFmt": [
+      "~>0.0.3"
+    ],
+    "FMDB": [
+      "2.2.0"
+    ],
+    "protobuf-c": [
+      "0.15"
+    ]
+  },
+  "frameworks": [
+    "SystemConfiguration",
+    "UIKit",
+    "Foundation",
+    "CoreTelephony",
+    "CoreLocation",
+    "CoreGraphics",
+    "Security",
+    "AdSupport"
+  ],
+  "requires_arc": true
+}

@@ -1,0 +1,30 @@
+{
+  "name": "UMengAnalytics",
+  "version": "2.2.1",
+  "summary": "UMeng's official Analytics SDK for iOS.",
+  "description": "UMeng Analytics SDK for analytics tracking and reporting.",
+  "homepage": "http://dev.umeng.com/analytics/ios/quick-start",
+  "license": {
+    "type": "Copyright",
+    "text": "      Copyright 2011 - 2013 UMeng.com. All rights reserved.\n"
+  },
+  "authors": {
+    "UMeng": "support@umeng.com"
+  },
+  "source": {
+    "http": "http://dev.umeng.com/files/download/Analytics_iOS_SDK_2.2.1.OpenUDID.zip"
+  },
+  "platforms": {
+    "ios": "4.3"
+  },
+  "source_files": "**/MobClick.h",
+  "preserve_paths": "**/libMobClickLibrary.a",
+  "libraries": [
+    "MobClickLibrary",
+    "z"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/UMengAnalytics/**\""
+  },
+  "requires_arc": false
+}

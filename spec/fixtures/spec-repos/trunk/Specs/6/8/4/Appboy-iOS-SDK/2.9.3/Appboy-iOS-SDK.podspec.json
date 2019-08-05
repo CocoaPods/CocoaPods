@@ -1,0 +1,73 @@
+{
+  "name": "Appboy-iOS-SDK",
+  "version": "2.9.3",
+  "summary": "This is the Appboy iOS SDK for Mobile Marketing Automation",
+  "description": "                    This pod has two subspecs, please ensure you only choose one of them when you are adding Appboy-iOS-SDK pod to your podfile by:\n\n                    pod 'Appboy-iOS-SDK/AppboyKit'\n                    * This requires Facebook-iOS-SDK in the workspace. Installing this pod will automatically install Facebook-iOS-SDK is it's not incluced in the workspace.\n\n\n                    pod 'Appboy-iOS-SDK/AppboyKitWithoutFacebookSupport'\n\n\n                    Warning: Integrating both pods will cause the SDK to be integrated twice which will cause errors!\n",
+  "homepage": "http://www.appboy.com",
+  "license": {
+    "type": "Commercial",
+    "text": "Please refer to https://github.com/Appboy/appboy-ios-sdk/blob/master/LICENSE"
+  },
+  "authors": {
+    "Appboy": "http://www.appboy.com"
+  },
+  "source": {
+    "git": "https://github.com/Appboy/appboy-ios-sdk.git",
+    "tag": "2.9.3"
+  },
+  "platforms": {
+    "ios": "5.1.1"
+  },
+  "requires_arc": false,
+  "documentation_url": "http://documentation.appboy.com/",
+  "frameworks": [
+    "SystemConfiguration",
+    "QuartzCore",
+    "CoreImage"
+  ],
+  "weak_frameworks": [
+    "CoreTelephony",
+    "Social",
+    "Twitter",
+    "Accounts",
+    "AdSupport",
+    "StoreKit"
+  ],
+  "subspecs": [
+    {
+      "name": "AppboyKit",
+      "source_files": [
+        "AppboyKit/headers/AppboyKitLibrary/*.h",
+        "AppboyKit/*.m"
+      ],
+      "exclude_files": "AppboyKit/**/*.txt",
+      "resources": "AppboyKit/Appboy.bundle",
+      "preserve_paths": "AppboyKit/**/*.*",
+      "vendored_libraries": "AppboyKit/libAppboyKitLibrary.a",
+      "dependencies": {
+        "Facebook-iOS-SDK": [
+          "~> 3.16.2"
+        ],
+        "SDWebImage": [
+          ">= 3.7.0"
+        ]
+      }
+    },
+    {
+      "name": "AppboyKitWithoutFacebookSupport",
+      "source_files": [
+        "AppboyKitWithoutFacebookSupport/headers/AppboyKitLibrary/*.h",
+        "AppboyKitWithoutFacebookSupport/*.m"
+      ],
+      "exclude_files": "AppboyKitWithoutFacebookSupport/**/*.txt",
+      "resources": "AppboyKitWithoutFacebookSupport/Appboy.bundle",
+      "preserve_paths": "AppboyKitWithoutFacebookSupport/**/*.*",
+      "vendored_libraries": "AppboyKitWithoutFacebookSupport/libAppboyKitLibrary.a",
+      "dependencies": {
+        "SDWebImage": [
+          ">= 3.7.0"
+        ]
+      }
+    }
+  ]
+}

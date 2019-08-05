@@ -1,0 +1,90 @@
+{
+  "name": "AFNetworking",
+  "version": "2.0.0-RC3",
+  "license": "MIT",
+  "summary": "A delightful iOS and OS X networking framework.",
+  "homepage": "https://github.com/AFNetworking/AFNetworking",
+  "authors": {
+    "Mattt Thompson": "m@mattt.me",
+    "Scott Raymond": "sco@scottraymond.net"
+  },
+  "source": {
+    "git": "https://github.com/AFNetworking/AFNetworking.git",
+    "tag": "2.0.0-RC3",
+    "submodules": true
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8"
+  },
+  "default_subspecs": [
+    "Core"
+  ],
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": "AFNetworking",
+      "dependencies": {
+        "AFNetworking/Serialization": [
+
+        ],
+        "AFNetworking/Reachability": [
+
+        ],
+        "AFNetworking/Security": [
+
+        ],
+        "AFNetworking/NSURLConnection": [
+
+        ]
+      }
+    },
+    {
+      "name": "Serialization",
+      "source_files": "AFNetworking/AFURL{Request,Response}Serialization.{h,m}",
+      "ios": {
+        "frameworks": [
+          "MobileCoreServices",
+          "CoreGraphics"
+        ]
+      },
+      "osx": {
+        "frameworks": "CoreServices"
+      }
+    },
+    {
+      "name": "Security",
+      "source_files": "AFNetworking/AFSecurityPolicy.{h,m}",
+      "frameworks": "Security"
+    },
+    {
+      "name": "Reachability",
+      "source_files": "AFNetworking/AFNetworkReachabilityManager.{h,m}",
+      "frameworks": "SystemConfiguration"
+    },
+    {
+      "name": "NSURLConnection",
+      "source_files": [
+        "AFNetworking/AFURLConnectionOperation.{h,m}",
+        "AFNetworking/AFHTTPRequestOperation.{h,m}",
+        "AFNetworking/AFHTTPRequestOperationManager.{h,m}"
+      ]
+    },
+    {
+      "name": "NSURLSession",
+      "platforms": {
+        "ios": "7.0",
+        "osx": "10.9"
+      },
+      "source_files": [
+        "AFNetworking/AFURLSessionManager.{h,m}",
+        "AFNetworking/AFHTTPSessionManager.{h,m}"
+      ]
+    },
+    {
+      "name": "UIKit+AFNetworking",
+      "source_files": "UIKit+AFNetworking"
+    }
+  ]
+}

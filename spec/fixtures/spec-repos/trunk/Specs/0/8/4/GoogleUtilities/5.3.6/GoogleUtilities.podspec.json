@@ -1,0 +1,144 @@
+{
+  "name": "GoogleUtilities",
+  "version": "5.3.6",
+  "summary": "Google Utilities for iOS (plus community support for macOS and tvOS)",
+  "description": "Internal Google Utilities including Network, Reachability Environment, Logger, and Swizzling for\nother Google CocoaPods. They're not intended for direct public usage.",
+  "homepage": "https://github.com/firebase/firebase-ios-sdk/tree/master/GoogleUtilities",
+  "license": {
+    "type": "Apache",
+    "file": "LICENSE"
+  },
+  "authors": "Google, Inc.",
+  "source": {
+    "git": "https://github.com/firebase/firebase-ios-sdk.git",
+    "tag": "Utilities-5.3.6"
+  },
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.10",
+    "tvos": "10.0"
+  },
+  "cocoapods_version": ">= 1.4.0",
+  "prefix_header_file": false,
+  "subspecs": [
+    {
+      "name": "Environment",
+      "source_files": "GoogleUtilities/Environment/third_party/*.[mh]",
+      "public_header_files": "GoogleUtilities/Environment/third_party/*.h",
+      "private_header_files": "GoogleUtilities/Environment/third_party/*.h"
+    },
+    {
+      "name": "Logger",
+      "source_files": "GoogleUtilities/Logger/**/*.[mh]",
+      "public_header_files": [
+        "GoogleUtilities/Logger/Private/*.h",
+        "GoogleUtilities/Logger/Public/*.h"
+      ],
+      "private_header_files": "GoogleUtilities/Logger/Private/*.h",
+      "dependencies": {
+        "GoogleUtilities/Environment": [
+
+        ]
+      }
+    },
+    {
+      "name": "Network",
+      "source_files": "GoogleUtilities/Network/**/*.[mh]",
+      "public_header_files": "GoogleUtilities/Network/Private/*.h",
+      "private_header_files": "GoogleUtilities/Network/Private/*.h",
+      "dependencies": {
+        "GoogleUtilities/NSData+zlib": [
+
+        ],
+        "GoogleUtilities/Logger": [
+
+        ],
+        "GoogleUtilities/Reachability": [
+
+        ]
+      },
+      "frameworks": [
+        "Security"
+      ]
+    },
+    {
+      "name": "NSData+zlib",
+      "source_files": "GoogleUtilities/NSData+zlib/*.[mh]",
+      "public_header_files": "GoogleUtilities/NSData+zlib/GULNSData+zlib.h",
+      "libraries": [
+        "z"
+      ]
+    },
+    {
+      "name": "Reachability",
+      "source_files": "GoogleUtilities/Reachability/**/*.[mh]",
+      "public_header_files": "GoogleUtilities/Reachability/Private/*.h",
+      "private_header_files": "GoogleUtilities/Reachability/Private/*.h",
+      "frameworks": [
+        "SystemConfiguration"
+      ],
+      "dependencies": {
+        "GoogleUtilities/Logger": [
+
+        ]
+      }
+    },
+    {
+      "name": "AppDelegateSwizzler",
+      "source_files": [
+        "GoogleUtilities/AppDelegateSwizzler/**/*.[mh]",
+        "GoogleUtilities/Common/*.h"
+      ],
+      "public_header_files": "GoogleUtilities/AppDelegateSwizzler/Private/*.h",
+      "private_header_files": "GoogleUtilities/AppDelegateSwizzler/Private/*.h",
+      "dependencies": {
+        "GoogleUtilities/Logger": [
+
+        ],
+        "GoogleUtilities/Network": [
+
+        ],
+        "GoogleUtilities/Environment": [
+
+        ]
+      }
+    },
+    {
+      "name": "ISASwizzler",
+      "source_files": [
+        "GoogleUtilities/ISASwizzler/**/*.[mh]",
+        "GoogleUtilities/Common/*.h"
+      ],
+      "private_header_files": "GoogleUtilities/ISASwizzler/Private/*.h"
+    },
+    {
+      "name": "MethodSwizzler",
+      "source_files": [
+        "GoogleUtilities/MethodSwizzler/**/*.[mh]",
+        "GoogleUtilities/Common/*.h"
+      ],
+      "private_header_files": "GoogleUtilities/MethodSwizzler/Private/*.h",
+      "dependencies": {
+        "GoogleUtilities/Logger": [
+
+        ]
+      }
+    },
+    {
+      "name": "SwizzlerTestHelpers",
+      "source_files": "GoogleUtilities/SwizzlerTestHelpers/*.[hm]",
+      "private_header_files": "GoogleUtilities/SwizzlerTestHelpers/*.h"
+    },
+    {
+      "name": "UserDefaults",
+      "source_files": "GoogleUtilities/UserDefaults/**/*.[hm]",
+      "public_header_files": "GoogleUtilities/UserDefaults/Private/*.h",
+      "private_header_files": "GoogleUtilities/UserDefaults/Private/*.h",
+      "dependencies": {
+        "GoogleUtilities/Logger": [
+
+        ]
+      }
+    }
+  ]
+}

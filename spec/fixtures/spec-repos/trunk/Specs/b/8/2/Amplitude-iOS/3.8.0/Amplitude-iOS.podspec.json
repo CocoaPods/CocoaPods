@@ -1,0 +1,22 @@
+{
+  "name": "Amplitude-iOS",
+  "version": "3.8.0",
+  "summary": "Amplitude mobile analytics iOS SDK.",
+  "homepage": "https://amplitude.com",
+  "license": {
+    "type": "MIT"
+  },
+  "authors": {
+    "Amplitude": "dev@amplitude.com"
+  },
+  "source": {
+    "git": "https://github.com/amplitude/Amplitude-iOS.git",
+    "tag": "v3.8.0"
+  },
+  "platforms": {
+    "ios": "5.0"
+  },
+  "source_files": "Amplitude/*.{h,m}",
+  "requires_arc": true,
+  "libraries": "sqlite3.0"
+}

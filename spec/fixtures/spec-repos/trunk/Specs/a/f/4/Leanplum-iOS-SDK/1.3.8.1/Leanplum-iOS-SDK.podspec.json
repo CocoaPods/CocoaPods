@@ -1,0 +1,41 @@
+{
+  "name": "Leanplum-iOS-SDK",
+  "version": "1.3.8.1",
+  "summary": "Mobile A/B testing, personalization & analytics in one powerful platform.",
+  "description": "Leanplum! Mobile A/B testing, personalization & analytics in one powerful platform.",
+  "homepage": "https://www.leanplum.com",
+  "license": {
+    "type": "Commercial",
+    "text": "See https://www.leanplum.com/tos"
+  },
+  "authors": {
+    "Leanplum": "support@leanplum.com"
+  },
+  "social_media_url": "https://twitter.com/leanplum",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "requires_arc": true,
+  "source": {
+    "git": "https://github.com/Leanplum/Leanplum-iOS-SDK.git",
+    "tag": "1.3.8.1"
+  },
+  "frameworks": [
+    "CFNetwork",
+    "Foundation",
+    "Security",
+    "SystemConfiguration",
+    "UIKit"
+  ],
+  "weak_frameworks": [
+    "AdSupport",
+    "StoreKit"
+  ],
+  "xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC"
+  },
+  "preserve_paths": "Leanplum.framework",
+  "documentation_url": "https://www.leanplum.com/docs#/docs",
+  "public_header_files": "Leanplum.framework/Headers/*.h",
+  "vendored_frameworks": "Leanplum.framework"
+}

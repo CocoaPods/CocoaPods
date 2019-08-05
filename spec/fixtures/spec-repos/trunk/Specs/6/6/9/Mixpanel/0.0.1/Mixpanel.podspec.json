@@ -1,0 +1,19 @@
+{
+  "name": "Mixpanel",
+  "version": "0.0.1",
+  "license": "Apache License",
+  "summary": "iPhone tracking library for Mixpanel Analytics.",
+  "homepage": "http://mixpanel.com",
+  "authors": {
+    "Mixpanel": "support@mixpanel.com"
+  },
+  "source": {
+    "git": "https://github.com/mixpanel/mixpanel-iphone.git",
+    "commit": "8656f676959a85c484c4be899075b00eaff083d8"
+  },
+  "platforms": {
+    "ios": null
+  },
+  "source_files": "MPLib/**/*.{h,m}",
+  "requires_arc": false
+}

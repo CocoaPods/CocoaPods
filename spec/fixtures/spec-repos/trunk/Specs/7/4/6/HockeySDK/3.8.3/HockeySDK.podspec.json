@@ -1,0 +1,66 @@
+{
+  "name": "HockeySDK",
+  "version": "3.8.3",
+  "summary": "Collect live crash reports, get feedback from your users, distribute your betas, and analyze your test coverage with HockeyApp.",
+  "description": "HockeyApp is a service to distribute beta apps, collect crash reports and\ncommunicate with your app's users.\n\nIt improves the testing process dramatically and can be used for both beta\nand App Store builds.",
+  "homepage": "http://hockeyapp.net/",
+  "documentation_url": "http://hockeyapp.net/help/sdk/ios/3.8.3/",
+  "license": {
+    "type": "MIT",
+    "file": "HockeySDK-iOS/LICENSE"
+  },
+  "authors": {
+    "Andreas Linde": "mail@andreaslinde.de",
+    "Thomas Dohmke": "thomas@dohmke.de"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "requires_arc": true,
+  "preserve_paths": "HockeySDK-iOS/README.md",
+  "source": {
+    "http": "https://github.com/bitstadium/HockeySDK-iOS/releases/download/3.8.3/HockeySDK-iOS-3.8.3.zip"
+  },
+  "frameworks": [
+    "SystemConfiguration",
+    "Security",
+    "Foundation"
+  ],
+  "libraries": "c++",
+  "default_subspecs": "AllFeaturesLib",
+  "subspecs": [
+    {
+      "name": "CrashOnlyLib",
+      "frameworks": "UIKit",
+      "resource_bundles": {
+        "HockeySDKResources": [
+          "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDK.framework/Versions/A/Resources/HockeySDKResources.bundle/*.lproj"
+        ]
+      },
+      "vendored_frameworks": "HockeySDK-iOS/HockeySDKCrashOnly/HockeySDK.framework"
+    },
+    {
+      "name": "CrashOnlyExtensionsLib",
+      "vendored_frameworks": "HockeySDK-iOS/HockeySDKCrashOnlyExtension/HockeySDK.framework"
+    },
+    {
+      "name": "AllFeaturesLib",
+      "resource_bundles": {
+        "HockeySDKResources": [
+          "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDK.framework/Versions/A/Resources/HockeySDKResources.bundle/*.png",
+          "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDK.framework/Versions/A/Resources/HockeySDKResources.bundle/*.lproj"
+        ]
+      },
+      "frameworks": [
+        "UIKit",
+        "CoreGraphics",
+        "QuartzCore",
+        "AssetsLibrary",
+        "MobileCoreServices",
+        "QuickLook",
+        "CoreText"
+      ],
+      "vendored_frameworks": "HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDK.framework"
+    }
+  ]
+}

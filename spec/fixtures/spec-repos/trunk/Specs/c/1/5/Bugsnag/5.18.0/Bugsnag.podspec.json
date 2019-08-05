@@ -1,0 +1,35 @@
+{
+  "name": "Bugsnag",
+  "version": "5.18.0",
+  "summary": "Cocoa notifier for SDK for bugsnag.com",
+  "homepage": "https://bugsnag.com",
+  "license": "MIT",
+  "authors": {
+    "Bugsnag": "notifiers@bugsnag.com"
+  },
+  "source": {
+    "git": "https://github.com/bugsnag/bugsnag-cocoa.git",
+    "tag": "v5.18.0"
+  },
+  "frameworks": [
+    "Foundation",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "c++",
+    "z"
+  ],
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.8",
+    "tvos": "9.0"
+  },
+  "source_files": [
+    "Source/{**/,}*.{m,h,mm,c,cpp}"
+  ],
+  "requires_arc": true,
+  "public_header_files": [
+    "Source/BSG_KSCrashReportWriter.h",
+    "Source/Bugsnag{,MetaData,Configuration,Breadcrumb,CrashReport}.h"
+  ]
+}

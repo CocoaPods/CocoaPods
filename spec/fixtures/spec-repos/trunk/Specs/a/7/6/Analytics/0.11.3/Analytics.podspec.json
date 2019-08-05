@@ -1,0 +1,46 @@
+{
+  "name": "Analytics",
+  "version": "0.11.3",
+  "summary": "Segment.io analytics and marketing tools library for iOS.",
+  "homepage": "https://segment.io/libraries/ios",
+  "license": {
+    "type": "MIT",
+    "file": "License.md"
+  },
+  "authors": {
+    "Segment.io": "friends@segment.io"
+  },
+  "source": {
+    "http": "https://s3.amazonaws.com/segmentio/releases/ios/Analytics-0.11.3.zip",
+    "flatten": true
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "preserve_paths": "Analytics.framework",
+  "source_files": "Analytics.framework/**/*.h",
+  "resources": [
+    "Analytics.framework/Versions/A/Resources/*"
+  ],
+  "frameworks": [
+    "Analytics",
+    "Foundation",
+    "UIKit",
+    "CoreData",
+    "SystemConfiguration",
+    "QuartzCore",
+    "CFNetwork",
+    "CoreTelephony",
+    "Security",
+    "CoreGraphics"
+  ],
+  "libraries": [
+    "sqlite3",
+    "z"
+  ],
+  "xcconfig": {
+    "OTHER_LDFLAGS": "-ObjC",
+    "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_ROOT)/Analytics\""
+  },
+  "requires_arc": true
+}

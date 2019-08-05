@@ -1,0 +1,28 @@
+{
+  "name": "Raven",
+  "version": "0.3.0",
+  "summary": "A client for Sentry (getsentry.com).",
+  "homepage": "https://getsentry.com/",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "David Cramer": "dcramer@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/getsentry/raven-objc.git",
+    "tag": "0.3.0"
+  },
+  "source_files": [
+    "Raven"
+  ],
+  "requires_arc": true,
+  "deprecated_in_favor_of": "Sentry",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "watchos": null
+  }
+}

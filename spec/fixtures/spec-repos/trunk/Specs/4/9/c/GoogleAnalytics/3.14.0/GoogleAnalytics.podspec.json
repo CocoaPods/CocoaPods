@@ -1,0 +1,35 @@
+{
+  "name": "GoogleAnalytics",
+  "version": "3.14.0",
+  "summary": "Google Analytics - measure your app performance",
+  "description": "Google Analytics lets you track application events you care about and gain insights from discovery and installation to conversion and engagement",
+  "homepage": "https://www.google.com/analytics",
+  "license": {
+    "type": "Copyright",
+    "text": "Copyright 2015 Google Inc."
+  },
+  "authors": "Google, Inc.",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "vendored_libraries": [
+    "Libraries/libGoogleAnalytics.a"
+  ],
+  "public_header_files": [
+    "Headers/Public/*.h"
+  ],
+  "source_files": [
+    "Headers/Public/*.h"
+  ],
+  "frameworks": [
+    "CoreData",
+    "SystemConfiguration"
+  ],
+  "libraries": [
+    "sqlite3",
+    "z"
+  ],
+  "source": {
+    "http": "https://www.gstatic.com/cpdc/69fd9fe84a8fea60-GoogleAnalytics-3.14.0.tar.gz"
+  }
+}

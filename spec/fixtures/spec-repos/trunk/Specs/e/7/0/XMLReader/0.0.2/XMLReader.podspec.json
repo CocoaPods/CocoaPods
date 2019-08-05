@@ -1,0 +1,19 @@
+{
+  "name": "XMLReader",
+  "version": "0.0.2",
+  "license": "MIT",
+  "summary": "An NSXMLParser-based XML to NSDictionary converter.",
+  "homepage": "https://github.com/RestKit/XML-to-NSDictionary",
+  "authors": {
+    "Caccinolo Benoit": "benoit.caccinolo@gmail.com",
+    "ezgit": "anonb5+git@gmail.com",
+    "Insert-Witty-Name": "tias_dp@hotmail.com",
+    "Christopher Swasey": "chris@gateguruapp.com"
+  },
+  "source": {
+    "git": "https://github.com/RestKit/XML-to-NSDictionary.git",
+    "tag": "0.0.2"
+  },
+  "source_files": "*.{h,m}",
+  "requires_arc": false
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Intercom",
+  "version": "3.0.14",
+  "summary": "The Intercom iOS SDK, for integrating Intercom into your iOS application.",
+  "license": {
+    "type": "Apache 2.0",
+    "file": "Intercom/LICENSE"
+  },
+  "authors": {
+    "Adam McCarthy": "adam@intercom.io",
+    "Brian Boyle": "brian.boyle@intercom.io",
+    "Conor O’Donnell": "conor.odonnell@intercom.io",
+    "James Treanor": "james@intercom.io"
+  },
+  "homepage": "https://github.com/intercom/intercom-ios",
+  "description": "The Intercom iOS SDK, for integrating Intercom into your iOS application. The SDK supports iOS 8, iOS 9 and iOS 10",
+  "frameworks": [
+    "Foundation",
+    "UIKit",
+    "Accelerate",
+    "Security",
+    "SystemConfiguration",
+    "MobileCoreServices",
+    "ImageIO",
+    "AudioToolbox",
+    "QuartzCore",
+    "CoreGraphics",
+    "Photos",
+    "Accelerate",
+    "UserNotifications"
+  ],
+  "libraries": [
+    "icucore",
+    "xml2"
+  ],
+  "requires_arc": true,
+  "source": {
+    "http": "https://github.com/intercom/intercom-ios/releases/download/3.0.14/CocoaPods.zip"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "preserve_paths": "Intercom/Intercom.framework",
+  "public_header_files": "Intercom/Intercom.framework/Versions/A/Headers/Intercom.h",
+  "source_files": "Intercom/Intercom.framework/Versions/A/Headers/Intercom.h",
+  "resources": "Intercom/Intercom.framework/Versions/A/Resources/Intercom.bundle",
+  "vendored_frameworks": "Intercom/Intercom.framework"
+}

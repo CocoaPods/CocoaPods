@@ -1,0 +1,62 @@
+{
+  "name": "Mixpanel",
+  "version": "2.9.0",
+  "summary": "iPhone tracking library for Mixpanel Analytics",
+  "homepage": "https://mixpanel.com",
+  "license": "Apache License, Version 2.0",
+  "authors": {
+    "Mixpanel, Inc": "support@mixpanel.com"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source": {
+    "git": "https://github.com/mixpanel/mixpanel-iphone.git",
+    "tag": "v2.9.0"
+  },
+  "requires_arc": true,
+  "default_subspecs": "Mixpanel",
+  "subspecs": [
+    {
+      "name": "Mixpanel",
+      "source_files": [
+        "Mixpanel/**/*.{m,h}",
+        "Mixpanel/**/*.swift"
+      ],
+      "resources": [
+        "Mixpanel/**/*.{png,storyboard}"
+      ],
+      "frameworks": [
+        "UIKit",
+        "Foundation",
+        "SystemConfiguration",
+        "CoreTelephony",
+        "Accelerate",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "libraries": "icucore"
+    },
+    {
+      "name": "AppExtension",
+      "source_files": [
+        "Mixpanel/Mixpanel.{m,h}",
+        "Mixpanel/MPLogger.h",
+        "Mixpanel/NSData+MPBase64.{m,h}"
+      ],
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) MIXPANEL_APP_EXTENSION"
+      },
+      "frameworks": [
+        "UIKit",
+        "Foundation",
+        "SystemConfiguration",
+        "CoreTelephony",
+        "Accelerate",
+        "CoreGraphics",
+        "QuartzCore"
+      ],
+      "libraries": "icucore"
+    }
+  ]
+}

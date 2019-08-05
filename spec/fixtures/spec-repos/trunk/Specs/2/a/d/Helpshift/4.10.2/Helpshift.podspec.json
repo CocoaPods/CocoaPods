@@ -1,0 +1,47 @@
+{
+  "name": "Helpshift",
+  "version": "4.10.2",
+  "summary": "Customer service helpdesk for mobile applications.",
+  "license": {
+    "type": "Commercial",
+    "text": "See http://www.helpshift.com/terms/"
+  },
+  "homepage": "http://www.helpshift.com/",
+  "authors": {
+    "Helpshift": "support@helpshift.com"
+  },
+  "source": {
+    "http": "https://d3e51fp79zp4el.cloudfront.net/library/ios/v4.10/helpshift-sdk-ios-v4.10.2.zip"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source_files": "helpshift-sdk-ios-v4.10.2/Helpshift.h",
+  "resources": "helpshift-sdk-ios-v4.10.2/HSResources/*.png",
+  "preserve_paths": [
+    "helpshift-sdk-ios-v4.10.2/libHelpshift.a",
+    "helpshift-sdk-ios-v4.10.2/HSLocalization/*.lproj",
+    "helpshift-sdk-ios-v4.10.2/HSThemes/*.plist"
+  ],
+  "frameworks": [
+    "CoreGraphics",
+    "QuartzCore",
+    "CoreText",
+    "SystemConfiguration",
+    "CoreTelephony",
+    "Foundation",
+    "UIKit",
+    "Security",
+    "QuickLook"
+  ],
+  "libraries": [
+    "sqlite3.0",
+    "z",
+    "Helpshift"
+  ],
+  "xcconfig": {
+    "LIBRARY_SEARCH_PATHS": "\"$(PODS_ROOT)/Helpshift/helpshift-sdk-ios-v4.10.2\""
+  },
+  "documentation_url": "http://developers.helpshift.com/ios/",
+  "requires_arc": false
+}
