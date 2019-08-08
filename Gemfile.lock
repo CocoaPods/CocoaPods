@@ -7,12 +7,13 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 137cfe17c33646542fb8ed9231c52cd4e4754b2e
+  revision: 0a6dea961da236995dfde3c7927e4daaf2045820
   branch: master
   specs:
     cocoapods-core (1.8.0.beta.1)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
+      concurrent-ruby (~> 1.0)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
@@ -32,7 +33,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: b9d0bcc26fcbccefd5ad77c14587c245fd583f90
+  revision: 602c802125b69199ccb06094974a569a98e734c3
   branch: master
   specs:
     xcodeproj (1.12.0)

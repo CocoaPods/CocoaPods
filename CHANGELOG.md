@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add support for integrating dependency file in user script phases.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9082](https://github.com/CocoaPods/CocoaPods/issues/9082)
 
 ##### Bug Fixes
 
