@@ -533,7 +533,7 @@ module Pod
                   device_family_by_platform = {
                     :ios => '1,2',
                     :tvos => '3',
-                    :watchos => '1,2,4'
+                    :watchos => '1,2,4',
                   }
 
                   if (family = device_family_by_platform[target.platform.name])
