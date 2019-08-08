@@ -12,7 +12,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Add Apple watch device family to resource bundles built for WatchOS
+* Add Apple watch device family to resource bundles built for WatchOS  
   [Aaron McDaniel](https://github.com/Spilly)
   [#9075](https://github.com/CocoaPods/CocoaPods/issues/9075)
 
