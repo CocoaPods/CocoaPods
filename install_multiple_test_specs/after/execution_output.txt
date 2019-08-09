@@ -87,8 +87,6 @@ Integrating target `HostedTestLib`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
-    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
 
 Integrating target `TestLib`
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
