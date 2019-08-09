@@ -235,6 +235,7 @@ module Pod
               phase.output_paths = script_phase[:output_files]
               phase.input_file_list_paths = script_phase[:input_file_lists]
               phase.output_file_list_paths = script_phase[:output_file_lists]
+              phase.dependency_file = script_phase[:dependency_file]
               # At least with Xcode 10 `showEnvVarsInLog` is *NOT* set to any value even if it's checked and it only
               # gets set to '0' if the user has explicitly disabled this.
               if (show_env_vars_in_log = script_phase.fetch(:show_env_vars_in_log, '1')) == '0'

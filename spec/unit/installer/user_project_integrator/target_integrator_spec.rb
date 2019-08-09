@@ -524,6 +524,7 @@ module Pod
           phase.input_file_list_paths.should.be.nil
           phase.output_file_list_paths.should.be.nil
           phase.show_env_vars_in_log.should.be.nil
+          phase.dependency_file.should.be.nil
         end
 
         it 'adds a custom shell script phase with input/output paths' do
@@ -544,6 +545,25 @@ module Pod
           phase.input_file_list_paths == ['/path/to/input_file.xcfilelist']
           phase.output_file_list_paths.should == ['/path/to/output_file.xcfilelist']
           phase.show_env_vars_in_log.should.be.nil
+          phase.dependency_file.should.be.nil
+        end
+
+        it 'adds a custom shell script phase with dependency file' do
+          @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script',
+                                                                       :script => 'echo "Hello World"',
+                                                                       :dependency_file => '/path/to/depfile.d'])
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+          phase.name.should == '[CP-User] Custom Script'
+          phase.shell_script.should == 'echo "Hello World"'
+          phase.shell_path.should == '/bin/sh'
+          phase.input_paths.should.be.nil
+          phase.output_paths.should.be.nil
+          phase.input_file_list_paths.should.be.nil
+          phase.output_file_list_paths.should.be.nil
+          phase.show_env_vars_in_log.should.be.nil
+          phase.dependency_file.should == '/path/to/depfile.d'
         end
 
         it 'sets the show_env_vars_in_log value to 0 if its explicitly set' do
