@@ -34,7 +34,11 @@ module Pod
               # cause an App Store rejection because frameworks cannot be
               # embedded in embedded targets.
               #
-              create_embed_frameworks_script if embed_frameworks_script_required?
+              if embed_frameworks_script_required?
+                create_embed_frameworks_script
+              else
+                delete_embed_frameworks_script
+              end
               create_bridge_support_file(native_target)
               create_copy_resources_script if target.includes_resources?
               create_acknowledgements
@@ -167,6 +171,16 @@ module Pod
             generator = Generator::EmbedFrameworksScript.new(target.framework_paths_by_config, target.xcframeworks_by_config)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
+          end
+
+          # Deletes the script that embeds the frameworks to the bundle of the client
+          # target.
+          #
+          # @return [void]
+          #
+          def delete_embed_frameworks_script
+            path = target.embed_frameworks_script_path
+            File.delete(path)
           end
 
           # Generates the acknowledgement files (markdown and plist) for the target.
