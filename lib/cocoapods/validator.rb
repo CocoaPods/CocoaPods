@@ -39,6 +39,7 @@ module Pod
     #         the platforms to lint.
     #
     def initialize(spec_or_path, source_urls, platforms = [])
+      @use_frameworks = true
       @linter = Specification::Linter.new(spec_or_path)
       @source_urls = if @linter.spec && @linter.spec.dependencies.empty? && @linter.spec.recursive_subspecs.all? { |s| s.dependencies.empty? }
                        []

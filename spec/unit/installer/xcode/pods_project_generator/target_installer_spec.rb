@@ -9,7 +9,7 @@ module Pod
             @project = Project.new(config.sandbox.project_path)
             user_build_configurations = { 'Debug' => :debug, 'Release' => :release, 'AppStore' => :release, 'Test' => :debug }
             archs = ['$(ARCHS_STANDARD_64_BIT)']
-            @target = Target.new(config.sandbox, false, user_build_configurations, archs, Platform.ios)
+            @target = Target.new(config.sandbox, BuildType.static_library, user_build_configurations, archs, Platform.ios)
             @installer = TargetInstaller.new(config.sandbox, @project, @target)
           end
 
@@ -52,7 +52,7 @@ module Pod
           end
 
           it 'verify static framework is building a static library' do
-            @target.stubs(:build_type => Target::BuildType.static_framework)
+            @target.stubs(:build_type => BuildType.static_framework)
             @installer.send(:add_target).resolved_build_setting('MACH_O_TYPE').should == {
               'Release' => 'staticlib',
               'Debug' => 'staticlib',

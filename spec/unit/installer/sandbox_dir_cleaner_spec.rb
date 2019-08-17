@@ -7,7 +7,7 @@ module Pod
       coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
       coconut_spec.module_name = 'CoconutLibModule'
       @coconut_pod_target = fixture_pod_target(coconut_spec)
-      @aggregate_target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios,
+      @aggregate_target = AggregateTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios,
                                               fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
                                               nil, {})
       @cleaner = Installer::SandboxDirCleaner.new(config.sandbox, [@banana_pod_target, @coconut_pod_target],

@@ -12,7 +12,7 @@ module Pod
               @project.add_pod_group('BananaLib', fixture('banana-lib'))
               platform = Platform.new(:ios, '4.3')
               @target_definition = fixture_target_definition('SampleProject', platform)
-              @pod_target = fixture_pod_target(@banana_spec, false, { 'Debug' => :debug, 'Release' => :release }, [],
+              @pod_target = fixture_pod_target(@banana_spec, BuildType.static_library, { 'Debug' => :debug, 'Release' => :release }, [],
                                                platform, [@target_definition])
               FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
               @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
@@ -28,7 +28,7 @@ module Pod
 
             it 'sets the platform and the deployment target for iOS targets that require frameworks' do
               @pod_target.stubs(:platform).returns(Platform.new(:ios, '8.0'))
-              @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+              @pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
               @installer.install!
               target = @project.targets.first
               target.platform_name.should == :ios
@@ -91,7 +91,7 @@ module Pod
 
             describe 'headers folder paths' do
               it 'does not set them for framework targets' do
-                @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                @pod_target.stubs(:build_type => BuildType.dynamic_framework)
                 @installer.install!
                 @project.targets.first.build_configurations.each do |config|
                   config.build_settings['PUBLIC_HEADERS_FOLDER_PATH'].should.be.nil
@@ -136,11 +136,13 @@ module Pod
                 @osx_target_definition = fixture_target_definition('SampleProject2', Platform.new(:osx, '10.8'))
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
-                @watermelon_ios_pod_target = fixture_pod_target_with_specs(all_specs, false, user_build_configurations,
-                                                                           [], Platform.new(:ios, '6.0'),
+                @watermelon_ios_pod_target = fixture_pod_target_with_specs(all_specs, BuildType.static_library,
+                                                                           user_build_configurations, [],
+                                                                           Platform.new(:ios, '6.0'),
                                                                            [@ios_target_definition])
-                @watermelon_osx_pod_target = fixture_pod_target_with_specs(all_specs, false, user_build_configurations,
-                                                                           [], Platform.new(:osx, '10.8'),
+                @watermelon_osx_pod_target = fixture_pod_target_with_specs(all_specs, BuildType.static_library,
+                                                                           user_build_configurations, [],
+                                                                           Platform.new(:osx, '10.8'),
                                                                            [@osx_target_definition])
                 FileReferencesInstaller.new(config.sandbox, [@watermelon_ios_pod_target, @watermelon_osx_pod_target],
                                             @project).install!
@@ -365,7 +367,7 @@ module Pod
               end
 
               it 'does not add test header imports to umbrella header' do
-                @watermelon_ios_pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+                @watermelon_ios_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
                 @ios_installer.install!
                 content = @watermelon_ios_pod_target.umbrella_header_path.read
                 content.should.not =~ /"CoconutTestHeader.h"/
@@ -373,7 +375,7 @@ module Pod
 
               it 'uses header_dir to umbrella header imports' do
                 @watermelon_ios_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Watermelon')
-                @watermelon_ios_pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+                @watermelon_ios_pod_target.stubs(:build_type).returns(BuildType.static_library)
                 @watermelon_ios_pod_target.stubs(:defines_module?).returns(true)
                 @ios_installer.install!
                 content = @watermelon_ios_pod_target.umbrella_header_path.read
@@ -383,7 +385,7 @@ module Pod
               it 'uses header_dir and header_mappings_dir to umbrella header imports' do
                 @watermelon_ios_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Watermelon2')
                 @watermelon_ios_pod_target.file_accessors.first.spec_consumer.stubs(:header_mappings_dir).returns('Classes')
-                @watermelon_ios_pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+                @watermelon_ios_pod_target.stubs(:build_type).returns(BuildType.static_library)
                 @watermelon_ios_pod_target.stubs(:defines_module?).returns(true)
                 @ios_installer.install!
                 content = @watermelon_ios_pod_target.umbrella_header_path.read
@@ -392,7 +394,7 @@ module Pod
 
               it 'does not use header_dir to umbrella header imports' do
                 @watermelon_ios_pod_target.file_accessors.first.spec_consumer.stubs(:header_dir).returns('Watermelon')
-                @watermelon_ios_pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+                @watermelon_ios_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
                 @watermelon_ios_pod_target.stubs(:defines_module?).returns(true)
                 @ios_installer.install!
                 content = @watermelon_ios_pod_target.umbrella_header_path.read
@@ -413,7 +415,7 @@ module Pod
               end
 
               it 'creates embed frameworks script for test target' do
-                @watermelon_ios_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.dynamic_framework)
                 @ios_installer.install!
                 script_path = @watermelon_ios_pod_target.embed_frameworks_script_path_for_spec(@watermelon_ios_pod_target.test_specs.first)
                 script = script_path.read
@@ -427,7 +429,7 @@ module Pod
               end
 
               it 'creates embed frameworks script for app target' do
-                @watermelon_ios_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.dynamic_framework)
                 @ios_installer.install!
                 script_path = @watermelon_ios_pod_target.embed_frameworks_script_path_for_spec(@watermelon_ios_pod_target.app_specs.first)
                 script = script_path.read
@@ -495,7 +497,7 @@ module Pod
               end
 
               it 'adds swift compatibility header phase for swift static libraries' do
-                @watermelon_ios_pod_target.stubs(:build_type => Target::BuildType.static_library, :uses_swift? => true)
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.static_library, :uses_swift? => true)
 
                 @ios_installer.install!
 
@@ -515,7 +517,7 @@ module Pod
               end
 
               it 'does not add swift compatibility header phase for swift static frameworks' do
-                @watermelon_ios_pod_target.stubs(:build_type => Target::BuildType.static_framework, :uses_swift? => true)
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.static_framework, :uses_swift? => true)
 
                 @ios_installer.install!
 
@@ -525,7 +527,7 @@ module Pod
               end
 
               it 'raises for swift static libraries with custom module maps' do
-                @watermelon_ios_pod_target.stubs(:build_type => Target::BuildType.static_library, :uses_swift? => true)
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.static_library, :uses_swift? => true)
                 @ios_installer.stubs(:custom_module_map => mock('custom_module_map', :read => ''))
 
                 e = ->() { @ios_installer.install! }.should.raise(Informative)
@@ -540,14 +542,15 @@ module Pod
                 @project = Project.new(config.sandbox.project_path)
                 @project.add_pod_group('MinionsLib', fixture('minions-lib'))
                 @minions_pod_target = fixture_pod_target_with_specs([@minions_spec, *@minions_spec.recursive_subspecs],
-                                                                    false, { 'Debug' => :debug, 'Release' => :release },
-                                                                    [], Platform.ios, [@target_definition])
+                                                                    BuildType.static_library,
+                                                                    { 'Debug' => :debug, 'Release' => :release }, [],
+                                                                    Platform.ios, [@target_definition])
                 FileReferencesInstaller.new(config.sandbox, [@minions_pod_target], @project).install!
                 @installer = PodTargetInstaller.new(config.sandbox, @project, @minions_pod_target)
               end
 
               it 'raises when references are missing for non-source files' do
-                @minions_pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+                @minions_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
                 exception = lambda { @installer.install! }.should.raise Informative
                 exception.message.should.include 'Unable to find other source ref for `Contents.json` for target `MinionsLib`.'
               end
@@ -622,7 +625,7 @@ module Pod
             #--------------------------------------#
 
             it 'adds framework resources to the framework target' do
-              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+              @pod_target.stubs(:build_type => BuildType.dynamic_framework)
               @installer.install!
               resources = @project.targets.first.resources_build_phase.files
               resources.count.should > 0
@@ -634,7 +637,7 @@ module Pod
             end
 
             it 'adds framework resources to the static framework target' do
-              @pod_target.stubs(:build_type => Target::BuildType.static_framework)
+              @pod_target.stubs(:build_type => BuildType.static_framework)
               @installer.install!
               resources = @project.targets.first.resources_build_phase.files
               resources.count.should > 0
@@ -646,7 +649,7 @@ module Pod
             end
 
             it 'includes spec info_plist entries for dynamic frameworks' do
-              @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+              @pod_target.stubs(:build_type => BuildType.dynamic_framework)
               expected_entries = {
                 'SOME_VAR' => 'SOME_VALUE',
               }
@@ -663,7 +666,7 @@ module Pod
             end
 
             it 'includes spec info_plist entries for static frameworks' do
-              @pod_target.stubs(:build_type => Target::BuildType.static_framework)
+              @pod_target.stubs(:build_type => BuildType.static_framework)
               expected_entries = {
                 'SOME_VAR' => 'SOME_VALUE',
               }
@@ -899,7 +902,8 @@ module Pod
                   all_specs = [watermelon_spec, *watermelon_spec.recursive_subspecs]
                   test_spec = all_specs.find { |s| s.name == 'WatermelonLib/Tests' }
                   test_spec.ios.deployment_target = '12.0'
-                  watermelon_pod_target = fixture_pod_target_with_specs(all_specs, false, user_build_configurations, [],
+                  watermelon_pod_target = fixture_pod_target_with_specs(all_specs, BuildType.static_library,
+                                                                        user_build_configurations, [],
                                                                         Platform.new(:ios, '6.0'), [target_definition])
                   FileReferencesInstaller.new(config.sandbox, [watermelon_pod_target], project).install!
                   PodTargetInstaller.new(config.sandbox, project, watermelon_pod_target).install!
@@ -953,7 +957,7 @@ module Pod
             end
 
             it 'creates an info.plist file when frameworks are required' do
-              @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+              @pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
               @installer.install!
               group = @project['Pods/BananaLib/Support Files']
               group.children.map(&:display_name).sort.should == [
@@ -966,7 +970,7 @@ module Pod
             end
 
             it 'creates an info.plist file when static frameworks are required' do
-              @pod_target.stubs(:build_type).returns(Target::BuildType.static_framework)
+              @pod_target.stubs(:build_type).returns(BuildType.static_framework)
               @installer.install!
               group = @project['Pods/BananaLib/Support Files']
               group.children.map(&:display_name).sort.should == [
@@ -979,7 +983,7 @@ module Pod
             end
 
             it 'does not create an Info.plist file if INFOPLIST_FILE is set' do
-              @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+              @pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
               @banana_spec.pod_target_xcconfig = {
                 'INFOPLIST_FILE' => 'somefile.plist',
               }
@@ -1050,10 +1054,9 @@ module Pod
                 @project = Project.new(config.sandbox.project_path)
                 @project.add_pod_group('snake', fixture('snake'))
 
-                @pod_target = fixture_pod_target('snake/snake.podspec', false,
+                @pod_target = fixture_pod_target('snake/snake.podspec', BuildType.dynamic_framework,
                                                  { 'Debug' => :debug, 'Release' => :release }, [],
-                                                 Pod::Platform.new(:ios, '6.0'), [@target_definition], nil,
-                                                 :build_type => Target::BuildType.dynamic_framework)
+                                                 Pod::Platform.new(:ios, '6.0'), [@target_definition], nil)
 
                 FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
                 @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
@@ -1123,7 +1126,7 @@ module Pod
               end
 
               it 'verifies that headers in build phase for static libraries are all Project headers' do
-                @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+                @pod_target.stubs(:build_type).returns(BuildType.static_library)
 
                 @installer.install!
 
@@ -1142,10 +1145,9 @@ module Pod
 
               describe 'depending on the root' do
                 before do
-                  @pod_target = fixture_pod_target_with_specs([@pod_spec, *@pod_spec.subspecs], false,
+                  @pod_target = fixture_pod_target_with_specs([@pod_spec, *@pod_spec.subspecs], BuildType.dynamic_framework,
                                                               { 'Debug' => :debug, 'Release' => :release }, [],
-                                                              Pod::Platform.new(:ios, '6.0'), [@target_definition],
-                                                              nil, :build_type => Target::BuildType.dynamic_framework)
+                                                              Pod::Platform.new(:ios, '6.0'), [@target_definition], nil)
                   FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
                   @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
                 end
@@ -1193,7 +1195,7 @@ module Pod
                 end
 
                 it 'verifies that headers in build phase for static libraries are all Project headers' do
-                  @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+                  @pod_target.stubs(:build_type).returns(BuildType.static_library)
 
                   @installer.install!
 
@@ -1207,10 +1209,9 @@ module Pod
                 before do
                   @project.group_for_spec('HeadersMappingSubspec')
                   @pod_spec.subspecs.last.name.should == 'HeadersMappingSubspec/Implementation'
-                  @pod_target = fixture_pod_target_with_specs(@pod_spec.subspecs.reverse, false,
+                  @pod_target = fixture_pod_target_with_specs(@pod_spec.subspecs.reverse, BuildType.dynamic_framework,
                                                               { 'Debug' => :debug, 'Release' => :release }, [],
-                                                              Pod::Platform.new(:ios, '6.0'), [@target_definition],
-                                                              nil, :build_type => Target::BuildType.dynamic_framework)
+                                                              Pod::Platform.new(:ios, '6.0'), [@target_definition], nil)
 
                   FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
                   @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
@@ -1259,7 +1260,7 @@ module Pod
                 end
 
                 it 'verifies that headers in build phase for static libraries are all Project headers' do
-                  @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+                  @pod_target.stubs(:build_type).returns(BuildType.static_library)
 
                   @installer.install!
 
@@ -1377,8 +1378,7 @@ module Pod
                 @banana_spec.resource_bundle = nil
                 @project.add_pod_group('BananaLib', fixture('banana-lib'))
 
-                @pod_target = fixture_pod_target(@banana_spec, false, { 'Debug' => :debug, 'Release' => :release },
-                                                 :build_type => Target::BuildType.dynamic_framework)
+                @pod_target = fixture_pod_target(@banana_spec, BuildType.dynamic_framework, 'Debug' => :debug, 'Release' => :release)
                 target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
@@ -1434,7 +1434,7 @@ module Pod
                 @banana_spec.resource_bundle = { 'banana_bundle' => ['Resources/**/*'] }
                 @project.add_pod_group('BananaLib', fixture('banana-lib'))
 
-                @pod_target = fixture_pod_target(@banana_spec, false, 'Debug' => :debug, 'Release' => :release)
+                @pod_target = fixture_pod_target(@banana_spec, BuildType.static_library, 'Debug' => :debug, 'Release' => :release)
                 target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.

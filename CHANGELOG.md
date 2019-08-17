@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Integrate `use_frameworks!` linkage DSL.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9099](https://github.com/CocoaPods/CocoaPods/issues/9099)
+
 * Add support for integrating dependency file in user script phases.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9082](https://github.com/CocoaPods/CocoaPods/issues/9082)

@@ -15,8 +15,9 @@ module Pod
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.abstract = false
         user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
-        @pod_bundle = AggregateTarget.new(config.sandbox, false, user_build_configurations, [], Platform.ios,
-                                          target_definition, project_path.dirname, @project, [@target.uuid], {})
+        @pod_bundle = AggregateTarget.new(config.sandbox, BuildType.static_library, user_build_configurations, [],
+                                          Platform.ios, target_definition, project_path.dirname, @project,
+                                          [@target.uuid], {})
         @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
         @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [Target::FrameworkPaths.new('${PODS_BUILD_DIR}/Lib/Lib.framework')])
         configuration = Xcodeproj::Config.new(
@@ -68,14 +69,14 @@ module Pod
           phase = target.frameworks_build_phase
           phase.files.find { |f| f.file_ref.path == 'libPods.a' }.should.not.be.nil
           phase.files.find { |f| f.file_ref.path == 'Pods.framework' }.should.be.nil
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           phase.files.find { |f| f.file_ref.path == 'libPods.a' }.should.be.nil
           phase.files.find { |f| f.file_ref.path == 'Pods.framework' }.should.not.be.nil
         end
 
         it 'cleans up linked libraries and frameworks from the frameworks build phase' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.frameworks_build_phase
@@ -89,13 +90,13 @@ module Pod
         end
 
         it 'adds references to the Pods static framework to the Frameworks group' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           @target_integrator.send(:user_project)['Frameworks/Pods.framework'].should.not.be.nil
         end
 
         it 'adds the Pods static framework to the "Link binary with libraries" build phase of each target' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.frameworks_build_phase
@@ -147,7 +148,7 @@ module Pod
         end
 
         it 'adds an embed frameworks build phase if frameworks are used' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
@@ -162,7 +163,7 @@ module Pod
         end
 
         it 'adds an embed frameworks build phase if the target to integrate is a messages application' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:messages_application)
           @target_integrator.integrate!
@@ -171,7 +172,7 @@ module Pod
         end
 
         it 'does not add an embed frameworks build phase if the target to integrate is a framework' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:framework)
           @target_integrator.integrate!
@@ -180,7 +181,7 @@ module Pod
         end
 
         it 'does not add an embed frameworks build phase if the target to integrate is an app extension' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:app_extension)
           @target_integrator.integrate!
@@ -189,7 +190,7 @@ module Pod
         end
 
         it 'does not add an embed frameworks build phase if the target to integrate is a watch extension' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:watch_extension)
           @target_integrator.integrate!
@@ -198,7 +199,7 @@ module Pod
         end
 
         it 'adds an embed frameworks build phase if the target to integrate is a watchOS 2 extension' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:watch2_extension)
           @target_integrator.integrate!
@@ -207,7 +208,7 @@ module Pod
         end
 
         it 'does not add an embed frameworks build phase if the target to integrate is a messages extension' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:messages_extension)
           @target_integrator.integrate!
@@ -216,7 +217,7 @@ module Pod
         end
 
         it 'adds an embed frameworks build phase if the target to integrate is a UI Test bundle' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
           target.stubs(:symbol_type).returns(:ui_test_bundle)
           @target_integrator.integrate!
@@ -225,7 +226,7 @@ module Pod
         end
 
         it 'does not remove existing embed frameworks build phases from integrated framework targets' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           @pod_bundle.stubs(:requires_frameworks? => false)
           target = @target_integrator.send(:native_targets).first
@@ -235,7 +236,7 @@ module Pod
         end
 
         it 'does not remove existing embed frameworks build phases if frameworks are not used anymore' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           @pod_bundle.stubs(:requires_frameworks? => false)
           @target_integrator.integrate!
@@ -245,7 +246,7 @@ module Pod
         end
 
         it 'removes embed frameworks build phases from app extension targets' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
@@ -257,7 +258,7 @@ module Pod
         end
 
         it 'removes embed frameworks build phases from watch extension targets' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
@@ -269,7 +270,7 @@ module Pod
         end
 
         it 'removes embed frameworks build phases from messages extension targets that are used in an iOS app' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
@@ -281,7 +282,7 @@ module Pod
         end
 
         it 'does not remove embed frameworks build phases from messages extension targets that are used in a messages app' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
@@ -294,7 +295,7 @@ module Pod
         end
 
         it 'removes embed frameworks build phases from framework targets' do
-          @pod_bundle.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
           phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }

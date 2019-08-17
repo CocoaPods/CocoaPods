@@ -16,11 +16,11 @@ module Pod
           end
         end
         user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
-        @target = AggregateTarget.new(config.sandbox, false, user_build_configurations, [],
+        @target = AggregateTarget.new(config.sandbox, BuildType.static_library, user_build_configurations, [],
                                       Platform.ios, @podfile.target_definitions['SampleProject'],
                                       sample_project_path.dirname,
                                       Xcodeproj::Project.open(@sample_project_path), ['A346496C14F9BE9A0080D870'], {})
-        @empty_library = AggregateTarget.new(config.sandbox, false, user_build_configurations, [],
+        @empty_library = AggregateTarget.new(config.sandbox, BuildType.static_library, user_build_configurations, [],
                                              Platform.ios, @podfile.target_definitions[:empty],
                                              sample_project_path.dirname, @target.user_project,
                                              ['C0C495321B9E5C47004F9854'], {})

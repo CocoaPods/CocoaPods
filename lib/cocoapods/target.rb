@@ -1,5 +1,4 @@
 require 'cocoapods/target/build_settings'
-require 'cocoapods/target/build_type'
 
 module Pod
   # Model class which describes a Pods target.
@@ -16,12 +15,6 @@ module Pod
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
     attr_reader :sandbox
-
-    # @return [Boolean] Whether the target needs to be implemented as a framework.
-    #         Computed by analyzer.
-    #
-    attr_reader :host_requires_frameworks
-    alias_method :host_requires_frameworks?, :host_requires_frameworks
 
     # @return [Hash{String=>Symbol}] A hash representing the user build
     #         configurations where each key corresponds to the name of a
@@ -41,7 +34,7 @@ module Pod
     #
     attr_reader :build_settings
 
-    # @return [Target::BuildType] the build type for this target.
+    # @return [BuildType] the build type for this target.
     #
     attr_reader :build_type
     private :build_type
@@ -49,15 +42,13 @@ module Pod
     # Initialize a new target
     #
     # @param [Sandbox] sandbox @see #sandbox
-    # @param [Boolean] host_requires_frameworks @see #host_requires_frameworks
+    # @param [BuildType] build_type @see #build_type
     # @param [Hash{String=>Symbol}] user_build_configurations @see #user_build_configurations
     # @param [Array<String>] archs @see #archs
     # @param [Platform] platform @see #platform
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
-                   build_type: Target::BuildType.infer_from_spec(nil, :host_requires_frameworks => host_requires_frameworks?))
+    def initialize(sandbox, build_type, user_build_configurations, archs, platform)
       @sandbox = sandbox
-      @host_requires_frameworks = host_requires_frameworks
       @user_build_configurations = user_build_configurations
       @archs = archs
       @platform = platform

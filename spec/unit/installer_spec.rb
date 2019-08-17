@@ -515,7 +515,7 @@ module Pod
           @spec.stubs(:root => @spec)
           @spec.stubs(:spec_type).returns(:library)
           @spec.stubs(:module_name => 'Spec')
-          @pod_targets = [PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
+          @pod_targets = [PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@spec],
                                         [fixture_target_definition], nil)]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
@@ -560,7 +560,7 @@ module Pod
 
         it 'correctly configures the Pod source installer' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec], [fixture_target_definition],
                                      nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
@@ -571,7 +571,7 @@ module Pod
 
         it 'maintains the list of the installed specs' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec], [fixture_target_definition],
                                      nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target, pod_target])
@@ -675,7 +675,7 @@ module Pod
             ]
             @pod_targets = targets.map do |(name, platform, target_spec)|
               target_definition = fixture_target_definition(name, platform)
-              PodTarget.new(config.sandbox, false, {}, [], platform, [target_spec], [target_definition], nil)
+              PodTarget.new(config.sandbox, BuildType.static_library, {}, [], platform, [target_spec], [target_definition], nil)
             end
             @installer.stubs(:pod_targets).returns(@pod_targets)
             @installer.send(:specs_for_pod, 'matryoshka').should == {
@@ -695,7 +695,7 @@ module Pod
           ]
           @pod_targets = targets.map do |(name, platform, target_spec)|
             target_definition = fixture_target_definition(name, platform)
-            PodTarget.new(config.sandbox, false, {}, [], platform, [target_spec], [target_definition], nil)
+            PodTarget.new(config.sandbox, BuildType.static_library, {}, [], platform, [target_spec], [target_definition], nil)
           end
           @installer.stubs(:pod_targets).returns(@pod_targets)
           pod_installer = @installer.send(:create_pod_installer, 'matryoshka')
@@ -709,7 +709,7 @@ module Pod
 
         it 'raises when it attempts to install pod source with no target supporting it' do
           spec = fixture_spec('banana-lib/BananaLib.podspec')
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec], [fixture_target_definition],
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec], [fixture_target_definition],
                                      nil)
           pod_target.stubs(:platform).returns(:ios)
           @installer.stubs(:pod_targets).returns([pod_target])
@@ -721,7 +721,7 @@ module Pod
         it 'prints a warning for installed pods that included script phases' do
           spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs],
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec, *spec.test_specs],
                                      [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           sandbox_state = Installer::Analyzer::SpecsState.new
@@ -737,7 +737,7 @@ module Pod
         it 'does not print a warning for already installed pods that include script phases' do
           spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
-          pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [spec, *spec.test_specs],
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec, *spec.test_specs],
                                      [fixture_target_definition], nil)
           pod_target.stubs(:platform).returns(:ios)
           sandbox_state = Installer::Analyzer::SpecsState.new
@@ -799,7 +799,7 @@ module Pod
 
     describe 'Integrating client projects' do
       it 'integrates the client projects' do
-        target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, fixture_target_definition,
+        target = AggregateTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, fixture_target_definition,
                                      config.sandbox.root.dirname, nil, nil, {})
         @installer.stubs(:aggregate_targets).returns([target])
         Installer::UserProjectIntegrator.any_instance.expects(:integrate!)

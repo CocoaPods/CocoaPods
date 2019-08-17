@@ -5,7 +5,7 @@ module Pod
     before do
       @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
       @target_definition = fixture_target_definition
-      @pod_target = fixture_pod_target(@banana_spec, false, {}, [], Platform.ios, [@target_definition])
+      @pod_target = fixture_pod_target(@banana_spec, BuildType.static_library, {}, [], Platform.ios, [@target_definition])
     end
 
     describe 'Meta' do
@@ -178,7 +178,7 @@ module Pod
         target_definition_one = fixture_target_definition
         target_definition_two = fixture_target_definition
         target_definition_two.store_pod('BananaLib', :project_name => 'SomeProject')
-        pod_target = fixture_pod_target(@banana_spec, false, {}, [], Platform.ios,
+        pod_target = fixture_pod_target(@banana_spec, BuildType.static_library, {}, [], Platform.ios,
                                         [target_definition_one, target_definition_two])
         pod_target.project_name.should == 'SomeProject'
       end
@@ -196,7 +196,7 @@ module Pod
         target_definition_one.store_swift_version_requirements('>= 4.0')
         target_definition_two = fixture_target_definition('App2')
         target_definition_two.store_swift_version_requirements('= 4.2')
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec],
                                    [target_definition_one, target_definition_two])
         @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0'),
                                                               Version.new('4.2')])
@@ -208,7 +208,7 @@ module Pod
         target_definition_one.store_swift_version_requirements('>= 4.0')
         target_definition_two = fixture_target_definition('App2')
         target_definition_two.store_swift_version_requirements('= 4.2')
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec],
                                    [target_definition_one, target_definition_two])
         @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
         pod_target.swift_version.should == ''
@@ -237,21 +237,21 @@ module Pod
       it 'should inhibit warnings for pods that are part of the target definition and require it' do
         target_definition = fixture_target_definition('App1')
         target_definition.store_pod('BananaLib', :inhibit_warnings => true)
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition])
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec], [target_definition])
         pod_target.inhibit_warnings?.should.be.true
       end
 
       it "should not inhibit warnings for pods that are part of the target definition but don't require it" do
         target_definition = fixture_target_definition('App1')
         target_definition.store_pod('BananaLib', :inhibit_warnings => false)
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition])
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec], [target_definition])
         pod_target.inhibit_warnings?.should.be.false
       end
 
       it 'should not inhibit warnings for pods that do not belong into the target definition' do
         target_definition = fixture_target_definition('App1')
         target_definition.store_pod('CoconutLib', :inhibit_warnings => true)
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec], [target_definition])
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec], [target_definition])
         pod_target.inhibit_warnings?.should.be.false
       end
 
@@ -260,7 +260,7 @@ module Pod
         target_definition_one.store_pod('BananaLib', :inhibit_warnings => true)
         target_definition_two = fixture_target_definition('App2')
         target_definition_two.store_pod('BananaLib', :inhibit_warnings => true)
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec],
                                    [target_definition_one, target_definition_two])
         pod_target.inhibit_warnings?.should.be.true
         UI.warnings.should.be.empty
@@ -272,7 +272,7 @@ module Pod
         target_definition_one.store_pod('BananaLib', :inhibit_warnings => true)
         target_definition_two = fixture_target_definition('App2')
         target_definition_two.store_pod('BananaLib', :inhibit_warnings => false)
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@banana_spec],
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec],
                                    [target_definition_one, target_definition_two])
         pod_target.inhibit_warnings?.should.be.true
         UI.warnings.should.include 'The pod `BananaLib` is linked to different targets (`App1` and `App2`), which ' \
@@ -375,7 +375,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [],
+          monkey_pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [],
                                             Platform.ios, [monkey_spec], [@target_definition])
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -393,7 +393,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [],
+          monkey_pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [],
                                             Platform.ios, [monkey_spec], [@target_definition])
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -441,7 +441,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [],
+          monkey_pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [],
                                             Platform.ios, [monkey_spec], [@target_definition])
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
           header_search_paths = @pod_target.header_search_paths
@@ -475,7 +475,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('BananaLib', Platform.ios)
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.osx)
           monkey_spec = fixture_spec('monkey/monkey.podspec')
-          monkey_pod_target = PodTarget.new(config.sandbox, false, {}, [],
+          monkey_pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [],
                                             Platform.ios, [monkey_spec], [@target_definition])
           monkey_pod_target.stubs(:platform).returns(Platform.ios)
           @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
@@ -496,12 +496,12 @@ module Pod
       end
 
       it 'returns true when building as a framework' do
-        @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+        @pod_target.stubs(:build_type => BuildType.dynamic_framework)
         @pod_target.should.defines_module
       end
 
       it 'returns true when building as a static framework' do
-        @pod_target.stubs(:build_type => Target::BuildType.static_framework)
+        @pod_target.stubs(:build_type => BuildType.static_framework)
         @pod_target.should.defines_module
       end
 
@@ -531,7 +531,7 @@ module Pod
         second_target_definition.abstract = false
         second_target_definition.store_pod('BananaLib', [])
         second_target_definition.set_use_modular_headers_for_pod('BananaLib', false)
-        pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [banana_spec],
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [banana_spec],
                                    [first_target_definition, second_target_definition])
         pod_target.should.not.defines_module
         UI.warnings.should.include 'Unable to determine whether to build `BananaLib` as a module due to a conflict ' \
@@ -552,7 +552,7 @@ module Pod
 
         describe 'Host requires frameworks' do
           before do
-            @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec', true)
+            @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec', BuildType.dynamic_framework)
           end
 
           it 'returns the product name' do
@@ -652,7 +652,7 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', true)
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', BuildType.dynamic_framework)
         end
 
         it 'returns that it uses swift' do
@@ -687,11 +687,11 @@ module Pod
 
       describe 'With dependencies' do
         before do
-          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', false, {}, [], Platform.ios,
+          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', BuildType.static_library, {}, [], Platform.ios,
                                                @pod_target.target_definitions)
-          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [], Platform.ios,
+          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [], Platform.ios,
                                                     @pod_target.target_definitions)
-          @app_pod_dependency = fixture_pod_target('monkey/monkey.podspec', false, {}, [], Platform.ios,
+          @app_pod_dependency = fixture_pod_target('monkey/monkey.podspec', BuildType.static_library, {}, [], Platform.ios,
                                                    @pod_target.target_definitions)
           @pod_target.dependent_targets = [@pod_dependency]
           @pod_target.test_dependent_targets_by_spec_name = { @pod_dependency.name => [@test_pod_dependency] }
@@ -736,7 +736,7 @@ module Pod
       describe 'Deployment target' do
         before do
           @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
-          @pod_target = fixture_pod_target(@watermelon_spec, false, {}, [], Platform.new(:ios, '9.0'))
+          @pod_target = fixture_pod_target(@watermelon_spec, BuildType.static_library, {}, [], Platform.new(:ios, '9.0'))
         end
 
         it 'returns the correct deployment target it was initialized with' do
@@ -795,7 +795,7 @@ module Pod
         it 'returns an empty scheme configuration for a spec with an unsupported platform' do
           @matryoshka_spec.ios.deployment_target = '7.0'
           @matryoshka_spec.subspecs.first.watchos.deployment_target = '4.2'
-          pod_target = fixture_pod_target(@matryoshka_spec.subspecs.first, true, [], {}, Platform.watchos)
+          pod_target = fixture_pod_target(@matryoshka_spec.subspecs.first, BuildType.dynamic_framework, [], {}, Platform.watchos)
           pod_target.scheme_for_spec(@matryoshka_spec).should == {}
         end
       end
@@ -806,9 +806,9 @@ module Pod
           @monkey_spec = fixture_spec('monkey/monkey.podspec')
           @target_definition = fixture_target_definition('Pods')
           @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
-                                                                 true, {}, [], Platform.new(:ios, '6.0'),
+                                                                 BuildType.dynamic_framework, {}, [], Platform.new(:ios, '6.0'),
                                                                  [@target_definition])
-          @monkey_pod_target = fixture_pod_target(@monkey_spec, true, {}, [], Platform.new(:ios, '6.0'),
+          @monkey_pod_target = fixture_pod_target(@monkey_spec, BuildType.dynamic_framework, {}, [], Platform.new(:ios, '6.0'),
                                                   [@target_definition])
         end
 

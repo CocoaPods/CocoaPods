@@ -7,9 +7,9 @@ module Pod
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
         project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition,
-                                      config.sandbox.root.dirname, Xcodeproj::Project.open(project_path),
-                                      ['A346496C14F9BE9A0080D870'], {})
+        @target = AggregateTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios,
+                                      @target_definition, config.sandbox.root.dirname,
+                                      Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], {})
       end
 
       it 'returns the target_definition that generated it' do
@@ -59,7 +59,8 @@ module Pod
       before do
         @target_definition = Podfile::TargetDefinition.new('Pods', nil)
         @target_definition.abstract = false
-        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition, config.sandbox.root.dirname, nil, nil, {})
+        @target = AggregateTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios,
+                                      @target_definition, config.sandbox.root.dirname, nil, nil, {})
       end
 
       it 'returns the absolute path of the xcconfig file' do
@@ -106,16 +107,16 @@ module Pod
         @target_definition.abstract = false
         @target_definition.set_platform(:ios, '10.0')
         file_accessor = fixture_file_accessor(@spec, Platform.ios)
-        @pod_target = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec], [@target_definition],
-                                    [file_accessor])
-        @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @target_definition,
+        @pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@spec],
+                                    [@target_definition], [file_accessor])
+        @target = AggregateTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, @target_definition,
                                       config.sandbox.root.dirname, nil, nil, 'Release' => [@pod_target], 'Debug' => [@pod_target])
       end
 
       describe 'with configuration dependent pod targets' do
         before do
           file_accessor = fixture_file_accessor(@spec, Platform.ios)
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [], Platform.ios, [@spec],
+          @pod_target_release = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@spec],
                                               [@target_definition], [file_accessor])
           @target.stubs(:pod_targets_for_build_configuration).with('Debug').returns([@pod_target])
           @target.stubs(:pod_targets_for_build_configuration).with('Release').returns([@pod_target, @pod_target_release])
@@ -140,16 +141,15 @@ module Pod
         before do
           @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           file_accessor = fixture_file_accessor(@coconut_spec, Platform.ios)
-          @pod_target_release = PodTarget.new(config.sandbox, false, {}, [],
-                                              Platform.ios, [@coconut_spec], [@target_definition],
-                                              [file_accessor])
+          @pod_target_release = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios,
+                                              [@coconut_spec], [@target_definition], [file_accessor])
           @target.stubs(:pod_targets).returns([@pod_target])
           @target.stubs(:user_build_configurations).returns('Debug' => :debug, 'Release' => :release)
         end
 
         it 'returns non vendored framework input and output paths by config' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+          @pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
             Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
@@ -160,7 +160,7 @@ module Pod
 
         it 'checks resource paths are empty for dynamic frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_target.stubs(:build_type => BuildType.dynamic_framework)
           @pod_target.stubs(:resource_paths).returns(['MyResources.bundle'])
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
@@ -170,7 +170,7 @@ module Pod
 
         it 'checks resource paths are included for static frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:build_type => Target::BuildType.static_framework)
+          @pod_target.stubs(:build_type => BuildType.static_framework)
           @pod_target.stubs(:resource_paths).returns('BananaLib' => ['MyResources.bundle'])
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
@@ -180,9 +180,9 @@ module Pod
 
         it 'returns non vendored frameworks by config with different release and debug targets' do
           @pod_target_release.stubs(:should_build?).returns(true)
-          @pod_target_release.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_target_release.stubs(:build_type => BuildType.dynamic_framework)
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_target.stubs(:build_type => BuildType.dynamic_framework)
           @target.stubs(:pod_targets_for_build_configuration).with('Debug').returns([@pod_target])
           @target.stubs(:pod_targets_for_build_configuration).with('Release').returns([@pod_target, @pod_target_release])
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
@@ -212,7 +212,7 @@ module Pod
 
         it 'returns correct input and output paths for non vendored frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
-          @pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+          @pod_target.stubs(:build_type => BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
             Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
@@ -276,16 +276,18 @@ module Pod
       describe 'With libraries' do
         before do
           @pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
-          @target = AggregateTarget.new(config.sandbox, false, {}, [], Platform.ios, @pod_target.target_definitions.first, config.sandbox.root.dirname, nil, nil, 'Release' => [@pod_target], 'Debug' => [@pod_target])
+          @target = AggregateTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios,
+                                        @pod_target.target_definitions.first, config.sandbox.root.dirname, nil, nil,
+                                        'Release' => [@pod_target], 'Debug' => [@pod_target])
         end
 
         it 'returns that it does not use swift' do
           @target.uses_swift?.should == false
         end
 
-        describe 'Host requires frameworks' do
+        describe 'requires frameworks' do
           before do
-            @target.stubs(:build_type).returns(Target::BuildType.static_framework)
+            @target.stubs(:build_type).returns(BuildType.static_framework)
           end
 
           it 'returns the product name' do
@@ -309,9 +311,9 @@ module Pod
           end
         end
 
-        describe 'Host does not requires frameworks' do
+        describe 'does not require frameworks' do
           before do
-            @target.stubs(:host_requires_frameworks?).returns(false)
+            @target.stubs(:build_type).returns(BuildType.static_library)
           end
 
           it 'returns the product name' do
@@ -340,7 +342,10 @@ module Pod
             target_definition = Podfile::TargetDefinition.new('Pods', nil)
             target_definition.abstract = false
             project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-            @target = AggregateTarget.new(config.sandbox, true, {}, [], Platform.ios, target_definition, config.sandbox.root.dirname, Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], 'Release' => [@pod_target], 'Debug' => [@pod_target])
+            @target = AggregateTarget.new(config.sandbox, BuildType.dynamic_framework, {}, [], Platform.ios,
+                                          target_definition, config.sandbox.root.dirname,
+                                          Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'],
+                                          'Release' => [@pod_target], 'Debug' => [@pod_target])
           end
 
           it 'requires a host target for app extension targets' do
@@ -400,7 +405,10 @@ module Pod
           target_definition = Podfile::TargetDefinition.new('Pods', nil)
           target_definition.abstract = false
           project_path = SpecHelper.fixture('SampleProject/SampleProject.xcodeproj')
-          @target = AggregateTarget.new(config.sandbox, true, {}, [], Platform.ios, target_definition, config.sandbox.root.dirname, Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'], 'Release' => [@pod_target], 'Debug' => [@pod_target])
+          @target = AggregateTarget.new(config.sandbox, BuildType.dynamic_framework, {}, [], Platform.ios,
+                                        target_definition, config.sandbox.root.dirname,
+                                        Xcodeproj::Project.open(project_path), ['A346496C14F9BE9A0080D870'],
+                                        'Release' => [@pod_target], 'Debug' => [@pod_target])
         end
 
         it 'is a library target if the user_target is a framework' do
@@ -431,8 +439,11 @@ module Pod
 
       describe 'With frameworks' do
         before do
-          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', true, {}, [], Platform.ios, [fixture_target_definition('iOS Example')])
-          @target = AggregateTarget.new(config.sandbox, true, {}, [], Platform.ios, @pod_target.target_definitions.first, config.sandbox.root.dirname, nil, nil, 'Release' => [@pod_target])
+          @pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec', BuildType.dynamic_framework, {},
+                                           [], Platform.ios, [fixture_target_definition('iOS Example')])
+          @target = AggregateTarget.new(config.sandbox, BuildType.dynamic_framework, {}, [], Platform.ios,
+                                        @pod_target.target_definitions.first, config.sandbox.root.dirname, nil, nil,
+                                        'Release' => [@pod_target])
         end
 
         it 'returns that it uses swift' do

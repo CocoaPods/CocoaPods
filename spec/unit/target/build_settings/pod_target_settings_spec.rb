@@ -49,7 +49,7 @@ module Pod
             vendored_dep_target.stubs(:build_settings => PodTargetSettings.new(vendored_dep_target))
 
             @spec = fixture_spec('banana-lib/BananaLib.podspec')
-            @pod_target = fixture_pod_target(@spec, true)
+            @pod_target = fixture_pod_target(@spec, BuildType.dynamic_framework)
             @pod_target.dependent_targets = [@monkey_pod_target, vendored_dep_target]
 
             @consumer = @pod_target.spec_consumers.first
@@ -123,7 +123,7 @@ module Pod
           end
 
           it 'vendored frameworks should be added to frameworks paths if use_frameworks! isnt set' do
-            @pod_target.stubs(:build_type).returns(Target::BuildType.static_library)
+            @pod_target.stubs(:build_type).returns(BuildType.static_library)
             @xcconfig = @generator.generate
             @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('spec/fixtures/monkey')
             @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should.include('${PODS_ROOT}/AAA')
@@ -287,7 +287,7 @@ module Pod
           end
 
           it 'includes correct other ld flags when requires frameworks' do
-            @coconut_pod_target.stubs(:build_type => Target::BuildType.dynamic_framework)
+            @coconut_pod_target.stubs(:build_type => BuildType.dynamic_framework)
             generator = PodTargetSettings.new(@coconut_pod_target, @coconut_test_spec)
             xcconfig = generator.generate
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -framework "CoconutLib"'

@@ -73,7 +73,7 @@ module Pod
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
-    # @param [Boolean] host_requires_frameworks @see Target#host_requires_frameworks
+    # @param [BuildType] build_type @see Target#build_type
     # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
     # @param [Array<String>] archs @see Target#archs
     # @param [Platform] platform @see Target#platform
@@ -81,12 +81,10 @@ module Pod
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
     # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
-    # @param [Target::BuildType] build_type @see #build_type
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
-                   target_definitions, file_accessors = [], scope_suffix = nil,
-                   build_type: Target::BuildType.infer_from_spec(specs.first, :host_requires_frameworks => host_requires_frameworks))
-      super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, :build_type => build_type)
+    def initialize(sandbox, build_type, user_build_configurations, archs, platform, specs, target_definitions,
+                   file_accessors = [], scope_suffix = nil)
+      super(sandbox, build_type, user_build_configurations, archs, platform)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
       raise "Can't initialize a PodTarget with an empty string scope suffix!" if scope_suffix == ''
@@ -119,9 +117,8 @@ module Pod
       target_definitions.map do |target_definition|
         cache_key = [specs, target_definition]
         cache[cache_key] ||= begin
-          target = PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
-                                 specs, [target_definition], file_accessors, target_definition.label,
-                                 :build_type => build_type)
+          target = PodTarget.new(sandbox, build_type, user_build_configurations, archs, platform, specs,
+                                 [target_definition], file_accessors, target_definition.label)
           scope_dependent_targets = ->(dependent_targets) do
             dependent_targets.flat_map do |pod_target|
               pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }
