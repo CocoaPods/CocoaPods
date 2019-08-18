@@ -75,7 +75,7 @@ module Pod
           #         should be stored in a file list file.
           #
           def input_output_paths_use_filelist?(object)
-            object.project.object_version.to_i >= 50
+            object.project.object_version.to_i >= 46
           end
 
           # Sets the input & output paths for the given script build phase.
