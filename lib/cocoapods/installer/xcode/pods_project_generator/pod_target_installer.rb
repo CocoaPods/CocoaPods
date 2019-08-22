@@ -445,6 +445,13 @@ module Pod
                 end
                 # For macOS we do not code sign the appbundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+                # For iOS, we delete the target_installer empty values that get set for libraries since CocoaPods will
+                # code sign the libraries manually but for apps this is not true.
+                if target.platform == :ios
+                  configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=appletvos*]')
+                  configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=iphoneos*]')
+                  configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=watchos*]')
+                end
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(app_spec), app_native_target)
