@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix iOS app spec code signing.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9110](https://github.com/CocoaPods/CocoaPods/issues/9110)
+
 * Add Apple watch device family to resource bundles built for WatchOS  
   [Aaron McDaniel](https://github.com/Spilly)
   [#9075](https://github.com/CocoaPods/CocoaPods/issues/9075)
