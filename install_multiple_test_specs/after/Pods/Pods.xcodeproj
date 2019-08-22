@@ -360,9 +360,6 @@ Targets:
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
           CODE_SIGN_IDENTITY: iPhone Developer
-          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
-          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-App-prefix.pch
           INFOPLIST_FILE: App/HostedTestLib-App-Info.plist
@@ -383,9 +380,6 @@ Targets:
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
           CODE_SIGN_IDENTITY: iPhone Developer
-          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
-          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-App-prefix.pch
           INFOPLIST_FILE: App/HostedTestLib-App-Info.plist
@@ -429,9 +423,6 @@ Targets:
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
           CODE_SIGN_IDENTITY: iPhone Developer
-          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
-          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-prefix.pch
           INFOPLIST_FILE: AppWithDep/HostedTestLib-AppWithDep-Info.plist
@@ -452,9 +443,6 @@ Targets:
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
           CODE_SIGN_IDENTITY: iPhone Developer
-          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
-          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-AppWithDep-prefix.pch
           INFOPLIST_FILE: AppWithDep/HostedTestLib-AppWithDep-Info.plist
@@ -959,9 +947,6 @@ Targets:
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
           CODE_SIGN_IDENTITY: iPhone Developer
-          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
-          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-App-prefix.pch
           INFOPLIST_FILE: App/TestLib-App-Info.plist
@@ -983,9 +968,6 @@ Targets:
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
           CODE_SIGN_IDENTITY: iPhone Developer
-          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
-          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
-          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
           CURRENT_PROJECT_VERSION: '1'
           GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-App-prefix.pch
           INFOPLIST_FILE: App/TestLib-App-Info.plist
