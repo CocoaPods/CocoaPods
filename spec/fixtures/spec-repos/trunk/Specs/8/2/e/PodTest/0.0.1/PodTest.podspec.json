@@ -1,0 +1,36 @@
+{
+  "name": "PodTest",
+  "version": "0.0.1",
+  "summary": "A short description of PodTest.",
+  "description": "MyDescription",
+  "homepage": "http://EXAMPLE/PodTest",
+  "license": "BSD",
+  "authors": {
+    "Shani": "shani@quickode.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/ShaniOliel/PodTest.git"
+  },
+  "source_files": [
+    "Classes",
+    "PodTest/*.h"
+  ],
+  "public_header_files": "PodTest/*.h",
+  "preserve_paths": "PodTest/libPodTest.a",
+  "libraries": [
+    "GGLCore",
+    "GGLAnalytics"
+  ],
+  "vendored_libraries": "PodTest/libPodTest.a",
+  "dependencies": {
+    "Google/Analytics": [
+
+    ],
+    "AFNetworking": [
+
+    ]
+  }
+}

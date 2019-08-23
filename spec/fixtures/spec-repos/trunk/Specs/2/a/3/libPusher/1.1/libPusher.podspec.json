@@ -1,0 +1,23 @@
+{
+  "name": "libPusher",
+  "version": "1.1",
+  "license": "MIT",
+  "summary": "An Objective-C client for the Pusher.com service.",
+  "homepage": "https://github.com/lukeredpath/libPusher",
+  "authors": "Luke Redpath",
+  "source": {
+    "git": "https://github.com/lukeredpath/libPusher.git",
+    "tag": "v1.1"
+  },
+  "source_files": "Library/*",
+  "frameworks": "CFNetwork",
+  "dependencies": {
+    "JSONKit": [
+      "1.4"
+    ],
+    "CocoaAsyncSocket": [
+      "0.0.1"
+    ]
+  },
+  "requires_arc": false
+}

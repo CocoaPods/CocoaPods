@@ -1,0 +1,47 @@
+{
+  "name": "libPusher",
+  "version": "1.6.1",
+  "license": "MIT",
+  "summary": "An Objective-C client for the Pusher.com service",
+  "homepage": "https://github.com/lukeredpath/libPusher",
+  "authors": "Luke Redpath",
+  "source": {
+    "git": "https://github.com/lukeredpath/libPusher.git",
+    "tag": "v1.6.1"
+  },
+  "requires_arc": true,
+  "header_dir": "Pusher",
+  "default_subspecs": "Core",
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8"
+  },
+  "subspecs": [
+    {
+      "name": "Core",
+      "dependencies": {
+        "SocketRocket": [
+          "0.4.1"
+        ]
+      },
+      "source_files": "Library/**/*.{h,m}",
+      "private_header_files": "Library/Private Headers/*",
+      "xcconfig": {
+        "GCC_PREPROCESSOR_DEFINITIONS": "kPTPusherClientLibraryVersion=@\\\"1.6\\\""
+      }
+    },
+    {
+      "name": "ReactiveExtensions",
+      "dependencies": {
+        "libPusher/Core": [
+
+        ],
+        "ReactiveCocoa": [
+          "~> 2.1"
+        ]
+      },
+      "source_files": "ReactiveExtensions/*",
+      "private_header_files": "ReactiveExtensions/*_Internal.h"
+    }
+  ]
+}

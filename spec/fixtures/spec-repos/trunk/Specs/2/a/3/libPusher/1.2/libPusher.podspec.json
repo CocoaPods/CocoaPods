@@ -1,0 +1,22 @@
+{
+  "name": "libPusher",
+  "version": "1.2",
+  "license": "MIT",
+  "summary": "An Objective-C client for the Pusher.com service.",
+  "homepage": "https://github.com/lukeredpath/libPusher",
+  "authors": "Luke Redpath",
+  "source": {
+    "git": "https://github.com/lukeredpath/libPusher.git",
+    "tag": "v1.2"
+  },
+  "source_files": "Library/*",
+  "requires_arc": true,
+  "dependencies": {
+    "JSONKit": [
+      "1.4"
+    ],
+    "SocketRocket": [
+      "~> 0.2.0"
+    ]
+  }
+}
