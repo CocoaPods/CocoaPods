@@ -192,7 +192,7 @@ module Pod
 
       #-------------------------------------------------------------------------#
 
-      # @!group Paths
+      # @!group Build System
 
       # @return [String]
       define_build_settings_method :pods_build_dir, :build_setting => true do
@@ -202,6 +202,11 @@ module Pod
       # @return [String]
       define_build_settings_method :pods_configuration_build_dir, :build_setting => true do
         '${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+      end
+
+      # @return [String]
+      define_build_settings_method :use_recursive_script_inputs_in_script_phases, :build_setting => true do
+        'YES'
       end
 
       #-------------------------------------------------------------------------#

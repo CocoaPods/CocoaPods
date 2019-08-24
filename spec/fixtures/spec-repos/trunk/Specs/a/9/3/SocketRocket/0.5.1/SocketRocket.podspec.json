@@ -1,0 +1,38 @@
+{
+  "name": "SocketRocket",
+  "version": "0.5.1",
+  "summary": "A conforming WebSocket (RFC 6455) client library.",
+  "homepage": "https://github.com/square/SocketRocket",
+  "authors": "Square",
+  "license": "Apache License, Version 2.0",
+  "source": {
+    "git": "https://github.com/square/SocketRocket.git",
+    "tag": "0.5.1"
+  },
+  "source_files": "SocketRocket/*.{h,m}",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "6.0",
+    "osx": "10.8",
+    "tvos": "9.0"
+  },
+  "ios": {
+    "frameworks": [
+      "CFNetwork",
+      "Security"
+    ]
+  },
+  "osx": {
+    "frameworks": [
+      "CoreServices",
+      "Security"
+    ]
+  },
+  "tvos": {
+    "frameworks": [
+      "CFNetwork",
+      "Security"
+    ]
+  },
+  "libraries": "icucore"
+}
