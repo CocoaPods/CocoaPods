@@ -532,6 +532,7 @@ You have either:#{specs_update_message}
     # @param  [Specification] spec
     #
     # @return [Bool]
+    #
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
       # This is safe since a pod will only be in locked dependencies if we're
       # using the same exact version
@@ -547,6 +548,8 @@ You have either:#{specs_update_message}
       platforms_to_satisfy.all? do |platform_to_satisfy|
         available_platforms.all? do |spec_platform|
           next true unless spec_platform.name == platform_to_satisfy.name
+          # For non library specs all we care is to match by the platform name, not to satisfy the version.
+          next true if spec.non_library_specification?
           platform_to_satisfy.supports?(spec_platform)
         end
       end
