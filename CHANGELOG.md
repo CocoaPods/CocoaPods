@@ -15,7 +15,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add `USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES` to all `.xcconfig`s  
   [Igor Makarov](https://github.com/igor-makarov)
   [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)
-  [#9125](ttps://github.com/CocoaPods/CocoaPods/pull/9125)
+  [#9125](https://github.com/CocoaPods/CocoaPods/pull/9125)
   [cocoapods-integration-specs#248](https://github.com/CocoaPods/cocoapods-integration-specs/pull/248)
 
 * Fix iOS app spec code signing.  
