@@ -17,6 +17,32 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.8.0.beta.2 (2019-08-27)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Do not verify deployment target version during resolution for non library specs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9105](https://github.com/CocoaPods/CocoaPods/issues/9105)
+
+* Add `USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES` to all `.xcconfig`s  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)
+  [#9125](https://github.com/CocoaPods/CocoaPods/pull/9125)
+  [cocoapods-integration-specs#248](https://github.com/CocoaPods/cocoapods-integration-specs/pull/248)
+
+* Fix iOS app spec code signing.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9110](https://github.com/CocoaPods/CocoaPods/issues/9110)
+
+* Add Apple watch device family to resource bundles built for WatchOS  
+  [Aaron McDaniel](https://github.com/Spilly)
+  [#9075](https://github.com/CocoaPods/CocoaPods/issues/9075)
+
 ## 1.8.0.beta.1 (2019-08-05)
 
 ##### Enhancements

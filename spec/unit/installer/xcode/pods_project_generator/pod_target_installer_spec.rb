@@ -213,6 +213,9 @@ module Pod
                   bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
                   bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
                   bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['CODE_SIGN_IDENTITY[sdk=appletvos*]'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY[sdk=watchos*]'].should.be.nil
                   bc.build_settings['INFOPLIST_FILE'].should == 'App/WatermelonLib-App-Info.plist'
                   bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
                 end
@@ -1370,8 +1373,8 @@ module Pod
                 @banana_spec.resource_bundle = nil
                 @project.add_pod_group('BananaLib', fixture('banana-lib'))
 
-                @pod_target = fixture_pod_target(@banana_spec, false, 'Debug' => :debug, 'Release' => :release,
-                                                                      :build_type => Target::BuildType.dynamic_framework)
+                @pod_target = fixture_pod_target(@banana_spec, false, { 'Debug' => :debug, 'Release' => :release },
+                                                 :build_type => Target::BuildType.dynamic_framework)
                 target_installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
 
                 # Use a file references installer to add the files so that the correct ones are added.
