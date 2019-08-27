@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Move custom `Copy Headers` script phase for header mappings before `Compile Sources`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9131](https://github.com/CocoaPods/CocoaPods/pull/9131)
 
 
 ## 1.8.0.beta.2 (2019-08-27)

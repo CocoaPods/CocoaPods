@@ -1075,13 +1075,17 @@ module Pod
                   snake-umbrella.h
                 )
 
-                copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
-                copy_files_build_phases.map(&:name).should == [
-                  'Copy . Public Headers',
+                target.build_phases.map(&:display_name).should == [
+                  'Headers',
                   'Copy A Public Headers',
+                  'Copy . Public Headers',
                   'Copy B Private Headers',
+                  'Sources',
+                  'Frameworks',
+                  'Resources',
                 ]
 
+                copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
                 copy_files_build_phases.map(&:symbol_dst_subfolder_spec).should == Array.new(3, :products_directory)
 
                 copy_files_build_phases.map(&:dst_path).should == [
