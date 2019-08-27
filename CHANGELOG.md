@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not verify deployment target version during resolution for non library specs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9105](https://github.com/CocoaPods/CocoaPods/issues/9105)
+
 * Add `USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES` to all `.xcconfig`s  
   [Igor Makarov](https://github.com/igor-makarov)
   [#8073](https://github.com/CocoaPods/CocoaPods/issues/8073)

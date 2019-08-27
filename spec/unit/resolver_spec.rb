@@ -599,8 +599,8 @@ You have either:
           spec_names.should == %w(
             MainSpec MainSpec/Tests
           )
-          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only
+          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only?
         end
 
         it 'handles test only transitive dependencies' do
@@ -625,9 +625,9 @@ You have either:
           spec_names.should == %w(
             Expecta MainSpec MainSpec/Tests
           )
-          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only
+          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only?
         end
 
         it 'handles test only dependencies when they are also required by sources' do
@@ -653,9 +653,9 @@ You have either:
           spec_names.should == %w(
             Expecta MainSpec MainSpec/Tests
           )
-          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only
+          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only?
         end
 
         it 'handles test only dependencies when they are also used in a different target' do
@@ -693,13 +693,13 @@ You have either:
           a_specs.map(&:name).sort.should == %w(Expecta MainSpec MainSpec/Tests OCMock)
           b_specs.map(&:name).sort.should == %w(Expecta OCMock)
 
-          a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
-          a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          a_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only
-          a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_non_library_targets_only
+          a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only?
+          a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          a_specs.find { |rs| rs.name == 'MainSpec/Tests' }.should.be.used_by_non_library_targets_only?
+          a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_non_library_targets_only?
 
-          b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
-          b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_non_library_targets_only
+          b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only?
+          b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_non_library_targets_only?
         end
 
         it 'handles test only dependencies when they are an app spec' do
@@ -738,19 +738,54 @@ You have either:
           b_specs = resolved_specs[@podfile.target_definitions['B']]
           c_specs = resolved_specs[@podfile.target_definitions['C']]
 
-          a_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only] }.should == [
+          a_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only?] }.should == [
             ['MainSpec', false],
             ['MainSpec/App', true],
             ['MainSpec/Tests', true],
           ]
-          b_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only] }.should == [
+          b_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only?] }.should == [
             ['MainSpec', false],
             ['MainSpec/App', true],
             ['MainSpec/Tests', true],
           ]
-          c_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only] }.should == [
+          c_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only?] }.should == [
             ['MainSpec', false],
             ['MainSpec/App', true],
+          ]
+        end
+
+        it 'handles non library specs having a non supported deployment target version' do
+          @podfile = Podfile.new do
+            platform :ios, '9.0'
+
+            target 'A' do
+              pod 'MainSpec', :git => 'GIT-URL', :testspecs => ['Tests'], :appspecs => ['App']
+            end
+          end
+          spec = Spec.new do |s|
+            s.name         = 'MainSpec'
+            s.version      = '1.2.3'
+            s.platform     = :ios
+            s.ios.deployment_target = '9.0'
+
+            s.test_spec 'Tests' do |tss|
+              tss.ios.deployment_target = '10.0'
+              tss.source_files = 'some/file'
+              tss.dependency 'MainSpec/App'
+            end
+            s.app_spec 'App' do |as|
+              as.ios.deployment_target = '11.0'
+              as.source_files = 'some/file'
+            end
+          end
+          config.sandbox.expects(:specification).with('MainSpec').returns(spec)
+          resolver = create_resolver
+          resolved_specs = resolver.resolve
+          a_specs = resolved_specs[@podfile.target_definitions['A']]
+          a_specs.sort_by(&:name).map { |s| [s.name, s.used_by_non_library_targets_only?] }.should == [
+            ['MainSpec', false],
+            ['MainSpec/App', true],
+            ['MainSpec/Tests', true],
           ]
         end
       end
@@ -781,8 +816,8 @@ You have either:
           spec_names.should == %w(
             MainSpec MainSpec/App
           )
-          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only
+          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only?
         end
 
         it 'handles app only transitive dependencies' do
@@ -807,9 +842,9 @@ You have either:
           spec_names.should == %w(
             Expecta MainSpec MainSpec/App
           )
-          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only
+          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only?
         end
 
         it 'handles app only dependencies when they are also required by sources' do
@@ -835,9 +870,9 @@ You have either:
           spec_names.should == %w(
             Expecta MainSpec MainSpec/App
           )
-          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          resolved_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only
+          resolved_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          resolved_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only?
         end
 
         it 'handles app only dependencies when they are also used in a different target' do
@@ -875,13 +910,13 @@ You have either:
           a_specs.map(&:name).sort.should == %w(Expecta MainSpec MainSpec/App OCMock)
           b_specs.map(&:name).sort.should == %w(Expecta OCMock)
 
-          a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
-          a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only
-          a_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only
-          a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_non_library_targets_only
+          a_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only?
+          a_specs.find { |rs| rs.name == 'MainSpec' }.should.not.be.used_by_non_library_targets_only?
+          a_specs.find { |rs| rs.name == 'MainSpec/App' }.should.be.used_by_non_library_targets_only?
+          a_specs.find { |rs| rs.name == 'OCMock' }.should.be.used_by_non_library_targets_only?
 
-          b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only
-          b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_non_library_targets_only
+          b_specs.find { |rs| rs.name == 'Expecta' }.should.not.be.used_by_non_library_targets_only?
+          b_specs.find { |rs| rs.name == 'OCMock' }.should.not.be.used_by_non_library_targets_only?
         end
       end
     end
