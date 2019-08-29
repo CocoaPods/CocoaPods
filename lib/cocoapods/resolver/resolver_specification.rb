@@ -12,7 +12,7 @@ module Pod
       #
       attr_reader :source
 
-      # @return [Bool] whether this resolved specification is by non-library targets.
+      # @return [Bool] whether this resolved specification is used by non-library targets.
       #
       attr_reader :used_by_non_library_targets_only
       alias used_by_non_library_targets_only? used_by_non_library_targets_only

@@ -57,6 +57,7 @@ module Pod
         end
         result
       end
+      @use_frameworks = true
     end
 
     #-------------------------------------------------------------------------#

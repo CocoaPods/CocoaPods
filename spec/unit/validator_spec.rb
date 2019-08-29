@@ -383,6 +383,7 @@ module Pod
         it 'includes only tests supported on the current platform' do
           file = write_podspec(stub_podspec)
           validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios osx))
+          validator.use_frameworks = false
           validator.instance_variable_set(:@results, [])
           subspec = Specification.new(validator.spec, 'Tests', true) do |s|
             s.platform = :ios
@@ -399,8 +400,8 @@ module Pod
           end
           Installer.any_instance.stubs(:aggregate_targets).returns([])
           Installer.any_instance.stubs(:pod_targets).returns([])
-          validator.expects(:podfile_from_spec).with(:osx, nil, nil, [], nil).once.returns(stub('Podfile'))
-          validator.expects(:podfile_from_spec).with(:ios, nil, nil, ['JSONKit/Tests'], nil).once.returns(stub('Podfile'))
+          validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil).once.returns(stub('Podfile'))
+          validator.expects(:podfile_from_spec).with(:ios, nil, false, ['JSONKit/Tests'], nil).once.returns(stub('Podfile'))
           validator.validate
         end
 
@@ -460,6 +461,7 @@ module Pod
 
       it 'uses the deployment target of the current subspec' do
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
+        validator.use_frameworks = false
         validator.instance_variable_set(:@results, [])
         validator.stubs(:validate_url)
         validator.stubs(:validate_screenshots)
@@ -475,11 +477,11 @@ module Pod
           s.ios.deployment_target = '7.0'
         end
         validator.spec.stubs(:subspecs).returns([subspec])
-        validator.expects(:podfile_from_spec).with(:osx, nil, nil, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:ios, nil, nil, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:ios, '7.0', nil, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:tvos, nil, nil, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:watchos, nil, nil, [], nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:ios, '7.0', false, [], nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil).once.returns(stub('Podfile'))
         validator.send(:perform_extensive_analysis, validator.spec)
 
         validator.results_message.strip.should.be.empty
@@ -757,6 +759,7 @@ module Pod
         end
 
         it 'creates an empty app project & target to integrate into' do
+          @validator.use_frameworks = false
           @validator.send(:create_app_project)
           project = Xcodeproj::Project.open(@validator.validation_dir + 'App.xcodeproj')
 

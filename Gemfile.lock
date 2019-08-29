@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 0a6dea961da236995dfde3c7927e4daaf2045820
+  revision: 7fd3bb0c34d70e825aee39473046cb9135152214
   branch: master
   specs:
-    cocoapods-core (1.8.0.beta.1)
+    cocoapods-core (1.8.0.beta.2)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.0)
@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: 1e7763f8762ecc83d38d9e0c7ebadefc71bf654b
+  revision: 30d7ed38561bc674ca2730948ffc0c97b7fea864
   branch: master
   specs:
     molinillo (0.6.6)
@@ -81,10 +81,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 208396fca7eeecf4b7fb2810f1a1ab3b036bd1a3
+  revision: 9ad16cb8f71b05d06eac29a541daeac7bc2c672e
   branch: master
   specs:
-    cocoapods-trunk (1.3.1)
+    cocoapods-trunk (1.4.0)
       nap (>= 0.8, < 2.0)
       netrc (~> 0.11)
 
@@ -111,16 +111,16 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.8.0.beta.1)
+    cocoapods (1.8.0.beta.2)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.8.0.beta.1)
+      cocoapods-core (= 1.8.0.beta.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
       cocoapods-search (>= 1.0.0, < 2.0)
       cocoapods-stats (>= 1.0.0, < 2.0)
-      cocoapods-trunk (>= 1.3.1, < 2.0)
+      cocoapods-trunk (>= 1.4.0, < 2.0)
       cocoapods-try (>= 1.1.0, < 2.0)
       colored2 (~> 3.1)
       escape (~> 0.0.4)
@@ -134,7 +134,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (3.0.0)
+    CFPropertyList (3.0.1)
     activesupport (4.2.11.1)
       i18n (~> 0.7)
       minitest (~> 5.1)

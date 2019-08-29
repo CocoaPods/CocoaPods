@@ -1,0 +1,11 @@
+BaseCamp/0.1.0/0.2.0
+CameraSupportPreset/1.0.0
+FFCodeLib/0.1.0
+KIAppStoreManager/0.0.1
+Mokei/0.0.1/0.0.2/0.0.3
+MoyaCache/0.1.0/0.1.1/0.2.0/0.2.1/0.3.0/0.3.1
+NSRemoteLog/0.0.1
+Point/1.0.1/1.0.2
+YTFloatingTitleTextField/0.1.0/0.1.1
+ijkplayer/0.8.2/1.0.0/1.1.0/1.1.2/1.1.3
+libPusher/1.1/1.2/1.3/1.4/1.5/1.6/1.6.1/1.6.2/1.6.3
