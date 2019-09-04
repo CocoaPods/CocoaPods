@@ -548,6 +548,16 @@ module Pod
         pod_targets_by_build_config = Hash.new([].freeze)
         build_configurations.each { |config| pod_targets_by_build_config[config] = [] }
 
+        target_definition_dependencies = @podfile_dependency_cache.target_definition_dependencies(target_definition)
+        target_definition_dependency_names = target_definition_dependencies.map { |dependency| Specification.root_name(dependency.name) }
+        dependencies_by_config = build_configurations.each_with_object({}) do |configuration_name, hash|
+          hash[configuration_name] = target_definition_dependencies.select do |dependency|
+            target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
+          end
+        end
+
+        puts "dependencies_by_config = #{dependencies_by_config}"
+
         pod_targets_by_target_definition[target_definition].each do |pod_target|
           pod_name = pod_target.pod_name
 
@@ -555,32 +565,50 @@ module Pod
             Specification.root_name(spec.name) == pod_name
           end
           raise Informative, "Unable to find resolved specification for dependency `#{pod_name}`" unless resolver_spec
-          dependencies = @podfile_dependency_cache.target_definition_dependencies(target_definition).select do |dependency|
+          dependencies = target_definition_dependencies.select do |dependency|
             Specification.root_name(dependency.name) == pod_name
           end
 
           build_configurations.each do |configuration_name|
             whitelists = dependencies.map do |dependency|
               target_definition.pod_whitelisted_for_configuration?(dependency.name, configuration_name)
-            end.uniq
+            end
+            puts "[#{configuration_name}] spec = #{resolver_spec.spec} whitelists = #{whitelists}"
             if resolver_spec.transitive?
               # Include the whitelist config for the source of the transitive dependency, so we can exclude
               # the transitive dependencies of whitelisted dependencies
-              whitelists += resolver_spec.dependent_specs.map do |dependent_spec|
-                target_definition.pod_whitelisted_for_configuration?(dependent_spec.name, configuration_name)
+              direct_spec_dependencies = resolver_spec.dependent_specs.select do |spec|
+                # dependencies_by_config[configuration_name].any? { |dependency| Specification.root_name(dependency.name) == Specification.root_name(spec.name) }
+                target_definition_dependencies.any? { |dependency| dependency.name == spec.name }
               end
-              whitelists.uniq!
+              puts "[#{configuration_name}] spec = #{resolver_spec.spec}, dependent_specs = #{resolver_spec.dependent_specs} direct_spec_dependencies = #{direct_spec_dependencies}"
+              # whitelists += resolver_spec.dependent_specs
+              #                 .select { |rs| direct_spec_dependencies.include?(rs.name) }
+              #                 .tap { |dependent_specs| puts "dependent_specs = #{dependent_specs}" }
+              #                 .map { |dependent_spec| target_definition.pod_whitelisted_for_configuration?(dependent_spec.name, configuration_name) }
+              whitelists += direct_spec_dependencies.map do  |dependent_spec|
+                target_definition.pod_whitelisted_for_configuration?(dependent_spec.name, configuration_name).tap do |whitelisted|
+                  if resolver_spec.name == 'RxSwift' && configuration_name.downcase == 'app store'
+                    puts "whitelisted = #{whitelisted}, dependency = #{dependent_spec.inspect}, resolver_spec = #{resolver_spec.spec}"
+                  end
+                end
+              end
+            elsif dependencies.empty?
+              whitelists = [true]
             end
+            puts "[#{configuration_name}] after spec = #{resolver_spec.spec} whitelists = #{whitelists}"
+            whitelists.uniq!
 
             case whitelists
-            when [], [true] then nil
+            when [true] then nil
             when [false] then next
             else
-              next if resolver_spec.transitive?
-              raise Informative, "The subspecs of `#{pod_name}` are linked to " \
-                "different build configurations for the `#{target_definition}` " \
-                'target. CocoaPods does not currently support subspecs across ' \
-                'different build configurations.'
+              unless resolver_spec.transitive?
+                raise Informative, "The subspecs of `#{pod_name}` are linked to " \
+                  "different build configurations for the `#{target_definition}` " \
+                  'target. CocoaPods does not currently support subspecs across ' \
+                  'different build configurations.'
+              end
             end
 
             pod_targets_by_build_config[configuration_name] << pod_target

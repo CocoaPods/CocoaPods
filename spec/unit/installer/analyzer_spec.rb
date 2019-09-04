@@ -1665,10 +1665,10 @@ module Pod
           target_definition = @podfile.target_definitions['SampleProject']
           aggregate_target = @analyzer.analyze.targets.find { |t| t.target_definition == target_definition }
 
-          aggregate_target.pod_targets_for_build_configuration('Debug').map(&:name).
-            should.include 'AFNetworking'
-          aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).
-            should.not.include 'AFNetworking'
+          aggregate_target.pod_targets_for_build_configuration('Debug').map(&:name).sort.
+            should == %w(AFNetworkActivityLogger AFNetworking)
+          aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).sort.
+            should == %w(AFNetworkActivityLogger)
         end
 
         it 'raises if a Pod is whitelisted for different build configurations' do
@@ -1709,6 +1709,69 @@ module Pod
           )
 
           aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).should == %w(
+            AFNetworking
+          )
+        end
+
+        it 'includes transitive dependencies when at least one dependent target is whitelisted' do
+          SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+          @podfile = Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject'
+            target 'SampleProject' do
+              pod 'AFNetworking'
+              pod 'RxSwiftExt', '3.4.0'
+              pod 'RxCocoa', '4.0.0', :configurations => ['Debug']
+            end
+          end
+          @analyzer = Installer::Analyzer.new(config.sandbox, @podfile)
+          target_definition = @podfile.target_definitions['SampleProject']
+          aggregate_target = @analyzer.analyze.targets.find { |t| t.target_definition == target_definition }
+
+          aggregate_target.pod_targets_for_build_configuration('Debug').map(&:name).should == %w(
+            AFNetworking
+            RxCocoa
+            RxSwift
+            RxSwiftExt
+          )
+
+          aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).should == %w(
+            AFNetworking
+            RxSwift
+            RxSwiftExt
+          )
+        end
+
+        it 'includes transitive dependencies for each configuration a dependent is whitelisted' do
+          SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+          @podfile = Podfile.new do
+            platform :ios, '8.0'
+            project 'SampleProject/SampleProject', 'App Store' => :release, 'Test' => :debug
+            target 'SampleProject' do
+              pod 'AFNetworking'
+              pod 'RxSwiftExt', '3.4.0', :configurations => ['Release']
+              pod 'RxCocoa', '4.0.0', :configurations => ['Debug']
+            end
+          end
+          @analyzer = Installer::Analyzer.new(config.sandbox, @podfile)
+          target_definition = @podfile.target_definitions['SampleProject']
+          aggregate_target = @analyzer.analyze.targets.find { |t| t.target_definition == target_definition }
+
+          aggregate_target.pod_targets_for_build_configuration('Debug').map(&:name).should == %w(
+            AFNetworking
+            RxCocoa
+            RxSwift
+          )
+
+          aggregate_target.pod_targets_for_build_configuration('Release').map(&:name).should == %w(
+            AFNetworking
+            RxSwift
+            RxSwiftExt
+          )
+          aggregate_target.pod_targets_for_build_configuration('Test').map(&:name).should == %w(
+            AFNetworking
+          )
+          aggregate_target.pod_targets_for_build_configuration('App Store').map(&:name).should == %w(
             AFNetworking
           )
         end
