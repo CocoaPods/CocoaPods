@@ -2037,9 +2037,9 @@ module Pod
             result = analyzer.analyze
 
             result.targets.map { |t| [t.name, t.application_extension_api_only] }.
-              should == [['Pods-Sample Extensions Project', nil], ['Pods-Today Extension', true]]
+              should == [['Pods-Sample Extensions Project', false], ['Pods-Today Extension', true]]
             result.pod_targets.map { |t| [t.name, t.application_extension_api_only] }.
-              should == [['matryoshka-Bar', true], ['matryoshka-Bar-Foo', nil], ['JSONKit', nil], ['monkey', true]]
+              should == [['matryoshka-Bar', true], ['matryoshka-Bar-Foo', false], ['JSONKit', false], ['monkey', true]]
           end
 
           it 'configures APPLICATION_EXTENSION_API_ONLY for watch app extension targets' do
@@ -2135,9 +2135,9 @@ module Pod
             result = analyzer.analyze
 
             result.targets.map { |t| [t.name, t.application_extension_api_only] }.
-              should == [['Pods-Sample Extensions Project', nil], ['Pods-Messages Extension Target', true]]
+              should == [['Pods-Sample Extensions Project', false], ['Pods-Messages Extension Target', true]]
             result.pod_targets.map { |t| [t.name, t.application_extension_api_only] }.
-              should == [['JSONKit', nil], ['monkey', true]]
+              should == [['JSONKit', false], ['monkey', true]]
           end
 
           it 'configures APPLICATION_EXTENSION_API_ONLY when build setting is set in user target' do

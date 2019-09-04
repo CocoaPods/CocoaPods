@@ -48,7 +48,7 @@ module Pod
 
     # @return [Boolean] whether the target can be linked to app extensions only.
     #
-    attr_accessor :application_extension_api_only
+    attr_reader :application_extension_api_only
 
     # Initialize a new target
     #
@@ -67,6 +67,7 @@ module Pod
       @platform = platform
       @build_type = build_type
 
+      @application_extension_api_only = false
       @build_settings = create_build_settings
     end
 
@@ -304,6 +305,13 @@ module Pod
     #
     def dummy_source_path
       support_files_dir + "#{label}-dummy.m"
+    end
+
+    # mark the target as extension-only,
+    # translates to APPLICATION_EXTENSION_API_ONLY = YES in the build settings
+    #
+    def mark_application_extension_api_only
+      @application_extension_api_only = true
     end
 
     #-------------------------------------------------------------------------#

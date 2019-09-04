@@ -446,10 +446,8 @@ module Pod
 
           next unless is_app_extension
 
-          aggregate_target.application_extension_api_only = true
-          aggregate_target.pod_targets.each do |pod_target|
-            pod_target.application_extension_api_only = true
-          end
+          aggregate_target.mark_application_extension_api_only
+          aggregate_target.pod_targets.each(&:mark_application_extension_api_only)
         end
 
         if installation_options.integrate_targets?
