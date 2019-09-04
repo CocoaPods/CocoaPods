@@ -69,6 +69,33 @@ module Pod
 
       #---------------------------------------------------------------------#
 
+      describe '::application_extension_api_only' do
+        it 'does not set APPLICATION_EXTENSION_API_ONLY missing in the target' do
+          target = fixture_pod_target('integration/Reachability/Reachability.podspec')
+          build_settings = pod(target)
+          other_swift_flags = build_settings.xcconfig.to_hash['APPLICATION_EXTENSION_API_ONLY']
+          other_swift_flags.should.be.nil
+        end
+
+        it 'does not set APPLICATION_EXTENSION_API_ONLY when false in the target' do
+          target = fixture_pod_target('integration/Reachability/Reachability.podspec')
+          target.application_extension_api_only = false
+          build_settings = pod(target)
+          other_swift_flags = build_settings.xcconfig.to_hash['APPLICATION_EXTENSION_API_ONLY']
+          other_swift_flags.should.be.nil
+        end
+
+        it 'sets APPLICATION_EXTENSION_API_ONLY to YES when true in the target' do
+          target = fixture_pod_target('integration/Reachability/Reachability.podspec')
+          target.application_extension_api_only = true
+          build_settings = pod(target)
+          other_swift_flags = build_settings.xcconfig.to_hash['APPLICATION_EXTENSION_API_ONLY']
+          other_swift_flags.should.== 'YES'
+        end
+      end
+
+      #---------------------------------------------------------------------#
+
       describe '::add_language_specific_settings' do
         it 'does not add OTHER_SWIFT_FLAGS to the xcconfig if the target does not use swift' do
           target = fixture_pod_target('integration/Reachability/Reachability.podspec')
