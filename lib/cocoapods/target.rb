@@ -46,6 +46,10 @@ module Pod
     attr_reader :build_type
     private :build_type
 
+    # @return [Boolean] whether the target .
+    #
+    attr_accessor :application_extension_api_only
+
     # Initialize a new target
     #
     # @param [Sandbox] sandbox @see #sandbox

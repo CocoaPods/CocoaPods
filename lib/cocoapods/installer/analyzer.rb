@@ -438,6 +438,20 @@ module Pod
           end
           target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
         end
+
+        aggregate_targets.each do |aggregate_target|
+          is_app_extension = !(aggregate_target.user_targets.map(&:symbol_type) &
+              [:app_extension, :watch_extension, :watch2_extension, :tv_extension, :messages_extension]).empty?
+          is_app_extension ||= aggregate_target.user_targets.any? { |ut| ut.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY') == 'YES' }
+
+          next unless is_app_extension
+
+          aggregate_target.application_extension_api_only = true
+          aggregate_target.pod_targets.each do |pod_target|
+            pod_target.application_extension_api_only = true
+          end
+        end
+
         if installation_options.integrate_targets?
           # Copy embedded target pods that cannot have their pods embedded as frameworks to
           # their host targets, and ensure we properly link library pods to their host targets
