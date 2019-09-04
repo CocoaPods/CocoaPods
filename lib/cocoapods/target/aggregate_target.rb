@@ -98,6 +98,7 @@ module Pod
       AggregateTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
                           target_definition, client_root, user_project, user_target_uuids, merged, :build_type => build_type).tap do |aggregate_target|
         aggregate_target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
+        aggregate_target.application_extension_api_only = application_extension_api_only
       end
     end
 
