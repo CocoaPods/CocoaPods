@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9082](https://github.com/CocoaPods/CocoaPods/issues/9082)
 
+* Add PODS prefix version of OTHER_LDFLAG  
+  [kateinoigakukun](https://github.com/kateinoigakukun)
+  [#9144](https://github.com/CocoaPods/CocoaPods/pull/9144)
+
+
 ##### Bug Fixes
 
 * Move custom `Copy Headers` script phase for header mappings before `Compile Sources`.  
