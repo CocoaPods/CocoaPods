@@ -29,6 +29,7 @@ module Pod
         OTHER_CPLUSPLUSFLAGS
         OTHER_LDFLAGS
         OTHER_SWIFT_FLAGS
+        PODS_OTHER_LDFLAGS
         REZ_SEARCH_PATHS
         SECTORDER_FLAGS
         SWIFT_ACTIVE_COMPILATION_CONDITIONS
@@ -337,7 +338,7 @@ module Pod
       private :_ld_runpath_search_paths
 
       # @return [Array<String>]
-      define_build_settings_method :other_ldflags, :build_setting => true, :memoized => true do
+      define_build_settings_method :pods_other_ldflags, :build_setting => true, :memoized => true do
         ld_flags = []
         ld_flags << '-ObjC' if requires_objc_linker_flag?
         if requires_fobjc_arc?
@@ -347,6 +348,11 @@ module Pod
         frameworks.each { |f| ld_flags << '-framework' << %("#{f}") }
         weak_frameworks.each { |f| ld_flags << '-weak_framework' << %("#{f}") }
         ld_flags
+      end
+
+      # @return [Array<String>]
+      define_build_settings_method :other_ldflags, :build_setting => true, :memoized => true do
+        pods_other_ldflags
       end
 
       #-------------------------------------------------------------------------#
