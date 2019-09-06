@@ -444,7 +444,7 @@ module Pod
           embedded_targets = aggregate_targets.select(&:requires_host_target?)
           analyze_host_targets_in_podfile(aggregate_targets, embedded_targets)
 
-          use_frameworks_embedded_targets, non_use_frameworks_embedded_targets = embedded_targets.partition(&:host_requires_frameworks?)
+          use_frameworks_embedded_targets, non_use_frameworks_embedded_targets = embedded_targets.partition(&:build_as_framework?)
           aggregate_targets = aggregate_targets.map do |aggregate_target|
             # For targets that require dynamic frameworks, we always have to copy their pods to their
             # host targets because those frameworks will all be loaded from the host target's bundle
@@ -494,13 +494,12 @@ module Pod
         end
         platform = target_definition.platform
         build_configurations = user_build_configurations.keys.concat(target_definition.all_whitelisted_configurations).uniq
-        pod_targets_for_build_configuration = filter_pod_targets_for_target_definition(target_definition, pod_targets_by_target_definition,
+        pod_targets_for_build_configuration = filter_pod_targets_for_target_definition(target_definition,
+                                                                                       pod_targets_by_target_definition,
                                                                                        build_configurations)
-
-        build_type = target_definition.uses_frameworks? ? Target::BuildType.static_framework : Target::BuildType.static_library
-        AggregateTarget.new(sandbox, target_definition.uses_frameworks?, user_build_configurations, archs, platform,
-                            target_definition, client_root, user_project, user_target_uuids,
-                            pod_targets_for_build_configuration, :build_type => build_type)
+        build_type = target_definition.uses_frameworks? ? BuildType.static_framework : BuildType.static_library
+        AggregateTarget.new(sandbox, build_type, user_build_configurations, archs, platform, target_definition,
+                            client_root, user_project, user_target_uuids, pod_targets_for_build_configuration)
       end
 
       # Returns a filtered list of pod targets that should or should not be part of the target definition. Pod targets
@@ -594,8 +593,8 @@ module Pod
               library_specs = all_specs_by_type[:library] || []
               test_specs = all_specs_by_type[:test] || []
               app_specs = all_specs_by_type[:app] || []
-              target_type = Target::BuildType.infer_from_spec(root_spec, :host_requires_frameworks => target_definition.uses_frameworks?)
-              pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, target_type)
+              build_type = determine_build_type(root_spec, target_definition.build_type)
+              pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, build_type)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
               pod_variant_spec = hash[root_spec].keys.find { |k| k == pod_variant }
@@ -610,7 +609,8 @@ module Pod
             end
             suffixes = PodVariantSet.new(target_definitions_by_variant.keys).scope_suffixes
             target_definitions_by_variant.map do |variant, target_definitions|
-              generate_pod_target(target_definitions, target_inspections, variant.specs + variant.test_specs + variant.app_specs, :build_type => variant.build_type, :scope_suffix => suffixes[variant])
+              generate_pod_target(target_definitions, variant.build_type, target_inspections, variant.specs +
+                  variant.test_specs + variant.app_specs, :scope_suffix => suffixes[variant])
             end
           end
 
@@ -621,8 +621,8 @@ module Pod
           resolver_specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by(&:root).values.uniq
             pod_targets = grouped_specs.flat_map do |pod_specs|
-              target_type = Target::BuildType.infer_from_spec(pod_specs.first, :host_requires_frameworks => target_definition.uses_frameworks?)
-              generate_pod_target([target_definition], target_inspections, pod_specs.map(&:spec), :build_type => target_type).scoped(dedupe_cache)
+              build_type = determine_build_type(pod_specs.first, target_definition.build_type)
+              generate_pod_target([target_definition], build_type, target_inspections, pod_specs.map(&:spec)).scoped(dedupe_cache)
             end
 
             compute_pod_target_dependencies(pod_targets, specs.map(&:spec).group_by(&:name))
@@ -675,7 +675,7 @@ module Pod
         dependencies.map do |root_spec, deps|
           pod_targets_by_name[root_spec.name].find do |t|
             next false if t.platform.symbolic_name != target.platform.symbolic_name ||
-                t.host_requires_frameworks? != target.host_requires_frameworks? # rather than target type or requires_frameworks? since we want to group by what was specified in that _target definition_
+                t.build_as_framework? != target.build_as_framework? # rather than target type or requires_frameworks? since we want to group by what was specified in that _target definition_
             spec_names = t.specs.map(&:name)
             deps.all? { |dep| spec_names.include?(dep.name) }
           end
@@ -724,7 +724,10 @@ module Pod
       # Create a target for each spec group
       #
       # @param  [Array<TargetDefinition>] target_definitions
-      #         the target definitions of the aggregate target
+      #         the target definitions of the pod target
+      #
+      # @param  [BuildType] build_type
+      #         the BuildType to use for this pod target.
       #
       # @param  [Hash{TargetDefinition => TargetInspectionResult}] target_inspections
       #         the user target inspections used to construct the aggregate and pod targets.
@@ -737,7 +740,7 @@ module Pod
       #
       # @return [PodTarget]
       #
-      def generate_pod_target(target_definitions, target_inspections, specs, scope_suffix: nil, build_type: nil)
+      def generate_pod_target(target_definitions, build_type, target_inspections, specs, scope_suffix: nil)
         target_inspections = target_inspections.select { |t, _| target_definitions.include?(t) }.values
         object_version = target_inspections.map { |ti| ti.project.object_version }.min
         target_requires_64_bit = target_definitions.all? { |td| Analyzer.requires_64_bit_archs?(td.platform, object_version) }
@@ -752,11 +755,10 @@ module Pod
           user_build_configurations = Target::DEFAULT_BUILD_CONFIGURATIONS
           archs = target_requires_64_bit ? ['$(ARCHS_STANDARD_64_BIT)'] : []
         end
-        host_requires_frameworks = target_definitions.any?(&:uses_frameworks?)
-        platform = determine_platform(specs, target_definitions, host_requires_frameworks)
+        platform = determine_platform(specs, target_definitions, build_type)
         file_accessors = create_file_accessors(specs, platform)
-        PodTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, specs,
-                      target_definitions, file_accessors, scope_suffix, :build_type => build_type)
+        PodTarget.new(sandbox, build_type, user_build_configurations, archs, platform, specs, target_definitions,
+                      file_accessors, scope_suffix)
       end
 
       # Creates the file accessors for a given pod.
@@ -790,23 +792,44 @@ module Pod
       # @param [Array<TargetDefinition>] target_definitions
       #        the target definitions these specs are part of.
       #
-      # @param [Boolean] host_requires_frameworks
-      #        whether the platform is calculated for a target that needs to be packaged as a framework.
+      # @param [BuildType] build_type
+      #        the #BuildType used for calculating the platform.
       #
       # @return [Platform]
       #
-      def determine_platform(specs, target_definitions, host_requires_frameworks)
+      def determine_platform(specs, target_definitions, build_type)
         library_specs = specs.select(&:library_specification?)
         platform_name = target_definitions.first.platform.name
         default = Podfile::TargetDefinition::PLATFORM_DEFAULTS[platform_name]
         deployment_target = library_specs.map do |library_spec|
           Version.new(library_spec.deployment_target(platform_name) || default)
         end.max
-        if platform_name == :ios && host_requires_frameworks
+        if platform_name == :ios && build_type.framework?
           minimum = Version.new('8.0')
           deployment_target = [deployment_target, minimum].max
         end
         Platform.new(platform_name, deployment_target)
+      end
+
+      # Calculates and returns the #BuildType to use for the given spec. If the spec specifies `static_framework` then
+      # it is honored as long as the host #BuildType also requires its pods to be integrated as frameworks.
+      #
+      # @param [Specification] spec
+      #        the spec to determine the #BuildType for.
+      #
+      # @param [BuildType] target_definition_build_type
+      #        The desired #BuildType by the target definition that integrates this target. If the pod target spec does
+      #        not specify explicitly a `static_framework` #BuildType then the one from the target definition is used.
+      #
+      # @return [BuildType]
+      #
+      def determine_build_type(spec, target_definition_build_type)
+        if target_definition_build_type.framework?
+          root_spec = spec.root
+          root_spec.static_framework ? BuildType.static_framework : target_definition_build_type
+        else
+          BuildType.static_library
+        end
       end
 
       # Generates dependencies that require the specific version of the Pods

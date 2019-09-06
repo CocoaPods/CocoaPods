@@ -9,7 +9,7 @@ module Pod
         end
 
         def pod_target(spec, target_definition)
-          fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition])
+          fixture_pod_target(spec, BuildType.static_library, {}, [], Platform.new(:ios, '6.0'), [target_definition])
         end
 
         before do
@@ -18,7 +18,8 @@ module Pod
           @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind', 'USE_HEADERMAP' => 'NO' } unless @specs.empty?
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
-          @target = fixture_aggregate_target(@pod_targets, false, { 'Release' => :release }, [], Platform.new(:ios, '6.0'), @target_definition)
+          @target = fixture_aggregate_target(@pod_targets, BuildType.static_library, { 'Release' => :release }, [],
+                                             Platform.new(:ios, '6.0'), @target_definition)
           unless @specs.empty?
             @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           end
@@ -152,7 +153,8 @@ module Pod
 
           describe 'with a pod target inhibiting warnings' do
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).tap { |pt| pt.stubs(:inhibit_warnings? => true) }
+              fixture_pod_target(spec, BuildType.static_library, {}, [], Platform.new(:ios, '6.0'),
+                                 [target_definition]).tap { |pt| pt.stubs(:inhibit_warnings? => true) }
             end
 
             it 'adds the sandbox public headers search paths to the xcconfig, with quotes, as system headers' do
@@ -163,7 +165,8 @@ module Pod
 
           describe 'with pod targets that define modules' do
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).tap { |pt| pt.stubs(:defines_module? => true) }
+              fixture_pod_target(spec, BuildType.static_library, {}, [], Platform.new(:ios, '6.0'),
+                                 [target_definition]).tap { |pt| pt.stubs(:defines_module? => true) }
             end
 
             it 'adds the dependent pods module map file to OTHER_CFLAGS' do
@@ -183,7 +186,7 @@ module Pod
 
           describe 'with a scoped pod target' do
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).scoped.first
+              fixture_pod_target(spec, BuildType.static_library, {}, [], Platform.new(:ios, '6.0'), [target_definition]).scoped.first
             end
 
             it 'links the pod targets with the aggregate target' do
@@ -256,7 +259,7 @@ module Pod
           end
 
           before do
-            Target.any_instance.stubs(:build_type).returns(Target::BuildType.dynamic_framework)
+            Target.any_instance.stubs(:build_type).returns(BuildType.dynamic_framework)
           end
 
           behaves_like 'Aggregate'
@@ -308,7 +311,7 @@ module Pod
             end
 
             it 'includes default runpath search path list when not using frameworks but links a vendored dynamic framework' do
-              @target.stubs(:build_type => Target::BuildType.static_library)
+              @target.stubs(:build_type => BuildType.static_library)
               @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
             end
           end
@@ -324,7 +327,7 @@ module Pod
             def pod_target(spec, target_definition)
               target_definition = fixture_target_definition(spec.name)
               target_definition.stubs(:parent).returns(@target_definition.podfile)
-              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [@target_definition], 'iOS')
+              fixture_pod_target(spec, BuildType.static_library, {}, [], Platform.new(:ios, '6.0'), [@target_definition], 'iOS')
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as framework search paths' do
@@ -350,7 +353,7 @@ module Pod
 
           describe 'with a pod target inhibiting warnings' do
             def pod_target(spec, target_definition)
-              fixture_pod_target(spec, false, {}, [], Platform.new(:ios, '6.0'), [target_definition]).tap { |pt| pt.stubs(:inhibit_warnings? => true) }
+              fixture_pod_target(spec, BuildType.static_library, {}, [], Platform.new(:ios, '6.0'), [target_definition]).tap { |pt| pt.stubs(:inhibit_warnings? => true) }
             end
 
             it 'adds the framework build path to the xcconfig, with quotes, as system framework search paths' do

@@ -19,7 +19,7 @@ module Pod
         #
         attr_reader :platform
 
-        # @return [Target::BuildType] the build type of the target
+        # @return [BuildType] the build type of the target
         #
         attr_reader :build_type
 
@@ -35,9 +35,9 @@ module Pod
         # @param [Array<Specification>] test_specs @see #test_specs
         # @param [Array<Specification>] app_specs  @see #app_specs
         # @param [Platform] platform               @see #platform
-        # @param [Target::BuildType] build_type    @see #build_type
+        # @param [BuildType] build_type            @see #build_type
         #
-        def initialize(specs, test_specs, app_specs, platform, build_type = Target::BuildType.static_library)
+        def initialize(specs, test_specs, app_specs, platform, build_type = BuildType.static_library)
           @specs = specs
           @test_specs = test_specs
           @app_specs = app_specs
@@ -46,11 +46,10 @@ module Pod
           @hash = [specs, platform, build_type].hash
         end
 
-        # @note Test specs are intentionally not included as part of the equality for pod variants since a
-        #       pod variant should not be affected by the number of test nor app specs included.
+        # @note Non library specs are intentionally not included as part of the equality for pod variants since a pod
+        #       variant should not be affected by the number of test nor app specs included.
         #
-        # @return [Bool] whether the {PodVariant} is equal to another taking all
-        #         all their attributes into account
+        # @return [Bool] whether the {PodVariant} is equal to another taking all all their attributes into account
         #
         def ==(other)
           self.class == other.class &&

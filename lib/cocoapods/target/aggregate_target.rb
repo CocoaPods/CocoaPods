@@ -56,7 +56,7 @@ module Pod
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
-    # @param [Boolean] host_requires_frameworks @see Target#host_requires_frameworks
+    # @param [BuildType] build_type @see Target#build_type
     # @param [Hash{String=>Symbol}] user_build_configurations @see Target#user_build_configurations
     # @param [Array<String>] archs @see Target#archs
     # @param [Platform] platform @see #Target#platform
@@ -65,12 +65,10 @@ module Pod
     # @param [Xcodeproj::Project] user_project @see #user_project
     # @param [Array<String>] user_target_uuids @see #user_target_uuids
     # @param [Hash{String=>Array<PodTarget>}] pod_targets_for_build_configuration @see #pod_targets_for_build_configuration
-    # @param [Target::BuildType] build_type @see #build_type
     #
-    def initialize(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, target_definition,
-                   client_root, user_project, user_target_uuids, pod_targets_for_build_configuration,
-                   build_type: Target::BuildType.infer_from_spec(nil, :host_requires_frameworks => host_requires_frameworks))
-      super(sandbox, host_requires_frameworks, user_build_configurations, archs, platform, :build_type => build_type)
+    def initialize(sandbox, build_type, user_build_configurations, archs, platform, target_definition, client_root,
+                   user_project, user_target_uuids, pod_targets_for_build_configuration)
+      super(sandbox, build_type, user_build_configurations, archs, platform)
       raise "Can't initialize an AggregateTarget without a TargetDefinition!" if target_definition.nil?
       raise "Can't initialize an AggregateTarget with an abstract TargetDefinition!" if target_definition.abstract?
       @target_definition = target_definition
@@ -95,8 +93,8 @@ module Pod
       merged = @pod_targets_for_build_configuration.merge(embedded_pod_targets_for_build_configuration) do |_, before, after|
         (before + after).uniq
       end
-      AggregateTarget.new(sandbox, host_requires_frameworks, user_build_configurations, archs, platform,
-                          target_definition, client_root, user_project, user_target_uuids, merged, :build_type => build_type).tap do |aggregate_target|
+      AggregateTarget.new(sandbox, build_type, user_build_configurations, archs, platform,
+                          target_definition, client_root, user_project, user_target_uuids, merged).tap do |aggregate_target|
         aggregate_target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
       end
     end

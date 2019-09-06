@@ -19,7 +19,7 @@ module Pod
             subspec1 = Pod::Specification.new(root_spec, 'MUS')
             subspec2 = Pod::Specification.new(root_spec, 'Module')
 
-            pod_target = fixture_pod_target_with_specs([root_spec, subspec1, subspec2], true)
+            pod_target = fixture_pod_target_with_specs([root_spec, subspec1, subspec2], BuildType.dynamic_framework)
             cache_key = TargetCacheKey.from_pod_target(config.sandbox, pod_target)
             cache_key.to_h['SPECS'].should.equal(['BananaLib (1.0)', 'BananaLib/Module (1.0)', 'BananaLib/MUS (1.0)'])
           end
@@ -61,7 +61,7 @@ module Pod
           end
 
           it 'should return inequality by adding a dependency' do
-            added_dependency_aggregate_target = AggregateTarget.new(config.sandbox, false, { 'Debug' => :debug }, [], Platform.ios,
+            added_dependency_aggregate_target = AggregateTarget.new(config.sandbox, BuildType.static_library, { 'Debug' => :debug }, [], Platform.ios,
                                                                     fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
                                                                     nil, 'Debug' => [@banana_pod_target])
             added_dependency_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox,

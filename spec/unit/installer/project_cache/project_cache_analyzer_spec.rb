@@ -14,7 +14,7 @@ module Pod
           @pod_targets = [@banana_lib, @orange_lib, @monkey_lib]
           @main_aggregate_target = fixture_aggregate_target(@pod_targets)
           secondary_target_definition = fixture_target_definition('Pods2')
-          @secondary_aggregate_target = fixture_aggregate_target([@banana_lib, @monkey_lib], false,
+          @secondary_aggregate_target = fixture_aggregate_target([@banana_lib, @monkey_lib], BuildType.static_library,
                                                                  Pod::Target::DEFAULT_BUILD_CONFIGURATIONS, [],
                                                                  Pod::Platform.new(:ios, '6.0'),
                                                                  secondary_target_definition)
@@ -30,7 +30,8 @@ module Pod
         describe 'in general' do
           it 'returns all pod targets if there is no cache' do
             empty_cache = ProjectInstallationCache.new
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, empty_cache, @build_configurations, @project_object_version, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, empty_cache, @build_configurations, @project_object_version,
+                                                @pod_targets, [@main_aggregate_target])
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -179,9 +180,9 @@ module Pod
           end
 
           it 'returns all pod targets that share the same #pod_name' do
-            subspec_target_1 = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [],
+            subspec_target_1 = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [],
                                                   Pod::Platform.new(:ios, '6.0'), [], 'Foo')
-            subspec_target_2 = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [],
+            subspec_target_2 = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [],
                                                   Pod::Platform.new(:ios, '6.0'), [], 'Bar')
             subspec_pods = [subspec_target_2, subspec_target_1]
             subspec_pods.each do |target|
@@ -201,11 +202,11 @@ module Pod
           end
 
           it 'returns sibling pod target when adding a new subspec' do
-            original_subspec = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [],
+            original_subspec = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [],
                                                   Pod::Platform.new(:ios, '6.0'), [])
-            subspec_target_1 = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [],
+            subspec_target_1 = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [],
                                                   Pod::Platform.new(:ios, '6.0'), [], 'Foo')
-            subspec_target_2 = fixture_pod_target('matryoshka/matryoshka.podspec', false, {}, [],
+            subspec_target_2 = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [],
                                                   Pod::Platform.new(:ios, '6.0'), [], 'Bar')
             subspec_pods = [subspec_target_2, subspec_target_1]
             subspec_pods.each do |target|

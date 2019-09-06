@@ -13,12 +13,14 @@ module Pod
 
               @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
               @watermelon_pod_target = fixture_pod_target_with_specs([@watermelon_spec,
-                                                                      *@watermelon_spec.recursive_subspecs], true, {},
-                                                                     [], Platform.ios, [@target_definition])
+                                                                      *@watermelon_spec.recursive_subspecs],
+                                                                     BuildType.dynamic_framework, {}, [], Platform.ios,
+                                                                     [@target_definition])
 
               @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
               @coconut_pod_target = fixture_pod_target_with_specs([@coconut_spec, *@coconut_spec.recursive_subspecs],
-                                                                  true, {}, [], Platform.ios, [@target_definition])
+                                                                  BuildType.dynamic_framework, {}, [], Platform.ios,
+                                                                  [@target_definition])
 
               @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [],
                                                     :project => @project)
@@ -128,8 +130,8 @@ module Pod
               end
 
               it 'excludes test framework and resource paths from dependent targets when using static libraries' do
-                @watermelon_pod_target.stubs(:build_type).returns(Pod::Target::BuildType.static_library)
-                @coconut_pod_target.stubs(:build_type).returns(Pod::Target::BuildType.static_library)
+                @watermelon_pod_target.stubs(:build_type).returns(BuildType.static_library)
+                @coconut_pod_target.stubs(:build_type).returns(BuildType.static_library)
                 @coconut_pod_target.stubs(:dependent_targets).returns([@watermelon_pod_target])
                 PodTargetIntegrator.new(@coconut_target_installation_result).integrate!
                 @test_native_target.build_phases.count.should == 0
@@ -156,8 +158,9 @@ module Pod
                 before do
                   @pineapple_spec = fixture_spec('pineapple-lib/PineappleLib.podspec')
                   @pineapple_pod_target = fixture_pod_target_with_specs([@pineapple_spec,
-                                                                         *@pineapple_spec.recursive_subspecs], true, {},
-                                                                        [], Platform.ios, [@target_definition])
+                                                                         *@pineapple_spec.recursive_subspecs],
+                                                                        BuildType.dynamic_framework, {}, [],
+                                                                        Platform.ios, [@target_definition])
 
                   @native_target = stub('NativeTarget', :shell_script_build_phases => [], :build_phases => [],
                                                         :project => @project)
