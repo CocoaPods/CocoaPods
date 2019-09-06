@@ -22,6 +22,10 @@ module Pod
         #
         attr_reader :project_object_version
 
+        # @return [Hash<String, Hash>] The podfile plugins to be run for the installation.
+        #
+        attr_reader :podfile_plugins
+
         # @return [Array<PodTarget>] The list of pod targets.
         #
         attr_reader :pod_targets
@@ -40,15 +44,17 @@ module Pod
         # @param [ProjectInstallationCache] cache @see #cache
         # @param [Hash{String => Symbol}] build_configurations @see #build_configurations
         # @param [Integer] project_object_version @see #project_object_version
+        # @param [Hash<String, Hash>] podfile_plugins @see #podfile_plugins
         # @param [Array<PodTarget>] pod_targets @see #pod_targets
         # @param [Array<AggregateTarget>] aggregate_targets @see #aggregate_targets
         # @param [Bool] clean_install @see #clean_install
         #
-        def initialize(sandbox, cache, build_configurations, project_object_version, pod_targets, aggregate_targets,
+        def initialize(sandbox, cache, build_configurations, project_object_version, podfile_plugins, pod_targets, aggregate_targets,
                        clean_install: false)
           @sandbox = sandbox
           @cache = cache
           @build_configurations = build_configurations
+          @podfile_plugins = podfile_plugins
           @pod_targets = pod_targets
           @aggregate_targets = aggregate_targets
           @project_object_version = project_object_version
@@ -70,7 +76,9 @@ module Pod
           end
 
           # Bail out early since these properties affect all targets and their associate projects.
-          if cache.build_configurations != build_configurations || cache.project_object_version != project_object_version
+          if cache.build_configurations != build_configurations ||
+              cache.project_object_version != project_object_version ||
+              cache.podfile_plugins != podfile_plugins
             UI.message 'Ignoring project cache due to project configuration changes.'
             return full_install_results
           end
