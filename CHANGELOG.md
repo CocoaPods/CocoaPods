@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Include Podfile Plugin changes for incremental installation.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#9147](https://github.com/CocoaPods/CocoaPods/pull/9147)
+
 * Integrate `use_frameworks!` linkage DSL.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9099](https://github.com/CocoaPods/CocoaPods/issues/9099)

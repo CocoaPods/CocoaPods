@@ -21,16 +21,23 @@ module Pod
         #
         attr_reader :project_object_version
 
+        # @return [Hash<String, Hash>]
+        #         Podfile plugins used with a particular install.
+        #
+        attr_reader :podfile_plugins
+
         # Initializes a new instance.
         #
         # @param [Hash{String => TargetCacheKey}] cache_key_by_target_label @see #cache_key_by_target_label
         # @param [Hash{String => Symbol}] build_configurations @see #build_configurations
         # @param [Integer] project_object_version @see #project_object_version
+        # @param [Hash<String, Hash>] podfile_plugins @see #podfile_plugins
         #
-        def initialize(cache_key_by_target_label = {}, build_configurations = nil, project_object_version = nil)
+        def initialize(cache_key_by_target_label = {}, build_configurations = nil, project_object_version = nil, podfile_plugins = {})
           @cache_key_by_target_label = cache_key_by_target_label
           @build_configurations = build_configurations
           @project_object_version = project_object_version
+          @podfile_plugins = podfile_plugins
         end
 
         def update_cache_key_by_target_label!(cache_key_by_target_label)
@@ -43,6 +50,10 @@ module Pod
 
         def update_project_object_version!(project_object_version)
           @project_object_version = project_object_version
+        end
+
+        def update_podfile_plugins!(podfile_plugins)
+          @podfile_plugins = podfile_plugins
         end
 
         def save_as(path)
@@ -59,7 +70,8 @@ module Pod
           end]
           project_object_version = contents['OBJECT_VERSION']
           build_configurations = contents['BUILD_CONFIGURATIONS']
-          ProjectInstallationCache.new(cache_key_by_target_label, build_configurations, project_object_version)
+          podfile_plugins = contents['PLUGINS']
+          ProjectInstallationCache.new(cache_key_by_target_label, build_configurations, project_object_version, podfile_plugins)
         end
 
         def to_hash
@@ -69,6 +81,7 @@ module Pod
           contents = { 'CACHE_KEYS' => cache_key_contents }
           contents['BUILD_CONFIGURATIONS'] = build_configurations if build_configurations
           contents['OBJECT_VERSION'] = project_object_version if project_object_version
+          contents['PLUGINS'] = podfile_plugins if podfile_plugins
           contents
         end
       end
