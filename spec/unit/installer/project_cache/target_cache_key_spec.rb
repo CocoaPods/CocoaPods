@@ -110,7 +110,7 @@ module Pod
               'CONFIGURATION_BUILD_DIR' => '${PODS_CONFIGURATION_BUILD_DIR}/BananaLib',
               'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/../../spec/fixtures/banana-lib"',
             }
-            changed_build_settings_target.build_settings.stubs(:xcconfig).returns(Xcodeproj::Config.new(changed_build_settings))
+            changed_build_settings_target.build_settings.each_value { |settings| settings.stubs(:xcconfig).returns(Xcodeproj::Config.new(changed_build_settings)) }
             changed_build_settings_cache_key = TargetCacheKey.from_pod_target(config.sandbox,
                                                                               changed_build_settings_target)
             @banana_cache_key.key_difference(changed_build_settings_cache_key).should.equal(:project)

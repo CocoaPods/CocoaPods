@@ -95,6 +95,20 @@ module Pod
         @pod_target.should_build?.should == false
       end
 
+      it 'returns empty sets of dependent targets' do
+        grapefruits = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
+        @pod_target = fixture_pod_target_with_specs([grapefruits, *grapefruits.recursive_subspecs], false, {}, [], Platform.ios, [@target_definition])
+
+        @pod_target.dependent_targets.should == []
+        @pod_target.dependent_targets_by_config.should == { :debug => [], :release => [] }
+
+        @pod_target.test_dependent_targets_by_spec_name.should == { 'GrapefruitsLib/Tests' => [] }
+        @pod_target.test_dependent_targets_by_spec_name_by_config.should == { 'GrapefruitsLib/Tests' => { :debug => [], :release => [] } }
+
+        @pod_target.app_dependent_targets_by_spec_name.should == { 'GrapefruitsLib/App' => [] }
+        @pod_target.app_dependent_targets_by_spec_name_by_config.should == { 'GrapefruitsLib/App' => { :debug => [], :release => [] } }
+      end
+
       describe '#headers_sandbox' do
         it 'returns the correct path' do
           @pod_target.headers_sandbox.should == Pathname.new('BananaLib')
@@ -117,7 +131,7 @@ module Pod
         before do
           @watermelon_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
           @pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
-                                                      true, {}, [], Platform.new(:ios, '6.0'), [@target_definition])
+                                                      true, Pod::Target::DEFAULT_BUILD_CONFIGURATIONS, [], Platform.new(:ios, '6.0'), [@target_definition])
         end
 
         it 'raises when the target does not contain the spec' do
@@ -125,17 +139,20 @@ module Pod
         end
 
         it 'returns the build settings for a library spec' do
-          @pod_target.build_settings_for_spec(@watermelon_spec).should.equal @pod_target.build_settings
+          @pod_target.build_settings_for_spec(@watermelon_spec, :configuration => :debug).should.equal @pod_target.build_settings[:debug]
+          @pod_target.build_settings_for_spec(@watermelon_spec, :configuration => :release).should.equal @pod_target.build_settings[:release]
         end
 
         it 'returns the build settings for a test spec' do
           test_spec = @watermelon_spec.recursive_subspecs.find { |s| s.name == 'GrapefruitsLib/Tests' }
-          @pod_target.build_settings_for_spec(test_spec).non_library_spec.should == test_spec
+          @pod_target.build_settings_for_spec(test_spec, :configuration => :debug).non_library_spec.should == test_spec
+          @pod_target.build_settings_for_spec(test_spec, :configuration => :release).non_library_spec.should == test_spec
         end
 
         it 'returns the build settings for an app spec' do
           app_spec = @watermelon_spec.recursive_subspecs.find { |s| s.name == 'GrapefruitsLib/App' }
-          @pod_target.build_settings_for_spec(app_spec).non_library_spec.should == app_spec
+          @pod_target.build_settings_for_spec(app_spec, :configuration => :debug).non_library_spec.should == app_spec
+          @pod_target.build_settings_for_spec(app_spec, :configuration => :release).non_library_spec.should == app_spec
         end
       end
     end
@@ -328,7 +345,7 @@ module Pod
           monkey_spec = fixture_spec('monkey/monkey.podspec')
           monkey_pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [],
                                             Platform.ios, [monkey_spec], [@target_definition])
-          @pod_target.stubs(:dependent_targets).returns([monkey_pod_target])
+          @pod_target.dependent_targets = [monkey_pod_target]
           header_search_paths = @pod_target.header_search_paths
           header_search_paths.sort.should == [
             '${PODS_ROOT}/Headers/Private',
@@ -409,7 +426,7 @@ module Pod
           @pod_target.sandbox.public_headers.add_search_path('monkey', Platform.ios)
           @monkey_pod_target = fixture_pod_target('monkey/monkey.podspec')
           @monkey_pod_target.stubs(:platform).returns(Platform.ios)
-          @pod_target.stubs(:dependent_targets).returns([@monkey_pod_target])
+          @pod_target.dependent_targets = [@monkey_pod_target]
           @file_accessor = @monkey_pod_target.file_accessors.first
           @file_accessor.spec_consumer.stubs(:header_dir).returns('Sub_dir')
           header_search_paths = @pod_target.header_search_paths
@@ -638,20 +655,24 @@ module Pod
 
       describe 'With dependencies' do
         before do
-          @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec', BuildType.static_library, {}, [], Platform.ios,
-                                               @pod_target.target_definitions)
-          @test_pod_dependency = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [], Platform.ios,
-                                                    @pod_target.target_definitions)
-          @app_pod_dependency = fixture_pod_target('monkey/monkey.podspec', BuildType.static_library, {}, [], Platform.ios,
-                                                   @pod_target.target_definitions)
-          @pod_target.dependent_targets = [@pod_dependency]
-          @pod_target.test_dependent_targets_by_spec_name = { @pod_dependency.name => [@test_pod_dependency] }
-          @pod_target.app_dependent_targets_by_spec_name = { @pod_dependency.name => [@app_pod_dependency] }
-          @pod_target.test_app_hosts_by_spec_name = { @pod_dependency.name => [@test_pod_dependency.specs.first, @test_pod_dependency] }
+          @orangeframework_pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec',
+                                                           BuildType.static_library, {}, [], Platform.ios,
+                                                           @pod_target.target_definitions)
+          @matryoshka_pod_target = fixture_pod_target('matryoshka/matryoshka.podspec', BuildType.static_library, {}, [],
+                                                      Platform.ios, @pod_target.target_definitions)
+          @monkey_pod_target = fixture_pod_target('monkey/monkey.podspec', BuildType.static_library, {}, [],
+                                                  Platform.ios, @pod_target.target_definitions)
+          @coconut_pod_target = fixture_pod_target('coconut-lib/CoconutLib.podspec', BuildType.static_library, {}, [],
+                                                   Platform.ios, @pod_target.target_definitions)
+          @pod_target.dependent_targets = [@orangeframework_pod_target]
+          @pod_target.test_dependent_targets_by_spec_name = { @orangeframework_pod_target.name => [@matryoshka_pod_target] }
+          @pod_target.app_dependent_targets_by_spec_name = { @orangeframework_pod_target.name => [@monkey_pod_target] }
+          @pod_target.test_app_hosts_by_spec_name = { @orangeframework_pod_target.name => [@matryoshka_pod_target.specs.first,
+                                                                                           @matryoshka_pod_target] }
         end
 
         it 'resolves simple dependencies' do
-          @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+          @pod_target.recursive_dependent_targets.should == [@orangeframework_pod_target]
         end
 
         it 'scopes test and non test dependencies' do
@@ -667,19 +688,57 @@ module Pod
         it 'scopes test app host dependencies' do
           scoped_pod_target = @pod_target.scoped
           scoped_pod_target.first.test_app_hosts_by_spec_name.count.should == 1
-          scoped_pod_target.first.test_app_hosts_by_spec_name['OrangeFramework'].first.should == @test_pod_dependency.specs.first
+          scoped_pod_target.first.test_app_hosts_by_spec_name['OrangeFramework'].first.should == @matryoshka_pod_target.specs.first
           scoped_pod_target.first.test_app_hosts_by_spec_name['OrangeFramework'].last.name.should == 'matryoshka-Pods'
         end
 
         describe 'With cyclic dependencies' do
           before do
-            @pod_dependency = fixture_pod_target('orange-framework/OrangeFramework.podspec')
-            @pod_dependency.dependent_targets = [@pod_target]
-            @pod_target.dependent_targets = [@pod_dependency]
+            @orangeframework_pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
+            @orangeframework_pod_target.dependent_targets = [@pod_target]
+            @pod_target.dependent_targets = [@orangeframework_pod_target]
           end
 
           it 'resolves the cycle' do
-            @pod_target.recursive_dependent_targets.should == [@pod_dependency]
+            @pod_target.recursive_dependent_targets.should == [@orangeframework_pod_target]
+          end
+        end
+
+        describe 'With per configuration dependencies' do
+          before do
+            @per_config_dependencies = { :debug => [@orangeframework_pod_target, @matryoshka_pod_target], :release => [@coconut_pod_target] }
+          end
+
+          it 'returns correct set of dependencies depending on configuration' do
+            @pod_target.dependent_targets_by_config = @per_config_dependencies
+            @pod_target.recursive_dependent_targets(:configuration => :debug).should == [@orangeframework_pod_target, @matryoshka_pod_target]
+            @pod_target.recursive_dependent_targets(:configuration => :release).should == [@coconut_pod_target]
+            @pod_target.recursive_dependent_targets.should == [@orangeframework_pod_target, @matryoshka_pod_target, @coconut_pod_target]
+          end
+
+          it 'returns correct set of test dependencies depending on configuration' do
+            watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+            watermelon_pod_target = fixture_pod_target_with_specs([watermelon_spec,
+                                                                   *watermelon_spec.recursive_subspecs],
+                                                                  BuildType.static_library, {}, [], Platform.ios,
+                                                                  @pod_target.target_definitions)
+            test_spec = watermelon_pod_target.test_specs.first
+            watermelon_pod_target.test_dependent_targets_by_spec_name_by_config = { test_spec.name => @per_config_dependencies }
+            watermelon_pod_target.recursive_test_dependent_targets(test_spec, :configuration => :debug).should == [@orangeframework_pod_target, @matryoshka_pod_target]
+            watermelon_pod_target.recursive_test_dependent_targets(test_spec, :configuration => :release).should == [@coconut_pod_target]
+            watermelon_pod_target.recursive_test_dependent_targets(test_spec).should == [@orangeframework_pod_target, @matryoshka_pod_target, @coconut_pod_target]
+          end
+
+          it 'returns correct set of app dependencies depending on configuration' do
+            watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+            watermelon_pod_target = fixture_pod_target_with_specs([watermelon_spec,
+                                                                   *watermelon_spec.recursive_subspecs],
+                                                                  BuildType.static_library, {}, [], Platform.ios,
+                                                                  @pod_target.target_definitions)
+            app_spec = watermelon_pod_target.app_specs.first
+            watermelon_pod_target.app_dependent_targets_by_spec_name_by_config = { app_spec.name => @per_config_dependencies }
+            watermelon_pod_target.recursive_app_dependent_targets(app_spec, :configuration => :debug).should == [@orangeframework_pod_target, @matryoshka_pod_target]
+            watermelon_pod_target.recursive_app_dependent_targets(app_spec, :configuration => :release).should == [@coconut_pod_target]
           end
         end
       end
@@ -754,7 +813,7 @@ module Pod
         it 'returns an empty scheme configuration for a spec with an unsupported platform' do
           @matryoshka_spec.ios.deployment_target = '7.0'
           @matryoshka_spec.subspecs.first.watchos.deployment_target = '4.2'
-          pod_target = fixture_pod_target(@matryoshka_spec.subspecs.first, BuildType.dynamic_framework, [], {}, Platform.watchos)
+          pod_target = fixture_pod_target(@matryoshka_spec.subspecs.first, BuildType.dynamic_framework, {}, {}, Platform.watchos)
           pod_target.scheme_for_spec(@matryoshka_spec).should == {}
         end
       end

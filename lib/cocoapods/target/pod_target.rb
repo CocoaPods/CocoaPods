@@ -48,15 +48,59 @@ module Pod
     # @return [Array<PodTarget>] the targets that this target has a dependency
     #         upon.
     #
-    attr_accessor :dependent_targets
+    attr_reader :dependent_targets
+    attr_reader :dependent_targets_by_config
+
+    # @deprecated
+    def dependent_targets=(dependent_targets)
+      @dependent_targets = dependent_targets
+      @dependent_targets_by_config = { :debug => dependent_targets, :release => dependent_targets }
+    end
+
+    def dependent_targets_by_config=(dependent_targets_by_config)
+      @dependent_targets_by_config = dependent_targets_by_config
+      @dependent_targets = dependent_targets_by_config.each_value.reduce([], &:|)
+    end
 
     # @return [Hash{String=>Array<PodTarget>}] all target dependencies by test spec name.
     #
-    attr_accessor :test_dependent_targets_by_spec_name
+    attr_reader :test_dependent_targets_by_spec_name
+    attr_reader :test_dependent_targets_by_spec_name_by_config
+
+    # @deprecated
+    def test_dependent_targets_by_spec_name=(test_dependent_targets_by_spec_name)
+      @test_dependent_targets_by_spec_name = test_dependent_targets_by_spec_name
+      @test_dependent_targets_by_spec_name_by_config = Hash[test_dependent_targets_by_spec_name.map do |k, v|
+        [k, { :debug => v, :release => v }]
+      end]
+    end
+
+    def test_dependent_targets_by_spec_name_by_config=(test_dependent_targets_by_spec_name_by_config)
+      @test_dependent_targets_by_spec_name_by_config = test_dependent_targets_by_spec_name_by_config
+      @test_dependent_targets_by_spec_name = Hash[test_dependent_targets_by_spec_name_by_config.map do |k, v|
+        [k, v.each_value.reduce(Set.new, &:|).to_a]
+      end]
+    end
 
     # @return [Hash{String=>Array<PodTarget>}] all target dependencies by app spec name.
     #
-    attr_accessor :app_dependent_targets_by_spec_name
+    attr_reader :app_dependent_targets_by_spec_name
+    attr_reader :app_dependent_targets_by_spec_name_by_config
+
+    # @deprecated
+    def app_dependent_targets_by_spec_name=(app_dependent_targets_by_spec_name)
+      @app_dependent_targets_by_spec_name = app_dependent_targets_by_spec_name
+      @app_dependent_targets_by_spec_name_by_config = Hash[app_dependent_targets_by_spec_name.map do |k, v|
+        [k, { :debug => v, :release => v }]
+      end]
+    end
+
+    def app_dependent_targets_by_spec_name_by_config=(app_dependent_targets_by_spec_name_by_config)
+      @app_dependent_targets_by_spec_name_by_config = app_dependent_targets_by_spec_name_by_config
+      @app_dependent_targets_by_spec_name = Hash[app_dependent_targets_by_spec_name_by_config.map do |k, v|
+        [k, v.each_value.reduce(Set.new, &:|).to_a]
+      end]
+    end
 
     # @return [Hash{String => (Specification,PodTarget)}] tuples of app specs and pod targets by test spec name.
     #
@@ -65,10 +109,12 @@ module Pod
     # @return [Hash{String => BuildSettings}] the test spec build settings for this target.
     #
     attr_reader :test_spec_build_settings
+    attr_reader :test_spec_build_settings_by_config
 
     # @return [Hash{String => BuildSettings}] the app spec build settings for this target.
     #
     attr_reader :app_spec_build_settings
+    attr_reader :app_spec_build_settings_by_config
 
     # @return [String] the Swift version for this target.
     #
@@ -103,13 +149,13 @@ module Pod
       @test_specs = all_specs_by_type[:test] || []
       @app_specs = all_specs_by_type[:app] || []
       @build_headers = Sandbox::HeadersStore.new(sandbox, 'Private', :private)
-      @dependent_targets = []
-      @test_dependent_targets_by_spec_name = {}
-      @app_dependent_targets_by_spec_name = {}
+      self.dependent_targets = []
+      self.test_dependent_targets_by_spec_name = Hash[test_specs.map { |ts| [ts.name, []] }]
+      self.app_dependent_targets_by_spec_name = Hash[app_specs.map { |as| [as.name, []] }]
       @test_app_hosts_by_spec_name = {}
       @build_config_cache = {}
-      @test_spec_build_settings = create_test_build_settings
-      @app_spec_build_settings = create_app_build_settings
+      @test_spec_build_settings_by_config = create_test_build_settings_by_config
+      @app_spec_build_settings_by_config = create_app_build_settings_by_config
     end
 
     # Scopes the current target based on the existing pod targets within the cache.
@@ -131,12 +177,12 @@ module Pod
             end
           end
 
-          target.dependent_targets = scope_dependent_targets[dependent_targets]
-          target.test_dependent_targets_by_spec_name = Hash[test_dependent_targets_by_spec_name.map do |spec_name, test_pod_targets|
-            [spec_name, scope_dependent_targets[test_pod_targets]]
+          target.dependent_targets_by_config = Hash[dependent_targets_by_config.map { |k, v| [k, scope_dependent_targets[v]] }]
+          target.test_dependent_targets_by_spec_name_by_config = Hash[test_dependent_targets_by_spec_name_by_config.map do |spec_name, test_pod_targets_by_config|
+            [spec_name, Hash[test_pod_targets_by_config.map { |k, v| [k, scope_dependent_targets[v]] }]]
           end]
-          target.app_dependent_targets_by_spec_name = Hash[app_dependent_targets_by_spec_name.map do |spec_name, app_pod_targets|
-            [spec_name, scope_dependent_targets[app_pod_targets]]
+          target.app_dependent_targets_by_spec_name_by_config = Hash[app_dependent_targets_by_spec_name_by_config.map do |spec_name, app_pod_targets_by_config|
+            [spec_name, Hash[app_pod_targets_by_config.map { |k, v| [k, scope_dependent_targets[v]] }]]
           end]
           target.test_app_hosts_by_spec_name = Hash[test_app_hosts_by_spec_name.map do |spec_name, (app_host_spec, app_pod_target)|
             [spec_name, [app_host_spec, app_pod_target.scoped(cache).find { |pt| pt.target_definitions == [target_definition] }]]
@@ -533,16 +579,19 @@ module Pod
     # @param [Specification] spec
     #        the spec to return app host dependencies for
     #
+    # @param [String] configuration
+    #        the configuration to retrieve the app host dependent targets for.
+    #
     # @return [Array<PodTarget>] the app host dependent targets for the given spec.
     #
-    def app_host_dependent_targets_for_spec(spec)
+    def app_host_dependent_targets_for_spec(spec, configuration: nil)
       return [] unless spec.test_specification? && spec.consumer(platform).test_type == :unit
       app_host_info = test_app_hosts_by_spec_name[spec.name]
       if app_host_info.nil?
         []
       else
         app_spec, app_target = *app_host_info
-        app_target.dependent_targets_for_app_spec(app_spec)
+        app_target.dependent_targets_for_app_spec(app_spec, :configuration => configuration)
       end
     end
 
@@ -647,16 +696,32 @@ module Pod
       end.uniq
     end
 
-    # @return [Array<PodTarget>] the recursive targets that this target has a
-    #         dependency upon.
+    # Returns all dependent targets of this target. If a configuration is passed then the list can be scoped to a given
+    # configuration.
     #
-    def recursive_dependent_targets
-      @recursive_dependent_targets ||= _add_recursive_dependent_targets(Set.new).delete(self).to_a
+    # @param [String] configuration
+    #        The configuration to return the dependent targets for or `nil` if all configurations should be included.
+    #
+    # @return [Array<PodTarget>] the recursive targets that this target has a dependency upon.
+    #
+    def recursive_dependent_targets(configuration: nil)
+      @recursive_dependent_targets ||= begin
+        hash = Hash[config_variants.map do |config|
+          [config, _add_recursive_dependent_targets(Set.new, :configuration => config).delete(self).to_a.freeze]
+        end]
+        hash[nil] = hash.each_value.reduce(Set.new, &:|).to_a
+        hash
+      end
+      @recursive_dependent_targets[configuration]
     end
 
-    def _add_recursive_dependent_targets(set)
+    def _add_recursive_dependent_targets(set, configuration: nil)
+      if defined?(@recursive_dependent_targets)
+        return set.merge(@recursive_dependent_targets[configuration])
+      end
+      dependent_targets = configuration ? dependent_targets_by_config[configuration] : self.dependent_targets
       dependent_targets.each do |target|
-        target._add_recursive_dependent_targets(set) if set.add?(target)
+        target._add_recursive_dependent_targets(set, :configuration => configuration) if set.add?(target)
       end
 
       set
@@ -666,20 +731,31 @@ module Pod
     # @param [Specification] test_spec
     #        the test spec to scope dependencies for
     #
+    # @param [String] configuration
+    #        the configuration to retrieve the test dependent targets for.
+    #
     # @return [Array<PodTarget>] the recursive targets that this target has a
     #         test dependency upon.
     #
-    def recursive_test_dependent_targets(test_spec)
+    def recursive_test_dependent_targets(test_spec, configuration: nil)
       @recursive_test_dependent_targets ||= {}
-      @recursive_test_dependent_targets[test_spec] ||= _add_recursive_test_dependent_targets(test_spec, Set.new).to_a
+      @recursive_test_dependent_targets[test_spec] ||= begin
+        hash = Hash[config_variants.map do |config|
+          [config, _add_recursive_test_dependent_targets(test_spec, Set.new, :configuration => config).to_a.freeze]
+        end]
+        hash[nil] = hash.each_value.reduce(Set.new, &:|).to_a.freeze
+        hash
+      end
+      @recursive_test_dependent_targets[test_spec][configuration]
     end
 
-    def _add_recursive_test_dependent_targets(test_spec, set)
+    def _add_recursive_test_dependent_targets(test_spec, set, configuration: nil)
       raise ArgumentError, 'Must give a test spec' unless test_spec
-      return unless dependent_targets = test_dependent_targets_by_spec_name[test_spec.name]
+      dependent_targets = configuration ? test_dependent_targets_by_spec_name_by_config[test_spec.name][configuration] : test_dependent_targets_by_spec_name[test_spec.name]
+      raise ArgumentError, "Unable to find deps for #{test_spec} for config #{configuration.inspect} (out of #{test_dependent_targets_by_spec_name_by_config.inspect})" unless dependent_targets
 
       dependent_targets.each do |target|
-        target._add_recursive_dependent_targets(set) if set.add?(target)
+        target._add_recursive_dependent_targets(set, :configuration => configuration) if set.add?(target)
       end
 
       set
@@ -689,30 +765,44 @@ module Pod
     # @param [Specification] test_spec
     #        the test spec to scope dependencies for
     #
+    # @param [String] configuration
+    #        the configuration to retrieve the test dependent targets for.
+    #
     # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
     #         This list includes the target itself as well as its recursive dependent and test dependent targets.
     #
-    def dependent_targets_for_test_spec(test_spec)
-      [self, *recursive_dependent_targets, *recursive_test_dependent_targets(test_spec)].uniq
+    def dependent_targets_for_test_spec(test_spec, configuration: nil)
+      [self, *recursive_dependent_targets(:configuration => configuration), *recursive_test_dependent_targets(test_spec, :configuration => configuration)].uniq
     end
 
     # @param [Specification] app_spec
     #        the app spec to scope dependencies for
     #
+    # @param [String] configuration
+    #        the configuration to retrieve the app dependent targets for.
+    #
     # @return [Array<PodTarget>] the recursive targets that this target has a
     #         app dependency upon.
     #
-    def recursive_app_dependent_targets(app_spec)
+    def recursive_app_dependent_targets(app_spec, configuration: nil)
       @recursive_app_dependent_targets ||= {}
-      @recursive_app_dependent_targets[app_spec] ||= _add_recursive_app_dependent_targets(app_spec, Set.new).to_a
+      @recursive_app_dependent_targets[app_spec] ||= begin
+        hash = Hash[config_variants.map do |config|
+          [config, _add_recursive_app_dependent_targets(app_spec, Set.new, :configuration => config).to_a.freeze]
+        end]
+        hash[nil] = hash.each_value.reduce(Set.new, &:|).to_a.freeze
+        hash
+      end
+      @recursive_app_dependent_targets[app_spec][configuration]
     end
 
-    def _add_recursive_app_dependent_targets(app_spec, set)
+    def _add_recursive_app_dependent_targets(app_spec, set, configuration: nil)
       raise ArgumentError, 'Must give a app spec' unless app_spec
-      return unless dependent_targets = app_dependent_targets_by_spec_name[app_spec.name]
+      dependent_targets = configuration ? app_dependent_targets_by_spec_name_by_config[app_spec.name][configuration] : app_dependent_targets_by_spec_name[app_spec.name]
+      raise ArgumentError, "Unable to find deps for #{app_spec} for config #{configuration.inspect} #{app_dependent_targets_by_spec_name_by_config.inspect}" unless dependent_targets
 
       dependent_targets.each do |target|
-        target._add_recursive_dependent_targets(set) if set.add?(target)
+        target._add_recursive_dependent_targets(set, :configuration => configuration) if set.add?(target)
       end
 
       set
@@ -722,11 +812,14 @@ module Pod
     # @param [Specification] app_spec
     #        the app spec to scope dependencies for
     #
+    # @param [String] configuration
+    #        the configuration to retrieve the app dependent targets for.
+    #
     # @return [Array<PodTarget>] the canonical list of dependent targets this target has a dependency upon.
     #         This list includes the target itself as well as its recursive dependent and app dependent targets.
     #
-    def dependent_targets_for_app_spec(app_spec)
-      [self, *recursive_dependent_targets, *recursive_app_dependent_targets(app_spec)].uniq
+    def dependent_targets_for_app_spec(app_spec, configuration: nil)
+      [self, *recursive_dependent_targets(:configuration => configuration), *recursive_app_dependent_targets(app_spec, :configuration => configuration)].uniq
     end
 
     # Checks if warnings should be inhibited for this pod.
@@ -798,31 +891,54 @@ module Pod
     #        whether to include header search paths for private headers of this
     #        target
     #
+    # @param [String] configuration
+    #        the configuration to return header search paths for or `nil` for all configurations.
+    #
     # @return [Array<String>] The set of header search paths this target uses.
     #
-    def header_search_paths(include_dependent_targets_for_test_spec: nil, include_dependent_targets_for_app_spec: nil, include_private_headers: true)
+    def header_search_paths(include_dependent_targets_for_test_spec: nil, include_dependent_targets_for_app_spec: nil,
+                            include_private_headers: true, configuration: nil)
       header_search_paths = []
       header_search_paths.concat(build_headers.search_paths(platform, nil, false)) if include_private_headers
       header_search_paths.concat(sandbox.public_headers.search_paths(platform, pod_name, uses_modular_headers?))
-      dependent_targets = recursive_dependent_targets
-      dependent_targets += recursive_test_dependent_targets(include_dependent_targets_for_test_spec) if include_dependent_targets_for_test_spec
-      dependent_targets += recursive_app_dependent_targets(include_dependent_targets_for_app_spec) if include_dependent_targets_for_app_spec
+      dependent_targets = recursive_dependent_targets(:configuration => configuration)
+      if include_dependent_targets_for_test_spec
+        dependent_targets += recursive_test_dependent_targets(include_dependent_targets_for_test_spec, :configuration => configuration)
+      end
+      if include_dependent_targets_for_app_spec
+        dependent_targets += recursive_app_dependent_targets(include_dependent_targets_for_app_spec, :configuration => configuration)
+      end
       dependent_targets.uniq.each do |dependent_target|
         header_search_paths.concat(sandbox.public_headers.search_paths(platform, dependent_target.pod_name, defines_module? && dependent_target.uses_modular_headers?(false)))
       end
       header_search_paths.uniq
     end
 
-    # @param  [Specification] spec
+    # @param [Specification] spec the specification to return build settings for.
+    #
+    # @param [String] configuration the configuration to scope the build settings.
     #
     # @return [BuildSettings::PodTargetSettings] The build settings for the given spec
     #
-    def build_settings_for_spec(spec)
+    def build_settings_for_spec(spec, configuration: nil)
+      raise ArgumentError, 'Must give configuration' unless configuration
+      configuration = user_build_configurations[configuration] if user_build_configurations.key?(configuration)
+      build_settings_by_config_for_spec(spec)[configuration] || raise(ArgumentError, "No build settings for #{spec} (configuration #{configuration.inspect}) (known configurations #{config_variants})")
+    end
+
+    def build_settings_by_config_for_spec(spec)
       case spec.spec_type
-      when :test then test_spec_build_settings[spec.name]
-      when :app  then app_spec_build_settings[spec.name]
+      when :test then test_spec_build_settings_by_config[spec.name]
+      when :app  then app_spec_build_settings_by_config[spec.name]
       else            build_settings
       end || raise(ArgumentError, "No build settings for #{spec}")
+    end
+
+    def user_config_names_by_config_type
+      user_build_configurations.each_with_object({}) do |(user, type), hash|
+        hash[type] ||= []
+        hash[type] << user
+      end.each_value(&:freeze).freeze
     end
 
     protected
@@ -844,19 +960,33 @@ module Pod
 
     private
 
-    def create_build_settings
-      BuildSettings::PodTargetSettings.new(self)
+    def config_variants
+      if user_build_configurations.empty?
+        %i(debug release)
+      else
+        user_build_configurations.values.uniq
+      end
     end
 
-    def create_test_build_settings
-      Hash[test_specs.map do |test_spec|
-        [test_spec.name, BuildSettings::PodTargetSettings.new(self, test_spec)]
+    def create_build_settings
+      Hash[config_variants.map do |config|
+        [config, BuildSettings::PodTargetSettings.new(self, nil, :configuration => config)]
       end]
     end
 
-    def create_app_build_settings
+    def create_test_build_settings_by_config
+      Hash[test_specs.map do |test_spec|
+        [test_spec.name, Hash[config_variants.map do |config|
+          [config, BuildSettings::PodTargetSettings.new(self, test_spec, :configuration => config)]
+        end]]
+      end]
+    end
+
+    def create_app_build_settings_by_config
       Hash[app_specs.map do |app_spec|
-        [app_spec.name, BuildSettings::PodTargetSettings.new(self, app_spec)]
+        [app_spec.name, Hash[config_variants.map do |config|
+          [config, BuildSettings::PodTargetSettings.new(self, app_spec, :configuration => config)]
+        end]]
       end]
     end
 

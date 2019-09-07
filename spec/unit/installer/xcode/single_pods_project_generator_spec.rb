@@ -70,9 +70,7 @@ module Pod
                                                                         BuildType.static_library,
                                                                         user_build_configurations, [], @ios_platform,
                                                                         [@ios_target_definition], 'iOS')
-            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name = { @coconut_test_spec.name => [@monkey_pod_target] }
-
-            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name[@grapefruits_ios_pod_target.app_specs.first.name] = [@banana_ios_pod_target]
+            @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name = { @grapefruits_app_spec.name => [@banana_ios_pod_target] }
 
             ios_pod_targets = [@banana_ios_pod_target, @monkey_ios_pod_target, @coconut_ios_pod_target,
                                @orangeframework_pod_target, @watermelon_ios_pod_target, @grapefruits_ios_pod_target]

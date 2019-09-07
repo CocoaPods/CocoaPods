@@ -12,6 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9230](https://github.com/CocoaPods/CocoaPods/pull/9230)
 
+* Configure dependencies per configuration.  
+  [Samuel Giddins](https://github.com/segiddins)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9149](https://github.com/CocoaPods/CocoaPods/pull/9149)
+
 * Include Podfile Plugin changes for incremental installation.  
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#9147](https://github.com/CocoaPods/CocoaPods/pull/9147)
