@@ -289,6 +289,26 @@ module Pod
         end
       end
 
+      describe '#exclude_from_backup' do
+        # Conditionally skip the test if `tmutil` is not available.
+        has_tmutil = system('tmutil', 'version', :out => File::NULL)
+        cit = has_tmutil ? method(:it) : method(:xit)
+        cit.call 'excludes the dir from Time Machine backups' do
+          dir = temporary_directory + 'no_backup'
+          FileUtils.mkdir(dir)
+          @config.send(:exclude_from_backup, dir)
+          `tmutil isexcluded #{dir}`.chomp.should.start_with?('[Excluded]')
+        end
+
+        it 'does not raise if the dir does not exist' do
+          dir = temporary_directory + 'no_backup'
+          FileUtils.remove_dir(dir, true)
+          should.not.raise do
+            @config.send(:exclude_from_backup, dir)
+          end
+        end
+      end
+
       #-----------------------------------------------------------------------#
     end
   end

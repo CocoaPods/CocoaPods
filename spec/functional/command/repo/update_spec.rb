@@ -39,6 +39,16 @@ module Pod
       (repo2 + 'README').read.should.include 'Updated'
     end
 
+    # Conditionally skip the test if `tmutil` is not available.
+    has_tmutil = system('tmutil', 'version', :out => File::NULL)
+    cit = has_tmutil ? method(:it) : method(:xit)
+    cit.call 'excludes the spec-repo from Time Machine backups' do
+      repo_make('repo1')
+      repo_clone('repo1', 'repo2')
+      run_command('repo', 'update', 'repo2')
+      `tmutil isexcluded #{config.repos_dir + 'repo2'}`.chomp.should.start_with?('[Excluded]')
+    end
+
     it 'repo updates do not fail when executed in parallel' do
       repo1 = repo_make('repo1')
       repo_clone('repo1', 'repo2')

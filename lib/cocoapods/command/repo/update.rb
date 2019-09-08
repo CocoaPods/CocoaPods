@@ -21,6 +21,17 @@ module Pod
         def run
           show_output = !config.silent?
           config.sources_manager.update(@name, show_output)
+          exclude_repos_dir_from_backup
+        end
+
+        private
+
+        # Excludes the repos directory from backups.
+        #
+        # @return [void]
+        #
+        def exclude_repos_dir_from_backup
+          config.exclude_from_backup(config.repos_dir)
         end
       end
     end
