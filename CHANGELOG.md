@@ -26,6 +26,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9131](https://github.com/CocoaPods/CocoaPods/pull/9131)
 
+* Correctly set deployment target for non library specs even if the root spec does not specify one.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9153](https://github.com/CocoaPods/CocoaPods/pull/9153)
+
+* Make `APPLICATION_EXTENSION_API_ONLY` build setting not break when performing a cached incremental install.  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#8967](https://github.com/CocoaPods/CocoaPods/issues/8967)
+  [#9141](https://github.com/CocoaPods/CocoaPods/issues/9141)
+  [#9142](https://github.com/CocoaPods/CocoaPods/pull/9142)
 
 ## 1.8.0.beta.2 (2019-08-27)
 

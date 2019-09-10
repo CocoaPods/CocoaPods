@@ -856,6 +856,11 @@ module Pod
           target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
         end
 
+        # @return [String]
+        define_build_settings_method :application_extension_api_only, :build_setting => true, :memoized => true do
+          target.application_extension_api_only ? 'YES' : nil
+        end
+
         #-------------------------------------------------------------------------#
 
         # @!group Target Properties
