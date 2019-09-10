@@ -753,6 +753,14 @@ module Pod
           @pod_target.deployment_target_for_non_library_spec(@watermelon_spec.test_specs.first).to_s.should == '8.0'
           @pod_target.deployment_target_for_non_library_spec(@watermelon_spec.app_specs.first).to_s.should == '8.0'
         end
+
+        it 'returns the determined deployment target even if the podspec does not explicitly specify one' do
+          # The coconut spec does not specify a deployment target at all. We expect the deployment target for the non
+          # library spec to be set with the one by the pod target itself instead.
+          coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          pod_target = fixture_pod_target(coconut_spec, false, {}, [], Platform.new(:ios, '4.3'))
+          pod_target.deployment_target_for_non_library_spec(coconut_spec.test_specs.first).to_s.should == '4.3'
+        end
       end
 
       describe 'script phases support' do
