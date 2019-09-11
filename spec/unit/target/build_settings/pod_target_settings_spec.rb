@@ -89,8 +89,8 @@ module Pod
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-weak_framework "iAd"')
           end
 
-          it 'does not include the vendored dynamic frameworks for dependency pods of the specification' do
-            @xcconfig.to_hash['OTHER_LDFLAGS'].should.not.include('-framework "dynamic-monkey"')
+          it 'does include the vendored dynamic frameworks for dependency pods of the specification' do
+            @xcconfig.to_hash['OTHER_LDFLAGS'].should.include('-framework "dynamic-monkey"')
           end
 
           it 'does not include vendored static frameworks for dependency pods of the specification' do
