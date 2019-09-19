@@ -111,6 +111,7 @@ module Pod
       def pre_download(sandbox)
         title = "Pre-downloading: `#{name}` #{description}"
         UI.titled_section(title,  :verbose_prefix => '-> ') do
+          sandbox.touch_pod(name)
           target = sandbox.pod_dir(name)
           begin
             download_result = Downloader.download(download_request, target, :can_cache => can_cache)

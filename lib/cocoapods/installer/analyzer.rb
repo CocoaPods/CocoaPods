@@ -1016,6 +1016,7 @@ module Pod
 
       def checkout_requires_update?(dependency)
         return true unless lockfile && sandbox.manifest
+        return true if sandbox.dirty?(dependency.name)
         locked_checkout_options = lockfile.checkout_options_for_pod_named(dependency.root_name)
         sandbox_checkout_options = sandbox.manifest.checkout_options_for_pod_named(dependency.root_name)
         locked_checkout_options != sandbox_checkout_options
