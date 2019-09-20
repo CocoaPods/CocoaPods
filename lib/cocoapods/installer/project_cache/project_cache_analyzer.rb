@@ -78,7 +78,7 @@ module Pod
           # Bail out early since these properties affect all targets and their associate projects.
           if cache.build_configurations != build_configurations ||
               cache.project_object_version != project_object_version ||
-              cache.podfile_plugins != podfile_plugins
+              YAMLHelper.convert(cache.podfile_plugins) != YAMLHelper.convert(podfile_plugins)
             UI.message 'Ignoring project cache due to project configuration changes.'
             return full_install_results
           end

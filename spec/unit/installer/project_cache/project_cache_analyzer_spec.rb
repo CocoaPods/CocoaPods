@@ -1,4 +1,5 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
+require 'cocoapods/installer/project_cache/target_cache_key.rb'
 
 module Pod
   class Installer
@@ -80,6 +81,17 @@ module Pod
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
+          end
+
+          it 'returns empty list when comparing plugins with different ordering of arguments' do
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
+            cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins' => %w[B A])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => %w[A B] }, @pod_targets, [@main_aggregate_target])
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal([])
+            result.aggregate_targets_to_generate.should.equal(nil)
           end
 
           it 'returns all pod targets and aggregate targets if the list of podfile plugins params changed' do
