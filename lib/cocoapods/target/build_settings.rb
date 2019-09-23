@@ -564,12 +564,16 @@ module Pod
 
           frameworks = []
           frameworks.concat consumer_frameworks
-          if library_xcconfig? && (target.should_build? && target.build_as_dynamic?)
-            frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
-          end
-          if non_library_xcconfig?
+          if library_xcconfig?
+            # We know that this library target is being built dynamically based
+            # on the guard above, so include any vendored static frameworks.
+            frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } if target.should_build?
+            # Also include any vendored dynamic frameworks of dependencies.
+            frameworks.concat dependent_targets.reject(&:should_build?).flat_map { |pt| pt.build_settings.dynamic_frameworks_to_import }
+          else
             frameworks.concat dependent_targets_to_link.flat_map { |pt| pt.build_settings.frameworks_to_import }
           end
+
           frameworks
         end
 
