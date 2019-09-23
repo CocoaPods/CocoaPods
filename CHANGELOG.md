@@ -30,6 +30,21 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9131](https://github.com/CocoaPods/CocoaPods/pull/9131)
 
+* None.  
+
+
+## 1.8.0 (2019-09-23)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Include dependent vendored frameworks in linker flags  
+  [Alex Coomans](https://github.com/drcapulet)
+  [#9045]((https://github.com/CocoaPods/CocoaPods/pull/9045)
+
 * Correctly set deployment target for non library specs even if the root spec does not specify one.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9153](https://github.com/CocoaPods/CocoaPods/pull/9153)
