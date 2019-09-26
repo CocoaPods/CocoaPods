@@ -68,8 +68,8 @@ module Pod
       #         The URL of the source.
       #
       def cdn_url?(url)
-        url =~ %r{^https:\/\/} &&
-          REST.head(url + '/all_pods.txt').ok?
+        url =~ %r{^https?:\/\/} &&
+          Pod::HTTP.validate_url(url + '/all_pods.txt', nil).ok?
       rescue => e
         raise Informative, "Couldn't determine repo type for URL: `#{url}`: #{e}"
       end
