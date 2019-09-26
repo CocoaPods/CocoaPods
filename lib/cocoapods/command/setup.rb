@@ -11,6 +11,7 @@ module Pod
 
       def run
         # Right now, no setup is needed
+        UI.puts 'Setup completed'.green
       end
     end
   end
