@@ -66,9 +66,9 @@ module Pod
             it 'sets an empty codesigning identity for iOS/tvOS/watchOS' do
               @installer.install!
               @project.targets.first.build_configurations.each do |config|
-                config.build_settings['CODE_SIGN_IDENTITY[sdk=appletvos*]'].should == ''
-                config.build_settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'].should == ''
-                config.build_settings['CODE_SIGN_IDENTITY[sdk=watchos*]'].should == ''
+                config.resolve_build_setting('CODE_SIGN_IDENTITY[sdk=appletvos*]').should == ''
+                config.resolve_build_setting('CODE_SIGN_IDENTITY[sdk=iphoneos*]').should == ''
+                config.resolve_build_setting('CODE_SIGN_IDENTITY[sdk=watchos*]').should == ''
               end
             end
 
@@ -94,16 +94,16 @@ module Pod
                 @pod_target.stubs(:build_type => BuildType.dynamic_framework)
                 @installer.install!
                 @project.targets.first.build_configurations.each do |config|
-                  config.build_settings['PUBLIC_HEADERS_FOLDER_PATH'].should.be.nil
-                  config.build_settings['PRIVATE_HEADERS_FOLDER_PATH'].should.be.nil
+                  config.resolve_build_setting('PUBLIC_HEADERS_FOLDER_PATH').should.be.nil
+                  config.resolve_build_setting('PRIVATE_HEADERS_FOLDER_PATH').should.be.nil
                 end
               end
 
               it 'empties them for non-framework targets' do
                 @installer.install!
                 @project.targets.first.build_configurations.each do |config|
-                  config.build_settings['PUBLIC_HEADERS_FOLDER_PATH'].should.be.empty
-                  config.build_settings['PRIVATE_HEADERS_FOLDER_PATH'].should.be.empty
+                  config.resolve_build_setting('PUBLIC_HEADERS_FOLDER_PATH').should.be.empty
+                  config.resolve_build_setting('PRIVATE_HEADERS_FOLDER_PATH').should.be.empty
                 end
               end
             end
@@ -113,6 +113,7 @@ module Pod
             describe 'setting the SWIFT_VERSION' do
               it 'does not set the version if not included by the target definition' do
                 @installer.install!
+                @installer.config_hash.should.not.include?('SWIFT_VERSION')
                 @project.targets.first.build_configurations.each do |config|
                   config.build_settings.should.not.include?('SWIFT_VERSION')
                 end
@@ -122,7 +123,7 @@ module Pod
                 @target_definition.swift_version = '3.0'
                 @installer.install!
                 @project.targets.first.build_configurations.each do |config|
-                  config.build_settings['SWIFT_VERSION'].should == '3.0'
+                  config.resolve_build_setting('SWIFT_VERSION').should == '3.0'
                 end
               end
             end
@@ -1042,8 +1043,7 @@ module Pod
                 Pathname.any_instance.stubs(:mkpath)
 
                 FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
-                native_target = mock(:build_configurations => [])
-                @installer.send(:create_module_map, native_target)
+                @installer.send(:create_module_map)
               end
             end
 

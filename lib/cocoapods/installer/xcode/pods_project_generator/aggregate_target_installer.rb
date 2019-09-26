@@ -6,6 +6,11 @@ module Pod
         # project and the relative support files.
         #
         class AggregateTargetInstaller < TargetInstaller
+
+          # @return [AggregateTarget] the aggregate target to be installed
+          #
+          attr_reader :target
+
           # Creates the target in the Pods project and the relative support files.
           #
           # @return [TargetInstallationResult] the result of the installation of this target.
@@ -15,13 +20,12 @@ module Pod
               native_target = add_target
               create_support_files_dir
               create_support_files_group
-              create_xcconfig_file(native_target)
               if target.build_as_framework?
                 create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform)
-                create_module_map(native_target)
+                create_module_map
                 create_umbrella_header(native_target)
               elsif target.uses_swift?
-                create_module_map(native_target)
+                create_module_map
                 create_umbrella_header(native_target)
               end
               # Because embedded targets live in their host target, CocoaPods
@@ -35,6 +39,8 @@ module Pod
               create_copy_resources_script if target.includes_resources?
               create_acknowledgements
               create_dummy_source(native_target)
+              remove_build_setting_overrides(config_hash, native_target)
+              create_xcconfig_file(native_target, Xcodeproj::Config.new(config_hash))
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target)
             end
@@ -50,21 +56,27 @@ module Pod
             target.target_definition
           end
 
-          # Ensure that vendored static frameworks and libraries are not linked
-          # twice to the aggregate target, which shares the xcconfig of the user
-          # target.
-          #
           def custom_build_settings
             settings = {
               'CODE_SIGN_IDENTITY[sdk=appletvos*]' => '',
               'CODE_SIGN_IDENTITY[sdk=iphoneos*]'  => '',
               'CODE_SIGN_IDENTITY[sdk=watchos*]'   => '',
+              'PRODUCT_BUNDLE_IDENTIFIER'          => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
+              'SKIP_INSTALL'                       => 'YES',
               'MACH_O_TYPE'                        => 'staticlib',
               'OTHER_LDFLAGS'                      => '',
               'OTHER_LIBTOOLFLAGS'                 => '',
+            }
+            super.merge(settings)
+          end
+
+          # Ensure that vendored static frameworks and libraries are not linked
+          # twice to the aggregate target, which shares the xcconfig of the user
+          # target.
+          #
+          def custom_xcconfig
+            settings = {
               'PODS_ROOT'                          => '$(SRCROOT)',
-              'PRODUCT_BUNDLE_IDENTIFIER'          => 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}',
-              'SKIP_INSTALL'                       => 'YES',
 
               # Needed to ensure that static libraries won't try to embed the swift stdlib,
               # since there's no where to embed in for a static library.
@@ -92,15 +104,18 @@ module Pod
           # @param  [PBXNativeTarget] native_target
           #         the native target to link the module map file into.
           #
+          # @param  [Xcodeproj::Config] xcconfig
+          #         the config contents to save
+          #
           # @return [void]
           #
-          def create_xcconfig_file(native_target)
+          def create_xcconfig_file(native_target, xcconfig)
+            generator = Generator::Constant.new(xcconfig.to_s)
             native_target.build_configurations.each do |configuration|
               next unless target.user_build_configurations.key?(configuration.name)
               path = target.xcconfig_path(configuration.name)
-              build_settings = target.build_settings(configuration.name)
-              update_changed_file(build_settings, path)
-              target.xcconfigs[configuration.name] = build_settings.xcconfig
+              update_changed_file(generator, path)
+              target.xcconfigs[configuration.name] = xcconfig
               xcconfig_file_ref = add_file_to_support_group(path)
               configuration.base_configuration_reference = xcconfig_file_ref
             end

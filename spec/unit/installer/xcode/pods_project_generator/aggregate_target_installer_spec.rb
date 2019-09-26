@@ -76,7 +76,7 @@ module Pod
 
             it "adds the user's build configurations to the target" do
               @installer.install!
-              @project.targets.first.build_configurations.map(&:name).sort.should == %w( AppStore Debug Release Test        )
+              @project.targets.first.build_configurations.map(&:name).sort.should == %w( AppStore Debug Release Test )
             end
 
             it 'it creates different hash instances for the build settings of various build configurations' do
@@ -86,26 +86,26 @@ module Pod
             end
 
             it 'does not enable the GCC_WARN_INHIBIT_ALL_WARNINGS flag by default' do
-              @installer.install!.native_target.build_configurations.each do |config|
-                config.build_settings['GCC_WARN_INHIBIT_ALL_WARNINGS'].should.be.nil
+              @installer.install!.native_target.resolved_build_setting('GCC_WARN_INHIBIT_ALL_WARNINGS', true).each_value do |value|
+                value.should.be.nil?
               end
             end
 
             it 'will be built as static library' do
-              @installer.install!.native_target.build_configurations.each do |config|
-                config.build_settings['MACH_O_TYPE'].should == 'staticlib'
+              @installer.install!.native_target.resolved_build_setting('MACH_O_TYPE', true).each_value do |value|
+                value.should == 'staticlib'
               end
             end
 
             it 'will be skipped when installing' do
-              @installer.install!.native_target.build_configurations.each do |config|
-                config.build_settings['SKIP_INSTALL'].should == 'YES'
+              @installer.install!.native_target.resolved_build_setting('SKIP_INSTALL', true).each_value do |value|
+                value.should == 'YES'
               end
             end
 
             it 'has a PRODUCT_BUNDLE_IDENTIFIER set' do
-              @installer.install!.native_target.build_configurations.each do |config|
-                config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+              @installer.install!.native_target.resolved_build_setting('PRODUCT_BUNDLE_IDENTIFIER', true).each_value do |value|
+                value.should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
               end
             end
 
