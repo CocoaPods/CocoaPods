@@ -10,8 +10,8 @@ module Pod
       config.repos_dir = SpecHelper.tmp_repos_path
     end
 
-    it 'Displays deprecation notice' do
-      UI.expects(:puts).never
+    it 'displays setup completed message' do
+      UI.expects(:puts).with('Setup completed')
       run_command('setup')
     end
   end
