@@ -307,7 +307,7 @@ module Pod
     def podfile_path_in_dir(dir)
       PODFILE_NAMES.each do |filename|
         candidate = dir + filename
-        if candidate.exist?
+        if candidate.file?
           return candidate
         end
       end

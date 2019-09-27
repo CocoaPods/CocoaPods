@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix crash when running on mounted filesystems  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9200](https://github.com/CocoaPods/CocoaPods/pull/9200)
 
 
 ## 1.8.1 (2019-09-27)
