@@ -136,6 +136,16 @@ module Pod
         end
       end
 
+      it 'should not return the working directory as the installation root if found Podfile is a directory' do
+        Dir.chdir(temporary_directory) do
+          path = temporary_directory + 'Podfile'
+          path.mkpath
+          Dir.chdir(path) do
+            @config.installation_root.should == path
+          end
+        end
+      end
+
       it 'returns the parent directory which contains the Podfile if it can be found' do
         Dir.chdir(temporary_directory) do
           File.open('Podfile', 'w') {}
