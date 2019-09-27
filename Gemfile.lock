@@ -7,13 +7,13 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: dbc9b76820d546b4d655aa26141fad0412c3c849
+  revision: fdae18f9d9cc0e396efb2a7579473f89a91273f6
   branch: master
   specs:
-    cocoapods-core (1.8.0)
+    cocoapods-core (1.8.1)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
-      concurrent-ruby (~> 1.0)
+      concurrent-ruby (~> 1.1)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
 
@@ -33,7 +33,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 602c802125b69199ccb06094974a569a98e734c3
+  revision: 6799dca9d56959549a1f2048c75d33aaf864a212
   branch: master
   specs:
     xcodeproj (1.12.0)
@@ -81,10 +81,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 9ad16cb8f71b05d06eac29a541daeac7bc2c672e
+  revision: 67959306c053bc77c73388865a5ac4de22574d96
   branch: master
   specs:
-    cocoapods-trunk (1.4.0)
+    cocoapods-trunk (1.4.1)
       nap (>= 0.8, < 2.0)
       netrc (~> 0.11)
 
@@ -111,10 +111,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.8.0)
+    cocoapods (1.8.1)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.8.0)
+      cocoapods-core (= 1.8.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -142,7 +142,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    algoliasearch (1.27.0)
+    algoliasearch (1.27.1)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
     ast (2.4.0)

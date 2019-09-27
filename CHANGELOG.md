@@ -31,6 +31,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#9131](https://github.com/CocoaPods/CocoaPods/pull/9131)
 
 
+## 1.8.1 (2019-09-27)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 1.8.0 (2019-09-23)
 
 ##### Enhancements
