@@ -9,7 +9,8 @@ File References:
     - Frameworks:
       - Realm.framework
     - Support Files:
-      - Realm.xcconfig
+      - Realm.debug.xcconfig
+      - Realm.release.xcconfig
   - RealmSwift:
     - Aliases.swift
     - List.swift
@@ -24,11 +25,12 @@ File References:
     - Util.swift
     - Support Files:
       - RealmSwift.modulemap
-      - RealmSwift.xcconfig
       - RealmSwift-dummy.m
       - RealmSwift-Info.plist
       - RealmSwift-prefix.pch
       - RealmSwift-umbrella.h
+      - RealmSwift.debug.xcconfig
+      - RealmSwift.release.xcconfig
 - Products:
   - Pods_SampleApp.framework
   - RealmSwift.framework
@@ -132,7 +134,7 @@ Targets:
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
           SDKROOT: iphoneos
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: Realm.xcconfig
+        Base Configuration: Realm.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -143,7 +145,7 @@ Targets:
           SDKROOT: iphoneos
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Realm.xcconfig
+        Base Configuration: Realm.release.xcconfig
 - RealmSwift:
     Build Phases:
     - Headers:
@@ -194,7 +196,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: RealmSwift.xcconfig
+        Base Configuration: RealmSwift.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -223,7 +225,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: RealmSwift.xcconfig
+        Base Configuration: RealmSwift.release.xcconfig
 
 
 

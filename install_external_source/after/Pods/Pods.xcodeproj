@@ -11,9 +11,10 @@ File References:
       - subspec_2.h
       - subspec_2.m
     - Support Files:
-      - PodTest.xcconfig
       - PodTest-dummy.m
       - PodTest-prefix.pch
+      - PodTest.debug.xcconfig
+      - PodTest.release.xcconfig
 - Products:
   - libPods-iOS App.a
   - libPodTest.a
@@ -111,7 +112,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: PodTest.xcconfig
+        Base Configuration: PodTest.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -133,7 +134,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: PodTest.xcconfig
+        Base Configuration: PodTest.release.xcconfig
 
 
 

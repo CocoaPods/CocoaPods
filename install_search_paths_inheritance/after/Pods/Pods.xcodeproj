@@ -9,11 +9,12 @@ File References:
       - asserts.podspec
     - Support Files:
       - asserts.modulemap
-      - asserts.xcconfig
       - asserts-dummy.m
       - asserts-Info.plist
       - asserts-prefix.pch
       - asserts-umbrella.h
+      - asserts.debug.xcconfig
+      - asserts.release.xcconfig
   - logger:
     - Core:
       - Logger.h
@@ -22,11 +23,12 @@ File References:
       - logger.podspec
     - Support Files:
       - logger.modulemap
-      - logger.xcconfig
       - logger-dummy.m
       - logger-Info.plist
       - logger-prefix.pch
       - logger-umbrella.h
+      - logger.debug.xcconfig
+      - logger.release.xcconfig
   - sharedlib:
     - Core:
       - AmazingModel.h
@@ -35,17 +37,19 @@ File References:
       - sharedlib.podspec
     - Support Files:
       - sharedlib-Core.modulemap
-      - sharedlib-Core.xcconfig
       - sharedlib-Core-dummy.m
       - sharedlib-Core-Info.plist
       - sharedlib-Core-prefix.pch
       - sharedlib-Core-umbrella.h
+      - sharedlib-Core.debug.xcconfig
+      - sharedlib-Core.release.xcconfig
       - sharedlib-Testing.modulemap
-      - sharedlib-Testing.xcconfig
       - sharedlib-Testing-dummy.m
       - sharedlib-Testing-Info.plist
       - sharedlib-Testing-prefix.pch
       - sharedlib-Testing-umbrella.h
+      - sharedlib-Testing.debug.xcconfig
+      - sharedlib-Testing.release.xcconfig
     - Testing:
       - AmazingTestHelper.h
       - AmazingTestHelper.m
@@ -56,11 +60,12 @@ File References:
       - testkit.podspec
     - Support Files:
       - testkit.modulemap
-      - testkit.xcconfig
       - testkit-dummy.m
       - testkit-Info.plist
       - testkit-prefix.pch
       - testkit-umbrella.h
+      - testkit.debug.xcconfig
+      - testkit.release.xcconfig
 - Frameworks:
   - asserts.framework
   - CocoaLumberjack.framework
@@ -99,11 +104,12 @@ File References:
       - DDMultiFormatter.m
     - Support Files:
       - CocoaLumberjack.modulemap
-      - CocoaLumberjack.xcconfig
       - CocoaLumberjack-dummy.m
       - CocoaLumberjack-Info.plist
       - CocoaLumberjack-prefix.pch
       - CocoaLumberjack-umbrella.h
+      - CocoaLumberjack.debug.xcconfig
+      - CocoaLumberjack.release.xcconfig
 - Products:
   - asserts.framework
   - CocoaLumberjack.framework
@@ -181,7 +187,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: asserts.xcconfig
+        Base Configuration: asserts.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -208,7 +214,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: asserts.xcconfig
+        Base Configuration: asserts.release.xcconfig
 - CocoaLumberjack:
     Build Phases:
     - Headers:
@@ -306,7 +312,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: CocoaLumberjack.xcconfig
+        Base Configuration: CocoaLumberjack.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -333,7 +339,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: CocoaLumberjack.xcconfig
+        Base Configuration: CocoaLumberjack.release.xcconfig
 - logger:
     Build Phases:
     - Headers:
@@ -377,7 +383,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: logger.xcconfig
+        Base Configuration: logger.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -404,7 +410,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: logger.xcconfig
+        Base Configuration: logger.release.xcconfig
 - Pods-App:
     Build Phases:
     - Headers:
@@ -591,7 +597,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: sharedlib-Core.xcconfig
+        Base Configuration: sharedlib-Core.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -618,7 +624,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: sharedlib-Core.xcconfig
+        Base Configuration: sharedlib-Core.release.xcconfig
 - sharedlib-Testing:
     Build Phases:
     - Headers:
@@ -662,7 +668,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: sharedlib-Testing.xcconfig
+        Base Configuration: sharedlib-Testing.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -689,7 +695,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: sharedlib-Testing.xcconfig
+        Base Configuration: sharedlib-Testing.release.xcconfig
 - testkit:
     Build Phases:
     - Headers:
@@ -734,7 +740,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: testkit.xcconfig
+        Base Configuration: testkit.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -761,7 +767,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: testkit.xcconfig
+        Base Configuration: testkit.release.xcconfig
 
 
 

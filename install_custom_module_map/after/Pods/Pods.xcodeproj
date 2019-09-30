@@ -12,10 +12,11 @@ File References:
       - BananaLib.podspec
     - Support Files:
       - BananaLib.modulemap
-      - BananaLib.xcconfig
       - BananaLib-dummy.m
       - BananaLib-Info.plist
       - BananaLib-prefix.pch
+      - BananaLib.debug.xcconfig
+      - BananaLib.release.xcconfig
 - Frameworks:
   - iOS:
     - Foundation.framework
@@ -82,7 +83,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: BananaLib.xcconfig
+        Base Configuration: BananaLib.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -109,7 +110,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: BananaLib.xcconfig
+        Base Configuration: BananaLib.release.xcconfig
 - Pods-Example:
     Build Phases:
     - Headers:
