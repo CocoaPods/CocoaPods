@@ -52,7 +52,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Include dependent vendored frameworks in linker flags  
   [Alex Coomans](https://github.com/drcapulet)
-  [#9045]((https://github.com/CocoaPods/CocoaPods/pull/9045)
+  [#9045](https://github.com/CocoaPods/CocoaPods/pull/9045)
 
 * Correctly set deployment target for non library specs even if the root spec does not specify one.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
