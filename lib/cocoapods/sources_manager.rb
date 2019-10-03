@@ -70,7 +70,10 @@ module Pod
       def cdn_url?(url)
         if url =~ %r{^https?:\/\/}
           response = REST.get(url + '/CocoaPods-version.yml')
-          response.ok? && !(YAML.load(response.body) || {})['last'].nil?
+          response.ok? && begin
+            response_hash = YAML.load(response.body)
+            response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
+          end
         end
       rescue => e
         raise Informative, "Couldn't determine repo type for URL: `#{url}`: #{e}"
