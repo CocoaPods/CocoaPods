@@ -339,7 +339,6 @@ Performance/StringReplacement:
 # Cop supports --auto-correct.
 Security/YAMLLoad:
   Exclude:
-    - 'lib/cocoapods/sources_manager.rb'
     - 'spec/functional/command/cache/list_spec.rb'
     - 'spec/integration.rb'
 

@@ -71,7 +71,9 @@ module Pod
         if url =~ %r{^https?:\/\/}
           response = REST.get(url + '/CocoaPods-version.yml')
           response.ok? && begin
+            # rubocop:disable Security/YAMLLoad
             response_hash = YAML.load(response.body)
+            # rubocop:enable Security/YAMLLoad
             response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
           end
         end
