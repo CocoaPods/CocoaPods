@@ -297,6 +297,7 @@ DEPENDENCIES
   inch_by_inch
   json!
   kicker
+  minitest (= 5.12.0)
   mocha
   mocha-on-bacon
   molinillo!
