@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b12be57b258de88802beb0f33305a0adc9faef8e
+  revision: df276236baa57db97b2ce14568cd9a12067a275d
   branch: 1-8-stable
   specs:
-    cocoapods-core (1.8.1)
+    cocoapods-core (1.8.3)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
@@ -111,10 +111,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.8.1)
+    cocoapods (1.8.3)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.8.1)
+      cocoapods-core (= 1.8.3)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
