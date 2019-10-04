@@ -31,6 +31,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#9131](https://github.com/CocoaPods/CocoaPods/pull/9131)
 
 
+## 1.8.3 (2019-10-04)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix crash when running on mounted filesystems  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9200](https://github.com/CocoaPods/CocoaPods/pull/9200)
+
+
 ## 1.8.1 (2019-09-27)
 
 ##### Enhancements
