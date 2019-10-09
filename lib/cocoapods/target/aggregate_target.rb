@@ -100,6 +100,8 @@ module Pod
       end
     end
 
+    # @return [Target::BuildSettings] the build settings for the provided configuration
+    #
     def build_settings(configuration_name = nil)
       if configuration_name
         @build_settings[configuration_name] ||

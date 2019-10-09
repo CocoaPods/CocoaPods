@@ -26,6 +26,10 @@ module Pod
           #
           attr_reader :target
 
+          # @return [Hash] The xcconfig hash for the target
+          #
+          attr_accessor :config_hash
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
@@ -36,6 +40,7 @@ module Pod
             @sandbox = sandbox
             @project = project
             @target = target
+            @config_hash = {}
           end
 
           private
@@ -70,6 +75,8 @@ module Pod
               configuration.build_settings.merge!(custom_build_settings)
             end
 
+            @config_hash.merge! custom_xcconfig
+            @config_hash.merge! target.build_settings.generate.to_hash
             native_target
           end
 
@@ -98,6 +105,28 @@ module Pod
             end
 
             settings
+          end
+
+          # Returns the customized xcconfig values
+          #
+          # @return [Hash{String => String}]
+          #
+          def custom_xcconfig
+            {}
+          end
+
+          # Removes all keys in `xcconfig_overrides` from the targets build settings
+          #
+          # @param [Hash,#each_key] xcconfig_overrides
+          #
+          # @param @param [PBXNativeTarget] native_target
+          #
+          def remove_build_setting_overrides(xcconfig_overrides, native_target)
+            native_target.build_configurations.each do |configuration|
+              xcconfig_overrides.each_key do |setting|
+                configuration.build_settings.delete(setting)
+              end
+            end
           end
 
           # Creates the directory where to store the support files of the target.
@@ -149,12 +178,9 @@ module Pod
           # Creates the module map file which ensures that the umbrella header is
           # recognized with a customized path
           #
-          # @param  [PBXNativeTarget] native_target
-          #         the native target to link the module map file into.
-          #
           # @return [void]
           #
-          def create_module_map(native_target)
+          def create_module_map
             path = target.module_map_path_to_write
             UI.message "- Generating module map file at #{UI.path(path)}" do
               generator = Generator::ModuleMap.new(target)
@@ -168,11 +194,7 @@ module Pod
                 source = path.relative_path_from(linked_path.dirname)
                 FileUtils.ln_sf(source, linked_path)
               end
-
-              relative_path_string = target.module_map_path.relative_path_from(sandbox.root).to_s
-              native_target.build_configurations.each do |c|
-                c.build_settings['MODULEMAP_FILE'] = relative_path_string
-              end
+              config_hash['MODULEMAP_FILE'] = target.module_map_path.relative_path_from(sandbox.root).to_s
             end
           end
 

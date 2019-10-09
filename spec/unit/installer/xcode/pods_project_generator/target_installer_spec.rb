@@ -74,8 +74,7 @@ module Pod
               Pathname.any_instance.stubs(:mkpath)
 
               FileUtils.expects(:ln_sf).with(relative_path, target_module_path)
-              native_target = mock(:build_configurations => [])
-              @installer.send(:create_module_map, native_target)
+              @installer.send(:create_module_map)
             end
           end
 

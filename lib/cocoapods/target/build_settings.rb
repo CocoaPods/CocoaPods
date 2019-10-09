@@ -937,7 +937,7 @@ module Pod
         #-------------------------------------------------------------------------#
       end
 
-      # A subclass that generates build settings for a `PodTarget`
+      # A subclass that generates build settings for an `AggregateTarget`
       class AggregateTargetSettings < BuildSettings
         #-------------------------------------------------------------------------#
 
