@@ -381,7 +381,9 @@ module Pod
             podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
             podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '2.3'
             @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:spec_swift_versions).returns(['4.0'])
+            @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:swift_version).returns('4.0')
             @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:spec_swift_versions).returns(['3.2'])
+            @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:swift_version).returns('3.2')
             lambda { @validator.validate! }.should.not.raise
           end
 
@@ -444,6 +446,7 @@ module Pod
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
             @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:spec_swift_versions).returns(['4.0'])
+            @validator.pod_targets.find { |pt| pt.name == 'OrangeFramework' }.stubs(:swift_version).returns('4.0')
             e = lambda { @validator.validate! }.should.raise Informative
             e.message.should.include <<-EOS.strip_heredoc.strip
               [!] The following Swift pods cannot yet be integrated as static libraries:

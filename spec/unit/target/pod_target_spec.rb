@@ -184,55 +184,6 @@ module Pod
       end
     end
 
-    describe 'swift version' do
-      it 'returns the swift version with the given requirements from the target definition' do
-        @target_definition.store_swift_version_requirements('>= 4.0')
-        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
-        @pod_target.swift_version.should == '4.0'
-      end
-
-      it 'returns the swift version with the given requirements from all target definitions' do
-        target_definition_one = fixture_target_definition('App1')
-        target_definition_one.store_swift_version_requirements('>= 4.0')
-        target_definition_two = fixture_target_definition('App2')
-        target_definition_two.store_swift_version_requirements('= 4.2')
-        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec],
-                                   [target_definition_one, target_definition_two])
-        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0'),
-                                                              Version.new('4.2')])
-        pod_target.swift_version.should == '4.2'
-      end
-
-      it 'returns an empty swift version if none of the requirements match' do
-        target_definition_one = fixture_target_definition('App1')
-        target_definition_one.store_swift_version_requirements('>= 4.0')
-        target_definition_two = fixture_target_definition('App2')
-        target_definition_two.store_swift_version_requirements('= 4.2')
-        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@banana_spec],
-                                   [target_definition_one, target_definition_two])
-        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
-        pod_target.swift_version.should == ''
-      end
-
-      it 'uses the swift version defined in the specification' do
-        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0')])
-        @target_definition.stubs(:swift_version).returns('2.3')
-        @pod_target.swift_version.should == '3.0'
-      end
-
-      it 'uses the max swift version defined in the specification' do
-        @pod_target.root_spec.stubs(:swift_versions).returns([Version.new('3.0'), Version.new('4.0')])
-        @target_definition.stubs(:swift_version).returns('2.3')
-        @pod_target.swift_version.should == '4.0'
-      end
-
-      it 'uses the swift version defined by the target definitions if no swift version is specified in the spec' do
-        @pod_target.root_spec.stubs(:swift_versions).returns([])
-        @target_definition.stubs(:swift_version).returns('2.3')
-        @pod_target.swift_version.should == '2.3'
-      end
-    end
-
     describe 'Inhibit warnings' do
       it 'should inhibit warnings for pods that are part of the target definition and require it' do
         target_definition = fixture_target_definition('App1')

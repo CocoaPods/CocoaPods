@@ -70,6 +70,10 @@ module Pod
     #
     attr_reader :app_spec_build_settings
 
+    # @return [String] the Swift version for this target.
+    #
+    attr_reader :swift_version
+
     # Initialize a new instance
     #
     # @param [Sandbox] sandbox @see Target#sandbox
@@ -81,9 +85,10 @@ module Pod
     # @param [Array<TargetDefinition>] target_definitions @see #target_definitions
     # @param [Array<Sandbox::FileAccessor>] file_accessors @see #file_accessors
     # @param [String] scope_suffix @see #scope_suffix
+    # @param [String] swift_version @see #swift_version
     #
     def initialize(sandbox, build_type, user_build_configurations, archs, platform, specs, target_definitions,
-                   file_accessors = [], scope_suffix = nil)
+                   file_accessors = [], scope_suffix = nil, swift_version = nil)
       super(sandbox, build_type, user_build_configurations, archs, platform)
       raise "Can't initialize a PodTarget without specs!" if specs.nil? || specs.empty?
       raise "Can't initialize a PodTarget without TargetDefinition!" if target_definitions.nil? || target_definitions.empty?
@@ -92,6 +97,7 @@ module Pod
       @target_definitions = target_definitions
       @file_accessors = file_accessors
       @scope_suffix = scope_suffix
+      @swift_version = swift_version
       all_specs_by_type = @specs.group_by(&:spec_type)
       @library_specs = all_specs_by_type[:library] || []
       @test_specs = all_specs_by_type[:test] || []
@@ -182,32 +188,6 @@ module Pod
         # The extra folder is intentional in order for `<>` imports to work.
         [file_accessor, header_mappings(file_accessor, file_accessor.public_headers)]
       end]
-    end
-
-    # @return [String] the Swift version for the target. If the pod author has provided a set of Swift versions
-    #         supported by their pod then the max Swift version across all of target definitions is chosen, unless
-    #         a target definition specifies explicit requirements for supported Swift versions. Otherwise the Swift
-    #         version is derived by the target definitions that integrate this pod as long as they are the same.
-    #
-    def swift_version
-      @swift_version ||= begin
-        if spec_swift_versions.empty?
-          target_definition_swift_version
-        else
-          spec_swift_versions.sort.reverse_each.find do |swift_version|
-            target_definitions.all? do |td|
-              td.supports_swift_version?(swift_version)
-            end
-          end.to_s
-        end
-      end
-    end
-
-    # @return [String] the Swift version derived from the target definitions that integrate this pod. This is used for
-    #         legacy reasons and only if the pod author has not specified the Swift versions their pod supports.
-    #
-    def target_definition_swift_version
-      target_definitions.map(&:swift_version).compact.uniq.first
     end
 
     # @return [Array<Version>] the Swift versions supported. Might be empty if the author has not

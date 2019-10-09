@@ -12,8 +12,9 @@ module Pod
               @project.add_pod_group('BananaLib', fixture('banana-lib'))
               platform = Platform.new(:ios, '4.3')
               @target_definition = fixture_target_definition('SampleProject', platform)
-              @pod_target = fixture_pod_target(@banana_spec, BuildType.static_library, { 'Debug' => :debug, 'Release' => :release }, [],
-                                               platform, [@target_definition])
+              @pod_target = fixture_pod_target(@banana_spec, BuildType.static_library,
+                                               { 'Debug' => :debug, 'Release' => :release }, [], platform,
+                                               [@target_definition])
               FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
               @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
             end
@@ -118,9 +119,12 @@ module Pod
                 end
               end
 
-              it 'sets the version to the one specified in the target definition' do
-                @target_definition.swift_version = '3.0'
-                @installer.install!
+              it 'sets the version to the one specified in by the pod target' do
+                pod_target = fixture_pod_target(@banana_spec, BuildType.static_library,
+                                                { 'Debug' => :debug, 'Release' => :release }, [], Platform.ios,
+                                                [@target_definition], nil, '3.0')
+                installer = PodTargetInstaller.new(config.sandbox, @project, pod_target)
+                installer.install!
                 @project.targets.first.build_configurations.each do |config|
                   config.build_settings['SWIFT_VERSION'].should == '3.0'
                 end
