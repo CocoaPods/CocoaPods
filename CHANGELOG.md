@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Do not crash if the repos dir is not setup.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9216](https://github.com/CocoaPods/CocoaPods/issues/9216)
 
 ## 1.8.3 (2019-10-04)
 
