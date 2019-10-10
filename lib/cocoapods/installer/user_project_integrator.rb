@@ -92,7 +92,7 @@ module Pod
       # @return [void]
       #
       def create_workspace
-        all_projects = user_project_paths_to_integrate.sort.push(sandbox.project_path).uniq
+        all_projects = user_project_paths.sort.push(sandbox.project_path).uniq
         file_references = all_projects.map do |path|
           relative_path = path.relative_path_from(workspace_path.dirname).to_s
           Xcodeproj::Workspace::FileReference.new(relative_path, 'group')
@@ -219,15 +219,6 @@ module Pod
             "workspace. Specify one in your Podfile like so:\n\n"       \
             "    workspace 'path/to/Workspace.xcworkspace'\n"
         end
-      end
-
-      # @return [Array<Pathname>] the paths of all the user projects referenced
-      #         by the targets that require integration.
-      #
-      # @note   Empty target definitions are ignored.
-      #
-      def user_project_paths_to_integrate
-        targets_to_integrate.map(&:user_project_path).compact.uniq
       end
 
       # @return [Array<Xcodeproj::Project>] the projects of all the targets that require integration.

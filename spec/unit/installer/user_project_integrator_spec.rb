@@ -187,6 +187,19 @@ module Pod
             'SampleProject/SampleProject.xcodeproj',
           ]
         end
+
+        it 'add user projects to workspace during incremental installation' do
+          targets = [@target, @empty_library]
+          @integrator = UserProjectIntegrator.new(@podfile, config.sandbox, temporary_directory, targets, nil)
+          @integrator.send(:create_workspace)
+
+          workspace_path = @integrator.send(:workspace_path)
+          saved = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
+          saved.file_references.map(&:path).should == [
+            'SampleProject/SampleProject.xcodeproj',
+            'Pods/Pods.xcodeproj',
+          ]
+        end
       end
 
       #-----------------------------------------------------------------------#
@@ -211,7 +224,7 @@ module Pod
         end
 
         it 'returns the paths of the user projects' do
-          @integrator.send(:user_project_paths_to_integrate).should == [@sample_project_path]
+          @integrator.send(:user_project_paths).should == [@sample_project_path]
         end
 
         it 'does not skip libraries with empty target definitions' do

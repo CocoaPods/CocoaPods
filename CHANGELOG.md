@@ -35,6 +35,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix issue where workspace was missing user project references during incremental installation.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#9237](https://github.com/CocoaPods/CocoaPods/issues/9237)
+
 * Search in users xcconfig's for figuring out when to set `APPLICATION_EXTENSION_API_ONLY`.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9233](https://github.com/CocoaPods/CocoaPods/issues/9233)
