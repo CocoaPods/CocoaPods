@@ -183,11 +183,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-InstallMultipleTestSpecs/Pods-InstallMultipleTestSpecs-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ByConfig/ByConfig.framework",
 				"${BUILT_PRODUCTS_DIR}/HostedTestLib/HostedTestLib.framework",
 				"${BUILT_PRODUCTS_DIR}/TestLib/TestLib.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ByConfig.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HostedTestLib.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TestLib.framework",
 			);

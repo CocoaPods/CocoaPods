@@ -371,7 +371,7 @@ module Pod
           end
 
           analyze.should.raise(Informative).
-            message.should.include 'b (1.0) depends upon `a/Tests (1.0)`, which is a `test` spec.'
+            message.should.include '`b (1.0)` depends upon `a/Tests (1.0)`, which is a `test` spec.'
 
           pod_b = Pod::Spec.new do |s|
             s.name = 'b'
@@ -382,7 +382,7 @@ module Pod
             s.app_spec 'App'
           end
           analyze.should.raise(Informative).
-            message.should.include 'b/Tests (1.0) depends upon `b/App (1.0)`, which is a `app` spec'
+            message.should.include '`b/Tests (1.0)` depends upon `b/App (1.0)`, which is a `app` spec'
         end
 
         describe 'with deduplicate targets as true' do

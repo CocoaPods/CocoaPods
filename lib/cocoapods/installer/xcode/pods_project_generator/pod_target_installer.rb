@@ -148,14 +148,18 @@ module Pod
           # Removes overrides of the `pod_target_xcconfig` settings from the target's
           # build configurations.
           #
-          # @return [Void]
-          #
-          # @param [Target::BuildSettings] build_settings
+          # @param [Hash{Symbol => Pod::Target::BuildSettings}] build_settings_by_config the build settings by config
+          #        of the target.
           #
           # @param [PBXNativeTarget] native_target
+          #        the native target to remove pod target xcconfig overrides from.
           #
-          def remove_pod_target_xcconfig_overrides_from_target(build_settings, native_target)
+          # @return [Void]
+          #
+          #
+          def remove_pod_target_xcconfig_overrides_from_target(build_settings_by_config, native_target)
             native_target.build_configurations.each do |configuration|
+              build_settings = build_settings_by_config[target.user_build_configurations[configuration.name]]
               build_settings.merged_pod_target_xcconfigs.each_key do |setting|
                 configuration.build_settings.delete(setting)
               end
@@ -365,7 +369,7 @@ module Pod
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
               end
 
-              remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(test_spec), test_native_target)
+              remove_pod_target_xcconfig_overrides_from_target(target.test_spec_build_settings_by_config[test_spec.name], test_native_target)
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
               create_test_target_embed_frameworks_script(test_spec)
@@ -454,7 +458,7 @@ module Pod
                 end
               end
 
-              remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(app_spec), app_native_target)
+              remove_pod_target_xcconfig_overrides_from_target(target.app_spec_build_settings_by_config[app_spec.name], app_native_target)
 
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
@@ -489,7 +493,7 @@ module Pod
           # @param  [Array<Sandbox::FileAccessor>] file_accessors
           #         the file accessors list to generate resource bundles for.
           #
-          # @return [Array<PBXNativeTarget>] the resource bundle native targets created.
+          # @return [Hash{String=>Array<PBXNativeTarget>}] the resource bundle native targets created.
           #
           def add_resources_bundle_targets(file_accessors)
             file_accessors.each_with_object({}) do |file_accessor, hash|
@@ -548,7 +552,7 @@ module Pod
                   end
                 end
 
-                remove_pod_target_xcconfig_overrides_from_target(target.build_settings_for_spec(file_accessor.spec), resource_bundle_target)
+                remove_pod_target_xcconfig_overrides_from_target(target.build_settings_by_config_for_spec(file_accessor.spec), resource_bundle_target)
 
                 resource_bundle_target
               end
@@ -566,12 +570,14 @@ module Pod
           # @return [void]
           #
           def create_xcconfig_file(native_target, resource_bundle_targets)
-            path = target.xcconfig_path
-            update_changed_file(target.build_settings, path)
-            xcconfig_file_ref = add_file_to_support_group(path)
+            target.user_config_names_by_config_type.each do |config, names|
+              path = target.xcconfig_path(config)
+              update_changed_file(target.build_settings[config], path)
+              xcconfig_file_ref = add_file_to_support_group(path)
 
-            # also apply the private config to resource bundle targets.
-            apply_xcconfig_file_ref_to_targets([native_target] + resource_bundle_targets, xcconfig_file_ref)
+              # also apply the private config to resource bundle targets.
+              apply_xcconfig_file_ref_to_targets([native_target] + resource_bundle_targets, xcconfig_file_ref, names)
+            end
           end
 
           # Generates the contents of the xcconfig file used for each test target type and saves it to disk.
@@ -588,19 +594,22 @@ module Pod
             target.test_specs.each do |test_spec|
               spec_consumer = test_spec.consumer(target.platform)
               test_type = spec_consumer.test_type
-              path = target.xcconfig_path("#{test_type.capitalize}-#{target.subspec_label(test_spec)}")
-              test_spec_build_settings = target.build_settings_for_spec(test_spec)
-              update_changed_file(test_spec_build_settings, path)
-              test_xcconfig_file_ref = add_file_to_support_group(path)
-
               test_native_target = test_native_target_from_spec(spec_consumer.spec, test_native_targets)
+
+              target.user_config_names_by_config_type.each do |config, names|
+                path = target.xcconfig_path("#{test_type.capitalize}-#{target.subspec_label(test_spec)}.#{config}")
+                test_spec_build_settings = target.build_settings_for_spec(test_spec, :configuration => config)
+                update_changed_file(test_spec_build_settings, path)
+                test_xcconfig_file_ref = add_file_to_support_group(path)
+
+                # also apply the private config to resource bundle test targets related to this test spec.
+                scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
+                apply_xcconfig_file_ref_to_targets([test_native_target] + scoped_test_resource_bundle_targets, test_xcconfig_file_ref, names)
+              end
+
               test_native_target.build_configurations.each do |test_native_target_bc|
                 test_target_swift_debug_hack(test_spec, test_native_target_bc)
               end
-
-              # also apply the private config to resource bundle test targets related to this test spec.
-              scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
-              apply_xcconfig_file_ref_to_targets([test_native_target] + scoped_test_resource_bundle_targets, test_xcconfig_file_ref)
             end
           end
 
@@ -613,12 +622,11 @@ module Pod
           #
           def create_test_target_copy_resources_script(test_spec)
             path = target.copy_resources_script_path_for_spec(test_spec)
-            pod_targets = target.dependent_targets_for_test_spec(test_spec)
             host_target_spec_names = target.app_host_dependent_targets_for_spec(test_spec).flat_map do |pt|
               pt.specs.map(&:name)
             end.uniq
-            resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
-              resources_by_config[config] = pod_targets.flat_map do |pod_target|
+            resource_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), resources_by_config|
+              resources_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include -= host_target_spec_names
                 spec_paths_to_include << test_spec.name if pod_target == target
@@ -641,12 +649,11 @@ module Pod
           #
           def create_test_target_embed_frameworks_script(test_spec)
             path = target.embed_frameworks_script_path_for_spec(test_spec)
-            pod_targets = target.dependent_targets_for_test_spec(test_spec)
             host_target_spec_names = target.app_host_dependent_targets_for_spec(test_spec).flat_map do |pt|
               pt.specs.map(&:name)
             end.uniq
-            framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
-              paths_by_config[config] = pod_targets.flat_map do |pod_target|
+            framework_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+              paths_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include -= host_target_spec_names
                 spec_paths_to_include << test_spec.name if pod_target == target
@@ -673,15 +680,18 @@ module Pod
           def create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
             target.app_specs.each do |app_spec|
               spec_consumer = app_spec.consumer(target.platform)
-              path = target.xcconfig_path(target.subspec_label(app_spec))
-              update_changed_file(target.build_settings_for_spec(app_spec), path)
-              app_xcconfig_file_ref = add_file_to_support_group(path)
-
               app_native_target = app_native_target_from_spec(spec_consumer.spec, app_native_targets)
 
-              # also apply the private config to resource bundle app targets related to this app spec.
-              scoped_app_resource_bundle_targets = app_resource_bundle_targets[app_spec.name]
-              apply_xcconfig_file_ref_to_targets([app_native_target] + scoped_app_resource_bundle_targets, app_xcconfig_file_ref)
+              target.user_config_names_by_config_type.each do |config, names|
+                path = target.xcconfig_path("#{target.subspec_label(app_spec)}.#{config}")
+                app_spec_build_settings = target.build_settings_for_spec(app_spec, :configuration => config)
+                update_changed_file(app_spec_build_settings, path)
+                app_xcconfig_file_ref = add_file_to_support_group(path)
+
+                # also apply the private config to resource bundle app targets related to this app spec.
+                scoped_app_resource_bundle_targets = app_resource_bundle_targets[app_spec.name]
+                apply_xcconfig_file_ref_to_targets([app_native_target] + scoped_app_resource_bundle_targets, app_xcconfig_file_ref, names)
+              end
             end
           end
 
@@ -694,8 +704,8 @@ module Pod
           #
           def create_app_target_copy_resources_script(app_spec)
             path = target.copy_resources_script_path_for_spec(app_spec)
-            pod_targets = target.dependent_targets_for_app_spec(app_spec)
             resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+              pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
               resources_by_config[config] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if pod_target == target
@@ -718,8 +728,8 @@ module Pod
           #
           def create_app_target_embed_frameworks_script(app_spec)
             path = target.embed_frameworks_script_path_for_spec(app_spec)
-            pod_targets = target.dependent_targets_for_app_spec(app_spec)
             framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
+              pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
               paths_by_config[config] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if pod_target == target
@@ -841,9 +851,10 @@ module Pod
             flags * ' '
           end
 
-          def apply_xcconfig_file_ref_to_targets(targets, xcconfig_file_ref)
+          def apply_xcconfig_file_ref_to_targets(targets, xcconfig_file_ref, configurations)
             targets.each do |config_target|
               config_target.build_configurations.each do |configuration|
+                next unless configurations.include?(configuration.name)
                 configuration.base_configuration_reference = xcconfig_file_ref
               end
             end
