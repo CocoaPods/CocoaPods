@@ -712,7 +712,7 @@ module Pod
         hash[nil] = hash.each_value.reduce(Set.new, &:|).to_a
         hash
       end
-      @recursive_dependent_targets[configuration]
+      @recursive_dependent_targets.fetch(configuration) { raise ArgumentError, "No configuration #{configuration} for #{self}, known configurations are #{@recursive_dependent_targets.keys}" }
     end
 
     def _add_recursive_dependent_targets(set, configuration: nil)

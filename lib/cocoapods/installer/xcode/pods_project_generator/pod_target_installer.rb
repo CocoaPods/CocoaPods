@@ -704,9 +704,9 @@ module Pod
           #
           def create_app_target_copy_resources_script(app_spec)
             path = target.copy_resources_script_path_for_spec(app_spec)
-            resource_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, resources_by_config|
+            resource_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), resources_by_config|
               pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
-              resources_by_config[config] = pod_targets.flat_map do |pod_target|
+              resources_by_config[config_name] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
@@ -728,9 +728,9 @@ module Pod
           #
           def create_app_target_embed_frameworks_script(app_spec)
             path = target.embed_frameworks_script_path_for_spec(app_spec)
-            framework_paths_by_config = target.user_build_configurations.keys.each_with_object({}) do |config, paths_by_config|
+            framework_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
               pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
-              paths_by_config[config] = pod_targets.flat_map do |pod_target|
+              paths_by_config[config_name] = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if pod_target == target
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
