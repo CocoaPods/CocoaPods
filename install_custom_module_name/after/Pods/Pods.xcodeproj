@@ -51,22 +51,24 @@ File References:
       - Pusher.h
     - Support Files:
       - libPusher.modulemap
-      - libPusher.xcconfig
       - libPusher-dummy.m
       - libPusher-Info.plist
       - libPusher-prefix.pch
       - libPusher-umbrella.h
+      - libPusher.debug.xcconfig
+      - libPusher.release.xcconfig
   - SocketRocket:
     - SocketRocket.h
     - SRWebSocket.h
     - SRWebSocket.m
     - Support Files:
       - SocketRocket.modulemap
-      - SocketRocket.xcconfig
       - SocketRocket-dummy.m
       - SocketRocket-Info.plist
       - SocketRocket-prefix.pch
       - SocketRocket-umbrella.h
+      - SocketRocket.debug.xcconfig
+      - SocketRocket.release.xcconfig
 - Products:
   - Pods_Example.framework
   - Pusher.framework
@@ -211,7 +213,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: libPusher.xcconfig
+        Base Configuration: libPusher.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -238,7 +240,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: libPusher.xcconfig
+        Base Configuration: libPusher.release.xcconfig
 - Pods-Example:
     Build Phases:
     - Headers:
@@ -356,7 +358,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: SocketRocket.xcconfig
+        Base Configuration: SocketRocket.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -383,7 +385,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: SocketRocket.xcconfig
+        Base Configuration: SocketRocket.release.xcconfig
 
 
 

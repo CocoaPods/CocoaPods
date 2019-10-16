@@ -29,9 +29,10 @@ File References:
       - AFURLResponseSerialization.h
       - AFURLResponseSerialization.m
     - Support Files:
-      - AFNetworking.xcconfig
       - AFNetworking-dummy.m
       - AFNetworking-prefix.pch
+      - AFNetworking.debug.xcconfig
+      - AFNetworking.release.xcconfig
     - UIKit:
       - AFNetworkActivityIndicatorManager.h
       - AFNetworkActivityIndicatorManager.m
@@ -54,16 +55,18 @@ File References:
     - RKValueTransformers.h
     - RKValueTransformers.m
     - Support Files:
-      - RKValueTransformers.xcconfig
       - RKValueTransformers-dummy.m
       - RKValueTransformers-prefix.pch
+      - RKValueTransformers.debug.xcconfig
+      - RKValueTransformers.release.xcconfig
   - SEGModules:
     - SEGModule.h
     - SEGModule.m
     - Support Files:
-      - SEGModules.xcconfig
       - SEGModules-dummy.m
       - SEGModules-prefix.pch
+      - SEGModules.debug.xcconfig
+      - SEGModules.release.xcconfig
 - Products:
   - libAFNetworking.a
   - libPods-SampleApp.a
@@ -180,7 +183,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: AFNetworking.xcconfig
+        Base Configuration: AFNetworking.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -201,7 +204,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: AFNetworking.xcconfig
+        Base Configuration: AFNetworking.release.xcconfig
 - Pods-SampleApp:
     Build Phases:
     - Headers: []
@@ -277,7 +280,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: RKValueTransformers.xcconfig
+        Base Configuration: RKValueTransformers.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -298,7 +301,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: RKValueTransformers.xcconfig
+        Base Configuration: RKValueTransformers.release.xcconfig
 - SEGModules:
     Build Phases:
     - Headers:
@@ -331,7 +334,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: SEGModules.xcconfig
+        Base Configuration: SEGModules.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -353,7 +356,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: SEGModules.xcconfig
+        Base Configuration: SEGModules.release.xcconfig
 
 
 

@@ -162,13 +162,9 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/HostedTestLib/HostedTestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/TestLib/TestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/DepPod/DepPod.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/HostedTestLib/HostedTestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/TestLib/TestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/DepPod/DepPod.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

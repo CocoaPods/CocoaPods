@@ -9,9 +9,10 @@ File References:
     - TimeParser.h
     - tokeIt.l
     - Support Files:
-      - Moment.xcconfig
       - Moment-dummy.m
       - Moment-prefix.pch
+      - Moment.debug.xcconfig
+      - Moment.release.xcconfig
 - Products:
   - libMoment.a
   - libPods-SampleApp.a
@@ -60,7 +61,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: Moment.xcconfig
+        Base Configuration: Moment.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -82,7 +83,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Moment.xcconfig
+        Base Configuration: Moment.release.xcconfig
 - Pods-SampleApp:
     Build Phases:
     - Headers: []

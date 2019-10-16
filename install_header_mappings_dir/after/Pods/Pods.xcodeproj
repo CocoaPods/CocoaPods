@@ -9,16 +9,18 @@ File References:
       - DepPod.podspec
     - Support Files:
       - DepPod-framework.modulemap
-      - DepPod-framework.xcconfig
       - DepPod-framework-dummy.m
       - DepPod-framework-Info.plist
       - DepPod-framework-prefix.pch
       - DepPod-framework-umbrella.h
+      - DepPod-framework.debug.xcconfig
+      - DepPod-framework.release.xcconfig
       - DepPod-library.modulemap
-      - DepPod-library.xcconfig
       - DepPod-library-dummy.m
       - DepPod-library-prefix.pch
       - DepPod-library-umbrella.h
+      - DepPod-library.debug.xcconfig
+      - DepPod-library.release.xcconfig
   - HeaderMappingsDirPod:
     - include:
       - com:
@@ -31,16 +33,18 @@ File References:
       - HMDP.m
     - Support Files:
       - HeaderMappingsDirPod-framework.modulemap
-      - HeaderMappingsDirPod-framework.xcconfig
       - HeaderMappingsDirPod-framework-dummy.m
       - HeaderMappingsDirPod-framework-Info.plist
       - HeaderMappingsDirPod-framework-prefix.pch
       - HeaderMappingsDirPod-framework-umbrella.h
+      - HeaderMappingsDirPod-framework.debug.xcconfig
+      - HeaderMappingsDirPod-framework.release.xcconfig
       - HeaderMappingsDirPod-library.modulemap
-      - HeaderMappingsDirPod-library.xcconfig
       - HeaderMappingsDirPod-library-dummy.m
       - HeaderMappingsDirPod-library-prefix.pch
       - HeaderMappingsDirPod-library-umbrella.h
+      - HeaderMappingsDirPod-library.debug.xcconfig
+      - HeaderMappingsDirPod-library.release.xcconfig
 - Frameworks:
   - HeaderMappingsDirPod.framework
   - iOS:
@@ -116,7 +120,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: DepPod-framework.xcconfig
+        Base Configuration: DepPod-framework.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -143,7 +147,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: DepPod-framework.xcconfig
+        Base Configuration: DepPod-framework.release.xcconfig
 - DepPod-library:
     Build Phases:
     - Headers:
@@ -180,7 +184,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: DepPod-library.xcconfig
+        Base Configuration: DepPod-library.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -203,9 +207,14 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: DepPod-library.xcconfig
+        Base Configuration: DepPod-library.release.xcconfig
 - HeaderMappingsDirPod-framework:
     Build Phases:
+    - Copy com/company/foo Public Headers:
+        Destination Path: "$(PUBLIC_HEADERS_FOLDER_PATH)/com/company/foo"
+        Destination Subfolder: products_directory
+        Files:
+        - HMDP.h
     - Headers:
       - HeaderMappingsDirPod-framework-umbrella.h:
           ATTRIBUTES:
@@ -218,11 +227,6 @@ Targets:
     - Frameworks:
       - Foundation.framework
     - Resources: []
-    - Copy com/company/foo Public Headers:
-        Destination Path: "$(PUBLIC_HEADERS_FOLDER_PATH)/com/company/foo"
-        Destination Subfolder: products_directory
-        Files:
-        - HMDP.h
     Build Configurations:
     - Debug:
         Build Settings:
@@ -249,7 +253,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: HeaderMappingsDirPod-framework.xcconfig
+        Base Configuration: HeaderMappingsDirPod-framework.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -276,7 +280,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: HeaderMappingsDirPod-framework.xcconfig
+        Base Configuration: HeaderMappingsDirPod-framework.release.xcconfig
 - HeaderMappingsDirPod-library:
     Build Phases:
     - Headers:
@@ -313,7 +317,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: HeaderMappingsDirPod-library.xcconfig
+        Base Configuration: HeaderMappingsDirPod-library.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -336,7 +340,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HeaderMappingsDirPod-library.xcconfig
+        Base Configuration: HeaderMappingsDirPod-library.release.xcconfig
 - Pods-OtherSampleApp:
     Build Phases:
     - Headers:

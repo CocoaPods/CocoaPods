@@ -7,9 +7,10 @@ File References:
     - Reachability.h
     - Reachability.m
     - Support Files:
-      - Reachability.xcconfig
       - Reachability-dummy.m
       - Reachability-prefix.pch
+      - Reachability.debug.xcconfig
+      - Reachability.release.xcconfig
 - Products:
   - libPods-SampleApp_1.a
   - libPods-SampleApp_2.a
@@ -151,7 +152,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: Reachability.xcconfig
+        Base Configuration: Reachability.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -173,7 +174,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Reachability.xcconfig
+        Base Configuration: Reachability.release.xcconfig
 
 
 

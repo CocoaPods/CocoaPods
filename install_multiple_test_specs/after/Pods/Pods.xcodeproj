@@ -9,11 +9,12 @@ File References:
       - DepPod.podspec
     - Support Files:
       - DepPod.modulemap
-      - DepPod.xcconfig
       - DepPod-dummy.m
       - DepPod-Info.plist
       - DepPod-prefix.pch
       - DepPod-umbrella.h
+      - DepPod.debug.xcconfig
+      - DepPod.release.xcconfig
   - HostedTestLib:
     - HostedTestLib.swift
     - App:
@@ -27,7 +28,6 @@ File References:
       - HostedTestLib.podspec
     - Support Files:
       - HostedTestLib.modulemap
-      - HostedTestLib.xcconfig
       - HostedTestLib-App-frameworks.sh
       - HostedTestLib-App-prefix.pch
       - HostedTestLib-AppWithDep-frameworks.sh
@@ -46,12 +46,20 @@ File References:
       - HostedTestLib-Unit-UnitTests5-prefix.pch
       - HostedTestLib-Unit-UnitTests6-Info.plist
       - HostedTestLib-Unit-UnitTests6-prefix.pch
-      - HostedTestLib.app.xcconfig
-      - HostedTestLib.appwithdep.xcconfig
-      - HostedTestLib.unit-unittests3.xcconfig
-      - HostedTestLib.unit-unittests4.xcconfig
-      - HostedTestLib.unit-unittests5.xcconfig
-      - HostedTestLib.unit-unittests6.xcconfig
+      - HostedTestLib.app.debug.xcconfig
+      - HostedTestLib.app.release.xcconfig
+      - HostedTestLib.appwithdep.debug.xcconfig
+      - HostedTestLib.appwithdep.release.xcconfig
+      - HostedTestLib.debug.xcconfig
+      - HostedTestLib.release.xcconfig
+      - HostedTestLib.unit-unittests3.debug.xcconfig
+      - HostedTestLib.unit-unittests3.release.xcconfig
+      - HostedTestLib.unit-unittests4.debug.xcconfig
+      - HostedTestLib.unit-unittests4.release.xcconfig
+      - HostedTestLib.unit-unittests5.debug.xcconfig
+      - HostedTestLib.unit-unittests5.release.xcconfig
+      - HostedTestLib.unit-unittests6.debug.xcconfig
+      - HostedTestLib.unit-unittests6.release.xcconfig
     - UnitTests3:
       - HostedTestLib3Tests.swift
     - UnitTests4:
@@ -72,7 +80,6 @@ File References:
       - TestLib.podspec
     - Support Files:
       - TestLib.modulemap
-      - TestLib.xcconfig
       - TestLib-App-frameworks.sh
       - TestLib-App-prefix.pch
       - TestLib-dummy.m
@@ -85,9 +92,14 @@ File References:
       - TestLib-Unit-UnitTests2-frameworks.sh
       - TestLib-Unit-UnitTests2-Info.plist
       - TestLib-Unit-UnitTests2-prefix.pch
-      - TestLib.app.xcconfig
-      - TestLib.unit-unittests1.xcconfig
-      - TestLib.unit-unittests2.xcconfig
+      - TestLib.app.debug.xcconfig
+      - TestLib.app.release.xcconfig
+      - TestLib.debug.xcconfig
+      - TestLib.release.xcconfig
+      - TestLib.unit-unittests1.debug.xcconfig
+      - TestLib.unit-unittests1.release.xcconfig
+      - TestLib.unit-unittests2.debug.xcconfig
+      - TestLib.unit-unittests2.release.xcconfig
     - UnitTests1:
       - Test1.swift
     - UnitTests2:
@@ -224,7 +236,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: DepPod.xcconfig
+        Base Configuration: DepPod.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: ''
@@ -254,7 +266,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: DepPod.xcconfig
+        Base Configuration: DepPod.release.xcconfig
 - HostedTestLib:
     Build Phases:
     - Headers:
@@ -299,7 +311,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: HostedTestLib.xcconfig
+        Base Configuration: HostedTestLib.debug.xcconfig
     - Release:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
@@ -331,7 +343,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: HostedTestLib.xcconfig
+        Base Configuration: HostedTestLib.release.xcconfig
 - HostedTestLib-App:
     Build Phases:
     - Sources:
@@ -372,7 +384,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: HostedTestLib.app.xcconfig
+        Base Configuration: HostedTestLib.app.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -393,7 +405,7 @@ Targets:
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HostedTestLib.app.xcconfig
+        Base Configuration: HostedTestLib.app.release.xcconfig
 - HostedTestLib-AppWithDep:
     Build Phases:
     - Sources:
@@ -435,7 +447,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: HostedTestLib.appwithdep.xcconfig
+        Base Configuration: HostedTestLib.appwithdep.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -456,7 +468,7 @@ Targets:
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HostedTestLib.appwithdep.xcconfig
+        Base Configuration: HostedTestLib.appwithdep.release.xcconfig
 - HostedTestLib-Unit-UnitTests3:
     Build Phases:
     - Sources:
@@ -499,7 +511,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host.app/App Host"
-        Base Configuration: HostedTestLib.unit-unittests3.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests3.debug.xcconfig
     - Release:
         Build Settings:
           BUNDLE_LOADER: "$(TEST_HOST)"
@@ -519,7 +531,7 @@ Targets:
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host.app/App Host"
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HostedTestLib.unit-unittests3.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests3.release.xcconfig
 - HostedTestLib-Unit-UnitTests4:
     Build Phases:
     - Sources:
@@ -561,7 +573,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TestLib-App.app/TestLib-App"
-        Base Configuration: HostedTestLib.unit-unittests4.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests4.debug.xcconfig
     - Release:
         Build Settings:
           BUNDLE_LOADER: "$(TEST_HOST)"
@@ -581,7 +593,7 @@ Targets:
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TestLib-App.app/TestLib-App"
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HostedTestLib.unit-unittests4.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests4.release.xcconfig
 - HostedTestLib-Unit-UnitTests5:
     Build Phases:
     - Sources:
@@ -612,7 +624,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
-        Base Configuration: HostedTestLib.unit-unittests5.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests5.debug.xcconfig
     - Release:
         Build Settings:
           BUNDLE_LOADER: "$(TEST_HOST)"
@@ -632,7 +644,7 @@ Targets:
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HostedTestLib.unit-unittests5.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests5.release.xcconfig
 - HostedTestLib-Unit-UnitTests6:
     Build Phases:
     - Sources:
@@ -664,7 +676,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
-        Base Configuration: HostedTestLib.unit-unittests6.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests6.debug.xcconfig
     - Release:
         Build Settings:
           BUNDLE_LOADER: "$(TEST_HOST)"
@@ -684,7 +696,7 @@ Targets:
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: HostedTestLib.unit-unittests6.xcconfig
+        Base Configuration: HostedTestLib.unit-unittests6.release.xcconfig
 - Pods-InstallMultipleTestSpecs:
     Build Phases:
     - Headers:
@@ -886,7 +898,7 @@ Targets:
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: TestLib.xcconfig
+        Base Configuration: TestLib.debug.xcconfig
     - Release:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
@@ -918,7 +930,7 @@ Targets:
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: TestLib.xcconfig
+        Base Configuration: TestLib.release.xcconfig
 - TestLib-App:
     Build Phases:
     - Sources:
@@ -960,7 +972,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: TestLib.app.xcconfig
+        Base Configuration: TestLib.app.debug.xcconfig
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -982,7 +994,7 @@ Targets:
           SWIFT_VERSION: '4'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: TestLib.app.xcconfig
+        Base Configuration: TestLib.app.release.xcconfig
 - TestLib-Unit-UnitTests1:
     Build Phases:
     - Sources:
@@ -1022,7 +1034,7 @@ Targets:
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
-        Base Configuration: TestLib.unit-unittests1.xcconfig
+        Base Configuration: TestLib.unit-unittests1.debug.xcconfig
     - Release:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
@@ -1040,7 +1052,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: TestLib.unit-unittests1.xcconfig
+        Base Configuration: TestLib.unit-unittests1.release.xcconfig
 - TestLib-Unit-UnitTests2:
     Build Phases:
     - Sources:
@@ -1082,7 +1094,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-TestLib-Unit-Tests.app/AppHost-TestLib-Unit-Tests"
-        Base Configuration: TestLib.unit-unittests2.xcconfig
+        Base Configuration: TestLib.unit-unittests2.debug.xcconfig
     - Release:
         Build Settings:
           BUNDLE_LOADER: "$(TEST_HOST)"
@@ -1102,7 +1114,7 @@ Targets:
           SWIFT_VERSION: '4'
           TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AppHost-TestLib-Unit-Tests.app/AppHost-TestLib-Unit-Tests"
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: TestLib.unit-unittests2.xcconfig
+        Base Configuration: TestLib.unit-unittests2.release.xcconfig
 
 
 

@@ -11,9 +11,10 @@ File References:
       - 512_black.png
       - troll.png
     - Support Files:
-      - res.xcconfig
       - res-dummy.m
       - res-prefix.pch
+      - res.debug.xcconfig
+      - res.release.xcconfig
       - ResourceBundle-res-res-Info.plist
 - Frameworks: []
 - Products:
@@ -104,7 +105,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-        Base Configuration: res.xcconfig
+        Base Configuration: res.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -125,7 +126,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
-        Base Configuration: res.xcconfig
+        Base Configuration: res.release.xcconfig
 - res-res:
     Build Phases:
     - Sources: []
@@ -146,7 +147,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           WRAPPER_EXTENSION: bundle
-        Base Configuration: res.xcconfig
+        Base Configuration: res.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: "-"
@@ -160,7 +161,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           WRAPPER_EXTENSION: bundle
-        Base Configuration: res.xcconfig
+        Base Configuration: res.release.xcconfig
 
 
 

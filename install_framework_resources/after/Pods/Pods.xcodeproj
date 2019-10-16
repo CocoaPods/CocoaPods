@@ -13,11 +13,12 @@ File References:
     - Support Files:
       - ResourceBundle-SamplePodWithResources-SamplePodWithResources-Info.plist
       - SamplePodWithResources.modulemap
-      - SamplePodWithResources.xcconfig
       - SamplePodWithResources-dummy.m
       - SamplePodWithResources-Info.plist
       - SamplePodWithResources-prefix.pch
       - SamplePodWithResources-umbrella.h
+      - SamplePodWithResources.debug.xcconfig
+      - SamplePodWithResources.release.xcconfig
 - Frameworks:
   - OS X:
     - Cocoa.framework
@@ -246,7 +247,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: SamplePodWithResources.xcconfig
+        Base Configuration: SamplePodWithResources.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -275,7 +276,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: SamplePodWithResources.xcconfig
+        Base Configuration: SamplePodWithResources.release.xcconfig
 - SamplePodWithResources-SamplePodWithResources:
     Build Phases:
     - Sources: []
@@ -296,7 +297,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           WRAPPER_EXTENSION: bundle
-        Base Configuration: SamplePodWithResources.xcconfig
+        Base Configuration: SamplePodWithResources.debug.xcconfig
     - Release:
         Build Settings:
           CODE_SIGN_IDENTITY: "-"
@@ -310,7 +311,7 @@ Targets:
           SDKROOT: macosx
           SKIP_INSTALL: 'YES'
           WRAPPER_EXTENSION: bundle
-        Base Configuration: SamplePodWithResources.xcconfig
+        Base Configuration: SamplePodWithResources.release.xcconfig
 
 
 

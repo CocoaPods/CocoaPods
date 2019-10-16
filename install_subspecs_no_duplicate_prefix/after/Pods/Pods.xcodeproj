@@ -10,9 +10,10 @@ File References:
       - Foo.h
       - Foo.m
     - Support Files:
-      - Test.xcconfig
       - Test-dummy.m
       - Test-prefix.pch
+      - Test.debug.xcconfig
+      - Test.release.xcconfig
 - Products:
   - libPods-iOS App.a
   - libTest.a
@@ -107,7 +108,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: Test.xcconfig
+        Base Configuration: Test.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -128,7 +129,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: Test.xcconfig
+        Base Configuration: Test.release.xcconfig
 
 
 

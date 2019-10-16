@@ -13,15 +13,17 @@ File References:
       - subspec_2.h
       - subspec_2.m
     - Support Files:
-      - PodTest-subspec_1.xcconfig
       - PodTest-subspec_1-dummy.m
       - PodTest-subspec_1-prefix.pch
+      - PodTest-subspec_1.debug.xcconfig
+      - PodTest-subspec_1.release.xcconfig
       - PodTest-subspec_2.modulemap
-      - PodTest-subspec_2.xcconfig
       - PodTest-subspec_2-dummy.m
       - PodTest-subspec_2-Info.plist
       - PodTest-subspec_2-prefix.pch
       - PodTest-subspec_2-umbrella.h
+      - PodTest-subspec_2.debug.xcconfig
+      - PodTest-subspec_2.release.xcconfig
 - Products:
   - libPods-iOS App.a
   - libPodTest-subspec_1.a
@@ -202,7 +204,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
-        Base Configuration: PodTest-subspec_1.xcconfig
+        Base Configuration: PodTest-subspec_1.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -224,7 +226,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
-        Base Configuration: PodTest-subspec_1.xcconfig
+        Base Configuration: PodTest-subspec_1.release.xcconfig
 - PodTest-subspec_2:
     Build Phases:
     - Headers:
@@ -270,7 +272,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: PodTest-subspec_2.xcconfig
+        Base Configuration: PodTest-subspec_2.debug.xcconfig
     - Release:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
@@ -299,7 +301,7 @@ Targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
-        Base Configuration: PodTest-subspec_2.xcconfig
+        Base Configuration: PodTest-subspec_2.release.xcconfig
 
 
 
