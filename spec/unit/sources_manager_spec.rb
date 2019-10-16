@@ -210,6 +210,11 @@ and the repository exists.
         master.verify_compatibility!
         UI.output.should.not.match /CocoaPods 999.0 is available/
       end
+
+      it 'does not crash if the repos dir does not exist' do
+        sources_manager = Source::Manager.new(Pathname.new(Dir.tmpdir) + 'CocoaPods/RepoDir/DoesNotExist')
+        lambda { sources_manager.update }.should.not.raise
+      end
     end
   end
 end
