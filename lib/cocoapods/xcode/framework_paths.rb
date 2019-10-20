@@ -1,5 +1,5 @@
 module Pod
-  class Target
+  module Xcode
     class FrameworkPaths
       # @return [String] the path to the .framework
       #

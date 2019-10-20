@@ -1,8 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-require 'cocoapods/target/framework_paths'
+require 'cocoapods/xcode/framework_paths'
 
 module Pod
-  class Target
+  module Xcode
     describe FrameworkPaths do
       describe '#==' do
         it 'compares equal framework paths as equal' do

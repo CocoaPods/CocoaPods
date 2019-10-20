@@ -1,4 +1,4 @@
-require 'cocoapods/target/framework_paths'
+require 'cocoapods/xcode/framework_paths'
 
 module Pod
   # Stores the information relative to the target used to compile a single Pod.
@@ -378,7 +378,7 @@ module Pod
       !app_specs.empty?
     end
 
-    # @return [Hash{String=>Array<FrameworkPaths>}] The vendored and non vendored framework paths this target
+    # @return [Hash{String=>Array<Xcode::FrameworkPaths>}] The vendored and non vendored framework paths this target
     #         depends upon keyed by spec name. For the root spec and subspecs the framework path of the target itself
     #         is included.
     #
@@ -404,10 +404,10 @@ module Pod
                                     end
                                   end
                                 end
-            FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_paths)
+            Xcode::FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_paths)
           end
           if file_accessor.spec.library_specification? && should_build? && build_as_dynamic_framework?
-            frameworks << FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))
+            frameworks << Xcode::FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))
           end
           hash[file_accessor.spec.name] = frameworks
         end

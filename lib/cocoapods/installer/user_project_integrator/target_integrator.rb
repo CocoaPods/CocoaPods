@@ -1,5 +1,5 @@
 require 'active_support/core_ext/string/inflections'
-require 'cocoapods/target/framework_paths'
+require 'cocoapods/xcode/framework_paths'
 
 module Pod
   class Installer
@@ -319,7 +319,7 @@ module Pod
 
           # Returns the framework output paths for the given input paths
           #
-          # @param  [Array<Target::FrameworkPaths>] framework_input_paths
+          # @param  [Array<Xcode::FrameworkPaths>] framework_input_paths
           #         The framework input paths to map to output paths.
           #
           # @return [Array<String>] The framework output paths

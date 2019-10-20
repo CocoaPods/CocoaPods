@@ -1,4 +1,4 @@
-require 'cocoapods/target/framework_paths'
+require 'cocoapods/xcode/framework_paths'
 
 module Pod
   module Generator
