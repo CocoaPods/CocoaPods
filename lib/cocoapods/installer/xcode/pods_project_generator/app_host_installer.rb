@@ -37,6 +37,10 @@ module Pod
           #
           attr_reader :add_main
 
+          # @return [Boolean] whether the app host installer should add a launch screen storyboard
+          #
+          attr_reader :add_launchscreen_storyboard
+
           # @return [Hash] Info.plist entries for the app host
           #
           attr_reader :info_plist_entries
@@ -52,7 +56,7 @@ module Pod
           # @param [Boolean] add_main see #add_main
           # @param [Hash] info_plist_entries see #info_plist_entries
           #
-          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, info_plist_entries: {})
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, add_launchscreen_storyboard: platform == :ios, info_plist_entries: {})
             @sandbox = sandbox
             @project = project
             @platform = platform
@@ -60,6 +64,7 @@ module Pod
             @group_name = group_name
             @app_target_label = app_target_label
             @add_main = add_main
+            @add_launchscreen_storyboard = add_launchscreen_storyboard
             @info_plist_entries = info_plist_entries
             target_group = project.pod_group(group_name)
             @group = target_group[subgroup_name] || target_group.new_group(subgroup_name)
@@ -79,7 +84,7 @@ module Pod
             end
 
             Pod::Generator::AppTargetHelper.add_app_host_main_file(project, app_host_target, platform_name, @group, app_target_label) if add_main
-            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, deployment_target, app_target_label) if platform == :ios
+            Pod::Generator::AppTargetHelper.add_launchscreen_storyboard(project, app_host_target, @group, deployment_target, app_target_label) if add_launchscreen_storyboard
             create_info_plist_file_with_sandbox(sandbox, app_host_info_plist_path, app_host_target, '1.0.0', platform,
                                                 :appl, :additional_entries => additional_info_plist_entries)
             @group.new_file(app_host_info_plist_path)

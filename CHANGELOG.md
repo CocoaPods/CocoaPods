@@ -39,6 +39,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9131](https://github.com/CocoaPods/CocoaPods/pull/9131)
 
+* Don't create a conflicting `LaunchScreen.storyboard` when an app spec contains a file
+  with that name in its `resources`.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 
 ## 1.8.4 (2019-10-16)
 

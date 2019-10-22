@@ -415,8 +415,11 @@ module Pod
               app_target_label = target.app_target_label(app_spec)
               platform = Platform.new(target.platform.symbolic_name, target.deployment_target_for_non_library_spec(app_spec))
               info_plist_entries = spec_consumer.info_plist
+              resources = target.file_accessors.find { |fa| fa.spec == app_spec }.resources
+              add_launchscreen_storyboard = resources.none? { |resource| resource.basename.to_s == 'LaunchScreen.storyboard' } && platform.name == :ios
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
+                                                                         :add_launchscreen_storyboard => add_launchscreen_storyboard,
                                                                          :info_plist_entries => info_plist_entries).install!
 
               app_native_target.product_reference.name = app_target_label
@@ -462,7 +465,7 @@ module Pod
 
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
-              add_resources_to_target(target.file_accessors.find { |fa| fa.spec == app_spec }.resources, app_native_target)
+              add_resources_to_target(resources, app_native_target)
 
               app_native_target
             end

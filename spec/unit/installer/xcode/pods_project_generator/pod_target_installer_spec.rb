@@ -449,6 +449,29 @@ module Pod
                 end
               end
 
+              it 'creates and adds launch screen storyboard for app target' do
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.dynamic_framework)
+                @ios_installer.install!
+                app_target = @project.targets.find { |t| t.name == 'WatermelonLib-App' }
+                launch_screen = app_target.resources_build_phase.files_references.find { |fr| fr.name == 'LaunchScreen.storyboard' }
+                launch_screen.path.should.end_with 'Pods/WatermelonLib-App/LaunchScreen.storyboard'
+                launch_screen.real_path.should.be.file
+              end
+
+              it 'does not add launch screen storyboard for app target when it is a spec resource' do
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.dynamic_framework)
+                path = Pathname('/tmp/Resources/LaunchScreen.storyboard')
+                path.stubs(:realpath => path, :file? => true, :exist? => true)
+                fr = @watermelon_ios_pod_target.file_accessors.find do |fa|
+                  fa.spec.name == 'WatermelonLib/App'
+                end
+                fr.stubs(:resources => fr.resources + [path])
+                @ios_installer.install!
+                app_target = @project.targets.find { |t| t.name == 'WatermelonLib-App' }
+                launch_screen = app_target.resources_build_phase.files_references.find { |f| f.name == 'LaunchScreen.storyboard' }
+                launch_screen.should.be.nil # since it was not installed by the file references installer in the before block
+              end
+
               it 'adds the resources bundles to the copy resources script for test target' do
                 @ios_installer.install!
                 script_path = @watermelon_ios_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.test_specs.first)
