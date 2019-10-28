@@ -39,8 +39,6 @@ Generating Pods project
   - Running post install hooks
   - Writing Xcode project file to `Pods/Pods.xcodeproj`
   Cleaning up sandbox directory
-  - Writing Lockfile in `Podfile.lock`
-  - Writing Manifest in `Pods/Manifest.lock`
 
 Integrating client project
 
@@ -48,6 +46,8 @@ Integrating client project
 
 Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
   - Running post install hooks
     - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
 
