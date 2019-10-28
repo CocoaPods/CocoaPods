@@ -31,6 +31,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Always generate a lockfile even if project integration is disabled.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9288](https://github.com/CocoaPods/CocoaPods/issues/9288)
+
 * Fix incremental installation with plugins that include arguments with different ordering.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9170](https://github.com/CocoaPods/CocoaPods/pull/9170)

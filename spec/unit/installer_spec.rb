@@ -71,7 +71,12 @@ module Pod
         @installer.stubs(:perform_post_install_actions)
         @installer.stubs(:predictabilize_uuids)
         @installer.stubs(:stabilize_target_uuids)
-
+        podfile_dependency_cache = Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile)
+        @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
+                                                                   [fixture_spec('banana-lib/BananaLib.podspec')],
+                                                                   Pod::Installer::Analyzer::SpecsState.new, [], [],
+                                                                   podfile_dependency_cache)
+        @installer.stubs(:analysis_result).returns(@analysis_result)
         Installer::Xcode::PodsProjectGenerator.any_instance.stubs(:configure_schemes)
         Installer::Xcode::SinglePodsProjectGenerator.any_instance.stubs(:generate!)
         Installer::Xcode::PodsProjectWriter.any_instance.stubs(:write!)
@@ -325,6 +330,13 @@ module Pod
       it 'generates Pods.xcodeproj if skip_pods_project_generation is not set' do
         @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
         @installer.expects(:integrate).once
+        @installer.install!
+      end
+
+      it 'always writes lockfile even if project generation and integration is false' do
+        installation_options = Pod::Installer::InstallationOptions.new(:skip_pods_project_generation => true, :integrate_targets => false)
+        @installer.stubs(:installation_options).returns(installation_options)
+        @installer.expects(:write_lockfiles)
         @installer.install!
       end
 
