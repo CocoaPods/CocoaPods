@@ -690,7 +690,9 @@ module Pod
 
             it 'correctly configures schemes for all specs' do
               @coconut_spec.scheme = { :launch_arguments => ['Arg1'] }
-              @coconut_test_spec.scheme = { :launch_arguments => ['TestArg1'], :environment_variables => { 'Key1' => 'Val1' } }
+              @coconut_test_spec.scheme = { :launch_arguments => ['TestArg1'],
+                                            :environment_variables => { 'Key1' => 'Val1' },
+                                            :code_coverage => true }
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(true)
@@ -720,6 +722,7 @@ module Pod
               test_scheme.launch_action.environment_variables.all_variables.map(&:to_h).should == [
                 { :key => 'Key1', :value => 'Val1', :enabled => true },
               ]
+              test_scheme.test_action.code_coverage_enabled?.should.be.true
             end
 
             it 'allows opting out' do
