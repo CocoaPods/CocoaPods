@@ -238,6 +238,9 @@ module Pod
                 environment_variables.assign_variable(:key => k, :value => v)
               end
               scheme.launch_action.environment_variables = environment_variables
+              if scheme_configuration.key?(:code_coverage)
+                scheme.test_action.code_coverage_enabled = scheme_configuration[:code_coverage]
+              end
               scheme.save!
             end
             Xcodeproj::XCScheme.share_scheme(project.path, scheme_name) if share_scheme

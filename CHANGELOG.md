@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Support for scheme code coverage.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8921](https://github.com/CocoaPods/CocoaPods/issues/8921)
+
 * Support Swift version variants.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9230](https://github.com/CocoaPods/CocoaPods/pull/9230)
