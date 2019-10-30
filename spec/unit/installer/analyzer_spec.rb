@@ -2172,6 +2172,42 @@ module Pod
               should == [['JSONKit', true], ['monkey', true]]
           end
         end
+
+        it 'configures APPLICATION_EXTENSION_API_ONLY when build setting is set in user target xcconfig' do
+          @user_project = Xcodeproj::Project.open(SpecHelper.create_sample_app_copy_from_fixture('Sample Extensions Project'))
+          targets = @user_project.targets
+          app_target = targets.find { |t| t.name == 'Sample Extensions Project' }
+          sample_config = @user_project.new_file('App.xcconfig')
+          File.write(sample_config.real_path, 'APPLICATION_EXTENSION_API_ONLY=YES')
+          app_target.build_configurations.each do |config|
+            config.base_configuration_reference = sample_config
+          end
+          @user_project.save
+          project_path = @user_project.path
+          @podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project project_path
+
+            target 'Sample Extensions Project' do
+              pod 'JSONKit', '1.4'
+            end
+
+            target 'Today Extension' do
+              use_frameworks!
+              pod 'monkey'
+            end
+          end
+
+          @podfile.use_frameworks!
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile)
+          result = analyzer.analyze
+
+          result.targets.map { |t| [t.name, t.application_extension_api_only] }.
+            should == [['Pods-Sample Extensions Project', true], ['Pods-Today Extension', true]]
+          result.pod_targets.map { |t| [t.name, t.application_extension_api_only] }.
+            should == [['JSONKit', true], ['monkey', true]]
+        end
       end
 
       #-------------------------------------------------------------------------#

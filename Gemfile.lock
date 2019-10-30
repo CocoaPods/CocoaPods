@@ -33,7 +33,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 1749a226234f03289d27fe96682591fc0d708535
+  revision: 15c9005e6c96892db5c96ac6323894f4c73d9dea
   branch: master
   specs:
     xcodeproj (1.13.0)

@@ -35,6 +35,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Search in users xcconfig's for figuring out when to set `APPLICATION_EXTENSION_API_ONLY`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9233](https://github.com/CocoaPods/CocoaPods/issues/9233)
+
 * Always generate a lockfile even if project integration is disabled.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9288](https://github.com/CocoaPods/CocoaPods/issues/9288)
