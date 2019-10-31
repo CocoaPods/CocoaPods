@@ -442,7 +442,9 @@ module Pod
         aggregate_targets.each do |aggregate_target|
           is_app_extension = !(aggregate_target.user_targets.map(&:symbol_type) &
               [:app_extension, :watch_extension, :watch2_extension, :tv_extension, :messages_extension]).empty?
-          is_app_extension ||= aggregate_target.user_targets.any? { |ut| ut.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY') == 'YES' }
+          is_app_extension ||= aggregate_target.user_targets.any? do |user_target|
+            user_target.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY', :resolve_against_xcconfig => true) == 'YES'
+          end
 
           next unless is_app_extension
 
