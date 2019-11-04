@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Get binary architectures use `lipo -archs`.  
+  [dacaiguoguo](https://github.com/dacaiguoguo)
+  [#9309](https://github.com/CocoaPods/CocoaPods/pull/9309)
+
 * Support for scheme code coverage.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8921](https://github.com/CocoaPods/CocoaPods/issues/8921)
