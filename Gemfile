@@ -49,6 +49,7 @@ group :development do
   # Integration tests
   gem 'diffy'
   gem 'clintegracon'
+  gem 'typhoeus'
 
   # Code Quality
   gem 'inch_by_inch'
