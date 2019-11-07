@@ -57,7 +57,7 @@ module Pod
 
           it 'runs `pod repo add-cdn` when there is no matching source for CocoaPods Trunk' do
             Command::Repo::AddCDN.any_instance.stubs(:run).once
-            expected = Typhoeus::Response.new(code: 200, body: CDN_REPO_RESPONSE)
+            expected = Typhoeus::Response.new(:code => 200, :body => CDN_REPO_RESPONSE)
             Typhoeus.stub(Pod::TrunkSource::TRUNK_REPO_URL + '/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(TrunkSource.new('trunk'))
             @sources_manager.find_or_create_source_with_url(Pod::TrunkSource::TRUNK_REPO_URL).name.
@@ -66,7 +66,7 @@ module Pod
 
           it 'runs `pod repo add` when there is no matching source' do
             Command::Repo::Add.any_instance.stubs(:run).once
-            expected = Typhoeus::Response.new(code: 404)
+            expected = Typhoeus::Response.new(:code => 404)
             Typhoeus.stub('https://github.com/artsy/Specs.git/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
             @sources_manager.find_or_create_source_with_url('https://github.com/artsy/Specs.git').name.
@@ -75,7 +75,7 @@ module Pod
 
           it 'runs `pod repo add` when the url doesn\'t end in `.git`' do
             Command::Repo::Add.any_instance.stubs(:run).once
-            expected = Typhoeus::Response.new(code: 404)
+            expected = Typhoeus::Response.new(:code => 404)
             Typhoeus.stub('https://github.com/artsy/Specs/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
             @sources_manager.find_or_create_source_with_url('https://github.com/artsy/Specs').name.
@@ -84,7 +84,7 @@ module Pod
 
           it 'runs `pod repo add-cdn` when there is no matching source and url is web' do
             Command::Repo::AddCDN.any_instance.stubs(:run).once
-            expected = Typhoeus::Response.new(code: 200, body: CDN_REPO_RESPONSE)
+            expected = Typhoeus::Response.new(:code => 200, :body => CDN_REPO_RESPONSE)
             Typhoeus.stub('https://website.com/Specs/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns(Source.new('Source'))
             @sources_manager.find_or_create_source_with_url('https://website.com/Specs').name.
@@ -93,7 +93,7 @@ module Pod
 
           it 'raises informative exception on network error' do
             Typhoeus.stub('https://website.com/Specs/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional) do
-              raise StandardError.new('some network error')
+              raise StandardError, 'some network error'
             end
             @sources_manager.stubs(:source_with_url).returns(nil)
             should.raise(Informative) do
@@ -117,7 +117,7 @@ module Pod
 
           it 'tries by url when there is no matching name' do
             Command::Repo::Add.any_instance.stubs(:run).once
-            expected = Typhoeus::Response.new(code: 404)
+            expected = Typhoeus::Response.new(:code => 404)
             Typhoeus.stub('https://github.com/artsy/Specs.git/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
             @sources_manager.stubs(:source_with_url).returns(nil).then.returns('Source')
             @sources_manager.source_with_name_or_url('https://github.com/artsy/Specs.git').
@@ -136,19 +136,19 @@ module Pod
 
       describe 'detect cdn repo' do
         it 'cdn master spec repo' do
-          expected = Typhoeus::Response.new(code: 200, body: CDN_REPO_RESPONSE)
+          expected = Typhoeus::Response.new(:code => 200, :body => CDN_REPO_RESPONSE)
           Typhoeus.stub('https://cdn.cocoapods.org/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
           @sources_manager.cdn_url?('https://cdn.cocoapods.org').should == true
         end
 
         it 'cdn master spec repo by http' do
-          expected = Typhoeus::Response.new(code: 200, body: CDN_REPO_RESPONSE)
+          expected = Typhoeus::Response.new(:code => 200, :body => CDN_REPO_RESPONSE)
           Typhoeus.stub('http://cdn.cocoapods.org/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
           @sources_manager.cdn_url?('http://cdn.cocoapods.org').should == true
         end
 
         it 'git master spec repo' do
-          expected = Typhoeus::Response.new(code: 404, body: 'Not Found')
+          expected = Typhoeus::Response.new(:code => 404, :body => 'Not Found')
           Typhoeus.stub('https://github.com/cocoapods/specs.git/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
           @sources_manager.cdn_url?('https://github.com/cocoapods/specs.git').should == false
           Typhoeus.stub('https://github.com/cocoapods/specs/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
@@ -167,13 +167,13 @@ module Pod
            </body>
            </html>"'.freeze
      
-          expected = Typhoeus::Response.new(code: 200, body: HTML_RESPONSE)
+          expected = Typhoeus::Response.new(:code => 200, :body => HTML_RESPONSE)
           Typhoeus.stub('https://some_host.com/something/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
           @sources_manager.cdn_url?('https://some_host.com/something').should == false
         end
 
         it 'redirect' do
-          expected = Typhoeus::Response.new(code: 301, body: {'location' => ['http://some_host.com']})
+          expected = Typhoeus::Response.new(:code => 301, :body => { 'location' => ['http://some_host.com'] })
           Typhoeus.stub('http://some_host.com/something/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
           @sources_manager.cdn_url?('http://some_host.com/something').should == false
         end
