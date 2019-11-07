@@ -43,13 +43,14 @@ group :development do
   gem 'minitest', '5.12.0' # Pinned since > 5.12.0+ drops support for Ruby 2.0
   gem 'mocha'
   gem 'mocha-on-bacon'
+  gem 'netrc'
   gem 'prettybacon'
+  gem 'typhoeus'
   gem 'webmock'
 
   # Integration tests
   gem 'diffy'
   gem 'clintegracon'
-  gem 'typhoeus'
 
   # Code Quality
   gem 'inch_by_inch'
