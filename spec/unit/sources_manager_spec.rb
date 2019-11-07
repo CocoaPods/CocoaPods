@@ -166,7 +166,6 @@ module Pod
             </div>
            </body>
            </html>"'.freeze
-     
           expected = Typhoeus::Response.new(:code => 200, :body => HTML_RESPONSE)
           Typhoeus.stub('https://some_host.com/something/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
           @sources_manager.cdn_url?('https://some_host.com/something').should == false
