@@ -28,14 +28,12 @@ module Pod
 
         @target_integrator = TargetIntegrator.new(@pod_bundle)
 
-        @phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX
-        @user_phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::USER_BUILD_PHASE_PREFIX
-        @embed_framework_phase_name = @phase_prefix +
-          Installer::UserProjectIntegrator::TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
-        @copy_pods_resources_phase_name = @phase_prefix +
-            Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
-        @check_manifest_phase_name = @phase_prefix +
-            Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+        @phase_prefix = TargetIntegrator::BUILD_PHASE_PREFIX
+        @user_phase_prefix = TargetIntegrator::USER_BUILD_PHASE_PREFIX
+        @embed_framework_phase_name = @phase_prefix + TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
+        @prepare_artifacts_phase_name = @phase_prefix + TargetIntegrator::PREPARE_ARTIFACTS_PHASE_NAME
+        @copy_pods_resources_phase_name = @phase_prefix + TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+        @check_manifest_phase_name = @phase_prefix + TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
         @user_script_phase_name = @user_phase_prefix + 'Custom Script'
       end
 
@@ -433,7 +431,7 @@ module Pod
             ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework
             ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
-          # Now pretend the same target has no more framework paths, it should update the targets input/output paths
+          # Now pretend the same target has no more framework paths, it should remove the script phase
           @pod_bundle.stubs(:framework_paths_by_config => {})
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
@@ -509,6 +507,52 @@ module Pod
             ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework
+          )
+        end
+
+        it 'does not add prepare artifacts build phase with no xcframeworks' do
+          @pod_bundle.stubs(:xcframeworks_by_config => { 'Debug' => {}, 'Release' => {} })
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.should.be.nil
+        end
+
+        it 'removes prepare artifacts build phase if it becomes empty' do
+          xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+          frameworks_by_config = {
+            'Debug' => [xcframework],
+            'Release' => [xcframework],
+          }
+          @pod_bundle.stubs(:xcframeworks_by_config => frameworks_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.should.not.be.nil?
+          # Now pretend the same target has no more xcframeworks, it should remove the script phase
+          @pod_bundle.stubs(:xcframeworks_by_config => {})
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.should.be.nil
+        end
+
+        it 'adds prepare artifacts build phase input and output paths for vendored xcframeworks without duplicate' do
+          xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+          frameworks_by_config = {
+            'Debug' => [xcframework],
+            'Release' => [xcframework],
+          }
+          @pod_bundle.stubs(:xcframeworks_by_config => frameworks_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.input_paths.sort.should == %w(
+            ${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-artifacts.sh
+          )
+          phase.output_paths.sort.should == %w(
+            ${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt
           )
         end
 

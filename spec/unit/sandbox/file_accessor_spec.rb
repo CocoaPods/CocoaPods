@@ -343,21 +343,6 @@ module Pod
           @accessor.send(:paths_for_attribute, :source_files)
         end
       end
-
-      describe '#dynamic_binary?' do
-        it 'not a dynamic binary if its not a file' do
-          binary = stub(:file? => false)
-          @accessor.send(:dynamic_binary?, binary).should.be.false
-        end
-
-        it 'uses the cache after the first time' do
-          binary = stub(:file? => true)
-          macho_file = stub(:dylib? => true)
-          MachO.stubs(:open).once.returns(macho_file)
-          @accessor.send(:dynamic_binary?, binary).should.be.true
-          @accessor.send(:dynamic_binary?, binary).should.be.true
-        end
-      end
     end
 
     #-------------------------------------------------------------------------#

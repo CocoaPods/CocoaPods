@@ -1,4 +1,5 @@
 require 'cocoapods/xcode/framework_paths'
+require 'cocoapods/xcode/xcframework'
 
 module Pod
   # Stores the information relative to the target used to compile a single Pod.
@@ -414,6 +415,20 @@ module Pod
       end
     end
 
+    # @return [Hash{String=>Array<Xcode::XCFramework>}] The vendored and non vendored xcframeworks this target
+    #         depends upon keyed by spec name.
+    #
+    def xcframeworks
+      @xcframeworks ||= begin
+        file_accessors.each_with_object({}) do |file_accessor, hash|
+          frameworks = file_accessor.vendored_xcframeworks.map do |framework_path|
+            Xcode::XCFramework.new(framework_path)
+          end
+          hash[file_accessor.spec.name] = frameworks
+        end
+      end
+    end
+
     # @return [Hash{String=>Array<String>}] The resource and resource bundle paths this target depends upon keyed by
     #         spec name. Resources for app specs and test specs are directly added to “Copy Bundle Resources” phase
     #         from the generated targets for frameworks, but not libraries. Therefore they are not part of the resource paths.
@@ -667,6 +682,33 @@ module Pod
     #
     def embed_frameworks_script_output_files_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-frameworks-output-files.xcfilelist"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this script path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script for the given spec.
+    #
+    def prepare_artifacts_script_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-prepare.sh"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this script path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script input file list for the given spec.
+    #
+    def prepare_artifacts_script_input_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-prepare-input-files.xcfilelist"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this script path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script output file list for the given spec.
+    #
+    def prepare_artifacts_script_output_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-prepare-output-files.xcfilelist"
     end
 
     # @param  [Specification] spec

@@ -30,7 +30,8 @@ module Pod
               # cause an App Store rejection because frameworks cannot be
               # embedded in embedded targets.
               #
-              create_embed_frameworks_script if target.includes_frameworks? && !target.requires_host_target?
+              create_embed_frameworks_script if (target.includes_frameworks? || target.includes_xcframeworks?) && !target.requires_host_target?
+              create_prepare_artifacts_script if target.includes_xcframeworks? && !target.requires_host_target?
               create_bridge_support_file(native_target)
               create_copy_resources_script if target.includes_resources?
               create_acknowledgements
@@ -145,8 +146,8 @@ module Pod
           # Creates a script that embeds the frameworks to the bundle of the client
           # target.
           #
-          # @note   We can't use Xcode default copy bundle resource phase, because
-          #         we need to ensure that we only copy the resources, which are
+          # @note   We can't use Xcode default link libraries phase, because
+          #         we need to ensure that we only copy the frameworks which are
           #         relevant for the current build configuration.
           #
           # @return [void]
@@ -156,6 +157,30 @@ module Pod
             generator = Generator::EmbedFrameworksScript.new(target.framework_paths_by_config)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
+          end
+
+          # Creates a script that prepares artifacts for embedding into a host target.
+          #
+          # @note   We can't use Xcode default link libraries phase, because
+          #         we need to ensure that we only copy the frameworks which are
+          #         relevant for the current build configuration.
+          #
+          # @return [void]
+          #
+          def create_prepare_artifacts_script
+            path = target.prepare_artifacts_script_path
+            generator = Generator::PrepareArtifactsScript.new(target.xcframeworks_by_config, sandbox.root)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
+
+            target.user_build_configurations.each do |config, _|
+              if (input_file_list = target.prepare_artifacts_script_input_files_path(config))
+                add_file_to_support_group(input_file_list)
+              end
+              if (output_file_list = target.prepare_artifacts_script_output_files_path(config))
+                add_file_to_support_group(output_file_list)
+              end
+            end
           end
 
           # Generates the acknowledgement files (markdown and plist) for the target.

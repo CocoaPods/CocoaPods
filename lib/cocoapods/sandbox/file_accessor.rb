@@ -1,4 +1,4 @@
-require 'macho'
+require 'cocoapods/xcode/linkage_analyzer'
 
 module Pod
   class Sandbox
@@ -167,8 +167,8 @@ module Pod
       #         that come shipped with the Pod.
       #
       def vendored_dynamic_frameworks
-        vendored_frameworks.select do |framework|
-          dynamic_binary?(framework + framework.basename('.*'))
+        (vendored_frameworks - vendored_xcframeworks).select do |framework|
+          Xcode::LinkageAnalyzer.dynamic_binary?(framework + framework.basename('.*'))
         end
       end
 
@@ -176,7 +176,16 @@ module Pod
       #         bundles that come shipped with the Pod.
       #
       def vendored_static_frameworks
-        vendored_frameworks - vendored_dynamic_frameworks
+        vendored_frameworks - vendored_dynamic_frameworks - vendored_xcframeworks
+      end
+
+      # @return [Array<Pathname>] The paths of vendored .xcframework bundles
+      #         that come shipped with the Pod.
+      #
+      def vendored_xcframeworks
+        vendored_frameworks.select do |framework|
+          File.extname(framework) == '.xcframework'
+        end
       end
 
       # @param [Array<FileAccessor>] file_accessors
@@ -220,13 +229,28 @@ module Pod
         Pathname.glob(headers_dir + '**/' + GLOB_PATTERNS[:public_header_files])
       end
 
+      # @param [Pathname] the path to the .xcframework
+      #
+      # @return [Array<Pathname>] The paths to all the headers included in the
+      #         vendored xcframework
+      def self.vendored_xcframework_headers(framework)
+        xcframework = Xcode::XCFramework.new(framework)
+        xcframework.slices.flat_map do |slice|
+          vendored_frameworks_headers(slice.path)
+        end
+      end
+
       # @return [Array<Pathname>] The paths of the framework headers that come
       #         shipped with the Pod.
       #
       def vendored_frameworks_headers
-        vendored_frameworks.flat_map do |framework|
+        paths = (vendored_frameworks - vendored_xcframeworks).flat_map do |framework|
           self.class.vendored_frameworks_headers(framework)
         end.uniq
+        paths.concat Array.new(vendored_xcframeworks.flat_map do |framework|
+          self.class.vendored_xcframework_headers(framework)
+        end)
+        paths
       end
 
       # @return [Array<Pathname>] The paths of the library bundles that come
@@ -241,7 +265,7 @@ module Pod
       #
       def vendored_dynamic_libraries
         vendored_libraries.select do |library|
-          dynamic_binary?(library)
+          Xcode::LinkageAnalyzer.dynamic_binary?(library)
         end
       end
 
@@ -442,21 +466,6 @@ module Pod
       def expanded_paths(patterns, options = {})
         return [] if patterns.empty?
         path_list.glob(patterns, options).flatten.compact.uniq
-      end
-
-      # @param  [Pathname] binary
-      #         The file to be checked for being a dynamic Mach-O binary.
-      #
-      # @return [Boolean] Whether `binary` can be dynamically linked.
-      #
-      def dynamic_binary?(binary)
-        @cached_dynamic_binary_results ||= {}
-        return @cached_dynamic_binary_results[binary] unless @cached_dynamic_binary_results[binary].nil?
-        return false unless binary.file?
-
-        @cached_dynamic_binary_results[binary] = MachO.open(binary).dylib?
-      rescue MachO::MachOError
-        @cached_dynamic_binary_results[binary] = false
       end
 
       #-----------------------------------------------------------------------#

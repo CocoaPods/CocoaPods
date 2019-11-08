@@ -1,4 +1,5 @@
 require 'cocoapods/xcode/framework_paths'
+require 'cocoapods/xcode/xcframework'
 
 module Pod
   # Stores the information relative to the target used to cluster the targets
@@ -223,11 +224,18 @@ module Pod
       !resource_paths_by_config.each_value.all?(&:empty?)
     end
 
-    # @return [Boolean] Whether the target contains framework to be embedded into
+    # @return [Boolean] Whether the target contains frameworks to be embedded into
     #         the user target
     #
     def includes_frameworks?
       !framework_paths_by_config.each_value.all?(&:empty?)
+    end
+
+    # @return [Boolean] Whether the target contains xcframeworks to be embedded into
+    #         the user target
+    #
+    def includes_xcframeworks?
+      !xcframeworks_by_config.each_value.all?(&:empty?)
     end
 
     # @return [Hash{String => Array<FrameworkPaths>}] The vendored dynamic artifacts and framework target
@@ -244,6 +252,23 @@ module Pod
           end
         end
         framework_paths_by_config
+      end
+    end
+
+    # @return [Hash{String => Array<Xcode::XCFramework>}] The vendored dynamic artifacts and framework target
+    #         input and output paths grouped by config
+    #
+    def xcframeworks_by_config
+      @xcframeworks_by_config ||= begin
+        xcframeworks_by_config = {}
+        user_build_configurations.each_key do |config|
+          relevant_pod_targets = pod_targets_for_build_configuration(config)
+          xcframeworks_by_config[config] = relevant_pod_targets.flat_map do |pod_target|
+            library_specs = pod_target.library_specs.map(&:name)
+            pod_target.xcframeworks.values_at(*library_specs).flatten.compact.uniq
+          end
+        end
+        xcframeworks_by_config
       end
     end
 
@@ -308,12 +333,6 @@ module Pod
       support_files_dir + "#{label}-resources-#{configuration}-output-files.xcfilelist"
     end
 
-    # @return [Pathname] The absolute path of the embed frameworks script.
-    #
-    def embed_frameworks_script_path
-      support_files_dir + "#{label}-frameworks.sh"
-    end
-
     # @param  [String] configuration the configuration this path is for.
     #
     # @return [Pathname] The absolute path of the embed frameworks script input file list.
@@ -328,6 +347,22 @@ module Pod
     #
     def embed_frameworks_script_output_files_path(configuration)
       support_files_dir + "#{label}-frameworks-#{configuration}-output-files.xcfilelist"
+    end
+
+    # @param  [String] configuration the configuration this path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script input file list.
+    #
+    def prepare_artifacts_script_input_files_path(configuration)
+      support_files_dir + "#{label}-artifacts-#{configuration}-input-files.xcfilelist"
+    end
+
+    # @param  [String] configuration the configuration this path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script output file list.
+    #
+    def prepare_artifacts_script_output_files_path(configuration)
+      support_files_dir + "#{label}-artifacts-#{configuration}-output-files.xcfilelist"
     end
 
     # @return [String] The output file path fo the check manifest lock script.
@@ -407,6 +442,27 @@ module Pod
     #
     def embed_frameworks_script_output_files_relative_path
       "${PODS_ROOT}/#{relative_to_pods_root(embed_frameworks_script_output_files_path('${CONFIGURATION}'))}"
+    end
+
+    # @return [String] The path of the prepare artifacts script relative to the
+    #         root of the Pods project.
+    #
+    def prepare_artifacts_script_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(prepare_artifacts_script_path)}"
+    end
+
+    # @return [String] The path of the prepare artifacts script input file list
+    #         relative to the root of the Pods project.
+    #
+    def prepare_artifacts_script_input_files_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(prepare_artifacts_script_input_files_path('${CONFIGURATION}'))}"
+    end
+
+    # @return [String] The path of the prepare artifacts script output file list
+    #         relative to the root of the Pods project.
+    #
+    def prepare_artifacts_script_output_files_relative_path
+      "${PODS_ROOT}/#{relative_to_pods_root(prepare_artifacts_script_output_files_path('${CONFIGURATION}'))}"
     end
 
     private

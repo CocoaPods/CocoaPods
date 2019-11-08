@@ -270,6 +270,7 @@ module Pod
                                :vendored_dynamic_libraries => [],
                                :vendored_static_frameworks => [],
                                :vendored_dynamic_frameworks => [],
+                               :vendored_xcframeworks => [],
                               )
           pod_target = stub('pod_target',
                             :file_accessors => [file_accessor],

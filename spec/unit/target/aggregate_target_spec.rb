@@ -47,6 +47,15 @@ module Pod
         @target.includes_frameworks?.should.be.false
       end
 
+      it 'returns whether it has xcframeworks to embed' do
+        @target.stubs(:xcframeworks_by_config).returns(
+          'DEBUG' => [Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))],
+        )
+        @target.includes_xcframeworks?.should.be.true
+        @target.stubs(:xcframeworks_by_config).returns('DEBUG' => [], 'RELEASE' => [])
+        @target.includes_xcframeworks?.should.be.false
+      end
+
       it 'returns whether it has resources' do
         @target.stubs(:resource_paths_by_config).returns('DEBUG' => %w(path/to/image.png banana/lib.png))
         @target.includes_resources?.should.be.true
@@ -73,6 +82,10 @@ module Pod
 
       it 'returns the absolute path of the frameworks script' do
         @target.embed_frameworks_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-frameworks.sh')
+      end
+
+      it 'returns the absolute path of the prepare artifacts script' do
+        @target.prepare_artifacts_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-artifacts.sh')
       end
 
       it 'returns the absolute path of the bridge support file' do
@@ -221,18 +234,13 @@ module Pod
           ]
         end
 
-        it 'returns correct input and output paths for vendored frameworks' do
+        it 'returns vendored xcframeworks by config' do
           path_list = Sandbox::PathList.new(fixture('banana-lib'))
           file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
           @pod_target.stubs(:file_accessors).returns([file_accessor])
-          framework_path = Pathname('/absolute/path/to/FrameworkA.framework')
-          @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
-            [framework_path],
-          )
-          framework_path.stubs(:relative_path_from).returns(Pathname.new('../../absolute/path/to/FrameworkA.framework'))
-          @target.framework_paths_by_config['Debug'].should == [
-            Xcode::FrameworkPaths.new('${PODS_ROOT}/../../absolute/path/to/FrameworkA.framework'),
-          ]
+          framework_path = fixture('CoconutLib.xcframework')
+          @pod_target.file_accessors.first.stubs(:vendored_xcframeworks).returns([framework_path])
+          @target.xcframeworks_by_config['Debug'].map(&:path).should == [framework_path]
         end
       end
 

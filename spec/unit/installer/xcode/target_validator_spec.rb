@@ -79,7 +79,7 @@ module Pod
 
           it 'allows duplicate references to the same expanded framework path' do
             Sandbox::FileAccessor.any_instance.stubs(:vendored_frameworks).returns([fixture('monkey/dynamic-monkey.framework')])
-            Sandbox::FileAccessor.any_instance.stubs(:dynamic_binary?).returns(true)
+            Pod::Xcode::LinkageAnalyzer.stubs(:dynamic_binary?).returns(true)
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
             podfile = Pod::Podfile.new do

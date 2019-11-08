@@ -4,7 +4,7 @@ module Pod
     class XCFramework
       class Slice
 
-        # @return [Pathname] the path to the root of this framework slice
+        # @return [Pathname] the path to the .framework root of this framework slice
         #
         attr_reader :path
 
@@ -32,8 +32,6 @@ module Pod
           @path = path
           @identifier = identifier
           @supported_archs = archs
-          # TODO: update Pod::Platform to handle `macos`
-          platform = 'osx' if platform == 'macos'
           @platform = Pod::Platform.new(platform)
           @platform_variant = platform_variant.to_sym unless platform_variant.nil?
         end
@@ -44,6 +42,16 @@ module Pod
 
         def simulator_variant?
           @platform_variant == :simulator
+        end
+
+        # @return [Pathname] the path to the bundled binary
+        #
+        def binary_path
+          path + name
+        end
+
+        def framework_paths
+          @framework_paths ||= FrameworkPaths.from_path(path)
         end
       end
     end
