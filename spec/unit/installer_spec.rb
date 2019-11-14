@@ -204,8 +204,15 @@ module Pod
           @installer.install!
         end
 
-        it 'stabilizes target UUIDs' do
+        it 'does not stabilize target UUIDs if incremental installation is disabled' do
           @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new)
+          @installer.expects(:stabilize_target_uuids).with([fixture('Pods.xcodeproj')]).never
+
+          @installer.install!
+        end
+
+        it 'does stabilize target UUIDs if incremental installation is enabled' do
+          @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:incremental_installation => true))
           @installer.expects(:stabilize_target_uuids).with([fixture('Pods.xcodeproj')]).once
 
           @installer.install!

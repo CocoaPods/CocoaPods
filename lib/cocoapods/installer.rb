@@ -317,7 +317,7 @@ module Pod
         projects_by_pod_targets = pod_project_generation_result.projects_by_pod_targets
 
         predictabilize_uuids(generated_projects) if installation_options.deterministic_uuids?
-        stabilize_target_uuids(generated_projects)
+        stabilize_target_uuids(generated_projects) if installation_options.incremental_installation?
 
         projects_writer = Xcode::PodsProjectWriter.new(sandbox, generated_projects,
                                                        target_installation_results.pod_target_installation_results, installation_options)
