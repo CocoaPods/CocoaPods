@@ -73,7 +73,6 @@ module Pod
         if url =~ %r{^https?:\/\/}
           response = Typhoeus.get(url + '/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional)
           response.code == 200 && begin
-            # rubocop:disable Security/YAMLLoad
             response_hash = YAML.load(response.body) # rubocop:disable Security/YAMLLoad
             response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
           end
