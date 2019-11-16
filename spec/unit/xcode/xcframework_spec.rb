@@ -14,6 +14,10 @@ module Pod
           @framework.format_version.should == Pod::Version.new('1.0')
         end
 
+        it 'returns the name of the framework' do
+          @framework.name.should == 'CoconutLib'
+        end
+
         it 'reads the framework slices' do
           slices = @framework.slices.sort_by { |s| s.identifier }
 

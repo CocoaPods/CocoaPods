@@ -12,15 +12,23 @@ module Pod
       #
       attr_reader :sandbox_root
 
+      # @return [Platform] the platform of the target for which this script will run
+      #
+      attr_reader :platform
+
       # @param  [Hash{String => Array<Pod::Xcode::XCFramework>] xcframeworks_by_config
       #         @see #xcframeworks_by_config
       #
       # @param  [Pathname] sandbox_root
       #         the sandbox root of the installation
       #
-      def initialize(xcframeworks_by_config, sandbox_root)
+      # @param  [Platform] platform
+      #         the platform of the target for which this script will run
+      #
+      def initialize(xcframeworks_by_config, sandbox_root, platform)
         @xcframeworks_by_config = xcframeworks_by_config
         @sandbox_root = sandbox_root
+        @platform = platform
       end
 
       # Saves the resource script to the given pathname.
@@ -100,7 +108,7 @@ module Pod
               local source="$1"
             fi
 
-            local strip_archs=${2:-true}
+            local embed=${2:-true}
             local destination="${TARGET_BUILD_DIR}"
 
             if [ -L "${source}" ]; then
@@ -118,11 +126,14 @@ module Pod
               binary="${destination}/${basename}"
             fi
 
-            record_artifact "$(dirname "${binary}")"
+            if [[ "$embed" == "true" ]]; then
+              record_artifact "$(dirname "${binary}")"  
+            fi
           }
 
           install_xcframework() {
             local basepath="$1"
+            local embed="$2"
             shift
             local paths=("$@")
             
@@ -150,7 +161,7 @@ module Pod
               return
             fi
 
-            install_framework "$basepath/$target_path"
+            install_framework "$basepath/$target_path" "$embed"
           }
 
         SH
@@ -160,19 +171,19 @@ module Pod
         xcframeworks_by_config.each do |config, xcframeworks|
           next if xcframeworks.empty?
           xcframeworks.each do |xcframework|
-            # It's possible for an .xcframework to include slices of different linkages,
-            # so we must select only dynamic slices to pass to the script
-            slices = xcframework.slices
-                       .select { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
-            next if slices.empty?
-            relative_path = xcframework.path.relative_path_from(sandbox_root)
-            args = [shell_escape("${PODS_ROOT}/#{relative_path}")]
-            slices.each do |slice|
-              args << shell_escape(slice.path.relative_path_from(xcframework.path))
+            dynamic_slices, static_slices = xcframework.slices
+                                              .select { |f| f.platform.symbolic_name == platform.symbolic_name }
+                                              .partition { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
+            next if dynamic_slices.empty? && static_slices.empty?
+            unless dynamic_slices.empty?
+              args = install_xcframework_args(xcframework.path, dynamic_slices, false)
+              contents_by_config[config] << %(  install_xcframework #{args}\n)
             end
-            # We pass two arrays to install_xcframework - a nested list of archs, and a list of paths that
-            # contain frameworks for those archs
-            contents_by_config[config] << %(  install_xcframework #{args.join(" ")}\n)
+
+            unless static_slices.empty?
+              args = install_xcframework_args(xcframework.path, static_slices, true)
+              contents_by_config[config] << %(  install_xcframework #{args}\n)
+            end
 
             dsyms = PrepareArtifactsScript.dsym_paths(xcframework.path)
             dsyms.each do |path|
@@ -198,6 +209,22 @@ module Pod
 
       def shell_escape(value)
         "\"#{value}\""
+      end
+
+      private
+
+      def install_xcframework_args(root, slices, static)
+        args = [shell_escape("${PODS_ROOT}/#{root.relative_path_from(sandbox_root)}")]
+        embed = if static
+                  "false"
+                else
+                  "true"
+                end
+        args << shell_escape(embed)
+        slices.each do |slice|
+          args << shell_escape(slice.path.relative_path_from(root))
+        end
+        args.join(" ")
       end
 
       # @param  [Pathname] the base path of the .xcframework bundle

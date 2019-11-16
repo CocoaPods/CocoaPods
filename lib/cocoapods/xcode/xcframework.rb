@@ -28,8 +28,6 @@ module Pod
         parse_plist_contents
       end
 
-      private
-
       # @return [Hash] the contents of the parsed plist
       #
       attr_reader :plist
@@ -37,6 +35,14 @@ module Pod
       def plist_path
         path + 'Info.plist'
       end
+
+      # @return [String] the basename of the framework
+      #
+      def name
+        File.basename(path, '.xcframework')
+      end
+
+      private
 
       def parse_plist_contents
         @format_version = Pod::Version.new(plist['XCFrameworkFormatVersion'])

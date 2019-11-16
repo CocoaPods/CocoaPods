@@ -169,7 +169,7 @@ module Pod
           #
           def create_prepare_artifacts_script
             path = target.prepare_artifacts_script_path
-            generator = Generator::PrepareArtifactsScript.new(target.xcframeworks_by_config, sandbox.root)
+            generator = Generator::PrepareArtifactsScript.new(target.xcframeworks_by_config, sandbox.root, target.platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
 

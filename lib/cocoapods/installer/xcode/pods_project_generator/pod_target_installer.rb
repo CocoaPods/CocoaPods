@@ -1,3 +1,5 @@
+require 'cocoapods/xcode'
+
 module Pod
   class Installer
     class Xcode
@@ -56,6 +58,7 @@ module Pod
 
               add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
               validate_targets_contain_sources(test_native_targets + app_native_targets + [native_target])
+              validate_xcframeworks_no_mixed_linkage
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
@@ -665,7 +668,7 @@ module Pod
               end
             end
             unless frameworks_by_config.each_value.all?(&:empty?)
-              generator = Generator::PrepareArtifactsScript.new(frameworks_by_config, target.sandbox.root)
+              generator = Generator::PrepareArtifactsScript.new(frameworks_by_config, target.sandbox.root, target.platform)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
@@ -1081,6 +1084,18 @@ module Pod
             end
           end
 
+          # Raises if a vendored xcframework contains frameworks of mixed linkage
+          #
+          def validate_xcframeworks_no_mixed_linkage
+            target.xcframeworks.each_value do |xcframeworks|
+              xcframeworks.each do |xcframework|
+                dynamic_slices, static_slices = xcframework.slices.partition { |slice| Pod::Xcode::LinkageAnalyzer.dynamic_binary?(slice.path) }
+                if dynamic_slices.size > 0 && static_slices.count > 0
+                  raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both static and dynamic frameworks."
+                end
+              end
+            end
+          end
           #-----------------------------------------------------------------------#
         end
       end

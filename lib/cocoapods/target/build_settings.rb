@@ -571,8 +571,10 @@ module Pod
           if library_xcconfig?
             # We know that this library target is being built dynamically based
             # on the guard above, so include any vendored static frameworks.
-            frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } if target.should_build?
-            frameworks.concat vendored_xcframeworks.map { |f| File.basename(f, '.xcframework') } if target.should_build?
+            if target.should_build?
+              frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
+              frameworks.concat vendored_xcframeworks.map(&:name)
+            end
             # Also include any vendored dynamic frameworks of dependencies.
             frameworks.concat dependent_targets.reject(&:should_build?).flat_map { |pt| pt.build_settings[@configuration].dynamic_frameworks_to_import }
           else
@@ -586,6 +588,10 @@ module Pod
         define_build_settings_method :static_frameworks_to_import, :memoized => true do
           static_frameworks_to_import = []
           static_frameworks_to_import.concat vendored_static_frameworks.map { |f| File.basename(f, '.framework') } unless target.should_build? && target.build_as_dynamic?
+          static_frameworks_to_import.concat vendored_xcframeworks
+                                                .select { |f| f.slices.any? { |slice| !Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }}
+                                                .map(&:name)
+                                                .uniq unless target.should_build? && target.build_as_dynamic?
           static_frameworks_to_import << target.product_basename if target.should_build? && target.build_as_static_framework?
           static_frameworks_to_import
         end
@@ -595,7 +601,7 @@ module Pod
           dynamic_frameworks_to_import = vendored_dynamic_frameworks.map { |f| File.basename(f, '.framework') }
           dynamic_frameworks_to_import.concat vendored_xcframeworks
                                                 .select { |f| f.slices.any? { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }}
-                                                .map { |f| File.basename(f.path, '.xcframework') }
+                                                .map { |xcf| xcf.name }.uniq
           dynamic_frameworks_to_import << target.product_basename if target.should_build? && target.build_as_dynamic_framework?
           dynamic_frameworks_to_import.concat consumer_frameworks
           dynamic_frameworks_to_import
@@ -646,7 +652,7 @@ module Pod
           search_paths.concat vendored_xcframeworks
                                 .flat_map(&:slices)
                                 .select { |slice| slice.platform.symbolic_name == target.platform.symbolic_name }
-                                .map { |slice| File.join '${PODS_ROOT}', slice.path.dirname.relative_path_from(target.sandbox.root) }
+                                .flat_map { |slice| File.join '${PODS_ROOT}', slice.path.dirname.relative_path_from(target.sandbox.root) }
           search_paths
         end
 
