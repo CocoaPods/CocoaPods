@@ -79,6 +79,16 @@ module Pod
             echo "$1" >> $ARTIFACT_LIST_FILE
           }
 
+          install_artifact()
+          {
+            local source="$1"
+            local destination="$2"
+
+            # Use filter instead of exclude so missing patterns don't throw errors.
+            echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" \\"${source}\\" \\"${destination}\\""
+            rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" "${source}" "${destination}"
+          }
+
           # Copies a framework to derived data for use in later build phases
           install_framework()
           {
@@ -98,9 +108,7 @@ module Pod
               source="$(readlink "${source}")"
             fi
 
-            # Use filter instead of exclude so missing patterns don't throw errors.
-            echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" \\"${source}\\" \\"${destination}\\""
-            rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" "${source}" "${destination}"
+            install_artifact "$source" "$destination"
 
             local basename
             basename="$(basename -s .framework "$1")"
@@ -165,6 +173,12 @@ module Pod
             # We pass two arrays to install_xcframework - a nested list of archs, and a list of paths that
             # contain frameworks for those archs
             contents_by_config[config] << %(  install_xcframework #{args.join(" ")}\n)
+
+            dsyms = PrepareArtifactsScript.dsym_paths(xcframework.path)
+            dsyms.each do |path|
+              source = shell_escape("${PODS_ROOT}/#{path.relative_path_from(sandbox_root).to_s}")
+              contents_by_config[config] << %(  install_artifact #{source} "${TARGET_BUILD_DIR}"\n)
+            end
           end
         end
 
@@ -184,6 +198,20 @@ module Pod
 
       def shell_escape(value)
         "\"#{value}\""
+      end
+
+      # @param  [Pathname] the base path of the .xcframework bundle
+      #
+      # @return [Array<Pathname>] all found .dSYM paths
+      #
+      def self.dsym_paths(xcframework_path)
+        basename = File.basename(xcframework_path, '.xcframework')
+        dsym_basename = basename + '.dSYMs'
+        path = xcframework_path.dirname + dsym_basename
+        return [] unless File.directory?(path)
+
+        pattern = path + '*.dSYM'
+        Dir.glob(pattern).map { |s| Pathname.new(s) }
       end
     end
   end
