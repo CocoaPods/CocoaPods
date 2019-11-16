@@ -82,6 +82,8 @@ module Pod
           ARTIFACT_LIST_FILE="${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt"
           cat > $ARTIFACT_LIST_FILE
 
+          BCSYMBOLMAP_DIR="BCSymbolMaps"
+
           record_artifact()
           {
             echo "$1" >> $ARTIFACT_LIST_FILE
@@ -91,10 +93,16 @@ module Pod
           {
             local source="$1"
             local destination="$2"
+            local record=${3:-false}
 
             # Use filter instead of exclude so missing patterns don't throw errors.
             echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" \\"${source}\\" \\"${destination}\\""
             rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" "${source}" "${destination}"
+
+            if [[ "$record" == "true" ]]; then
+              artifact="${destination}/$(basename "$source")"
+              record_artifact "$artifact"
+            fi
           }
 
           # Copies a framework to derived data for use in later build phases
@@ -108,7 +116,7 @@ module Pod
               local source="$1"
             fi
 
-            local embed=${2:-true}
+            local record_artifact=${2:-true}
             local destination="${TARGET_BUILD_DIR}"
 
             if [ -L "${source}" ]; then
@@ -116,18 +124,13 @@ module Pod
               source="$(readlink "${source}")"
             fi
 
-            install_artifact "$source" "$destination"
+            install_artifact "$source" "$destination" "$record_artifact"
 
-            local basename
-            basename="$(basename -s .framework "$1")"
-            binary="${destination}/${basename}.framework/${basename}"
-
-            if ! [ -r "$binary" ]; then
-              binary="${destination}/${basename}"
-            fi
-
-            if [[ "$embed" == "true" ]]; then
-              record_artifact "$(dirname "${binary}")"  
+            if [ -d "${source}/${BCSYMBOLMAP_DIR}" ]; then
+              # Locate and install any .bcsymbolmaps if present
+              find "${source}/${BCSYMBOLMAP_DIR}/" -name "*.bcsymbolmap"|while read f; do
+                install_artifact "$f" "$destination" "true"
+              done
             fi
           }
 
@@ -188,7 +191,7 @@ module Pod
             dsyms = PrepareArtifactsScript.dsym_paths(xcframework.path)
             dsyms.each do |path|
               source = shell_escape("${PODS_ROOT}/#{path.relative_path_from(sandbox_root).to_s}")
-              contents_by_config[config] << %(  install_artifact #{source} "${TARGET_BUILD_DIR}"\n)
+              contents_by_config[config] << %(  install_artifact #{source} "${TARGET_BUILD_DIR}" "true"\n)
             end
           end
         end

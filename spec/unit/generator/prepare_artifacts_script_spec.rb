@@ -62,10 +62,10 @@ module Pod
       generator = PrepareArtifactsScript.new({'Debug' => [xcframework]}, temporary_sandbox.root, Platform.ios)
       results = generator.generate
       results.should.include <<-SH.strip_heredoc
-        install_artifact "${PODS_ROOT}/../../spec/fixtures/CoconutLib.dSYMs/A.dSYM" "${TARGET_BUILD_DIR}"
+        install_artifact "${PODS_ROOT}/../../spec/fixtures/CoconutLib.dSYMs/A.dSYM" "${TARGET_BUILD_DIR}" "true"
       SH
       results.should.include <<-SH.strip_heredoc
-        install_artifact "${PODS_ROOT}/../../spec/fixtures/CoconutLib.dSYMs/B.dSYM" "${TARGET_BUILD_DIR}"
+        install_artifact "${PODS_ROOT}/../../spec/fixtures/CoconutLib.dSYMs/B.dSYM" "${TARGET_BUILD_DIR}" "true"
       SH
     end
   end
