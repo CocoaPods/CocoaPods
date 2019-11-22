@@ -941,6 +941,15 @@ module Pod
       end.each_value(&:freeze).freeze
     end
 
+    def objc_bridging_module_map_path
+      objc_bridging_module_map_path_to_write
+    end
+
+    def objc_bridging_module_map_path_to_write
+      basename = "module.modulemap"
+      build_headers.root + product_module_name + basename
+    end
+
     protected
 
     # Returns whether the pod target should use modular headers.
