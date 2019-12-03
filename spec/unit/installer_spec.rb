@@ -111,10 +111,11 @@ module Pod
         generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, {}, target_installation_results)
         generator.stubs(:generate!).returns(generator_result)
         generator.stubs(:configure_schemes)
+        Installer::Xcode::PodsProjectWriter.any_instance.unstub(:write!)
 
         hooks = sequence('hooks')
         @installer.expects(:run_podfile_post_install_hooks).once.in_sequence(hooks)
-        Installer::Xcode::PodsProjectWriter.any_instance.expects(:write!).once.in_sequence(hooks)
+        Installer::Xcode::PodsProjectWriter.any_instance.expects(:save_projects).once.in_sequence(hooks)
 
         @installer.install!
       end

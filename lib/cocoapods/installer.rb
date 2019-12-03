@@ -319,11 +319,11 @@ module Pod
         predictabilize_uuids(generated_projects) if installation_options.deterministic_uuids?
         stabilize_target_uuids(generated_projects)
 
-        run_podfile_post_install_hooks
-
         projects_writer = Xcode::PodsProjectWriter.new(sandbox, generated_projects,
                                                        target_installation_results.pod_target_installation_results, installation_options)
-        projects_writer.write!
+        projects_writer.write! do
+          run_podfile_post_install_hooks
+        end
 
         pods_project_pod_targets = pod_targets_to_generate - projects_by_pod_targets.values.flatten
         all_projects_by_pod_targets = {}
