@@ -1203,8 +1203,9 @@ module Pod
                   header_build_phase_file_refs = target.headers_build_phase.files.
                     reject { |build_file| build_file.settings.nil? }.
                     map { |build_file| build_file.file_ref.path }
-                  header_build_phase_file_refs.should.be.empty
-
+                  header_build_phase_file_refs.should == [
+                    'root.h',
+                  ]
                   copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
                   copy_files_build_phases.map(&:name).should == [
                     'Copy . Public Headers',
