@@ -13,6 +13,8 @@ Pod::Spec.new do |s|
 
   s.module_map = 'HeadersMappingSubspec.modulemap'
 
+  s.source_files = '*.{h,m}'
+
   s.subspec 'Interface' do |ss|
     ss.header_mappings_dir = 'include/mapping'
     ss.source_files = 'include/mapping/*.h'

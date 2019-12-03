@@ -69,7 +69,7 @@ module Pod
                   generator.imports += library_file_accessors.flat_map do |file_accessor|
                     header_dir = if !target.build_as_framework? && dir = file_accessor.spec_consumer.header_dir
                                    Pathname.new(dir)
-                    end
+                                 end
 
                     file_accessor.public_headers.map do |public_header|
                       public_header = if header_mappings_dir(file_accessor)
@@ -942,7 +942,7 @@ module Pod
                     'Project'
                   end
 
-            if target.build_as_framework? && any_header_mapping_dirs? && acl != 'Project'
+            if target.build_as_framework? && !header_mappings_dir(file_accessor).nil? && acl != 'Project'
               relative_path = if mapping_dir = header_mappings_dir(file_accessor)
                                 file_ref.real_path.relative_path_from(mapping_dir)
                               else

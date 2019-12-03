@@ -35,6 +35,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not apply header mapping copy if the spec does not provide a header mappings dir.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9308](https://github.com/CocoaPods/CocoaPods/issues/9308)
+
 * Fix issue where workspace was missing user project references during incremental installation.  
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#9237](https://github.com/CocoaPods/CocoaPods/issues/9237)
