@@ -1,6 +1,8 @@
 require 'cocoapods-core/source'
+require 'netrc'
 require 'set'
 require 'rest'
+require 'typhoeus'
 
 module Pod
   class Source
@@ -68,8 +70,13 @@ module Pod
       #         The URL of the source.
       #
       def cdn_url?(url)
-        url =~ %r{^https?:\/\/} &&
-          REST.head(url + '/all_pods.txt').ok?
+        if url =~ %r{^https?:\/\/}
+          response = Typhoeus.get(url + '/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional)
+          response.code == 200 && begin
+            response_hash = YAML.load(response.body) # rubocop:disable Security/YAMLLoad
+            response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
+          end
+        end
       rescue => e
         raise Informative, "Couldn't determine repo type for URL: `#{url}`: #{e}"
       end
