@@ -1,10 +1,10 @@
 # frozen_string_literal: true
+
 require 'cocoapods/xcode/xcframework/xcframework_slice'
 
 module Pod
   module Xcode
     class XCFramework
-
       # @return [Pathname] path the path to the .xcframework on disk
       #
       attr_reader :path
@@ -17,6 +17,10 @@ module Pod
       #
       attr_reader :slices
 
+      # @return [Hash] the contents of the parsed plist
+      #
+      attr_reader :plist
+
       # @param [Pathname, String] path the path to the .xcframework on disk
       #
       def initialize(path)
@@ -28,10 +32,8 @@ module Pod
         parse_plist_contents
       end
 
-      # @return [Hash] the contents of the parsed plist
+      # @return [Pathname] the path to the Info.plist
       #
-      attr_reader :plist
-
       def plist_path
         path + 'Info.plist'
       end
@@ -40,6 +42,18 @@ module Pod
       #
       def name
         File.basename(path, '.xcframework')
+      end
+
+      # @return [Boolean] true if any slices use dynamic linkage
+      #
+      def includes_dynamic_slices?
+        slices.any? { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
+      end
+
+      # @return [Boolean] true if any slices use dynamic linkage
+      #
+      def includes_static_slices?
+        slices.any? { |slice| !Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
       end
 
       private

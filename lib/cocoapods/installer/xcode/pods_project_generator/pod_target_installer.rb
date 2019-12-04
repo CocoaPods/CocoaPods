@@ -1090,7 +1090,7 @@ module Pod
             target.xcframeworks.each_value do |xcframeworks|
               xcframeworks.each do |xcframework|
                 dynamic_slices, static_slices = xcframework.slices.partition { |slice| Pod::Xcode::LinkageAnalyzer.dynamic_binary?(slice.path) }
-                if dynamic_slices.size > 0 && static_slices.count > 0
+                if !dynamic_slices.empty? && !static_slices.empty?
                   raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both static and dynamic frameworks."
                 end
               end

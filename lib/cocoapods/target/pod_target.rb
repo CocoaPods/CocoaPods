@@ -415,7 +415,7 @@ module Pod
       end
     end
 
-    # @return [Hash{String=>Array<Xcode::XCFramework>}] The vendored and non vendored xcframeworks this target
+    # @return [Hash{String=>Array<Xcode::XCFramework>}] The vendored xcframeworks this target
     #         depends upon keyed by spec name.
     #
     def xcframeworks

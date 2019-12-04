@@ -51,7 +51,7 @@ module Pod
 
         # @return [String] the path to the artifact lists file used in the prepare & embed scripts
         #
-        ARTIFACT_LIST_FILE = "${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt"
+        ARTIFACT_LIST_FILE = '${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt'.freeze
 
         # @return [AggregateTarget] the target that should be integrated.
         #
@@ -552,7 +552,7 @@ module Pod
             target.xcframeworks_by_config.each do |config, xcframeworks|
               input_paths_key = XCFileListConfigKey.new(target.prepare_artifacts_script_input_files_path(config), target.prepare_artifacts_script_input_files_relative_path)
               input_paths = input_paths_by_config[input_paths_key] = [script_path]
-              input_paths.concat xcframeworks.map { |xcf| "${PODS_ROOT}/#{xcf.path.relative_path_from(target.sandbox.root)}" }
+              input_paths.concat(xcframeworks.map { |xcf| "${PODS_ROOT}/#{xcf.path.relative_path_from(target.sandbox.root)}" })
 
               output_paths_key = XCFileListConfigKey.new(target.prepare_artifacts_script_output_files_path(config), target.prepare_artifacts_script_output_files_relative_path)
               output_paths_by_config[output_paths_key] = [ARTIFACT_LIST_FILE]

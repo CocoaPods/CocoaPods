@@ -19,7 +19,7 @@ module Pod
         end
 
         it 'reads the framework slices' do
-          slices = @framework.slices.sort_by { |s| s.identifier }
+          slices = @framework.slices.sort_by(&:identifier)
 
           slices.size.should == 7
 

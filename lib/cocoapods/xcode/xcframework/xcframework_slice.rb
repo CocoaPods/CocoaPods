@@ -1,16 +1,10 @@
-
 module Pod
   module Xcode
     class XCFramework
       class Slice
-
         # @return [Pathname] the path to the .framework root of this framework slice
         #
         attr_reader :path
-
-        # @return [String] the name of the framework
-        #
-        attr_reader :name
 
         # @return [Array<String>] list of supported architectures
         #
@@ -36,6 +30,8 @@ module Pod
           @platform_variant = platform_variant.to_sym unless platform_variant.nil?
         end
 
+        # @return [String] the name of the framework
+        #
         def name
           @name ||= File.basename(path, '.framework')
         end
@@ -48,10 +44,6 @@ module Pod
         #
         def binary_path
           path + name
-        end
-
-        def framework_paths
-          @framework_paths ||= FrameworkPaths.from_path(path)
         end
       end
     end

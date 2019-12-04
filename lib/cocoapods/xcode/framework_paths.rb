@@ -45,7 +45,7 @@ module Pod
         dsym_name = "#{path.basename}.dSYM"
         dsym_path = Pathname.new("#{path.dirname}/#{dsym_name}")
         dsym_path = nil unless dsym_path.exist?
-        bcsymbolmap_paths = Pathname.glob(path.dirname, "*.bcsymbolmap")
+        bcsymbolmap_paths = Pathname.glob(path.dirname, '*.bcsymbolmap')
 
         FrameworkPaths.new(path, dsym_path, bcsymbolmap_paths)
       end

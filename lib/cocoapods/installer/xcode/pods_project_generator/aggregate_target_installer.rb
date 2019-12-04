@@ -173,7 +173,7 @@ module Pod
             update_changed_file(generator, path)
             add_file_to_support_group(path)
 
-            target.user_build_configurations.each do |config, _|
+            target.user_build_configurations.each_key do |config|
               if (input_file_list = target.prepare_artifacts_script_input_files_path(config))
                 add_file_to_support_group(input_file_list)
               end

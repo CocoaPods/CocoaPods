@@ -42,7 +42,7 @@ module Pod
         pathname.open('w') do |file|
           file.puts(script)
         end
-        File.chmod(0755, pathname.to_s)
+        File.chmod(0o755, pathname.to_s)
       end
 
       # @return [String] The contents of the embed frameworks script.
@@ -139,7 +139,7 @@ module Pod
             local embed="$2"
             shift
             local paths=("$@")
-            
+
             # Locate the correct slice of the .xcframework for the current architectures
             local target_path=""
             local target_arch="$ARCHS"
@@ -158,7 +158,7 @@ module Pod
                 break;
               fi
             done
-            
+
             if [[ -z "$target_path" ]]; then
               echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
               return
@@ -169,14 +169,13 @@ module Pod
 
         SH
         contents_by_config = Hash.new do |hash, key|
-          hash[key] = ""
+          hash[key] = ''
         end
         xcframeworks_by_config.each do |config, xcframeworks|
           next if xcframeworks.empty?
           xcframeworks.each do |xcframework|
-            dynamic_slices, static_slices = xcframework.slices
-                                              .select { |f| f.platform.symbolic_name == platform.symbolic_name }
-                                              .partition { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
+            slices = xcframework.slices.select { |f| f.platform.symbolic_name == platform.symbolic_name }
+            dynamic_slices, static_slices = slices.partition { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
             next if dynamic_slices.empty? && static_slices.empty?
             unless dynamic_slices.empty?
               args = install_xcframework_args(xcframework.path, dynamic_slices, false)
@@ -190,7 +189,7 @@ module Pod
 
             dsyms = PrepareArtifactsScript.dsym_paths(xcframework.path)
             dsyms.each do |path|
-              source = shell_escape("${PODS_ROOT}/#{path.relative_path_from(sandbox_root).to_s}")
+              source = shell_escape("${PODS_ROOT}/#{path.relative_path_from(sandbox_root)}")
               contents_by_config[config] << %(  install_artifact #{source} "${TARGET_BUILD_DIR}" "true"\n)
             end
           end
@@ -214,34 +213,30 @@ module Pod
         "\"#{value}\""
       end
 
-      private
-
       def install_xcframework_args(root, slices, static)
         args = [shell_escape("${PODS_ROOT}/#{root.relative_path_from(sandbox_root)}")]
-        embed = if static
-                  "false"
-                else
-                  "true"
-                end
+        embed = static ? 'false' : 'true'
         args << shell_escape(embed)
         slices.each do |slice|
           args << shell_escape(slice.path.relative_path_from(root))
         end
-        args.join(" ")
+        args.join(' ')
       end
 
-      # @param  [Pathname] the base path of the .xcframework bundle
-      #
-      # @return [Array<Pathname>] all found .dSYM paths
-      #
-      def self.dsym_paths(xcframework_path)
-        basename = File.basename(xcframework_path, '.xcframework')
-        dsym_basename = basename + '.dSYMs'
-        path = xcframework_path.dirname + dsym_basename
-        return [] unless File.directory?(path)
+      class << self
+        # @param  [Pathname] the base path of the .xcframework bundle
+        #
+        # @return [Array<Pathname>] all found .dSYM paths
+        #
+        def dsym_paths(xcframework_path)
+          basename = File.basename(xcframework_path, '.xcframework')
+          dsym_basename = basename + '.dSYMs'
+          path = xcframework_path.dirname + dsym_basename
+          return [] unless File.directory?(path)
 
-        pattern = path + '*.dSYM'
-        Dir.glob(pattern).map { |s| Pathname.new(s) }
+          pattern = path + '*.dSYM'
+          Dir.glob(pattern).map { |s| Pathname.new(s) }
+        end
       end
     end
   end

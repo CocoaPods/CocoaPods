@@ -233,6 +233,7 @@ module Pod
       #
       # @return [Array<Pathname>] The paths to all the headers included in the
       #         vendored xcframework
+      #
       def self.vendored_xcframework_headers(framework)
         xcframework = Xcode::XCFramework.new(framework)
         xcframework.slices.flat_map do |slice|
