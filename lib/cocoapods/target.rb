@@ -305,12 +305,6 @@ module Pod
       @application_extension_api_only = true
     end
 
-    # @return [Pathname] The absolute path of the embed frameworks script.
-    #
-    def embed_frameworks_script_path
-      support_files_dir + "#{label}-frameworks.sh"
-    end
-
     # @return [Pathname] The absolute path of the prepare artifacts script.
     #
     def prepare_artifacts_script_path

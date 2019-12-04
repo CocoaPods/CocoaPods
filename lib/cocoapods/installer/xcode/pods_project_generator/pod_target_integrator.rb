@@ -32,6 +32,7 @@ module Pod
           def integrate!
             UI.section(integration_message) do
               target_installation_result.non_library_specs_by_native_target.each do |native_target, spec|
+                add_prepare_artifacts_script_phase(native_target, spec)
                 add_embed_frameworks_script_phase(native_target, spec)
                 add_copy_resources_script_phase(native_target, spec)
                 UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(spec), native_target)
@@ -52,6 +53,12 @@ module Pod
           #---------------------------------------------------------------------#
 
           # Find or create a 'Copy Pods Resources' build phase
+          #
+          # @param [PBXNativeTarget] native_target
+          #         the native target for which to add the copy resources script
+          #
+          # @param [Pod::Specification] spec
+          #         the specification to integrate
           #
           # @return [void]
           #
@@ -96,7 +103,13 @@ module Pod
             end
           end
 
-          # Find or create a 'Embed Pods Frameworks' Copy Files Build Phase
+          # Find or create a 'Embed Pods Frameworks' Run Script Build Phase
+          #
+          # @param [PBXNativeTarget] native_target
+          #         the native target for which to add the embed frameworks script
+          #
+          # @param [Pod::Specification] spec
+          #         the specification to integrate
           #
           # @return [void]
           #
@@ -140,6 +153,60 @@ module Pod
               UserProjectIntegrator::TargetIntegrator.remove_embed_frameworks_script_phase_from_target(native_target)
             else
               UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(
+                native_target, script_path, input_paths_by_config, output_paths_by_config)
+            end
+          end
+
+          # Find or create a 'Prepare Artifacts' Run Script Build Phase
+          #
+          # @param [PBXNativeTarget] native_target
+          #         the native target for which to add the prepare artifacts script
+          #
+          # @param [Pod::Specification] spec
+          #         the specification to integrate
+          #
+          # @return [void]
+          #
+          def add_prepare_artifacts_script_phase(native_target, spec)
+            script_path = "${PODS_ROOT}/#{target.prepare_artifacts_script_path_for_spec(spec).relative_path_from(target.sandbox.root)}"
+
+            input_paths_by_config = {}
+            output_paths_by_config = {}
+
+            dependent_targets = if spec.test_specification?
+                                  target.dependent_targets_for_test_spec(spec)
+                                else
+                                  target.dependent_targets_for_app_spec(spec)
+                                end
+            host_target_spec_names = target.app_host_dependent_targets_for_spec(spec).flat_map do |pt|
+              pt.specs.map(&:name)
+            end.uniq
+            xcframeworks = dependent_targets.flat_map do |dependent_target|
+              spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include -= host_target_spec_names
+              spec_paths_to_include << spec.name if dependent_target == target
+              dependent_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact
+            end.uniq
+
+            if use_input_output_paths? && !xcframeworks.empty?
+              input_file_list_path = target.prepare_artifacts_script_input_files_path_for_spec(spec)
+              input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
+              input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
+              input_paths = input_paths_by_config[input_paths_key] = [script_path]
+
+              framework_paths = xcframeworks.map { |xcf| "${PODS_ROOT}/#{xcf.path.relative_path_from(target.sandbox.root)}" }
+              input_paths.concat framework_paths
+
+              output_file_list_path = target.prepare_artifacts_script_output_files_path_for_spec(spec)
+              output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
+              output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
+              output_paths_by_config[output_paths_key] = [UserProjectIntegrator::TargetIntegrator::ARTIFACT_LIST_FILE]
+            end
+
+            if xcframeworks.empty?
+              UserProjectIntegrator::TargetIntegrator.remove_prepare_artifacts_script_phase_from_target(native_target)
+            else
+              UserProjectIntegrator::TargetIntegrator.create_or_update_prepare_artifacts_script_phase_to_target(
                 native_target, script_path, input_paths_by_config, output_paths_by_config)
             end
           end

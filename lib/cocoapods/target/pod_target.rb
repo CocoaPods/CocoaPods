@@ -690,7 +690,7 @@ module Pod
     # @return [Pathname] The absolute path of the prepare artifacts script for the given spec.
     #
     def prepare_artifacts_script_path_for_spec(spec)
-      support_files_dir + "#{non_library_spec_label(spec)}-prepare.sh"
+      support_files_dir + "#{non_library_spec_label(spec)}-artifacts.sh"
     end
 
     # @param  [Specification] spec
@@ -699,7 +699,7 @@ module Pod
     # @return [Pathname] The absolute path of the prepare artifacts script input file list for the given spec.
     #
     def prepare_artifacts_script_input_files_path_for_spec(spec)
-      support_files_dir + "#{non_library_spec_label(spec)}-prepare-input-files.xcfilelist"
+      support_files_dir + "#{non_library_spec_label(spec)}-artifacts-input-files.xcfilelist"
     end
 
     # @param  [Specification] spec
@@ -708,7 +708,7 @@ module Pod
     # @return [Pathname] The absolute path of the prepare artifacts script output file list for the given spec.
     #
     def prepare_artifacts_script_output_files_path_for_spec(spec)
-      support_files_dir + "#{non_library_spec_label(spec)}-prepare-output-files.xcfilelist"
+      support_files_dir + "#{non_library_spec_label(spec)}-artifacts-output-files.xcfilelist"
     end
 
     # @param  [Specification] spec

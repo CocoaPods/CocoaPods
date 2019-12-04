@@ -317,6 +317,12 @@ module Pod
       support_files_dir + "#{label}-resources.sh"
     end
 
+    # @return [Pathname] The absolute path of the embed frameworks script.
+    #
+    def embed_frameworks_script_path
+      support_files_dir + "#{label}-frameworks.sh"
+    end
+
     # @param  [String] configuration the configuration this path is for.
     #
     # @return [Pathname] The absolute path of the copy resources script input file list.
