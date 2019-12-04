@@ -30,7 +30,7 @@ module Pod
               # cause an App Store rejection because frameworks cannot be
               # embedded in embedded targets.
               #
-              create_embed_frameworks_script if target.includes_frameworks? && !target.requires_host_target?
+              create_embed_frameworks_script if !target.requires_host_target?
               create_bridge_support_file(native_target)
               create_copy_resources_script if target.includes_resources?
               create_acknowledgements
