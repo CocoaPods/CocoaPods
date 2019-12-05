@@ -224,7 +224,8 @@ module Pod
       end
 
       class << self
-        # @param  [Pathname] the base path of the .xcframework bundle
+        # @param  [Pathname] xcframework_path
+        #         the base path of the .xcframework bundle
         #
         # @return [Array<Pathname>] all found .dSYM paths
         #

@@ -315,6 +315,11 @@ describe_cli 'pod' do
                             'install --no-repo-update --no-verbose'
     end
 
+    describe 'Integrates a Pod using a vendored xcframework' do
+      behaves_like cli_spec 'install_vendored_xcframework',
+                            'install --no-repo-update'
+    end
+
     # @todo add tests for all the hooks API
     #
     describe 'Runs the Podfile callbacks' do

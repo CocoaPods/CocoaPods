@@ -229,7 +229,8 @@ module Pod
         Pathname.glob(headers_dir + '**/' + GLOB_PATTERNS[:public_header_files])
       end
 
-      # @param [Pathname] the path to the .xcframework
+      # @param [Pathname] framework
+      #         The path to the .xcframework
       #
       # @return [Array<Pathname>] The paths to all the headers included in the
       #         vendored xcframework

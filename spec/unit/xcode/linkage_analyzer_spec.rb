@@ -1,5 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-require 'cocoapods/xcode/framework_paths'
+require 'cocoapods/xcode'
 require 'macho'
 
 describe LinkageAnalyzer = Pod::Xcode::LinkageAnalyzer do

@@ -21,7 +21,12 @@ module Pod
       #
       attr_reader :plist
 
-      # @param [Pathname, String] path the path to the .xcframework on disk
+      # Initializes an XCFramework instance with a path on disk
+      #
+      # @param [Pathname, String] path
+      #        The path to the .xcframework on disk
+      #
+      # @return [XCFramework] the xcframework at the given path
       #
       def initialize(path)
         @path = Pathname.new(path).tap do |p|
