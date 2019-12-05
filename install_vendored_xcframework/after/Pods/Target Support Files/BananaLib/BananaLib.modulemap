@@ -1,0 +1,6 @@
+framework module BananaLib {
+  umbrella header "BananaLib-umbrella.h"
+
+  export *
+  module * { export * }
+}

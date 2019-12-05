@@ -1,0 +1,7 @@
+
+target 'XCFrameworkIntegration' do
+	platform :ios, '13.0'
+  use_frameworks!
+
+  pod 'BananaLib', :path => 'BananaLib', :testspecs => ['Tests']
+end
