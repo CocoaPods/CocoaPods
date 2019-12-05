@@ -337,7 +337,9 @@ module Pod
       it 'cats the first podspec from all podspecs' do
         UI.next_input = "1\n"
         run_command('spec', 'cat', '--show-all', 'AFNetworking')
-        UI.output.should.include fixture('spec-repos/trunk/Specs/a/7/5/AFNetworking/3.2.1/AFNetworking.podspec.json').read
+        output = UI.output.gsub(/[0-9]+: /, '')
+        first_spec_path = output.split("\n")[0]
+        UI.output.should.include Pathname.new(first_spec_path).read
       end
 
       describe_regex_support('cat')
