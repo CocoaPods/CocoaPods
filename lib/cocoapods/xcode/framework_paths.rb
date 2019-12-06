@@ -1,5 +1,5 @@
 module Pod
-  class Target
+  module Xcode
     class FrameworkPaths
       # @return [String] the path to the .framework
       #
@@ -35,6 +35,19 @@ module Pod
 
       def all_paths
         [source_path, dsym_path, bcsymbolmap_paths].flatten.compact
+      end
+
+      # @param [Pathname] path the path to the `.framework` bundle
+      #
+      # @return [FrameworkPaths] the path of the framework with dsym & bcsymbolmap paths, if found
+      #
+      def self.from_path(path)
+        dsym_name = "#{path.basename}.dSYM"
+        dsym_path = Pathname.new("#{path.dirname}/#{dsym_name}")
+        dsym_path = nil unless dsym_path.exist?
+        bcsymbolmap_paths = Pathname.glob(path.dirname, '*.bcsymbolmap')
+
+        FrameworkPaths.new(path, dsym_path, bcsymbolmap_paths)
       end
     end
   end

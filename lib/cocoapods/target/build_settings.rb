@@ -571,7 +571,10 @@ module Pod
           if library_xcconfig?
             # We know that this library target is being built dynamically based
             # on the guard above, so include any vendored static frameworks.
-            frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') } if target.should_build?
+            if target.should_build?
+              frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
+              frameworks.concat vendored_xcframeworks.map(&:name)
+            end
             # Also include any vendored dynamic frameworks of dependencies.
             frameworks.concat dependent_targets.reject(&:should_build?).flat_map { |pt| pt.build_settings[@configuration].dynamic_frameworks_to_import }
           else
@@ -585,6 +588,12 @@ module Pod
         define_build_settings_method :static_frameworks_to_import, :memoized => true do
           static_frameworks_to_import = []
           static_frameworks_to_import.concat vendored_static_frameworks.map { |f| File.basename(f, '.framework') } unless target.should_build? && target.build_as_dynamic?
+          unless target.should_build? && target.build_as_dynamic?
+            static_frameworks_to_import.concat vendored_xcframeworks.
+              select(&:includes_static_slices?).
+              map(&:name).
+              uniq
+          end
           static_frameworks_to_import << target.product_basename if target.should_build? && target.build_as_static_framework?
           static_frameworks_to_import
         end
@@ -592,6 +601,10 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :dynamic_frameworks_to_import, :memoized => true do
           dynamic_frameworks_to_import = vendored_dynamic_frameworks.map { |f| File.basename(f, '.framework') }
+          dynamic_frameworks_to_import.concat vendored_xcframeworks.
+            select(&:includes_dynamic_slices?).
+            map(&:name).
+            uniq
           dynamic_frameworks_to_import << target.product_basename if target.should_build? && target.build_as_dynamic_framework?
           dynamic_frameworks_to_import.concat consumer_frameworks
           dynamic_frameworks_to_import
@@ -633,7 +646,17 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :vendored_framework_search_paths, :memoized => true do
-          file_accessors.flat_map(&:vendored_frameworks).map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
+          search_paths = []
+          search_paths.concat file_accessors.
+            flat_map(&:vendored_frameworks).
+            map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
+          # Include each slice in the framework search paths.
+          # Xcode will not search inside an .xcframework for headers within each slice
+          search_paths.concat vendored_xcframeworks.
+            flat_map(&:slices).
+            select { |slice| slice.platform.symbolic_name == target.platform.symbolic_name }.
+            flat_map { |slice| File.join '${PODS_ROOT}', slice.path.dirname.relative_path_from(target.sandbox.root) }
+          search_paths
         end
 
         # @return [Array<String>]
@@ -653,6 +676,11 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :vendored_dynamic_frameworks, :memoized => true do
           file_accessors.flat_map(&:vendored_dynamic_frameworks)
+        end
+
+        # @return [Array<Xcode::XCFramework>]
+        define_build_settings_method :vendored_xcframeworks, :memoized => true do
+          file_accessors.flat_map(&:vendored_xcframeworks).map { |path| Xcode::XCFramework.new(path) }
         end
 
         #-------------------------------------------------------------------------#

@@ -1535,6 +1535,13 @@ module Pod
                 xml_file.should.be.nil
               end
             end
+
+            it 'raises if a vendored xcframework has slices of mixed linkage' do
+              @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+              Pod::Xcode::LinkageAnalyzer.stubs(:dynamic_binary?).returns(true, false, true, false, true, false, true)
+              e = ->() { @installer.install! }.should.raise Informative
+              e.message.should.include? 'Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib`, because it contains both static and dynamic frameworks.'
+            end
           end
         end
       end

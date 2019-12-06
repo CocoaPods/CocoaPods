@@ -1,3 +1,5 @@
+require 'cocoapods/xcode'
+
 module Pod
   class Installer
     class Xcode
@@ -56,6 +58,7 @@ module Pod
 
               add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
               validate_targets_contain_sources(test_native_targets + app_native_targets + [native_target])
+              validate_xcframeworks_no_mixed_linkage
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
@@ -372,6 +375,7 @@ module Pod
               remove_pod_target_xcconfig_overrides_from_target(target.test_spec_build_settings_by_config[test_spec.name], test_native_target)
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
+              create_test_target_prepare_artifacts_script(test_spec)
               create_test_target_embed_frameworks_script(test_spec)
               create_test_target_copy_resources_script(test_spec)
 
@@ -638,6 +642,33 @@ module Pod
             end
             unless resource_paths_by_config.each_value.all?(&:empty?)
               generator = Generator::CopyResourcesScript.new(resource_paths_by_config, target.platform)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+            end
+          end
+
+          # Creates a script that prepares artifacts for the test target.
+          #
+          # @param [Specification] test_spec
+          #        The test spec to create the script for.
+          #
+          # @return [void]
+          #
+          def create_test_target_prepare_artifacts_script(test_spec)
+            path = target.prepare_artifacts_script_path_for_spec(test_spec)
+            host_target_spec_names = target.app_host_dependent_targets_for_spec(test_spec).flat_map do |pt|
+              pt.specs.map(&:name)
+            end.uniq
+            frameworks_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+              paths_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include -= host_target_spec_names
+                spec_paths_to_include << test_spec.name if pod_target == target
+                pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq
+              end
+            end
+            unless frameworks_by_config.each_value.all?(&:empty?)
+              generator = Generator::PrepareArtifactsScript.new(frameworks_by_config, target.sandbox.root, target.platform)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
@@ -1053,6 +1084,18 @@ module Pod
             end
           end
 
+          # Raises if a vendored xcframework contains frameworks of mixed linkage
+          #
+          def validate_xcframeworks_no_mixed_linkage
+            target.xcframeworks.each_value do |xcframeworks|
+              xcframeworks.each do |xcframework|
+                dynamic_slices, static_slices = xcframework.slices.partition { |slice| Pod::Xcode::LinkageAnalyzer.dynamic_binary?(slice.path) }
+                if !dynamic_slices.empty? && !static_slices.empty?
+                  raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both static and dynamic frameworks."
+                end
+              end
+            end
+          end
           #-----------------------------------------------------------------------#
         end
       end

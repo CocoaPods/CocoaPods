@@ -50,6 +50,16 @@ module SpecHelper
     #
     def set_up_test_repo
       require 'fileutils'
+      require 'typhoeus'
+      cdn_repo_response = '---
+         min: 1.0.0
+         last: 1.8.1
+         prefix_lengths:
+         - 1
+         - 1
+         - 1'.freeze
+      expected = Typhoeus::Response.new(:code => 200, :body => cdn_repo_response, :headers => {})
+      Typhoeus.stub(Pod::TrunkSource::TRUNK_REPO_URL + '/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional).and_return(expected)
       test_repo_path.mkpath
       origin = ROOT + 'spec/fixtures/spec-repos/test_repo/.'
       destination = tmp_repos_path + 'master'

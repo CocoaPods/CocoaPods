@@ -305,6 +305,12 @@ module Pod
       @application_extension_api_only = true
     end
 
+    # @return [Pathname] The absolute path of the prepare artifacts script.
+    #
+    def prepare_artifacts_script_path
+      support_files_dir + "#{label}-artifacts.sh"
+    end
+
     #-------------------------------------------------------------------------#
 
     private

@@ -27,6 +27,7 @@ module Pod
               :vendored_static_libraries => [config.sandbox.root + 'BBB/StaticLibrary.a'],
               :vendored_dynamic_frameworks => [config.sandbox.root + 'CCC/VendoredFramework.framework'],
               :vendored_dynamic_libraries => [config.sandbox.root + 'DDD/VendoredDyld.dyld'],
+              :vendored_xcframeworks => [],
             )
             file_accessor.stubs(:vendored_libraries => file_accessor.vendored_static_libraries + file_accessor.vendored_dynamic_libraries,
                                 :vendored_frameworks => file_accessor.vendored_static_frameworks + file_accessor.vendored_dynamic_frameworks)

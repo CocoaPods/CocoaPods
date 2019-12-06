@@ -40,11 +40,20 @@ module Pod
 
       it 'returns whether it has frameworks to embed' do
         @target.stubs(:framework_paths_by_config).returns(
-          'DEBUG' => [Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework')],
+          'DEBUG' => [Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework')],
         )
         @target.includes_frameworks?.should.be.true
         @target.stubs(:framework_paths_by_config).returns('DEBUG' => [], 'RELEASE' => [])
         @target.includes_frameworks?.should.be.false
+      end
+
+      it 'returns whether it has xcframeworks to embed' do
+        @target.stubs(:xcframeworks_by_config).returns(
+          'DEBUG' => [Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))],
+        )
+        @target.includes_xcframeworks?.should.be.true
+        @target.stubs(:xcframeworks_by_config).returns('DEBUG' => [], 'RELEASE' => [])
+        @target.includes_xcframeworks?.should.be.false
       end
 
       it 'returns whether it has resources' do
@@ -73,6 +82,10 @@ module Pod
 
       it 'returns the absolute path of the frameworks script' do
         @target.embed_frameworks_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-frameworks.sh')
+      end
+
+      it 'returns the absolute path of the prepare artifacts script' do
+        @target.prepare_artifacts_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-artifacts.sh')
       end
 
       it 'returns the absolute path of the bridge support file' do
@@ -151,10 +164,10 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
           @target.framework_paths_by_config['Release'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
         end
 
@@ -188,11 +201,11 @@ module Pod
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
           framework_paths_by_config = @target.framework_paths_by_config
           framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
           framework_paths_by_config['Release'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/CoconutLib/CoconutLib.framework'),
           ]
         end
 
@@ -206,7 +219,7 @@ module Pod
           )
           framework_path.stubs(:relative_path_from).returns(Pathname.new('../../some/absolute/path/to/FrameworkA.framework'))
           @target.framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${PODS_ROOT}/../../some/absolute/path/to/FrameworkA.framework'),
+            Xcode::FrameworkPaths.new('${PODS_ROOT}/../../some/absolute/path/to/FrameworkA.framework'),
           ]
         end
 
@@ -214,25 +227,20 @@ module Pod
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type => BuildType.dynamic_framework)
           @target.framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
           @target.framework_paths_by_config['Release'].should == [
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework'),
           ]
         end
 
-        it 'returns correct input and output paths for vendored frameworks' do
+        it 'returns vendored xcframeworks by config' do
           path_list = Sandbox::PathList.new(fixture('banana-lib'))
           file_accessor = Sandbox::FileAccessor.new(path_list, @spec.consumer(:ios))
           @pod_target.stubs(:file_accessors).returns([file_accessor])
-          framework_path = Pathname('/absolute/path/to/FrameworkA.framework')
-          @pod_target.file_accessors.first.stubs(:vendored_dynamic_artifacts).returns(
-            [framework_path],
-          )
-          framework_path.stubs(:relative_path_from).returns(Pathname.new('../../absolute/path/to/FrameworkA.framework'))
-          @target.framework_paths_by_config['Debug'].should == [
-            Target::FrameworkPaths.new('${PODS_ROOT}/../../absolute/path/to/FrameworkA.framework'),
-          ]
+          framework_path = fixture('CoconutLib.xcframework')
+          @pod_target.file_accessors.first.stubs(:vendored_xcframeworks).returns([framework_path])
+          @target.xcframeworks_by_config['Debug'].map(&:path).should == [framework_path]
         end
       end
 

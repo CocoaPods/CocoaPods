@@ -1,4 +1,5 @@
-require 'cocoapods/target/framework_paths'
+require 'cocoapods/xcode/framework_paths'
+require 'cocoapods/xcode/xcframework'
 
 module Pod
   # Stores the information relative to the target used to compile a single Pod.
@@ -378,7 +379,7 @@ module Pod
       !app_specs.empty?
     end
 
-    # @return [Hash{String=>Array<FrameworkPaths>}] The vendored and non vendored framework paths this target
+    # @return [Hash{String=>Array<Xcode::FrameworkPaths>}] The vendored and non vendored framework paths this target
     #         depends upon keyed by spec name. For the root spec and subspecs the framework path of the target itself
     #         is included.
     #
@@ -404,10 +405,24 @@ module Pod
                                     end
                                   end
                                 end
-            FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_paths)
+            Xcode::FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_paths)
           end
           if file_accessor.spec.library_specification? && should_build? && build_as_dynamic_framework?
-            frameworks << FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))
+            frameworks << Xcode::FrameworkPaths.new(build_product_path('${BUILT_PRODUCTS_DIR}'))
+          end
+          hash[file_accessor.spec.name] = frameworks
+        end
+      end
+    end
+
+    # @return [Hash{String=>Array<Xcode::XCFramework>}] The vendored xcframeworks this target
+    #         depends upon keyed by spec name.
+    #
+    def xcframeworks
+      @xcframeworks ||= begin
+        file_accessors.each_with_object({}) do |file_accessor, hash|
+          frameworks = file_accessor.vendored_xcframeworks.map do |framework_path|
+            Xcode::XCFramework.new(framework_path)
           end
           hash[file_accessor.spec.name] = frameworks
         end
@@ -667,6 +682,33 @@ module Pod
     #
     def embed_frameworks_script_output_files_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-frameworks-output-files.xcfilelist"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this script path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script for the given spec.
+    #
+    def prepare_artifacts_script_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-artifacts.sh"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this script path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script input file list for the given spec.
+    #
+    def prepare_artifacts_script_input_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-artifacts-input-files.xcfilelist"
+    end
+
+    # @param  [Specification] spec
+    #         The spec this script path is for.
+    #
+    # @return [Pathname] The absolute path of the prepare artifacts script output file list for the given spec.
+    #
+    def prepare_artifacts_script_output_files_path_for_spec(spec)
+      support_files_dir + "#{non_library_spec_label(spec)}-artifacts-output-files.xcfilelist"
     end
 
     # @param  [Specification] spec

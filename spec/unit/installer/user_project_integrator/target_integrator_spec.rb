@@ -19,7 +19,7 @@ module Pod
                                           Platform.ios, target_definition, project_path.dirname, @project,
                                           [@target.uuid], {})
         @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
-        @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [Target::FrameworkPaths.new('${PODS_BUILD_DIR}/Lib/Lib.framework')])
+        @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [Xcode::FrameworkPaths.new('${PODS_BUILD_DIR}/Lib/Lib.framework')])
         configuration = Xcodeproj::Config.new(
           'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) COCOAPODS=1',
         )
@@ -28,14 +28,12 @@ module Pod
 
         @target_integrator = TargetIntegrator.new(@pod_bundle)
 
-        @phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX
-        @user_phase_prefix = Installer::UserProjectIntegrator::TargetIntegrator::USER_BUILD_PHASE_PREFIX
-        @embed_framework_phase_name = @phase_prefix +
-          Installer::UserProjectIntegrator::TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
-        @copy_pods_resources_phase_name = @phase_prefix +
-            Installer::UserProjectIntegrator::TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
-        @check_manifest_phase_name = @phase_prefix +
-            Installer::UserProjectIntegrator::TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
+        @phase_prefix = TargetIntegrator::BUILD_PHASE_PREFIX
+        @user_phase_prefix = TargetIntegrator::USER_BUILD_PHASE_PREFIX
+        @embed_framework_phase_name = @phase_prefix + TargetIntegrator::EMBED_FRAMEWORK_PHASE_NAME
+        @prepare_artifacts_phase_name = @phase_prefix + TargetIntegrator::PREPARE_ARTIFACTS_PHASE_NAME
+        @copy_pods_resources_phase_name = @phase_prefix + TargetIntegrator::COPY_PODS_RESOURCES_PHASE_NAME
+        @check_manifest_phase_name = @phase_prefix + TargetIntegrator::CHECK_MANIFEST_PHASE_NAME
         @user_script_phase_name = @user_phase_prefix + 'Custom Script'
       end
 
@@ -421,7 +419,7 @@ module Pod
         end
 
         it 'removes embed frameworks phase if it becomes empty' do
-          debug_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework')
+          debug_non_vendored_framework = Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework')
           framework_paths_by_config = {
             'Debug' => [debug_non_vendored_framework],
           }
@@ -433,7 +431,7 @@ module Pod
             ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework
             ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
-          # Now pretend the same target has no more framework paths, it should update the targets input/output paths
+          # Now pretend the same target has no more framework paths, it should remove the script phase
           @pod_bundle.stubs(:framework_paths_by_config => {})
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
@@ -442,14 +440,14 @@ module Pod
         end
 
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks' do
-          debug_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
-                                                                '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM',
-                                                                ['${PODS_ROOT}/DebugVendoredFramework/ios/A6621399-62A0-3DC3-A6E3-B6B51BD287AD.bcsymbolmap'])
+          debug_vendored_framework = Xcode::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework',
+                                                               '${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM',
+                                                               ['${PODS_ROOT}/DebugVendoredFramework/ios/A6621399-62A0-3DC3-A6E3-B6B51BD287AD.bcsymbolmap'])
 
-          debug_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework')
+          debug_non_vendored_framework = Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework')
 
-          release_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
-                                                                  '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM')
+          release_vendored_framework = Xcode::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework',
+                                                                 '${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM')
           framework_paths_by_config = {
             'Debug' => [debug_vendored_framework, debug_non_vendored_framework],
             'Release' => [release_vendored_framework],
@@ -478,15 +476,15 @@ module Pod
         end
 
         it 'adds embed frameworks build phase input and output paths for vendored and non vendored frameworks without duplicate' do
-          debug_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
-                                                                '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM')
+          debug_vendored_framework = Xcode::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
+                                                               '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM')
 
-          debug_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework')
+          debug_non_vendored_framework = Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework')
 
-          release_vendored_framework = Target::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
-                                                                  '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM')
+          release_vendored_framework = Xcode::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
+                                                                 '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM')
 
-          release_non_vendored_framework = Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework')
+          release_non_vendored_framework = Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework')
 
           framework_paths_by_config = {
             'Debug' => [debug_vendored_framework, debug_non_vendored_framework],
@@ -509,6 +507,52 @@ module Pod
             ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework
+          )
+        end
+
+        it 'does not add prepare artifacts build phase with no xcframeworks' do
+          @pod_bundle.stubs(:xcframeworks_by_config => { 'Debug' => {}, 'Release' => {} })
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.should.be.nil
+        end
+
+        it 'removes prepare artifacts build phase if it becomes empty' do
+          xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+          frameworks_by_config = {
+            'Debug' => [xcframework],
+            'Release' => [xcframework],
+          }
+          @pod_bundle.stubs(:xcframeworks_by_config => frameworks_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.should.not.be.nil?
+          # Now pretend the same target has no more xcframeworks, it should remove the script phase
+          @pod_bundle.stubs(:xcframeworks_by_config => {})
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.should.be.nil
+        end
+
+        it 'adds prepare artifacts build phase input and output paths for vendored xcframeworks without duplicate' do
+          xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+          frameworks_by_config = {
+            'Debug' => [xcframework],
+            'Release' => [xcframework],
+          }
+          @pod_bundle.stubs(:xcframeworks_by_config => frameworks_by_config)
+          @target_integrator.integrate!
+          target = @target_integrator.send(:native_targets).first
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @prepare_artifacts_phase_name }
+          phase.input_paths.sort.should == %w(
+            ${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework
+            ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-artifacts.sh
+          )
+          phase.output_paths.sort.should == %w(
+            ${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt
           )
         end
 
@@ -714,12 +758,12 @@ module Pod
       describe 'Script paths' do
         it 'calculates the output paths of the embed frameworks script' do
           paths = [
-            Target::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
-                                       '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM'),
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework'),
-            Target::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
-                                       '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM'),
-            Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework'),
+            Xcode::FrameworkPaths.new('${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework',
+                                      '${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework'),
+            Xcode::FrameworkPaths.new('${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework',
+                                      '${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM'),
+            Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework'),
           ]
           TargetIntegrator.framework_output_paths(paths).sort.should == %w(
             ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM

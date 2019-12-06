@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 5c7c11df7b4d1626292f525e747fd2732666f99d
+  revision: 5a3a8714d828acec517b9b266e69d1626b080b51
   branch: master
   specs:
     cocoapods-core (1.8.4)
@@ -16,6 +16,8 @@ GIT
       concurrent-ruby (~> 1.1)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
+      netrc (~> 0.11)
+      typhoeus (~> 1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git

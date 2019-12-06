@@ -59,7 +59,7 @@ module Pod
               end
 
               it 'integrates test native targets with frameworks and resources script phase input and output paths' do
-                framework_paths = [Target::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
+                framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
@@ -87,7 +87,7 @@ module Pod
 
               it 'integrates test native targets with frameworks and resource script phase input and output file lists' do
                 @project.stubs(:object_version).returns('50')
-                framework_paths = [Target::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
+                framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
@@ -111,8 +111,47 @@ module Pod
                 ]
               end
 
+              it 'integrates test native targets with frameworks, xcframeworks, and resource script phase input and output file lists' do
+                @project.stubs(:object_version).returns('50')
+                framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+                @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
+                @watermelon_pod_target.stubs(:resource_paths).returns('WatermelonLib' => resource_paths)
+                @watermelon_pod_target.stubs(:xcframeworks).returns('WatermelonLib' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
+                                                              :shell_script_build_phases => [], :project => @project,
+                                                              :name => 'WatermelonLib-Unit-Tests')
+                installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target,
+                                                                   [], [test_native_target])
+                PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
+                test_native_target.build_phases.count.should == 3
+                test_native_target.build_phases.map(&:display_name).should == [
+                  '[CP] Prepare Artifacts',
+                  '[CP] Embed Pods Frameworks',
+                  '[CP] Copy Pods Resources',
+                ]
+                test_native_target.build_phases[0].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-artifacts-input-files.xcfilelist',
+                ]
+                test_native_target.build_phases[0].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-artifacts-output-files.xcfilelist',
+                ]
+                test_native_target.build_phases[1].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks-input-files.xcfilelist',
+                ]
+                test_native_target.build_phases[1].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks-output-files.xcfilelist',
+                ]
+                test_native_target.build_phases[2].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources-input-files.xcfilelist',
+                ]
+                test_native_target.build_phases[2].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources-output-files.xcfilelist',
+                ]
+              end
+
               it 'does not include input output paths when use_input_output_paths is false' do
-                framework_paths = [Target::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
+                framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
                 @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)

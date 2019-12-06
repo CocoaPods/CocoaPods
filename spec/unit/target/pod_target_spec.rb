@@ -856,7 +856,7 @@ module Pod
         it 'returns the correct framework paths' do
           @watermelon_pod_target.framework_paths.should == {
             'WatermelonLib' => [
-              Target::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
+              Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework'),
             ],
             'WatermelonLib/Tests' => [],
             'WatermelonLib/UITests' => [],
@@ -868,7 +868,7 @@ module Pod
         it 'returns correct vendored framework paths' do
           @monkey_pod_target.framework_paths.should == {
             'monkey' => [
-              Target::FrameworkPaths.new('${PODS_ROOT}/../../spec/fixtures/monkey/dynamic-monkey.framework', nil, []),
+              Xcode::FrameworkPaths.new('${PODS_ROOT}/../../spec/fixtures/monkey/dynamic-monkey.framework', nil, []),
             ],
           }
         end
