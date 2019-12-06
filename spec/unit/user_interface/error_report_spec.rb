@@ -15,6 +15,7 @@ module Pod
         @report = UserInterface::ErrorReport
         set_up_test_repo
         config.repos_dir = SpecHelper.tmp_repos_path
+        Pod::TrunkSource.any_instance.stubs(:refresh_metadata)
         FileUtils.mkdir_p(SpecHelper.tmp_repos_path.join('trunk'))
         FileUtils.cp(fixture('spec-repos/trunk').join('.url'), SpecHelper.tmp_repos_path.join('trunk/.url'))
       end
