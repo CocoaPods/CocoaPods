@@ -34,6 +34,8 @@ module Pod
     autoload :InstallationOptions,          'cocoapods/installer/installation_options'
     autoload :PostInstallHooksContext,      'cocoapods/installer/post_install_hooks_context'
     autoload :PreInstallHooksContext,       'cocoapods/installer/pre_install_hooks_context'
+    autoload :BaseInstallHooksContext,      'cocoapods/installer/base_install_hooks_context'
+    autoload :PostIntegrateHooksContext,    'cocoapods/installer/post_integrate_hooks_context'
     autoload :SourceProviderHooksContext,   'cocoapods/installer/source_provider_hooks_context'
     autoload :PodfileValidator,             'cocoapods/installer/podfile_validator'
     autoload :PodSourceInstaller,           'cocoapods/installer/pod_source_installer'
@@ -635,10 +637,25 @@ module Pod
       lock_pod_sources
     end
 
+    # Runs the registered callbacks for the plugins post integrate hooks.
+    #
+    def run_plugins_post_integrate_hooks
+      if any_plugin_post_integrate_hooks?
+        context = PostIntegrateHooksContext.generate(sandbox, pods_project, aggregate_targets)
+        HooksManager.run(:post_integrate, context, plugins)
+      end
+    end
+
     # @return [Boolean] whether there are any plugin post-install hooks to run
     #
     def any_plugin_post_install_hooks?
       HooksManager.hooks_to_run(:post_install, plugins).any?
+    end
+
+    # @return [Boolean] whether there are any plugin post-integrate hooks to run
+    #
+    def any_plugin_post_integrate_hooks?
+      HooksManager.hooks_to_run(:post_integrate, plugins).any?
     end
 
     # Runs the registered callbacks for the source provider plugin hooks.
@@ -799,6 +816,7 @@ module Pod
         integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, aggregate_targets, generated_aggregate_targets,
                                                :use_input_output_paths => !installation_options.disable_input_output_paths?)
         integrator.integrate!
+        run_podfile_post_integrate_hooks
       end
     end
 
@@ -861,6 +879,33 @@ module Pod
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
+    # Runs the post integrate hooks of the installed specs and of the Podfile.
+    #
+    # @note   Post integrate hooks run _after_ saving of project, so that they
+    #         can alter it after it is written to the disk.
+    #
+    # @return [void]
+    #
+    def run_podfile_post_integrate_hooks
+      UI.message '- Running post integrate hooks' do
+        executed = run_podfile_post_integrate_hook
+        UI.message '- Podfile' if executed
+      end
+    end
+
+    # Runs the post integrate hook of the Podfile.
+    #
+    # @raise  Raises an informative if the hooks raises.
+    #
+    # @return [Boolean] Whether the hook was run.
+    #
+    def run_podfile_post_integrate_hook
+      podfile.post_integrate!(self)
+    rescue => e
+      raise Informative, 'An error occurred while processing the post-integrate ' \
+        'hook of the Podfile.' \
+        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
+    end
     #-------------------------------------------------------------------------#
 
     public
