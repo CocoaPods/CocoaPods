@@ -163,7 +163,7 @@ module Pod
         status = result.last
         unless status.success?
           output = result[0..-2].join
-          raise Informative, "#{bin} #{command.join(' ')}\n\n#{output}".strip
+          raise Informative, "#{executable} #{command.join(' ')}\n\n#{output}".strip
         end
       end
     end

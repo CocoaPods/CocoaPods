@@ -175,10 +175,8 @@ EOS
             if source.is_a?(Pod::CDNSource)
               "#{repo.basename} - CDN - #{source.url}"
             elsif source.git?
-              Dir.chdir(repo) do
-                sha = `git rev-parse HEAD 2>&1`.strip
-                "#{repo.basename} - git - #{source.url} @ #{sha}"
-              end
+              sha = git_hash(source)
+              "#{repo.basename} - git - #{source.url} @ #{sha}"
             else
               "#{repo.basename} - #{source.type}"
             end
@@ -187,6 +185,18 @@ EOS
 
         def original_command
           "#{$PROGRAM_NAME} #{ARGV.join(' ')}"
+        end
+
+        private
+
+        # @param [Source] source
+        #        a git source
+        #
+        # @return [String] the current git SHA
+        def git_hash(source)
+          Dir.chdir(source.repo) do
+            `git rev-parse HEAD 2>&1`
+          end
         end
       end
     end

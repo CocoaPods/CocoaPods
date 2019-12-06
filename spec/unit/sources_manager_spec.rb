@@ -25,6 +25,7 @@ module Pod
             - 1'.freeze
 
   describe Source::Manager do
+    extend SpecHelper::TemporaryRepos
     before do
       @test_source = Source.new(fixture('spec-repos/test_repo'))
       @sources_manager = Source::Manager.new(config.repos_dir)
@@ -256,7 +257,7 @@ and the repository exists.
       end
 
       it 'informs the user if there is an update for CocoaPods' do
-        master = @sources_manager.master.first
+        master = Pod::TrunkSource.new(repo_path('trunk'))
         master.stubs(:metadata).returns(Source::Metadata.new('last' => '999.0'))
         master.verify_compatibility!
         UI.output.should.match /CocoaPods 999.0 is available/
@@ -264,7 +265,7 @@ and the repository exists.
 
       it 'skips the update message if the user disabled the notification' do
         config.new_version_message = false
-        master = @sources_manager.master.first
+        master = Pod::TrunkSource.new(repo_path('trunk'))
         master.stubs(:metadata).returns(Source::Metadata.new('last' => '999.0'))
         master.verify_compatibility!
         UI.output.should.not.match /CocoaPods 999.0 is available/

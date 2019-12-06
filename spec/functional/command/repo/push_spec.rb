@@ -247,6 +247,8 @@ module Pod
 
     it 'raises error and exit code when push fails' do
       cmd = command('repo', 'push', 'master')
+      Pod::TrunkSource.any_instance.stubs(:refresh_metadata)
+      cmd.instance_variable_set(:@source, Pod::TrunkSource.new(repo_path('trunk')))
       e = lambda do
         Dir.chdir(temporary_directory) { cmd.run }
       end.should.raise Informative

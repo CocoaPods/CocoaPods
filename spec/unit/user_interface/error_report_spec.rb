@@ -15,15 +15,21 @@ module Pod
         @report = UserInterface::ErrorReport
         set_up_test_repo
         config.repos_dir = SpecHelper.tmp_repos_path
+        Pod::TrunkSource.any_instance.stubs(:refresh_metadata)
         FileUtils.mkdir_p(SpecHelper.tmp_repos_path.join('trunk'))
         FileUtils.cp(fixture('spec-repos/trunk').join('.url'), SpecHelper.tmp_repos_path.join('trunk/.url'))
       end
 
       it 'returns a well-structured report' do
-        source = Source.new(SpecHelper.tmp_repos_path.join('master'))
-        git_url = source.url
-        git_commit_hash = source.send(:git_commit_hash)
-
+        master = stub('master',
+                      :url => 'https://github.com/CocoaPods/Specs.git', :repo => SpecHelper.tmp_repos_path.join('master'),
+                      :git? => true)
+        sources = [
+          master,
+          Pod::TrunkSource.new(SpecHelper.tmp_repos_path.join('trunk')),
+        ]
+        @report.stubs(:git_hash).returns('ABCD')
+        config.sources_manager.stubs(:all).returns(sources)
         expected = <<-EOS
 
 ――― MARKDOWN TEMPLATE ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
@@ -53,7 +59,7 @@ module Pod
        Xcode : :xcode_information
          Git : :git_information
 Ruby lib dir : #{RbConfig::CONFIG['libdir']}
-Repositories : master - git - #{git_url} @ #{git_commit_hash}
+Repositories : master - git - https://github.com/CocoaPods/Specs.git @ ABCD
                trunk - CDN - #{Pod::TrunkSource::TRUNK_REPO_URL}
 ```
 
