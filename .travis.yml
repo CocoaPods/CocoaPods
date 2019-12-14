@@ -18,6 +18,7 @@ rvm:
 
 env:
   - COCOAPODS_CI_TASKS=SPECS
+  - COCOAPODS_CI_TASKS=INTEGRATION
 
 branches:
   only:

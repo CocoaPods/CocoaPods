@@ -137,11 +137,12 @@ begin
     #
     task :all => 'fixture_tarballs:unpack' do
       tasks = ENV.fetch('COCOAPODS_CI_TASKS') { 'ALL' }.upcase.split(/\s+/)
-      if %w(ALL SPECS EXAMPLES LINT).&(tasks).empty?
+      if %w(ALL SPECS INTEGRATION EXAMPLES LINT).&(tasks).empty?
         raise "Unknown tasks #{tasks} -- supported options for COCOAPODS_CI_TASKS are " \
               'ALL, SPECS, EXAMPLES, LINT'
       end
       specs = %w(ALL SPECS).&(tasks).any?
+      integration = %w(ALL INTEGRATION).&(tasks).any?
       examples = %w(ALL EXAMPLES).&(tasks).any?
       lint = %w(ALL LINT).&(tasks).any?
 
@@ -153,7 +154,9 @@ begin
       if specs
         title 'Running the specs'
         sh "bundle exec bacon #{specs('**/*')}"
+      end
 
+      if integration
         title 'Running Integration tests'
         sh 'bundle exec bacon spec/integration.rb'
       end
