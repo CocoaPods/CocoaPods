@@ -8,7 +8,7 @@ GIT
 GIT
   remote: https://github.com/CocoaPods/Core.git
   revision: ff94fb3bb524a98487e81709ecf83bf96d3e2d67
-  branch: master
+  branch: 1-9-stable
   specs:
     cocoapods-core (1.9.0.beta.1)
       activesupport (>= 4.0.2, < 6)
@@ -137,7 +137,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.2)
-    activesupport (4.2.11.12)
+    activesupport (4.2.11.1)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
