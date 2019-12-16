@@ -8,6 +8,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.9.0.beta.1 (2019-12-16)
+
+##### Enhancements
+
 * Support for scheme code coverage.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8921](https://github.com/CocoaPods/CocoaPods/issues/8921)
