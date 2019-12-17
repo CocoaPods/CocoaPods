@@ -3,6 +3,7 @@ require 'netrc'
 require 'set'
 require 'rest'
 require 'typhoeus'
+require 'yaml'
 
 module Pod
   class Source
