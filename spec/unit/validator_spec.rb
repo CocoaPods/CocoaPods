@@ -395,7 +395,7 @@ module Pod
           validator.stubs(:install_pod)
           validator.stubs(:add_app_project_import)
           validator.stubs(:test_pod)
-          %i(prepare resolve_dependencies download_dependencies).each do |m|
+          %i(prepare resolve_dependencies download_dependencies write_lockfiles).each do |m|
             Installer.any_instance.stubs(m)
           end
           Installer.any_instance.stubs(:aggregate_targets).returns([])
@@ -468,7 +468,7 @@ module Pod
         validator.stubs(:check_file_patterns)
         validator.stubs(:install_pod)
         validator.stubs(:add_app_project_import)
-        %i(prepare resolve_dependencies download_dependencies).each do |m|
+        %i(prepare resolve_dependencies download_dependencies write_lockfiles).each do |m|
           Installer.any_instance.stubs(m)
         end
         Installer.any_instance.stubs(:aggregate_targets).returns([])
@@ -962,7 +962,7 @@ module Pod
         @validator.stubs(:check_file_patterns)
         @validator.stubs(:install_pod)
         @validator.stubs(:add_app_project_import)
-        %i(prepare resolve_dependencies download_dependencies).each do |m|
+        %i(prepare resolve_dependencies download_dependencies write_lockfiles).each do |m|
           Installer.any_instance.stubs(m)
         end
         Installer.any_instance.stubs(:aggregate_targets).returns([])

@@ -562,7 +562,7 @@ module Pod
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
       @installer.has_dependencies = !spec.dependencies.empty?
-      %i(prepare resolve_dependencies download_dependencies).each { |m| @installer.send(m) }
+      %i(prepare resolve_dependencies download_dependencies write_lockfiles).each { |m| @installer.send(m) }
       @file_accessor = @installer.pod_targets.flat_map(&:file_accessors).find { |fa| fa.spec.name == consumer.spec.name }
     end
 
