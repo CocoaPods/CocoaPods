@@ -124,7 +124,7 @@ describe_cli 'pod' do
   has_mercurial = $?.success?
 
   subject do |s|
-    s.executable = "ruby #{ROOT + 'bin/pod'}"
+    s.executable = "ruby -W0 #{ROOT + 'bin/pod'}"
     s.environment_vars = {
       'CLAIDE_DISABLE_AUTO_WRAP'            => 'TRUE',
       'COCOAPODS_DISABLE_STATS'             => 'TRUE',

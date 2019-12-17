@@ -24,7 +24,7 @@ module Pod
     end
 
     it "doesn't hang when the spawned process forks a zombie process with the same STDOUT and STDERR" do
-      cmd = ['-e', <<-RB]
+      cmd = ['-W0', '-e', <<-RB]
         Process.fork { Process.daemon(nil, true); sleep(4) }
         puts 'out'
       RB
@@ -34,7 +34,7 @@ module Pod
     end
 
     it 'returns the right output' do
-      cmd = ['-e', <<-RB]
+      cmd = ['-W0', '-e', <<-RB]
         puts 'foo'
         puts 'bar'
       RB
@@ -42,7 +42,7 @@ module Pod
     end
 
     it 'handles an EOFError' do
-      cmd = ['-e', <<-RB]
+      cmd = ['-W0', '-e', <<-RB]
         puts 'foo'
         print 'bar'
       RB
@@ -50,14 +50,14 @@ module Pod
     end
 
     it 'handles a large amount of output' do
-      cmd = ['-e', <<-RB]
+      cmd = ['-W0', '-e', <<-RB]
         puts File.read(#{__FILE__.inspect})
       RB
       Executable.execute_command('ruby', cmd, true).should == File.read(__FILE__)
     end
 
     it 'handles carriage returns' do
-      cmd = ['-e', <<-RB]
+      cmd = ['-W0', '-e', <<-RB]
         print "foo\\rbar\\nbaz\\r"
       RB
       Executable.execute_command('ruby', cmd, true).should == "foo\rbar\nbaz\r"
@@ -68,7 +68,7 @@ module Pod
       UI.indentation_level = 1
       config.verbose = true
       Executable::Indenter.any_instance.stubs(:io).returns(io)
-      cmd = ['-e', <<-RB]
+      cmd = ['-W0', '-e', <<-RB]
         3.times { |i| puts i }
       RB
       Executable.execute_command('ruby', cmd, true)
