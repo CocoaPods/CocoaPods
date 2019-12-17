@@ -189,7 +189,7 @@ module Pod
     end
 
     before do
-      %i(prepare resolve_dependencies download_dependencies).each do |m|
+      %i(prepare resolve_dependencies download_dependencies write_lockfiles).each do |m|
         Installer.any_instance.stubs(m)
       end
       Installer.any_instance.stubs(:aggregate_targets).returns([])
