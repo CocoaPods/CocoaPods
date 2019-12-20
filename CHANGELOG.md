@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix resources script when building a project from a symlink.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9423](https://github.com/CocoaPods/CocoaPods/issues/9423)
 
 
 ## 1.9.0.beta.2 (2019-12-17)
