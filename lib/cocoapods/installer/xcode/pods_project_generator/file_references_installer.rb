@@ -65,7 +65,10 @@ module Pod
           # @return [void]
           #
           def refresh_file_accessors
-            file_accessors.map(&:path_list).uniq.each(&:read_file_system)
+            file_accessors.reject do |file_accessor|
+              pod_name = file_accessor.spec.name
+              sandbox.local?(pod_name)
+            end.map(&:path_list).uniq.each(&:read_file_system)
           end
 
           # Prepares the main groups to which all files will be added for the respective target
