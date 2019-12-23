@@ -54,7 +54,8 @@ module Pod
         dirs = []
         files = []
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
-        Dir.glob(root + '**/*', File::FNM_DOTMATCH).each do |f|
+        escaped_root = escape_path_for_glob(root)
+        Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH).each do |f|
           directory = File.directory?(f)
           # Ignore `.` and `..` directories
           next if directory && f =~ /\.\.?$/
@@ -214,6 +215,25 @@ module Pod
           end
           patterns
         end
+      end
+
+      # Escapes the glob metacharacters from a given path so it can used in
+      # Dir#glob and similar methods.
+      #
+      # @note   See CocoaPods/CocoaPods#862.
+      #
+      # @param  [String, Pathname] path
+      #         The path to escape.
+      #
+      # @return [Pathname] The escaped path.
+      #
+      def escape_path_for_glob(path)
+        result = path.to_s
+        characters_to_escape = ['[', ']', '{', '}', '?', '*']
+        characters_to_escape.each do |character|
+          result.gsub!(character, "\\#{character}")
+        end
+        Pathname.new(result)
       end
 
       #-----------------------------------------------------------------------#
