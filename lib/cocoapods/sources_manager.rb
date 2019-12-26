@@ -2,7 +2,6 @@ require 'cocoapods-core/source'
 require 'netrc'
 require 'set'
 require 'rest'
-require 'typhoeus'
 require 'yaml'
 
 module Pod
@@ -72,6 +71,8 @@ module Pod
       #
       def cdn_url?(url)
         if url =~ %r{^https?:\/\/}
+          require 'typhoeus'
+
           response = Typhoeus.get(url + '/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional)
           response.code == 200 && begin
             response_hash = YAML.load(response.body) # rubocop:disable Security/YAMLLoad
