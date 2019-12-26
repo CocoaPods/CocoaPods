@@ -1,7 +1,5 @@
 require File.expand_path('../../spec_helper', __FILE__)
 
-require 'cocoapods_stats/sender'
-
 # @return [Lockfile]
 #
 def generate_lockfile(lockfile_version: Pod::VERSION)
@@ -49,7 +47,6 @@ end
 module Pod
   describe Installer do
     before do
-      CocoaPodsStats::Sender.any_instance.stubs(:send)
       podfile = generate_podfile
       lockfile = generate_lockfile
       @installer = Installer.new(config.sandbox, podfile, lockfile)
@@ -833,8 +830,8 @@ module Pod
           @default_plugins = @installer.send(:plugins)
         end
 
-        it 'includes cocoapods-stats' do
-          @default_plugins['cocoapods-stats'].should == {}
+        it 'is empty' do
+          @default_plugins.should == {}
         end
       end
 

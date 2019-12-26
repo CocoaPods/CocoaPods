@@ -75,13 +75,6 @@ GIT
     cocoapods-search (1.0.0)
 
 GIT
-  remote: https://github.com/CocoaPods/cocoapods-stats.git
-  revision: d172a8efddfeb1c9d27b33002c9cb46abb6f1c37
-  branch: master
-  specs:
-    cocoapods-stats (1.1.0)
-
-GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
   revision: 67959306c053bc77c73388865a5ac4de22574d96
   branch: master
@@ -121,7 +114,6 @@ PATH
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
       cocoapods-search (>= 1.0.0, < 2.0)
-      cocoapods-stats (>= 1.0.0, < 2.0)
       cocoapods-trunk (>= 1.4.0, < 2.0)
       cocoapods-try (>= 1.1.0, < 2.0)
       colored2 (~> 3.1)
@@ -294,7 +286,6 @@ DEPENDENCIES
   cocoapods-downloader!
   cocoapods-plugins!
   cocoapods-search!
-  cocoapods-stats!
   cocoapods-trunk!
   cocoapods-try!
   cocoapods_debug

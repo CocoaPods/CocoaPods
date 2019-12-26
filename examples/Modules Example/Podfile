@@ -32,5 +32,3 @@ abstract_target 'Abstract Target' do
         end
     end
 end
-
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'

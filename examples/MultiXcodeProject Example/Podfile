@@ -27,5 +27,3 @@ target 'MultiXcodeProjFrameworks' do
   pod 'Coffee', path: 'Coffee/Coffee.podspec'
   pod 'CoffeeMachine', path: 'CoffeeMachine/CoffeeMachine.podspec'
 end
-
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
