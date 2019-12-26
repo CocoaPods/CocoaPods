@@ -112,7 +112,7 @@ module Pod
       #
       def path_for_spec(request, slug_opts = {})
         path = root + 'Specs' + request.slug(slug_opts)
-        path.sub_ext('.podspec.json')
+        Pathname.new(path.to_path + '.podspec.json')
       end
 
       # @param  [Request] request
