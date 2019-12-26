@@ -329,6 +329,30 @@ module Pod
       support_files_dir + "#{label}-artifacts.sh"
     end
 
+    # Returns an extension in the target that corresponds to the
+    # resource's input extension.
+    #
+    # @param [String] input_extension
+    #        The input extension to map to.
+    #
+    # @return [String] The output extension.
+    #
+    def self.output_extension_for_resource(input_extension)
+      case input_extension
+      when '.storyboard'        then '.storyboardc'
+      when '.xib'               then '.nib'
+      when '.xcdatamodel'       then '.mom'
+      when '.xcdatamodeld'      then '.momd'
+      when '.xcmappingmodel'    then '.cdm'
+      when '.xcassets'          then '.car'
+      else                      input_extension
+      end
+    end
+
+    def self.resource_extension_compilable?(input_extension)
+      output_extension_for_resource(input_extension) != input_extension
+    end
+
     #-------------------------------------------------------------------------#
 
     private
