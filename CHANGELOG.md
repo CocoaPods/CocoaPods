@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#9465](https://github.com/CocoaPods/CocoaPods/pull/9465)
 
+* Fix an issue that caused iOS archives to be invalid when including a vendored XCFramework  
+  [Eric Amorde](https://github.com/amorde)
+  [#9458](https://github.com/CocoaPods/CocoaPods/issues/9458)
+
 
 ## 1.9.0.beta.2 (2019-12-17)
 
