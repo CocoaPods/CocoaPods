@@ -241,6 +241,10 @@ module Pod
     #
     attr_accessor :skip_tests
 
+    # @return [Array<String>] List of test_specs to run. If nil, all tests are run (unless skip_tests is specified).
+    #
+    attr_accessor :test_specs
+
     # @return [Bool] Whether the validator should run Xcode Static Analysis.
     #
     attr_accessor :analyze
@@ -732,7 +736,17 @@ module Pod
       else
         UI.message "\nTesting with `xcodebuild`.\n".yellow do
           pod_target = validation_pod_target
-          consumer.spec.test_specs.each do |test_spec|
+          all_test_specs = consumer.spec.test_specs
+          unless test_specs.nil?
+            test_spec_names = all_test_specs.map(&:base_name)
+            all_test_specs.select! { |test_spec| test_specs.include? test_spec.base_name }
+            test_specs.each do |test_spec|
+              unless test_spec_names.include? test_spec
+                UI.warn "Requested test spec `#{test_spec}` does not exist in the podspec. Existing test specs are `#{test_spec_names}`"
+              end
+            end
+          end
+          all_test_specs.each do |test_spec|
             if !test_spec.supported_on_platform?(consumer.platform_name)
               UI.warn "Skipping test spec `#{test_spec.name}` on platform `#{consumer.platform_name}` since it is not supported.\n".yellow
             else

@@ -439,6 +439,119 @@ module Pod
         end
       end
 
+      it 'test_pod runs multiple test_specs' do
+        file = write_podspec(stub_podspec)
+        validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios))
+        validator.instance_variable_set(:@results, [])
+
+        debug_configuration_one = stub(:build_settings => {})
+        native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+        pod_target_one = stub(:name => 'PodTarget1', :pod_name => 'JSONKit', :uses_swift? => true, :swift_version => '4.0')
+        pod_target_installation_one = stub(:target => pod_target_one, :native_target_for_spec => native_target_one,
+                                           :test_native_targets => [],
+                                           :test_specs_by_native_target => {})
+        pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one }
+
+        installer = stub(:pod_targets => [pod_target_one],
+                         :target_installation_results => [pod_target_installation_results])
+        validator.instance_variable_set(:@installer, installer)
+        test_spec1 = Specification.new(validator.spec, 'Tests1', true) do |s|
+          s.platform = :ios
+        end
+        test_spec2 = Specification.new(validator.spec, 'Tests2', true) do |s|
+          s.platform = :ios
+        end
+        test_spec3 = Specification.new(validator.spec, 'Tests3', true) do |s|
+          s.platform = :ios
+        end
+        validator.spec.stubs(:test_specs).returns([test_spec1, test_spec2, test_spec3])
+        validator.stubs(:parse_xcodebuild_output)
+        validator.stubs(:translate_output_to_linter_messages)
+
+        # expect three calls to xcodebuild
+        validator.expects(:xcodebuild).times(3)
+
+        consumer = validator.spec.consumer(:ios)
+        validator.instance_variable_set(:@consumer, consumer)
+        validator.send(:test_pod)
+      end
+
+      it 'test_pod runs a single specified test_spec' do
+        file = write_podspec(stub_podspec)
+        validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios))
+        validator.instance_variable_set(:@results, [])
+
+        debug_configuration_one = stub(:build_settings => {})
+        native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+        pod_target_one = stub(:name => 'PodTarget1', :pod_name => 'JSONKit', :uses_swift? => true, :swift_version => '4.0')
+        pod_target_installation_one = stub(:target => pod_target_one, :native_target_for_spec => native_target_one,
+                                           :test_native_targets => [],
+                                           :test_specs_by_native_target => {})
+        pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one }
+
+        installer = stub(:pod_targets => [pod_target_one],
+                         :target_installation_results => [pod_target_installation_results])
+        validator.instance_variable_set(:@installer, installer)
+        test_spec1 = Specification.new(validator.spec, 'Tests1', true) do |s|
+          s.platform = :ios
+        end
+        test_spec2 = Specification.new(validator.spec, 'Tests2', true) do |s|
+          s.platform = :ios
+        end
+        test_spec3 = Specification.new(validator.spec, 'Tests3', true) do |s|
+          s.platform = :ios
+        end
+        validator.test_specs = ['Tests2']
+        validator.spec.stubs(:test_specs).returns([test_spec1, test_spec2, test_spec3])
+        validator.stubs(:parse_xcodebuild_output)
+        validator.stubs(:translate_output_to_linter_messages)
+
+        # expect only one call to xcodebuild
+        validator.expects(:xcodebuild).once.returns('file.m:1:1: error: Pretended!')
+
+        consumer = validator.spec.consumer(:ios)
+        validator.instance_variable_set(:@consumer, consumer)
+        validator.send(:test_pod)
+      end
+
+      it '--skip-tests runs specified tests' do
+        file = write_podspec(stub_podspec)
+        validator = Validator.new(file, config.sources_manager.master.map(&:url), %w(ios))
+        validator.instance_variable_set(:@results, [])
+
+        debug_configuration_one = stub(:build_settings => {})
+        native_target_one = stub(:build_configuration_list => stub(:build_configurations => [debug_configuration_one]))
+        pod_target_one = stub(:name => 'PodTarget1', :pod_name => 'JSONKit', :uses_swift? => true, :swift_version => '4.0')
+        pod_target_installation_one = stub(:target => pod_target_one, :native_target_for_spec => native_target_one,
+                                           :test_native_targets => [],
+                                           :test_specs_by_native_target => {})
+        pod_target_installation_results = { 'PodTarget1' => pod_target_installation_one }
+
+        installer = stub(:pod_targets => [pod_target_one],
+                         :target_installation_results => [pod_target_installation_results])
+        validator.instance_variable_set(:@installer, installer)
+        test_spec1 = Specification.new(validator.spec, 'Tests1', true) do |s|
+          s.platform = :ios
+        end
+        test_spec2 = Specification.new(validator.spec, 'Tests2', true) do |s|
+          s.platform = :ios
+        end
+        test_spec3 = Specification.new(validator.spec, 'Tests3', true) do |s|
+          s.platform = :ios
+        end
+        validator.test_specs = %w(Tests1 Tests3)
+        validator.spec.stubs(:test_specs).returns([test_spec1, test_spec2, test_spec3])
+        validator.stubs(:parse_xcodebuild_output)
+        validator.stubs(:translate_output_to_linter_messages)
+
+        # expect two calls to xcodebuild for two specified test_specs
+        validator.expects(:xcodebuild).times(2)
+
+        consumer = validator.spec.consumer(:ios)
+        validator.instance_variable_set(:@consumer, consumer)
+        validator.send(:test_pod)
+      end
+
       it 'builds the pod only once if the first fails with fail_fast' do
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
