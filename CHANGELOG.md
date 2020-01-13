@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9423](https://github.com/CocoaPods/CocoaPods/issues/9423)
 
+* Fix `pod install` crash on projects with atypical configuration names.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9465](https://github.com/CocoaPods/CocoaPods/pull/9465)
+
 
 ## 1.9.0.beta.2 (2019-12-17)
 
