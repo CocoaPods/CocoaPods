@@ -3,13 +3,12 @@ File References:
 - Podfile
 - Development Pods:
   - res:
+    - 512_black.png
     - foo.m
+    - troll.png
     - Pod:
       - LICENSE
       - res.podspec
-    - Resources:
-      - 512_black.png
-      - troll.png
     - Support Files:
       - res-dummy.m
       - res-prefix.pch
