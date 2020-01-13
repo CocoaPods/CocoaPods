@@ -218,7 +218,8 @@ module Pod
               pod_name = file_accessor.spec.name
               preserve_pod_file_structure_flag = (sandbox.local?(pod_name) || preserve_pod_file_structure) && reflect_file_system_structure
               base_path = preserve_pod_file_structure_flag ? common_path(paths) : nil
-              group = pods_project.group_for_spec(pod_name, group_key)
+              actual_group_key = preserve_pod_file_structure_flag ? nil : group_key
+              group = pods_project.group_for_spec(pod_name, actual_group_key)
               paths.each do |path|
                 pods_project.add_file_reference(path, group, preserve_pod_file_structure_flag, base_path)
               end
