@@ -117,7 +117,7 @@ module Pod
             fi
 
             local record_artifact=${2:-true}
-            local destination="${TARGET_BUILD_DIR}"
+            local destination="${CONFIGURATION_BUILD_DIR}"
 
             if [ -L "${source}" ]; then
               echo "Symlinked..."
