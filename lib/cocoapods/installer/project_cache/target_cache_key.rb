@@ -51,9 +51,12 @@ module Pod
               return :project if (other.key_hash.keys - key_hash.keys).any?
               return :project if other.key_hash['CHECKSUM'] != key_hash['CHECKSUM']
               return :project if other.key_hash['SPECS'] != key_hash['SPECS']
-              return :project if other.key_hash['FILES'] != key_hash['FILES']
               return :project if other.key_hash['PROJECT_NAME'] != key_hash['PROJECT_NAME']
             end
+
+            this_files = key_hash['FILES']
+            other_files = other.key_hash['FILES']
+            return :project if this_files != other_files
 
             this_build_settings = key_hash['BUILD_SETTINGS_CHECKSUM']
             other_build_settings = other.key_hash['BUILD_SETTINGS_CHECKSUM']
@@ -155,7 +158,14 @@ module Pod
             build_settings[configuration] = Digest::MD5.hexdigest(aggregate_target.build_settings(configuration).xcconfig.to_s)
           end
 
-          TargetCacheKey.new(sandbox, :aggregate, 'BUILD_SETTINGS_CHECKSUM' => build_settings)
+          contents = {
+            'BUILD_SETTINGS_CHECKSUM' => build_settings,
+          }
+          if aggregate_target.includes_resources?
+            relative_file_paths = aggregate_target.resource_paths_by_config.values.flatten.uniq
+            contents['FILES'] = relative_file_paths.sort_by(&:downcase)
+          end
+          TargetCacheKey.new(sandbox, :aggregate, contents)
         end
       end
     end

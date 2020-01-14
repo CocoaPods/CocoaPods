@@ -23,6 +23,15 @@ module Pod
             cache_key = TargetCacheKey.from_pod_target(config.sandbox, pod_target)
             cache_key.to_h['SPECS'].should.equal(['BananaLib (1.0)', 'BananaLib/Module (1.0)', 'BananaLib/MUS (1.0)'])
           end
+
+          it 'should output files for aggregate target if it has aggregate resources' do
+            aggregate_target = AggregateTarget.new(config.sandbox, BuildType.static_library, { 'Debug' => :debug }, [], Platform.ios,
+                                                   fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
+                                                   nil, 'Debug' => [@banana_pod_target])
+            aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, aggregate_target)
+            library_resources = @banana_pod_target.resource_paths.values.flatten.sort_by(&:downcase)
+            aggregate_target_cache_key.to_h['FILES'].should.equal(library_resources)
+          end
         end
 
         describe 'key_difference with pod targets' do
@@ -100,6 +109,26 @@ module Pod
                                                                     :is_local_pod => true)
             diff = added_banana_cache_key.key_difference(@banana_cache_key)
             inverse_diff = @banana_cache_key.key_difference(added_banana_cache_key)
+            diff.should.equal(:project)
+            inverse_diff.should.equal(:project)
+          end
+
+          it 'should return inequality for aggregate target if the list of tracked resource files has changed' do
+            @aggregate_target = fixture_aggregate_target([@banana_pod_target])
+            @aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, @aggregate_target)
+
+            added_banana_files_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+            new_file = (Pod::Sandbox::PathList.new(@banana_spec.defined_in_file.dirname).root + 'Resources/CoolFile.png').to_s
+            new_file = '${PODS_ROOT}/' + Pathname.new(new_file).relative_path_from(config.sandbox.root).to_s
+            added_files_list = @banana_pod_target.resource_paths
+            added_files_list['BananaLib'] << new_file
+            added_banana_files_target.stubs(:resource_paths).returns(added_files_list)
+
+            added_aggregate_target = fixture_aggregate_target([added_banana_files_target])
+            added_aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, added_aggregate_target)
+            added_aggregate_target_cache_key.to_h['FILES'].should.include?(new_file)
+            diff = added_aggregate_target_cache_key.key_difference(@aggregate_target_cache_key)
+            inverse_diff = @aggregate_target_cache_key.key_difference(added_aggregate_target_cache_key)
             diff.should.equal(:project)
             inverse_diff.should.equal(:project)
           end
