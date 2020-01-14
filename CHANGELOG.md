@@ -10,7 +10,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * PathList optimizations related to file system reads.  
   [manuyavuz](https://github.com/manuyavuz)
-  [#4927](https://github.com/CocoaPods/CocoaPods/issues/4927)
+  [#9428](https://github.com/CocoaPods/CocoaPods/pull/9428)
 
 ##### Bug Fixes
 
