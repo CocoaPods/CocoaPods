@@ -13,13 +13,18 @@ module Pod
         end
 
         before do
-          @target_definition = fixture_target_definition
+          project_path = SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
+          @project = Xcodeproj::Project.open(project_path)
+          @project.save
+          @native_target = @project.targets.find { |t| t.name == 'SampleProject' }
+          @target_definition = fixture_target_definition('SampleProject')
           @specs = specs
           @specs.first.user_target_xcconfig = { 'OTHER_LDFLAGS' => '-no_compact_unwind', 'USE_HEADERMAP' => 'NO' } unless @specs.empty?
           @specs.first.pod_target_xcconfig = { 'CLANG_CXX_LANGUAGE_STANDARD' => 'c++11' } unless @specs.empty?
           @pod_targets = @specs.map { |spec| pod_target(spec, @target_definition) }
           @target = fixture_aggregate_target(@pod_targets, BuildType.static_library, { 'Release' => :release }, [],
-                                             Platform.new(:ios, '6.0'), @target_definition)
+                                             Platform.new(:ios, '6.0'), @target_definition, @project,
+                                             [@native_target.uuid])
           unless @specs.empty?
             @target.target_definition.whitelist_pod_for_configuration(@specs.first.name, 'Release')
           end
@@ -190,7 +195,7 @@ module Pod
             end
 
             it 'links the pod targets with the aggregate target' do
-              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib-Pods"'
+              @xcconfig.to_hash['OTHER_LDFLAGS'].should.include '-l"BananaLib-Pods-SampleProject"'
             end
           end
 
@@ -387,14 +392,16 @@ module Pod
 
           it 'includes correct default runpath search path list for OSX unit test bundle user target' do
             @target.stubs(:platform).returns(Platform.new(:osx, '10.10'))
-            mock_user_target = mock('usertarget', :symbol_type => :unit_test_bundle)
+            mock_user_target = mock('usertarget')
+            mock_user_target.stubs(:symbol_type).returns(:unit_test_bundle)
             @target.stubs(:user_targets).returns([mock_user_target])
             @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks'"
           end
 
           it 'includes correct default runpath search path list for OSX application user target' do
             @target.stubs(:platform).returns(Platform.new(:osx, '10.10'))
-            mock_user_target = mock('usertarget', :symbol_type => :application)
+            mock_user_target = mock('usertarget')
+            mock_user_target.stubs(:symbol_type).returns(:application)
             @target.stubs(:user_targets).returns([mock_user_target])
             @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/Frameworks'"
           end
