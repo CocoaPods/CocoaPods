@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Igor Makarov](https://github.com/igor-makarov)
   [#9431](https://github.com/CocoaPods/CocoaPods/pull/9431)
 
+* Fix an issue that caused an incorrect warning to be emitted for CLI targets with static libraries  
+  [Eric Amorde](https://github.com/amorde)
+  [#9498](https://github.com/CocoaPods/CocoaPods/issues/9498)
+
 ## 1.9.0.beta.2 (2019-12-17)
 
 ##### Enhancements

@@ -2006,7 +2006,22 @@ module Pod
           end
           analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
           analyzer.analyze
-          UI.warnings.should.match /The Podfile contains command line tool target\(s\) \(SampleCommandLineTool\) which are attempting to integrate dynamic frameworks\./
+          UI.warnings.should.match /The Podfile contains command line tool target\(s\) \(SampleCommandLineTool\) which are attempting to integrate dynamic frameworks or libraries\./
+        end
+
+        it 'does not warn when using static libraries with CLI targets' do
+          project_path = fixture('Sample Extensions Project/Sample Extensions Project')
+          podfile = Pod::Podfile.new do
+            source SpecHelper.test_repo_url
+            platform :ios, '8.0'
+            project project_path
+            target 'SampleCommandLineTool' do
+              pod 'monkey'
+            end
+          end
+          analyzer = Pod::Installer::Analyzer.new(config.sandbox, podfile)
+          analyzer.analyze
+          UI.warnings.should.be.empty?
         end
 
         it 'raises when the extension calls use_frameworks!, but the host target does not' do
