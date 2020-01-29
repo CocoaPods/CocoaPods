@@ -138,10 +138,12 @@ end
 
 def fixture_aggregate_target(pod_targets = [], build_type = Pod::BuildType.static_library,
                              user_build_configurations = Pod::Target::DEFAULT_BUILD_CONFIGURATIONS, archs = [],
-                             platform = Pod::Platform.new(:ios, '6.0'), target_definition = nil)
+                             platform = Pod::Platform.new(:ios, '6.0'), target_definition = nil, user_project = nil,
+                             user_target_uuids = [])
   target_definition ||= pod_targets.flat_map(&:target_definitions).first || fixture_target_definition
   Pod::AggregateTarget.new(config.sandbox, build_type, user_build_configurations, archs, platform,
-                           target_definition, config.sandbox.root.dirname, nil, nil, 'Release' => pod_targets)
+                           target_definition, config.sandbox.root.dirname, user_project, user_target_uuids,
+                           'Release' => pod_targets)
 end
 
 #-----------------------------------------------------------------------------#
