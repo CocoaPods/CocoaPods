@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Also apply Xcode 11 `XCTUnwrap` fix to library and framework targets that weakly link `XCTest`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9518](https://github.com/CocoaPods/CocoaPods/pull/9518)  
 
 
 ## 1.9.0.beta.3 (2020-02-04)
