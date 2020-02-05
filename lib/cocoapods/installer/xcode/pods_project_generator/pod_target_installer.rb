@@ -163,8 +163,10 @@ module Pod
           def remove_pod_target_xcconfig_overrides_from_target(build_settings_by_config, native_target)
             native_target.build_configurations.each do |configuration|
               build_settings = build_settings_by_config[target.user_build_configurations[configuration.name]]
-              build_settings.merged_pod_target_xcconfigs.each_key do |setting|
-                configuration.build_settings.delete(setting)
+              unless build_settings.nil?
+                build_settings.merged_pod_target_xcconfigs.each_key do |setting|
+                  configuration.build_settings.delete(setting)
+                end
               end
             end
           end

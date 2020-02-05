@@ -334,15 +334,16 @@ module Pod
       #
       def analyze_host_targets_in_podfile(aggregate_targets, embedded_aggregate_targets)
         target_definitions_by_uuid = {}
-        cli_host_with_frameworks = []
+        cli_host_with_dynamic_linkage = []
         cli_product_type = 'com.apple.product-type.tool'
         # Collect aggregate target definitions by uuid to later lookup host target
         # definitions and verify their compatibility with their embedded targets
         aggregate_targets.each do |target|
           target.user_targets.each do |user_target|
-            target_definitions_by_uuid[user_target.uuid] = target.target_definition
-            if user_target.product_type == cli_product_type
-              cli_host_with_frameworks << user_target
+            target_definition = target.target_definition
+            target_definitions_by_uuid[user_target.uuid] = target_definition
+            if user_target.product_type == cli_product_type && target_definition.build_type.linkage == :dynamic
+              cli_host_with_dynamic_linkage << user_target
             end
           end
         end
@@ -368,10 +369,10 @@ module Pod
           end
         end
 
-        unless cli_host_with_frameworks.empty?
-          UI.warn "The Podfile contains command line tool target(s) (#{cli_host_with_frameworks.map(&:name).to_sentence}) which are attempting to integrate dynamic frameworks." \
+        unless cli_host_with_dynamic_linkage.empty?
+          UI.warn "The Podfile contains command line tool target(s) (#{cli_host_with_dynamic_linkage.map(&:name).to_sentence}) which are attempting to integrate dynamic frameworks or libraries." \
             "\n" \
-            'This may not behave as expected, because command line tools are usually distributed as a single binary and cannot contain their own dynamic frameworks.'
+            'This may not behave as expected, because command line tools are usually distributed as a single binary and cannot contain their own dynamic dependencies.'
         end
 
         unless embedded_targets_missing_hosts.empty?

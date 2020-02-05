@@ -526,6 +526,21 @@ module Pod
                 app_target.resolved_build_setting('PRODUCT_NAME', true).values.uniq.should == %w(ExampleApp)
               end
 
+              it 'should not crash with nil build settings' do
+                user_build_configurations = { 'MyConfig' => :myconfig }
+                @watermelon_ios_pod_target = fixture_pod_target_with_specs([@watermelon_spec], BuildType.static_library,
+                                                                           user_build_configurations, [],
+                                                                           Platform.new(:ios, '6.0'),
+                                                                           [@ios_target_definition])
+                @ios_installer = PodTargetInstaller.new(config.sandbox, @project, @watermelon_ios_pod_target)
+                @ios_installer.stubs(:create_xcconfig_file)
+
+                @watermelon_ios_pod_target.root_spec.pod_target_xcconfig = { 'PRODUCT_MODULE_NAME' => 'FOOBAR' }
+                @watermelon_ios_pod_target.build_settings[:release].should.nil?
+                @watermelon_ios_pod_target.build_settings[:debug].should.nil?
+                @ios_installer.install!
+              end
+
               it 'adds swift compatibility header phase for swift static libraries' do
                 @watermelon_ios_pod_target.stubs(:build_type => BuildType.static_library, :uses_swift? => true)
 

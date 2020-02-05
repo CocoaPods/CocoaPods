@@ -492,9 +492,15 @@ module Pod
         attr_reader :test_xcconfig
         alias test_xcconfig? test_xcconfig
 
+        # @return [Boolean]
+        #   whether settings are being generated for an application bundle
+        #
         attr_reader :app_xcconfig
         alias app_xcconfig? app_xcconfig
 
+        # @return [Boolean]
+        #   whether settings are being generated for an library bundle
+        #
         attr_reader :library_xcconfig
         alias library_xcconfig? library_xcconfig
 
@@ -683,6 +689,12 @@ module Pod
           file_accessors.flat_map(&:vendored_xcframeworks).map { |path| Xcode::XCFramework.new(path) }
         end
 
+        # @return [Array<String>]
+        define_build_settings_method :system_framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
+          return ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
+          []
+        end
+
         #-------------------------------------------------------------------------#
 
         # @!group Libraries
@@ -737,16 +749,18 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          return [] if library_xcconfig? && target.build_as_static?
+          library_search_paths = should_apply_xctunwrap_fix? ? ['$(PLATFORM_DIR)/Developer/usr/lib'] : []
+          return library_search_paths if library_xcconfig? && target.build_as_static?
 
-          vendored = library_search_paths_to_import.dup
-          vendored.concat dependent_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_dynamic_library_search_paths }
+          library_search_paths.concat library_search_paths_to_import.dup
+          library_search_paths.concat dependent_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_dynamic_library_search_paths }
           if library_xcconfig?
-            vendored.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE))
+            library_search_paths.delete(target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE))
           else
-            vendored.concat(dependent_targets.flat_map { |pt| pt.build_settings[@configuration].library_search_paths_to_import })
+            library_search_paths.concat(dependent_targets.flat_map { |pt| pt.build_settings[@configuration].library_search_paths_to_import })
           end
-          vendored
+
+          library_search_paths
         end
 
         # @return [Array<String>]
@@ -837,6 +851,7 @@ module Pod
         define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
           paths = dependent_targets.flat_map { |pt| pt.build_settings[@configuration].swift_include_paths_to_import }
           paths.concat swift_include_paths_to_import if non_library_xcconfig?
+          paths.concat ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
           paths
         end
 
@@ -964,6 +979,20 @@ module Pod
           else
             target.spec_consumers.select { |sc| sc.spec.spec_type == @xcconfig_spec_type }
           end
+        end
+
+        # Xcode 11 causes an issue with frameworks or libraries before 12.2 deployment target that link or are part of
+        # test bundles that use XCTUnwrap. Apple has provided an official work around for this.
+        #
+        # @see https://developer.apple.com/documentation/xcode_release_notes/xcode_11_release_notes
+        #
+        # @return [Boolean] Whether to apply the fix or not.
+        #
+        define_build_settings_method :should_apply_xctunwrap_fix?, :memoized => true do
+          library_xcconfig? &&
+            target.platform.name == :ios &&
+            Version.new(target.platform.deployment_target) < Version.new('12.2') &&
+            (frameworks_to_import + weak_frameworks_to_import).uniq.include?('XCTest')
         end
 
         #-------------------------------------------------------------------------#
