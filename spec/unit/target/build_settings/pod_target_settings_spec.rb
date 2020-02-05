@@ -194,6 +194,16 @@ module Pod
             hash['SWIFT_INCLUDE_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
           end
 
+          it 'includes xctunwrap fix for a pod target with deployment target < 12.2 and weakly links XCTest' do
+            @spec.weak_frameworks = ['XCTest']
+            @pod_target.stubs(:platform).returns(Platform.new(:ios, '12.1'))
+            generator = PodTargetSettings.new(@pod_target, nil, :configuration => :debug)
+            hash = generator.generate.to_hash
+            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['LIBRARY_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['SWIFT_INCLUDE_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+          end
+
           it 'does not include xctunwrap fix for a pod target with higher than 12.1 deployment target' do
             @spec.frameworks = ['XCTest']
             @pod_target.stubs(:platform).returns(Platform.new(:ios, '12.2'))

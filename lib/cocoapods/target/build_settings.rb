@@ -992,7 +992,7 @@ module Pod
           library_xcconfig? &&
             target.platform.name == :ios &&
             Version.new(target.platform.deployment_target) < Version.new('12.2') &&
-            frameworks_to_import.include?('XCTest')
+            (frameworks_to_import + weak_frameworks_to_import).uniq.include?('XCTest')
         end
 
         #-------------------------------------------------------------------------#
