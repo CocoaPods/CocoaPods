@@ -12,8 +12,44 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Also apply Xcode 11 `XCTUnwrap` fix to library and framework targets that weakly link `XCTest`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9518](https://github.com/CocoaPods/CocoaPods/pull/9518)  
 
+
+## 1.9.0.beta.3 (2020-02-04)
+
+##### Enhancements
+
+* PathList optimizations related to file system reads.  
+  [manuyavuz](https://github.com/manuyavuz)
+  [#9428](https://github.com/CocoaPods/CocoaPods/pull/9428)
+
+##### Bug Fixes
+
+* Apply Xcode 11 `XCTUnwrap` fix to library and framework targets.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9500](https://github.com/CocoaPods/CocoaPods/pull/9500)
+
+* Fix resources script when building a project from a symlink.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9423](https://github.com/CocoaPods/CocoaPods/issues/9423)
+
+* Fix `pod install` crash on projects with atypical configuration names.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9465](https://github.com/CocoaPods/CocoaPods/pull/9465)
+
+* Fix an issue that caused iOS archives to be invalid when including a vendored XCFramework  
+  [Eric Amorde](https://github.com/amorde)
+  [#9458](https://github.com/CocoaPods/CocoaPods/issues/9458)
+
+* Fix a bug where an incremental install missed library resources.  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#9431](https://github.com/CocoaPods/CocoaPods/pull/9431)
+
+* Fix an issue that caused an incorrect warning to be emitted for CLI targets with static libraries  
+  [Eric Amorde](https://github.com/amorde)
+  [#9498](https://github.com/CocoaPods/CocoaPods/issues/9498)
 
 ## 1.9.0.beta.2 (2019-12-17)
 
