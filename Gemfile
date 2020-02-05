@@ -39,7 +39,6 @@ group :development do
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 
-  gem 'activesupport', '>= 4.0.2', '!= 4.2.11.12', '< 5' # Pinned < 5 to ensure we're speccing 4.x.x
   gem 'bacon', :git => 'https://github.com/leahneukirchen/bacon.git'
   gem 'minitest', '5.12.0' # Pinned since > 5.12.0+ drops support for Ruby 2.0
   gem 'mocha'
