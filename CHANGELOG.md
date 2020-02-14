@@ -16,6 +16,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9518](https://github.com/CocoaPods/CocoaPods/pull/9518)  
 
+* Add support for running tests through the scheme of the app spec host of a test spec    
+  [Eric Amorde](https://github.com/amorde)
+  [#9332](https://github.com/CocoaPods/CocoaPods/issues/9332)
 
 ## 1.9.0.beta.3 (2020-02-04)
 

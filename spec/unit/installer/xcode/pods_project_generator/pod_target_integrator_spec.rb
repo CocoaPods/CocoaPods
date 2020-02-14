@@ -217,9 +217,9 @@ module Pod
 
                   @app_host_spec = @pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
 
-                  @pineapple_pod_target.test_app_hosts_by_spec_name = {
-                    'PineappleLib/Tests' => [@app_host_spec, @pineapple_pod_target],
-                    'PineappleLib/UI' => [@app_host_spec, @pineapple_pod_target],
+                  @pineapple_pod_target.test_app_hosts_by_spec = {
+                    @pineapple_spec.subspec_by_name('PineappleLib/Tests', true, true) => [@app_host_spec, @pineapple_pod_target],
+                    @pineapple_spec.subspec_by_name('PineappleLib/UI', true, true) => [@app_host_spec, @pineapple_pod_target],
                   }
                 end
 

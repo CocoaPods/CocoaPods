@@ -79,13 +79,14 @@ module Pod
         #
         # @param [PBXProject] project The project to configure schemes for.
         # @param [Array<PodTarget>] pod_targets The pod targets within that project to configure their schemes.
+        # @param [PodsProjectGeneratorResult] generator_result the result of the project generation
         #
         # @return [void]
         #
-        def configure_schemes(project, pod_targets)
+        def configure_schemes(project, pod_targets, generator_result)
           pod_targets.each do |pod_target|
             share_scheme = pod_target.should_build? && share_scheme_for_development_pod?(pod_target.pod_name) && sandbox.local?(pod_target.pod_name)
-            configure_schemes_for_pod_target(project, pod_target, share_scheme)
+            configure_schemes_for_pod_target(project, pod_target, share_scheme, generator_result)
           end
         end
 
@@ -218,14 +219,35 @@ module Pod
           end
         end
 
-        def configure_schemes_for_pod_target(project, pod_target, share_scheme)
+        # @param [Project] project
+        #        the project of the pod target
+        #
+        # @param [Pod::PodTarget] pod_target
+        #        the pod target for which to configure schemes
+        #
+        # @param [Boolean] share_scheme
+        #        whether the created schemes should be shared
+        #
+        # @param [PodsProjectGeneratorResult] generator_result
+        #        the project generation result
+        #
+        def configure_schemes_for_pod_target(project, pod_target, share_scheme, generator_result)
           # Ignore subspecs because they do not provide a scheme configuration due to the fact that they are always
           # merged with the root spec scheme.
           specs = [pod_target.root_spec] + pod_target.test_specs + pod_target.app_specs
+          hosted_test_specs_by_host = Hash.new do |hash, key|
+            hash[key] = []
+          end
+          pod_target.test_app_hosts_by_spec.each do |spec, (host_spec, host_target)|
+            if host_target == pod_target
+              hosted_test_specs_by_host[host_spec] << spec
+            end
+          end
+          is_custom_host = !hosted_test_specs_by_host.empty?
           specs.each do |spec|
             scheme_name = spec.spec_type == :library ? pod_target.label : pod_target.non_library_spec_label(spec)
             scheme_configuration = pod_target.scheme_for_spec(spec)
-            unless scheme_configuration.empty?
+            if !scheme_configuration.empty? || is_custom_host
               scheme_path = Xcodeproj::XCScheme.user_data_dir(project.path) + "#{scheme_name}.xcscheme"
               scheme = Xcodeproj::XCScheme.new(scheme_path)
               command_line_arguments = scheme.launch_action.command_line_arguments
@@ -240,6 +262,14 @@ module Pod
               scheme.launch_action.environment_variables = environment_variables
               if scheme_configuration.key?(:code_coverage)
                 scheme.test_action.code_coverage_enabled = scheme_configuration[:code_coverage]
+              end
+
+              hosted_test_specs_by_host[spec].each do |hosted_spec|
+                # We are an app spec which hosts this test spec.
+                # Include the test specs's test bundle within our scheme's test action
+                native_target = generator_result.native_target_for_spec(hosted_spec)
+                testable = Xcodeproj::XCScheme::TestAction::TestableReference.new(native_target)
+                scheme.test_action.add_testable(testable)
               end
               scheme.save!
             end

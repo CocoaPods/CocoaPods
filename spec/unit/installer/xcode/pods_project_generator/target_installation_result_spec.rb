@@ -19,7 +19,7 @@ module Pod
               result.test_native_targets.should == []
               result.test_resource_bundle_targets.should == {}
               result.test_app_host_targets.should == []
-              result.app_native_targets.should == []
+              result.app_native_targets.should == {}
               result.app_resource_bundle_targets.should == {}
             end
 

@@ -57,7 +57,7 @@ module Pod
               app_resource_bundle_targets = add_resources_bundle_targets(app_file_accessors)
 
               add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
-              validate_targets_contain_sources(test_native_targets + app_native_targets + [native_target])
+              validate_targets_contain_sources(test_native_targets + app_native_targets.values + [native_target])
               validate_xcframeworks_no_mixed_linkage
 
               create_xcconfig_file(native_target, resource_bundle_targets)
@@ -120,7 +120,7 @@ module Pod
                 target.app_specs.each do |app_spec|
                   path = target.prefix_header_path_for_spec(app_spec)
                   app_spec_consumer = app_spec.consumer(target.platform)
-                  app_native_target = app_native_target_from_spec(app_spec_consumer.spec, app_native_targets)
+                  app_native_target = app_native_targets[app_spec_consumer.spec]
                   create_prefix_header(path, app_file_accessors, target.platform, app_native_target, project_directory)
                   add_file_to_support_group(path)
                 end
@@ -285,7 +285,7 @@ module Pod
                                when :test
                                  test_native_target_from_spec(consumer.spec, test_native_targets)
                                when :app
-                                 app_native_target_from_spec(consumer.spec, app_native_targets)
+                                 app_native_targets[consumer.spec]
                                end
 
               headers = file_accessor.headers
@@ -411,10 +411,10 @@ module Pod
           # Adds the app targets for the library to the Pods project with the
           # appropriate build configurations.
           #
-          # @return [Array<PBXNativeTarget>] the app native targets created.
+          # @return [Hash{Specification => PBXNativeTarget}] the app native targets created, keyed by their app spec
           #
           def add_app_targets
-            target.app_specs.map do |app_spec|
+            target.app_specs.each_with_object({}) do |app_spec, hash|
               spec_consumer = app_spec.consumer(target.platform)
               spec_name = app_spec.parent.name
               subspec_name = target.subspec_label(app_spec)
@@ -473,7 +473,7 @@ module Pod
               create_app_target_copy_resources_script(app_spec)
               add_resources_to_target(resources, app_native_target)
 
-              app_native_target
+              hash[app_spec] = app_native_target
             end
           end
 
@@ -705,8 +705,8 @@ module Pod
 
           # Generates the contents of the xcconfig file used for each app target type and saves it to disk.
           #
-          # @param  [Array<PBXNativeTarget>] app_native_targets
-          #         the app native target to link the xcconfig file into.
+          # @param  [Hash{Specification => PBXNativeTarget}] app_native_targets
+          #         the app native targets to link the xcconfig file into.
           #
           # @param  [Hash{String=>Array<PBXNativeTarget>}] app_resource_bundle_targets
           #         the additional app resource bundle targets to link the xcconfig file into.
@@ -716,7 +716,7 @@ module Pod
           def create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
             target.app_specs.each do |app_spec|
               spec_consumer = app_spec.consumer(target.platform)
-              app_native_target = app_native_target_from_spec(spec_consumer.spec, app_native_targets)
+              app_native_target = app_native_targets[spec_consumer.spec]
 
               target.user_config_names_by_config_type.each do |config, names|
                 path = target.xcconfig_path("#{target.subspec_label(app_spec)}.#{config}")
@@ -1008,13 +1008,6 @@ module Pod
             test_target_label = target.test_target_label(spec)
             test_native_targets.find do |test_native_target|
               test_native_target.name == test_target_label
-            end
-          end
-
-          def app_native_target_from_spec(spec, app_native_targets)
-            app_target_label = target.app_target_label(spec)
-            app_native_targets.find do |app_native_target|
-              app_native_target.name == app_target_label
             end
           end
 

@@ -103,9 +103,9 @@ module Pod
       end]
     end
 
-    # @return [Hash{String => (Specification,PodTarget)}] tuples of app specs and pod targets by test spec name.
+    # @return [Hash{Specification => (Specification,PodTarget)}] tuples of app specs and pod targets by test spec.
     #
-    attr_accessor :test_app_hosts_by_spec_name
+    attr_accessor :test_app_hosts_by_spec
 
     # @return [Hash{String => BuildSettings}] the test spec build settings for this target.
     #
@@ -153,7 +153,7 @@ module Pod
       self.dependent_targets = []
       self.test_dependent_targets_by_spec_name = Hash[test_specs.map { |ts| [ts.name, []] }]
       self.app_dependent_targets_by_spec_name = Hash[app_specs.map { |as| [as.name, []] }]
-      @test_app_hosts_by_spec_name = {}
+      @test_app_hosts_by_spec = {}
       @build_config_cache = {}
       @test_spec_build_settings_by_config = create_test_build_settings_by_config
       @app_spec_build_settings_by_config = create_app_build_settings_by_config
@@ -185,8 +185,8 @@ module Pod
           target.app_dependent_targets_by_spec_name_by_config = Hash[app_dependent_targets_by_spec_name_by_config.map do |spec_name, app_pod_targets_by_config|
             [spec_name, Hash[app_pod_targets_by_config.map { |k, v| [k, scope_dependent_targets[v]] }]]
           end]
-          target.test_app_hosts_by_spec_name = Hash[test_app_hosts_by_spec_name.map do |spec_name, (app_host_spec, app_pod_target)|
-            [spec_name, [app_host_spec, app_pod_target.scoped(cache).find { |pt| pt.target_definitions == [target_definition] }]]
+          target.test_app_hosts_by_spec = Hash[test_app_hosts_by_spec.map do |spec, (app_host_spec, app_pod_target)|
+            [spec, [app_host_spec, app_pod_target.scoped(cache).find { |pt| pt.target_definitions == [target_definition] }]]
           end]
           target
         end
@@ -582,7 +582,7 @@ module Pod
     #         app host, and the second item is the target name of the app host
     #
     def app_host_target_label(test_spec)
-      app_spec, app_target = test_app_hosts_by_spec_name[test_spec.name]
+      app_spec, app_target = test_app_hosts_by_spec[test_spec]
 
       if app_spec
         [app_target.name, app_target.app_target_label(app_spec)]
@@ -601,7 +601,7 @@ module Pod
     #
     def app_host_dependent_targets_for_spec(spec, configuration: nil)
       return [] unless spec.test_specification? && spec.consumer(platform).test_type == :unit
-      app_host_info = test_app_hosts_by_spec_name[spec.name]
+      app_host_info = test_app_hosts_by_spec[spec]
       if app_host_info.nil?
         []
       else

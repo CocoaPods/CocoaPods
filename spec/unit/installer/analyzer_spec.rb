@@ -551,14 +551,14 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['a/Tests', ['a_testing']]]
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e)
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'a_testing' }
             pod_target.dependent_targets.map(&:name).sort.should == %w(a base_testing)
             pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base base_testing c e)
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'b' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -567,14 +567,14 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['b/Tests', []]]
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'base' }
             pod_target.dependent_targets.map(&:name).sort.should == []
             pod_target.recursive_dependent_targets.map(&:name).sort.should == []
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'c' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -583,7 +583,7 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['a_testing']]]
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e)
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['app_host/App', 'app_host']]]
+            pod_target.test_app_hosts_by_spec.map { |k, v| [k.name, v.map(&:name)] }.should == [['c/Tests', ['app_host/App', 'app_host']]]
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'd' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -592,14 +592,14 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['d/Tests', ['b']]]
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(b base c e)
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'e' }
             pod_target.dependent_targets.map(&:name).sort.should == ['base']
             pod_target.recursive_dependent_targets.map(&:name).sort.should == ['base']
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'app_host' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -610,7 +610,7 @@ module Pod
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['app_host/App', ['d']]]
             pod_target.recursive_app_dependent_targets(app_spec).map(&:name).sort.should == %w(a b base c d e)
-            pod_target.test_app_hosts_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['app_host/Tests', ['app_host/App', 'app_host']]]
+            pod_target.test_app_hosts_by_spec.map { |k, v| [k.name, v.map(&:name)] }.should == [['app_host/Tests', ['app_host/App', 'app_host']]]
           end
 
           it 'correctly computes recursive dependent targets for scoped pod targets' do
@@ -717,14 +717,14 @@ module Pod
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['a/Tests', ['a_testing'].map { |n| n + scope }]]
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
               pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e).map { |n| n + scope }
-              pod_target.test_app_hosts_by_spec_name.should == {}
+              pod_target.test_app_hosts_by_spec.should == {}
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'a_testing' + scope }
               pod_target.dependent_targets.map(&:name).sort.should == %w(a base_testing).map { |n| n + scope }
               pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base base_testing c e).map { |n| n + scope }
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-              pod_target.test_app_hosts_by_spec_name.should == {}
+              pod_target.test_app_hosts_by_spec.should == {}
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'b' + scope }
               test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -733,14 +733,14 @@ module Pod
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['b/Tests', []]]
               pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-              pod_target.test_app_hosts_by_spec_name.should == {}
+              pod_target.test_app_hosts_by_spec.should == {}
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'base' + scope }
               pod_target.dependent_targets.map(&:name).sort.should == []
               pod_target.recursive_dependent_targets.map(&:name).sort.should == []
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-              pod_target.test_app_hosts_by_spec_name.should == {}
+              pod_target.test_app_hosts_by_spec.should == {}
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'c' + scope }
               test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -749,7 +749,7 @@ module Pod
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['a_testing'].map { |n| n + scope }]]
               pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e).map { |n| n + scope }
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-              pod_target.test_app_hosts_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['app_host/App', 'app_host' + scope]]]
+              pod_target.test_app_hosts_by_spec.map { |k, v| [k.name, v.map(&:name)] }.should == [['c/Tests', ['app_host/App', 'app_host' + scope]]]
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'd' + scope }
               test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -758,14 +758,14 @@ module Pod
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['d/Tests', ['b'].map { |n| n + scope }]]
               pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(b base c e).map { |n| n + scope }
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-              pod_target.test_app_hosts_by_spec_name.should == {}
+              pod_target.test_app_hosts_by_spec.should == {}
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'e' + scope }
               pod_target.dependent_targets.map(&:name).sort.should == ['base'].map { |n| n + scope }
               pod_target.recursive_dependent_targets.map(&:name).sort.should == ['base'].map { |n| n + scope }
               pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-              pod_target.test_app_hosts_by_spec_name.should == {}
+              pod_target.test_app_hosts_by_spec.should == {}
 
               pod_target = result.pod_targets.find { |pt| pt.name == 'app_host' + scope }
               test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -776,7 +776,7 @@ module Pod
               pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
               pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['app_host/App', ['d'].map { |n| n + scope }]]
               pod_target.recursive_app_dependent_targets(app_spec).map(&:name).sort.should == %w(a b base c d e).map { |n| n + scope }
-              pod_target.test_app_hosts_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['app_host/Tests', ['app_host/App', 'app_host' + scope]]]
+              pod_target.test_app_hosts_by_spec.map { |k, v| [k.name, v.map(&:name)] }.should == [['app_host/Tests', ['app_host/App', 'app_host' + scope]]]
             end
           end
 
@@ -1001,14 +1001,14 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['a/Tests', ['a_testing'].map { |n| n + '-Pods-SampleProject' }]]
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e).map { |n| n + '-Pods-SampleProject' }
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'a_testing-Pods-SampleProject' }
             pod_target.dependent_targets.map(&:name).sort.should == %w(a base_testing).map { |n| n + '-Pods-SampleProject' }
             pod_target.recursive_dependent_targets.map(&:name).sort.should == %w(a b base base_testing c e).map { |n| n + '-Pods-SampleProject' }
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'b-Pods-SampleProject' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -1017,14 +1017,14 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['b/Tests', []]]
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'base-Pods-SampleProject' }
             pod_target.dependent_targets.map(&:name).sort.should == []
             pod_target.recursive_dependent_targets.map(&:name).sort.should == []
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'c-Pods-SampleProject' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -1033,7 +1033,7 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['a_testing'].map { |n| n + '-Pods-SampleProject' }]]
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(a a_testing b base base_testing c e).map { |n| n + '-Pods-SampleProject' }
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['c/Tests', ['app_host/App', 'app_host-Pods-SampleProject']]]
+            pod_target.test_app_hosts_by_spec.map { |k, v| [k.name, v.map(&:name)] }.should == [['c/Tests', ['app_host/App', 'app_host-Pods-SampleProject']]]
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'd-Pods-SampleProject' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -1042,14 +1042,14 @@ module Pod
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['d/Tests', ['b'].map { |n| n + '-Pods-SampleProject' }]]
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == %w(b base c e).map { |n| n + '-Pods-SampleProject' }
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'e-Pods-SampleProject' }
             pod_target.dependent_targets.map(&:name).sort.should == ['base'].map { |n| n + '-Pods-SampleProject' }
             pod_target.recursive_dependent_targets.map(&:name).sort.should == ['base'].map { |n| n + '-Pods-SampleProject' }
             pod_target.test_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == []
-            pod_target.test_app_hosts_by_spec_name.should == {}
+            pod_target.test_app_hosts_by_spec.should == {}
 
             pod_target = result.pod_targets.find { |pt| pt.name == 'app_host-Pods-SampleProject' }
             test_spec = pod_target.test_specs.find { |ts| ts.name == "#{pod_target.pod_name}/Tests" }
@@ -1060,7 +1060,7 @@ module Pod
             pod_target.recursive_test_dependent_targets(test_spec).map(&:name).sort.should == []
             pod_target.app_dependent_targets_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['app_host/App', ['d'].map { |n| n + '-Pods-SampleProject' }]]
             pod_target.recursive_app_dependent_targets(app_spec).map(&:name).sort.should == %w(a b base c d e).map { |n| n + '-Pods-SampleProject' }
-            pod_target.test_app_hosts_by_spec_name.map { |k, v| [k, v.map(&:name)] }.should == [['app_host/Tests', ['app_host/App', 'app_host-Pods-SampleProject']]]
+            pod_target.test_app_hosts_by_spec.map { |k, v| [k.name, v.map(&:name)] }.should == [['app_host/Tests', ['app_host/App', 'app_host-Pods-SampleProject']]]
           end
 
           it 'picks the right variants up when there are multiple' do
