@@ -550,6 +550,7 @@ module Pod
                   map { |test_spec| pod_generator_result.native_target_for_spec(test_spec).uuid }.
                   sort
               host_scheme.test_action.testables.flat_map { |t| t.buildable_references.map(&:target_uuid) }.sort.should == native_target_uuids
+              test_scheme.launch_action.macro_expansions.empty?.should.be.false
             end
 
             it 'allows opting out' do

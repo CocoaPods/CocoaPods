@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#9332](https://github.com/CocoaPods/CocoaPods/issues/9332)
 
+* Fix an issue that prevented variables in test bundle scheme settings from expanding   
+  [Eric Amorde](https://github.com/amorde)
+  [#9539](https://github.com/CocoaPods/CocoaPods/pull/9539)
+
 ## 1.9.0.beta.3 (2020-02-04)
 
 ##### Enhancements

@@ -271,6 +271,13 @@ module Pod
                 testable = Xcodeproj::XCScheme::TestAction::TestableReference.new(native_target)
                 scheme.test_action.add_testable(testable)
               end
+
+              if spec.test_specification?
+                # Default to using the test bundle to expand variables
+                native_target_for_expansion = generator_result.native_target_for_spec(spec)
+                macro_expansion = Xcodeproj::XCScheme::MacroExpansion.new(native_target_for_expansion)
+                scheme.launch_action.add_macro_expansion(macro_expansion)
+              end
               scheme.save!
             end
             Xcodeproj::XCScheme.share_scheme(project.path, scheme_name) if share_scheme

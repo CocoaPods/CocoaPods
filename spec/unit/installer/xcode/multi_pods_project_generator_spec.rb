@@ -740,6 +740,7 @@ module Pod
                 { :key => 'Key1', :value => 'Val1', :enabled => true },
               ]
               test_scheme.test_action.code_coverage_enabled?.should.be.true
+              test_scheme.launch_action.macro_expansions.empty?.should.be.false
             end
 
             it 'adds the test bundle to the test action of the app host when using app specs' do
