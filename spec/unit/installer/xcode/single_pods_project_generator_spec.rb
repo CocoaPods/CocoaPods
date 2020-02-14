@@ -561,7 +561,7 @@ module Pod
               pod_generator_result = @generator.generate!
               @generator.sandbox.stubs(:development_pods).returns('BananaLib' => fixture('BananaLib'))
 
-              targets =@generator.pod_targets.select { |target| target.root_spec.name == 'BananaLib' }
+              targets = @generator.pod_targets.select { |target| target.root_spec.name == 'BananaLib' }
 
               Xcode::PodsProjectWriter.new(config.sandbox, [pod_generator_result.project],
                                            pod_generator_result.target_installation_results.pod_target_installation_results,

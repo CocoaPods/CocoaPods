@@ -33,12 +33,12 @@ module Pod
           #
           attr_reader :test_resource_bundle_targets
 
-          # @return [Hash{Specification => PBXNativeTarget}] test_app_host_targets
+          # @return [Array<PBXNativeTarget>] test_app_host_targets
           #         The test app host native targets that were produced for this target. Can be empty.
           #
           attr_reader :test_app_host_targets
 
-          # @return [Array<PBXNativeTarget>] app_native_targets
+          # @return [Hash{Specification => PBXNativeTarget}] app_native_targets
           #         The app native targets that were produced for this target. Can be empty if there were no app
           #         native targets created (e.g. no app specs present).
           #

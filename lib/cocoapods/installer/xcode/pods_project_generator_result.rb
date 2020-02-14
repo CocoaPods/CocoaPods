@@ -33,6 +33,7 @@ module Pod
           #        A spec which was included in the generated project
           #
           # @return [Xcodeproj::PBXNativeTarget] the native target for the spec
+          #
           def native_target_for_spec(spec)
             installation_results_by_spec[spec.root].native_target_for_spec(spec)
           end

@@ -668,7 +668,7 @@ module Pod
           @pod_target.test_dependent_targets_by_spec_name = { @orangeframework_pod_target.name => [@matryoshka_pod_target] }
           @pod_target.app_dependent_targets_by_spec_name = { @orangeframework_pod_target.name => [@monkey_pod_target] }
           @pod_target.test_app_hosts_by_spec = {
-              fixture_spec('orange-framework/OrangeFramework.podspec') => [@matryoshka_pod_target.specs.first, @matryoshka_pod_target]
+            fixture_spec('orange-framework/OrangeFramework.podspec') => [@matryoshka_pod_target.specs.first, @matryoshka_pod_target],
           }
         end
 
