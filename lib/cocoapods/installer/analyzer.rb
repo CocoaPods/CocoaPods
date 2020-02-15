@@ -690,13 +690,13 @@ module Pod
             hash[app_spec.name] = Hash[app_dependencies_by_config.map { |k, v| [k, filter_dependencies(v, pod_targets_by_name, target)] }]
           end
 
-          target.test_app_hosts_by_spec_name = target.test_specs.each_with_object({}) do |test_spec, hash|
+          target.test_app_hosts_by_spec = target.test_specs.each_with_object({}) do |test_spec, hash|
             next unless app_host_name = test_spec.consumer(target.platform).app_host_name
             app_host_spec = pod_targets_by_name[Specification.root_name(app_host_name)].flat_map(&:app_specs).find do |pt|
               pt.name == app_host_name
             end
             app_host_dependencies = { app_host_spec.root => [app_host_spec] }
-            hash[test_spec.name] = [app_host_spec, filter_dependencies(app_host_dependencies, pod_targets_by_name, target).first]
+            hash[test_spec] = [app_host_spec, filter_dependencies(app_host_dependencies, pod_targets_by_name, target).first]
           end
         end
       end

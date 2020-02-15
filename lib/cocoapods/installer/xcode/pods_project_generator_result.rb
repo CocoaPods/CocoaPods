@@ -28,6 +28,25 @@ module Pod
             @projects_by_pod_targets = projects_by_pod_targets
             @target_installation_results = target_installation_results
           end
+
+          # @param [Pod::Specification] spec
+          #        A spec which was included in the generated project
+          #
+          # @return [Xcodeproj::PBXNativeTarget] the native target for the spec
+          #
+          def native_target_for_spec(spec)
+            installation_results_by_spec[spec.root].native_target_for_spec(spec)
+          end
+
+          private
+
+          def installation_results_by_spec
+            @target_installation_results_by_spec ||= begin
+              target_installation_results.pod_target_installation_results.values.each_with_object({}) do |installation_results, hash|
+                hash[installation_results.target.root_spec] = installation_results
+              end
+            end
+          end
         end
       end
     end

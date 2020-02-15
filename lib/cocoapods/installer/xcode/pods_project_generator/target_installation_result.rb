@@ -38,7 +38,7 @@ module Pod
           #
           attr_reader :test_app_host_targets
 
-          # @return [Array<PBXNativeTarget>] app_native_targets
+          # @return [Hash{Specification => PBXNativeTarget}] app_native_targets
           #         The app native targets that were produced for this target. Can be empty if there were no app
           #         native targets created (e.g. no app specs present).
           #
@@ -58,12 +58,12 @@ module Pod
           # @param [Array<PBXNativeTarget>] test_native_targets @see #test_native_targets
           # @param [Hash{String=>Array<PBXNativeTarget>}] test_resource_bundle_targets @see #test_resource_bundle_targets
           # @param [Array<PBXNativeTarget>] test_app_host_targets @see #test_app_host_targets
-          # @param [Array<PBXNativeTarget>] app_native_targets @see #app_native_targets
+          # @param [Hash{Specification => PBXNativeTarget}] app_native_targets @see #app_native_targets
           # @param [Hash{String=>Array<PBXNativeTarget>}] app_resource_bundle_targets @see #app_resource_bundle_targets
           #
           def initialize(target, native_target, resource_bundle_targets = [], test_native_targets = [],
                          test_resource_bundle_targets = {}, test_app_host_targets = [],
-                         app_native_targets = [], app_resource_bundle_targets = {})
+                         app_native_targets = {}, app_resource_bundle_targets = {})
             @target = target
             @native_target = native_target
             @resource_bundle_targets = resource_bundle_targets
@@ -115,7 +115,7 @@ module Pod
           # @return [PBXNativeTarget] the app host target with the given target label.
           #
           def app_host_target_labelled(label)
-            app_native_targets.find do |app_native_target|
+            app_native_targets.values.find do |app_native_target|
               app_native_target.name == label
             end || test_app_host_targets.find do |app_native_target|
               app_native_target.name == label
@@ -131,9 +131,7 @@ module Pod
           end
 
           def app_native_target_from_spec(spec)
-            app_native_targets.find do |app_native_target|
-              app_native_target.name == target.app_target_label(spec)
-            end
+            app_native_targets[spec]
           end
         end
       end

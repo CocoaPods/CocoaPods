@@ -667,8 +667,9 @@ module Pod
           @pod_target.dependent_targets = [@orangeframework_pod_target]
           @pod_target.test_dependent_targets_by_spec_name = { @orangeframework_pod_target.name => [@matryoshka_pod_target] }
           @pod_target.app_dependent_targets_by_spec_name = { @orangeframework_pod_target.name => [@monkey_pod_target] }
-          @pod_target.test_app_hosts_by_spec_name = { @orangeframework_pod_target.name => [@matryoshka_pod_target.specs.first,
-                                                                                           @matryoshka_pod_target] }
+          @pod_target.test_app_hosts_by_spec = {
+            fixture_spec('orange-framework/OrangeFramework.podspec') => [@matryoshka_pod_target.specs.first, @matryoshka_pod_target],
+          }
         end
 
         it 'resolves simple dependencies' do
@@ -686,10 +687,10 @@ module Pod
         end
 
         it 'scopes test app host dependencies' do
-          scoped_pod_target = @pod_target.scoped
-          scoped_pod_target.first.test_app_hosts_by_spec_name.count.should == 1
-          scoped_pod_target.first.test_app_hosts_by_spec_name['OrangeFramework'].first.should == @matryoshka_pod_target.specs.first
-          scoped_pod_target.first.test_app_hosts_by_spec_name['OrangeFramework'].last.name.should == 'matryoshka-Pods'
+          scoped_pod_target = @pod_target.scoped.first
+          scoped_pod_target.test_app_hosts_by_spec.count.should == 1
+          scoped_pod_target.test_app_hosts_by_spec[@orangeframework_pod_target.root_spec].first.should == @matryoshka_pod_target.specs.first
+          scoped_pod_target.test_app_hosts_by_spec[@orangeframework_pod_target.root_spec].last.name.should == 'matryoshka-Pods'
         end
 
         describe 'With cyclic dependencies' do
@@ -935,7 +936,7 @@ module Pod
                                                                [target_definition])
           app_host_spec = pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
           test_spec = pineapple_pod_target.test_specs.find { |t| t.base_name == 'Tests' }
-          pineapple_pod_target.test_app_hosts_by_spec_name = { 'PineappleLib/Tests' => [app_host_spec, pineapple_pod_target] }
+          pineapple_pod_target.test_app_hosts_by_spec = { pineapple_spec.subspec_by_name('PineappleLib/Tests', true, true) => [app_host_spec, pineapple_pod_target] }
           pineapple_pod_target.app_host_dependent_targets_for_spec(test_spec).map(&:name).should == ['PineappleLib']
         end
 
@@ -947,7 +948,7 @@ module Pod
                                                                [target_definition])
           app_host_spec = pineapple_pod_target.app_specs.find { |t| t.base_name == 'App' }
           test_spec = pineapple_pod_target.test_specs.find { |t| t.base_name == 'UI' }
-          pineapple_pod_target.test_app_hosts_by_spec_name = { 'PineappleLib/UI' => [app_host_spec, pineapple_pod_target] }
+          pineapple_pod_target.test_app_hosts_by_spec = { pineapple_spec.subspec_by_name('PineappleLib/UI', true, true) => [app_host_spec, pineapple_pod_target] }
           pineapple_pod_target.app_host_dependent_targets_for_spec(test_spec).map(&:name).should == []
         end
 
