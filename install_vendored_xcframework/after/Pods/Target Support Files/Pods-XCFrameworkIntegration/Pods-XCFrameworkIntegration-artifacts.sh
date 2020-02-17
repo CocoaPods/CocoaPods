@@ -75,7 +75,8 @@ install_framework()
 
 install_xcframework() {
   local basepath="$1"
-  local embed="$2"
+  local dsym_folder="$2"
+  local embed="$3"
   shift
   local paths=("$@")
 
@@ -104,14 +105,25 @@ install_xcframework() {
   fi
 
   install_framework "$basepath/$target_path" "$embed"
+
+  if [[ -z "$dsym_folder" || ! -d "$dsym_folder" ]]; then
+    return
+  fi
+
+  dsyms=($(ls "$dsym_folder"))
+
+  local target_dsym=""
+  for i in ${!dsyms[@]}; do
+    install_artifact "$dsym_folder/${dsyms[$i]}" "$CONFIGURATION_BUILD_DIR" "true"
+  done
 }
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "true" "ios-x86_64-maccatalyst/CoconutLib.framework" "ios-i386_x86_64-simulator/CoconutLib.framework" "ios-armv7_arm64/CoconutLib.framework"
+  install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "" "true" "ios-x86_64-maccatalyst/CoconutLib.framework" "ios-i386_x86_64-simulator/CoconutLib.framework" "ios-armv7_arm64/CoconutLib.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "true" "ios-x86_64-maccatalyst/CoconutLib.framework" "ios-i386_x86_64-simulator/CoconutLib.framework" "ios-armv7_arm64/CoconutLib.framework"
+  install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "" "true" "ios-x86_64-maccatalyst/CoconutLib.framework" "ios-i386_x86_64-simulator/CoconutLib.framework" "ios-armv7_arm64/CoconutLib.framework"
 fi
 
 echo "Artifact list stored at $ARTIFACT_LIST_FILE"
