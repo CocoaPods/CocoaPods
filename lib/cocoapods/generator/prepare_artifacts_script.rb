@@ -136,7 +136,8 @@ module Pod
 
           install_xcframework() {
             local basepath="$1"
-            local embed="$2"
+            local dsym_folder="$2"
+            local embed="$3"
             shift
             local paths=("$@")
 
@@ -165,6 +166,17 @@ module Pod
             fi
 
             install_framework "$basepath/$target_path" "$embed"
+
+            if [[ -z "$dsym_folder" || ! -d "$dsym_folder" ]]; then
+              return
+            fi
+
+            dsyms=($(ls "$dsym_folder"))
+
+            local target_dsym=""
+            for i in ${!dsyms[@]}; do
+              install_artifact "$dsym_folder/${dsyms[$i]}" "$CONFIGURATION_BUILD_DIR" "true"
+            done
           }
 
         SH
@@ -185,12 +197,6 @@ module Pod
             unless static_slices.empty?
               args = install_xcframework_args(xcframework.path, static_slices, true)
               contents_by_config[config] << %(  install_xcframework #{args}\n)
-            end
-
-            dsyms = PrepareArtifactsScript.dsym_paths(xcframework.path)
-            dsyms.each do |path|
-              source = shell_escape("${PODS_ROOT}/#{path.relative_path_from(sandbox_root)}")
-              contents_by_config[config] << %(  install_artifact #{source} "${TARGET_BUILD_DIR}" "true"\n)
             end
           end
         end
@@ -215,6 +221,12 @@ module Pod
 
       def install_xcframework_args(root, slices, static)
         args = [shell_escape("${PODS_ROOT}/#{root.relative_path_from(sandbox_root)}")]
+        dsym_folder_arg = if (dsym_folder = PrepareArtifactsScript.dsym_folder(root))
+                            shell_escape("${PODS_ROOT}/#{dsym_folder.relative_path_from(sandbox_root)}")
+                          else
+                            '""'
+                          end
+        args << dsym_folder_arg
         embed = static ? 'false' : 'true'
         args << shell_escape(embed)
         slices.each do |slice|
@@ -229,14 +241,11 @@ module Pod
         #
         # @return [Array<Pathname>] all found .dSYM paths
         #
-        def dsym_paths(xcframework_path)
+        def dsym_folder(xcframework_path)
           basename = File.basename(xcframework_path, '.xcframework')
           dsym_basename = basename + '.dSYMs'
           path = xcframework_path.dirname + dsym_basename
-          return [] unless File.directory?(path)
-
-          pattern = path + '*.dSYM'
-          Dir.glob(pattern).map { |s| Pathname.new(s) }
+          Pathname.new(path) if File.directory?(path)
         end
       end
     end
