@@ -242,6 +242,43 @@ module Pod
                     '${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PineappleLib.framework',
                   ]
                 end
+
+                it 'integrates native target with copy dSYM script phase' do
+                  framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework',
+                                                                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM')]
+                  @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
+                  installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target, [], [])
+                  PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
+                  @native_target.build_phases.count.should == 1
+                  @native_target.build_phases.map(&:display_name).should == [
+                    '[CP] Copy dSYMs',
+                  ]
+                  @native_target.build_phases[0].input_paths.should == [
+                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM',
+                  ]
+                  @native_target.build_phases[0].output_paths.should == [
+                    '${TARGET_BUILD_DIR}/Vendored.framework.dSYM',
+                  ]
+                end
+
+                it 'integrates native target with copy dSYM script phase and xcfilelists' do
+                  @project.stubs(:object_version).returns('50')
+                  framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework',
+                                                                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM')]
+                  @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
+                  installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target, [], [])
+                  PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
+                  @native_target.build_phases.count.should == 1
+                  @native_target.build_phases.map(&:display_name).should == [
+                    '[CP] Copy dSYMs',
+                  ]
+                  @native_target.build_phases[0].input_file_list_paths.should == [
+                    '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-copy-dsyms-input-files.xcfilelist',
+                  ]
+                  @native_target.build_phases[0].output_file_list_paths.should == [
+                    '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-copy-dsyms-output-files.xcfilelist',
+                  ]
+                end
               end
             end
           end

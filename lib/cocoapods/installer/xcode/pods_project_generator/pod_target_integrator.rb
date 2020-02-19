@@ -37,6 +37,7 @@ module Pod
                 add_copy_resources_script_phase(native_target, spec)
                 UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(spec), native_target)
               end
+              add_copy_dsyms_script_phase(target_installation_result.native_target)
               UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(target.library_specs), target_installation_result.native_target)
             end
           end
@@ -140,7 +141,7 @@ module Pod
               input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
               input_paths = input_paths_by_config[input_paths_key] = [script_path]
               framework_paths.each do |path|
-                input_paths.concat(path.all_paths)
+                input_paths.concat([path.source_path, path.bcsymbolmap_paths].flatten.compact)
               end
 
               output_file_list_path = target.embed_frameworks_script_output_files_path_for_spec(spec)
@@ -211,6 +212,49 @@ module Pod
             end
           end
 
+          # Adds a script phase that copies and strips dSYMs that are part of this target. Note this only deals with
+          # vendored dSYMs.
+          #
+          # @param [PBXNativeTarget] native_target
+          #         the native target for which to add the the copy dSYM files build phase.
+          #
+          # @return [void]
+          #
+          def add_copy_dsyms_script_phase(native_target)
+            script_path = "${PODS_ROOT}/#{target.copy_dsyms_script_path.relative_path_from(target.sandbox.root)}"
+            dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+
+            if dsym_paths.empty?
+              script_phase = native_target.shell_script_build_phases.find { |bp| bp.name && bp.name.end_with?(UserProjectIntegrator::TargetIntegrator::COPY_DSYM_FILES_PHASE_NAME) }
+              native_target.build_phases.delete(script_phase) if script_phase.present?
+              return
+            end
+
+            phase_name = UserProjectIntegrator::TargetIntegrator::BUILD_PHASE_PREFIX + UserProjectIntegrator::TargetIntegrator::COPY_DSYM_FILES_PHASE_NAME
+            phase = UserProjectIntegrator::TargetIntegrator.create_or_update_shell_script_build_phase(native_target, phase_name)
+            phase.shell_script = %("#{script_path}"\n)
+
+            input_paths_by_config = {}
+            output_paths_by_config = {}
+            if use_input_output_paths?
+              input_file_list_path = target.copy_dsyms_script_input_files_path
+              input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
+              input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
+              input_paths = input_paths_by_config[input_paths_key] = []
+              input_paths.concat dsym_paths
+
+              output_file_list_path = target.copy_dsyms_script_output_files_path
+              output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
+              output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
+              output_paths = output_paths_by_config[output_paths_key] = []
+
+              dsym_output_paths = dsym_paths.map { |dsym_path| "${TARGET_BUILD_DIR}/#{File.basename(dsym_path)}" }
+              output_paths.concat dsym_output_paths
+            end
+
+            UserProjectIntegrator::TargetIntegrator.set_input_output_paths(phase, input_paths_by_config, output_paths_by_config)
+          end
+
           # @return [String] the message that should be displayed for the target
           #         integration.
           #
@@ -218,7 +262,7 @@ module Pod
             "Integrating target `#{target.name}`"
           end
 
-          # @return [PodTarget] the target part of the installation result.
+          # @return [Target] the target part of the installation result.
           #
           def target
             target_installation_result.target
@@ -231,6 +275,48 @@ module Pod
           #
           def script_phases_for_specs(specs)
             Array(specs).flat_map { |spec| spec.consumer(target.platform).script_phases }
+          end
+
+          # @param [Array<Pathname>] dsym_paths
+          #         the dSYM paths to include in the script contents.
+          #
+          # @return [String] the script contents related to dSYM architecture stripping.
+          #
+          def dsym_script_contents(dsym_paths)
+            script = <<-SH.strip_heredoc
+#{Pod::Generator::ScriptPhaseConstants::DEFAULT_SCRIPT_PHASE_HEADER}
+#{Pod::Generator::ScriptPhaseConstants::STRIP_INVALID_ARCHITECTURES_METHOD}
+#{Pod::Generator::ScriptPhaseConstants::RSYNC_PROTECT_TMP_FILES}
+# Copies and strips a vendored dSYM
+install_dsym() {
+  local source="$1"
+  if [ -r "$source" ]; then
+    # Copy the dSYM into a the targets temp dir.
+    echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${DERIVED_FILES_DIR}\\""
+    rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${DERIVED_FILES_DIR}"
+    local basename
+    basename="$(basename -s .framework.dSYM "$source")"
+    binary="${DERIVED_FILES_DIR}/${basename}.framework.dSYM/Contents/Resources/DWARF/${basename}"
+    # Strip invalid architectures so "fat" simulator / device frameworks work on device
+    if [[ "$(file "$binary")" == *"Mach-O "*"dSYM companion"* ]]; then
+      strip_invalid_archs "$binary"
+    fi
+    if [[ $STRIP_BINARY_RETVAL == 0 ]]; then
+      # Move the stripped file into its final destination.
+      echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${DERIVED_FILES_DIR}/${basename}.framework.dSYM\\" \\"${TARGET_BUILD_DIR}\\""
+      rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${DERIVED_FILES_DIR}/${basename}.framework.dSYM" "${TARGET_BUILD_DIR}"
+    else
+      # The dSYM was not stripped at all, in this case touch a fake folder so the input/output paths from Xcode do not reexecute this script because the file is missing.
+      touch "${TARGET_BUILD_DIR}/${basename}.framework.dSYM"
+    fi
+  fi
+}
+
+            SH
+            dsym_paths.each do |dsym_path|
+              script << %(install_dsym "#{dsym_path}"\n)
+            end
+            script
           end
         end
       end
