@@ -693,6 +693,14 @@ module Pod
           scoped_pod_target.test_app_hosts_by_spec[@orangeframework_pod_target.root_spec].last.name.should == 'matryoshka-Pods'
         end
 
+        it 'responds to #test_app_hosts_by_name for compatibility' do
+          # TODO: Remove in 2.0
+          scoped_pod_target = @pod_target.scoped.first
+          scoped_pod_target.test_app_hosts_by_spec_name.count.should == 1
+          scoped_pod_target.test_app_hosts_by_spec_name[@orangeframework_pod_target.root_spec.name].first.should == @matryoshka_pod_target.specs.first
+          scoped_pod_target.test_app_hosts_by_spec_name[@orangeframework_pod_target.root_spec.name].last.name.should == 'matryoshka-Pods'
+        end
+
         describe 'With cyclic dependencies' do
           before do
             @orangeframework_pod_target = fixture_pod_target('orange-framework/OrangeFramework.podspec')
