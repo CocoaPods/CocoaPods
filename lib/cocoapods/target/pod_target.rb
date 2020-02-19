@@ -1065,5 +1065,22 @@ module Pod
       end
       mappings
     end
+
+    # @!group Deprecated APIs
+    # ----------------------------------------------------------------------- #
+
+    public
+
+    # @deprecated Use `test_app_hosts_by_spec` instead.
+    #
+    # @todo Remove in 2.0
+    #
+    # @return [Hash{String => (Specification,PodTarget)}] tuples of app specs and pod targets by test spec name.
+    #
+    def test_app_hosts_by_spec_name
+      Hash[test_app_hosts_by_spec.map do |spec, value|
+        [spec.name, value]
+      end]
+    end
   end
 end
