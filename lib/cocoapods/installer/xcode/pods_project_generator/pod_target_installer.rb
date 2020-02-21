@@ -42,6 +42,7 @@ module Pod
                 # PBXAggregateTarget that will be used to wire up dependencies later.
                 native_target = add_placeholder_target
                 resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
+                create_copy_dsyms_script
                 create_xcconfig_file(native_target, resource_bundle_targets)
                 return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
@@ -126,6 +127,7 @@ module Pod
                 end
               end
               create_dummy_source(native_target)
+              create_copy_dsyms_script
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets,
                                            test_native_targets, test_resource_bundle_targets, test_app_host_targets,
@@ -774,6 +776,20 @@ module Pod
             end
             unless framework_paths_by_config.each_value.all?(&:empty?)
               generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+            end
+          end
+
+          # Creates a script that copies and strips vendored dSYMs.
+          #
+          # @return [void]
+          #
+          def create_copy_dsyms_script
+            dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+            path = target.copy_dsyms_script_path
+            unless dsym_paths.empty?
+              generator = Generator::CopydSYMsScript.new(dsym_paths)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end

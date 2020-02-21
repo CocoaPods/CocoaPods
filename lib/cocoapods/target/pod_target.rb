@@ -711,6 +711,24 @@ module Pod
       support_files_dir + "#{non_library_spec_label(spec)}-artifacts-output-files.xcfilelist"
     end
 
+    # @return [Pathname] The absolute path of the copy dSYMs script.
+    #
+    def copy_dsyms_script_path
+      support_files_dir + "#{label}-copy-dsyms.sh"
+    end
+
+    # @return [Pathname] The absolute path of the copy dSYM script phase input file list.
+    #
+    def copy_dsyms_script_input_files_path
+      support_files_dir + "#{label}-copy-dsyms-input-files.xcfilelist"
+    end
+
+    # @return [Pathname] The absolute path of the copy dSYM script phase output file list.
+    #
+    def copy_dsyms_script_output_files_path
+      support_files_dir + "#{label}-copy-dsyms-output-files.xcfilelist"
+    end
+
     # @param  [Specification] spec
     #         The spec this Info.plist path is for.
     #

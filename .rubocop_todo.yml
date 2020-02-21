@@ -440,6 +440,7 @@ Style/NumericLiteralPrefix:
     - 'lib/cocoapods/command/repo/push.rb'
     - 'lib/cocoapods/generator/copy_resources_script.rb'
     - 'lib/cocoapods/generator/embed_frameworks_script.rb'
+    - 'lib/cocoapods/generator/copy_dsyms_script.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

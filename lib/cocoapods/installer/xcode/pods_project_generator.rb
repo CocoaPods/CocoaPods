@@ -144,8 +144,9 @@ module Pod
           pod_installations_to_integrate = pod_target_installation_results.values.select do |pod_target_installation_result|
             pod_target = pod_target_installation_result.target
             !pod_target_installation_result.test_native_targets.empty? ||
-                !pod_target_installation_result.app_native_targets.empty? ||
-                pod_target.contains_script_phases?
+              !pod_target_installation_result.app_native_targets.empty? ||
+              pod_target.contains_script_phases? ||
+              pod_target.framework_paths.values.flatten.any? { |paths| !paths.dsym_path.nil? }
           end
           return if pod_installations_to_integrate.empty?
 

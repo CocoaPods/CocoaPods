@@ -45,6 +45,10 @@ module Pod
         #
         COPY_PODS_RESOURCES_PHASE_NAME = 'Copy Pods Resources'.freeze
 
+        # @return [String] the name of the copy dSYM files phase
+        #
+        COPY_DSYM_FILES_PHASE_NAME = 'Copy dSYMs'.freeze
+
         # @return [Integer] the maximum number of input and output paths to use for a script phase
         #
         MAX_INPUT_OUTPUT_PATHS = 1000
@@ -239,7 +243,7 @@ module Pod
           #        The value to set for show environment variables in the log during execution of this script phase or
           #        `nil` for not setting the value at all.
           #
-          # @return [void]
+          # @return [PBXShellScriptBuildPhase] The existing or newly created shell script build phase.
           #
           def create_or_update_shell_script_build_phase(native_target, script_phase_name, show_env_vars_in_log = '0')
             build_phases = native_target.build_phases.grep(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
@@ -263,7 +267,9 @@ module Pod
           def create_or_update_user_script_phases(script_phases, native_target)
             script_phase_names = script_phases.map { |k| k[:name] }
             # Delete script phases no longer present in the target.
-            native_target_script_phases = native_target.shell_script_build_phases.select { |bp| !bp.name.nil? && bp.name.start_with?(USER_BUILD_PHASE_PREFIX) }
+            native_target_script_phases = native_target.shell_script_build_phases.select do |bp|
+              !bp.name.nil? && bp.name.start_with?(USER_BUILD_PHASE_PREFIX)
+            end
             native_target_script_phases.each do |script_phase|
               script_phase_name_without_prefix = script_phase.name.sub(USER_BUILD_PHASE_PREFIX, '')
               unless script_phase_names.include?(script_phase_name_without_prefix)
@@ -375,15 +381,12 @@ module Pod
           def framework_output_paths(framework_input_paths)
             framework_input_paths.flat_map do |framework_path|
               framework_output_path = "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{File.basename(framework_path.source_path)}"
-              dsym_output_path = if (dsym_input_path = framework_path.dsym_path)
-                                   "${DWARF_DSYM_FOLDER_PATH}/#{File.basename(dsym_input_path)}"
-                                 end
               bcsymbol_output_paths = unless framework_path.bcsymbolmap_paths.nil?
                                         framework_path.bcsymbolmap_paths.map do |bcsymbolmap_path|
                                           "${BUILT_PRODUCTS_DIR}/#{File.basename(bcsymbolmap_path)}"
                                         end
                                       end
-              [framework_output_path, dsym_output_path, *bcsymbol_output_paths]
+              [framework_output_path, *bcsymbol_output_paths]
             end.compact.uniq
           end
         end
@@ -520,7 +523,7 @@ module Pod
               input_paths = input_paths_by_config[input_paths_key] = [script_path]
               input_paths << ARTIFACT_LIST_FILE if target.includes_xcframeworks?
               framework_paths.each do |path|
-                input_paths.concat(path.all_paths)
+                input_paths.concat([path.source_path, path.bcsymbolmap_paths].flatten.compact)
               end
 
               output_paths_key = XCFileListConfigKey.new(target.embed_frameworks_script_output_files_path(config), target.embed_frameworks_script_output_files_relative_path)

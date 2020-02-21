@@ -460,15 +460,11 @@ module Pod
             ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/DebugCompiledFramework.framework
             ${PODS_ROOT}/DebugVendoredFramework/ios/A6621399-62A0-3DC3-A6E3-B6B51BD287AD.bcsymbolmap
             ${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework
-            ${PODS_ROOT}/DebugVendoredFramework/ios/DebugVendoredFramework.framework.dSYM
             ${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework
-            ${PODS_ROOT}/ReleaseVendoredFramework/ios/ReleaseVendoredFramework.framework.dSYM
             ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
           phase.output_paths.sort.should == %w(
             ${BUILT_PRODUCTS_DIR}/A6621399-62A0-3DC3-A6E3-B6B51BD287AD.bcsymbolmap
-            ${DWARF_DSYM_FOLDER_PATH}/DebugVendoredFramework.framework.dSYM
-            ${DWARF_DSYM_FOLDER_PATH}/ReleaseVendoredFramework.framework.dSYM
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugCompiledFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DebugVendoredFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReleaseVendoredFramework.framework
@@ -498,13 +494,10 @@ module Pod
             ${BUILT_PRODUCTS_DIR}/DebugCompiledFramework/CompiledFramework.framework
             ${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework
             ${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework
-            ${PODS_ROOT}/DebugVendoredFramework/ios/SomeFramework.framework.dSYM
             ${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework
-            ${PODS_ROOT}/ReleaseVendoredFramework/ios/SomeFramework.framework.dSYM
             ${PODS_ROOT}/Target\ Support\ Files/Pods/Pods-frameworks.sh
           )
           phase.output_paths.sort.should == %w(
-            ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework
           )
@@ -537,7 +530,7 @@ module Pod
           phase.should.be.nil
         end
 
-        it 'adds prepare artifacts build phase input and output paths for vendored xcframeworks without duplicate' do
+        it 'adds prepare artifacts build phase input and output paths for vendored xcframeworks without duplicates' do
           xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
           frameworks_by_config = {
             'Debug' => [xcframework],
@@ -766,7 +759,6 @@ module Pod
             Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework'),
           ]
           TargetIntegrator.framework_output_paths(paths).sort.should == %w(
-            ${DWARF_DSYM_FOLDER_PATH}/SomeFramework.framework.dSYM
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CompiledFramework.framework
             ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SomeFramework.framework
           )

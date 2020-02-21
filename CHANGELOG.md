@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Re-implement `dSYM` copying and stripping to avoid duplicate outputs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9185](https://github.com/CocoaPods/CocoaPods/issues/9185)  
+
 * Also apply Xcode 11 `XCTUnwrap` fix to library and framework targets that weakly link `XCTest`.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9518](https://github.com/CocoaPods/CocoaPods/pull/9518)  
