@@ -396,6 +396,14 @@ module Pod
           FileUtils.rm_f(@user_xcconfig) if File.exist?(@user_xcconfig)
         end
 
+        it 'verify path adjustments are made to config path' do
+          user_project = Xcodeproj::Project.new('path')
+          target = user_project.new_target(:application, 'Target', :ios)
+          sample_config = user_project.new_file(@user_xcconfig)
+          user_project.root_object.stubs(:project_dir_path).returns('foo')
+          sample_config.real_path.to_s.should.include 'foo/User.xcconfig'
+        end
+
         it 'returns the xcconfig-level SWIFT_VERSION if the target has an existing user xcconfig set' do
           user_project = Xcodeproj::Project.new('path')
           user_project.build_configuration_list.set_setting('SWIFT_VERSION', '2.3')
