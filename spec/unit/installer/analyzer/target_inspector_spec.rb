@@ -6,6 +6,28 @@ module Pod
       SpecHelper.create_sample_app_copy_from_fixture('SampleProject')
     end
 
+    describe '#compute_results' do
+      it 'checks the path' do
+        target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
+        user_project = Xcodeproj::Project.new('UserProject.xcodeproj')
+        user_project.new_target(:application, 'UserTarget', :ios)
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        results = target_inspector.send(:compute_results, user_project)
+        results.client_root.to_s.should == Dir.getwd.to_s
+      end
+
+      it 'checks the adjusted path' do
+        target_definition = Podfile::TargetDefinition.new('UserTarget', nil)
+        user_project = Xcodeproj::Project.new('UserProject.xcodeproj')
+        user_project.new_target(:application, 'UserTarget', :ios)
+        user_project.root_object.stubs(:project_dir_path).returns('../')
+        target_inspector = TargetInspector.new(target_definition, config.installation_root)
+        results = target_inspector.send(:compute_results, user_project)
+        results.client_root.to_s.should.not.include Dir.getwd.to_s
+        Dir.getwd.to_s.should.include results.client_root.to_s
+      end
+    end
+
     describe '#compute_project_path' do
       it 'uses the path specified in the target definition while computing the path of the user project' do
         target_definition = Podfile::TargetDefinition.new(:default, nil)
