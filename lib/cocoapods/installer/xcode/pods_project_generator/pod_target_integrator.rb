@@ -248,7 +248,7 @@ module Pod
               output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
               output_paths = output_paths_by_config[output_paths_key] = []
 
-              dsym_output_paths = dsym_paths.map { |dsym_path| "${TARGET_BUILD_DIR}/#{File.basename(dsym_path)}" }
+              dsym_output_paths = dsym_paths.map { |dsym_path| "${DWARF_DSYM_FOLDER_PATH}/#{File.basename(dsym_path)}" }
               output_paths.concat dsym_output_paths
             end
 

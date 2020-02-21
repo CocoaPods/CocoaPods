@@ -257,7 +257,7 @@ module Pod
                     '${PODS_ROOT}/Vendored/Vendored.framework.dSYM',
                   ]
                   @native_target.build_phases[0].output_paths.should == [
-                    '${TARGET_BUILD_DIR}/Vendored.framework.dSYM',
+                    '${DWARF_DSYM_FOLDER_PATH}/Vendored.framework.dSYM',
                   ]
                 end
 
