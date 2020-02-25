@@ -77,6 +77,34 @@ install_framework()
     done
   fi
 }
+# Copies and strips a vendored dSYM
+install_dsym() {
+  local source="$1"
+  warn_missing_arch=${2:-true}
+  if [ -r "$source" ]; then
+    # Copy the dSYM into the targets temp dir.
+    echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers\" --filter \"- PrivateHeaders\" --filter \"- Modules\" \"${source}\" \"${DERIVED_FILES_DIR}\""
+    rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${DERIVED_FILES_DIR}"
+
+    local basename
+    basename="$(basename -s .dSYM "$source")"
+    binary_name="$(ls "$source/Contents/Resources/DWARF")"
+    binary="${DERIVED_FILES_DIR}/${basename}.dSYM/Contents/Resources/DWARF/${binary_name}"
+
+    # Strip invalid architectures from the dSYM.
+    if [[ "$(file "$binary")" == *"Mach-O "*"dSYM companion"* ]]; then
+      strip_invalid_archs "$binary" "$warn_missing_arch"
+    fi
+    if [[ $STRIP_BINARY_RETVAL == 0 ]]; then
+      # Move the stripped file into its final destination.
+      echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers\" --filter \"- PrivateHeaders\" --filter \"- Modules\" \"${DERIVED_FILES_DIR}/${basename}.framework.dSYM\" \"${DWARF_DSYM_FOLDER_PATH}\""
+      rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${DERIVED_FILES_DIR}/${basename}.dSYM" "${DWARF_DSYM_FOLDER_PATH}"
+    else
+      # The dSYM was not stripped at all, in this case touch a fake folder so the input/output paths from Xcode do not reexecute this script because the file is missing.
+      touch "${DWARF_DSYM_FOLDER_PATH}/${basename}.dSYM"
+    fi
+  fi
+}
 
 # Used as a return value for each invocation of `strip_invalid_archs` function.
 STRIP_BINARY_RETVAL=0
@@ -84,13 +112,16 @@ STRIP_BINARY_RETVAL=0
 # Strip invalid architectures
 strip_invalid_archs() {
   binary="$1"
+  warn_missing_arch=${2:-true}
   # Get architectures for current target binary
   binary_archs="$(lipo -info "$binary" | rev | cut -d ':' -f1 | awk '{$1=$1;print}' | rev)"
   # Intersect them with the architectures we are building for
   intersected_archs="$(echo ${ARCHS[@]} ${binary_archs[@]} | tr ' ' '\n' | sort | uniq -d)"
   # If there are no archs supported by this binary then warn the user
   if [[ -z "$intersected_archs" ]]; then
-    echo "warning: [CP] Vendored binary '$binary' contains architectures ($binary_archs) none of which match the current build architectures ($ARCHS)."
+    if [[ "$warn_missing_arch" == "true" ]]; then
+      echo "warning: [CP] Vendored binary '$binary' contains architectures ($binary_archs) none of which match the current build architectures ($ARCHS)."
+    fi
     STRIP_BINARY_RETVAL=1
     return
   fi
@@ -137,6 +168,10 @@ install_artifact() {
   case $base in
   *.framework)
     install_framework "$artifact"
+    ;;
+  *.dSYM)
+    # Suppress arch warnings since XCFrameworks will include many dSYM files
+    install_dsym "$artifact" "false"
     ;;
   *.bcsymbolmap)
     install_bcsymbolmap "$artifact"
