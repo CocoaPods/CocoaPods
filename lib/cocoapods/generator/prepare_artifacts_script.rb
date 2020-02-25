@@ -66,7 +66,7 @@ if [ -z ${FRAMEWORKS_FOLDER_PATH+x} ]; then
   exit 0
 fi
 
-#{Pod::Generator::ScriptPhaseConstants::RSYNC_PROTECT_TMP_FILES}q
+#{Pod::Generator::ScriptPhaseConstants::RSYNC_PROTECT_TMP_FILES}
 ARTIFACT_LIST_FILE="${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt"
 cat > $ARTIFACT_LIST_FILE
 

@@ -276,48 +276,6 @@ module Pod
           def script_phases_for_specs(specs)
             Array(specs).flat_map { |spec| spec.consumer(target.platform).script_phases }
           end
-
-          # @param [Array<Pathname>] dsym_paths
-          #         the dSYM paths to include in the script contents.
-          #
-          # @return [String] the script contents related to dSYM architecture stripping.
-          #
-          def dsym_script_contents(dsym_paths)
-            script = <<-SH.strip_heredoc
-#{Pod::Generator::ScriptPhaseConstants::DEFAULT_SCRIPT_PHASE_HEADER}
-#{Pod::Generator::ScriptPhaseConstants::STRIP_INVALID_ARCHITECTURES_METHOD}
-#{Pod::Generator::ScriptPhaseConstants::RSYNC_PROTECT_TMP_FILES}
-# Copies and strips a vendored dSYM
-install_dsym() {
-  local source="$1"
-  if [ -r "$source" ]; then
-    # Copy the dSYM into a the targets temp dir.
-    echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${DERIVED_FILES_DIR}\\""
-    rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${DERIVED_FILES_DIR}"
-    local basename
-    basename="$(basename -s .framework.dSYM "$source")"
-    binary="${DERIVED_FILES_DIR}/${basename}.framework.dSYM/Contents/Resources/DWARF/${basename}"
-    # Strip invalid architectures so "fat" simulator / device frameworks work on device
-    if [[ "$(file "$binary")" == *"Mach-O "*"dSYM companion"* ]]; then
-      strip_invalid_archs "$binary"
-    fi
-    if [[ $STRIP_BINARY_RETVAL == 0 ]]; then
-      # Move the stripped file into its final destination.
-      echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${DERIVED_FILES_DIR}/${basename}.framework.dSYM\\" \\"${TARGET_BUILD_DIR}\\""
-      rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${DERIVED_FILES_DIR}/${basename}.framework.dSYM" "${TARGET_BUILD_DIR}"
-    else
-      # The dSYM was not stripped at all, in this case touch a fake folder so the input/output paths from Xcode do not reexecute this script because the file is missing.
-      touch "${TARGET_BUILD_DIR}/${basename}.framework.dSYM"
-    fi
-  fi
-}
-
-            SH
-            dsym_paths.each do |dsym_path|
-              script << %(install_dsym "#{dsym_path}"\n)
-            end
-            script
-          end
         end
       end
     end
