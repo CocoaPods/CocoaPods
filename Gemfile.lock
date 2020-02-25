@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 590452b874f10576e36d70d15d1a6fe26041a664
+  revision: 60387d624acabb44d3154d14bed556f3c310deb4
   branch: 1-9-stable
   specs:
-    cocoapods-core (1.9.0.beta.3)
+    cocoapods-core (1.9.0)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 415cf26a26778fd417028de166930b0d0349066c
+  revision: b9375049007fca925ef16ea9487681bcaa59a5ad
   branch: master
   specs:
     xcodeproj (1.15.0)
@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 7cfdd7c010c894744c876b2a33b5f8e9cc300fde
+  revision: a4549f05cda07771e4ebc29b79db553eeaaf6afd
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -113,10 +113,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.9.0.beta.3)
+    cocoapods (1.9.0)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.9.0.beta.3)
+      cocoapods-core (= 1.9.0)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -137,7 +137,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.2)
-    activesupport (4.2.11.1)
+    activesupport (4.2.11.12)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
@@ -163,7 +163,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)
