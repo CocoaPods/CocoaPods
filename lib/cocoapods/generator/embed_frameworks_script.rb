@@ -110,7 +110,7 @@ install_framework()
     done
   fi
 }
-
+#{Pod::Generator::ScriptPhaseConstants::INSTALL_DSYM_METHOD}
 #{Pod::Generator::ScriptPhaseConstants::STRIP_INVALID_ARCHITECTURES_METHOD}
 # Copies the bcsymbolmap files of a vendored framework
 install_bcsymbolmap() {
@@ -141,6 +141,10 @@ install_artifact() {
   case $base in
   *.framework)
     install_framework "$artifact"
+    ;;
+  *.dSYM)
+    # Suppress arch warnings since XCFrameworks will include many dSYM files
+    install_dsym "$artifact" "false"
     ;;
   *.bcsymbolmap)
     install_bcsymbolmap "$artifact"
@@ -183,6 +187,18 @@ fi
         fi
         SH
         script
+      end
+
+      # @param  [Xcode::FrameworkPaths] framework_path
+      #         the framework path containing the dSYM
+      #
+      # @return [String, Nil] the name of the dSYM binary, if found
+      #
+      def dsym_binary_name(framework_path)
+        return nil if framework_path.dsym_path.nil?
+        if (path = Pathname.glob(framework_path.dsym_path.join('Contents/Resources/DWARF', '**/*')).first)
+          File.basename(path)
+        end
       end
     end
   end

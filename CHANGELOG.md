@@ -16,10 +16,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9185](https://github.com/CocoaPods/CocoaPods/issues/9185)  
 
-* Also apply Xcode 11 `XCTUnwrap` fix to library and framework targets that weakly link `XCTest`.  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#9518](https://github.com/CocoaPods/CocoaPods/pull/9518)  
-
 * Add support for running tests through the scheme of the app spec host of a test spec    
   [Eric Amorde](https://github.com/amorde)
   [#9332](https://github.com/CocoaPods/CocoaPods/issues/9332)
@@ -27,6 +23,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix an issue that prevented variables in test bundle scheme settings from expanding   
   [Eric Amorde](https://github.com/amorde)
   [#9539](https://github.com/CocoaPods/CocoaPods/pull/9539)
+
+## 1.9.0 (2020-02-25)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+  
+* Fix dSYM handling for XCFrameworks.  
+  [Eric Amorde](https://github.com/amorde)
+  [#9530](https://github.com/CocoaPods/CocoaPods/issues/9530)
 
 ## 1.9.0.beta.3 (2020-02-04)
 
