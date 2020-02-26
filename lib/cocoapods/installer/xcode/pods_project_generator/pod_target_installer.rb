@@ -59,7 +59,7 @@ module Pod
 
               add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
               validate_targets_contain_sources(test_native_targets + app_native_targets.values + [native_target])
-              validate_xcframeworks_no_mixed_linkage
+              validate_xcframeworks
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
@@ -1095,14 +1095,18 @@ module Pod
             end
           end
 
-          # Raises if a vendored xcframework contains frameworks of mixed linkage
+          # Raises if a vendored xcframework contains frameworks of mixed linkage or mixed packaging
           #
-          def validate_xcframeworks_no_mixed_linkage
+          def validate_xcframeworks
             target.xcframeworks.each_value do |xcframeworks|
               xcframeworks.each do |xcframework|
                 dynamic_slices, static_slices = xcframework.slices.partition { |slice| Pod::Xcode::LinkageAnalyzer.dynamic_binary?(slice.path) }
                 if !dynamic_slices.empty? && !static_slices.empty?
                   raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both static and dynamic frameworks."
+                end
+                library_slices, framework_slices = xcframework.slices.partition(&:library?)
+                if !library_slices.empty? && !framework_slices.empty?
+                  raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both libraries and frameworks."
                 end
               end
             end

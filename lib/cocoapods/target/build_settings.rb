@@ -579,7 +579,10 @@ module Pod
             # on the guard above, so include any vendored static frameworks.
             if target.should_build?
               frameworks.concat vendored_static_frameworks.map { |l| File.basename(l, '.framework') }
-              frameworks.concat vendored_xcframeworks.map(&:name)
+              frameworks.concat vendored_xcframeworks.
+                                select { |xcf| xcf.slices.all?(&:framework?) }.
+                                map(&:name).
+                                uniq
             end
             # Also include any vendored dynamic frameworks of dependencies.
             frameworks.concat dependent_targets.reject(&:should_build?).flat_map { |pt| pt.build_settings[@configuration].dynamic_frameworks_to_import }
@@ -596,7 +599,7 @@ module Pod
           static_frameworks_to_import.concat vendored_static_frameworks.map { |f| File.basename(f, '.framework') } unless target.should_build? && target.build_as_dynamic?
           unless target.should_build? && target.build_as_dynamic?
             static_frameworks_to_import.concat vendored_xcframeworks.
-              select(&:includes_static_slices?).
+              select { |xcf| xcf.slices.any? { |slice| slice.build_type == BuildType.static_framework }}.
               map(&:name).
               uniq
           end
@@ -707,7 +710,7 @@ module Pod
         # @return [Array<String>]
         #
         def linker_names_from_libraries(libraries)
-          libraries.map { |l| File.basename(l, l.extname).sub(/\Alib/, '') }
+          libraries.map { |l| File.basename(l, File.extname(l)).sub(/\Alib/, '') }
         end
 
         # @return [Array<String>]
@@ -717,6 +720,11 @@ module Pod
           libraries = []
           if non_library_xcconfig? || target.build_as_dynamic?
             libraries.concat linker_names_from_libraries(vendored_static_libraries)
+            xcframework_libraries = vendored_xcframeworks.
+              select { |xcf| xcf.slices.all?(&:library?) }.
+              map(&:name).
+              uniq
+            libraries.concat linker_names_from_libraries(xcframework_libraries)
             libraries.concat libraries_to_import
           end
           if non_library_xcconfig?
@@ -729,7 +737,14 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :static_libraries_to_import, :memoized => true do
           static_libraries_to_import = []
-          static_libraries_to_import.concat linker_names_from_libraries(vendored_static_libraries) unless target.should_build? && target.build_as_dynamic?
+          if !target.should_build? && !target.build_as_dynamic?
+            static_libraries_to_import.concat linker_names_from_libraries(vendored_static_libraries)
+            xcframework_libraries = vendored_xcframeworks.
+              select { |xcf| xcf.slices.all?(&:library?) }.
+              map(&:name).
+              uniq
+            static_libraries_to_import.concat linker_names_from_libraries(xcframework_libraries)
+          end
           static_libraries_to_import << target.product_basename if target.should_build? && target.build_as_static_library?
           static_libraries_to_import
         end
@@ -786,6 +801,14 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :library_search_paths_to_import, :memoized => true do
           vendored_library_search_paths = vendored_static_library_search_paths + vendored_dynamic_library_search_paths
+          # xcframework_library_headers = vendored_xcframeworks.
+          #   flat_map(&:slices).
+          #   select(&:library?).
+          #   map(&:headers).
+          #   compact.
+          #   map { |path| path.relative_path_from(target.sandbox.root) }
+          # puts "xcframework_library_headers #{xcframework_library_headers}, xcframeworks #{vendored_xcframeworks}"
+          # vendored_library_search_paths.concat xcframework_library_headers
           return vendored_library_search_paths if target.build_as_framework? || !target.should_build?
 
           vendored_library_search_paths << target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)
@@ -1097,6 +1120,15 @@ module Pod
           paths.concat pod_targets.
             select { |pt| pt.build_as_framework? && pt.should_build? }.
             map { |pt| pt.build_settings[@configuration].framework_header_search_path }
+
+          xcframework_library_headers = pod_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_xcframeworks }.
+            flat_map(&:slices).
+            select(&:library?).
+            map(&:headers).
+            compact.
+            map { |path| "$PODS_ROOT/#{path.relative_path_from(target.sandbox.root)}" }
+
+          paths.concat xcframework_library_headers
 
           paths.concat target.search_paths_aggregate_targets.flat_map { |at| at.build_settings(configuration_name).header_search_paths }
 

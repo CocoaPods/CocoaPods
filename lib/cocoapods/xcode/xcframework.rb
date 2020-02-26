@@ -71,9 +71,12 @@ module Pod
           archs = library['SupportedArchitectures']
           platform_name = library['SupportedPlatform']
           platform_variant = library['SupportedPlatformVariant']
+          headers = library['HeadersPath']
 
-          slice_path = path.join(identifier).join(relative_path)
-          XCFramework::Slice.new(slice_path, identifier, archs, platform_name, platform_variant)
+          slice_root = path.join(identifier)
+          slice_path = slice_root.join(relative_path)
+          headers = slice_root.join(headers)
+          XCFramework::Slice.new(slice_path, identifier, archs, platform_name, platform_variant: platform_variant, headers: headers)
         end
       end
     end
