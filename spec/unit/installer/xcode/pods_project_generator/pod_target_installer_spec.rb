@@ -1592,11 +1592,45 @@ module Pod
               end
             end
 
-            it 'raises if a vendored xcframework has slices of mixed linkage' do
-              @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
-              Pod::Xcode::LinkageAnalyzer.stubs(:dynamic_binary?).returns(true, false, true, false, true, false, true)
-              e = ->() { @installer.install! }.should.raise Informative
-              e.message.should.include? 'Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib`, because it contains both static and dynamic frameworks.'
+            describe 'xcframeworks' do
+              it 'raises if a vendored xcframework has slices of mixed linkage' do
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                Pod::Xcode::LinkageAnalyzer.stubs(:dynamic_binary?).returns(true, false, true, false, true, false, true)
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.include? 'Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib`, because it contains both static and dynamic frameworks.'
+              end
+
+              it 'raises if a vendored xcframework is empty' do
+                xcframework = Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+                xcframework.stubs(:slices).returns([])
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [xcframework])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.include? 'Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib` because it does not contain any binaries.'
+              end
+
+              it 'raises if a vendored xcframework with static libraries has mutliple library names' do
+                slices = [
+                  stub('sliceA', :binary_path => Pathname.new('/tmp/path/to/libSliceA.a'), :build_type => BuildType.static_library),
+                  stub('sliceB', :binary_path => Pathname.new('/tmp/path/to/libSliceB.a'), :build_type => BuildType.static_library),
+                ]
+                xcframework = stub('xcframework', :name => 'CoconutLib', :build_type => BuildType.static_library, :slices => slices)
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [xcframework])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.include? <<-MSG.strip_heredoc
+                Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib` because it contains static libraries
+                with differing binary names: libSliceA and libSliceB.
+                MSG
+              end
+
+              it 'raises if a vendored xcframework uses dynamic libraries' do
+                xcframework = stub('xcframework', :name => 'CoconutLib', :build_type => BuildType.dynamic_library, :slices => [stub('Slice')])
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [xcframework])
+                e = ->() { @installer.install! }.should.raise Informative
+                e.message.should.include? <<-MSG.strip_heredoc
+                Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib` because it contains dynamic libraries which are not supported.
+                Use dynamic frameworks for dynamic linking instead.
+                MSG
+              end
             end
           end
         end
