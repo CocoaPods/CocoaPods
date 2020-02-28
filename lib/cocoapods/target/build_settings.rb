@@ -691,7 +691,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :system_framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          return ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
+          return ['$(inherited) $(PLATFORM_DIR)/Developer/Library/Frameworks'] if should_apply_xctunwrap_fix?
           []
         end
 
@@ -749,7 +749,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :library_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          library_search_paths = should_apply_xctunwrap_fix? ? ['$(PLATFORM_DIR)/Developer/usr/lib'] : []
+          library_search_paths = should_apply_xctunwrap_fix? ? ['$(inherited) $(PLATFORM_DIR)/Developer/usr/lib'] : []
           return library_search_paths if library_xcconfig? && target.build_as_static?
 
           library_search_paths.concat library_search_paths_to_import.dup
@@ -851,7 +851,7 @@ module Pod
         define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
           paths = dependent_targets.flat_map { |pt| pt.build_settings[@configuration].swift_include_paths_to_import }
           paths.concat swift_include_paths_to_import if non_library_xcconfig?
-          paths.concat ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
+          paths.concat ['$(inherited) $(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
           paths
         end
 
