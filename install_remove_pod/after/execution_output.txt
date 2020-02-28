@@ -63,6 +63,7 @@ Integrating client project
 Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
   Removing old product reference `libPods.a` from project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
   - Running post install hooks

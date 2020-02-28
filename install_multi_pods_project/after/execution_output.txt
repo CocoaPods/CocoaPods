@@ -64,6 +64,7 @@ Generating Pods project
 Integrating client project
 
 Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
+  - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
   - Running post install hooks

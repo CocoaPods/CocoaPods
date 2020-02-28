@@ -57,6 +57,7 @@ Integrating client project
 [!] Please close any current Xcode sessions and use `SubSpecCircular.xcworkspace` for this project from now on.
 
 Integrating target `Pods-SubSpecCircular` (`SubSpecCircular.xcodeproj` project)
+  - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
   - Running post install hooks

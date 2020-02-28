@@ -63,6 +63,7 @@ Integrating target `Pods-SampleApp_1` (`SampleApp_1.xcodeproj` project)
 
 Integrating target `Pods-SampleApp_2` (`SampleApp_2.xcodeproj` project)
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
   - Running post install hooks
