@@ -189,9 +189,10 @@ module Pod
             @pod_target.stubs(:platform).returns(Platform.new(:ios, '12.1'))
             generator = PodTargetSettings.new(@pod_target, nil, :configuration => :debug)
             hash = generator.generate.to_hash
-            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
-            hash['LIBRARY_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
-            hash['SWIFT_INCLUDE_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            puts hash
+            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(inherited) $(PLATFORM_DIR)/Developer/Library/Frameworks"'
+            hash['LIBRARY_SEARCH_PATHS'].should.include '"$(inherited) $(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['SWIFT_INCLUDE_PATHS'].should.include '"$(inherited) $(PLATFORM_DIR)/Developer/usr/lib"'
           end
 
           it 'includes xctunwrap fix for a pod target with deployment target < 12.2 and weakly links XCTest' do
@@ -199,9 +200,9 @@ module Pod
             @pod_target.stubs(:platform).returns(Platform.new(:ios, '12.1'))
             generator = PodTargetSettings.new(@pod_target, nil, :configuration => :debug)
             hash = generator.generate.to_hash
-            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
-            hash['LIBRARY_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
-            hash['SWIFT_INCLUDE_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(inherited) $(PLATFORM_DIR)/Developer/Library/Frameworks"'
+            hash['LIBRARY_SEARCH_PATHS'].should.include '"$(inherited) $(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['SWIFT_INCLUDE_PATHS'].should.include '"$(inherited) $(PLATFORM_DIR)/Developer/usr/lib"'
           end
 
           it 'does not include xctunwrap fix for a pod target with higher than 12.1 deployment target' do
@@ -210,7 +211,7 @@ module Pod
             generator = PodTargetSettings.new(@pod_target, nil, :configuration => :debug)
             hash = generator.generate.to_hash
             hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.be.nil
-            hash['LIBRARY_SEARCH_PATHS'].should.not.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['LIBRARY_SEARCH_PATHS'].should.not.include '"$(inherited) $(PLATFORM_DIR)/Developer/usr/lib"'
             hash['SWIFT_INCLUDE_PATHS'].should.be.nil
           end
 
