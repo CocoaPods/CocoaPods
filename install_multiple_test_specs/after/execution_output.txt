@@ -109,6 +109,7 @@ Integrating target `Pods-InstallMultipleTestSpecs` (`InstallMultipleTestSpecs.xc
 Integrating target `Pods-Other` (`InstallMultipleTestSpecs.xcodeproj` project)
   Adding Build Phase '[CP] Embed Pods Frameworks' to project.
   Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
   - Running post install hooks
