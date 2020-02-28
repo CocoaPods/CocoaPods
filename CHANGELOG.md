@@ -15,6 +15,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+* Fix Xcode 11 `XCTUnwrap` workaround paths that prevented linting of podspecs dependent on XCTest  
+  [Steven Grosmark](https://github.com/g-mark)
+  [#9571](https://github.com/CocoaPods/CocoaPods/pull/9571)
+
 ## 1.9.0 (2020-02-25)
 
 ##### Enhancements
