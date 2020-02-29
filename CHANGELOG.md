@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix an issue that caused a build failure with vendored XCFrameworks on macOS  
+  [Eric Amorde](https://github.com/amorde)
+  [#9574](https://github.com/CocoaPods/CocoaPods/pull/9574) 
 
 
 ## 1.9.0 (2020-02-25)
