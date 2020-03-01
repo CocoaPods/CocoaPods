@@ -148,7 +148,7 @@ module Pod
             if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
               target_variant="simulator"
             fi
-            if [[ "$EFFECTIVE_PLATFORM_NAME" == *"maccatalyst" ]]; then
+            if [[ ! -z ${EFFECTIVE_PLATFORM_NAME+x} && "$EFFECTIVE_PLATFORM_NAME" == *"maccatalyst" ]]; then
               target_variant="maccatalyst"
             fi
             for i in ${!paths[@]}; do
