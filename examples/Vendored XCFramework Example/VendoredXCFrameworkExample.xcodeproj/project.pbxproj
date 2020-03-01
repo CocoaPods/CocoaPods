@@ -1,0 +1,1036 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01F5A9C994EBD9C6096C0320 /* Pods_AwesomeWatchApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B104C9327295D77B217456F3 /* Pods_AwesomeWatchApp.framework */; };
+		070E751B240B4BCE007E6F8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E751A240B4BCE007E6F8A /* AppDelegate.swift */; };
+		070E751D240B4BCE007E6F8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E751C240B4BCE007E6F8A /* SceneDelegate.swift */; };
+		070E751F240B4BCE007E6F8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E751E240B4BCE007E6F8A /* ViewController.swift */; };
+		070E7522240B4BCE007E6F8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070E7520240B4BCE007E6F8A /* Main.storyboard */; };
+		070E7524240B4BD0007E6F8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 070E7523240B4BD0007E6F8A /* Assets.xcassets */; };
+		070E7527240B4BD0007E6F8A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070E7525240B4BD0007E6F8A /* LaunchScreen.storyboard */; };
+		070E7535240B4D7F007E6F8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E7534240B4D7F007E6F8A /* AppDelegate.swift */; };
+		070E7537240B4D7F007E6F8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E7536240B4D7F007E6F8A /* ContentView.swift */; };
+		070E7539240B4D80007E6F8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 070E7538240B4D80007E6F8A /* Assets.xcassets */; };
+		070E753C240B4D80007E6F8A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 070E753B240B4D80007E6F8A /* Preview Assets.xcassets */; };
+		070E754B240B4DE2007E6F8A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070E7549240B4DE2007E6F8A /* Interface.storyboard */; };
+		070E754D240B4DE3007E6F8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 070E754C240B4DE3007E6F8A /* Assets.xcassets */; };
+		070E7554240B4DE4007E6F8A /* AwesomeWatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 070E7553240B4DE4007E6F8A /* AwesomeWatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		070E7559240B4DE4007E6F8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E7558240B4DE4007E6F8A /* ContentView.swift */; };
+		070E755B240B4DE4007E6F8A /* HostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E755A240B4DE4007E6F8A /* HostingController.swift */; };
+		070E755D240B4DE4007E6F8A /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070E755C240B4DE4007E6F8A /* ExtensionDelegate.swift */; };
+		070E7566240B4DE4007E6F8A /* AwesomeWatchApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 070E7547240B4DE2007E6F8A /* AwesomeWatchApp.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		070F9019240C630D00E41592 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070F9017240C630D00E41592 /* Main.storyboard */; };
+		0BC7455A1EBCF2D95CAE5142 /* Pods_AwesomeWatchApp_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1B2E0811415A7E848CA24B /* Pods_AwesomeWatchApp_Extension.framework */; };
+		0EF1E20256B1DB43279A963B /* Pods_AmazingMacApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AAECE0AF577749339B5A2CE /* Pods_AmazingMacApp.framework */; };
+		FA1792929978F2462E785121 /* Pods_VendoredXCFrameworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0CF804C37E41FB7289E7CA3 /* Pods_VendoredXCFrameworkExample.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		070E7555240B4DE4007E6F8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 070E750F240B4BCE007E6F8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 070E7552240B4DE4007E6F8A;
+			remoteInfo = "AwesomeWatchApp Extension";
+		};
+		070E7564240B4DE4007E6F8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 070E750F240B4BCE007E6F8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 070E7546240B4DE2007E6F8A;
+			remoteInfo = AwesomeWatchApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		070E756A240B4DE4007E6F8A /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				070E7554240B4DE4007E6F8A /* AwesomeWatchApp Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E756E240B4DE4007E6F8A /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				070E7566240B4DE4007E6F8A /* AwesomeWatchApp.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		070E7517240B4BCE007E6F8A /* VendoredXCFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VendoredXCFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		070E751A240B4BCE007E6F8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		070E751C240B4BCE007E6F8A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		070E751E240B4BCE007E6F8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		070E7521240B4BCE007E6F8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		070E7523240B4BD0007E6F8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		070E7526240B4BD0007E6F8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		070E7528240B4BD0007E6F8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		070E7532240B4D7F007E6F8A /* AmazingMacApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmazingMacApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		070E7534240B4D7F007E6F8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		070E7536240B4D7F007E6F8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		070E7538240B4D80007E6F8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		070E753B240B4D80007E6F8A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		070E7540240B4D80007E6F8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		070E7541240B4D81007E6F8A /* AmazingMacApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AmazingMacApp.entitlements; sourceTree = "<group>"; };
+		070E7547240B4DE2007E6F8A /* AwesomeWatchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AwesomeWatchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		070E754A240B4DE2007E6F8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		070E754C240B4DE3007E6F8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		070E754E240B4DE3007E6F8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		070E7553240B4DE4007E6F8A /* AwesomeWatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "AwesomeWatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		070E7558240B4DE4007E6F8A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		070E755A240B4DE4007E6F8A /* HostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingController.swift; sourceTree = "<group>"; };
+		070E755C240B4DE4007E6F8A /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		070E7563240B4DE4007E6F8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		070F9018240C630D00E41592 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		17F49BB24FDD9D612C1D8D4F /* Pods-AwesomeWatchApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeWatchApp.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeWatchApp/Pods-AwesomeWatchApp.debug.xcconfig"; sourceTree = "<group>"; };
+		2480AD5B02E9BC1E69B2ED00 /* Pods-AwesomeWatchApp Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeWatchApp Extension.release.xcconfig"; path = "Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension.release.xcconfig"; sourceTree = "<group>"; };
+		54412139FFD628897A90AA92 /* Pods-AmazingMacApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmazingMacApp.debug.xcconfig"; path = "Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp.debug.xcconfig"; sourceTree = "<group>"; };
+		961D55694EE2F9D1CF2124C4 /* Pods-AwesomeWatchApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeWatchApp.release.xcconfig"; path = "Target Support Files/Pods-AwesomeWatchApp/Pods-AwesomeWatchApp.release.xcconfig"; sourceTree = "<group>"; };
+		9AAECE0AF577749339B5A2CE /* Pods_AmazingMacApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AmazingMacApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B104C9327295D77B217456F3 /* Pods_AwesomeWatchApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeWatchApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B21BB09FE8C9D9A7E0723BD1 /* Pods-AmazingMacApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AmazingMacApp.release.xcconfig"; path = "Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp.release.xcconfig"; sourceTree = "<group>"; };
+		BD9896F302F64025E0886F53 /* Pods-VendoredXCFrameworkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VendoredXCFrameworkExample.debug.xcconfig"; path = "Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample.debug.xcconfig"; sourceTree = "<group>"; };
+		C0CF804C37E41FB7289E7CA3 /* Pods_VendoredXCFrameworkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VendoredXCFrameworkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE1B2E0811415A7E848CA24B /* Pods_AwesomeWatchApp_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeWatchApp_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6CA554091EBBD037B6253EC /* Pods-VendoredXCFrameworkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VendoredXCFrameworkExample.release.xcconfig"; path = "Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample.release.xcconfig"; sourceTree = "<group>"; };
+		F38CB1AD6974A418FB9E7B53 /* Pods-AwesomeWatchApp Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeWatchApp Extension.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		070E7514240B4BCE007E6F8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA1792929978F2462E785121 /* Pods_VendoredXCFrameworkExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E752F240B4D7F007E6F8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0EF1E20256B1DB43279A963B /* Pods_AmazingMacApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E7550240B4DE4007E6F8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BC7455A1EBCF2D95CAE5142 /* Pods_AwesomeWatchApp_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		241EAA6DACDBB24541BC40F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01F5A9C994EBD9C6096C0320 /* Pods_AwesomeWatchApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		070E750E240B4BCE007E6F8A = {
+			isa = PBXGroup;
+			children = (
+				070E7519240B4BCE007E6F8A /* VendoredXCFrameworkExample */,
+				070E7533240B4D7F007E6F8A /* AmazingMacApp */,
+				070E7548240B4DE2007E6F8A /* AwesomeWatchApp */,
+				070E7557240B4DE4007E6F8A /* AwesomeWatchApp Extension */,
+				070E7518240B4BCE007E6F8A /* Products */,
+				2683BE89118A3AC7A98D41F7 /* Pods */,
+				E0702670988CAB3D0C08450C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		070E7518240B4BCE007E6F8A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				070E7517240B4BCE007E6F8A /* VendoredXCFrameworkExample.app */,
+				070E7532240B4D7F007E6F8A /* AmazingMacApp.app */,
+				070E7547240B4DE2007E6F8A /* AwesomeWatchApp.app */,
+				070E7553240B4DE4007E6F8A /* AwesomeWatchApp Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		070E7519240B4BCE007E6F8A /* VendoredXCFrameworkExample */ = {
+			isa = PBXGroup;
+			children = (
+				070E751A240B4BCE007E6F8A /* AppDelegate.swift */,
+				070E751C240B4BCE007E6F8A /* SceneDelegate.swift */,
+				070E751E240B4BCE007E6F8A /* ViewController.swift */,
+				070E7520240B4BCE007E6F8A /* Main.storyboard */,
+				070E7523240B4BD0007E6F8A /* Assets.xcassets */,
+				070E7525240B4BD0007E6F8A /* LaunchScreen.storyboard */,
+				070E7528240B4BD0007E6F8A /* Info.plist */,
+			);
+			path = VendoredXCFrameworkExample;
+			sourceTree = "<group>";
+		};
+		070E7533240B4D7F007E6F8A /* AmazingMacApp */ = {
+			isa = PBXGroup;
+			children = (
+				070E7534240B4D7F007E6F8A /* AppDelegate.swift */,
+				070E7536240B4D7F007E6F8A /* ContentView.swift */,
+				070E7538240B4D80007E6F8A /* Assets.xcassets */,
+				070F9017240C630D00E41592 /* Main.storyboard */,
+				070E7540240B4D80007E6F8A /* Info.plist */,
+				070E7541240B4D81007E6F8A /* AmazingMacApp.entitlements */,
+				070E753A240B4D80007E6F8A /* Preview Content */,
+			);
+			path = AmazingMacApp;
+			sourceTree = "<group>";
+		};
+		070E753A240B4D80007E6F8A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				070E753B240B4D80007E6F8A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		070E7548240B4DE2007E6F8A /* AwesomeWatchApp */ = {
+			isa = PBXGroup;
+			children = (
+				070E7549240B4DE2007E6F8A /* Interface.storyboard */,
+				070E754C240B4DE3007E6F8A /* Assets.xcassets */,
+				070E754E240B4DE3007E6F8A /* Info.plist */,
+			);
+			path = AwesomeWatchApp;
+			sourceTree = "<group>";
+		};
+		070E7557240B4DE4007E6F8A /* AwesomeWatchApp Extension */ = {
+			isa = PBXGroup;
+			children = (
+				070E7558240B4DE4007E6F8A /* ContentView.swift */,
+				070E755A240B4DE4007E6F8A /* HostingController.swift */,
+				070E755C240B4DE4007E6F8A /* ExtensionDelegate.swift */,
+				070E7563240B4DE4007E6F8A /* Info.plist */,
+			);
+			path = "AwesomeWatchApp Extension";
+			sourceTree = "<group>";
+		};
+		2683BE89118A3AC7A98D41F7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BD9896F302F64025E0886F53 /* Pods-VendoredXCFrameworkExample.debug.xcconfig */,
+				E6CA554091EBBD037B6253EC /* Pods-VendoredXCFrameworkExample.release.xcconfig */,
+				54412139FFD628897A90AA92 /* Pods-AmazingMacApp.debug.xcconfig */,
+				B21BB09FE8C9D9A7E0723BD1 /* Pods-AmazingMacApp.release.xcconfig */,
+				17F49BB24FDD9D612C1D8D4F /* Pods-AwesomeWatchApp.debug.xcconfig */,
+				961D55694EE2F9D1CF2124C4 /* Pods-AwesomeWatchApp.release.xcconfig */,
+				F38CB1AD6974A418FB9E7B53 /* Pods-AwesomeWatchApp Extension.debug.xcconfig */,
+				2480AD5B02E9BC1E69B2ED00 /* Pods-AwesomeWatchApp Extension.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		E0702670988CAB3D0C08450C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C0CF804C37E41FB7289E7CA3 /* Pods_VendoredXCFrameworkExample.framework */,
+				9AAECE0AF577749339B5A2CE /* Pods_AmazingMacApp.framework */,
+				B104C9327295D77B217456F3 /* Pods_AwesomeWatchApp.framework */,
+				DE1B2E0811415A7E848CA24B /* Pods_AwesomeWatchApp_Extension.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		070E7516240B4BCE007E6F8A /* VendoredXCFrameworkExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 070E752B240B4BD0007E6F8A /* Build configuration list for PBXNativeTarget "VendoredXCFrameworkExample" */;
+			buildPhases = (
+				BB2C327F3F89CB56180AE823 /* [CP] Check Pods Manifest.lock */,
+				7EA09AE09A806E8988A9BB40 /* [CP] Prepare Artifacts */,
+				070E7513240B4BCE007E6F8A /* Sources */,
+				070E7514240B4BCE007E6F8A /* Frameworks */,
+				070E7515240B4BCE007E6F8A /* Resources */,
+				070E756E240B4DE4007E6F8A /* Embed Watch Content */,
+				9EC52C678003EA19FE1A8E4E /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				070E7565240B4DE4007E6F8A /* PBXTargetDependency */,
+			);
+			name = VendoredXCFrameworkExample;
+			productName = VendoredXCFrameworkExample;
+			productReference = 070E7517240B4BCE007E6F8A /* VendoredXCFrameworkExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		070E7531240B4D7F007E6F8A /* AmazingMacApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 070E7544240B4D81007E6F8A /* Build configuration list for PBXNativeTarget "AmazingMacApp" */;
+			buildPhases = (
+				18E098D65DF40FAE806F60FD /* [CP] Check Pods Manifest.lock */,
+				E82BE281D9C14C720570D92C /* [CP] Prepare Artifacts */,
+				070E752E240B4D7F007E6F8A /* Sources */,
+				070E752F240B4D7F007E6F8A /* Frameworks */,
+				070E7530240B4D7F007E6F8A /* Resources */,
+				0DF22EE5C05BF33D9B3E8398 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AmazingMacApp;
+			productName = AmazingMacApp;
+			productReference = 070E7532240B4D7F007E6F8A /* AmazingMacApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		070E7546240B4DE2007E6F8A /* AwesomeWatchApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 070E756B240B4DE4007E6F8A /* Build configuration list for PBXNativeTarget "AwesomeWatchApp" */;
+			buildPhases = (
+				413EA6BC77F0DF5C43D699FF /* [CP] Check Pods Manifest.lock */,
+				070E7545240B4DE2007E6F8A /* Resources */,
+				070E756A240B4DE4007E6F8A /* Embed App Extensions */,
+				241EAA6DACDBB24541BC40F4 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				070E7556240B4DE4007E6F8A /* PBXTargetDependency */,
+			);
+			name = AwesomeWatchApp;
+			productName = AwesomeWatchApp;
+			productReference = 070E7547240B4DE2007E6F8A /* AwesomeWatchApp.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		070E7552240B4DE4007E6F8A /* AwesomeWatchApp Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 070E7567240B4DE4007E6F8A /* Build configuration list for PBXNativeTarget "AwesomeWatchApp Extension" */;
+			buildPhases = (
+				A58FC4CDC3E3243103EF6906 /* [CP] Check Pods Manifest.lock */,
+				1AFF3F1F9741AEDBF689FA92 /* [CP] Prepare Artifacts */,
+				070E754F240B4DE4007E6F8A /* Sources */,
+				070E7550240B4DE4007E6F8A /* Frameworks */,
+				070E7551240B4DE4007E6F8A /* Resources */,
+				FBB957ECC305B3D76B6ACB83 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AwesomeWatchApp Extension";
+			productName = "AwesomeWatchApp Extension";
+			productReference = 070E7553240B4DE4007E6F8A /* AwesomeWatchApp Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		070E750F240B4BCE007E6F8A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = CocoaPods;
+				TargetAttributes = {
+					070E7516240B4BCE007E6F8A = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					070E7531240B4D7F007E6F8A = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					070E7546240B4DE2007E6F8A = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					070E7552240B4DE4007E6F8A = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 070E7512240B4BCE007E6F8A /* Build configuration list for PBXProject "VendoredXCFrameworkExample" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 070E750E240B4BCE007E6F8A;
+			productRefGroup = 070E7518240B4BCE007E6F8A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				070E7516240B4BCE007E6F8A /* VendoredXCFrameworkExample */,
+				070E7531240B4D7F007E6F8A /* AmazingMacApp */,
+				070E7546240B4DE2007E6F8A /* AwesomeWatchApp */,
+				070E7552240B4DE4007E6F8A /* AwesomeWatchApp Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		070E7515240B4BCE007E6F8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				070E7527240B4BD0007E6F8A /* LaunchScreen.storyboard in Resources */,
+				070E7524240B4BD0007E6F8A /* Assets.xcassets in Resources */,
+				070E7522240B4BCE007E6F8A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E7530240B4D7F007E6F8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				070F9019240C630D00E41592 /* Main.storyboard in Resources */,
+				070E753C240B4D80007E6F8A /* Preview Assets.xcassets in Resources */,
+				070E7539240B4D80007E6F8A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E7545240B4DE2007E6F8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				070E754D240B4DE3007E6F8A /* Assets.xcassets in Resources */,
+				070E754B240B4DE2007E6F8A /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E7551240B4DE4007E6F8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0DF22EE5C05BF33D9B3E8398 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		18E098D65DF40FAE806F60FD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AmazingMacApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1AFF3F1F9741AEDBF689FA92 /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension-artifacts-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension-artifacts-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		413EA6BC77F0DF5C43D699FF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AwesomeWatchApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7EA09AE09A806E8988A9BB40 /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-artifacts-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-artifacts-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9EC52C678003EA19FE1A8E4E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A58FC4CDC3E3243103EF6906 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AwesomeWatchApp Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BB2C327F3F89CB56180AE823 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VendoredXCFrameworkExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E82BE281D9C14C720570D92C /* [CP] Prepare Artifacts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp-artifacts-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Prepare Artifacts";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp-artifacts-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AmazingMacApp/Pods-AmazingMacApp-artifacts.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FBB957ECC305B3D76B6ACB83 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AwesomeWatchApp Extension/Pods-AwesomeWatchApp Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		070E7513240B4BCE007E6F8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				070E751F240B4BCE007E6F8A /* ViewController.swift in Sources */,
+				070E751B240B4BCE007E6F8A /* AppDelegate.swift in Sources */,
+				070E751D240B4BCE007E6F8A /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E752E240B4D7F007E6F8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				070E7537240B4D7F007E6F8A /* ContentView.swift in Sources */,
+				070E7535240B4D7F007E6F8A /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		070E754F240B4DE4007E6F8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				070E755B240B4DE4007E6F8A /* HostingController.swift in Sources */,
+				070E7559240B4DE4007E6F8A /* ContentView.swift in Sources */,
+				070E755D240B4DE4007E6F8A /* ExtensionDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		070E7556240B4DE4007E6F8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 070E7552240B4DE4007E6F8A /* AwesomeWatchApp Extension */;
+			targetProxy = 070E7555240B4DE4007E6F8A /* PBXContainerItemProxy */;
+		};
+		070E7565240B4DE4007E6F8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 070E7546240B4DE2007E6F8A /* AwesomeWatchApp */;
+			targetProxy = 070E7564240B4DE4007E6F8A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		070E7520240B4BCE007E6F8A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				070E7521240B4BCE007E6F8A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		070E7525240B4BD0007E6F8A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				070E7526240B4BD0007E6F8A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		070E7549240B4DE2007E6F8A /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				070E754A240B4DE2007E6F8A /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+		070F9017240C630D00E41592 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				070F9018240C630D00E41592 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		070E7529240B4BD0007E6F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		070E752A240B4BD0007E6F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		070E752C240B4BD0007E6F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD9896F302F64025E0886F53 /* Pods-VendoredXCFrameworkExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = VendoredXCFrameworkExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		070E752D240B4BD0007E6F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6CA554091EBBD037B6253EC /* Pods-VendoredXCFrameworkExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = VendoredXCFrameworkExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		070E7542240B4D81007E6F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54412139FFD628897A90AA92 /* Pods-AmazingMacApp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AmazingMacApp/AmazingMacApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"AmazingMacApp/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = AmazingMacApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.AmazingMacApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		070E7543240B4D81007E6F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B21BB09FE8C9D9A7E0723BD1 /* Pods-AmazingMacApp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AmazingMacApp/AmazingMacApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"AmazingMacApp/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = AmazingMacApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.AmazingMacApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		070E7568240B4DE4007E6F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F38CB1AD6974A418FB9E7B53 /* Pods-AwesomeWatchApp Extension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "AwesomeWatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		070E7569240B4DE4007E6F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2480AD5B02E9BC1E69B2ED00 /* Pods-AwesomeWatchApp Extension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "AwesomeWatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+		070E756C240B4DE4007E6F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 17F49BB24FDD9D612C1D8D4F /* Pods-AwesomeWatchApp.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				IBSC_MODULE = AwesomeWatchApp_Extension;
+				INFOPLIST_FILE = AwesomeWatchApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		070E756D240B4DE4007E6F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 961D55694EE2F9D1CF2124C4 /* Pods-AwesomeWatchApp.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				IBSC_MODULE = AwesomeWatchApp_Extension;
+				INFOPLIST_FILE = AwesomeWatchApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		070E7512240B4BCE007E6F8A /* Build configuration list for PBXProject "VendoredXCFrameworkExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070E7529240B4BD0007E6F8A /* Debug */,
+				070E752A240B4BD0007E6F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		070E752B240B4BD0007E6F8A /* Build configuration list for PBXNativeTarget "VendoredXCFrameworkExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070E752C240B4BD0007E6F8A /* Debug */,
+				070E752D240B4BD0007E6F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		070E7544240B4D81007E6F8A /* Build configuration list for PBXNativeTarget "AmazingMacApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070E7542240B4D81007E6F8A /* Debug */,
+				070E7543240B4D81007E6F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		070E7567240B4DE4007E6F8A /* Build configuration list for PBXNativeTarget "AwesomeWatchApp Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070E7568240B4DE4007E6F8A /* Debug */,
+				070E7569240B4DE4007E6F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		070E756B240B4DE4007E6F8A /* Build configuration list for PBXNativeTarget "AwesomeWatchApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				070E756C240B4DE4007E6F8A /* Debug */,
+				070E756D240B4DE4007E6F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 070E750F240B4BCE007E6F8A /* Project object */;
+}
