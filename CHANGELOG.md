@@ -14,7 +14,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Fix an issue that caused a build failure with vendored XCFrameworks on macOS  
   [Eric Amorde](https://github.com/amorde)
-  [#9574](https://github.com/CocoaPods/CocoaPods/pull/9574) 
+  [#9572](https://github.com/CocoaPods/CocoaPods/issues/9572)
+
+* Fix an issue that prevented the correct XCFramework slice from being selected for watchOS extensions  
+  [Eric Amorde](https://github.com/amorde)
+  [#9569](https://github.com/CocoaPods/CocoaPods/issues/9569)
 
 
 ## 1.9.0 (2020-02-25)

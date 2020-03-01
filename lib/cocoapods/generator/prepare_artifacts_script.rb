@@ -144,6 +144,10 @@ module Pod
             # Locate the correct slice of the .xcframework for the current architectures
             local target_path=""
             local target_arch="$ARCHS"
+
+            # Replace spaces in compound architectures with _ to match slice format
+            target_arch=${target_arch//\ /_}
+
             local target_variant=""
             if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
               target_variant="simulator"
