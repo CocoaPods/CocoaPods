@@ -1,0 +1,41 @@
+#
+# To rebuild the xcframework:
+#
+#   rm -rf BananaLib/CoconutLib.dSYMs BananaLib/CoconutLib.xcframework
+#   cd CoconutLib
+#   ./build.sh
+#   mv build/CoconutLib.xcframework ../BananaLib
+#   mv build/CoconutLib.dSYMs ../BananaLib
+#
+
+project 'VendoredXCFrameworkExample.xcodeproj'
+
+workspace 'Examples'
+
+target 'VendoredXCFrameworkExample' do
+  platform :ios, '13.0'
+  use_frameworks!
+
+  pod 'BananaLib', path: 'BananaLib'
+end
+
+target 'AmazingMacApp' do
+  platform :osx, '10.12'
+  use_frameworks!
+
+  pod 'BananaLib', path: 'BananaLib'
+end
+
+target 'AwesomeWatchApp' do
+  platform :watchos, '6.0'
+  use_frameworks!
+
+  pod 'BananaLib', path: 'BananaLib'
+end
+
+target 'AwesomeWatchApp Extension' do
+  platform :watchos, '6.0'
+  use_frameworks!
+
+  pod 'BananaLib', path: 'BananaLib'
+end
