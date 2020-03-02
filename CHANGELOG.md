@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Apply correct `SYSTEM_FRAMEWORK_SEARCH_PATHS` for `XCTUnwrap` fix.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9579](https://github.com/CocoaPods/CocoaPods/pull/9579)
+
 * Fix an issue that caused a build failure with vendored XCFrameworks on macOS  
   [Eric Amorde](https://github.com/amorde)
   [#9572](https://github.com/CocoaPods/CocoaPods/issues/9572)

@@ -189,7 +189,7 @@ module Pod
             @pod_target.stubs(:platform).returns(Platform.new(:ios, '12.1'))
             generator = PodTargetSettings.new(@pod_target, nil, :configuration => :debug)
             hash = generator.generate.to_hash
-            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/Library/Frameworks"'
             hash['LIBRARY_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
             hash['SWIFT_INCLUDE_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
           end
@@ -199,7 +199,7 @@ module Pod
             @pod_target.stubs(:platform).returns(Platform.new(:ios, '12.1'))
             generator = PodTargetSettings.new(@pod_target, nil, :configuration => :debug)
             hash = generator.generate.to_hash
-            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
+            hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/Library/Frameworks"'
             hash['LIBRARY_SEARCH_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
             hash['SWIFT_INCLUDE_PATHS'].should.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
           end
