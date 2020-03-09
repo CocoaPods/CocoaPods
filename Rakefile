@@ -295,6 +295,8 @@ begin
 
             project = Xcodeproj::Project.open(project_path)
             target = project.targets.first
+            scheme_target = project.targets.find { |t| t.name == scheme_name }
+            target = scheme_target unless scheme_target.nil?
 
             xcodebuild_args = %W(
               xcodebuild -workspace #{workspace_path} -scheme #{scheme_name} clean #{build_action}
@@ -304,8 +306,10 @@ begin
             when :osx
               execute_command(*xcodebuild_args)
             when :ios
-              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', '-destination', 'platform=iOS Simulator,name=iPhone Xs']
+              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', '-destination', 'platform=iOS Simulator,name=iPhone 11 Pro']
               execute_command(*xcodebuild_args)
+            when :watchos
+              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', '-destination', 'platform=watchOS Simulator,name=Apple Watch Series 5 - 40mm']
             else
               raise "Unknown platform #{platform}"
             end

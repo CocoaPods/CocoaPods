@@ -691,7 +691,7 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :system_framework_search_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
-          return ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
+          return ['$(PLATFORM_DIR)/Developer/Library/Frameworks'] if should_apply_xctunwrap_fix?
           []
         end
 
