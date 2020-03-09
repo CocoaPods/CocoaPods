@@ -83,11 +83,15 @@ install_xcframework() {
   # Locate the correct slice of the .xcframework for the current architectures
   local target_path=""
   local target_arch="$ARCHS"
+
+  # Replace spaces in compound architectures with _ to match slice format
+  target_arch=${target_arch// /_}
+
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
     target_variant="simulator"
   fi
-  if [[ "$EFFECTIVE_PLATFORM_NAME" == *"maccatalyst" ]]; then
+  if [[ ! -z ${EFFECTIVE_PLATFORM_NAME+x} && "$EFFECTIVE_PLATFORM_NAME" == *"maccatalyst" ]]; then
     target_variant="maccatalyst"
   fi
   for i in ${!paths[@]}; do
