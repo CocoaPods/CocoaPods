@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     macos:
-      xcode: "10.2.0"
+      xcode: "11.3.1"
     shell: /bin/bash --login -eo pipefail
     steps:
       - checkout
