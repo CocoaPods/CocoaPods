@@ -853,6 +853,14 @@ module Pod
         @installer.send(:run_plugins_post_install_hooks)
       end
 
+      it 'runs plugins post integrate hook' do
+        context = stub
+        Installer::PostIntegrateHooksContext.expects(:generate).returns(context)
+        HooksManager.expects(:run).with(:post_integrate, context, Installer::DEFAULT_PLUGINS)
+        @installer.expects(:any_plugin_post_integrate_hooks?).returns(true)
+        @installer.send(:run_plugins_post_integrate_hooks)
+      end
+
       it 'runs plugins source provider hook' do
         context = stub
         context.stubs(:sources).returns([])
