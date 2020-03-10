@@ -398,7 +398,6 @@ module Pod
 
         it 'verify path adjustments are made to config path' do
           user_project = Xcodeproj::Project.new('path')
-          target = user_project.new_target(:application, 'Target', :ios)
           sample_config = user_project.new_file(@user_xcconfig)
           user_project.root_object.stubs(:project_dir_path).returns('foo')
           sample_config.real_path.to_s.should.include 'foo/User.xcconfig'
