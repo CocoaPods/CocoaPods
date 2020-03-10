@@ -50,7 +50,7 @@ module Pod
           @build_configurations = build_configurations
           @platform = platform
           @archs = archs
-          @client_root = project.project_dir.realpath
+          @client_root = Pathname.new(project.project_dir + project.root_object.project_dir_path).realpath
         end
       end
     end
