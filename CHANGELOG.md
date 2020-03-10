@@ -26,6 +26,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#9539](https://github.com/CocoaPods/CocoaPods/pull/9539)
 
+* Fix project path handling issue that caused cmake projects to be incorrect  
+  [Paul Beusterien](https://github.com/paulb777)
+  [Andrew](https://github.com/mad-rain)
+  [#6268](https://github.com/CocoaPods/CocoaPods/pull/6268)
+
 ## 1.9.1 (2020-03-09)
 
 ##### Enhancements
@@ -62,10 +67,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix dSYM handling for XCFrameworks.  
   [Eric Amorde](https://github.com/amorde)
   [#9530](https://github.com/CocoaPods/CocoaPods/issues/9530)
-* Fix project path handling issue that caused cmake projects to be incorrect  
-  [Paul Beusterien](https://github.com/paulb777)
-  [Andrew](https://github.com/mad-rain)
-  [#6268](https://github.com/CocoaPods/CocoaPods/pull/6268)
 
 ## 1.9.0.beta.3 (2020-02-04)
 
