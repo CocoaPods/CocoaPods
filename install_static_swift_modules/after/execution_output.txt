@@ -206,7 +206,5 @@ Integrating target `Pods-Abstract Target-macOS Pods-Static` (`macOS Modules.xcod
   - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
-  - Running post install hooks
-    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
 
 -> Pod installation complete! There are 8 dependencies from the Podfile and 4 total pods installed.

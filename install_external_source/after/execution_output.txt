@@ -52,7 +52,5 @@ Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
   - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
-  - Running post install hooks
-    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
 
 -> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.

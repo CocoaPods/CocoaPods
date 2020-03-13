@@ -112,8 +112,6 @@ Integrating target `Pods-Other` (`InstallMultipleTestSpecs.xcodeproj` project)
   - Running post integrate hooks
   - Writing Lockfile in `Podfile.lock`
   - Writing Manifest in `Pods/Manifest.lock`
-  - Running post install hooks
-    - cocoapods-stats from `cocoapods-stats/lib/cocoapods_plugin.rb`
 
 -> Pod installation complete! There are 9 dependencies from the Podfile and 3 total pods installed.
 
