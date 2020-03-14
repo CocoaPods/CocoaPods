@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* When preserving pod paths, preserve ALL the paths  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#9483](https://github.com/CocoaPods/CocoaPods/pull/9483)
+
 * Re-implement `dSYM` copying and stripping to avoid duplicate outputs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9185](https://github.com/CocoaPods/CocoaPods/issues/9185)  

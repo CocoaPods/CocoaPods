@@ -295,6 +295,12 @@ module Pod
           end
 
           #-------------------------------------------------------------------------#
+
+          it 'preserves all the paths of the Pod' do
+            @installer = FileReferencesInstaller.new(config.sandbox, [@pod_target], @project, true)
+            @installer.install!
+            @project.group_for_spec('BananaLib').recursive_children.map(&:name).compact.should.not.include? 'Resources'
+          end
         end
       end
     end
