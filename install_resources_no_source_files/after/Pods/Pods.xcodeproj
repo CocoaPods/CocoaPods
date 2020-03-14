@@ -3,12 +3,11 @@ File References:
 - Podfile
 - Development Pods:
   - res:
+    - 512_black.png
+    - troll.png
     - Pod:
       - LICENSE
       - res.podspec
-    - Resources:
-      - 512_black.png
-      - troll.png
     - Support Files:
       - res.debug.xcconfig
       - res.release.xcconfig
