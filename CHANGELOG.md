@@ -31,6 +31,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Andrew](https://github.com/mad-rain)
   [#6268](https://github.com/CocoaPods/CocoaPods/pull/6268)
 
+* Set `Missing Localizability` setting to `'YES'` to prevent warnings in Xcode 11  
+  [Eric Amorde](https://github.com/amorde)
+  [#9612](https://github.com/CocoaPods/CocoaPods/pull/9612)
+
 ## 1.9.1 (2020-03-09)
 
 ##### Enhancements

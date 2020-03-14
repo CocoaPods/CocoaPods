@@ -30,7 +30,7 @@ module Pod
         #
         attr_reader :platforms
 
-        # @return [String] Object version for the Xcode project.
+        # @return [Integer] Object version for the Xcode project.
         #
         attr_reader :object_version
 
@@ -50,7 +50,7 @@ module Pod
         # @param [Array<PodTarget>] pod_targets @see #pod_targets
         # @param [Hash{String=>Symbol}] build_configurations @see #build_configurations
         # @param [Array<Platform>] platforms @see #platforms
-        # @param [String] object_version @see #object_version
+        # @param [Integer] object_version @see #object_version
         # @param [String] podfile_path @see #podfile_path
         #
         def initialize(sandbox, path, pod_targets, build_configurations, platforms,
@@ -110,6 +110,7 @@ module Pod
               build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
               build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
               build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
+              build_configuration.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
             end
           end
         end
