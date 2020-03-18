@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'cocoapods-trunk',       '>= 1.4.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-try',         '>= 1.1.0', '< 2.0'
   s.add_runtime_dependency 'molinillo',             '~> 0.7.0'
-  s.add_runtime_dependency 'xcodeproj',             '>= 1.19.0', '< 2.0'
+  s.add_runtime_dependency 'xcodeproj',             '>= 1.20.0', '< 2.0'
 
   s.add_runtime_dependency 'colored2',       '~> 3.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'

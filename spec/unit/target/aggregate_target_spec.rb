@@ -146,7 +146,7 @@ module Pod
         end
       end
 
-      describe 'frameworks by config and input output paths' do
+      describe 'pod target paths' do
         before do
           @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
           file_accessor = fixture_file_accessor(@coconut_spec, Platform.ios)
@@ -272,6 +272,13 @@ module Pod
           framework_path = fixture('CoconutLib.xcframework')
           @pod_target.file_accessors.first.stubs(:vendored_xcframeworks).returns([framework_path])
           @target.xcframeworks_by_config['Debug'].map(&:path).should == [framework_path]
+        end
+
+        it 'returns on demand resources paths' do
+          @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
+          @pod_target.file_accessors.first.stubs(:on_demand_resources).returns('tag1' => ['./banana-lib/path/to/resource'])
+          @pod_target_release.file_accessors.first.stubs(:on_demand_resources).returns('othertag1' => ['./coconutlib/path/to/other/resource'])
+          @target.on_demand_resources.should == ['./banana-lib/path/to/resource', './coconutlib/path/to/other/resource']
         end
       end
 
