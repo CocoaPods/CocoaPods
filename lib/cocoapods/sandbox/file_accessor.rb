@@ -144,6 +144,12 @@ module Pod
         private_header_files
       end
 
+      # @return [Array<Pathname>] the on_demand_resources of the specification.
+      #
+      def on_demand_resources
+        paths_for_attribute(:on_demand_resources, true)
+      end
+      
       # @return [Array<Pathname>] the resources of the specification.
       #
       def resources

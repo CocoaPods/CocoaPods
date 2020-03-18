@@ -408,6 +408,7 @@ module Pod
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             add_user_script_phases
+            add_on_demand_resources
           end
         end
 
@@ -418,6 +419,51 @@ module Pod
         end
 
         private
+        
+        # Integrates the targets of the user projects with the on demand resources
+        #
+        # @return [void]
+        #
+        def add_on_demand_resources
+          attributes = target.user_project.root_object.attributes
+          asset_tags = (attributes["KnownAssetTags"] ||= [])
+
+          unless asset_tags.include?("OnDemand")
+            asset_tags << "OnDemand"
+          end
+
+          attributes["KnownAssetTags"] = asset_tags
+          target.user_project.root_object.attributes = attributes
+
+          on_demand_resources_group = target.user_project.main_group["on_demand_resources"]
+          unless on_demand_resources_group
+            on_demand_resources_group = target.user_project.main_group.new_group("on_demand_resources", target.sandbox.root)
+          end
+
+          pb_target = target.user_project.objects_by_uuid[target.user_target_uuids[0]]
+
+          old_on_demand_resource_file_refs = on_demand_resources_group.files
+          pb_target.remove_on_demand_resources(old_on_demand_resource_file_refs)
+          on_demand_resources_group.clear
+
+          on_demand_resource_file_refs = []
+
+          target.pod_targets.each do |pod_target|
+            pod_target.file_accessors.each {|file_accessor|
+              file_accessor.on_demand_resources.each {|on_demand_resource|
+                on_demand_resource_pathname = Pathname.new(File.expand_path(on_demand_resource))
+
+                file_ref = on_demand_resources_group.files.find {|file| file.real_path == on_demand_resource_pathname}
+                unless file_ref
+                  file_ref = on_demand_resources_group.new_file(on_demand_resource)
+                  on_demand_resource_file_refs << file_ref
+                end
+              }
+            }
+          end
+
+          pb_target.add_on_demand_resources(on_demand_resource_file_refs)
+        end
 
         # @!group Integration steps
         #---------------------------------------------------------------------#
