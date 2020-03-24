@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [lucasmpaim](https://github.com/lucasmpaim)
   [#7432](https://github.com/CocoaPods/CocoaPods/issues/7432)
 
+* Add `--strict` flag
+  [ileitch](https://github.com/ileitch)
+  [#9640](https://github.com/CocoaPods/CocoaPods/issues/9640)
+
 ##### Bug Fixes
 
 * When preserving pod paths, preserve ALL the paths  
