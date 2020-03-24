@@ -299,7 +299,7 @@ module Pod
       # Signifies if there are any stored warnings.
       #
       # @return [Bool] whether there are any stored warnings.
-      def has_warnings?
+      def warnings?
         !warnings.empty?
       end
 

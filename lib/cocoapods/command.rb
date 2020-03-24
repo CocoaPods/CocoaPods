@@ -55,7 +55,7 @@ module Pod
       super(argv)
     ensure
       UI.print_warnings
-      exit 1 if strict && UI.has_warnings?
+      exit 1 if strict && UI.warnings?
     end
 
     def self.report_error(exception)
