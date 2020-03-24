@@ -296,6 +296,13 @@ module Pod
         end
       end
 
+      # Signifies if there are any stored warnings.
+      #
+      # @return [Bool] whether there are any stored warnings.
+      def has_warnings?
+        !warnings.empty?
+      end
+
       # Presents a choice among the elements of an array to the user.
       #
       # @param  [Array<#to_s>] array

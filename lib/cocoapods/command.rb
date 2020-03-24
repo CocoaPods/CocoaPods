@@ -40,10 +40,13 @@ module Pod
     def self.options
       [
         ['--silent', 'Show nothing'],
+        ['--strict', 'Return a non-zero exit status if any warnings are emitted'],
       ].concat(super)
     end
 
     def self.run(argv)
+      strict = !argv.delete('--strict').nil?
+
       help! 'You cannot run CocoaPods as root.' if Process.uid == 0 && !Gem.win_platform?
 
       verify_minimum_git_version!
@@ -52,6 +55,7 @@ module Pod
       super(argv)
     ensure
       UI.print_warnings
+      exit 1 if strict && UI.has_warnings?
     end
 
     def self.report_error(exception)
