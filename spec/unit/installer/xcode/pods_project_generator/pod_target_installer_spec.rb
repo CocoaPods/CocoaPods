@@ -493,7 +493,6 @@ module Pod
                 @watermelon_ios_pod_target.user_build_configurations.keys.each do |configuration|
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
-          install_resource "${PODS_ROOT}/../../spec/fixtures/watermelon-lib/App/resource.txt"
           install_resource "${PODS_CONFIGURATION_BUILD_DIR}/WatermelonLib/WatermelonLibExampleAppResources.bundle"
         fi
                   eos
