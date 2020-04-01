@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix mapping of resource bundle paths for app specs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9676](https://github.com/CocoaPods/CocoaPods/pull/9676)
+
 * When preserving pod paths, preserve ALL the paths  
   [Igor Makarov](https://github.com/igor-makarov)
   [#9483](https://github.com/CocoaPods/CocoaPods/pull/9483)

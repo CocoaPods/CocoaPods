@@ -430,13 +430,22 @@ module Pod
     end
 
     # @return [Hash{String=>Array<String>}] The resource and resource bundle paths this target depends upon keyed by
-    #         spec name. Resources for app specs and test specs are directly added to “Copy Bundle Resources” phase
-    #         from the generated targets for frameworks, but not libraries. Therefore they are not part of the resource paths.
+    #         spec name. Resource (not resource bundles) paths can vary depending on the type of spec:
+    #           - App specs _always_ get their resource paths added to "Copy Bundle Resources" phase from
+    #             [PodTargetInstaller] therefore their resource paths are never included here.
+    #           - Test specs may have their resource paths added to "Copy Bundle Resources" if the target itself is
+    #             built as a framework, which is again checked and handled by PodTargetInstaller. If that is true then
+    #             the resource paths are not included, otherwise they are included and handled via the CocoaPods copy
+    #             resources script phase.
+    #           - Library specs _do not_ have per-configuration CocoaPods copy resources script phase and their resource
+    #             paths will be added to "Copy Bundle Resources" phase if the target is built as a framework because
+    #             it supports it. We always include the resource paths for library specs because they are also
+    #             integrated to the user target.
     #
     def resource_paths
       @resource_paths ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
-          resource_paths = if file_accessor.spec.non_library_specification? && build_as_framework?
+          resource_paths = if file_accessor.spec.app_specification? || (file_accessor.spec.test_specification? && build_as_framework?)
                              []
                            else
                              file_accessor.resources.map do |res|
