@@ -67,8 +67,9 @@ module Pod
             sandbox.pod_target_project_path(pod_target.project_name)
           end
           project_dir_names = sandbox_project_dir_names - [sandbox.project_path]
+          user_project_dir_names = aggregate_targets.map(&:user_project_path).uniq
 
-          removed_project_dir_names = project_dir_names - project_dir_names_to_install
+          removed_project_dir_names = project_dir_names - user_project_dir_names - project_dir_names_to_install
           removed_project_dir_names.each { |dir| remove_dir(dir) }
         end
       end
