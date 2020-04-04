@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Honor prefix_header_file=false for subspecs  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9687](https://github.com/CocoaPods/CocoaPods/pull/9687)
+
 * Do not clean user projects from sandbox.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9683](https://github.com/CocoaPods/CocoaPods/pull/9683)
