@@ -1125,6 +1125,45 @@ module Pod
             result.targets[1].pod_targets.count == 1
             result.targets[1].pod_targets[0].name.should == 'CoconutLib-Pods-SampleProject'
           end
+
+          it 'sets the correct swift version' do
+            @podfile = Pod::Podfile.new do
+              source SpecHelper.test_repo_url
+              platform :ios, '8.0'
+              project 'SampleProject/SampleProject'
+
+              target 'SampleProject' do
+                pod 'MultiSwift'
+              end
+            end
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
+            result = @analyzer.analyze
+
+            result.targets.count.should == 1
+            result.targets[0].pod_targets.count == 1
+            result.targets[0].pod_targets[0].name.should == 'MultiSwift-Pods-SampleProject'
+            result.targets[0].pod_targets[0].swift_version.should == '4.0'
+          end
+
+          it 'sets the correct swift version given podfile requirements' do
+            @podfile = Pod::Podfile.new do
+              source SpecHelper.test_repo_url
+              platform :ios, '8.0'
+              supports_swift_versions '< 4.0'
+              project 'SampleProject/SampleProject'
+
+              target 'SampleProject' do
+                pod 'MultiSwift'
+              end
+            end
+            @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile, nil, [], true, false, @sources_manager)
+            result = @analyzer.analyze
+
+            result.targets.count.should == 1
+            result.targets[0].pod_targets.count == 1
+            result.targets[0].pod_targets[0].name.should == 'MultiSwift-Pods-SampleProject'
+            result.targets[0].pod_targets[0].swift_version.should == '3.2'
+          end
         end
       end
 

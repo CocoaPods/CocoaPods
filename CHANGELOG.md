@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix setting `swift_version` when deduplicate targets is turned off.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9689](https://github.com/CocoaPods/CocoaPods/pull/9689)
+
 * Honor prefix_header_file=false for subspecs  
   [Paul Beusterien](https://github.com/paulb777)
   [#9687](https://github.com/CocoaPods/CocoaPods/pull/9687)

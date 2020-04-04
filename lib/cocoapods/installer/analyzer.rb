@@ -648,8 +648,10 @@ module Pod
           resolver_specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by(&:root).values.uniq
             pod_targets = grouped_specs.flat_map do |pod_specs|
-              build_type = determine_build_type(pod_specs.first, target_definition.build_type)
-              generate_pod_target([target_definition], build_type, target_inspections, pod_specs.map(&:spec)).scoped(dedupe_cache)
+              build_type = determine_build_type(pod_specs.first.spec, target_definition.build_type)
+              swift_version = determine_swift_version(pod_specs.first.spec, [target_definition])
+              generate_pod_target([target_definition], build_type, target_inspections, pod_specs.map(&:spec),
+                                  :swift_version => swift_version).scoped(dedupe_cache)
             end
 
             compute_pod_target_dependencies(pod_targets, specs.map(&:spec).group_by(&:name))

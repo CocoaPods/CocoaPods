@@ -49,6 +49,13 @@ module Pod
         @pod_target.scoped.first.product_name.should == 'libBananaLib-Pods.a'
       end
 
+      it 'returns the swift version' do
+        multiswift_spec = fixture_spec('multi-swift/MultiSwift.podspec')
+        pod_target = fixture_pod_target(multiswift_spec, BuildType.dynamic_framework, {}, [], Platform.ios,
+                                        [@target_definition], nil, '4.0')
+        pod_target.scoped.first.swift_version.should == '4.0'
+      end
+
       it 'returns the spec consumers for the pod targets' do
         @pod_target.spec_consumers.should.not.nil?
       end
