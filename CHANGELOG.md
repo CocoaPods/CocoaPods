@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix deduplicate_targets and Swift crash  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9688](https://github.com/CocoaPods/CocoaPods/pull/9688)
+
 * Honor prefix_header_file=false for subspecs  
   [Paul Beusterien](https://github.com/paulb777)
   [#9687](https://github.com/CocoaPods/CocoaPods/pull/9687)
