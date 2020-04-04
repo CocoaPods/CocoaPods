@@ -179,7 +179,7 @@ module Pod
           # @return [Boolean] Whether the target should build a pch file.
           #
           def skip_pch?(specs)
-            specs.any? { |spec| spec.prefix_header_file.is_a?(FalseClass) }
+            specs.any? { |spec| spec.root.prefix_header_file.is_a?(FalseClass) }
           end
 
           # True if info.plist generation should be skipped

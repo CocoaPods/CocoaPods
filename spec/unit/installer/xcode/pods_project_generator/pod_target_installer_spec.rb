@@ -768,6 +768,48 @@ module Pod
                 ]
               end
 
+              it 'verifies keeping prefix header generation for subspecs' do
+                @project = Project.new(config.sandbox.project_path)
+                @project.add_pod_group('HeadersMappingSubspec', fixture('HeadersMappingSubspec'))
+                @pod_spec = fixture_spec('HeadersMappingSubspec/HeadersMappingSubspec.podspec')
+                @pod_target = fixture_pod_target_with_specs([@pod_spec, *@pod_spec.subspecs], BuildType.dynamic_framework,
+                                                            { 'Debug' => :debug, 'Release' => :release }, [],
+                                                            Pod::Platform.new(:ios, '6.0'), [@target_definition], nil)
+                FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
+                @installer.install!
+                group = @project['Pods/HeadersMappingSubspec/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'HeadersMappingSubspec-Info.plist',
+                  'HeadersMappingSubspec-dummy.m',
+                  'HeadersMappingSubspec-prefix.pch',
+                  'HeadersMappingSubspec.debug.xcconfig',
+                  'HeadersMappingSubspec.modulemap',
+                  'HeadersMappingSubspec.release.xcconfig',
+                ]
+              end
+
+              it 'verifies skipping prefix header generation for subspecs' do
+                @project = Project.new(config.sandbox.project_path)
+                @project.add_pod_group('HeadersMappingSubspec', fixture('HeadersMappingSubspec'))
+                @pod_spec = fixture_spec('HeadersMappingSubspec/HeadersMappingSubspec.podspec')
+                @pod_target = fixture_pod_target_with_specs([@pod_spec, *@pod_spec.subspecs], BuildType.dynamic_framework,
+                                                            { 'Debug' => :debug, 'Release' => :release }, [],
+                                                            Pod::Platform.new(:ios, '6.0'), [@target_definition], nil)
+                @pod_spec.stubs(:prefix_header_file).returns(false)
+                FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
+                @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
+                @installer.install!
+                group = @project['Pods/HeadersMappingSubspec/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'HeadersMappingSubspec-Info.plist',
+                  'HeadersMappingSubspec-dummy.m',
+                  'HeadersMappingSubspec.debug.xcconfig',
+                  'HeadersMappingSubspec.modulemap',
+                  'HeadersMappingSubspec.release.xcconfig',
+                ]
+              end
+
               it 'adds the module map when the target defines a module' do
                 @pod_target.stubs(:defines_module?).returns(true)
                 @installer.install!
