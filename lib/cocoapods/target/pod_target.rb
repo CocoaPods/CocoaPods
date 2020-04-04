@@ -171,7 +171,7 @@ module Pod
         cache_key = [specs, target_definition]
         cache[cache_key] ||= begin
           target = PodTarget.new(sandbox, build_type, user_build_configurations, archs, platform, specs,
-                                 [target_definition], file_accessors, target_definition.label)
+                                 [target_definition], file_accessors, target_definition.label, swift_version)
           scope_dependent_targets = ->(dependent_targets) do
             dependent_targets.flat_map do |pod_target|
               pod_target.scoped(cache).select { |pt| pt.target_definitions == [target_definition] }

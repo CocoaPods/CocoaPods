@@ -410,6 +410,31 @@ module Pod
               'any of targets (`SampleProject` and `TestRunner`) integrating it.'
           end
 
+          it 'does not crash on swift version check with deduplicate_targets' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false, :deduplicate_targets => false
+              pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
+              supports_swift_versions '< 3.0'
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            e = should.raise Informative do
+              @validator.validate!
+            end
+            e.message.should.match /Unable to determine Swift version for the following pods:/
+            e.message.should.include 'MultiSwift-Pods-SampleProject` does not specify a Swift version (`3.2` and `4.0`) that is satisfied by ' \
+             'any of targets (`SampleProject`) integrating it.'
+            e.message.should.include 'MultiSwift-Pods-TestRunner` does not specify a Swift version (`3.2` and `4.0`) that is satisfied by ' \
+             'any of targets (`TestRunner`) integrating it.'
+          end
+
           it 'does not raise an error if a pods swift versions are satisfied by the targets requirements' do
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'

@@ -247,7 +247,7 @@ Lint/UselessAccessModifier:
 # Offense count: 349
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
-  Max: 1948
+  Max: 1968
 
 # Offense count: 6245
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
