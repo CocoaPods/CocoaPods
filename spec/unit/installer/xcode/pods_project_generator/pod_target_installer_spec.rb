@@ -668,9 +668,8 @@ module Pod
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @banana_spec.consumer(:ios))
                 @pod_target.stubs(:file_accessors).returns([file_accessor])
-                exception = lambda { @installer.install! }.should.raise Errno::ENOENT
-                exception.message.should.include 'No such file or directory'
-                exception.message.should.include file_path.to_s
+                exception = lambda { @installer.install! }.should.raise Informative
+                exception.message.should.include 'Unable to find source ref for `SymLinkOf-Banana.m` for target `BananaLib`.'
               end
 
               it 'raises when header file reference is not found' do
@@ -679,9 +678,8 @@ module Pod
                 path_list = Sandbox::PathList.new(fixture('banana-lib'))
                 file_accessor = Sandbox::FileAccessor.new(path_list, @banana_spec.consumer(:ios))
                 @pod_target.stubs(:file_accessors).returns([file_accessor])
-                exception = lambda { @installer.install! }.should.raise Errno::ENOENT
-                exception.message.should.include 'No such file or directory'
-                exception.message.should.include file_path.to_s
+                exception = lambda { @installer.install! }.should.raise Informative
+                exception.message.should.include 'Unable to find header ref for `SymLinkOf-Banana.h` for target `BananaLib`.'
               end
 
               it 'does not raise when header file reference is found' do

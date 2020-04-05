@@ -991,9 +991,18 @@ module Pod
           end
 
           def project_file_references_array(files, file_type)
+            error_message_for_missing_reference = lambda do |sf, target|
+              "Unable to find #{file_type} ref for `#{sf.basename}` for target `#{target.name}`."
+            end
             files.map do |sf|
-              project.reference_for_path(sf).tap do |ref|
-                raise Informative, "Unable to find #{file_type} ref for `#{sf.basename}` for target `#{target.name}`." unless ref
+              begin
+                project.reference_for_path(sf).tap do |ref|
+                  raise Informative, error_message_for_missing_reference.call(sf, target) unless ref
+                end
+              rescue Errno::ENOENT
+                # Normalize the error for Ruby < 2.7. Ruby 2.7 can crash on a different call of real path compared
+                # to older versions. This ensures that the error message is consistent.
+                raise Informative, error_message_for_missing_reference.call(sf, target)
               end
             end
           end

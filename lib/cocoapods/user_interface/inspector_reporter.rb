@@ -1,3 +1,4 @@
+require 'addressable'
 require 'uri'
 
 module Pod
@@ -7,8 +8,6 @@ module Pod
     class InspectorReporter
       # Called just as the investigation has begun.
       # Lets the user know that it's looking for an issue.
-      #
-      # @param [query] String unused
       #
       # @param [GhInspector::Inspector] inspector
       #        The current inspector
@@ -25,9 +24,6 @@ module Pod
       # @param [GhInspector::InspectionReport] report
       #        Report a list of the issues
       #
-      # @param [GhInspector::Inspector] inspector
-      #        The current inspector
-      #
       # @return [void]
       #
       def inspector_successfully_received_report(report, _)
@@ -40,9 +36,6 @@ module Pod
       end
 
       # Called once the report has been received, but when there are no issues found.
-      #
-      # @param [GhInspector::InspectionReport] report
-      #        An empty report
       #
       # @param [GhInspector::Inspector] inspector
       #        The current inspector
@@ -68,7 +61,7 @@ module Pod
       # @return [void]
       #
       def inspector_could_not_create_report(error, query, inspector)
-        safe_query = URI.escape query
+        safe_query = Addressable::URI.escape query
         UI.puts 'Could not access the GitHub API, you may have better luck via the website.'
         UI.puts "https://github.com/#{inspector.repo_owner}/#{inspector.repo_name}/search?q=#{safe_query}&type=Issues&utf8=✓"
         UI.puts "Error: #{error.name}"
@@ -77,7 +70,7 @@ module Pod
       private
 
       def print_issue_full(issue)
-        safe_url = URI.escape issue.html_url
+        safe_url = Addressable::URI.escape issue.html_url
         UI.puts " - #{issue.title}"
         UI.puts "   #{safe_url} [#{issue.state}] [#{issue.comments} comment#{issue.comments == 1 ? '' : 's'}]"
         UI.puts "   #{pretty_date(issue.updated_at)}"

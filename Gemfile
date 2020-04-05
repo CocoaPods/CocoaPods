@@ -48,6 +48,9 @@ group :development do
   gem 'typhoeus'
   gem 'webmock'
 
+  gem 'bigdecimal', '~> 1.3.0'
+  gem 'public_suffix', '~> 2.0' # Need 2.x version due to support for Ruby 2.0.x
+
   # Integration tests
   gem 'diffy'
   gem 'clintegracon'
@@ -56,7 +59,7 @@ group :development do
   gem 'inch_by_inch'
   gem 'rubocop'
 
-  gem 'danger'
+  gem 'danger', '~> 5.3'
 end
 
 group :debugging do
