@@ -2317,27 +2317,26 @@ module Pod
               source SpecHelper.test_repo_url
               platform :ios, '8.0'
               project project_path
-  
+
               target 'Sample Extensions Project' do
                 pod 'JSONKit', '1.4'
               end
-  
+
               target 'Today Extension' do
                 use_frameworks!
                 pod 'monkey'
               end
             end
-  
+
             @podfile.use_frameworks!
             analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile)
             result = analyzer.analyze
-  
+
             result.targets.map { |t| [t.name, t.build_library_for_distribution] }.
               should == [['Pods-Sample Extensions Project', true], ['Pods-Today Extension', true]]
             result.pod_targets.map { |t| [t.name, t.build_library_for_distribution] }.
               should == [['JSONKit', true], ['monkey', true]]
           end
-
         end
       end
 
