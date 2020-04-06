@@ -98,6 +98,7 @@ module Pod
                           target_definition, client_root, user_project, user_target_uuids, merged).tap do |aggregate_target|
         aggregate_target.search_paths_aggregate_targets.concat(search_paths_aggregate_targets).freeze
         aggregate_target.mark_application_extension_api_only if application_extension_api_only
+        aggregate_target.mark_build_library_for_distribution if build_library_for_distribution
       end
     end
 

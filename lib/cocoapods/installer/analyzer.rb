@@ -453,6 +453,17 @@ module Pod
           aggregate_target.pod_targets.each(&:mark_application_extension_api_only)
         end
 
+        aggregate_targets.each do |aggregate_target|
+          build_library_for_distribution = aggregate_target.user_targets.any? do |user_target|
+            user_target.common_resolved_build_setting('BUILD_LIBRARY_FOR_DISTRIBUTION', :resolve_against_xcconfig => true) == 'YES'
+          end
+
+          next unless build_library_for_distribution
+
+          aggregate_target.mark_build_library_for_distribution
+          aggregate_target.pod_targets.each(&:mark_build_library_for_distribution)
+        end
+
         if installation_options.integrate_targets?
           # Copy embedded target pods that cannot have their pods embedded as frameworks to
           # their host targets, and ensure we properly link library pods to their host targets
