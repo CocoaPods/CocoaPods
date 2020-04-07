@@ -11,7 +11,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add a post_integrate_hook API  
   [lucasmpaim](https://github.com/lucasmpaim)
   [#7432](https://github.com/CocoaPods/CocoaPods/issues/7432)
-* Set the `BUILD_LIBRARY_FOR_DISTRIBUTION` build setting if integrating with a target that has the setting set to `YES` (directly or in an .xcconfig).  
+
+* Set the `BUILD_LIBRARY_FOR_DISTRIBUTION` build setting if integrating with
+  a target that has the setting set to `YES` (directly or in an .xcconfig).  
   [Juanjo López](https://github.com/juanjonol)
   [#9232](https://github.com/CocoaPods/CocoaPods/issues/9232)
 
@@ -57,6 +59,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Set `Missing Localizability` setting to `'YES'` to prevent warnings in Xcode 11  
   [Eric Amorde](https://github.com/amorde)
   [#9612](https://github.com/CocoaPods/CocoaPods/pull/9612)
+
 
 ## 1.9.1 (2020-03-09)
 

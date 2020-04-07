@@ -304,16 +304,16 @@ module Pod
       support_files_dir + "#{label}-dummy.m"
     end
 
-    # mark the target as extension-only,
-    # translates to APPLICATION_EXTENSION_API_ONLY = YES in the build settings
+    # Mark the target as extension-only.
+    # Translates to APPLICATION_EXTENSION_API_ONLY = YES in the build settings.
     #
     def mark_application_extension_api_only
       @application_extension_api_only = true
     end
 
-    # compiles the target with Swift's library evolution support,
-    # necessary to build XCFrameworks
-    # translates to BUILD_LIBRARY_FOR_DISTRIBUTION = YES in the build settings
+    # Compiles the target with Swift's library evolution support, necessary to
+    # build XCFrameworks.
+    # Translates to BUILD_LIBRARY_FOR_DISTRIBUTION = YES in the build settings.
     #
     def mark_build_library_for_distribution
       @build_library_for_distribution = true

@@ -446,22 +446,18 @@ module Pod
           is_app_extension ||= aggregate_target.user_targets.any? do |user_target|
             user_target.common_resolved_build_setting('APPLICATION_EXTENSION_API_ONLY', :resolve_against_xcconfig => true) == 'YES'
           end
+          if is_app_extension
+            aggregate_target.mark_application_extension_api_only
+            aggregate_target.pod_targets.each(&:mark_application_extension_api_only)
+          end
 
-          next unless is_app_extension
-
-          aggregate_target.mark_application_extension_api_only
-          aggregate_target.pod_targets.each(&:mark_application_extension_api_only)
-        end
-
-        aggregate_targets.each do |aggregate_target|
           build_library_for_distribution = aggregate_target.user_targets.any? do |user_target|
             user_target.common_resolved_build_setting('BUILD_LIBRARY_FOR_DISTRIBUTION', :resolve_against_xcconfig => true) == 'YES'
           end
-
-          next unless build_library_for_distribution
-
-          aggregate_target.mark_build_library_for_distribution
-          aggregate_target.pod_targets.each(&:mark_build_library_for_distribution)
+          if build_library_for_distribution
+            aggregate_target.mark_build_library_for_distribution
+            aggregate_target.pod_targets.each(&:mark_build_library_for_distribution)
+          end
         end
 
         if installation_options.integrate_targets?
