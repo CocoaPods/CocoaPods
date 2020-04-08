@@ -912,6 +912,11 @@ module Pod
           target.application_extension_api_only ? 'YES' : nil
         end
 
+        # @return [String]
+        define_build_settings_method :build_library_for_distribution, :build_setting => true, :memoized => true do
+          target.build_library_for_distribution ? 'YES' : nil
+        end
+
         #-------------------------------------------------------------------------#
 
         # @!group Target Properties

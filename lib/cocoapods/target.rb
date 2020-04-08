@@ -43,6 +43,11 @@ module Pod
     #
     attr_reader :application_extension_api_only
 
+    # @return [Boolean] whether the target must be compiled with Swift's library
+    # evolution support, necessary for XCFrameworks.
+    #
+    attr_reader :build_library_for_distribution
+
     # Initialize a new target
     #
     # @param [Sandbox] sandbox @see #sandbox
@@ -59,6 +64,7 @@ module Pod
       @build_type = build_type
 
       @application_extension_api_only = false
+      @build_library_for_distribution = false
       @build_settings = create_build_settings
     end
 
@@ -298,11 +304,19 @@ module Pod
       support_files_dir + "#{label}-dummy.m"
     end
 
-    # mark the target as extension-only,
-    # translates to APPLICATION_EXTENSION_API_ONLY = YES in the build settings
+    # Mark the target as extension-only.
+    # Translates to APPLICATION_EXTENSION_API_ONLY = YES in the build settings.
     #
     def mark_application_extension_api_only
       @application_extension_api_only = true
+    end
+
+    # Compiles the target with Swift's library evolution support, necessary to
+    # build XCFrameworks.
+    # Translates to BUILD_LIBRARY_FOR_DISTRIBUTION = YES in the build settings.
+    #
+    def mark_build_library_for_distribution
+      @build_library_for_distribution = true
     end
 
     # @return [Pathname] The absolute path of the prepare artifacts script.
