@@ -60,6 +60,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#9612](https://github.com/CocoaPods/CocoaPods/pull/9612)
 
+* Don't crash on non UTF-8 error message
+  [Kenji KATO](https://github.com/katoken-0215)
+  [#9706](https://github.com/CocoaPods/CocoaPods/pull/9706)
 
 ## 1.9.1 (2020-03-09)
 
