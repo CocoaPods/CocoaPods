@@ -31,7 +31,7 @@ module Pod
 ### Error
 
 ```
-#{exception.class} - #{exception.message.force_encoding("UTF-8")}
+#{exception.class} - #{exception.message.force_encoding('UTF-8')}
 #{exception.backtrace.join("\n") if exception.backtrace}
 ```
 
