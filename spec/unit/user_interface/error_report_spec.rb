@@ -155,6 +155,13 @@ https://github.com/cocoapods/cocoapods/search?q=Testing&type=Issues&utf8=✓
 EOS
         UI.output.should == result
       end
+
+      it 'doesn\'t crash on non UTF-8 error message' do
+        should.not.raise(Encoding::CompatibilityError) {
+          @exception.stubs(:message).returns('”ASCII-8BIT”'.force_encoding('ASCII-8BIT'))
+          @report.report(@exception)
+        }
+      end
     end
   end
 end
