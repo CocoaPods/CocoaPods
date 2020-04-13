@@ -400,12 +400,11 @@ module Pod
           # @return [Array<String>] The embed frameworks script input paths
           #
           def embed_frameworks_input_paths(framework_paths, xcframeworks)
-            input_paths = []
-            framework_paths.each do |path|
-              input_paths.concat([path.source_path, path.bcsymbolmap_paths].flatten.compact)
+            input_paths = framework_paths.each_with_object([]) do |path, result|
+              result.concat([path.source_path, path.bcsymbolmap_paths].flatten.compact)
             end
             # Only include dynamic xcframeworks as the input since we will not be copying static xcframework slices
-            xcframeworks.select { |xcf| xcf.build_type == BuildType.dynamic_framework }.each do |xcframework|
+            xcframeworks.select { |xcf| xcf.build_type.dynamic_framework? }.each do |xcframework|
               name = xcframework.name
               input_paths << "#{Pod::Target::BuildSettings.xcframework_intermediate_dir(xcframework)}/#{name}.framework/#{name}"
             end
@@ -434,7 +433,7 @@ module Pod
             end.compact.uniq
             # Static xcframeworks are not copied to the build dir
             # so only include dynamic artifacts that will be copied to the build folder
-            xcframework_paths = xcframeworks.select(&:build_type.dynamic_framework?).map do |xcframework|
+            xcframework_paths = xcframeworks.select { |xcf| xcf.build_type.dynamic_framework? }.map do |xcframework|
               "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{xcframework.name}.framework"
             end
             paths + xcframework_paths

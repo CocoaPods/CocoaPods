@@ -14,16 +14,16 @@ workspace 'Examples'
 
 target 'VendoredXCFrameworkExample' do
   platform :ios, '13.0'
-  use_frameworks!
+  use_frameworks!(:linkage => :dynamic)
 
-  pod 'BananaLib', path: 'BananaLib'
+  pod 'BananaLib/DynamicFramework', path: 'BananaLib'
 end
 
 target 'AmazingMacApp' do
   platform :osx, '10.12'
-  use_frameworks!
+  use_frameworks!(:linkage => :static)
 
-  pod 'BananaLib', path: 'BananaLib'
+  pod 'BananaLib/StaticFramework', path: 'BananaLib'
 end
 
 target 'AwesomeWatchApp' do
@@ -38,4 +38,10 @@ target 'AwesomeWatchApp Extension' do
   use_frameworks!
 
   pod 'BananaLib', path: 'BananaLib'
+end
+
+target 'AppUsingStaticLibraries' do
+  platform :ios, '13.0'
+  
+  pod 'BananaLib/StaticLibrary', path: 'BananaLib'
 end
