@@ -157,10 +157,10 @@ EOS
       end
 
       it 'doesn\'t crash on non UTF-8 error message' do
-        should.not.raise(Encoding::CompatibilityError) {
+        should.not.raise(Encoding::CompatibilityError) do
           @exception.stubs(:message).returns('”ASCII-8BIT”'.force_encoding('ASCII-8BIT'))
           @report.report(@exception)
-        }
+        end
       end
     end
   end
