@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Add quotes around SWIFT_INCLUDE_PATHS in xcconfig.  
+  [Nick Entin](https://github.com/NickEntin)
+  [#9716](https://github.com/CocoaPods/CocoaPods/pull/9716)
+
 * Fix setting `swift_version` when deduplicate targets is turned off.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9689](https://github.com/CocoaPods/CocoaPods/pull/9689)
