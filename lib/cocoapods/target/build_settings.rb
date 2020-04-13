@@ -40,6 +40,13 @@ module Pod
         WARNING_LDFLAGS
       ).to_set.freeze
 
+      # @return [Set<String>]
+      #   The build settings that are arrays, but should be wrapped in quotes.
+      #
+      QUOTE_WRAPPED_SETTINGS = %w(
+        SWIFT_INCLUDE_PATHS
+      ).to_set.freeze
+
       # @return [String]
       #   The variable for the configuration build directory used when building pod targets.
       #
@@ -371,7 +378,16 @@ module Pod
           if PLURAL_SETTINGS.include?(key)
             raise ArgumentError, "#{key} is a plural setting, cannot have #{value.inspect} as its value" unless value.is_a? Array
 
-            value = "$(inherited) #{quote_array(value)}"
+            if QUOTE_WRAPPED_SETTINGS.include?(key)
+              if value.empty?
+                value = "$(inherited)"
+              else
+                value_to_wrap = "$(inherited) #{quote_array(value)}".strip
+                value = "\"#{value_to_wrap}\""
+              end
+            else
+              value = "$(inherited) #{quote_array(value)}"
+            end
           else
             raise ArgumentError, "#{key} is not a plural setting, cannot have #{value.inspect} as its value" unless value.is_a? String
           end
