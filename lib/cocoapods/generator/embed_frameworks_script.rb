@@ -8,11 +8,20 @@ module Pod
       #
       attr_reader :frameworks_by_config
 
+      # @return [Hash{String => Array<XCFrameworkPaths>}] Multiple lists of frameworks per
+      #         configuration.
+      #
+      attr_reader :xcframeworks_by_config
+
       # @param  [Hash{String => Array<FrameworkPaths>] frameworks_by_config
       #         @see #frameworks_by_config
       #
-      def initialize(frameworks_by_config)
+      # @param  [Hash{String => Array<XCFramework>] xcframeworks_by_config
+      #         @see #xcframeworks_by_config
+      #
+      def initialize(frameworks_by_config, xcframeworks_by_config)
         @frameworks_by_config = frameworks_by_config
+        @xcframeworks_by_config = xcframeworks_by_config
       end
 
       # Saves the resource script to the given pathname.
@@ -55,6 +64,8 @@ mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
 COCOAPODS_PARALLEL_CODE_SIGN="${COCOAPODS_PARALLEL_CODE_SIGN:-false}"
 SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
+BCSYMBOLMAP_DIR="BCSymbolMaps"
+
 
 #{Pod::Generator::ScriptPhaseConstants::RSYNC_PROTECT_TMP_FILES}
 # Copies and strips a vendored framework
@@ -109,6 +120,13 @@ install_framework()
       code_sign_if_enabled "${destination}/${lib}"
     done
   fi
+
+   if [ -d "${source}/${BCSYMBOLMAP_DIR}" ]; then
+    # Locate and install any .bcsymbolmaps if present
+    find "${source}/${BCSYMBOLMAP_DIR}/" -name "*.bcsymbolmap"|while read f; do
+      install_bcsymbolmap "$f" "$destination"
+    done
+  fi
 }
 #{Pod::Generator::ScriptPhaseConstants::INSTALL_DSYM_METHOD}
 #{Pod::Generator::ScriptPhaseConstants::STRIP_INVALID_ARCHITECTURES_METHOD}
@@ -134,51 +152,32 @@ code_sign_if_enabled() {
     eval "$code_sign_cmd"
   fi
 }
-
-install_artifact() {
-  artifact="$1"
-  base="$(basename "$artifact")"
-  case $base in
-  *.framework)
-    install_framework "$artifact"
-    ;;
-  *.dSYM)
-    # Suppress arch warnings since XCFrameworks will include many dSYM files
-    install_dsym "$artifact" "false"
-    ;;
-  *.bcsymbolmap)
-    install_bcsymbolmap "$artifact"
-    ;;
-  *)
-    echo "error: Unrecognized artifact "$artifact""
-    ;;
-  esac
-}
-
-copy_artifacts() {
-  file_list="$1"
-  while read artifact; do
-    install_artifact "$artifact"
-  done <$file_list
-}
-
-ARTIFACT_LIST_FILE="${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt"
-if [ -r "${ARTIFACT_LIST_FILE}" ]; then
-  copy_artifacts "${ARTIFACT_LIST_FILE}"
-fi
-
         SH
-        frameworks_by_config.each do |config, frameworks_with_dsyms|
-          next if frameworks_with_dsyms.empty?
-          script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
-          frameworks_with_dsyms.each do |framework_with_dsym|
-            script << %(  install_framework "#{framework_with_dsym.source_path}"\n)
-            unless framework_with_dsym.bcsymbolmap_paths.nil?
-              framework_with_dsym.bcsymbolmap_paths.each do |bcsymbolmap_path|
-                script << %(  install_bcsymbolmap "#{bcsymbolmap_path}"\n)
+        contents_by_config = Hash.new do |hash, key|
+          hash[key] = ''
+        end
+        frameworks_by_config.each do |config, frameworks|
+          frameworks.each do |framework|
+            contents_by_config[config] << %(  install_framework "#{framework.source_path}"\n)
+            unless framework.bcsymbolmap_paths.nil?
+              framework.bcsymbolmap_paths.each do |bcsymbolmap_path|
+                contents_by_config[config] << %(  install_bcsymbolmap "#{bcsymbolmap_path}"\n)
               end
             end
           end
+        end
+        xcframeworks_by_config.each do |config, xcframeworks|
+          xcframeworks.each do |xcframework|
+            name = xcframework.name
+            contents_by_config[config] << %(  install_framework "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{name}/#{name}.framework"\n)
+          end
+        end
+        script << "\n" unless contents_by_config.empty?
+        contents_by_config.keys.sort.each do |config|
+          contents = contents_by_config[config]
+          next if contents.empty?
+          script << %(if [[ "$CONFIGURATION" == "#{config}" ]]; then\n)
+          script << contents
           script << "fi\n"
         end
         script << <<-SH.strip_heredoc

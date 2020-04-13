@@ -45,6 +45,12 @@ module Pod
       #
       CONFIGURATION_BUILD_DIR_VARIABLE = '${PODS_CONFIGURATION_BUILD_DIR}'.freeze
 
+      # @return [String]
+      #   The variable for the configuration intermediate frameworks directory used for building pod targets
+      #   that contain vendored xcframeworks.
+      #
+      XCFRAMEWORKS_BUILD_DIR_VARIABLE = '${PODS_XCFRAMEWORKS_BUILD_DIR}'.freeze
+
       #-------------------------------------------------------------------------#
 
       # @!group DSL
@@ -134,6 +140,14 @@ module Pod
       end
       private_class_method :define_build_settings_method
 
+      # @param [XCFramework] xcframework the xcframework thats slice will be copied to the intermediates dir
+      #
+      # @return [String] the path to the directory containing the xcframework slice
+      #
+      def self.xcframework_intermediate_dir(xcframework)
+        "#{XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{xcframework.name}"
+      end
+
       class << self
         #-------------------------------------------------------------------------#
 
@@ -202,6 +216,10 @@ module Pod
       # @return [String]
       define_build_settings_method :pods_configuration_build_dir, :build_setting => true do
         '${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)'
+      end
+
+      define_build_settings_method :pods_xcframeworks_build_dir, :build_setting => true do
+        '$(PODS_CONFIGURATION_BUILD_DIR)/XCFrameworkIntermediates'
       end
 
       # @return [String]
@@ -667,12 +685,11 @@ module Pod
           search_paths.concat file_accessors.
             flat_map(&:vendored_frameworks).
             map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
-          # Include each slice in the framework search paths.
-          # Xcode will not search inside an .xcframework for headers within each slice
-          search_paths.concat vendored_xcframeworks.
-            flat_map(&:slices).
-            select { |slice| slice.platform.symbolic_name == target.platform.symbolic_name }.
-            flat_map { |slice| File.join '${PODS_ROOT}', slice.path.dirname.relative_path_from(target.sandbox.root) }
+          xcframework_intermediates = vendored_xcframeworks.
+                                      select { |xcf| xcf.build_type.framework? }.
+                                      map { |xcf| BuildSettings.xcframework_intermediate_dir(xcf) }.
+                                      uniq
+          search_paths.concat xcframework_intermediates
           search_paths
         end
 
@@ -798,12 +815,20 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :vendored_static_library_search_paths, :memoized => true do
-          vendored_static_libraries.map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
+          paths = vendored_static_libraries.map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
+          paths.concat vendored_xcframeworks.
+            select { |xcf| xcf.build_type.static_library? }.
+            map { |xcf| BuildSettings.xcframework_intermediate_dir(xcf) }
+          paths
         end
 
         # @return [Array<String>]
         define_build_settings_method :vendored_dynamic_library_search_paths, :memoized => true do
-          vendored_dynamic_libraries.map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
+          paths = vendored_dynamic_libraries.map { |f| File.join '${PODS_ROOT}', f.dirname.relative_path_from(target.sandbox.root) }
+          paths.concat vendored_xcframeworks.
+            select { |xcf| xcf.build_type.dynamic_library? }.
+            map { |xcf| BuildSettings.xcframework_intermediate_dir(xcf) }
+          paths
         end
 
         # @return [Array<String>]
@@ -1127,11 +1152,9 @@ module Pod
             map { |pt| pt.build_settings[@configuration].framework_header_search_path }
 
           xcframework_library_headers = pod_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_xcframeworks }.
-            flat_map(&:slices).
-            select(&:library?).
-            map(&:headers).
-            compact.
-            map { |path| "$PODS_ROOT/#{path.relative_path_from(target.sandbox.root)}" }
+                                        select { |xcf| xcf.build_type.static_library? }.
+                                        map { |xcf| "#{BuildSettings.xcframework_intermediate_dir(xcf)}/Headers" }.
+                                        compact
 
           paths.concat xcframework_library_headers
 

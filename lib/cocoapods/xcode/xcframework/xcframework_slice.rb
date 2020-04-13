@@ -107,14 +107,14 @@ module Pod
             linkage = Xcode::LinkageAnalyzer.dynamic_binary?(binary_path) ? :dynamic : :static
             ext = File.extname(path)
             packaging = case ext
-            when '.framework'
-              :framework
-            when '.a'
-              :library
-            else
-              raise Informative, "Invalid XCFramework slice type `#{ext}`"
-            end
-            BuildType.new(linkage: linkage, packaging: packaging)
+                        when '.framework'
+                          :framework
+                        when '.a'
+                          :library
+                        else
+                          raise Informative, "Invalid XCFramework slice type `#{ext}`"
+                        end
+            BuildType.new(:linkage => linkage, :packaging => packaging)
           end
         end
 

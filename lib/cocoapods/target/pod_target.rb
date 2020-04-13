@@ -693,10 +693,32 @@ module Pod
       support_files_dir + "#{non_library_spec_label(spec)}-frameworks-output-files.xcfilelist"
     end
 
+    # @return [Pathname] The absolute path of the copy xcframeworks script.
+    #
+    def copy_xcframeworks_script_path
+      support_files_dir + "#{label}-xcframeworks.sh"
+    end
+
+    # @return [String] The path of the copy xcframeworks input files file list
+    #
+    def copy_xcframeworks_script_input_files_path
+      support_files_dir + "#{label}-xcframeworks-input-files.xcfilelist"
+    end
+
+    # @return [String] The path of the copy xcframeworks output files file list
+    #
+    def copy_xcframeworks_script_output_files_path
+      support_files_dir + "#{label}-xcframeworks-output-files.xcfilelist"
+    end
+
     # @param  [Specification] spec
     #         The spec this script path is for.
     #
     # @return [Pathname] The absolute path of the prepare artifacts script for the given spec.
+    #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
     #
     def prepare_artifacts_script_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-artifacts.sh"
@@ -707,6 +729,10 @@ module Pod
     #
     # @return [Pathname] The absolute path of the prepare artifacts script input file list for the given spec.
     #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
+    #
     def prepare_artifacts_script_input_files_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-artifacts-input-files.xcfilelist"
     end
@@ -715,6 +741,10 @@ module Pod
     #         The spec this script path is for.
     #
     # @return [Pathname] The absolute path of the prepare artifacts script output file list for the given spec.
+    #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
     #
     def prepare_artifacts_script_output_files_path_for_spec(spec)
       support_files_dir + "#{non_library_spec_label(spec)}-artifacts-output-files.xcfilelist"

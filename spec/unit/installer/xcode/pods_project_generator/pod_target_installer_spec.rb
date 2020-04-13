@@ -1631,6 +1631,12 @@ module Pod
                 Use dynamic frameworks for dynamic linking instead.
                 MSG
               end
+
+              it 'creates the copy xcframeworks script phase if needed' do
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                @installer.expects(:create_copy_xcframeworks_script).once
+                @installer.install!
+              end
             end
           end
         end

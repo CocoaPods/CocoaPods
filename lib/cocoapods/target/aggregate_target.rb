@@ -360,6 +360,10 @@ module Pod
     #
     # @return [Pathname] The absolute path of the prepare artifacts script input file list.
     #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
+    #
     def prepare_artifacts_script_input_files_path(configuration)
       support_files_dir + "#{label}-artifacts-#{configuration}-input-files.xcfilelist"
     end
@@ -367,6 +371,10 @@ module Pod
     # @param  [String] configuration the configuration this path is for.
     #
     # @return [Pathname] The absolute path of the prepare artifacts script output file list.
+    #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
     #
     def prepare_artifacts_script_output_files_path(configuration)
       support_files_dir + "#{label}-artifacts-#{configuration}-output-files.xcfilelist"
@@ -454,6 +462,10 @@ module Pod
     # @return [String] The path of the prepare artifacts script relative to the
     #         root of the Pods project.
     #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
+    #
     def prepare_artifacts_script_relative_path
       "${PODS_ROOT}/#{relative_to_pods_root(prepare_artifacts_script_path)}"
     end
@@ -461,12 +473,20 @@ module Pod
     # @return [String] The path of the prepare artifacts script input file list
     #         relative to the root of the Pods project.
     #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
+    #
     def prepare_artifacts_script_input_files_relative_path
       "${PODS_ROOT}/#{relative_to_pods_root(prepare_artifacts_script_input_files_path('${CONFIGURATION}'))}"
     end
 
     # @return [String] The path of the prepare artifacts script output file list
     #         relative to the root of the Pods project.
+    #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
     #
     def prepare_artifacts_script_output_files_relative_path
       "${PODS_ROOT}/#{relative_to_pods_root(prepare_artifacts_script_output_files_path('${CONFIGURATION}'))}"

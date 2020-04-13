@@ -146,7 +146,8 @@ module Pod
             !pod_target_installation_result.test_native_targets.empty? ||
               !pod_target_installation_result.app_native_targets.empty? ||
               pod_target.contains_script_phases? ||
-              pod_target.framework_paths.values.flatten.any? { |paths| !paths.dsym_path.nil? }
+              pod_target.framework_paths.values.flatten.any? { |paths| !paths.dsym_path.nil? } ||
+              pod_target.xcframeworks.values.any? { |xcframeworks| !xcframeworks.empty? }
           end
           return if pod_installations_to_integrate.empty?
 

@@ -84,10 +84,6 @@ module Pod
         @target.embed_frameworks_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-frameworks.sh')
       end
 
-      it 'returns the absolute path of the prepare artifacts script' do
-        @target.prepare_artifacts_script_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods-artifacts.sh')
-      end
-
       it 'returns the absolute path of the bridge support file' do
         @target.bridge_support_path.to_s.should.include?('Pods/Target Support Files/Pods/Pods.bridgesupport')
       end
