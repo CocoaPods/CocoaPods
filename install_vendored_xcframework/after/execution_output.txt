@@ -44,8 +44,8 @@ Generating Pods project
   - Integrating targets
 
 Integrating target `BananaLib`
-    Adding Build Phase '[CP] Prepare Artifacts' to project.
     Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy XCFrameworks' to project.
   - Generating deterministic UUIDs
   - Stabilizing target UUIDs
   - Running post install hooks

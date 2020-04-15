@@ -41,17 +41,6 @@ Targets:
           fi
           # This output is used by Xcode 'outputs' to avoid re-running this script phase.
           echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
-    - "[CP] Prepare Artifacts":
-        Input File List Paths:
-        - "${PODS_ROOT}/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration-artifacts-${CONFIGURATION}-input-files.xcfilelist"
-        Input Paths: []
-        Output File List Paths:
-        - "${PODS_ROOT}/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration-artifacts-${CONFIGURATION}-output-files.xcfilelist"
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration-artifacts.sh"
-
-          '
     - Sources:
       - ViewController.swift
       - AppDelegate.swift

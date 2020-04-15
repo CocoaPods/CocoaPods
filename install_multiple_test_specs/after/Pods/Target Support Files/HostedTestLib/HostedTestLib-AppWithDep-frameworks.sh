@@ -19,6 +19,8 @@ mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
 COCOAPODS_PARALLEL_CODE_SIGN="${COCOAPODS_PARALLEL_CODE_SIGN:-false}"
 SWIFT_STDLIB_PATH="${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"
+BCSYMBOLMAP_DIR="BCSymbolMaps"
+
 
 # This protects against multiple targets copying the same framework dependency at the same time. The solution
 # was originally proposed here: https://lists.samba.org/archive/rsync/2008-February/020158.html
@@ -74,6 +76,13 @@ install_framework()
       echo "rsync -auv \"${SWIFT_STDLIB_PATH}/${lib}\" \"${destination}\""
       rsync -auv "${SWIFT_STDLIB_PATH}/${lib}" "${destination}"
       code_sign_if_enabled "${destination}/${lib}"
+    done
+  fi
+
+   if [ -d "${source}/${BCSYMBOLMAP_DIR}" ]; then
+    # Locate and install any .bcsymbolmaps if present
+    find "${source}/${BCSYMBOLMAP_DIR}/" -name "*.bcsymbolmap"|while read f; do
+      install_bcsymbolmap "$f" "$destination"
     done
   fi
 }
@@ -162,47 +171,11 @@ code_sign_if_enabled() {
   fi
 }
 
-install_artifact() {
-  artifact="$1"
-  base="$(basename "$artifact")"
-  case $base in
-  *.framework)
-    install_framework "$artifact"
-    ;;
-  *.dSYM)
-    # Suppress arch warnings since XCFrameworks will include many dSYM files
-    install_dsym "$artifact" "false"
-    ;;
-  *.bcsymbolmap)
-    install_bcsymbolmap "$artifact"
-    ;;
-  *)
-    echo "error: Unrecognized artifact "$artifact""
-    ;;
-  esac
-}
-
-copy_artifacts() {
-  file_list="$1"
-  while read artifact; do
-    install_artifact "$artifact"
-  done <$file_list
-}
-
-ARTIFACT_LIST_FILE="${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt"
-if [ -r "${ARTIFACT_LIST_FILE}" ]; then
-  copy_artifacts "${ARTIFACT_LIST_FILE}"
-fi
-
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/HostedTestLib/HostedTestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/TestLib/TestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/DepPod/DepPod.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/HostedTestLib/HostedTestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/TestLib/TestLib.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/DepPod/DepPod.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
