@@ -19,6 +19,21 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix an issue that caused multiple xcframework scripts to produce the same output files  
+  [Eric Amorde](https://github.com/amorde)
+  [#9670](https://github.com/CocoaPods/CocoaPods/issues/9670)
+  [#9720](https://github.com/CocoaPods/CocoaPods/pull/9720)
+
+* Fix an issue preventing framework user targets with an xcframework dependency from building successfully  
+  [Eric Amorde](https://github.com/amorde)
+  [#9525](https://github.com/CocoaPods/CocoaPods/issues/9525)
+  [#9720](https://github.com/CocoaPods/CocoaPods/pull/9720)
+
+* Fix an issue preventing xcframeworks that wrapped static libraries from linking successfully  
+  [Eric Amorde](https://github.com/amorde)
+  [#9528](https://github.com/CocoaPods/CocoaPods/issues/9528)
+  [#9720](https://github.com/CocoaPods/CocoaPods/pull/9720)
+
 * Fix setting `swift_version` when deduplicate targets is turned off.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9689](https://github.com/CocoaPods/CocoaPods/pull/9689)
