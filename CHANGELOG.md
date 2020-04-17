@@ -23,10 +23,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Re-implement `bcsymbolmap` copying to avoid duplicate outputs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [mplorentz](https://github.com/mplorentz)
+  [#9734](https://github.com/CocoaPods/CocoaPods/pull/9734)
+
 * Fix Xcode 11 warning when setting Bundle Identifier in `info_plist`  
   [Sean Reinhardt](https://github.com/seanreinhardtapps)
   [#9536](https://github.com/CocoaPods/CocoaPods/issues/9536)
-  
+
 * Fix `incompatible encoding regexp match` for linting non-ascii pod name  
   [banjun](https://github.com/banjun)
   [#9765](https://github.com/CocoaPods/CocoaPods/issues/9765)
@@ -77,7 +82,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Re-implement `dSYM` copying and stripping to avoid duplicate outputs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#9185](https://github.com/CocoaPods/CocoaPods/issues/9185)  
+  [#9185](https://github.com/CocoaPods/CocoaPods/issues/9185)
 
 * Add support for running tests through the scheme of the app spec host of a test spec    
   [Eric Amorde](https://github.com/amorde)

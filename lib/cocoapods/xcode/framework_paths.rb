@@ -9,7 +9,7 @@ module Pod
       #
       attr_reader :dsym_path
 
-      # @return [Array, Nil] the bcsymbolmap files path array, if one exists
+      # @return [Array<String>, Nil] the bcsymbolmap files path array, if one exists
       #
       attr_reader :bcsymbolmap_paths
 

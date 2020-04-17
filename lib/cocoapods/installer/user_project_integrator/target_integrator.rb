@@ -391,20 +391,18 @@ module Pod
             end.uniq
           end
 
-          # Returns the framework output paths for the given input paths
+          # Returns the framework input paths for the given framework paths
           #
           # @param  [Hash<Array<Xcode::FrameworkPaths>>] framework_paths
-          #         The target's framework paths to map to output paths.
+          #         The target's framework paths to map to input paths.
           #
           # @param  [Hash<Array<XCFramework>>] xcframeworks
-          #         The target's xcframeworks to map to output paths.
+          #         The target's xcframeworks to map to input paths.
           #
           # @return [Array<String>] The embed frameworks script input paths
           #
           def embed_frameworks_input_paths(framework_paths, xcframeworks)
-            input_paths = framework_paths.each_with_object([]) do |path, result|
-              result.concat([path.source_path, path.bcsymbolmap_paths].flatten.compact)
-            end
+            input_paths = framework_paths.map(&:source_path)
             # Only include dynamic xcframeworks as the input since we will not be copying static xcframework slices
             xcframeworks.select { |xcf| xcf.build_type.dynamic_framework? }.each do |xcframework|
               name = xcframework.name
@@ -413,26 +411,20 @@ module Pod
             input_paths
           end
 
-          # Returns the framework output paths for the given input paths
+          # Returns the framework output paths for the given framework paths
           #
-          # @param  [Array<Xcode::FrameworkPaths>] framework_input_paths
+          # @param  [Array<Xcode::FrameworkPaths>] framework_paths
           #         The framework input paths to map to output paths.
           #
           # @param  [Array<XCFramework>] xcframeworks
           #         The installed xcframeworks.
           #
-          # @return [Array<String>] The framework output paths
+          # @return [Array<String>] The embed framework script output paths
           #
-          def embed_frameworks_output_paths(framework_input_paths, xcframeworks)
-            paths = framework_input_paths.flat_map do |framework_path|
-              framework_output_path = "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{File.basename(framework_path.source_path)}"
-              bcsymbol_output_paths = unless framework_path.bcsymbolmap_paths.nil?
-                                        framework_path.bcsymbolmap_paths.map do |bcsymbolmap_path|
-                                          "${BUILT_PRODUCTS_DIR}/#{File.basename(bcsymbolmap_path)}"
-                                        end
-                                      end
-              [framework_output_path, *bcsymbol_output_paths]
-            end.compact.uniq
+          def embed_frameworks_output_paths(framework_paths, xcframeworks)
+            paths = framework_paths.map do |framework_path|
+              "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/#{File.basename(framework_path.source_path)}"
+            end.uniq
             # Static xcframeworks are not copied to the build dir
             # so only include dynamic artifacts that will be copied to the build folder
             xcframework_paths = xcframeworks.select { |xcf| xcf.build_type.dynamic_framework? }.map do |xcframework|

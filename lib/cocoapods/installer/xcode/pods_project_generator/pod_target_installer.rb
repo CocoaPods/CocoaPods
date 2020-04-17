@@ -797,15 +797,16 @@ module Pod
             end
           end
 
-          # Creates a script that copies and strips vendored dSYMs.
+          # Creates a script that copies and strips vendored dSYMs and bcsymbolmaps.
           #
           # @return [void]
           #
           def create_copy_dsyms_script
             dsym_paths = PodTargetInstaller.dsym_paths(target)
+            bcsymbolmap_paths = PodTargetInstaller.bcsymbolmap_paths(target)
             path = target.copy_dsyms_script_path
-            unless dsym_paths.empty?
-              generator = Generator::CopydSYMsScript.new(dsym_paths)
+            unless dsym_paths.empty? && bcsymbolmap_paths.empty?
+              generator = Generator::CopydSYMsScript.new(dsym_paths, bcsymbolmap_paths)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
@@ -1172,6 +1173,16 @@ module Pod
               dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
               dsym_paths.concat(target.xcframeworks.values.flatten.flat_map { |xcframework| xcframework_dsyms(xcframework.path) })
               dsym_paths
+            end
+
+            # @param [PodTarget] target the target to be installed
+            #
+            # @return [Array<String>] the bcsymbolmap paths for the given target
+            #
+            def bcsymbolmap_paths(target)
+              target.framework_paths.values.flatten.reject do |fmwk_path|
+                fmwk_path.bcsymbolmap_paths.nil?
+              end.flat_map(&:bcsymbolmap_paths)
             end
 
             # @param  [Pathname] xcframework_path

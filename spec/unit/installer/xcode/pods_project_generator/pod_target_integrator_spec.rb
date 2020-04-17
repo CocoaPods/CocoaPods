@@ -237,7 +237,8 @@ module Pod
 
                 it 'integrates native target with copy dSYM script phase' do
                   framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework',
-                                                                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM')]
+                                                                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM',
+                                                                    ['${PODS_ROOT}/Vendored/7724D6B4-C7DD-31F0-80C6-EE818ED30B07.bcsymbolmap'])]
                   @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
                   installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target, [], [])
                   PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
@@ -247,16 +248,19 @@ module Pod
                   ]
                   @native_target.build_phases[0].input_paths.should == [
                     '${PODS_ROOT}/Vendored/Vendored.framework.dSYM',
+                    '${PODS_ROOT}/Vendored/7724D6B4-C7DD-31F0-80C6-EE818ED30B07.bcsymbolmap',
                   ]
                   @native_target.build_phases[0].output_paths.should == [
                     '${DWARF_DSYM_FOLDER_PATH}/Vendored.framework.dSYM',
+                    '${DWARF_DSYM_FOLDER_PATH}/7724D6B4-C7DD-31F0-80C6-EE818ED30B07.bcsymbolmap',
                   ]
                 end
 
                 it 'integrates native target with copy dSYM script phase and xcfilelists' do
                   @project.stubs(:object_version).returns('50')
                   framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework',
-                                                                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM')]
+                                                                    '${PODS_ROOT}/Vendored/Vendored.framework.dSYM',
+                                                                    ['${PODS_ROOT}/Vendored/7724D6B4-C7DD-31F0-80C6-EE818ED30B07.bcsymbolmap'])]
                   @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
                   installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target, [], [])
                   PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
