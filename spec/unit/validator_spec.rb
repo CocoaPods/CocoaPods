@@ -927,6 +927,48 @@ module Pod
           end.uniq.should == [%w($(inherited) "$(PLATFORM_DIR)/Developer/Library/Frameworks")]
         end
 
+        it 'adds developer library paths when the pod depends on XCTest' do
+          @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          app_project_path = @validator.validation_dir + 'App.xcodeproj'
+          pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
+          installer = stub('Installer', :pod_targets => [pod_target], :pods_project => pods_project)
+          Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
+          Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
+          @validator.stubs(:shares_pod_target_xcscheme?).returns(true)
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:add_app_project_import)
+
+          app_project = Xcodeproj::Project.open(app_project_path)
+          app_project.native_targets.first.build_configurations.map do |bc|
+            bc.build_settings['LIBRARY_SEARCH_PATHS']
+          end.uniq.should == [%w($(inherited) "$(PLATFORM_DIR)/Developer/usr/lib")]
+        end
+
+        it 'does not add developer library paths when the pod depends on XCTest and deployment target after 12.2' do
+          Specification.any_instance.stubs(:deployment_target).returns('13.0')
+
+          @validator.send(:create_app_project)
+          pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
+          app_project_path = @validator.validation_dir + 'App.xcodeproj'
+          pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
+          pod_target.stubs(:uses_swift? => true, :pod_name => 'JSONKit')
+          pod_target.spec_consumers.first.stubs(:frameworks).returns(%w(XCTest))
+          installer = stub('Installer', :pod_targets => [pod_target], :pods_project => pods_project)
+          Xcodeproj::XCScheme.expects(:share_scheme).with(app_project_path, 'App').once
+          Xcodeproj::XCScheme.expects(:share_scheme).with(pods_project.path, 'BananaLib').once
+          @validator.stubs(:shares_pod_target_xcscheme?).returns(true)
+          @validator.instance_variable_set(:@installer, installer)
+          @validator.send(:add_app_project_import)
+
+          app_project = Xcodeproj::Project.open(app_project_path)
+          app_project.native_targets.first.build_configurations.map do |bc|
+            bc.build_settings['LIBRARY_SEARCH_PATHS']
+          end.uniq.should == [nil]
+        end
+
         it 'does not share xcscheme for pod target if there isnt one' do
           @validator.send(:create_app_project)
           pods_project = Xcodeproj::Project.new(@validator.validation_dir + 'Pods/Pods.xcodeproj')
