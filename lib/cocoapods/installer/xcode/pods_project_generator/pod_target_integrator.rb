@@ -208,7 +208,7 @@ module Pod
           #
           def add_copy_dsyms_script_phase(native_target)
             script_path = "${PODS_ROOT}/#{target.copy_dsyms_script_path.relative_path_from(target.sandbox.root)}"
-            dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+            dsym_paths = PodTargetInstaller.dsym_paths(target)
 
             if dsym_paths.empty?
               script_phase = native_target.shell_script_build_phases.find { |bp| bp.name && bp.name.end_with?(UserProjectIntegrator::TargetIntegrator::COPY_DSYM_FILES_PHASE_NAME) }

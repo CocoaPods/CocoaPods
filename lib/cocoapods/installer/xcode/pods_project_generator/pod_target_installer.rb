@@ -781,8 +781,7 @@ module Pod
           # @return [void]
           #
           def create_copy_dsyms_script
-            dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
-            dsym_paths.concat(target.xcframeworks.values.flatten.flat_map { |xcframework| xcframework_dsyms(xcframework.path) })
+            dsym_paths = PodTargetInstaller.dsym_paths(target)
             path = target.copy_dsyms_script_path
             unless dsym_paths.empty?
               generator = Generator::CopydSYMsScript.new(dsym_paths)
@@ -1141,22 +1140,35 @@ module Pod
             end
           end
 
-          # @param  [Pathname] xcframework_path
-          #         the base path of the .xcframework bundle
-          #
-          # @return [Array<Pathname>] all found .dSYM paths
-          #
-          def xcframework_dsyms(xcframework_path)
-            basename = File.basename(xcframework_path, '.xcframework')
-            dsym_basename = basename + '.dSYMs'
-            path = xcframework_path.dirname + dsym_basename
-            if File.directory?(path)
-              Dir.glob(path + '*.dSYM')
-            else
-              []
+          #-----------------------------------------------------------------------#
+
+          class << self
+            # @param [PodTarget] target the target to be installed
+            #
+            # @return [Array<String>] the dSYM paths for the given target
+            #
+            def dsym_paths(target)
+              dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+              dsym_paths.concat(target.xcframeworks.values.flatten.flat_map { |xcframework| xcframework_dsyms(xcframework.path) })
+              dsym_paths
+            end
+
+            # @param  [Pathname] xcframework_path
+            #         the base path of the .xcframework bundle
+            #
+            # @return [Array<Pathname>] all found .dSYM paths
+            #
+            def xcframework_dsyms(xcframework_path)
+              basename = File.basename(xcframework_path, '.xcframework')
+              dsym_basename = basename + '.dSYMs'
+              path = xcframework_path.dirname + dsym_basename
+              if File.directory?(path)
+                Dir.glob(path + '*.dSYM')
+              else
+                []
+              end
             end
           end
-          #-----------------------------------------------------------------------#
         end
       end
     end
