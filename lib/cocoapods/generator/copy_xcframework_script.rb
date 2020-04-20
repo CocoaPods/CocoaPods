@@ -3,7 +3,7 @@ require 'cocoapods/xcode'
 module Pod
   module Generator
     class CopyXCFrameworksScript
-      # @return [Array<Pod::Xcode::XCFramework>] Lists of xcframeworks to copy
+      # @return [Array<Pod::Xcode::XCFramework>] List of xcframeworks to copy
       #
       attr_reader :xcframeworks
 
@@ -15,14 +15,16 @@ module Pod
       #
       attr_reader :platform
 
+      # Creates a script for copying XCFramework slcies into an intermediate build directory
+      #
       # @param  [Array<Pod::Xcode::XCFramework>] xcframeworks
-      #         @see #xcframeworks
+      #         the list of xcframeworks to copy
       #
       # @param  [Pathname] sandbox_root
-      #         the sandbox root of the installation
+      #         the root of the Sandbox into which this script will be installed
       #
       # @param  [Platform] platform
-      #         the platform of the target for which this script will run
+      #         the platform of the target for which this script will be run
       #
       def initialize(xcframeworks, sandbox_root, platform)
         @xcframeworks = xcframeworks

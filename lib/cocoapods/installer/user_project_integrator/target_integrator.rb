@@ -192,6 +192,8 @@ module Pod
             remove_script_phase_from_target(native_target, COPY_XCFRAMEWORKS_PHASE_NAME)
           end
 
+          # Removes a script phase from a native target by name
+          #
           # @param [PBXNativeTarget] native_target
           #        The target from which the script phased should be removed
           #
