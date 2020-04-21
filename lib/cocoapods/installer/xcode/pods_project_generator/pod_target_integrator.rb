@@ -32,12 +32,12 @@ module Pod
           def integrate!
             UI.section(integration_message) do
               target_installation_result.non_library_specs_by_native_target.each do |native_target, spec|
-                add_prepare_artifacts_script_phase(native_target, spec)
                 add_embed_frameworks_script_phase(native_target, spec)
                 add_copy_resources_script_phase(native_target, spec)
                 UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(spec), native_target)
               end
               add_copy_dsyms_script_phase(target_installation_result.native_target)
+              add_copy_xcframeworks_script_phase(target_installation_result.native_target)
               UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(target.library_specs), target_installation_result.native_target)
             end
           end
@@ -147,7 +147,7 @@ module Pod
               output_file_list_path = target.embed_frameworks_script_output_files_path_for_spec(spec)
               output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
               output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
-              output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.framework_output_paths(framework_paths)
+              output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.embed_frameworks_output_paths(framework_paths, [])
             end
 
             if framework_paths.empty?
@@ -163,34 +163,18 @@ module Pod
           # @param [PBXNativeTarget] native_target
           #         the native target for which to add the prepare artifacts script
           #
-          # @param [Pod::Specification] spec
-          #         the specification to integrate
-          #
           # @return [void]
           #
-          def add_prepare_artifacts_script_phase(native_target, spec)
-            script_path = "${PODS_ROOT}/#{target.prepare_artifacts_script_path_for_spec(spec).relative_path_from(target.sandbox.root)}"
+          def add_copy_xcframeworks_script_phase(native_target)
+            script_path = "${PODS_ROOT}/#{target.copy_xcframeworks_script_path.relative_path_from(target.sandbox.root)}"
 
             input_paths_by_config = {}
             output_paths_by_config = {}
 
-            dependent_targets = if spec.test_specification?
-                                  target.dependent_targets_for_test_spec(spec)
-                                else
-                                  target.dependent_targets_for_app_spec(spec)
-                                end
-            host_target_spec_names = target.app_host_dependent_targets_for_spec(spec).flat_map do |pt|
-              pt.specs.map(&:name)
-            end.uniq
-            xcframeworks = dependent_targets.flat_map do |dependent_target|
-              spec_paths_to_include = dependent_target.library_specs.map(&:name)
-              spec_paths_to_include -= host_target_spec_names
-              spec_paths_to_include << spec.name if dependent_target == target
-              dependent_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact
-            end.uniq
+            xcframeworks = target.xcframeworks.values.flatten
 
             if use_input_output_paths? && !xcframeworks.empty?
-              input_file_list_path = target.prepare_artifacts_script_input_files_path_for_spec(spec)
+              input_file_list_path = target.copy_xcframeworks_script_input_files_path
               input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
               input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
               input_paths = input_paths_by_config[input_paths_key] = [script_path]
@@ -198,16 +182,18 @@ module Pod
               framework_paths = xcframeworks.map { |xcf| "${PODS_ROOT}/#{xcf.path.relative_path_from(target.sandbox.root)}" }
               input_paths.concat framework_paths
 
-              output_file_list_path = target.prepare_artifacts_script_output_files_path_for_spec(spec)
+              output_file_list_path = target.copy_xcframeworks_script_output_files_path
               output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
               output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
-              output_paths_by_config[output_paths_key] = [UserProjectIntegrator::TargetIntegrator::ARTIFACT_LIST_FILE]
+              output_paths_by_config[output_paths_key] = xcframeworks.map do |xcf|
+                "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{xcf.name}"
+              end
             end
 
             if xcframeworks.empty?
-              UserProjectIntegrator::TargetIntegrator.remove_prepare_artifacts_script_phase_from_target(native_target)
+              UserProjectIntegrator::TargetIntegrator.remove_copy_xcframeworks_script_phase_from_target(native_target)
             else
-              UserProjectIntegrator::TargetIntegrator.create_or_update_prepare_artifacts_script_phase_to_target(
+              UserProjectIntegrator::TargetIntegrator.create_or_update_copy_xcframeworks_script_phase_to_target(
                 native_target, script_path, input_paths_by_config, output_paths_by_config)
             end
           end
@@ -222,7 +208,7 @@ module Pod
           #
           def add_copy_dsyms_script_phase(native_target)
             script_path = "${PODS_ROOT}/#{target.copy_dsyms_script_path.relative_path_from(target.sandbox.root)}"
-            dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+            dsym_paths = PodTargetInstaller.dsym_paths(target)
 
             if dsym_paths.empty?
               script_phase = native_target.shell_script_build_phases.find { |bp| bp.name && bp.name.end_with?(UserProjectIntegrator::TargetIntegrator::COPY_DSYM_FILES_PHASE_NAME) }
@@ -262,7 +248,7 @@ module Pod
             "Integrating target `#{target.name}`"
           end
 
-          # @return [Target] the target part of the installation result.
+          # @return [PodTarget] the target part of the installation result.
           #
           def target
             target_installation_result.target

@@ -977,5 +977,66 @@ module Pod
         end
       end
     end
+
+    describe 'script phases' do
+      before do
+        @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
+        @watermelon_test_spec = @watermelon_spec.test_specs.first
+        @test_spec_target_definition = fixture_target_definition('Pods')
+        @test_pod_target = fixture_pod_target_with_specs([@watermelon_spec, *@watermelon_spec.recursive_subspecs],
+                                                         true, {}, [], Platform.new(:ios, '6.0'),
+                                                         [@test_spec_target_definition])
+      end
+      describe 'embed frameworks for test & app specs' do
+        it 'returns the relative path to the script' do
+          path = @test_pod_target.embed_frameworks_script_path_for_spec(@watermelon_test_spec)
+          path.should == @test_pod_target.support_files_dir + 'WatermelonLib-Unit-Tests-frameworks.sh'
+        end
+
+        it 'returns the correct input files file list path' do
+          path = @test_pod_target.embed_frameworks_script_input_files_path_for_spec(@watermelon_test_spec)
+          path.should == @test_pod_target.support_files_dir + 'WatermelonLib-Unit-Tests-frameworks-input-files.xcfilelist'
+        end
+
+        it 'returns the correct output files file list path' do
+          path = @test_pod_target.embed_frameworks_script_output_files_path_for_spec(@watermelon_test_spec)
+          path.should == @test_pod_target.support_files_dir + 'WatermelonLib-Unit-Tests-frameworks-output-files.xcfilelist'
+        end
+      end
+
+      describe 'copy xframeworks' do
+        it 'returns the relative path to the script' do
+          path = @pod_target.copy_xcframeworks_script_path
+          path.should == @pod_target.support_files_dir + 'BananaLib-xcframeworks.sh'
+        end
+
+        it 'returns the correct input files file list path' do
+          path = @pod_target.copy_xcframeworks_script_input_files_path
+          path.should == @pod_target.support_files_dir + 'BananaLib-xcframeworks-input-files.xcfilelist'
+        end
+
+        it 'returns the correct output files file list path' do
+          path = @pod_target.copy_xcframeworks_script_output_files_path
+          path.should == @pod_target.support_files_dir + 'BananaLib-xcframeworks-output-files.xcfilelist'
+        end
+      end
+
+      describe 'copy dSYMs' do
+        it 'returns the relative path to the script' do
+          path = @pod_target.copy_dsyms_script_path
+          path.should == @pod_target.support_files_dir + 'BananaLib-copy-dsyms.sh'
+        end
+
+        it 'returns the correct input files file list path' do
+          path = @pod_target.copy_dsyms_script_input_files_path
+          path.should == @pod_target.support_files_dir + 'BananaLib-copy-dsyms-input-files.xcfilelist'
+        end
+
+        it 'returns the correct output files file list path' do
+          path = @pod_target.copy_dsyms_script_output_files_path
+          path.should == @pod_target.support_files_dir + 'BananaLib-copy-dsyms-output-files.xcfilelist'
+        end
+      end
+    end
   end
 end

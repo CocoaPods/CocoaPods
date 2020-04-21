@@ -12,15 +12,20 @@ Pod::Spec.new do |spec|
   spec.license      = "MIT"
   spec.author       = 'Coconut Corp', { 'Monkey Boy' => 'monkey@coconut-corp.local' }
   spec.source       = { :git => "https://github.com/CocoaPods/CocoaPods.git", :tag => "#{spec.version}" }
-  spec.source_files  = "Classes", "Classes/**/*.{h,m}"
-  spec.exclude_files = "Classes/Exclude"
-  spec.vendored_frameworks = 'CoconutLib.xcframework'
 
   spec.ios.deployment_target = '13.0'
   spec.watchos.deployment_target = '3.0'
   spec.osx.deployment_target = '10.12'
+  
+  spec.default_subspecs = 'DynamicFramework'
 
-  spec.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'Tests/**/*.{h,m}'
+  spec.subspec 'DynamicFramework' do |ss|
+    ss.vendored_frameworks = 'DynamicFramework/CoconutLib.xcframework'
+  end
+  spec.subspec 'StaticFramework' do |ss|
+    ss.vendored_frameworks = 'StaticFramework/CoconutLib.xcframework'
+  end
+  spec.subspec 'StaticLibrary' do |ss|
+    ss.vendored_frameworks = 'StaticLibrary/CoconutLib.xcframework'
   end
 end

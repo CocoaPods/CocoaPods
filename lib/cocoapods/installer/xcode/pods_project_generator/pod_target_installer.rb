@@ -1,3 +1,5 @@
+require 'active_support/core_ext/array'
+require 'active_support/core_ext/string/inflections'
 require 'cocoapods/xcode'
 
 module Pod
@@ -14,11 +16,15 @@ module Pod
           #
           attr_reader :umbrella_header_paths
 
+          # @return [PodTarget] @see TargetInstaller#target
+          #
+          attr_reader :target
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see TargetInstaller#sandbox
           # @param [Pod::Project] project @see TargetInstaller#project
-          # @param [Target] target @see TargetInstaller#target
+          # @param [PodTarget] target @see TargetInstaller#target
           # @param [Array<Pathname>] umbrella_header_paths @see #umbrella_header_paths
           #
           def initialize(sandbox, project, target, umbrella_header_paths = nil)
@@ -43,6 +49,7 @@ module Pod
                 native_target = add_placeholder_target
                 resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
                 create_copy_dsyms_script
+                create_copy_xcframeworks_script unless target.xcframeworks.values.all?(&:empty?)
                 create_xcconfig_file(native_target, resource_bundle_targets)
                 return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
               end
@@ -59,7 +66,9 @@ module Pod
 
               add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
               validate_targets_contain_sources(test_native_targets + app_native_targets.values + [native_target])
-              validate_xcframeworks_no_mixed_linkage
+              validate_xcframeworks
+
+              create_copy_xcframeworks_script unless target.xcframeworks.values.all?(&:empty?)
 
               create_xcconfig_file(native_target, resource_bundle_targets)
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
@@ -379,7 +388,6 @@ module Pod
               remove_pod_target_xcconfig_overrides_from_target(target.test_spec_build_settings_by_config[test_spec.name], test_native_target)
 
               # Test native targets also need frameworks and resources to be copied over to their xctest bundle.
-              create_test_target_prepare_artifacts_script(test_spec)
               create_test_target_embed_frameworks_script(test_spec)
               create_test_target_copy_resources_script(test_spec)
 
@@ -651,33 +659,6 @@ module Pod
             end
           end
 
-          # Creates a script that prepares artifacts for the test target.
-          #
-          # @param [Specification] test_spec
-          #        The test spec to create the script for.
-          #
-          # @return [void]
-          #
-          def create_test_target_prepare_artifacts_script(test_spec)
-            path = target.prepare_artifacts_script_path_for_spec(test_spec)
-            host_target_spec_names = target.app_host_dependent_targets_for_spec(test_spec).flat_map do |pt|
-              pt.specs.map(&:name)
-            end.uniq
-            frameworks_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
-              paths_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
-                spec_paths_to_include = pod_target.library_specs.map(&:name)
-                spec_paths_to_include -= host_target_spec_names
-                spec_paths_to_include << test_spec.name if pod_target == target
-                pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq
-              end
-            end
-            unless frameworks_by_config.each_value.all?(&:empty?)
-              generator = Generator::PrepareArtifactsScript.new(frameworks_by_config, target.sandbox.root, target.platform)
-              update_changed_file(generator, path)
-              add_file_to_support_group(path)
-            end
-          end
-
           # Creates a script that embeds the frameworks to the bundle of the test target.
           #
           # @param [Specification] test_spec
@@ -698,8 +679,16 @@ module Pod
                 pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
             end
-            unless framework_paths_by_config.each_value.all?(&:empty?)
-              generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+            xcframeworks_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+              paths_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include -= host_target_spec_names
+                spec_paths_to_include << test_spec.name if pod_target == target
+                pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq
+              end
+            end
+            unless framework_paths_by_config.each_value.all?(&:empty?) && xcframeworks_by_config.each_value.all?(&:empty?)
+              generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config, xcframeworks_by_config)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
@@ -766,16 +755,22 @@ module Pod
           #
           def create_app_target_embed_frameworks_script(app_spec)
             path = target.embed_frameworks_script_path_for_spec(app_spec)
-            framework_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+            framework_paths_by_config = {}
+            xcframeworks_by_config = {}
+            target.user_build_configurations.each do |config_name, config|
               pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
-              paths_by_config[config_name] = pod_targets.flat_map do |pod_target|
+              frameworks, xcframeworks = pod_targets.flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if pod_target == target
-                pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
+                [pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq,
+                 pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq]
               end
+              framework_paths_by_config[config_name] = frameworks
+              xcframeworks_by_config[config_name] = xcframeworks
             end
-            unless framework_paths_by_config.each_value.all?(&:empty?)
-              generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config)
+
+            unless framework_paths_by_config.each_value.all?(&:empty?) && xcframeworks_by_config.each_value.all?(&:empty?)
+              generator = Generator::EmbedFrameworksScript.new(framework_paths_by_config, xcframeworks_by_config)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
@@ -786,13 +781,28 @@ module Pod
           # @return [void]
           #
           def create_copy_dsyms_script
-            dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+            dsym_paths = PodTargetInstaller.dsym_paths(target)
             path = target.copy_dsyms_script_path
             unless dsym_paths.empty?
               generator = Generator::CopydSYMsScript.new(dsym_paths)
               update_changed_file(generator, path)
               add_file_to_support_group(path)
             end
+          end
+
+          # Creates a script that copies the appropriate xcframework slice to the build dir.
+          #
+          # @note   We can't use Xcode default link libraries phase, because
+          #         we need to ensure that we only copy the frameworks which are
+          #         relevant for the current build configuration.
+          #
+          # @return [void]
+          #
+          def create_copy_xcframeworks_script
+            path = target.copy_xcframeworks_script_path
+            generator = Generator::CopyXCFrameworksScript.new(target.xcframeworks.values.flatten, sandbox.root, target.platform)
+            update_changed_file(generator, path)
+            add_file_to_support_group(path)
           end
 
           # Manually add `libswiftSwiftOnoneSupport.dylib` as it seems there is an issue with tests that do not include it for Debug configurations.
@@ -1095,19 +1105,70 @@ module Pod
             end
           end
 
-          # Raises if a vendored xcframework contains frameworks of mixed linkage
+          # Raises if a vendored xcframework contains frameworks of mixed linkage or mixed packaging
           #
-          def validate_xcframeworks_no_mixed_linkage
+          def validate_xcframeworks
             target.xcframeworks.each_value do |xcframeworks|
               xcframeworks.each do |xcframework|
-                dynamic_slices, static_slices = xcframework.slices.partition { |slice| Pod::Xcode::LinkageAnalyzer.dynamic_binary?(slice.path) }
+                if xcframework.slices.empty?
+                  raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}` because it does not contain any binaries."
+                end
+                if xcframework.build_type.dynamic_library?
+                  raise Informative, <<-MSG.strip_heredoc
+                    Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}` because it contains dynamic libraries which are not supported.
+                    Use dynamic frameworks for dynamic linking instead.
+                  MSG
+                end
+                if xcframework.build_type.static_library?
+                  binary_names = xcframework.slices.map { |slice| File.basename(slice.binary_path, File.extname(slice.binary_path)) }.uniq
+                  if binary_names.size > 1
+                    raise Informative, <<-MSG.strip_heredoc
+                      Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}` because it contains static libraries
+                      with differing binary names: #{binary_names.to_sentence}.
+                    MSG
+                  end
+                end
+                dynamic_slices, static_slices = xcframework.slices.partition(&:dynamic?)
                 if !dynamic_slices.empty? && !static_slices.empty?
                   raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both static and dynamic frameworks."
+                end
+                library_slices, framework_slices = xcframework.slices.partition(&:library?)
+                if !library_slices.empty? && !framework_slices.empty?
+                  raise Informative, "Unable to install vendored xcframework `#{xcframework.name}` for Pod `#{target.label}`, because it contains both libraries and frameworks."
                 end
               end
             end
           end
+
           #-----------------------------------------------------------------------#
+
+          class << self
+            # @param [PodTarget] target the target to be installed
+            #
+            # @return [Array<String>] the dSYM paths for the given target
+            #
+            def dsym_paths(target)
+              dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
+              dsym_paths.concat(target.xcframeworks.values.flatten.flat_map { |xcframework| xcframework_dsyms(xcframework.path) })
+              dsym_paths
+            end
+
+            # @param  [Pathname] xcframework_path
+            #         the base path of the .xcframework bundle
+            #
+            # @return [Array<Pathname>] all found .dSYM paths
+            #
+            def xcframework_dsyms(xcframework_path)
+              basename = File.basename(xcframework_path, '.xcframework')
+              dsym_basename = basename + '.dSYMs'
+              path = xcframework_path.dirname + dsym_basename
+              if File.directory?(path)
+                Dir.glob(path + '*.dSYM')
+              else
+                []
+              end
+            end
+          end
         end
       end
     end

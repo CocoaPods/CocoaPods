@@ -321,6 +321,10 @@ module Pod
 
     # @return [Pathname] The absolute path of the prepare artifacts script.
     #
+    # @deprecated
+    #
+    # @todo Remove in 2.0
+    #
     def prepare_artifacts_script_path
       support_files_dir + "#{label}-artifacts.sh"
     end

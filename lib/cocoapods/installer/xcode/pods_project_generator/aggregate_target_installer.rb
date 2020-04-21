@@ -6,6 +6,10 @@ module Pod
         # project and the relative support files.
         #
         class AggregateTargetInstaller < TargetInstaller
+          # @return [AggregateTarget] @see TargetInstaller#target
+          #
+          attr_reader :target
+
           # Creates the target in the Pods project and the relative support files.
           #
           # @return [TargetInstallationResult] the result of the installation of this target.
@@ -30,8 +34,7 @@ module Pod
               # cause an App Store rejection because frameworks cannot be
               # embedded in embedded targets.
               #
-              create_embed_frameworks_script if (target.includes_frameworks? || target.includes_xcframeworks?) && !target.requires_host_target?
-              create_prepare_artifacts_script if target.includes_xcframeworks? && !target.requires_host_target?
+              create_embed_frameworks_script if embed_frameworks_script_required?
               create_bridge_support_file(native_target)
               create_copy_resources_script if target.includes_resources?
               create_acknowledgements
@@ -74,6 +77,13 @@ module Pod
               'ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES' => 'NO',
             }
             super.merge(settings)
+          end
+
+          # @return [Boolean] whether this target requires an `Embed Frameworks` script phase
+          #
+          def embed_frameworks_script_required?
+            includes_dynamic_xcframeworks = target.xcframeworks_by_config.values.flatten.map(&:build_type).any?(&:dynamic_framework?)
+            (target.includes_frameworks? || includes_dynamic_xcframeworks) && !target.requires_host_target?
           end
 
           # Creates the group that holds the references to the support files
@@ -154,33 +164,9 @@ module Pod
           #
           def create_embed_frameworks_script
             path = target.embed_frameworks_script_path
-            generator = Generator::EmbedFrameworksScript.new(target.framework_paths_by_config)
+            generator = Generator::EmbedFrameworksScript.new(target.framework_paths_by_config, target.xcframeworks_by_config)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
-          end
-
-          # Creates a script that prepares artifacts for embedding into a host target.
-          #
-          # @note   We can't use Xcode default link libraries phase, because
-          #         we need to ensure that we only copy the frameworks which are
-          #         relevant for the current build configuration.
-          #
-          # @return [void]
-          #
-          def create_prepare_artifacts_script
-            path = target.prepare_artifacts_script_path
-            generator = Generator::PrepareArtifactsScript.new(target.xcframeworks_by_config, sandbox.root, target.platform)
-            update_changed_file(generator, path)
-            add_file_to_support_group(path)
-
-            target.user_build_configurations.each_key do |config|
-              if (input_file_list = target.prepare_artifacts_script_input_files_path(config))
-                add_file_to_support_group(input_file_list)
-              end
-              if (output_file_list = target.prepare_artifacts_script_output_files_path(config))
-                add_file_to_support_group(output_file_list)
-              end
-            end
           end
 
           # Generates the acknowledgement files (markdown and plist) for the target.

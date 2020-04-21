@@ -124,28 +124,20 @@ module Pod
                 installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target,
                                                                    [], [test_native_target])
                 PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
-                test_native_target.build_phases.count.should == 3
                 test_native_target.build_phases.map(&:display_name).should == [
-                  '[CP] Prepare Artifacts',
                   '[CP] Embed Pods Frameworks',
                   '[CP] Copy Pods Resources',
                 ]
                 test_native_target.build_phases[0].input_file_list_paths.should == [
-                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-artifacts-input-files.xcfilelist',
-                ]
-                test_native_target.build_phases[0].output_file_list_paths.should == [
-                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-artifacts-output-files.xcfilelist',
-                ]
-                test_native_target.build_phases[1].input_file_list_paths.should == [
                   '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks-input-files.xcfilelist',
                 ]
-                test_native_target.build_phases[1].output_file_list_paths.should == [
+                test_native_target.build_phases[0].output_file_list_paths.should == [
                   '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks-output-files.xcfilelist',
                 ]
-                test_native_target.build_phases[2].input_file_list_paths.should == [
+                test_native_target.build_phases[1].input_file_list_paths.should == [
                   '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources-input-files.xcfilelist',
                 ]
-                test_native_target.build_phases[2].output_file_list_paths.should == [
+                test_native_target.build_phases[1].output_file_list_paths.should == [
                   '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources-output-files.xcfilelist',
                 ]
               end

@@ -64,7 +64,7 @@ module Pod
     autoload :CopydSYMsScript,         'cocoapods/generator/copy_dsyms_script'
     autoload :DummySource,             'cocoapods/generator/dummy_source'
     autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
-    autoload :PrepareArtifactsScript,  'cocoapods/generator/prepare_artifacts_script'
+    autoload :CopyXCFrameworksScript,  'cocoapods/generator/copy_xcframework_script'
     autoload :FileList,                'cocoapods/generator/file_list'
     autoload :Header,                  'cocoapods/generator/header'
     autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'

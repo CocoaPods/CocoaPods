@@ -52,13 +52,22 @@ module Pod
       # @return [Boolean] true if any slices use dynamic linkage
       #
       def includes_dynamic_slices?
-        slices.any? { |slice| Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
+        build_type.dynamic?
       end
 
       # @return [Boolean] true if any slices use dynamic linkage
       #
       def includes_static_slices?
-        slices.any? { |slice| !Xcode::LinkageAnalyzer.dynamic_binary?(slice.binary_path) }
+        build_type.static?
+      end
+
+      # @return [Pod::BuildType] the build type of the contained slices
+      #
+      # @note As CocoaPods does not support mixed packaging nor linkage for xcframework slices,
+      #       we pick the first slice and assume all are the same
+      #
+      def build_type
+        @build_type ||= slices.first.build_type
       end
 
       private
@@ -71,10 +80,14 @@ module Pod
           archs = library['SupportedArchitectures']
           platform_name = library['SupportedPlatform']
           platform_variant = library['SupportedPlatformVariant']
+          headers = library['HeadersPath']
 
-          slice_path = path.join(identifier).join(relative_path)
-          XCFramework::Slice.new(slice_path, identifier, archs, platform_name, platform_variant)
+          slice_root = path.join(identifier)
+          slice_path = slice_root.join(relative_path)
+          headers = slice_root.join(headers) unless headers.nil?
+          XCFramework::Slice.new(slice_path, identifier, archs, platform_name, :platform_variant => platform_variant, :headers => headers)
         end
+        raise Informative, "XCFramework at #{path} does not contain any frameworks or libraries." if slices.empty?
       end
     end
   end
