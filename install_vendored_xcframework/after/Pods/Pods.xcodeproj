@@ -15,10 +15,10 @@ File References:
       - BananaLib-Info.plist
       - BananaLib-prefix.pch
       - BananaLib-umbrella.h
-      - BananaLib-Unit-Tests-artifacts.sh
       - BananaLib-Unit-Tests-frameworks.sh
       - BananaLib-Unit-Tests-Info.plist
       - BananaLib-Unit-Tests-prefix.pch
+      - BananaLib-xcframeworks.sh
       - BananaLib.debug.xcconfig
       - BananaLib.release.xcconfig
       - BananaLib.unit-tests.debug.xcconfig
@@ -39,11 +39,6 @@ File References:
     - Pods-XCFrameworkIntegration.modulemap
     - Pods-XCFrameworkIntegration-acknowledgements.markdown
     - Pods-XCFrameworkIntegration-acknowledgements.plist
-    - Pods-XCFrameworkIntegration-artifacts.sh
-    - Pods-XCFrameworkIntegration-artifacts-Debug-input-files.xcfilelist
-    - Pods-XCFrameworkIntegration-artifacts-Debug-output-files.xcfilelist
-    - Pods-XCFrameworkIntegration-artifacts-Release-input-files.xcfilelist
-    - Pods-XCFrameworkIntegration-artifacts-Release-output-files.xcfilelist
     - Pods-XCFrameworkIntegration-dummy.m
     - Pods-XCFrameworkIntegration-frameworks.sh
     - Pods-XCFrameworkIntegration-Info.plist
@@ -63,6 +58,17 @@ Targets:
       - BananaObject.h:
           ATTRIBUTES:
           - Public
+    - "[CP] Copy XCFrameworks":
+        Input File List Paths:
+        - "${PODS_ROOT}/Target Support Files/BananaLib/BananaLib-xcframeworks-input-files.xcfilelist"
+        Input Paths: []
+        Output File List Paths:
+        - "${PODS_ROOT}/Target Support Files/BananaLib/BananaLib-xcframeworks-output-files.xcfilelist"
+        Output Paths: []
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/BananaLib/BananaLib-xcframeworks.sh"
+
+          '
     - Sources:
       - BananaLib-dummy.m
       - BananaObject.m
@@ -135,17 +141,6 @@ Targets:
         Base Configuration: BananaLib.release.xcconfig
 - BananaLib-Unit-Tests:
     Build Phases:
-    - "[CP] Prepare Artifacts":
-        Input File List Paths:
-        - "${PODS_ROOT}/Target Support Files/BananaLib/BananaLib-Unit-Tests-artifacts-input-files.xcfilelist"
-        Input Paths: []
-        Output File List Paths:
-        - "${PODS_ROOT}/Target Support Files/BananaLib/BananaLib-Unit-Tests-artifacts-output-files.xcfilelist"
-        Output Paths: []
-        Shell Path: "/bin/sh"
-        Shell Script: '"${PODS_ROOT}/Target Support Files/BananaLib/BananaLib-Unit-Tests-artifacts.sh"
-
-          '
     - Sources:
       - SomeTest.m
     - Frameworks:
