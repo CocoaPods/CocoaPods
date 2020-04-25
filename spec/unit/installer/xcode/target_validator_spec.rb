@@ -442,14 +442,13 @@ module Pod
               project(fixture_path + 'SampleProject/SampleProject').to_s
               platform :ios, '10.0'
               install! 'cocoapods', :integrate_targets => false
-              pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
-              supports_swift_versions '< 3.0'
-              target 'SampleProject'
             end
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
-            @validator.pod_targets.find { |pt| pt.name == 'MultiSwift' }.stubs(:swift_version).returns(nil)
+            @validator.stubs(:pod_targets).returns([stub('MultiSwift', :uses_swift? => true,
+                                                         :swift_version => nil, :dependent_targets => [],
+                                                         :spec_swift_versions => (['4.0']))])
             lambda { @validator.validate! }.should.not.raise
           end
 
