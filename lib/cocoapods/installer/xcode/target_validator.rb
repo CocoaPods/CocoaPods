@@ -115,7 +115,7 @@ module Pod
                 target_errors = swift_target_definitions.map(&error_message_for_target_definition).to_sentence
                 "- `#{swift_pod_target.name}` is integrated by multiple targets that use a different Swift version: #{target_errors}."
               end
-            elsif swift_pod_target.swift_version.empty?
+            elsif !swift_pod_target.swift_version.nil? && swift_pod_target.swift_version.empty?
               "- `#{swift_pod_target.name}` does not specify a Swift version (#{swift_pod_target.spec_swift_versions.map { |v| "`#{v}`" }.to_sentence}) " \
                 "that is satisfied by any of targets (#{swift_pod_target.target_definitions.map { |td| "`#{td.name}`" }.to_sentence}) integrating it."
             end

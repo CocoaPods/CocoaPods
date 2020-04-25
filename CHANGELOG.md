@@ -19,6 +19,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix crash when targets missing in Podfile  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9745](https://github.com/CocoaPods/CocoaPods/pull/9745)
+
 * Fix adding developer library search paths during pod validation.  
   [Nick Entin](https://github.com/NickEntin)
   [#9736](https://github.com/CocoaPods/CocoaPods/pull/9736)

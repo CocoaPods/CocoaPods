@@ -435,6 +435,24 @@ module Pod
              'any of targets (`TestRunner`) integrating it.'
           end
 
+          it 'does not crash if targets are missing' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '10.0'
+              install! 'cocoapods', :integrate_targets => false
+              pod 'MultiSwift', :path => (fixture_path + 'multi-swift').to_s
+              supports_swift_versions '< 3.0'
+              target 'SampleProject'
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            @validator.pod_targets.find { |pt| pt.name == 'MultiSwift' }.stubs(:swift_version).returns(nil)
+            lambda { @validator.validate! }.should.not.raise
+          end
+
           it 'does not raise an error if a pods swift versions are satisfied by the targets requirements' do
             fixture_path = ROOT + 'spec/fixtures'
             config.repos_dir = fixture_path + 'spec-repos'
