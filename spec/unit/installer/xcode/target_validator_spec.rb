@@ -446,9 +446,11 @@ module Pod
             lockfile = generate_lockfile
 
             @validator = create_validator(config.sandbox, podfile, lockfile)
-            @validator.stubs(:pod_targets).returns([stub('MultiSwift', :uses_swift? => true,
-                                                         :swift_version => nil, :dependent_targets => [],
-                                                         :spec_swift_versions => (['4.0']))])
+            @validator.stubs(:pod_targets).returns([stub('MultiSwift',
+                                                         :uses_swift? => true,
+                                                         :swift_version => nil,
+                                                         :dependent_targets => [],
+                                                         :spec_swift_versions => ['4.0'])])
             lambda { @validator.validate! }.should.not.raise
           end
 
