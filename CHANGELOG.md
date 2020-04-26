@@ -10,7 +10,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Support On-Demand Resource   
   [JunyiXie](https://github.com/JunyiXie)
-  [#issue_number](https://github.com/CocoaPods/Core/pull/622)
+  [#issue_number](https://github.com/CocoaPods/CocoaPods/pull/9620)
 
 * Add a post_integrate_hook API  
   [lucasmpaim](https://github.com/lucasmpaim)
