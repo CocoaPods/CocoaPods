@@ -144,12 +144,6 @@ module Pod
         private_header_files
       end
 
-      # @return [Array<Pathname>] the on_demand_resources of the specification.
-      #
-      def on_demand_resources
-        paths_for_attribute(:on_demand_resources, true)
-      end
-      
       # @return [Array<Pathname>] the resources of the specification.
       #
       def resources
@@ -309,6 +303,17 @@ module Pod
                                  :exclude_patterns => spec_consumer.exclude_files,
                                  :include_dirs => true)
           result[name] = paths
+        end
+        result
+      end
+
+      def on_demand_resources
+        result = {}
+        spec_consumer.on_demand_resources.each do |tag_name, file_patterns|
+          paths = expanded_paths(file_patterns,
+                                 :exclude_patterns => spec_consumer.exclude_files,
+                                 :include_dirs => true)
+          result[tag_name] = paths
         end
         result
       end
