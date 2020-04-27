@@ -307,6 +307,17 @@ module Pod
         result
       end
 
+      def on_demand_resources
+        result = {}
+        spec_consumer.on_demand_resources.each do |tag_name, file_patterns|
+          paths = expanded_paths(file_patterns,
+                                 :exclude_patterns => spec_consumer.exclude_files,
+                                 :include_dirs => true)
+          result[tag_name] = paths
+        end
+        result
+      end
+
       # @return [Array<Pathname>] The paths of the files which should be
       #         included in resources bundles by the Pod.
       #

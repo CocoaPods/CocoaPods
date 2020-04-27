@@ -459,6 +459,7 @@ module Pod
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             add_user_script_phases
+            add_on_demand_resources
           end
         end
 
@@ -469,6 +470,78 @@ module Pod
         end
 
         private
+        
+        # Integrates the targets of the user projects with the on demand resources
+        #
+        # we create groups like:
+        #
+        # on_demand_resources
+        # ----- tag1
+        # ------------ user resource dir
+        # ----- tag2
+        # ------------ user resource dir
+        #
+        # we only add user resource dir in resources build phase.
+        #
+        # @return [void]
+        def add_on_demand_resources
+
+          attributes = target.user_project.root_object.attributes
+          asset_tags = (attributes["KnownAssetTags"] ||= [])
+
+          on_demand_resources_group = target.user_project.main_group["on_demand_resources"]
+          unless on_demand_resources_group
+            on_demand_resources_group = target.user_project.main_group.new_group("on_demand_resources", target.sandbox.root)
+          end
+
+          # Clean up previous on_demand_resources group
+          old_on_demand_resource_files = {}
+          on_demand_resources_group.groups.each do |group|
+            old_on_demand_resource_files[group.name] = []
+
+            group.files.each {|file|
+              old_on_demand_resource_files[group.name] << file
+            }
+          end
+          pb_target = target.user_project.objects_by_uuid[target.user_target_uuids[0]]
+          pb_target.remove_on_demand_resources(old_on_demand_resource_files)
+          on_demand_resources_group.clear
+
+          # create group from on_demand_resources
+          target.pod_targets.each do |pod_target|
+            pod_target.file_accessors.each {|file_accessor|
+              file_accessor.on_demand_resources.each {|tag_name, resources|
+                unless asset_tags.include?(tag_name)
+                  asset_tags << tag_name
+                end
+                tag_group = on_demand_resources_group.new_group(tag_name)
+                resources.each {|resource|
+                  dir_path = File.dirname(resource)
+                  # The operation may repeatedly add the group
+                  tag_group.new_file(dir_path)
+                }
+                tag_files = tag_group.files.map {|file| file.real_path}.uniq
+                tag_group.clear
+                tag_files.each {|file|
+                  tag_group.new_file(file)
+                }
+              }
+            }
+          end
+
+          attributes["KnownAssetTags"] = asset_tags
+          target.user_project.root_object.attributes = attributes
+
+          on_demand_resource_tag_files = {}
+          on_demand_resources_group.groups.each do |group|
+            on_demand_resource_tag_files[group.name] = []
+            group.files.each {|file|
+              on_demand_resource_tag_files[group.name] << file
+            }
+          end
+
+          pb_target.add_on_demand_resources(on_demand_resource_tag_files)
+        end
 
         # @!group Integration steps
         #---------------------------------------------------------------------#
