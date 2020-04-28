@@ -257,6 +257,10 @@ module Pod
     #
     attr_accessor :use_modular_headers
 
+    # @return [Boolean] Whether static frameworks should be used for the installation.
+    #
+    attr_accessor :use_static_frameworks
+
     # @return [Boolean] Whether attributes that affect only public sources
     #         Bool be skipped.
     #
@@ -561,7 +565,7 @@ module Pod
 
     def download_pod
       test_spec_names = consumer.spec.test_specs.select { |ts| ts.supported_on_platform?(consumer.platform_name) }.map(&:name)
-      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, test_spec_names, use_modular_headers)
+      podfile = podfile_from_spec(consumer.platform_name, deployment_target, use_frameworks, test_spec_names, use_modular_headers, use_static_frameworks)
       sandbox = Sandbox.new(config.sandbox_root)
       @installer = Installer.new(sandbox, podfile)
       @installer.use_default_plugins = false
@@ -967,7 +971,7 @@ module Pod
     # @note   The generated podfile takes into account whether the linter is
     #         in local mode.
     #
-    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [], use_modular_headers = false)
+    def podfile_from_spec(platform_name, deployment_target, use_frameworks = true, test_spec_names = [], use_modular_headers = false, use_static_frameworks = false)
       name     = subspec_name || spec.name
       podspec  = file.realpath
       local    = local?
@@ -982,7 +986,11 @@ module Pod
         inhibit_all_warnings!
         urls.each { |u| source(u) }
         target 'App' do
-          use_frameworks!(use_frameworks)
+          if use_static_frameworks
+            use_frameworks!(:linkage => :static)
+          else
+            use_frameworks!(use_frameworks)
+          end
           use_modular_headers! if use_modular_headers
           platform(platform_name, deployment_target)
           if local

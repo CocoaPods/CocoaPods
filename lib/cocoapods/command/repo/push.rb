@@ -25,6 +25,7 @@ module Pod
             ['--allow-warnings', 'Allows pushing even if there are warnings'],
             ['--use-libraries', 'Linter uses static libraries to install the spec'],
             ['--use-modular-headers', 'Lint uses modular headers during installation'],
+            ['--use-static-frameworks', 'Lint uses static frameworks during installation'],
             ["--sources=#{Pod::TrunkSource::TRUNK_REPO_URL}", 'The sources from which to pull dependent pods ' \
              '(defaults to all available repos). Multiple sources must be comma-delimited'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
@@ -49,6 +50,7 @@ module Pod
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @use_modular_headers = argv.flag?('use-modular-headers', false)
+          @use_static_frameworks = argv.flag?('use-static-frameworks', false)
           @private = argv.flag?('private', true)
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
@@ -137,6 +139,7 @@ module Pod
             validator.allow_warnings = @allow_warnings
             validator.use_frameworks = @use_frameworks
             validator.use_modular_headers = @use_modular_headers
+            validator.use_static_frameworks = @use_static_frameworks
             validator.ignore_public_only_results = @private
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation

@@ -204,10 +204,10 @@ module Pod
     end
 
     it 'validates specs as frameworks by default' do
-      Validator.any_instance.expects(:podfile_from_spec).with(:ios, '8.0', true, [], false).times(3).returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true, [], false).twice.returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true, [], false).twice.returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true, [], false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, '8.0', true, [], false, false).times(3).returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true, [], false, false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true, [], false, false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true, [], false, false).twice.returns(stub('Podfile'))
 
       cmd = command('repo', 'push', 'master')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
@@ -218,10 +218,10 @@ module Pod
     end
 
     it 'validates specs as libraries if requested' do
-      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false, [], false).times(3).returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, [], false).twice.returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, [], false).twice.returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, [], false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false, [], false, false).times(3).returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, [], false, false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, [], false, false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, [], false, false).twice.returns(stub('Podfile'))
 
       cmd = command('repo', 'push', 'master', '--use-libraries')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
@@ -232,12 +232,26 @@ module Pod
     end
 
     it 'validates specs with modular headers if requested' do
-      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false, [], true).times(3).returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, [], true).twice.returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, [], true).twice.returns(stub('Podfile'))
-      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, [], true).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, nil, false, [], true, false).times(3).returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, [], true, false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, [], true, false).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, [], true, false).twice.returns(stub('Podfile'))
 
       cmd = command('repo', 'push', 'master', '--use-libraries', '--use-modular-headers')
+      # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
+      # tests so the exception is swallowed.
+      lambda do
+        Dir.chdir(temporary_directory) { cmd.run }
+      end.should.raise Informative
+    end
+
+    it 'validates specs with static frameworks if requested' do
+      Validator.any_instance.expects(:podfile_from_spec).with(:ios, '8.0', true, [], false, true).times(3).returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true, [], false, true).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true, [], false, true).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true, [], false, true).twice.returns(stub('Podfile'))
+
+      cmd = command('repo', 'push', 'master', '--use-static-frameworks')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
       # tests so the exception is swallowed.
       lambda do
