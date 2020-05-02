@@ -36,6 +36,7 @@ module Pod
             ['--skip-tests', 'Lint skips building and running tests during validation'],
             ['--test-specs=test-spec1,test-spec2,etc', 'List of test specs to run'],
             ['--analyze', 'Validate with the Xcode Static Analysis tool'],
+            ['--configuration=CONFIGURATION', 'Build using the given configuration (defaults to Release)'],
           ].concat(super)
         end
 
@@ -59,6 +60,7 @@ module Pod
           @test_specs          = argv.option('test-specs', nil).try(:split, ',')
           @analyze             = argv.flag?('analyze', false)
           @podspecs_paths      = argv.arguments!
+          @configuration       = argv.option('configuration', nil)
           super
         end
 
@@ -87,6 +89,7 @@ module Pod
             validator.analyze = @analyze
             validator.include_podspecs = @include_podspecs
             validator.external_podspecs = @external_podspecs
+            validator.configuration = @configuration
             validator.validate
 
             unless @clean
