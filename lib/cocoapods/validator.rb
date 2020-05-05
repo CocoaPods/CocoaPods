@@ -1030,7 +1030,7 @@ module Pod
           l.include?('note: ') && (l !~ /expanded from macro/)
       end
       selected_lines.map do |l|
-        new = l.gsub(%r{#{validation_dir}/Pods/}, '')
+        new = l.force_encoding('UTF-8').gsub(%r{#{validation_dir}/Pods/}, '')
         new.gsub!(/^ */, ' ')
       end
     end
