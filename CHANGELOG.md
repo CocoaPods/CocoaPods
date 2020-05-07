@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* add a `--configuration` option to `pod lib lint` and `pod spec lint`.  
+  [Gereon Steffens](https://github.com/gereons)
+  [#9686](https://github.com/CocoaPods/CocoaPods/issues/9686)
+
 * Add a post_integrate_hook API  
   [lucasmpaim](https://github.com/lucasmpaim)
   [#7432](https://github.com/CocoaPods/CocoaPods/issues/7432)

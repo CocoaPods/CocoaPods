@@ -275,6 +275,8 @@ module Pod
     attr_accessor :skip_import_validation
     alias_method :skip_import_validation?, :skip_import_validation
 
+    attr_accessor :configuration
+
     #-------------------------------------------------------------------------#
 
     # !@group Lint results
@@ -714,7 +716,7 @@ module Pod
                 error('build_pod', message)
               end
             else
-              output = xcodebuild('build', scheme, 'Release')
+              output = xcodebuild('build', scheme, configuration ? configuration : 'Release')
             end
             parsed_output = parse_xcodebuild_output(output)
             translate_output_to_linter_messages(parsed_output)

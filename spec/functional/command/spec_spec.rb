@@ -218,6 +218,14 @@ module Pod
         end
       end
 
+      it 'lints the current working directory using Debug configuration' do
+        Dir.chdir(fixture('spec-repos') + 'trunk/Specs/1/3/f/JSONKit/1.4/') do
+          cmd = command('spec', 'lint', '--quick', '--allow-warnings', '--configuration=Debug')
+          cmd.run
+          UI.output.should.include 'passed validation'
+        end
+      end
+
       it 'fails with an informative error when downloading the podspec 404s' do
         WebMock.stub_request(:get, 'https://no.such.domain/404').
           to_return(:status => 404, :body => '', :headers => {})
