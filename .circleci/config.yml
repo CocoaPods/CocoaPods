@@ -9,7 +9,7 @@ jobs:
 
       - run:
           name: Set Ruby Version
-          command:  echo "2.4" > ~/.ruby-version
+          command:  echo 'chruby ruby-2.4' >> ~/.bash_profile
       - restore_cache:
           keys:
             - v1-gems-{{ checksum "Gemfile.lock" }}
