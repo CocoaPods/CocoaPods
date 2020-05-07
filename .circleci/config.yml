@@ -7,6 +7,9 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Set Ruby Version
+          command:  echo "2.4" > ~/.ruby-version
       - restore_cache:
           keys:
             - v1-gems-{{ checksum "Gemfile.lock" }}
