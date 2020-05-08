@@ -1,4 +1,5 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
+require 'webmock'
 
 module Pod
   describe Command::Lib::Lint do
@@ -61,6 +62,7 @@ module Pod
     end
 
     it 'lints a spec with non-ascii pod name' do
+      WebMock.disable!
       Dir.chdir(fixture('ikemen')) do
         cmd = command('lib', 'lint', '--only-errors')
         cmd.run
