@@ -59,5 +59,13 @@ module Pod
         UI.output.should.include 'could not be loaded'
       end
     end
+
+    it 'lints a spec with non-ascii pod name' do
+      Dir.chdir(fixture('ikemen')) do
+        cmd = command('lib', 'lint', '--only-errors')
+        cmd.run
+        UI.output.should.include 'passed validation'
+      end
+    end
   end
 end
