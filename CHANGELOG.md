@@ -19,7 +19,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Fix `incompatible encoding regexp match` for linting non-ascii pod name
+* Fix `incompatible encoding regexp match` for linting non-ascii pod name  
   [banjun](https://github.com/banjun)
   [#9765](https://github.com/CocoaPods/CocoaPods/issues/9765)
   [#9776](https://github.com/CocoaPods/CocoaPods/pull/9776)
