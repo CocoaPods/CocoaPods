@@ -1103,6 +1103,21 @@ module Pod
         validator.validate
         validator.validated?.should.be.true
       end
+
+      it 'validates a podspec with non-ascii pod name' do
+        Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
+        podspec = stub_podspec(/.*name.*/, '"name": "※ikemen",')
+        file = write_podspec(podspec, '※ikemen.podspec.json')
+        # xcodebuild output on macOS Catalina 10.15 (system ruby) may include non-ascii characters in ASCII-8BIT String
+        xcodebuild_output = "note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 \"Operation not permitted\" (in target '※ikemen' from project 'Pods')".force_encoding('ASCII-8BIT')
+
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(file, config.sources_manager.master.map(&:url), [:osx])
+        validator.stubs(:validate_url)
+        validator.stubs(:_xcodebuild).returns(xcodebuild_output)
+        validator.validate
+        validator.validated?.should.be.true
+      end
     end
 
     describe 'frameworks' do
