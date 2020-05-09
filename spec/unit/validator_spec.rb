@@ -1105,15 +1105,15 @@ module Pod
       end
 
       it 'validates a podspec with non-ascii pod name' do
-        Specification.any_instance.stubs(:deployment_target).returns('9.0')
         podspec = stub_podspec(/.*name.*/, '"name": "※ikemen",')
-        podspec.gsub!(/.*requires_arc.*/, '"compiler_flags": ["-Wno-deprecated-objc-isa-usage", "-Wno-deprecated-declarations", "-Wno-parentheses-equality", "-Wno-format"], "requires_arc": false') # workaround to pass build for the JSONKit stub with recent Xcode (Xcode 11)
         file = write_podspec(podspec, '※ikemen.podspec.json')
+        # xcodebuild output on macOS Catalina 10.15 (system ruby) may include non-ascii characters in ASCII-8BIT String
+        xcodebuild_output = "note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 \"Operation not permitted\" (in target '※ikemen' from project 'Pods')".force_encoding('ASCII-8BIT')
 
         Validator.any_instance.unstub(:xcodebuild)
         validator = Validator.new(file, config.sources_manager.master.map(&:url), [:ios])
         validator.stubs(:validate_url)
-        validator.allow_warnings = true # -Wno flags generates a warning by cocoapods-core
+        validator.stubs(:_xcodebuild).returns(xcodebuild_output)
         validator.validate
         validator.validated?.should.be.true
       end
