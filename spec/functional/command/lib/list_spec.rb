@@ -1,5 +1,4 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-require 'webmock'
 
 module Pod
   describe Command::Lib::Lint do
@@ -58,15 +57,6 @@ module Pod
           run_command('lib', 'lint', '404.podspec')
         end
         UI.output.should.include 'could not be loaded'
-      end
-    end
-
-    it 'lints a spec with non-ascii pod name' do
-      WebMock.disable!
-      Dir.chdir(fixture('ikemen')) do
-        cmd = command('lib', 'lint', '--only-errors')
-        cmd.run
-        UI.output.should.include 'passed validation'
       end
     end
   end

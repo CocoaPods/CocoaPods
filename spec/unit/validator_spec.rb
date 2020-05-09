@@ -1103,6 +1103,20 @@ module Pod
         validator.validate
         validator.validated?.should.be.true
       end
+
+      it 'validates a podspec with non-ascii pod name' do
+        Specification.any_instance.stubs(:deployment_target).returns('9.0')
+        podspec = stub_podspec(/.*name.*/, '"name": "※ikemen",')
+        podspec.gsub!(/.*requires_arc.*/, '"compiler_flags": ["-Wno-deprecated-objc-isa-usage", "-Wno-deprecated-declarations", "-Wno-parentheses-equality", "-Wno-format"], "requires_arc": false') # workaround to pass build for the JSONKit stub with recent Xcode (Xcode 11)
+        file = write_podspec(podspec, '※ikemen.podspec.json')
+
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(file, config.sources_manager.master.map(&:url), [:ios])
+        validator.stubs(:validate_url)
+        validator.allow_warnings = true # -Wno flags generates a warning by cocoapods-core
+        validator.validate
+        validator.validated?.should.be.true
+      end
     end
 
     describe 'frameworks' do
