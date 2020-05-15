@@ -30,10 +30,10 @@ select_slice() {
   local paths=("$@")
   # Locate the correct slice of the .xcframework for the current architectures
   local target_path=""
-  local target_arch="$ARCHS"
 
-  # Replace spaces in compound architectures with _ to match slice format
-  target_arch=${target_arch// /_}
+  # Split archs on space so we can find a slice that has all the needed archs
+  local target_archs=$(echo $ARCHS | tr " " "
+")
 
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
@@ -43,7 +43,18 @@ select_slice() {
     target_variant="maccatalyst"
   fi
   for i in ${!paths[@]}; do
-    if [[ "${paths[$i]}" == *"$target_arch"* ]] && [[ "${paths[$i]}" == *"$target_variant"* ]]; then
+    local matched_all_archs="1"
+    for target_arch in $target_archs
+    do
+      if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
+        matched_all_archs="0"
+      fi
+      if ! [[ "${paths[$i]}" == *"$target_arch"* ]]; then
+        matched_all_archs="0"
+      fi
+    done
+
+    if [[ "$matched_all_archs" == *"1" ]]; then
       # Found a matching slice
       echo "Selected xcframework slice ${paths[$i]}"
       SELECT_SLICE_RETVAL=${paths[$i]}
