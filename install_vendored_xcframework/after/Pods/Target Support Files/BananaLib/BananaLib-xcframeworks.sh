@@ -47,6 +47,7 @@ select_slice() {
     do
       if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
         matched_all_archs="0"
+        break
       fi
 
       # This regex matches all possible variants of the arch in the folder name:
@@ -57,14 +58,15 @@ select_slice() {
       local target_arch_regex="[_\-]${target_arch}[\/_\-]"
       if ! [[ "${paths[$i]}" =~ $target_arch_regex ]]; then
         matched_all_archs="0"
+        break
       fi
     done
 
-    if [[ "$matched_all_archs" == *"1" ]]; then
+    if [[ "$matched_all_archs" == "1" ]]; then
       # Found a matching slice
       echo "Selected xcframework slice ${paths[$i]}"
       SELECT_SLICE_RETVAL=${paths[$i]}
-      break;
+      break
     fi
   done
 }
