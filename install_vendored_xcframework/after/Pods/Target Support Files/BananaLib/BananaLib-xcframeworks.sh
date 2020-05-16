@@ -32,8 +32,7 @@ select_slice() {
   local target_path=""
 
   # Split archs on space so we can find a slice that has all the needed archs
-  local target_archs=$(echo $ARCHS | tr " " "
-")
+  local target_archs=$(echo $ARCHS | tr " " "\n")
 
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
@@ -55,7 +54,7 @@ select_slice() {
       # We match the following: -armv7_, _armv7s_, _arm64_ and _arm64e/.
       # If we have a specific variant: ios-i386_x86_64-simulator/CoconutLib.framework
       # We match the following: -i386_ and _x86_64-
-      local target_arch_regex="[_-]${target_arch}[/_-]"
+      local target_arch_regex="[_\-]${target_arch}[\/_\-]"
       if ! [[ "${paths[$i]}" =~ $target_arch_regex ]]; then
         matched_all_archs="0"
       fi
