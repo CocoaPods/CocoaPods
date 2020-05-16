@@ -49,7 +49,14 @@ select_slice() {
       if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
         matched_all_archs="0"
       fi
-      if ! [[ "${paths[$i]}" == *"$target_arch"* ]]; then
+
+      # This regex matches all possible variants of the arch in the folder name:
+      # Let's say the folder name is: ios-armv7_armv7s_arm64_arm64e/CoconutLib.framework
+      # We match the following: -armv7_, _armv7s_, _arm64_ and _arm64e/.
+      # If we have a specific variant: ios-i386_x86_64-simulator/CoconutLib.framework
+      # We match the following: -i386_ and _x86_64-
+      local target_arch_regex="[_-]${target_arch}[_-/]"
+      if ! [[ "${paths[$i]}" =~ $target_arch_regex ]]; then
         matched_all_archs="0"
       fi
     done
