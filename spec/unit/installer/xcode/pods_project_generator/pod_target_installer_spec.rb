@@ -83,9 +83,48 @@ module Pod
               end
             end
 
+            it 'adds bundle identifier from info_plist to build settings' do
+              @banana_spec.info_plist = {
+                'CFBundleIdentifier' => 'some.bundle.id',
+              }
+              @installer.install!
+              @project.targets.first.build_configurations.each do |config|
+                config.resolve_build_setting('PRODUCT_BUNDLE_IDENTIFIER').should == 'some.bundle.id'
+              end
+            end
+
             it 'cleans up temporary directories' do
               @installer.expects(:clean_support_files_temp_dir).once
               @installer.install!
+            end
+
+            describe 'info_plist_bundle_id' do
+              it 'cache and return CFBundleIdentifier value when present in info_plist hash' do
+                @installer.target.root_spec.info_plist = { 'CFBundleIdentifier' => 'CocoaPods.test.id' }
+                @installer.send(:info_plist_bundle_id).should == 'CocoaPods.test.id'
+                @installer.instance_variable_get(:@plist_bundle_id).should == 'CocoaPods.test.id'
+              end
+
+              it 'logs warning when CFBundleIdentifier value present in info_plist hash' do
+                @installer.target.root_spec.info_plist = { 'CFBundleIdentifier' => 'CocoaPods.test.id' }
+                @installer.send(:info_plist_bundle_id)
+                UI.warnings.should.include 'The `BananaLib` target ' \
+              'sets a Bundle Identifier of `CocoaPods.test.id` in it\'s info.plist file. ' \
+              'The Bundle Identifier should be set using pod_target_xcconfig: ' \
+              's.pod_target_xcconfig = { \'PRODUCT_BUNDLE_IDENTIFIER\': \'CocoaPods.test.id\' }`.'
+              end
+
+              it 'returns nil with no CFBundleIdentifier info_plist hash' do
+                @installer.target.root_spec.info_plist = nil
+                @installer.send(:info_plist_bundle_id).should.nil?
+                @installer.target.root_spec.info_plist = {}
+                @installer.send(:info_plist_bundle_id).should.nil?
+                @installer.instance_variable_get(:@plist_bundle_id).should.nil?
+                UI.warnings.should.not.include 'The `BananaLib` target ' \
+              'sets a Bundle Identifier of `CocoaPods.test.id` in it\'s info.plist file. ' \
+              'The Bundle Identifier should be set using pod_target_xcconfig: ' \
+              's.pod_target_xcconfig = { \'PRODUCT_BUNDLE_IDENTIFIER\': \'CocoaPods.test.id\' }`.'
+              end
             end
 
             #--------------------------------------#

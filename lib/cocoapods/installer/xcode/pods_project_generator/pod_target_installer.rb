@@ -227,7 +227,28 @@ module Pod
               settings['SWIFT_VERSION'] = target.swift_version
             end
 
+            if info_plist_bundle_id
+              settings['PRODUCT_BUNDLE_IDENTIFIER'] = info_plist_bundle_id
+            end
+
             settings
+          end
+
+          # @return [String] Bundle Identifier found in the custom Info.plist entries
+          #
+          def info_plist_bundle_id
+            return @plist_bundle_id if defined?(@plist_bundle_id)
+            unless target.info_plist_entries.nil?
+              @plist_bundle_id = target.info_plist_entries['CFBundleIdentifier']
+              unless @plist_bundle_id.nil?
+                message = "The `#{target.name}` target " \
+              "sets a Bundle Identifier of `#{@plist_bundle_id}` in it's info.plist file. " \
+              'The Bundle Identifier should be set using pod_target_xcconfig: ' \
+              "s.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': '#{@plist_bundle_id}' }`."
+                UI.warn message
+              end
+              @plist_bundle_id
+            end
           end
 
           # Filters the given resource file references discarding empty paths which are
