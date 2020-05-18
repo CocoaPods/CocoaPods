@@ -96,6 +96,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kenji KATO](https://github.com/katoken-0215)
   [#9706](https://github.com/CocoaPods/CocoaPods/pull/9706)
 
+* Fix XCFramework slice selection when having more archs in slice than requested with $ARCHS  
+  [jerbob92](https://github.com/jerbob92)
+  [#9790](https://github.com/CocoaPods/CocoaPods/pull/9790)
+
 ## 1.9.1 (2020-03-09)
 
 ##### Enhancements
