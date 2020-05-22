@@ -130,14 +130,7 @@ install_framework()
 }
 #{Pod::Generator::ScriptPhaseConstants::INSTALL_DSYM_METHOD}
 #{Pod::Generator::ScriptPhaseConstants::STRIP_INVALID_ARCHITECTURES_METHOD}
-# Copies the bcsymbolmap files of a vendored framework
-install_bcsymbolmap() {
-    local bcsymbolmap_path="$1"
-    local destination="${BUILT_PRODUCTS_DIR}"
-    echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter \"- CVS/\" --filter \"- .svn/\" --filter \"- .git/\" --filter \"- .hg/\" --filter \"- Headers\" --filter \"- PrivateHeaders\" --filter \"- Modules\" \"${bcsymbolmap_path}\" \"${destination}\""
-    rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${bcsymbolmap_path}" "${destination}"
-}
-
+#{Pod::Generator::ScriptPhaseConstants::INSTALL_BCSYMBOLMAP_METHOD}
 # Signs a framework with the provided identity
 code_sign_if_enabled() {
   if [ -n "${EXPANDED_CODE_SIGN_IDENTITY:-}" -a "${CODE_SIGNING_REQUIRED:-}" != "NO" -a "${CODE_SIGNING_ALLOWED}" != "NO" ]; then
@@ -159,11 +152,6 @@ code_sign_if_enabled() {
         frameworks_by_config.each do |config, frameworks|
           frameworks.each do |framework|
             contents_by_config[config] << %(  install_framework "#{framework.source_path}"\n)
-            unless framework.bcsymbolmap_paths.nil?
-              framework.bcsymbolmap_paths.each do |bcsymbolmap_path|
-                contents_by_config[config] << %(  install_bcsymbolmap "#{bcsymbolmap_path}"\n)
-              end
-            end
           end
         end
         xcframeworks_by_config.each do |config, xcframeworks|
