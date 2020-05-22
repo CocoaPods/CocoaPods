@@ -23,6 +23,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix Xcode 11 warning when setting Bundle Identifier in `info_plist`  
+  [Sean Reinhardt](https://github.com/seanreinhardtapps)
+  [#9536](https://github.com/CocoaPods/CocoaPods/issues/9536)
+  
 * Fix `incompatible encoding regexp match` for linting non-ascii pod name  
   [banjun](https://github.com/banjun)
   [#9765](https://github.com/CocoaPods/CocoaPods/issues/9765)
