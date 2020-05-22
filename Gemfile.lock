@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 4b0c9de753ccf2b0e66888cc76a6e2cc85a6a552
+  revision: 85110a5fc8ec6b80da4a0115e4d195d04a09b804
   branch: 1-9-stable
   specs:
-    cocoapods-core (1.9.1)
+    cocoapods-core (1.9.2)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
@@ -21,24 +21,24 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: b419616b2230663db01462a4b93c01d3c3569a8d
+  revision: e1a548a8bd5232027ef008383bdad9107c18a4dd
   branch: master
   specs:
     molinillo (0.6.6)
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 9b30f911a506b9b42d15ea8808d3236a8971010e
+  revision: 1414d9c0b642e376873138325f8132e8f053988a
   branch: master
   specs:
     nanaimo (0.2.6)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: b9375049007fca925ef16ea9487681bcaa59a5ad
+  revision: 1112f447897c116cac1a107de1ffbcb177c702f4
   branch: master
   specs:
-    xcodeproj (1.15.0)
+    xcodeproj (1.16.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -61,7 +61,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: a4549f05cda07771e4ebc29b79db553eeaaf6afd
+  revision: 683b4fbef37740301543f3a7bd46b88c2ff305f5
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -83,19 +83,19 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 67959306c053bc77c73388865a5ac4de22574d96
+  revision: 00eca277d17d24c272adb6c7fa8d7c2c3fe8da3b
   branch: master
   specs:
-    cocoapods-trunk (1.4.1)
+    cocoapods-trunk (1.5.0)
       nap (>= 0.8, < 2.0)
       netrc (~> 0.11)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-try.git
-  revision: 2c0840a6ba64056931622abc1d11479ffcc4a31b
+  revision: 607f9c85b4aea8a5662b68ab41cdd402f94d84c3
   branch: master
   specs:
-    cocoapods-try (1.1.0)
+    cocoapods-try (1.2.0)
 
 GIT
   remote: https://github.com/leahneukirchen/bacon.git
@@ -113,10 +113,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.9.1)
+    cocoapods (1.9.2)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.9.1)
+      cocoapods-core (= 1.9.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -144,7 +144,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    algoliasearch (1.27.1)
+    algoliasearch (1.27.2)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
     ast (2.4.0)
@@ -267,7 +267,7 @@ GEM
     terminal-table (1.6.0)
     thread_safe (0.3.6)
     tins (1.16.3)
-    typhoeus (1.3.1)
+    typhoeus (1.4.0)
       ethon (>= 0.9.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
