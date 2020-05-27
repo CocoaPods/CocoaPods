@@ -21,6 +21,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Juanjo López](https://github.com/juanjonol)
   [#9232](https://github.com/CocoaPods/CocoaPods/issues/9232)
 
+* Option to lint a specified set of test_specs  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9392](https://github.com/CocoaPods/CocoaPods/pull/9392)
+
+* Add --use-static-frameworks lint option  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9632](https://github.com/CocoaPods/CocoaPods/pull/9632)
+
 ##### Bug Fixes
 
 * Re-implement `bcsymbolmap` copying to avoid duplicate outputs.  
@@ -123,10 +131,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ## 1.9.1 (2020-03-09)
 
 ##### Enhancements
-
-* Option to lint a specified set of test_specs  
-  [Paul Beusterien](https://github.com/paulb777)
-  [#9392](https://github.com/CocoaPods/CocoaPods/pull/9392)
 
 ##### Bug Fixes
 

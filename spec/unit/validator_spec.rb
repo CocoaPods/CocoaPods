@@ -400,8 +400,8 @@ module Pod
           end
           Installer.any_instance.stubs(:aggregate_targets).returns([])
           Installer.any_instance.stubs(:pod_targets).returns([])
-          validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil).once.returns(stub('Podfile'))
-          validator.expects(:podfile_from_spec).with(:ios, nil, false, ['JSONKit/Tests'], nil).once.returns(stub('Podfile'))
+          validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+          validator.expects(:podfile_from_spec).with(:ios, nil, false, ['JSONKit/Tests'], nil, nil).once.returns(stub('Podfile'))
           validator.validate
         end
 
@@ -590,11 +590,11 @@ module Pod
           s.ios.deployment_target = '7.0'
         end
         validator.spec.stubs(:subspecs).returns([subspec])
-        validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:ios, '7.0', false, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil).once.returns(stub('Podfile'))
-        validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:ios, '7.0', false, [], nil, nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         validator.send(:perform_extensive_analysis, validator.spec)
 
         validator.results_message.strip.should.be.empty
@@ -632,6 +632,14 @@ module Pod
           podfile = @validator.send(:podfile_from_spec, :ios, '5.0', false, [], true)
           target_definition = podfile.target_definitions['App']
           target_definition.use_modular_headers_hash['all'].should.be.true
+          target_definition.uses_frameworks?.should == false
+        end
+
+        it 'validates with --use-static-frameworks' do
+          podfile = @validator.send(:podfile_from_spec, :ios, '5.0', false, [], false, true)
+          target_definition = podfile.target_definitions['App']
+          target_definition.uses_frameworks?.should == true
+          target_definition.use_frameworks!.should == { :linkage => :dynamic, :packaging => :framework }
         end
 
         it 'inhibits warnings for all pods except the one being validated' do
@@ -1144,10 +1152,10 @@ module Pod
 
         setup_validator
 
-        @validator.expects(:podfile_from_spec).with(:osx, nil, true, [], nil).once.returns(stub('Podfile'))
-        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true, [], nil).once.returns(stub('Podfile'))
-        @validator.expects(:podfile_from_spec).with(:tvos, nil, true, [], nil).once.returns(stub('Podfile'))
-        @validator.expects(:podfile_from_spec).with(:watchos, nil, true, [], nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:osx, nil, true, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:ios, '8.0', true, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:tvos, nil, true, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, true, [], nil, nil).once.returns(stub('Podfile'))
         @validator.send(:perform_extensive_analysis, @validator.spec)
 
         @validator.results_message.strip.should.be.empty
@@ -1158,10 +1166,10 @@ module Pod
 
         setup_validator
 
-        @validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil).once.returns(stub('Podfile'))
-        @validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil).once.returns(stub('Podfile'))
-        @validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil).once.returns(stub('Podfile'))
-        @validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         @validator.send(:perform_extensive_analysis, @validator.spec)
 
         @validator.results_message.strip.should.be.empty
