@@ -14,8 +14,12 @@ module Pod
         end
         expected = %w(
           Banana.modulemap
+          BananaFramework.framework/Headers/BananaFramework.h
+          BananaFramework.framework/Headers/SubDir/SubBananaFramework.h
           BananaFramework.framework/Versions/A/Headers/BananaFramework.h
           BananaFramework.framework/Versions/A/Headers/SubDir/SubBananaFramework.h
+          BananaFramework.framework/Versions/Current/Headers/BananaFramework.h
+          BananaFramework.framework/Versions/Current/Headers/SubDir/SubBananaFramework.h
           BananaLib.podspec
           Classes/Banana.h
           Classes/Banana.m
@@ -56,11 +60,14 @@ module Pod
         dirs.sort.should == %w(
           BananaFramework.framework
           BananaFramework.framework/Headers
+          BananaFramework.framework/Headers/SubDir
           BananaFramework.framework/Versions
           BananaFramework.framework/Versions/A
           BananaFramework.framework/Versions/A/Headers
           BananaFramework.framework/Versions/A/Headers/SubDir
           BananaFramework.framework/Versions/Current
+          BananaFramework.framework/Versions/Current/Headers
+          BananaFramework.framework/Versions/Current/Headers/SubDir
           Classes
           Resources
           Resources/Base.lproj
@@ -336,12 +343,12 @@ module Pod
         @path_list.dirs.map(&:to_s).should.include?('Classes/symlinked')
       end
 
-      it 'doesn\'t include file in symlinked dir' do
+      it 'includes file in symlinked dir' do
         @path_list.instance_variable_set(:@files, nil)
         @path_list.instance_variable_set(:@dirs, nil)
         File.symlink(@tmpdir, @symlink_dir)
 
-        @path_list.files.map(&:to_s).should.not.include?('Classes/symlinked/someheader.h')
+        @path_list.files.map(&:to_s).should.include?('Classes/symlinked/someheader.h')
       end
     end
 

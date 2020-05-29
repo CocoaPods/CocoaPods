@@ -55,7 +55,7 @@ module Pod
         files = []
         root_length = root.cleanpath.to_s.length + File::SEPARATOR.length
         escaped_root = escape_path_for_glob(root)
-        Dir.glob(escaped_root + '**/*', File::FNM_DOTMATCH).each do |f|
+        Dir.glob(escaped_root + '**{,/[^.]*/**}/*', File::FNM_DOTMATCH).each do |f|
           directory = File.directory?(f)
           # Ignore `.` and `..` directories
           next if directory && f =~ /\.\.?$/
@@ -66,8 +66,8 @@ module Pod
           (directory ? dirs : files) << f
         end
 
-        dirs.sort_by!(&:upcase)
-        files.sort_by!(&:upcase)
+        dirs.sort_by!(&:upcase).uniq!
+        files.sort_by!(&:upcase).uniq!
 
         @dirs = dirs
         @files = files
