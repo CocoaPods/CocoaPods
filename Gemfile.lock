@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 85110a5fc8ec6b80da4a0115e4d195d04a09b804
+  revision: cbcc82ccb7f7d28736cbd7eec877fbe3a7f50579
   branch: 1-9-stable
   specs:
-    cocoapods-core (1.9.2)
+    cocoapods-core (1.9.3)
       activesupport (>= 4.0.2, < 6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
@@ -21,7 +21,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: e1a548a8bd5232027ef008383bdad9107c18a4dd
+  revision: db572ea89ff7391fcfb81a8ecfbc9872a9e8613f
   branch: master
   specs:
     molinillo (0.6.6)
@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 1112f447897c116cac1a107de1ffbcb177c702f4
+  revision: d1283c5f09ba9a06f0f3a333d437e74ffb344fb6
   branch: master
   specs:
     xcodeproj (1.16.0)
@@ -113,10 +113,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.9.2)
+    cocoapods (1.9.3)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.9.2)
+      cocoapods-core (= 1.9.3)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.2.2, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
