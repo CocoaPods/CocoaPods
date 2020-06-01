@@ -45,7 +45,7 @@ module Pod
           @local_only = argv.flag?('local-only')
           @repo = argv.shift_argument
           @source = source_for_repo
-          @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).join(',')).split(',')
+          @source_urls = argv.option('sources', config.sources_manager.all.map(&:url).append(Pod::TrunkSource::TRUNK_REPO_URL).uniq.join(',')).split(',')
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @use_modular_headers = argv.flag?('use-modular-headers', false)
