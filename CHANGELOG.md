@@ -117,6 +117,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [jerbob92](https://github.com/jerbob92)
   [#9790](https://github.com/CocoaPods/CocoaPods/pull/9790)
 
+* Don't add app spec dependencies to the parent library's target in Xcode,
+  which was happening when the dependency's project was not being regenerated
+  due to incremental installation.  
+  [segiddins][https://github.com/segiddins]
+
+
 ## 1.9.2 (2020-05-22)
 
 ##### Enhancements
