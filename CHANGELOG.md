@@ -123,6 +123,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [segiddins][https://github.com/segiddins]
 
 
+## 1.9.3 (2020-05-29)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 1.9.2 (2020-05-22)
 
 ##### Enhancements
