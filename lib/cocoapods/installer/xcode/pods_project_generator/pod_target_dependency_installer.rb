@@ -187,7 +187,7 @@ module Pod
                 # Hit the cache
                 cached_dependency = metadata_cache.target_label_by_metadata[app_dependent_target.label]
                 project.add_cached_pod_subproject(sandbox, cached_dependency, is_local)
-                Project.add_cached_dependency(sandbox, native_target, cached_dependency)
+                Project.add_cached_dependency(sandbox, app_native_target, cached_dependency)
               end
             end
           end
