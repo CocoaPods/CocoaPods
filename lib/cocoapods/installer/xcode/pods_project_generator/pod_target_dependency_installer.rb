@@ -53,8 +53,8 @@ module Pod
 
             # Wire up app native targets.
             unless pod_target_installation_result.app_native_targets.empty?
-              wire_app_native_targets(pod_target, native_target, pod_target_installation_result,
-                                      pod_target_installation_results, project, frameworks_group, metadata_cache)
+              wire_app_native_targets(pod_target, pod_target_installation_result, pod_target_installation_results,
+                                      project, frameworks_group, metadata_cache)
             end
           end
         end
@@ -160,7 +160,7 @@ module Pod
           end
         end
 
-        def wire_app_native_targets(pod_target, native_target, installation_result, pod_target_installation_results, project, frameworks_group, metadata_cache)
+        def wire_app_native_targets(pod_target, installation_result, pod_target_installation_results, project, frameworks_group, metadata_cache)
           installation_result.app_specs_by_native_target.each do |app_native_target, app_spec|
             resource_bundle_native_targets = installation_result.app_resource_bundle_targets[app_spec.name] || []
             resource_bundle_native_targets.each do |app_resource_bundle_target|
