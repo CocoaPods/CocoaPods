@@ -48,7 +48,8 @@ group :development do
   gem 'webmock'
 
   gem 'bigdecimal', '~> 1.3.0'
-  gem 'public_suffix', '~> 2.0' # Need 2.x version due to support for Ruby 2.0.x
+  gem 'public_suffix'
+  gem 'ruby-graphviz', '< 1.2.5'
 
   # Integration tests
   gem 'diffy'

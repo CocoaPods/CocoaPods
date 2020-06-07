@@ -317,10 +317,11 @@ DEPENDENCIES
   nanaimo!
   netrc
   prettybacon
-  public_suffix (~> 2.0)
+  public_suffix
   rake (~> 10.0)
   rb-fsevent
   rubocop
+  ruby-graphviz (< 1.2.5)
   ruby-prof
   simplecov (< 0.18)
   typhoeus
