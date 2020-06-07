@@ -4,7 +4,8 @@
 
 [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods)
 [![Gem Version](http://img.shields.io/gem/v/cocoapods.svg?style=flat)](http://badge.fury.io/rb/cocoapods)
-[![Code Climate](http://img.shields.io/codeclimate/github/CocoaPods/CocoaPods.svg?style=flat)](https://codeclimate.com/github/CocoaPods/CocoaPods)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8f0fe544baf2ae1acc2b/maintainability)](https://codeclimate.com/github/CocoaPods/CocoaPods/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/8f0fe544baf2ae1acc2b/test_coverage)](https://codeclimate.com/github/CocoaPods/CocoaPods/test_coverage)
 
 CocoaPods manages dependencies for your Xcode projects.
 
