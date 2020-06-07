@@ -107,7 +107,7 @@ PATH
   remote: .
   specs:
     cocoapods (1.9.3)
-      activesupport (>= 4.0.2, < 5)
+      activesupport (> 5)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
       cocoapods-core (= 1.9.3)
@@ -130,10 +130,10 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.2)
-    activesupport (4.2.11.3)
-      i18n (~> 0.7)
+    activesupport (5.2.4.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
@@ -191,7 +191,7 @@ GEM
       rchardet (~> 1.8)
     hashdiff (0.3.1)
     httpclient (2.8.3)
-    i18n (0.9.5)
+    i18n (1.8.3)
       concurrent-ruby (~> 1.0)
     inch (0.8.0)
       pry
@@ -211,7 +211,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.12.0)
+    minitest (5.14.1)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -289,7 +289,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (>= 4.0.2, < 5, != 4.2.11.12)
+  activesupport (> 5, < 6)
   awesome_print
   bacon!
   bigdecimal (~> 1.3.0)
@@ -311,8 +311,7 @@ DEPENDENCIES
   inch_by_inch
   json!
   kicker
-  minitest (= 5.12.0)
-  mocha
+  mocha (< 1.5)
   mocha-on-bacon
   molinillo!
   nanaimo!
