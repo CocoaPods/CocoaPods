@@ -320,7 +320,7 @@ DEPENDENCIES
   public_suffix
   rake (~> 10.0)
   rb-fsevent
-  rubocop
+  rubocop (= 0.50.0)
   ruby-graphviz (< 1.2.5)
   ruby-prof
   simplecov (< 0.18)
