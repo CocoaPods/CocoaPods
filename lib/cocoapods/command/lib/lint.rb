@@ -59,7 +59,7 @@ module Pod
           @external_podspecs   = argv.option('external-podspecs', nil)
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests          = argv.flag?('skip-tests', false)
-          @test_specs          = argv.option('test-specs', nil).try(:split, ',')
+          @test_specs          = argv.option('test-specs', nil)&.split(',')
           @analyze             = argv.flag?('analyze', false)
           @podspecs_paths      = argv.arguments!
           @configuration       = argv.option('configuration', nil)
