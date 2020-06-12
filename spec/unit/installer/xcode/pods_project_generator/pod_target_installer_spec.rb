@@ -172,6 +172,7 @@ module Pod
 
             describe 'non-library target generation' do
               before do
+                @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
                 @watermelon_spec = fixture_spec('watermelon-lib/WatermelonLib.podspec')
                 @project = Project.new(config.sandbox.project_path)
                 @project.add_pod_group('WatermelonLib', fixture('watermelon-lib'))
@@ -179,6 +180,11 @@ module Pod
                 @osx_target_definition = fixture_target_definition('SampleProject2', Platform.new(:osx, '10.8'))
                 user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
                 all_specs = [@watermelon_spec, *@watermelon_spec.recursive_subspecs]
+                @banana_target = fixture_pod_target_with_specs([@banana_spec], BuildType.dynamic_framework,
+                                                               user_build_configurations, [],
+                                                               Platform.new(:ios, '6.0'),
+                                                               [@ios_target_definition])
+
                 @watermelon_ios_pod_target = fixture_pod_target_with_specs(all_specs, BuildType.static_library,
                                                                            user_build_configurations, [],
                                                                            Platform.new(:ios, '6.0'),
@@ -483,6 +489,22 @@ module Pod
                   script.should.include <<-eos.strip_heredoc
         if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
           install_framework "${BUILT_PRODUCTS_DIR}/WatermelonLib/WatermelonLib.framework"
+        fi
+                  eos
+                end
+              end
+
+              it 'creates embed frameworks script for app target that includes framework paths from dependencies' do
+                @watermelon_ios_pod_target.dependent_targets = [@banana_target]
+                @watermelon_ios_pod_target.stubs(:framework_paths).returns('WatermelonLib' => [])
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.dynamic_framework)
+                @ios_installer.install!
+                script_path = @watermelon_ios_pod_target.embed_frameworks_script_path_for_spec(@watermelon_ios_pod_target.app_specs.first)
+                script = script_path.read
+                @watermelon_ios_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+        if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+          install_framework "${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework"
         fi
                   eos
                 end
