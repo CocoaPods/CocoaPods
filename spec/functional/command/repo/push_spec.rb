@@ -180,7 +180,7 @@ module Pod
 
     it 'initializes with default sources if no custom sources specified' do
       cmd = command('repo', 'push', 'master')
-      cmd.instance_variable_get(:@source_urls).should.equal [@upstream.to_s]
+      cmd.instance_variable_get(:@source_urls).should.equal [@upstream.to_s, Pod::TrunkSource::TRUNK_REPO_URL]
     end
 
     it 'initializes with custom sources if specified' do
