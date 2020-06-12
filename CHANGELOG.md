@@ -122,6 +122,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   due to incremental installation.  
   [segiddins][https://github.com/segiddins]
 
+* Add the trunk repo to the default `sources` for the `repo push` command  
+  [Elf Sundae](https://github.com/ElfSundae)
+  [#9840](https://github.com/CocoaPods/CocoaPods/pull/9840)
 
 ## 1.9.3 (2020-05-29)
 
@@ -133,9 +136,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * None.  
 
-* Add the trunk repo to the default `sources` for the `repo push` command  
-  [Elf Sundae](https://github.com/ElfSundae)
-  [#9840](https://github.com/CocoaPods/CocoaPods/pull/9840)
 
 ## 1.9.2 (2020-05-22)
 
