@@ -776,18 +776,19 @@ module Pod
           #
           def create_app_target_embed_frameworks_script(app_spec)
             path = target.embed_frameworks_script_path_for_spec(app_spec)
-            framework_paths_by_config = {}
-            xcframeworks_by_config = {}
-            target.user_build_configurations.each do |config_name, config|
-              pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
-              frameworks, xcframeworks = pod_targets.flat_map do |pod_target|
+            framework_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+              paths_by_config[config_name] = target.dependent_targets_for_app_spec(app_spec, :configuration => config).flat_map do |pod_target|
                 spec_paths_to_include = pod_target.library_specs.map(&:name)
                 spec_paths_to_include << app_spec.name if pod_target == target
-                [pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq,
-                 pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq]
+                pod_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact.uniq
               end
-              framework_paths_by_config[config_name] = frameworks
-              xcframeworks_by_config[config_name] = xcframeworks
+            end
+            xcframeworks_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+              paths_by_config[config_name] = target.dependent_targets_for_app_spec(app_spec, :configuration => config).flat_map do |pod_target|
+                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include << app_spec.name if pod_target == target
+                pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq
+              end
             end
 
             unless framework_paths_by_config.each_value.all?(&:empty?) && xcframeworks_by_config.each_value.all?(&:empty?)
