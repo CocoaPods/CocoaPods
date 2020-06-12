@@ -58,6 +58,7 @@ group :development do
   # Code Quality
   gem 'inch_by_inch'
   gem 'rubocop'
+  gem 'simplecov', '< 0.18'
 
   gem 'danger', '~> 5.3'
 end
