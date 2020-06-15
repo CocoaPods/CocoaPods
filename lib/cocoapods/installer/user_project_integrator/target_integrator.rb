@@ -60,6 +60,14 @@ module Pod
           'Prepare Artifacts'.freeze,
         ].freeze
 
+        # @return [float] Returns Minimum Xcode Compatibility version for FileLists
+        #
+        MIN_FILE_LIST_COMPATIBILITY_VERSION = 9.3
+
+        # @return [String] Returns Minimum Xcode Object version for FileLists
+        #
+        MIN_FILE_LIST_OBJECT_VERSION = 50
+
         # @return [AggregateTarget] the target that should be integrated.
         #
         attr_reader :target
@@ -90,7 +98,14 @@ module Pod
           #         should be stored in a file list file.
           #
           def input_output_paths_use_filelist?(object)
-            object.project.object_version.to_i >= 50
+            unless object.project.root_object.compatibility_version.nil?
+              version_match = object.project.root_object.compatibility_version.match(/Xcode ([0-9]*\.[0-9]*)/).to_a
+            end
+            if version_match&.at(1).nil?
+              object.project.object_version.to_i >= MIN_FILE_LIST_OBJECT_VERSION
+            else
+              Pod::Version.new(version_match[1]) >= Pod::Version.new(MIN_FILE_LIST_COMPATIBILITY_VERSION)
+            end
           end
 
           # Sets the input & output paths for the given script build phase.

@@ -86,6 +86,33 @@ module Pod
               end
 
               it 'integrates test native targets with frameworks and resource script phase input and output file lists' do
+                @project.root_object.stubs(:compatibility_version).returns('Xcode 9.10')
+                framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+                @coconut_pod_target.stubs(:framework_paths).returns('CoconutLib' => framework_paths)
+                @coconut_pod_target.stubs(:resource_paths).returns('CoconutLib' => resource_paths)
+                PodTargetIntegrator.new(@coconut_target_installation_result, :use_input_output_paths => true).integrate!
+                @test_native_target.build_phases.count.should == 2
+                @test_native_target.build_phases.map(&:display_name).should == [
+                  '[CP] Embed Pods Frameworks',
+                  '[CP] Copy Pods Resources',
+                ]
+                @test_native_target.build_phases[0].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks-input-files.xcfilelist',
+                ]
+                @test_native_target.build_phases[0].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-frameworks-output-files.xcfilelist',
+                ]
+                @test_native_target.build_phases[1].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources-input-files.xcfilelist',
+                ]
+                @test_native_target.build_phases[1].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/CoconutLib/CoconutLib-Unit-Tests-resources-output-files.xcfilelist',
+                ]
+              end
+
+              it 'integrates input and output file lists using objectVersion when compatibility version not parsed' do
+                @project.root_object.stubs(:compatibility_version).returns('Xcode unexpected value')
                 @project.stubs(:object_version).returns('50')
                 framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
@@ -112,6 +139,38 @@ module Pod
               end
 
               it 'integrates test native targets with frameworks, xcframeworks, and resource script phase input and output file lists' do
+                @project.root_object.stubs(:compatibility_version).returns('Xcode 9.3')
+                framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+                @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
+                @watermelon_pod_target.stubs(:resource_paths).returns('WatermelonLib' => resource_paths)
+                @watermelon_pod_target.stubs(:xcframeworks).returns('WatermelonLib' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
+                                                              :shell_script_build_phases => [], :project => @project,
+                                                              :name => 'WatermelonLib-Unit-Tests')
+                installation_result = TargetInstallationResult.new(@watermelon_pod_target, @native_target,
+                                                                   [], [test_native_target])
+                PodTargetIntegrator.new(installation_result, :use_input_output_paths => true).integrate!
+                test_native_target.build_phases.map(&:display_name).should == [
+                  '[CP] Embed Pods Frameworks',
+                  '[CP] Copy Pods Resources',
+                ]
+                test_native_target.build_phases[0].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks-input-files.xcfilelist',
+                ]
+                test_native_target.build_phases[0].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-frameworks-output-files.xcfilelist',
+                ]
+                test_native_target.build_phases[1].input_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources-input-files.xcfilelist',
+                ]
+                test_native_target.build_phases[1].output_file_list_paths.should == [
+                  '${PODS_ROOT}/Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-resources-output-files.xcfilelist',
+                ]
+              end
+
+              it 'integrates frameworks, xcframeworks, with input and output file lists when compatibilityVersion nil' do
+                @project.root_object.stubs(:compatibility_version).returns(nil)
                 @project.stubs(:object_version).returns('50')
                 framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework')]
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
@@ -257,7 +316,7 @@ module Pod
                 end
 
                 it 'integrates native target with copy dSYM script phase and xcfilelists' do
-                  @project.stubs(:object_version).returns('50')
+                  @project.root_object.stubs(:compatibility_version).returns('Xcode 10.0')
                   framework_paths = [Pod::Xcode::FrameworkPaths.new('${PODS_ROOT}/Vendored/Vendored.framework',
                                                                     '${PODS_ROOT}/Vendored/Vendored.framework.dSYM',
                                                                     ['${PODS_ROOT}/Vendored/7724D6B4-C7DD-31F0-80C6-EE818ED30B07.bcsymbolmap'])]
