@@ -84,6 +84,10 @@ select_slice() {
   # Split archs on space so we can find a slice that has all the needed archs
   local target_archs=$(echo $ARCHS | tr " " "\\n")
 
+  # arm64e and arm7vs are not required architectures for a device slice
+  target_archs=( "${target_archs[@]/arm64e}" )
+  target_archs=( "${target_archs[@]/armv7s}" )
+  
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
     target_variant="simulator"
@@ -158,7 +162,7 @@ install_xcframework_library() {
   local target_path="$SELECT_SLICE_RETVAL"
   if [[ -z "$target_path" ]]; then
     echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
-    return
+    exit 1
   fi
 
   install_framework "$basepath/$target_path" "$name"
@@ -175,7 +179,7 @@ install_xcframework() {
   local target_path="$SELECT_SLICE_RETVAL"
   if [[ -z "$target_path" ]]; then
     echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
-    return
+    exit 1
   fi
   local source="$basepath/$target_path"
 
