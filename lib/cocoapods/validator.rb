@@ -983,7 +983,7 @@ module Pod
       additional_path_pods = (include_podspecs ? Dir.glob(include_podspecs) : []) .select { |path| spec.name != Specification.from_file(path).name } - additional_podspec_pods
 
       Pod::Podfile.new do
-        install! 'cocoapods', :deterministic_uuids => false
+        install! 'cocoapods', :deterministic_uuids => false, :warn_for_unused_master_specs_repo => false
         # By default inhibit warnings for all pods, except the one being validated.
         inhibit_all_warnings!
         urls.each { |u| source(u) }

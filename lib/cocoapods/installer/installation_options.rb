@@ -153,6 +153,11 @@ module Pod
       #
       option :warn_for_multiple_pod_sources, true
 
+      # Whether to emit a warning if a project is not explicitly specifying the git based master specs repo and can
+      # instead use CDN which is the default.
+      #
+      option :warn_for_unused_master_specs_repo, true
+
       # Whether to share Xcode schemes for development pods.
       #
       # Schemes for development pods are created automatically but are not shared by default.

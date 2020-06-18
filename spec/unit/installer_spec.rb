@@ -351,6 +351,59 @@ module Pod
         UI.warnings.should.include 'BlocksKit has been deprecated'
       end
 
+      it 'prints a warning if the master specs repo is not explicitly used but it exists in the users repos dir' do
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods', :integrate_targets => false
+          platform :ios
+        end
+        @installer = Installer.new(config.sandbox, podfile)
+        master_source = Source.new(Pod::Installer::MASTER_SPECS_REPO_GIT_URL)
+        master_source.stubs(:url).returns(Pod::Installer::MASTER_SPECS_REPO_GIT_URL)
+        config.sources_manager.stubs(:all).returns([master_source])
+        @installer.send(:warn_for_removing_git_master_specs_repo)
+        UI.warnings.should.include 'Your project does not explicitly specify the CocoaPods master specs repo. Since CDN is now used as the' \
+          ' default, you may safely remove it from your repos directory via `pod repo remove master`.' \
+          ' To suppress this warning please add `warn_for_unused_master_specs_repo => false` to your Podfile.'
+      end
+
+      it 'does not print a warning if the master specs repo is explicitly used' do
+        podfile = Pod::Podfile.new do
+          source Pod::Installer::MASTER_SPECS_REPO_GIT_URL
+          install! 'cocoapods', :integrate_targets => false
+          platform :ios
+        end
+        @installer = Installer.new(config.sandbox, podfile)
+        master_source = Source.new(Pod::Installer::MASTER_SPECS_REPO_GIT_URL)
+        master_source.stubs(:url).returns(Pod::Installer::MASTER_SPECS_REPO_GIT_URL)
+        config.sources_manager.stubs(:all).returns([master_source])
+        @installer.send(:warn_for_removing_git_master_specs_repo)
+        UI.warnings.should.be.empty
+      end
+
+      it 'does not print a warning if the master specs repo is not explicitly used but is also not present in the users repo dir' do
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods', :integrate_targets => false
+          platform :ios
+        end
+        @installer = Installer.new(config.sandbox, podfile)
+        config.sources_manager.stubs(:all).returns([])
+        @installer.send(:warn_for_removing_git_master_specs_repo)
+        UI.warnings.should.be.empty
+      end
+
+      it 'does not print a warning for removing the master specs repo if the warning is suppressed' do
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods', :integrate_targets => false, :warn_for_unused_master_specs_repo => false
+          platform :ios
+        end
+        @installer = Installer.new(config.sandbox, podfile)
+        master_source = Source.new(Pod::Installer::MASTER_SPECS_REPO_GIT_URL)
+        master_source.stubs(:url).returns(Pod::Installer::MASTER_SPECS_REPO_GIT_URL)
+        config.sources_manager.stubs(:all).returns([master_source])
+        @installer.send(:warn_for_removing_git_master_specs_repo)
+        UI.warnings.should.be.empty
+      end
+
       it 'does not raise if command is run outside sandbox directory' do
         Dir.chdir(@installer.sandbox.root.parent) do
           should.not.raise(Informative) { @installer.install! }

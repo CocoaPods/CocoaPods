@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Warn users to delete the master specs repo if its not explicitly used.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9871](https://github.com/CocoaPods/CocoaPods/pull/9871)
+
 * add a `--configuration` option to `pod lib lint` and `pod spec lint`.  
   [Gereon Steffens](https://github.com/gereons)
   [#9686](https://github.com/CocoaPods/CocoaPods/issues/9686)
