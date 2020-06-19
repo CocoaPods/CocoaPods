@@ -33,6 +33,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Paul Beusterien](https://github.com/paulb777)
   [#9632](https://github.com/CocoaPods/CocoaPods/pull/9632)
 
+* Exclude the local spec-repos directory from Time Machine Backups.  
+  [Jakob Krigovsky](https://github.com/sonicdoe)
+  [#8308](https://github.com/CocoaPods/CocoaPods/issues/8308)
+
 ##### Bug Fixes
 
 * Re-implement `bcsymbolmap` copying to avoid duplicate outputs.  
