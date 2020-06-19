@@ -498,14 +498,8 @@ module Pod
             previous_version = sandbox.manifest.version(spec.name)
             has_changed_version = current_version != previous_version
             current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
-            if current_repo
-              # trunk is always saved by name, so force the name
-              if current_repo.name == Pod::TrunkSource::TRUNK_REPO_NAME
-                current_repo = Pod::TrunkSource::TRUNK_REPO_NAME
-              else
-                current_repo = current_repo.url || current_repo.name
-              end
-            end
+            current_repo &&= Pod::TrunkSource::TRUNK_REPO_NAME if current_repo.name == Pod::TrunkSource::TRUNK_REPO_NAME
+            current_repo &&= current_repo.url || current_repo.name
             previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
             has_changed_repo = !previous_spec_repo.nil? && current_repo && !current_repo.casecmp(previous_spec_repo).zero?
             title = "Installing #{spec.name} #{spec.version}"
