@@ -49,6 +49,8 @@ module Pod
 
     include Config::Mixin
 
+    MASTER_SPECS_REPO_GIT_URL = 'https://github.com/CocoaPods/Specs.git'.freeze
+
     # @return [Sandbox] The sandbox where the Pods should be installed.
     #
     attr_reader :sandbox
@@ -609,6 +611,7 @@ module Pod
       run_plugins_post_install_hooks
       warn_for_deprecations
       warn_for_installed_script_phases
+      warn_for_removing_git_master_specs_repo
       print_post_install_message
     end
 
@@ -750,6 +753,24 @@ module Pod
               'Please inspect before executing a build. See `https://guides.cocoapods.org/syntax/podspec.html#script_phases` for more information.'
           end
         end
+      end
+    end
+
+    # Prints a warning if the project is not explicitly using the git based master specs repo.
+    #
+    # Helps users to delete the git based master specs repo from the repos directory which reduces `--repo-update`
+    # speed and hopefully reduces Github workload.
+    #
+    # @return [void]
+    #
+    def warn_for_removing_git_master_specs_repo
+      return unless installation_options.warn_for_unused_master_specs_repo?
+      podfile_master_source = podfile.sources.find { |source| source == MASTER_SPECS_REPO_GIT_URL }
+      master_repo = config.sources_manager.all.find { |s| s.url == MASTER_SPECS_REPO_GIT_URL }
+      if podfile_master_source.nil? && !master_repo.nil?
+        UI.warn 'Your project does not explicitly specify the CocoaPods master specs repo. Since CDN is now used as the' \
+        ' default, you may safely remove it from your repos directory via `pod repo remove master`. To suppress this warning' \
+        ' please add `warn_for_unused_master_specs_repo => false` to your Podfile.'
       end
     end
 
