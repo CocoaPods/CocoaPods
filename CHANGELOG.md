@@ -39,6 +39,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Prevent "source changed" message for every version change when using trunk source  
+  [cltnschlosser](https://github.com/cltnschlosser)
+  [#9865](https://github.com/CocoaPods/CocoaPods/issues/9865)
+
 * Re-implement `bcsymbolmap` copying to avoid duplicate outputs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [mplorentz](https://github.com/mplorentz)
