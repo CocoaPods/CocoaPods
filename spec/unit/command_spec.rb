@@ -47,6 +47,47 @@ module Pod
       end
     end
 
+    describe 'ensure_not_root_or_allowed!' do
+      it 'passes check with ENV["COCOAPODS_ALLOW_ROOT"]' do
+        stored_env = ENV['COCOAPODS_ALLOW_ROOT']
+        ENV['COCOAPODS_ALLOW_ROOT'] = '1'
+        lambda { Command.ensure_not_root_or_allowed!([], 123, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!([], 0, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!([], 123, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!([], 0, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 0, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 0, true) }.should.not.raise
+        ENV['COCOAPODS_ALLOW_ROOT'] = stored_env
+      end
+
+      it 'prevents the gem from running as root without flag' do
+        lambda { Command.ensure_not_root_or_allowed!([], 0, false) }.should.raise CLAide::Help
+      end
+
+      it 'skips root check on Widnows' do
+        lambda { Command.ensure_not_root_or_allowed!([], 0, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!([], 123, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 0, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, true) }.should.not.raise
+      end
+
+      it 'passes check when Process.uid != 0' do
+        lambda { Command.ensure_not_root_or_allowed!([], 123, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!([], 123, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, false) }.should.not.raise
+      end
+
+      it 'passes check with --allow-root flag' do
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 0, false) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 123, true) }.should.not.raise
+        lambda { Command.ensure_not_root_or_allowed!(['--allow-root'], 0, true) }.should.not.raise
+      end
+    end
+
     describe 'git version extraction' do
       git_versions = [
         ['git version 1.2.4', Gem::Version.new('1.2.4')],
