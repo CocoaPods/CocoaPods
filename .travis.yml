@@ -7,8 +7,6 @@ cache:
 
 matrix:
   include:
-  - rvm: 2.0.0-p647
-    env: COCOAPODS_CI_TASKS=SPECS
   - rvm: 2.3.4
     env: COCOAPODS_CI_TASKS=SPECS
   - rvm: 2.4.1

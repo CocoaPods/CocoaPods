@@ -38,10 +38,9 @@ group :development do
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 
-  gem 'activesupport', '>= 4.0.2', '< 5', '!= 4.2.11.12' # Pinned < 5 to ensure we're speccing 4.x.x
+  gem 'activesupport', '> 5', '< 6' # Pinned < 6 because 6 requires Ruby 2.5.0
   gem 'bacon', :git => 'https://github.com/leahneukirchen/bacon.git'
-  gem 'minitest', '5.12.0' # Pinned since > 5.12.0+ drops support for Ruby 2.0
-  gem 'mocha'
+  gem 'mocha', '< 1.5'
   gem 'mocha-on-bacon'
   gem 'netrc'
   gem 'prettybacon'
@@ -49,7 +48,8 @@ group :development do
   gem 'webmock'
 
   gem 'bigdecimal', '~> 1.3.0'
-  gem 'public_suffix', '~> 2.0' # Need 2.x version due to support for Ruby 2.0.x
+  gem 'public_suffix'
+  gem 'ruby-graphviz', '< 1.2.5'
 
   # Integration tests
   gem 'diffy'
@@ -57,7 +57,7 @@ group :development do
 
   # Code Quality
   gem 'inch_by_inch'
-  gem 'rubocop'
+  gem 'rubocop', '0.50.0'
   gem 'simplecov', '< 0.18'
 
   gem 'danger', '~> 5.3'

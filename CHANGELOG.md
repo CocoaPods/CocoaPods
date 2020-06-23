@@ -6,6 +6,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Breaking
+
+* Bump minimum Ruby version to 2.3.3 (included with macOS High Sierra)  
+  [Eric Amorde](https://github.com/amorde)
+  [#9821](https://github.com/CocoaPods/CocoaPods/issues/9821)
+
 ##### Enhancements
 
 * Warn users to delete the master specs repo if its not explicitly used.  
