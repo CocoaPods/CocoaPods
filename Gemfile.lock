@@ -28,14 +28,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 1414d9c0b642e376873138325f8132e8f053988a
+  revision: de85da3fd03c4f96f9ab1e408d775420fa6dfeb0
   branch: master
   specs:
     nanaimo (0.2.6)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: d1283c5f09ba9a06f0f3a333d437e74ffb344fb6
+  revision: fa55bfccdf2f3970a157267f889a528cf7c033b1
   branch: master
   specs:
     xcodeproj (1.16.0)
