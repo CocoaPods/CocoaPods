@@ -5,7 +5,7 @@ inherit_from:
 #- CocoaPods ------------------------------------------------------------------
 
 AllCops:
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.3
   Exclude:
     - spec/fixtures/**/*
     - spec/cocoapods-integration-specs/**/*

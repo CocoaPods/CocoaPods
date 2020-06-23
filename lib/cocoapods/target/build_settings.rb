@@ -43,13 +43,13 @@ module Pod
       # @return [String]
       #   The variable for the configuration build directory used when building pod targets.
       #
-      CONFIGURATION_BUILD_DIR_VARIABLE = '${PODS_CONFIGURATION_BUILD_DIR}'.freeze
+      CONFIGURATION_BUILD_DIR_VARIABLE = '${PODS_CONFIGURATION_BUILD_DIR}'
 
       # @return [String]
       #   The variable for the configuration intermediate frameworks directory used for building pod targets
       #   that contain vendored xcframeworks.
       #
-      XCFRAMEWORKS_BUILD_DIR_VARIABLE = '${PODS_XCFRAMEWORKS_BUILD_DIR}'.freeze
+      XCFRAMEWORKS_BUILD_DIR_VARIABLE = '${PODS_XCFRAMEWORKS_BUILD_DIR}'
 
       #-------------------------------------------------------------------------#
 
@@ -101,7 +101,7 @@ module Pod
                                             from_search_paths_aggregate_targets: false, from_pod_targets_to_link: false,
                                             &implementation)
 
-        memoized_key = "#{self}##{method_name}".freeze
+        memoized_key = "#{self}##{method_name}"
 
         (@build_settings_names ||= Set.new) << method_name.to_s.upcase if build_setting
 

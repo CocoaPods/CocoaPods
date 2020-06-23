@@ -4,6 +4,9 @@
 ParameterLists:
   CountKeywordArgs: false
 
+Style/SafeNavigation:
+  Enabled: false
+
 # We adopted raise instead of fail.
 SignalException:
   EnforcedStyle: only_raise
