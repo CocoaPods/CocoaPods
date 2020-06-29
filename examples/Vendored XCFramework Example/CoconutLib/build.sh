@@ -13,8 +13,8 @@ rm -rf build/*
 static=0
 library=0
 
-linkage=""
-packaging=""
+linkage="dynamic"
+packaging="frameworks"
 
 settings="SKIP_INSTALL=NO"
 for arg in "$@"
@@ -67,16 +67,25 @@ xcodebuild clean archive -project CoconutLib.xcodeproj -scheme "CoconutLib-macOS
 archives=(iOS iOS-Simulator iOS-Catalyst watchOS watchOS-Simulator tvOS tvOS-Simulator macOS)
 
 args=""
-dSYMs=""
 if [[ $library == 1 ]]; then
     for archive in "${archives[@]}"; do
         args="$args -library build/${archive}.xcarchive/Products/usr/local/lib/libCoconutLib.a -headers build/${archive}.xcarchive/Products/usr/local/include"
-        dSYMs="$dSYMs ${archive}.xcarchive/dSYMs/"
     done
 else
     for archive in "${archives[@]}"; do
         args="$args -framework build/${archive}.xcarchive/Products/Library/Frameworks/CoconutLib.framework"
-        dSYMs="$dSYMs ${archive}.xcarchive/dSYMs/"
+    done
+fi
+
+if [[ $static == 0 && $library == 0 ]]; then
+    echo "Copying bitcode symbol maps..."
+    for archive in "${archives[@]}"; do
+        symbolmap_src="build/${archive}.xcarchive/BCSymbolMaps"
+        if [[ -d "$symbolmap_src" ]]; then
+            rsync -av "${symbolmap_src}/" "build/${archive}.xcarchive/Products/Library/Frameworks/CoconutLib.framework/BCSymbolMaps"
+        else
+            echo "No bitcode symbol maps in archive ${archive}"
+        fi
     done
 fi
 
@@ -90,7 +99,6 @@ if [[ $static == 0 ]]; then
     for archive in "${archives[@]}"; do
         dsym_src="build/${archive}.xcarchive/dSYMs/CoconutLib.framework.dSYM"
         if [[ -d "$dsym_src" ]]; then
-            # mkdir "${DSYM_FOLDER}/${archive}.dSYM"
             rsync -av "${dsym_src}/" "${DSYM_FOLDER}/${archive}.dSYM"
         else
             echo "No dSYMs in archive ${archive}"
