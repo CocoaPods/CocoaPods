@@ -185,7 +185,7 @@ module Pod
     # @return [PBXGroup] The group.
     #
     def pod_group(pod_name)
-      pod_groups.find { |group| group.name == pod_name }
+      pod_groups.find { |group| group.name == pod_name || group.path == pod_name }
     end
 
     # @return [Hash] The names of the specification subgroups by key.
@@ -289,7 +289,13 @@ module Pod
     # @return [PBXFileReference] The new file reference.
     #
     def add_subproject_reference(project, group)
-      new_subproject_file_reference(project.path, group)
+      # new_subproject_file_reference(project.path, group)
+      if (ref = reference_for_path(project.path))
+        return ref
+      end
+      Xcodeproj::Project::FileReferencesFactory.new_subproject(group, project, :group).tap do |ref|
+        refs_by_absolute_path[project.path.to_s] = ref
+      end
     end
 
     # Adds a file reference for a cached project as a child of the given group.
@@ -348,7 +354,6 @@ module Pod
     def mark_ruby_file_ref(file_ref)
       file_ref.xc_language_specification_identifier = 'xcode.lang.ruby'
       file_ref.explicit_file_type = 'text.script.ruby'
-      file_ref.last_known_file_type = 'text'
       file_ref.tab_width = '2'
       file_ref.indent_width = '2'
     end
@@ -474,6 +479,11 @@ module Pod
                   group.new_variant_group(group_name, lproj_parent_dir)
       end
 
+      if group.name == group.path
+        # Xcode re-saves the project and removes this
+        group.name = nil
+      end
+
       group
     end
 
@@ -521,9 +531,12 @@ module Pod
       ref.name = Pathname(project_path).basename('.*').to_s
       ref.include_in_index = nil
 
+      # product_group_ref = (group.project.root_object.product_ref_group ||= group.project.main_group.find_subpath('Products', true))
+
       attribute = PBXProject.references_by_keys_attributes.find { |attrb| attrb.name == :project_references }
       project_reference = ObjectDictionary.new(attribute, group.project.root_object)
       project_reference[:project_ref] = ref
+      # project_reference[:product_group] = product_group_ref
       root_object.project_references << project_reference
       refs_by_absolute_path[project_path.to_s] = ref
       ref

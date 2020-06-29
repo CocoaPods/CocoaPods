@@ -44,6 +44,7 @@ module Pod
           platforms = pod_targets.map(&:platform)
           project = ProjectGenerator.new(sandbox, path, pod_targets, build_configurations, platforms,
                                          project_object_version, false, :pod_target_subproject => true).generate!
+          install_file_references(project, pod_targets)
           # Instead of saving every subproject to disk, we can optimize this by creating a temporary folder
           # the file reference can use so that we only have to call `save` once for all projects.
           project.path.mkpath
@@ -53,7 +54,6 @@ module Pod
             parent_project.add_pod_subproject(project, is_local)
           end
 
-          install_file_references(project, pod_targets)
           project
         end
 

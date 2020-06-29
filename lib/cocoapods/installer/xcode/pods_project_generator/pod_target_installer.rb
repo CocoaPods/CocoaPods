@@ -138,6 +138,7 @@ module Pod
               create_dummy_source(native_target)
               create_copy_dsyms_script
               clean_support_files_temp_dir
+              project.root_object.product_ref_group.sort_by_type
               TargetInstallationResult.new(target, native_target, resource_bundle_targets,
                                            test_native_targets, test_resource_bundle_targets, test_app_host_targets,
                                            app_native_targets, app_resource_bundle_targets)
@@ -380,7 +381,6 @@ module Pod
               test_native_target = project.new_target(product_type, name, platform_name,
                                                       target.deployment_target_for_non_library_spec(test_spec), nil,
                                                       language)
-              test_native_target.product_reference.name = name
 
               target.user_build_configurations.each do |bc_name, type|
                 test_native_target.add_build_configuration(bc_name, type)
@@ -460,11 +460,12 @@ module Pod
               resources = target.file_accessors.find { |fa| fa.spec == app_spec }.resources
               add_launchscreen_storyboard = resources.none? { |resource| resource.basename.to_s == 'LaunchScreen.storyboard' } && platform.name == :ios
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
-                                                       app_target_label, :add_main => false,
+                                                       spec_name, :add_main => false,
                                                                          :add_launchscreen_storyboard => add_launchscreen_storyboard,
                                                                          :info_plist_entries => info_plist_entries).install!
+              app_native_target.name = app_target_label
 
-              app_native_target.product_reference.name = app_target_label
+              # app_native_target.product_reference.name = target.product_name_for_spec(app_spec)
               target.user_build_configurations.each do |bc_name, type|
                 app_native_target.add_build_configuration(bc_name, type)
               end
@@ -544,11 +545,8 @@ module Pod
             file_accessors.each_with_object({}) do |file_accessor, hash|
               hash[file_accessor.spec.name] = file_accessor.resource_bundles.map do |bundle_name, paths|
                 label = target.resources_bundle_target_label(bundle_name)
-                resource_bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
-                resource_bundle_target.product_reference.tap do |bundle_product|
-                  bundle_file_name = "#{bundle_name}.bundle"
-                  bundle_product.name = bundle_file_name
-                end
+                resource_bundle_target = project.new_resources_bundle(bundle_name, file_accessor.spec_consumer.platform_name)
+                resource_bundle_target.name = label
 
                 contains_compile_phase_refs = add_resources_to_target(paths, resource_bundle_target)
 

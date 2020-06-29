@@ -60,7 +60,7 @@ module Pod
 
             product_name = target.product_name
             product = native_target.product_reference
-            product.name = product_name
+            # product.name = product_name if product.path.to_s.include?('/')
 
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)

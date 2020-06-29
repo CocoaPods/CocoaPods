@@ -268,6 +268,23 @@ module Pod
       root_spec.module_name
     end
 
+    # @param [Specification] spec the specification
+    #
+    # @return [String] the product name of the specification's target
+    def product_name_for_spec(spec)
+      case spec.spec_type
+      when :app
+        # "#{spec.module_name}.app"
+        "#{app_target_label(spec)}.app"
+      when :test
+        "#{test_target_label(spec)}.xctest"
+      end
+    end
+
+    def product_name_for_resource_bundle_label(bundle_label)
+      bundle_label.gsub("#{label}-", '')
+    end
+
     # @return [Bool] Whether or not this target should be built.
     #
     # A target should not be built if it has no source files.
