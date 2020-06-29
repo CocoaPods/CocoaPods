@@ -45,6 +45,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Remove bitcode symbol maps from embedded framework bundles  
+  [Eric Amorde](https://github.com/amorde)
+  [#9681](https://github.com/CocoaPods/CocoaPods/issues/9681)
+
 * Prevent "source changed" message for every version change when using trunk source  
   [cltnschlosser](https://github.com/cltnschlosser)
   [#9865](https://github.com/CocoaPods/CocoaPods/issues/9865)
