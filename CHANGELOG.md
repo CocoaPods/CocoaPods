@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Igor Makarov](https://github.com/igor-makarov)
   [#9882](https://github.com/CocoaPods/CocoaPods/pull/9882)
 
+* Allow gem to run as root when passing argument flag `--allow-root`  
+  [Sean Reinhardt](https://github.com/seanreinhardtapps)
+  [#8929](https://github.com/CocoaPods/CocoaPods/issues/8929)
+  
 * Warn users to delete the master specs repo if its not explicitly used.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9871](https://github.com/CocoaPods/CocoaPods/pull/9871)

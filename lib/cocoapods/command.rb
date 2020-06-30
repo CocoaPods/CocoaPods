@@ -39,13 +39,13 @@ module Pod
 
     def self.options
       [
+        ['--allow-root', 'Allows CocoaPods to run as root'],
         ['--silent', 'Show nothing'],
       ].concat(super)
     end
 
     def self.run(argv)
-      help! 'You cannot run CocoaPods as root.' if Process.uid == 0 && !Gem.win_platform?
-
+      ensure_not_root_or_allowed! argv
       verify_minimum_git_version!
       verify_xcode_license_approved!
 
@@ -85,11 +85,21 @@ module Pod
     def initialize(argv)
       super
       config.silent = argv.flag?('silent', config.silent)
+      config.allow_root = argv.flag?('allow-root', config.allow_root)
       config.verbose = self.verbose? unless verbose.nil?
       unless self.ansi_output?
         Colored2.disable!
         String.send(:define_method, :colorize) { |string, _| string }
       end
+    end
+
+    # Ensure root user
+    #
+    # @return [void]
+    #
+    def self.ensure_not_root_or_allowed!(argv, uid = Process.uid, is_windows = Gem.win_platform?)
+      root_allowed = argv.include?('--allow-root') || !ENV['COCOAPODS_ALLOW_ROOT'].nil?
+      help! 'You cannot run CocoaPods as root.' unless root_allowed || uid != 0 || is_windows
     end
 
     # Ensure that the master spec repo exists

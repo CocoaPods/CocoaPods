@@ -60,6 +60,11 @@ module Pod
     attr_accessor :silent
     alias_method :silent?, :silent
 
+    # @return [Bool] Whether CocoaPods is allowed to run as root.
+    #
+    attr_accessor :allow_root
+    alias_method :allow_root?, :allow_root
+
     # @return [Bool] Whether a message should be printed when a new version of
     #         CocoaPods is available.
     #
