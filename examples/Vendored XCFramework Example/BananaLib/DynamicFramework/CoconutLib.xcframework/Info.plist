@@ -6,15 +6,16 @@
 	<array>
 		<dict>
 			<key>LibraryIdentifier</key>
-			<string>tvos-x86_64-simulator</string>
+			<string>ios-i386_x86_64-simulator</string>
 			<key>LibraryPath</key>
 			<string>CoconutLib.framework</string>
 			<key>SupportedArchitectures</key>
 			<array>
+				<string>i386</string>
 				<string>x86_64</string>
 			</array>
 			<key>SupportedPlatform</key>
-			<string>tvos</string>
+			<string>ios</string>
 			<key>SupportedPlatformVariant</key>
 			<string>simulator</string>
 		</dict>
@@ -29,21 +30,6 @@
 			</array>
 			<key>SupportedPlatform</key>
 			<string>tvos</string>
-		</dict>
-		<dict>
-			<key>LibraryIdentifier</key>
-			<string>ios-i386_x86_64-simulator</string>
-			<key>LibraryPath</key>
-			<string>CoconutLib.framework</string>
-			<key>SupportedArchitectures</key>
-			<array>
-				<string>i386</string>
-				<string>x86_64</string>
-			</array>
-			<key>SupportedPlatform</key>
-			<string>ios</string>
-			<key>SupportedPlatformVariant</key>
-			<string>simulator</string>
 		</dict>
 		<dict>
 			<key>LibraryIdentifier</key>
@@ -74,15 +60,16 @@
 		</dict>
 		<dict>
 			<key>LibraryIdentifier</key>
-			<string>macos-x86_64</string>
+			<string>watchos-armv7k_arm64_32</string>
 			<key>LibraryPath</key>
 			<string>CoconutLib.framework</string>
 			<key>SupportedArchitectures</key>
 			<array>
-				<string>x86_64</string>
+				<string>armv7k</string>
+				<string>arm64_32</string>
 			</array>
 			<key>SupportedPlatform</key>
-			<string>macos</string>
+			<string>watchos</string>
 		</dict>
 		<dict>
 			<key>LibraryIdentifier</key>
@@ -100,16 +87,29 @@
 		</dict>
 		<dict>
 			<key>LibraryIdentifier</key>
-			<string>watchos-armv7k_arm64_32</string>
+			<string>tvos-x86_64-simulator</string>
 			<key>LibraryPath</key>
 			<string>CoconutLib.framework</string>
 			<key>SupportedArchitectures</key>
 			<array>
-				<string>armv7k</string>
-				<string>arm64_32</string>
+				<string>x86_64</string>
 			</array>
 			<key>SupportedPlatform</key>
-			<string>watchos</string>
+			<string>tvos</string>
+			<key>SupportedPlatformVariant</key>
+			<string>simulator</string>
+		</dict>
+		<dict>
+			<key>LibraryIdentifier</key>
+			<string>macos-x86_64</string>
+			<key>LibraryPath</key>
+			<string>CoconutLib.framework</string>
+			<key>SupportedArchitectures</key>
+			<array>
+				<string>x86_64</string>
+			</array>
+			<key>SupportedPlatform</key>
+			<string>macos</string>
 		</dict>
 	</array>
 	<key>CFBundlePackageType</key>
