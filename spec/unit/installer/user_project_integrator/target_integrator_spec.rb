@@ -168,6 +168,15 @@ module Pod
           phase.nil?.should == false
         end
 
+        it 'adds an embed frameworks build phase if the target to integrate is an app clip' do
+          @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
+          target = @target_integrator.send(:native_targets).first
+          target.stubs(:symbol_type).returns(:application_on_demand_install_capable)
+          @target_integrator.integrate!
+          phase = target.shell_script_build_phases.find { |bp| bp.name == @embed_framework_phase_name }
+          phase.nil?.should == false
+        end
+
         it 'does not add an embed frameworks build phase if the target to integrate is a framework' do
           @pod_bundle.stubs(:build_type => BuildType.dynamic_framework)
           target = @target_integrator.send(:native_targets).first
