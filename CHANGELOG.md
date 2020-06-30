@@ -18,6 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9871](https://github.com/CocoaPods/CocoaPods/pull/9871)
 
+* Use User Project's compatibilityVersion instead of objectVersion when
+  deciding when to use xcfilelists.  
+  [Sean Reinhardt](https://github.com/seanreinhardtapps)
+  [#9140](https://github.com/CocoaPods/CocoaPods/issues/9140)
+  
 * add a `--configuration` option to `pod lib lint` and `pod spec lint`.  
   [Gereon Steffens](https://github.com/gereons)
   [#9686](https://github.com/CocoaPods/CocoaPods/issues/9686)
