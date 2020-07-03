@@ -204,7 +204,7 @@ EOS
 if [[ -n "${WRAPPER_EXTENSION}" ]] && [ "`xcrun --find actool`" ] && [ -n "${XCASSET_FILES:-}" ]
 then
   # Find all other xcassets (this unfortunately includes those of path pods and other targets).
-  OTHER_XCASSETS=$(find -L "$PWD" -iname "*.xcassets" -not -path "${PODS_ROOT}/*")
+  OTHER_XCASSETS=$(find "$PWD" -type d -path "${PODS_ROOT}" -prune -o -iname '*.xcassets' -print)
   while read line; do
     XCASSET_FILES+=("$line")
   done <<<"$OTHER_XCASSETS"
