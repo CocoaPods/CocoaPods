@@ -58,10 +58,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Fixed 'Pods' directory' * . Xcassets 'files are copied and compied twice.
+* Fixed `Pods` directory  `*.xcassets` files are copied and compied twice.  
   [linhay](https://github.com/linhay)
-  [#8431](https://github.com/CocoaPods/CocoaPods/issues/#8431)
-  
+  [#8431](https://github.com/CocoaPods/CocoaPods/issues/8431)
+
 * Remove bitcode symbol maps from embedded framework bundles  
   [Eric Amorde](https://github.com/amorde)
   [#9681](https://github.com/CocoaPods/CocoaPods/issues/9681)
