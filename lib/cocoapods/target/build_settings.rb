@@ -332,6 +332,13 @@ module Pod
         false
       end
 
+      # Xcode 12 turns on this warning by default which is problematic for CocoaPods-generated
+      # imports which use double-quoted paths.
+      # @return [Boolean]
+      define_build_settings_method :clang_warn_quoted_include_in_framework_header, :build_setting => true do
+        'NO'
+      end
+
       # @return [Array<String>]
       #   the `LD_RUNPATH_SEARCH_PATHS` needed for dynamically linking the {#target}
       #
