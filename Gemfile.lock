@@ -35,10 +35,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: fa55bfccdf2f3970a157267f889a528cf7c033b1
+  revision: dac33d249ede1af24c8391e9a2c8b803cb316c4b
   branch: master
   specs:
-    xcodeproj (1.16.0)
+    xcodeproj (1.17.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -54,7 +54,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 519dabd09819fcfbf2b63c53b9d2df00546f50a6
+  revision: d90399cce64a078efa64d639d68504016c9a05cc
   branch: master
   specs:
     cocoapods-downloader (1.3.0)
