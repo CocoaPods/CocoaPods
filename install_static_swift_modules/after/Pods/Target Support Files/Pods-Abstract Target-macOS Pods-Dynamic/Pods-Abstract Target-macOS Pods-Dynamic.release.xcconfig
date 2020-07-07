@@ -1,4 +1,5 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
+CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
 FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CustomModuleMapPod-framework-macOS" "${PODS_CONFIGURATION_BUILD_DIR}/MixedPod-framework-macOS" "${PODS_CONFIGURATION_BUILD_DIR}/ObjCPod-framework-macOS" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftPod-framework-macOS"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CustomModuleMapPod-framework-macOS/CustomModuleMapPod.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/MixedPod-framework-macOS/MixedPod.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/ObjCPod-framework-macOS/ObjCPod.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftPod-framework-macOS/SwiftPod.framework/Headers"

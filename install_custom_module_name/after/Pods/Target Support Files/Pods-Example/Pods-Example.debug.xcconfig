@@ -1,3 +1,4 @@
+CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
 FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket" "${PODS_CONFIGURATION_BUILD_DIR}/libPusher"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 kPTPusherClientLibraryVersion=@\"1.6.2\"
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket/SocketRocket.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/libPusher/Pusher.framework/Headers"
