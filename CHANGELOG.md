@@ -58,6 +58,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Override Xcode 12 default for erroring on quoted imports in umbrellas.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9902](https://github.com/CocoaPods/CocoaPods/issues/9902)
+
 * Remove bitcode symbol maps from embedded framework bundles  
   [Eric Amorde](https://github.com/amorde)
   [#9681](https://github.com/CocoaPods/CocoaPods/issues/9681)
