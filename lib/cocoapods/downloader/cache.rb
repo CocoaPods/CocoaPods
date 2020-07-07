@@ -97,7 +97,7 @@ module Pod
       #         `request`.
       #
       def path_for_pod(request, slug_opts = {})
-        root + request.slug(slug_opts)
+        root + request.slug(**slug_opts)
       end
 
       # @param  [Request] request
@@ -111,7 +111,7 @@ module Pod
       #         `request`.
       #
       def path_for_spec(request, slug_opts = {})
-        path = root + 'Specs' + request.slug(slug_opts)
+        path = root + 'Specs' + request.slug(**slug_opts)
         path.sub_ext('.podspec.json')
       end
 
