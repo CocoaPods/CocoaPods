@@ -58,6 +58,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix lint subspec error when the name of subspec start with the pod name
+  [XianpuMeng](https://github.com/XianpuMeng)
+  [#9914](https://github.com/CocoaPods/CocoaPods/pull/9914)
+
 * Override Xcode 12 default for erroring on quoted imports in umbrellas.  
   [Paul Beusterien](https://github.com/paulb777)
   [#9902](https://github.com/CocoaPods/CocoaPods/issues/9902)
