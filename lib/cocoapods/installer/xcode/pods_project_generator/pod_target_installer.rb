@@ -354,6 +354,11 @@ module Pod
 
               filter_resource_file_references(file_accessor.resources.flatten) do |compile_phase_refs, resource_phase_refs|
                 native_target.add_file_references(compile_phase_refs, nil)
+
+                if target.build_as_static_framework?
+                  resource_phase_refs = resource_phase_refs.select { |ref| Target.resource_extension_compilable?(File.extname(ref.path)) }
+                end
+
                 native_target.add_resources(resource_phase_refs)
               end
             end

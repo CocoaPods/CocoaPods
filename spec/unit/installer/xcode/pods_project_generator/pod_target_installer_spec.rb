@@ -4,8 +4,8 @@ module Pod
   class Installer
     class Xcode
       class PodsProjectGenerator
-        describe PodTargetInstaller do
-          describe 'In General' do
+        describe PodTargetInstaller do # rubocop:disable Metrics/BlockLength
+          describe 'In General' do # rubocop:disable Metrics/BlockLength
             before do
               @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
               @project = Pod::Project.new(config.sandbox.project_path)
@@ -739,16 +739,25 @@ module Pod
               resource.should.be.not.nil
             end
 
-            it 'adds framework resources to the static framework target' do
+            it 'adds compilable framework resources to the static framework target' do
+              @pod_target.stubs(:build_type => BuildType.static_framework)
+              @installer.install!
+              resources = @project.targets.first.resources_build_phase.files
+              resources.count.should > 0
+              resource = resources.find { |res| res.file_ref.path.include?('Migration.xcmappingmodel') }
+              resource.should.be.not.nil
+            end
+
+            it 'doesn\'t add non-compilable framework resources to the static framework target' do
               @pod_target.stubs(:build_type => BuildType.static_framework)
               @installer.install!
               resources = @project.targets.first.resources_build_phase.files
               resources.count.should > 0
               resource = resources.find { |res| res.file_ref.path.include?('logo-sidebar.png') }
-              resource.should.be.not.nil
+              resource.should.be.nil
 
               resource = resources.find { |res| res.file_ref.path.include?('en.lproj') }
-              resource.should.be.not.nil
+              resource.should.be.nil
             end
 
             it 'includes spec info_plist entries for dynamic frameworks' do
