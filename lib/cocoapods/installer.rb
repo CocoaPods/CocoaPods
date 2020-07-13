@@ -567,6 +567,7 @@ module Pod
     #
     def clean_pod_sources
       return unless installation_options.clean?
+      return if installed_specs.empty?
       pod_installers.each(&:clean!)
     end
 

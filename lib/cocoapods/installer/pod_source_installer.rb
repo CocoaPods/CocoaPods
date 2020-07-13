@@ -90,7 +90,8 @@ module Pod
       #
       def lock_files!(file_accessors)
         return if local?
-        FileUtils.chmod('u-w', source_files(file_accessors))
+        unlocked_files = source_files(file_accessors).reject { |f| (File.stat(f).mode & 0o200).zero? }
+        FileUtils.chmod('u-w', unlocked_files)
       end
 
       # Unlocks the source files if appropriate.
