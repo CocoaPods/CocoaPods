@@ -14,6 +14,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add flag to ignore prerelease versions when reporting latest version for outdated pods.  
+  [cltnschlosser](https://github.com/cltnschlosser)
+  [#9916](https://github.com/CocoaPods/CocoaPods/pull/9916)
+
 * Add the App Clip product symbol to the list of products that need embedding.  
   [Igor Makarov](https://github.com/igor-makarov)
   [#9882](https://github.com/CocoaPods/CocoaPods/pull/9882)
