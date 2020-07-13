@@ -25,13 +25,13 @@ module Pod
       spec = Specification.new(nil, 'BlocksKit')
       subspec = Specification.new(spec, 'UIKit')
       set = mock
-      set.stubs(:versions).returns(['2.0'])
+      set.stubs(:versions).returns([Version.new('2.0')])
       set.stubs(:specification).returns(spec)
       subset = mock
       subset.stubs(:specification).returns(subspec)
-      subset.stubs(:versions).returns(['2.0'])
+      subset.stubs(:versions).returns([Version.new('2.0')])
       version = mock
-      version.stubs(:version).returns('1.0')
+      version.stubs(:version).returns(Version.new('1.0'))
       Command::Outdated.any_instance.stubs(:spec_sets).returns([set, subset])
       Command::Outdated.any_instance.stubs(:lockfile).returns(version)
       run_command('outdated', '--no-repo-update')
@@ -144,6 +144,42 @@ module Pod
       config.stubs(:podfile).returns(podfile)
       exception = lambda { run_command('outdated', '--no-repo-update') }.should.raise Informative
       exception.message.should.include 'You must run `pod install` first to ensure that the podspec for `AFNetworking` has been fetched.'
+    end
+
+    it 'tells the user about outdated pods that are prerelease versions' do
+      spec = Specification.new(nil, 'BlocksKit')
+      set = mock
+      set.stubs(:versions).returns([Version.new('2.0-beta'), Version.new('1.9')])
+      set.stubs(:specification).returns(spec)
+
+      lockfile = mock
+      lockfile.stubs(:version).returns(Version.new('1.0'))
+      lockfile.stubs(:pod_names).returns(%w(BlocksKit))
+
+      Command::Outdated.any_instance.stubs(:spec_sets).returns([set])
+      Command::Outdated.any_instance.stubs(:lockfile).returns(lockfile)
+      Command::Outdated.any_instance.stubs(:deprecated_pods).returns([])
+
+      run_command('outdated')
+      UI.output.should.include('BlocksKit 1.0 -> (unused) (latest version 2.0-beta)')
+    end
+
+    it 'tells the user about outdated pods that are not prerelease versions when ignoring prerelease versions' do
+      spec = Specification.new(nil, 'BlocksKit')
+      set = mock
+      set.stubs(:versions).returns([Version.new('2.0-beta'), Version.new('1.9')])
+      set.stubs(:specification).returns(spec)
+
+      lockfile = mock
+      lockfile.stubs(:version).returns(Version.new('1.0'))
+      lockfile.stubs(:pod_names).returns(%w(BlocksKit))
+
+      Command::Outdated.any_instance.stubs(:spec_sets).returns([set])
+      Command::Outdated.any_instance.stubs(:lockfile).returns(lockfile)
+      Command::Outdated.any_instance.stubs(:deprecated_pods).returns([])
+
+      run_command('outdated', '--ignore-prerelease')
+      UI.output.should.include('BlocksKit 1.0 -> (unused) (latest version 1.9)')
     end
   end
 end
