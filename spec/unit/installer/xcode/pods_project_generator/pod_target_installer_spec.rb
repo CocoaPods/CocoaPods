@@ -4,8 +4,8 @@ module Pod
   class Installer
     class Xcode
       class PodsProjectGenerator
-        describe PodTargetInstaller do
-          describe 'In General' do
+        describe PodTargetInstaller do # rubocop:disable Metrics/BlockLength
+          describe 'In General' do # rubocop:disable Metrics/BlockLength
             before do
               @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
               @project = Pod::Project.new(config.sandbox.project_path)
