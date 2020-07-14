@@ -108,6 +108,18 @@ module Pod
           @validator.send(:subspec_name).should == 'RestKit/CoreData'
         end
 
+        it 'handles a relative subspec name which starts with the pod name' do
+          @validator.only_subspec = 'RestKitSubspec'
+          @validator.validate
+          @validator.send(:subspec_name).should == 'RestKit/RestKitSubspec'
+        end
+
+        it 'handles an absolute subspec name which starts with the pod name' do
+          @validator.only_subspec = 'RestKit/RestKitSubspec'
+          @validator.validate
+          @validator.send(:subspec_name).should == 'RestKit/RestKitSubspec'
+        end
+
         it 'handles a missing subspec name' do
           @validator.only_subspec = 'RestKit/Missing'
           should.raise(Informative) { @validator.validate }.message.
