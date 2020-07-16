@@ -47,8 +47,6 @@ module Pod
           # Adds the target for the library to the Pods project with the
           # appropriate build configurations.
           #
-          # @note   The `PODS_HEADERS_SEARCH_PATHS` overrides the xcconfig.
-          #
           # @return [PBXNativeTarget] the native target that was added.
           #
           def add_target
@@ -60,7 +58,11 @@ module Pod
 
             product_name = target.product_name
             product = native_target.product_reference
-            # product.name = product_name if product.path.to_s.include?('/')
+            if name.include?('WelcomeFlow')
+              puts "#{target.inspect}"
+              puts "label: #{target.label}, name: #{target.name}"
+            end
+            product.name = product_name if product.path.to_s.include?('/')
 
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)

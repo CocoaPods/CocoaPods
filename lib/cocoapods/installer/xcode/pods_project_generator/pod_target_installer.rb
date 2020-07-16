@@ -157,6 +157,11 @@ module Pod
           def add_target
             super.tap do |native_target|
               remove_pod_target_xcconfig_overrides_from_target(target.build_settings, native_target)
+              # if (product_name = custom_build_settings['PRODUCT_NAME'])
+              #   ext = File.extname(native_target.product_reference.path)
+              #   name = product_name + ext
+              #   native_target.product_reference.name = name unless native_target.product_reference.path == name
+              # end
             end
           end
 
@@ -463,7 +468,6 @@ module Pod
                                                        spec_name, :add_main => false,
                                                                          :add_launchscreen_storyboard => add_launchscreen_storyboard,
                                                                          :info_plist_entries => info_plist_entries).install!
-              app_native_target.name = app_target_label
 
               # app_native_target.product_reference.name = target.product_name_for_spec(app_spec)
               target.user_build_configurations.each do |bc_name, type|
