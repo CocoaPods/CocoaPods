@@ -7,16 +7,18 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 8cf6bf0c08a0429c50310e68c24dce37d5022aa5
+  revision: 59eaa9b1b22070d6c5ffcfa19f491c1f47594459
   branch: master
   specs:
-    cocoapods-core (1.9.3)
-      activesupport (>= 4.0.2, < 6)
+    cocoapods-core (1.10.0.beta.1)
+      activesupport (> 5.0, < 6)
+      addressable (~> 2.6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
       netrc (~> 0.11)
+      public_suffix
       typhoeus (~> 1.0)
 
 GIT
@@ -28,22 +30,22 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: de85da3fd03c4f96f9ab1e408d775420fa6dfeb0
+  revision: 622714fb77fc91261d637f5505b1b4ce2e87f1c8
   branch: master
   specs:
-    nanaimo (0.2.6)
+    nanaimo (0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: dac33d249ede1af24c8391e9a2c8b803cb316c4b
+  revision: 1c6d6fd2bf71d76df7c5870fa33fdc469fae46da
   branch: master
   specs:
-    xcodeproj (1.17.0)
+    xcodeproj (1.17.1)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
       colored2 (~> 3.1)
-      nanaimo (~> 0.2.6)
+      nanaimo (~> 0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
@@ -61,7 +63,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 683b4fbef37740301543f3a7bd46b88c2ff305f5
+  revision: a620049b3024f87d47ef30cefaa833bcf1ca11bd
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -106,11 +108,11 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.9.3)
+    cocoapods (1.10.0.beta.1)
       activesupport (> 5)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.9.3)
+      cocoapods-core (= 1.10.0.beta.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -137,7 +139,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    algoliasearch (1.27.2)
+    algoliasearch (1.27.3)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
     ast (2.4.0)
@@ -183,7 +185,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.3.1)
       faraday (~> 0.8)
-    ffi (1.12.2)
+    ffi (1.13.1)
     fourflusher (2.3.1)
     fuzzy_match (2.0.4)
     gh_inspector (1.1.3)
@@ -236,7 +238,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    public_suffix (2.0.5)
+    public_suffix (4.0.5)
     rainbow (2.2.2)
       rake
     rake (10.5.0)
