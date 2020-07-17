@@ -37,7 +37,7 @@ Downloading dependencies
 
 -> Installing Realm (0.94.1)
  > Http download
-   $ CURL_BIN -f -L -o PROJECT/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs --netrc-optional --retry 2 -A 'CocoaPods/1.9.3 cocoapods-downloader/1.3.0'
+   $ CURL_BIN -f -L -o PROJECT/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs --netrc-optional --retry 2 -A 'CocoaPods/<#Pod::VERSION#> cocoapods-downloader/<#Pod::Downloader::VERSION#>'
 
    $ /usr/bin/unzip PROJECT/Pods/Realm/file.zip -d PROJECT/Pods/Realm
    Archive:  PROJECT/Pods/Realm/file.zip
