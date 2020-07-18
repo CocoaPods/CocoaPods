@@ -547,6 +547,18 @@ module Pod
                 end
               end
 
+              it 'adds the resources to the copy resources phase for test target when a pod target is a static framework' do
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.static_framework)
+                @ios_installer.install!
+
+                unit_test_target = @project.targets.find { |t| t.name == 'WatermelonLib-Unit-Tests' }
+
+                resources = unit_test_target.resources_build_phase.files
+                resources.count.should > 0
+                resource = resources.find { |res| res.file_ref.path.include?('resource.txt') }
+                resource.should.be.not.nil
+              end
+
               it 'adds the resources bundles to the copy resources script for app target' do
                 @ios_installer.install!
                 script_path = @watermelon_ios_pod_target.copy_resources_script_path_for_spec(@watermelon_spec.app_specs.first)
