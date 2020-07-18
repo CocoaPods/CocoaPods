@@ -184,12 +184,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Vendored Framework Example/Pods-Vendored Framework Example-frameworks.sh",
 				"${PODS_ROOT}/VendoredFrameworkExample/Carthage/Build/iOS/AFNetworking.framework",
-				"${PODS_ROOT}/VendoredFrameworkExample/Carthage/Build/iOS/AFNetworking.framework.dSYM",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/AFNetworking.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

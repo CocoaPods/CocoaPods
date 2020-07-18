@@ -6,6 +6,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
 
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.10.0.beta.1 (2020-07-17)
+
 ##### Breaking
 
 * Bump minimum Ruby version to 2.3.3 (included with macOS High Sierra)  
