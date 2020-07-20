@@ -109,7 +109,6 @@ PATH
   remote: .
   specs:
     cocoapods (1.10.0.beta.1)
-      activesupport (> 5)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
       cocoapods-core (= 1.10.0.beta.1)
