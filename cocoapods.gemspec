@@ -39,7 +39,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'molinillo',             '~> 0.6.6'
   s.add_runtime_dependency 'xcodeproj',             '>= 1.17.0', '< 2.0'
 
-  s.add_runtime_dependency 'activesupport', '> 5'
   s.add_runtime_dependency 'colored2',       '~> 3.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
   s.add_runtime_dependency 'fourflusher',   '>= 2.3.0', '< 3.0'
