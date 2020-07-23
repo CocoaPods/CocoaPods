@@ -36,6 +36,7 @@ module Pod
     autoload :PreInstallHooksContext,       'cocoapods/installer/pre_install_hooks_context'
     autoload :BaseInstallHooksContext,      'cocoapods/installer/base_install_hooks_context'
     autoload :PostIntegrateHooksContext,    'cocoapods/installer/post_integrate_hooks_context'
+    autoload :PreIntegrateHooksContext,     'cocoapods/installer/pre_integrate_hooks_context'
     autoload :SourceProviderHooksContext,   'cocoapods/installer/source_provider_hooks_context'
     autoload :PodfileValidator,             'cocoapods/installer/podfile_validator'
     autoload :PodSourceInstaller,           'cocoapods/installer/pod_source_installer'
@@ -175,6 +176,7 @@ module Pod
     end
 
     def integrate
+      run_podfile_pre_integrate_hooks
       generate_pods_project
       if installation_options.integrate_targets?
         integrate_user_project
@@ -627,6 +629,15 @@ module Pod
                         title_options)
     end
 
+    # Runs the registered callbacks for the plugins pre integrate hooks.
+    #
+    def run_plugins_pre_integrate_hooks
+      if any_plugin_pre_integrate_hooks?
+        context = PreIntegrateHooksContext.generate(sandbox, pods_project, aggregate_targets)
+        HooksManager.run(:pre_integrate, context, plugins)
+      end
+    end
+
     # Runs the registered callbacks for the plugins post install hooks.
     #
     def run_plugins_post_install_hooks
@@ -648,6 +659,12 @@ module Pod
         context = PostIntegrateHooksContext.generate(sandbox, pods_project, aggregate_targets)
         HooksManager.run(:post_integrate, context, plugins)
       end
+    end
+
+    # @return [Boolean] whether there are any plugin pre-integrate hooks to run
+    #
+    def any_plugin_pre_integrate_hooks?
+      HooksManager.hooks_to_run(:pre_integrate, plugins).any?
     end
 
     # @return [Boolean] whether there are any plugin post-install hooks to run
@@ -870,6 +887,34 @@ module Pod
       podfile.pre_install!(self)
     rescue => e
       raise Informative, 'An error occurred while processing the pre-install ' \
+        'hook of the Podfile.' \
+        "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
+    end
+
+    # Runs the post integrate hooks of the installed specs and of the Podfile.
+    #
+    # @note   Post integrate hooks run _after_ saving of project, so that they
+    #         can alter it after it is written to the disk.
+    #
+    # @return [void]
+    #
+    def run_podfile_pre_integrate_hooks
+      UI.message '- Running pre integrate hooks' do
+        executed = run_podfile_pre_integrate_hook
+        UI.message '- Podfile' if executed
+      end
+    end
+
+    # Runs the pre integrate hook of the Podfile.
+    #
+    # @raise  Raises an informative if the hooks raises.
+    #
+    # @return [Boolean] Whether the hook was run.
+    #
+    def run_podfile_pre_integrate_hook
+      podfile.pre_integrate!(self)
+    rescue => e
+      raise Informative, 'An error occurred while processing the pre-integrate ' \
         'hook of the Podfile.' \
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end

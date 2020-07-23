@@ -55,7 +55,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add a post_integrate_hook API  
+  [dcvz](https://github.com/dcvz)
+  [#9935](https://github.com/CocoaPods/CocoaPods/pull/9935)
 
 ##### Bug Fixes
 

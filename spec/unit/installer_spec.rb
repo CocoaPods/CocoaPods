@@ -932,6 +932,14 @@ module Pod
         @installer.send(:run_plugins_pre_install_hooks)
       end
 
+      it 'runs plugins pre integrate hook' do
+        context = stub
+        Installer::PreIntegrateHooksContext.expects(:generate).returns(context)
+        HooksManager.expects(:run).with(:pre_integrate, context, Installer::DEFAULT_PLUGINS)
+        @installer.expects(:any_plugin_pre_integrate_hooks?).returns(true)
+        @installer.send(:run_plugins_pre_integrate_hooks)
+      end
+
       it 'runs plugins post install hook' do
         context = stub
         Installer::PostInstallHooksContext.expects(:generate).returns(context)
