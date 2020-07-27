@@ -74,7 +74,7 @@ install_framework()
   local basename
   basename="$(basename -s .framework "$1")"
   source_binary="$1/${basename}"
-  if [[ $(file $source_binary | grep 'current ar archive') ]]; then
+  if [[ $(file "$source_binary" | grep 'current ar archive') ]]; then
     echo "Static binary $basename detected, skipping embed."
     return
   fi
