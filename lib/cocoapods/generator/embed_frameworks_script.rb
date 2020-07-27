@@ -71,6 +71,14 @@ BCSYMBOLMAP_DIR="BCSymbolMaps"
 # Copies and strips a vendored framework
 install_framework()
 {
+  local basename
+  basename="$(basename -s .framework "$1")"
+  source_binary="$1/${basename}"
+  if [[ $(file $source_binary | grep 'current ar archive') ]]; then
+    echo "Static binary $basename detected, skipping embed."
+    return
+  fi
+
   if [ -r "${BUILT_PRODUCTS_DIR}/$1" ]; then
     local source="${BUILT_PRODUCTS_DIR}/$1"
   elif [ -r "${BUILT_PRODUCTS_DIR}/$(basename "$1")" ]; then
@@ -100,8 +108,6 @@ install_framework()
   echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" --filter \\"- Headers\\" --filter \\"- PrivateHeaders\\" --filter \\"- Modules\\" \\"${source}\\" \\"${destination}\\""
   rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "${source}" "${destination}"
 
-  local basename
-  basename="$(basename -s .framework "$1")"
   binary="${destination}/${basename}.framework/${basename}"
 
   if ! [ -r "$binary" ]; then
