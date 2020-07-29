@@ -1,0 +1,31 @@
+{
+  "name": "BananaLib",
+  "version": "0.0.1",
+  "summary": "Amazing bananalib that provides access to bananas",
+  "description": "Amazing bananalib that provides access to bananas",
+  "homepage": "http://github.com/CocoaPods/CocoaPods",
+  "license": "MIT",
+  "authors": {
+    "CocoaPods": "someone@cocoapods.org"
+  },
+  "platforms": {
+    "ios": "13.0"
+  },
+  "source": {
+    "git": "https://github.com/CocoaPods/CocoaPods.git",
+    "tag": "0.0.1"
+  },
+  "source_files": [
+    "Classes",
+    "Classes/**/*.{h,m}"
+  ],
+  "exclude_files": "Classes/Exclude",
+  "vendored_frameworks": "CoconutLib.xcframework",
+  "testspecs": [
+    {
+      "name": "Tests",
+      "test_type": "unit",
+      "source_files": "Tests/**/*.{h,m}"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+framework module Pods_XCFrameworkIntegration {
+  umbrella header "Pods-XCFrameworkIntegration-umbrella.h"
+
+  export *
+  module * { export * }
+}
