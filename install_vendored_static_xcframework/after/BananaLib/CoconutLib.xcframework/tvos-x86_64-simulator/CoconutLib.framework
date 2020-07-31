@@ -1,0 +1,14 @@
+BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework
+  BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/_CodeSignature
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/_CodeSignature/CodeDirectory
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/_CodeSignature/CodeRequirements
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/_CodeSignature/CodeRequirements-1
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/_CodeSignature/CodeResources
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/_CodeSignature/CodeSignature
+  BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/CoconutLib
+  BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/Headers
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/Headers/Coconut.h
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/Headers/CoconutLib.h
+  BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/Info.plist
+  BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/Modules
+    BananaLib/CoconutLib.xcframework/tvos-x86_64-simulator/CoconutLib.framework/Modules/module.modulemap
