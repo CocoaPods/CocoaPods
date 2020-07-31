@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Ensure that static frameworks are not embedded  
+  [Bernard Gatt](https://github.com/BernardGatt)
+  [#9943](https://github.com/CocoaPods/CocoaPods/issues/9943)
+
 * Ensure that the non-compilable resource skipping in static frameworks happens only for the pod itself  
   [Igor Makarov](https://github.com/igor-makarov)
   [#9922](https://github.com/CocoaPods/CocoaPods/pull/9922)

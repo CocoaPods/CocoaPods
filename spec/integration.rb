@@ -318,6 +318,11 @@ describe_cli 'pod' do
                             'install --no-repo-update --no-verbose'
     end
 
+    describe 'Integrates a Pod using a vendored static xcframework' do
+      behaves_like cli_spec 'install_vendored_static_xcframework',
+                            'install --no-repo-update'
+    end
+
     describe 'Integrates a Pod using a vendored xcframework' do
       behaves_like cli_spec 'install_vendored_xcframework',
                             'install --no-repo-update'
