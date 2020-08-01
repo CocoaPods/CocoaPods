@@ -188,6 +188,17 @@ module Pod
       end
     end
 
+    # Returns the path where the Pod checkout options are stored.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Pathname] the path of the Pod checkout options file.
+    #
+    def pod_checkout_options_path(name)
+      pod_dir(name).join('.checkout_options')
+    end
+
     # Returns true if the path as originally specified was absolute.
     #
     # @param  [String] name

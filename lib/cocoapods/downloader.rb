@@ -111,7 +111,11 @@ module Pod
       target.mkpath
 
       if downloader.options_specific?
-        params
+        if downloader.is_a?(Downloader::Git) && params[:commit].nil?
+          downloader.checkout_options
+        else
+          params
+        end
       else
         downloader.checkout_options
       end

@@ -798,7 +798,8 @@ module Pod
         Executable.stubs(:which).with('git').returns(git)
         Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
         Executable.stubs(:which).with(:xcrun)
-        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command.first == 'clone' }.once
+        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command[2] == 'rev-parse' }.returns('0baddead').times(4)
+        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command.first == 'clone' }.times(4)
         # Command should include the pod target 'JSONKit' instead of the 'App' target.
         command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'JSONKit', '-configuration', 'Release']
         args = %w(CODE_SIGN_IDENTITY=)
@@ -827,7 +828,8 @@ module Pod
         Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
         Executable.stubs(:which).with(:xcrun)
         Executable.stubs(:execute_command).with('find', [validator.validation_dir, '-name', '*.html'], false).returns('')
-        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command.first == 'clone' }.once
+        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command[2] == 'rev-parse' }.returns('0baddead').times(4)
+        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command.first == 'clone' }.times(4)
         # Command should 'analyze' instead of 'build'.
         command = ['clean', 'analyze', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release']
         args = %w(CODE_SIGN_IDENTITY=)
@@ -854,7 +856,8 @@ module Pod
         Executable.stubs(:which).with('git').returns(git)
         Executable.stubs(:capture_command).with('git', ['config', '--get', 'remote.origin.url'], :capture => :out).returns(['https://github.com/CocoaPods/Specs.git'])
         Executable.stubs(:which).with(:xcrun)
-        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command.first == 'clone' }.once
+        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command[2] == 'rev-parse' }.returns('0baddead').times(4)
+        Executable.expects(:execute_command).with { |executable, command, _| executable == 'git' && command.first == 'clone' }.times(4)
         command = ['clean', 'build', '-workspace', File.join(validator.validation_dir, 'App.xcworkspace'), '-scheme', 'App', '-configuration', 'Release']
         args = %w(CODE_SIGN_IDENTITY=)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')

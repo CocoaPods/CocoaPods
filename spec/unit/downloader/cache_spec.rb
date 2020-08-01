@@ -77,6 +77,7 @@ module Pod
 
         it 'downloads the source' do
           @cache.expects(:copy_and_clean).twice
+          @cache.expects(:save_checkout_options).twice
           response = @cache.download_pod(@unreleased_request)
           response.should == Downloader::Response.new(@cache.root + @unreleased_request.slug, @spec, @spec.source)
         end
@@ -160,6 +161,7 @@ module Pod
       describe 'when downloading a released pod' do
         it 'does not download the source' do
           Downloader::Git.any_instance.expects(:download).never
+          @cache.expects(:cached_checkout_options).returns(@spec.source)
           @cache.expects(:uncached_pod).never
           response = @cache.download_pod(@request)
           response.should == Downloader::Response.new(@cache.root + @request.slug, @spec, @spec.source)
@@ -169,6 +171,7 @@ module Pod
       describe 'when downloading an unreleased pod' do
         it 'does not download the source' do
           Downloader::Git.any_instance.expects(:download).never
+          @cache.expects(:cached_checkout_options).returns(@spec.source)
           @cache.expects(:uncached_pod).never
           response = @cache.download_pod(@unreleased_request)
           response.should == Downloader::Response.new(@cache.root + @unreleased_request.slug, @spec, @spec.source)

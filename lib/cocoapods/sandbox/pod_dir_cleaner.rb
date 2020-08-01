@@ -54,7 +54,7 @@ module Pod
         cached_used_set = cached_used.to_set
         files.reject do |candidate|
           candidate = candidate.downcase
-          candidate.end_with?('.', '..') || cached_used_set.include?(candidate) || cached_used.any? do |path|
+          candidate.end_with?('.', '..', '.checkout_options') || cached_used_set.include?(candidate) || cached_used.any? do |path|
             path.include?(candidate) || candidate.include?(path)
           end
         end
