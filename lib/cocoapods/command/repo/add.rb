@@ -18,6 +18,7 @@ module Pod
         def self.options
           [
             ['--progress', 'Show the progress of cloning the spec repository'],
+            ['--registry', 'Use a private registry instead of git repository'],
           ].concat(super)
         end
 
@@ -26,6 +27,7 @@ module Pod
           @url = argv.shift_argument
           @branch = argv.shift_argument
           @progress = argv.flag?('progress')
+          @registry = argv.flag?('registry')
           super
         end
 
@@ -45,9 +47,13 @@ module Pod
           section << " (branch `#{@branch}`)" if @branch
           UI.section(section) do
             create_repos_dir
-            clone_repo
-            checkout_branch
-            config.sources_manager.sources([dir.basename.to_s]).each(&:verify_compatibility!)
+            if @registry
+              download_from_registry
+            else
+              clone_repo
+              checkout_branch
+              config.sources_manager.sources([dir.basename.to_s]).each(&:verify_compatibility!)
+            end
           end
         end
 
@@ -65,6 +71,33 @@ module Pod
         rescue => e
           raise Informative, "Could not create '#{config.repos_dir}', the CocoaPods repo cache directory.\n" \
             "#{e.class.name}: #{e.message}"
+        end
+
+        def download_from_registry
+          changes = if @progress
+                      { :verbose => true }
+                    else
+                      {}
+                    end
+          config.with_changes(changes) do
+            repo_dir = config.repos_dir.join(@name)
+            options = {
+              :http => @url,
+              :type => 'tgz',
+              :flatten => true,
+            }
+            downloader = Downloader.for_target(repo_dir, options)
+            downloader.download
+            create_registry_yml(repo_dir)
+          end
+        end
+
+        def create_registry_yml(repo_dir_root)
+          registryrc_path = "#{repo_dir_root}/.registry-rc.yml"
+          registryrc = { 'registry_url' => @url }
+          File.open(registryrc_path, 'wb') do |file|
+            file.write registryrc.to_yaml
+          end
         end
 
         # Clones the git spec-repo according to parameters passed to the
