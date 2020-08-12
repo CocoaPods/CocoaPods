@@ -158,7 +158,7 @@ code_sign_if_enabled() {
           end
         end
         xcframeworks_by_config.each do |config, xcframeworks|
-          xcframeworks.each do |xcframework|
+          xcframeworks.select { |xcf| xcf.build_type.dynamic_framework? }.each do |xcframework|
             name = xcframework.name
             contents_by_config[config] << %(  install_framework "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{name}/#{name}.framework"\n)
           end

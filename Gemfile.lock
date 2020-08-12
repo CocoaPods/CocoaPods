@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 59eaa9b1b22070d6c5ffcfa19f491c1f47594459
+  revision: 5f1594a90154a067b448c3cfe11b7fdac543a627
   branch: master
   specs:
-    cocoapods-core (1.10.0.beta.1)
+    cocoapods-core (1.10.0.beta.2)
       activesupport (> 5.0, < 6)
       addressable (~> 2.6)
       algoliasearch (~> 1.0)
@@ -37,10 +37,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 1c6d6fd2bf71d76df7c5870fa33fdc469fae46da
+  revision: faf8c8e47e89a91a31f47c78eaae7e87bf052e69
   branch: master
   specs:
-    xcodeproj (1.17.1)
+    xcodeproj (1.18.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -56,7 +56,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: e2c4ac9f7536c3f31594b26ba2c4c09639f3dca8
+  revision: 1afba7c3e26b55710317f69483c1446a60fbfb2e
   branch: master
   specs:
     cocoapods-downloader (1.4.0)
@@ -108,10 +108,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.10.0.beta.1)
+    cocoapods (1.10.0.beta.2)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.10.0.beta.1)
+      cocoapods-core (= 1.10.0.beta.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -158,7 +158,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)
@@ -192,7 +192,7 @@ GEM
       rchardet (~> 1.8)
     hashdiff (0.3.1)
     httpclient (2.8.3)
-    i18n (1.8.3)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     inch (0.8.0)
       pry
