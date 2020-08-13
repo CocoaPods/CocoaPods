@@ -1,6 +1,6 @@
 # Installation & Update
 
-To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
+To install or update CocoaPods see this [guide](https://guides.cocoapods.org/using/index.html).
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
