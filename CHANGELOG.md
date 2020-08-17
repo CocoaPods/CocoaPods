@@ -12,7 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Ensure that incremental installation is able to set target dependencies for a
+  test spec that uses a custom `app_host_name` that is in a project that is not
+  regenerated.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 
 ## 1.10.0.beta.2 (2020-08-12)
