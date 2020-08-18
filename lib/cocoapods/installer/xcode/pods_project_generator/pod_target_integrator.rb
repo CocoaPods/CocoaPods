@@ -135,6 +135,24 @@ module Pod
               dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact
             end.uniq
 
+            xcframeworks_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), paths_by_config|
+              target.test_specs.map do |test_spec|
+                paths_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
+                  spec_paths_to_include = pod_target.library_specs.map(&:name)
+                  spec_paths_to_include -= host_target_spec_names
+                  spec_paths_to_include << test_spec.name if pod_target == target
+                  pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq
+                end
+              end
+              target.app_specs.map do |app_spec|
+                paths_by_config[config_name] = target.dependent_targets_for_app_spec(app_spec, :configuration => config).flat_map do |pod_target|
+                  spec_paths_to_include = pod_target.library_specs.map(&:name)
+                  spec_paths_to_include << app_spec.name if pod_target == target
+                  pod_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact.uniq
+                end
+              end
+            end            
+
             if use_input_output_paths? && !framework_paths.empty?
               input_file_list_path = target.embed_frameworks_script_input_files_path_for_spec(spec)
               input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
@@ -147,7 +165,7 @@ module Pod
               output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.embed_frameworks_output_paths(framework_paths, [])
             end
 
-            if framework_paths.empty?
+            if framework_paths.empty? && xcframeworks_by_config.empty?
               UserProjectIntegrator::TargetIntegrator.remove_embed_frameworks_script_phase_from_target(native_target)
             else
               UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(
