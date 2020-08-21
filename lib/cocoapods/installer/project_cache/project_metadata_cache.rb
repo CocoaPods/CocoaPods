@@ -54,6 +54,10 @@ module Pod
           installation_results.each do |installation_result|
             native_target = installation_result.native_target
             target_label_by_metadata[native_target.name] = TargetMetadata.from_native_target(sandbox, native_target)
+            # app targets need to be added to the cache because they can be used as app hosts for test targets, even if those test targets live inside a different pod (and thus project)
+            installation_result.app_native_targets.each_value do |app_target|
+              target_label_by_metadata[app_target.name] = TargetMetadata.from_native_target(sandbox, app_target)
+            end
           end
         end
 

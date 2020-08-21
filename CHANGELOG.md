@@ -1,6 +1,6 @@
 # Installation & Update
 
-To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
+To install or update CocoaPods see this [guide](https://guides.cocoapods.org/using/index.html).
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
@@ -12,7 +12,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Honor test spec deployment target during validation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9999](https://github.com/CocoaPods/CocoaPods/pull/9999)
+
+* Ensure that incremental installation is able to set target dependencies for a
+  test spec that uses a custom `app_host_name` that is in a project that is not
+  regenerated.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 
 ## 1.10.0.beta.2 (2020-08-12)
