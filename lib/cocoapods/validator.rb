@@ -556,6 +556,8 @@ module Pod
       validation_dir.rmtree
     end
 
+    # @return [String] The deployment targret of the library spec.
+    #
     def deployment_target
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       if consumer.platform_name == :ios && use_frameworks
@@ -711,7 +713,7 @@ module Pod
             UI.warn "Skipping compilation with `xcodebuild` because target contains no sources.\n".yellow
           else
             if analyze
-              output = xcodebuild('analyze', scheme, 'Release')
+              output = xcodebuild('analyze', scheme, 'Release', :deployment_target => deployment_target)
               find_output = Executable.execute_command('find', [validation_dir, '-name', '*.html'], false)
               if find_output != ''
                 message = 'Static Analysis failed.'
@@ -720,7 +722,7 @@ module Pod
                 error('build_pod', message)
               end
             else
-              output = xcodebuild('build', scheme, configuration ? configuration : 'Release')
+              output = xcodebuild('build', scheme, configuration ? configuration : 'Release', :deployment_target => deployment_target)
             end
             parsed_output = parse_xcodebuild_output(output)
             translate_output_to_linter_messages(parsed_output)
@@ -757,7 +759,7 @@ module Pod
               UI.warn "Skipping test spec `#{test_spec.name}` on platform `#{consumer.platform_name}` since it is not supported.\n".yellow
             else
               scheme = @installer.target_installation_results.first[pod_target.name].native_target_for_spec(test_spec)
-              output = xcodebuild('test', scheme, 'Debug')
+              output = xcodebuild('test', scheme, 'Debug', :deployment_target => test_spec.deployment_target(consumer.platform_name))
               parsed_output = parse_xcodebuild_output(output)
               translate_output_to_linter_messages(parsed_output)
             end
@@ -1048,7 +1050,7 @@ module Pod
     # @return [String] Executes xcodebuild in the current working directory and
     #         returns its output (both STDOUT and STDERR).
     #
-    def xcodebuild(action, scheme, configuration)
+    def xcodebuild(action, scheme, configuration, deployment_target:)
       require 'fourflusher'
       command = %W(clean #{action} -workspace #{File.join(validation_dir, 'App.xcworkspace')} -scheme #{scheme} -configuration #{configuration})
       case consumer.platform_name

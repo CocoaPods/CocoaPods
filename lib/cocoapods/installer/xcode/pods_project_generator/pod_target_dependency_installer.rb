@@ -152,11 +152,13 @@ module Pod
             target_attributes[test_native_target.uuid.to_s] = { 'TestTargetID' => app_native_target.uuid.to_s }
             project.root_object.attributes['TargetAttributes'] = target_attributes
             test_native_target.add_dependency(app_native_target)
-          else
+          elsif cached_dependency = metadata_cache.target_label_by_metadata[app_host_target_label]
             # Hit the cache
-            cached_dependency = metadata_cache.target_label_by_metadata[app_host_target_label]
             project.add_cached_subproject_reference(sandbox, cached_dependency, project.dependencies_group)
             Project.add_cached_dependency(sandbox, test_native_target, cached_dependency)
+          else
+            raise "Expected to either have an installation or cache result for #{app_host_target_label} (from pod #{app_host_pod_target_label}) " \
+              "for target #{test_native_target.name} in project #{project.project_name}"
           end
         end
 
