@@ -34,6 +34,10 @@ module Pod
         #
         attr_reader :aggregate_targets
 
+        # @return [Hash<Symbol, Object>] Hash of installation options.
+        #
+        attr_reader :installation_options
+
         # @return [Bool] Flag indicating if we want to ignore the cache and force a clean installation.
         #
         attr_reader :clean_install
@@ -47,9 +51,10 @@ module Pod
         # @param [Hash<String, Hash>] podfile_plugins @see #podfile_plugins
         # @param [Array<PodTarget>] pod_targets @see #pod_targets
         # @param [Array<AggregateTarget>] aggregate_targets @see #aggregate_targets
+        # @param [Hash<Symbol, Object>] installation_options @see #installation_options
         # @param [Bool] clean_install @see #clean_install
         #
-        def initialize(sandbox, cache, build_configurations, project_object_version, podfile_plugins, pod_targets, aggregate_targets,
+        def initialize(sandbox, cache, build_configurations, project_object_version, podfile_plugins, pod_targets, aggregate_targets, installation_options,
                        clean_install: false)
           @sandbox = sandbox
           @cache = cache
@@ -58,6 +63,7 @@ module Pod
           @pod_targets = pod_targets
           @aggregate_targets = aggregate_targets
           @project_object_version = project_object_version
+          @installation_options = installation_options
           @clean_install = clean_install
         end
 
@@ -78,7 +84,8 @@ module Pod
           # Bail out early since these properties affect all targets and their associate projects.
           if cache.build_configurations != build_configurations ||
               cache.project_object_version != project_object_version ||
-              YAMLHelper.convert(cache.podfile_plugins) != YAMLHelper.convert(podfile_plugins)
+              YAMLHelper.convert(cache.podfile_plugins) != YAMLHelper.convert(podfile_plugins) ||
+              YAMLHelper.convert(cache.installation_options) != YAMLHelper.convert(installation_options)
             UI.message 'Ignoring project cache due to project configuration changes.'
             return full_install_results
           end
