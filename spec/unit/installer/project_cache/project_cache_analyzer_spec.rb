@@ -32,7 +32,7 @@ module Pod
           it 'returns all pod targets if there is no cache' do
             empty_cache = ProjectInstallationCache.new
             analyzer = ProjectCacheAnalyzer.new(@sandbox, empty_cache, @build_configurations, @project_object_version, {},
-                                                @pod_targets, [@main_aggregate_target])
+                                                @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -43,7 +43,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal(nil)
@@ -55,7 +55,7 @@ module Pod
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             @banana_lib.root_spec.stubs(:checksum).returns('Blah')
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([@banana_lib])
             result.aggregate_targets_to_generate.should.equal(nil)
@@ -66,7 +66,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations.merge('Production' => :release), @project_object_version, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations.merge('Production' => :release), @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -77,7 +77,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, {})
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => {} }, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => {} }, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -88,7 +88,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins' => %w[B A])
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => %w[A B] }, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => %w[A B] }, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal(nil)
@@ -99,7 +99,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins-1' => {}, 'my-plugins-2' => {})
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins-2' => { 'input' => 1 }, 'my-plugins-1' => {} }, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins-2' => { 'input' => 1 }, 'my-plugins-1' => {} }, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -110,7 +110,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins-1' => {}, 'my-plugins-2' => {})
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins-2' => {}, 'my-plugins-1' => {} }, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins-2' => {}, 'my-plugins-1' => {} }, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal(nil)
@@ -121,7 +121,7 @@ module Pod
             cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, 2, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, 2, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -133,7 +133,7 @@ module Pod
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             @banana_lib.stubs(:project_name).returns('SomeProject')
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(@pod_targets)
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -148,7 +148,7 @@ module Pod
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
 
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target, @secondary_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target, @secondary_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target, @secondary_aggregate_target])
@@ -163,7 +163,7 @@ module Pod
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
 
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
@@ -175,7 +175,7 @@ module Pod
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
 
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, [], [@main_aggregate_target, @secondary_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, [], [@main_aggregate_target, @secondary_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal([@main_aggregate_target, @secondary_aggregate_target])
@@ -183,7 +183,7 @@ module Pod
 
           it 'returns an empty list of aggregate targets when podfile has no targets and empty cache' do
             cache = ProjectInstallationCache.new
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, [], [])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, [], [], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal([])
@@ -193,7 +193,7 @@ module Pod
             FileUtils.rm_rf @orange_lib.support_files_dir
             cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([@orange_lib])
             result.aggregate_targets_to_generate.should.be.nil
@@ -203,7 +203,7 @@ module Pod
             FileUtils.rm_rf @sandbox.pod_target_project_path(@orange_lib.pod_name)
             cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([@orange_lib])
             result.aggregate_targets_to_generate.should.be.nil
@@ -218,7 +218,7 @@ module Pod
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
 
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal([@monkey_lib])
             result.aggregate_targets_to_generate.should.equal(nil)
@@ -240,7 +240,7 @@ module Pod
               subspec_target_2.label => TargetCacheKey.from_cache_hash(@sandbox, 'BUILD_SETTINGS_CHECKSUM' => 'Blah'),
             }
             cache = ProjectInstallationCache.new(cache_key_by_aggregate_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, subspec_pods, [])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, subspec_pods, [], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(subspec_pods)
             result.aggregate_targets_to_generate.should.equal([])
@@ -264,9 +264,31 @@ module Pod
             }
 
             cache = ProjectInstallationCache.new(cache_key_by_aggregate_target_labels, @build_configurations, @project_object_version)
-            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, subspec_pods, [])
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, subspec_pods, [], {})
             result = analyzer.analyze
             result.pod_targets_to_generate.should.equal(subspec_pods)
+            result.aggregate_targets_to_generate.should.equal(nil)
+          end
+
+          it 'returns all pod targets when installation options change' do
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
+            cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, {}, 'share_schemes_for_development_pods' => false, 'lock_pod_sources' => true)
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], 'share_schemes_for_development_pods' => false)
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal(@pod_targets)
+            result.aggregate_targets_to_generate.should.equal([@main_aggregate_target])
+          end
+
+          it 'returns empty list when installation options do not change' do
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
+            cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, {}, 'share_schemes_for_development_pods' => false, 'lock_pod_sources' => true)
+            analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], 'lock_pod_sources' => true, 'share_schemes_for_development_pods' => false)
+            result = analyzer.analyze
+            result.pod_targets_to_generate.should.equal([])
             result.aggregate_targets_to_generate.should.equal(nil)
           end
         end

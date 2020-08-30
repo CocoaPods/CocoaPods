@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Force a clean install if installation options change.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#10016](https://github.com/CocoaPods/CocoaPods/pull/10016)
+
 * Honor test spec deployment target during validation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9999](https://github.com/CocoaPods/CocoaPods/pull/9999)
