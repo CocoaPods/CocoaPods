@@ -69,6 +69,60 @@ module Pod
         end
       end
 
+      # Convenience method for acquiring a shared lock to safely read from the
+      # cache. See `Cache.lock` for more details.
+      #
+      # @param  [Pathname] location
+      #         the path to require a lock for.
+      #
+      # @param  [Proc] block
+      #         the block to execute inside the lock.
+      #
+      # @return [Void]
+      #
+      def self.read_lock(location, block = Proc.new)
+        Cache.lock(location, File::LOCK_SH, block)
+      end
+
+      # Convenience method for acquiring an exclusive lock to safely write to
+      # the cache. See `Cache.lock` for more details.
+      #
+      # @param  [Pathname] location
+      #         the path to require a lock for.
+      #
+      # @param  [Proc] block
+      #         the block to execute inside the lock.
+      #
+      # @return [Void]
+      #
+      def self.write_lock(location, block = Proc.new)
+        Cache.lock(location, File::LOCK_EX, block)
+      end
+
+      # Creates a .lock file at `location`, aquires a lock of type
+      # `lock_type`, and executes `block` while holding on to that lock. The
+      # block is passed the location for convenience.
+      #
+      # @param  [Pathname] location
+      #         the path to require a lock for.
+      #
+      # @param  [locking_constant] lock_type
+      #         the type of lock, either exclusive (File::LOCK_EX) or shared
+      #         (File::LOCK_SH).
+      #
+      # @param  [Proc] block
+      #         the block to execute inside the lock.
+      #
+      # @return [Void]
+      #
+      def self.lock(location, lock_type, block = Proc.new)
+        lockfile = "#{location}.lock"
+        File.open(lockfile, File::CREAT, 0o644) do |f|
+          f.flock(lock_type)
+          block.call location
+        end
+      end
+
       private
 
       # Ensures the cache on disk was created with the same CocoaPods version as
@@ -197,10 +251,12 @@ module Pod
       def copy_and_clean(source, destination, spec)
         specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
-        FileUtils.rm_rf(destination)
-        FileUtils.cp_r(source, destination)
-        Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
-        Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+        Cache.write_lock(destination) do
+          FileUtils.rm_rf(destination)
+          FileUtils.cp_r(source, destination)
+          Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
+          Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+        end
       end
 
       def group_subspecs_by_platform(spec)
@@ -226,7 +282,9 @@ module Pod
       #
       def write_spec(spec, path)
         path.dirname.mkpath
-        path.open('w') { |f| f.write spec.to_pretty_json }
+        Cache.write_lock(path) do
+          path.open('w') { |f| f.write spec.to_pretty_json }
+        end
       end
     end
   end

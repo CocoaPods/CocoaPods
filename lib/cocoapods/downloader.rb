@@ -50,8 +50,10 @@ module Pod
 
       if target && result.location && target != result.location
         UI.message "Copying #{request.name} from `#{result.location}` to #{UI.path target}", '> ' do
-          FileUtils.rm_rf target
-          FileUtils.cp_r(result.location, target)
+          Cache.read_lock(result.location) do
+            FileUtils.rm_rf target
+            FileUtils.cp_r(result.location, target)
+          end
         end
       end
       result
