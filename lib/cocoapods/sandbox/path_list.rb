@@ -71,7 +71,7 @@ module Pod
 
         @dirs = dirs
         @files = files
-        @glob_cache = {}
+        @glob_cache.clear
       end
 
       #-----------------------------------------------------------------------#
@@ -156,6 +156,22 @@ module Pod
           list -= relative_glob(exclude_patterns, exclude_options)
         end
         list
+      end
+
+      # Number of files and directories that are read in the read_file_system.
+      #
+      # @return [Integer]
+      #
+      def read_file_system_size
+        (files + dirs).length
+      end
+
+      # Number of files and directories that are resolved by the glob search.
+      #
+      # @return [Integer]
+      #
+      def resolved_file_system_size
+        @glob_cache.values.flatten.uniq.length
       end
 
       #-----------------------------------------------------------------------#

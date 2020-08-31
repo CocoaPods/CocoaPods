@@ -391,6 +391,57 @@ module Pod
         result.compact.flatten.sort
       end
 
+      class FileAccessorStat
+        # @return [Integer]
+        #
+        attr_reader :resolved_file_system_size
+
+        # @return [Integer]
+        #
+        attr_reader :read_file_system_size
+
+        # @return [String]
+        #
+        attr_reader :spec_name
+
+        # @param  [Integer] resolved_file_system_size
+        # @param  [Integer] read_file_system_size
+        # @param  [String] spec_name
+        #
+        def initialize(resolved_file_system_size, read_file_system_size, spec_name)
+          @resolved_file_system_size = resolved_file_system_size
+          @read_file_system_size = read_file_system_size
+          @spec_name = spec_name
+        end
+
+        # Percentage of the file system that is read by the accessor
+        #
+        # @return [Integer]
+        #
+        def resolved_file_system_percentage
+          if read_file_system_size != 0
+            used_files_ratio = resolved_file_system_size.to_f / read_file_system_size.to_f
+          else
+            used_files_ratio = 0.0
+          end
+          (used_files_ratio * 100.0).to_int
+        end
+      end
+
+      # A stat for the file accessor that accounts for how many files and directories were read and resolved.
+      #
+      # @note stat will be reset if PathList.read_file_system method is called
+      #
+      # @return [FileAccessorStat]
+      #
+      def stat
+        FileAccessorStat.new(
+          path_list.resolved_file_system_size,
+          path_list.read_file_system_size,
+          spec.name,
+        )
+      end
+
       #-----------------------------------------------------------------------#
 
       private

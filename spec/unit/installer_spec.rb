@@ -891,6 +891,81 @@ module Pod
       end
     end
 
+    #-------------------------------------------------------------------------#
+
+    describe 'Large local spec warning' do
+      it 'prints a warning when spec is local, large enough and uses little files' do
+        stat = Sandbox::FileAccessor::FileAccessorStat.new(5, 10, 'local_spec')
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods',
+                   :warn_for_large_local_specs => true,
+                   :warn_for_large_local_specs_files_count_threshold => 10,
+                   :warn_for_large_local_specs_resolved_files_percentage => 50
+          platform :ios
+        end
+        @installer = Installer.new(stub(:local? => true), podfile)
+        @installer.stubs(:pod_targets).returns(
+            [stub(:file_accessors => [stub(:stat => stat)])]
+        )
+        @installer.send(:warn_for_large_local_specs)
+        UI.warnings.should.include 'Local spec local_spec resolves 5 of the 10 read files and directories (50%). ' \
+            'Consider restructuring the layout of the podspec and its files to reduce the install duration.'
+      end
+
+      it "doesn't print warning when spec is not big enough" do
+        stat = Sandbox::FileAccessor::FileAccessorStat.new(5, 10, 'local_spec')
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods',
+                   :warn_for_large_local_specs => true,
+                   :warn_for_large_local_specs_files_count_threshold => 11,
+                   :warn_for_large_local_specs_resolved_files_percentage => 50
+          platform :ios
+        end
+        @installer = Installer.new(stub(:local? => true), podfile)
+        @installer.stubs(:pod_targets).returns(
+            [stub(:file_accessors => [stub(:stat => stat)])]
+        )
+        @installer.send(:warn_for_large_local_specs)
+        UI.warnings.should.be.empty
+      end
+
+      it "doesn't print warning when spec uses enough files" do
+        stat = Sandbox::FileAccessor::FileAccessorStat.new(5, 10, 'local_spec')
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods',
+                   :warn_for_large_local_specs => true,
+                   :warn_for_large_local_specs_files_count_threshold => 10,
+                   :warn_for_large_local_specs_resolved_files_percentage => 49
+          platform :ios
+        end
+        @installer = Installer.new(stub(:local? => true), podfile)
+        @installer.stubs(:pod_targets).returns(
+            [stub(:file_accessors => [stub(:stat => stat)])]
+        )
+        @installer.send(:warn_for_large_local_specs)
+        UI.warnings.should.be.empty
+      end
+
+      it "doesn't print warning when spec is not local" do
+        stat = Sandbox::FileAccessor::FileAccessorStat.new(5, 10, 'local_spec')
+        podfile = Pod::Podfile.new do
+          install! 'cocoapods',
+                   :warn_for_large_local_specs => true,
+                   :warn_for_large_local_specs_files_count_threshold => 10,
+                   :warn_for_large_local_specs_resolved_files_percentage => 50
+          platform :ios
+        end
+        @installer = Installer.new(stub(:local? => false), podfile)
+        @installer.stubs(:pod_targets).returns(
+            [stub(:file_accessors => [stub(:stat => stat)])]
+        )
+        @installer.send(:warn_for_large_local_specs)
+        UI.warnings.should.be.empty
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
     describe 'Plugins Hooks' do
       before do
         @installer.send(:analyze)

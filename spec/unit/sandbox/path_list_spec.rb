@@ -239,6 +239,32 @@ module Pod
       end
     end
 
+    describe 'File system size' do
+      describe 'Read size' do
+        it 'includes all read files and directories' do
+          @path_list.read_file_system_size.should == 555
+        end
+      end
+
+      describe 'Resolved size' do
+        it 'is 0 when no files have been resolved' do
+          @path_list.resolved_file_system_size.should == 0
+        end
+
+        it 'counts resolved files' do
+          @path_list.glob('Classes/*.{h,m}').size.should == 3
+          @path_list.resolved_file_system_size.should == 3
+        end
+
+        it "doesn't count same files twice" do
+          @path_list.glob('Classes/Banana.h').size.should == 1
+          @path_list.resolved_file_system_size.should == 1
+          @path_list.glob('Classes/*.{h,m}').size.should == 3
+          @path_list.resolved_file_system_size.should == 3
+        end
+      end
+    end
+
     #-------------------------------------------------------------------------#
 
     describe 'Private Helpers' do

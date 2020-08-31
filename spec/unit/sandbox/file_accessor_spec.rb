@@ -346,5 +346,34 @@ module Pod
     end
 
     #-------------------------------------------------------------------------#
+
+    describe 'Stat' do
+      it 'provides correct percentage when no files were read or resolved' do
+        stat = FileAccessor::FileAccessorStat.new(0, 0, 'name')
+        stat.resolved_file_system_percentage.should == 0
+      end
+
+      it 'provides correct percentage when half of the files have been read' do
+        stat = FileAccessor::FileAccessorStat.new(1, 2, 'name')
+        stat.resolved_file_system_percentage.should == 50
+      end
+
+      it 'changes after files have been resolved' do
+        @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')
+        before_resolving_stat = @accessor.stat
+        before_resolving_stat.read_file_system_size.should == 555
+        before_resolving_stat.resolved_file_system_size.should == 0
+        before_resolving_stat.resolved_file_system_percentage.should == 0
+
+        @accessor.resource_bundles.values.flatten.size.should == 8
+        after_resolving_stat = @accessor.stat
+        after_resolving_stat.read_file_system_size.should == 555
+        after_resolving_stat.resolved_file_system_size.should == 8
+        after_resolving_stat.resolved_file_system_percentage.should == 1
+      end
+    end
+
+    #-------------------------------------------------------------------------#
+
   end
 end

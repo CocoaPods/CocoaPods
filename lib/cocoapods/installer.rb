@@ -613,6 +613,7 @@ module Pod
       warn_for_deprecations
       warn_for_installed_script_phases
       warn_for_removing_git_master_specs_repo
+      warn_for_large_local_specs
       print_post_install_message
     end
 
@@ -773,6 +774,32 @@ module Pod
         ' default, you may safely remove it from your repos directory via `pod repo remove master`. To suppress this warning' \
         ' please add `warn_for_unused_master_specs_repo => false` to your Podfile.'
       end
+    end
+
+    # Prints a warning for each local spec that reads many files but resolves only a small percentage of those files.
+    #
+    # Helps users discover installation performance issues.
+    #
+    # @return [void]
+    #
+    def warn_for_large_local_specs
+      return unless installation_options.warn_for_large_local_specs?
+      local_file_accessor_stats = pod_targets.flat_map(&:file_accessors).map(&:stat).select do |stat|
+        is_local = sandbox.local?(stat.spec_name)
+        reads_many_files = stat.read_file_system_size >= installation_options.warn_for_large_local_specs_files_count_threshold
+        resolves_small_percentage_of_read_files = stat.resolved_file_system_percentage <= installation_options.warn_for_large_local_specs_resolved_files_percentage
+        is_local && reads_many_files && resolves_small_percentage_of_read_files
+      end
+
+      local_file_accessor_stats.
+        group_by(&:resolved_file_system_percentage).
+        sort.
+        flat_map { |_, stats| stats.sort_by(&:read_file_system_size).reverse }.
+        each do |stat|
+          UI.warn "Local spec #{stat.spec_name} resolves #{stat.resolved_file_system_size} " \
+          "of the #{stat.read_file_system_size} read files and directories (#{stat.resolved_file_system_percentage}%). " \
+          'Consider restructuring the layout of the podspec and its files to reduce the install duration.'
+        end
     end
 
     # @return [Lockfile] The lockfile to write to disk.

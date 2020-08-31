@@ -72,6 +72,9 @@ module Pod
           'generate_multiple_pod_projects' => false,
           'incremental_installation' => false,
           'skip_pods_project_generation' => false,
+          'warn_for_large_local_specs' => false,
+          'warn_for_large_local_specs_files_count_threshold' => 1000,
+          'warn_for_large_local_specs_resolved_files_percentage' => 5,
         }
       end
 

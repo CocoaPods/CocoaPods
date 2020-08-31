@@ -190,6 +190,22 @@ module Pod
       # Whether to skip generating the `Pods.xcodeproj` and perform only dependency resolution and downloading.
       #
       option :skip_pods_project_generation, false
+
+      # Whether to emit a warning when the local spec layout impedes quick installation.
+      #
+      # @see https://github.com/CocoaPods/CocoaPods/issues/9982
+      #
+      option :warn_for_large_local_specs, false
+
+      # Minimum number of files for a spec to be considered large.
+      # Used with warn_for_large_local_specs.
+      #
+      option :warn_for_large_local_specs_files_count_threshold, 1000, :boolean => false
+
+      # Percentage of files resolved by the spec below which a spec is considered to impede performance of installation.
+      # Used with warn_for_large_local_specs.
+      #
+      option :warn_for_large_local_specs_resolved_files_percentage, 5, :boolean => false
     end
   end
 end
