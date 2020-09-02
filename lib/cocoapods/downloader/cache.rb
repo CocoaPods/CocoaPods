@@ -78,7 +78,7 @@ module Pod
       # @param  [Proc] block
       #         the block to execute inside the lock.
       #
-      # @return [Void]
+      # @return [void]
       #
       def self.read_lock(location, block = Proc.new)
         Cache.lock(location, File::LOCK_SH, block)
@@ -93,7 +93,7 @@ module Pod
       # @param  [Proc] block
       #         the block to execute inside the lock.
       #
-      # @return [Void]
+      # @return [void]
       #
       def self.write_lock(location, block = Proc.new)
         Cache.lock(location, File::LOCK_EX, block)
@@ -115,7 +115,7 @@ module Pod
       # @param  [Proc] block
       #         the block to execute inside the lock.
       #
-      # @return [Void]
+      # @return [void]
       #
       def self.lock(destination, lock_type, block = Proc.new)
         lockfile = "#{destination}.lock"
@@ -126,14 +126,17 @@ module Pod
           f.flock(lock_type)
           break if Cache.validate_lock(f, lockfile)
         end
-        block.call destination
-        if lock_type == File::LOCK_SH
-          f.flock(File::LOCK_EX)
-          File.delete(lockfile) if Cache.validate_lock(f, lockfile)
-        else
-          File.delete(lockfile)
+        begin
+          block.call destination
+        ensure
+          if lock_type == File::LOCK_SH
+            f.flock(File::LOCK_EX)
+            File.delete(lockfile) if Cache.validate_lock(f, lockfile)
+          else
+            File.delete(lockfile)
+          end
+          f.close
         end
-        f.close
       end
 
       # Checks that the lock is on a file that still exists on the filesystem.
