@@ -69,6 +69,91 @@ module Pod
         end
       end
 
+      # Convenience method for acquiring a shared lock to safely read from the
+      # cache. See `Cache.lock` for more details.
+      #
+      # @param  [Pathname] location
+      #         the path to require a lock for.
+      #
+      # @param  [block] &block
+      #         the block to execute inside the lock.
+      #
+      # @return [void]
+      #
+      def self.read_lock(location, &block)
+        Cache.lock(location, File::LOCK_SH, &block)
+      end
+
+      # Convenience method for acquiring an exclusive lock to safely write to
+      # the cache. See `Cache.lock` for more details.
+      #
+      # @param  [Pathname] location
+      #         the path to require a lock for.
+      #
+      # @param  [block] &block
+      #         the block to execute inside the lock.
+      #
+      # @return [void]
+      #
+      def self.write_lock(location, &block)
+        Cache.lock(location, File::LOCK_EX, &block)
+      end
+
+      # Creates a .lock file at `location`, aquires a lock of type
+      # `lock_type`, checks that it is valid, and executes passed block while
+      # holding on to that lock. Afterwards, the .lock file is deleted, which is
+      # why validation of the lock is necessary, as you might have a lock on a
+      # file that doesn't exist on the filesystem anymore.
+      #
+      # @param  [Pathname] location
+      #         the path to require a lock for.
+      #
+      # @param  [locking_constant] lock_type
+      #         the type of lock, either exclusive (File::LOCK_EX) or shared
+      #         (File::LOCK_SH).
+      #
+      # @return [void]
+      #
+      def self.lock(location, lock_type)
+        raise ArgumentError, 'no block given' unless block_given?
+        lockfile = "#{location}.lock"
+        f = nil
+        loop do
+          f.close if f
+          f = File.open(lockfile, File::CREAT, 0o644)
+          f.flock(lock_type)
+          break if Cache.valid_lock?(f, lockfile)
+        end
+        begin
+          yield location
+        ensure
+          if lock_type == File::LOCK_SH
+            f.flock(File::LOCK_EX)
+            File.delete(lockfile) if Cache.valid_lock?(f, lockfile)
+          else
+            File.delete(lockfile)
+          end
+          f.close
+        end
+      end
+
+      # Checks that the lock is on a file that still exists on the filesystem.
+      #
+      # @param  [File] file
+      #         the actual file that we have a lock for.
+      #
+      # @param  [String] filename
+      #         the filename of the file that we have a lock for.
+      #
+      # @return [Boolean]
+      #         true if `filename` still exists and is the same file as `file`
+      #
+      def self.valid_lock?(file, filename)
+        file.stat.ino == File.stat(filename).ino
+      rescue Errno::ENOENT
+        false
+      end
+
       private
 
       # Ensures the cache on disk was created with the same CocoaPods version as
@@ -197,10 +282,12 @@ module Pod
       def copy_and_clean(source, destination, spec)
         specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
-        FileUtils.rm_rf(destination)
-        FileUtils.cp_r(source, destination)
-        Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
-        Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+        Cache.write_lock(destination) do
+          FileUtils.rm_rf(destination)
+          FileUtils.cp_r(source, destination)
+          Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
+          Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+        end
       end
 
       def group_subspecs_by_platform(spec)
@@ -226,7 +313,9 @@ module Pod
       #
       def write_spec(spec, path)
         path.dirname.mkpath
-        path.open('w') { |f| f.write spec.to_pretty_json }
+        Cache.write_lock(path) do
+          path.open('w') { |f| f.write spec.to_pretty_json }
+        end
       end
     end
   end
