@@ -100,8 +100,10 @@ module Pod
       end
 
       # Creates a .lock file at `location`, aquires a lock of type
-      # `lock_type`, and executes `block` while holding on to that lock. The
-      # block is passed the location for convenience.
+      # `lock_type`, checks that it is valid, and executes `block` while holding
+      # on to that lock. Afterwards, the .lock file is deleted, which is why
+      # validation of the lock is necessary, as you might have a lock on a file
+      # that doesn't exist on the filesystem anymore.
       #
       # @param  [Pathname] location
       #         the path to require a lock for.
@@ -115,12 +117,40 @@ module Pod
       #
       # @return [Void]
       #
-      def self.lock(location, lock_type, block = Proc.new)
-        lockfile = "#{location}.lock"
-        File.open(lockfile, File::CREAT, 0o644) do |f|
+      def self.lock(destination, lock_type, block = Proc.new)
+        lockfile = "#{destination}.lock"
+        f = nil
+        loop do
+          f.close if f
+          f = File.open(lockfile, File::CREAT, 0o644)
           f.flock(lock_type)
-          block.call location
+          break if Cache.validate_lock(f, lockfile)
         end
+        block.call destination
+        if lock_type == File::LOCK_SH
+          f.flock(File::LOCK_EX)
+          File.delete(lockfile) if Cache.validate_lock(f, lockfile)
+        else
+          File.delete(lockfile)
+        end
+        f.close
+      end
+
+      # Checks that the lock is on a file that still exists on the filesystem.
+      #
+      # @param  [File] file
+      #         the actual file that we have a lock for.
+      #
+      # @param  [String] filename
+      #         the filename of the file that we have a lock for.
+      #
+      # @return [Boolean]
+      #         true if `filename` still exists and is the same file as `f`
+      #
+      def self.validate_lock(file, filename)
+        file.stat.ino == File.stat(filename).ino
+      rescue Errno::ENOENT
+        false
       end
 
       private
