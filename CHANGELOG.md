@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix XCFramework slice selection  
+  [lowip](https://github.com/lowip)
+  [#10026](https://github.com/CocoaPods/CocoaPods/issues/10026)
+
 * Honor test spec deployment target during validation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9999](https://github.com/CocoaPods/CocoaPods/pull/9999)
