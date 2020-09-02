@@ -75,13 +75,13 @@ module Pod
       # @param  [Pathname] location
       #         the path to require a lock for.
       #
-      # @param  [Proc] block
+      # @param  [block] &block
       #         the block to execute inside the lock.
       #
       # @return [void]
       #
-      def self.read_lock(location, block = Proc.new)
-        Cache.lock(location, File::LOCK_SH, block)
+      def self.read_lock(location, &block)
+        Cache.lock(location, File::LOCK_SH, &block)
       end
 
       # Convenience method for acquiring an exclusive lock to safely write to
@@ -90,20 +90,20 @@ module Pod
       # @param  [Pathname] location
       #         the path to require a lock for.
       #
-      # @param  [Proc] block
+      # @param  [block] &block
       #         the block to execute inside the lock.
       #
       # @return [void]
       #
-      def self.write_lock(location, block = Proc.new)
-        Cache.lock(location, File::LOCK_EX, block)
+      def self.write_lock(location, &block)
+        Cache.lock(location, File::LOCK_EX, &block)
       end
 
       # Creates a .lock file at `location`, aquires a lock of type
-      # `lock_type`, checks that it is valid, and executes `block` while holding
-      # on to that lock. Afterwards, the .lock file is deleted, which is why
-      # validation of the lock is necessary, as you might have a lock on a file
-      # that doesn't exist on the filesystem anymore.
+      # `lock_type`, checks that it is valid, and executes passed block while
+      # holding on to that lock. Afterwards, the .lock file is deleted, which is
+      # why validation of the lock is necessary, as you might have a lock on a
+      # file that doesn't exist on the filesystem anymore.
       #
       # @param  [Pathname] location
       #         the path to require a lock for.
@@ -112,26 +112,24 @@ module Pod
       #         the type of lock, either exclusive (File::LOCK_EX) or shared
       #         (File::LOCK_SH).
       #
-      # @param  [Proc] block
-      #         the block to execute inside the lock.
-      #
       # @return [void]
       #
-      def self.lock(destination, lock_type, block = Proc.new)
-        lockfile = "#{destination}.lock"
+      def self.lock(location, lock_type)
+        raise ArgumentError, 'no block given' unless block_given?
+        lockfile = "#{location}.lock"
         f = nil
         loop do
           f.close if f
           f = File.open(lockfile, File::CREAT, 0o644)
           f.flock(lock_type)
-          break if Cache.validate_lock(f, lockfile)
+          break if Cache.valid_lock?(f, lockfile)
         end
         begin
-          block.call destination
+          yield location
         ensure
           if lock_type == File::LOCK_SH
             f.flock(File::LOCK_EX)
-            File.delete(lockfile) if Cache.validate_lock(f, lockfile)
+            File.delete(lockfile) if Cache.valid_lock?(f, lockfile)
           else
             File.delete(lockfile)
           end
@@ -148,9 +146,9 @@ module Pod
       #         the filename of the file that we have a lock for.
       #
       # @return [Boolean]
-      #         true if `filename` still exists and is the same file as `f`
+      #         true if `filename` still exists and is the same file as `file`
       #
-      def self.validate_lock(file, filename)
+      def self.valid_lock?(file, filename)
         file.stat.ino == File.stat(filename).ino
       rescue Errno::ENOENT
         false
