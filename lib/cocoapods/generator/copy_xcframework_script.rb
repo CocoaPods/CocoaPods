@@ -101,7 +101,7 @@ select_slice() {
       fi
 
       # Verifies that the path contains the variant string (simulator or maccatalyst) if the variant is set.
-      if [[ -z "$target_variant" && "${paths[$i]}" == *"simulator"* || "${paths[$i]}" == *"maccatalyst"* ]]; then
+      if [[ -z "$target_variant" && ("${paths[$i]}" == *"simulator"* || "${paths[$i]}" == *"maccatalyst"*) ]]; then
         matched_all_archs="0"
         break
       fi
