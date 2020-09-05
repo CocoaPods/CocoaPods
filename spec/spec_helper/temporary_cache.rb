@@ -12,10 +12,11 @@ module SpecHelper
       FileUtils.rm_rf(destination)
       destination.mkpath
       FileUtils.cp_r(fixture_path, destination)
-      # Add version file so that the cache isn't imploded on version mismatch
-      # (We don't include it in the tar.gz as we don't want to regenerate it each time)
-      version_file = tmp_cache_path + 'Pods/VERSION'
-      version_file.open('w') { |f| f << Pod::VERSION }
+      tmpdir = Pathname(Dir.mktmpdir)
+      FileUtils.mv(tmp_cache_path + 'Pods', tmpdir)
+      versioned_cache = tmp_cache_path + "Pods/#{Pod::VERSION}"
+      versioned_cache.mkpath
+      FileUtils.mv(Dir.glob(tmpdir + 'Pods/*'), versioned_cache)
     end
 
     def tmp_cache_path
@@ -23,7 +24,7 @@ module SpecHelper
     end
 
     def test_cache_yaml(short = false)
-      cache_root = "#{tmp_cache_path}/Pods"
+      cache_root = "#{tmp_cache_path}/Pods/#{Pod::VERSION}"
       root_path = short ? '' : "#{cache_root}/"
       yaml = {
         'AFNetworking' => [

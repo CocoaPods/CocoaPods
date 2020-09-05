@@ -7,7 +7,7 @@ module Pod
     # them in a cache directory.
     #
     class Cache
-      # @return [Pathname] The root directory where this cache store its
+      # @return [Pathname] The root directory where this cache stores its
       #         downloads.
       #
       attr_reader :root
@@ -18,8 +18,8 @@ module Pod
       #         see {#root}
       #
       def initialize(root)
-        @root = Pathname(root)
-        ensure_matching_version
+        @root = Pathname(root) + Pod::VERSION
+        @root.mkpath
       end
 
       # Downloads the Pod from the given `request`
@@ -155,21 +155,6 @@ module Pod
       end
 
       private
-
-      # Ensures the cache on disk was created with the same CocoaPods version as
-      # is currently running.
-      #
-      # @return [Void]
-      #
-      def ensure_matching_version
-        version_file = root + 'VERSION'
-        version = version_file.read.strip if version_file.file?
-
-        root.rmtree if version != Pod::VERSION && root.exist?
-        root.mkpath
-
-        version_file.open('w') { |f| f << Pod::VERSION }
-      end
 
       # @param  [Request] request
       #         the request to be downloaded.
