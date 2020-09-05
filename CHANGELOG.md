@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Allow different versions of CocoaPods to use the same cache (at the same time).  
+  [Erik Blomqvist](https://github.com/codiophile)
+  [#10030](https://github.com/CocoaPods/CocoaPods/issues/10030)
+
 * Ensure cache integrity on concurrent installations.  
   [Erik Blomqvist](https://github.com/codiophile)
   [#10013](https://github.com/CocoaPods/CocoaPods/issues/10013)
