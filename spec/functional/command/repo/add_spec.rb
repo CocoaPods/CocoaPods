@@ -35,6 +35,14 @@ module Pod
       Dir.chdir(repo2.dir) { `git symbolic-ref HEAD` }.should.include? 'my-branch'
     end
 
+    it 'adds a registry repo' do
+      run_command('repo', 'add', 'registry', 'https://github.com/CocoaPods/cocoapods-test-specs/archive/master.zip', '--registry')
+      Dir.chdir(config.repos_dir + 'registry') do
+        registry_rc = YAML.safe_load(File.read('.registry-rc.yml'))
+        registry_rc['registry_url'].chomp.should == 'https://github.com/CocoaPods/cocoapods-test-specs/archive/master.zip'
+      end
+    end
+
     it 'raises an informative error when the repos directory fails to be created' do
       repos_dir = config.repos_dir
       def repos_dir.mkpath

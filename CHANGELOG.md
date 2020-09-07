@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Support for CocoaPods registries.
+  [yahavi](https://github.com/yahavi)
+  [#9959](https://github.com/CocoaPods/CocoaPods/pull/9959)
 
 ##### Bug Fixes
 

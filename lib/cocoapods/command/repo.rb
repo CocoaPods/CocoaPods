@@ -22,6 +22,9 @@ module Pod
       extend Executable
       executable :git
 
+      extend Executable
+      executable :curl
+
       def dir
         config.repos_dir + @name
       end
