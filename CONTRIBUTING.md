@@ -76,9 +76,8 @@ Code/comments should adhere to the following rules:
   work. (There are a few exceptions to this, which can be recognised by there
   not being any coverage for similar code.)
   * CocoaPods uses [bacon](https://github.com/chneukirchen/bacon) as a test runner.
-    To run all tests, use `bundle exec rake spec` in the root of the 
-    [Rainforest repo](https://github.com/CocoaPods/Rainforest). If you want to run
-    a specific test instead, use `bundle exec bacon spec/[folder]/[name]_spec.rb`
+    To run all tests, use `bundle exec rake spec` in the root of the project. If
+    you want to run a specific test instead, use `bundle exec bacon spec/[folder]/[name]_spec.rb`
 * All enhancements and bug fixes need to be documented in the CHANGELOG.
 * When writing comments, use properly constructed sentences, including
   punctuation.
