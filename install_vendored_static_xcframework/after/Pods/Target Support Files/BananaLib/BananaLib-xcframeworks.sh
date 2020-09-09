@@ -51,7 +51,7 @@ select_slice() {
       fi
 
       # Verifies that the path contains the variant string (simulator or maccatalyst) if the variant is set.
-      if [[ -z "$target_variant" && "${paths[$i]}" == *"simulator"* || "${paths[$i]}" == *"maccatalyst"* ]]; then
+      if [[ -z "$target_variant" && ("${paths[$i]}" == *"simulator"* || "${paths[$i]}" == *"maccatalyst"*) ]]; then
         matched_all_archs="0"
         break
       fi
@@ -154,4 +154,3 @@ install_xcframework() {
 }
 
 install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "CoconutLib" "framework" "ios-i386_x86_64-simulator/CoconutLib.framework" "ios-armv7_arm64/CoconutLib.framework"
-
