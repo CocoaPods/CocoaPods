@@ -651,10 +651,6 @@ module Pod
                 scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
                 apply_xcconfig_file_ref_to_targets([test_native_target] + scoped_test_resource_bundle_targets, test_xcconfig_file_ref, names)
               end
-
-              test_native_target.build_configurations.each do |test_native_target_bc|
-                test_target_swift_debug_hack(test_spec, test_native_target_bc)
-              end
             end
           end
 
@@ -831,18 +827,6 @@ module Pod
             generator = Generator::CopyXCFrameworksScript.new(target.xcframeworks.values.flatten, sandbox.root, target.platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
-          end
-
-          # Manually add `libswiftSwiftOnoneSupport.dylib` as it seems there is an issue with tests that do not include it for Debug configurations.
-          # Possibly related to Swift module optimization.
-          #
-          # @return [void]
-          #
-          def test_target_swift_debug_hack(test_spec, test_target_bc)
-            return unless test_target_bc.debug?
-            return unless target.dependent_targets_for_test_spec(test_spec).any?(&:uses_swift?)
-            ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
-            ldflags << ' -lswiftSwiftOnoneSupport'
           end
 
           # Creates a build phase which links the versioned header folders

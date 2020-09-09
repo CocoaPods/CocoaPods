@@ -404,7 +404,8 @@ module Pod
 
           it 'includes default runpath search path list for a host target' do
             @target.stubs(:requires_host_target?).returns(true)
-            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' '@executable_path/../../Frameworks'"
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' '@executable_path/../../Frameworks' " \
+              '"${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}" "$(PLATFORM_DIR)/Developer/Library/Frameworks"'
           end
 
           it 'includes correct default runpath search path list for OSX unit test bundle user target' do
@@ -412,7 +413,7 @@ module Pod
             mock_user_target = mock('usertarget')
             mock_user_target.stubs(:symbol_type).returns(:unit_test_bundle)
             @target.stubs(:user_targets).returns([mock_user_target])
-            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks'"
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/../Frameworks' '@loader_path/../Frameworks' \"${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\""
           end
 
           it 'includes correct default runpath search path list for OSX application user target' do
