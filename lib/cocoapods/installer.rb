@@ -747,7 +747,7 @@ module Pod
     def warn_for_installed_script_phases
       pods_to_install = sandbox_state.added | sandbox_state.changed
       pod_targets.group_by(&:pod_name).each do |name, pod_targets|
-        if pods_to_install.include?(name)
+        if pods_to_install.include?(name) && !sandbox.local?(name)
           script_phase_count = pod_targets.inject(0) { |sum, target| sum + target.script_phases.count }
           unless script_phase_count.zero?
             UI.warn "#{name} has added #{script_phase_count} #{'script phase'.pluralize(script_phase_count)}. " \
