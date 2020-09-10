@@ -377,6 +377,7 @@ module Pod
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
               language = target.uses_swift_for_spec?(test_spec) ? :swift : :objc
+              embedded_content_contains_swift = target.dependent_targets_for_test_spec(test_spec).any?(&:uses_swift?)
               test_native_target = project.new_target(product_type, name, platform_name,
                                                       target.deployment_target_for_non_library_spec(test_spec), nil,
                                                       language)
@@ -409,6 +410,9 @@ module Pod
                 end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+                # Ensure swift stdlib gets copied in if needed, even when the target contains no swift files,
+                # because a dependency uses swift
+                configuration.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES' if embedded_content_contains_swift
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.test_spec_build_settings_by_config[test_spec.name], test_native_target)
@@ -459,6 +463,7 @@ module Pod
               info_plist_entries = spec_consumer.info_plist
               resources = target.file_accessors.find { |fa| fa.spec == app_spec }.resources
               add_launchscreen_storyboard = resources.none? { |resource| resource.basename.to_s == 'LaunchScreen.storyboard' } && platform.name == :ios
+              embedded_content_contains_swift = target.dependent_targets_for_app_spec(app_spec).any?(&:uses_swift?)
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
                                                                          :add_launchscreen_storyboard => add_launchscreen_storyboard,
@@ -501,6 +506,9 @@ module Pod
                   configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=iphoneos*]')
                   configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=watchos*]')
                 end
+                # Ensure swift stdlib gets copied in if needed, even when the target contains no swift files,
+                # because a dependency uses swift
+                configuration.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES' if embedded_content_contains_swift
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.app_spec_build_settings_by_config[app_spec.name], app_native_target)
