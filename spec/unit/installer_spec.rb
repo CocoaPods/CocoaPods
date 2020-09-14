@@ -833,6 +833,22 @@ module Pod
           UI.warnings.should.be.empty
         end
 
+        it 'does not print a warning for a local pod that include script phases' do
+          spec = fixture_spec('coconut-lib/CoconutLib.podspec')
+          spec.test_specs.first.script_phase = { :name => 'Hello World', :script => 'echo "Hello World"' }
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec, *spec.test_specs],
+                                     [fixture_target_definition], nil)
+          pod_target.stubs(:platform).returns(:ios)
+          config.sandbox.stubs(:local?).with('CoconutLib').returns(true)
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.changed << 'CoconutLib'
+          @installer.stubs(:pod_targets).returns([pod_target])
+          @installer.stubs(:root_specs).returns([spec])
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.send(:warn_for_installed_script_phases)
+          UI.warnings.should.be.empty
+        end
+
         #--------------------------------------#
 
         describe '#clean' do
