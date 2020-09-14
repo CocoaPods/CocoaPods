@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Installing a local (`:path`) pod that defines script phases will no longer
+  produce warnings.  
+  [Samuel Giddins](https://github.com/segiddins)
 
 ##### Bug Fixes
 
