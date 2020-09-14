@@ -51,7 +51,7 @@ module Pod
 
       it 'shows the current git branch configuration' do
         output = run_command('repo', 'list')
-        output.should.include? '- Type: git (master)'
+        output.should.include? '- Type: git (main)'
       end
 
       it 'shows the git URL (when an upstream is not configured)' do
