@@ -367,6 +367,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -387,6 +388,7 @@ Targets:
         Base Configuration: HostedTestLib.app.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -430,6 +432,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -450,6 +453,7 @@ Targets:
         Base Configuration: HostedTestLib.appwithdep.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -492,6 +496,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -503,9 +508,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-prefix.pch
           INFOPLIST_FILE: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests3-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-          OTHER_LDFLAGS:
-          - "$(inherited)"
-          - "-lswiftSwiftOnoneSupport"
           PRODUCT_NAME: HostedTestLib-Unit-UnitTests3
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
@@ -514,6 +516,7 @@ Targets:
         Base Configuration: HostedTestLib.unit-unittests3.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -554,6 +557,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -565,9 +569,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-prefix.pch
           INFOPLIST_FILE: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests4-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-          OTHER_LDFLAGS:
-          - "$(inherited)"
-          - "-lswiftSwiftOnoneSupport"
           PRODUCT_NAME: HostedTestLib-Unit-UnitTests4
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
@@ -576,6 +577,7 @@ Targets:
         Base Configuration: HostedTestLib.unit-unittests4.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -605,6 +607,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -616,9 +619,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-prefix.pch
           INFOPLIST_FILE: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests5-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-          OTHER_LDFLAGS:
-          - "$(inherited)"
-          - "-lswiftSwiftOnoneSupport"
           PRODUCT_NAME: HostedTestLib-Unit-UnitTests5
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
@@ -627,6 +627,7 @@ Targets:
         Base Configuration: HostedTestLib.unit-unittests5.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -657,6 +658,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -668,9 +670,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-prefix.pch
           INFOPLIST_FILE: Target Support Files/HostedTestLib/HostedTestLib-Unit-UnitTests6-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-          OTHER_LDFLAGS:
-          - "$(inherited)"
-          - "-lswiftSwiftOnoneSupport"
           PRODUCT_NAME: HostedTestLib-Unit-UnitTests6
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
@@ -679,6 +678,7 @@ Targets:
         Base Configuration: HostedTestLib.unit-unittests6.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -954,6 +954,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -975,6 +976,7 @@ Targets:
         Base Configuration: TestLib.app.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -1017,6 +1019,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -1027,9 +1030,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-Unit-UnitTests1-prefix.pch
           INFOPLIST_FILE: Target Support Files/TestLib/TestLib-Unit-UnitTests1-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-          OTHER_LDFLAGS:
-          - "$(inherited)"
-          - "-lswiftSwiftOnoneSupport"
           PRODUCT_NAME: TestLib-Unit-UnitTests1
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
@@ -1037,6 +1037,7 @@ Targets:
         Base Configuration: TestLib.unit-unittests1.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -1075,6 +1076,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
@@ -1086,9 +1088,6 @@ Targets:
           GCC_PREFIX_HEADER: Target Support Files/TestLib/TestLib-Unit-UnitTests2-prefix.pch
           INFOPLIST_FILE: Target Support Files/TestLib/TestLib-Unit-UnitTests2-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
-          OTHER_LDFLAGS:
-          - "$(inherited)"
-          - "-lswiftSwiftOnoneSupport"
           PRODUCT_NAME: TestLib-Unit-UnitTests2
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
@@ -1097,6 +1096,7 @@ Targets:
         Base Configuration: TestLib.unit-unittests2.debug.xcconfig
     - Release:
         Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'YES'
           BUNDLE_LOADER: "$(TEST_HOST)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
