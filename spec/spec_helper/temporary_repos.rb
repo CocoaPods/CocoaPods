@@ -20,6 +20,7 @@ module SpecHelper
       path.mkpath
       Dir.chdir(path) do
         Pod::Executable.capture_command!('git', %w(init))
+        Pod::Executable.capture_command!('git', %w(checkout -b main))
         repo_make_readme_change(name, 'Added')
         Pod::Executable.capture_command!('git', %w(add .))
         Pod::Executable.capture_command!('git', %w(commit -nm Initialized.))

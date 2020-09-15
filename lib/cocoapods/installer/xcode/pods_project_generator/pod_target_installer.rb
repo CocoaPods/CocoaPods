@@ -377,6 +377,7 @@ module Pod
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
               language = target.uses_swift_for_spec?(test_spec) ? :swift : :objc
+              embedded_content_contains_swift = target.dependent_targets_for_test_spec(test_spec).any?(&:uses_swift?)
               test_native_target = project.new_target(product_type, name, platform_name,
                                                       target.deployment_target_for_non_library_spec(test_spec), nil,
                                                       language)
@@ -409,6 +410,9 @@ module Pod
                 end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+                # Ensure swift stdlib gets copied in if needed, even when the target contains no swift files,
+                # because a dependency uses swift
+                configuration.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES' if embedded_content_contains_swift
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.test_spec_build_settings_by_config[test_spec.name], test_native_target)
@@ -459,6 +463,7 @@ module Pod
               info_plist_entries = spec_consumer.info_plist
               resources = target.file_accessors.find { |fa| fa.spec == app_spec }.resources
               add_launchscreen_storyboard = resources.none? { |resource| resource.basename.to_s == 'LaunchScreen.storyboard' } && platform.name == :ios
+              embedded_content_contains_swift = target.dependent_targets_for_app_spec(app_spec).any?(&:uses_swift?)
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
                                                                          :add_launchscreen_storyboard => add_launchscreen_storyboard,
@@ -501,6 +506,9 @@ module Pod
                   configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=iphoneos*]')
                   configuration.build_settings.delete('CODE_SIGN_IDENTITY[sdk=watchos*]')
                 end
+                # Ensure swift stdlib gets copied in if needed, even when the target contains no swift files,
+                # because a dependency uses swift
+                configuration.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES' if embedded_content_contains_swift
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.app_spec_build_settings_by_config[app_spec.name], app_native_target)
@@ -650,10 +658,6 @@ module Pod
                 # also apply the private config to resource bundle test targets related to this test spec.
                 scoped_test_resource_bundle_targets = test_resource_bundle_targets[test_spec.name]
                 apply_xcconfig_file_ref_to_targets([test_native_target] + scoped_test_resource_bundle_targets, test_xcconfig_file_ref, names)
-              end
-
-              test_native_target.build_configurations.each do |test_native_target_bc|
-                test_target_swift_debug_hack(test_spec, test_native_target_bc)
               end
             end
           end
@@ -831,18 +835,6 @@ module Pod
             generator = Generator::CopyXCFrameworksScript.new(target.xcframeworks.values.flatten, sandbox.root, target.platform)
             update_changed_file(generator, path)
             add_file_to_support_group(path)
-          end
-
-          # Manually add `libswiftSwiftOnoneSupport.dylib` as it seems there is an issue with tests that do not include it for Debug configurations.
-          # Possibly related to Swift module optimization.
-          #
-          # @return [void]
-          #
-          def test_target_swift_debug_hack(test_spec, test_target_bc)
-            return unless test_target_bc.debug?
-            return unless target.dependent_targets_for_test_spec(test_spec).any?(&:uses_swift?)
-            ldflags = test_target_bc.build_settings['OTHER_LDFLAGS'] ||= '$(inherited)'
-            ldflags << ' -lswiftSwiftOnoneSupport'
           end
 
           # Creates a build phase which links the versioned header folders

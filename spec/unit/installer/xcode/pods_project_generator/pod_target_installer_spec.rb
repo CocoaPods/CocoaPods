@@ -360,16 +360,6 @@ module Pod
                     include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-App` target in Xcode would have no sources to compile.'
               end
 
-              it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
-                @watermelon_ios_pod_target.stubs(:uses_swift?).returns(true)
-                @ios_installer.install!
-                test_native_target = @project.targets[1]
-                debug_configuration = test_native_target.build_configurations.find(&:debug?)
-                debug_configuration.build_settings['OTHER_LDFLAGS'].should == '$(inherited) -lswiftSwiftOnoneSupport'
-                release_configuration = test_native_target.build_configurations.find { |bc| bc.type == :release }
-                release_configuration.build_settings['OTHER_LDFLAGS'].should.be.nil
-              end
-
               it 'adds files to build phases correctly depending on the native target' do
                 @ios_installer.install!
                 @project.targets.count.should == 9

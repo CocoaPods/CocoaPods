@@ -22,6 +22,10 @@ Pod::Spec.new do |s|
     test_spec.source_files = 'TestLib/UnitTests2/**/*'
   end
 
+  s.test_spec 'UnitTests5' do |test_spec|
+    test_spec.source_files = 'TestLib/UnitTests5/**/*'
+  end
+
   s.app_spec 'App' do |app_spec|
     app_spec.source_files = 'TestLib/App/**/*'
   end

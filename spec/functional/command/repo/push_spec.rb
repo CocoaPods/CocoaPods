@@ -73,7 +73,7 @@ module Pod
         `git remote add origin #{@upstream}`
         `git remote -v`
         `git fetch -q`
-        `git branch --set-upstream-to=origin/master master`
+        `git branch --set-upstream-to=origin/main main`
       end
 
       # prepare the spec
@@ -156,7 +156,7 @@ module Pod
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)
       Dir.chdir(temporary_directory) { cmd.run }
-      Dir.chdir(@upstream) { `git checkout master -q` }
+      Dir.chdir(@upstream) { `git checkout main -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
 
@@ -165,7 +165,7 @@ module Pod
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)
       Dir.chdir(temporary_directory) { cmd.run }
-      Dir.chdir(@upstream) { `git checkout master -q` }
+      Dir.chdir(@upstream) { `git checkout main -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
 
@@ -174,7 +174,7 @@ module Pod
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
       cmd.expects(:validate_podspec_files).returns(true)
       Dir.chdir(temporary_directory) { cmd.run }
-      Dir.chdir(@upstream) { `git checkout master -q` }
+      Dir.chdir(@upstream) { `git checkout main -q` }
       (@upstream + 'PushTest/1.4/PushTest.podspec.json').read.should.include('PushTest')
     end
 

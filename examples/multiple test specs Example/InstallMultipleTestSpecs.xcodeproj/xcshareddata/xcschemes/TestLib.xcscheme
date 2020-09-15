@@ -48,6 +48,16 @@
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "795874B04DB7F28773F99BF9DBF99000"
+               BuildableName = "TestLib-Unit-UnitTests5.xctest"
+               BlueprintName = "TestLib-Unit-UnitTests5"
+               ReferencedContainer = "container:Pods.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   produce warnings.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Allow building app & test spec targets that depend on a library that uses
+  Swift without requiring an empty Swift file be present.  
+  [Samuel Giddins](https://github.com/segiddins)
+
 ##### Bug Fixes
 
 * Ensure cache integrity on concurrent installations.  
