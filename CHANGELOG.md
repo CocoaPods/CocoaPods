@@ -26,6 +26,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#10016](https://github.com/CocoaPods/CocoaPods/pull/10016)
 
+
+## 1.10.0.rc.1 (2020-09-15)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix XCFramework slice selection  
+  [lowip](https://github.com/lowip)
+  [#10026](https://github.com/CocoaPods/CocoaPods/issues/10026)
+
 * Honor test spec deployment target during validation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9999](https://github.com/CocoaPods/CocoaPods/pull/9999)
