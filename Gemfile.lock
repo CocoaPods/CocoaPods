@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 97c3fb214a388f37af462806a5e73205d3e6399a
+  revision: 1dfbaa2ae03f89d52c8a0aa609e398262402bf3f
   branch: 1-10-stable
   specs:
-    cocoapods-core (1.10.0.beta.2)
+    cocoapods-core (1.10.0.rc.1)
       activesupport (> 5.0, < 6)
       addressable (~> 2.6)
       algoliasearch (~> 1.0)
@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: faf8c8e47e89a91a31f47c78eaae7e87bf052e69
+  revision: fe1ce4f4f6d37d227409da1574eb42163581eb06
   branch: master
   specs:
     xcodeproj (1.18.0)
@@ -63,7 +63,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: a620049b3024f87d47ef30cefaa833bcf1ca11bd
+  revision: 89f05e5bbd847b82e46e5a9ee0f3953805877828
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -108,10 +108,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.10.0.beta.2)
+    cocoapods (1.10.0.rc.1)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.10.0.beta.2)
+      cocoapods-core (= 1.10.0.rc.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -131,7 +131,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.2)
-    activesupport (5.2.4.3)
+    activesupport (5.2.4.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -212,7 +212,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.14.1)
+    minitest (5.14.2)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -237,7 +237,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    public_suffix (4.0.5)
+    public_suffix (4.0.6)
     rainbow (2.2.2)
       rake
     rake (10.5.0)
