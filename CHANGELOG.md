@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Resolve new Xcode 12 deployment target warning  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#9392](https://github.com/CocoaPods/CocoaPods/issues/9884) 
 
 ## 1.10.0.rc.1 (2020-09-15)
 

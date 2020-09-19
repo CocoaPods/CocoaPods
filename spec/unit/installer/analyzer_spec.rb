@@ -2465,6 +2465,46 @@ module Pod
       end
     end
 
+    describe 'platform version' do
+      before do
+        @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+        @podfile = Pod::Podfile.new do
+          target 'SampleProject' do
+            pod 'BananaLib', :git => 'example.com'
+          end
+        end
+        @analyzer = Pod::Installer::Analyzer.new(config.sandbox, @podfile)
+      end
+
+      it 'returns static library default ios deployment target of 4.3' do
+        target_definition = fixture_target_definition('App')
+        platform = @analyzer.send(:determine_platform, [@banana_spec], [target_definition], BuildType.static_library)
+        platform.deployment_target.to_s.should == '4.3'
+      end
+
+      it 'returns dynamic framework default ios deployment target of 8.0' do
+        target_definition = fixture_target_definition('App')
+        platform = @analyzer.send(:determine_platform, [@banana_spec], [target_definition], BuildType.dynamic_framework)
+        platform.deployment_target.to_s.should == '8.0'
+      end
+
+      it 'chooses the higher deployment target version from the podspec' do
+        ios_platform = Platform.new(:ios, '10.1')
+        target_definition = fixture_target_definition('App', ios_platform)
+        @banana_spec.ios.deployment_target = Version.new('9.0')
+        platform = @analyzer.send(:determine_platform, [@banana_spec], [target_definition], BuildType.dynamic_framework)
+        platform.deployment_target.to_s.should == '10.1'
+      end
+
+      it 'chooses the higher deployment target version from the Podfile' do
+        ios_platform = Platform.new(:ios, '10.1')
+        target_definition = fixture_target_definition('App', ios_platform)
+        @banana_spec.ios.deployment_target = Version.new('12.0')
+        platform = @analyzer.send(:determine_platform, [@banana_spec], [target_definition], BuildType.dynamic_framework)
+        platform.deployment_target.to_s.should == '12.0'
+      end
+    end
+
     describe 'swift version' do
       before do
         @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')

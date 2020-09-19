@@ -860,6 +860,8 @@ module Pod
           minimum = Version.new('8.0')
           deployment_target = [deployment_target, minimum].max
         end
+        # Set deployment_target to max of the Podfile and podspec specifications.
+        deployment_target = [deployment_target, target_definitions.first.platform.deployment_target].max
         Platform.new(platform_name, deployment_target)
       end
 
