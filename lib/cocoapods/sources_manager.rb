@@ -42,6 +42,8 @@ module Pod
         begin
           if is_cdn
             Command::Repo::AddCDN.parse([name, url]).run
+          elsif url.downcase =~ %r{github\.com\/cocoapods\/specs}
+            Command::Repo::Add.parse(['--sparse', name, url]).run
           else
             Command::Repo::Add.parse([name, url]).run
           end
