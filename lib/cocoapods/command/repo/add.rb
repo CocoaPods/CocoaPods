@@ -18,6 +18,7 @@ module Pod
         def self.options
           [
             ['--progress', 'Show the progress of cloning the spec repository'],
+            ['--sparse', 'Add the spec repository using sparse checkout and partial clone, good for huge repos'],
           ].concat(super)
         end
 
@@ -26,6 +27,7 @@ module Pod
           @url = argv.shift_argument
           @branch = argv.shift_argument
           @progress = argv.flag?('progress')
+          @sparse = argv.flag?('sparse')
           super
         end
 
@@ -83,8 +85,25 @@ module Pod
             Dir.chdir(config.repos_dir) do
               command = ['clone', @url]
               command << '--progress' if @progress
+              command << %w[--filter=blob:none --no-checkout --depth 1] if @sparse
               command << '--' << @name
+
               git!(command)
+
+              if @sparse
+                Dir.chdir(@name) do
+                  git!(%w[config core.sparseCheckout true])
+                  git!(%w[config core.sparseCheckoutCone true])
+                  File.open('.git/info/sparse-checkout', 'w') do |sparse|
+                    sparse.puts '/*'
+                    sparse.puts '!/*/'
+                    sparse.puts 'Specs/2/e/c/RxSwift'
+                  end
+                  command = ['checkout']
+                  command << '--progress' if @progress
+                  git!(command)
+                end
+              end
             end
           end
         end
