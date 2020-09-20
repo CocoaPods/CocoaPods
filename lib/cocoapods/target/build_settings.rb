@@ -755,7 +755,7 @@ module Pod
             libraries.concat libraries_to_import
             xcframework_libraries = vendored_xcframeworks.
                                     select { |xcf| xcf.build_type.static_library? }.
-                                    map(&:name).
+                                    flat_map { |xcf| linker_names_from_libraries([xcf.slices.first.binary_path]) }.
                                     uniq
             libraries.concat xcframework_libraries
           end
