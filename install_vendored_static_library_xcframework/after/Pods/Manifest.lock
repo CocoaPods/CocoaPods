@@ -1,0 +1,14 @@
+PODS:
+  - BananaLib (0.0.1)
+  - BananaLib/Tests (0.0.1)
+
+DEPENDENCIES:
+  - BananaLib (from `BananaLib`)
+  - BananaLib/Tests (from `BananaLib`)
+
+EXTERNAL SOURCES:
+  BananaLib:
+    :path: BananaLib
+
+SPEC CHECKSUMS:
+  BananaLib: 61eeffa10260a90dac22a76dd9ac320a4f4bacf6
