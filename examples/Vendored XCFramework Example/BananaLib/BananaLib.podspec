@@ -27,8 +27,5 @@ Pod::Spec.new do |spec|
   end
   spec.subspec 'StaticLibrary' do |ss|
     ss.vendored_frameworks = 'StaticLibrary/CoconutLib.xcframework'
-    ss.pod_target_xcconfig = {
-      'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_XCFRAMEWORKS_BUILD_DIR}/CoconutLib/Headers"',
-    }
   end
 end
