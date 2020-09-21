@@ -871,7 +871,16 @@ module Pod
 
         # @return [Array<String>]
         define_build_settings_method :header_search_paths, :build_setting => true, :memoized => true, :sorted => true do
-          target.header_search_paths(:include_dependent_targets_for_test_spec => test_xcconfig? && non_library_spec, :include_dependent_targets_for_app_spec => app_xcconfig? && non_library_spec, :configuration => @configuration)
+          paths = target.header_search_paths(:include_dependent_targets_for_test_spec => test_xcconfig? && non_library_spec, :include_dependent_targets_for_app_spec => app_xcconfig? && non_library_spec, :configuration => @configuration)
+
+          dependent_vendored_xcframeworks = []
+          dependent_vendored_xcframeworks.concat vendored_xcframeworks
+          dependent_vendored_xcframeworks.concat dependent_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_xcframeworks }
+          paths.concat dependent_vendored_xcframeworks.
+            select { |xcf| xcf.build_type.static_library? }.
+            map { |xcf| "#{BuildSettings.xcframework_intermediate_dir(xcf)}/Headers" }.
+            compact
+          paths
         end
 
         # @return [Array<String>]
