@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = '13.0'
   spec.watchos.deployment_target = '3.0'
   spec.osx.deployment_target = '10.12'
-  
+
   spec.default_subspecs = 'DynamicFramework'
 
   spec.subspec 'DynamicFramework' do |ss|
@@ -27,5 +27,8 @@ Pod::Spec.new do |spec|
   end
   spec.subspec 'StaticLibrary' do |ss|
     ss.vendored_frameworks = 'StaticLibrary/CoconutLib.xcframework'
+    ss.pod_target_xcconfig = {
+      'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_XCFRAMEWORKS_BUILD_DIR}/CoconutLib/Headers"',
+    }
   end
 end
