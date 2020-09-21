@@ -48,6 +48,7 @@ module Pod
           UI.section(section) do
             create_repos_dir
             clone_repo
+            initialize_sparse_checkout if @sparse
             checkout_branch
             config.sources_manager.sources([dir.basename.to_s]).each(&:verify_compatibility!)
           end
@@ -87,23 +88,7 @@ module Pod
               command << '--progress' if @progress
               command << %w[--filter=blob:none --no-checkout --depth 1] if @sparse
               command << '--' << @name
-
               git!(command)
-
-              if @sparse
-                Dir.chdir(@name) do
-                  git!(%w[config core.sparseCheckout true])
-                  git!(%w[config core.sparseCheckoutCone true])
-                  File.open('.git/info/sparse-checkout', 'w') do |sparse|
-                    sparse.puts '/*'
-                    sparse.puts '!/*/'
-                    sparse.puts 'Specs/2/e/c/RxSwift'
-                  end
-                  command = ['checkout']
-                  command << '--progress' if @progress
-                  git!(command)
-                end
-              end
             end
           end
         end
@@ -114,6 +99,27 @@ module Pod
         #
         def checkout_branch
           Dir.chdir(dir) { git!('checkout', @branch) } if @branch
+        end
+
+        # Initialize a sparse checkout in the git spec-repo.
+        #
+        # @return [void]
+        #
+        def initialize_sparse_checkout
+          Dir.chdir(dir) do
+            git!(%w[config core.sparseCheckout true])
+            git!(%w[config core.sparseCheckoutCone true])
+            File.open('.git/info/sparse-checkout', 'w') do |sparse|
+              sparse.puts '/*'
+              sparse.puts '!/*/'
+              sparse.puts '/Specs/*'
+              sparse.puts '!/Specs/*/'
+              sparse.puts 'Specs/2/e/c/RxSwift'
+            end
+            command = ['checkout']
+            command << '--progress' if @progress
+            git!(command)
+          end
         end
       end
     end
