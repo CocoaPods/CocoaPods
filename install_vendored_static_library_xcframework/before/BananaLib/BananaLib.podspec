@@ -21,10 +21,6 @@ Pod::Spec.new do |spec|
 
   spec.vendored_frameworks = 'CoconutLib.xcframework'
 
-  spec.pod_target_xcconfig = {
-    'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_XCFRAMEWORKS_BUILD_DIR}/CoconutLib/Headers"',
-  }
-
   spec.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Tests/**/*.{h,m}'
   end

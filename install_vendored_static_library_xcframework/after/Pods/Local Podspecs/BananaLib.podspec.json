@@ -21,9 +21,6 @@
   ],
   "exclude_files": "Classes/Exclude",
   "vendored_frameworks": "CoconutLib.xcframework",
-  "pod_target_xcconfig": {
-    "HEADER_SEARCH_PATHS": "$(inherited) \"${PODS_XCFRAMEWORKS_BUILD_DIR}/CoconutLib/Headers\""
-  },
   "testspecs": [
     {
       "name": "Tests",
