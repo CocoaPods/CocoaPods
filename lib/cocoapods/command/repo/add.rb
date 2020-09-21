@@ -114,7 +114,6 @@ module Pod
               sparse.puts '!/*/'
               sparse.puts '/Specs/*'
               sparse.puts '!/Specs/*/'
-              sparse.puts 'Specs/2/e/c/RxSwift'
             end
             command = ['checkout']
             command << '--progress' if @progress
