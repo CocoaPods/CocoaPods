@@ -26,6 +26,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#10016](https://github.com/CocoaPods/CocoaPods/pull/10016)
 
+* Correctly detect that a prebuilt pod uses Swift.
+  (with help from Dimitris Koutsogiorgas)  
+  [Elton Gao](https://github.com/gyfelton)
+  [#8649](https://github.com/CocoaPods/CocoaPods/issues/8649)
+
 
 ## 1.10.0.rc.1 (2020-09-15)
 
