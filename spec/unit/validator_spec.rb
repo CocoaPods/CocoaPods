@@ -600,6 +600,39 @@ module Pod
         validator.results_message.strip.should.be.empty
       end
 
+      it 'uses the deployment target of the current test spec' do
+        require 'fourflusher'
+        Validator.any_instance.unstub(:xcodebuild)
+        validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
+        validator.use_frameworks = true
+        validator.instance_variable_set(:@results, [])
+        validator.stubs(:validate_url)
+        validator.stubs(:validate_screenshots)
+        validator.stubs(:check_file_patterns)
+        validator.stubs(:install_pod)
+        validator.stubs(:add_app_project_import)
+        %i(prepare resolve_dependencies download_dependencies write_lockfiles).each do |m|
+          Installer.any_instance.stubs(m)
+        end
+        Installer.any_instance.stubs(:aggregate_targets).returns([])
+        Installer.any_instance.stubs(:pod_targets).returns([])
+        validator.spec.ios.deployment_target = '8.0'
+        test_spec = Specification.new(validator.spec, 'testspec', true) do |s|
+          s.ios.deployment_target = '9.0'
+        end
+        validator.spec.stubs(:subspecs).returns([test_spec])
+        pod_target = stub('JSONKit-PodTarget')
+        pod_target.stubs(:name).returns('JSONKit')
+        validator.stubs(:validation_pod_target).returns(pod_target)
+        target_installation_result = stub('JSONKitTargetInstallationResult')
+        target_installation_result.stubs(:native_target_for_spec).with(test_spec).returns('Testspec-Target')
+        Installer.any_instance.stubs(:target_installation_results).returns([{ 'JSONKit' => target_installation_result }])
+        Fourflusher::SimControl.any_instance.expects(:destination).with(:oldest, 'iOS', '8.0').returns(['-destination', 'id=XXX'])
+        Fourflusher::SimControl.any_instance.expects(:destination).with(:oldest, 'iOS', '9.0').returns(['-destination', 'id=XXX'])
+
+        validator.validate
+      end
+
       describe '#podfile_from_spec' do
         before do
           @validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))

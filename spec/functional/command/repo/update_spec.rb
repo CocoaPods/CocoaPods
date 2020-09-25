@@ -18,7 +18,7 @@ module Pod
         Pod::Executable.capture_command!('git', %W(remote add origin #{upstream}))
         Pod::Executable.capture_command!('git', %w(remote -v))
         Pod::Executable.capture_command!('git', %w(fetch -q))
-        Pod::Executable.capture_command!('git', %w(branch --set-upstream-to=origin/master master))
+        Pod::Executable.capture_command!('git', %w(branch --set-upstream-to=origin/main main))
       end
       config.sources_manager.expects(:update_search_index_if_needed_in_background).with({}).returns(nil)
       lambda { command('repo', 'update').run }.should.not.raise

@@ -199,7 +199,7 @@ module Pod
 
           force_clean_install = clean_install || project_cache_version.version != Version.create(VersionMetadata.project_cache_version)
           cache_result = ProjectCache::ProjectCacheAnalyzer.new(sandbox, installation_cache, analysis_result.all_user_build_configurations,
-                                                                object_version, plugins, pod_targets, aggregate_targets, :clean_install => force_clean_install).analyze
+                                                                object_version, plugins, pod_targets, aggregate_targets, installation_options.to_h, :clean_install => force_clean_install).analyze
           aggregate_targets_to_generate = cache_result.aggregate_targets_to_generate || []
           pod_targets_to_generate = cache_result.pod_targets_to_generate
           (aggregate_targets_to_generate + pod_targets_to_generate).each do |target|
@@ -567,6 +567,7 @@ module Pod
     #
     def clean_pod_sources
       return unless installation_options.clean?
+      return if installed_specs.empty?
       pod_installers.each(&:clean!)
     end
 
@@ -746,7 +747,7 @@ module Pod
     def warn_for_installed_script_phases
       pods_to_install = sandbox_state.added | sandbox_state.changed
       pod_targets.group_by(&:pod_name).each do |name, pod_targets|
-        if pods_to_install.include?(name)
+        if pods_to_install.include?(name) && !sandbox.local?(name)
           script_phase_count = pod_targets.inject(0) { |sum, target| sum + target.script_phases.count }
           unless script_phase_count.zero?
             UI.warn "#{name} has added #{script_phase_count} #{'script phase'.pluralize(script_phase_count)}. " \
@@ -814,6 +815,7 @@ module Pod
       installation_cache.update_project_object_version!(cache_analysis_result.project_object_version)
       installation_cache.update_build_configurations!(cache_analysis_result.build_configurations)
       installation_cache.update_podfile_plugins!(plugins)
+      installation_cache.update_installation_options!(installation_options.to_h)
       installation_cache.save_as(sandbox.project_installation_cache_path)
 
       metadata_cache.update_metadata!(target_installation_results.pod_target_installation_results || {},

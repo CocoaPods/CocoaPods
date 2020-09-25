@@ -368,27 +368,6 @@ module Pod
             end
           end
 
-          # Returns an extension in the target that corresponds to the
-          # resource's input extension.
-          #
-          # @param [String] input_extension
-          #        The input extension to map to.
-          #
-          # @return [String] The output extension.
-          #
-          def output_extension_for_resource(input_extension)
-            case input_extension
-            when '.storyboard'        then '.storyboardc'
-            when '.xib'               then '.nib'
-            when '.framework'         then '.framework'
-            when '.xcdatamodel'       then '.mom'
-            when '.xcdatamodeld'      then '.momd'
-            when '.xcmappingmodel'    then '.cdm'
-            when '.xcassets'          then '.car'
-            else                      input_extension
-            end
-          end
-
           # Returns the resource output paths for all given input paths.
           #
           # @param [Array<String>] resource_input_paths
@@ -401,7 +380,7 @@ module Pod
               base_path = '${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}'
               extname = File.extname(resource_input_path)
               basename = extname == '.xcassets' ? 'Assets' : File.basename(resource_input_path)
-              output_extension = TargetIntegrator.output_extension_for_resource(extname)
+              output_extension = Target.output_extension_for_resource(extname)
               File.join(base_path, File.basename(basename, extname) + output_extension)
             end.uniq
           end

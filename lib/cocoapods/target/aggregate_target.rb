@@ -285,6 +285,20 @@ module Pod
           resources_by_config[config] = targets.flat_map do |pod_target|
             library_specs = pod_target.library_specs.map(&:name)
             resource_paths = pod_target.resource_paths.values_at(*library_specs).flatten
+
+            if pod_target.build_as_static_framework?
+              built_product_dir = Pathname.new(pod_target.build_product_path('${BUILT_PRODUCTS_DIR}'))
+              resource_paths = resource_paths.map do |resource_path|
+                extname = File.extname(resource_path)
+                if self.class.resource_extension_compilable?(extname)
+                  output_extname = self.class.output_extension_for_resource(extname)
+                  built_product_dir.join(File.basename(resource_path, extname)).sub_ext(output_extname).to_s
+                else
+                  resource_path
+                end
+              end
+            end
+
             resource_paths << bridge_support_file
             resource_paths.compact.uniq
           end

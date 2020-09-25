@@ -360,16 +360,6 @@ module Pod
                     include 'Unable to install the `WatermelonLib` pod, because the `WatermelonLib-App` target in Xcode would have no sources to compile.'
               end
 
-              it 'adds swiftSwiftOnoneSupport ld flag to the debug configuration' do
-                @watermelon_ios_pod_target.stubs(:uses_swift?).returns(true)
-                @ios_installer.install!
-                test_native_target = @project.targets[1]
-                debug_configuration = test_native_target.build_configurations.find(&:debug?)
-                debug_configuration.build_settings['OTHER_LDFLAGS'].should == '$(inherited) -lswiftSwiftOnoneSupport'
-                release_configuration = test_native_target.build_configurations.find { |bc| bc.type == :release }
-                release_configuration.build_settings['OTHER_LDFLAGS'].should.be.nil
-              end
-
               it 'adds files to build phases correctly depending on the native target' do
                 @ios_installer.install!
                 @project.targets.count.should == 9
@@ -545,6 +535,18 @@ module Pod
         fi
                   eos
                 end
+              end
+
+              it 'adds the resources to the copy resources phase for test target when a pod target is a static framework' do
+                @watermelon_ios_pod_target.stubs(:build_type => BuildType.static_framework)
+                @ios_installer.install!
+
+                unit_test_target = @project.targets.find { |t| t.name == 'WatermelonLib-Unit-Tests' }
+
+                resources = unit_test_target.resources_build_phase.files
+                resources.count.should > 0
+                resource = resources.find { |res| res.file_ref.path.include?('resource.txt') }
+                resource.should.be.not.nil
               end
 
               it 'adds the resources bundles to the copy resources script for app target' do
@@ -739,16 +741,25 @@ module Pod
               resource.should.be.not.nil
             end
 
-            it 'adds framework resources to the static framework target' do
+            it 'adds compilable framework resources to the static framework target' do
+              @pod_target.stubs(:build_type => BuildType.static_framework)
+              @installer.install!
+              resources = @project.targets.first.resources_build_phase.files
+              resources.count.should > 0
+              resource = resources.find { |res| res.file_ref.path.include?('Migration.xcmappingmodel') }
+              resource.should.be.not.nil
+            end
+
+            it 'doesn\'t add non-compilable framework resources to the static framework target' do
               @pod_target.stubs(:build_type => BuildType.static_framework)
               @installer.install!
               resources = @project.targets.first.resources_build_phase.files
               resources.count.should > 0
               resource = resources.find { |res| res.file_ref.path.include?('logo-sidebar.png') }
-              resource.should.be.not.nil
+              resource.should.be.nil
 
               resource = resources.find { |res| res.file_ref.path.include?('en.lproj') }
-              resource.should.be.not.nil
+              resource.should.be.nil
             end
 
             it 'includes spec info_plist entries for dynamic frameworks' do

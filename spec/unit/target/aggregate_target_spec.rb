@@ -187,6 +187,18 @@ module Pod
           resource_paths_by_config['Release'].should == ['MyResources.bundle']
         end
 
+        it 'checks resource paths for compilable are converted for static frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:build_type => BuildType.static_framework)
+          convertible_files = %w[.storyboard .xib .xcdatamodel .xcdatamodeld .xcmappingmodel].map { |ext| "Filename#{ext}" }
+          @pod_target.stubs(:resource_paths).returns('BananaLib' => convertible_files)
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          expected_files = %w[.storyboardc .nib .mom .momd .cdm].map { |ext| "${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework/Filename#{ext}" }
+          resource_paths_by_config['Debug'].should == expected_files
+          resource_paths_by_config['Release'].should == expected_files
+        end
+
         it 'returns non vendored frameworks by config with different release and debug targets' do
           @pod_target_release.stubs(:should_build?).returns(true)
           @pod_target_release.stubs(:build_type => BuildType.dynamic_framework)

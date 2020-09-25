@@ -1,10 +1,73 @@
 # Installation & Update
 
-To install or update CocoaPods see this [guide](http://docs.cocoapods.org/guides/installing_cocoapods.html).
+To install or update CocoaPods see this [guide](https://guides.cocoapods.org/using/index.html).
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ## Master
+
+##### Enhancements
+
+* Installing a local (`:path`) pod that defines script phases will no longer
+  produce warnings.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+* Allow building app & test spec targets that depend on a library that uses
+  Swift without requiring an empty Swift file be present.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+##### Bug Fixes
+
+* Ensure cache integrity on concurrent installations.  
+  [Erik Blomqvist](https://github.com/codiophile)
+  [#10013](https://github.com/CocoaPods/CocoaPods/issues/10013)
+
+* Force a clean install if installation options change.  
+  [Sebastian Shanus](https://github.com/sebastianv1)
+  [#10016](https://github.com/CocoaPods/CocoaPods/pull/10016)
+
+
+## 1.10.0.rc.1 (2020-09-15)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix XCFramework slice selection  
+  [lowip](https://github.com/lowip)
+  [#10026](https://github.com/CocoaPods/CocoaPods/issues/10026)
+
+* Honor test spec deployment target during validation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9999](https://github.com/CocoaPods/CocoaPods/pull/9999)
+
+* Ensure that incremental installation is able to set target dependencies for a
+  test spec that uses a custom `app_host_name` that is in a project that is not
+  regenerated.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
+## 1.10.0.beta.2 (2020-08-12)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Ensure that static frameworks are not embedded  
+  [Bernard Gatt](https://github.com/BernardGatt)
+  [#9943](https://github.com/CocoaPods/CocoaPods/issues/9943)
+
+* Ensure that the non-compilable resource skipping in static frameworks happens only for the pod itself  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#9922](https://github.com/CocoaPods/CocoaPods/pull/9922)
+  [#9920](https://github.com/CocoaPods/CocoaPods/issues/9920)
+
+
+## 1.10.0.beta.1 (2020-07-17)
 
 ##### Breaking
 
@@ -73,6 +136,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Prevent "source changed" message for every version change when using trunk source  
   [cltnschlosser](https://github.com/cltnschlosser)
   [#9865](https://github.com/CocoaPods/CocoaPods/issues/9865)
+
+* When pod target is a static framework, save time by copying compiled resources  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#9441](https://github.com/CocoaPods/CocoaPods/pull/9441)
 
 * Re-implement `bcsymbolmap` copying to avoid duplicate outputs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)

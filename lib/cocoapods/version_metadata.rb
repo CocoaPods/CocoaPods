@@ -1,6 +1,6 @@
 module Pod
   module VersionMetadata
-    CACHE_VERSION = '002'.freeze
+    CACHE_VERSION = '003'.freeze
 
     def self.gem_version
       Pod::VERSION

@@ -31,15 +31,14 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'claide',                '>= 1.0.2', '< 2.0'
   s.add_runtime_dependency 'cocoapods-deintegrate', '>= 1.0.3', '< 2.0'
-  s.add_runtime_dependency 'cocoapods-downloader',  '>= 1.2.2', '< 2.0'
+  s.add_runtime_dependency 'cocoapods-downloader',  '>= 1.4.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-plugins',     '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-search',      '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-trunk',       '>= 1.4.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-try',         '>= 1.1.0', '< 2.0'
   s.add_runtime_dependency 'molinillo',             '~> 0.6.6'
-  s.add_runtime_dependency 'xcodeproj',             '>= 1.14.0', '< 2.0'
+  s.add_runtime_dependency 'xcodeproj',             '>= 1.17.0', '< 2.0'
 
-  s.add_runtime_dependency 'activesupport', '> 5'
   s.add_runtime_dependency 'colored2',       '~> 3.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
   s.add_runtime_dependency 'fourflusher',   '>= 2.3.0', '< 3.0'
