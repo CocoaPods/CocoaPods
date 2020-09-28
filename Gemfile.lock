@@ -6,8 +6,8 @@ GIT
     claide (1.0.3)
 
 GIT
-  remote: https://github.com/CocoaPods/Core.git
-  revision: 572dcf263fab3d4a39da9c9f043ca4ff944f5c40
+  remote: https://github.com/gyfelton/Core.git
+  revision: 95f9294b32e629765cf97362d1ed4adbc35d9464
   branch: master
   specs:
     cocoapods-core (1.10.0.rc.1)
