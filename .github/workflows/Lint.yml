@@ -1,0 +1,42 @@
+name: Lint
+
+jobs:
+  lint:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout git
+        uses: actions/checkout@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.4
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Run bundle install
+        run: |
+          gem install bundler -v "~> 1.17"
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3 --without debugging documentation
+
+      - name: Run Tests
+        run: bundle exec rake spec:all
+        env: 
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          COCOAPODS_CI_TASKS: LINT
+
+on:
+  push:
+    branches:
+      - "master"
+      - ".+-stable$"
+  pull_request:
+    branches: 
+      - master
+      - ".+-stable$"
+

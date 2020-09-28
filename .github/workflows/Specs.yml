@@ -1,0 +1,70 @@
+name: Specs
+
+jobs:
+  specs:
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [SPECS]
+        ruby: [2.3.3, 2.4, 2.5, 2.6, 2.7]
+        os: [ubuntu-16.04]
+        include:
+          - task: SPECS
+            os: macos-10.15
+            ruby: system
+          - task: EXAMPLES
+            os: macos-10.15
+            ruby: system
+
+    name: ${{ matrix.task }} Ruby ${{ matrix.ruby }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout git
+        uses: actions/checkout@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        if: ${{ matrix.ruby != 'system' }}
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Update git submodules
+        run: git submodule update --init
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Run bundle install
+        run: |
+          gem install bundler -v "~> 1.17"
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3 --without debugging documentation
+      - name: Set up git identity
+        run: |
+          git config --global user.email "tests@cocoapods.org"
+          git config --global user.name "CocoaPods Tests"
+
+      - uses: maxim-lobanov/setup-xcode@v1.1
+        if: ${{ matrix.task == 'EXAMPLES' }}
+        with:
+          xcode-version: 11.3.1
+
+      - name: Run Tests
+        run: bundle exec rake spec:all
+        env: 
+          COCOAPODS_CI_TASKS: ${{ matrix.task }}
+
+on:
+  push:
+    branches:
+      - "master"
+      - ".+-stable$"
+  pull_request:
+    branches: 
+      - master
+      - ".+-stable$"
+
