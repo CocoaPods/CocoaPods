@@ -41,7 +41,7 @@ module Pod
       @test_source = Source.new(fixture('spec-repos/test_repo'))
       @sources_manager = Source::Manager.new(config.repos_dir)
       stub_url_as_cdn('https://cdn.cocoapods.org')
-      stub_url_as_cdn('http://cdn.cocoapods.org')
+      stub_url_as_cdn('https://cdn.cocoapods.org/')
     end
 
     after do
@@ -149,10 +149,6 @@ module Pod
       describe 'detect cdn repo' do
         it 'cdn master spec repo' do
           @sources_manager.cdn_url?('https://cdn.cocoapods.org').should == true
-        end
-
-        it 'cdn master spec repo by http' do
-          @sources_manager.cdn_url?('http://cdn.cocoapods.org').should == true
         end
 
         it 'git master spec repo' do
