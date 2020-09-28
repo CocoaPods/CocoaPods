@@ -174,6 +174,21 @@ describe_cli 'pod' do
     # ignore lines in the vein of `CDN: trunk Relative path: all_pods_versions_1_3_f.txt exists!`
     # they are somewhat non-deteministic and non-essential to testing integration
     s.replace_pattern /.*CDN:.*\n/, ''
+
+    # get rid of the git warning about detached HEAD as it is user-configurable
+    s.replace_pattern /\s+Note: (checking out|switching to) \'.*\'\./, ''
+    s.replace_pattern /\s+You are in \'detached HEAD\' state\. You can look around, make experimental/, ''
+    s.replace_pattern /\s+changes and commit them, and you can discard any commits you make in this/, ''
+    s.replace_pattern /\s+state without impacting any branches by performing another checkout\./, ''
+    s.replace_pattern /\s+state without impacting any branches by switching back to a branch\./, ''
+    s.replace_pattern /\s+If you want to create a new branch to retain commits you create, you may/, ''
+    s.replace_pattern /\s+do so \(now or later\) by using -b with the checkout command again. Example:/, ''
+    s.replace_pattern /\s+do so \(now or later\) by using -c with the switch command. Example:/, ''
+    s.replace_pattern /\s+(git checkout -b new_branch_name\n|git switch -c <new-branch-name>)/, ''
+    s.replace_pattern /\s+If you want to create a new branch to retain commits you create, you may/, ''
+    s.replace_pattern /\s+Or undo this operation with:/, ''
+    s.replace_pattern /\s+git switch \-/, ''
+    s.replace_pattern /\s+Turn off this advice by setting config variable advice.detachedHead to false\n/, ''
   end
 
   describe 'Pod install' do
