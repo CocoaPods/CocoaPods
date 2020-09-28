@@ -42,6 +42,7 @@ module Pod
       @sources_manager = Source::Manager.new(config.repos_dir)
       stub_url_as_cdn('https://cdn.cocoapods.org')
       stub_url_as_cdn('http://cdn.cocoapods.org')
+      stub_url_as_cdn('https://cdn.cocoapods.org/')
     end
 
     after do
