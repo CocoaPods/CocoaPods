@@ -151,8 +151,8 @@ begin
       puts "\033[0;32mUsing #{`ruby --version`}\033[0m"
 
       if specs
-        title 'Running the specs'
-        sh "bundle exec bacon #{specs('**/*')}"
+        # title 'Running the specs'
+        # sh "bundle exec bacon #{specs('**/*')}"
 
         title 'Running Integration tests'
         sh 'bundle exec bacon spec/integration.rb'

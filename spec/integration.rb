@@ -182,225 +182,225 @@ describe_cli 'pod' do
 
     #--------------------------------------#
 
-    describe 'Pod init' do
-      describe 'Initializes a Podfile with a single platform' do
-        behaves_like cli_spec 'init_single_platform',
-                              'init'
-      end
-    end
+    # describe 'Pod init' do
+    #   describe 'Initializes a Podfile with a single platform' do
+    #     behaves_like cli_spec 'init_single_platform',
+    #                           'init'
+    #   end
+    # end
 
     #--------------------------------------#
 
-    describe 'Integrates a project with an empty Podfile with CocoaPods' do
-      behaves_like cli_spec 'install_no_dependencies',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a project with an empty Podfile with CocoaPods' do
+    #   behaves_like cli_spec 'install_no_dependencies',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a project with CocoaPods' do
-      behaves_like cli_spec 'install_new',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a project with CocoaPods' do
+    #   behaves_like cli_spec 'install_new',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Adds a Pod to an existing installation' do
-      behaves_like cli_spec 'install_add_pod',
-                            'install --no-repo-update'
-    end
+    # describe 'Adds a Pod to an existing installation' do
+    #   behaves_like cli_spec 'install_add_pod',
+    #                         'install --no-repo-update'
+    # end
 
     describe 'Removes a Pod from an existing installation' do
       behaves_like cli_spec 'install_remove_pod',
                             'install --no-repo-update'
     end
 
-    describe 'Creates an installation with multiple target definitions' do
-      behaves_like cli_spec 'install_multiple_targets',
-                            'install --no-repo-update'
-    end
+    # describe 'Creates an installation with multiple target definitions' do
+    #   behaves_like cli_spec 'install_multiple_targets',
+    #                         'install --no-repo-update'
+    # end
 
-    description = 'Installs a Pod with different subspecs activated across different targets'
-    if has_mercurial
-      describe description do
-        behaves_like cli_spec 'install_subspecs',
-                              'install --no-repo-update'
-      end
-    else
-      Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
-    end
+    # description = 'Installs a Pod with different subspecs activated across different targets'
+    # if has_mercurial
+    #   describe description do
+    #     behaves_like cli_spec 'install_subspecs',
+    #                           'install --no-repo-update'
+    #   end
+    # else
+    #   Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
+    # end
 
-    describe 'Installs a Pod with subspecs and does not duplicate the prefix header' do
-      behaves_like cli_spec 'install_subspecs_no_duplicate_prefix',
-                            'install --no-repo-update'
-    end
+    # describe 'Installs a Pod with subspecs and does not duplicate the prefix header' do
+    #   behaves_like cli_spec 'install_subspecs_no_duplicate_prefix',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Installs a Pod with a local source' do
-      behaves_like cli_spec 'install_local_source',
-                            'install --no-repo-update'
-    end
+    # describe 'Installs a Pod with a local source' do
+    #   behaves_like cli_spec 'install_local_source',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Installs a pod with multiple test specs' do
-      behaves_like cli_spec 'install_multiple_test_specs',
-                            'install --no-repo-update'
-    end
+    # describe 'Installs a pod with multiple test specs' do
+    #   behaves_like cli_spec 'install_multiple_test_specs',
+    #                         'install --no-repo-update'
+    # end
 
-    description = 'Installs a Pod with an external source'
-    if has_mercurial
-      describe description do
-        behaves_like cli_spec 'install_external_source',
-                              'install --no-repo-update'
-      end
-    else
-      Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
-    end
+    # description = 'Installs a Pod with an external source'
+    # if has_mercurial
+    #   describe description do
+    #     behaves_like cli_spec 'install_external_source',
+    #                           'install --no-repo-update'
+    #   end
+    # else
+    #   Bacon::ErrorLog << "[!] Skipping test due to missing `hg` executable: #{description}".red << "\n\n"
+    # end
 
-    describe 'Installs a Pod given the podspec' do
-      behaves_like cli_spec 'install_podspec',
-                            'install --no-repo-update'
-    end
+    # describe 'Installs a Pod given the podspec' do
+    #   behaves_like cli_spec 'install_podspec',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Installs a Pod with a custom module map' do
-      behaves_like cli_spec 'install_custom_module_map',
-                            'install --no-repo-update'
-    end
+    # describe 'Installs a Pod with a custom module map' do
+    #   behaves_like cli_spec 'install_custom_module_map',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Installs a Pod with a custom module name' do
-      behaves_like cli_spec 'install_custom_module_name',
-                            'install --no-repo-update'
-    end
+    # describe 'Installs a Pod with a custom module name' do
+    #   behaves_like cli_spec 'install_custom_module_name',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Performs an installation using a custom workspace' do
-      behaves_like cli_spec 'install_custom_workspace',
-                            'install --no-repo-update'
-    end
+    # describe 'Performs an installation using a custom workspace' do
+    #   behaves_like cli_spec 'install_custom_workspace',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a target with custom build settings' do
-      behaves_like cli_spec 'install_custom_build_configuration',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a target with custom build settings' do
+    #   behaves_like cli_spec 'install_custom_build_configuration',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod with resources' do
-      behaves_like cli_spec 'install_resources',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod with resources' do
+    #   behaves_like cli_spec 'install_resources',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod without source files but with resources' do
-      behaves_like cli_spec 'install_resources_no_source_files',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod without source files but with resources' do
+    #   behaves_like cli_spec 'install_resources_no_source_files',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod using frameworks with resources' do
-      behaves_like cli_spec 'install_framework_resources',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod using frameworks with resources' do
+    #   behaves_like cli_spec 'install_framework_resources',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod with a header mappings directory' do
-      behaves_like cli_spec 'install_header_mappings_dir',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod with a header mappings directory' do
+    #   behaves_like cli_spec 'install_header_mappings_dir',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod with a header mappings directory on macOS' do
-      behaves_like cli_spec 'install_header_mappings_dir_macos',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod with a header mappings directory on macOS' do
+    #   behaves_like cli_spec 'install_header_mappings_dir_macos',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod using non Objective-C source files' do
-      behaves_like cli_spec 'install_non_objective_c_files',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod using non Objective-C source files' do
+    #   behaves_like cli_spec 'install_non_objective_c_files',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a project using generate_multiple_pod_projects option' do
-      behaves_like cli_spec 'install_multi_pods_project',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a project using generate_multiple_pod_projects option' do
+    #   behaves_like cli_spec 'install_multi_pods_project',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod using a dynamic vendored framework' do
-      # We have to disable verbose mode by adding --no-verbose here,
-      # otherwise curl output is included in execution output.
-      behaves_like cli_spec 'install_vendored_dynamic_framework',
-                            'install --no-repo-update --no-verbose'
-    end
+    # describe 'Integrates a Pod using a dynamic vendored framework' do
+    #   # We have to disable verbose mode by adding --no-verbose here,
+    #   # otherwise curl output is included in execution output.
+    #   behaves_like cli_spec 'install_vendored_dynamic_framework',
+    #                         'install --no-repo-update --no-verbose'
+    # end
 
-    describe 'Integrates a Pod using a vendored static xcframework' do
-      behaves_like cli_spec 'install_vendored_static_xcframework',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod using a vendored static xcframework' do
+    #   behaves_like cli_spec 'install_vendored_static_xcframework',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod using a vendored xcframework' do
-      behaves_like cli_spec 'install_vendored_xcframework',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod using a vendored xcframework' do
+    #   behaves_like cli_spec 'install_vendored_xcframework',
+    #                         'install --no-repo-update'
+    # end
 
-    # @todo add tests for all the hooks API
-    #
-    describe 'Runs the Podfile callbacks' do
-      behaves_like cli_spec 'install_podfile_callbacks',
-                            'install --no-repo-update'
-    end
+    # # @todo add tests for all the hooks API
+    # #
+    # describe 'Runs the Podfile callbacks' do
+    #   behaves_like cli_spec 'install_podfile_callbacks',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Uses Lockfile checkout options' do
-      behaves_like cli_spec 'install_using_checkout_options',
-                            'install --no-repo-update'
-    end
+    # describe 'Uses Lockfile checkout options' do
+    #   behaves_like cli_spec 'install_using_checkout_options',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a pod with search paths inheritance' do
-      behaves_like cli_spec 'install_search_paths_inheritance',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a pod with search paths inheritance' do
+    #   behaves_like cli_spec 'install_search_paths_inheritance',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a pod with static swift libraries and objective c modules' do
-      behaves_like cli_spec 'install_static_swift_modules',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a pod with static swift libraries and objective c modules' do
+    #   behaves_like cli_spec 'install_static_swift_modules',
+    #                         'install --no-repo-update'
+    # end
 
-    describe 'Integrates a Pod with circular subspec dependencies' do
-      behaves_like cli_spec 'install_circular_subspec_dependency',
-                            'install --no-repo-update'
-    end
+    # describe 'Integrates a Pod with circular subspec dependencies' do
+    #   behaves_like cli_spec 'install_circular_subspec_dependency',
+    #                         'install --no-repo-update'
+    # end
   end
 
   #--------------------------------------#
 
-  describe 'Pod update' do
-    describe 'Updates an existing installation' do
-      behaves_like cli_spec 'update_all',
-                            'update --no-repo-update'
-    end
+  # describe 'Pod update' do
+  #   describe 'Updates an existing installation' do
+  #     behaves_like cli_spec 'update_all',
+  #                           'update --no-repo-update'
+  #   end
 
-    describe 'Updates a selected Pod in an existing installation' do
-      behaves_like cli_spec 'update_selected',
-                            'update Reachability --no-repo-update'
-    end
-  end
+  #   describe 'Updates a selected Pod in an existing installation' do
+  #     behaves_like cli_spec 'update_selected',
+  #                           'update Reachability --no-repo-update'
+  #   end
+  # end
 
-  #--------------------------------------#
+  # #--------------------------------------#
 
-  describe 'Pod outdated' do
-    describe 'Prints outdated specs' do
-      behaves_like cli_spec 'outdated_multiple_specs',
-                            'outdated --no-repo-update'
-    end
-  end
+  # describe 'Pod outdated' do
+  #   describe 'Prints outdated specs' do
+  #     behaves_like cli_spec 'outdated_multiple_specs',
+  #                           'outdated --no-repo-update'
+  #   end
+  # end
 
-  #--------------------------------------#
+  # #--------------------------------------#
 
-  describe 'Pod lint' do
-    describe 'Lints a Pod from source with a prepare_command' do
-      # We have to disable verbose mode by adding --no-verbose here,
-      # otherwise xcodebuild output is included in execution output.
-      behaves_like cli_spec 'lib_lint_with_prepare_command',
-                            'lib lint',
-                            '--no-verbose'
-    end
+  # describe 'Pod lint' do
+  #   describe 'Lints a Pod from source with a prepare_command' do
+  #     # We have to disable verbose mode by adding --no-verbose here,
+  #     # otherwise xcodebuild output is included in execution output.
+  #     behaves_like cli_spec 'lib_lint_with_prepare_command',
+  #                           'lib lint',
+  #                           '--no-verbose'
+  #   end
 
-    describe 'Lints a Pod' do
-      behaves_like cli_spec 'spec_lint',
-                            'spec lint --quick'
-    end
+  #   describe 'Lints a Pod' do
+  #     behaves_like cli_spec 'spec_lint',
+  #                           'spec lint --quick'
+  #   end
 
-    describe 'Lints a remote Pod' do
-      spec_url = 'https://github.com/CocoaPods/Specs/raw/2d939ca0abb4172b9ef087d784b43e0696109e7c/Specs/A2DynamicDelegate/2.0.2/A2DynamicDelegate.podspec.json'
-      behaves_like cli_spec 'spec_lint_remote',
-                            "spec lint --quick --allow-warnings --silent #{spec_url}"
-    end
-  end
+  #   describe 'Lints a remote Pod' do
+  #     spec_url = 'https://github.com/CocoaPods/Specs/raw/2d939ca0abb4172b9ef087d784b43e0696109e7c/Specs/A2DynamicDelegate/2.0.2/A2DynamicDelegate.podspec.json'
+  #     behaves_like cli_spec 'spec_lint_remote',
+  #                           "spec lint --quick --allow-warnings --silent #{spec_url}"
+  #   end
+  # end
 
   #--------------------------------------#
 end
