@@ -6,22 +6,6 @@ GIT
     claide (1.0.3)
 
 GIT
-  remote: https://github.com/gyfelton/Core.git
-  revision: 95f9294b32e629765cf97362d1ed4adbc35d9464
-  branch: master
-  specs:
-    cocoapods-core (1.10.0.rc.1)
-      activesupport (> 5.0, < 6)
-      addressable (~> 2.6)
-      algoliasearch (~> 1.0)
-      concurrent-ruby (~> 1.1)
-      fuzzy_match (~> 2.0.4)
-      nap (~> 1.0)
-      netrc (~> 0.11)
-      public_suffix
-      typhoeus (~> 1.0)
-
-GIT
   remote: https://github.com/CocoaPods/Molinillo.git
   revision: db572ea89ff7391fcfb81a8ecfbc9872a9e8613f
   branch: master
@@ -93,6 +77,22 @@ GIT
     cocoapods-try (1.2.0)
 
 GIT
+  remote: https://github.com/gyfelton/Core.git
+  revision: 95f9294b32e629765cf97362d1ed4adbc35d9464
+  ref: 95f9294b32e629765cf97362d1ed4adbc35d9464
+  specs:
+    cocoapods-core (1.10.0.rc.1)
+      activesupport (> 5.0, < 6)
+      addressable (~> 2.6)
+      algoliasearch (~> 1.0)
+      concurrent-ruby (~> 1.1)
+      fuzzy_match (~> 2.0.4)
+      nap (~> 1.0)
+      netrc (~> 0.11)
+      public_suffix
+      typhoeus (~> 1.0)
+
+GIT
   remote: https://github.com/leahneukirchen/bacon.git
   revision: 5e7115d577ebc98f7dc45fe628964751939f294e
   specs:
@@ -138,7 +138,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    algoliasearch (1.27.3)
+    algoliasearch (1.27.4)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
     ast (2.4.0)
