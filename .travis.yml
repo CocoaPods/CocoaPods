@@ -44,7 +44,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - bundle exec rake spec:all
+  - bundle exec rake spec:integration
 
 after_script:
   - ./cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.json coverage/.resultset.json # Format coverage
