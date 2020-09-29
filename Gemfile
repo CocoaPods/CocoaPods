@@ -22,7 +22,7 @@ gemspec
 # At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
 # so we use a fork that makes a trivial change to a macro invocation.
 gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
-gem 'cocoapods-core', :git => 'https://github.com/gyfelton/Core.git', :ref => '95f9294b32e629765cf97362d1ed4adbc35d9464'
+gem 'cocoapods-core', :git => 'https://github.com/gyfelton/Core.git', :ref => 'f9a3d85dcde5b8a123775051745408892a0e10cb'
 
 group :development do
   cp_gem 'claide',                'CLAide'

@@ -78,8 +78,8 @@ GIT
 
 GIT
   remote: https://github.com/gyfelton/Core.git
-  revision: 95f9294b32e629765cf97362d1ed4adbc35d9464
-  ref: 95f9294b32e629765cf97362d1ed4adbc35d9464
+  revision: f9a3d85dcde5b8a123775051745408892a0e10cb
+  ref: f9a3d85dcde5b8a123775051745408892a0e10cb
   specs:
     cocoapods-core (1.10.0.rc.1)
       activesupport (> 5.0, < 6)
