@@ -34,9 +34,9 @@ on:
   push:
     branches:
       - "master"
-      - ".+-stable$"
+      - "*-stable"
   pull_request:
     branches: 
       - master
-      - ".+-stable$"
+      - "*-stable"
 
