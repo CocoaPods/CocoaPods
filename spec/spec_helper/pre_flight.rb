@@ -1,4 +1,5 @@
 # Restores the config to the default state before each requirement
+require 'fileutils'
 
 module Bacon
   class Context
@@ -16,7 +17,7 @@ module Bacon
       ::Pod::UI.indentation_level = 0
       ::Pod::UI.title_level = 0
 
-      SpecHelper.temporary_directory.rmtree if SpecHelper.temporary_directory.exist?
+      FileUtils.rm_rf(SpecHelper.temporary_directory) if SpecHelper.temporary_directory.exist?
       SpecHelper.temporary_directory.mkpath
 
       old_run_requirement.bind(self).call(description, spec)
