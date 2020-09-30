@@ -13,17 +13,6 @@ Fetching external sources
  > Git download
      $ GIT_BIN clone https://github.com/realm/realm-cocoa.git PROJECT/Pods/RealmSwift --template= --single-branch --depth 1 --branch v0.94.1
      Cloning into 'PROJECT/Pods/RealmSwift'...
-     Note: checking out '878d041b6b4356fa074f3d1b57fb8557b00dbec9'.
-
-     You are in 'detached HEAD' state. You can look around, make experimental
-     changes and commit them, and you can discard any commits you make in this
-     state without impacting any branches by performing another checkout.
-
-     If you want to create a new branch to retain commits you create, you may
-     do so (now or later) by using -b with the checkout command again. Example:
-
-       git checkout -b new_branch_name
-
  > Running prepare command
    $ BASH_BIN -c  set -e rm -rf RealmSwift mv RealmSwift-swift1.2 RealmSwift
 
