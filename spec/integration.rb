@@ -189,6 +189,9 @@ describe_cli 'pod' do
     s.replace_pattern /\s+Or undo this operation with:/, ''
     s.replace_pattern /\s+git switch \-/, ''
     s.replace_pattern /\s+Turn off this advice by setting config variable advice.detachedHead to false\n/, ''
+
+    # remove more git noise
+    s.replace_pattern /\s*Updating files:  .*\% \(.*\)\s*/, ''
   end
 
   describe 'Pod install' do
