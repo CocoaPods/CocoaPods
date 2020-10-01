@@ -18,13 +18,12 @@ Downloading dependencies
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/square/SocketRocket.git PROJECT/Pods/SocketRocket --template= --single-branch --depth 1 --branch 0.5.1
-     Cloning into 'PROJECT/Pods/SocketRocket'...
 
 -> Installing libPusher (1.6.2)
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/pusher/libPusher.git PROJECT/Pods/libPusher --template= --single-branch --depth 1 --branch v1.6.2
-     Cloning into 'PROJECT/Pods/libPusher'...
+
   - Running pre install hooks
 
 Generating Pods project

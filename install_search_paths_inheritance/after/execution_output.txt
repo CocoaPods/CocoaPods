@@ -28,7 +28,6 @@ Downloading dependencies
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/CocoaLumberjack/CocoaLumberjack.git PROJECT/Pods/CocoaLumberjack --template= --single-branch --depth 1 --branch 3.0.0
-     Cloning into 'PROJECT/Pods/CocoaLumberjack'...
 
 -> Installing asserts (0.0.1)
 
