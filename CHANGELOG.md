@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Generate the correct LD `-l` flags for XCFrameworks containing libraries  
+  [Wes Campaigne](https://github.com/Westacular)
+  [#10071](https://github.com/CocoaPods/CocoaPods/issues/10071)
 
 
 ## 1.10.0.rc.1 (2020-09-15)

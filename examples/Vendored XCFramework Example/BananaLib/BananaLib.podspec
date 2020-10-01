@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = '13.0'
   spec.watchos.deployment_target = '3.0'
   spec.osx.deployment_target = '10.12'
-  
+
   spec.default_subspecs = 'DynamicFramework'
 
   spec.subspec 'DynamicFramework' do |ss|

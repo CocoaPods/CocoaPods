@@ -6,4 +6,4 @@ FOUNDATION_EXPORT double CoconutLibVersionNumber;
 //! Project version string for CoconutLib.
 FOUNDATION_EXPORT const unsigned char CoconutLibVersionString[];
 
-#import <CoconutLib/Coconut.h>
+#import "Coconut.h"
