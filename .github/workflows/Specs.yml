@@ -16,7 +16,7 @@ jobs:
             os: macos-10.15
             ruby: system
 
-    name: ${{ matrix.task }} Ruby ${{ matrix.ruby }}
+    name: ${{ matrix.task }} / ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
     runs-on: ${{ matrix.os }}
 
     steps:
