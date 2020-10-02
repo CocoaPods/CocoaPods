@@ -37,7 +37,7 @@ module Pod
           # @return [TargetInstallationResult] the result of the installation of this target.
           #
           def install!
-            UI.message "- Installing target `#{target.name}` #{target.platform}" do
+            UI.message "- Installing target `#{target.name}` #{target.platform}" do # rubocop:disable Metrics/BlockLength
               create_support_files_dir
               library_file_accessors = target.file_accessors.select { |fa| fa.spec.library_specification? }
               test_file_accessors = target.file_accessors.select { |fa| fa.spec.test_specification? }

@@ -135,3 +135,9 @@ ClassAndModuleChildren:
 UselessComparison:
   Exclude:
     - spec/**/*
+
+Metrics/BlockLength:
+  Max: 50
+  Exclude:
+    - spec/**/*
+    - Rakefile
