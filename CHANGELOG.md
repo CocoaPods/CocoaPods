@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Wes Campaigne](https://github.com/Westacular)
   [#10071](https://github.com/CocoaPods/CocoaPods/issues/10071)
 
+* Do not warn for missing arch if `$ONLY_ACTIVE_ARCH` is set to `NO`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10076](https://github.com/CocoaPods/CocoaPods/issues/10076)
+
 
 ## 1.10.0.rc.1 (2020-09-15)
 
