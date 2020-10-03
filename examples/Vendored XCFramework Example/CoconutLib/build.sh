@@ -69,7 +69,7 @@ archives=(iOS iOS-Simulator iOS-Catalyst watchOS watchOS-Simulator tvOS tvOS-Sim
 args=""
 if [[ $library == 1 ]]; then
     for archive in "${archives[@]}"; do
-        args="$args -library build/${archive}.xcarchive/Products/usr/local/lib/libCoconutLib.a -headers build/${archive}.xcarchive/Products/usr/local/include"
+        args="$args -library build/${archive}.xcarchive/Products/usr/local/lib/libCoconut.a -headers build/${archive}.xcarchive/Products/usr/local/include"
     done
 else
     for archive in "${archives[@]}"; do

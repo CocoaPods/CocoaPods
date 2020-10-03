@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0798955A2442B55B000FC943"
-               BuildableName = "libCoconutLib.a"
+               BuildableName = "libCoconut.a"
                BlueprintName = "CoconutLib-watchOS-Library"
                ReferencedContainer = "container:CoconutLib.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0798955A2442B55B000FC943"
-            BuildableName = "libCoconutLib.a"
+            BuildableName = "libCoconut.a"
             BlueprintName = "CoconutLib-watchOS-Library"
             ReferencedContainer = "container:CoconutLib.xcodeproj">
          </BuildableReference>
