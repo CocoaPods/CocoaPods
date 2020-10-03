@@ -2,8 +2,8 @@
 
 ### CocoaPods: The Cocoa dependency manager
 
-[![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods)
-[![Gem Version](http://img.shields.io/gem/v/cocoapods.svg?style=flat)](http://badge.fury.io/rb/cocoapods)
+[![Build Status](https://img.shields.io/github/workflow/status/CocoaPods/CocoaPods/Specs)](https://github.com/CocoaPods/CocoaPods/actions)
+[![Gem Version](https://img.shields.io/gem/v/cocoapods)](https://rubygems.org/gems/cocoapods)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8f0fe544baf2ae1acc2b/maintainability)](https://codeclimate.com/github/CocoaPods/CocoaPods/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/8f0fe544baf2ae1acc2b/test_coverage)](https://codeclimate.com/github/CocoaPods/CocoaPods/test_coverage)
 
@@ -70,13 +70,13 @@ contributor [code of conduct](CODE_OF_CONDUCT.md).
 
 CocoaPods is composed of the following projects:
 
-| Status | Project | Description | Info |
-| :----- | :------ | :--- | :--- |
-| [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods) | [CocoaPods](https://github.com/CocoaPods/CocoaPods) | The CocoaPods command line tool. | [guides](https://guides.cocoapods.org)
-| [![Build Status](http://img.shields.io/travis/CocoaPods/Core/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Core) | [CocoaPods Core](https://github.com/CocoaPods/Core) | Support for working with specifications and podfiles. | [docs](https://guides.cocoapods.org/contributing/components.html)
-| [![Build Status](http://img.shields.io/travis/CocoaPods/cocoapods-downloader/master.svg?style=flat)](https://travis-ci.org/CocoaPods/cocoapods-downloader) |[CocoaPods Downloader](https://github.com/CocoaPods/cocoapods-downloader) |  Downloaders for various source types. |  [docs](https://www.rubydoc.info/gems/cocoapods-downloader)
-| [![Build Status](http://img.shields.io/travis/CocoaPods/Xcodeproj/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Xcodeproj) | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | Create and modify Xcode projects from Ruby. |  [docs](https://www.rubydoc.info/gems/xcodeproj)
-| [![Build Status](http://img.shields.io/travis/CocoaPods/CLAide/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CLAide) | [CLAide](https://github.com/CocoaPods/CLAide) | A small command-line interface framework.  | [docs](https://www.rubydoc.info/gems/claide)
-| [![Build Status](http://img.shields.io/travis/CocoaPods/Molinillo/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Molinillo) | [Molinillo](https://github.com/CocoaPods/Molinillo) | A powerful generic dependency resolver.  | [docs](https://www.rubydoc.info/gems/molinillo)
-| [![Build Status](http://img.shields.io/travis/CocoaPods/CocoaPods-app/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods-app) | [CocoaPods.app](https://github.com/CocoaPods/CocoaPods-app) | A full-featured and standalone installation of CocoaPods.  | [info](https://cocoapods.org/app)
+| Status    | Project | Description | Info |
+| :-------- | :------ | :--- | :--- |
+| [![Build Status](https://img.shields.io/github/workflow/status/CocoaPods/CocoaPods/Specs)](https://github.com/CocoaPods/CocoaPods/actions) | [CocoaPods](https://github.com/CocoaPods/CocoaPods) | The CocoaPods command line tool. | [guides](https://guides.cocoapods.org)
+| [![Build Status](https://img.shields.io/github/workflow/status/CocoaPods/Core/Specs)](https://github.com/CocoaPods/Core/actions) | [CocoaPods Core](https://github.com/CocoaPods/Core) | Support for working with specifications and podfiles. | [docs](https://guides.cocoapods.org/contributing/components.html)
+| [![Build Status](https://img.shields.io/travis/CocoaPods/cocoapods-downloader/master.svg?style=flat)](https://travis-ci.org/CocoaPods/cocoapods-downloader) |[CocoaPods Downloader](https://github.com/CocoaPods/cocoapods-downloader) |  Downloaders for various source types. |  [docs](https://www.rubydoc.info/gems/cocoapods-downloader)
+| [![Build Status](https://img.shields.io/travis/CocoaPods/Xcodeproj/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Xcodeproj) | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | Create and modify Xcode projects from Ruby. |  [docs](https://www.rubydoc.info/gems/xcodeproj)
+| [![Build Status](https://img.shields.io/travis/CocoaPods/CLAide/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CLAide) | [CLAide](https://github.com/CocoaPods/CLAide) | A small command-line interface framework.  | [docs](https://www.rubydoc.info/gems/claide)
+| [![Build Status](https://img.shields.io/travis/CocoaPods/Molinillo/master.svg?style=flat)](https://travis-ci.org/CocoaPods/Molinillo) | [Molinillo](https://github.com/CocoaPods/Molinillo) | A powerful generic dependency resolver.  | [docs](https://www.rubydoc.info/gems/molinillo)
+| [![Build Status](https://img.shields.io/travis/CocoaPods/CocoaPods-app/master.svg?style=flat)](https://travis-ci.org/CocoaPods/CocoaPods-app) | [CocoaPods.app](https://github.com/CocoaPods/CocoaPods-app) | A full-featured and standalone installation of CocoaPods.  | [info](https://cocoapods.org/app)
 |  | [Master Repo ](https://github.com/CocoaPods/Specs) | Master repository of specifications. | [guides](https://guides.cocoapods.org/making/specs-and-specs-repo.html)
