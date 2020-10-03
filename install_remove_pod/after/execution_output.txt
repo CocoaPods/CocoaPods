@@ -22,7 +22,7 @@ Downloading dependencies
  > Git download
  > Git download
      $ GIT_BIN clone https://github.com/tonymillion/Reachability.git PROJECT/Pods/Reachability --template= --single-branch --depth 1 --branch v3.1.0
-     Cloning into 'PROJECT/Pods/Reachability'...
+
   - Running pre install hooks
 
 -> Removing JSONKit
