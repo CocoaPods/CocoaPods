@@ -172,6 +172,15 @@ begin
 
         unless ENV['CI'].nil?
           title 'Running Danger'
+          # The obfuscated token is hard-coded into the repo because GitHub's Actions have no option to make a secret
+          # available to PRs from forks. This token belongs to @CocoaPodsBarista and has no permissions except posting
+          # comments. The reason it is needed is to inform the PR author of things Danger has suggestions for.
+          ENV['DANGER_GITHUB_API_TOKEN'] = [:d, 2, :c, :e, 4,
+                                            6, 5, :d, 3, :c, :b, 3, 3,
+                                            :b, 6, 4, 4, 8, 2, 3, 2, :f,
+                                            1, 8, :d, 8, :a, 5, 1, 6,
+                                            5, 4, 4, 2, :c, :e, 3,
+                                            :b, 0, :b].map(&:to_s).join
           Rake::Task['danger'].invoke
         end
       end

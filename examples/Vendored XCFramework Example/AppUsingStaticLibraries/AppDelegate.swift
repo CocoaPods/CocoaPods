@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoconutLib
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let coconut = CoconutObj()
+        print("Successfully loaded .xcframework dependency type \(type(of: coconut))")
         // Override point for customization after application launch.
         return true
     }
