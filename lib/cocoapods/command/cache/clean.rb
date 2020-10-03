@@ -81,7 +81,7 @@ module Pod
 
         def clear_cache
           UI.message("Removing the whole cache dir #{@cache.root}") do
-            FileUtils.rm_rf(@cache.root)
+            FileUtils.rm_rf(@cache.root.parent)
           end
         end
       end

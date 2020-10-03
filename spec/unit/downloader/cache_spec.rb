@@ -30,13 +30,15 @@ module Pod
       @cache.root.should.be.directory?
     end
 
-    it 'implodes when the cache is from a different CocoaPods version' do
+    it 'creates versioned directory and leaves other versions of the cache' do
       root = Pathname(Dir.mktmpdir)
-      root.+('VERSION').open('w') { |f| f << '0.0.0' }
-      root.+('FILE').open('w') { |f| f << '0.0.0' }
+      old_version = root + '0.0.0'
+      old_version.mkpath
+      old_version.+('FILE').open('w') { |f| f << '0.0.0' }
       @cache = Downloader::Cache.new(root)
-      root.+('VERSION').read.should == Pod::VERSION
-      root.+('FILE').should.not.exist?
+      root.+(Pod::VERSION).should.be.directory?
+      old_version.should.be.directory?
+      old_version.+('FILE').should.exist?
     end
 
     it 'groups subspecs by platform' do
