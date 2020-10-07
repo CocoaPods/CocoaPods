@@ -13,7 +13,6 @@ Pod::Spec.new do |spec|
   spec.watchos.deployment_target = '3.0'
   spec.tvos.deployment_target = '13.0'
 
-  spec.default_subspecs = 'DynamicFramework'
-
   spec.vendored_frameworks = 'build/BananaLib.xcframework'
+  spec.preserve_paths = 'build/BananaLib.dSYMs/iOS-Simulator.dSYM', 'build/BananaLib.dSYMs/iOS.dSYM', 'build/BananaLib.dSYMs/iOS-Catalyst.dSYM', 'build/BananaLib.dSYMs/macOS.dSYM', 'build/BananaLib.dSYMs/tvOS-Simulator.dSYM', 'build/BananaLib.dSYMs/tvOS.dSYM', 'build/BananaLib.dSYMs/watchOS-Simulator.dSYM', 'build/BananaLib.dSYMs/watchOS.dSYM'
 end
