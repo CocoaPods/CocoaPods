@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B92F4F948B2627D25C3B487 /* Pods_VendoredXCFrameworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBF7E1F8F8EBA8AAED7B760 /* Pods_VendoredXCFrameworkExample.framework */; };
 		5BFCC8D4252E3B9D000564E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D3252E3B9D000564E9 /* AppDelegate.swift */; };
 		5BFCC8D6252E3B9D000564E9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D5252E3B9D000564E9 /* SceneDelegate.swift */; };
 		5BFCC8D8252E3B9D000564E9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D7252E3B9D000564E9 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2FBF7E1F8F8EBA8AAED7B760 /* Pods_VendoredXCFrameworkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VendoredXCFrameworkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFCC8D0252E3B9D000564E9 /* VendoredXCFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VendoredXCFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFCC8D3252E3B9D000564E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5BFCC8D5252E3B9D000564E9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +26,8 @@
 		5BFCC8DC252E3BA0000564E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5BFCC8DF252E3BA0000564E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5BFCC8E1252E3BA0000564E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BCAE785A6DBB4A53A381B7A1 /* Pods-VendoredXCFrameworkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VendoredXCFrameworkExample.release.xcconfig"; path = "Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample.release.xcconfig"; sourceTree = "<group>"; };
+		D02A199032E77CA06241E6EB /* Pods-VendoredXCFrameworkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VendoredXCFrameworkExample.debug.xcconfig"; path = "Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B92F4F948B2627D25C3B487 /* Pods_VendoredXCFrameworkExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				5BFCC8D2252E3B9D000564E9 /* VendoredXCFrameworkExample */,
 				5BFCC8D1252E3B9D000564E9 /* Products */,
+				F2EC89055FB594BA7C06074D /* Pods */,
+				C2C9BACE7B3F22CC97B209D9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +74,24 @@
 			path = VendoredXCFrameworkExample;
 			sourceTree = "<group>";
 		};
+		C2C9BACE7B3F22CC97B209D9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2FBF7E1F8F8EBA8AAED7B760 /* Pods_VendoredXCFrameworkExample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2EC89055FB594BA7C06074D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D02A199032E77CA06241E6EB /* Pods-VendoredXCFrameworkExample.debug.xcconfig */,
+				BCAE785A6DBB4A53A381B7A1 /* Pods-VendoredXCFrameworkExample.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +99,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5BFCC8E4252E3BA0000564E9 /* Build configuration list for PBXNativeTarget "VendoredXCFrameworkExample" */;
 			buildPhases = (
+				549C45826CCDB10A13E121D5 /* [CP] Check Pods Manifest.lock */,
 				5BFCC8CC252E3B9D000564E9 /* Sources */,
 				5BFCC8CD252E3B9D000564E9 /* Frameworks */,
 				5BFCC8CE252E3B9D000564E9 /* Resources */,
+				3F2C7CF549E87E146ADF16E5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -131,6 +158,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3F2C7CF549E87E146ADF16E5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		549C45826CCDB10A13E121D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VendoredXCFrameworkExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5BFCC8CC252E3B9D000564E9 /* Sources */ = {
@@ -281,6 +350,7 @@
 		};
 		5BFCC8E5252E3BA0000564E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D02A199032E77CA06241E6EB /* Pods-VendoredXCFrameworkExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -298,6 +368,7 @@
 		};
 		5BFCC8E6252E3BA0000564E9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BCAE785A6DBB4A53A381B7A1 /* Pods-VendoredXCFrameworkExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
