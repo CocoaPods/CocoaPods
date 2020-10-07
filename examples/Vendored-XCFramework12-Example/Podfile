@@ -1,0 +1,17 @@
+#
+# To rebuild the xcframework:
+#
+#   cd CoconutLib
+#   ./build.sh
+#
+
+project 'VendoredXCFrameworkExample.xcodeproj'
+
+workspace 'Examples'
+
+target 'VendoredXCFrameworkExample' do
+  platform :ios, '13.0'
+  use_frameworks!
+
+  pod 'CoconutLib', path: './CoconutLib'
+end
