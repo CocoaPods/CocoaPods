@@ -2,9 +2,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Coconut : NSObject
+@interface Banana : NSObject
 
-- (void)makeCoconuts;
+- (void)peel;
 
 @end
 
