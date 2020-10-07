@@ -624,9 +624,15 @@ module Pod
                 select { |xcf| xcf.build_type.static_framework? }.
                 map(&:name).
                 uniq
+
+              # Include direct dynamic dependencies to the linker flags. We used to add those in the 'Link Binary With Libraries'
+              # phase but we no longer do since we cannot differentiate between debug or release configurations within
+              # that phase.
+              frameworks.concat target.dependent_targets_by_config[@configuration].flat_map { |pt| pt.build_settings[@configuration].dynamic_frameworks_to_import }
+            else
+              # Also include any vendored dynamic frameworks of dependencies.
+              frameworks.concat dependent_targets.reject(&:should_build?).flat_map { |pt| pt.build_settings[@configuration].dynamic_frameworks_to_import }
             end
-            # Also include any vendored dynamic frameworks of dependencies.
-            frameworks.concat dependent_targets.reject(&:should_build?).flat_map { |pt| pt.build_settings[@configuration].dynamic_frameworks_to_import }
           else
             frameworks.concat dependent_targets_to_link.flat_map { |pt| pt.build_settings[@configuration].frameworks_to_import }
           end

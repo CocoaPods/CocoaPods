@@ -236,6 +236,7 @@ module Pod
                                  :vendored_static_libraries => [config.sandbox.root + 'StaticLibrary.a'],
                                  :vendored_dynamic_frameworks => [config.sandbox.root + 'VendoredFramework.framework'],
                                  :vendored_dynamic_libraries => [config.sandbox.root + 'VendoredDyld.dyld'],
+                                 :vendored_xcframeworks => [],
                                 )
             pod_target = stub('pod_target',
                               :file_accessors => [file_accessor],
@@ -253,7 +254,7 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.other_ldflags.should.
-              be == %w(-l"BananaStaticLib" -l"xml2" -framework "BananaFramework" -weak_framework "iAd")
+              be == %w(-l"BananaStaticLib" -l"xml2" -framework "BananaFramework" -framework "VendoredFramework" -framework "dynamic-monkey" -weak_framework "iAd")
           end
         end
 
