@@ -3,8 +3,22 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
+
+/* Begin PBXAggregateTarget section */
+		5BFCC900252E56C0000564E9 /* ArchiveAndValidate */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 5BFCC903252E56C0000564E9 /* Build configuration list for PBXAggregateTarget "ArchiveAndValidate" */;
+			buildPhases = (
+				5BFCC904252E56CB000564E9 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = ArchiveAndValidate;
+			productName = ArchiveAndValidate;
+		};
+/* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
 		4B92F4F948B2627D25C3B487 /* Pods_VendoredXCFrameworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBF7E1F8F8EBA8AAED7B760 /* Pods_VendoredXCFrameworkExample.framework */; };
@@ -88,7 +102,6 @@
 				D02A199032E77CA06241E6EB /* Pods-VendoredXCFrameworkExample.debug.xcconfig */,
 				BCAE785A6DBB4A53A381B7A1 /* Pods-VendoredXCFrameworkExample.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -126,6 +139,9 @@
 					5BFCC8CF252E3B9D000564E9 = {
 						CreatedOnToolsVersion = 11.7;
 					};
+					5BFCC900252E56C0000564E9 = {
+						CreatedOnToolsVersion = 11.7;
+					};
 				};
 			};
 			buildConfigurationList = 5BFCC8CB252E3B9D000564E9 /* Build configuration list for PBXProject "VendoredXCFrameworkExample" */;
@@ -142,6 +158,7 @@
 			projectRoot = "";
 			targets = (
 				5BFCC8CF252E3B9D000564E9 /* VendoredXCFrameworkExample */,
+				5BFCC900252E56C0000564E9 /* ArchiveAndValidate */,
 			);
 		};
 /* End PBXProject section */
@@ -198,6 +215,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		5BFCC904252E56CB000564E9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "archivePath=\"${BUILD_DIR}/VendoredXCFrameworkExample.xcarchive\"\n\nxcodebuild archive \\\n   -workspace \"${PROJECT_DIR}/Examples.xcworkspace\" \\\n   -scheme \"VendoredXCFrameworkExample\" \\\n   -configuration \"Release\" \\\n   -archivePath \"${archivePath}\" \\\n   CODE_SIGN_IDENTITY=\"\" \\\n   CODE_SIGNING_REQUIRED=NO \\\n   CODE_SIGN_ENTITLEMENTS=\"\" \\\n   CODE_SIGNING_ALLOWED=\"NO\"\n\n# ---------------------------------------\n# Collecting debug symbols in archive\n# ---------------------------------------\nexitCode=0\n\n# Ensure the expected BCSYmbolMaps are in the root of the archive\nbcSymbolMapsPath=\"${archivePath}/BCSymbolMaps\"\n\n# Ensure the expected SDK12 BCSYmbolMaps are in the root of the archive\nlibraryBCSymbolMapDir=\"${PROJECT_DIR}/CoconutLib/build/CoconutLib.xcframework/ios-arm64/BCSymbolMaps\"\nfor file in \"${libraryBCSymbolMapDir}\"/*; do\n    filename=\"${file##*/}\"\n    if ! test -f \"${bcSymbolMapsPath}/${filename}\"; then\n        echo \"error: Missing BCSymbolMap for CoconutLib: ${filename}\"\n        exitCode=1\n    fi\ndone\n\n# Ensure the expected dSYMs are in the root of the archive\ndsymsPath=\"${archivePath}/dSYMs\"\n\nif ! test -d \"$dsymsPath/VendoredXCFrameworkExample.app.dSYM\"; then\n    echo \"error: Missing dSYM: VendoredXCFrameworkExample.app.dSYM\"\n    exitCode=1\nfi\n\nif ! test -d \"$dsymsPath/CoconutLib.framework.dSYM\"; then\n    echo \"error: Missing dSYM: CoconutLib.framework.dSYM\"\n    exitCode=1\nfi\n\nexit $exitCode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -384,6 +418,22 @@
 			};
 			name = Release;
 		};
+		5BFCC901252E56C0000564E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5BFCC902252E56C0000564E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -401,6 +451,15 @@
 			buildConfigurations = (
 				5BFCC8E5252E3BA0000564E9 /* Debug */,
 				5BFCC8E6252E3BA0000564E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5BFCC903252E56C0000564E9 /* Build configuration list for PBXAggregateTarget "ArchiveAndValidate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BFCC901252E56C0000564E9 /* Debug */,
+				5BFCC902252E56C0000564E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
