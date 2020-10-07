@@ -2,7 +2,6 @@
 File References:
 - Podfile
 - Frameworks:
-  - SocketRocket.framework
   - iOS:
     - CFNetwork.framework
     - Foundation.framework
@@ -185,7 +184,6 @@ Targets:
       - PTURLRequestOperation.m
     - Frameworks:
       - Foundation.framework
-      - SocketRocket.framework
     - Resources: []
     Build Configurations:
     - Debug:
