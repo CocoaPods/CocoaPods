@@ -1,10 +1,3 @@
-//
-//  CoconutLib.h
-//  CoconutLib
-//
-//  Created by John McIntosh on 10/7/20.
-//
-
 #import <Foundation/Foundation.h>
 
 //! Project version number for CoconutLib.

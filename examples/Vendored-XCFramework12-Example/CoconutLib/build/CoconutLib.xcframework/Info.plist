@@ -5,22 +5,6 @@
 	<key>AvailableLibraries</key>
 	<array>
 		<dict>
-			<key>BitcodeSymbolMapsPath</key>
-			<string>BCSymbolMaps</string>
-			<key>DebugSymbolsPath</key>
-			<string>dSYMs</string>
-			<key>LibraryIdentifier</key>
-			<string>ios-arm64</string>
-			<key>LibraryPath</key>
-			<string>CoconutLib.framework</string>
-			<key>SupportedArchitectures</key>
-			<array>
-				<string>arm64</string>
-			</array>
-			<key>SupportedPlatform</key>
-			<string>ios</string>
-		</dict>
-		<dict>
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
 			<key>LibraryIdentifier</key>
@@ -56,22 +40,21 @@
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
 			<key>LibraryIdentifier</key>
-			<string>watchos-arm64_32_armv7k</string>
+			<string>ios-arm64</string>
 			<key>LibraryPath</key>
 			<string>CoconutLib.framework</string>
 			<key>SupportedArchitectures</key>
 			<array>
-				<string>arm64_32</string>
-				<string>armv7k</string>
+				<string>arm64</string>
 			</array>
 			<key>SupportedPlatform</key>
-			<string>watchos</string>
+			<string>ios</string>
 		</dict>
 		<dict>
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
 			<key>LibraryIdentifier</key>
-			<string>watchos-arm64_x86_64-simulator</string>
+			<string>tvos-arm64_x86_64-simulator</string>
 			<key>LibraryPath</key>
 			<string>CoconutLib.framework</string>
 			<key>SupportedArchitectures</key>
@@ -80,7 +63,7 @@
 				<string>x86_64</string>
 			</array>
 			<key>SupportedPlatform</key>
-			<string>watchos</string>
+			<string>tvos</string>
 			<key>SupportedPlatformVariant</key>
 			<string>simulator</string>
 		</dict>
@@ -99,6 +82,23 @@
 			<string>ios</string>
 			<key>SupportedPlatformVariant</key>
 			<string>maccatalyst</string>
+		</dict>
+		<dict>
+			<key>BitcodeSymbolMapsPath</key>
+			<string>BCSymbolMaps</string>
+			<key>DebugSymbolsPath</key>
+			<string>dSYMs</string>
+			<key>LibraryIdentifier</key>
+			<string>watchos-arm64_32_armv7k</string>
+			<key>LibraryPath</key>
+			<string>CoconutLib.framework</string>
+			<key>SupportedArchitectures</key>
+			<array>
+				<string>arm64_32</string>
+				<string>armv7k</string>
+			</array>
+			<key>SupportedPlatform</key>
+			<string>watchos</string>
 		</dict>
 		<dict>
 			<key>DebugSymbolsPath</key>
@@ -121,7 +121,7 @@
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
 			<key>LibraryIdentifier</key>
-			<string>tvos-arm64_x86_64-simulator</string>
+			<string>watchos-arm64_x86_64-simulator</string>
 			<key>LibraryPath</key>
 			<string>CoconutLib.framework</string>
 			<key>SupportedArchitectures</key>
@@ -130,7 +130,7 @@
 				<string>x86_64</string>
 			</array>
 			<key>SupportedPlatform</key>
-			<string>tvos</string>
+			<string>watchos</string>
 			<key>SupportedPlatformVariant</key>
 			<string>simulator</string>
 		</dict>
