@@ -11,6 +11,7 @@ rm -rf build/*
 
 settings="SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
 archiveDir="build/DerivedData/"
+
 echo "Building xcframework slices"
 
 xcodebuild clean archive -project CoconutLib.xcodeproj -scheme "CoconutLib" -sdk iphoneos -archivePath "${archiveDir}/iOS" $settings

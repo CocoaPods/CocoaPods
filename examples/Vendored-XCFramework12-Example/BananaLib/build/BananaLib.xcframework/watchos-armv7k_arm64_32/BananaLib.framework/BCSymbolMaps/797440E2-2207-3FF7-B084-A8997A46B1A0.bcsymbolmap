@@ -1,0 +1,11 @@
+BCSymbolMap Version: 2.0
+Apple clang version 11.0.3 (clang-1103.0.32.62)
+/Users/jtm/Library/Developer/Xcode/DerivedData/BananaLib-goieoziljschjhfxqahxldwqessj/Build/Intermediates.noindex/ArchiveIntermediates/BananaLib/IntermediateBuildFilesPath/BananaLib.build/Release-watchos/BananaLib.build/DerivedSources/BananaLib_vers.c
+/Users/jtm/development/CocoaPodsOrg/CocoaPods/examples/Vendored-XCFramework12-Example/BananaLib
+-[Banana peel]
+__OBJC_METACLASS_RO_$_Banana
+__OBJC_$_INSTANCE_METHODS_Banana
+__OBJC_CLASS_RO_$_Banana
+_OBJC_LABEL_CLASS_$
+/Users/jtm/development/CocoaPodsOrg/CocoaPods/examples/Vendored-XCFramework12-Example/BananaLib/BananaLib/Banana.m
+BananaLib/Banana.m
