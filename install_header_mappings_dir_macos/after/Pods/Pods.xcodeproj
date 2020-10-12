@@ -46,7 +46,6 @@ File References:
       - HeaderMappingsDirPod-library.debug.xcconfig
       - HeaderMappingsDirPod-library.release.xcconfig
 - Frameworks:
-  - HeaderMappingsDirPod.framework
   - OS X:
     - Cocoa.framework
 - Products:
@@ -92,7 +91,6 @@ Targets:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
     - Frameworks:
       - Cocoa.framework
-      - HeaderMappingsDirPod.framework
     - Resources: []
     Build Configurations:
     - Debug:

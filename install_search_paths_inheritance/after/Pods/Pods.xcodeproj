@@ -67,10 +67,6 @@ File References:
       - testkit.debug.xcconfig
       - testkit.release.xcconfig
 - Frameworks:
-  - asserts.framework
-  - CocoaLumberjack.framework
-  - logger.framework
-  - testkit.framework
   - iOS:
     - Foundation.framework
     - XCTest.framework
@@ -159,7 +155,6 @@ Targets:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
     - Frameworks:
       - Foundation.framework
-      - logger.framework
     - Resources: []
     Build Configurations:
     - Debug:
@@ -354,7 +349,6 @@ Targets:
       - Logger.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
     - Frameworks:
-      - CocoaLumberjack.framework
       - Foundation.framework
     - Resources: []
     Build Configurations:
@@ -567,9 +561,7 @@ Targets:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - sharedlib-Core-dummy.m
     - Frameworks:
-      - asserts.framework
       - Foundation.framework
-      - logger.framework
     - Resources: []
     Build Configurations:
     - Debug:
@@ -640,7 +632,6 @@ Targets:
       - sharedlib-Testing-dummy.m
     - Frameworks:
       - Foundation.framework
-      - testkit.framework
     - Resources: []
     Build Configurations:
     - Debug:
@@ -710,7 +701,6 @@ Targets:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
       - testkit-dummy.m
     - Frameworks:
-      - asserts.framework
       - Foundation.framework
       - XCTest.framework
     - Resources: []

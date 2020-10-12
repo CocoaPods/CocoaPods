@@ -212,10 +212,6 @@ File References:
     - Tests:
       - SwiftPodTests.swift
 - Frameworks:
-  - CustomModuleMapPod.framework
-  - MixedPod.framework
-  - ObjCPod.framework
-  - SwiftPod.framework
   - iOS:
     - Foundation.framework
     - XCTest.framework
@@ -379,7 +375,6 @@ Targets:
     - Sources:
       - CustomModuleMapPodTests.m
     - Frameworks:
-      - CustomModuleMapPod.framework
       - Foundation.framework
       - XCTest.framework
     - Resources: []
@@ -514,7 +509,6 @@ Targets:
       - CustomModuleMapPodTests.m
     - Frameworks:
       - Cocoa.framework
-      - CustomModuleMapPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":
@@ -793,8 +787,6 @@ Targets:
       - MixedPod-framework-iOS-dummy.m
     - Frameworks:
       - Foundation.framework
-      - ObjCPod.framework
-      - SwiftPod.framework
     - Resources: []
     Build Configurations:
     - Debug:
@@ -859,7 +851,6 @@ Targets:
       - MixedPodTests.swift
     - Frameworks:
       - Foundation.framework
-      - MixedPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":
@@ -929,8 +920,6 @@ Targets:
       - MixedPod-framework-macOS-dummy.m
     - Frameworks:
       - Cocoa.framework
-      - ObjCPod.framework
-      - SwiftPod.framework
     - Resources: []
     Build Configurations:
     - Debug:
@@ -1000,7 +989,6 @@ Targets:
       - MixedPodTests.swift
     - Frameworks:
       - Cocoa.framework
-      - MixedPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":
@@ -1389,7 +1377,6 @@ Targets:
       - ObjCPodTests.m
     - Frameworks:
       - Foundation.framework
-      - ObjCPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":
@@ -1520,7 +1507,6 @@ Targets:
       - ObjCPodTests.m
     - Frameworks:
       - Cocoa.framework
-      - ObjCPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":
@@ -2112,7 +2098,6 @@ Targets:
       - SwiftPodTests.swift
     - Frameworks:
       - Foundation.framework
-      - SwiftPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":
@@ -2242,7 +2227,6 @@ Targets:
       - SwiftPodTests.swift
     - Frameworks:
       - Cocoa.framework
-      - SwiftPod.framework
       - XCTest.framework
     - Resources: []
     - "[CP] Embed Pods Frameworks":

@@ -27,7 +27,6 @@ File References:
       - SomeTest.h
       - SomeTest.m
 - Frameworks:
-  - BananaLib.framework
   - iOS:
     - Foundation.framework
 - Products:
@@ -144,7 +143,6 @@ Targets:
     - Sources:
       - SomeTest.m
     - Frameworks:
-      - BananaLib.framework
       - Foundation.framework
     - Resources: []
     - Headers:
