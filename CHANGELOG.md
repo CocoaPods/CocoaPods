@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not add dependencies to 'Link Binary With Libraries' phase.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10133](https://github.com/CocoaPods/CocoaPods/pull/10133)
+
 * Ensure cache integrity on concurrent installations.  
   [Erik Blomqvist](https://github.com/codiophile)
   [#10013](https://github.com/CocoaPods/CocoaPods/issues/10013)
