@@ -1,0 +1,20 @@
+project 'VendoredXCFrameworkExample.xcodeproj'
+
+workspace 'Examples'
+
+target 'VendoredXCFrameworkExample' do
+  platform :ios, '13.0'
+  use_frameworks!
+
+  # XCFramework with Xcode 11 style inclusion of debug symbols
+  # To rebuild the xcframework:
+  #   cd BananaLib
+  #   ./build.sh
+  pod 'BananaLib', path: './BananaLib'
+
+  # XCFramework with Xcode 12 style inclusion of debug symbols
+  # To rebuild the xcframework:
+  #   cd CoconutLib
+  #   ./build.sh
+  pod 'CoconutLib', path: './CoconutLib'
+end
