@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   Swift without requiring an empty Swift file be present.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Add flag to ignore prerelease versions when reporting latest version for outdated pods.  
+  [cltnschlosser](https://github.com/cltnschlosser)
+  [#9916](https://github.com/CocoaPods/CocoaPods/pull/9916)
+
 ##### Bug Fixes
 
 * Do not add dependencies to 'Link Binary With Libraries' phase.  

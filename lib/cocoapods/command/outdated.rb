@@ -11,6 +11,17 @@ module Pod
         spec repos, not those from local/external sources.
       DESC
 
+      def self.options
+        [
+          ['--ignore-prerelease', "Don't consider prerelease versions to be updates"],
+        ].concat(super)
+      end
+
+      def initialize(argv)
+        @ignore_prerelease = argv.flag?('ignore-prerelease')
+        super
+      end
+
       # Run the command
       #
       def run
@@ -67,7 +78,7 @@ module Pod
           ensure_external_podspecs_present!
           spec_sets.map do |set|
             spec = set.specification
-            source_version = set.versions.first
+            source_version = set.versions.find { |version| !@ignore_prerelease || !version.prerelease? }
             pod_name = spec.root.name
             lockfile_version = lockfile.version(pod_name)
             if source_version > lockfile_version
