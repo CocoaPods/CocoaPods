@@ -50,7 +50,6 @@ Targets:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -71,7 +70,6 @@ Targets:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -100,7 +98,6 @@ Targets:
         Build Settings:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -118,7 +115,6 @@ Targets:
         Build Settings:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -149,7 +145,6 @@ Targets:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -170,7 +165,6 @@ Targets:
         Build Settings:
           ARCHS: "$(ARCHS_STANDARD_64_BIT)"
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -218,6 +212,7 @@ Build Configurations:
       CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: 'YES'
       CLANG_WARN_OBJC_LITERAL_CONVERSION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: 'YES'
       CLANG_WARN_RANGE_LOOP_ANALYSIS: 'YES'
       CLANG_WARN_STRICT_PROTOTYPES: 'YES'
       CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
@@ -278,6 +273,7 @@ Build Configurations:
       CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: 'YES'
       CLANG_WARN_OBJC_LITERAL_CONVERSION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: 'YES'
       CLANG_WARN_RANGE_LOOP_ANALYSIS: 'YES'
       CLANG_WARN_STRICT_PROTOTYPES: 'YES'
       CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
