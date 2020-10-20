@@ -39,9 +39,22 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8649](https://github.com/CocoaPods/CocoaPods/issues/8649)
 
+
+## 1.10.0 (2020-10-20)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
 * Generate the correct LD `-l` flags for XCFrameworks containing libraries  
   [Wes Campaigne](https://github.com/Westacular)
   [#10071](https://github.com/CocoaPods/CocoaPods/issues/10071)
+
+* Add support for automatically embeddeding XCFramework debug symbols for XCFrameworks generated with Xcode 12  
+  [johntmcintosh](https://github.com/johntmcintosh)
+  [#10111](https://github.com/CocoaPods/CocoaPods/issues/10111)
 
 ## 1.10.0.rc.1 (2020-09-15)
 

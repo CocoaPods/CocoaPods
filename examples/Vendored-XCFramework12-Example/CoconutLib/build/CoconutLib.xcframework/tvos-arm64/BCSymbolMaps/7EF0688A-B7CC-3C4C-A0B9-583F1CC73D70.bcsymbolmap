@@ -1,0 +1,12 @@
+BCSymbolMap Version: 2.0
+Apple clang version 12.0.0 (clang-1200.0.32.2)
+/Applications/Xcode-12.0.app/Contents/Developer/Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.0.sdk
+AppleTVOS14.0.sdk
+/Users/jtm/Library/Developer/Xcode/DerivedData/CoconutLib-grokdlqdjuknutarjtemhurhbmfb/Build/Intermediates.noindex/ArchiveIntermediates/CoconutLib/IntermediateBuildFilesPath/CoconutLib.build/Release-appletvos/CoconutLib.build/DerivedSources/CoconutLib_vers.c
+/Users/jtm/development/CocoaPodsOrg/CocoaPods/examples/Vendored-XCFramework12-Example/CoconutLib
+-[Coconut makeCoconuts]
+__OBJC_METACLASS_RO_$_Coconut
+__OBJC_$_INSTANCE_METHODS_Coconut
+__OBJC_CLASS_RO_$_Coconut
+/Users/jtm/development/CocoaPodsOrg/CocoaPods/examples/Vendored-XCFramework12-Example/CoconutLib/CoconutLib/Coconut.m
+CoconutLib/Coconut.m

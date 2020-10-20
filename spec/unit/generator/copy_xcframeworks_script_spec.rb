@@ -6,7 +6,7 @@ module Pod
       xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.ios)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "ios-armv7_arm64/CoconutLib.framework" "ios-i386_x86_64-simulator/CoconutLib.framework"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "ios-armv7_arm64" "ios-i386_x86_64-simulator"
       SH
     end
 
@@ -14,19 +14,19 @@ module Pod
       xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.macos)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "macos-x86_64/CoconutLib.framework"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "macos-x86_64"
       SH
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.ios)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "ios-armv7_arm64/CoconutLib.framework" "ios-i386_x86_64-simulator/CoconutLib.framework"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "ios-armv7_arm64" "ios-i386_x86_64-simulator"
       SH
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.watchos)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "watchos-i386-simulator/CoconutLib.framework" "watchos-armv7k_arm64_32/CoconutLib.framework"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "watchos-i386-simulator" "watchos-armv7k_arm64_32"
       SH
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.tvos)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "tvos-x86_64-simulator/CoconutLib.framework" "tvos-arm64/CoconutLib.framework"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "tvos-x86_64-simulator" "tvos-arm64"
       SH
     end
 

@@ -409,7 +409,11 @@ module Pod
                   configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
                 end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
-                configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+                if target.platform == :osx
+                  configuration.build_settings['CODE_SIGN_IDENTITY'] = ''
+                elsif target.platform == :ios
+                  configuration.build_settings['CODE_SIGN_IDENTITY'] = 'iPhone Developer'
+                end
                 # Ensure swift stdlib gets copied in if needed, even when the target contains no swift files,
                 # because a dependency uses swift
                 configuration.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES' if embedded_content_contains_swift
