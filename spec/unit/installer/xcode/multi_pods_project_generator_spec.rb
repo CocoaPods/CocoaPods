@@ -468,7 +468,7 @@ module Pod
               message.should.include '`CoconutLib-iOS-unit-Tests` manually specifies an app host but has not specified `requires_app_host = true`.'
           end
 
-          it 'adds framework file references for framework pod targets that require building' do
+          it 'does not add framework file references for framework pod targets that require building' do
             @orangeframework_pod_target.stubs(:build_type => BuildType.dynamic_framework)
             @coconut_ios_pod_target.stubs(:build_type => BuildType.dynamic_framework)
             @coconut_ios_pod_target.stubs(:should_build?).returns(true)
@@ -479,7 +479,6 @@ module Pod
             native_target.isa.should == 'PBXNativeTarget'
             native_target.frameworks_build_phase.file_display_names.sort.should == [
               'Foundation.framework',
-              'OrangeFramework.framework',
             ]
           end
 

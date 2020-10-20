@@ -174,6 +174,9 @@ describe_cli 'pod' do
     # ignore lines in the vein of `CDN: trunk Relative path: all_pods_versions_1_3_f.txt exists!`
     # they are somewhat non-deteministic and non-essential to testing integration
     s.replace_pattern /.*CDN:.*\n/, ''
+
+    # replace all git downloader output with just the command
+    s.replace_pattern %r{ > Git download\n(     \$ GIT_BIN [^\n]+\n)(     [^\n]*\n|\n)+}m, " > Git download\n\\1\n"
   end
 
   describe 'Pod install' do
@@ -320,6 +323,11 @@ describe_cli 'pod' do
 
     describe 'Integrates a Pod using a vendored static xcframework' do
       behaves_like cli_spec 'install_vendored_static_xcframework',
+                            'install --no-repo-update'
+    end
+
+    describe 'Integrates a Pod using a vendored static library xcframework' do
+      behaves_like cli_spec 'install_vendored_static_library_xcframework',
                             'install --no-repo-update'
     end
 
