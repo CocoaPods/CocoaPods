@@ -166,6 +166,7 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -182,6 +183,7 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
+          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
