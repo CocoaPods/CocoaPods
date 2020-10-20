@@ -163,6 +163,7 @@ Targets:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
@@ -178,6 +179,7 @@ Targets:
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGN_IDENTITY: iPhone Developer
           CURRENT_PROJECT_VERSION: '1'
@@ -210,7 +212,6 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -239,7 +240,6 @@ Targets:
         Base Configuration: DepPod.debug.xcconfig
     - Release:
         Build Settings:
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -284,7 +284,6 @@ Targets:
     - Debug:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -315,7 +314,6 @@ Targets:
     - Release:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -368,6 +366,7 @@ Targets:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -388,6 +387,7 @@ Targets:
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -431,6 +431,7 @@ Targets:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -451,6 +452,7 @@ Targets:
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -496,7 +498,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -518,7 +519,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -558,7 +558,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -580,7 +579,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -609,7 +607,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -631,7 +628,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -661,7 +657,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -683,7 +678,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -713,7 +707,6 @@ Targets:
         Build Settings:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -746,7 +739,6 @@ Targets:
         Build Settings:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -792,7 +784,6 @@ Targets:
         Build Settings:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -825,7 +816,6 @@ Targets:
         Build Settings:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -871,7 +861,6 @@ Targets:
     - Debug:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -902,7 +891,6 @@ Targets:
     - Release:
         Build Settings:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
-          CODE_SIGN_IDENTITY: ''
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -955,6 +943,7 @@ Targets:
     - Debug:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -976,6 +965,7 @@ Targets:
     - Release:
         Build Settings:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
@@ -1020,7 +1010,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -1040,7 +1029,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -1079,7 +1067,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -1101,7 +1088,6 @@ Targets:
           CLANG_ENABLE_OBJC_WEAK: 'NO'
           CODE_SIGNING_ALLOWED: 'YES'
           CODE_SIGNING_REQUIRED: 'YES'
-          CODE_SIGN_IDENTITY: iPhone Developer
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
@@ -1145,6 +1131,7 @@ Build Configurations:
       CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: 'YES'
       CLANG_WARN_OBJC_LITERAL_CONVERSION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: 'YES'
       CLANG_WARN_RANGE_LOOP_ANALYSIS: 'YES'
       CLANG_WARN_STRICT_PROTOTYPES: 'YES'
       CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
@@ -1205,6 +1192,7 @@ Build Configurations:
       CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: 'YES'
       CLANG_WARN_OBJC_LITERAL_CONVERSION: 'YES'
       CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: 'YES'
       CLANG_WARN_RANGE_LOOP_ANALYSIS: 'YES'
       CLANG_WARN_STRICT_PROTOTYPES: 'YES'
       CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
