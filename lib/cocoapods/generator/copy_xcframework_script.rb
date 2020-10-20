@@ -194,12 +194,8 @@ install_xcframework() {
     mkdir -p "$destination"
   fi
 
-  if [[ "$package_type" == "library" ]]; then
-    # Libraries can contain headers, module maps, and a binary, so we'll copy everything in the folder over
-    copy_dir "$source/" "$destination"
-  elif [[ "$package_type" == "framework" ]]; then
-    copy_dir "$source" "$destination"
-  fi
+  copy_dir "$source/" "$destination"
+
   echo "Copied $source to $destination"
 }
 
@@ -226,12 +222,7 @@ install_xcframework() {
         is_framework = xcframework.build_type.framework?
         args << shell_escape(is_framework ? 'framework' : 'library')
         slices.each do |slice|
-          args << if is_framework
-                    shell_escape(slice.path.relative_path_from(root))
-                  else
-                    # We don't want the path to the library binary, we want the dir that contains it
-                    shell_escape(slice.path.dirname.relative_path_from(root))
-                  end
+          args << shell_escape(slice.path.dirname.relative_path_from(root))
         end
         args.join(' ')
       end
