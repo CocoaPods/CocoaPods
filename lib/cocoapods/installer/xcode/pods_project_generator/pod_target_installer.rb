@@ -408,7 +408,11 @@ module Pod
                   configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'YES'
                 end
                 # For macOS we do not code sign the XCTest bundle because we do not code sign the frameworks either.
-                configuration.build_settings['CODE_SIGN_IDENTITY'] = '' if target.platform == :osx
+                if target.platform == :osx
+                  configuration.build_settings['CODE_SIGN_IDENTITY'] = ''
+                elsif target.platform == :ios
+                  configuration.build_settings['CODE_SIGN_IDENTITY'] = 'iPhone Developer'
+                end
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.test_spec_build_settings_by_config[test_spec.name], test_native_target)
