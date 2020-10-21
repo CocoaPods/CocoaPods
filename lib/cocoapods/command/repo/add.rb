@@ -18,6 +18,7 @@ module Pod
         def self.options
           [
             ['--progress', 'Show the progress of cloning the spec repository'],
+            ['--sparse', 'Add the spec repository using sparse checkout and partial clone, good for huge repos'],
           ].concat(super)
         end
 
@@ -26,6 +27,7 @@ module Pod
           @url = argv.shift_argument
           @branch = argv.shift_argument
           @progress = argv.flag?('progress')
+          @sparse = argv.flag?('sparse')
           super
         end
 
@@ -46,6 +48,7 @@ module Pod
           UI.section(section) do
             create_repos_dir
             clone_repo
+            initialize_sparse_checkout if @sparse
             checkout_branch
             config.sources_manager.sources([dir.basename.to_s]).each(&:verify_compatibility!)
           end
@@ -83,6 +86,7 @@ module Pod
             Dir.chdir(config.repos_dir) do
               command = ['clone', @url]
               command << '--progress' if @progress
+              command << %w[--filter=blob:none --no-checkout --depth 1] if @sparse
               command << '--' << @name
               git!(command)
             end
@@ -95,6 +99,26 @@ module Pod
         #
         def checkout_branch
           Dir.chdir(dir) { git!('checkout', @branch) } if @branch
+        end
+
+        # Initialize a sparse checkout in the git spec-repo.
+        #
+        # @return [void]
+        #
+        def initialize_sparse_checkout
+          Dir.chdir(dir) do
+            git!(%w[config core.sparseCheckout true])
+            git!(%w[config core.sparseCheckoutCone true])
+            File.open('.git/info/sparse-checkout', 'w') do |sparse|
+              sparse.puts '/*'
+              sparse.puts '!/*/'
+              sparse.puts '/Specs/*'
+              sparse.puts '!/Specs/*/'
+            end
+            command = ['checkout']
+            command << '--progress' if @progress
+            git!(command)
+          end
         end
       end
     end

@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Support adding a git spec repo with a sparse checkout  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#10069](https://github.com/CocoaPods/CocoaPods/pull/10069)
+  [Core#649](https://github.com/CocoaPods/Core/pull/649)
+
 * Installing a local (`:path`) pod that defines script phases will no longer
   produce warnings.  
   [Samuel Giddins](https://github.com/segiddins)
