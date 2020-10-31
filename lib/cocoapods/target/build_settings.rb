@@ -772,9 +772,9 @@ module Pod
                                     flat_map { |xcf| linker_names_from_libraries([xcf.slices.first.binary_path]) }.
                                     uniq
             libraries.concat xcframework_libraries
+            libraries.concat dependent_targets.flat_map { |pt| pt.build_settings[@configuration].dynamic_libraries_to_import }
           end
           if non_library_xcconfig?
-            libraries.concat dependent_targets.flat_map { |pt| pt.build_settings[@configuration].dynamic_libraries_to_import }
             libraries.concat dependent_targets_to_link.flat_map { |pt| pt.build_settings[@configuration].static_libraries_to_import }
           end
           libraries

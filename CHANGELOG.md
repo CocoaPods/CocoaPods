@@ -112,6 +112,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Serialize schemes that do not need to be rewritten by Xcode.  
   [Samuel Giddins](https://github.com/segiddins)
 
+* Fixed linking dynamic libraries error when a pod was dependent on another pod.  
+  [langyanduan](https://github.com/langyanduan)
+  [#10183](https://github.com/CocoaPods/CocoaPods/pull/10183)
 
 ## 1.10.1 (2021-01-07)
 
