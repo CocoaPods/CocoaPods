@@ -12,7 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix processing of xcassets resources when pod target is static framework  
+  [Federico Trimboli](https://github.com/fedetrim)
+  [#10175](https://github.com/CocoaPods/CocoaPods/pull/10175)
+  [#10170](https://github.com/CocoaPods/CocoaPods/issues/10170)
 
 
 ## 1.10.0 (2020-10-20)

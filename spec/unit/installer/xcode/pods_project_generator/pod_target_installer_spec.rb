@@ -772,6 +772,24 @@ module Pod
               resource.should.be.nil
             end
 
+            it 'doesn\'t add xcassets resources to the static framework target' do
+              @pod_target.stubs(:build_type => BuildType.static_framework)
+              @installer.install!
+              resources = @project.targets.first.resources_build_phase.files
+              resources.count.should > 0
+              resource = resources.find { |res| res.file_ref.path.include?('Images.xcassets') }
+              resource.should.be.nil
+            end
+
+            it 'adds xcassets resources to the dynamic framework target' do
+              @pod_target.stubs(:build_type => BuildType.dynamic_framework)
+              @installer.install!
+              resources = @project.targets.first.resources_build_phase.files
+              resources.count.should > 0
+              resource = resources.find { |res| res.file_ref.path.include?('Images.xcassets') }
+              resource.should.be.not.nil
+            end
+
             it 'includes spec info_plist entries for dynamic frameworks' do
               @pod_target.stubs(:build_type => BuildType.dynamic_framework)
               expected_entries = {
