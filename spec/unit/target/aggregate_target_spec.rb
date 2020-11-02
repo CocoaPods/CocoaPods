@@ -199,6 +199,17 @@ module Pod
           resource_paths_by_config['Release'].should == expected_files
         end
 
+        it 'checks xcassets resource paths are not converted for static frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:build_type => BuildType.static_framework)
+          @pod_target.stubs(:resource_paths).returns('BananaLib' => ['/some/absolute/path/to/Images.xcassets'])
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          expected_files = ['/some/absolute/path/to/Images.xcassets']
+          resource_paths_by_config['Debug'].should == expected_files
+          resource_paths_by_config['Release'].should == expected_files
+        end
+
         it 'returns non vendored frameworks by config with different release and debug targets' do
           @pod_target_release.stubs(:should_build?).returns(true)
           @pod_target_release.stubs(:build_type => BuildType.dynamic_framework)
