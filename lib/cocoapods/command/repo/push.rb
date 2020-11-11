@@ -180,12 +180,16 @@ module Pod
           git!(%W(-C #{repo_dir} pull))
         end
 
+        # Update sources if present
+        #
+        # @return [void]
+        #
         def update_sources
           return if @source_urls.nil?
           @source_urls.each do |source_url|
             source = config.sources_manager.source_with_name_or_url(source_url)
             dir = source.specs_dir
-            UI.puts "Updating source at #{dir} for #{source}"
+            UI.puts "Updating a source at #{dir} for #{source}"
             git!(%W(-C #{dir} pull))
           end
         end
