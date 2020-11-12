@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date. 
+  [Elton Gao](https://github.com/gyfelton)
+  [Justin Martin](https://github.com/justinseanmartin)
+  
 * Installing a local (`:path`) pod that defines script phases will no longer
   produce warnings.  
   [Samuel Giddins](https://github.com/segiddins)

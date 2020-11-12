@@ -178,6 +178,16 @@ module Pod
       (@upstream + 'PushTest/1.4/PushTest.podspec.json').read.should.include('PushTest')
     end
 
+    it 'successfully pushes a spec with flag update-sources' do
+      cmd = command('repo', 'push', 'master', '--update-sources')
+      Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
+      cmd.expects(:validate_podspec_files).returns(true)
+      cmd.expects(:update_sources)
+      Dir.chdir(temporary_directory) { cmd.run }
+      Dir.chdir(@upstream) { `git checkout main -q` }
+      cmd.instance_variable_get(:@update_sources).should.equal true
+    end
+
     it 'initializes with default sources if no custom sources specified' do
       cmd = command('repo', 'push', 'master')
       cmd.instance_variable_get(:@source_urls).should.equal [@upstream.to_s, Pod::TrunkSource::TRUNK_REPO_URL]
