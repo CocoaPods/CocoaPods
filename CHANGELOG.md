@@ -43,6 +43,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8649](https://github.com/CocoaPods/CocoaPods/issues/8649)
 
+* Fixed linking dynamic libraries error when a pod was dependent on another pod.  
+  [langyanduan](https://github.com/langyanduan)
+  [#10183](https://github.com/CocoaPods/CocoaPods/pull/10183)
 
 ## 1.10.0 (2020-10-20)
 

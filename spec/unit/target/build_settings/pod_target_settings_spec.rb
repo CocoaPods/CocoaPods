@@ -254,7 +254,7 @@ module Pod
             @generator.spec_consumers.each { |sc| sc.stubs(:frameworks => []) }
             @generator.stubs(:dependent_targets => [pod_target])
             @generator.other_ldflags.should.
-              be == %w(-l"BananaStaticLib" -l"xml2" -framework "BananaFramework" -framework "VendoredFramework" -framework "dynamic-monkey" -weak_framework "iAd")
+              be == %w(-l"BananaStaticLib" -l"VendoredDyld" -l"xml2" -framework "BananaFramework" -framework "VendoredFramework" -framework "dynamic-monkey" -weak_framework "iAd")
           end
         end
 
