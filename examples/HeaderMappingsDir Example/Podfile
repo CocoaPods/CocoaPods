@@ -2,12 +2,17 @@ if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
 
-platform :osx, '10.9'
 use_frameworks!
 
 workspace 'Examples.xcworkspace'
 project 'HeaderMappingsDir Example.xcodeproj'
 
 target 'App' do
+  platform :osx, '10.9'
+  pod 'HeaderMappingsDirPod', :path => 'HeaderMappingsDirPod'
+end
+
+target 'CatalystApp' do
+  platform :ios, '13.0'
   pod 'HeaderMappingsDirPod', :path => 'HeaderMappingsDirPod'
 end
