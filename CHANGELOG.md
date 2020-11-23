@@ -17,6 +17,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#10175](https://github.com/CocoaPods/CocoaPods/pull/10175)
   [#10170](https://github.com/CocoaPods/CocoaPods/issues/10170)
 
+* Fix missing `-ObjC` for static XCFrameworks  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#10234](https://github.com/CocoaPods/CocoaPods/pull/10234)
+
 
 ## 1.10.0 (2020-10-20)
 
@@ -30,7 +34,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Wes Campaigne](https://github.com/Westacular)
   [#10071](https://github.com/CocoaPods/CocoaPods/issues/10071)
 
-* Add support for automatically embeddeding XCFramework debug symbols for XCFrameworks generated with Xcode 12  
+* Add support for automatically embedding XCFramework debug symbols for XCFrameworks generated with Xcode 12  
   [johntmcintosh](https://github.com/johntmcintosh)
   [#10111](https://github.com/CocoaPods/CocoaPods/issues/10111)
 
