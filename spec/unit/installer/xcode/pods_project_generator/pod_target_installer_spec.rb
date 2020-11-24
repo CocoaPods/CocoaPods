@@ -1617,6 +1617,22 @@ module Pod
                 end
                 core_data_sources_file.should.be.not.nil
               end
+
+              it 'adds RealityComposer projects to the compile sources phase (non-bundles only)' do
+                native_target = @project.targets.first
+
+                # The project should not be in the resources phase.
+                reality_composer_resources_file = native_target.resources_build_phase.files.find do |bf|
+                  bf.file_ref.path == 'Resources/Sample.rcproject'
+                end
+                reality_composer_resources_file.should.be.nil
+
+                # The project should not be in the resources phase.
+                reality_composer_sources_file = native_target.source_build_phase.files.find do |bf|
+                  bf.file_ref.path == 'Resources/Sample.rcproject'
+                end
+                reality_composer_sources_file.should.be.not.nil
+              end
             end
 
             describe 'concerning resource bundles' do

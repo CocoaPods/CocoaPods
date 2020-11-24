@@ -264,10 +264,10 @@ module Pod
           # @yield_param  [Array<PBXFileReference>} The filtered resource file references to be installed
           #               in the compile sources phase.
           #
-          # @note   Core Data model directories (.xcdatamodeld) used to be added to the
-          #         `Copy Resources` build phase like all other resources, since they would
-          #         compile correctly in either the resources or compile phase. In recent
-          #         versions of xcode, there's an exception for data models that generate
+          # @note   Core Data model directories (.xcdatamodeld) and Realitykit projects (.rcproject)
+          #         used to be added to the `Copy Resources` build phase like all other resources,
+          #         since they would compile correctly in either the resources or compile phase. In
+          #         recent versions of xcode, there's an exception for data models that generate
           #         headers. These need to be added to the compile sources phase of a real
           #         target for the headers to be built in time for code in the target to
           #         use them. These kinds of models generally break when added to resource
@@ -287,7 +287,7 @@ module Pod
 
               ref
             end.compact.uniq
-            compile_phase_matcher = lambda { |ref| !(ref.path =~ /.*\.xcdatamodeld/i).nil? }
+            compile_phase_matcher = lambda { |ref| !(ref.path =~ /.*\.(xcdatamodeld|rcproject)/i).nil? }
             compile_phase_refs, resources_phase_refs = file_references.partition(&compile_phase_matcher)
             yield compile_phase_refs, resources_phase_refs
           end

@@ -28,6 +28,11 @@ module Pod
           Resources/Images.xcassets/Logo.imageset/Contents.json
           Resources/Images.xcassets/Logo.imageset/logo.png
           Resources/Migration.xcmappingmodel/xcmapping.xml
+          Resources/Sample.rcproject/Library/ProjectLibrary/Contents.json
+          Resources/Sample.rcproject/Library/ProjectLibrary/Version.json
+          Resources/Sample.rcproject/SceneThumbnails/A6BD9D7A-36EE-4D49-BF83-DEB3039A790C.thumbnails/square
+          Resources/Sample.rcproject/SceneThumbnails/A6BD9D7A-36EE-4D49-BF83-DEB3039A790C.thumbnails/wide
+          Resources/Sample.rcproject/com.apple.RCFoundation.Project
           Resources/Sample.xcdatamodeld/.xccurrentversion
           Resources/Sample.xcdatamodeld/Sample\ 2.xcdatamodel/contents
           Resources/Sample.xcdatamodeld/Sample.xcdatamodel/contents
@@ -67,6 +72,11 @@ module Pod
           Resources/Images.xcassets
           Resources/Images.xcassets/Logo.imageset
           Resources/Migration.xcmappingmodel
+          Resources/Sample.rcproject
+          Resources/Sample.rcproject/Library
+          Resources/Sample.rcproject/Library/ProjectLibrary
+          Resources/Sample.rcproject/SceneThumbnails
+          Resources/Sample.rcproject/SceneThumbnails/A6BD9D7A-36EE-4D49-BF83-DEB3039A790C.thumbnails
           Resources/Sample.xcdatamodeld
           Resources/Sample.xcdatamodeld/Sample\ 2.xcdatamodel
           Resources/Sample.xcdatamodeld/Sample.xcdatamodel
@@ -185,6 +195,7 @@ module Pod
           Resources/Base.lproj
           Resources/Images.xcassets
           Resources/Migration.xcmappingmodel
+          Resources/Sample.rcproject
           Resources/Sample.xcdatamodeld
           Resources/de.lproj
           Resources/en.lproj
