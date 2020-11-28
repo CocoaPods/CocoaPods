@@ -1,8 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 module Pod
-  describe Installer::Analyzer do # rubocop:disable Metrics/BlockLength
-    describe 'Analysis' do # rubocop:disable Metrics/BlockLength
+  describe Installer::Analyzer do
+    describe 'Analysis' do
       before do
         repos = [Source.new(fixture('spec-repos/test_repo')), TrunkSource.new(fixture('spec-repos/trunk'))]
         aggregate = Pod::Source::Aggregate.new(repos)

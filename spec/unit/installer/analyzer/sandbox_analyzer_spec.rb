@@ -18,6 +18,7 @@ module Pod
     describe 'Analysis' do
       it 'returns the sandbox state' do
         @analyzer.stubs(:folder_exist?).returns(true)
+        @analyzer.stubs(:checkout_options_exist?).returns(true)
         @analyzer.stubs(:folder_empty?).returns(false)
         @analyzer.stubs(:sandbox_checksum).returns(@spec.checksum)
         state = @analyzer.analyze
@@ -36,6 +37,7 @@ module Pod
     describe 'Analysis' do
       before do
         @analyzer.stubs(:folder_exist?).returns(true)
+        @analyzer.stubs(:checkout_options_exist?).returns(true)
         @analyzer.stubs(:folder_empty?).returns(false)
         @analyzer.stubs(:sandbox_checksum).returns(@spec.checksum)
       end

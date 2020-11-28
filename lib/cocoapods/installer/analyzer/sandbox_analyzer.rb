@@ -103,7 +103,7 @@ module Pod
         #
         def pod_added?(pod)
           return true if resolved_pods.include?(pod) && !sandbox_pods.include?(pod)
-          return true if !folder_exist?(pod) && !sandbox.local?(pod)
+          return true if !(folder_exist?(pod) && checkout_options_exist?(pod)) && !sandbox.local?(pod)
           false
         end
 
@@ -227,6 +227,10 @@ module Pod
 
         def folder_exist?(pod)
           sandbox.pod_dir(pod).exist?
+        end
+
+        def checkout_options_exist?(pod)
+          sandbox.pod_checkout_options_path(pod).exist?
         end
 
         def folder_empty?(pod)

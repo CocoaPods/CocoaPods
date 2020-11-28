@@ -192,6 +192,20 @@ module Pod
       #         the download options that should be used in constructing the
       #         cache slug for this request.
       #
+      # @return [Pathname] The path for the Pod checkout options downloaded
+      #         from the given `request`.
+      #
+      def path_for_pod_checkout_options(request, slug_opts = {})
+        path_for_pod(request, slug_opts).join('.checkout_options')
+      end
+
+      # @param  [Request] request
+      #         the request to be downloaded.
+      #
+      # @param  [Hash<Symbol,String>] slug_opts
+      #         the download options that should be used in constructing the
+      #         cache slug for this request.
+      #
       # @return [Pathname] The path for the podspec downloaded from the given
       #         `request`.
       #
@@ -212,7 +226,15 @@ module Pod
 
         return unless cached_spec && path.directory?
         spec = request.spec || cached_spec
-        Response.new(path, spec, request.params)
+
+        return unless checkout_options = cached_checkout_options(request)
+
+        Response.new(path, spec, checkout_options)
+      end
+
+      def cached_checkout_options(request)
+        checkout_options_path = path_for_pod_checkout_options(request)
+        checkout_options_path.exist? && YAMLHelper.load_file(checkout_options_path)
       end
 
       # @param  [Request] request
@@ -242,6 +264,7 @@ module Pod
           podspecs.each do |name, spec|
             destination = path_for_pod(request, :name => name, :params => result.checkout_options)
             copy_and_clean(target, destination, spec)
+            save_checkout_options(request, :name => name, :params => result.checkout_options)
             write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
             if request.name == name
               result.location = destination
@@ -250,6 +273,11 @@ module Pod
 
           result
         end
+      end
+
+      def save_checkout_options(request, slug_opts = {})
+        checkout_options_path = path_for_pod_checkout_options(request, slug_opts)
+        checkout_options_path.open('w') { |f| f.write YAMLHelper.convert_hash(slug_opts[:params], []) << "\n" }
       end
 
       def download(request, target)

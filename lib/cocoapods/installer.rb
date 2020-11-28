@@ -240,17 +240,18 @@ module Pod
         validate_build_configurations
       end
 
-      UI.section 'Verifying no changes' do
-        verify_no_podfile_changes!
-        verify_no_lockfile_changes!
-      end if deployment?
-
       analyzer
     end
 
     def download_dependencies
       UI.section 'Downloading dependencies' do
         install_pod_sources
+
+        UI.section 'Verifying no changes' do
+          verify_no_podfile_changes!
+          verify_no_lockfile_changes!
+        end if deployment?
+
         run_podfile_pre_install_hooks
         clean_pod_sources
       end
@@ -778,8 +779,18 @@ module Pod
     # @return [Lockfile] The lockfile to write to disk.
     #
     def generate_lockfile
-      external_source_pods = analysis_result.podfile_dependency_cache.podfile_dependencies.select(&:external_source).map(&:root_name).uniq
-      checkout_options = sandbox.checkout_sources.select { |root_name, _| external_source_pods.include? root_name }
+      checkout_options = sandbox.checkout_sources
+
+      pods_needing_checkout_options = analysis_result.specifications.
+                                                      reject { |spec| sandbox.local?(spec.name) || checkout_options[spec.name] }.
+                                                      select { |spec| sandbox.pod_checkout_options_path(spec.name).exist? }
+      checkout_options_for_rest_of_pods = pods_needing_checkout_options.map do |spec|
+        options_path = sandbox.pod_checkout_options_path(spec.name)
+        [spec.name, YAMLHelper.load_file(options_path)]
+      end
+
+      checkout_options.merge!(Hash[checkout_options_for_rest_of_pods])
+
       Lockfile.generate(podfile, analysis_result.specifications, checkout_options, analysis_result.specs_by_source)
     end
 
