@@ -173,6 +173,7 @@ module Pod
                             :spec_consumers => [consumer],
                             :build_as_static? => false,
                             :build_as_dynamic? => true,
+                            :build_settings => [],
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                             :root_spec => spec,
@@ -211,6 +212,7 @@ module Pod
                             :spec_consumers => [consumer],
                             :build_as_static? => false,
                             :build_as_dynamic? => true,
+                            :build_settings => [],
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                             :root_spec => spec,
@@ -247,6 +249,7 @@ module Pod
                             :spec_consumers => [consumer],
                             :build_as_static? => false,
                             :build_as_dynamic? => true,
+                            :build_settings => [],
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                             :root_spec => spec,
@@ -286,6 +289,7 @@ module Pod
                             :spec_consumers => [consumer],
                             :build_as_static? => true,
                             :build_as_dynamic? => false,
+                            :build_settings => [],
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                             :root_spec => spec,
@@ -293,6 +297,143 @@ module Pod
           pod_target.stubs(:build_settings_for_spec => pod(pod_target))
           aggregate_target = fixture_aggregate_target([pod_target], true)
           aggregate(aggregate_target).other_ldflags.should.include '-ObjC'
+        end
+
+        it 'other_ld_flags should include -ObjC when linking vendored static frameworks' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => true, :spec_type => :library)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_artifacts => ['Foo'],
+                               :vendored_static_libraries => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_static_frameworks => [],
+                               :vendored_dynamic_frameworks => [],
+                               :vendored_xcframeworks => [],
+                              )
+          pod_target = stub('pod_target',
+                            :any_vendored_static_artifacts? => true,
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => false,
+                            :build_as_dynamic? => false,
+                            :build_settings => [],
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                            :root_spec => spec,
+                           )
+          pod_target.stubs(:build_settings_for_spec => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target], true)
+          aggregate(aggregate_target).other_ldflags.should.include '-ObjC'
+        end
+
+        it 'other_ld_flags should include -ObjC when linking vendored static xcframeworks' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => true, :spec_type => :library)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_artifacts => [],
+                               :vendored_static_libraries => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_static_frameworks => [],
+                               :vendored_dynamic_frameworks => [],
+                               :vendored_xcframeworks => [],
+                              )
+          vendored_xcframework = stub('vendored_xcframework',
+                                      :build_type => BuildType.static_framework,
+                                     )
+          build_setting = stub('build_setting',
+                               :vendored_xcframeworks => [vendored_xcframework],
+                              )
+          pod_target = stub('pod_target',
+                            :any_vendored_static_artifacts? => true,
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => false,
+                            :build_as_dynamic? => false,
+                            :build_settings => [build_setting],
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                            :root_spec => spec,
+                            :configuration => 0,
+                           )
+          pod_target.stubs(:build_settings_for_spec => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target], true)
+          aggregate(aggregate_target).other_ldflags.should.include '-ObjC'
+        end
+
+        it 'other_ld_flags should include not -ObjC when linking vendored dynamic xcframeworks' do
+          target_definition = fixture_target_definition(:contents => { 'inheritance' => 'complete' })
+          spec = stub('spec', :library_specification? => true, :spec_type => :library)
+          consumer = stub('consumer',
+                          :libraries => ['xml2'],
+                          :frameworks => ['XCTest'],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :spec_consumer => consumer,
+                               :vendored_static_artifacts => [],
+                               :vendored_static_libraries => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_static_frameworks => [],
+                               :vendored_dynamic_frameworks => [],
+                               :vendored_xcframeworks => [],
+                              )
+          vendored_xcframework = stub('vendored_xcframework',
+                                      :build_type => BuildType.dynamic_framework,
+                                     )
+          build_setting = stub('build_setting',
+                               :vendored_xcframeworks => [vendored_xcframework],
+                              )
+          pod_target = stub('pod_target',
+                            :any_vendored_static_artifacts? => true,
+                            :file_accessors => [file_accessor],
+                            :requires_frameworks? => true,
+                            :dependent_targets => [],
+                            :recursive_dependent_targets => [],
+                            :sandbox => config.sandbox,
+                            :include_in_build_config? => true,
+                            :should_build? => false,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => false,
+                            :build_as_dynamic? => false,
+                            :build_settings => [build_setting],
+                            :product_basename => 'PodTarget',
+                            :target_definitions => [target_definition],
+                            :root_spec => spec,
+                            :configuration => 0,
+                           )
+          pod_target.stubs(:build_settings_for_spec => pod(pod_target))
+          aggregate_target = fixture_aggregate_target([pod_target], true)
+          aggregate(aggregate_target).other_ldflags.should.not.include '-ObjC'
         end
       end
 
