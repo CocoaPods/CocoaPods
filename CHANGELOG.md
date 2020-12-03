@@ -43,6 +43,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8649](https://github.com/CocoaPods/CocoaPods/issues/8649)
 
+* fix: ensure cached spec path uniq  
+  [SolaWing](https://github.com/SolaWing)
+  [#10231](https://github.com/CocoaPods/CocoaPods/issues/10231)
 
 ## 1.10.0 (2020-10-20)
 

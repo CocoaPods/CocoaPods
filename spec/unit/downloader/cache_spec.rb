@@ -56,6 +56,11 @@ module Pod
       }
     end
 
+    it 'ensure path for spec uniq' do
+      path = @cache.send :path_for_spec, @request
+      path.to_path.should.end_with? @request.slug + '.podspec.json'
+    end
+
     describe 'when the download is not cached' do
       describe 'when downloading a released pod' do
         it 'downloads the source' do
