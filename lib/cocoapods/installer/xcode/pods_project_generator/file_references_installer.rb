@@ -315,7 +315,7 @@ module Pod
               end
             end.compact
 
-            pods_project.root_object.known_regions = (pods_project.root_object.known_regions + regions).uniq.sort
+            pods_project.root_object.known_regions = (pods_project.root_object.known_regions | regions).sort
           end
 
           #-----------------------------------------------------------------------#
