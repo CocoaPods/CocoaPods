@@ -6,6 +6,9 @@ module Pod
         # specifications in the Pods project.
         #
         class FileReferencesInstaller
+          # Regex for extracting the region portion of a localized file path. Ex. `Resources/en.lproj` --> `en`
+          LOCALIZATION_REGION_FILEPATTERN_REGEX = /(\/|^)(?<region>[^\/]*?)\.lproj(\/|$)/
+
           # @return [Sandbox] The sandbox of the installation.
           #
           attr_reader :sandbox
@@ -308,7 +311,7 @@ module Pod
           # @param [Array<PBXFileReferences>] file_references the resource file references
           #
           def add_known_regions(file_references)
-            pattern = /(\/|^)(?<region>[^\/]*?)\.lproj(\/|$)/
+            pattern = LOCALIZATION_REGION_FILEPATTERN_REGEX
             regions = file_references.map do |ref|
               if (match = ref.path.to_s.match(pattern))
                 match[:region]
