@@ -308,7 +308,7 @@ module Pod
           # @param [Array<PBXFileReferences>] file_references the resource file references
           #
           def add_known_regions(file_references)
-            pattern = /.*(\/|^)(?<region>.*)\.lproj(\/|$)/
+            pattern = /(\/|^)(?<region>[^\/]*?)\.lproj(\/|$)/
             regions = file_references.map do |ref|
               if (match = ref.path.to_s.match(pattern))
                 match[:region]
