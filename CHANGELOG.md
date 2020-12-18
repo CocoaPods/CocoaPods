@@ -46,6 +46,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * fix: ensure cached spec path uniq  
   [SolaWing](https://github.com/SolaWing)
   [#10231](https://github.com/CocoaPods/CocoaPods/issues/10231)
+  
+* Set `knownRegions` on generated projects with localized resources to prevent Xcode from re-saving projects to disk.  
+  [Eric Amorde](https://github.com/amorde)
+  [#10290](https://github.com/CocoaPods/CocoaPods/pull/10290)
 
 ## 1.10.0 (2020-10-20)
 

@@ -6,6 +6,9 @@ module Pod
         # specifications in the Pods project.
         #
         class FileReferencesInstaller
+          # Regex for extracting the region portion of a localized file path. Ex. `Resources/en.lproj` --> `en`
+          LOCALIZATION_REGION_FILEPATTERN_REGEX = /(\/|^)(?<region>[^\/]*?)\.lproj(\/|$)/
+
           # @return [Sandbox] The sandbox of the installation.
           #
           attr_reader :sandbox
@@ -126,8 +129,9 @@ module Pod
           #
           def add_resources
             UI.message '- Adding resources' do
-              add_file_accessors_paths_to_pods_group(:resources, :resources, true)
-              add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources, true)
+              refs = add_file_accessors_paths_to_pods_group(:resources, :resources, true)
+              refs.concat add_file_accessors_paths_to_pods_group(:resource_bundle_files, :resources, true)
+              add_known_regions(refs)
             end
           end
 
@@ -207,20 +211,20 @@ module Pod
           #         Whether organizing a local pod's files in subgroups inside
           #         the pod's group is allowed.
           #
-          # @return [void]
+          # @return [Array<PBXFileReference>] the added file references
           #
           def add_file_accessors_paths_to_pods_group(file_accessor_key, group_key = nil, reflect_file_system_structure = false)
-            file_accessors.each do |file_accessor|
+            file_accessors.flat_map do |file_accessor|
               paths = file_accessor.send(file_accessor_key)
               paths = allowable_project_paths(paths)
-              next if paths.empty?
+              next [] if paths.empty?
 
               pod_name = file_accessor.spec.name
               preserve_pod_file_structure_flag = (sandbox.local?(pod_name) || preserve_pod_file_structure) && reflect_file_system_structure
               base_path = preserve_pod_file_structure_flag ? common_path(paths) : nil
               actual_group_key = preserve_pod_file_structure_flag ? nil : group_key
               group = pods_project.group_for_spec(pod_name, actual_group_key)
-              paths.each do |path|
+              paths.map do |path|
                 pods_project.add_file_reference(path, group, preserve_pod_file_structure_flag, base_path)
               end
             end
@@ -300,6 +304,21 @@ module Pod
             result = Pathname.new(min[0...idx].join('/'))
             # Don't consider "/" a common path
             return result unless result.to_s == '' || result.to_s == '/'
+          end
+
+          # Adds the known localization regions to the root of the project
+          #
+          # @param [Array<PBXFileReferences>] file_references the resource file references
+          #
+          def add_known_regions(file_references)
+            pattern = LOCALIZATION_REGION_FILEPATTERN_REGEX
+            regions = file_references.map do |ref|
+              if (match = ref.path.to_s.match(pattern))
+                match[:region]
+              end
+            end.compact
+
+            pods_project.root_object.known_regions = (pods_project.root_object.known_regions | regions).sort
           end
 
           #-----------------------------------------------------------------------#

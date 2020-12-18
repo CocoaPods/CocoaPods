@@ -57,6 +57,12 @@ module Pod
               file_ref.path.should == 'Resources/en.lproj'
             end
 
+            it 'adds `knownRegions` for all resource localization regions' do
+              @installer.install!
+              regions = @installer.pods_project.root_object.known_regions
+              regions.sort.should == %w(Base de en)
+            end
+
             it 'adds file references for files within CoreData directories' do
               @installer.install!
               model_ref = @installer.pods_project['Pods/BananaLib/Resources/Sample.xcdatamodeld']
