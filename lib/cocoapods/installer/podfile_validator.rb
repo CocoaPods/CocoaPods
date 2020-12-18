@@ -8,11 +8,11 @@ module Pod
       #
       attr_reader :podfile
 
-      # @return [Array<String>] any errors that have occured during the validation
+      # @return [Array<String>] any errors that have occurred during the validation
       #
       attr_reader :errors
 
-      # @return [Array<String>] any warnings that have occured during the validation
+      # @return [Array<String>] any warnings that have occurred during the validation
       #
       attr_reader :warnings
 
