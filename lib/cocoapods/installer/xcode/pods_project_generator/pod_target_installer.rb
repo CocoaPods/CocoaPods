@@ -468,12 +468,15 @@ module Pod
               resources = target.file_accessors.find { |fa| fa.spec == app_spec }.resources
               add_launchscreen_storyboard = resources.none? { |resource| resource.basename.to_s == 'LaunchScreen.storyboard' } && platform.name == :ios
               embedded_content_contains_swift = target.dependent_targets_for_app_spec(app_spec).any?(&:uses_swift?)
+
+              product_name = target.product_name_for_spec(app_spec)
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
-                                                                         :add_launchscreen_storyboard => add_launchscreen_storyboard,
-                                                                         :info_plist_entries => info_plist_entries).install!
+                                                       :add_launchscreen_storyboard => add_launchscreen_storyboard,
+                                                       :info_plist_entries => info_plist_entries,
+                                                       :product_name => product_name).install!
 
-              app_native_target.product_reference.name = app_target_label
+              app_native_target.product_reference.name = app_target_label if product_name != app_target_label
               target.user_build_configurations.each do |bc_name, type|
                 app_native_target.add_build_configuration(bc_name, type)
               end
@@ -487,7 +490,7 @@ module Pod
                 # target_installer will automatically set the product name to the module name if the target
                 # requires frameworks. For apps we always use the app target name as the product name
                 # irrelevant to whether we use frameworks or not.
-                configuration.build_settings['PRODUCT_NAME'] = app_target_label
+                configuration.build_settings['PRODUCT_NAME'] = product_name
                 # target_installer sets 'MACH_O_TYPE' for static frameworks ensure this does not propagate
                 # to app target.
                 configuration.build_settings.delete('MACH_O_TYPE')
@@ -516,6 +519,10 @@ module Pod
               end
 
               remove_pod_target_xcconfig_overrides_from_target(target.app_spec_build_settings_by_config[app_spec.name], app_native_target)
+
+              # if (product_name = target.app_spec_build_settings_by_config[app_spec.name]['PRODUCT_NAME']) && !product_name.empty?
+              #   app_native_target.product_reference.name = product_name
+              # end
 
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
