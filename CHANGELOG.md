@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix file extension replacement for resource paths when using static frameworks.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10206](https://github.com/CocoaPods/CocoaPods/issues/10206)
+
 * Fix processing of xcassets resources when pod target is static framework  
   [Federico Trimboli](https://github.com/fedetrim)
   [#10175](https://github.com/CocoaPods/CocoaPods/pull/10175)
