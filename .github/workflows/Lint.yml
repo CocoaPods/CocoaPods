@@ -12,14 +12,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.4
+          ruby-version: 2.4 # be sure to update cache key if this gets updated
 
       - uses: actions/cache@v2
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
+          key: ${{ runner.os }}-Ruby2.4-gems-${{ hashFiles('Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-gems-
+            ${{ runner.os }}-Ruby2.4-gems-
       - name: Run bundle install
         run: |
           gem install bundler -v "~> 1.17"
