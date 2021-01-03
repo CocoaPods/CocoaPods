@@ -1,4 +1,5 @@
 require 'cocoapods-core/source'
+require 'cocoapods/open-uri'
 require 'netrc'
 require 'set'
 require 'rest'
@@ -70,15 +71,29 @@ module Pod
       #         The URL of the source.
       #
       def cdn_url?(url)
-        if url =~ %r{^https?:\/\/}
-          require 'typhoeus'
+        return unless url =~ %r{^https?:\/\/}
 
-          response = Typhoeus.get(url + '/CocoaPods-version.yml', :netrc_file => Netrc.default_path, :netrc => :optional)
-          response.code == 200 && begin
-            response_hash = YAML.load(response.body) # rubocop:disable Security/YAMLLoad
-            response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
-          end
-        end
+        opts = {
+          :redirect => false,
+        }
+
+        info = Netrc.read
+        netrc_host = URI.parse(url).host
+        creds = info[netrc_host]
+        opts[:http_basic_authentication] = creds if creds
+
+        # Ruby below 2.5, URI#open is a private method,
+        # but above 2.5 Kernel#open is deprecated and suggest to use URI#open
+        response = URI.send(:open, "#{url}/CocoaPods-version.yml", opts)
+
+        response_hash = YAML.load(response.read) # rubocop:disable Security/YAMLLoad
+        response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
+      rescue ::OpenURI::HTTPError
+        return false
+      rescue ::OpenURI::HTTPRedirect
+        return false
+      rescue SocketError
+        return false
       rescue => e
         raise Informative, "Couldn't determine repo type for URL: `#{url}`: #{e}"
       end

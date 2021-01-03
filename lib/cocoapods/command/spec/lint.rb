@@ -122,7 +122,7 @@ module Pod
                 output_path = podspecs_tmp_dir + File.basename(path)
                 output_path.dirname.mkpath
                 begin
-                  open(path) do |io|
+                  URI.send(:open, path) do |io|
                     output_path.open('w') { |f| f << io.read }
                   end
                 rescue => e

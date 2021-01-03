@@ -105,7 +105,7 @@ module Pod
           end
 
           it 'raises informative exception on network error' do
-            Typhoeus.stubs(:get).with do
+            URI.stubs(:open).with do
               raise StandardError, 'some network error'
             end
             @sources_manager.stubs(:source_with_url).returns(nil)

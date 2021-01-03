@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Remove dependency of `typhoeus`
+  [Jun Jiang](https://github.com/jasl)
+  [#10346](https://github.com/CocoaPods/CocoaPods/pull/10346)
+
 * Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date. 
   [Elton Gao](https://github.com/gyfelton)
   [Justin Martin](https://github.com/justinseanmartin)
