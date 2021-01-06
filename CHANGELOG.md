@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix library name in LD `-l` flags for XCFrameworks containing libraries  
+  [Wes Campaigne](https://github.com/Westacular)
+  [#10165](https://github.com/CocoaPods/CocoaPods/issues/10165)
+
 * Fix file extension replacement for resource paths when using static frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10206](https://github.com/CocoaPods/CocoaPods/issues/10206)
