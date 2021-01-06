@@ -121,7 +121,16 @@ module Pod
         # @return [Pathname] the path to the bundled binary
         #
         def binary_path
-          path + name
+          @binary_path ||= begin
+            case package_type
+            when :framework
+              path + name
+            when :library
+              path
+            else
+              raise Informative, "Invalid package type `#{package_type}`"
+            end
+          end
         end
       end
     end
