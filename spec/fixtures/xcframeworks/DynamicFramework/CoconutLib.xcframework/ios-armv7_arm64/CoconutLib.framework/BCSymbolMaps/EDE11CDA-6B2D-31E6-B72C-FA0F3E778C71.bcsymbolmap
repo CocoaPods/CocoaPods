@@ -1,0 +1,11 @@
+BCSymbolMap Version: 2.0
+Apple clang version 11.0.3 (clang-1103.0.32.62)
+/Users/eric/Library/Developer/Xcode/DerivedData/CoconutLib-bveulnfkonxlgpexdnasxbpdakbb/Build/Intermediates.noindex/ArchiveIntermediates/CoconutLib-iOS/IntermediateBuildFilesPath/CoconutLib.build/Release-iphoneos/CoconutLib-iOS.build/DerivedSources/CoconutLib_vers.c
+/Users/eric/Projects/CocoaPods/examples/Vendored XCFramework Example/CoconutLib
+-[CoconutObj makeCoconuts]
+__OBJC_METACLASS_RO_$_CoconutObj
+__OBJC_$_INSTANCE_METHODS_CoconutObj
+__OBJC_CLASS_RO_$_CoconutObj
+_OBJC_LABEL_CLASS_$
+/Users/eric/Projects/CocoaPods/examples/Vendored XCFramework Example/CoconutLib/CoconutLib/Coconut.m
+CoconutLib/Coconut.m
