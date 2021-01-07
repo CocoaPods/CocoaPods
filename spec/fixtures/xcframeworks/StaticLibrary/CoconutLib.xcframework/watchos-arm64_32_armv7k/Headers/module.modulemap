@@ -1,0 +1,4 @@
+module CoconutLib {
+    umbrella header "CoconutLib.h"
+    export *
+}

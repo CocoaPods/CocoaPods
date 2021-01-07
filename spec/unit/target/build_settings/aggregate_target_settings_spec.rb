@@ -509,6 +509,7 @@ module Pod
                               :build_as_dynamic_library? => false,
                               :build_as_dynamic_framework? => true,
                               :build_as_dynamic? => true,
+                              :build_settings => [],
                               :dependent_targets => [],
                               :recursive_dependent_targets => [],
                               :sandbox => config.sandbox,
