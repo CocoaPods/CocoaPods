@@ -190,11 +190,34 @@ module Pod
         it 'checks resource paths for compilable are converted for static frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type => BuildType.static_framework)
-          convertible_files = %w[.storyboard .xib .xcdatamodel .xcdatamodeld .xcmappingmodel].map { |ext| "Filename#{ext}" }
+          convertible_files = %w[.storyboard .xib .xcdatamodel .xcdatamodeld .xcmappingmodel].map { |ext| "${PODS_ROOT}/Filename#{ext}" }
           @pod_target.stubs(:resource_paths).returns('BananaLib' => convertible_files)
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
           expected_files = %w[.storyboardc .nib .mom .momd .cdm].map { |ext| "${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework/Filename#{ext}" }
+          resource_paths_by_config['Debug'].should == expected_files
+          resource_paths_by_config['Release'].should == expected_files
+        end
+
+        it 'checks resource paths for compilable are converted for static frameworks with multiple file extensions' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:build_type => BuildType.static_framework)
+          convertible_files = %w[.storyboard .xib .xcdatamodel .xcdatamodeld .xcmappingmodel].map { |ext| "${PODS_ROOT}/Filename.Suffix#{ext}" }
+          @pod_target.stubs(:resource_paths).returns('BananaLib' => convertible_files)
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          expected_files = %w[.storyboardc .nib .mom .momd .cdm].map { |ext| "${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework/Filename.Suffix#{ext}" }
+          resource_paths_by_config['Debug'].should == expected_files
+          resource_paths_by_config['Release'].should == expected_files
+        end
+
+        it 'checks xcassets resource paths are not converted for static frameworks' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:build_type => BuildType.static_framework)
+          @pod_target.stubs(:resource_paths).returns('BananaLib' => ['/some/absolute/path/to/Images.xcassets'])
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          expected_files = ['/some/absolute/path/to/Images.xcassets']
           resource_paths_by_config['Debug'].should == expected_files
           resource_paths_by_config['Release'].should == expected_files
         end

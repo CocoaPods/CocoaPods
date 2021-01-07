@@ -350,7 +350,7 @@ module Pod
     end
 
     def self.resource_extension_compilable?(input_extension)
-      output_extension_for_resource(input_extension) != input_extension
+      output_extension_for_resource(input_extension) != input_extension && input_extension != '.xcassets'
     end
 
     #-------------------------------------------------------------------------#

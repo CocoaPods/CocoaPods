@@ -1285,7 +1285,23 @@ module Pod
         end
 
         # @return [Boolean]
+        define_build_settings_method :any_vendored_static_xcframeworks?, :memoized => true do
+          pod_targets.any? do |pt|
+            pt.build_settings.any? do |bs|
+              if bs.respond_to?(:vendored_xcframeworks)
+                bs.vendored_xcframeworks.any? do |xcf|
+                  xcf.build_type == BuildType.static_framework
+                end
+              end
+            end
+          end
+        end
+
+        # @return [Boolean]
         define_build_settings_method :any_vendored_static_artifacts?, :memoized => true do
+          if any_vendored_static_xcframeworks?
+            return true
+          end
           pod_targets.any? do |pt|
             pt.file_accessors.any? do |fa|
               !fa.vendored_static_artifacts.empty?
