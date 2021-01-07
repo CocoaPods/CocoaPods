@@ -32,8 +32,9 @@ group :development do
   cp_gem 'cocoapods-search',      'cocoapods-search'
   cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
   cp_gem 'cocoapods-try',         'cocoapods-try'
-  cp_gem 'molinillo',             'Molinillo'
+  gem 'molinillo', :git => 'https://github.com/CocoaPods/Molinillo.git', :tag => '0.6.6'
   cp_gem 'nanaimo',               'Nanaimo'
+
   cp_gem 'xcodeproj',             'Xcodeproj'
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
