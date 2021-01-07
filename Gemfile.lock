@@ -23,8 +23,8 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Molinillo.git
-  revision: db572ea89ff7391fcfb81a8ecfbc9872a9e8613f
-  branch: master
+  revision: 3bce9d12dcd9678109306eb2aef2275d1a05893b
+  tag: 0.6.6
   specs:
     molinillo (0.6.6)
 
