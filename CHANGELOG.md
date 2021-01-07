@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add a post_integrate_hook API  
+  [dcvz](https://github.com/dcvz)
+  [#9935](https://github.com/CocoaPods/CocoaPods/pull/9935)
+
 * Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date. 
   [Elton Gao](https://github.com/gyfelton)
   [Justin Martin](https://github.com/justinseanmartin)
@@ -55,9 +59,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Add a post_integrate_hook API  
-  [dcvz](https://github.com/dcvz)
-  [#9935](https://github.com/CocoaPods/CocoaPods/pull/9935)
+* None.
 
 ##### Bug Fixes
 
