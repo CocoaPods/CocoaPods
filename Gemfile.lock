@@ -1,16 +1,16 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: b5ced9cc141df732e8027078543eb92fc6447567
+  revision: a5d1a29b08ca88f90f47104805bc4fad2efc93c9
   branch: master
   specs:
     claide (1.0.3)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: b745aeac8726010f59f60c1614eff702b0e03c97
+  revision: 4a155d542d1735d3b168811ae8f7c2e9949a4ae7
   branch: 1-10-stable
   specs:
-    cocoapods-core (1.10.0)
+    cocoapods-core (1.10.1)
       activesupport (> 5.0, < 6)
       addressable (~> 2.6)
       algoliasearch (~> 1.0)
@@ -30,14 +30,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 622714fb77fc91261d637f5505b1b4ce2e87f1c8
+  revision: 30bd8ecd80d7530c5f50029e1e67812170c91e96
   branch: master
   specs:
     nanaimo (0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 84e5be06886829b90b6cd12e45a21d1cdbe8f448
+  revision: 3adafadf3ff7dee3369401bb48c42f7447c2eff6
   branch: master
   specs:
     xcodeproj (1.19.0)
@@ -46,6 +46,7 @@ GIT
       claide (>= 1.0.2, < 2.0)
       colored2 (~> 3.1)
       nanaimo (~> 0.3.0)
+      rexml (~> 3.2.4)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
@@ -108,10 +109,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.10.0)
+    cocoapods (1.10.1)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.10.0)
+      cocoapods-core (= 1.10.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -130,7 +131,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (3.0.2)
+    CFPropertyList (3.0.3)
     activesupport (5.2.4.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
@@ -138,7 +139,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    algoliasearch (1.27.4)
+    algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
     ast (2.4.0)
@@ -184,7 +185,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.3.1)
       faraday (~> 0.8)
-    ffi (1.13.1)
+    ffi (1.14.2)
     fourflusher (2.3.1)
     fuzzy_match (2.0.4)
     gh_inspector (1.1.3)
@@ -192,7 +193,7 @@ GEM
       rchardet (~> 1.8)
     hashdiff (0.3.1)
     httpclient (2.8.3)
-    i18n (1.8.5)
+    i18n (1.8.7)
       concurrent-ruby (~> 1.0)
     inch (0.8.0)
       pry
@@ -212,7 +213,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.14.2)
+    minitest (5.14.3)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -247,6 +248,7 @@ GEM
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
     rchardet (1.8.0)
+    rexml (3.2.4)
     rubocop (0.50.0)
       parallel (~> 1.10)
       parser (>= 2.3.3.1, < 3.0)
@@ -277,7 +279,7 @@ GEM
     tins (1.16.3)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
-    tzinfo (1.2.7)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
     webmock (2.3.1)
