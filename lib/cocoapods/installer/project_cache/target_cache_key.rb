@@ -136,7 +136,7 @@ module Pod
             'PROJECT_NAME' => pod_target.project_name,
           }
           if is_local_pod
-            relative_file_paths = pod_target.all_files.map { |f| Pathname.new(f).relative_path_from(sandbox.root).to_s }
+            relative_file_paths = pod_target.all_files.map { |f| f.relative_path_from(sandbox.root).to_s }
             contents['FILES'] = relative_file_paths.sort_by(&:downcase)
           end
           contents['CHECKOUT_OPTIONS'] = checkout_options if checkout_options

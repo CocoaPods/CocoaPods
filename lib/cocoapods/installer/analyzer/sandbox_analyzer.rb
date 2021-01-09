@@ -103,7 +103,7 @@ module Pod
         #
         def pod_added?(pod)
           return true if resolved_pods.include?(pod) && !sandbox_pods.include?(pod)
-          return true if !folder_exist?(pod) && !sandbox.local?(pod)
+          return true if !sandbox.local?(pod) && !folder_exist?(pod)
           false
         end
 
@@ -161,14 +161,14 @@ module Pod
         # @return [Array<String>] The name of the resolved Pods.
         #
         def resolved_pods
-          specs.map { |spec| spec.root.name }.uniq
+          @resolved_pods ||= specs.map { |spec| spec.root.name }.uniq
         end
 
         # @return [Array<String>] The name of the Pods stored in the sandbox
         #         manifest.
         #
         def sandbox_pods
-          sandbox_manifest.pod_names.map { |name| Specification.root_name(name) }.uniq
+          @sandbox_pods ||= sandbox_manifest.pod_names.map { |name| Specification.root_name(name) }.uniq
         end
 
         # @return [Array<String>] The name of the resolved specifications

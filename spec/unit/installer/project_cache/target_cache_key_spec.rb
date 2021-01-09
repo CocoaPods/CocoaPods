@@ -101,7 +101,7 @@ module Pod
             added_banana_files_target = fixture_pod_target('banana-lib/BananaLib.podspec')
             @banana_cache_key = TargetCacheKey.from_pod_target(config.sandbox, @banana_pod_target,
                                                                :is_local_pod => true)
-            new_file = [(Pod::Sandbox::PathList.new(@banana_spec.defined_in_file.dirname).root + 'CoolFile.h').to_s]
+            new_file = [(Pod::Sandbox::PathList.new(@banana_spec.defined_in_file.dirname).root + 'CoolFile.h')]
             added_files_list = new_file + @banana_pod_target.all_files
             added_banana_files_target.stubs(:all_files).returns(added_files_list)
 
@@ -126,7 +126,7 @@ module Pod
 
             added_aggregate_target = fixture_aggregate_target([added_banana_files_target])
             added_aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, added_aggregate_target)
-            added_aggregate_target_cache_key.to_h['FILES'].should.include?(new_file)
+            added_aggregate_target_cache_key.to_h['FILES'].should.include?(new_file.to_s)
             diff = added_aggregate_target_cache_key.key_difference(@aggregate_target_cache_key)
             inverse_diff = @aggregate_target_cache_key.key_difference(added_aggregate_target_cache_key)
             diff.should.equal(:project)

@@ -565,12 +565,11 @@ module Pod
         pod_targets_by_build_config = Hash.new([].freeze)
         build_configurations.each { |config| pod_targets_by_build_config[config] = [] }
 
+        dependencies_by_root_name = @podfile_dependency_cache.target_definition_dependencies(target_definition).group_by(&:root_name)
+
         pod_targets_by_target_definition[target_definition].each do |pod_target|
           pod_name = pod_target.pod_name
-
-          dependencies = @podfile_dependency_cache.target_definition_dependencies(target_definition).select do |dependency|
-            Specification.root_name(dependency.name) == pod_name
-          end
+          dependencies = dependencies_by_root_name[pod_name] || []
 
           build_configurations.each do |configuration_name|
             whitelists = dependencies.map do |dependency|

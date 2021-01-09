@@ -191,7 +191,7 @@ module Pod
       # @param [Array<FileAccessor>] file_accessors
       #        The list of all file accessors to compute.
       #
-      # @return [Array<String>] The list of all file accessors that a target will integrate into the project.
+      # @return [Array<Pathname>] The list of all file accessors that a target will integrate into the project.
       #
       def self.all_files(file_accessors)
         files = [
@@ -206,7 +206,7 @@ module Pod
           file_accessors.map(&:source_files),
           file_accessors.map(&:module_map),
         ]
-        files.flatten.compact.map(&:to_s).uniq
+        files.flatten.compact.uniq
       end
 
       # @param  [Pathname] framework
