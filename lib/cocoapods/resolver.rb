@@ -162,9 +162,8 @@ module Pod
                                     Array(@podfile_requirements_by_root_name[dependency.root_name])
                                   end
 
-        specifications_for_dependency(dependency, additional_requirements)
+        specifications_for_dependency(dependency, additional_requirements).freeze
       end
-      @search[dependency].dup
     end
 
     # Returns the dependencies of `specification`.
@@ -175,8 +174,9 @@ module Pod
     #         dependencies are being asked for.
     #
     def dependencies_for(specification)
+      root_name = Specification.root_name(specification.name)
       specification.all_dependencies.map do |dependency|
-        if dependency.root_name == Specification.root_name(specification.name)
+        if dependency.root_name == root_name
           dependency.dup.tap { |d| d.specific_version = specification.version }
         else
           dependency
@@ -264,7 +264,7 @@ module Pod
     # @param  [{String => Array<Conflict>}] conflicts the current conflicts.
     #
     def sort_dependencies(dependencies, activated, conflicts)
-      dependencies.sort_by do |dependency|
+      dependencies.sort_by! do |dependency|
         name = name_for(dependency)
         [
           activated.vertex_named(name).payload ? 0 : 1,

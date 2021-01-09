@@ -51,7 +51,9 @@ module Pod
       #
       def search_paths(platform, target_name = nil, use_modular_headers = false)
         key = SEARCH_PATHS_KEY.new(platform.name, target_name, use_modular_headers)
-        return @search_paths_cache[key] if @search_paths_cache.key?(key)
+        if (cached = @search_paths_cache[key])
+          return cached
+        end
         search_paths = @search_paths.select do |entry|
           matches_platform = entry[:platform] == platform.name
           matches_target = target_name.nil? || (File.basename(entry[:path]) == target_name)

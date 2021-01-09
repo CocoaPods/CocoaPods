@@ -203,7 +203,7 @@ module Pod
       end
     end
 
-    # @return [Array<FileAccessor>] The list of all files tracked.
+    # @return [Array<String>] The list of all files tracked.
     #
     def all_files
       Sandbox::FileAccessor.all_files(file_accessors)
@@ -459,7 +459,7 @@ module Pod
           prefix = Pod::Target::BuildSettings::CONFIGURATION_BUILD_DIR_VARIABLE
           prefix = configuration_build_dir unless file_accessor.spec.test_specification?
           resource_bundle_paths = file_accessor.resource_bundles.keys.map { |name| "#{prefix}/#{name.shellescape}.bundle" }
-          hash[file_accessor.spec.name] = resource_paths + resource_bundle_paths
+          hash[file_accessor.spec.name] = (resource_paths + resource_bundle_paths).map(&:to_s)
         end
       end
     end
@@ -516,7 +516,7 @@ module Pod
     # @return [Specification] The root specification for the target.
     #
     def root_spec
-      specs.first.root
+      @root_spec ||= specs.first.root
     end
 
     # @return [String] The name of the Pod that this target refers to.
@@ -1058,7 +1058,8 @@ module Pod
     #
     def uses_modular_headers?(only_if_defines_modules = true)
       return false if only_if_defines_modules && !defines_module?
-      spec_consumers.none?(&:header_mappings_dir) && spec_consumers.none?(&:header_dir)
+      return @uses_modular_headers if defined? @uses_modular_headers
+      @uses_modular_headers = spec_consumers.none?(&:header_mappings_dir) && spec_consumers.none?(&:header_dir)
     end
 
     private

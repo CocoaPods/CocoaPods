@@ -64,7 +64,7 @@ module Pod
       #         specifications (according to their platform) of this Pod.
       #
       def used_files
-        FileAccessor.all_files(file_accessors)
+        FileAccessor.all_files(file_accessors).map(&:to_s)
       end
     end
   end
