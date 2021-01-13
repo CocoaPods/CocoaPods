@@ -24,12 +24,12 @@ CDN_REPO_RESPONSE = '---
             - 1'.freeze
 
 def stub_url_as_cdn(url)
-  WebMock.stub_request(:get, url + '/CocoaPods-version.yml').
+  WebMock.stub_request(:get, URI.join(url, 'CocoaPods-version.yml')).
     to_return(:status => 200, :headers => {}, :body => CDN_REPO_RESPONSE)
 end
 
 def stub_as_404(url)
-  WebMock.stub_request(:get, url + '/CocoaPods-version.yml').
+  WebMock.stub_request(:get, URI.join(url, 'CocoaPods-version.yml')).
     to_return(:status => 404, :headers => {}, :body => '')
 end
 
@@ -105,7 +105,7 @@ module Pod
           end
 
           it 'raises informative exception on network error' do
-            URI.stubs(:open).with do
+            OpenURI.stubs(:open_uri).with do
               raise StandardError, 'some network error'
             end
             @sources_manager.stubs(:source_with_url).returns(nil)

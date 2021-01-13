@@ -82,9 +82,7 @@ module Pod
         creds = info[netrc_host]
         opts[:http_basic_authentication] = creds if creds
 
-        # Ruby below 2.5, URI#open is a private method,
-        # but above 2.5 Kernel#open is deprecated and suggest to use URI#open
-        response = URI.send(:open, "#{url}/CocoaPods-version.yml", opts)
+        response = OpenURI.open_uri(URI.join(url, 'CocoaPods-version.yml'), opts)
 
         response_hash = YAML.load(response.read) # rubocop:disable Security/YAMLLoad
         response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
