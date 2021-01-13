@@ -23,6 +23,7 @@ Downloading dependencies
 
    $ GIT_BIN -C PROJECT/Pods/Moment checkout --quiet 39f21fee0cef410c6d89c9fa94ff5638527ef7bc
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

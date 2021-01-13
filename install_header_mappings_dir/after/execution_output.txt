@@ -23,6 +23,7 @@ Downloading dependencies
 
 -> Installing HeaderMappingsDirPod (1.0.0)
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

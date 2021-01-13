@@ -25,6 +25,7 @@ Downloading dependencies
      $ GIT_BIN clone https://github.com/pusher/libPusher.git PROJECT/Pods/libPusher --template= --single-branch --depth 1 --branch v1.6.2
 
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

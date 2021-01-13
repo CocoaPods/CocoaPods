@@ -18,6 +18,7 @@ Downloading dependencies
 
 -> Installing BananaLib (0.0.1)
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

@@ -19,6 +19,7 @@ Downloading dependencies
      $ GIT_BIN clone https://github.com/tonymillion/Reachability.git PROJECT/Pods/Reachability --template= --single-branch --depth 1 --branch v3.1.0
      Cloning into 'PROJECT/Pods/Reachability'...
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

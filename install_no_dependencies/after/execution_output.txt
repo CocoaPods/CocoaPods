@@ -12,6 +12,7 @@ Comparing resolved specification to the sandbox manifest
 
 Downloading dependencies
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

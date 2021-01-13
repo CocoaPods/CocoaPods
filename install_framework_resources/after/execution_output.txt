@@ -19,6 +19,7 @@ Downloading dependencies
 
 -> Installing SamplePodWithResources (0.1.0)
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project
