@@ -32,7 +32,7 @@ jobs:
 on:
   push:
     branches:
-      - "master"
+      - "*"
       - "*-stable"
   pull_request:
     branches:
