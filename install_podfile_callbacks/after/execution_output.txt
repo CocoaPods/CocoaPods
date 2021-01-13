@@ -20,6 +20,7 @@ Downloading dependencies
 
   - Running pre install hooks
     - Podfile
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project

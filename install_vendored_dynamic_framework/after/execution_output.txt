@@ -984,6 +984,7 @@ Downloading dependencies
 
 -> Installing RealmSwift (0.94.1)
   - Running pre install hooks
+  - Running pre integrate hooks
 
 Generating Pods project
   - Creating Pods project
