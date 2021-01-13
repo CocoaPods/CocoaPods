@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [dcvz](https://github.com/dcvz)
   [#9935](https://github.com/CocoaPods/CocoaPods/pull/9935)
 
+* Rewrite the only place dependent on `typhoeus`.  
+  [Jun Jiang](https://github.com/jasl), [Igor Makarov](https://github.com/igor-makarov)
+  [#10346](https://github.com/CocoaPods/CocoaPods/pull/10346)
+
 * Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date. 
   [Elton Gao](https://github.com/gyfelton)
   [Justin Martin](https://github.com/justinseanmartin)

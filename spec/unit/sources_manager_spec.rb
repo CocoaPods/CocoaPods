@@ -1,5 +1,4 @@
 require File.expand_path('../../spec_helper', __FILE__)
-require 'webmock'
 
 def set_up_test_repo_for_update
   set_up_test_repo
@@ -24,12 +23,12 @@ CDN_REPO_RESPONSE = '---
             - 1'.freeze
 
 def stub_url_as_cdn(url)
-  WebMock.stub_request(:get, url + '/CocoaPods-version.yml').
+  WebMock.stub_request(:get, url.chomp('/') + '/CocoaPods-version.yml').
     to_return(:status => 200, :headers => {}, :body => CDN_REPO_RESPONSE)
 end
 
 def stub_as_404(url)
-  WebMock.stub_request(:get, url + '/CocoaPods-version.yml').
+  WebMock.stub_request(:get, url.chomp('/') + '/CocoaPods-version.yml').
     to_return(:status => 404, :headers => {}, :body => '')
 end
 
@@ -105,7 +104,7 @@ module Pod
           end
 
           it 'raises informative exception on network error' do
-            Typhoeus.stubs(:get).with do
+            OpenURI.stubs(:open_uri).with do
               raise StandardError, 'some network error'
             end
             @sources_manager.stubs(:source_with_url).returns(nil)
@@ -162,6 +161,19 @@ module Pod
           @sources_manager.cdn_url?('https://github.com/cocoapods/specs').should == false
         end
 
+        it 'netrc' do
+          WebMock.stub_request(:get, 'https://some_host.com/something/CocoaPods-version.yml').
+            with(:basic_auth => %w[user1 xxx]).
+            to_return(:status => 200, :body => CDN_REPO_RESPONSE)
+
+          netrc_file = temporary_directory + '.netrc'
+          File.open(netrc_file, 'w', 0o600) { |f| f.write("machine some_host.com\nlogin user1\npassword xxx\n") }
+
+          ENV['NETRC'] = temporary_directory.to_s
+          @sources_manager.cdn_url?('https://some_host.com/something').should == true
+          ENV.delete('NETRC')
+        end
+
         it 'fake 200 response' do
           HTML_RESPONSE = '<!doctype html>
           <html>
@@ -178,10 +190,26 @@ module Pod
           @sources_manager.cdn_url?('https://some_host.com/something').should == false
         end
 
-        it 'redirect' do
+        it 'handles trailing slash' do
+          stub_url_as_cdn('http://some_host.com/something')
+          @sources_manager.cdn_url?('http://some_host.com/something').should == true
+          @sources_manager.cdn_url?('http://some_host.com/something/').should == true
+        end
+
+        it 'handles redirects' do
           WebMock.stub_request(:get, 'http://some_host.com/something/CocoaPods-version.yml').
             to_return(:status => 301, :body => '', :headers => { 'Location' => ['http://some_host.com'] })
+          WebMock.stub_request(:get, 'http://some_host.com').
+            to_return(:status => 200, :body => '', :headers => {})
+
           @sources_manager.cdn_url?('http://some_host.com/something').should == false
+
+          WebMock.stub_request(:get, 'http://some_another_host.com/something/CocoaPods-version.yml').
+            to_return(:status => 301, :body => '', :headers => { 'Location' => ['http://some_another_host.com'] })
+          WebMock.stub_request(:get, 'http://some_another_host.com').
+            to_return(:status => 200, :body => CDN_REPO_RESPONSE)
+
+          @sources_manager.cdn_url?('http://some_another_host.com/something').should == true
         end
       end
     end
