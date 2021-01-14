@@ -12,6 +12,9 @@ jobs:
           - task: SPECS
             os: macos-10.15
             ruby: system
+          - task: SPECS
+            os: macos-11.0
+            ruby: system
           - task: EXAMPLES
             os: macos-10.15
             ruby: system
