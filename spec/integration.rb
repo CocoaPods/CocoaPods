@@ -108,6 +108,8 @@ CLIntegracon.configure do |c|
     FileUtils.mv path, path.parent.join('INTEGRATION.xcuserdatad')
   end
 
+  c.ignores('**/*.xcodeproj/project.xcworkspace')
+
   # So we don't need to compare them directly
   c.ignores 'Podfile'
 
