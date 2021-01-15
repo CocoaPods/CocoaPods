@@ -1,3 +1,4 @@
 tmp/
-xcuserdata
+xcuserdata/*.xcuserdatad
+!xcuserdata/INTEGRATION.xcuserdatad
 .DS_Store
