@@ -6,7 +6,7 @@ File References:
   - Reachability2
 - Frameworks: []
 - Products:
-  - libPods-iOS App.a
+  - Pods-iOS App
 - Targets Support Files:
   - Pods-iOS App:
     - Pods-iOS App-acknowledgements.markdown

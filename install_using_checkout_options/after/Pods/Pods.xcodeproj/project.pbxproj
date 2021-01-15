@@ -68,10 +68,10 @@ File References:
       - SEGModules.debug.xcconfig
       - SEGModules.release.xcconfig
 - Products:
-  - libAFNetworking.a
-  - libPods-SampleApp.a
-  - libRKValueTransformers.a
-  - libSEGModules.a
+  - AFNetworking
+  - Pods-SampleApp
+  - RKValueTransformers
+  - SEGModules
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp-acknowledgements.markdown

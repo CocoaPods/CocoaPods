@@ -20,11 +20,11 @@ File References:
       - Reachability.debug.xcconfig
       - Reachability.release.xcconfig
 - Products:
-  - libJSONKit.a
-  - libPods-SampleApp.a
-  - libPods-SampleApp_2.a
-  - libPods-SampleAppTests.a
-  - libReachability.a
+  - JSONKit
+  - Pods-SampleApp
+  - Pods-SampleApp_2
+  - Pods-SampleAppTests
+  - Reachability
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp-acknowledgements.markdown

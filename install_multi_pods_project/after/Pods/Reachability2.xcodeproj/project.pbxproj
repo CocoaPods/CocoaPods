@@ -2,7 +2,7 @@
 File References:
 - Frameworks: []
 - Products:
-  - libReachability2.a
+  - Reachability2
 - Reachability2:
   - Reachability2.h
   - Reachability2.m

@@ -15,8 +15,8 @@ File References:
       - Test.debug.xcconfig
       - Test.release.xcconfig
 - Products:
-  - libPods-iOS App.a
-  - libTest.a
+  - Pods-iOS App
+  - Test
 - Targets Support Files:
   - Pods-iOS App:
     - Pods-iOS App-acknowledgements.markdown

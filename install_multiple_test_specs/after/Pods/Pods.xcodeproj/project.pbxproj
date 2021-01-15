@@ -109,17 +109,17 @@ File References:
     - Foundation.framework
 - Products:
   - AppHost-TestLib-Unit-Tests.app
-  - DepPod.framework
-  - HostedTestLib.framework
+  - DepPod
+  - HostedTestLib
   - HostedTestLib-App
   - HostedTestLib-AppWithDep
   - HostedTestLib-Unit-UnitTests3
   - HostedTestLib-Unit-UnitTests4
   - HostedTestLib-Unit-UnitTests5
   - HostedTestLib-Unit-UnitTests6
-  - Pods_InstallMultipleTestSpecs.framework
-  - Pods_Other.framework
-  - TestLib.framework
+  - Pods-InstallMultipleTestSpecs
+  - Pods-Other
+  - TestLib
   - TestLib-App
   - TestLib-Unit-UnitTests1
   - TestLib-Unit-UnitTests2

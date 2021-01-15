@@ -107,14 +107,14 @@ File References:
       - CocoaLumberjack.debug.xcconfig
       - CocoaLumberjack.release.xcconfig
 - Products:
-  - asserts.framework
-  - CocoaLumberjack.framework
-  - logger.framework
-  - Pods_App.framework
-  - Pods_Test.framework
-  - sharedlib.framework
-  - sharedlib.framework
-  - testkit.framework
+  - asserts
+  - CocoaLumberjack
+  - logger
+  - Pods-App
+  - Pods-Test
+  - sharedlib-Core
+  - sharedlib-Testing
+  - testkit
 - Targets Support Files:
   - Pods-App:
     - Pods-App.modulemap

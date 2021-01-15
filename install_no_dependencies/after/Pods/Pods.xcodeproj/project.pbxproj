@@ -3,7 +3,7 @@ File References:
 - Podfile
 - Frameworks: []
 - Products:
-  - libPods-SampleApp.a
+  - Pods-SampleApp
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp-acknowledgements.markdown

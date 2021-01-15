@@ -32,8 +32,8 @@ File References:
       - RealmSwift.debug.xcconfig
       - RealmSwift.release.xcconfig
 - Products:
-  - Pods_SampleApp.framework
-  - RealmSwift.framework
+  - Pods-SampleApp
+  - RealmSwift
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp.modulemap

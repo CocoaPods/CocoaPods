@@ -22,10 +22,10 @@ File References:
   - OS X:
     - Cocoa.framework
 - Products:
-  - Pods_SampleApp.framework
-  - Pods_SampleAppTests.framework
-  - SamplePodWithResources.bundle
-  - SamplePodWithResources.framework
+  - Pods-SampleApp
+  - Pods-SampleAppTests
+  - SamplePodWithResources
+  - SamplePodWithResources-SamplePodWithResources
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp.modulemap
@@ -207,7 +207,7 @@ Targets:
     - Frameworks:
       - Cocoa.framework
     - Resources:
-      - SamplePodWithResources.bundle
+      - SamplePodWithResources-SamplePodWithResources
       - troll.png
     Build Configurations:
     - Debug:

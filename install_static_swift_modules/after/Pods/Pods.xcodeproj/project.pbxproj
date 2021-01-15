@@ -219,41 +219,41 @@ File References:
     - Cocoa.framework
     - XCTest.framework
 - Products:
-  - CustomModuleMapPod.framework
-  - CustomModuleMapPod.framework
+  - CustomModuleMapPod-framework-iOS
   - CustomModuleMapPod-framework-iOS-Unit-Tests
+  - CustomModuleMapPod-framework-macOS
   - CustomModuleMapPod-framework-macOS-Unit-Tests
+  - CustomModuleMapPod-library-iOS
   - CustomModuleMapPod-library-iOS-Unit-Tests
+  - CustomModuleMapPod-library-macOS
   - CustomModuleMapPod-library-macOS-Unit-Tests
-  - libCustomModuleMapPod-library-iOS.a
-  - libCustomModuleMapPod-library-macOS.a
-  - libMixedPod-library-iOS.a
-  - libMixedPod-library-macOS.a
-  - libObjCPod-library-iOS.a
-  - libObjCPod-library-macOS.a
-  - libPods-Abstract Target-iOS Pods-Static.a
-  - libPods-Abstract Target-macOS Pods-Static.a
-  - libSwiftPod-library-iOS.a
-  - libSwiftPod-library-macOS.a
-  - MixedPod.framework
-  - MixedPod.framework
+  - MixedPod-framework-iOS
   - MixedPod-framework-iOS-Unit-Tests
+  - MixedPod-framework-macOS
   - MixedPod-framework-macOS-Unit-Tests
+  - MixedPod-library-iOS
   - MixedPod-library-iOS-Unit-Tests
+  - MixedPod-library-macOS
   - MixedPod-library-macOS-Unit-Tests
-  - ObjCPod.framework
-  - ObjCPod.framework
+  - ObjCPod-framework-iOS
   - ObjCPod-framework-iOS-Unit-Tests
+  - ObjCPod-framework-macOS
   - ObjCPod-framework-macOS-Unit-Tests
+  - ObjCPod-library-iOS
   - ObjCPod-library-iOS-Unit-Tests
+  - ObjCPod-library-macOS
   - ObjCPod-library-macOS-Unit-Tests
-  - Pods_Abstract_Target_iOS_Pods_Dynamic.framework
-  - Pods_Abstract_Target_macOS_Pods_Dynamic.framework
-  - SwiftPod.framework
-  - SwiftPod.framework
+  - Pods-Abstract Target-iOS Pods-Dynamic
+  - Pods-Abstract Target-iOS Pods-Static
+  - Pods-Abstract Target-macOS Pods-Dynamic
+  - Pods-Abstract Target-macOS Pods-Static
+  - SwiftPod-framework-iOS
   - SwiftPod-framework-iOS-Unit-Tests
+  - SwiftPod-framework-macOS
   - SwiftPod-framework-macOS-Unit-Tests
+  - SwiftPod-library-iOS
   - SwiftPod-library-iOS-Unit-Tests
+  - SwiftPod-library-macOS
   - SwiftPod-library-macOS-Unit-Tests
 - Targets Support Files:
   - Pods-Abstract Target-iOS Pods-Dynamic:
