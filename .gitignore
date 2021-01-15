@@ -1,3 +1,5 @@
 tmp/
-xcuserdata
+xcuserdata/*.xcuserdatad
+!xcuserdata/INTEGRATION.xcuserdatad
+project.xcworkspace
 .DS_Store
