@@ -56,11 +56,8 @@ module Pod
             name = target.label
             platform = target.platform.name
             language = target.uses_swift? ? :swift : :objc
-            native_target = project.new_target(product_type, name, platform, deployment_target, nil, language)
-
-            product_name = target.product_name
-            product = native_target.product_reference
-            product.name = product_name
+            native_target = project.new_target(product_type, name, platform, deployment_target, nil, language, target.product_basename)
+            native_target.product_reference.name = name
 
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)
