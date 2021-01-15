@@ -2,7 +2,14 @@ name: Lint
 
 jobs:
   lint:
-    runs-on: ubuntu-16.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.4]
+        os: [ubuntu-16.04]
+
+    name: Lint
+    runs-on: ${{ matrix.os }}
     env:
       COCOAPODS_CI_TASKS: LINT
     steps:
@@ -12,14 +19,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.4 # be sure to update cache key if this gets updated
+          ruby-version: ${{ matrix.ruby }}
 
       - uses: actions/cache@v2
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-Ruby2.4-gems-${{ hashFiles('Gemfile.lock') }}
+          key: gems@v1-${{ matrix.os }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-Ruby2.4-gems-
+            gems@v1-${{ matrix.os }}-Ruby${{ matrix.ruby }}-
       - name: Run bundle install
         run: |
           gem install bundler -v "~> 1.17"
