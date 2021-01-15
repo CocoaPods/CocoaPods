@@ -67,12 +67,12 @@ CLIntegracon.configure do |c|
   c.temp_path = ROOT + 'tmp'
 
   # Transform produced project files to YAMLs
-  c.transform_produced '**/*.xcodeproj' do |path|
+  c.transform_produced '**/*.xcodeproj/project.pbxproj' do |path|
     # Creates a YAML representation of the Xcodeproj files
     # which should be used as a reference for comparison.
-    xcodeproj = Xcodeproj::Project.open(path)
+    xcodeproj = Xcodeproj::Project.open(path.parent)
     yaml = xcodeproj.to_yaml
-    path.rmtree
+    path.delete
     path.open('w') { |f| f << yaml }
   end
 
@@ -92,7 +92,7 @@ CLIntegracon.configure do |c|
     path.open('w') { |f| f << Pod::YAMLHelper.convert_hash(yaml, keys_hint, "\n\n") }
   end
 
-  c.preprocess('**/*.xcodeproj', %r{(^|/)(Podfile|Manifest).lock$}) do |path|
+  c.preprocess('**/*.xcodeproj/project.pbxproj', %r{(^|/)(Podfile|Manifest).lock$}) do |path|
     keys_hint = if path.extname == '.lock'
                   Pod::Lockfile::HASH_KEY_ORDER
                 end
@@ -104,14 +104,17 @@ CLIntegracon.configure do |c|
     end
   end
 
+  c.transform_produced('**/xcuserdata/*.xcuserdatad') do |path|
+    FileUtils.mv path, path.parent.join('INTEGRATION.xcuserdatad')
+  end
+
+  c.ignores('**/*.xcodeproj/project.xcworkspace')
+
   # So we don't need to compare them directly
   c.ignores 'Podfile'
 
   # Ignore certain OSX files
   c.ignores '.DS_Store'
-
-  # Ignore xcuserdata
-  c.ignores %r{/xcuserdata/}
 
   # Needed for some test cases
   c.ignores '*.podspec'
