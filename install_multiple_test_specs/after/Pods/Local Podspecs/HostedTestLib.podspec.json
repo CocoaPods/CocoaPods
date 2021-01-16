@@ -94,7 +94,7 @@
         ]
       },
       "pod_target_xcconfig": {
-        "PRODUCT_NAME": "App Host w/ Dep"
+        "PRODUCT_NAME": "App Host with Dep"
       }
     }
   ],

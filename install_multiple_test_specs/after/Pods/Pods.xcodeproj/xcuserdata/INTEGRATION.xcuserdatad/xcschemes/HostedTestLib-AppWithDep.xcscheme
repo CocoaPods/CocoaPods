@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5826A314609E57BCD576355A1DFE550F"
-               BuildableName = "HostedTestLib-AppWithDep.app"
+               BuildableName = "App Host with Dep.app"
                BlueprintName = "HostedTestLib-AppWithDep"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
@@ -31,7 +31,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5826A314609E57BCD576355A1DFE550F"
-            BuildableName = "HostedTestLib-AppWithDep.app"
+            BuildableName = "App Host with Dep.app"
             BlueprintName = "HostedTestLib-AppWithDep"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
@@ -74,7 +74,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5826A314609E57BCD576355A1DFE550F"
-            BuildableName = "HostedTestLib-AppWithDep.app"
+            BuildableName = "App Host with Dep.app"
             BlueprintName = "HostedTestLib-AppWithDep"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
@@ -95,7 +95,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5826A314609E57BCD576355A1DFE550F"
-            BuildableName = "HostedTestLib-AppWithDep.app"
+            BuildableName = "App Host with Dep.app"
             BlueprintName = "HostedTestLib-AppWithDep"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
