@@ -377,7 +377,7 @@ module Pod
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
               language = target.uses_swift_for_spec?(test_spec) ? :swift : :objc
-              product_basename = name # TODO: derive from xcconfig
+              product_basename = target.product_basename_for_spec(test_spec)
               embedded_content_contains_swift = target.dependent_targets_for_test_spec(test_spec).any?(&:uses_swift?)
               test_native_target = project.new_target(product_type, name, platform_name,
                                                       target.deployment_target_for_non_library_spec(test_spec), nil,
@@ -472,7 +472,8 @@ module Pod
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
                                                                          :add_launchscreen_storyboard => add_launchscreen_storyboard,
-                                                                         :info_plist_entries => info_plist_entries).install!
+                                                                         :info_plist_entries => info_plist_entries,
+                                                                         :product_basename => target.product_basename_for_spec(app_spec)).install!
 
               app_native_target.product_reference.name = app_target_label
               target.user_build_configurations.each do |bc_name, type|
