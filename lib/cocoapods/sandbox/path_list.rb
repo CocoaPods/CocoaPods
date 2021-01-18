@@ -23,7 +23,7 @@ module Pod
       # @param  [Pathname] root @see #root
       #
       def initialize(root)
-        root_dir = ActiveSupport::Multibyte::Unicode.normalize(root.to_s)
+        root_dir = root.to_s.unicode_normalize(:nfkc)
         @root = Pathname.new(root_dir)
         @glob_cache = {}
       end
