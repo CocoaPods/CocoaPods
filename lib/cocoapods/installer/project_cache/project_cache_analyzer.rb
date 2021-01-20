@@ -51,7 +51,7 @@ module Pod
         # @param [Hash<String, Hash>] podfile_plugins @see #podfile_plugins
         # @param [Array<PodTarget>] pod_targets @see #pod_targets
         # @param [Array<AggregateTarget>] aggregate_targets @see #aggregate_targets
-        # @param [Hash<Symbol, Object>] installation_options @see #installation_options
+        # @param [Hash<String, Object>] installation_options @see #installation_options
         # @param [Bool] clean_install @see #clean_install
         #
         def initialize(sandbox, cache, build_configurations, project_object_version, podfile_plugins, pod_targets, aggregate_targets, installation_options,

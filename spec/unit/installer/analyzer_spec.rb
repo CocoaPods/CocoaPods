@@ -1427,7 +1427,7 @@ module Pod
 
       it 'unlocks only local pod when specification checksum changes' do
         sandbox = config.sandbox
-        local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.1', 'dependencies' => { 'Expecta' => ['~> 0.0'] })
+        local_spec = Specification.from_hash({ 'name' => 'LocalPod', 'version' => '1.1', 'dependencies' => { 'Expecta' => ['~> 0.0'] } }) # rubocop:disable Style/BracesAroundHashParameters
         sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
         podfile = Podfile.new do
           platform :ios, '8.0'
@@ -1454,7 +1454,7 @@ module Pod
 
       it 'raises if change in local pod specification conflicts with lockfile' do
         sandbox = config.sandbox
-        local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0', 'dependencies' => { 'Expecta' => ['0.2.2'] })
+        local_spec = Specification.from_hash({ 'name' => 'LocalPod', 'version' => '1.0', 'dependencies' => { 'Expecta' => ['0.2.2'] } }) # rubocop:disable Style/BracesAroundHashParameters
         sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
         podfile = Podfile.new do
           platform :ios, '8.0'
