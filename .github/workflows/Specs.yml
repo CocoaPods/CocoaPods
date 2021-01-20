@@ -20,6 +20,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Set build image var
+        run: echo "ImageVersion=$ImageVersion"  >> $GITHUB_ENV
+
       - name: Checkout git
         uses: actions/checkout@v1
 
@@ -36,9 +39,9 @@ jobs:
         if: ${{ matrix.ruby != 'system' }}
         with:
           path: vendor/bundle
-          key: gems@v1-${{ matrix.os }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
+          key: gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
           restore-keys: |
-            gems@v1-${{ matrix.os }}-Ruby${{ matrix.ruby }}-
+            gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-
       - name: Run bundle install
         run: |
           gem install bundler -v "~> 1.17"
