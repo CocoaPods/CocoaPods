@@ -36,7 +36,6 @@ jobs:
         run: git submodule update --init
 
       - uses: actions/cache@v2
-        if: ${{ matrix.ruby != 'system' }}
         with:
           path: vendor/bundle
           key: gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
