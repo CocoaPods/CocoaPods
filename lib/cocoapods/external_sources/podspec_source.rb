@@ -16,7 +16,7 @@ module Pod
           else
             require 'cocoapods/open-uri'
             begin
-              open(podspec_uri) { |io| store_podspec(sandbox, io.read, is_json) }
+              URI(podspec_uri).open { |io| store_podspec(sandbox, io.read, is_json) }
             rescue OpenURI::HTTPError => e
               status = e.io.status.join(' ')
               raise Informative, "Failed to fetch podspec for `#{name}` at `#{podspec_uri}`.\n Error: #{status}"

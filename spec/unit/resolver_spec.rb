@@ -228,7 +228,7 @@ module Pod
 
       it 'raises an informative error when version conflict is caused by platform incompatibilities for local pods' do
         sandbox = config.sandbox
-        local_spec = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0', 'platforms' => { 'ios' => '8.0' })
+        local_spec = Specification.from_hash({'name' => 'LocalPod', 'version' => '1.0', 'platforms' => { 'ios' => '8.0' }})
         sandbox.stubs(:specification).with('LocalPod').returns(local_spec)
         @podfile = Podfile.new do
           target 'SampleProject' do
@@ -1249,8 +1249,8 @@ You have either:
 
       it 'resolves when there is no prerelease dependency on an external source pod' do
         sandbox = config.sandbox
-        local_pod = Specification.from_hash('name' => 'LocalPod', 'version' => '1.0.0.LOCAL')
-        local_pod2 = Specification.from_hash('name' => 'LocalPod2', 'version' => '1.0.0.LOCAL', 'dependencies' => { 'LocalPod' => [] })
+        local_pod = Specification.from_hash({'name' => 'LocalPod', 'version' => '1.0.0.LOCAL'})
+        local_pod2 = Specification.from_hash({'name' => 'LocalPod2', 'version' => '1.0.0.LOCAL', 'dependencies' => { 'LocalPod' => [] }})
         sandbox.stubs(:specification).with('LocalPod').returns(local_pod)
         sandbox.stubs(:specification).with('LocalPod2').returns(local_pod2)
         podfile = Podfile.new do
