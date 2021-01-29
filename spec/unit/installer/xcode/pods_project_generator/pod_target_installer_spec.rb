@@ -1405,7 +1405,7 @@ module Pod
                 end
 
                 it 'creates a build phase to symlink header folders on iOS' do
-                  @pod_target.stubs(:platform).returns(Platform.osx)
+                  @pod_target.stubs(:platform).returns(Platform.ios)
 
                   @installer.install!
 
