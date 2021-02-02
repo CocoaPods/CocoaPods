@@ -14,6 +14,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * None.  
 
+## 1.10.2
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Change URL validation failure to a note  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#10291](https://github.com/CocoaPods/CocoaPods/issues/10291)
 
 ## 1.10.1 (2021-01-07)
 
