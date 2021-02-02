@@ -443,7 +443,7 @@ module Pod
       if !resp
         warning('url', "There was a problem validating the URL #{url}.", true)
       elsif !resp.success?
-        warning('url', "The URL (#{url}) is not reachable.", true)
+        note('url', "The URL (#{url}) is not reachable.", true)
       end
 
       resp
