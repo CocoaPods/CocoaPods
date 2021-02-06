@@ -18,6 +18,9 @@ module Pod
       # @param  [String] name
       #         The name to use for the target, defaults to 'App'.
       #
+      # @param  [String] product_basename
+      #         The product basename to use for the target, defaults to `name`.
+      #
       # @return [PBXNativeTarget] the new target that was created.
       #
       def self.add_app_target(project, platform_name, deployment_target, name = 'App', product_basename = nil)

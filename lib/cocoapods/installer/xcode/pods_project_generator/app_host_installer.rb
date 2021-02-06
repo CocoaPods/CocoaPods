@@ -45,6 +45,9 @@ module Pod
           #
           attr_reader :info_plist_entries
 
+          # @return [String] product_basename
+          #         The product basename to use for the target.
+          #
           attr_reader :product_basename
 
           # Initialize a new instance
@@ -57,6 +60,7 @@ module Pod
           # @param [String] app_target_label see #app_target_label
           # @param [Boolean] add_main see #add_main
           # @param [Hash] info_plist_entries see #info_plist_entries
+          # @param [String] product_basename see #product_basename
           #
           def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, add_launchscreen_storyboard: platform == :ios, info_plist_entries: {}, product_basename: nil)
             @sandbox = sandbox
