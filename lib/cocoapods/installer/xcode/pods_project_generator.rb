@@ -247,7 +247,7 @@ module Pod
           end
           is_custom_host = !hosted_test_specs_by_host.empty?
           specs.each do |spec|
-            scheme_name = spec.spec_type == :library ? pod_target.label : pod_target.non_library_spec_label(spec)
+            scheme_name = pod_target.spec_label(spec)
             scheme_configuration = pod_target.scheme_for_spec(spec)
             if !scheme_configuration.empty? || is_custom_host
               scheme_path = Xcodeproj::XCScheme.user_data_dir(project.path) + "#{scheme_name}.xcscheme"

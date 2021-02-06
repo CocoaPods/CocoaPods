@@ -207,6 +207,7 @@ module Pod
                 unit_test_native_target = @project.targets[1]
                 unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
                 unit_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.product_reference.path.should == 'WatermelonLib-Unit-Tests.xctest'
                 unit_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.unit-tests.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
@@ -223,6 +224,7 @@ module Pod
                 ui_test_native_target = @project.targets[2]
                 ui_test_native_target.name.should == 'WatermelonLib-UI-UITests'
                 ui_test_native_target.product_reference.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.product_reference.path.should == 'WatermelonLib-UI-UITests.xctest'
                 ui_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.ui-uitests.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-UI-UITests'
@@ -239,6 +241,7 @@ module Pod
                 snapshot_test_native_target = @project.targets[3]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
                 snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.product_reference.path.should == 'WatermelonLib-Unit-SnapshotTests.xctest'
                 snapshot_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.unit-snapshottests.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
@@ -254,6 +257,7 @@ module Pod
                 app_native_target = @project.targets[7]
                 app_native_target.name.should == 'WatermelonLib-App'
                 app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.path.should == 'WatermelonLib-App.app'
                 app_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.app.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
@@ -281,8 +285,8 @@ module Pod
                 @project.targets.count.should == 9
                 @project.targets.first.name.should == 'WatermelonLib'
                 unit_test_native_target = @project.targets[1]
-                unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
                 unit_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.product_reference.path.should == 'WatermelonLib-Unit-Tests.xctest'
                 unit_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.unit-tests.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
@@ -298,6 +302,7 @@ module Pod
                 ui_test_native_target = @project.targets[2]
                 ui_test_native_target.name.should == 'WatermelonLib-UI-UITests'
                 ui_test_native_target.product_reference.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.product_reference.path.should == 'WatermelonLib-UI-UITests.xctest'
                 ui_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.ui-uitests.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-UI-UITests'
@@ -314,6 +319,7 @@ module Pod
                 snapshot_test_native_target = @project.targets[3]
                 snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
                 snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.product_reference.path.should == 'WatermelonLib-Unit-SnapshotTests.xctest'
                 snapshot_test_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.unit-snapshottests.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
@@ -329,6 +335,7 @@ module Pod
                 app_native_target = @project.targets[7]
                 app_native_target.name.should == 'WatermelonLib-App'
                 app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.path.should == 'WatermelonLib-App.app'
                 app_native_target.build_configurations.each do |bc|
                   bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.app.#{bc.name.downcase}.xcconfig"
                   bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
@@ -925,8 +932,8 @@ module Pod
                   @installer.install!
                   @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-Pods-SampleProject-banana_bundle' }
                   @bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
-                  @bundle_target.product_reference.name.should == 'banana_bundle.bundle'
-                  @bundle_target.product_reference.path.should == 'BananaLib-Pods-SampleProject-banana_bundle.bundle'
+                  @bundle_target.product_reference.name.should == 'BananaLib-Pods-SampleProject-banana_bundle'
+                  @bundle_target.product_reference.path.should == 'banana_bundle.bundle'
                   @bundle_target.platform_name.should == :ios
                   @bundle_target.deployment_target.should == '4.3'
                 end
@@ -1061,8 +1068,8 @@ module Pod
                   @installer.install!
                   @bundle_target = @project.targets.find { |t| t.name == 'BananaLib-banana_bundle' }
                   @bundle_target.should.be.an.instance_of Xcodeproj::Project::Object::PBXNativeTarget
-                  @bundle_target.product_reference.name.should == 'banana_bundle.bundle'
-                  @bundle_target.product_reference.path.should == 'BananaLib-banana_bundle.bundle'
+                  @bundle_target.product_reference.name.should == 'BananaLib-banana_bundle'
+                  @bundle_target.product_reference.path.should == 'banana_bundle.bundle'
                 end
 
                 it 'adds the build configurations to the resources bundle targets' do

@@ -45,6 +45,11 @@ module Pod
           #
           attr_reader :info_plist_entries
 
+          # @return [String] product_basename
+          #         The product basename to use for the target.
+          #
+          attr_reader :product_basename
+
           # Initialize a new instance
           #
           # @param [Sandbox] sandbox @see #sandbox
@@ -55,8 +60,9 @@ module Pod
           # @param [String] app_target_label see #app_target_label
           # @param [Boolean] add_main see #add_main
           # @param [Hash] info_plist_entries see #info_plist_entries
+          # @param [String] product_basename see #product_basename
           #
-          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, add_launchscreen_storyboard: platform == :ios, info_plist_entries: {})
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, add_launchscreen_storyboard: platform == :ios, info_plist_entries: {}, product_basename: nil)
             @sandbox = sandbox
             @project = project
             @platform = platform
@@ -66,6 +72,7 @@ module Pod
             @add_main = add_main
             @add_launchscreen_storyboard = add_launchscreen_storyboard
             @info_plist_entries = info_plist_entries
+            @product_basename = product_basename || app_target_label
             target_group = project.pod_group(group_name)
             @group = target_group[subgroup_name] || target_group.new_group(subgroup_name)
           end
@@ -75,9 +82,9 @@ module Pod
           def install!
             platform_name = platform.name
             app_host_target = Pod::Generator::AppTargetHelper.add_app_target(project, platform_name, deployment_target,
-                                                                             app_target_label)
+                                                                             app_target_label, product_basename)
             app_host_target.build_configurations.each do |configuration|
-              configuration.build_settings['PRODUCT_NAME'] = app_target_label
+              configuration.build_settings['PRODUCT_NAME'] = product_basename
               configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
               if platform == :osx
                 configuration.build_settings['CODE_SIGN_IDENTITY'] = ''

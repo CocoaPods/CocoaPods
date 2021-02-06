@@ -9,7 +9,7 @@ module Pod
       # @param  [Project] project
       #         the Xcodeproj to generate the target into.
       #
-      # @param  [Symbol] platform
+      # @param  [Symbol] platform_name
       #         the platform of the target. Can be `:ios` or `:osx`, etc.
       #
       # @param  [String] deployment_target
@@ -18,10 +18,14 @@ module Pod
       # @param  [String] name
       #         The name to use for the target, defaults to 'App'.
       #
+      # @param  [String] product_basename
+      #         The product basename to use for the target, defaults to `name`.
+      #
       # @return [PBXNativeTarget] the new target that was created.
       #
-      def self.add_app_target(project, platform, deployment_target, name = 'App')
-        project.new_target(:application, name, platform, deployment_target)
+      def self.add_app_target(project, platform_name, deployment_target, name = 'App', product_basename = nil)
+        project.new_target(:application, name, platform_name, deployment_target, nil,
+                           nil, product_basename)
       end
 
       # Creates and links an import file for the given pod target and into the given native target.

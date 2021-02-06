@@ -377,10 +377,11 @@ module Pod
               name = target.test_target_label(test_spec)
               platform_name = target.platform.name
               language = target.uses_swift_for_spec?(test_spec) ? :swift : :objc
+              product_basename = target.product_basename_for_spec(test_spec)
               embedded_content_contains_swift = target.dependent_targets_for_test_spec(test_spec).any?(&:uses_swift?)
               test_native_target = project.new_target(product_type, name, platform_name,
                                                       target.deployment_target_for_non_library_spec(test_spec), nil,
-                                                      language)
+                                                      language, product_basename)
               test_native_target.product_reference.name = name
 
               target.user_build_configurations.each do |bc_name, type|
@@ -471,7 +472,8 @@ module Pod
               app_native_target = AppHostInstaller.new(sandbox, project, platform, subspec_name, spec_name,
                                                        app_target_label, :add_main => false,
                                                                          :add_launchscreen_storyboard => add_launchscreen_storyboard,
-                                                                         :info_plist_entries => info_plist_entries).install!
+                                                                         :info_plist_entries => info_plist_entries,
+                                                                         :product_basename => target.product_basename_for_spec(app_spec)).install!
 
               app_native_target.product_reference.name = app_target_label
               target.user_build_configurations.each do |bc_name, type|
@@ -556,12 +558,8 @@ module Pod
             file_accessors.each_with_object({}) do |file_accessor, hash|
               hash[file_accessor.spec.name] = file_accessor.resource_bundles.map do |bundle_name, paths|
                 label = target.resources_bundle_target_label(bundle_name)
-                resource_bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name)
-                resource_bundle_target.product_reference.tap do |bundle_product|
-                  bundle_file_name = "#{bundle_name}.bundle"
-                  bundle_product.name = bundle_file_name
-                end
-
+                resource_bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name, nil, bundle_name)
+                resource_bundle_target.product_reference.name = label
                 contains_compile_phase_refs = add_resources_to_target(paths, resource_bundle_target)
 
                 target.user_build_configurations.each do |bc_name, type|

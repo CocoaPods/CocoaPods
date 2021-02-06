@@ -59,6 +59,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#10290](https://github.com/CocoaPods/CocoaPods/pull/10290)
 
+* Serialize schemes that do not need to be rewritten by Xcode.  
+  [Samuel Giddins](https://github.com/segiddins)
+
+
 ## 1.10.1 (2021-01-07)
 
 ##### Enhancements
