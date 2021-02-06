@@ -6,7 +6,7 @@ jobs:
       fail-fast: false
       matrix:
         task: [SPECS]
-        ruby: [2.3.3, 2.4, 2.5, 2.6, 2.7]
+        ruby: [2.6, 2.7]
         os: [ubuntu-16.04]
         include:
           - task: SPECS
