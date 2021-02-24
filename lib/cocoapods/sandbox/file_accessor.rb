@@ -167,7 +167,7 @@ module Pod
       #         that come shipped with the Pod.
       #
       def vendored_dynamic_frameworks
-        (vendored_frameworks - vendored_xcframeworks).select do |framework|
+        vendored_frameworks.select do |framework|
           Xcode::LinkageAnalyzer.dynamic_binary?(framework + framework.basename('.*'))
         end
       end
@@ -176,7 +176,7 @@ module Pod
       #         bundles that come shipped with the Pod.
       #
       def vendored_static_frameworks
-        vendored_frameworks - vendored_dynamic_frameworks - vendored_xcframeworks
+        vendored_frameworks - vendored_dynamic_frameworks
       end
 
       # @return [Array<Pathname>] The paths of vendored .xcframework bundles

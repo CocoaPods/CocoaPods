@@ -24,6 +24,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix missing `-ObjC` for static XCFrameworks - take 2  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#10459](https://github.com/CocoaPods/CocoaPods/issuess/10459)
+
 * Change URL validation failure to a note  
   [Paul Beusterien](https://github.com/paulb777)
   [#10291](https://github.com/CocoaPods/CocoaPods/issues/10291)
