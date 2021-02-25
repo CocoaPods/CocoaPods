@@ -167,8 +167,19 @@ module Pod
       #         that come shipped with the Pod.
       #
       def vendored_dynamic_frameworks
-        vendored_frameworks.select do |framework|
+        (vendored_frameworks - vendored_xcframeworks).select do |framework|
           Xcode::LinkageAnalyzer.dynamic_binary?(framework + framework.basename('.*'))
+        end
+      end
+
+      # @return [Array<Pathname>] The paths of the dynamic xcframework bundles
+      #         that come shipped with the Pod.
+      #
+      def vendored_static_xcframeworks
+        vendored_xcframeworks.select do |path|
+          if Xcode::XCFramework.new(path).build_type == BuildType.static_framework
+            path
+          end
         end
       end
 
@@ -176,7 +187,7 @@ module Pod
       #         bundles that come shipped with the Pod.
       #
       def vendored_static_frameworks
-        vendored_frameworks - vendored_dynamic_frameworks
+        vendored_frameworks - vendored_dynamic_frameworks - vendored_xcframeworks
       end
 
       # @return [Array<Pathname>] The paths of vendored .xcframework bundles
@@ -289,7 +300,7 @@ module Pod
       #         that come shipped with the Pod.
       #
       def vendored_static_artifacts
-        vendored_static_libraries + vendored_static_frameworks
+        vendored_static_libraries + vendored_static_frameworks + vendored_static_xcframeworks
       end
 
       # @return [Hash{String => Array<Pathname>}] A hash that describes the
