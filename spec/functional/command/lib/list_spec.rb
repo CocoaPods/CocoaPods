@@ -18,6 +18,15 @@ module Pod
       end
     end
 
+    it 'analyzes the current working directory using Debug configuration' do
+      Dir.chdir(fixture('integration/Reachability')) do
+        cmd = command('lib', 'lint', '--only-errors', '--quick', '--configuration=Debug', '--analyze')
+        cmd.run
+
+        UI.output.should.include 'passed validation'
+      end
+    end
+
     it 'lints a single spec in the current working directory' do
       Dir.chdir(fixture('integration/Reachability')) do
         cmd = command('lib', 'lint', 'Reachability.podspec', '--quick', '--only-errors')
