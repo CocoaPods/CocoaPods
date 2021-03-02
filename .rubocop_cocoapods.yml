@@ -59,6 +59,11 @@ Next:
 
 # Arbitrary max lengths for classes simply do not work and enabling this will
 # lead to a never ending stream of annoyance and changes.
+Metrics/BlockLength:
+  Enabled: false
+
+# Arbitrary max lengths for classes simply do not work and enabling this will
+# lead to a never ending stream of annoyance and changes.
 Metrics/ClassLength:
   Enabled: false
 
