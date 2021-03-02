@@ -234,11 +234,6 @@ Lint/UriRegexp:
 Lint/UselessAccessModifier:
   Enabled: false
 
-# Offense count: 373
-# Configuration parameters: CountComments, ExcludedMethods.
-Metrics/BlockLength:
-  Max: 1476
-
 # Offense count: 7099
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
