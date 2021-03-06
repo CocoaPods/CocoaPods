@@ -254,6 +254,19 @@ module Pod
           'contain different settings to inhibit warnings. CocoaPods does not currently support different settings ' \
           "and will fall back to your preference set in the root target definition.\n"
       end
+
+      it 'should not supress warnings and not warn if inhibit warnings values collide and pod_target have "SWIFT_TREAT_WARNINGS_AS_ERRORS" compiler flag' do
+        target_definition_one = fixture_target_definition('App1')
+        target_definition_one.podfile.root_target_definitions = [target_definition_one]
+        target_definition_one.store_pod('BananaLib', :inhibit_warnings => true)
+        target_definition_two = fixture_target_definition('App2')
+        target_definition_two.store_pod('BananaLib', :inhibit_warnings => false)
+        spec = @banana_spec.clone
+        spec.attributes_hash['pod_target_xcconfig']['SWIFT_TREAT_WARNINGS_AS_ERRORS'] = 'YES'
+        pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec],
+                                   [target_definition_one, target_definition_two])
+        pod_target.inhibit_warnings?.should.be.false
+      end
     end
 
     describe 'Support files' do

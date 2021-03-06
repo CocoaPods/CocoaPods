@@ -36,6 +36,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [cltnschlosser](https://github.com/cltnschlosser)
   [#9916](https://github.com/CocoaPods/CocoaPods/pull/9916)
 
+* Ignore inhibit_warnings when target contains SWIFT_TREAT_WARNINGS_AS_ERROR compiler flag  
+  [AgranatMarkit](https://github.com/AgranatMarkit)
+  [#10495](https://github.com/CocoaPods/CocoaPods/pull/10495)
+
 ##### Bug Fixes
 
 * Do not add dependencies to 'Link Binary With Libraries' phase.  

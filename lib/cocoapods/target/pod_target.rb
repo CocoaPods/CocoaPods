@@ -955,7 +955,9 @@ module Pod
         target_definition.inhibits_warnings_for_pod?(root_spec.name)
       end.uniq
 
-      if whitelists.empty?
+      swift_treat_warnings_as_errors = @build_settings.values.any? { |s| s.merged_pod_target_xcconfigs['SWIFT_TREAT_WARNINGS_AS_ERRORS'] == 'YES' }
+
+      if whitelists.empty? || swift_treat_warnings_as_errors
         @inhibit_warnings = false
         false
       elsif whitelists.count == 1
