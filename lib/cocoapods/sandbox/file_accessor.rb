@@ -177,9 +177,7 @@ module Pod
       #
       def vendored_static_xcframeworks
         vendored_xcframeworks.select do |path|
-          if Xcode::XCFramework.new(path).build_type == BuildType.static_framework
-            path
-          end
+          Xcode::XCFramework.new(path).build_type == BuildType.static_framework
         end
       end
 
