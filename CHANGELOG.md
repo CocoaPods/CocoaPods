@@ -38,6 +38,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
+  [Jenn Magder](https://github.com/jmagman)
+  [#10476](https://github.com/CocoaPods/CocoaPods/issues/10476)
+
 * Do not add dependencies to 'Link Binary With Libraries' phase.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10133](https://github.com/CocoaPods/CocoaPods/pull/10133)
