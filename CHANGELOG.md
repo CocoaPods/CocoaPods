@@ -36,6 +36,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [cltnschlosser](https://github.com/cltnschlosser)
   [#9916](https://github.com/CocoaPods/CocoaPods/pull/9916)
 
+* Add a `--version` option to `pod spec cat` for listing the podspec of a specific version  
+  [pietbrauer](https://github.com/pietbrauer)
+  [#10609](https://github.com/CocoaPods/CocoaPods/pull/10609)
+
 ##### Bug Fixes
 
 * Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
