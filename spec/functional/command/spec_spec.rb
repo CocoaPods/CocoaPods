@@ -358,6 +358,11 @@ module Pod
         UI.output.should.include Pathname.new(first_spec_path).read
       end
 
+      it 'cats the first podspec from all podspecs matching the version' do
+        lambda { command('spec', 'cat', '--version=3.1.0', 'AFNetworking').run }.should.not.raise
+        UI.output.should.include fixture('spec-repos/trunk/Specs/a/7/5/AFNetworking/3.1.0/AFNetworking.podspec.json').read
+      end
+
       describe_regex_support('cat')
     end
 
