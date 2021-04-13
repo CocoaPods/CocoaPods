@@ -341,7 +341,6 @@ module Pod
       case input_extension
       when '.storyboard'        then '.storyboardc'
       when '.xib'               then '.nib'
-      when '.xcdatamodel'       then '.mom'
       when '.xcdatamodeld'      then '.momd'
       when '.xcmappingmodel'    then '.cdm'
       when '.xcassets'          then '.car'
