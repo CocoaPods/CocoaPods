@@ -1185,7 +1185,11 @@ module Pod
             def dsym_paths(target)
               dsym_paths = target.framework_paths.values.flatten.reject { |fmwk_path| fmwk_path.dsym_path.nil? }.map(&:dsym_path)
               dsym_paths.concat(target.xcframeworks.values.flatten.flat_map { |xcframework| xcframework_dsyms(xcframework.path) })
-              dsym_paths
+              dsym_paths.map do |dsym_path|
+                dsym_pathname = Pathname(dsym_path)
+                dsym_path = "${PODS_ROOT}/#{dsym_pathname.relative_path_from(target.sandbox.root)}" unless dsym_pathname.relative?
+                dsym_path
+              end
             end
 
             # @param [PodTarget] target the target to be installed
