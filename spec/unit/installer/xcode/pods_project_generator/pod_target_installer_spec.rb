@@ -1282,6 +1282,7 @@ module Pod
                   'Sources',
                   'Frameworks',
                   'Resources',
+                  'Create Symlinks to Header Folders',
                 ]
 
                 copy_files_build_phases = target.copy_files_build_phases.sort_by(&:name)
@@ -1311,6 +1312,18 @@ module Pod
 
               it 'creates a build phase to symlink header folders on OS X' do
                 @pod_target.stubs(:platform).returns(Platform.osx)
+
+                @installer.install!
+
+                target = @project.native_targets.first
+                build_phase = target.shell_script_build_phases.find do |bp|
+                  bp.name == 'Create Symlinks to Header Folders'
+                end
+                build_phase.should.not.be.nil
+              end
+
+              it 'creates a build phase to symlink header folders on iOS' do
+                @pod_target.stubs(:platform).returns(Platform.ios)
 
                 @installer.install!
 
@@ -1381,6 +1394,18 @@ module Pod
 
                 it 'creates a build phase to symlink header folders on OS X' do
                   @pod_target.stubs(:platform).returns(Platform.osx)
+
+                  @installer.install!
+
+                  target = @project.native_targets.first
+                  build_phase = target.shell_script_build_phases.find do |bp|
+                    bp.name == 'Create Symlinks to Header Folders'
+                  end
+                  build_phase.should.not.be.nil
+                end
+
+                it 'creates a build phase to symlink header folders on iOS' do
+                  @pod_target.stubs(:platform).returns(Platform.ios)
 
                   @installer.install!
 
