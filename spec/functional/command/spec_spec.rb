@@ -336,6 +336,12 @@ module Pod
         UI.output.should.include text.gsub(/\n/, '')
       end
 
+      it 'prints the path of a given podspec respecting the version' do
+        lambda { command('spec', 'which', '--version=3.1.0', 'AFNetworking').run }.should.not.raise
+        text = '3.1.0/AFNetworking.podspec'
+        UI.output.should.include text.gsub(/\n/, '')
+      end
+
       describe_regex_support('which')
     end
 
