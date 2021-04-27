@@ -40,7 +40,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   Add RealityComposer-projects (rcproject) that are defined in the resources-spec will be compiled.
   [Hendrik von Prince](https://github.com/parallaxe)
 
-* Add a `--version` option to `pod spec cat` for listing the podspec of a specific version  
+* Add a `--version` option to `pod spec cat` and `pod spec which` for listing the podspec of a specific version  
   [pietbrauer](https://github.com/pietbrauer)
   [#10609](https://github.com/CocoaPods/CocoaPods/pull/10609)
 
