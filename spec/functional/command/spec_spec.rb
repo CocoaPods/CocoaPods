@@ -336,6 +336,12 @@ module Pod
         UI.output.should.include text.gsub(/\n/, '')
       end
 
+      it 'prints the path of a given podspec respecting the version' do
+        lambda { command('spec', 'which', '--version=3.1.0', 'AFNetworking').run }.should.not.raise
+        text = '3.1.0/AFNetworking.podspec'
+        UI.output.should.include text.gsub(/\n/, '')
+      end
+
       describe_regex_support('which')
     end
 
@@ -356,6 +362,11 @@ module Pod
         output = UI.output.gsub(/[0-9]+: /, '')
         first_spec_path = output.split("\n")[0]
         UI.output.should.include Pathname.new(first_spec_path).read
+      end
+
+      it 'cats the first podspec from all podspecs matching the version' do
+        lambda { command('spec', 'cat', '--version=3.1.0', 'AFNetworking').run }.should.not.raise
+        UI.output.should.include fixture('spec-repos/trunk/Specs/a/7/5/AFNetworking/3.1.0/AFNetworking.podspec.json').read
       end
 
       describe_regex_support('cat')
