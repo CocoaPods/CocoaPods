@@ -36,11 +36,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [cltnschlosser](https://github.com/cltnschlosser)
   [#9916](https://github.com/CocoaPods/CocoaPods/pull/9916)
 
+* Add a `--version` option to `pod spec cat` and `pod spec which` for listing the podspec of a specific version  
+  [pietbrauer](https://github.com/pietbrauer)
+  [#10609](https://github.com/CocoaPods/CocoaPods/pull/10609)
+
 * Ignore inhibit_warnings when target contains SWIFT_TREAT_WARNINGS_AS_ERROR compiler flag  
   [AgranatMarkit](https://github.com/AgranatMarkit)
   [#10495](https://github.com/CocoaPods/CocoaPods/pull/10495)
 
 ##### Bug Fixes
+
+* Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
+  [Jenn Magder](https://github.com/jmagman)
+  [#10476](https://github.com/CocoaPods/CocoaPods/issues/10476)
 
 * Do not add dependencies to 'Link Binary With Libraries' phase.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)

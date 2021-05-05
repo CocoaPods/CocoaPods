@@ -16,6 +16,7 @@ module Pod
           [
             ['--regex', 'Interpret the `QUERY` as a regular expression'],
             ['--show-all', 'Pick from all versions of the given podspec'],
+            ['--version', 'Print a specific version of the given podspec'],
           ].concat(super)
         end
 
@@ -24,6 +25,7 @@ module Pod
           @show_all = argv.flag?('show-all')
           @query = argv.shift_argument
           @query = @query.gsub('.podspec', '') unless @query.nil?
+          @version = argv.option('version')
           super
         end
 
@@ -40,7 +42,7 @@ module Pod
                        index = UI.choose_from_array(specs, "Which spec would you like to print [1-#{specs.count}]? ")
                        specs[index]
                      else
-                       get_path_of_spec(query)
+                       get_path_of_spec(query, @version)
                      end
 
           UI.puts File.read(filepath)
