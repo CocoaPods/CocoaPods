@@ -67,7 +67,7 @@ module Pod
       #         the specification for which license is needed.
       #
       # @return [String] The text of the license.
-      # @return [Nil] If not license text could be found.
+      # @return [Nil] If no license text could be found.
       #
       def license_text(spec)
         return nil unless spec.license
