@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Use relative paths in copy dsyms script
+  [Mickey Knox](https://github.com/knox)
+  [#10583](https://github.com/CocoaPods/CocoaPods/pull/10583)
+
 * Use `OpenURI.open_uri` instead.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10597](https://github.com/CocoaPods/CocoaPods/issues/10597)
