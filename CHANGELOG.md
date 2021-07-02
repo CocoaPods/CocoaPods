@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add --use-static-frameworks repo push option  
+  [lxj9457](https://github.com/lxj9457)
+  [#10575](https://github.com/CocoaPods/CocoaPods/pull/10575)
+
 * Improve compatibility with ActiveSupport 6  
   [Jun Jiang](https://github.com/jasl)
   [#10364](https://github.com/CocoaPods/CocoaPods/pull/10364)
