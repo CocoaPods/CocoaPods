@@ -918,6 +918,19 @@ module Pod
                 ]
               end
 
+              it 'verifies disabling module map generation' do
+                @pod_target.stubs(:defines_module?).returns(true)
+                @pod_target.specs.first.stubs(:module_map).returns(false)
+                @installer.install!
+                group = @project['Pods/BananaLib/Support Files']
+                group.children.map(&:display_name).sort.should == [
+                  'BananaLib-Pods-SampleProject-dummy.m',
+                  'BananaLib-Pods-SampleProject-prefix.pch',
+                  'BananaLib-Pods-SampleProject.debug.xcconfig',
+                  'BananaLib-Pods-SampleProject.release.xcconfig',
+                ]
+              end
+
               it 'adds the target for the static library to the project' do
                 @installer.install!
                 @project.targets.count.should == 1

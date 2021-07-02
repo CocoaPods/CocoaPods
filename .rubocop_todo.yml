@@ -234,6 +234,13 @@ Lint/UriRegexp:
 Lint/UselessAccessModifier:
   Enabled: false
 
+# Offense count: 373
+# Configuration parameters: CountComments, ExcludedMethods.
+Metrics/BlockLength:
+  Max: 1476
+  Exclude:
+    - 'spec/unit/installer/xcode/pods_project_generator/pod_target_installer_spec.rb'
+
 # Offense count: 7099
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https

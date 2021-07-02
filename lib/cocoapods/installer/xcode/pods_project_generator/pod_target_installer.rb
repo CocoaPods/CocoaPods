@@ -74,7 +74,7 @@ module Pod
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
               create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
 
-              if target.defines_module?
+              if target.defines_module? && !skip_modulemap?(target.library_specs)
                 create_module_map(native_target) do |generator|
                   generator.headers.concat module_map_additional_headers
                 end
@@ -189,6 +189,10 @@ module Pod
           #
           def skip_pch?(specs)
             specs.any? { |spec| spec.root.prefix_header_file.is_a?(FalseClass) }
+          end
+
+          def skip_modulemap?(specs)
+            specs.any? { |spec| spec.module_map.is_a?(FalseClass) }
           end
 
           # True if info.plist generation should be skipped
