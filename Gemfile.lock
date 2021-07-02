@@ -7,18 +7,18 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9584a94db960979a0182acfbf4de5e677c848847
+  revision: 1c476854e031b459d983d297bd6f5424813bcdb0
   branch: master
   specs:
     cocoapods-core (1.10.1)
-      activesupport (> 5.0, < 6)
+      activesupport (>= 5.0, < 7)
       addressable (~> 2.6)
       algoliasearch (~> 1.0)
       concurrent-ruby (~> 1.1)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
       netrc (~> 0.11)
-      public_suffix
+      public_suffix (~> 4.0)
       typhoeus (~> 1.0)
 
 GIT
@@ -324,4 +324,4 @@ DEPENDENCIES
   xcodeproj!
 
 BUNDLED WITH
-   1.17.3
+   2.2.8
