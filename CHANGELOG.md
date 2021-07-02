@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Use `OpenURI.open_uri` instead.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10597](https://github.com/CocoaPods/CocoaPods/issues/10597)
+
 * Set minimum supported Ruby version to 2.6.  
   [Igor Makarov](https://github.com/igor-makarov)
   [#10412](https://github.com/CocoaPods/CocoaPods/pull/10412)
