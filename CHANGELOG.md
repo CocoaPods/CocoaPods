@@ -53,6 +53,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix touch on a missing directory on PhaseScriptExecution  
+  [alvarollmenezes](https://github.com/alvarollmenezes)
+  [#10488](https://github.com/CocoaPods/CocoaPods/issues/10488)
+
 * Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
   [Jenn Magder](https://github.com/jmagman)
   [#10476](https://github.com/CocoaPods/CocoaPods/issues/10476)
