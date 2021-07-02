@@ -8,7 +8,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Deprecate support for Ruby 2.6  
+* Set minimum supported Ruby version to 2.6.  
   [Igor Makarov](https://github.com/igor-makarov)
   [#10412](https://github.com/CocoaPods/CocoaPods/pull/10412)
 
