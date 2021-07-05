@@ -8,7 +8,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Use relative paths in copy dsyms script
+* Use relative paths in copy dsyms script.  
   [Mickey Knox](https://github.com/knox)
   [#10583](https://github.com/CocoaPods/CocoaPods/pull/10583)
 
@@ -61,6 +61,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [XianpuMeng](https://github.com/XianpuMeng)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9906](https://github.com/CocoaPods/CocoaPods/issues/9906)
+
+* Update `ruby-macho` gem version to support 1.x and 2.x.  
+  [Eric Chamberlain](https://github.com/PeqNP)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
 
 * Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
   [Jenn Magder](https://github.com/jmagman)
