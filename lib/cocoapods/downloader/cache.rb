@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'tmpdir'
+require 'digest/md5'
 
 module Pod
   module Downloader
@@ -156,6 +157,34 @@ module Pod
 
       private
 
+      def checksum_for_directory(directory)
+        md5 = Digest::MD5.new
+        Dir["#{directory}/**/*"].reject { |f| File.directory?(f) }.sort.each do |path|
+          File.open(path, 'rb') do |f|
+            stat = f.stat
+            chunk_size = stat.blksize || 4096
+            md5 << stat.size.to_s
+            while chunk = f.read(chunk_size)
+              md5 << chunk
+            end
+          end
+        end
+        md5.hexdigest
+      end
+
+      def validate_cache(path)
+        checksum_file = "#{path}.md5"
+        return unless File.exist? checksum_file
+        expected_checksum = File.read(checksum_file).strip
+        actual_checksum = checksum_for_directory(path)
+        expected_checksum == actual_checksum
+      end
+
+      def save_checksum(checksum, destination)
+        checksum_file = "#{destination}.md5"
+        File.write(checksum_file, checksum)
+      end
+
       # Ensures the cache on disk was created with the same CocoaPods version as
       # is currently running.
       #
@@ -210,7 +239,7 @@ module Pod
         cached_spec = cached_spec(request)
         path = path_for_pod(request)
 
-        return unless cached_spec && path.directory?
+        return unless cached_spec && path.directory? && validate_cache(path)
         spec = request.spec || cached_spec
         Response.new(path, spec, request.params)
       end
@@ -281,12 +310,14 @@ module Pod
       #
       def copy_and_clean(source, destination, spec)
         specs_by_platform = group_subspecs_by_platform(spec)
+        Pod::Installer::PodSourcePreparer.new(spec, source).prepare!
+        Sandbox::PodDirCleaner.new(source, specs_by_platform).clean!
+        checksum = checksum_for_directory(source)
         destination.parent.mkpath
         Cache.write_lock(destination) do
           FileUtils.rm_rf(destination)
           FileUtils.cp_r(source, destination)
-          Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
-          Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
+          save_checksum(checksum, destination)
         end
       end
 
