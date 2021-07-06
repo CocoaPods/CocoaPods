@@ -36,8 +36,9 @@ module Pod
 
     # @return [Pathname]
     #
-    def podspec_path(name = 'JSONKit', version = '1.4')
-      Config.instance.sources_manager.master.first.specification_path(name, version)
+    def podspec_path(name = 'JSONKit', version = '1.4', source = nil)
+      source = Config.instance.sources_manager.master.first if source.nil?
+      source.specification_path(name, version)
     end
 
     #-------------------------------------------------------------------------#
@@ -91,7 +92,8 @@ module Pod
 
       describe '#only_subspec' do
         before do
-          podspec = podspec_path('RestKit', '0.22.0')
+          test_repo_source = Config.instance.sources_manager.source_with_name_or_url('test_repo')
+          podspec = podspec_path('RestKit', '0.22.0', test_repo_source)
           @validator = Validator.new(podspec, config.sources_manager.master.map(&:url))
           @validator.quick = true
         end
@@ -106,6 +108,18 @@ module Pod
           @validator.only_subspec = 'RestKit/CoreData'
           @validator.validate
           @validator.send(:subspec_name).should == 'RestKit/CoreData'
+        end
+
+        it 'handles a relative subspec name which starts with the pod name' do
+          @validator.only_subspec = 'RestKitSubspec'
+          @validator.validate
+          @validator.send(:subspec_name).should == 'RestKit/RestKitSubspec'
+        end
+
+        it 'handles an absolute subspec name which starts with the pod name' do
+          @validator.only_subspec = 'RestKit/RestKitSubspec'
+          @validator.validate
+          @validator.send(:subspec_name).should == 'RestKit/RestKitSubspec'
         end
 
         it 'handles a missing subspec name' do

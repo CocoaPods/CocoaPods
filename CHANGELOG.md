@@ -57,6 +57,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix lint subspec error when the name of subspec start with the pod name.  
+  [XianpuMeng](https://github.com/XianpuMeng)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9906](https://github.com/CocoaPods/CocoaPods/issues/9906)
+
 * Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
   [Jenn Magder](https://github.com/jmagman)
   [#10476](https://github.com/CocoaPods/CocoaPods/issues/10476)
