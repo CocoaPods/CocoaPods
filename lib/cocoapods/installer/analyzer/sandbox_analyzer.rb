@@ -141,6 +141,7 @@ module Pod
           return true if resolved_spec_names(pod) != sandbox_spec_names(pod)
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
+          return true if sandbox.dirty?(pod)
           false
         end
 

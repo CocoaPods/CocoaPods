@@ -108,6 +108,11 @@ module Pod
       FileUtils.mkdir_p(target_support_files_root)
     end
 
+    # mark the install transaction is finished
+    def finish
+      FileUtils.rmtree install_locking_dir
+    end
+
     # @return [String] a string representation suitable for debugging.
     #
     def inspect
@@ -130,6 +135,11 @@ module Pod
     #
     def project_path
       root + 'Pods.xcodeproj'
+    end
+
+    # @return [Pathname] the path of the updating pods
+    def install_locking_dir
+      root + '.install_locking'
     end
 
     # @return [Pathname] the path of the installation cache.
@@ -442,6 +452,29 @@ module Pod
     def local_podspec(name)
       root_name = Specification.root_name(name)
       development_pods[root_name]
+    end
+
+    #--------------------------------------#
+
+    # mark the pod is dirty and need to be update
+    #
+    # @param [String] name
+    #        The name of the Pod
+    # @return [void]
+    def touch_pod(name)
+      root_name = Specification.root_name(name)
+      FileUtils.mkdir_p(install_locking_dir)
+      FileUtils.touch(install_locking_dir + root_name)
+    end
+
+    # checks if a pod is dirty and need a overwrite
+    #
+    # @param [String] name
+    #        The name of the Pod
+    # @return [Bool] Whether the Pod is dirty
+    def dirty?(name)
+      root_name = Specification.root_name(name)
+      (install_locking_dir + root_name).exist?
     end
 
     # @!group Convenience Methods
