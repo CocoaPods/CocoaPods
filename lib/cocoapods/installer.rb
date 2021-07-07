@@ -783,9 +783,11 @@ module Pod
     #
     def warn_for_removing_git_master_specs_repo
       return unless installation_options.warn_for_unused_master_specs_repo?
-      podfile_master_source = podfile.sources.find { |source| source == MASTER_SPECS_REPO_GIT_URL }
+      plugin_sources = run_source_provider_hooks
+      all_sources = podfile.sources + plugin_sources.map(&:url)
+      master_source = all_sources.find { |source| source == MASTER_SPECS_REPO_GIT_URL }
       master_repo = config.sources_manager.all.find { |s| s.url == MASTER_SPECS_REPO_GIT_URL }
-      if podfile_master_source.nil? && !master_repo.nil?
+      if master_source.nil? && !master_repo.nil?
         UI.warn 'Your project does not explicitly specify the CocoaPods master specs repo. Since CDN is now used as the' \
         ' default, you may safely remove it from your repos directory via `pod repo remove master`. To suppress this warning' \
         ' please add `warn_for_unused_master_specs_repo => false` to your Podfile.'

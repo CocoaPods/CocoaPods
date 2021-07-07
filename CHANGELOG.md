@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Check the podfile sources and plugin sources when printing warnings without explicitly using the master source.  
+  [gonghonglou](https://github.com/gonghonglou)
+  [#10764](https://github.com/CocoaPods/CocoaPods/pull/10764)
+
 * Use relative paths in copy dsyms script.  
   [Mickey Knox](https://github.com/knox)
   [#10583](https://github.com/CocoaPods/CocoaPods/pull/10583)
