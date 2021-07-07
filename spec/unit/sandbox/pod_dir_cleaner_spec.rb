@@ -49,6 +49,7 @@ module Pod
         Resources/Base.lproj
         Resources/Images.xcassets
         Resources/Migration.xcmappingmodel
+        Resources/Sample.rcproject
         Resources/Sample.xcdatamodeld
         Resources/de.lproj
         Resources/en.lproj
@@ -84,6 +85,7 @@ module Pod
         Resources/Base.lproj
         Resources/Images.xcassets
         Resources/Migration.xcmappingmodel
+        Resources/Sample.rcproject
         Resources/Sample.xcdatamodeld
         Resources/de.lproj
         Resources/en.lproj
