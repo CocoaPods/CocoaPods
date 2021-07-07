@@ -713,7 +713,7 @@ module Pod
               @consumer_b.stubs(:user_target_xcconfig).returns('OTHER_CPLUSPLUSFLAGS' => '-std=c++1y')
               consumer_c = mock('consumer_c', :user_target_xcconfig => { 'OTHER_CPLUSPLUSFLAGS' => '-stdlib=libc++' },
                                               :spec => mock(:spec_type => :library), :frameworks => [],
-                                              :libraries => [], :weak_frameworks => [])
+                                              :libraries => [], :weak_frameworks => [], :pod_target_xcconfig => [])
               @pod_targets[1].stubs(:spec_consumers).returns([@consumer_b, consumer_c])
               @xcconfig = @generator.generate
               @xcconfig.to_hash['OTHER_CPLUSPLUSFLAGS'].should == '-std=c++1y -stdlib=libc++'

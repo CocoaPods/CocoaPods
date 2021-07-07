@@ -59,6 +59,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [pietbrauer](https://github.com/pietbrauer)
   [#10609](https://github.com/CocoaPods/CocoaPods/pull/10609)
 
+* Ignore inhibit_warnings when target contains SWIFT_TREAT_WARNINGS_AS_ERROR compiler flag  
+  [AgranatMarkit](https://github.com/AgranatMarkit)
+  [#10495](https://github.com/CocoaPods/CocoaPods/pull/10495)
+
 ##### Bug Fixes
 
 * Fix lint subspec error when the name of subspec start with the pod name.  
