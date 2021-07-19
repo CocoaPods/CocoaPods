@@ -61,6 +61,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Generate default `Info.plist` for consumer app during validation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#8570](https://github.com/CocoaPods/CocoaPods/issues/8570)
+
 * Fix lint subspec error when the name of subspec start with the pod name.  
   [XianpuMeng](https://github.com/XianpuMeng)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
