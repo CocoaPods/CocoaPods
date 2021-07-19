@@ -581,6 +581,9 @@ module Pod
     def create_app_project
       app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
       app_target = Pod::Generator::AppTargetHelper.add_app_target(app_project, consumer.platform_name, deployment_target)
+      sandbox = Sandbox.new(config.sandbox_root)
+      info_plist_path = app_project.path.dirname.+('App/App-Info.plist')
+      Pod::Installer::Xcode::PodsProjectGenerator::TargetInstallerHelper.create_info_plist_file_with_sandbox(sandbox, info_plist_path, app_target, '1.0.0', Platform.new(consumer.platform_name), :appl)
       Pod::Generator::AppTargetHelper.add_swift_version(app_target, derived_swift_version)
       # Lint will fail if a AppIcon is set but no image is found with such name
       # Happens only with Static Frameworks enabled but shouldn't be set anyway
