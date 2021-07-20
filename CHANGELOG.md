@@ -8,6 +8,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Mark RealityComposer-projects (`.rcproject`) files defined in resources for compilation.  
+  [Hendrik von Prince](https://github.com/parallaxe)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10793](https://github.com/CocoaPods/CocoaPods/pull/10793)
+
 * Add support for `before_headers` and `after_headers` script phase DSL.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10770](https://github.com/CocoaPods/CocoaPods/issues/10770)
