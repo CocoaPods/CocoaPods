@@ -58,6 +58,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Add possibility to skip modulemap generation  
   [till0xff](https://github.com/till0xff)
+  [#10235](https://github.com/CocoaPods/CocoaPods/issues/10235)
 
 * Add a `--version` option to `pod spec cat` and `pod spec which` for listing the podspec of a specific version  
   [pietbrauer](https://github.com/pietbrauer)
