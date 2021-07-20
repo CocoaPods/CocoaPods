@@ -32,7 +32,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jun Jiang](https://github.com/jasl)
   [#10364](https://github.com/CocoaPods/CocoaPods/pull/10364)
 
-* Add a `post_integrate_hook` API  
+* Add a `pre_integrate_hook` API  
   [dcvz](https://github.com/dcvz)
   [#9935](https://github.com/CocoaPods/CocoaPods/pull/9935)
 
