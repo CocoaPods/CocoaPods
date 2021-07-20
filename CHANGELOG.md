@@ -32,7 +32,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jun Jiang](https://github.com/jasl)
   [#10364](https://github.com/CocoaPods/CocoaPods/pull/10364)
 
-* Add a post_integrate_hook API  
+* Add a `post_integrate_hook` API  
   [dcvz](https://github.com/dcvz)
   [#9935](https://github.com/CocoaPods/CocoaPods/pull/9935)
 
@@ -40,7 +40,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Jun Jiang](https://github.com/jasl), [Igor Makarov](https://github.com/igor-makarov)
   [#10346](https://github.com/CocoaPods/CocoaPods/pull/10346)
 
-* Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date. 
+* Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date.  
   [Elton Gao](https://github.com/gyfelton)
   [Justin Martin](https://github.com/justinseanmartin)
   
@@ -56,7 +56,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [cltnschlosser](https://github.com/cltnschlosser)
   [#9916](https://github.com/CocoaPods/CocoaPods/pull/9916)
 
-* Add possibility to skip modulemap generation
+* Add possibility to skip modulemap generation  
   [till0xff](https://github.com/till0xff)
 
 * Add a `--version` option to `pod spec cat` and `pod spec which` for listing the podspec of a specific version  
@@ -79,7 +79,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
 
-* Respect `--configuration` option when analyzing via `pod lib lint --analyze`. 
+* Respect `--configuration` option when analyzing via `pod lib lint --analyze`.  
   [Jenn Magder](https://github.com/jmagman)
   [#10476](https://github.com/CocoaPods/CocoaPods/issues/10476)
 
