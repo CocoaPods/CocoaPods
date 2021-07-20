@@ -622,11 +622,25 @@ module Pod
         end
 
         it 'moves custom shell scripts according to their execution position' do
-          shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"', :execution_position => :before_compile }
-          shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
-          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two])
+          @pod_bundle.target_definition.stubs(:script_phases).returns([])
           @target_integrator.integrate!
           target = @target_integrator.send(:native_targets).first
+          # By calling this, xcodeproj automatically adds this phase to the native target.
+          target.headers_build_phase
+          target.build_phases.map(&:display_name).should == [
+            '[CP] Check Pods Manifest.lock',
+            'Sources',
+            'Frameworks',
+            'Resources',
+            '[CP] Embed Pods Frameworks',
+            '[CP] Copy Pods Resources',
+            'Headers',
+          ]
+          shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"', :execution_position => :before_compile }
+          shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
+          shell_script_three = { :name => 'Custom Script 3', :script => 'echo "Hello Aliens"', :execution_position => :before_headers }
+          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two, shell_script_three])
+          @target_integrator.integrate!
           target.build_phases.map(&:display_name).should == [
             '[CP] Check Pods Manifest.lock',
             '[CP-User] Custom Script',
@@ -635,11 +649,14 @@ module Pod
             'Resources',
             '[CP] Embed Pods Frameworks',
             '[CP] Copy Pods Resources',
+            '[CP-User] Custom Script 3',
+            'Headers',
             '[CP-User] Custom Script 2',
           ]
           shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"', :execution_position => :after_compile }
           shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"', :execution_position => :before_compile }
-          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two])
+          shell_script_three = { :name => 'Custom Script 3', :script => 'echo "Hello Aliens"', :execution_position => :after_headers }
+          @pod_bundle.target_definition.stubs(:script_phases).returns([shell_script_one, shell_script_two, shell_script_three])
           @target_integrator.integrate!
           target.build_phases.map(&:display_name).should == [
             '[CP] Check Pods Manifest.lock',
@@ -650,6 +667,8 @@ module Pod
             'Resources',
             '[CP] Embed Pods Frameworks',
             '[CP] Copy Pods Resources',
+            'Headers',
+            '[CP-User] Custom Script 3',
           ]
           shell_script_one = { :name => 'Custom Script', :script => 'echo "Hello World"' }
           shell_script_two = { :name => 'Custom Script 2', :script => 'echo "Hello Aliens"' }
@@ -664,6 +683,7 @@ module Pod
             'Resources',
             '[CP] Embed Pods Frameworks',
             '[CP] Copy Pods Resources',
+            'Headers',
           ]
         end
 

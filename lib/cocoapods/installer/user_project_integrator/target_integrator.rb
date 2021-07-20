@@ -326,11 +326,18 @@ module Pod
 
           def reorder_script_phase(native_target, script_phase, execution_position)
             return if execution_position == :any || execution_position.to_s.empty?
-            target_phase_type = Xcodeproj::Project::Object::PBXSourcesBuildPhase
+            target_phase_type = case execution_position
+                                when :before_compile, :after_compile
+                                  Xcodeproj::Project::Object::PBXSourcesBuildPhase
+                                when :before_headers, :after_headers
+                                  Xcodeproj::Project::Object::PBXHeadersBuildPhase
+                                else
+                                  raise ArgumentError, "Unknown execution position `#{execution_position}`"
+                                end
             order_before = case execution_position
-                           when :before_compile
+                           when :before_compile, :before_headers
                              true
-                           when :after_compile
+                           when :after_compile, :after_headers
                              false
                            else
                              raise ArgumentError, "Unknown execution position `#{execution_position}`"
