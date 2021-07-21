@@ -43,18 +43,14 @@ module Pod
               test_file_accessors = target.file_accessors.select { |fa| fa.spec.test_specification? }
               app_file_accessors = target.file_accessors.select { |fa| fa.spec.app_specification? }
 
-              unless target.should_build?
-                # For targets that should not be built (e.g. pre-built vendored frameworks etc), we add a placeholder
-                # PBXAggregateTarget that will be used to wire up dependencies later.
-                native_target = add_placeholder_target
-                resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
-                create_copy_dsyms_script
-                create_copy_xcframeworks_script unless target.xcframeworks.values.all?(&:empty?)
-                create_xcconfig_file(native_target, resource_bundle_targets)
-                return TargetInstallationResult.new(target, native_target, resource_bundle_targets)
-              end
+              native_target = if target.should_build?
+                                add_target
+                              else
+                                # For targets that should not be built (e.g. pre-built vendored frameworks etc), we add a placeholder
+                                # PBXAggregateTarget that will be used to wire up dependencies later.
+                                add_placeholder_target
+                              end
 
-              native_target = add_target
               resource_bundle_targets = add_resources_bundle_targets(library_file_accessors).values.flatten
 
               test_native_targets = add_test_targets
@@ -65,8 +61,10 @@ module Pod
               app_resource_bundle_targets = add_resources_bundle_targets(app_file_accessors)
 
               add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
-              validate_targets_contain_sources(test_native_targets + app_native_targets.values + [native_target])
-              validate_xcframeworks
+              targets_to_validate = test_native_targets + app_native_targets.values
+              targets_to_validate << native_target if target.should_build?
+              validate_targets_contain_sources(targets_to_validate)
+              validate_xcframeworks if target.should_build?
 
               create_copy_xcframeworks_script unless target.xcframeworks.values.all?(&:empty?)
 
@@ -74,7 +72,7 @@ module Pod
               create_test_xcconfig_files(test_native_targets, test_resource_bundle_targets)
               create_app_xcconfig_files(app_native_targets, app_resource_bundle_targets)
 
-              if target.defines_module? && !skip_modulemap?(target.library_specs)
+              if target.should_build? && target.defines_module? && !skip_modulemap?(target.library_specs)
                 create_module_map(native_target) do |generator|
                   generator.headers.concat module_map_additional_headers
                 end
@@ -99,20 +97,21 @@ module Pod
                 end
               end
 
-              if target.build_as_framework?
+              if target.should_build? && target.build_as_framework?
                 unless skip_info_plist?(native_target)
-                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform, :additional_entries => target.info_plist_entries)
+                  create_info_plist_file(target.info_plist_path, native_target, target.version, target.platform,
+                                         :additional_entries => target.info_plist_entries)
                 end
                 create_build_phase_to_symlink_header_folders(native_target)
               end
 
-              if target.build_as_library? && target.uses_swift?
+              if target.should_build? && target.build_as_library? && target.uses_swift?
                 add_swift_library_compatibility_header_phase(native_target)
               end
 
               project_directory = project.path.dirname
 
-              unless skip_pch?(target.library_specs)
+              if target.should_build? && !skip_pch?(target.library_specs)
                 path = target.prefix_header_path
                 create_prefix_header(path, library_file_accessors, target.platform, native_target, project_directory)
                 add_file_to_support_group(path)
@@ -135,7 +134,7 @@ module Pod
                   add_file_to_support_group(path)
                 end
               end
-              create_dummy_source(native_target)
+              create_dummy_source(native_target) if target.should_build?
               create_copy_dsyms_script
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets,
@@ -311,18 +310,22 @@ module Pod
           #
           # @return [void]
           #
-          def add_files_to_build_phases(native_target, test_native_targets, app_native_targets)
+          def add_files_to_build_phases(library_native_target, test_native_targets, app_native_targets)
             target.file_accessors.each do |file_accessor|
               consumer = file_accessor.spec_consumer
 
               native_target =  case consumer.spec.spec_type
                                when :library
-                                 native_target
+                                 library_native_target
                                when :test
                                  test_native_target_from_spec(consumer.spec, test_native_targets)
                                when :app
                                  app_native_targets[consumer.spec]
+                               else
+                                 raise ArgumentError, "Unknown spec type #{consumer.spec.spec_type}."
                                end
+
+              next if native_target.is_a?(Xcodeproj::Project::Object::PBXAggregateTarget)
 
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers.map(&:realpath)
@@ -987,7 +990,7 @@ module Pod
           end
 
           def create_umbrella_header(native_target)
-            return super(native_target) unless custom_module_map
+            super(native_target) unless custom_module_map
           end
 
           def custom_module_map

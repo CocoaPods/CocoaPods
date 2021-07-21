@@ -13,6 +13,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10793](https://github.com/CocoaPods/CocoaPods/pull/10793)
 
+* Integrate test specs and app specs of pre-built pods.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10795](https://github.com/CocoaPods/CocoaPods/pull/10795)
+
 * Add support for `before_headers` and `after_headers` script phase DSL.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10770](https://github.com/CocoaPods/CocoaPods/issues/10770)
