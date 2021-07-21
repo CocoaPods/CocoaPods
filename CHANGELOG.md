@@ -71,6 +71,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Correctly filter dependencies for pod variants across different platforms.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10777](https://github.com/CocoaPods/CocoaPods/issues/10777)
+
 * Generate default `Info.plist` for consumer app during validation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8570](https://github.com/CocoaPods/CocoaPods/issues/8570)

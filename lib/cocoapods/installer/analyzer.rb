@@ -35,7 +35,7 @@ module Pod
       #
       attr_reader :podfile
 
-      # @return [Lockfile] The Lockfile, if available, that stores the information about the Pods previously installed.
+      # @return [Lockfile, nil] The Lockfile, if available, that stores the information about the Pods previously installed.
       #
       attr_reader :lockfile
 
@@ -67,7 +67,7 @@ module Pod
       #
       # @param  [Sandbox] sandbox @see #sandbox
       # @param  [Podfile] podfile @see #podfile
-      # @param  [Lockfile] lockfile @see #lockfile
+      # @param  [Lockfile, nil] lockfile @see #lockfile
       # @param  [Array<Source>] plugin_sources @see #plugin_sources
       # @param  [Boolean] has_dependencies @see #has_dependencies
       # @param  [Hash, Boolean, nil] pods_to_update @see #pods_to_update
@@ -713,7 +713,12 @@ module Pod
         dependencies.map do |root_spec, deps|
           pod_targets_by_name[root_spec.name].find do |t|
             next false if t.platform.symbolic_name != target.platform.symbolic_name ||
-                t.build_as_framework? != target.build_as_framework? # rather than target type or requires_frameworks? since we want to group by what was specified in that _target definition_
+              # In the case of variants we must ensure that the platform this target is meant for is the same
+              # as the one we are interested in.
+              t.target_definitions.first.platform != target.target_definitions.first.platform ||
+              # rather than target type or requires_frameworks? since we want to group by what was specified in that
+              # _target definition_.
+              t.build_as_framework? != target.build_as_framework?
             spec_names = t.specs.map(&:name)
             deps.all? { |dep| spec_names.include?(dep.name) }
           end
