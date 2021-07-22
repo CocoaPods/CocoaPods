@@ -1255,6 +1255,26 @@ module Pod
 
             #--------------------------------------------------------------------------------#
 
+            describe '#bcsymbolmap_paths' do
+              it 'de dups bcsymbol map paths that are found across multiple frameworks' do
+                framework_a = Pod::Xcode::FrameworkPaths.new('/path/to/A.framework', '/path/to/A.framework.dSYM', [
+                  '${PODS_ROOT}/path/to/A9FE499F-68E9-3984-A291-CFB68F9C77EB.bcsymbolmap',
+                  '${PODS_ROOT}/path/to/48874290-E5EB-391C-A715-28CBA7F8B4B8.bcsymbolmap',
+                ])
+                framework_b = Pod::Xcode::FrameworkPaths.new('/path/to/B.framework', '/path/to/B.framework.dSYM', [
+                  '${PODS_ROOT}/path/to/A9FE499F-68E9-3984-A291-CFB68F9C77EB.bcsymbolmap',
+                  '${PODS_ROOT}/path/to/48874290-E5EB-391C-A715-28CBA7F8B4B8.bcsymbolmap',
+                ])
+                @pod_target.stubs(:framework_paths).returns('Spec' => [framework_a, framework_b])
+                Pod::Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.bcsymbolmap_paths(@pod_target).should == [
+                  '${PODS_ROOT}/path/to/A9FE499F-68E9-3984-A291-CFB68F9C77EB.bcsymbolmap',
+                  '${PODS_ROOT}/path/to/48874290-E5EB-391C-A715-28CBA7F8B4B8.bcsymbolmap',
+                ]
+              end
+            end
+
+            #--------------------------------------------------------------------------------#
+
             describe 'concerning header_mappings_dirs' do
               before do
                 @project = Project.new(config.sandbox.project_path)
