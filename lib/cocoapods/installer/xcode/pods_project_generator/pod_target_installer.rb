@@ -1199,7 +1199,7 @@ module Pod
             def bcsymbolmap_paths(target)
               target.framework_paths.values.flatten.reject do |fmwk_path|
                 fmwk_path.bcsymbolmap_paths.nil?
-              end.flat_map(&:bcsymbolmap_paths)
+              end.flat_map(&:bcsymbolmap_paths).uniq
             end
 
             # @param  [Pathname] xcframework_path

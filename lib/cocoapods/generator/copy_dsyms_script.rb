@@ -1,18 +1,18 @@
 module Pod
   module Generator
     class CopydSYMsScript
-      # @return [Array<Pathname>] dsym_paths the dSYM paths to include in the script contents.
+      # @return [Array<Pathname, String>] dsym_paths the dSYM paths to include in the script contents.
       #
       attr_reader :dsym_paths
 
-      # @return [Array<Pathname>] bcsymbolmap_paths the bcsymbolmap paths to include in the script contents.
+      # @return [Array<Pathname, String>] bcsymbolmap_paths the bcsymbolmap paths to include in the script contents.
       #
       attr_reader :bcsymbolmap_paths
 
       # Initialize a new instance
       #
-      # @param  [Array<Pathname>] dsym_paths @see dsym_paths
-      # @param  [Array<Pathname>] bcsymbolmap_paths @see bcsymbolmap_paths
+      # @param  [Array<Pathname, String>] dsym_paths @see dsym_paths
+      # @param  [Array<Pathname, String>] bcsymbolmap_paths @see bcsymbolmap_paths
       #
       def initialize(dsym_paths, bcsymbolmap_paths)
         @dsym_paths = Array(dsym_paths)
