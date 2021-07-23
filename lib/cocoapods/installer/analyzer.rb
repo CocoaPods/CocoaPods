@@ -615,7 +615,7 @@ module Pod
               library_specs = all_specs_by_type[:library] || []
               test_specs = all_specs_by_type[:test] || []
               app_specs = all_specs_by_type[:app] || []
-              build_type = determine_build_type(root_spec, target_definition.build_type)
+              build_type = determine_build_type(root_spec, target_definition)
               pod_variant = PodVariant.new(library_specs, test_specs, app_specs, target_definition.platform, build_type)
               hash[root_spec] ||= {}
               (hash[root_spec][pod_variant] ||= []) << target_definition
@@ -654,7 +654,7 @@ module Pod
           resolver_specs_by_target.flat_map do |target_definition, specs|
             grouped_specs = specs.group_by(&:root).values.uniq
             pod_targets = grouped_specs.flat_map do |pod_specs|
-              build_type = determine_build_type(pod_specs.first.spec, target_definition.build_type)
+              build_type = determine_build_type(pod_specs.first.spec, target_definition)
               swift_version = determine_swift_version(pod_specs.first.spec, [target_definition])
               generate_pod_target([target_definition], build_type, target_inspections, pod_specs.map(&:spec),
                                   :swift_version => swift_version).scoped(dedupe_cache)
@@ -898,16 +898,23 @@ module Pod
       # @param [Specification] spec
       #        the spec to determine the #BuildType for.
       #
-      # @param [BuildType] target_definition_build_type
-      #        The desired #BuildType by the target definition that integrates this target. If the pod target spec does
-      #        not specify explicitly a `static_framework` #BuildType then the one from the target definition is used.
+      # @param [TargetDefinition] target_definition
+      #        The target definition that integrates this target. If the pod target spec does
+      #        not specify explicitly a `static_framework` #BuildType then the one from the
+      #        dependency or target definition is used.
       #
       # @return [BuildType]
       #
-      def determine_build_type(spec, target_definition_build_type)
-        if target_definition_build_type.framework?
+      def determine_build_type(spec, target_definition)
+        if target_definition.build_type.framework?
           root_spec = spec.root
-          root_spec.static_framework ? BuildType.static_framework : target_definition_build_type
+          if root_spec.static_framework
+            BuildType.static_framework
+          else
+            t = target_definition.build_type_for_pod(root_spec.name)
+            # STDERR.puts "#{root_spec.name} => #{t.inspect}"
+            t
+          end
         else
           BuildType.static_library
         end
