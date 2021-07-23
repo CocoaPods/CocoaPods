@@ -75,6 +75,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Bump addressable dependency to 2.8.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10802](https://github.com/CocoaPods/CocoaPods/issues/10802)
+
 * Dedup bcsymbolmap paths found from multiple vendored frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10373](https://github.com/CocoaPods/CocoaPods/issues/10373)

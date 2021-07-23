@@ -103,7 +103,7 @@ PATH
   remote: .
   specs:
     cocoapods (1.10.1)
-      addressable (~> 2.6)
+      addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
       cocoapods-core (= 1.10.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
@@ -130,7 +130,7 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
