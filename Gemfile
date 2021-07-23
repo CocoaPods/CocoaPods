@@ -19,8 +19,8 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
+  cp_gem 'claide', 'CLAide'
+  gem 'cocoapods-core', :git => 'https://github.com/igor-makarov/Core', :branch => 'custom-build'
   cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
   cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
   cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
