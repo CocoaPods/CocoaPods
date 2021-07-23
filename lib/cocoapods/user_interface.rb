@@ -137,6 +137,10 @@ module Pod
       #        The indentation level relative to the current,
       #        when the message is printed.
       #
+      # @yield  The action, this block is always executed.
+      #
+      # @return [void]
+      #
       def message(message, verbose_prefix = '', relative_indentation = 2)
         message = verbose_prefix + message if config.verbose?
         puts_indented message if config.verbose?

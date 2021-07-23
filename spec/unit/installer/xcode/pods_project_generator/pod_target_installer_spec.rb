@@ -647,6 +647,97 @@ module Pod
                 e = ->() { @ios_installer.install! }.should.raise(Informative)
                 e.message.should.include '[!] Using Swift static libraries with custom module maps is currently not supported. Please build `WatermelonLib` as a framework or remove the custom module map.'
               end
+
+              it 'integrates test specs and app specs even for targets that do not require building' do
+                @watermelon_ios_pod_target.stubs(:should_build?).returns(false)
+                @watermelon_spec.app_specs.each { |s| s.pod_target_xcconfig = {} }
+                installation_result = @ios_installer.install!
+                @project.targets.count.should == 9
+                @project.targets.first.name.should == 'WatermelonLib'
+                @project.targets.first.class.should == Xcodeproj::Project::PBXAggregateTarget
+                unit_test_native_target = @project.targets[1]
+                unit_test_native_target.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-Tests'
+                unit_test_native_target.product_reference.path.should == 'WatermelonLib-Unit-Tests.xctest'
+                unit_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.unit-tests.#{bc.name.downcase}.xcconfig"
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-Tests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-Tests-prefix.pch'
+                end
+                unit_test_native_target.symbol_type.should == :unit_test_bundle
+                unit_test_native_target.source_build_phase.files.map(&:display_name).should == [
+                  'WatermelonTests.m',
+                  'WatermelonSwiftTests.swift',
+                ]
+
+                ui_test_native_target = @project.targets[2]
+                ui_test_native_target.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.product_reference.name.should == 'WatermelonLib-UI-UITests'
+                ui_test_native_target.product_reference.path.should == 'WatermelonLib-UI-UITests.xctest'
+                ui_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.ui-uitests.#{bc.name.downcase}.xcconfig"
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-UI-UITests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-UI-UITests-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-UI-UITests-prefix.pch'
+                end
+                ui_test_native_target.symbol_type.should == :ui_test_bundle
+                ui_test_native_target.source_build_phase.files.map(&:display_name).should == [
+                  'WatermelonUITests.m',
+                ]
+                snapshot_test_native_target = @project.targets[3]
+                snapshot_test_native_target.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.product_reference.name.should == 'WatermelonLib-Unit-SnapshotTests'
+                snapshot_test_native_target.product_reference.path.should == 'WatermelonLib-Unit-SnapshotTests.xctest'
+                snapshot_test_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.unit-snapshottests.#{bc.name.downcase}.xcconfig"
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-Unit-SnapshotTests'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['INFOPLIST_FILE'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-Unit-SnapshotTests-prefix.pch'
+                end
+                snapshot_test_native_target.symbol_type.should == :unit_test_bundle
+                app_native_target = @project.targets[7]
+                app_native_target.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.name.should == 'WatermelonLib-App'
+                app_native_target.product_reference.path.should == 'WatermelonLib-App.app'
+                app_native_target.build_configurations.each do |bc|
+                  bc.base_configuration_reference.real_path.basename.to_s.should == "WatermelonLib.app.#{bc.name.downcase}.xcconfig"
+                  bc.build_settings['PRODUCT_NAME'].should == 'WatermelonLib-App'
+                  bc.build_settings['PRODUCT_BUNDLE_IDENTIFIER'].should == 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+                  bc.build_settings['CURRENT_PROJECT_VERSION'].should == '1'
+                  bc.build_settings['MACH_O_TYPE'].should.be.nil
+                  bc.build_settings['PRODUCT_MODULE_NAME'].should.be.nil
+                  bc.build_settings['CODE_SIGNING_REQUIRED'].should == 'YES'
+                  bc.build_settings['CODE_SIGNING_ALLOWED'].should == 'YES'
+                  bc.build_settings['CODE_SIGN_IDENTITY'].should == 'iPhone Developer'
+                  bc.build_settings['CODE_SIGN_IDENTITY[sdk=appletvos*]'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'].should.be.nil
+                  bc.build_settings['CODE_SIGN_IDENTITY[sdk=watchos*]'].should.be.nil
+                  bc.build_settings['INFOPLIST_FILE'].should == 'App/WatermelonLib-App-Info.plist'
+                  bc.build_settings['GCC_PREFIX_HEADER'].should == 'Target Support Files/WatermelonLib/WatermelonLib-App-prefix.pch'
+                end
+                app_native_target.symbol_type.should == :application
+                app_native_target.source_build_phase.files.map(&:display_name).should == [
+                  'main.swift',
+                ]
+                installation_result.test_native_targets.count.should == 3
+                installation_result.app_native_targets.count.should == 1
+              end
             end
 
             describe 'test other files under sources' do
