@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'nap',           '~> 1.0'
   s.add_runtime_dependency 'ruby-macho',    '>= 1.0', '< 3.0'
 
-  s.add_runtime_dependency 'addressable', '~> 2.6'
+  s.add_runtime_dependency 'addressable', '~> 2.8'
 
   s.add_development_dependency 'bacon', '~> 1.1'
   s.add_development_dependency 'bundler', '~> 2.0'
