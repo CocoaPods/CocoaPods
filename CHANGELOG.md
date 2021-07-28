@@ -12,17 +12,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.
-
-
-## 1.10.2
-
-##### Enhancements
-
-* None.  
-
-##### Bug Fixes
-
 * Fix errors when archiving a Catalyst app which depends on a pod which uses `header_mappings_dir`.  
   [Thomas Goyne](https://github.com/tgoyne)
   [#10224](https://github.com/CocoaPods/CocoaPods/pull/10224)
@@ -34,6 +23,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Change URL validation failure to a note  
   [Paul Beusterien](https://github.com/paulb777)
   [#10291](https://github.com/CocoaPods/CocoaPods/issues/10291)
+
 
 ## 1.10.1 (2021-01-07)
 
