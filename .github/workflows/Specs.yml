@@ -51,11 +51,11 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1.1
         if: ${{ matrix.task == 'EXAMPLES' }}
         with:
-          xcode-version: 11.3.1
+          xcode-version: 12.1
 
       - name: Run Tests
         run: bundle exec rake spec:all
-        env: 
+        env:
           COCOAPODS_CI_TASKS: ${{ matrix.task }}
 
 on:
@@ -64,7 +64,7 @@ on:
       - "master"
       - "*-stable"
   pull_request:
-    branches: 
+    branches:
       - master
       - "*-stable"
 
