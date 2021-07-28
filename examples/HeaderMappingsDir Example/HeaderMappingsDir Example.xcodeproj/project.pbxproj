@@ -9,16 +9,24 @@
 /* Begin PBXBuildFile section */
 		295BB5621CEA95DE00E79F82 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295BB5611CEA95DE00E79F82 /* AppDelegate.swift */; };
 		295BB5641CEA95DE00E79F82 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 295BB5631CEA95DE00E79F82 /* Assets.xcassets */; };
-		44CEACDCCD13E316EE074DA1 /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD4F2DCE25281A4C3DAC43C7 /* Pods_App.framework */; };
+		3F49FDA22566CB6000DB4C28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295BB5611CEA95DE00E79F82 /* AppDelegate.swift */; };
+		3F49FDA62566CB6000DB4C28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 295BB5631CEA95DE00E79F82 /* Assets.xcassets */; };
+		44CEACDCCD13E316EE074DA1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		B4B33EF6E0070B20B05555D6 /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F60F2D3508AE8ED06682EB7 /* Pods_App.framework */; };
+		D58F29E1D5E5C3BFD7A7BFBC /* Pods_CatalystApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD0F347465854673E869234 /* Pods_CatalystApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0DFB53AE16B90D7F289BBEC2 /* Pods-CatalystApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CatalystApp.debug.xcconfig"; path = "Target Support Files/Pods-CatalystApp/Pods-CatalystApp.debug.xcconfig"; sourceTree = "<group>"; };
 		295BB55E1CEA95DE00E79F82 /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		295BB5611CEA95DE00E79F82 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		295BB5631CEA95DE00E79F82 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		295BB5681CEA95DE00E79F82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F49FDAB2566CB6000DB4C28 /* CatalystApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatalystApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F60F2D3508AE8ED06682EB7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FD0F347465854673E869234 /* Pods_CatalystApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CatalystApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8914945168DAAA34EFE099AF /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.release.xcconfig"; path = "Target Support Files/Pods-App/Pods-App.release.xcconfig"; sourceTree = "<group>"; };
-		AD4F2DCE25281A4C3DAC43C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A695CAA98C383BCC61786E74 /* Pods-CatalystApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CatalystApp.release.xcconfig"; path = "Target Support Files/Pods-CatalystApp/Pods-CatalystApp.release.xcconfig"; sourceTree = "<group>"; };
 		E1928C2D408B1D2E8B3E2FA3 /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -27,7 +35,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44CEACDCCD13E316EE074DA1 /* Pods_App.framework in Frameworks */,
+				44CEACDCCD13E316EE074DA1 /* BuildFile in Frameworks */,
+				B4B33EF6E0070B20B05555D6 /* Pods_App.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F49FDA32566CB6000DB4C28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D58F29E1D5E5C3BFD7A7BFBC /* Pods_CatalystApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,10 +54,10 @@
 		295BB5551CEA95DE00E79F82 = {
 			isa = PBXGroup;
 			children = (
-				295BB5601CEA95DE00E79F82 /* HeaderMappingsDir Example */,
-				295BB55F1CEA95DE00E79F82 /* Products */,
-				66AD76830CE2BBB6379CA47B /* Pods */,
 				83215639ECD12CBC1F4DC4E3 /* Frameworks */,
+				295BB5601CEA95DE00E79F82 /* HeaderMappingsDir Example */,
+				66AD76830CE2BBB6379CA47B /* Pods */,
+				295BB55F1CEA95DE00E79F82 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -48,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				295BB55E1CEA95DE00E79F82 /* App.app */,
+				3F49FDAB2566CB6000DB4C28 /* CatalystApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,15 +85,17 @@
 			children = (
 				E1928C2D408B1D2E8B3E2FA3 /* Pods-App.debug.xcconfig */,
 				8914945168DAAA34EFE099AF /* Pods-App.release.xcconfig */,
+				0DFB53AE16B90D7F289BBEC2 /* Pods-CatalystApp.debug.xcconfig */,
+				A695CAA98C383BCC61786E74 /* Pods-CatalystApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
 		83215639ECD12CBC1F4DC4E3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AD4F2DCE25281A4C3DAC43C7 /* Pods_App.framework */,
+				4F60F2D3508AE8ED06682EB7 /* Pods_App.framework */,
+				6FD0F347465854673E869234 /* Pods_CatalystApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -102,6 +122,25 @@
 			productReference = 295BB55E1CEA95DE00E79F82 /* App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		3F49FD9F2566CB6000DB4C28 /* CatalystApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3F49FDA82566CB6000DB4C28 /* Build configuration list for PBXNativeTarget "CatalystApp" */;
+			buildPhases = (
+				3F49FDA02566CB6000DB4C28 /* [CP] Check Pods Manifest.lock */,
+				3F49FDA12566CB6000DB4C28 /* Sources */,
+				3F49FDA32566CB6000DB4C28 /* Frameworks */,
+				3F49FDA52566CB6000DB4C28 /* Resources */,
+				3F49FDA72566CB6000DB4C28 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CatalystApp;
+			productName = "HeaderMappingsDir Example";
+			productReference = 3F49FDAB2566CB6000DB4C28 /* CatalystApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -122,6 +161,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -131,6 +171,7 @@
 			projectRoot = "";
 			targets = (
 				295BB55D1CEA95DE00E79F82 /* App */,
+				3F49FD9F2566CB6000DB4C28 /* CatalystApp */,
 			);
 		};
 /* End PBXProject section */
@@ -144,9 +185,53 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3F49FDA52566CB6000DB4C28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F49FDA62566CB6000DB4C28 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3F49FDA02566CB6000DB4C28 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CatalystApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3F49FDA72566CB6000DB4C28 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CatalystApp/Pods-CatalystApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/HeaderMappingsDirPod-iOS/HeaderMappingsDirPod.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HeaderMappingsDirPod.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CatalystApp/Pods-CatalystApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		62E9CD52D31153978437D4C2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -172,7 +257,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/HeaderMappingsDirPod/HeaderMappingsDirPod.framework",
+				"${BUILT_PRODUCTS_DIR}/HeaderMappingsDirPod-macOS/HeaderMappingsDirPod.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -191,6 +276,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				295BB5621CEA95DE00E79F82 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F49FDA12566CB6000DB4C28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F49FDA22566CB6000DB4C28 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,7 +338,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
@@ -292,7 +386,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 			};
@@ -308,6 +403,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.HeaderMappingsDir-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
 			};
 			name = Debug;
 		};
@@ -321,6 +419,39 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.HeaderMappingsDir-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+			};
+			name = Release;
+		};
+		3F49FDA92566CB6000DB4C28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0DFB53AE16B90D7F289BBEC2 /* Pods-CatalystApp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "HeaderMappingsDir Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.HeaderMappingsDir-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+			};
+			name = Debug;
+		};
+		3F49FDAA2566CB6000DB4C28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A695CAA98C383BCC61786E74 /* Pods-CatalystApp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "HeaderMappingsDir Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.HeaderMappingsDir-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
 			};
 			name = Release;
 		};
@@ -341,6 +472,15 @@
 			buildConfigurations = (
 				295BB56C1CEA95DE00E79F82 /* Debug */,
 				295BB56D1CEA95DE00E79F82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3F49FDA82566CB6000DB4C28 /* Build configuration list for PBXNativeTarget "CatalystApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F49FDA92566CB6000DB4C28 /* Debug */,
+				3F49FDAA2566CB6000DB4C28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

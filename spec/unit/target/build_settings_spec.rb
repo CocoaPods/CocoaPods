@@ -352,18 +352,12 @@ module Pod
           file_accessor = stub('file_accessor',
                                :spec => spec,
                                :spec_consumer => consumer,
-                               :vendored_static_artifacts => [],
+                               :vendored_static_artifacts => [1, 2, 3],
                                :vendored_static_libraries => [],
                                :vendored_dynamic_libraries => [],
                                :vendored_static_frameworks => [],
                                :vendored_dynamic_frameworks => [],
                                :vendored_xcframeworks => [],
-                              )
-          vendored_xcframework = stub('vendored_xcframework',
-                                      :build_type => BuildType.static_framework,
-                                     )
-          build_setting = stub('build_setting',
-                               :vendored_xcframeworks => [vendored_xcframework],
                               )
           pod_target = stub('pod_target',
                             :any_vendored_static_artifacts? => true,
@@ -377,7 +371,6 @@ module Pod
                             :spec_consumers => [consumer],
                             :build_as_static? => false,
                             :build_as_dynamic? => false,
-                            :build_settings => [build_setting],
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                             :root_spec => spec,
@@ -407,12 +400,6 @@ module Pod
                                :vendored_dynamic_frameworks => [],
                                :vendored_xcframeworks => [],
                               )
-          vendored_xcframework = stub('vendored_xcframework',
-                                      :build_type => BuildType.dynamic_framework,
-                                     )
-          build_setting = stub('build_setting',
-                               :vendored_xcframeworks => [vendored_xcframework],
-                              )
           pod_target = stub('pod_target',
                             :any_vendored_static_artifacts? => true,
                             :file_accessors => [file_accessor],
@@ -425,7 +412,6 @@ module Pod
                             :spec_consumers => [consumer],
                             :build_as_static? => false,
                             :build_as_dynamic? => false,
-                            :build_settings => [build_setting],
                             :product_basename => 'PodTarget',
                             :target_definitions => [target_definition],
                             :root_spec => spec,

@@ -46,7 +46,6 @@
 				A8A706EB2A5031760E4C935B /* Pods-Vendored Framework Example.debug.xcconfig */,
 				57D9D0A9E402C4C20EF1132A /* Pods-Vendored Framework Example.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -131,6 +130,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -335,6 +335,7 @@
 			baseConfigurationReference = A8A706EB2A5031760E4C935B /* Pods-Vendored Framework Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EXCLUDED_ARCHS = arm64;
 				INFOPLIST_FILE = "Vendored Framework Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.Vendored-Framework-Example";
@@ -348,6 +349,7 @@
 			baseConfigurationReference = 57D9D0A9E402C4C20EF1132A /* Pods-Vendored Framework Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EXCLUDED_ARCHS = arm64;
 				INFOPLIST_FILE = "Vendored Framework Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.Vendored-Framework-Example";
