@@ -21,8 +21,8 @@ File References:
   - iOS:
     - Foundation.framework
 - Products:
-  - BananaLib.framework
-  - Pods_Example.framework
+  - BananaLib
+  - Pods-Example
 - Targets Support Files:
   - Pods-Example:
     - Pods-Example.modulemap

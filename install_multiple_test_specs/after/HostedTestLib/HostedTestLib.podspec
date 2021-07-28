@@ -57,7 +57,7 @@ Pod::Spec.new do |s|
     app_spec.source_files = 'App/**/*'
     app_spec.dependency 'DepPod'
     app_spec.pod_target_xcconfig = {
-      'PRODUCT_NAME' => 'App Host w/ Dep'
+      'PRODUCT_NAME' => 'App Host with Dep'
     }
   end
 end

@@ -109,17 +109,17 @@ File References:
     - Foundation.framework
 - Products:
   - AppHost-TestLib-Unit-Tests.app
-  - DepPod.framework
-  - HostedTestLib.framework
+  - DepPod
+  - HostedTestLib
   - HostedTestLib-App
   - HostedTestLib-AppWithDep
   - HostedTestLib-Unit-UnitTests3
   - HostedTestLib-Unit-UnitTests4
   - HostedTestLib-Unit-UnitTests5
   - HostedTestLib-Unit-UnitTests6
-  - Pods_InstallMultipleTestSpecs.framework
-  - Pods_Other.framework
-  - TestLib.framework
+  - Pods-InstallMultipleTestSpecs
+  - Pods-Other
+  - TestLib
   - TestLib-App
   - TestLib-Unit-UnitTests1
   - TestLib-Unit-UnitTests2
@@ -614,7 +614,7 @@ Targets:
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host with Dep.app/App Host with Dep"
         Base Configuration: HostedTestLib.unit-unittests5.debug.xcconfig
     - Release:
         Build Settings:
@@ -634,7 +634,7 @@ Targets:
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host with Dep.app/App Host with Dep"
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: HostedTestLib.unit-unittests5.release.xcconfig
 - HostedTestLib-Unit-UnitTests6:
@@ -663,7 +663,7 @@ Targets:
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host with Dep.app/App Host with Dep"
         Base Configuration: HostedTestLib.unit-unittests6.debug.xcconfig
     - Release:
         Build Settings:
@@ -683,7 +683,7 @@ Targets:
           SDKROOT: iphoneos
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_VERSION: '4'
-          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host w/ Dep.app/App Host w/ Dep"
+          TEST_HOST: "$(BUILT_PRODUCTS_DIR)/App Host with Dep.app/App Host with Dep"
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: HostedTestLib.unit-unittests6.release.xcconfig
 - Pods-InstallMultipleTestSpecs:

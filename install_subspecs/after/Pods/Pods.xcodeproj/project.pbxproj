@@ -25,10 +25,10 @@ File References:
       - PodTest-subspec_2.debug.xcconfig
       - PodTest-subspec_2.release.xcconfig
 - Products:
-  - libPods-iOS App.a
-  - libPodTest-subspec_1.a
-  - Pods_OS_X_App.framework
-  - PodTest.framework
+  - Pods-iOS App
+  - Pods-OS X App
+  - PodTest-subspec_1
+  - PodTest-subspec_2
 - Targets Support Files:
   - Pods-iOS App:
     - Pods-iOS App-acknowledgements.markdown

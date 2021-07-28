@@ -12,9 +12,9 @@ File References:
       - Reachability.debug.xcconfig
       - Reachability.release.xcconfig
 - Products:
-  - libPods-SampleApp_1.a
-  - libPods-SampleApp_2.a
-  - libReachability.a
+  - Pods-SampleApp_1
+  - Pods-SampleApp_2
+  - Reachability
 - Targets Support Files:
   - Pods-SampleApp_1:
     - Pods-SampleApp_1-acknowledgements.markdown

@@ -30,9 +30,9 @@ File References:
   - iOS:
     - Foundation.framework
 - Products:
-  - BananaLib.framework
+  - BananaLib
   - BananaLib-Unit-Tests
-  - Pods_XCFrameworkIntegration.framework
+  - Pods-XCFrameworkIntegration
 - Targets Support Files:
   - Pods-XCFrameworkIntegration:
     - Pods-XCFrameworkIntegration.modulemap

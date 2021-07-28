@@ -14,8 +14,8 @@ File References:
       - Moment.debug.xcconfig
       - Moment.release.xcconfig
 - Products:
-  - libMoment.a
-  - libPods-SampleApp.a
+  - Moment
+  - Pods-SampleApp
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp-acknowledgements.markdown

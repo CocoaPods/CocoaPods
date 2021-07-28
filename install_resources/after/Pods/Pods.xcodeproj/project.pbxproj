@@ -17,9 +17,9 @@ File References:
       - ResourceBundle-res-res-Info.plist
 - Frameworks: []
 - Products:
-  - libPods-SampleApp.a
-  - libres.a
-  - res.bundle
+  - Pods-SampleApp
+  - res
+  - res-res
 - Targets Support Files:
   - Pods-SampleApp:
     - Pods-SampleApp-acknowledgements.markdown

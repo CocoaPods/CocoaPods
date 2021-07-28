@@ -38,10 +38,10 @@ File References:
       - Pod3.release.xcconfig
 - Frameworks: []
 - Products:
-  - libPod1.a
-  - libPod2.a
-  - libPod3.a
-  - libPods-SubSpecCircular.a
+  - Pod1
+  - Pod2
+  - Pod3
+  - Pods-SubSpecCircular
 - Targets Support Files:
   - Pods-SubSpecCircular:
     - Pods-SubSpecCircular-acknowledgements.markdown

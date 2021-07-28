@@ -14,8 +14,8 @@ File References:
       - Reachability.release.xcconfig
 - Frameworks: []
 - Products:
-  - libPods-iOS App.a
-  - libReachability.a
+  - Pods-iOS App
+  - Reachability
 - Targets Support Files:
   - Pods-iOS App:
     - Pods-iOS App-acknowledgements.markdown

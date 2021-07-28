@@ -49,12 +49,12 @@ File References:
   - OS X:
     - Cocoa.framework
 - Products:
-  - DepPod.framework
-  - HeaderMappingsDirPod.framework
-  - libDepPod-library.a
-  - libHeaderMappingsDirPod-library.a
-  - libPods-SampleApp.a
-  - Pods_OtherSampleApp.framework
+  - DepPod-framework
+  - DepPod-library
+  - HeaderMappingsDirPod-framework
+  - HeaderMappingsDirPod-library
+  - Pods-OtherSampleApp
+  - Pods-SampleApp
 - Targets Support Files:
   - Pods-OtherSampleApp:
     - Pods-OtherSampleApp.modulemap
