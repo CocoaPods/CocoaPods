@@ -1,0 +1,13 @@
+BCSymbolMap Version: 2.0
+Apple clang version 12.0.0 (clang-1200.0.32.21)
+/Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator7.0.sdk
+WatchSimulator7.0.sdk
+/Users/dimitris/Library/Developer/Xcode/DerivedData/CoconutLib-emvxikeulksgclhknusminvzkhbs/Build/Intermediates.noindex/ArchiveIntermediates/CoconutLib-watchOS/IntermediateBuildFilesPath/CoconutLib.build/Release-watchsimulator/CoconutLib-watchOS.build/DerivedSources/CoconutLib_vers.c
+/Users/dimitris/Development/ios/Rainforest/cocoapods/examples/Vendored XCFramework Example/CoconutLib
+-[CoconutObj makeCoconuts]
+__OBJC_METACLASS_RO_$_CoconutObj
+__OBJC_$_INSTANCE_METHODS_CoconutObj
+__OBJC_CLASS_RO_$_CoconutObj
+/Users/dimitris/Development/ios/Rainforest/CocoaPods/examples/Vendored XCFramework Example/CoconutLib/CoconutLib/Coconut.m
+CocoaPods/examples/Vendored XCFramework Example/CoconutLib/CoconutLib/Coconut.m
+/Users/dimitris/Development/ios/Rainforest
