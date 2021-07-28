@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 4a155d542d1735d3b168811ae8f7c2e9949a4ae7
+  revision: 79996f3e5f712f3d6337a7d9b440a3d036bc1619
   branch: 1-10-stable
   specs:
-    cocoapods-core (1.10.1)
+    cocoapods-core (1.10.2)
       activesupport (> 5.0, < 6)
       addressable (~> 2.6)
       algoliasearch (~> 1.0)
@@ -30,17 +30,17 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 30bd8ecd80d7530c5f50029e1e67812170c91e96
+  revision: 1bf2e6e8781045fed99ca7020d5007234e715dc8
   branch: master
   specs:
     nanaimo (0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 3adafadf3ff7dee3369401bb48c42f7447c2eff6
+  revision: eeccae7275645753cbaf45d96fc4b23e4b8b3b9f
   branch: master
   specs:
-    xcodeproj (1.19.0)
+    xcodeproj (1.20.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -57,14 +57,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 1afba7c3e26b55710317f69483c1446a60fbfb2e
+  revision: 55c2937c19baadbd3529bf9919f9626af4dea597
   branch: master
   specs:
     cocoapods-downloader (1.4.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
-  revision: 89f05e5bbd847b82e46e5a9ee0f3953805877828
+  revision: 5fe129c3a803dd91fac58ddc5996eecb0ddb4703
   branch: master
   specs:
     cocoapods-plugins (1.0.0)
@@ -79,7 +79,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 00eca277d17d24c272adb6c7fa8d7c2c3fe8da3b
+  revision: d3ae92f6364ccc02439bf439df2abc07fa58f259
   branch: master
   specs:
     cocoapods-trunk (1.5.0)
@@ -109,10 +109,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.10.1)
+    cocoapods (1.10.2)
       addressable (~> 2.6)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.10.1)
+      cocoapods-core (= 1.10.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -132,12 +132,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (3.0.3)
-    activesupport (5.2.4.4)
+    activesupport (5.2.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
@@ -159,7 +159,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.2)
     colored2 (3.1.2)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.9)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.3)
@@ -179,13 +179,13 @@ GEM
     diffy (3.2.1)
     docile (1.1.5)
     escape (0.0.4)
-    ethon (0.12.0)
-      ffi (>= 1.3.0)
+    ethon (0.14.0)
+      ffi (>= 1.15.0)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.3.1)
       faraday (~> 0.8)
-    ffi (1.14.2)
+    ffi (1.15.3)
     fourflusher (2.3.1)
     fuzzy_match (2.0.4)
     gh_inspector (1.1.3)
@@ -193,7 +193,7 @@ GEM
       rchardet (~> 1.8)
     hashdiff (0.3.1)
     httpclient (2.8.3)
-    i18n (1.8.7)
+    i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     inch (0.8.0)
       pry
@@ -213,7 +213,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.14.3)
+    minitest (5.14.4)
     mocha (1.2.1)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -248,7 +248,7 @@ GEM
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
     rchardet (1.8.0)
-    rexml (3.2.4)
+    rexml (3.2.5)
     rubocop (0.50.0)
       parallel (~> 1.10)
       parser (>= 2.3.3.1, < 3.0)
