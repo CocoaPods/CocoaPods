@@ -134,6 +134,27 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins)
 
 
+## 1.10.2 (2021-07-28)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix errors when archiving a Catalyst app which depends on a pod which uses `header_mappings_dir`.  
+  [Thomas Goyne](https://github.com/tgoyne)
+  [#10224](https://github.com/CocoaPods/CocoaPods/pull/10224)
+
+* Fix missing `-ObjC` for static XCFrameworks - take 2  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#10459](https://github.com/CocoaPods/CocoaPods/issuess/10459)
+
+* Change URL validation failure to a note  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#10291](https://github.com/CocoaPods/CocoaPods/issues/10291)
+
+
 ## 1.10.1 (2021-01-07)
 
 ##### Enhancements

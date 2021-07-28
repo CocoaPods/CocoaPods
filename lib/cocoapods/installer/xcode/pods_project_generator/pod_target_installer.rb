@@ -847,7 +847,7 @@ module Pod
           end
 
           # Creates a build phase which links the versioned header folders
-          # of the OS X into the framework bundle's root root directory.
+          # of the OS X framework into the framework bundle's root directory.
           # This is only necessary because the way how headers are copied
           # via custom copy file build phases in combination with
           # header_mappings_dir interferes with xcodebuild's expectations
@@ -859,11 +859,16 @@ module Pod
           # @return [void]
           #
           def create_build_phase_to_symlink_header_folders(native_target)
-            return unless target.platform.name == :osx && any_header_mapping_dirs?
+            # This is required on iOS for Catalyst, which uses macOS framework layouts
+            return unless (target.platform.name == :osx || target.platform.name == :ios) && any_header_mapping_dirs?
 
             build_phase = native_target.new_shell_script_build_phase('Create Symlinks to Header Folders')
             build_phase.shell_script = <<-eos.strip_heredoc
               cd "$CONFIGURATION_BUILD_DIR/$WRAPPER_NAME" || exit 1
+              if [ ! -d Versions ]; then
+                # Not a versioned framework, so no need to do anything
+                exit 0
+              fi
 
               public_path="${PUBLIC_HEADERS_FOLDER_PATH\#\$CONTENTS_FOLDER_PATH/}"
               if [ ! -f "$public_path" ]; then
