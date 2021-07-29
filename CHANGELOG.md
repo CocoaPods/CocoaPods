@@ -21,6 +21,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10770](https://github.com/CocoaPods/CocoaPods/issues/10770)
 
+* Fix touch on a missing directory for dSYM copy phase script.  
+  [alvarollmenezes](https://github.com/alvarollmenezes)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10488](https://github.com/CocoaPods/CocoaPods/issues/10488)
+
 * Check the podfile sources and plugin sources when printing warnings without explicitly using the master source.  
   [gonghonglou](https://github.com/gonghonglou)
   [#10764](https://github.com/CocoaPods/CocoaPods/pull/10764)
