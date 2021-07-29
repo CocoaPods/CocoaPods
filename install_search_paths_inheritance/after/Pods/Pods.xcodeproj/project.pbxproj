@@ -143,16 +143,16 @@ Targets:
 - asserts:
     Build Phases:
     - Headers:
-      - asserts-umbrella.h:
-          ATTRIBUTES:
-          - Public
       - Asserts.h:
           ATTRIBUTES:
           - Public
+      - asserts-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
-      - asserts-dummy.m
       - Asserts.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - asserts-dummy.m
     - Frameworks:
       - Foundation.framework
     - Resources: []
@@ -211,10 +211,10 @@ Targets:
 - CocoaLumberjack:
     Build Phases:
     - Headers:
-      - CocoaLumberjack-umbrella.h:
+      - CocoaLumberjack.h:
           ATTRIBUTES:
           - Public
-      - CocoaLumberjack.h:
+      - CocoaLumberjack-umbrella.h:
           ATTRIBUTES:
           - Public
       - DDAbstractDatabaseLogger.h:
@@ -241,10 +241,10 @@ Targets:
       - DDLegacyMacros.h:
           ATTRIBUTES:
           - Public
-      - DDLog+LOGV.h:
+      - DDLog.h:
           ATTRIBUTES:
           - Public
-      - DDLog.h:
+      - DDLog+LOGV.h:
           ATTRIBUTES:
           - Public
       - DDLogMacros.h:
@@ -334,16 +334,16 @@ Targets:
 - logger:
     Build Phases:
     - Headers:
-      - logger-umbrella.h:
-          ATTRIBUTES:
-          - Public
       - Logger.h:
           ATTRIBUTES:
           - Public
+      - logger-umbrella.h:
+          ATTRIBUTES:
+          - Public
     - Sources:
-      - logger-dummy.m
       - Logger.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - logger-dummy.m
     - Frameworks:
       - Foundation.framework
     - Resources: []

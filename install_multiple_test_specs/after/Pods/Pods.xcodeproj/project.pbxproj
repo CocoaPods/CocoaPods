@@ -271,8 +271,8 @@ Targets:
           ATTRIBUTES:
           - Public
     - Sources:
-      - HostedTestLib-dummy.m
       - HostedTestLib.swift
+      - HostedTestLib-dummy.m
     - Frameworks:
       - Foundation.framework
     - Resources: []

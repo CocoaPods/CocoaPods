@@ -252,9 +252,9 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - RKValueTransformers-dummy.m
       - RKValueTransformers.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - RKValueTransformers-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:

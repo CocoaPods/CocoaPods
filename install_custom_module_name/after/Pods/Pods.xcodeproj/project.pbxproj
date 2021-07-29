@@ -309,10 +309,10 @@ Targets:
 - SocketRocket:
     Build Phases:
     - Headers:
-      - SocketRocket-umbrella.h:
+      - SocketRocket.h:
           ATTRIBUTES:
           - Public
-      - SocketRocket.h:
+      - SocketRocket-umbrella.h:
           ATTRIBUTES:
           - Public
       - SRWebSocket.h:

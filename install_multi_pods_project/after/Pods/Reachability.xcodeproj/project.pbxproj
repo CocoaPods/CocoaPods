@@ -24,9 +24,9 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: "-fno-objc-arc"
+      - Reachability-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:
