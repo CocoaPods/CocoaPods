@@ -299,12 +299,12 @@ Targets:
 - CustomModuleMapPod-framework-iOS:
     Build Phases:
     - Headers:
-      - CMM+Private.h:
-          ATTRIBUTES:
-          - Private
       - CMM.h:
           ATTRIBUTES:
           - Public
+      - CMM+Private.h:
+          ATTRIBUTES:
+          - Private
       - CMMFunctions.h:
           ATTRIBUTES:
           - Public
@@ -425,12 +425,12 @@ Targets:
 - CustomModuleMapPod-framework-macOS:
     Build Phases:
     - Headers:
-      - CMM+Private.h:
-          ATTRIBUTES:
-          - Private
       - CMM.h:
           ATTRIBUTES:
           - Public
+      - CMM+Private.h:
+          ATTRIBUTES:
+          - Private
       - CMMFunctions.h:
           ATTRIBUTES:
           - Public
@@ -553,10 +553,10 @@ Targets:
 - CustomModuleMapPod-library-iOS:
     Build Phases:
     - Headers:
-      - CMM+Private.h:
+      - CMM.h:
           ATTRIBUTES:
           - Project
-      - CMM.h:
+      - CMM+Private.h:
           ATTRIBUTES:
           - Project
       - CMMFunctions.h:
@@ -658,10 +658,10 @@ Targets:
 - CustomModuleMapPod-library-macOS:
     Build Phases:
     - Headers:
-      - CMM+Private.h:
+      - CMM.h:
           ATTRIBUTES:
           - Project
-      - CMM.h:
+      - CMM+Private.h:
           ATTRIBUTES:
           - Project
       - CMMFunctions.h:

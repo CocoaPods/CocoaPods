@@ -60,8 +60,8 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - Pod1-dummy.m
       - Pod1.m
+      - Pod1-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:
@@ -108,8 +108,8 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - Pod2-dummy.m
       - Pod2.m
+      - Pod2-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:
@@ -156,8 +156,8 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - Pod3-dummy.m
       - Pod3.m
+      - Pod3-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:

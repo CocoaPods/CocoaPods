@@ -41,9 +41,9 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - JSONKit-dummy.m
       - JSONKit.m:
           COMPILER_FLAGS: "-fno-objc-arc"
+      - JSONKit-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:
@@ -136,9 +136,9 @@ Targets:
           ATTRIBUTES:
           - Project
     - Sources:
-      - Reachability-dummy.m
       - Reachability.m:
           COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - Reachability-dummy.m
     - Frameworks: []
     Build Configurations:
     - Debug:
