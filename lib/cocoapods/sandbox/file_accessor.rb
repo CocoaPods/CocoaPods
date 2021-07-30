@@ -177,7 +177,7 @@ module Pod
       #
       def vendored_static_xcframeworks
         vendored_xcframeworks.select do |path|
-          Xcode::XCFramework.new(path).build_type == BuildType.static_framework
+          Xcode::XCFramework.new(spec.name, path).build_type == BuildType.static_framework
         end
       end
 
@@ -239,14 +239,17 @@ module Pod
         Pathname.glob(headers_dir + '**/' + GLOB_PATTERNS[:public_header_files])
       end
 
-      # @param [Pathname] framework
+      # @param [String] target_name
+      #         The target name this .xcframework belongs to
+      #
+      # @param [Pathname] framework_path
       #         The path to the .xcframework
       #
       # @return [Array<Pathname>] The paths to all the headers included in the
       #         vendored xcframework
       #
-      def self.vendored_xcframework_headers(framework)
-        xcframework = Xcode::XCFramework.new(framework)
+      def self.vendored_xcframework_headers(target_name, framework_path)
+        xcframework = Xcode::XCFramework.new(target_name, framework_path)
         xcframework.slices.flat_map do |slice|
           vendored_frameworks_headers(slice.path)
         end
@@ -260,7 +263,7 @@ module Pod
           self.class.vendored_frameworks_headers(framework)
         end.uniq
         paths.concat Array.new(vendored_xcframeworks.flat_map do |framework|
-          self.class.vendored_xcframework_headers(framework)
+          self.class.vendored_xcframework_headers(spec.name, framework)
         end)
         paths
       end

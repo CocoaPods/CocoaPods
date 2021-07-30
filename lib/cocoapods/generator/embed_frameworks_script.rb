@@ -159,8 +159,9 @@ code_sign_if_enabled() {
         end
         xcframeworks_by_config.each do |config, xcframeworks|
           xcframeworks.select { |xcf| xcf.build_type.dynamic_framework? }.each do |xcframework|
+            target_name = xcframework.target_name
             name = xcframework.name
-            contents_by_config[config] << %(  install_framework "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{name}/#{name}.framework"\n)
+            contents_by_config[config] << %(  install_framework "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{target_name}/#{name}.framework"\n)
           end
         end
         script << "\n" unless contents_by_config.empty?

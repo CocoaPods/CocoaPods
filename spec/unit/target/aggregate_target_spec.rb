@@ -49,7 +49,7 @@ module Pod
 
       it 'returns whether it has xcframeworks to embed' do
         @target.stubs(:xcframeworks_by_config).returns(
-          'DEBUG' => [Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))],
+          'DEBUG' => [Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))],
         )
         @target.includes_xcframeworks?.should.be.true
         @target.stubs(:xcframeworks_by_config).returns('DEBUG' => [], 'RELEASE' => [])

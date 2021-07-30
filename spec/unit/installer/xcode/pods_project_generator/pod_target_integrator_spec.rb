@@ -144,7 +144,7 @@ module Pod
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
                 @watermelon_pod_target.stubs(:resource_paths).returns('WatermelonLib' => resource_paths)
-                @watermelon_pod_target.stubs(:xcframeworks).returns('WatermelonLib' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                @watermelon_pod_target.stubs(:xcframeworks).returns('WatermelonLib' => [Pod::Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))])
                 test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
                                                               :shell_script_build_phases => [], :project => @project,
                                                               :name => 'WatermelonLib-Unit-Tests')
@@ -176,7 +176,7 @@ module Pod
                 resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
                 @watermelon_pod_target.stubs(:framework_paths).returns('WatermelonLib' => framework_paths)
                 @watermelon_pod_target.stubs(:resource_paths).returns('WatermelonLib' => resource_paths)
-                @watermelon_pod_target.stubs(:xcframeworks).returns('WatermelonLib' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                @watermelon_pod_target.stubs(:xcframeworks).returns('WatermelonLib' => [Pod::Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))])
                 test_native_target = stub('TestNativeTarget', :symbol_type => :unit_test_bundle, :build_phases => [],
                                                               :shell_script_build_phases => [], :project => @project,
                                                               :name => 'WatermelonLib-Unit-Tests')

@@ -221,6 +221,7 @@ module Pod
                             :spec => spec,
                            )
             xcframework = stub('xcframework',
+                               :target_name => 'PodTarget',
                                :name => 'VendoredXCFramework',
                                :build_type => BuildType.static_library,
                                :slices => [stub('slice', :binary_path => Pathname.new('/tmp/path/to/libVendoredXCFramework.a'))],
@@ -255,6 +256,7 @@ module Pod
                               :uses_swift? => false,
                               :build_product_path => 'BPP',
                               :product_basename => 'PodTarget',
+                              :label => 'PodTarget',
                               :target_definitions => [target_definition],
                               :root_spec => spec,
                              )

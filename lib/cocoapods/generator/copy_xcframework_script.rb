@@ -218,7 +218,7 @@ install_xcframework() {
       def install_xcframework_args(xcframework, slices)
         root = xcframework.path
         args = [shell_escape("${PODS_ROOT}/#{root.relative_path_from(sandbox_root)}")]
-        args << shell_escape(xcframework.name)
+        args << shell_escape(xcframework.target_name)
         is_framework = xcframework.build_type.framework?
         args << shell_escape(is_framework ? 'framework' : 'library')
         slices.each do |slice|
