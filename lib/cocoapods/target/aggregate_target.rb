@@ -225,6 +225,12 @@ module Pod
       !resource_paths_by_config.each_value.all?(&:empty?)
     end
 
+    # @return [Boolean] Whether the target contains any on demand resources
+    #
+    def includes_on_demand_resources?
+      !on_demand_resources.empty?
+    end
+
     # @return [Boolean] Whether the target contains frameworks to be embedded into
     #         the user target
     #
@@ -270,6 +276,20 @@ module Pod
           end
         end
         xcframeworks_by_config
+      end
+    end
+
+    # @return [Array<Pathname>] Uniqued On Demand Resources for this target.
+    #
+    # @note On Demand Resources are not separated by config as they are integrated directly into the users target via
+    # the resources build phase.
+    #
+    def on_demand_resources
+      @on_demand_resources ||= begin
+        pod_targets.flat_map do |pod_target|
+          library_file_accessors = pod_target.file_accessors.select { |fa| fa.spec.library_specification? }
+          library_file_accessors.flat_map { |fa| fa.on_demand_resources.values.flatten }
+        end.uniq
       end
     end
 

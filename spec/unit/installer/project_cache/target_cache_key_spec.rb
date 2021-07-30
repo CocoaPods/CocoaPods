@@ -32,6 +32,28 @@ module Pod
             library_resources = @banana_pod_target.resource_paths.values.flatten.sort_by(&:downcase)
             aggregate_target_cache_key.to_h['FILES'].should.equal(library_resources)
           end
+
+          it 'should output files for aggregate target if it has aggregate on demand resources' do
+            aggregate_target = AggregateTarget.new(config.sandbox, BuildType.static_library, { 'Debug' => :debug }, [], Platform.ios,
+                                                   fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
+                                                   nil, 'Debug' => [@banana_pod_target])
+            @banana_pod_target.stubs(:resource_paths).returns({})
+            @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns('tag1' => ['/path/to/resource'])
+            aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, aggregate_target)
+            library_on_demand_resources = @banana_pod_target.file_accessors.first.on_demand_resources.values.flatten.sort_by(&:downcase)
+            aggregate_target_cache_key.to_h['FILES'].should.equal(library_on_demand_resources)
+          end
+
+          it 'should output files for aggregate target if it has aggregate both aggregate resources and on demand resources' do
+            aggregate_target = AggregateTarget.new(config.sandbox, BuildType.static_library, { 'Debug' => :debug }, [], Platform.ios,
+                                                   fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
+                                                   nil, 'Debug' => [@banana_pod_target])
+            @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns('tag1' => ['/path/to/resource'])
+            aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, aggregate_target)
+            library_resources = @banana_pod_target.resource_paths.values.flatten.sort_by(&:downcase)
+            library_on_demand_resources = @banana_pod_target.file_accessors.first.on_demand_resources.values.flatten.sort_by(&:downcase)
+            aggregate_target_cache_key.to_h['FILES'].should.equal(library_resources + library_on_demand_resources)
+          end
         end
 
         describe 'key_difference with pod targets' do

@@ -15,9 +15,10 @@ module Pod
         target_definition = Podfile::TargetDefinition.new('Pods', nil)
         target_definition.abstract = false
         user_build_configurations = { 'Release' => :release, 'Debug' => :debug }
+        @banana_pod_target = fixture_pod_target('banana-lib/BananaLib.podspec')
         @pod_bundle = AggregateTarget.new(config.sandbox, BuildType.static_library, user_build_configurations, [],
                                           Platform.ios, target_definition, project_path.dirname, @project,
-                                          [@target.uuid], {})
+                                          [@target.uuid], 'Release' => [@banana_pod_target], 'Debug' => [@banana_pod_target])
         @pod_bundle.stubs(:resource_paths_by_config).returns('Release' => %w(${PODS_ROOT}/Lib/Resources/image.png))
         @pod_bundle.stubs(:framework_paths_by_config).returns('Release' => [Xcode::FrameworkPaths.new('${PODS_BUILD_DIR}/Lib/Lib.framework')])
         configuration = Xcodeproj::Config.new(
@@ -750,6 +751,57 @@ module Pod
             '[CP] Copy Pods Resources',
           ]
         end
+      end
+
+      it 'adds and remove on demand resources to the user target resources build phase' do
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(
+          'tag1' => [config.sandbox.root + 'banana-lib/path/to/resource.png'],
+        )
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings', 'resource.png']
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources').should.not.be.nil
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources/tag1').should.not.be.nil
+        @project['Pods']['BananaLib-OnDemandResources']['tag1'].files.map(&:display_name).should == ['resource.png']
+        @project.root_object.attributes['KnownAssetTags'].should == ['tag1']
+        # Now pretend target no longer specifies ODRs.
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns({})
+        @target_integrator.integrate!
+        target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings']
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources').should.be.nil
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources/tag1').should.be.nil
+        # Despite the fact we added this asset tag we can never guarantee it was added by CocoaPods so we can never
+        # delete any KnownAssetTags. We can let the user do this.
+        @project.root_object.attributes['KnownAssetTags'].should == ['tag1']
+      end
+
+      it 'removes stale on demand resource file references' do
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(
+          'tag1' => [config.sandbox.root + 'banana-lib/path/to/resource.png'],
+          'tag2' => [config.sandbox.root + 'banana-lib/path/to/resource2.png'],
+        )
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings', 'resource.png', 'resource2.png']
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources').should.not.be.nil
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources/tag1').should.not.be.nil
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources/tag2').should.not.be.nil
+        @project['Pods']['BananaLib-OnDemandResources']['tag1'].files.map(&:display_name).should == ['resource.png']
+        @project['Pods']['BananaLib-OnDemandResources']['tag2'].files.map(&:display_name).should == ['resource2.png']
+        @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2]
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(
+          'tag2' => [config.sandbox.root + 'banana-lib/path/to/resource2.png'],
+        )
+        @target_integrator.integrate!
+        target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings', 'resource2.png']
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources').should.not.be.nil
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources/tag1').should.be.nil
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources/tag2').should.not.be.nil
+        @project['Pods']['BananaLib-OnDemandResources']['tag2'].files.map(&:display_name).should == ['resource2.png']
+        @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources').should.not.be.nil
+        # Despite the fact we added this asset tag we can never guarantee it was added by CocoaPods so we can never
+        # delete any KnownAssetTags. We can let the user do this.
+        @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2]
       end
 
       describe 'Script paths' do

@@ -193,6 +193,24 @@ module Pod
         @accessor.resource_bundle_files.should == resource_paths
       end
 
+      it 'returns the paths of the files of the on demand resources' do
+        @spec_consumer.stubs(:on_demand_resources).returns('OnDemandResources' => 'Resources/*')
+        expected_on_demand_resources = {
+          'OnDemandResources' => [
+            @root + 'Resources/logo-sidebar.png',
+            @root + 'Resources/Base.lproj',
+            @root + 'Resources/de.lproj',
+            @root + 'Resources/en.lproj',
+            @root + 'Resources/Images.xcassets',
+            @root + 'Resources/Migration.xcmappingmodel',
+            @root + 'Resources/Sample.rcproject',
+            @root + 'Resources/Sample.xcdatamodeld',
+            @root + 'Resources/sub_dir',
+          ],
+        }
+        @accessor.on_demand_resources.should == expected_on_demand_resources
+      end
+
       it 'takes into account exclude_files when creating the resource bundles of the pod' do
         @spec_consumer.stubs(:exclude_files).returns(['**/*.png'])
         @spec_consumer.stubs(:resource_bundles).returns('BananaLib' => 'Resources/*')

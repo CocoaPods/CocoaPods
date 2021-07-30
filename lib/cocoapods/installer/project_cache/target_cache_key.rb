@@ -161,8 +161,8 @@ module Pod
           contents = {
             'BUILD_SETTINGS_CHECKSUM' => build_settings,
           }
-          if aggregate_target.includes_resources?
-            relative_file_paths = aggregate_target.resource_paths_by_config.values.flatten.uniq
+          if aggregate_target.includes_resources? || aggregate_target.includes_on_demand_resources?
+            relative_file_paths = aggregate_target.resource_paths_by_config.values.flatten.uniq + aggregate_target.on_demand_resources.map(&:to_s)
             contents['FILES'] = relative_file_paths.sort_by(&:downcase)
           end
           TargetCacheKey.new(sandbox, :aggregate, contents)

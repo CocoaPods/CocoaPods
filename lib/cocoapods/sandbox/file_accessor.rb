@@ -212,6 +212,7 @@ module Pod
           file_accessors.map(&:preserve_paths),
           file_accessors.map(&:readme),
           file_accessors.map(&:resources),
+          file_accessors.flat_map { |f| f.on_demand_resources.values.flatten },
           file_accessors.map(&:source_files),
           file_accessors.map(&:module_map),
         ]
@@ -323,6 +324,20 @@ module Pod
         resource_bundles.values.flatten
       end
 
+      # @return [Hash{String => Array<Pathname>}] The paths of the on demand resources specified
+      #         keyed by their tag.
+      #
+      def on_demand_resources
+        result = {}
+        spec_consumer.on_demand_resources.each do |tag_name, file_patterns|
+          paths = expanded_paths(file_patterns,
+                                 :exclude_patterns => spec_consumer.exclude_files,
+                                 :include_dirs => true)
+          result[tag_name] = paths
+        end
+        result
+      end
+
       # @return [Pathname] The of the prefix header file of the specification.
       #
       def prefix_header
@@ -331,7 +346,7 @@ module Pod
         end
       end
 
-      # @return [Pathname] The path of the auto-detected README file.
+      # @return [Pathname, nil] The path of the auto-detected README file.
       #
       def readme
         path_list.glob([GLOB_PATTERNS[:readme]]).first

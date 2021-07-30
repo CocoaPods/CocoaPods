@@ -252,6 +252,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support for integrating on demand resources.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [JunyiXie](https://github.com/JunyiXie)
+  [#9606](https://github.com/CocoaPods/CocoaPods/issues/9606)
+
 * Add the App Clip product symbol to the list of products that need embedding.  
   [Igor Makarov](https://github.com/igor-makarov)
   [#9882](https://github.com/CocoaPods/CocoaPods/pull/9882)

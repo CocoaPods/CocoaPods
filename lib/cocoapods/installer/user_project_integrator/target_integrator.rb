@@ -452,6 +452,7 @@ module Pod
             add_copy_resources_script_phase
             add_check_manifest_lock_script_phase
             add_user_script_phases
+            add_on_demand_resources
           end
         end
 
@@ -628,6 +629,71 @@ module Pod
             removed_phase_names.each do |phase_name|
               TargetIntegrator.remove_script_phase_from_target(native_target, phase_name)
             end
+          end
+        end
+
+        # Updates all user targets to include on demand resources specified by libraries. Note that currently,
+        # only app level targets are allowed to include on demand resources.
+        #
+        # @return [void]
+        #
+        def add_on_demand_resources
+          user_project = target.user_project
+
+          asset_tags_added = target.pod_targets.each_with_object(Set.new) do |pod_target, asset_tags|
+            target_odr_group_name = "#{pod_target.label}-OnDemandResources"
+            library_file_accessors = pod_target.file_accessors.select { |fa| fa.spec.library_specification? }
+
+            # Target no longer provides ODR references so remove everything related to this target.
+            if library_file_accessors.all? { |fa| fa.on_demand_resources.empty? }
+              old_target_odr_group = user_project.main_group.find_subpath("Pods/#{target_odr_group_name}")
+              old_odr_file_refs = old_target_odr_group&.recursive_children_groups&.each_with_object({}) do |group, hash|
+                hash[group.name] = group.files
+              end || {}
+              target.user_targets.each do |user_target|
+                user_target.remove_on_demand_resources(old_odr_file_refs)
+              end
+              old_target_odr_group&.remove_from_project
+              next
+            end
+
+            target_odr_group = user_project['Pods'][target_odr_group_name] || user_project['Pods'].new_group(target_odr_group_name)
+            current_file_refs = target_odr_group.recursive_children_groups.flat_map(&:files)
+
+            added_file_refs = library_file_accessors.flat_map do |file_accessor|
+              target_odr_files_refs = Hash[file_accessor.on_demand_resources.map do |tag, resources|
+                tag_group = target_odr_group[tag] || target_odr_group.new_group(tag)
+                asset_tags << tag
+                resources_file_refs = resources.map do |resource|
+                  odr_resource_file_ref = Pathname.new(resource).relative_path_from(target.sandbox.root)
+                  tag_group.find_file_by_path(odr_resource_file_ref.to_s) || tag_group.new_file(odr_resource_file_ref)
+                end
+                [tag, resources_file_refs]
+              end]
+              target.user_targets.each do |user_target|
+                user_target.add_on_demand_resources(target_odr_files_refs)
+              end
+              target_odr_files_refs.values.flatten
+            end
+
+            # if the target ODR file references were updated, make sure we remove the ones that are no longer present
+            # for the target.
+            remaining_refs = current_file_refs - added_file_refs
+            unless remaining_refs.empty?
+              remaining_refs.each do |ref|
+                target.user_targets.each do |user_target|
+                  user_target.resources_build_phase.remove_file_reference(ref)
+                end
+                ref.remove_from_project
+              end
+              target_odr_group.recursive_children_groups.each { |g| g.remove_from_project if g.empty? }
+            end
+          end
+
+          unless asset_tags_added.empty?
+            attributes = user_project.root_object.attributes
+            attributes['KnownAssetTags'] = (attributes['KnownAssetTags'] ||= []) | asset_tags_added.to_a
+            target.user_project.root_object.attributes = attributes
           end
         end
 

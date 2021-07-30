@@ -119,7 +119,7 @@ PATH
       molinillo (~> 0.7.0)
       nap (~> 1.0)
       ruby-macho (>= 1.0, < 3.0)
-      xcodeproj (>= 1.19.0, < 2.0)
+      xcodeproj (>= 1.20.0, < 2.0)
 
 GEM
   remote: https://rubygems.org/
