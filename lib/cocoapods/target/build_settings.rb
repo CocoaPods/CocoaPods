@@ -140,12 +140,12 @@ module Pod
       end
       private_class_method :define_build_settings_method
 
-      # @param [XCFramework] xcframework the xcframework thats slice will be copied to the intermediates dir
+      # @param [XCFramework] xcframework the xcframework slice that will be copied to the intermediates dir
       #
       # @return [String] the path to the directory containing the xcframework slice
       #
       def self.xcframework_intermediate_dir(xcframework)
-        "#{XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{xcframework.name}"
+        "#{XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{xcframework.target_name}"
       end
 
       class << self
@@ -508,12 +508,14 @@ module Pod
         pod_targets - subset_targets
       end
 
+      # @param  [String] target_name the name of the target this xcframework belongs to
+      #
       # @param  [Pathname,String] path the path to the xcframework bundle
       #
       # @return [Xcode::XCFramework] the xcframework at the given path
       #
-      def load_xcframework(path)
-        Xcode::XCFramework.new(path)
+      def load_xcframework(target_name, path)
+        Xcode::XCFramework.new(target_name, path)
       end
 
       # A subclass that generates build settings for a {PodTarget}
@@ -735,7 +737,7 @@ module Pod
 
         # @return [Array<Xcode::XCFramework>]
         define_build_settings_method :vendored_xcframeworks, :memoized => true do
-          file_accessors.flat_map(&:vendored_xcframeworks).map { |path| load_xcframework(path) }
+          file_accessors.flat_map(&:vendored_xcframeworks).map { |path| load_xcframework(target.label, path) }
         end
 
         # @return [Array<String>]

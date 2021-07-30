@@ -7,9 +7,10 @@ module Pod
       describe 'when parsing `Info.plist`' do
         before do
           @framework_path = fixture('CoconutLib.xcframework')
-          @framework = XCFramework.new(@framework_path)
+          @framework = XCFramework.new('CoconutLib', @framework_path)
         end
 
+        # shit
         it 'reads the format version' do
           @framework.format_version.should == Pod::Version.new('1.0')
         end
@@ -85,7 +86,7 @@ module Pod
         describe 'library packaging' do
           before do
             @framework_path = fixture('xcframeworks/StaticLibrary/CoconutLib.xcframework')
-            @framework = XCFramework.new(@framework_path)
+            @framework = XCFramework.new('CoconutLib', @framework_path)
           end
 
           it 'reads the library slices' do

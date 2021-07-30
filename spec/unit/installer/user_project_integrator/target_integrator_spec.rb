@@ -815,7 +815,7 @@ module Pod
             Xcode::FrameworkPaths.new('${BUILT_PRODUCTS_DIR}/ReleaseCompiledFramework/CompiledFramework.framework'),
           ]
           xcframeworks = [
-            Xcode::XCFramework.new(fixture('CoconutLib.xcframework')),
+            Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework')),
           ]
           xcframeworks[0].stubs(:build_type).returns(BuildType.dynamic_framework)
           TargetIntegrator.embed_frameworks_output_paths(paths, xcframeworks).sort.should == %w(
@@ -827,7 +827,7 @@ module Pod
 
         it 'does not include static xcframeworks in the embed frameworks output paths' do
           xcframeworks = [
-            Xcode::XCFramework.new(fixture('CoconutLib.xcframework')),
+            Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework')),
           ]
           xcframeworks[0].stubs(:build_type).returns(BuildType.static_framework)
           TargetIntegrator.embed_frameworks_output_paths([], xcframeworks).should == []

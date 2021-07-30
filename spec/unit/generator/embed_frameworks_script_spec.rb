@@ -54,12 +54,23 @@ module Pod
     end
 
     it 'installs intermediate XCFramework slices' do
-      xcframework = Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+      xcframework = Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))
       generator = Pod::Generator::EmbedFrameworksScript.new({}, 'Debug' => [xcframework])
       result = generator.send(:script)
       result.should.include <<-SH.strip_heredoc
         if [[ "$CONFIGURATION" == "Debug" ]]; then
           install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/CoconutLib/CoconutLib.framework"
+        fi
+      SH
+    end
+
+    it 'installs intermediate XCFramework slices based on the correct target name and framework name' do
+      xcframework = Xcode::XCFramework.new('SomeLib', fixture('CoconutLib.xcframework'))
+      generator = Pod::Generator::EmbedFrameworksScript.new({}, 'Debug' => [xcframework])
+      result = generator.send(:script)
+      result.should.include <<-SH.strip_heredoc
+        if [[ "$CONFIGURATION" == "Debug" ]]; then
+          install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SomeLib/CoconutLib.framework"
         fi
       SH
     end

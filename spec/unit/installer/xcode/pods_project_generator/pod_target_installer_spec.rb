@@ -1854,14 +1854,14 @@ module Pod
 
             describe 'xcframeworks' do
               it 'raises if a vendored xcframework has slices of mixed linkage' do
-                @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))])
                 Pod::Xcode::LinkageAnalyzer.stubs(:dynamic_binary?).returns(true, false, true, false, true, false, true)
                 e = ->() { @installer.install! }.should.raise Informative
                 e.message.should.include? 'Unable to install vendored xcframework `CoconutLib` for Pod `BananaLib`, because it contains both static and dynamic frameworks.'
               end
 
               it 'raises if a vendored xcframework is empty' do
-                xcframework = Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))
+                xcframework = Pod::Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))
                 xcframework.stubs(:slices).returns([])
                 @pod_target.stubs(:xcframeworks).returns('Debug' => [xcframework])
                 e = ->() { @installer.install! }.should.raise Informative
@@ -1893,7 +1893,7 @@ module Pod
               end
 
               it 'creates the copy xcframeworks script phase if needed' do
-                @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new(fixture('CoconutLib.xcframework'))])
+                @pod_target.stubs(:xcframeworks).returns('Debug' => [Pod::Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))])
                 @installer.expects(:create_copy_xcframeworks_script).once
                 @installer.install!
               end
