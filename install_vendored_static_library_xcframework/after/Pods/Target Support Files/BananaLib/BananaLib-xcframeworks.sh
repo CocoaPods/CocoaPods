@@ -149,5 +149,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "CoconutLib" "library" "ios-arm64" "ios-x86_64-maccatalyst" "ios-arm64_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "BananaLib" "library" "ios-arm64" "ios-x86_64-maccatalyst" "ios-arm64_x86_64-simulator"
 
