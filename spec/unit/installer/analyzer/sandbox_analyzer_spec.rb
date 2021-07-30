@@ -86,7 +86,10 @@ module Pod
       end
 
       it 'considers a changed Pod whose dependency is changed' do
-        @analyzer.stubs(:sandbox_dependency).returns(['BananaLib (from `https://github.com/grafiszti/bananalib.git`)'])
+        dep1 = Dependency.new('BananaLib', :git => 'https://github.com/grafiszti/bananalib.git')
+        dep2 = Dependency.new('BananaLib')
+        @analyzer.stubs(:sandbox_dependency).returns(dep1)
+        @analyzer.stubs(:podfile_dependency).returns(dep2)
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
     end

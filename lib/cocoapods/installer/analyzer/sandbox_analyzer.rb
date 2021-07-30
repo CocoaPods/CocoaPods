@@ -230,26 +230,24 @@ module Pod
           sandbox_manifest.checksum(pod)
         end
 
-        # @return [Dependency] The dependency with the given name stored in the sandbox.
+        # @return [Dependency, nil] The dependency with the given name stored in the sandbox.
         #
         # @param  [String] pod
         #         the name of the Pod.
         #
         def sandbox_dependency(pod)
-          sandbox_manifest.dependencies.each { |d| return d if d.name == pod }
-          return nil
+          sandbox_manifest.dependencies.find { |d| d.name == pod }
         end
 
         #--------------------------------------#
 
-        # @return [Dependency] The dependency with the given name from the podfile.
+        # @return [Dependency, nil] The dependency with the given name from the podfile.
         #
         # @param  [String] pod
         #         the name of the Pod.
         #
         def podfile_dependency(pod)
-          @podfile.dependencies.each { |d| return d if d.name == pod }
-          return nil
+          podfile.dependencies.find { |d| d.name == pod }
         end
 
         #--------------------------------------#
