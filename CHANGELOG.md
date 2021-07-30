@@ -80,6 +80,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Update pod in Pods folder when changing the pod from branch to version in Podfie.  
+  [gonghonglou](https://github.com/gonghonglou)
+  [#10764](https://github.com/CocoaPods/CocoaPods/pull/10764)
+
 * Bump addressable dependency to 2.8.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10802](https://github.com/CocoaPods/CocoaPods/issues/10802)

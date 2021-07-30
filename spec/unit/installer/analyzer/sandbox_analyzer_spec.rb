@@ -7,10 +7,11 @@ module Pod
     before do
       @spec = fixture_spec('banana-lib/BananaLib.podspec')
       @sandbox = config.sandbox
+      @podfile = Pod::Podfile.new
       lockfile_hash = { 'PODS' => ['BananaLib (1.0)'] }
       @manifest = Pod::Lockfile.new(lockfile_hash)
       @sandbox.stubs(:manifest).returns(@manifest)
-      @analyzer = Installer::Analyzer::SandboxAnalyzer.new(@sandbox, [@spec], false)
+      @analyzer = Installer::Analyzer::SandboxAnalyzer.new(@sandbox, @podfile, [@spec], false)
     end
 
     #-------------------------------------------------------------------------#
@@ -81,6 +82,11 @@ module Pod
 
       it 'considers a changed Pod which has been pre-downloaded' do
         @sandbox.stubs(:predownloaded?).returns(true)
+        @analyzer.send(:pod_changed?, 'BananaLib').should == true
+      end
+
+      it 'considers a changed Pod whose dependency is changed' do
+        @analyzer.stubs(:sandbox_dependency).returns(['BananaLib (from `https://github.com/grafiszti/bananalib.git`)'])
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
     end

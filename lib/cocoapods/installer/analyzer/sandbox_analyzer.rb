@@ -31,6 +31,10 @@ module Pod
         #
         attr_reader :sandbox
 
+        # @return [Podfile] The Podfile to analyze dependencies.
+        #
+        attr_reader :podfile
+
         # @return [Array<Specifications>] The specifications returned by the
         #         resolver.
         #
@@ -45,11 +49,13 @@ module Pod
         # Init a new SandboxAnalyzer
         #
         # @param [Sandbox] sandbox @see sandbox
+        # @param [Podfile] podfile @see podfile
         # @param [Array<Specifications>] specs @see specs
         # @param [Bool] update_mode @see update_mode
         #
-        def initialize(sandbox, specs, update_mode)
+        def initialize(sandbox, podfile, specs, update_mode)
           @sandbox = sandbox
+          @podfile = podfile
           @specs = specs
           @update_mode = update_mode
         end
@@ -139,6 +145,7 @@ module Pod
           return true if spec.version != sandbox_version(pod)
           return true if spec.checksum != sandbox_checksum(pod)
           return true if resolved_spec_names(pod) != sandbox_spec_names(pod)
+          return true if podfile_dependency(pod) != sandbox_dependency(pod)
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
           false
@@ -221,6 +228,28 @@ module Pod
         #
         def sandbox_checksum(pod)
           sandbox_manifest.checksum(pod)
+        end
+
+        # @return [Dependency] The dependency with the given name stored in the sandbox.
+        #
+        # @param  [String] pod
+        #         the name of the Pod.
+        #
+        def sandbox_dependency(pod)
+          sandbox_manifest.dependencies.each { |d| return d if d.name == pod }
+          return nil
+        end
+
+        #--------------------------------------#
+
+        # @return [Dependency] The dependency with the given name from the podfile.
+        #
+        # @param  [String] pod
+        #         the name of the Pod.
+        #
+        def podfile_dependency(pod)
+          @podfile.dependencies.each { |d| return d if d.name == pod }
+          return nil
         end
 
         #--------------------------------------#
