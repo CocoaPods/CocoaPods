@@ -10,7 +10,6 @@ module Pod
           @framework = XCFramework.new('CoconutLib', @framework_path)
         end
 
-        # shit
         it 'reads the format version' do
           @framework.format_version.should == Pod::Version.new('1.0')
         end
