@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Integrate `project_header_files` specified by specs.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#9820](https://github.com/CocoaPods/CocoaPods/issues/9820)
+
 * Mark RealityComposer-projects (`.rcproject`) files defined in resources for compilation.  
   [Hendrik von Prince](https://github.com/parallaxe)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
