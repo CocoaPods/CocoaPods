@@ -80,6 +80,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Remove unused `install_xcframework_library` code.  
+  [Gio Lodi](https://github.com/mokagio)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10831](https://github.com/CocoaPods/CocoaPods/pull/10831)
+
 * Validate vendored library names after they have been expanded.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10832](https://github.com/CocoaPods/CocoaPods/pull/10832)
