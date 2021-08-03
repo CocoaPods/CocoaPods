@@ -329,6 +329,7 @@ module Pod
 
               headers = file_accessor.headers
               public_headers = file_accessor.public_headers.map(&:realpath)
+              project_headers = file_accessor.project_headers.map(&:realpath)
               private_headers = file_accessor.private_headers.map(&:realpath)
               other_source_files = file_accessor.other_source_files
 
@@ -351,7 +352,7 @@ module Pod
 
               header_file_refs = project_file_references_array(headers, 'header')
               native_target.add_file_references(header_file_refs) do |build_file|
-                add_header(file_accessor, build_file, public_headers, private_headers, native_target)
+                add_header(file_accessor, build_file, public_headers, project_headers, private_headers, native_target)
               end
 
               other_file_refs = project_file_references_array(other_source_files, 'other source')
@@ -1032,12 +1033,14 @@ module Pod
                                                    end
           end
 
-          def add_header(file_accessor, build_file, public_headers, private_headers, native_target)
+          def add_header(file_accessor, build_file, public_headers, project_headers, private_headers, native_target)
             file_ref = build_file.file_ref
             acl = if !target.build_as_framework? # Headers are already rooted at ${PODS_ROOT}/Headers/P*/[pod]/...
                     'Project'
                   elsif public_headers.include?(file_ref.real_path)
                     'Public'
+                  elsif project_headers.include?(file_ref.real_path)
+                    'Project'
                   elsif private_headers.include?(file_ref.real_path)
                     'Private'
                   else

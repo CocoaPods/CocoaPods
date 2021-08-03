@@ -778,7 +778,7 @@ module Pod
 
     FILE_PATTERNS = %i(source_files resources preserve_paths vendored_libraries
                        vendored_frameworks public_header_files preserve_paths
-                       private_header_files resource_bundles).freeze
+                       project_header_files private_header_files resource_bundles).freeze
 
     # It checks that every file pattern specified in a spec yields
     # at least one file. It requires the pods to be already present
@@ -823,6 +823,11 @@ module Pod
         end
       end
       validate_nonempty_patterns(:vendored_libraries, :warning)
+    end
+
+    def _validate_project_header_files
+      _validate_header_files(:project_header_files)
+      validate_nonempty_patterns(:project_header_files, :warning)
     end
 
     def _validate_private_header_files

@@ -128,6 +128,7 @@ module Pod
       #
       def public_headers(include_frameworks = false)
         public_headers = public_header_files
+        project_headers = project_header_files
         private_headers = private_header_files
         if public_headers.nil? || public_headers.empty?
           header_files = headers
@@ -135,7 +136,13 @@ module Pod
           header_files = public_headers
         end
         header_files += vendored_frameworks_headers if include_frameworks
-        header_files - private_headers
+        header_files - project_headers - private_headers
+      end
+
+      # @return [Array<Pathname>] The project headers of the specification.
+      #
+      def project_headers
+        project_header_files
       end
 
       # @return [Array<Pathname>] The private headers of the specification.
@@ -431,7 +438,14 @@ module Pod
         paths_for_attribute(:public_header_files)
       end
 
-      # @return [Array<Pathname>] The paths of the user-specified public header
+      # @return [Array<Pathname>] The paths of the user-specified project header
+      #         files.
+      #
+      def project_header_files
+        paths_for_attribute(:project_header_files)
+      end
+
+      # @return [Array<Pathname>] The paths of the user-specified private header
       #         files.
       #
       def private_header_files
