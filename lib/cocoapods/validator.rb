@@ -814,6 +814,17 @@ module Pod
       add_result(message_type, 'file patterns', "The `#{attr_name}` pattern did not match any file.")
     end
 
+    def _validate_vendored_libraries
+      file_accessor.vendored_libraries.each do |lib|
+        basename = File.basename(lib)
+        lib_name = basename.downcase
+        unless lib_name.end_with?('.a') && lib_name.start_with?('lib')
+          warning('vendored_libraries', "`#{basename}` does not match the expected static library name format `lib[name].a`")
+        end
+      end
+      validate_nonempty_patterns(:vendored_libraries, :warning)
+    end
+
     def _validate_private_header_files
       _validate_header_files(:private_header_files)
       validate_nonempty_patterns(:private_header_files, :warning)

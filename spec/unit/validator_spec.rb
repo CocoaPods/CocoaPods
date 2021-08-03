@@ -1313,8 +1313,25 @@ module Pod
         validator.stubs(:validate_url)
         validator.validate
 
-        validator.results.map(&:to_s).first.should.match /Dynamic frameworks.*iOS 8.0 and onwards/
+        validator.results.count.should == 2
+        validator.results.map(&:to_s)[0].should.match /`empty\.dylib` does not match the expected static library name format/
+        validator.results.map(&:to_s)[1].should.match /Dynamic frameworks.*iOS 8.0 and onwards/
         validator.result_type.should == :error
+      end
+
+      it 'uses the expanded paths of the vendored libraries to validate them' do
+        podspec = stub_podspec(/.*source_files.*/, "  \"source_files\": \"JSONKit.*\",\n  \"vendored_libraries\": \"**/*.a\",")
+        file = write_podspec(podspec)
+
+        Pod::Sandbox::FileAccessor.any_instance.stubs(:vendored_libraries).returns([fixture('monkey/monkey.a'), fixture('banana-lib/libBananaStaticLib.a')])
+        validator = Validator.new(file, config.sources_manager.master.map(&:url))
+        validator.stubs(:build_pod)
+        validator.stubs(:validate_url)
+        validator.validate
+
+        validator.results.count.should == 1
+        validator.results.map(&:to_s).first.should.match /`monkey\.a` does not match the expected static library name format/
+        validator.result_type.should == :warning
       end
     end
 
