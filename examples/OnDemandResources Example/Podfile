@@ -2,9 +2,10 @@
 # platform :ios, '9.0'
 
 target 'OnDemandResourcesDemo' do
+  platform :ios, '13.2'
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-    pod 'TestLibrary', :path  => './TestLibrary'
+    pod 'TestLibrary', :path  => './TestLibrary', :appspecs => ['App1', 'App2'], :testspecs => ['Tests']
 
   # Pods for OnDemandResourcesDemo
 

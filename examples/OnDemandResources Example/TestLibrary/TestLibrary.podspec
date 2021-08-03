@@ -28,10 +28,12 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/lizhuoli1126@126.com/TestLibrary.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
+
+  s.swift_version = '4'
 
   s.source_files = 'TestLibrary/Classes/**/*'
-  
+
   s.on_demand_resources = {
     't1' => ['on_demand_bundle1/*'],
     't2' => ['on_demand_bundle2/*']
@@ -41,5 +43,31 @@ TODO: Add long description of the pod here.
     'DEFINES_MODULE' => 'YES'
   }
 
+  s.app_spec 'App1' do |app_spec|
+    app_spec.source_files = 'App1/Classes/**/*'
 
+    app_spec.on_demand_resources = {
+      'a1' => ['App1/app1_on_demand_bundle1/*']
+    }
+  end
+
+  s.app_spec 'App2' do |app_spec|
+    app_spec.source_files = 'App2/Classes/**/*'
+
+    app_spec.on_demand_resources = {
+      'a2' => ['App2/app2_on_demand_bundle1/*']
+    }
+  end
+
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'Tests/Classes/**/*'
+
+    test_spec.app_host_name = 'TestLibrary/App1'
+    test_spec.requires_app_host = true
+    test_spec.dependency 'TestLibrary/App1'
+
+    test_spec.on_demand_resources = {
+      'test1' => ['Tests/test_on_demand_bundle/*']
+    }
+  end
 end

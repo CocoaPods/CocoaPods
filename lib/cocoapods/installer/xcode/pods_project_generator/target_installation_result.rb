@@ -79,12 +79,12 @@ module Pod
           # @param  [Specification] spec
           #         The specification to base from in order to find the native target.
           #
-          # @return [PBXNativeTarget] the native target to use or `nil` if none is found.
+          # @return [PBXNativeTarget, Nil] the native target to use or `nil` if none is found.
           #
           def native_target_for_spec(spec)
             return native_target if spec.library_specification?
             return test_native_target_from_spec(spec) if spec.test_specification?
-            return app_native_target_from_spec(spec) if spec.app_specification?
+            app_native_target_from_spec(spec) if spec.app_specification?
           end
 
           # @return [Hash{PBXNativeTarget => Specification}] a hash where the keys are the test native targets and the value

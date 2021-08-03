@@ -8,6 +8,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Add support for integrating on demand resources.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [JunyiXie](https://github.com/JunyiXie)
+  [#9606](https://github.com/CocoaPods/CocoaPods/issues/9606)
+  [#10845](https://github.com/CocoaPods/CocoaPods/pull/10845)
+
 * Integrate `project_header_files` specified by specs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9820](https://github.com/CocoaPods/CocoaPods/issues/9820)
@@ -276,11 +282,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#9821](https://github.com/CocoaPods/CocoaPods/issues/9821)
 
 ##### Enhancements
-
-* Add support for integrating on demand resources.  
-  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [JunyiXie](https://github.com/JunyiXie)
-  [#9606](https://github.com/CocoaPods/CocoaPods/issues/9606)
 
 * Add the App Clip product symbol to the list of products that need embedding.  
   [Igor Makarov](https://github.com/igor-makarov)
