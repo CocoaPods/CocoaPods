@@ -134,20 +134,26 @@ module Pod
               spec_paths_to_include << spec.name if dependent_target == target
               dependent_target.framework_paths.values_at(*spec_paths_to_include).flatten.compact
             end.uniq
+            xcframework_paths = dependent_targets.flat_map do |dependent_target|
+              spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include -= host_target_spec_names
+              spec_paths_to_include << spec.name if dependent_target == target
+              dependent_target.xcframeworks.values_at(*spec_paths_to_include).flatten.compact
+            end.uniq
 
-            if use_input_output_paths? && !framework_paths.empty?
+            if use_input_output_paths? && !framework_paths.empty? || !xcframework_paths.empty?
               input_file_list_path = target.embed_frameworks_script_input_files_path_for_spec(spec)
               input_file_list_relative_path = "${PODS_ROOT}/#{input_file_list_path.relative_path_from(target.sandbox.root)}"
               input_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(input_file_list_path, input_file_list_relative_path)
-              input_paths_by_config[input_paths_key] = [script_path] + UserProjectIntegrator::TargetIntegrator.embed_frameworks_input_paths(framework_paths, [])
+              input_paths_by_config[input_paths_key] = [script_path] + UserProjectIntegrator::TargetIntegrator.embed_frameworks_input_paths(framework_paths, xcframework_paths)
 
               output_file_list_path = target.embed_frameworks_script_output_files_path_for_spec(spec)
               output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
               output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
-              output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.embed_frameworks_output_paths(framework_paths, [])
+              output_paths_by_config[output_paths_key] = UserProjectIntegrator::TargetIntegrator.embed_frameworks_output_paths(framework_paths, xcframework_paths)
             end
 
-            if framework_paths.empty?
+            if framework_paths.empty? && xcframework_paths.empty?
               UserProjectIntegrator::TargetIntegrator.remove_embed_frameworks_script_phase_from_target(native_target)
             else
               UserProjectIntegrator::TargetIntegrator.create_or_update_embed_frameworks_script_phase_to_target(
