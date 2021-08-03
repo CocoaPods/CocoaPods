@@ -394,10 +394,10 @@ module Pod
 
           # Returns the framework input paths for the given framework paths
           #
-          # @param  [Hash<Array<Xcode::FrameworkPaths>>] framework_paths
+          # @param  [Array<Xcode::FrameworkPaths>] framework_paths
           #         The target's framework paths to map to input paths.
           #
-          # @param  [Hash<Array<XCFramework>>] xcframeworks
+          # @param  [Array<XCFramework>] xcframeworks
           #         The target's xcframeworks to map to input paths.
           #
           # @return [Array<String>] The embed frameworks script input paths

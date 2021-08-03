@@ -80,6 +80,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix adding embed frameworks script phase to unit test targets if xcframeworks are present.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10652](https://github.com/CocoaPods/CocoaPods/issues/10652)
+
 * Remove unused `install_xcframework_library` code.  
   [Gio Lodi](https://github.com/mokagio)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
