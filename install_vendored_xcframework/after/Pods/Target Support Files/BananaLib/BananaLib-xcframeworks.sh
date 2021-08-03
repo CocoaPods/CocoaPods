@@ -107,22 +107,6 @@ install_framework()
   echo "Copied $source to $destination"
 }
 
-install_xcframework_library() {
-  local basepath="$1"
-  local name="$2"
-  local paths=("$@")
-
-  # Locate the correct slice of the .xcframework for the current architectures
-  select_slice "${paths[@]}"
-  local target_path="$SELECT_SLICE_RETVAL"
-  if [[ -z "$target_path" ]]; then
-    echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
-    return
-  fi
-
-  install_framework "$basepath/$target_path" "$name"
-}
-
 install_xcframework() {
   local basepath="$1"
   local name="$2"
