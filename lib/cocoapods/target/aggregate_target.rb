@@ -312,7 +312,9 @@ module Pod
                 extname = File.extname(resource_path)
                 if self.class.resource_extension_compilable?(extname)
                   output_extname = self.class.output_extension_for_resource(extname)
-                  built_product_dir.join(File.basename(resource_path)).sub_ext(output_extname).to_s
+                  output_path_components = Pathname(resource_path).each_filename.select { |component| File.extname(component) == '.lproj' }
+                  output_path_components << File.basename(resource_path)
+                  built_product_dir.join(*output_path_components).sub_ext(output_extname).to_s
                 else
                   resource_path
                 end
