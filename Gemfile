@@ -48,7 +48,7 @@ group :development do
 
   # Integration tests
   gem 'diffy'
-  gem 'clintegracon'
+  gem 'clintegracon', git: 'https://github.com/mrackwitz/CLIntegracon.git'
 
   # Code Quality
   gem 'inch_by_inch'
