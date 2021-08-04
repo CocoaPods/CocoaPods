@@ -189,7 +189,7 @@ module Pod
               output_file_list_relative_path = "${PODS_ROOT}/#{output_file_list_path.relative_path_from(target.sandbox.root)}"
               output_paths_key = UserProjectIntegrator::TargetIntegrator::XCFileListConfigKey.new(output_file_list_path, output_file_list_relative_path)
               output_paths_by_config[output_paths_key] = xcframeworks.map do |xcf|
-                "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{xcf.target_name}"
+                "#{Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/#{xcf.target_name}/#{xcf.name}.framework"
               end
             end
 

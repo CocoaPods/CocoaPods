@@ -443,7 +443,7 @@ module Pod
       @xcframeworks ||= begin
         file_accessors.each_with_object({}) do |file_accessor, hash|
           frameworks = file_accessor.vendored_xcframeworks.map do |framework_path|
-            Xcode::XCFramework.new(label, framework_path)
+            Xcode::XCFramework.new(file_accessor.spec.name, framework_path)
           end
           hash[file_accessor.spec.name] = frameworks
         end
