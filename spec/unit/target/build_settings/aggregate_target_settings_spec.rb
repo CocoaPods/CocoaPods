@@ -205,7 +205,7 @@ module Pod
             end
           end
 
-          it 'does not links the pod targets with the aggregate target for non-whitelisted configuration' do
+          it 'does not link the pod targets with the aggregate target for non-whitelisted configuration' do
             @generator = AggregateTargetSettings.new(@target, 'Debug', :configuration => :debug)
             @xcconfig = @generator.dup.generate
             @xcconfig.to_hash['OTHER_LDFLAGS'].should.be.nil
@@ -213,7 +213,7 @@ module Pod
 
           it 'does propagate framework or libraries from a non test specification to an aggregate target' do
             target_definition = stub('target_definition', :inheritance => 'complete', :abstract? => false, :podfile => Podfile.new, :platform => Platform.ios)
-            spec = stub('spec', :library_specification? => true, :spec_type => :library)
+            spec = stub('spec', :library_specification? => true, :spec_type => :library, :name => 'Spec')
             consumer = stub('consumer',
                             :libraries => ['xml2'],
                             :frameworks => ['XCTest'],

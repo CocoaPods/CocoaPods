@@ -737,7 +737,9 @@ module Pod
 
         # @return [Array<Xcode::XCFramework>]
         define_build_settings_method :vendored_xcframeworks, :memoized => true do
-          file_accessors.flat_map(&:vendored_xcframeworks).map { |path| load_xcframework(target.label, path) }
+          file_accessors.flat_map do |file_accessor|
+            file_accessor.vendored_xcframeworks.map { |path| load_xcframework(file_accessor.spec.name, path) }
+          end
         end
 
         # @return [Array<String>]
