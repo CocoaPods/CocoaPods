@@ -34,6 +34,7 @@ module Pod
               target_installation_result.non_library_specs_by_native_target.each do |native_target, spec|
                 add_embed_frameworks_script_phase(native_target, spec)
                 add_copy_resources_script_phase(native_target, spec)
+                add_on_demand_resources(native_target, spec) if spec.app_specification?
                 UserProjectIntegrator::TargetIntegrator.create_or_update_user_script_phases(script_phases_for_specs(spec), native_target)
               end
               add_copy_dsyms_script_phase(target_installation_result.native_target)
@@ -205,7 +206,7 @@ module Pod
           # vendored dSYMs.
           #
           # @param [PBXNativeTarget] native_target
-          #         the native target for which to add the the copy dSYM files build phase.
+          #         the native target for which to add the copy dSYM files build phase.
           #
           # @return [void]
           #
@@ -246,6 +247,41 @@ module Pod
             end
 
             UserProjectIntegrator::TargetIntegrator.set_input_output_paths(phase, input_paths_by_config, output_paths_by_config)
+          end
+
+          # Adds the ODRs that are related to this app spec. This includes the app spec dependencies as well as the ODRs
+          # coming from the app spec itself.
+          #
+          # @param [Xcodeproj::PBXNativeTarget] native_target
+          #         the native target for which to add the ODR file references into.
+          #
+          # @param [Specification] app_spec
+          #         the app spec to integrate ODRs for.
+          #
+          # @return [void]
+          #
+          def add_on_demand_resources(native_target, app_spec)
+            dependent_targets = target.dependent_targets_for_app_spec(app_spec)
+            parent_odr_group = native_target.project.group_for_spec(app_spec.name)
+
+            # Add ODRs of the app spec dependencies first.
+            dependent_targets.each do |pod_target|
+              file_accessors = pod_target.file_accessors.select do |fa|
+                fa.spec.library_specification? ||
+                  fa.spec.test_specification? && pod_target.test_app_hosts_by_spec[fa.spec]&.first == app_spec
+              end
+              target_odr_group_name = "#{pod_target.label}-OnDemandResources"
+              UserProjectIntegrator::TargetIntegrator.add_on_demand_resources(target.sandbox, native_target.project,
+                                                                              native_target, file_accessors,
+                                                                              parent_odr_group, target_odr_group_name)
+            end
+
+            # Now add the ODRs of our own app spec declaration.
+            file_accessor = target.file_accessors.find { |fa| fa.spec == app_spec }
+            target_odr_group_name = "#{target.subspec_label(app_spec)}-OnDemandResources"
+            UserProjectIntegrator::TargetIntegrator.add_on_demand_resources(target.sandbox, native_target.project,
+                                                                            native_target, file_accessor,
+                                                                            parent_odr_group, target_odr_group_name)
           end
 
           # @return [String] the message that should be displayed for the target

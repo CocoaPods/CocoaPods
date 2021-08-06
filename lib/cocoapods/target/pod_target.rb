@@ -311,7 +311,7 @@ module Pod
       test_specs.map { |test_spec| test_spec.consumer(platform) }
     end
 
-    # @return [Array<Specification::Consumer>] the test specification consumers for
+    # @return [Array<Specification::Consumer>] the app specification consumers for
     #         the target.
     #
     def app_spec_consumers
@@ -394,7 +394,7 @@ module Pod
       !test_specs.empty?
     end
 
-    # @return [Boolean] Whether the target has any tests specifications.
+    # @return [Boolean] Whether the target has any app specifications.
     #
     def contains_app_specifications?
       !app_specs.empty?
