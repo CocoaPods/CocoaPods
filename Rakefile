@@ -207,8 +207,8 @@ begin
       task :rebuild => :check_for_pending_changes do
         tarballs.each do |tarball|
           basename = File.basename(tarball)
-          untarred_path = File.join(File.dirname(tarball), basename[0..-8])
-          sh "rm #{tarball} && env COPYFILE_DISABLE=1 tar -zcf #{tarball} #{untarred_path}"
+          untarred_basename = File.basename(tarball, '.tar.gz')
+          sh "cd #{File.dirname(tarball)} rm #{basename} && env COPYFILE_DISABLE=1 tar -zcf #{basename} #{untarred_basename}"
         end
       end
 
@@ -223,7 +223,7 @@ begin
         tarballs.each do |tarball|
           basename = File.basename(tarball)
           Dir.chdir(File.dirname(tarball)) do
-            sh "rm -rf #{basename[0..-8]} && tar zxf #{basename}"
+            sh "rm -rf #{basename[0..-8]} ; tar zxf #{basename}"
           end
         end
       end
