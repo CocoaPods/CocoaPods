@@ -187,7 +187,7 @@ module Pod
           resource_paths_by_config['Release'].should == ['MyResources.bundle']
         end
 
-        it 'checks resource paths for compilable are converted for static frameworks' do
+        it 'checks resource paths for compilable files are converted for static frameworks' do
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type => BuildType.static_framework)
           convertible_files = %w[.storyboard .xib .xcdatamodel .xcdatamodeld .xcmappingmodel].map { |ext| "${PODS_ROOT}/Filename#{ext}" }
@@ -199,7 +199,7 @@ module Pod
           resource_paths_by_config['Release'].should == expected_files
         end
 
-        it 'checks resource paths for compilable are converted for static frameworks with multiple file extensions' do
+        it 'checks resource paths for compilable files are converted for static frameworks with multiple file extensions' do
           @pod_target.stubs(:should_build?).returns(true)
           @pod_target.stubs(:build_type => BuildType.static_framework)
           convertible_files = %w[.storyboard .xib .xcdatamodel .xcdatamodeld .xcmappingmodel].map { |ext| "${PODS_ROOT}/Filename.Suffix#{ext}" }
@@ -207,6 +207,18 @@ module Pod
           @target.stubs(:bridge_support_file).returns(nil)
           resource_paths_by_config = @target.resource_paths_by_config
           expected_files = %w[.storyboardc .nib .mom .momd .cdm].map { |ext| "${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework/Filename.Suffix#{ext}" }
+          resource_paths_by_config['Debug'].should == expected_files
+          resource_paths_by_config['Release'].should == expected_files
+        end
+
+        it 'checks resource paths for compilable files are converted for static frameworks when base-localized' do
+          @pod_target.stubs(:should_build?).returns(true)
+          @pod_target.stubs(:build_type => BuildType.static_framework)
+          convertible_files = %w[${PODS_ROOT}/some/folder/Base.lproj/Main.storyboard ${PODS_ROOT}/some/folder/en.lproj/Main.strings]
+          @pod_target.stubs(:resource_paths).returns('BananaLib' => convertible_files)
+          @target.stubs(:bridge_support_file).returns(nil)
+          resource_paths_by_config = @target.resource_paths_by_config
+          expected_files = %w[${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework/Base.lproj/Main.storyboardc ${PODS_ROOT}/some/folder/en.lproj/Main.strings]
           resource_paths_by_config['Debug'].should == expected_files
           resource_paths_by_config['Release'].should == expected_files
         end
