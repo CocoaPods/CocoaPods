@@ -116,12 +116,14 @@ module Pod
       it 'returns the resources' do
         @accessor.resources.sort.should == [
           @root + 'Resources/Base.lproj',
+          @root + 'Resources/Base.lproj/Main.storyboard',
           @root + 'Resources/Images.xcassets',
           @root + 'Resources/Migration.xcmappingmodel',
           @root + 'Resources/Sample.rcproject',
           @root + 'Resources/Sample.xcdatamodeld',
           @root + 'Resources/de.lproj',
           @root + 'Resources/en.lproj',
+          @root + 'Resources/en.lproj/Main.strings',
           @root + 'Resources/logo-sidebar.png',
           @root + 'Resources/sub_dir',
         ]

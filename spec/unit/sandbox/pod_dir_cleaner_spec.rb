@@ -47,12 +47,14 @@ module Pod
         LICENSE
         README
         Resources/Base.lproj
+        Resources/Base.lproj/Main.storyboard
         Resources/Images.xcassets
         Resources/Migration.xcmappingmodel
         Resources/Sample.rcproject
         Resources/Sample.xcdatamodeld
         Resources/de.lproj
         Resources/en.lproj
+        Resources/en.lproj/Main.strings
         Resources/logo-sidebar.png
         Resources/sub_dir
         framework/Source/MoreBanana.h
@@ -83,12 +85,14 @@ module Pod
         LICENSE
         README
         Resources/Base.lproj
+        Resources/Base.lproj/Main.storyboard
         Resources/Images.xcassets
         Resources/Migration.xcmappingmodel
         Resources/Sample.rcproject
         Resources/Sample.xcdatamodeld
         Resources/de.lproj
         Resources/en.lproj
+        Resources/en.lproj/Main.strings
         Resources/logo-sidebar.png
         Resources/sub_dir
         libBananaStaticLib.a

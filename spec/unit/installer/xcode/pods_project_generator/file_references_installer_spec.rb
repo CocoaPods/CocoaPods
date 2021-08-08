@@ -52,9 +52,9 @@ module Pod
 
             it "adds file references for localization directories if glob doesn't include contained files" do
               @installer.install!
-              file_ref = @installer.pods_project['Pods/BananaLib/Resources/en.lproj']
+              file_ref = @installer.pods_project['Pods/BananaLib/Resources/de.lproj']
               file_ref.should.be.not.nil
-              file_ref.path.should == 'Resources/en.lproj'
+              file_ref.path.should == 'Resources/de.lproj'
             end
 
             it 'adds `knownRegions` for all resource localization regions' do
