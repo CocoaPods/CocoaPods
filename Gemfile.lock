@@ -37,10 +37,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: eeccae7275645753cbaf45d96fc4b23e4b8b3b9f
+  revision: 878c6464b593287ee907d755f812306384b4cca6
   branch: master
   specs:
-    xcodeproj (1.20.0)
+    xcodeproj (1.21.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -127,7 +127,7 @@ PATH
       molinillo (~> 0.7.0)
       nap (~> 1.0)
       ruby-macho (>= 1.0, < 3.0)
-      xcodeproj (>= 1.20.0, < 2.0)
+      xcodeproj (>= 1.21.0, < 2.0)
 
 GEM
   remote: https://rubygems.org/
