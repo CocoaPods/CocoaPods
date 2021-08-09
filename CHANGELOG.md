@@ -8,6 +8,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.11.0.beta.1 (2021-08-09)
+
+##### Enhancements
+
 * Add support for integrating on demand resources.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [JunyiXie](https://github.com/JunyiXie)
