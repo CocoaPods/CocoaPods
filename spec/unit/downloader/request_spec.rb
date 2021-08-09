@@ -46,7 +46,7 @@ module Pod
       end
 
       it 'returns the slug' do
-        @request.slug.should == 'Release/BananaLib/1.0-5b1d7'
+        @request.slug.should == 'Release/BananaLib/1.0-09ac6'
       end
     end
 

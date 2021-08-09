@@ -90,6 +90,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix resource variant groups in static frameworks  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#10834](https://github.com/CocoaPods/CocoaPods/pull/10834)
+  [#10605](https://github.com/CocoaPods/CocoaPods/issues/10605)
+
 * Fix adding embed frameworks script phase to unit test targets if xcframeworks are present.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10652](https://github.com/CocoaPods/CocoaPods/issues/10652)

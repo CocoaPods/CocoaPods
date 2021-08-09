@@ -364,7 +364,10 @@ module Pod
                 native_target.add_file_references(compile_phase_refs, nil)
 
                 if target.build_as_static_framework? && consumer.spec.library_specification?
-                  resource_phase_refs = resource_phase_refs.select { |ref| Target.resource_extension_compilable?(File.extname(ref.path)) }
+                  resource_phase_refs = resource_phase_refs.select do |ref|
+                    filename = ref.name || ref.path
+                    Target.resource_extension_compilable?(File.extname(filename))
+                  end
                 end
 
                 native_target.add_resources(resource_phase_refs)

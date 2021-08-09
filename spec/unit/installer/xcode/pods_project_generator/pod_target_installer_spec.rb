@@ -832,11 +832,15 @@ module Pod
               @installer.install!
               resources = @project.targets.first.resources_build_phase.files
               resources.count.should > 0
-              resource = resources.find { |res| res.file_ref.path.include?('logo-sidebar.png') }
+              resource = resources.find { |res| res.file_ref.name == 'logo-sidebar.png' }
               resource.should.be.not.nil
+              resource.file_ref.class.should == Xcodeproj::Project::Object::PBXFileReference
+              resource.file_ref.path.should == 'Resources/logo-sidebar.png'
 
-              resource = resources.find { |res| res.file_ref.path.include?('en.lproj') }
+              resource = resources.find { |res| res.file_ref.name == 'Main.storyboard' }
               resource.should.be.not.nil
+              resource.file_ref.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+              resource.file_ref.children.map(&:path).sort.should == %w[Base.lproj/Main.storyboard en.lproj/Main.strings]
             end
 
             it 'adds compilable framework resources to the static framework target' do
@@ -844,8 +848,14 @@ module Pod
               @installer.install!
               resources = @project.targets.first.resources_build_phase.files
               resources.count.should > 0
-              resource = resources.find { |res| res.file_ref.path.include?('Migration.xcmappingmodel') }
+              resource = resources.find { |res| res.file_ref.name == 'Migration.xcmappingmodel' }
               resource.should.be.not.nil
+              resource.file_ref.class.should == Xcodeproj::Project::Object::PBXFileReference
+              resource.file_ref.path.should == 'Resources/Migration.xcmappingmodel'
+              resource = resources.find { |res| res.file_ref.name == 'Main.storyboard' }
+              resource.should.be.not.nil
+              resource.file_ref.class.should == Xcodeproj::Project::Object::PBXVariantGroup
+              resource.file_ref.children.map(&:path).sort.should == %w[Base.lproj/Main.storyboard en.lproj/Main.strings]
             end
 
             it 'doesn\'t add non-compilable framework resources to the static framework target' do
