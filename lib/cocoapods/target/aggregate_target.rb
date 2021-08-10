@@ -288,7 +288,7 @@ module Pod
       @on_demand_resources ||= begin
         pod_targets.flat_map do |pod_target|
           library_file_accessors = pod_target.file_accessors.select { |fa| fa.spec.library_specification? }
-          library_file_accessors.flat_map { |fa| fa.on_demand_resources.values.flatten }
+          library_file_accessors.flat_map(&:on_demand_resources_files)
         end.uniq
       end
     end

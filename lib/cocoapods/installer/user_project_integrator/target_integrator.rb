@@ -32,7 +32,8 @@ module Pod
         # For messages extensions, this only applies if it's embedded in a messages
         # application.
         #
-        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :application_on_demand_install_capable, :unit_test_bundle, :ui_test_bundle, :watch2_extension, :messages_application].freeze
+        EMBED_FRAMEWORK_TARGET_TYPES = [:application, :application_on_demand_install_capable, :unit_test_bundle,
+                                        :ui_test_bundle, :watch2_extension, :messages_application].freeze
 
         # @return [String] the name of the embed frameworks phase
         #
@@ -457,9 +458,9 @@ module Pod
           #
           # @return [void]
           #
-          def add_on_demand_resources(sandbox, project, native_targets, file_accessors, parent_odr_group,
-                                      target_odr_group_name)
-            asset_tags_added = Set.new
+          def update_on_demand_resources(sandbox, project, native_targets, file_accessors, parent_odr_group,
+                                         target_odr_group_name)
+            category_to_tags = {}
             file_accessors = Array(file_accessors)
             native_targets = Array(native_targets)
 
@@ -469,8 +470,9 @@ module Pod
               old_odr_file_refs = old_target_odr_group&.recursive_children_groups&.each_with_object({}) do |group, hash|
                 hash[group.name] = group.files
               end || {}
-              native_targets.each do |user_target|
-                user_target.remove_on_demand_resources(old_odr_file_refs)
+              native_targets.each do |native_target|
+                native_target.remove_on_demand_resources(old_odr_file_refs)
+                update_on_demand_resources_build_settings(native_target, nil => old_odr_file_refs.keys)
               end
               old_target_odr_group&.remove_from_project
               return
@@ -480,17 +482,18 @@ module Pod
             current_file_refs = target_odr_group.recursive_children_groups.flat_map(&:files)
 
             added_file_refs = file_accessors.flat_map do |file_accessor|
-              target_odr_files_refs = Hash[file_accessor.on_demand_resources.map do |tag, resources|
+              target_odr_files_refs = Hash[file_accessor.on_demand_resources.map do |tag, value|
                 tag_group = target_odr_group[tag] || target_odr_group.new_group(tag)
-                asset_tags_added << tag
-                resources_file_refs = resources.map do |resource|
+                category_to_tags[value[:category]] ||= []
+                category_to_tags[value[:category]] << tag
+                resources_file_refs = value[:paths].map do |resource|
                   odr_resource_file_ref = Pathname.new(resource).relative_path_from(sandbox.root)
                   tag_group.find_file_by_path(odr_resource_file_ref.to_s) || tag_group.new_file(odr_resource_file_ref)
                 end
                 [tag, resources_file_refs]
               end]
-              native_targets.each do |user_target|
-                user_target.add_on_demand_resources(target_odr_files_refs)
+              native_targets.each do |native_target|
+                native_target.add_on_demand_resources(target_odr_files_refs)
               end
               target_odr_files_refs.values.flatten
             end
@@ -506,10 +509,42 @@ module Pod
             end
             target_odr_group.recursive_children_groups.each { |g| g.remove_from_project if g.empty? }
 
-            unless asset_tags_added.empty?
-              attributes = project.root_object.attributes
-              attributes['KnownAssetTags'] = (attributes['KnownAssetTags'] ||= []) | asset_tags_added.to_a
-              project.root_object.attributes = attributes
+            attributes = project.root_object.attributes
+            attributes['KnownAssetTags'] = (attributes['KnownAssetTags'] ||= []) | category_to_tags.values.flatten
+            project.root_object.attributes = attributes
+
+            native_targets.each do |native_target|
+              update_on_demand_resources_build_settings(native_target, category_to_tags)
+            end
+          end
+
+          def update_on_demand_resources_build_settings(native_target, category_to_tags)
+            %w[ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS ON_DEMAND_RESOURCES_PREFETCH_ORDER].each do |category_key|
+              native_target.build_configurations.each do |c|
+                key = case category_key
+                      when 'ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'
+                        :initial_install
+                      when 'ON_DEMAND_RESOURCES_PREFETCH_ORDER'
+                        :prefetched
+                      else
+                        :download_on_demand
+                      end
+                tags_for_category = (c.build_settings[category_key] || '').split
+                category_to_tags_dup = category_to_tags.dup
+                tags_to_add = category_to_tags_dup.delete(key) || []
+                tags_to_delete = category_to_tags_dup.values.flatten
+                tags_for_category = (tags_for_category + tags_to_add - tags_to_delete).flatten.compact.uniq
+                if tags_for_category.empty?
+                  val = c.build_settings.delete(category_key)
+                  native_target.project.mark_dirty! unless val.nil?
+                else
+                  tags = tags_for_category.join(' ')
+                  unless c.build_settings[category_key] == tags
+                    c.build_settings[category_key] = tags
+                    native_target.project.mark_dirty!
+                  end
+                end
+              end
             end
           end
         end
@@ -596,10 +631,12 @@ module Pod
           output_paths_by_config = {}
           if use_input_output_paths
             target.resource_paths_by_config.each do |config, resource_paths|
-              input_paths_key = XCFileListConfigKey.new(target.copy_resources_script_input_files_path(config), target.copy_resources_script_input_files_relative_path)
+              input_paths_key = XCFileListConfigKey.new(target.copy_resources_script_input_files_path(config),
+                                                        target.copy_resources_script_input_files_relative_path)
               input_paths_by_config[input_paths_key] = [script_path] + resource_paths
 
-              output_paths_key = XCFileListConfigKey.new(target.copy_resources_script_output_files_path(config), target.copy_resources_script_output_files_relative_path)
+              output_paths_key = XCFileListConfigKey.new(target.copy_resources_script_output_files_path(config),
+                                                         target.copy_resources_script_output_files_relative_path)
               output_paths_by_config[output_paths_key] = TargetIntegrator.resource_output_paths(resource_paths)
             end
           end
@@ -607,7 +644,9 @@ module Pod
           native_targets.each do |native_target|
             # Static library targets cannot include resources. Skip this phase from being added instead.
             next if native_target.symbol_type == :static_library
-            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path, input_paths_by_config, output_paths_by_config)
+            TargetIntegrator.create_or_update_copy_resources_script_phase_to_target(native_target, script_path,
+                                                                                    input_paths_by_config,
+                                                                                    output_paths_by_config)
           end
         end
 
@@ -720,8 +759,8 @@ module Pod
             # The 'Pods' group would always be there for production code however for tests its sometimes not added.
             # This ensures its always present and makes it easier for existing and new tests.
             parent_odr_group = target.user_project.main_group['Pods'] || target.user_project.new_group('Pods')
-            TargetIntegrator.add_on_demand_resources(target.sandbox, target.user_project, target.user_targets,
-                                                     library_file_accessors, parent_odr_group, target_odr_group_name)
+            TargetIntegrator.update_on_demand_resources(target.sandbox, target.user_project, target.user_targets,
+                                                        library_file_accessors, parent_odr_group, target_odr_group_name)
           end
         end
 

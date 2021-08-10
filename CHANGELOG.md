@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Integrate ODR categories into projects.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10855](https://github.com/CocoaPods/CocoaPods/pull/10855)
 
 ##### Bug Fixes
 
