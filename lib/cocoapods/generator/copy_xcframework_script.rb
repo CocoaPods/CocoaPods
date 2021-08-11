@@ -164,7 +164,7 @@ install_xcframework() {
   local paths=("$@")
 
   # Locate the correct slice of the .xcframework for the current architectures
-  select_slice "${paths[@]}"
+  select_slice "${paths[@]:1}"
   local target_path="$SELECT_SLICE_RETVAL"
   if [[ -z "$target_path" ]]; then
     echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
