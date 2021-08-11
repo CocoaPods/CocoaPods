@@ -38,9 +38,12 @@ module Pod
                                                    fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
                                                    nil, 'Debug' => [@banana_pod_target])
             @banana_pod_target.stubs(:resource_paths).returns({})
-            @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns('tag1' => ['/path/to/resource'])
+            on_demand_resources = { 'tag1' => { :paths => [Pathname('/path/to/resource')], :category => :download_on_demand } }
+            @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
             aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, aggregate_target)
-            library_on_demand_resources = @banana_pod_target.file_accessors.first.on_demand_resources.values.flatten.sort_by(&:downcase)
+            library_on_demand_resources = @banana_pod_target.file_accessors.first.on_demand_resources_files.map do |p|
+              p.relative_path_from(config.sandbox.root).to_s.downcase
+            end
             aggregate_target_cache_key.to_h['FILES'].should.equal(library_on_demand_resources)
           end
 
@@ -48,10 +51,13 @@ module Pod
             aggregate_target = AggregateTarget.new(config.sandbox, BuildType.static_library, { 'Debug' => :debug }, [], Platform.ios,
                                                    fixture_target_definition('MyApp'), config.sandbox.root.dirname, nil,
                                                    nil, 'Debug' => [@banana_pod_target])
-            @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns('tag1' => ['/path/to/resource'])
+            on_demand_resources = { 'tag1' => { :paths => [Pathname('/path/to/resource')], :category => :download_on_demand } }
+            @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
             aggregate_target_cache_key = TargetCacheKey.from_aggregate_target(config.sandbox, aggregate_target)
             library_resources = @banana_pod_target.resource_paths.values.flatten.sort_by(&:downcase)
-            library_on_demand_resources = @banana_pod_target.file_accessors.first.on_demand_resources.values.flatten.sort_by(&:downcase)
+            library_on_demand_resources = @banana_pod_target.file_accessors.first.on_demand_resources_files.map do |p|
+              p.relative_path_from(config.sandbox.root).to_s.downcase
+            end
             aggregate_target_cache_key.to_h['FILES'].should.equal(library_resources + library_on_demand_resources)
           end
         end

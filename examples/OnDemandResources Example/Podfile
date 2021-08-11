@@ -1,5 +1,5 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+workspace 'Examples.xcworkspace'
+project 'OnDemandResourcesDemo.xcodeproj'
 
 target 'OnDemandResourcesDemo' do
   platform :ios, '13.2'

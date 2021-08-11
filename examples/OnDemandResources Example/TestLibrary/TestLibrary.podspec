@@ -36,7 +36,7 @@ TODO: Add long description of the pod here.
 
   s.on_demand_resources = {
     't1' => ['on_demand_bundle1/*'],
-    't2' => ['on_demand_bundle2/*']
+    't2' => { :paths => ['on_demand_bundle2/*'], :category => :prefetched },
   }
 
   s.pod_target_xcconfig = {
@@ -47,7 +47,7 @@ TODO: Add long description of the pod here.
     app_spec.source_files = 'App1/Classes/**/*'
 
     app_spec.on_demand_resources = {
-      'a1' => ['App1/app1_on_demand_bundle1/*']
+      'a1' => { :paths => ['App1/app1_on_demand_bundle1/*'], :category => :initial_install }
     }
   end
 
@@ -55,7 +55,7 @@ TODO: Add long description of the pod here.
     app_spec.source_files = 'App2/Classes/**/*'
 
     app_spec.on_demand_resources = {
-      'a2' => ['App2/app2_on_demand_bundle1/*']
+      'a2' => { :paths => ['App2/app2_on_demand_bundle1/*'], :category => :initial_install }
     }
   end
 

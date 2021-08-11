@@ -754,9 +754,8 @@ module Pod
       end
 
       it 'adds and remove on demand resources to the user target resources build phase' do
-        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(
-          'tag1' => [config.sandbox.root + 'banana-lib/path/to/resource.png'],
-        )
+        on_demand_resources = { 'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :download_on_demand } }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
         @target_integrator.integrate!
         target = @target_integrator.send(:native_targets).first
         target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings', 'resource.png']
@@ -776,10 +775,11 @@ module Pod
       end
 
       it 'removes stale on demand resource file references' do
-        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(
-          'tag1' => [config.sandbox.root + 'banana-lib/path/to/resource.png'],
-          'tag2' => [config.sandbox.root + 'banana-lib/path/to/resource2.png'],
-        )
+        on_demand_resources = {
+          'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :download_on_demand },
+          'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :download_on_demand },
+        }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
         @target_integrator.integrate!
         target = @target_integrator.send(:native_targets).first
         target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings', 'resource.png', 'resource2.png']
@@ -789,9 +789,8 @@ module Pod
         @project['Pods']['BananaLib-OnDemandResources']['tag1'].files.map(&:display_name).should == ['resource.png']
         @project['Pods']['BananaLib-OnDemandResources']['tag2'].files.map(&:display_name).should == ['resource2.png']
         @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2]
-        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(
-          'tag2' => [config.sandbox.root + 'banana-lib/path/to/resource2.png'],
-        )
+        on_demand_resources = { 'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :download_on_demand } }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
         @target_integrator.integrate!
         target.resources_build_phase.files.map(&:display_name).should == ['InfoPlist.strings', 'resource2.png']
         @project.main_group.find_subpath('Pods/BananaLib-OnDemandResources').should.not.be.nil
@@ -802,6 +801,130 @@ module Pod
         # Despite the fact we added this asset tag we can never guarantee it was added by CocoaPods so we can never
         # delete any KnownAssetTags. We can let the user do this.
         @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2]
+      end
+
+      it 'completely removes build settings related to on demand resources if they are empty' do
+        on_demand_resources = { 'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :initial_install } }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @project.dirty?.should.be.false
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag1'
+        end
+        @project.dirty?.should.be.true
+        @project.save
+        @project.dirty?.should.be.false
+        # Now pretend target no longer specifies ODRs.
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns({})
+        @target_integrator.integrate!
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should.be.nil
+        end
+        @project.dirty?.should.be.true
+      end
+
+      it 'maintains on demand resources build settings when a target no longer specifies on demand resources' do
+        target = @target_integrator.send(:native_targets).first
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'] = 'existing_tag'
+        end
+        @project.dirty?.should.be.false
+        on_demand_resources = { 'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :initial_install } }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @target_integrator.integrate!
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'existing_tag tag1'
+        end
+        @project.dirty?.should.be.true
+        @project.save
+        @project.dirty?.should.be.false
+        # Now pretend target no longer specifies ODRs.
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns({})
+        @target_integrator.integrate!
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'existing_tag'
+        end
+        @project.dirty?.should.be.true
+      end
+
+      it 'does not mark the project as dirty if on demand resources build settings did not change' do
+        on_demand_resources = {
+          'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :initial_install },
+          'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :initial_install },
+        }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag1 tag2'
+        end
+        @project.dirty?.should.be.true
+        @project.save
+        @project.dirty?.should.be.false
+        @target_integrator.integrate!
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag1 tag2'
+        end
+        @project.dirty?.should.be.false
+      end
+
+      it 'sets on demand resource category build settings' do
+        on_demand_resources = {
+          'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :initial_install },
+          'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :prefetched },
+        }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2]
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag1'
+          bc.build_settings['ON_DEMAND_RESOURCES_PREFETCH_ORDER'].should == 'tag2'
+        end
+      end
+
+      it 'sets multiple on demand resource categories on a single build setting' do
+        on_demand_resources = {
+          'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :initial_install },
+          'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :initial_install },
+        }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2]
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag1 tag2'
+          bc.build_settings['ON_DEMAND_RESOURCES_PREFETCH_ORDER'].should.be.nil
+        end
+      end
+
+      it 'updates on demand resources build settings if they change' do
+        on_demand_resources = {
+          'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :initial_install },
+          'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :initial_install },
+          'tag3' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource3.png'], :category => :initial_install },
+        }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2 tag3]
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag1 tag2 tag3'
+          bc.build_settings['ON_DEMAND_RESOURCES_PREFETCH_ORDER'].should.be.nil
+        end
+        on_demand_resources = {
+          'tag1' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource.png'], :category => :prefetched },
+          'tag2' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource2.png'], :category => :initial_install },
+          'tag3' => { :paths => [config.sandbox.root + 'banana-lib/path/to/resource3.png'], :category => :download_on_demand },
+        }
+        @banana_pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+        @target_integrator.integrate!
+        @project.root_object.attributes['KnownAssetTags'].should == %w[tag1 tag2 tag3]
+        target.build_configurations.each do |bc|
+          bc.build_settings['ON_DEMAND_RESOURCES_INITIAL_INSTALL_TAGS'].should == 'tag2'
+          bc.build_settings['ON_DEMAND_RESOURCES_PREFETCH_ORDER'].should == 'tag1'
+        end
       end
 
       describe 'Script paths' do

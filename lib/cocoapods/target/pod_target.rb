@@ -203,7 +203,7 @@ module Pod
       end
     end
 
-    # @return [Array<String>] The list of all files tracked.
+    # @return [Array<Pathname>] The list of all files tracked.
     #
     def all_files
       Sandbox::FileAccessor.all_files(file_accessors)
