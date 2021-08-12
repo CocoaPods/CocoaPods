@@ -271,17 +271,17 @@ module Pod
                   fa.spec.test_specification? && pod_target.test_app_hosts_by_spec[fa.spec]&.first == app_spec
               end
               target_odr_group_name = "#{pod_target.label}-OnDemandResources"
-              UserProjectIntegrator::TargetIntegrator.add_on_demand_resources(target.sandbox, native_target.project,
-                                                                              native_target, file_accessors,
-                                                                              parent_odr_group, target_odr_group_name)
+              UserProjectIntegrator::TargetIntegrator.update_on_demand_resources(target.sandbox, native_target.project,
+                                                                                 native_target, file_accessors,
+                                                                                 parent_odr_group, target_odr_group_name)
             end
 
             # Now add the ODRs of our own app spec declaration.
             file_accessor = target.file_accessors.find { |fa| fa.spec == app_spec }
             target_odr_group_name = "#{target.subspec_label(app_spec)}-OnDemandResources"
-            UserProjectIntegrator::TargetIntegrator.add_on_demand_resources(target.sandbox, native_target.project,
-                                                                            native_target, file_accessor,
-                                                                            parent_odr_group, target_odr_group_name)
+            UserProjectIntegrator::TargetIntegrator.update_on_demand_resources(target.sandbox, native_target.project,
+                                                                               native_target, file_accessor,
+                                                                               parent_odr_group, target_odr_group_name)
           end
 
           # @return [String] the message that should be displayed for the target

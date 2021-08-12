@@ -404,6 +404,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ON_DEMAND_RESOURCES_PREFETCH_ORDER = t2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.junyixie..OnDemandResourcesDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -421,6 +422,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ON_DEMAND_RESOURCES_PREFETCH_ORDER = t2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.junyixie..OnDemandResourcesDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

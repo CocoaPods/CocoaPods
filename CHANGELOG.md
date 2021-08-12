@@ -15,6 +15,21 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.11.0.beta.2 (2021-08-11)
+
+##### Enhancements
+
+* Integrate ODR categories into projects.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10855](https://github.com/CocoaPods/CocoaPods/pull/10855)
+
+##### Bug Fixes
+
+* Pass correct paths for `select_slice` method.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10430](https://github.com/CocoaPods/CocoaPods/issues/10430)
+
+
 ## 1.11.0.beta.1 (2021-08-09)
 
 ##### Enhancements
