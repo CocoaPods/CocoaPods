@@ -111,7 +111,7 @@ install_xcframework() {
   local basepath="$1"
   local name="$2"
   local package_type="$3"
-  local paths=("${@:3}")
+  local paths=("${@:4}")
 
   # Locate the correct slice of the .xcframework for the current architectures
   select_slice "${paths[@]}"
