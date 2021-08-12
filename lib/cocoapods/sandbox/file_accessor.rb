@@ -219,7 +219,7 @@ module Pod
           file_accessors.map(&:preserve_paths),
           file_accessors.map(&:readme),
           file_accessors.map(&:resources),
-          file_accessors.flat_map { |f| f.on_demand_resources.values.flatten },
+          file_accessors.map(&:on_demand_resources_files),
           file_accessors.map(&:source_files),
           file_accessors.map(&:module_map),
         ]
@@ -334,18 +334,24 @@ module Pod
         resource_bundles.values.flatten
       end
 
-      # @return [Hash{String => Array<Pathname>}] The paths of the on demand resources specified
-      #         keyed by their tag.
+      # @return [Hash{String => Hash] The expanded paths of the on demand resources specified
+      #         keyed by their tag including their category.
       #
       def on_demand_resources
         result = {}
         spec_consumer.on_demand_resources.each do |tag_name, file_patterns|
-          paths = expanded_paths(file_patterns,
+          paths = expanded_paths(file_patterns[:paths],
                                  :exclude_patterns => spec_consumer.exclude_files,
                                  :include_dirs => true)
-          result[tag_name] = paths
+          result[tag_name] = { :paths => paths, :category => file_patterns[:category] }
         end
         result
+      end
+
+      # @return [Array<Pathname>] The expanded paths of the on demand resources.
+      #
+      def on_demand_resources_files
+        on_demand_resources.values.flat_map { |v| v[:paths] }
       end
 
       # @return [Pathname] The of the prefix header file of the specification.

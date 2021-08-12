@@ -288,8 +288,10 @@ module Pod
 
         it 'returns on demand resources paths' do
           @target.stubs(:pod_targets).returns([@pod_target, @pod_target_release])
-          @pod_target.file_accessors.first.stubs(:on_demand_resources).returns('tag1' => ['./banana-lib/path/to/resource'])
-          @pod_target_release.file_accessors.first.stubs(:on_demand_resources).returns('othertag1' => ['./coconutlib/path/to/other/resource'])
+          on_demand_resources = { 'tag1' => { :paths => ['./banana-lib/path/to/resource'], :category => :download_on_demand } }
+          @pod_target.file_accessors.first.stubs(:on_demand_resources).returns(on_demand_resources)
+          release_on_demand_resources = { 'othertag1' => { :paths => ['./coconutlib/path/to/other/resource'], :category => :download_on_demand } }
+          @pod_target_release.file_accessors.first.stubs(:on_demand_resources).returns(release_on_demand_resources)
           @target.on_demand_resources.should == ['./banana-lib/path/to/resource', './coconutlib/path/to/other/resource']
         end
       end
