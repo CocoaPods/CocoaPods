@@ -244,7 +244,7 @@ module Pod
             lproj_paths = Set.new
             lproj_paths_with_files = Set.new
 
-            # Remove all file ref under .docc folder
+            # Remove all file ref under .docc folder, but preserve the .docc folder
             paths = merge_to_docc_folder(paths)
 
             allowable_paths = paths.select do |path|

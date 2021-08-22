@@ -1011,6 +1011,7 @@ module Pod
               "Unable to find #{file_type} ref for `#{sf.basename}` for target `#{target.name}`."
             end
 
+            # Remove all file ref under .docc folder, but preserve the .docc folder
             files = merge_to_docc_folder(files)
             files.map do |sf|
               begin
