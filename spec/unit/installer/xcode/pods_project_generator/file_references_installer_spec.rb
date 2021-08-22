@@ -141,6 +141,60 @@ module Pod
           end
 
           #-------------------------------------------------------------------------#
+          describe 'Installation With empty DocC documentation' do
+            before do
+              spec = fixture_spec('banana-lib/BananaLib.podspec')
+              spec.source_files = 'Classes/*.*' # we don't include the files inside 'Classes/Documentation.docc/'
+              @pod_target = fixture_pod_target(spec)
+              @file_accessor = @pod_target.file_accessors.first
+              @project = Project.new(config.sandbox.project_path)
+              @project.add_pod_group('BananaLib', fixture('banana-lib'))
+              @installer = FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+            end
+
+            it "doesn't file system reference for non empty Documentation Catalog" do
+              @installer.install!
+              ref = @installer.pods_project['Pods/BananaLib/Documentation.docc']
+              ref.should.be.nil
+            end
+          end
+
+          describe 'Installation With non-empty DocC documentation' do
+            before do
+              spec = fixture_spec('banana-lib/BananaLib.podspec')
+              spec.source_files = 'Classes/**/*.*' # we include all files inside 'Classes/Documentation.docc/'
+              @pod_target = fixture_pod_target(spec)
+              @file_accessor = @pod_target.file_accessors.first
+              @project = Project.new(config.sandbox.project_path)
+              @project.add_pod_group('BananaLib', fixture('banana-lib'))
+              @installer = FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+            end
+
+            it 'creates file system reference for non empty Documentation Catalog' do
+              @installer.install!
+              ref = @installer.pods_project['Pods/BananaLib/Documentation.docc']
+              ref.should.be.not.nil
+              ref.is_a?(Xcodeproj::Project::Object::PBXFileReference).should.be.true
+            end
+
+            it "doesn't add file references for files within Documentation Catalog" do
+              @installer.install!
+
+              resources_group_ref = @installer.pods_project['Pods/BananaLib']
+              catalog_path = 'Classes/Documentation.docc'
+
+              # The asset catalog should be a "PBXFileReference" and therefore doesn't have children.
+              resources_group_ref.files.any? { |ref| ref.path == catalog_path }.should.be.true
+
+              # The asset catalog should not also be a "PBXGroup".
+              resources_group_ref.groups.any? { |ref| ref.path == catalog_path }.should.be.false
+
+              # None of the children of the catalog directory should be present directly.
+              resources_group_ref.files.any? { |ref| ref.path.start_with?(catalog_path + '/') }.should.be.false
+            end
+          end
+
+          #-------------------------------------------------------------------------#
 
           describe 'Installation With Recursive Resources Glob' do
             before do
