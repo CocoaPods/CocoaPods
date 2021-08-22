@@ -243,6 +243,10 @@ module Pod
           def allowable_project_paths(paths)
             lproj_paths = Set.new
             lproj_paths_with_files = Set.new
+
+            # Remove all file ref under .docc folder
+            paths = merge_to_docc_folder(paths)
+
             allowable_paths = paths.select do |path|
               path_str = path.to_s
 
@@ -326,4 +330,29 @@ module Pod
       end
     end
   end
+end
+
+# If we have an non-empty .docc folder, remove all paths under the folder
+# but keep the folder itself
+def merge_to_docc_folder(paths)
+    docc_paths_with_files = Set.new
+    allowable_paths = paths.select do |path|
+        path_str = path.to_s
+
+        if path_str =~ /\.docc(\/|$)/i
+
+            # we want folder with files
+            next if path.directory?
+
+            # remove everything after ".docc", but keep ".docc"
+            folder_path = path_str.split("\.docc")[0] + "\.docc"
+
+            docc_paths_with_files << Pathname(folder_path)
+            next
+
+        end
+        true
+    end
+
+    allowable_paths + docc_paths_with_files.to_a
 end
