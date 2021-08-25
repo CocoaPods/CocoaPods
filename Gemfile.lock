@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: f87ce7e9f0d42502f39f0a3ab3953c3eac891306
+  revision: 686c81012a7d5521b6fc45404924492e06fac405
   branch: 1-11-stable
   specs:
-    cocoapods-core (1.11.0.beta.2)
+    cocoapods-core (1.11.0.rc.1)
       activesupport (>= 5.0, < 7)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -50,14 +50,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
-  revision: c3372a2ea2c2134db78fc6f8d157ebb9bb943a83
+  revision: 2e378b88c65a21a4b89fad989a81a23caec48cdf
   branch: master
   specs:
-    cocoapods-deintegrate (1.0.4)
+    cocoapods-deintegrate (1.0.5)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: bce1d26b422e0efa967f66df955a05a8bbb49a3f
+  revision: c2ee972817a8de12118809d5d9daf8cef2a0217f
   branch: master
   specs:
     cocoapods-downloader (1.4.0)
@@ -72,10 +72,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-search.git
-  revision: 452eee08d6497c43afd4452c28f9d7b8da8686f1
+  revision: 1d10b7a71e1b7de865560d4af5ab1d9dcce5ea1d
   branch: master
   specs:
-    cocoapods-search (1.0.0)
+    cocoapods-search (1.0.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
@@ -110,10 +110,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.11.0.beta.2)
+    cocoapods (1.11.0.rc.1)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.11.0.beta.2)
+      cocoapods-core (= 1.11.0.rc.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
