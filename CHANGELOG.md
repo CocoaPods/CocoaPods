@@ -15,6 +15,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.11.0.rc.1 (2021-08-25)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Correctly process multiple `xcframeworks` a pod provides.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10378](https://github.com/CocoaPods/CocoaPods/issues/10378)
+
+
 ## 1.11.0.beta.2 (2021-08-11)
 
 ##### Enhancements
