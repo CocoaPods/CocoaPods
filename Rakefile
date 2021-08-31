@@ -54,30 +54,11 @@ begin
   # Post release
   #-----------------------------------------------------------------------------#
 
-  desc 'Updates the last know version of CocoaPods in the specs repo'
+  desc 'Updates the last known version of CocoaPods in the specs repo'
   task :post_release do
-    title 'Updating last known version in Specs repo'
-    specs_branch = 'master'
-    Dir.chdir('../Specs') do
-      puts Dir.pwd
-      sh "git checkout #{specs_branch}"
-      sh 'git pull'
-
-      yaml_file = 'CocoaPods-version.yml'
-      unless File.exist?(yaml_file)
-        $stderr.puts red("[!] Unable to find #{yaml_file}!")
-        exit 1
-      end
-      require 'yaml'
-      cocoapods_version = YAML.load_file(yaml_file)
-      cocoapods_version['last'] = gem_version
-      File.open(yaml_file, 'w') do |f|
-        f.write(cocoapods_version.to_yaml)
-      end
-
-      sh "git commit #{yaml_file} -m 'CocoaPods release #{gem_version}'"
-      sh 'git push'
-    end
+    puts yellow("\n[!] The `post_release` task of CocoaPods no longer updates the master specs repo last known version. " \
+                  'This is because of how slow it has become which can break the release process. ' \
+                  "Please use the GitHub UI to update it to the #{gem_version} version.\n")
   end
 
   # Spec
@@ -401,4 +382,8 @@ end
 
 def red(string)
   "\033[0;31m#{string}\e[0m"
+end
+
+def yellow(string)
+  "\033[0;33m#{string}\e[0m"
 end
