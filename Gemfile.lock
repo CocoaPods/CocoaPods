@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 686c81012a7d5521b6fc45404924492e06fac405
+  revision: f2959d1eca8171e26f1d0d23aa1f6f8862bbed55
   branch: 1-11-stable
   specs:
-    cocoapods-core (1.11.0.rc.1)
+    cocoapods-core (1.11.0)
       activesupport (>= 5.0, < 7)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 5694e58661d830c6c57e318bc805c24597e605a6
+  revision: 6b9db609dbda4bdac339c33ca23efa9c30a88e0e
   branch: master
   specs:
     xcodeproj (1.21.0)
@@ -57,10 +57,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: c2ee972817a8de12118809d5d9daf8cef2a0217f
+  revision: f0f9d86c2b489b4ccac58c6311e460b0e06d1f18
   branch: master
   specs:
-    cocoapods-downloader (1.4.0)
+    cocoapods-downloader (1.5.0)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
@@ -110,10 +110,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.11.0.rc.1)
+    cocoapods (1.11.0)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.11.0.rc.1)
+      cocoapods-core (= 1.11.0)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
