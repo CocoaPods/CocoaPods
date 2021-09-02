@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Do not validate modular header dependencies for pre-built Swift pods.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10912](https://github.com/CocoaPods/CocoaPods/issues/10912)
 
 
 ## 1.11.0 (2021-09-01)
