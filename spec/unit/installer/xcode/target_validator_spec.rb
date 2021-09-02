@@ -448,6 +448,7 @@ module Pod
             @validator = create_validator(config.sandbox, podfile, lockfile)
             @validator.stubs(:pod_targets).returns([stub('MultiSwift',
                                                          :uses_swift? => true,
+                                                         :should_build? => true,
                                                          :swift_version => nil,
                                                          :dependent_targets => [],
                                                          :spec_swift_versions => ['4.0'])])
@@ -517,6 +518,29 @@ module Pod
             podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
             podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '3.0'
             @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }.stubs(:should_build?).returns(false)
+            lambda { @validator.validate! }.should.not.raise
+          end
+
+          it 'does not raise when a pre built swift target depends upon a target that requires building' do
+            fixture_path = ROOT + 'spec/fixtures'
+            config.repos_dir = fixture_path + 'spec-repos'
+            podfile = Podfile.new do
+              project(fixture_path + 'SampleProject/SampleProject').to_s
+              platform :ios, '12.0'
+              install! 'cocoapods', :integrate_targets => false
+              pod 'VendoredSwiftFramework', :path => (fixture_path + 'prebuilt-swift-framework').to_s
+              pod 'matryoshka', :path => (fixture_path + 'matryoshka').to_s
+              target 'SampleProject'
+              target 'TestRunner'
+            end
+            lockfile = generate_lockfile
+
+            @validator = create_validator(config.sandbox, podfile, lockfile)
+            podfile.target_definition_list.find { |td| td.name == 'SampleProject' }.swift_version = '3.0'
+            podfile.target_definition_list.find { |td| td.name == 'TestRunner' }.swift_version = '3.0'
+            vendored_swift_framework_pod_target = @validator.pod_targets.find { |pt| pt.name == 'VendoredSwiftFramework' }
+            matryoshka_pod_target = @validator.pod_targets.find { |pt| pt.name == 'matryoshka' }
+            vendored_swift_framework_pod_target.stubs(:dependent_targets).returns([matryoshka_pod_target])
             lambda { @validator.validate! }.should.not.raise
           end
         end

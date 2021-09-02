@@ -129,7 +129,7 @@ module Pod
         def verify_swift_pods_have_module_dependencies
           error_messages = []
           pod_targets.each do |pod_target|
-            next unless pod_target.uses_swift?
+            next unless pod_target.uses_swift? && pod_target.should_build?
 
             non_module_dependencies = []
             pod_target.dependent_targets.each do |dependent_target|
