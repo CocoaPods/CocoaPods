@@ -6,7 +6,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby: [2.6]
-        os: [ubuntu-16.04]
+        os: [ubuntu-18.04]
 
     name: Lint
     runs-on: ${{ matrix.os }}
