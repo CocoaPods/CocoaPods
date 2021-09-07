@@ -34,7 +34,7 @@ module Pod
     #
     attr_reader :sources
 
-    # @return [Bool] Whether the resolver has sources repositories up-to-date.
+    # @return [Boolean] Whether the resolver has sources repositories up-to-date.
     #
     attr_reader :specs_updated
     alias specs_updated? specs_updated
@@ -531,7 +531,7 @@ You have either:#{specs_update_message}
     #
     # @param  [Specification] spec
     #
-    # @return [Bool]
+    # @return [Boolean]
     #
     def spec_is_platform_compatible?(dependency_graph, dependency, spec)
       # This is safe since a pod will only be in locked dependencies if we're
@@ -575,7 +575,7 @@ You have either:#{specs_update_message}
     # Whether the given `edge` should be followed to find dependencies for the
     # given `target_platform`.
     #
-    # @return [Bool]
+    # @return [Boolean]
     #
     def edge_is_valid_for_target_platform?(edge, target_platform)
       @edge_validity ||= Hash.new do |hash, edge_and_platform|

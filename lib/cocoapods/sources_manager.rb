@@ -116,7 +116,7 @@ module Pod
       #
       # @param  [String] source_name
       #
-      # @param  [Bool] show_output
+      # @param  [Boolean] show_output
       #
       # @return [void]
       #

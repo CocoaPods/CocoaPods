@@ -38,7 +38,7 @@ module Pod
         #
         attr_reader :podfile_path
 
-        # @return [Bool] Bool indicating if this project is a pod target subproject.
+        # @return [Boolean] Bool indicating if this project is a pod target subproject.
         # Used by `generate_multiple_pod_projects` installation option.
         #
         attr_reader :pod_target_subproject

@@ -285,7 +285,7 @@ module Pod
       end
     end
 
-    # @return [Bool] Whether or not this target should be built.
+    # @return [Boolean] Whether or not this target should be built.
     #
     # A target should not be built if it has no source files.
     #
@@ -947,7 +947,7 @@ module Pod
 
     # Checks if warnings should be inhibited for this pod.
     #
-    # @return [Bool]
+    # @return [Boolean]
     #
     def inhibit_warnings?
       return @inhibit_warnings if defined? @inhibit_warnings

@@ -43,7 +43,7 @@ module Pod
       #
       attr_reader :plugin_sources
 
-      # @return [Bool] Whether the analysis has dependencies and thus sources must be configured.
+      # @return [Boolean] Whether the analysis has dependencies and thus sources must be configured.
       #
       # @note   This is used by the `pod lib lint` command to prevent update of specs when not needed.
       #
@@ -93,7 +93,7 @@ module Pod
       # compute which specification should be installed. The manifest of the
       # sandbox returns which specifications are installed.
       #
-      # @param  [Bool] allow_fetches
+      # @param  [Boolean] allow_fetches
       #         whether external sources may be fetched
       #
       # @return [AnalysisResult]
@@ -193,7 +193,7 @@ module Pod
 
       # @!group Configuration
 
-      # @return [Bool] Whether the version of the dependencies which did not
+      # @return [Boolean] Whether the version of the dependencies which did not
       #         change in the Podfile should be locked.
       #
       def update_mode?

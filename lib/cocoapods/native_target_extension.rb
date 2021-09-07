@@ -43,7 +43,7 @@ module Pod
     # @param  [TargetMetadata] cached_target
     #         the target to search for.
     #
-    # @return [Bool]
+    # @return [Boolean]
     #
     def self.dependency_for_cached_target?(sandbox, target, cached_target)
       target.dependencies.find do |dep|

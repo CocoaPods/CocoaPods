@@ -109,7 +109,7 @@ module Pod
         # @param [PodTarget] pod_target
         #        The pod target used to construct a TargetCacheKey object.
         #
-        # @param [Bool] is_local_pod
+        # @param [Boolean] is_local_pod
         #        Used to also include its local files in the cache key.
         #
         # @param [Hash] checkout_options

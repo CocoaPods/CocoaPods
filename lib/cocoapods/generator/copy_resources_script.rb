@@ -59,7 +59,7 @@ module Pod
         :tvos => Version.new('9.0'),
       }
 
-      # @return [Bool] Whether the external strings file is supported by the
+      # @return [Boolean] Whether the external strings file is supported by the
       #         `ibtool` according to the deployment target of the platform.
       #
       def use_external_strings_file?

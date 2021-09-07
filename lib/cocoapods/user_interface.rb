@@ -25,7 +25,7 @@ module Pod
       #
       attr_accessor :output_io
 
-      # @return [Bool] Whether the wrapping of the strings to the width of the
+      # @return [Boolean] Whether the wrapping of the strings to the width of the
       #         terminal should be disabled.
       #
       attr_accessor :disable_wrap
@@ -370,7 +370,7 @@ module Pod
       #
       # @param [String]  message The message to print.
       # @param [Array]   actions The actions that the user should take.
-      # @param [Bool]    verbose_only
+      # @param [Boolean]    verbose_only
       #        Restrict the appearance of the warning to verbose mode only
       #
       # return [void]

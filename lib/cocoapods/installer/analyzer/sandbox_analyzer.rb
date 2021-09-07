@@ -40,7 +40,7 @@ module Pod
         #
         attr_reader :specs
 
-        # @return [Bool] Whether the installation is performed in update mode.
+        # @return [Boolean] Whether the installation is performed in update mode.
         #
         attr_reader :update_mode
 
@@ -51,7 +51,7 @@ module Pod
         # @param [Sandbox] sandbox @see sandbox
         # @param [Podfile] podfile @see podfile
         # @param [Array<Specifications>] specs @see specs
-        # @param [Bool] update_mode @see update_mode
+        # @param [Boolean] update_mode @see update_mode
         #
         def initialize(sandbox, podfile, specs, update_mode)
           @sandbox = sandbox
@@ -105,7 +105,7 @@ module Pod
         # @param  [String] pod
         #         the name of the Pod.
         #
-        # @return [Bool] Whether the Pod is added.
+        # @return [Boolean] Whether the Pod is added.
         #
         def pod_added?(pod)
           return true if resolved_pods.include?(pod) && !sandbox_pods.include?(pod)
@@ -119,7 +119,7 @@ module Pod
         # @param  [String] pod
         #         the name of the Pod.
         #
-        # @return [Bool] Whether the Pod is deleted.
+        # @return [Boolean] Whether the Pod is deleted.
         #
         def pod_deleted?(pod)
           return true if !resolved_pods.include?(pod) && sandbox_pods.include?(pod)
@@ -138,7 +138,7 @@ module Pod
         # @param  [String] pod
         #         the name of the Pod.
         #
-        # @return [Bool] Whether the Pod is changed.
+        # @return [Boolean] Whether the Pod is changed.
         #
         def pod_changed?(pod)
           spec = root_spec(pod)

@@ -192,7 +192,7 @@ module Pod
     #
     # @param  [String] name
     #
-    # @return [Bool] true if originally absolute
+    # @return [Boolean] true if originally absolute
     #
     def local_path_was_absolute?(name)
       @pods_with_absolute_path.include? name
@@ -342,7 +342,7 @@ module Pod
     # @param  [String] name
     #         The name of the Pod.
     #
-    # @return [Bool] Whether the Pod has been pre-downloaded.
+    # @return [Boolean] Whether the Pod has been pre-downloaded.
     #
     def predownloaded?(name)
       root_name = Specification.root_name(name)
@@ -406,7 +406,7 @@ module Pod
     # @param  [Pathname, String] path
     #         The path to the local Podspec
     #
-    # @param  [Bool] was_absolute
+    # @param  [Boolean] was_absolute
     #         True if the specified local path was absolute.
     #
     # @return [void]
@@ -428,7 +428,7 @@ module Pod
     # @param  [String] name
     #         The name of the Pod.
     #
-    # @return [Bool] Whether the Pod is locally sourced.
+    # @return [Boolean] Whether the Pod is locally sourced.
     #
     def local?(name)
       !local_podspec(name).nil?
