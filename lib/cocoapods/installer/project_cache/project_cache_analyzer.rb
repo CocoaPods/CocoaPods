@@ -38,7 +38,7 @@ module Pod
         #
         attr_reader :installation_options
 
-        # @return [Bool] Flag indicating if we want to ignore the cache and force a clean installation.
+        # @return [Boolean] Flag indicating if we want to ignore the cache and force a clean installation.
         #
         attr_reader :clean_install
 
@@ -52,7 +52,7 @@ module Pod
         # @param [Array<PodTarget>] pod_targets @see #pod_targets
         # @param [Array<AggregateTarget>] aggregate_targets @see #aggregate_targets
         # @param [Hash<Symbol, Object>] installation_options @see #installation_options
-        # @param [Bool] clean_install @see #clean_install
+        # @param [Boolean] clean_install @see #clean_install
         #
         def initialize(sandbox, cache, build_configurations, project_object_version, podfile_plugins, pod_targets, aggregate_targets, installation_options,
                        clean_install: false)

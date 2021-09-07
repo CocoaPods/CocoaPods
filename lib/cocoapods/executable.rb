@@ -36,7 +36,7 @@ module Pod
     # @param  [Array<#to_s>] command
     #         The command to send to the binary.
     #
-    # @param  [Bool] raise_on_failure
+    # @param  [Boolean] raise_on_failure
     #         Whether it should raise if the command fails.
     #
     # @raise  If the executable could not be located.

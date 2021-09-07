@@ -24,7 +24,7 @@ module OpenURI
   # @param [URI::Generic] uri2
   #        the target uri where to where the redirect points to
   #
-  # @return [Bool]
+  # @return [Boolean]
   #
   def self.redirectable?(uri1, uri2)
     uri1.scheme.downcase == uri2.scheme.downcase ||

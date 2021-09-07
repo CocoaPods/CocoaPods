@@ -195,7 +195,7 @@ module Pod
 
         # @param  [String] pod The root name of the development pod.
         #
-        # @return [Bool] whether the scheme for the given development pod should be
+        # @return [Boolean] whether the scheme for the given development pod should be
         #         shared.
         #
         def share_scheme_for_development_pod?(pod)

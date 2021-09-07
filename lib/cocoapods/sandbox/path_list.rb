@@ -164,7 +164,7 @@ module Pod
 
       # @!group Private helpers
 
-      # @return [Bool] Wether a path is a directory. The result of this method
+      # @return [Boolean] Wether a path is a directory. The result of this method
       #         computed without accessing the file system and is case
       #         insensitive.
       #

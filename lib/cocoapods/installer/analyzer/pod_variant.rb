@@ -56,7 +56,7 @@ module Pod
         # @note Non library specs are intentionally not included as part of the equality for pod variants since a pod
         #       variant should not be affected by the number of test nor app specs included.
         #
-        # @return [Bool] whether the {PodVariant} is equal to another taking all all their attributes into account
+        # @return [Boolean] whether the {PodVariant} is equal to another taking all all their attributes into account
         #
         def ==(other)
           self.class == other.class &&

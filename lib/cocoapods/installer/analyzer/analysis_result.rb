@@ -59,14 +59,14 @@ module Pod
           end
         end
 
-        # @return [Bool] Whether an installation should be performed or this
+        # @return [Boolean] Whether an installation should be performed or this
         #         CocoaPods project is already up to date.
         #
         def needs_install?
           podfile_needs_install? || sandbox_needs_install?
         end
 
-        # @return [Bool] Whether the podfile has changes respect to the lockfile.
+        # @return [Boolean] Whether the podfile has changes respect to the lockfile.
         #
         def podfile_needs_install?
           state = podfile_state
@@ -74,7 +74,7 @@ module Pod
           needing_install > 0
         end
 
-        # @return [Bool] Whether the sandbox is in synch with the lockfile.
+        # @return [Boolean] Whether the sandbox is in synch with the lockfile.
         #
         def sandbox_needs_install?
           state = sandbox_state

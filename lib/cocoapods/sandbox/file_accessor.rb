@@ -504,7 +504,7 @@ module Pod
       # @option options [Array<String>] :exclude_patterns
       #         The exclude patterns to pass to the PathList.
       #
-      # @option options [Bool] :include_dirs
+      # @option options [Boolean] :include_dirs
       #         Whether directories should be also included or just plain
       #         files.
       #

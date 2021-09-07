@@ -21,7 +21,7 @@ module Pod
           #
           attr_reader :pods_project
 
-          # @return [Bool] add support for preserving the file structure of externally sourced pods, in addition to local pods.
+          # @return [Boolean] add support for preserving the file structure of externally sourced pods, in addition to local pods.
           #
           attr_reader :preserve_pod_file_structure
 
@@ -30,7 +30,7 @@ module Pod
           # @param [Sandbox] sandbox @see #sandbox
           # @param [Array<PodTarget>] pod_targets @see #pod_targets
           # @param [Project] pods_project @see #pods_project
-          # @param [Bool] preserve_pod_file_structure @see #preserve_pod_file_structure
+          # @param [Boolean] preserve_pod_file_structure @see #preserve_pod_file_structure
           #
           def initialize(sandbox, pod_targets, pods_project, preserve_pod_file_structure = false)
             @sandbox = sandbox
@@ -207,7 +207,7 @@ module Pod
           # @param  [Symbol] group_key
           #         The key of the group of the Pods project.
           #
-          # @param  [Bool] reflect_file_system_structure
+          # @param  [Boolean] reflect_file_system_structure
           #         Whether organizing a local pod's files in subgroups inside
           #         the pod's group is allowed.
           #

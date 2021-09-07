@@ -45,7 +45,7 @@ module Pod
         path.exist? ? path : Pathname("#{path}.json")
       end
 
-      # @return [Bool]
+      # @return [Boolean]
       #
       def absolute?(path)
         Pathname(path).absolute? || path.to_s.start_with?('~')

@@ -110,7 +110,7 @@ module Pod
     # @note   This method shows immediately which pod is being processed and
     #         overrides the printed line once the result is known.
     #
-    # @return [Bool] whether the specification passed validation.
+    # @return [Boolean] whether the specification passed validation.
     #
     def validate
       @results = []
@@ -201,23 +201,23 @@ module Pod
 
     #  @!group Configuration
 
-    # @return [Bool] whether the validation should skip the checks that
+    # @return [Boolean] whether the validation should skip the checks that
     #         requires the download of the library.
     #
     attr_accessor :quick
 
-    # @return [Bool] whether the linter should not clean up temporary files
+    # @return [Boolean] whether the linter should not clean up temporary files
     #         for inspection.
     #
     attr_accessor :no_clean
 
-    # @return [Bool] whether the linter should fail as soon as the first build
+    # @return [Boolean] whether the linter should fail as soon as the first build
     #         variant causes an error. Helpful for i.e. multi-platforms specs,
     #         specs with subspecs.
     #
     attr_accessor :fail_fast
 
-    # @return [Bool] whether the validation should be performed against the root of
+    # @return [Boolean] whether the validation should be performed against the root of
     #         the podspec instead to its original source.
     #
     # @note   Uses the `:path` option of the Podfile.
@@ -225,7 +225,7 @@ module Pod
     attr_accessor :local
     alias_method :local?, :local
 
-    # @return [Bool] Whether the validator should fail on warnings, or only on errors.
+    # @return [Boolean] Whether the validator should fail on warnings, or only on errors.
     #
     attr_accessor :allow_warnings
 
@@ -233,11 +233,11 @@ module Pod
     #
     attr_accessor :only_subspec
 
-    # @return [Bool] Whether the validator should validate all subspecs.
+    # @return [Boolean] Whether the validator should validate all subspecs.
     #
     attr_accessor :no_subspecs
 
-    # @return [Bool] Whether the validator should skip building and running tests.
+    # @return [Boolean] Whether the validator should skip building and running tests.
     #
     attr_accessor :skip_tests
 
@@ -245,11 +245,11 @@ module Pod
     #
     attr_accessor :test_specs
 
-    # @return [Bool] Whether the validator should run Xcode Static Analysis.
+    # @return [Boolean] Whether the validator should run Xcode Static Analysis.
     #
     attr_accessor :analyze
 
-    # @return [Bool] Whether frameworks should be used for the installation.
+    # @return [Boolean] Whether frameworks should be used for the installation.
     #
     attr_accessor :use_frameworks
 
@@ -983,7 +983,7 @@ module Pod
     #         the deployment target, which should be declared in
     #         the Podfile.
     #
-    # @param  [Bool] use_frameworks
+    # @param  [Boolean] use_frameworks
     #         whether frameworks should be used for the installation
     #
     # @param [Array<String>] test_spec_names
@@ -1122,7 +1122,7 @@ module Pod
     # @param  [Platform] platform
     #         The platform to check
     #
-    # @return [Bool] True if the platform is valid
+    # @return [Boolean] True if the platform is valid
     #
     def valid_platform?(platform)
       VALID_PLATFORMS.any? { |p| p.name == platform.name }
@@ -1136,7 +1136,7 @@ module Pod
     # @param  [Specification] spec
     #         The specification which must support the provided platform
     #
-    # @return [Bool] Whether the platform is supported by the specification
+    # @return [Boolean] Whether the platform is supported by the specification
     #
     def supported_platform?(platform, spec)
       available_platforms = spec.available_platforms

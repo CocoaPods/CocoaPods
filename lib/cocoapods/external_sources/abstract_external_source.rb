@@ -36,7 +36,7 @@ module Pod
         @can_cache = can_cache
       end
 
-      # @return [Bool] whether an external source source is equal to another
+      # @return [Boolean] whether an external source source is equal to another
       #         according to the {#name} and to the {#params}.
       #
       def ==(other)

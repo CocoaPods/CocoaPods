@@ -26,7 +26,7 @@ module Pod
     #
     attr_reader :dependencies_group
 
-    # @return [Bool] Bool indicating if this project is a pod target subproject.
+    # @return [Boolean] Bool indicating if this project is a pod target subproject.
     # Used by `generate_multiple_pod_projects` installation option.
     #
     attr_reader :pod_target_subproject
@@ -39,7 +39,7 @@ module Pod
     # Initialize a new instance
     #
     # @param  [Pathname, String] path @see Xcodeproj::Project#path
-    # @param  [Bool] skip_initialization Whether the project should be initialized from scratch.
+    # @param  [Boolean] skip_initialization Whether the project should be initialized from scratch.
     # @param  [Int] object_version Object version to use for serialization, defaults to Xcode 3.2 compatible.
     #
     def initialize(path, skip_initialization = false,
@@ -107,10 +107,10 @@ module Pod
     # @param  [#to_s] path
     #         The path to the root of the Pod.
     #
-    # @param  [Bool] development
+    # @param  [Boolean] development
     #         Whether the group should be added to the Development Pods group.
     #
-    # @param  [Bool] absolute
+    # @param  [Boolean] absolute
     #         Whether the path of the group should be set as absolute.
     #
     # @return [PBXGroup] The new group.
@@ -136,7 +136,7 @@ module Pod
     # @param [Project] project
     #        The subproject to be added.
     #
-    # @param [Bool] development
+    # @param [Boolean] development
     #        Whether the project should be added to the Development Pods group.
     #        For projects where `pod_target_subproject` is enabled, all subprojects are added into the Dependencies group.
     #
@@ -156,7 +156,7 @@ module Pod
     # @param [TargetMetadata] metadata
     #        The project metadata to be added.
     #
-    # @param [Bool] development
+    # @param [Boolean] development
     #        Whether the project should be added to the Development Pods group.
     #        For projects where `pod_target_subproject` is enabled, all subprojects are added into the Dependencies group.
     #
@@ -253,7 +253,7 @@ module Pod
     # @param  [PBXGroup] group
     #         The group for the new file reference.
     #
-    # @param  [Bool] reflect_file_system_structure
+    # @param  [Boolean] reflect_file_system_structure
     #         Whether group structure should reflect the file system structure.
     #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.
@@ -430,7 +430,7 @@ module Pod
     # @param  [PBXGroup] group
     #         The parent group used as the base of the relative path.
     #
-    # @param  [Bool] reflect_file_system_structure
+    # @param  [Boolean] reflect_file_system_structure
     #         Whether group structure should reflect the file system structure.
     #         If yes, where needed, intermediate groups are created, similar to
     #         how mkdir -p operates.

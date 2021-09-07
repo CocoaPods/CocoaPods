@@ -49,23 +49,23 @@ module Pod
 
     # @!group UI
 
-    # @return [Bool] Whether CocoaPods should provide detailed output about the
+    # @return [Boolean] Whether CocoaPods should provide detailed output about the
     #         performed actions.
     #
     attr_accessor :verbose
     alias_method :verbose?, :verbose
 
-    # @return [Bool] Whether CocoaPods should produce not output.
+    # @return [Boolean] Whether CocoaPods should produce not output.
     #
     attr_accessor :silent
     alias_method :silent?, :silent
 
-    # @return [Bool] Whether CocoaPods is allowed to run as root.
+    # @return [Boolean] Whether CocoaPods is allowed to run as root.
     #
     attr_accessor :allow_root
     alias_method :allow_root?, :allow_root
 
-    # @return [Bool] Whether a message should be printed when a new version of
+    # @return [Boolean] Whether a message should be printed when a new version of
     #         CocoaPods is available.
     #
     attr_accessor :new_version_message
@@ -75,7 +75,7 @@ module Pod
 
     # @!group Installation
 
-    # @return [Bool] Whether the installer should skip the download cache.
+    # @return [Boolean] Whether the installer should skip the download cache.
     #
     attr_accessor :skip_download_cache
     alias_method :skip_download_cache?, :skip_download_cache
