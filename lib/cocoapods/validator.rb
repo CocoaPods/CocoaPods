@@ -585,10 +585,13 @@ module Pod
       info_plist_path = app_project.path.dirname.+('App/App-Info.plist')
       Pod::Installer::Xcode::PodsProjectGenerator::TargetInstallerHelper.create_info_plist_file_with_sandbox(sandbox, info_plist_path, app_target, '1.0.0', Platform.new(consumer.platform_name), :appl)
       Pod::Generator::AppTargetHelper.add_swift_version(app_target, derived_swift_version)
-      # Lint will fail if a AppIcon is set but no image is found with such name
-      # Happens only with Static Frameworks enabled but shouldn't be set anyway
       app_target.build_configurations.each do |config|
+        # Lint will fail if a AppIcon is set but no image is found with such name
+        # Happens only with Static Frameworks enabled but shouldn't be set anyway
         config.build_settings.delete('ASSETCATALOG_COMPILER_APPICON_NAME')
+        # Ensure this is set generally but we have seen an issue with ODRs:
+        # see: https://github.com/CocoaPods/CocoaPods/issues/10933
+        config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
       end
       app_project.save
       app_project.recreate_user_schemes
