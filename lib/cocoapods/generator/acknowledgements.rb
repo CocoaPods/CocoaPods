@@ -84,7 +84,19 @@ module Pod
           elsif license_file = file_accessor(spec).license
             text = IO.read(license_file)
           end
+          text = format_license(text)
         end
+        text
+      end
+
+      # Convenience method for users to format licenses
+      #
+      # @param  [String] text
+      #         Unformatted license text
+      #
+      # @return [String] Formatted license text
+      #
+      def format_license(text)
         text
       end
 
