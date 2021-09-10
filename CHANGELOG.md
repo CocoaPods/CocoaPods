@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Set `INFOPLIST_FILE` build setting to `$(SRCROOT)/App/App-Info.plist` during lint.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10927](https://github.com/CocoaPods/CocoaPods/issues/10927)
+
 * Set `PRODUCT_BUNDLE_IDENTIFIER` for generated app during lint.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10933](https://github.com/CocoaPods/CocoaPods/issues/10933)

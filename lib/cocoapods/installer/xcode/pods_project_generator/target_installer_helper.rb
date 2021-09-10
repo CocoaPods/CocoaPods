@@ -48,17 +48,23 @@ module Pod
           #  @param [Hash] additional_entries
           #         any additional entries to include in this Info.plist file.
           #
+          # @param [String] build_setting_value
+          #         an optional value to set for the `INFOPLIST_FILE` build setting on the
+          #         native target. If none is specified then the value is calculated from the
+          #         Info.plist path relative to the sandbox root.
+          #
           # @return [void]
           #
           def create_info_plist_file_with_sandbox(sandbox, path, native_target, version, platform,
-                                                  bundle_package_type = :fmwk, additional_entries: {})
+                                                  bundle_package_type = :fmwk, additional_entries: {},
+                                                  build_setting_value: nil)
             UI.message "- Generating Info.plist file at #{UI.path(path)}" do
               generator = Generator::InfoPlistFile.new(version, platform, bundle_package_type, additional_entries)
               update_changed_file(generator, path)
 
-              relative_path_string = path.relative_path_from(sandbox.root).to_s
+              build_setting_value ||= path.relative_path_from(sandbox.root).to_s
               native_target.build_configurations.each do |c|
-                c.build_settings['INFOPLIST_FILE'] = relative_path_string
+                c.build_settings['INFOPLIST_FILE'] = build_setting_value
               end
             end
           end
