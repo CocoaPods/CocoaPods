@@ -8,7 +8,7 @@ module Pod
           describe 'In presence of Documentation Catalog' do
             before do
               @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
-              @banana_spec.source_files        = 'Classes/**/*.*' # we include all files inside 'Classes/Documentation.docc/'
+              @banana_spec.source_files = 'Classes/**/*.*' # we include all files inside 'Classes/Documentation.docc/'
 
               @project = Pod::Project.new(config.sandbox.project_path)
               @project.add_pod_group('BananaLib', fixture('banana-lib'))
@@ -26,7 +26,17 @@ module Pod
               names.should.include('Documentation.docc')
             end
           end
+        end
+      end
+    end
+  end
+end
 
+module Pod
+  class Installer
+    class Xcode
+      class PodsProjectGenerator
+        describe PodTargetInstaller do
           describe 'In General' do
             before do
               @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')

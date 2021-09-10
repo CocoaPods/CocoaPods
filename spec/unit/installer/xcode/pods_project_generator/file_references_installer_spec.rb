@@ -144,14 +144,13 @@ module Pod
           describe 'Installation With empty DocC documentation' do
             before do
               spec = fixture_spec('banana-lib/BananaLib.podspec')
-              spec.source_files        = 'Classes/*.*' # we don't include the files inside 'Classes/Documentation.docc/'
+              spec.source_files = 'Classes/*.*' # we don't include the files inside 'Classes/Documentation.docc/'
               @pod_target = fixture_pod_target(spec)
               @file_accessor = @pod_target.file_accessors.first
               @project = Project.new(config.sandbox.project_path)
               @project.add_pod_group('BananaLib', fixture('banana-lib'))
               @installer = FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
             end
-
 
             it "doesn't file system reference for non empty Documentation Catalog" do
               @installer.install!
@@ -163,14 +162,13 @@ module Pod
           describe 'Installation With non-empty DocC documentation' do
             before do
               spec = fixture_spec('banana-lib/BananaLib.podspec')
-              spec.source_files        = 'Classes/**/*.*' # we include all files inside 'Classes/Documentation.docc/'
+              spec.source_files = 'Classes/**/*.*' # we include all files inside 'Classes/Documentation.docc/'
               @pod_target = fixture_pod_target(spec)
               @file_accessor = @pod_target.file_accessors.first
               @project = Project.new(config.sandbox.project_path)
               @project.add_pod_group('BananaLib', fixture('banana-lib'))
               @installer = FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
             end
-
 
             it 'creates file system reference for non empty Documentation Catalog' do
               @installer.install!
