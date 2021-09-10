@@ -142,6 +142,28 @@ module Pod
 
           #-------------------------------------------------------------------------#
 
+          describe 'Installation With DocC documentation' do
+            before do
+              spec = fixture_spec('banana-lib/BananaLib.podspec')
+              spec.source_files        = 'Classes/*.*'
+              @pod_target = fixture_pod_target(spec)
+              @file_accessor = @pod_target.file_accessors.first
+              @project = Project.new(config.sandbox.project_path)
+              @project.add_pod_group('BananaLib', fixture('banana-lib'))
+              @installer = FileReferencesInstaller.new(config.sandbox, [@pod_target], @project)
+            end
+
+
+            it 'creates file system reference for non empty .docc' do
+              @installer.install!
+              ref = @installer.pods_project['Classes/Documentation.docc']
+              ref.should.be.not.nil
+              ref.is_a?(Xcodeproj::Project::Object::PBXVariantGroup).should.be.true
+            end
+          end
+
+          #-------------------------------------------------------------------------#
+
           describe 'Installation With Recursive Resources Glob' do
             before do
               spec = fixture_spec('banana-lib/BananaLib.podspec')
