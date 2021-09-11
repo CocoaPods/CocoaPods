@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Handle spec repo urls with user info when determining if they are CDN.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10941](https://github.com/CocoaPods/CocoaPods/issues/10941)
+
 * Set `INFOPLIST_FILE` build setting to `$(SRCROOT)/App/App-Info.plist` during lint.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10927](https://github.com/CocoaPods/CocoaPods/issues/10927)
