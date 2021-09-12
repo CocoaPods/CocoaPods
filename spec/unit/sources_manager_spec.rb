@@ -154,6 +154,10 @@ module Pod
           @sources_manager.cdn_url?('http://cdn.cocoapods.org').should == true
         end
 
+        it 'spec repo with userinfo' do
+          @sources_manager.cdn_url?('https://foo:bar@bitbucket.org/foobar/Specs.git').should == false
+        end
+
         it 'git master spec repo' do
           stub_as_404('https://github.com/cocoapods/specs.git')
           stub_as_404('https://github.com/cocoapods/specs')

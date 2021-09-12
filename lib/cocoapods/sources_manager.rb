@@ -71,12 +71,15 @@ module Pod
       #         The URL of the source.
       #
       def cdn_url?(url)
-        return unless url =~ %r{^https?:\/\/}
+        return false unless url =~ %r{^https?:\/\/}
 
         uri_options = {}
 
         netrc_info = Netrc.read
-        netrc_host = URI.parse(url).host
+        uri = URI.parse(url)
+        return false unless uri.userinfo.nil?
+
+        netrc_host = uri.host
         credentials = netrc_info[netrc_host]
         uri_options[:http_basic_authentication] = credentials if credentials
 
