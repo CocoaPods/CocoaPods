@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
                               * has private headers
                               * has a `header_mappings_dir`
                               * has a `module_map`
-                              * explictly declare at least one of the private
+                              * explicitly declare at least one of the private
                                 headers in the module map
                               DESC
   s.source                  = { :git => 'https://github.com/CocoaPods/CocoaPods.git', :tag => "v#{s.version}" }
