@@ -28,7 +28,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#10912](https://github.com/CocoaPods/CocoaPods/issues/10912)
 
 
-## 1.11.1 (2021-09-13)
+## 1.11.1 (2021-09-12)
 
 ##### Enhancements
 
