@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 74e0cc225042b1a4666d33a13eefea9892ce52c2
+  revision: f856fa726812c5a35e6ea664f3acc78285053f7e
   branch: master
   specs:
-    cocoapods-core (1.11.1)
+    cocoapods-core (1.11.2)
       activesupport (>= 5.0, < 7)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -110,10 +110,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.11.1)
+    cocoapods (1.11.2)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.11.1)
+      cocoapods-core (= 1.11.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.4.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
