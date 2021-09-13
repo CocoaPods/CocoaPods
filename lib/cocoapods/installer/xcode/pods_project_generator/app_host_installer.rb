@@ -62,7 +62,8 @@ module Pod
           # @param [Hash] info_plist_entries see #info_plist_entries
           # @param [String] product_basename see #product_basename
           #
-          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true, add_launchscreen_storyboard: platform == :ios, info_plist_entries: {}, product_basename: nil)
+          def initialize(sandbox, project, platform, subgroup_name, group_name, app_target_label, add_main: true,
+                         add_launchscreen_storyboard: platform == :ios, info_plist_entries: {}, product_basename: nil)
             @sandbox = sandbox
             @project = project
             @platform = platform
