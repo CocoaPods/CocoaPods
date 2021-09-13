@@ -36,7 +36,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * None.  
 * Add method for formatting licenses for acknowledgements generation.    
+* Add method for formatting licenses for acknowledgements generation.  
   [Raihaan Shouhell](https://github.com/res0nance)
+  [#10940](https://github.com/CocoaPods/CocoaPods/pull/10940)
 
 ##### Bug Fixes
 
