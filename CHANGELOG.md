@@ -17,6 +17,27 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#10912](https://github.com/CocoaPods/CocoaPods/issues/10912)
 
 
+## 1.11.1 (2021-09-13)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Handle spec repo urls with user info when determining if they are CDN.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10941](https://github.com/CocoaPods/CocoaPods/issues/10941)
+
+* Set `INFOPLIST_FILE` build setting to `$(SRCROOT)/App/App-Info.plist` during lint.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10927](https://github.com/CocoaPods/CocoaPods/issues/10927)
+
+* Set `PRODUCT_BUNDLE_IDENTIFIER` for generated app during lint.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10933](https://github.com/CocoaPods/CocoaPods/issues/10933)
+
+
 ## 1.11.0 (2021-09-01)
 
 ##### Enhancements
@@ -119,7 +140,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add a `--update-sources` option to `pod repo push` so one can ensure sources are up-to-date.  
   [Elton Gao](https://github.com/gyfelton)
   [Justin Martin](https://github.com/justinseanmartin)
-
+  
 * Installing a local (`:path`) pod that defines script phases will no longer
   produce warnings.  
   [Samuel Giddins](https://github.com/segiddins)
@@ -218,7 +239,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * fix: ensure cached spec path uniq  
   [SolaWing](https://github.com/SolaWing)
   [#10231](https://github.com/CocoaPods/CocoaPods/issues/10231)
-
+  
 * Set `knownRegions` on generated projects with localized resources to prevent Xcode from re-saving projects to disk.  
   [Eric Amorde](https://github.com/amorde)
   [#10290](https://github.com/CocoaPods/CocoaPods/pull/10290)
@@ -347,7 +368,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Allow gem to run as root when passing argument flag `--allow-root`  
   [Sean Reinhardt](https://github.com/seanreinhardtapps)
   [#8929](https://github.com/CocoaPods/CocoaPods/issues/8929)
-
+  
 * Warn users to delete the master specs repo if its not explicitly used.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9871](https://github.com/CocoaPods/CocoaPods/pull/9871)
@@ -356,7 +377,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   deciding when to use xcfilelists.  
   [Sean Reinhardt](https://github.com/seanreinhardtapps)
   [#9140](https://github.com/CocoaPods/CocoaPods/issues/9140)
-
+  
 * add a `--configuration` option to `pod lib lint` and `pod spec lint`.  
   [Gereon Steffens](https://github.com/gereons)
   [#9686](https://github.com/CocoaPods/CocoaPods/issues/9686)
@@ -625,7 +646,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add support for integrating dependency file in user script phases.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9082](https://github.com/CocoaPods/CocoaPods/issues/9082)
-
+ 
 * Add support for XCFrameworks using the `vendored_frameworks` Podspec DSL.  
   [Eric Amorde](https://github.com/amorde)
   [#9148](https://github.com/CocoaPods/CocoaPods/issues/9148)
@@ -879,7 +900,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Only return library itself as a framework path for library specs.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9029](https://github.com/CocoaPods/CocoaPods/pull/9029)
-
+  
 * Fix a bug that prevented dependencies in a plugin source from resolving  
   [Eric Amorde](https://github.com/amorde)
   [#8540](https://github.com/CocoaPods/CocoaPods/issues/8540)
@@ -1148,7 +1169,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [#8503](https://github.com/CocoaPods/CocoaPods/pull/8503)
 
 * Incremental Pod Installation
-  Enables only regenerating projects for pod targets that have changed since the previous installation.
+  Enables only regenerating projects for pod targets that have changed since the previous installation. 
   This feature is gated by the `incremental_installation` option.  
   [Sebastian Shanus](https://github.com/sebastianv1)
   [#8319](https://github.com/CocoaPods/CocoaPods/issues/8319)
@@ -1201,7 +1222,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Always update sources specified with the `:source` option when `--repo-update` is specified  
   [Eric Amorde](https://github.com/amorde)
-  [#8421](https://github.com/CocoaPods/CocoaPods/issues/8421)
+  [#8421](https://github.com/CocoaPods/CocoaPods/issues/8421) 
 
 * Set `showEnvVarsInLog` for script phases only when its disabled.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -1214,11 +1235,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Remove `manifest` attribute from sandbox.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#8260](https://github.com/CocoaPods/CocoaPods/pull/8260)
-
+  
 * Don't have libraries build the app spec.  
   [Derek Ostrander](https://github.com/dostrander)
   [#8244](https://github.com/CocoaPods/CocoaPods/pull/8244)
-
+  
 * Fix HTTPs -> HTTPS in warning message  
   [CydeWeys](https://github.com/CydeWeys)
   [#8354](https://github.com/CocoaPods/CocoaPods/issues/8354)
@@ -1283,7 +1304,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.
+* None. 
 
 ##### Bug Fixes
 
@@ -1327,17 +1348,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
   [#8097](https://github.com/CocoaPods/CocoaPods/pull/8097)
 
-* Nests test specs host apps inside that Pod's directory for cleaner project
+* Nests test specs host apps inside that Pod's directory for cleaner project 
   navigators.  
   [Derek Ostrander](https://github.com/dostrander)
-
+   
 * mark_ruby_file_ref add indent width and tab width config  
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
 
 * Print an error that will show up in Xcode's issue navigator upon unexpected
   failures in the copy resources and embed frameworks script phases.  
   [Samuel Giddins](https://github.com/segiddins)
-
+  
 * Validate that all generated `PBXNativeTarget`s contain source files to build,
   so specs (including test specs) with no source files won't fail at runtime
   due to the lack of a generated executable.  
@@ -1358,7 +1379,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Slightly improve resolution speed for Podfiles that contain multiple targets
   with the same dependencies.  
   [Samuel Giddins](https://github.com/segiddins)
-
+  
 ##### Bug Fixes
 
 * Don't generate unencrypted source warnings for localhost.  
@@ -1462,7 +1483,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   plugin post-install hooks for performance reasons.  
   [Samuel Giddins](https://github.com/segiddins)
 
-* Change shell script relative paths to use `${PODS_ROOT}` instead of
+* Change shell script relative paths to use `${PODS_ROOT}` instead of 
   `${SRCROOT}/Pods`.  
   [Whirlwind](https://github.com/Whirlwind)
   [#7878](https://github.com/CocoaPods/CocoaPods/pull/7878)
@@ -1475,7 +1496,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add a `--deployment` flag to `pod install` that errors if there are any
   changes to the Podfile or Lockfile.  
   [Samuel Giddins](https://github.com/segiddins)
-
+  
 * Add `--use-modular-headers` flag to the `pod spec lint`, `pod lib lint`,
   and `pod repo push` commands.  
   [Eric Amorde](https://github.com/amorde)
@@ -1495,7 +1516,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Do not ignore `--no-overwrite` parameter if a commit message is specified.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7926](https://github.com/CocoaPods/CocoaPods/issues/7926)
-
+  
 * Generate `-ObjC` in `OTHER_LDFLAGS` for apps with static frameworks.  
   [Paul Beusterien](https://github.com/paulb777)
   [#7946](https://github.com/CocoaPods/CocoaPods/pull/7946)
@@ -1503,7 +1524,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Do not display that a source was changed if it uses different casing.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7883](https://github.com/CocoaPods/CocoaPods/pull/7883)
-
+  
 * Set `CURRENT_PROJECT_VERSION` for generated app host targets.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7825](https://github.com/CocoaPods/CocoaPods/pull/7825)
@@ -1511,7 +1532,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Properly follow symlinks within macOS universal frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7587](https://github.com/CocoaPods/CocoaPods/issues/7587)
-
+  
 * Validator adds a Swift file if any of the pod targets use Swift.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7738](https://github.com/CocoaPods/CocoaPods/issues/7738)
@@ -1588,7 +1609,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `CP_HOME_DIR` as the base for all default directories.  
   [mcfedr](https://github.com/mcfedr)
   [#7917](https://github.com/CocoaPods/CocoaPods/pull/7917)
-
+  
 * Exclude 32-bit architectures from Pod targets when the deployment target is
   iOS 11.0 or higher.  
   [Eric Amorde](https://github.com/amorde)
@@ -1742,8 +1763,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Keith Smiley](https://github.com/keith)
   [#7180](https://github.com/CocoaPods/CocoaPods/pull/7180)
 
-* Allow integrating into static library targets without attempting to copy
-  resources or embed frameworks unless `UNLOCALIZED_RESOURCES_FOLDER_PATH`
+* Allow integrating into static library targets without attempting to copy 
+  resources or embed frameworks unless `UNLOCALIZED_RESOURCES_FOLDER_PATH` 
   or `FRAMEWORKS_FOLDER_PATH` is set.  
   [Samuel Giddins](https://github.com/segiddins)
 
@@ -1762,14 +1783,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Update validator to stream output as xcodebuild runs  
   [abbeycode](https://github.com/abbeycode)
   [#7040](https://github.com/CocoaPods/CocoaPods/issues/7040)
-
+  
 ##### Bug Fixes
 
 * Create a generic Info.plist file for test targets  
   Use xcode default `PRODUCT_MODULE_NAME` for generated test targets  
   [Paul Zabelin](https://github.com/paulz)
   [#7506](https://github.com/CocoaPods/CocoaPods/issues/7506)
-
+  
 * Prevent `xcassets` compilation from stomping over the apps `xcassets`  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7003](https://github.com/CocoaPods/CocoaPods/issues/7003)
@@ -1866,7 +1887,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7292](https://github.com/CocoaPods/CocoaPods/pull/7292)
 
-* Fix resolution when multiple sources provide the same pods, and there are
+* Fix resolution when multiple sources provide the same pods, and there are 
   (potential) dependencies between the sources.  
   [Samuel Giddins](https://github.com/segiddins)
   [#7031](https://github.com/CocoaPods/CocoaPods/issues/7031)
@@ -1957,7 +1978,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Set language to Swift for test native targets if any dependencies use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7170](https://github.com/CocoaPods/CocoaPods/issues/7170)
-
+  
 * Prevent multiple script phases from stripping vendored dSYM  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#7166](https://github.com/CocoaPods/CocoaPods/pull/7166)
@@ -2061,7 +2082,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6820](https://github.com/CocoaPods/CocoaPods/pull/6820)
 
-* Show full requirement trees when a version conflict is encountered during
+* Show full requirement trees when a version conflict is encountered during 
   dependency resolution.  
   [Samuel Giddins](https://github.com/segiddins)
 
@@ -2278,15 +2299,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Add support for test target creation in the pods project generator  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6703](https://github.com/CocoaPods/CocoaPods/pull/6703)
+  [#6703](https://github.com/CocoaPods/CocoaPods/pull/6703) 
 
 * Copy dSYM for vendored frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#1698](https://github.com/CocoaPods/CocoaPods/issues/1698)
+  [#1698](https://github.com/CocoaPods/CocoaPods/issues/1698) 
 
 * Prevents need for .swift-version file in Objective-C pods  
   [Austin Emmons](https://github.com/atreat)
-  [#6742](https://github.com/CocoaPods/CocoaPods/issues/6742)
+  [#6742](https://github.com/CocoaPods/CocoaPods/issues/6742) 
 
 * Add a ipc command `podfile_json` converts a Podfile to JSON  
   [Dacaiguoguo](https://github.com/dacaiguoguogmail)
@@ -2324,7 +2345,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Only check for valid Swift version for pod targets that use Swift  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6733](https://github.com/CocoaPods/CocoaPods/pull/6733)
+  [#6733](https://github.com/CocoaPods/CocoaPods/pull/6733) 
 
 * Fix pod install error from 1.2.1 when working with static lib-only projects.  
   [Ben Asher](https://github.com/benasher44)
@@ -2332,7 +2353,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Use `git!` when executing `push` command in order to raise informative and set exit code.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
-  [#6700](https://github.com/CocoaPods/CocoaPods/pull/6700)
+  [#6700](https://github.com/CocoaPods/CocoaPods/pull/6700) 
 
 * Make copy resources echoes always return true to work around issue where Xcode stops handling build script output greater than \~440 characters (rdar://30607704).  
   [postmechanical](https://github.com/postmechanical)
@@ -2341,11 +2362,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Inherit pod defined values for `SWIFT_ACTIVE_COMPILATION_CONDITIONS`.  
   [Louis D'hauwe](https://github.com/louisdh)
   [#6629](https://github.com/CocoaPods/CocoaPods/pull/6629)
-
+  
 * Delete extraneous files in rsync destination.  
   [jgavris](https://github.com/jgavris)
   [#6694](https://github.com/CocoaPods/CocoaPods/pull/6694)
-
+  
 ## 1.2.1 (2017-04-11)
 
 ##### Enhancements
@@ -2409,10 +2430,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Use red text when pod installation fails
+* Use red text when pod installation fails 
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6534](https://github.com/CocoaPods/CocoaPods/issues/6534)
-
+  
 * Provide installation option to disable multiple pod sources warnings.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6497](https://github.com/CocoaPods/CocoaPods/pull/6497)
@@ -2459,7 +2480,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use `${SRCROOT}` rather than `${PODS_ROOT}` in the generated manifest lock script phase.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#5499](https://github.com/CocoaPods/CocoaPods/issues/5499)
-
+  
 * Fix build phase resource references to point at PBXVariantGroups where relevant.  
   [Wes Campaigne](https://github.com/Westacular)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -2468,7 +2489,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Correctly set runtime search paths for OSX unit test bundles when using frameworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#6435](https://github.com/CocoaPods/CocoaPods/pull/6435)
-
+  
 * Add `--skip-import-validation` to skip linking a pod during lint.  
   [Samuel Giddins](https://github.com/segiddins)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -2499,7 +2520,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Danielle Tomlinson](https://github.com/dantoml)
   [#5937](https://github.com/CocoaPods/CocoaPods/issues/5937)
 
-* Move Installer target verification into the Xcode namespace
+* Move Installer target verification into the Xcode namespace 
   [Danielle Tomlinson](https://github.com/DanToml)
   [#5607](https://github.com/CocoaPods/CocoaPods/pull/5607)
 
