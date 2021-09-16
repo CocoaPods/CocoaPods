@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Use `${DEVELOPMENT_LANGUAGE}` as the default `CFBundleDevelopmentRegion` value in any generated `Info.plist`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10950](https://github.com/CocoaPods/CocoaPods/pull/10950)
 
 ##### Bug Fixes
 

@@ -112,7 +112,7 @@ module Pod
           'CFBundleSignature' => '????',
           'CFBundleVersion' => '${CURRENT_PROJECT_VERSION}',
           'NSPrincipalClass' => '',
-          'CFBundleDevelopmentRegion' => 'en',
+          'CFBundleDevelopmentRegion' => '${PODS_DEVELOPMENT_LANGUAGE}',
         }
 
         info['CFBundleExecutable'] = '${EXECUTABLE_NAME}' if bundle_package_type != :bndl
