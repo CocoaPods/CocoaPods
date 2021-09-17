@@ -20,7 +20,7 @@ module Pod
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file).should == {
-        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleDevelopmentRegion' => '${PODS_DEVELOPMENT_LANGUAGE}',
         'CFBundleExecutable' => '${EXECUTABLE_NAME}',
         'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
         'CFBundleInfoDictionaryVersion' => '6.0',
@@ -38,7 +38,7 @@ module Pod
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file).should == {
-        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleDevelopmentRegion' => '${PODS_DEVELOPMENT_LANGUAGE}',
         'CFBundleExecutable' => '${EXECUTABLE_NAME}',
         'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
         'CFBundleInfoDictionaryVersion' => '6.0',
@@ -56,7 +56,7 @@ module Pod
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file).should == {
-        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleDevelopmentRegion' => '${PODS_DEVELOPMENT_LANGUAGE}',
         'CFBundleExecutable' => '${EXECUTABLE_NAME}',
         'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
         'CFBundleInfoDictionaryVersion' => '6.0',
@@ -74,7 +74,7 @@ module Pod
       file = temporary_directory + 'Info.plist'
       generator.save_as(file)
       Xcodeproj::Plist.read_from_path(file).should == {
-        'CFBundleDevelopmentRegion' => 'en',
+        'CFBundleDevelopmentRegion' => '${PODS_DEVELOPMENT_LANGUAGE}',
         'CFBundleExecutable' => '${EXECUTABLE_NAME}',
         'CFBundleIdentifier' => '${PRODUCT_BUNDLE_IDENTIFIER}',
         'CFBundleInfoDictionaryVersion' => '6.0',

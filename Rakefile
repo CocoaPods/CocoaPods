@@ -219,7 +219,7 @@ begin
         exit 1
       end
       title 'Running Integration tests'
-      rm_rf 'tmp'
+      FileUtils.rm_rf 'tmp'
       title 'Building all the fixtures'
       sh('bundle exec bacon spec/integration.rb') {}
       title 'Storing fixtures'
@@ -228,8 +228,8 @@ begin
         name = source.match(%r{^tmp/(.+)/transformed$})[1]
         destination = "spec/cocoapods-integration-specs/#{name}/after"
         if File.exist?(destination)
-          rm_rf destination
-          mv source, destination
+          FileUtils.rm_rf destination
+          FileUtils.mv source, destination
         end
       end
 

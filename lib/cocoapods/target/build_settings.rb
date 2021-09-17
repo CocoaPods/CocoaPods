@@ -602,6 +602,11 @@ module Pod
           target.pod_target_srcroot
         end
 
+        # @return [String]
+        define_build_settings_method :pods_development_language, :build_setting => true do
+          '${DEVELOPMENT_LANGUAGE}'
+        end
+
         #-------------------------------------------------------------------------#
 
         # @!group Frameworks
