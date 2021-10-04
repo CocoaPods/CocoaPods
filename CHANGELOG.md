@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not consider podspec_repo when analying sandbox for changes.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#10985](https://github.com/CocoaPods/CocoaPods/pull/10985)
+
 * Rewrite XCFramework slice selection using plist metadata.  
   [Igor Makarov](https://github.com/igor-makarov)
   [#11229](https://github.com/CocoaPods/CocoaPods/pull/11229)

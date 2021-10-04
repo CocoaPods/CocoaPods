@@ -145,7 +145,8 @@ module Pod
           return true if spec.version != sandbox_version(pod)
           return true if spec.checksum != sandbox_checksum(pod)
           return true if resolved_spec_names(pod) != sandbox_spec_names(pod)
-          return true if podfile_dependency(pod) != sandbox_dependency(pod)
+          podfile_dep = podfile_dependency(pod)&.tap { |dep| dep.podspec_repo = nil }
+          return true if podfile_dep != sandbox_dependency(pod)
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
           false
