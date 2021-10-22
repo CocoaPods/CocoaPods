@@ -276,7 +276,7 @@ module Pod
             build_phases = native_target.build_phases.grep(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
             build_phases.find { |phase| phase.name && phase.name.end_with?(script_phase_name) }.tap { |p| p.name = script_phase_name if p } ||
               native_target.project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase).tap do |phase|
-                UI.message("Adding Build Phase '#{script_phase_name}' to project.") do
+                UI.message("Adding Build Phase !!!! '#{script_phase_name}' to project.") do
                   phase.name = script_phase_name
                   unless show_env_vars_in_log.nil?
                     phase.show_env_vars_in_log = show_env_vars_in_log
