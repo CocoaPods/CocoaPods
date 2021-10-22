@@ -144,7 +144,7 @@ install_xcframework() {
   select_slice "${paths[@]}"
   local target_path="$SELECT_SLICE_RETVAL"
   if [[ -z "$target_path" ]]; then
-    echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
+    echo "warning !!!!: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
     return
   fi
 
