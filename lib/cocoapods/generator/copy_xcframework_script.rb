@@ -143,7 +143,6 @@ install_xcframework() {
     echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
     return
   fi
-  local source="$basepath/$target_path"
 
   local destination="#{Pod::Target::BuildSettings::XCFRAMEWORKS_BUILD_DIR_VARIABLE}/${name}"
 
@@ -151,8 +150,13 @@ install_xcframework() {
     mkdir -p "$destination"
   fi
 
-  copy_dir "$source/" "$destination"
-  echo "Copied $source to $destination"
+  local target_paths=$(echo $target_path | tr " " "\\n")
+  for target_path_i in $target_paths
+  do
+    local source="$basepath/$target_path_i"
+    copy_dir "$source/" "$destination"
+    echo "Copied $source to $destination"
+  done
 }
 
         SH
