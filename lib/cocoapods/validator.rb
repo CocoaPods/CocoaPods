@@ -579,6 +579,7 @@ module Pod
     end
 
     def create_app_project
+      UI.warn "!!!!! PAT TEST\n".yellow
       app_project = Xcodeproj::Project.new(validation_dir + 'App.xcodeproj')
       app_target = Pod::Generator::AppTargetHelper.add_app_target(app_project, consumer.platform_name, deployment_target)
       sandbox = Sandbox.new(config.sandbox_root)
