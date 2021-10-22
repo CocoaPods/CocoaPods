@@ -78,6 +78,7 @@ SELECT_SLICE_RETVAL=""
 
 select_slice() {
   local paths=("$@")
+  echo "!!! $paths"
   # Locate the correct slice of the .xcframework for the current architectures
   local target_path=""
 
@@ -136,6 +137,8 @@ install_xcframework() {
   local name="$2"
   local package_type="$3"
   local paths="${@:4}"
+  
+  echo "!!!!!! ${paths[@]}"
 
   # Locate the correct slice of the .xcframework for the current architectures
   select_slice "${paths[@]}"
