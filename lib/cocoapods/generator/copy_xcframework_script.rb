@@ -83,6 +83,7 @@ select_slice() {
 
   # Split archs on space so we can find a slice that has all the needed archs
   local target_archs=$(echo $ARCHS | tr " " "\\n")
+  echo "!!! target_archs $target_archs"
 
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then

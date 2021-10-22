@@ -598,6 +598,7 @@ module Pod
         # Ensure this is set generally but we have seen an issue with ODRs:
         # see: https://github.com/CocoaPods/CocoaPods/issues/10933
         config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'org.cocoapods.${PRODUCT_NAME:rfc1034identifier}'
+        config.build_settings['ARCHS'] = 'x86_64'
       end
       app_project.save
       app_project.recreate_user_schemes
