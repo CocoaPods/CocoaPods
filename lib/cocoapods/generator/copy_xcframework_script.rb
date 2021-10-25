@@ -148,14 +148,9 @@ install_xcframework() {
     mkdir -p "$destination"
   fi
 
-  # Split target_path on space so we can copy each target_path into the destination.
-  local target_paths=$(echo $target_path | tr " " "\\n")
-  for target_path_i in $target_paths
-  do
-    local source="$basepath/$target_path_i"
-    copy_dir "$source/" "$destination"
-    echo "Copied $source to $destination"
-  done
+  local source="$basepath/$target_path"
+  copy_dir "$source/" "$destination"
+  echo "Copied $source to $destination"
 }
 
         SH
