@@ -79,6 +79,7 @@ SELECT_SLICE_RETVAL=""
 select_slice() {
   local paths=("$@")
   local target_archs=($ARCHS)
+  local sorted_target_archs=($(for l in ${target_archs[@]}; do echo $l; done | sort))
 
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
@@ -89,7 +90,7 @@ select_slice() {
   fi
   for i in ${!paths[@]}; do
     local matched_all_archs="1"
-    for target_arch in ${!target_arch[@]}
+    for target_arch in ${!sorted_target_archs[@]}
     do
       if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
         matched_all_archs="0"
