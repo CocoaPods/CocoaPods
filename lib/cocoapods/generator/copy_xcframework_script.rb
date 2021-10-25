@@ -78,8 +78,6 @@ SELECT_SLICE_RETVAL=""
 
 select_slice() {
   local paths=("$@")
-
-  # Split archs on space so we can find a slice that has all the needed archs
   local target_archs=($ARCHS)
 
   local target_variant=""
