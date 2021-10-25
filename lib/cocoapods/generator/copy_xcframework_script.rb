@@ -88,17 +88,24 @@ select_slice() {
     target_variant="maccatalyst"
   fi
   for i in ${!paths[@]}; do
+    echo "😍 ${paths[@]} -- ${paths[$i]}"
     local matched_all_archs="1"
     for target_arch_i in ${!target_archs[@]}
     do
+      echo "🥰"
       local target_arch=${target_archs[$target_arch_i]}
+
+      echo "!!! $target_arch - $target_variant - ${paths[$i]} - ${paths[@]} - ${target_archs[@]}"
+
       if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
+        echo "🥵"
         matched_all_archs="0"
         break
       fi
 
       # Verifies that the path contains the variant string (simulator or maccatalyst) if the variant is set.
       if [[ -z "$target_variant" && ("${paths[$i]}" == *"simulator"* || "${paths[$i]}" == *"maccatalyst"*) ]]; then
+        echo "😡"
         matched_all_archs="0"
         break
       fi
@@ -113,6 +120,7 @@ select_slice() {
       # We also match _armv7$ to handle that case.
       local target_arch_regex="[_\\-]${target_arch}([\\/_\\-]|$)"
       if ! [[ "${paths[$i]}" =~ $target_arch_regex ]]; then
+        echo "🤬"
         matched_all_archs="0"
         break
       fi
@@ -154,6 +162,8 @@ install_xcframework() {
 
         SH
         xcframeworks.each do |xcframework|
+          puts "😀"
+          xcframework.slices.each { |s|  puts s.path.dirname.relative_path_from(xcframework.path) }
           slices = xcframework.slices.select { |f| f.platform.symbolic_name == platform.symbolic_name }
           next if slices.empty?
           args = install_xcframework_args(xcframework, slices)
