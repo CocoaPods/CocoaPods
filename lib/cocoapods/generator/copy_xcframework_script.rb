@@ -78,13 +78,11 @@ SELECT_SLICE_RETVAL=""
 
 select_slice() {
   local paths=("$@")
-  echo "!!! $paths"
   # Locate the correct slice of the .xcframework for the current architectures
   local target_path=""
 
   # Split archs on space so we can find a slice that has all the needed archs
   local target_archs=$(echo $ARCHS | tr " " "\\n")
-  echo "!!! target_archs $target_archs"
 
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
@@ -137,14 +135,12 @@ install_xcframework() {
   local name="$2"
   local package_type="$3"
   local paths="${@:4}"
-  
-  echo "!!!!!! ${paths[@]}"
 
   # Locate the correct slice of the .xcframework for the current architectures
   select_slice "${paths[@]}"
   local target_path="$SELECT_SLICE_RETVAL"
   if [[ -z "$target_path" ]]; then
-    echo "warning !!!!: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
+    echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
     return
   fi
 
@@ -154,6 +150,7 @@ install_xcframework() {
     mkdir -p "$destination"
   fi
 
+  # Split target_path on space so we can copy each target_path into the destination.
   local target_paths=$(echo $target_path | tr " " "\\n")
   for target_path_i in $target_paths
   do
