@@ -78,11 +78,9 @@ SELECT_SLICE_RETVAL=""
 
 select_slice() {
   local paths=("$@")
-  # Locate the correct slice of the .xcframework for the current architectures
-  local target_path=""
 
   # Split archs on space so we can find a slice that has all the needed archs
-  local target_archs=$(echo $ARCHS | tr " " "\\n")
+  local target_archs=($(echo $ARCHS | tr " " "\\n"))
 
   local target_variant=""
   if [[ "$PLATFORM_NAME" == *"simulator" ]]; then
@@ -93,7 +91,7 @@ select_slice() {
   fi
   for i in ${!paths[@]}; do
     local matched_all_archs="1"
-    for target_arch in $target_archs
+    for target_arch in ${!target_arch[@]}
     do
       if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
         matched_all_archs="0"
@@ -134,7 +132,7 @@ install_xcframework() {
   local basepath="$1"
   local name="$2"
   local package_type="$3"
-  local paths="${@:4}"
+  local paths=("${@:4}")
 
   # Locate the correct slice of the .xcframework for the current architectures
   select_slice "${paths[@]}"
