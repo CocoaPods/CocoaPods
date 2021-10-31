@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Do not add compile_phase_refs to resources of app specs  
+  [manuyavuz](https://github.com/manuyavuz)
+  [#11028](https://github.com/CocoaPods/CocoaPods/issues/11028)
 
 
 ## 1.11.2 (2021-09-13)
