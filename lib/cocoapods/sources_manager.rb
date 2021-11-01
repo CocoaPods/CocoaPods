@@ -86,7 +86,7 @@ module Pod
         response = OpenURI.open_uri(url.chomp('/') + '/CocoaPods-version.yml', uri_options)
         response_hash = YAML.load(response.read) # rubocop:disable Security/YAMLLoad
         response_hash.is_a?(Hash) && !Source::Metadata.new(response_hash).latest_cocoapods_version.nil?
-      rescue ::OpenURI::HTTPError, SocketError
+      rescue Psych::SyntaxError, ::OpenURI::HTTPError, SocketError
         return false
       rescue => e
         raise Informative, "Couldn't determine repo type for URL: `#{url}`: #{e}"
