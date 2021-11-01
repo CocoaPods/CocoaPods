@@ -492,8 +492,8 @@ module Pod
               o << "\nYou should explicitly specify the version in order to install a pre-release version"
             elsif !conflict.existing
               conflicts = conflict.requirements.values.flatten.uniq
-              found_conflicted_specs = conflicts.reject { |c| search_for(c).empty? }
-              if found_conflicted_specs.empty?
+              have_missing = conflicts.any? { |c| search_for(c).empty? }
+              if have_missing
                 # There are no existing specification inside any of the spec repos with given requirements.
                 type = NoSpecFoundError
                 dependencies = conflicts.count == 1 ? 'dependency' : 'dependencies'

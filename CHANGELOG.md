@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* improve locked version conflict tip  
+  [SolaWing](https://github.com/SolaWing)
+  [#11030](https://github.com/CocoaPods/CocoaPods/pull/11030)
 
 
 ## 1.11.2 (2021-09-13)
