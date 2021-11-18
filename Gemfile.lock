@@ -126,7 +126,7 @@ PATH
       gh_inspector (~> 1.0)
       molinillo (~> 0.8.0)
       nap (~> 1.0)
-      ruby-macho (>= 1.0, < 3.0)
+      ruby-macho (>= 2.0, < 3.0)
       xcodeproj (>= 1.21.0, < 2.0)
 
 GEM

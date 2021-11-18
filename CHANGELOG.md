@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10950](https://github.com/CocoaPods/CocoaPods/pull/10950)
 
+* Change `ruby-macho` minimal required version 2.0 to upgrade ruby-macho when users update CocoaPods.
+  [Jeroen Bobbeldijk](https://github.com/jerbob92)
+  [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
+
 ##### Bug Fixes
 
 * None.  
