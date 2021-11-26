@@ -21,6 +21,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11213](https://github.com/CocoaPods/CocoaPods/pull/11213)
+* Change minimal required version of ruby-macho to 2.3.0.
+  [xuzhongping](https://github.com/xuzhongping)
+  [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
+
+
 
 * Run post install hooks when "skip Pods.xcodeproj generation" option is set
   [Elton Gao](https://github.com/gyfelton)
@@ -668,7 +673,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add support for integrating dependency file in user script phases.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#9082](https://github.com/CocoaPods/CocoaPods/issues/9082)
- 
+
 * Add support for XCFrameworks using the `vendored_frameworks` Podspec DSL.  
   [Eric Amorde](https://github.com/amorde)
   [#9148](https://github.com/CocoaPods/CocoaPods/issues/9148)
@@ -1373,7 +1378,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Nests test specs host apps inside that Pod's directory for cleaner project 
   navigators.  
   [Derek Ostrander](https://github.com/dostrander)
-   
+  
 * mark_ruby_file_ref add indent width and tab width config  
   [dacaiguoguogmail](https://github.com/dacaiguoguogmail)
 
