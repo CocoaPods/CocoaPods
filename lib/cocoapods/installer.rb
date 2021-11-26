@@ -163,6 +163,7 @@ module Pod
       validate_targets
       if installation_options.skip_pods_project_generation?
         show_skip_pods_project_generation_message
+        run_podfile_post_install_hooks
       else
         integrate
       end
