@@ -342,6 +342,24 @@ module Pod
             end
           end
 
+          describe 'with a vendored dynamic xcframework pod' do
+            before do
+              coconut_pod_target = @pod_targets.first
+              coconut_pod_target.stubs(:build_type).returns(BuildType.static_library)
+            end
+
+            def specs
+              spec = fixture_spec('xcframeworks/xcframework-spec.podspec')
+              spec.vendored_frameworks = 'DynamicFramework/CoconutLib.xcframework'
+              [spec]
+            end
+
+            it 'includes default runpath search path list when linking vendored dynamic xcframework' do
+              @target.stubs(:build_type => BuildType.dynamic_framework)
+              @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'"
+            end
+          end
+
           describe 'with a scoped pod target' do
             def specs
               [
