@@ -1288,7 +1288,7 @@ module Pod
         define_build_settings_method :any_vendored_dynamic_artifacts?, :memoized => true do
           pod_targets.any? do |pt|
             pt.file_accessors.any? do |fa|
-              !fa.vendored_dynamic_artifacts.empty?
+              !fa.vendored_dynamic_artifacts.empty? || !fa.vendored_dynamic_xcframeworks.empty?
             end
           end
         end

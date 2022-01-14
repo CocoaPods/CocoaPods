@@ -179,12 +179,21 @@ module Pod
         end
       end
 
-      # @return [Array<Pathname>] The paths of the dynamic xcframework bundles
+      # @return [Array<Pathname>] The paths of the static xcframework bundles
       #         that come shipped with the Pod.
       #
       def vendored_static_xcframeworks
         vendored_xcframeworks.select do |path|
           Xcode::XCFramework.new(spec.name, path).build_type == BuildType.static_framework
+        end
+      end
+
+      # @return [Array<Pathname>] The paths of the dynamic xcframework bundles
+      #         that come shipped with the Pod.
+      #
+      def vendored_dynamic_xcframeworks
+        vendored_xcframeworks.select do |path|
+          Xcode::XCFramework.new(spec.name, path).build_type == BuildType.dynamic_framework
         end
       end
 
