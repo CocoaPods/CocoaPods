@@ -111,6 +111,7 @@ module Pod
     # mark the install transaction is finished
     def finish
       FileUtils.rmtree install_locking_dir
+      @dirty_set = Set.new
     end
 
     # @return [String] a string representation suitable for debugging.
@@ -465,6 +466,7 @@ module Pod
       root_name = Specification.root_name(name)
       FileUtils.mkdir_p(install_locking_dir)
       FileUtils.touch(install_locking_dir + root_name)
+      dirty_set.add(root_name)
     end
 
     # checks if a pod is dirty and need a overwrite
@@ -474,7 +476,11 @@ module Pod
     # @return [Bool] Whether the Pod is dirty
     def dirty?(name)
       root_name = Specification.root_name(name)
-      (install_locking_dir + root_name).exist?
+      dirty_set.include?(root_name)
+    end
+
+    def dirty_set
+      @dirty_set ||= install_locking_dir.exist? ? Dir.children(install_locking_dir).to_set : Set.new
     end
 
     # @!group Convenience Methods
