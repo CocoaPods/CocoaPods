@@ -3,10 +3,10 @@ require 'fileutils'
 module Pod
   class Command
     class Setup < Command
-      self.summary = 'Setup the CocoaPods environment'
+      self.summary = 'Set up the CocoaPods environment'
 
       self.description = <<-DESC
-        Setup the CocoaPods environment
+        Set up the CocoaPods environment
       DESC
 
       def run
