@@ -511,6 +511,7 @@ module Pod
             title = "Installing #{spec}"
           end
           UI.titled_section(title.green, title_options) do
+            sandbox.touch_pod(spec.name)
             install_source_of_pod(spec.name)
           end
         else
@@ -819,6 +820,7 @@ module Pod
         # No need to invoke Sandbox#update_changed_file here since this logic already handles checking if the
         # contents of the file are the same.
         @lockfile.write_to_disk(sandbox.manifest_path)
+        sandbox.finish
       end
     end
 

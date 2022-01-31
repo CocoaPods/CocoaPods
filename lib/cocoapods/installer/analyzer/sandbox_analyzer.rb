@@ -148,6 +148,7 @@ module Pod
           return true if podfile_dependency(pod) != sandbox_dependency(pod)
           return true if sandbox.predownloaded?(pod)
           return true if folder_empty?(pod)
+          return true if sandbox.dirty?(pod)
           false
         end
 

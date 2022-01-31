@@ -18,7 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Ensure reinstall when other install touch sandbox but still not write to manifest.  
+  [SolaWing](https://github.com/SolaWing)
+  [#9128](https://github.com/CocoaPods/CocoaPods/issues/9128)
+  [#9168](https://github.com/CocoaPods/CocoaPods/pull/9168)
 
 
 ## 1.11.2 (2021-09-13)
