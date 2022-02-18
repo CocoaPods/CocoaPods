@@ -18,7 +18,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Clean sandbox when a pod switches from remote to local.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11213](https://github.com/CocoaPods/CocoaPods/pull/11213)
 
 
 ## 1.11.2 (2021-09-13)

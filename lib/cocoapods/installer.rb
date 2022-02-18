@@ -456,8 +456,20 @@ module Pod
         title_options = { :verbose_prefix => '-> '.red }
         sandbox_state.deleted.each do |pod_name|
           UI.titled_section("Removing #{pod_name}".red, title_options) do
-            sandbox.clean_pod(pod_name)
+            root_name = Specification.root_name(pod_name)
+            pod_dir = sandbox.local?(root_name) ? nil : sandbox.pod_dir(root_name)
+            sandbox.clean_pod(pod_name, pod_dir)
           end
+        end
+      end
+
+      # Check any changed pods that became local pods and used to be remote pods and
+      # ensure the sandbox is cleaned up.
+      unless sandbox_state.changed.empty?
+        sandbox_state.changed.each do |pod_name|
+          previous_spec_repo = sandbox.manifest.spec_repo(pod_name)
+          should_clean = !previous_spec_repo.nil? && sandbox.local?(pod_name)
+          sandbox.clean_pod(pod_name, sandbox.sources_root + Specification.root_name(pod_name)) if should_clean
         end
       end
     end

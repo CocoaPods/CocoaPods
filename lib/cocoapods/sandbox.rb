@@ -84,14 +84,13 @@ module Pod
 
     # Removes the files of the Pod with the given name from the sandbox.
     #
+    # @param [String] name The name of the pod, which is used to calculate additional paths to clean.
+    # @param [String] pod_dir The directory of the pod to clean.
+    #
     # @return [void]
     #
-    def clean_pod(name)
-      root_name = Specification.root_name(name)
-      unless local?(root_name)
-        path = pod_dir(name)
-        path.rmtree if path.exist?
-      end
+    def clean_pod(name, pod_dir)
+      pod_dir.rmtree if pod_dir
       podspec_path = specification_path(name)
       podspec_path.rmtree if podspec_path
       pod_target_project_path = pod_target_project_path(name)
