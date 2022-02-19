@@ -618,9 +618,33 @@ module Pod
         end
 
         it 'deletes the sources of the removed Pods' do
+          pod_dir = config.sandbox.sources_root + Specification.root_name('Deleted-Pod')
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           @analysis_result.sandbox_state.add_name('Deleted-Pod', :deleted)
-          config.sandbox.expects(:clean_pod).with('Deleted-Pod')
+          config.sandbox.expects(:clean_pod).with('Deleted-Pod', pod_dir)
+          @installer.send(:clean_sandbox, @installer.pod_targets)
+        end
+
+        it 'deletes the sources of a pod that became local and was remote' do
+          manifest = stub
+          manifest.stubs(:spec_repo).with('Deleted-Pod').returns('some repo')
+          config.sandbox.stubs(:manifest).returns(manifest)
+          config.sandbox.stubs(:local?).with('Deleted-Pod').returns(true)
+          pod_dir = config.sandbox.sources_root + Specification.root_name('Deleted-Pod')
+          FileUtils.mkdir_p(config.sandbox.target_support_files_root)
+          @analysis_result.sandbox_state.add_name('Deleted-Pod', :changed)
+          config.sandbox.expects(:clean_pod).with('Deleted-Pod', pod_dir)
+          @installer.send(:clean_sandbox, @installer.pod_targets)
+        end
+
+        it 'does not delete the sources of a changed remote pod' do
+          manifest = stub
+          manifest.stubs(:spec_repo).with('Deleted-Pod').returns('some repo')
+          config.sandbox.stubs(:manifest).returns(manifest)
+          config.sandbox.stubs(:local?).with('Deleted-Pod').returns(false)
+          FileUtils.mkdir_p(config.sandbox.target_support_files_root)
+          @analysis_result.sandbox_state.add_name('Deleted-Pod', :changed)
+          config.sandbox.expects(:clean_pod).never
           @installer.send(:clean_sandbox, @installer.pod_targets)
         end
       end

@@ -39,7 +39,7 @@ module Pod
         specification_path = @sandbox.specification_path('BananaLib')
         pod_project_path = @sandbox.pod_target_project_path('BananaLib')
         pod_project_path.mkpath
-        @sandbox.clean_pod('BananaLib')
+        @sandbox.clean_pod('BananaLib', pod_root)
         pod_root.should.not.exist
         pod_project_path.should.not.exist
         specification_path.should.not.exist
@@ -49,7 +49,7 @@ module Pod
         pod_root = @sandbox.pod_dir('BananaLib')
         @sandbox.stubs(:local?).returns(true)
         pod_root.mkpath
-        @sandbox.clean_pod('BananaLib')
+        @sandbox.clean_pod('BananaLib', nil)
         pod_root.should.exist
       end
     end
