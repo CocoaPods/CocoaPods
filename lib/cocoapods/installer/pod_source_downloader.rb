@@ -107,7 +107,7 @@ module Pod
         Downloader::Request.new(
           :spec => root_spec,
           :released => released?,
-          )
+        )
       end
 
       #-----------------------------------------------------------------------#
@@ -133,6 +133,20 @@ module Pod
       #
       def root
         sandbox.pod_dir(root_spec.name)
+      end
+
+      # @return [Boolean] whether the source has been pre downloaded in the
+      #         resolution process to retrieve its podspec.
+      #
+      def predownloaded?
+        sandbox.predownloaded_pods.include?(root_spec.name)
+      end
+
+      # @return [Boolean] whether the pod uses the local option and thus
+      #         CocoaPods should not interfere with the files of the user.
+      #
+      def local?
+        sandbox.local?(root_spec.name)
       end
 
       def released?
