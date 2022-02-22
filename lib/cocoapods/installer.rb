@@ -39,6 +39,7 @@ module Pod
     autoload :PreIntegrateHooksContext,     'cocoapods/installer/pre_integrate_hooks_context'
     autoload :SourceProviderHooksContext,   'cocoapods/installer/source_provider_hooks_context'
     autoload :PodfileValidator,             'cocoapods/installer/podfile_validator'
+    autoload :PodSourceDownloader,          'cocoapods/installer/pod_source_downloader'
     autoload :PodSourceInstaller,           'cocoapods/installer/pod_source_installer'
     autoload :PodSourcePreparer,            'cocoapods/installer/pod_source_preparer'
     autoload :UserProjectIntegrator,        'cocoapods/installer/user_project_integrator'
@@ -502,9 +503,38 @@ module Pod
     # @return [void]
     #
     def install_pod_sources
+      @downloaded_specs = []
       @installed_specs = []
       pods_to_install = sandbox_state.added | sandbox_state.changed
       title_options = { :verbose_prefix => '-> '.green }
+
+      # Download pods in parallel before installing if the option is set
+      if installation_options.parallel_pod_downloads
+        root_specs.sort_by(&:name).each do |spec|
+          if pods_to_install.include?(spec.name)
+            if sandbox_state.changed.include?(spec.name) && sandbox.manifest
+              current_version = spec.version
+              previous_version = sandbox.manifest.version(spec.name)
+              has_changed_version = current_version != previous_version
+              current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
+              current_repo &&= (Pod::TrunkSource::TRUNK_REPO_NAME if current_repo.name == Pod::TrunkSource::TRUNK_REPO_NAME) || current_repo.url || current_repo.name
+              previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
+              has_changed_repo = !previous_spec_repo.nil? && current_repo && !current_repo.casecmp(previous_spec_repo).zero?
+              title = "Downloading #{spec.name} #{spec.version}"
+              title << " (was #{previous_version} and source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if has_changed_version && has_changed_repo
+              title << " (was #{previous_version})" if has_changed_version && !has_changed_repo
+              title << " (source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if !has_changed_version && has_changed_repo
+            else
+              title = "Downloading #{spec}"
+            end
+            UI.titled_section(title.green, title_options) do
+              download_source_of_pod(spec.name)
+            end
+          end
+        end
+      end
+
+      # Install pods, which includes downloading only if parallel_pod_downloads is set to false
       root_specs.sort_by(&:name).each do |spec|
         if pods_to_install.include?(spec.name)
           if sandbox_state.changed.include?(spec.name) && sandbox.manifest
@@ -539,7 +569,7 @@ module Pod
       if specs_by_platform.empty?
         requiring_targets = pod_targets.select { |pt| pt.recursive_dependent_targets.any? { |dt| dt.pod_name == pod_name } }
         message = "Could not install '#{pod_name}' pod"
-        message += ", dependended upon by #{requiring_targets.to_sentence}" unless requiring_targets.empty?
+        message += ", depended upon by #{requiring_targets.to_sentence}" unless requiring_targets.empty?
         message += '. There is either no platform to build for, or no target to build.'
         raise StandardError, message
       end
@@ -547,6 +577,20 @@ module Pod
       pod_installer = PodSourceInstaller.new(sandbox, podfile, specs_by_platform, :can_cache => installation_options.clean?)
       pod_installers << pod_installer
       pod_installer
+    end
+
+    def create_pod_downloader(pod_name)
+      specs_by_platform = specs_for_pod(pod_name)
+
+      if specs_by_platform.empty?
+        requiring_targets = pod_targets.select { |pt| pt.recursive_dependent_targets.any? { |dt| dt.pod_name == pod_name } }
+        message = "Could not download '#{pod_name}' pod"
+        message += ", depended upon by #{requiring_targets.to_sentence}" unless requiring_targets.empty?
+        message += '. There is either no platform to build for, or no target to build.'
+        raise StandardError, message
+      end
+
+      PodSourceDownloader.new(sandbox, podfile, specs_by_platform, :can_cache => installation_options.clean?)
     end
 
     # The specifications matching the specified pod name
@@ -576,8 +620,17 @@ module Pod
       @installed_specs.concat(pod_installer.specs_by_platform.values.flatten.uniq)
     end
 
-    # Cleans the sources of the Pods if the config instructs to do so.
+    # Download the pod unless it is local or has been predownloaded from an
+    # external source.
     #
+    # @return [void]
+    #
+    def download_source_of_pod(pod_name)
+      pod_downloader = create_pod_downloader(pod_name)
+      pod_downloader.download!
+    end
+
+    # Cleans the sources of the Pods if the config instructs to do so.
     #
     def clean_pod_sources
       return unless installation_options.clean?

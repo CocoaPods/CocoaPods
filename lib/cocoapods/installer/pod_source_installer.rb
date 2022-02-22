@@ -8,8 +8,6 @@ module Pod
     # @note This class needs to consider all the activated specs of a Pod.
     #
     class PodSourceInstaller
-      UNENCRYPTED_PROTOCOLS = %w(http git).freeze
-
       # @return [Sandbox] The installation target.
       #
       attr_reader :sandbox
@@ -114,41 +112,10 @@ module Pod
       # @return [void]
       #
       def download_source
-        verify_source_is_secure(root_spec)
-        download_result = Downloader.download(download_request, root, :can_cache => can_cache?)
-
-        if (specific_source = download_result.checkout_options) && specific_source != root_spec.source
-          sandbox.store_checkout_source(root_spec.name, specific_source)
+        unless downloaded?
+          downloader = PodSourceDownloader.new(sandbox, podfile, specs_by_platform, :can_cache => can_cache?)
+          downloader.download!
         end
-      end
-
-      # Verify the source of the spec is secure, which is used to show a warning to the user if that isn't the case
-      # This method doesn't verify all protocols, but currently only prohibits unencrypted 'http://' and 'git://''
-      # connections.
-      #
-      # @return [void]
-      #
-      def verify_source_is_secure(root_spec)
-        return if root_spec.source.nil? || (root_spec.source[:http].nil? && root_spec.source[:git].nil?)
-        source = if !root_spec.source[:http].nil?
-                   URI(root_spec.source[:http].to_s)
-                 elsif !root_spec.source[:git].nil?
-                   git_source = root_spec.source[:git].to_s
-                   return unless git_source =~ /^#{URI.regexp}$/
-                   URI(git_source)
-                 end
-        if UNENCRYPTED_PROTOCOLS.include?(source.scheme) && source.host != 'localhost'
-          UI.warn "'#{root_spec.name}' uses the unencrypted '#{source.scheme}' protocol to transfer the Pod. " \
-                'Please be sure you\'re in a safe network with only trusted hosts. ' \
-                'Otherwise, please reach out to the library author to notify them of this security issue.'
-        end
-      end
-
-      def download_request
-        Downloader::Request.new(
-          :spec => root_spec,
-          :released => released?,
-        )
       end
 
       #-----------------------------------------------------------------------#
@@ -184,6 +151,13 @@ module Pod
       #
       def root
         sandbox.pod_dir(root_spec.name)
+      end
+
+      # @return [Boolean] whether the source has already been downloaded prior
+      #         to the installation process.
+      #
+      def downloaded?
+        sandbox.downloaded_pods.include?(root_spec.name)
       end
 
       # @return [Boolean] whether the source has been pre downloaded in the

@@ -67,6 +67,7 @@ module Pod
       @root = Pathname.new(root).realpath
       @public_headers = HeadersStore.new(self, 'Public', :public)
       @predownloaded_pods = []
+      @downloaded_pods = []
       @checkout_sources = {}
       @development_pods = {}
       @pods_with_absolute_path = []
@@ -347,6 +348,42 @@ module Pod
       root_name = Specification.root_name(name)
       predownloaded_pods.include?(root_name)
     end
+
+    #--------------------------------------#
+
+    # Marks a Pod as downloaded
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [void]
+    #
+    def store_downloaded_pod(name)
+      root_name = Specification.root_name(name)
+      downloaded_pods << root_name
+    end
+
+    # Checks if a Pod has been downloaded before the installation
+    # process.
+    #
+    # @param  [String] name
+    #         The name of the Pod.
+    #
+    # @return [Boolean] Whether the Pod has been downloaded.
+    #
+    def downloaded?(name)
+      root_name = Specification.root_name(name)
+      downloaded_pods.include?(root_name)
+    end
+
+    # @return [Array<String>] The names of the pods that have been
+    #         downloaded before the installation process begins.
+    #         These are distinct from the pre-downloaded pods in
+    #         that these do not necessarily come from external
+    #         sources, and are only downloaded right before
+    #         installation if the parallel_pod_downloads option is on.
+    #
+    attr_reader :downloaded_pods
 
     #--------------------------------------#
 

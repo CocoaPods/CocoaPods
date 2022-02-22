@@ -72,6 +72,8 @@ module Pod
           'generate_multiple_pod_projects' => false,
           'incremental_installation' => false,
           'skip_pods_project_generation' => false,
+          'parallel_pod_downloads' => false,
+          'parallel_pod_download_thread_pool_size' => 40,
         }
       end
 
