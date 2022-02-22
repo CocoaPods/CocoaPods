@@ -161,6 +161,7 @@ module Pod
       resolve_dependencies
       download_dependencies
       validate_targets
+      clean_sandbox
       if installation_options.skip_pods_project_generation?
         show_skip_pods_project_generation_message
       else
@@ -296,7 +297,10 @@ module Pod
       pod_targets_to_generate = cache_analysis_result.pod_targets_to_generate
       aggregate_targets_to_generate = cache_analysis_result.aggregate_targets_to_generate
 
-      clean_sandbox(pod_targets_to_generate)
+      pod_targets_to_generate.each do |pod_target|
+        pod_target.build_headers.implode_path!(pod_target.headers_sandbox)
+        sandbox.public_headers.implode_path!(pod_target.headers_sandbox)
+      end
 
       create_and_save_projects(pod_targets_to_generate, aggregate_targets_to_generate,
                                cache_analysis_result.build_configurations, cache_analysis_result.project_object_version)
@@ -443,15 +447,10 @@ module Pod
       end
     end
 
-    # @return [void] In this step we clean all the header folders for pod targets that will be
-    #         regenerated from scratch and cleanup any pods that have been removed.
+    # @return [void] Performs a general clean up of the sandbox related to the sandbox state that was
+    #                calculated. For example, pods that were marked for deletion are removed.
     #
-    def clean_sandbox(pod_targets)
-      pod_targets.each do |pod_target|
-        pod_target.build_headers.implode_path!(pod_target.headers_sandbox)
-        sandbox.public_headers.implode_path!(pod_target.headers_sandbox)
-      end
-
+    def clean_sandbox
       unless sandbox_state.deleted.empty?
         title_options = { :verbose_prefix => '-> '.red }
         sandbox_state.deleted.each do |pod_name|
