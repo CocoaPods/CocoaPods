@@ -190,6 +190,10 @@ module Pod
       # Whether to skip generating the `Pods.xcodeproj` and perform only dependency resolution and downloading.
       #
       option :skip_pods_project_generation, false
+
+      # Whether to download pods in parallel before beginning the installation process
+      #
+      option :parallel_pod_downloads, false
     end
   end
 end
