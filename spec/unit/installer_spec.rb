@@ -595,26 +595,20 @@ module Pod
           @analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
                                                                      [], Pod::Installer::Analyzer::SpecsState.new, [], [],
                                                                      Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
-          @consumer = stub(:header_dir => 'myDir')
-          @spec = stub(:name => 'Spec', :test_specification? => false, :library_specification? => true, :non_library_specification? => false,
-                       :app_specification? => false, :consumer => @consumer)
-          @spec.stubs(:root => @spec)
-          @spec.stubs(:spec_type).returns(:library)
-          @spec.stubs(:module_name => 'Spec')
+          @spec = fixture_spec('banana-lib/BananaLib.podspec')
           @pod_targets = [PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [@spec],
-                                        [fixture_target_definition], nil)]
+                                        [fixture_target_definition], [], nil, '5.0')]
           @installer.stubs(:analysis_result).returns(@analysis_result)
           @installer.stubs(:pod_targets).returns(@pod_targets)
           @installer.stubs(:aggregate_targets).returns([])
         end
 
         it 'cleans the header stores' do
-          FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           @installer.pod_targets.each do |pods_target|
             pods_target.build_headers.expects(:implode_path!)
             config.sandbox.public_headers.expects(:implode_path!).with(pods_target.headers_sandbox)
           end
-          @installer.send(:clean_sandbox, @installer.pod_targets)
+          @installer.install!
         end
 
         it 'deletes the sources of the removed Pods' do
@@ -622,7 +616,7 @@ module Pod
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           @analysis_result.sandbox_state.add_name('Deleted-Pod', :deleted)
           config.sandbox.expects(:clean_pod).with('Deleted-Pod', pod_dir)
-          @installer.send(:clean_sandbox, @installer.pod_targets)
+          @installer.send(:clean_sandbox)
         end
 
         it 'deletes the sources of a pod that became local and was remote' do
@@ -634,7 +628,7 @@ module Pod
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           @analysis_result.sandbox_state.add_name('Deleted-Pod', :changed)
           config.sandbox.expects(:clean_pod).with('Deleted-Pod', pod_dir)
-          @installer.send(:clean_sandbox, @installer.pod_targets)
+          @installer.send(:clean_sandbox)
         end
 
         it 'does not delete the sources of a changed remote pod' do
@@ -645,7 +639,7 @@ module Pod
           FileUtils.mkdir_p(config.sandbox.target_support_files_root)
           @analysis_result.sandbox_state.add_name('Deleted-Pod', :changed)
           config.sandbox.expects(:clean_pod).never
-          @installer.send(:clean_sandbox, @installer.pod_targets)
+          @installer.send(:clean_sandbox)
         end
       end
     end
