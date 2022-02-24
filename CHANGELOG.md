@@ -10,13 +10,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * None.  
 
+##### Bug Fixes
+
 * Fix setting `LD_RUNTIME_SEARCH_PATHS` for aggregate targets that include dynamic xcframeworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11158](https://github.com/CocoaPods/CocoaPods/pull/11158)
-
-##### Bug Fixes
-
-* None.  
 
 
 ## 1.11.2 (2021-09-13)
