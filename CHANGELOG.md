@@ -16,7 +16,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11158](https://github.com/CocoaPods/CocoaPods/pull/11158)
 
-* Add catch for YAML syntax error to prevent crash in cdn_url? check. 
+* Add catch for YAML syntax error to prevent crash in `cdn_url?` check.  
   [Kanstantsin Shautsou](https://github.com/KostyaSha)
   [#11010](https://github.com/CocoaPods/CocoaPods/issues/11010)
 
