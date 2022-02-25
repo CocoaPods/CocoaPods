@@ -117,6 +117,32 @@ module Pod
         @installer.install!
       end
 
+      it 'in runs the post-install hooks before serializing the Pods project when skip_pods_project_generation is set' do
+        @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:skip_pods_project_generation => true))
+        @installer.stubs(:run_podfile_pre_install_hooks)
+        @installer.stubs(:write_lockfiles)
+        @installer.stubs(:aggregate_targets).returns([])
+        @installer.stubs(:pod_targets).returns([])
+        analysis_result = Installer::Analyzer::AnalysisResult.new(Pod::Installer::Analyzer::SpecsState.new, {}, {},
+                                                                  [], Pod::Installer::Analyzer::SpecsState.new, [], [],
+                                                                  Installer::Analyzer::PodfileDependencyCache.from_podfile(@installer.podfile))
+        @installer.stubs(:analysis_result).returns(analysis_result)
+        @installer.unstub(:generate_pods_project)
+        generator = @installer.send(:create_generator, [], [], {}, '')
+        @installer.stubs(:create_generator).returns(generator)
+        target_installation_results = Installer::Xcode::PodsProjectGenerator::InstallationResults.new({}, {})
+        generator_result = Installer::Xcode::PodsProjectGenerator::PodsProjectGeneratorResult.new(nil, {}, target_installation_results)
+        generator.stubs(:generate!).returns(generator_result)
+        generator.stubs(:configure_schemes)
+        Installer::Xcode::PodsProjectWriter.any_instance.unstub(:write!)
+
+        hooks = sequence('hooks')
+        @installer.expects(:run_podfile_post_install_hooks).once.in_sequence(hooks)
+        Installer::Xcode::PodsProjectWriter.any_instance.expects(:save_projects).once.in_sequence(hooks)
+
+        @installer.install!
+      end
+
       it 'injects all generated projects into #share_development_pod_schemes for single project generation' do
         @installer.unstub(:generate_pods_project)
         Installer::SandboxDirCleaner.any_instance.stubs(:clean!)
