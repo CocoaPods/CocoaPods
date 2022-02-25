@@ -938,6 +938,8 @@ module Pod
         define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
           paths = dependent_targets.flat_map { |pt| pt.build_settings[@configuration].swift_include_paths_to_import }
           paths.concat swift_include_paths_to_import if non_library_xcconfig?
+          vendored_static_library_search_paths = dependent_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_static_library_search_paths }
+          paths.concat vendored_static_library_search_paths
           paths.concat ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
           paths
         end

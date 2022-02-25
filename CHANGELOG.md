@@ -20,6 +20,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Kanstantsin Shautsou](https://github.com/KostyaSha)
   [#11010](https://github.com/CocoaPods/CocoaPods/issues/11010)
 
+* Fix static Swift XCFramework import paths.  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#11058](https://github.com/CocoaPods/CocoaPods/issues/10058)
+  [#11093](https://github.com/CocoaPods/CocoaPods/pull/11093)
+
 ## 1.11.2 (2021-09-13)
 
 ##### Enhancements
