@@ -12,9 +12,15 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10950](https://github.com/CocoaPods/CocoaPods/pull/10950)
 
+* Fix setting `LD_RUNTIME_SEARCH_PATHS` for aggregate targets that include dynamic xcframeworks.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11158](https://github.com/CocoaPods/CocoaPods/pull/11158)
+
 ##### Bug Fixes
 
-* None.  
+* Clean sandbox when a pod switches from remote to local.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11213](https://github.com/CocoaPods/CocoaPods/pull/11213)
 
 
 ## 1.11.2 (2021-09-13)

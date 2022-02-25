@@ -161,6 +161,7 @@ module Pod
       resolve_dependencies
       download_dependencies
       validate_targets
+      clean_sandbox
       if installation_options.skip_pods_project_generation?
         show_skip_pods_project_generation_message
         run_podfile_post_install_hooks
@@ -297,7 +298,10 @@ module Pod
       pod_targets_to_generate = cache_analysis_result.pod_targets_to_generate
       aggregate_targets_to_generate = cache_analysis_result.aggregate_targets_to_generate
 
-      clean_sandbox(pod_targets_to_generate)
+      pod_targets_to_generate.each do |pod_target|
+        pod_target.build_headers.implode_path!(pod_target.headers_sandbox)
+        sandbox.public_headers.implode_path!(pod_target.headers_sandbox)
+      end
 
       create_and_save_projects(pod_targets_to_generate, aggregate_targets_to_generate,
                                cache_analysis_result.build_configurations, cache_analysis_result.project_object_version)
@@ -444,21 +448,28 @@ module Pod
       end
     end
 
-    # @return [void] In this step we clean all the header folders for pod targets that will be
-    #         regenerated from scratch and cleanup any pods that have been removed.
+    # @return [void] Performs a general clean up of the sandbox related to the sandbox state that was
+    #                calculated. For example, pods that were marked for deletion are removed.
     #
-    def clean_sandbox(pod_targets)
-      pod_targets.each do |pod_target|
-        pod_target.build_headers.implode_path!(pod_target.headers_sandbox)
-        sandbox.public_headers.implode_path!(pod_target.headers_sandbox)
-      end
-
+    def clean_sandbox
       unless sandbox_state.deleted.empty?
         title_options = { :verbose_prefix => '-> '.red }
         sandbox_state.deleted.each do |pod_name|
           UI.titled_section("Removing #{pod_name}".red, title_options) do
-            sandbox.clean_pod(pod_name)
+            root_name = Specification.root_name(pod_name)
+            pod_dir = sandbox.local?(root_name) ? nil : sandbox.pod_dir(root_name)
+            sandbox.clean_pod(pod_name, pod_dir)
           end
+        end
+      end
+
+      # Check any changed pods that became local pods and used to be remote pods and
+      # ensure the sandbox is cleaned up.
+      unless sandbox_state.changed.empty?
+        sandbox_state.changed.each do |pod_name|
+          previous_spec_repo = sandbox.manifest.spec_repo(pod_name)
+          should_clean = !previous_spec_repo.nil? && sandbox.local?(pod_name)
+          sandbox.clean_pod(pod_name, sandbox.sources_root + Specification.root_name(pod_name)) if should_clean
         end
       end
     end
