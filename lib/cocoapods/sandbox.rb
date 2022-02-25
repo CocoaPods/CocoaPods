@@ -90,11 +90,11 @@ module Pod
     # @return [void]
     #
     def clean_pod(name, pod_dir)
-      pod_dir.rmtree if pod_dir
+      pod_dir.rmtree if pod_dir&.exist?
       podspec_path = specification_path(name)
-      podspec_path.rmtree if podspec_path
+      podspec_path.rmtree if podspec_path&.exist?
       pod_target_project_path = pod_target_project_path(name)
-      pod_target_project_path.rmtree if pod_target_project_path.exist?
+      pod_target_project_path.rmtree if pod_target_project_path&.exist?
     end
 
     # Prepares the sandbox for a new installation removing any file that will
