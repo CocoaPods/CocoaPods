@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: a5d1a29b08ca88f90f47104805bc4fad2efc93c9
+  revision: 00379095567c88f7a00da25136bad60e41ca2b47
   branch: master
   specs:
-    claide (1.0.3)
+    claide (1.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
@@ -30,14 +30,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 1bf2e6e8781045fed99ca7020d5007234e715dc8
+  revision: 40cc6326e74000f597bb73d727053d9effe28c7d
   branch: master
   specs:
     nanaimo (0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 2a1f19ad039556a153dd888cc293b9330bdc0f7a
+  revision: 14c3954d05ca954ee7b43498def8077cc7495509
   branch: master
   specs:
     xcodeproj (1.21.0)
@@ -94,6 +94,15 @@ GIT
     cocoapods-try (1.2.0)
 
 GIT
+  remote: https://github.com/CocoaPods/inch_by_inch.git
+  revision: 484fd1ff09c23dc0fc3f3affd97a079dbd51ad23
+  branch: loosen-dependency
+  specs:
+    inch_by_inch (1.0.1)
+      inch (~> 0.8)
+      rake
+
+GIT
   remote: https://github.com/leahneukirchen/bacon.git
   revision: 5e7115d577ebc98f7dc45fe628964751939f294e
   specs:
@@ -132,8 +141,9 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (3.0.3)
-    activesupport (5.2.6)
+    CFPropertyList (3.0.5)
+      rexml
+    activesupport (5.2.6.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -143,19 +153,19 @@ GEM
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
       json (>= 1.5.1)
-    ast (2.4.0)
+    ast (2.4.2)
     atomos (0.1.3)
-    awesome_print (1.6.1)
+    awesome_print (1.9.2)
     bigdecimal (1.3.5)
     claide-plugins (0.9.2)
       cork
       nap
       open4 (~> 1.3)
-    cocoapods-dependencies (1.0.0.beta.1)
+    cocoapods-dependencies (1.3.0)
       ruby-graphviz (~> 1.2)
     cocoapods_debug (0.1.0)
       pry (= 0.10.3)
-    coderay (1.1.2)
+    coderay (1.1.3)
     colored2 (3.1.2)
     concurrent-ruby (1.1.9)
     cork (0.3.0)
@@ -175,33 +185,30 @@ GEM
       octokit (~> 4.7)
       terminal-table (~> 1)
     diffy (3.4.0)
-    docile (1.1.5)
+    docile (1.4.0)
     escape (0.0.4)
-    ethon (0.14.0)
+    ethon (0.15.0)
       ffi (>= 1.15.0)
-    faraday (0.17.3)
+    faraday (0.17.5)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (1.3.1)
       faraday (~> 0.8)
-    ffi (1.15.4)
+    ffi (1.15.5)
     fourflusher (2.3.1)
     fuzzy_match (2.0.4)
     gh_inspector (1.1.3)
-    git (1.7.0)
+    git (1.10.2)
       rchardet (~> 1.8)
     hashdiff (1.0.1)
     httpclient (2.8.3)
-    i18n (1.8.10)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     inch (0.8.0)
       pry
       sparkr (>= 0.2.0)
       term-ansicolor
       yard (~> 0.9.12)
-    inch_by_inch (1.0.1)
-      inch (~> 0.8.0)
-      rake (~> 10.0)
-    json (2.5.1)
+    json (2.6.1)
     kicker (3.0.0)
       listen (~> 1.3.0)
       notify (~> 0.5.2)
@@ -212,25 +219,24 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.14.4)
-    mocha (1.2.1)
+    minitest (5.15.0)
+    mocha (1.4.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
       mocha (>= 0.13.0)
-    multi_json (1.14.1)
     multipart-post (2.1.1)
     nap (1.1.0)
     netrc (0.11.0)
     no_proxy_fix (0.1.2)
     notify (0.5.2)
-    octokit (4.18.0)
+    octokit (4.22.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     open4 (1.3.4)
-    parallel (1.10.0)
-    parser (2.6.3.0)
-      ast (~> 2.4.0)
-    powerpack (0.1.2)
+    parallel (1.21.0)
+    parser (2.7.2.0)
+      ast (~> 2.4.1)
+    powerpack (0.1.3)
     prettybacon (0.0.2)
       bacon (~> 1.2)
     pry (0.10.3)
@@ -240,11 +246,11 @@ GEM
     public_suffix (4.0.6)
     rainbow (2.2.2)
       rake
-    rake (10.5.0)
-    rb-fsevent (0.9.4)
-    rb-inotify (0.9.5)
-      ffi (>= 0.5.0)
-    rb-kqueue (0.2.3)
+    rake (12.3.3)
+    rb-fsevent (0.11.1)
+    rb-inotify (0.10.1)
+      ffi (~> 1.0)
+    rb-kqueue (0.2.8)
       ffi (>= 0.5.0)
     rchardet (1.8.0)
     rexml (3.2.5)
@@ -255,36 +261,40 @@ GEM
       rainbow (>= 2.2.2, < 3.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-graphviz (1.2.2)
+    ruby-graphviz (1.2.4)
     ruby-macho (2.5.1)
-    ruby-prof (0.15.2)
-    ruby-progressbar (1.10.1)
+    ruby-prof (1.4.3)
+    ruby-progressbar (1.11.0)
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    simplecov (0.9.2)
-      docile (~> 1.1.0)
-      multi_json (~> 1.0)
-      simplecov-html (~> 0.9.0)
-    simplecov-html (0.9.0)
+    simplecov (0.17.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     slop (3.6.0)
     sparkr (0.4.1)
-    term-ansicolor (1.6.0)
+    sync (0.5.0)
+    term-ansicolor (1.7.1)
       tins (~> 1.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thread_safe (0.3.6)
-    tins (1.16.3)
+    tins (1.31.0)
+      sync
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
-    unicode-display_width (1.7.0)
-    webmock (3.11.1)
-      addressable (>= 2.3.6)
+    unicode-display_width (1.8.0)
+    webmock (3.14.0)
+      addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    yard (0.9.12)
+    webrick (1.7.0)
+    yard (0.9.27)
+      webrick (~> 1.7.0)
 
 PLATFORMS
   ruby
@@ -309,7 +319,7 @@ DEPENDENCIES
   cocoapods_debug
   danger (~> 5.3)
   diffy
-  inch_by_inch
+  inch_by_inch!
   kicker
   mocha (< 1.5)
   mocha-on-bacon
@@ -318,7 +328,7 @@ DEPENDENCIES
   netrc
   prettybacon
   public_suffix
-  rake (~> 10.0)
+  rake (~> 12.3)
   rb-fsevent
   rubocop (= 0.50.0)
   ruby-graphviz (< 1.2.5)
