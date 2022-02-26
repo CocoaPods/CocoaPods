@@ -229,7 +229,7 @@ GEM
     netrc (0.11.0)
     no_proxy_fix (0.1.2)
     notify (0.5.2)
-    octokit (4.22.0)
+    octokit (4.18.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     open4 (1.3.4)
