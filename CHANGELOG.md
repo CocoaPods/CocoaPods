@@ -21,15 +21,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11213](https://github.com/CocoaPods/CocoaPods/pull/11213)
-* Change minimal required version of ruby-macho to 2.3.0.
-  [xuzhongping](https://github.com/xuzhongping)
-  [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
 
-
-
-* Run post install hooks when "skip Pods.xcodeproj generation" option is set
+* Run post install hooks when "skip Pods.xcodeproj generation" option is set  
   [Elton Gao](https://github.com/gyfelton)
   [#11073](https://github.com/CocoaPods/CocoaPods/pull/11073)
+
+* Change minimal required version of ruby-macho to 2.3.0.  
+  [xuzhongping](https://github.com/xuzhongping)
+  [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
 
 ## 1.11.2 (2021-09-13)
 
