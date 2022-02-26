@@ -7553,7 +7553,7 @@ that can be added to a settings bundle for an iOS application.
 You don't need to do anything for this to happen, it should just work.
 
 If you're not happy with the default boilerplate text generated for the title, header
-and footnotes in the files, it's possible to customise these by overriding the methods
+and footnotes in the files, it's possible to customize these by overriding the methods
 that generate the text in your `Podfile` like this:
 
 ```ruby
@@ -7564,7 +7564,7 @@ class ::Pod::Generator::Acknowledgements
 end
 ```
 
-You can even go one step further and customise the text on a per target basis by
+You can even go one step further and customize the text on a per target basis by
 checking against the target name, like this:
 
 ```ruby
