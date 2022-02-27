@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11158](https://github.com/CocoaPods/CocoaPods/pull/11158)
 
+* Add method for formatting licenses for acknowledgements generation.  
+  [Raihaan Shouhell](https://github.com/res0nance)
+  [#10940](https://github.com/CocoaPods/CocoaPods/pull/10940)
+
 ##### Bug Fixes
 
 * Clean sandbox when a pod switches from remote to local.  
