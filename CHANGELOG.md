@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Rewrite XCFramework slice selection using plist metadata.  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#11229](https://github.com/CocoaPods/CocoaPods/pull/11229)
+
 * Fix setting `LD_RUNTIME_SEARCH_PATHS` for aggregate targets that include dynamic xcframeworks.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11158](https://github.com/CocoaPods/CocoaPods/pull/11158)
