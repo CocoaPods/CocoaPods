@@ -1,0 +1,12 @@
+BCSymbolMap Version: 2.0
+Apple clang version 13.1.6 (clang-1316.0.21.1)
+/Applications/Xcode-13.3-beta3.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.4.sdk
+iPhoneOS15.4.sdk
+/Users/Igor/Library/Developer/Xcode/DerivedData/CoconutLib-doqzauetjglrxlbwzqgshnstpjuq/Build/Intermediates.noindex/ArchiveIntermediates/CoconutLib/IntermediateBuildFilesPath/CoconutLib.build/Release-iphoneos/CoconutLib.build/DerivedSources/CoconutLib_vers.c
+/Users/Igor/CocoaPods/CocoaPods/examples/Excluded-Archs-Example/CoconutLib
+-[Coconut makeCoconuts]
+__OBJC_METACLASS_RO_$_Coconut
+__OBJC_$_INSTANCE_METHODS_Coconut
+__OBJC_CLASS_RO_$_Coconut
+/Users/Igor/CocoaPods/CocoaPods/examples/Excluded-Archs-Example/CoconutLib/CoconutLib/Coconut.m
+CoconutLib/Coconut.m
