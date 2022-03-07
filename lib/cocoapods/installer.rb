@@ -518,21 +518,7 @@ module Pod
 
         sorted_root_specs.each do |spec|
           if pods_to_install.include?(spec.name)
-            if sandbox_state.changed.include?(spec.name) && sandbox.manifest
-              current_version = spec.version
-              previous_version = sandbox.manifest.version(spec.name)
-              has_changed_version = current_version != previous_version
-              current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
-              current_repo &&= (Pod::TrunkSource::TRUNK_REPO_NAME if current_repo.name == Pod::TrunkSource::TRUNK_REPO_NAME) || current_repo.url || current_repo.name
-              previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
-              has_changed_repo = !previous_spec_repo.nil? && current_repo && !current_repo.casecmp(previous_spec_repo).zero?
-              title = "Downloading #{spec.name} #{spec.version}"
-              title << " (was #{previous_version} and source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if has_changed_version && has_changed_repo
-              title << " (was #{previous_version})" if has_changed_version && !has_changed_repo
-              title << " (source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if !has_changed_version && has_changed_repo
-            else
-              title = "Downloading #{spec}"
-            end
+            title = section_title(spec, 'Downloading')
             UI.titled_section(title.green, title_options) do
               thread_pool.post do
                 download_source_of_pod(spec.name)
@@ -548,21 +534,7 @@ module Pod
       # Install pods, which includes downloading only if parallel_pod_downloads is set to false
       sorted_root_specs.each do |spec|
         if pods_to_install.include?(spec.name)
-          if sandbox_state.changed.include?(spec.name) && sandbox.manifest
-            current_version = spec.version
-            previous_version = sandbox.manifest.version(spec.name)
-            has_changed_version = current_version != previous_version
-            current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
-            current_repo &&= (Pod::TrunkSource::TRUNK_REPO_NAME if current_repo.name == Pod::TrunkSource::TRUNK_REPO_NAME) || current_repo.url || current_repo.name
-            previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
-            has_changed_repo = !previous_spec_repo.nil? && current_repo && !current_repo.casecmp(previous_spec_repo).zero?
-            title = "Installing #{spec.name} #{spec.version}"
-            title << " (was #{previous_version} and source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if has_changed_version && has_changed_repo
-            title << " (was #{previous_version})" if has_changed_version && !has_changed_repo
-            title << " (source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if !has_changed_version && has_changed_repo
-          else
-            title = "Installing #{spec}"
-          end
+          title = section_title(spec, 'Installing')
           UI.titled_section(title.green, title_options) do
             install_source_of_pod(spec.name)
           end
@@ -572,6 +544,25 @@ module Pod
           end
         end
       end
+    end
+
+    def section_title(spec, current_action)
+      if sandbox_state.changed.include?(spec.name) && sandbox.manifest
+        current_version = spec.version
+        previous_version = sandbox.manifest.version(spec.name)
+        has_changed_version = current_version != previous_version
+        current_repo = analysis_result.specs_by_source.detect { |key, values| break key if values.map(&:name).include?(spec.name) }
+        current_repo &&= (Pod::TrunkSource::TRUNK_REPO_NAME if current_repo.name == Pod::TrunkSource::TRUNK_REPO_NAME) || current_repo.url || current_repo.name
+        previous_spec_repo = sandbox.manifest.spec_repo(spec.name)
+        has_changed_repo = !previous_spec_repo.nil? && current_repo && !current_repo.casecmp(previous_spec_repo).zero?
+        title = "#{current_action} #{spec.name} #{spec.version}"
+        title << " (was #{previous_version} and source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if has_changed_version && has_changed_repo
+        title << " (was #{previous_version})" if has_changed_version && !has_changed_repo
+        title << " (source changed to `#{current_repo}` from `#{previous_spec_repo}`)" if !has_changed_version && has_changed_repo
+      else
+        title = "#{current_action} #{spec}"
+      end
+      title
     end
 
     def create_pod_installer(pod_name)
