@@ -194,6 +194,13 @@ module Pod
       # Whether to download pods in parallel before beginning the installation process
       #
       option :parallel_pod_downloads, false
+
+      # The size of the thread pool to use when downloading pods in parallel. Only takes effect when
+      # `parallel_pod_downloads` is `true`.
+      #
+      # Default: 40
+      #
+      option(:parallel_pod_download_thread_pool_size, 40, :boolean => false)
     end
   end
 end
