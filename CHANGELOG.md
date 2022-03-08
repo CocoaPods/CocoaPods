@@ -34,6 +34,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [xuzhongping](https://github.com/xuzhongping)
   [#10390](https://github.com/CocoaPods/CocoaPods/issues/10390)
 
+* Add .gitignores to the banana and snake fixtures  
+  [Seth Friedman](https://github.com/sethfri)
+  [#11235](https://github.com/CocoaPods/CocoaPods/pull/11235)
+
 ## 1.11.2 (2021-09-13)
 
 ##### Enhancements
