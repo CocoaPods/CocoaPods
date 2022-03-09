@@ -43,70 +43,6 @@ module Pod
         end
       end
 
-      it 'does not show warning if the source is encrypted using https' do
-        @spec.source = { :http => 'https://orta.io/sdk.zip' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.length.should.equal(0)
-      end
-
-      it 'does not show warning if the source uses file:///' do
-        @spec.source = { :http => 'file:///orta.io/sdk.zip' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.length.should.equal(0)
-      end
-
-      it 'shows a warning if the source is unencrypted with http://' do
-        @spec.source = { :http => 'http://orta.io/sdk.zip' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.should.include 'uses the unencrypted \'http\' protocol'
-      end
-
-      it 'does not show a warning if the source is http://localhost' do
-        @spec.source = { :http => 'http://localhost:123/sdk.zip' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.length.should.equal(0)
-      end
-
-      it 'shows a warning if the source is unencrypted with git://' do
-        @spec.source = { :git => 'git://git.orta.io/orta.git' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.should.include 'uses the unencrypted \'git\' protocol'
-      end
-
-      it 'does not warn for local repositories with spaces' do
-        @spec.source = { :git => '/Users/kylef/Projects X', :tag => '1.0' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.length.should.equal(0)
-      end
-
-      it 'does not warn for SSH repositories' do
-        @spec.source = { :git => 'git@bitbucket.org:kylef/test.git', :tag => '1.0' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.length.should.equal(0)
-      end
-
-      it 'does not warn for SSH repositories on Github' do
-        @spec.source = { :git => 'git@github.com:kylef/test.git', :tag => '1.0' }
-        dummy_response = Pod::Downloader::Response.new
-        Downloader.stubs(:download).returns(dummy_response)
-        @installer.install!
-        UI.warnings.length.should.equal(0)
-      end
-
       #--------------------------------------#
 
       describe 'Prepare command' do
@@ -168,14 +104,14 @@ module Pod
       #--------------------------------------#
 
       describe 'Options' do
-        it "doesn't downloads the source if the pod was already downloaded" do
+        it "doesn't download the source if the pod was already predownloaded" do
           @installer.stubs(:predownloaded?).returns(true)
           @installer.expects(:download_source).never
           @installer.stubs(:clean_installation)
           @installer.install!
         end
 
-        it "doesn't downloads the source if the pod has a local source" do
+        it "doesn't download the source if the pod has a local source" do
           config.sandbox.store_local_path('BananaLib', 'Some Path')
           @installer.expects(:download_source).never
           @installer.install!
@@ -185,6 +121,18 @@ module Pod
           config.sandbox.store_local_path('BananaLib', 'Some Path')
           @installer.expects(:clean_installation).never
           @installer.install!
+        end
+
+        it "doesn't download the source if the pod was already downloaded" do
+          @installer.stubs(:downloaded?).returns(true)
+          Installer::PodSourceDownloader.any_instance.expects(:download!).never
+          @installer.send(:download_source)
+        end
+
+        it 'correctly downloads the source if the pod was not already downloaded' do
+          @installer.stubs(:downloaded?).returns(false)
+          Installer::PodSourceDownloader.any_instance.expects(:download!)
+          @installer.send(:download_source)
         end
       end
 

@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Raihaan Shouhell](https://github.com/res0nance)
   [#10940](https://github.com/CocoaPods/CocoaPods/pull/10940)
 
+* Add the ability to download pods in parallel  
+  [Seth Friedman](https://github.com/sethfri)
+  [#11232](https://github.com/CocoaPods/CocoaPods/pull/11232)
+
 ##### Bug Fixes
 
 * Clean sandbox when a pod switches from remote to local.  

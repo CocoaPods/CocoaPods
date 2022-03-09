@@ -682,6 +682,24 @@ module Pod
           sandbox_state.added << 'BananaLib'
           sandbox_state.changed << 'RestKit'
           @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:download_source_of_pod).never
+          @installer.expects(:install_source_of_pod).with('BananaLib')
+          @installer.expects(:install_source_of_pod).with('RestKit')
+          @installer.send(:install_pod_sources)
+        end
+
+        it 'downloads Pods separately from installation when parallel pod downloads is on' do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          spec_2 = Spec.new
+          spec_2.name = 'RestKit'
+          @installer.stubs(:root_specs).returns([spec, spec_2])
+          @installer.stubs(:installation_options).returns(Pod::Installer::InstallationOptions.new(:parallel_pod_downloads => true))
+          sandbox_state = Installer::Analyzer::SpecsState.new
+          sandbox_state.added << 'BananaLib'
+          sandbox_state.changed << 'RestKit'
+          @installer.stubs(:sandbox_state).returns(sandbox_state)
+          @installer.expects(:download_source_of_pod).with('BananaLib')
+          @installer.expects(:download_source_of_pod).with('RestKit')
           @installer.expects(:install_source_of_pod).with('BananaLib')
           @installer.expects(:install_source_of_pod).with('RestKit')
           @installer.send(:install_pod_sources)
@@ -696,6 +714,27 @@ module Pod
           @installer.instance_variable_set(:@installed_specs, [])
           Installer::PodSourceInstaller.any_instance.expects(:install!)
           @installer.send(:install_source_of_pod, 'BananaLib')
+        end
+
+        it 'correctly configures the Pod source downloader when parallel pod downloads is on' do
+          spec = fixture_spec('banana-lib/BananaLib.podspec')
+          pod_target = PodTarget.new(config.sandbox, BuildType.static_library, {}, [], Platform.ios, [spec], [fixture_target_definition],
+                                     nil)
+          @installer.stubs(:pod_targets).returns([pod_target])
+          Installer::PodSourceDownloader.any_instance.expects(:download!)
+          @installer.send(:download_source_of_pod, 'BananaLib')
+        end
+
+        it 'does not download a pod if it is predownloaded' do
+          @installer.sandbox.stubs(:predownloaded?).returns(true)
+          Installer::PodSourceDownloader.any_instance.expects(:download!).never
+          @installer.send(:download_source_of_pod, 'BananaLib')
+        end
+
+        it 'does not download a pod if it is local' do
+          @installer.sandbox.stubs(:local?).returns(true)
+          Installer::PodSourceDownloader.any_instance.expects(:download!).never
+          @installer.send(:download_source_of_pod, 'BananaLib')
         end
 
         it 'maintains the list of the installed specs' do
