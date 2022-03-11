@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CocoaPods/CLAide.git
-  revision: a5d1a29b08ca88f90f47104805bc4fad2efc93c9
+  revision: 00379095567c88f7a00da25136bad60e41ca2b47
   branch: master
   specs:
-    claide (1.0.3)
+    claide (1.1.0)
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
@@ -30,14 +30,14 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: 1bf2e6e8781045fed99ca7020d5007234e715dc8
+  revision: 40cc6326e74000f597bb73d727053d9effe28c7d
   branch: master
   specs:
     nanaimo (0.3.0)
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 2a1f19ad039556a153dd888cc293b9330bdc0f7a
+  revision: 14c3954d05ca954ee7b43498def8077cc7495509
   branch: master
   specs:
     xcodeproj (1.21.0)
@@ -132,7 +132,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (3.0.3)
+    CFPropertyList (3.0.5)
+      rexml
     activesupport (5.2.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
