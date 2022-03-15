@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix script breaking when attempting to print a warning.  
+  [Igor Makarov](https://github.com/igor-makarov)
+  [#11251](https://github.com/CocoaPods/CocoaPods/issues/11251)
+
 * Do not consider podspec_repo when analying sandbox for changes.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10985](https://github.com/CocoaPods/CocoaPods/pull/10985)
