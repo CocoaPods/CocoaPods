@@ -964,7 +964,7 @@ module Pod
 
     # Runs the pre integrate hooks of the installed specs and of the Podfile.
     #
-    # @note   Pre integrate hooks run _before_ generation of the Podsproject.
+    # @note   Pre integrate hooks run _before_ generation of the Pods project.
     #
     # @return [void]
     #
