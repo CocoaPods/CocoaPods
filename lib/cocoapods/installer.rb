@@ -962,10 +962,9 @@ module Pod
         "\n\n#{e.message}\n\n#{e.backtrace * "\n"}"
     end
 
-    # Runs the post integrate hooks of the installed specs and of the Podfile.
+    # Runs the pre integrate hooks of the installed specs and of the Podfile.
     #
-    # @note   Post integrate hooks run _after_ saving of project, so that they
-    #         can alter it after it is written to the disk.
+    # @note   Pre integrate hooks run _before_ generation of the Podsproject.
     #
     # @return [void]
     #
