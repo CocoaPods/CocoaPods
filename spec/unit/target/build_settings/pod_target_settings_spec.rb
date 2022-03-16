@@ -211,7 +211,7 @@ module Pod
             hash = generator.generate.to_hash
             hash['SYSTEM_FRAMEWORK_SEARCH_PATHS'].should.be.nil
             hash['LIBRARY_SEARCH_PATHS'].should.not.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
-            hash['SWIFT_INCLUDE_PATHS'].should.be.nil
+            hash['SWIFT_INCLUDE_PATHS'].should.not.include '"$(PLATFORM_DIR)/Developer/usr/lib"'
           end
 
           it 'saves the xcconfig' do
