@@ -64,6 +64,10 @@ module Pod
 
 #{Pod::Generator::ScriptPhaseConstants::RSYNC_PROTECT_TMP_FILES}
 
+#{variant_for_slice}
+
+#{archs_for_slice}
+
 copy_dir()
 {
   local source="$1"
@@ -77,7 +81,9 @@ copy_dir()
 SELECT_SLICE_RETVAL=""
 
 select_slice() {
-  local paths=("$@")
+  local xcframework_name="$1"
+  xcframework_name="${xcframework_name##*/}"
+  local paths=("${@:2}")
   # Locate the correct slice of the .xcframework for the current architectures
   local target_path=""
 
@@ -93,29 +99,15 @@ select_slice() {
   fi
   for i in ${!paths[@]}; do
     local matched_all_archs="1"
-    for target_arch in $target_archs
-    do
-      if ! [[ "${paths[$i]}" == *"$target_variant"* ]]; then
+    local slice_archs="$(archs_for_slice "${xcframework_name}/${paths[$i]}")"
+    local slice_variant="$(variant_for_slice "${xcframework_name}/${paths[$i]}")"
+    for target_arch in $target_archs; do
+      if ! [[ "${slice_variant}" == "$target_variant" ]]; then
         matched_all_archs="0"
         break
       fi
 
-      # Verifies that the path contains the variant string (simulator or maccatalyst) if the variant is set.
-      if [[ -z "$target_variant" && ("${paths[$i]}" == *"simulator"* || "${paths[$i]}" == *"maccatalyst"*) ]]; then
-        matched_all_archs="0"
-        break
-      fi
-
-      # This regex matches all possible variants of the arch in the folder name:
-      # Let's say the folder name is: ios-armv7_armv7s_arm64_arm64e/CoconutLib.framework
-      # We match the following: -armv7_, _armv7s_, _arm64_ and _arm64e/.
-      # If we have a specific variant: ios-i386_x86_64-simulator/CoconutLib.framework
-      # We match the following: -i386_ and _x86_64-
-      # When the .xcframework wraps a static library, the folder name does not include
-      # any .framework. In that case, the folder name can be: ios-arm64_armv7
-      # We also match _armv7$ to handle that case.
-      local target_arch_regex="[_\\-]${target_arch}([\\/_\\-]|$)"
-      if ! [[ "${paths[$i]}" =~ $target_arch_regex ]]; then
+      if ! echo "${slice_archs}" | tr " " "\\n" | grep -F -q -x "$target_arch"; then
         matched_all_archs="0"
         break
       fi
@@ -137,10 +129,10 @@ install_xcframework() {
   local paths=("${@:4}")
 
   # Locate the correct slice of the .xcframework for the current architectures
-  select_slice "${paths[@]}"
+  select_slice "${basepath}" "${paths[@]}"
   local target_path="$SELECT_SLICE_RETVAL"
   if [[ -z "$target_path" ]]; then
-    echo "warning: [CP] Unable to find matching .xcframework slice in '${paths[@]}' for the current build architectures ($ARCHS)."
+    echo "warning: [CP] $(basename ${basepath}): Unable to find matching slice in '${paths[@]}' for the current build architectures ($ARCHS) and platform (${EFFECTIVE_PLATFORM_NAME-${PLATFORM_NAME}})."
     return
   fi
   local source="$basepath/$target_path"
@@ -181,6 +173,40 @@ install_xcframework() {
           args << shell_escape(slice.path.dirname.relative_path_from(root))
         end
         args.join(' ')
+      end
+
+      def variant_for_slice
+        script = ''
+        script << "variant_for_slice()\n"
+        script << "{\n"
+        script << "  case \"$1\" in\n"
+        xcframeworks.each do |xcframework|
+          root = xcframework.path
+          xcframework.slices.each do |slice|
+            script << "  #{shell_escape(root.basename.join(slice.path.dirname.relative_path_from(root)))})\n"
+            script << "    echo \"#{slice.platform_variant}\"\n"
+            script << "    ;;\n"
+          end
+        end
+        script << "  esac\n"
+        script << '}'
+      end
+
+      def archs_for_slice
+        script = ''
+        script << "archs_for_slice()\n"
+        script << "{\n"
+        script << "  case \"$1\" in\n"
+        xcframeworks.each do |xcframework|
+          root = xcframework.path
+          xcframework.slices.each do |slice|
+            script << "  #{shell_escape(root.basename.join(slice.path.dirname.relative_path_from(root)))})\n"
+            script << "    echo \"#{slice.supported_archs.sort.join(' ')}\"\n"
+            script << "    ;;\n"
+          end
+        end
+        script << "  esac\n"
+        script << '}'
       end
 
       class << self

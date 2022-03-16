@@ -92,6 +92,15 @@ module Pod
         @analyzer.stubs(:podfile_dependency).returns(dep2)
         @analyzer.send(:pod_changed?, 'BananaLib').should == true
       end
+
+      it 'does not consider the podspec repo on whether a dependency has changed' do
+        dep1 = Dependency.new('BananaLib')
+        dep2 = Dependency.new('BananaLib')
+        dep2.podspec_repo = 'https://some/repo/my_repo.git'
+        @analyzer.stubs(:sandbox_dependency).returns(dep1)
+        @analyzer.stubs(:podfile_dependency).returns(dep2)
+        @analyzer.send(:pod_changed?, 'BananaLib').should == false
+      end
     end
 
     #-------------------------------------------------------------------------#

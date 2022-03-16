@@ -125,7 +125,7 @@ module Pod
         validate_platforms(resolver_specs_by_target)
         specifications = generate_specifications(resolver_specs_by_target)
         aggregate_targets, pod_targets = generate_targets(resolver_specs_by_target, target_inspections)
-        sandbox_state   = generate_sandbox_state(specifications)
+        sandbox_state = generate_sandbox_state(specifications)
         specs_by_target = resolver_specs_by_target.each_with_object({}) do |rspecs_by_target, hash|
           hash[rspecs_by_target[0]] = rspecs_by_target[1].map(&:spec)
         end

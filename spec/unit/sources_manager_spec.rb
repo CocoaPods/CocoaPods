@@ -179,16 +179,12 @@ module Pod
         end
 
         it 'fake 200 response' do
-          HTML_RESPONSE = '<!doctype html>
-          <html>
-           <head>
-            <title>Some page</title>\n\n <meta charset=\"utf-8\" />
-           <body>
-            <div>
-             <h1>Some page</h1>
-            </div>
-           </body>
-           </html>"'.freeze
+          # really broken (not compatible with YAML) html that may return any endpoint
+          # i.e. login page after request redirect
+          HTML_RESPONSE = '<!DOCTYPE html>
+            <html class="devise-layout-html">
+            <head prefix="og: http://ogp.me/ns#">
+            <meta charset="utf-8">'.freeze
           WebMock.stub_request(:get, 'https://some_host.com/something/CocoaPods-version.yml').
             to_return(:status => 200, :body => HTML_RESPONSE)
           @sources_manager.cdn_url?('https://some_host.com/something').should == false
