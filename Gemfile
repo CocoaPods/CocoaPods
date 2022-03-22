@@ -57,7 +57,9 @@ group :development do
   gem 'rubocop', '0.50.0'
   gem 'simplecov', '< 0.18'
 
-  gem 'danger', '~> 5.3'
+  gem 'octokit', '~> 4.18.0'
+
+  gem 'danger', '~> 8.0'
 end
 
 group :debugging do
