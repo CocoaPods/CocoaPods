@@ -16,12 +16,13 @@ module Pod
                                      'Release' => [pod_target])
       umbrella.stubs(:platform).returns(Platform.new(:ios, '8.0'))
 
-      result = Installer::PostInstallHooksContext.generate(sandbox, pods_project, [umbrella])
+      result = Installer::PostInstallHooksContext.generate(sandbox, pods_project, [], [umbrella])
       result.class.should == Installer::PostInstallHooksContext
       result.sandbox_root.should == '/path'
       result.pods_project.should == pods_project
       result.sandbox.should == sandbox
       result.umbrella_targets.count.should == 1
+      result.generated_projects.should == [pods_project]
       umbrella_target = result.umbrella_targets.first
       umbrella_target.user_targets.should == [user_target]
       umbrella_target.user_target_uuids.should == [user_target.uuid]
