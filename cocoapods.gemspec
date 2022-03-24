@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'claide',                '>= 1.0.2', '< 2.0'
   s.add_runtime_dependency 'cocoapods-deintegrate', '>= 1.0.3', '< 2.0'
-  s.add_runtime_dependency 'cocoapods-downloader',  '>= 1.4.0', '< 2.0'
+  s.add_runtime_dependency 'cocoapods-downloader',  '>= 1.6.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-plugins',     '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-search',      '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-trunk',       '>= 1.6.0', '< 2.0'
