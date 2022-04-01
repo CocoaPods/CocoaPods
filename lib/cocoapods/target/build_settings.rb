@@ -942,18 +942,22 @@ module Pod
         # @return [Array<String>]
         define_build_settings_method :swift_include_paths, :build_setting => true, :memoized => true, :sorted => true, :uniqued => true do
           paths = dependent_targets.flat_map { |pt| pt.build_settings[@configuration].swift_include_paths_to_import }
-          paths.concat swift_include_paths_to_import if non_library_xcconfig?
-          vendored_static_library_search_paths = dependent_targets.flat_map { |pt| pt.build_settings[@configuration].vendored_static_library_search_paths }
-          paths.concat vendored_static_library_search_paths
+          if target.should_build? && target.uses_swift?
+            paths.concat vendored_xcframeworks.
+              select { |xcf| xcf.build_type.library? && xcf.includes_swift_module? }.
+              map { |xcf| BuildSettings.xcframework_intermediate_dir(xcf) }
+          end
           paths.concat ['$(PLATFORM_DIR)/Developer/usr/lib'] if should_apply_xctunwrap_fix?
           paths
         end
 
         # @return [Array<String>]
         define_build_settings_method :swift_include_paths_to_import, :memoized => true do
-          return [] unless target.uses_swift? && !target.build_as_framework?
-
-          [target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)]
+          paths = vendored_xcframeworks.
+                  select { |xcf| xcf.build_type.library? && xcf.includes_swift_module? }.
+                  map { |xcf| BuildSettings.xcframework_intermediate_dir(xcf) }
+          paths.concat [target.configuration_build_dir(CONFIGURATION_BUILD_DIR_VARIABLE)] if target.should_build? && target.uses_swift? && !target.build_as_framework?
+          paths
         end
 
         #-------------------------------------------------------------------------#

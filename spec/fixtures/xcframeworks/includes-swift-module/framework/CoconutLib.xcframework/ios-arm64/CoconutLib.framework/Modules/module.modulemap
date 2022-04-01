@@ -1,0 +1,11 @@
+framework module CoconutLib {
+  umbrella header "CoconutLib.h"
+
+  export *
+  module * { export * }
+}
+
+module CoconutLib.Swift {
+    header "CoconutLib-Swift.h"
+    requires objc
+}
