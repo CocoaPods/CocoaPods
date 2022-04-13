@@ -123,6 +123,102 @@ module Pod
 
       #---------------------------------------------------------------------#
 
+      describe '::other_ldflags' do
+        it 'does not add static library to other_ldflags if there is a host app' do
+          spec = stub('spec', :library_specification? => true, :spec_type => :library)
+          test_spec = stub('spec', :test_specification? => true, :app_specification? => false, :spec_type => :test)
+          app_spec = stub('spec', :test_specification? => false, :app_specification? => true, :spec_type => :app)
+
+          consumer = stub('consumer',
+                          :libraries => [],
+                          :frameworks => [],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :vendored_static_artifacts => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_frameworks => [],
+                              )
+
+          podfile = stub('podfile',
+            :set_arc_compatibility_flag? => false
+          )
+          
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :should_build? => true,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => true,
+                            :build_as_dynamic? => false,
+                            :build_as_static_library? => true,
+                            :build_as_dynamic_library? => false,
+                            :product_basename => 'PodTarget',
+                            :pod_name => 'PodName',
+                            :podfile => podfile,
+                            )
+
+          pod_target.stubs(:build_settings => { :debug => BuildSettings::PodTargetSettings.new(pod_target, nil, :configuration => :debug) })
+          pod_target.stubs(:app_host_dependent_targets_for_spec => [pod_target])
+          pod_target.stubs(:dependent_targets_for_test_spec => [pod_target])
+          pod_target.stubs(:test_app_hosts_by_spec => { test_spec => [app_spec, pod_target]})
+
+          build_settings = BuildSettings::PodTargetSettings.new(pod_target, test_spec, :configuration => :debug)
+          
+          other_ldflags = build_settings.other_ldflags
+          other_ldflags.should.not.include "-l\"PodTarget\""
+        end
+
+        it 'adds static library to other_ldflags if there is no host app' do
+          spec = stub('spec', :library_specification? => true, :spec_type => :library)
+          test_spec = stub('spec', :test_specification? => true, :app_specification? => false, :spec_type => :test)
+
+          consumer = stub('consumer',
+                          :libraries => [],
+                          :frameworks => [],
+                          :weak_frameworks => [],
+                          :spec => spec,
+                         )
+          file_accessor = stub('file_accessor',
+                               :spec => spec,
+                               :vendored_static_artifacts => [],
+                               :vendored_dynamic_libraries => [],
+                               :vendored_frameworks => [],
+                              )
+
+          podfile = stub('podfile',
+            :set_arc_compatibility_flag? => false
+          )
+          
+          pod_target = stub('pod_target',
+                            :file_accessors => [file_accessor],
+                            :should_build? => true,
+                            :spec_consumers => [consumer],
+                            :build_as_static? => true,
+                            :build_as_dynamic? => false,
+                            :build_as_static_library? => true,
+                            :build_as_dynamic_library? => false,
+                            :product_basename => 'PodTarget',
+                            :pod_name => 'PodName',
+                            :podfile => podfile,
+                            )
+
+          pod_target.stubs(:build_settings => { :debug => BuildSettings::PodTargetSettings.new(pod_target, nil, :configuration => :debug) })
+          pod_target.stubs(:app_host_dependent_targets_for_spec => [pod_target])
+          pod_target.stubs(:dependent_targets_for_test_spec => [pod_target])
+
+          pod_target.stubs(:test_app_hosts_by_spec => { })
+
+          build_settings = BuildSettings::PodTargetSettings.new(pod_target, test_spec, :configuration => :debug)
+          
+          other_ldflags = build_settings.other_ldflags
+          other_ldflags.should.include "-l\"PodTarget\""
+        end
+      end
+
+      #---------------------------------------------------------------------#
+
       describe '#merge_spec_xcconfig_into_xcconfig' do
         before do
           @build_settings = BuildSettings.new(stub('Target'))

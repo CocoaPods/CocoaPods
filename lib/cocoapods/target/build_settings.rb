@@ -800,7 +800,8 @@ module Pod
                                     uniq
             static_libraries_to_import.concat linker_names_from_libraries(xcframework_libraries)
           end
-          static_libraries_to_import << target.product_basename if target.should_build? && target.build_as_static_library?
+          tests_hosted_in_app = test_xcconfig && !target.test_app_hosts_by_spec[non_library_spec].nil?
+          static_libraries_to_import << target.product_basename if target.should_build? && target.build_as_static_library? && !tests_hosted_in_app
           static_libraries_to_import
         end
 
