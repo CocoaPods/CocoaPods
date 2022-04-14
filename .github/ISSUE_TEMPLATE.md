@@ -1,4 +1,18 @@
 <!--
+WARNING: Please do not file issues for CocoaPods with projects 
+that use React Native or Flutter. Please remove React Native or Flutter
+in your sample app in order to properly demonstrate an issue with CocoaPods itself.
+
+The integration between CocoaPods and React Native or Flutter 
+makes it very difficult for us to diagnose and fix issues.
+
+Issues with React Native or Flutter will be closed.
+
+Please file React Native issues at https://github.com/facebook/react-native
+and Flutter issues at https://github.com/flutter/flutter.
+-->
+
+<!--
 ℹ Please fill out this template when filing an issue.
 All lines beginning with an ℹ symbol instruct you with
 what info we expect.  
