@@ -1908,6 +1908,130 @@ module Pod
                 @installer.install!
               end
             end
+
+            describe 'copying resources from dependencies to non-library targets bundle' do
+              before do
+                @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+                @grapefruits_spec = fixture_spec('grapefruits-lib/GrapefruitsLib.podspec')
+                @project = Project.new(config.sandbox.project_path)
+                @project.add_pod_group('GrapefruitsLib', fixture('grapefruits-lib'))
+                @project.add_pod_group('BananaLib', fixture('banana-lib'))
+                @ios_target_definition = fixture_target_definition('SampleProject', Platform.new(:ios, '6.0'))
+                user_build_configurations = { 'Debug' => :debug, 'Release' => :release }
+                @banana_ios_pod_target = fixture_pod_target_with_specs([@banana_spec], BuildType.static_library,
+                                                                       user_build_configurations, [],
+                                                                       Platform.new(:ios, '6.0'),
+                                                                       [@ios_target_definition])
+                @grapefruits_ios_pod_target = fixture_pod_target_with_specs([@grapefruits_spec, *@grapefruits_spec.recursive_subspecs],
+                                                                            BuildType.dynamic_framework,
+                                                                            user_build_configurations, [],
+                                                                            Platform.new(:ios, '6.0'),
+                                                                            [@ios_target_definition])
+                @grapefruits_app_spec = @grapefruits_spec.app_specs.first
+                @grapefruits_test_spec = @grapefruits_spec.test_specs.first
+                @grapefruits_ios_pod_target.app_dependent_targets_by_spec_name = { @grapefruits_app_spec.name => [@banana_ios_pod_target] }
+                @grapefruits_ios_pod_target.test_dependent_targets_by_spec_name = { @grapefruits_test_spec.name => [@banana_ios_pod_target] }
+
+                FileReferencesInstaller.new(config.sandbox, [@grapefruits_ios_pod_target, @banana_ios_pod_target],
+                                            @project).install!
+                @ios_installer = PodTargetInstaller.new(config.sandbox, @project, @grapefruits_ios_pod_target)
+              end
+
+              it 'does not copy resources from dynamically built dependent target to test spec bundle' do
+                @banana_ios_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @banana_spec.consumer(:ios))
+                file_accessor.stubs(:vendored_static_artifacts).returns([])
+                @banana_ios_pod_target.stubs(:file_accessors).returns([file_accessor])
+
+                @ios_installer.install!
+                script_path = @grapefruits_ios_pod_target.copy_resources_script_path_for_spec(@grapefruits_spec.test_specs.first)
+                script_path.should.not.exist?
+              end
+
+              it 'does not copy resources from dynamically built dependent target to app spec bundle' do
+                @banana_ios_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @banana_spec.consumer(:ios))
+                file_accessor.stubs(:vendored_static_artifacts).returns([])
+                @banana_ios_pod_target.stubs(:file_accessors).returns([file_accessor])
+                @ios_installer.install!
+                script_path = @grapefruits_ios_pod_target.copy_resources_script_path_for_spec(@grapefruits_spec.app_specs.first)
+                script_path.should.not.exist?
+              end
+
+              it 'copies resources from dependent target with static vendored artifacts to app spec bundle' do
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/AppResourceBundle.bundle']
+                @banana_ios_pod_target.stubs(:resource_paths).returns('BananaLib' => resource_paths)
+                @banana_ios_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @banana_spec.consumer(:ios))
+                file_accessor.stubs(:vendored_static_frameworks).returns([config.sandbox.root + 'StaticFramework.framework'])
+                @banana_ios_pod_target.stubs(:file_accessors).returns([file_accessor])
+                @ios_installer.install!
+                script_path = @grapefruits_ios_pod_target.copy_resources_script_path_for_spec(@grapefruits_spec.app_specs.first)
+                script_path.should.exist?
+                script = script_path.read
+                @grapefruits_ios_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+                  if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+                    install_resource "${PODS_CONFIGURATION_BUILD_DIR}/AppResourceBundle.bundle"
+                  fi
+                  eos
+                end
+              end
+
+              it 'copies resources from dependent target with static vendored artifacts to test spec bundle' do
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+                @banana_ios_pod_target.stubs(:resource_paths).returns('BananaLib' => resource_paths)
+                @banana_ios_pod_target.stubs(:build_type).returns(BuildType.dynamic_framework)
+                path_list = Sandbox::PathList.new(fixture('banana-lib'))
+                file_accessor = Sandbox::FileAccessor.new(path_list, @banana_spec.consumer(:ios))
+                file_accessor.stubs(:vendored_static_libraries).returns([config.sandbox.root + 'staticLibrary.a'])
+                @banana_ios_pod_target.stubs(:file_accessors).returns([file_accessor])
+                @ios_installer.install!
+                script_path = @grapefruits_ios_pod_target.copy_resources_script_path_for_spec(@grapefruits_spec.test_specs.first)
+                script_path.should.exist?
+                script = script_path.read
+                @grapefruits_ios_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+                  if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+                    install_resource "${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle"
+                  fi
+                  eos
+                end
+              end
+
+              it 'copies resources from statically built dependent target to test spec bundle' do
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle']
+                @banana_ios_pod_target.stubs(:resource_paths).returns('BananaLib' => resource_paths)
+                @ios_installer.install!
+                script_path = @grapefruits_ios_pod_target.copy_resources_script_path_for_spec(@grapefruits_spec.test_specs.first)
+                script = script_path.read
+                @grapefruits_ios_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+                  if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+                    install_resource "${PODS_CONFIGURATION_BUILD_DIR}/TestResourceBundle.bundle"
+                  fi
+                  eos
+                end
+              end
+
+              it 'copies resources from statically built dependent target to app spec bundle' do
+                resource_paths = ['${PODS_CONFIGURATION_BUILD_DIR}/AppResourceBundle.bundle']
+                @banana_ios_pod_target.stubs(:resource_paths).returns('BananaLib' => resource_paths)
+                @ios_installer.install!
+                script_path = @grapefruits_ios_pod_target.copy_resources_script_path_for_spec(@grapefruits_spec.app_specs.first)
+                script = script_path.read
+                @grapefruits_ios_pod_target.user_build_configurations.keys.each do |configuration|
+                  script.should.include <<-eos.strip_heredoc
+                  if [[ "$CONFIGURATION" == "#{configuration}" ]]; then
+                    install_resource "${PODS_CONFIGURATION_BUILD_DIR}/AppResourceBundle.bundle"
+                  fi
+                  eos
+                end
+              end
+            end
           end
         end
       end
