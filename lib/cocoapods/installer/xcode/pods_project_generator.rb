@@ -265,6 +265,9 @@ module Pod
               if scheme_configuration.key?(:code_coverage)
                 scheme.test_action.code_coverage_enabled = scheme_configuration[:code_coverage]
               end
+              if scheme_configuration.key?(:parallelizable)
+                scheme.test_action.testables.each { |testable| testable.parallelizable = scheme_configuration[:parallelizable] }
+              end
 
               hosted_test_specs_by_host[spec].each do |hosted_spec|
                 # We are an app spec which hosts this test spec.

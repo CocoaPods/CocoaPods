@@ -491,7 +491,8 @@ module Pod
               @coconut_spec.scheme = { :launch_arguments => ['Arg1'] }
               @coconut_test_spec.scheme = { :launch_arguments => ['TestArg1'],
                                             :environment_variables => { 'Key1' => 'Val1' },
-                                            :code_coverage => true }
+                                            :code_coverage => true,
+                                            :parallelizable => true }
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(true)
@@ -519,6 +520,7 @@ module Pod
                 { :key => 'Key1', :value => 'Val1', :enabled => true },
               ]
               test_scheme.test_action.code_coverage_enabled?.should.be.true
+              test_scheme.test_action.testables.each { |testable| testable.parallelizable?.should.be.true }
             end
 
             it 'adds the test bundle to the test action of the app host when using app specs' do
