@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Integrate `parallelizable` scheme DSL option.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11399](https://github.com/CocoaPods/CocoaPods/pull/11399)
+
 * Use `${DEVELOPMENT_LANGUAGE}` as the default `CFBundleDevelopmentRegion` value in any generated `Info.plist`.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10950](https://github.com/CocoaPods/CocoaPods/pull/10950)
