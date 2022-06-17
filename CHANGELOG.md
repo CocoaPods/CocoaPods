@@ -8,6 +8,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Re-use the same path lists for pods that share the same root.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11417](https://github.com/CocoaPods/CocoaPods/pull/11417)
+
 * Integrate `parallelizable` scheme DSL option.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11399](https://github.com/CocoaPods/CocoaPods/pull/11399)
