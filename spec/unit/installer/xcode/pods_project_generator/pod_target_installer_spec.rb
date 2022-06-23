@@ -5,6 +5,38 @@ module Pod
     class Xcode
       class PodsProjectGenerator
         describe PodTargetInstaller do
+          describe 'In presence of Documentation Catalog' do
+            before do
+              @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')
+              @banana_spec.source_files = 'Classes/**/*.*' # we include all files inside 'Classes/Documentation.docc/'
+
+              @project = Pod::Project.new(config.sandbox.project_path)
+              @project.add_pod_group('BananaLib', fixture('banana-lib'))
+              platform = Platform.new(:ios, '4.3')
+              @target_definition = fixture_target_definition('SampleProject', platform)
+              @pod_target = fixture_pod_target(@banana_spec, BuildType.static_library,
+                                               { 'Debug' => :debug, 'Release' => :release }, [], platform,
+                                               [@target_definition])
+              FileReferencesInstaller.new(config.sandbox, [@pod_target], @project).install!
+              @installer = PodTargetInstaller.new(config.sandbox, @project, @pod_target)
+            end
+
+            it 'adds the Documentation Catalog of each pod to the target of the Pod library' do
+              names = @installer.install!.native_target.source_build_phase.files.map { |bf| bf.file_ref.display_name }
+              names.should.include('Documentation.docc')
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+module Pod
+  class Installer
+    class Xcode
+      class PodsProjectGenerator
+        describe PodTargetInstaller do
           describe 'In General' do
             before do
               @banana_spec = fixture_spec('banana-lib/BananaLib.podspec')

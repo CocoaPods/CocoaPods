@@ -1010,6 +1010,9 @@ module Pod
             error_message_for_missing_reference = lambda do |sf, target|
               "Unable to find #{file_type} ref for `#{sf.basename}` for target `#{target.name}`."
             end
+
+            # Remove all file ref under .docc folder, but preserve the .docc folder
+            files = merge_to_docc_folder(files)
             files.map do |sf|
               begin
                 project.reference_for_path(sf).tap do |ref|

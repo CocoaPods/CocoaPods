@@ -8,6 +8,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Correctly handle .docc documentation in source_files.  
+  [haifengkao](https://github.com/haifengkao)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11438](https://github.com/CocoaPods/CocoaPods/pull/11438)
+  [#10885](https://github.com/CocoaPods/CocoaPods/issues/10885)
+
 * Re-use the same path lists for pods that share the same root.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11417](https://github.com/CocoaPods/CocoaPods/pull/11417)
