@@ -79,7 +79,9 @@ module Pod
               pt.specs.map(&:name)
             end.uniq
             resource_paths = dependent_targets.flat_map do |dependent_target|
-              spec_paths_to_include = dependent_target.library_specs.map(&:name)
+              spec_paths_to_include = []
+              static_libs = dependent_target.file_accessors.flat_map(&:vendored_static_artifacts)
+              spec_paths_to_include += dependent_target.library_specs.map(&:name) if dependent_target.build_as_static? || !static_libs.empty?
               spec_paths_to_include -= host_target_spec_names
               spec_paths_to_include << spec.name if dependent_target == target
               dependent_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact

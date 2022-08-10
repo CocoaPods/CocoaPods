@@ -689,7 +689,9 @@ module Pod
             end.uniq
             resource_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), resources_by_config|
               resources_by_config[config_name] = target.dependent_targets_for_test_spec(test_spec, :configuration => config).flat_map do |pod_target|
-                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include = []
+                static_libs = pod_target.file_accessors.flat_map(&:vendored_static_artifacts)
+                spec_paths_to_include += pod_target.library_specs.map(&:name) if pod_target.build_as_static? || !static_libs.empty?
                 spec_paths_to_include -= host_target_spec_names
                 spec_paths_to_include << test_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
@@ -777,7 +779,9 @@ module Pod
             resource_paths_by_config = target.user_build_configurations.each_with_object({}) do |(config_name, config), resources_by_config|
               pod_targets = target.dependent_targets_for_app_spec(app_spec, :configuration => config)
               resources_by_config[config_name] = pod_targets.flat_map do |pod_target|
-                spec_paths_to_include = pod_target.library_specs.map(&:name)
+                spec_paths_to_include = []
+                static_libs = pod_target.file_accessors.flat_map(&:vendored_static_artifacts)
+                spec_paths_to_include += pod_target.library_specs.map(&:name) if pod_target.build_as_static? || !static_libs.empty?
                 spec_paths_to_include << app_spec.name if pod_target == target
                 pod_target.resource_paths.values_at(*spec_paths_to_include).flatten.compact
               end

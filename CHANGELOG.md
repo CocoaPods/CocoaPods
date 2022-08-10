@@ -47,6 +47,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Sources priority in Podfile warks as stated in documentation.
   [Ilya Myakotin](https://github.com/rehsals)
   [#8679](https://github.com/CocoaPods/CocoaPods/issues/8679)
+* Do not copy resources to non-library (App, Tests) targets bundles from dynamically built dependencies
+  [Ilya Myakotin](https://github.com/rehsals)
+  [#11331](https://github.com/CocoaPods/CocoaPods/issues/11331)
 
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
