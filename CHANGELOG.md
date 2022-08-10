@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Sources priority in Podfile warks as stated in documentation.
+  [Ilya Myakotin](https://github.com/rehsals)
+  [#8679](https://github.com/CocoaPods/CocoaPods/issues/8679)
+
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11213](https://github.com/CocoaPods/CocoaPods/pull/11213)
