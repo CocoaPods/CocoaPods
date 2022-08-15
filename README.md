@@ -13,7 +13,7 @@ You specify the dependencies for your project in a simple text file: your `Podfi
 CocoaPods recursively resolves dependencies between libraries, fetches 
 source code for all dependencies, and creates and maintains an Xcode 
 workspace to build your project. The latest released Xcode versions and the 
-prior version are supported.
+prior versions are supported.
 
 Installing and updating CocoaPods is very easy. Don't miss the [Installation
 guide](https://guides.cocoapods.org/using/getting-started.html#installation) and the
@@ -22,7 +22,7 @@ guide](https://guides.cocoapods.org/using/getting-started.html#installation) and
 ## Project Goals
 
 CocoaPods aims to improve the engagement with, and discoverability 
-of, third party open-source Cocoa libraries. These
+of, third-party open-source Cocoa libraries. These
 project goals influence and drive the design of CocoaPods:
 
 - Create and share libraries, and use them in your own projects,
@@ -35,9 +35,9 @@ project goals influence and drive the design of CocoaPods:
 - Support any source management system. (Currently supported are `git`, 
   `svn`, `mercurial`, `bazaar`, and various types of archives downloaded over HTTP.)
 - Promote a culture of distributed collaboration on pods, but also provide
-  features only possible with a centralised solution to foster a community.
+  features only possible with a centralized solution to foster a community.
 - Build tools on top of the core Cocoa development system, including those 
-  typically deployed to other operating systems, such as web-services.
+  typically deployed to other operating systems, such as web services.
 - Provide opinionated and automated integration, but make it completely
   optional. You may manually integrate your CocoaPods dependencies
   into your Xcode project as you see fit, with or without a workspace.
@@ -50,7 +50,7 @@ Lovingly sponsored by a collection of companies, see the footer of [CocoaPods.or
 ## Collaborate
 
 All CocoaPods development happens on GitHub. Contributions make for good karma and
-we [welcome new](https://blog.cocoapods.org/starting-open-source/) contributors with joy. We take contributors seriously, and thus have a 
+we [welcome new](https://blog.cocoapods.org/starting-open-source/) contributors with joy. We take contributors seriously and thus have a 
 contributor [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Links
