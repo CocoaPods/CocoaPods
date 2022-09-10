@@ -46,7 +46,6 @@ module Pod
               File.basename(path, '.framework')
             when :library
               result = File.basename(path, '.a').gsub(/^lib/, '')
-              result[0] = result.downcase[0]
               result
             else
               raise Informative, "Invalid package type `#{package_type}`"
