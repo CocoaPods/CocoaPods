@@ -46,6 +46,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Seth Friedman](https://github.com/sethfri)
   [#11235](https://github.com/CocoaPods/CocoaPods/pull/11235)
 
+* Fix `SWIFT_INCLUDE_PATHS` for swift library xcframework  
+  [xuzhongping](https://github.com/xuzhongping)
+  [#10058](https://github.com/CocoaPods/CocoaPods/issues/10058)
+
 ## 1.11.3 (2022-03-16)
 
 ##### Enhancements
