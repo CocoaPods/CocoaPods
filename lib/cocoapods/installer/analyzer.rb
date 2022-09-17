@@ -1011,6 +1011,7 @@ module Pod
               sandbox.specification_path(dep.root_name).nil? ||
                 !dep.external_source[:path].nil? ||
                 !sandbox.pod_dir(dep.root_name).directory? ||
+                sandbox.pod_dir(dep.root_name).empty? ||
                 checkout_requires_update?(dep)
             end
           end
