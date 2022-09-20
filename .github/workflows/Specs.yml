@@ -1,5 +1,8 @@
 name: Specs
 
+permissions:
+   contents: read
+
 jobs:
   specs:
     strategy:
