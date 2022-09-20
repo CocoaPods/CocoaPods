@@ -1,5 +1,8 @@
 name: Lint
 
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
 jobs:
   lint:
     strategy:
