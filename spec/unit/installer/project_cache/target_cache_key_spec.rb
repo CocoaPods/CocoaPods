@@ -202,6 +202,25 @@ module Pod
             diff.should.equal(:project)
             inverse_diff.should.equal(:project)
           end
+
+          it 'should return inequality if an upstream pod changes resources' do
+            monkey_target = fixture_pod_target('monkey/monkey.podspec')
+            targets_by_label = Hash[[@banana_pod_target, monkey_target].map { |target| [target.label, target] }]
+            @banana_cache_key = TargetCacheKey.from_pod_target(config.sandbox, targets_by_label, @banana_pod_target,
+                                                               :is_local_pod => true)
+
+            # make up a new object to avoid the memoization of a target's resource_paths
+            monkey_target = fixture_pod_target('monkey/monkey.podspec')
+            monkey_target.file_accessors.first.stubs(:resource_bundles).returns('monkey_bundle' => ['Resources/**/*'])
+
+            targets_by_label = Hash[[@banana_pod_target, monkey_target].map { |target| [target.label, target] }]
+            added_banana_cache_key = TargetCacheKey.from_pod_target(config.sandbox, targets_by_label, @banana_pod_target,
+                                                                    :is_local_pod => true)
+            diff = added_banana_cache_key.key_difference(@banana_cache_key)
+            inverse_diff = @banana_cache_key.key_difference(added_banana_cache_key)
+            diff.should.equal(:project)
+            inverse_diff.should.equal(:project)
+          end
         end
 
         describe 'key_difference with hash objects' do
