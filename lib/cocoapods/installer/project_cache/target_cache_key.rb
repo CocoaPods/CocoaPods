@@ -58,6 +58,10 @@ module Pod
             other_files = other.key_hash['FILES']
             return :project if this_files != other_files
 
+            this_resources = key_hash['RESOURCES']
+            other_resources = other.key_hash['RESOURCES']
+            return :project if this_resources != other_resources
+
             this_build_settings = key_hash['BUILD_SETTINGS_CHECKSUM']
             other_build_settings = other.key_hash['BUILD_SETTINGS_CHECKSUM']
             return :project if this_build_settings != other_build_settings
@@ -98,6 +102,9 @@ module Pod
           if specs = cache_hash['SPECS']
             cache_hash['SPECS'] = specs.sort_by(&:downcase)
           end
+          if resources = cache_hash['RESOURCES']
+            cache_hash['RESOURCES'] = resources.sort_by(&:downcase)
+          end
           type = cache_hash['CHECKSUM'] ? :pod_target : :aggregate
           TargetCacheKey.new(sandbox, type, cache_hash)
         end
@@ -105,6 +112,9 @@ module Pod
         # Constructs a TargetCacheKey instance from a PodTarget.
         #
         # @param [Sandbox] sandbox The sandbox to use to construct a TargetCacheKey object.
+        #
+        # @param [Hash] target_by_label
+        #        Maps target names to PodTarget objects.
         #
         # @param [PodTarget] pod_target
         #        The pod target used to construct a TargetCacheKey object.
@@ -117,7 +127,7 @@ module Pod
         #
         # @return [TargetCacheKey]
         #
-        def self.from_pod_target(sandbox, pod_target, is_local_pod: false, checkout_options: nil)
+        def self.from_pod_target(sandbox, target_by_label, pod_target, is_local_pod: false, checkout_options: nil)
           build_settings = {}
           build_settings[pod_target.label.to_s] = Hash[pod_target.build_settings.map do |k, v|
             [k, Digest::MD5.hexdigest(v.xcconfig.to_s)]
@@ -127,6 +137,20 @@ module Pod
           end
           pod_target.app_spec_build_settings_by_config.each do |name, settings_by_config|
             build_settings[name] = Hash[settings_by_config.map { |k, v| [k, Digest::MD5.hexdigest(v.xcconfig.to_s)] }]
+          end
+
+          # find resources from upstream dependencies that will be named in the `{name}-resources.sh` script
+          resource_dependencies = []
+          pod_target.dependencies.each do |name|
+            next unless target_by_label[name]
+
+            upstream = target_by_label[name]
+
+            # pod target
+            resource_dependencies.append(upstream.resource_paths.values.flatten) if upstream.respond_to?(:resource_paths)
+
+            # aggregate target
+            resource_dependencies.append(upstream.resource_paths_by_config.values.flatten) if upstream.respond_to?(:resource_paths_by_config)
           end
 
           contents = {
@@ -140,6 +164,7 @@ module Pod
             contents['FILES'] = relative_file_paths.sort_by(&:downcase)
           end
           contents['CHECKOUT_OPTIONS'] = checkout_options if checkout_options
+          contents['RESOURCES'] = resource_dependencies.flatten.uniq.sort_by(&:downcase) if resource_dependencies.any?
           TargetCacheKey.new(sandbox, :pod_target, contents)
         end
 
@@ -152,10 +177,22 @@ module Pod
         #
         # @return [TargetCacheKey]
         #
-        def self.from_aggregate_target(sandbox, aggregate_target)
+        def self.from_aggregate_target(sandbox, target_by_label, aggregate_target)
           build_settings = {}
           aggregate_target.user_build_configurations.keys.each do |configuration|
             build_settings[configuration] = Digest::MD5.hexdigest(aggregate_target.build_settings(configuration).xcconfig.to_s)
+          end
+
+          # find resources from upstream dependencies that will be named in the `{name}-resources.sh` script
+          resource_dependencies = []
+          aggregate_target.pod_targets.each do |name|
+            upstream = target_by_label[name]
+
+            # pod target
+            resource_dependencies.append(upstream.resource_paths.values.flatten) if upstream.respond_to?(:resource_paths)
+
+            # aggregate target
+            resource_dependencies.append(upstream.resource_paths_by_config.values.flatten) if upstream.respond_to?(:resource_paths_by_config)
           end
 
           contents = {
@@ -167,6 +204,7 @@ module Pod
               res.relative_path_from(sandbox.project_path.dirname).to_s
             end
             contents['FILES'] = (relative_resource_file_paths + relative_on_demand_resource_file_paths).sort_by(&:downcase)
+            contents['RESOURCES'] = resource_dependencies.flatten.uniq.sort_by(&:downcase) if resource_dependencies.any?
           end
           TargetCacheKey.new(sandbox, :aggregate, contents)
         end

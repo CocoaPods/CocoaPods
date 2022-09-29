@@ -139,10 +139,10 @@ module Pod
             when PodTarget
               local = sandbox.local?(target.pod_name)
               checkout_options = sandbox.checkout_sources[target.pod_name]
-              [label, TargetCacheKey.from_pod_target(sandbox, target, :is_local_pod => local,
-                                                                      :checkout_options => checkout_options)]
+              [label, TargetCacheKey.from_pod_target(sandbox, target_by_label, target,
+                                                     :is_local_pod => local, :checkout_options => checkout_options)]
             when AggregateTarget
-              [label, TargetCacheKey.from_aggregate_target(sandbox, target)]
+              [label, TargetCacheKey.from_aggregate_target(sandbox, target_by_label, target)]
             else
               raise "[BUG] Unknown target type #{target}"
             end
