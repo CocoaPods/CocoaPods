@@ -1,5 +1,0 @@
-platform :ios
-pod 'SSZipArchive',      '>= 1'
-pod 'ASIHTTPRequest',    '~> 1.8.0'
-pod 'Reachability'                  # part of ASIHTTPRequest
-pod 'ASIWebPageRequest',        '< 1.8.2'  # part of ASIHTTPRequest
