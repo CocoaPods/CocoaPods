@@ -46,7 +46,6 @@ module Pod
               File.basename(path, '.framework')
             when :library
               result = File.basename(path, '.a').gsub(/^lib/, '')
-              result[0] = result.downcase[0]
               result
             else
               raise Informative, "Invalid package type `#{package_type}`"
@@ -131,6 +130,18 @@ module Pod
               raise Informative, "Invalid package type `#{package_type}`"
             end
           end
+        end
+
+        # @return [Boolean] true if this slice includes swift module
+        #
+        def includes_swift_module?
+          base = case package_type
+                 when :framework
+                   path + 'Modules'
+                 when :library
+                   path.dirname
+                 end
+          base.join("#{name}.swiftmodule").directory?
         end
       end
     end

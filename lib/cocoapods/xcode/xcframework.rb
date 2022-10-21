@@ -75,6 +75,12 @@ module Pod
         @build_type ||= slices.first.build_type
       end
 
+      # @return [Boolean] true if any slices includes swift module
+      #
+      def includes_swift_module?
+        slices.first.includes_swift_module?
+      end
+
       private
 
       def parse_plist_contents
