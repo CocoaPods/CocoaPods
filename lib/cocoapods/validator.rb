@@ -827,8 +827,8 @@ module Pod
       file_accessor.vendored_libraries.each do |lib|
         basename = File.basename(lib)
         lib_name = basename.downcase
-        unless lib_name.end_with?('.a') && lib_name.start_with?('lib')
-          warning('vendored_libraries', "`#{basename}` does not match the expected static library name format `lib[name].a`")
+        unless lib_name.end_with?('.a', '.dylib') && lib_name.start_with?('lib')
+          warning('vendored_libraries', "`#{basename}` does not match the expected library name format `lib[name].a` or `lib[name].dylib`")
         end
       end
       validate_nonempty_patterns(:vendored_libraries, :warning)
