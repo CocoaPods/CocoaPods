@@ -2585,6 +2585,7 @@ module Pod
         @analyzer.sandbox.stubs(:specification_path).with('BananaLib').returns(stub)
         pod_dir = stub
         pod_dir.stubs(:directory?).returns(true)
+        pod_dir.stubs(:empty?).returns(false)
         @analyzer.sandbox.stubs(:pod_dir).with('BananaLib').returns(pod_dir)
       end
 
@@ -2617,6 +2618,19 @@ module Pod
         downloader = stub('DownloaderSource')
         ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file,
                                                  true).returns(downloader)
+
+        downloader.expects(:fetch)
+        @analyzer.send(:fetch_external_sources, podfile_state)
+      end
+
+      it 'uses lockfile checkout options when the pod folder in the sandbox is empty' do
+        @analyzer.sandbox.send(:pod_dir, 'BananaLib').stubs(:empty?).returns(true)
+
+        downloader = stub('DownloaderSource')
+        ExternalSources.stubs(:from_params).with(@lockfile_checkout_options, @dependency, @podfile.defined_in_file,
+                                                 true).returns(downloader)
+        podfile_state = Installer::Analyzer::SpecsState.new
+        podfile_state.unchanged << 'BananaLib'
 
         downloader.expects(:fetch)
         @analyzer.send(:fetch_external_sources, podfile_state)
