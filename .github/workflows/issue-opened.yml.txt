@@ -1,0 +1,477 @@
+2022-10-27T18:05:56.9661655Z Requested labels: ubuntu-latest
+2022-10-27T18:05:56.9661693Z Job defined at: CocoaPods/CocoaPods/.github/workflows/issue-opened.yml@refs/heads/master
+2022-10-27T18:05:56.9661714Z Waiting for a runner to pick up this job...
+2022-10-27T18:05:57.9024548Z Job is waiting for a hosted runner to come online.
+2022-10-27T18:06:00.1112647Z Job is about to start running on the hosted runner: Hosted Agent (hosted)
+2022-10-27T18:06:02.8000573Z Current runner version: '2.298.2'
+2022-10-27T18:06:02.8033685Z ##[group]Operating System
+2022-10-27T18:06:02.8034450Z Ubuntu
+2022-10-27T18:06:02.8034817Z 20.04.5
+2022-10-27T18:06:02.8035117Z LTS
+2022-10-27T18:06:02.8035467Z ##[endgroup]
+2022-10-27T18:06:02.8035840Z ##[group]Runner Image
+2022-10-27T18:06:02.8036238Z Image: ubuntu-20.04
+2022-10-27T18:06:02.8036642Z Version: 20221024.1
+2022-10-27T18:06:02.8037243Z Included Software: https://github.com/actions/runner-images/blob/ubuntu20/20221024.1/images/linux/Ubuntu2004-Readme.md
+2022-10-27T18:06:02.8037944Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu20%2F20221024.1
+2022-10-27T18:06:02.8038473Z ##[endgroup]
+2022-10-27T18:06:02.8038933Z ##[group]Runner Image Provisioner
+2022-10-27T18:06:02.8039282Z 2.0.91.1
+2022-10-27T18:06:02.8039716Z ##[endgroup]
+2022-10-27T18:06:02.8040506Z ##[group]GITHUB_TOKEN Permissions
+2022-10-27T18:06:02.8041211Z Contents: read
+2022-10-27T18:06:02.8041540Z Metadata: read
+2022-10-27T18:06:02.8042107Z ##[endgroup]
+2022-10-27T18:06:02.8046093Z Secret source: Actions
+2022-10-27T18:06:02.8046855Z Prepare workflow directory
+2022-10-27T18:06:02.9048886Z Prepare all required actions
+2022-10-27T18:06:02.9268780Z Getting action download info
+2022-10-27T18:06:03.2844743Z Download action repository 'actions/github-script@v6' (SHA:d556feaca394842dc55e4734bf3bb9f685482fa0)
+2022-10-27T18:06:04.7523314Z ##[group]Run actions/github-script@v6
+2022-10-27T18:06:04.7523702Z with:
+2022-10-27T18:06:04.7526643Z   script: console.log(context)
+const [owner, repo] = context.payload.repository.full_name.split('/')
+const issue = context.payload.issue
+if (
+  issue.body.includes("incompatible architecture (have (x86_64), need (arm64e)))") ||
+  issue.body.includes("missing compatible arch in")
+) {
+  github.rest.issues.createComment({
+    issue_number: issue.number,
+    owner,
+    repo,
+    body: "👋 Thanks for reporting! This is likely an issue with your installation not being set up for your M-class mac. We recommend reading some of the resources on getting your computer set up: https://duckduckgo.com/?q=ruby+cocoapods+m1&t=h_&ia=web#",
+  })
+}
+
+const ghIssueTemplateResponse = await github.rest.repos.getContent({
+  owner,
+  repo,
+  path: ".github/ISSUE_TEMPLATE.md",
+})
+
+const buffer = new Buffer(ghIssueTemplateResponse.data.content, "base64")
+const template = buffer.toString()
+
+// Whitespace between code on disk vs text which comes from GitHub is different.
+// This took far too long to figure.
+
+console.log( template.replace(/\s+/g, "") )
+console.log( issue.body.replace(/\s+/g, "") )
+console.log( issue.body.replace(/\s+/g, "").includes(template.replace(/\s+/g, "")))
+console.log( issue.body.toLowerCase().replace(/\s+/g, "").includes(template.toLowerCase().replace(/\s+/g, "")))
+
+
+if (issue.state === "open" && template && issue.body.replace(/\s+/g, "").includes(template.replace(/\s+/g, ""))) {
+  // Post a message
+  await github.rest.issues.createComment({
+    issue_number: issue.number,
+    owner,
+    repo,
+    body: `Hi there, thanks for the issue, but it seem that this issue is just the default template. Please create a new issue with the template filled out.`,
+  })
+
+  // Close the issue
+  await github.rest.issues.update({
+    issue_number: issue.number,
+    owner,
+    repo,
+    state: "closed",
+  })
+}
+
+2022-10-27T18:06:04.7529960Z   github-token: ***
+2022-10-27T18:06:04.7530219Z   debug: false
+2022-10-27T18:06:04.7530493Z   user-agent: actions/github-script
+2022-10-27T18:06:04.7530795Z   result-encoding: json
+2022-10-27T18:06:04.7531049Z   retries: 0
+2022-10-27T18:06:04.7531342Z   retry-exempt-status-codes: 400,401,403,404,422
+2022-10-27T18:06:04.7531647Z ##[endgroup]
+2022-10-27T18:06:05.0878837Z Context {
+2022-10-27T18:06:05.0879223Z   payload: {
+2022-10-27T18:06:05.0879742Z     action: 'opened',
+2022-10-27T18:06:05.0879978Z     issue: {
+2022-10-27T18:06:05.0881492Z       active_lock_reason: null,
+2022-10-27T18:06:05.0881771Z       assignee: null,
+2022-10-27T18:06:05.0882044Z       assignees: [],
+2022-10-27T18:06:05.0882395Z       author_association: 'NONE',
+2022-10-27T18:06:05.0883193Z       body: '<!--\r\n' +
+2022-10-27T18:06:05.0883664Z         'WARNING: Please do not file issues for CocoaPods with projects \r\n' +
+2022-10-27T18:06:05.0884232Z         'that use React Native or Flutter. Please remove React Native or Flutter\r\n' +
+2022-10-27T18:06:05.0884872Z         'in your sample app in order to properly demonstrate an issue with CocoaPods itself.\r\n' +
+2022-10-27T18:06:05.0885285Z         '\r\n' +
+2022-10-27T18:06:05.0885740Z         'The integration between CocoaPods and React Native or Flutter \r\n' +
+2022-10-27T18:06:05.0886282Z         'makes it very difficult for us to diagnose and fix issues.\r\n' +
+2022-10-27T18:06:05.0886642Z         '\r\n' +
+2022-10-27T18:06:05.0887038Z         'Issues with React Native or Flutter will be closed.\r\n' +
+2022-10-27T18:06:05.0887388Z         '\r\n' +
+2022-10-27T18:06:05.0887916Z         'Please file React Native issues at https://github.com/facebook/react-native\r\n' +
+2022-10-27T18:06:05.0888540Z         'and Flutter issues at https://github.com/flutter/flutter.\r\n' +
+2022-10-27T18:06:05.0888916Z         '-->\r\n' +
+2022-10-27T18:06:05.0889193Z         '\r\n' +
+2022-10-27T18:06:05.0889531Z         '<!--\r\n' +
+2022-10-27T18:06:05.0890144Z         'ℹ Please fill out this template when filing an issue.\r\n' +
+2022-10-27T18:06:05.0890822Z         'All lines beginning with an ℹ symbol instruct you with\r\n' +
+2022-10-27T18:06:05.0891252Z         'what info we expect.  \r\n' +
+2022-10-27T18:06:05.0891548Z         '\r\n' +
+2022-10-27T18:06:05.0891984Z         'Before you start, are you using the latest CocoaPods release?\r\n' +
+2022-10-27T18:06:05.0892543Z         'A lot changes with Xcode releases that are not backwards compatible.\r\n' +
+2022-10-27T18:06:05.0892930Z         '\r\n' +
+2022-10-27T18:06:05.0893541Z         'Not an issue about the CocoaPods command line app? Please file an issue in the appropriate repo - https://github.com/CocoaPods\r\n' +
+2022-10-27T18:06:05.0894237Z         'Issues are for feature requests, and bugs; questions should go to Stack Overflow\r\n' +
+2022-10-27T18:06:05.0894643Z         '\r\n' +
+2022-10-27T18:06:05.0895135Z         'Using CocoaPods <= 0.39: https://blog.cocoapods.org/Sharding/\r\n' +
+2022-10-27T18:06:05.0895508Z         '\r\n' +
+2022-10-27T18:06:05.0895925Z         'Using Xcode 10.1: Requires CocoaPods 1.6.0 or above.\r\n' +
+2022-10-27T18:06:05.0896494Z         '\r\n' +
+2022-10-27T18:06:05.0896814Z         'Issue with Nanaimo not loading:\r\n' +
+2022-10-27T18:06:05.0897308Z         'Please run `[sudo] gem uninstall nanaimo` and remove all but the latest version.\r\n' +
+2022-10-27T18:06:05.0897672Z         '\r\n' +
+2022-10-27T18:06:05.0898141Z         'Issues with `pod search`? Try deleting your cache `rm -rf ~/Library/Caches/CocoaPods`first.\r\n' +
+2022-10-27T18:06:05.0898531Z         '-->\r\n' +
+2022-10-27T18:06:05.0898786Z         '\r\n' +
+2022-10-27T18:06:05.0900498Z         "* [ ] I've read and understood the [*CONTRIBUTING* guidelines and have done my best effort to follow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).\r\n" +
+2022-10-27T18:06:05.0901102Z         '\r\n' +
+2022-10-27T18:06:05.0901402Z         '# Report\r\n' +
+2022-10-27T18:06:05.0901690Z         '\r\n' +
+2022-10-27T18:06:05.0901992Z         '## What did you do?\r\n' +
+2022-10-27T18:06:05.0902291Z         '\r\n' +
+2022-10-27T18:06:05.0902617Z         'Run `pod install`\r\n' +
+2022-10-27T18:06:05.0902904Z         '\r\n' +
+2022-10-27T18:06:05.0903269Z         '## What did you expect to happen?\r\n' +
+2022-10-27T18:06:05.0903593Z         '\r\n' +
+2022-10-27T18:06:05.0903943Z         'Successfully installed the pods\r\n' +
+2022-10-27T18:06:05.0904275Z         '\r\n' +
+2022-10-27T18:06:05.0904614Z         '## What happened instead?\r\n' +
+2022-10-27T18:06:05.0905072Z         '\r\n' +
+2022-10-27T18:06:05.0905375Z         '### Command\r\n' +
+2022-10-27T18:06:05.0905665Z         '\r\n' +
+2022-10-27T18:06:05.0905925Z         '```\r\n' +
+2022-10-27T18:06:05.0906269Z         '/usr/local/bin/pod install\r\n' +
+2022-10-27T18:06:05.0906864Z         '```\r\n' +
+2022-10-27T18:06:05.0907121Z         '\r\n' +
+2022-10-27T18:06:05.0907418Z         '### Report\r\n' +
+2022-10-27T18:06:05.0907702Z         '\r\n' +
+2022-10-27T18:06:05.0908004Z         '* What did you do?\r\n' +
+2022-10-27T18:06:05.0908298Z         '\r\n' +
+2022-10-27T18:06:05.0908657Z         '* What did you expect to happen?\r\n' +
+2022-10-27T18:06:05.0908968Z         '\r\n' +
+2022-10-27T18:06:05.0909303Z         '* What happened instead?\r\n' +
+2022-10-27T18:06:05.0909614Z         '\r\n' +
+2022-10-27T18:06:05.0909863Z         '\r\n' +
+2022-10-27T18:06:05.0910148Z         '### Stack\r\n' +
+2022-10-27T18:06:05.0910433Z         '\r\n' +
+2022-10-27T18:06:05.0910695Z         '```\r\n' +
+2022-10-27T18:06:05.0911024Z         '   CocoaPods : 1.11.3\r\n' +
+2022-10-27T18:06:05.0911544Z         '        Ruby : ruby 2.6.8p205 (2021-07-07 revision 67951) [universal.x86_64-darwin21]\r\n' +
+2022-10-27T18:06:05.0911952Z         '    RubyGems : 3.0.3.1\r\n' +
+2022-10-27T18:06:05.0912333Z         '        Host : macOS 12.6 (21G115)\r\n' +
+2022-10-27T18:06:05.0912708Z         '       Xcode : 13.4 (13F17a)\r\n' +
+2022-10-27T18:06:05.0913144Z         '         Git : git version 2.38.1.273.g43a17bfeac-goog\r\n' +
+2022-10-27T18:06:05.0913760Z         'Ruby lib dir : /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib\r\n' +
+2022-10-27T18:06:05.0914499Z         'Repositories : cpdc-internal-spec - git - sso://cpdc-internal/spec @ 2c4ad6d690cd0003a1ac849594947fd6e2dd8121\r\n' +
+2022-10-27T18:06:05.0914956Z         '\r\n' +
+2022-10-27T18:06:05.0915373Z         '               trunk - CDN - https://cdn.cocoapods.org/\r\n' +
+2022-10-27T18:06:05.0916018Z         '               ypang-repo - git - sso://cpdc-internal/spec @ 2c4ad6d690cd0003a1ac849594947fd6e2dd8121\r\n' +
+2022-10-27T18:06:05.0916438Z         '\r\n' +
+2022-10-27T18:06:05.0916699Z         '```\r\n' +
+2022-10-27T18:06:05.0916969Z         '\r\n' +
+2022-10-27T18:06:05.0917270Z         '### Plugins\r\n' +
+2022-10-27T18:06:05.0917561Z         '\r\n' +
+2022-10-27T18:06:05.0917819Z         '```\r\n' +
+2022-10-27T18:06:05.0918189Z         'cocoapods-deintegrate : 1.0.5\r\n' +
+2022-10-27T18:06:05.0918601Z         'cocoapods-plugins     : 1.0.0\r\n' +
+2022-10-27T18:06:05.0918986Z         'cocoapods-search      : 1.0.1\r\n' +
+2022-10-27T18:06:05.0919380Z         'cocoapods-trunk       : 1.6.0\r\n' +
+2022-10-27T18:06:05.0919762Z         'cocoapods-try         : 1.2.0\r\n' +
+2022-10-27T18:06:05.0920088Z         '```\r\n' +
+2022-10-27T18:06:05.0920348Z         '\r\n' +
+2022-10-27T18:06:05.0920650Z         '### Podfile\r\n' +
+2022-10-27T18:06:05.0920940Z         '\r\n' +
+2022-10-27T18:06:05.0921211Z         '```ruby\r\n' +
+2022-10-27T18:06:05.0921546Z         "platform :ios, '12.0'\r\n" +
+2022-10-27T18:06:05.0921848Z         '\r\n' +
+2022-10-27T18:06:05.0922200Z         "target 'SoundClassification' do\r\n" +
+2022-10-27T18:06:05.0922709Z         "  # Comment the next line if you don't want to use dynamic frameworks\r\n" +
+2022-10-27T18:06:05.0923129Z         '  use_frameworks!\r\n' +
+2022-10-27T18:06:05.0923421Z         '\r\n' +
+2022-10-27T18:06:05.0923882Z         "  pod 'TensorFlowLiteSwift', '~> 0.0.1-nightly'\r\n" +
+2022-10-27T18:06:05.0924429Z         "  pod 'TensorFlowLiteSelectTfOps', '~> 0.0.1-nightly'\r\n" +
+2022-10-27T18:06:05.0924837Z         'end\r\n' +
+2022-10-27T18:06:05.0925118Z         '```\r\n' +
+2022-10-27T18:06:05.0925496Z         '\r\n' +
+2022-10-27T18:06:05.0925803Z         '### Error\r\n' +
+2022-10-27T18:06:05.0926116Z         '\r\n' +
+2022-10-27T18:06:05.0926386Z         '```\r\n' +
+2022-10-27T18:06:05.0960658Z         'Errno::EIO - Input/output error - write\r\n' +
+2022-10-27T18:06:05.0961415Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1388:in `copy_stream'\r\n" +
+2022-10-27T18:06:05.0962170Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1388:in `block (2 levels) in copy_file'\r\n" +
+2022-10-27T18:06:05.0963160Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1387:in `open'\r\n" +
+2022-10-27T18:06:05.0963890Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1387:in `block in copy_file'\r\n" +
+2022-10-27T18:06:05.0964591Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1386:in `open'\r\n" +
+2022-10-27T18:06:05.0965268Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1386:in `copy_file'\r\n" +
+2022-10-27T18:06:05.0965951Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1354:in `copy'\r\n" +
+2022-10-27T18:06:05.0966666Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:478:in `block in copy_entry'\r\n" +
+2022-10-27T18:06:05.0967388Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1485:in `wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0968116Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1488:in `block in wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0968805Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in `each'\r\n" +
+2022-10-27T18:06:05.0969584Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in `wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0970327Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1488:in `block in wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0971006Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in `each'\r\n" +
+2022-10-27T18:06:05.0971705Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in `wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0972439Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1488:in `block in wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0973143Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in `each'\r\n" +
+2022-10-27T18:06:05.0973831Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in `wrap_traverse'\r\n" +
+2022-10-27T18:06:05.0974535Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:475:in `copy_entry'\r\n" +
+2022-10-27T18:06:05.0975238Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:453:in `block in cp_r'\r\n" +
+2022-10-27T18:06:05.0975973Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1558:in `block in fu_each_src_dest'\r\n" +
+2022-10-27T18:06:05.0976690Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1574:in `fu_each_src_dest0'\r\n" +
+2022-10-27T18:06:05.0977410Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1556:in `fu_each_src_dest'\r\n" +
+2022-10-27T18:06:05.0978094Z         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:452:in `cp_r'\r\n" +
+2022-10-27T18:06:05.0978809Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader.rb:55:in `block (2 levels) in download'\r\n" +
+2022-10-27T18:06:05.0979484Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader/cache.rb:128:in `lock'\r\n" +
+2022-10-27T18:06:05.0980154Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader/cache.rb:84:in `read_lock'\r\n" +
+2022-10-27T18:06:05.0980835Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader.rb:53:in `block in download'\r\n" +
+2022-10-27T18:06:05.0981508Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/user_interface.rb:149:in `message'\r\n" +
+2022-10-27T18:06:05.0982225Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader.rb:52:in `download'\r\n" +
+2022-10-27T18:06:05.0982950Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer/pod_source_installer.rb:118:in `download_source'\r\n" +
+2022-10-27T18:06:05.0983687Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer/pod_source_installer.rb:69:in `install!'\r\n" +
+2022-10-27T18:06:05.0984394Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:563:in `install_source_of_pod'\r\n" +
+2022-10-27T18:06:05.0985294Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:514:in `block (2 levels) in install_pod_sources'\r\n" +
+2022-10-27T18:06:05.0986003Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/user_interface.rb:86:in `titled_section'\r\n" +
+2022-10-27T18:06:05.0986719Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:513:in `block in install_pod_sources'\r\n" +
+2022-10-27T18:06:05.0987375Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:496:in `each'\r\n" +
+2022-10-27T18:06:05.0988135Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:496:in `install_pod_sources'\r\n" +
+2022-10-27T18:06:05.0988868Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:255:in `block in download_dependencies'\r\n" +
+2022-10-27T18:06:05.0989546Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/user_interface.rb:64:in `section'\r\n" +
+2022-10-27T18:06:05.0990224Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:254:in `download_dependencies'\r\n" +
+2022-10-27T18:06:05.0990887Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:162:in `install!'\r\n" +
+2022-10-27T18:06:05.0991525Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/command/install.rb:52:in `run'\r\n" +
+2022-10-27T18:06:05.0992120Z         "/Library/Ruby/Gems/2.6.0/gems/claide-1.1.0/lib/claide/command.rb:334:in `run'\r\n" +
+2022-10-27T18:06:05.0992707Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/command.rb:52:in `run'\r\n" +
+2022-10-27T18:06:05.0993310Z         "/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/bin/pod:55:in `<top (required)>'\r\n" +
+2022-10-27T18:06:05.0993783Z         "/usr/local/bin/pod:23:in `load'\r\n" +
+2022-10-27T18:06:05.0994188Z         "/usr/local/bin/pod:23:in `<main>'\r\n" +
+2022-10-27T18:06:05.0994499Z         '```\r\n' +
+2022-10-27T18:06:05.0995007Z         '\r\n' +
+2022-10-27T18:06:05.0995548Z         '――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――\r\n' +
+2022-10-27T18:06:05.0995882Z         '\r\n' +
+2022-10-27T18:06:05.0996217Z         '[!] Oh no, an error occurred.\r\n' +
+2022-10-27T18:06:05.0996512Z         '\r\n' +
+2022-10-27T18:06:05.0996884Z         'Search for existing GitHub issues similar to yours:\r\n' +
+2022-10-27T18:06:05.0997494Z         'https://github.com/CocoaPods/CocoaPods/search?q=Input%2Foutput+error+-+write&type=Issues\r\n' +
+2022-10-27T18:06:05.0997901Z         '\r\n' +
+2022-10-27T18:06:05.0998320Z         'If none exists, create a ticket, with the template displayed above, on:\r\n' +
+2022-10-27T18:06:05.0998818Z         'https://github.com/CocoaPods/CocoaPods/issues/new\r\n' +
+2022-10-27T18:06:05.0999157Z         '\r\n' +
+2022-10-27T18:06:05.0999643Z         'Be sure to first read the contributing guide for details on how to properly submit a ticket:\r\n' +
+2022-10-27T18:06:05.1001072Z         'https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md\r\n' +
+2022-10-27T18:06:05.1001563Z         '\r\n' +
+2022-10-27T18:06:05.1001961Z         "Don't forget to anonymize any private data!\r\n" +
+2022-10-27T18:06:05.1002288Z         '\r\n' +
+2022-10-27T18:06:05.1002711Z         'Looking for related issues on cocoapods/cocoapods...\r\n' +
+2022-10-27T18:06:05.1003514Z         " - Xcode 10 new build system makes asset catalog invalid specified by podspec's`resource(s)`\r\n" +
+2022-10-27T18:06:05.1004147Z         '   https://github.com/CocoaPods/CocoaPods/issues/8122 [open] [82 comments]\r\n' +
+2022-10-27T18:06:05.1004569Z         '   16 Aug 2021\r\n' +
+2022-10-27T18:06:05.1004860Z         '\r\n' +
+2022-10-27T18:06:05.1005302Z         ' - Frameworks with conflicting names: webrtc.xcframework\r\n' +
+2022-10-27T18:06:05.1005873Z         '   https://github.com/CocoaPods/CocoaPods/issues/11278 [closed] [6 comments]\r\n' +
+2022-10-27T18:06:05.1006297Z         '   31 Mar 2022\r\n' +
+2022-10-27T18:06:05.1006580Z         '\r\n' +
+2022-10-27T18:06:05.1007441Z         ' - Errno::EACCES - Permission denied @ apply2files -.../Library/Caches/CocoaPods/Pods/Release/Firebase/8.10.0-44213.lock\r\n' +
+2022-10-27T18:06:05.1008110Z         '   https://github.com/CocoaPods/CocoaPods/issues/11142 [closed] [1 comment]\r\n' +
+2022-10-27T18:06:05.1008532Z         '   09 Mar 2022\r\n' +
+2022-10-27T18:06:05.1008809Z         '\r\n' +
+2022-10-27T18:06:05.1009114Z         'and 9 more at:\r\n' +
+2022-10-27T18:06:05.1009719Z         'https://github.com/cocoapods/cocoapods/search?q=Input%2Foutput%20error%20-%20write&type=Issues&utf8=✓\r\n' +
+2022-10-27T18:06:05.1010158Z         '\r\n' +
+2022-10-27T18:06:05.1010577Z         '## CocoaPods Environment\r\n' +
+2022-10-27T18:06:05.1010904Z         '\r\n' +
+2022-10-27T18:06:05.1011195Z         '### Stack\r\n' +
+2022-10-27T18:06:05.1011464Z         '\r\n' +
+2022-10-27T18:06:05.1011737Z         '```\r\n' +
+2022-10-27T18:06:05.1012065Z         '   CocoaPods : 1.11.3\r\n' +
+2022-10-27T18:06:05.1012567Z         '        Ruby : ruby 2.6.8p205 (2021-07-07 revision 67951) [universal.x86_64-darwin21]\r\n' +
+2022-10-27T18:06:05.1012990Z         '    RubyGems : 3.0.3.1\r\n' +
+2022-10-27T18:06:05.1013376Z         '        Host : macOS 12.6 (21G115)\r\n' +
+2022-10-27T18:06:05.1013739Z         '       Xcode : 13.4 (13F17a)\r\n' +
+2022-10-27T18:06:05.1014188Z         '         Git : git version 2.38.1.273.g43a17bfeac-goog\r\n' +
+2022-10-27T18:06:05.1014733Z         'Ruby lib dir : /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib\r\n' +
+2022-10-27T18:06:05.1015109Z         '\r\n' +
+2022-10-27T18:06:05.1015383Z         '```\r\n' +
+2022-10-27T18:06:05.1015655Z         '\r\n' +
+2022-10-27T18:06:05.1015989Z         '### Installation Source\r\n' +
+2022-10-27T18:06:05.1016285Z         '\r\n' +
+2022-10-27T18:06:05.1016557Z         '```\r\n' +
+2022-10-27T18:06:05.1016931Z         'Executable Path: /usr/local/bin/pod\r\n' +
+2022-10-27T18:06:05.1017251Z         '```\r\n' +
+2022-10-27T18:06:05.1017522Z         '\r\n' +
+2022-10-27T18:06:05.1017820Z         '### Plugins\r\n' +
+2022-10-27T18:06:05.1018093Z         '\r\n' +
+2022-10-27T18:06:05.1018364Z         '```\r\n' +
+2022-10-27T18:06:05.1018731Z         'cocoapods-deintegrate : 1.0.5\r\n' +
+2022-10-27T18:06:05.1019134Z         'cocoapods-plugins     : 1.0.0\r\n' +
+2022-10-27T18:06:05.1019536Z         'cocoapods-search      : 1.0.1\r\n' +
+2022-10-27T18:06:05.1019953Z         'cocoapods-trunk       : 1.6.0\r\n' +
+2022-10-27T18:06:05.1020336Z         'cocoapods-try         : 1.2.0\r\n' +
+2022-10-27T18:06:05.1020648Z         '```\r\n' +
+2022-10-27T18:06:05.1020962Z         '\r'... 452 more characters,
+2022-10-27T18:06:05.1021458Z       closed_at: null,
+2022-10-27T18:06:05.1021692Z       comments: 0,
+2022-10-27T18:06:05.1022160Z       comments_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/11630/comments',
+2022-10-27T18:06:05.1022607Z       created_at: '2022-10-27T18:05:53Z',
+2022-10-27T18:06:05.1023088Z       events_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/11630/events',
+2022-10-27T18:06:05.1023602Z       html_url: 'https://github.com/CocoaPods/CocoaPods/issues/11630',
+2022-10-27T18:06:05.1023914Z       id: 1426071923,
+2022-10-27T18:06:05.1024140Z       labels: [],
+2022-10-27T18:06:05.1024602Z       labels_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/11630/labels{/name}',
+2022-10-27T18:06:05.1025222Z       locked: false,
+2022-10-27T18:06:05.1025461Z       milestone: null,
+2022-10-27T18:06:05.1025965Z       node_id: 'I_kwDOACGf_c5VACFz',
+2022-10-27T18:06:05.1026238Z       number: 11630,
+2022-10-27T18:06:05.1026522Z       performed_via_github_app: null,
+2022-10-27T18:06:05.1026801Z       reactions: [Object],
+2022-10-27T18:06:05.1027276Z       repository_url: 'https://api.github.com/repos/CocoaPods/CocoaPods',
+2022-10-27T18:06:05.1027676Z       state: 'open',
+2022-10-27T18:06:05.1027934Z       state_reason: null,
+2022-10-27T18:06:05.1028437Z       timeline_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/11630/timeline',
+2022-10-27T18:06:05.1029137Z       title: 'Errno::EIO - Input/output error when running pod install/update on Apple M1',
+2022-10-27T18:06:05.1029601Z       updated_at: '2022-10-27T18:05:53Z',
+2022-10-27T18:06:05.1030077Z       url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/11630',
+2022-10-27T18:06:05.1030425Z       user: [Object]
+2022-10-27T18:06:05.1030663Z     },
+2022-10-27T18:06:05.1030879Z     organization: {
+2022-10-27T18:06:05.1031364Z       avatar_url: 'https://avatars.githubusercontent.com/u/1189714?v=4',
+2022-10-27T18:06:05.1032350Z       description: 'A Swift & Objective C Dependency Manager',
+2022-10-27T18:06:05.1033030Z       events_url: 'https://api.github.com/orgs/CocoaPods/events',
+2022-10-27T18:06:05.1033549Z       hooks_url: 'https://api.github.com/orgs/CocoaPods/hooks',
+2022-10-27T18:06:05.1033872Z       id: 1189714,
+2022-10-27T18:06:05.1034301Z       issues_url: 'https://api.github.com/orgs/CocoaPods/issues',
+2022-10-27T18:06:05.1034686Z       login: 'CocoaPods',
+2022-10-27T18:06:05.1035162Z       members_url: 'https://api.github.com/orgs/CocoaPods/members{/member}',
+2022-10-27T18:06:05.1035681Z       node_id: 'MDEyOk9yZ2FuaXphdGlvbjExODk3MTQ=',
+2022-10-27T18:06:05.1036250Z       public_members_url: 'https://api.github.com/orgs/CocoaPods/public_members{/member}',
+2022-10-27T18:06:05.1036805Z       repos_url: 'https://api.github.com/orgs/CocoaPods/repos',
+2022-10-27T18:06:05.1037280Z       url: 'https://api.github.com/orgs/CocoaPods'
+2022-10-27T18:06:05.1037559Z     },
+2022-10-27T18:06:05.1037791Z     repository: {
+2022-10-27T18:06:05.1038053Z       allow_forking: true,
+2022-10-27T18:06:05.1038570Z       archive_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/{archive_format}{/ref}',
+2022-10-27T18:06:05.1038953Z       archived: false,
+2022-10-27T18:06:05.1039458Z       assignees_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/assignees{/user}',
+2022-10-27T18:06:05.1041703Z       blobs_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/git/blobs{/sha}',
+2022-10-27T18:06:05.1042322Z       branches_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/branches{/branch}',
+2022-10-27T18:06:05.1042875Z       clone_url: 'https://github.com/CocoaPods/CocoaPods.git',
+2022-10-27T18:06:05.1043511Z       collaborators_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/collaborators{/collaborator}',
+2022-10-27T18:06:05.1044159Z       comments_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/comments{/number}',
+2022-10-27T18:06:05.1044766Z       commits_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/commits{/sha}',
+2022-10-27T18:06:05.1045389Z       compare_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/compare/{base}...{head}',
+2022-10-27T18:06:05.1046013Z       contents_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/contents/{+path}',
+2022-10-27T18:06:05.1046623Z       contributors_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/contributors',
+2022-10-27T18:06:05.1047101Z       created_at: '2011-08-14T00:10:53Z',
+2022-10-27T18:06:05.1047450Z       default_branch: 'master',
+2022-10-27T18:06:05.1047953Z       deployments_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/deployments',
+2022-10-27T18:06:05.1048461Z       description: 'The Cocoa Dependency Manager.',
+2022-10-27T18:06:05.1048773Z       disabled: false,
+2022-10-27T18:06:05.1049260Z       downloads_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/downloads',
+2022-10-27T18:06:05.1050025Z       events_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/events',
+2022-10-27T18:06:05.1050374Z       fork: false,
+2022-10-27T18:06:05.1050614Z       forks: 2575,
+2022-10-27T18:06:05.1050891Z       forks_count: 2575,
+2022-10-27T18:06:05.1051359Z       forks_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/forks',
+2022-10-27T18:06:05.1051807Z       full_name: 'CocoaPods/CocoaPods',
+2022-10-27T18:06:05.1052333Z       git_commits_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/git/commits{/sha}',
+2022-10-27T18:06:05.1052950Z       git_refs_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/git/refs{/sha}',
+2022-10-27T18:06:05.1053550Z       git_tags_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/git/tags{/sha}',
+2022-10-27T18:06:05.1054060Z       git_url: 'git://github.com/CocoaPods/CocoaPods.git',
+2022-10-27T18:06:05.1054392Z       has_downloads: true,
+2022-10-27T18:06:05.1054655Z       has_issues: true,
+2022-10-27T18:06:05.1054918Z       has_pages: false,
+2022-10-27T18:06:05.1055168Z       has_projects: true,
+2022-10-27T18:06:05.1055427Z       has_wiki: true,
+2022-10-27T18:06:05.1055800Z       homepage: 'https://cocoapods.org/',
+2022-10-27T18:06:05.1056298Z       hooks_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/hooks',
+2022-10-27T18:06:05.1056883Z       html_url: 'https://github.com/CocoaPods/CocoaPods',
+2022-10-27T18:06:05.1057203Z       id: 2203645,
+2022-10-27T18:06:05.1057442Z       is_template: false,
+2022-10-27T18:06:05.1057987Z       issue_comment_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/comments{/number}',
+2022-10-27T18:06:05.1058649Z       issue_events_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues/events{/number}',
+2022-10-27T18:06:05.1059253Z       issues_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/issues{/number}',
+2022-10-27T18:06:05.1059841Z       keys_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/keys{/key_id}',
+2022-10-27T18:06:05.1060433Z       labels_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/labels{/name}',
+2022-10-27T18:06:05.1060852Z       language: 'Ruby',
+2022-10-27T18:06:05.1061329Z       languages_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/languages',
+2022-10-27T18:06:05.1061699Z       license: [Object],
+2022-10-27T18:06:05.1062176Z       merges_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/merges',
+2022-10-27T18:06:05.1062776Z       milestones_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/milestones{/number}',
+2022-10-27T18:06:05.1063164Z       mirror_url: null,
+2022-10-27T18:06:05.1063479Z       name: 'CocoaPods',
+2022-10-27T18:06:05.1063872Z       node_id: 'MDEwOlJlcG9zaXRvcnkyMjAzNjQ1',
+2022-10-27T18:06:05.1064537Z       notifications_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/notifications{?since,all,participating}',
+2022-10-27T18:06:05.1065314Z       open_issues: 445,
+2022-10-27T18:06:05.1065592Z       open_issues_count: 445,
+2022-10-27T18:06:05.1065850Z       owner: [Object],
+2022-10-27T18:06:05.1066108Z       private: false,
+2022-10-27T18:06:05.1066611Z       pulls_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/pulls{/number}',
+2022-10-27T18:06:05.1067066Z       pushed_at: '2022-10-23T13:23:03Z',
+2022-10-27T18:06:05.1067588Z       releases_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/releases{/id}',
+2022-10-27T18:06:05.1067952Z       size: 88816,
+2022-10-27T18:06:05.1068339Z       ssh_url: 'git@github.com:CocoaPods/CocoaPods.git',
+2022-10-27T18:06:05.1068668Z       stargazers_count: 13870,
+2022-10-27T18:06:05.1069176Z       stargazers_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/stargazers',
+2022-10-27T18:06:05.1069772Z       statuses_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/statuses/{sha}',
+2022-10-27T18:06:05.1070387Z       subscribers_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/subscribers',
+2022-10-27T18:06:05.1071011Z       subscription_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/subscription',
+2022-10-27T18:06:05.1071673Z       svn_url: 'https://github.com/CocoaPods/CocoaPods',
+2022-10-27T18:06:05.1072401Z       tags_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/tags',
+2022-10-27T18:06:05.1072919Z       teams_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/teams',
+2022-10-27T18:06:05.1073244Z       topics: [Array],
+2022-10-27T18:06:05.1073690Z       trees_url: 'https://api.github.com/repos/CocoaPods/CocoaPods/git/trees{/sha}',
+2022-10-27T18:06:05.1074125Z       updated_at: '2022-10-26T07:49:58Z',
+2022-10-27T18:06:05.1074548Z       url: 'https://api.github.com/repos/CocoaPods/CocoaPods',
+2022-10-27T18:06:05.1074909Z       visibility: 'public',
+2022-10-27T18:06:05.1075158Z       watchers: 13870,
+2022-10-27T18:06:05.1075403Z       watchers_count: 13870,
+2022-10-27T18:06:05.1075665Z       web_commit_signoff_required: false
+2022-10-27T18:06:05.1075912Z     },
+2022-10-27T18:06:05.1076114Z     sender: {
+2022-10-27T18:06:05.1076553Z       avatar_url: 'https://avatars.githubusercontent.com/u/6421220?v=4',
+2022-10-27T18:06:05.1077088Z       events_url: 'https://api.github.com/users/yishuangP/events{/privacy}',
+2022-10-27T18:06:05.1079351Z       followers_url: 'https://api.github.com/users/yishuangP/followers',
+2022-10-27T18:06:05.1080031Z       following_url: 'https://api.github.com/users/yishuangP/following{/other_user}',
+2022-10-27T18:06:05.1080760Z       gists_url: 'https://api.github.com/users/yishuangP/gists{/gist_id}',
+2022-10-27T18:06:05.1081212Z       gravatar_id: '',
+2022-10-27T18:06:05.1081664Z       html_url: 'https://github.com/yishuangP',
+2022-10-27T18:06:05.1081946Z       id: 6421220,
+2022-10-27T18:06:05.1082254Z       login: 'yishuangP',
+2022-10-27T18:06:05.1082656Z       node_id: 'MDQ6VXNlcjY0MjEyMjA=',
+2022-10-27T18:06:05.1083185Z       organizations_url: 'https://api.github.com/users/yishuangP/orgs',
+2022-10-27T18:06:05.1083771Z       received_events_url: 'https://api.github.com/users/yishuangP/received_events',
+2022-10-27T18:06:05.1084318Z       repos_url: 'https://api.github.com/users/yishuangP/repos',
+2022-10-27T18:06:05.1084661Z       site_admin: false,
+2022-10-27T18:06:05.1085141Z       starred_url: 'https://api.github.com/users/yishuangP/starred{/owner}{/repo}',
+2022-10-27T18:06:05.1085744Z       subscriptions_url: 'https://api.github.com/users/yishuangP/subscriptions',
+2022-10-27T18:06:05.1086158Z       type: 'User',
+2022-10-27T18:06:05.1086541Z       url: 'https://api.github.com/users/yishuangP'
+2022-10-27T18:06:05.1086838Z     }
+2022-10-27T18:06:05.1087045Z   },
+2022-10-27T18:06:05.1087313Z   eventName: 'issues',
+2022-10-27T18:06:05.1087713Z   sha: 'f5ea2cf05f562428830d7d9288020c01f46628bc',
+2022-10-27T18:06:05.1088075Z   ref: 'refs/heads/master',
+2022-10-27T18:06:05.1088466Z   workflow: '.github/workflows/issue-opened.yml',
+2022-10-27T18:06:05.1088873Z   action: '__actions_github-script',
+2022-10-27T18:06:05.1089212Z   actor: 'yishuangP',
+2022-10-27T18:06:05.1089492Z   job: 'comment',
+2022-10-27T18:06:05.1089738Z   runNumber: 16,
+2022-10-27T18:06:05.1089988Z   runId: 3339794503,
+2022-10-27T18:06:05.1090332Z   apiUrl: 'https://api.github.com',
+2022-10-27T18:06:05.1090730Z   serverUrl: 'https://github.com',
+2022-10-27T18:06:05.1091161Z   graphqlUrl: 'https://api.github.com/graphql'
+2022-10-27T18:06:05.1091442Z }
+2022-10-27T18:06:05.5755935Z (node:1548) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2022-10-27T18:06:05.5756918Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2022-10-27T18:06:05.5768856Z <!--WARNING:PleasedonotfileissuesforCocoaPodswithprojectsthatuseReactNativeorFlutter.PleaseremoveReactNativeorFlutterinyoursampleappinordertoproperlydemonstrateanissuewithCocoaPodsitself.TheintegrationbetweenCocoaPodsandReactNativeorFluttermakesitverydifficultforustodiagnoseandfixissues.IssueswithReactNativeorFlutterwillbeclosed.PleasefileReactNativeissuesathttps://github.com/facebook/react-nativeandFlutterissuesathttps://github.com/flutter/flutter.--><!--ℹPleasefilloutthistemplatewhenfilinganissue.Alllinesbeginningwithanℹsymbolinstructyouwithwhatinfoweexpect.Beforeyoustart,areyouusingthelatestCocoaPodsrelease?AlotchangeswithXcodereleasesthatarenotbackwardscompatible.NotanissueabouttheCocoaPodscommandlineapp?Pleasefileanissueintheappropriaterepo-https://github.com/CocoaPodsIssuesareforfeaturerequests,andbugs;questionsshouldgotoStackOverflowUsingCocoaPods<=0.39:https://blog.cocoapods.org/Sharding/UsingXcode10.1:RequiresCocoaPods1.6.0orabove.IssuewithNanaimonotloading:Pleaserun`[sudo]gemuninstallnanaimo`andremoveallbutthelatestversion.Issueswith`podsearch`?Trydeletingyourcache`rm-rf~/Library/Caches/CocoaPods`first.-->*[]I'vereadandunderstoodthe[*CONTRIBUTING*guidelinesandhavedonemybestefforttofollow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).#Report##Whatdidyoudo?ℹPleasereplacethesetwolineswithwhatyoudid.e.g.Run`podinstall`##Whatdidyouexpecttohappen?ℹPleasereplacethesetwolineswithwhatyouexpectedtohappen.e.g.Installallpoddependenciescorrectly.##Whathappenedinstead?ℹPleasereplacethesetwolineswithofwhathappenedinstead.e.g.PodAismissingthesubspecBfortargetC.##CocoaPodsEnvironmentℹPleasereplacethesetwolineswiththeoutputof`podenv`.e.g.via`podenv|pbcopy`##ProjectthatdemonstratestheissueℹPleaselinktoaprojectwecandownloadthatreproducestheissue.Youcandeletethissectionifyourissueisunrelatedtobuildproblems,i.e.it'sonlyanissuewithCocoaPodsthetool.
+2022-10-27T18:06:05.5816095Z <!--WARNING:PleasedonotfileissuesforCocoaPodswithprojectsthatuseReactNativeorFlutter.PleaseremoveReactNativeorFlutterinyoursampleappinordertoproperlydemonstrateanissuewithCocoaPodsitself.TheintegrationbetweenCocoaPodsandReactNativeorFluttermakesitverydifficultforustodiagnoseandfixissues.IssueswithReactNativeorFlutterwillbeclosed.PleasefileReactNativeissuesathttps://github.com/facebook/react-nativeandFlutterissuesathttps://github.com/flutter/flutter.--><!--ℹPleasefilloutthistemplatewhenfilinganissue.Alllinesbeginningwithanℹsymbolinstructyouwithwhatinfoweexpect.Beforeyoustart,areyouusingthelatestCocoaPodsrelease?AlotchangeswithXcodereleasesthatarenotbackwardscompatible.NotanissueabouttheCocoaPodscommandlineapp?Pleasefileanissueintheappropriaterepo-https://github.com/CocoaPodsIssuesareforfeaturerequests,andbugs;questionsshouldgotoStackOverflowUsingCocoaPods<=0.39:https://blog.cocoapods.org/Sharding/UsingXcode10.1:RequiresCocoaPods1.6.0orabove.IssuewithNanaimonotloading:Pleaserun`[sudo]gemuninstallnanaimo`andremoveallbutthelatestversion.Issueswith`podsearch`?Trydeletingyourcache`rm-rf~/Library/Caches/CocoaPods`first.-->*[]I'vereadandunderstoodthe[*CONTRIBUTING*guidelinesandhavedonemybestefforttofollow](https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.md).#Report##Whatdidyoudo?Run`podinstall`##Whatdidyouexpecttohappen?Successfullyinstalledthepods##Whathappenedinstead?###Command```/usr/local/bin/podinstall```###Report*Whatdidyoudo?*Whatdidyouexpecttohappen?*Whathappenedinstead?###Stack```CocoaPods:1.11.3Ruby:ruby2.6.8p205(2021-07-07revision67951)[universal.x86_64-darwin21]RubyGems:3.0.3.1Host:macOS12.6(21G115)Xcode:13.4(13F17a)Git:gitversion2.38.1.273.g43a17bfeac-googRubylibdir:/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/libRepositories:cpdc-internal-spec-git-sso://cpdc-internal/spec@2c4ad6d690cd0003a1ac849594947fd6e2dd8121trunk-CDN-https://cdn.cocoapods.org/ypang-repo-git-sso://cpdc-internal/spec@2c4ad6d690cd0003a1ac849594947fd6e2dd8121```###Plugins```cocoapods-deintegrate:1.0.5cocoapods-plugins:1.0.0cocoapods-search:1.0.1cocoapods-trunk:1.6.0cocoapods-try:1.2.0```###Podfile```rubyplatform:ios,'12.0'target'SoundClassification'do#Commentthenextlineifyoudon'twanttousedynamicframeworksuse_frameworks!pod'TensorFlowLiteSwift','~>0.0.1-nightly'pod'TensorFlowLiteSelectTfOps','~>0.0.1-nightly'end```###Error```Errno::EIO-Input/outputerror-write/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1388:in`copy_stream'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1388:in`block(2levels)incopy_file'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1387:in`open'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1387:in`blockincopy_file'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1386:in`open'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1386:in`copy_file'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1354:in`copy'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:478:in`blockincopy_entry'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1485:in`wrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1488:in`blockinwrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in`each'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in`wrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1488:in`blockinwrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in`each'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in`wrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1488:in`blockinwrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in`each'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1487:in`wrap_traverse'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:475:in`copy_entry'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:453:in`blockincp_r'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1558:in`blockinfu_each_src_dest'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1574:in`fu_each_src_dest0'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:1556:in`fu_each_src_dest'/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/fileutils.rb:452:in`cp_r'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader.rb:55:in`block(2levels)indownload'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader/cache.rb:128:in`lock'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader/cache.rb:84:in`read_lock'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader.rb:53:in`blockindownload'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/user_interface.rb:149:in`message'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/downloader.rb:52:in`download'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer/pod_source_installer.rb:118:in`download_source'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer/pod_source_installer.rb:69:in`install!'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:563:in`install_source_of_pod'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:514:in`block(2levels)ininstall_pod_sources'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/user_interface.rb:86:in`titled_section'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:513:in`blockininstall_pod_sources'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:496:in`each'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:496:in`install_pod_sources'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:255:in`blockindownload_dependencies'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/user_interface.rb:64:in`section'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:254:in`download_dependencies'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/installer.rb:162:in`install!'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/command/install.rb:52:in`run'/Library/Ruby/Gems/2.6.0/gems/claide-1.1.0/lib/claide/command.rb:334:in`run'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/lib/cocoapods/command.rb:52:in`run'/Library/Ruby/Gems/2.6.0/gems/cocoapods-1.11.3/bin/pod:55:in`<top(required)>'/usr/local/bin/pod:23:in`load'/usr/local/bin/pod:23:in`<main>'```―――TEMPLATEEND――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――[!]Ohno,anerroroccurred.SearchforexistingGitHubissuessimilartoyours:https://github.com/CocoaPods/CocoaPods/search?q=Input%2Foutput+error+-+write&type=IssuesIfnoneexists,createaticket,withthetemplatedisplayedabove,on:https://github.com/CocoaPods/CocoaPods/issues/newBesuretofirstreadthecontributingguidefordetailsonhowtoproperlysubmitaticket:https://github.com/CocoaPods/CocoaPods/blob/master/CONTRIBUTING.mdDon'tforgettoanonymizeanyprivatedata!Lookingforrelatedissuesoncocoapods/cocoapods...-Xcode10newbuildsystemmakesassetcataloginvalidspecifiedbypodspec's`resource(s)`https://github.com/CocoaPods/CocoaPods/issues/8122[open][82comments]16Aug2021-Frameworkswithconflictingnames:webrtc.xcframeworkhttps://github.com/CocoaPods/CocoaPods/issues/11278[closed][6comments]31Mar2022-Errno::EACCES-Permissiondenied@apply2files-.../Library/Caches/CocoaPods/Pods/Release/Firebase/8.10.0-44213.lockhttps://github.com/CocoaPods/CocoaPods/issues/11142[closed][1comment]09Mar2022and9moreat:https://github.com/cocoapods/cocoapods/search?q=Input%2Foutput%20error%20-%20write&type=Issues&utf8=✓##CocoaPodsEnvironment###Stack```CocoaPods:1.11.3Ruby:ruby2.6.8p205(2021-07-07revision67951)[universal.x86_64-darwin21]RubyGems:3.0.3.1Host:macOS12.6(21G115)Xcode:13.4(13F17a)Git:gitversion2.38.1.273.g43a17bfeac-googRubylibdir:/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib```###InstallationSource```ExecutablePath:/usr/local/bin/pod```###Plugins```cocoapods-deintegrate:1.0.5cocoapods-plugins:1.0.0cocoapods-search:1.0.1cocoapods-trunk:1.6.0cocoapods-try:1.2.0```###Podfile```rubyplatform:ios,'12.0'target'SoundClassification'do#Commentthenextlineifyoudon'twanttousedynamicframeworksuse_frameworks!pod'TensorFlowLiteSwift','~>0.0.1-nightly'pod'TensorFlowLiteSelectTfOps','~>0.0.1-nightly'end```##ProjectthatdemonstratestheissueProjectcouldbefoundherehttps://github.com/tensorflow/examples/tree/master/lite/examples/sound_classification/ios
+2022-10-27T18:06:05.5836508Z false
+2022-10-27T18:06:05.5836722Z false
+2022-10-27T18:06:05.6142374Z Cleaning up orphan processes
