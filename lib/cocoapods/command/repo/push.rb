@@ -166,7 +166,7 @@ module Pod
         # @return [void]
         #
         def check_repo_status
-          porcelain_status, = Executable.capture_command('git', %w(status --porcelain), :capture => :merge, :chdir => repo_dir)
+          porcelain_status, = Executable.capture_command('git', %w(status --untracked-files=all --porcelain), :capture => :merge, :chdir => repo_dir)
           clean = porcelain_status == ''
           raise Informative, "The repo `#{@repo}` at #{UI.path repo_dir} is not clean" unless clean
         end
@@ -231,7 +231,7 @@ module Pod
             end
 
             # only commit if modified
-            if repo_git('status', '--porcelain').include?(spec.name)
+            if repo_git('status', '--untracked-files=all', '--porcelain').include?(spec.name)
               UI.puts " - #{message}"
               repo_git('add', spec.name)
               repo_git('commit', '--no-verify', '-m', message)
