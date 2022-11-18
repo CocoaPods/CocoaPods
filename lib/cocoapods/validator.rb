@@ -1098,7 +1098,6 @@ module Pod
         end
       when :watchos
         command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
-        command += Fourflusher::SimControl.new.destination(:oldest, 'watchOS', deployment_target)
       when :tvos
         command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)

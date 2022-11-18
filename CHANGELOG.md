@@ -60,6 +60,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Seth Friedman](https://github.com/sethfri)
   [#11235](https://github.com/CocoaPods/CocoaPods/pull/11235)
 
+* Fix publishing podspecs with watchOS support on Xcode 14
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#11660](https://github.com/CocoaPods/CocoaPods/pull/11660)
+
 ## 1.11.3 (2022-03-16)
 
 ##### Enhancements
