@@ -50,7 +50,7 @@ module Pod
         @analyzer.send(:pod_added?, 'BananaLib').should == true
       end
 
-      it "considers a Pod as added if it folder doesn't exits" do
+      it "considers a Pod as added if it folder doesn't exist" do
         @analyzer.stubs(:folder_exist?).returns(false)
         @analyzer.send(:pod_added?, 'BananaLib').should == true
       end
@@ -58,6 +58,16 @@ module Pod
       it 'considers a deleted Pod without any resolved specification' do
         @analyzer.stubs(:resolved_pods).returns([])
         @analyzer.send(:pod_deleted?, 'BananaLib').should == true
+      end
+
+      it 'considers a Pod as deleted if no resolved specification exists even if other metadata is present' do
+        @analyzer.stubs(:resolved_pods).returns([])
+        @analyzer.stubs(:sandbox_pods).returns(['BananaLib'])
+
+        @analyzer.stubs(:folder_exist?).returns(false)
+        @sandbox.stubs(:local?).returns(false)
+
+        @analyzer.send(:pod_state, 'BananaLib').should == :deleted
       end
 
       it 'considers a changed Pod whose versions do not match' do
