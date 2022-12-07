@@ -92,8 +92,8 @@ module Pod
         # @return [Symbol] The state
         #
         def pod_state(pod)
-          return :added   if pod_added?(pod)
           return :deleted if pod_deleted?(pod)
+          return :added   if pod_added?(pod)
           return :changed if pod_changed?(pod)
           :unchanged
         end

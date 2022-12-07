@@ -44,6 +44,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix incremental installation when a development pod is deleted.  
+  [John Szumski](https://github.com/jszumski)
+  [#11438](https://github.com/CocoaPods/CocoaPods/pull/11681)
+
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11213](https://github.com/CocoaPods/CocoaPods/pull/11213)
