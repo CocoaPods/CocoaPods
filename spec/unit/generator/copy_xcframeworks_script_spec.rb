@@ -22,11 +22,11 @@ module Pod
       SH
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.watchos)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "watchos-i386-simulator" "watchos-armv7k_arm64_32"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "watchos-armv7k_arm64_32" "watchos-i386-simulator"
       SH
       generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.tvos)
       generator.send(:script).should.include <<-SH.strip_heredoc
-        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "tvos-x86_64-simulator" "tvos-arm64"
+        install_xcframework "${PODS_ROOT}/../../spec/fixtures/CoconutLib.xcframework" "CoconutLib" "framework" "tvos-arm64" "tvos-x86_64-simulator"
       SH
     end
 
