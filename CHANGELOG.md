@@ -42,6 +42,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#11224](https://github.com/CocoaPods/CocoaPods/pull/11224)
 
+* Ensure the order of slices passed to the `install_xcframework` script (in the "Copy XCFrameworks" script build phase) is stable.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#11707](https://github.com/CocoaPods/CocoaPods/pull/11707)
+
 ##### Bug Fixes
 
 * Fix incremental installation when a development pod is deleted.  
