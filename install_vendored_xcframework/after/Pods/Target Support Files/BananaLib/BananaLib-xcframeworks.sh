@@ -17,29 +17,29 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "CoconutLib.xcframework/tvos-arm64")
+  "CoconutLib.xcframework/ios-armv7_arm64")
     echo ""
-    ;;
-  "CoconutLib.xcframework/ios-x86_64-maccatalyst")
-    echo "maccatalyst"
     ;;
   "CoconutLib.xcframework/ios-i386_x86_64-simulator")
     echo "simulator"
     ;;
+  "CoconutLib.xcframework/ios-x86_64-maccatalyst")
+    echo "maccatalyst"
+    ;;
   "CoconutLib.xcframework/macos-x86_64")
     echo ""
     ;;
-  "CoconutLib.xcframework/ios-armv7_arm64")
+  "CoconutLib.xcframework/tvos-arm64")
     echo ""
     ;;
   "CoconutLib.xcframework/tvos-x86_64-simulator")
     echo "simulator"
     ;;
-  "CoconutLib.xcframework/watchos-i386-simulator")
-    echo "simulator"
-    ;;
   "CoconutLib.xcframework/watchos-armv7k_arm64_32")
     echo ""
+    ;;
+  "CoconutLib.xcframework/watchos-i386-simulator")
+    echo "simulator"
     ;;
   esac
 }
@@ -47,29 +47,29 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "CoconutLib.xcframework/tvos-arm64")
-    echo "arm64"
-    ;;
-  "CoconutLib.xcframework/ios-x86_64-maccatalyst")
-    echo "x86_64"
+  "CoconutLib.xcframework/ios-armv7_arm64")
+    echo "arm64 armv7"
     ;;
   "CoconutLib.xcframework/ios-i386_x86_64-simulator")
     echo "i386 x86_64"
     ;;
+  "CoconutLib.xcframework/ios-x86_64-maccatalyst")
+    echo "x86_64"
+    ;;
   "CoconutLib.xcframework/macos-x86_64")
     echo "x86_64"
     ;;
-  "CoconutLib.xcframework/ios-armv7_arm64")
-    echo "arm64 armv7"
+  "CoconutLib.xcframework/tvos-arm64")
+    echo "arm64"
     ;;
   "CoconutLib.xcframework/tvos-x86_64-simulator")
     echo "x86_64"
     ;;
-  "CoconutLib.xcframework/watchos-i386-simulator")
-    echo "i386"
-    ;;
   "CoconutLib.xcframework/watchos-armv7k_arm64_32")
     echo "arm64_32 armv7k"
+    ;;
+  "CoconutLib.xcframework/watchos-i386-simulator")
+    echo "i386"
     ;;
   esac
 }
@@ -153,5 +153,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "BananaLib" "framework" "ios-x86_64-maccatalyst" "ios-i386_x86_64-simulator" "ios-armv7_arm64"
+install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "BananaLib" "framework" "ios-armv7_arm64" "ios-i386_x86_64-simulator" "ios-x86_64-maccatalyst"
 

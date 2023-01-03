@@ -20,26 +20,26 @@ variant_for_slice()
   "CoconutLib.xcframework/ios-arm64")
     echo ""
     ;;
-  "CoconutLib.xcframework/macos-x86_64")
-    echo ""
+  "CoconutLib.xcframework/ios-arm64_x86_64-simulator")
+    echo "simulator"
     ;;
   "CoconutLib.xcframework/ios-x86_64-maccatalyst")
     echo "maccatalyst"
     ;;
-  "CoconutLib.xcframework/watchos-arm64_32_armv7k")
+  "CoconutLib.xcframework/macos-x86_64")
+    echo ""
+    ;;
+  "CoconutLib.xcframework/tvos-arm64")
     echo ""
     ;;
   "CoconutLib.xcframework/tvos-arm64_x86_64-simulator")
     echo "simulator"
     ;;
+  "CoconutLib.xcframework/watchos-arm64_32_armv7k")
+    echo ""
+    ;;
   "CoconutLib.xcframework/watchos-arm64_i386_x86_64-simulator")
     echo "simulator"
-    ;;
-  "CoconutLib.xcframework/ios-arm64_x86_64-simulator")
-    echo "simulator"
-    ;;
-  "CoconutLib.xcframework/tvos-arm64")
-    echo ""
     ;;
   esac
 }
@@ -50,26 +50,26 @@ archs_for_slice()
   "CoconutLib.xcframework/ios-arm64")
     echo "arm64"
     ;;
-  "CoconutLib.xcframework/macos-x86_64")
-    echo "x86_64"
+  "CoconutLib.xcframework/ios-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
     ;;
   "CoconutLib.xcframework/ios-x86_64-maccatalyst")
     echo "x86_64"
     ;;
-  "CoconutLib.xcframework/watchos-arm64_32_armv7k")
-    echo "arm64_32 armv7k"
+  "CoconutLib.xcframework/macos-x86_64")
+    echo "x86_64"
+    ;;
+  "CoconutLib.xcframework/tvos-arm64")
+    echo "arm64"
     ;;
   "CoconutLib.xcframework/tvos-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
+  "CoconutLib.xcframework/watchos-arm64_32_armv7k")
+    echo "arm64_32 armv7k"
+    ;;
   "CoconutLib.xcframework/watchos-arm64_i386_x86_64-simulator")
     echo "arm64 i386 x86_64"
-    ;;
-  "CoconutLib.xcframework/ios-arm64_x86_64-simulator")
-    echo "arm64 x86_64"
-    ;;
-  "CoconutLib.xcframework/tvos-arm64")
-    echo "arm64"
     ;;
   esac
 }
@@ -153,5 +153,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "BananaLib" "library" "ios-arm64" "ios-x86_64-maccatalyst" "ios-arm64_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/../BananaLib/CoconutLib.xcframework" "BananaLib" "library" "ios-arm64" "ios-arm64_x86_64-simulator" "ios-x86_64-maccatalyst"
 
