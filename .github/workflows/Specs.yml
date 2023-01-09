@@ -6,14 +6,14 @@ jobs:
       fail-fast: false
       matrix:
         task: [SPECS]
-        ruby: [2.6, 2.7, 3.0]
+        ruby: [2.6, 2.7, 3.0, 3.1, 3.2]
         os: [ubuntu-18.04]
         include:
           - task: SPECS
-            os: macos-11
+            os: macos-12
             ruby: system
           - task: EXAMPLES
-            os: macos-11
+            os: macos-12
             ruby: system
 
     name: ${{ matrix.task }} / ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
@@ -24,7 +24,7 @@ jobs:
         run: echo "ImageVersion=$ImageVersion"  >> $GITHUB_ENV
 
       - name: Checkout git
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -35,7 +35,7 @@ jobs:
       - name: Update git submodules
         run: git submodule update --init
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: vendor/bundle
           key: gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
@@ -54,7 +54,7 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1.1
         if: ${{ matrix.task == 'EXAMPLES' }}
         with:
-          xcode-version: 13.2.1
+          xcode-version: 14.2
 
       - name: Run Tests
         run: bundle exec rake spec:all
