@@ -131,6 +131,7 @@ Targets:
     Build Configurations:
     - Debug:
         Build Settings:
+          CODE_SIGNING_ALLOWED: 'NO'
           COMBINE_HIDPI_IMAGES: 'YES'
           CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
           IBSC_MODULE: res
@@ -144,6 +145,7 @@ Targets:
         Base Configuration: res.debug.xcconfig
     - Release:
         Build Settings:
+          CODE_SIGNING_ALLOWED: 'NO'
           COMBINE_HIDPI_IMAGES: 'YES'
           CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
           IBSC_MODULE: res
