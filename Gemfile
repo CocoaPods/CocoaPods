@@ -42,7 +42,7 @@ group :development do
   gem 'typhoeus'
   gem 'webmock'
 
-  gem 'bigdecimal', '~> 1.3.0'
+  gem 'bigdecimal', '~> 3.0'
   gem 'public_suffix'
   gem 'ruby-graphviz', '< 1.2.5'
 

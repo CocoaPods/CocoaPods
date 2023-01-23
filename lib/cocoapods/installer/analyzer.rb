@@ -84,6 +84,7 @@ module Pod
         @installation_options = podfile.installation_options
         @podfile_dependency_cache = PodfileDependencyCache.from_podfile(podfile)
         @sources_manager = sources_manager
+        @path_lists = {}
         @result = nil
       end
 
@@ -830,7 +831,10 @@ module Pod
       def create_file_accessors(specs, platform)
         name = specs.first.name
         pod_root = sandbox.pod_dir(name)
-        path_list = Sandbox::PathList.new(pod_root)
+        path_list = @path_lists.fetch(pod_root) do |root|
+          path_list = Sandbox::PathList.new(root)
+          @path_lists[root] = path_list
+        end
         specs.map do |spec|
           Sandbox::FileAccessor.new(path_list, spec.consumer(platform))
         end

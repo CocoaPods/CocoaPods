@@ -8,6 +8,20 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Correctly handle .docc documentation in source_files.  
+  [haifengkao](https://github.com/haifengkao)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11438](https://github.com/CocoaPods/CocoaPods/pull/11438)
+  [#10885](https://github.com/CocoaPods/CocoaPods/issues/10885)
+
+* Re-use the same path lists for pods that share the same root.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11417](https://github.com/CocoaPods/CocoaPods/pull/11417)
+
+* Integrate `parallelizable` scheme DSL option.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11399](https://github.com/CocoaPods/CocoaPods/pull/11399)
+
 * Use `${DEVELOPMENT_LANGUAGE}` as the default `CFBundleDevelopmentRegion` value in any generated `Info.plist`.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10950](https://github.com/CocoaPods/CocoaPods/pull/10950)
@@ -28,11 +42,22 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#11224](https://github.com/CocoaPods/CocoaPods/pull/11224)
 
+* Ensure the order of slices passed to the `install_xcframework` script (in the "Copy XCFrameworks" script build phase) is stable.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#11707](https://github.com/CocoaPods/CocoaPods/pull/11707)
+
 ##### Bug Fixes
+
 
 * Do not copy resources to non-library (App, Tests) targets bundles from dynamically built dependencies
   [Ilya Myakotin](https://github.com/rehsals)
   [#11331](https://github.com/CocoaPods/CocoaPods/issues/11331)
+
+
+* Fix incremental installation when a development pod is deleted.  
+  [John Szumski](https://github.com/jszumski)
+  [#11438](https://github.com/CocoaPods/CocoaPods/pull/11681)
+
 
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -49,6 +74,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add .gitignores to the banana and snake fixtures  
   [Seth Friedman](https://github.com/sethfri)
   [#11235](https://github.com/CocoaPods/CocoaPods/pull/11235)
+
+* Fix publishing podspecs with watchOS support on Xcode 14
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#11660](https://github.com/CocoaPods/CocoaPods/pull/11660)
 
 ## 1.11.3 (2022-03-16)
 
