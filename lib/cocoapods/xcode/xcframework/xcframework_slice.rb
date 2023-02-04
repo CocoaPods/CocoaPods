@@ -4,7 +4,7 @@ module Pod
   module Xcode
     class XCFramework
       class Slice
-        # @return [Pathname] the path to the .framework or .a of this slice
+        # @return [Pathname] the path to the .framework, .a or .dylib of this slice
         #
         attr_reader :path
 
@@ -45,9 +45,15 @@ module Pod
             when :framework
               File.basename(path, '.framework')
             when :library
-              result = File.basename(path, '.a').gsub(/^lib/, '')
-              result[0] = result.downcase[0]
-              result
+              ext = File.extname(path)
+              case ext
+              when '.a', '.dylib'
+                result = File.basename(path).gsub(/^lib/, '')
+                result[0] = result.downcase[0]
+                result
+              else
+                raise Informative, "Invalid package type `#{package_type}`"
+              end
             else
               raise Informative, "Invalid package type `#{package_type}`"
             end
@@ -68,7 +74,7 @@ module Pod
             case ext
             when '.framework'
               :framework
-            when '.a'
+            when '.a', '.dylib'
               :library
             else
               raise Informative, "Invalid XCFramework slice type `#{ext}`"
@@ -109,7 +115,7 @@ module Pod
             packaging = case ext
                         when '.framework'
                           :framework
-                        when '.a'
+                        when '.a', '.dylib'
                           :library
                         else
                           raise Informative, "Invalid XCFramework slice type `#{ext}`"
