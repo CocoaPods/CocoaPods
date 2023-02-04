@@ -1324,7 +1324,7 @@ module Pod
         validator.validate
 
         validator.results.count.should == 2
-        validator.results.map(&:to_s)[0].should.match /`empty\.dylib` does not match the expected static library name format/
+        validator.results.map(&:to_s)[0].should.match /`empty\.dylib` does not match the expected library name format/
         validator.results.map(&:to_s)[1].should.match /Dynamic frameworks.*iOS 8.0 and onwards/
         validator.result_type.should == :error
       end
@@ -1340,7 +1340,7 @@ module Pod
         validator.validate
 
         validator.results.count.should == 1
-        validator.results.map(&:to_s).first.should.match /`monkey\.a` does not match the expected static library name format/
+        validator.results.map(&:to_s).first.should.match /`monkey\.a` does not match the expected library name format/
         validator.result_type.should == :warning
       end
     end
