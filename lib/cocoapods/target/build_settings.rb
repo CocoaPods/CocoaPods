@@ -443,7 +443,7 @@ module Pod
       def merged_xcconfigs(xcconfig_values_by_consumer_by_key, attribute, overriding: {})
         xcconfig_values_by_consumer_by_key.each_with_object(overriding.dup) do |(key, values_by_consumer), xcconfig|
           uniq_values = values_by_consumer.values.uniq
-          values_are_bools = uniq_values.all? { |v| v =~ /\A(yes|no)\z/i }
+          values_are_bools = uniq_values.all? { |v| v.is_a?(String) && v =~ /\A(yes|no)\z/i }
           if values_are_bools
             # Boolean build settings
             if uniq_values.count > 1

@@ -821,7 +821,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -850,7 +850,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -881,7 +881,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm') + analyzer_args
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -913,7 +913,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm') + analyzer_args
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -937,7 +937,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch - 38mm')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate
       end
@@ -1324,7 +1324,7 @@ module Pod
         validator.validate
 
         validator.results.count.should == 2
-        validator.results.map(&:to_s)[0].should.match /`empty\.dylib` does not match the expected static library name format/
+        validator.results.map(&:to_s)[0].should.match /`empty\.dylib` does not match the expected library name format/
         validator.results.map(&:to_s)[1].should.match /Dynamic frameworks.*iOS 8.0 and onwards/
         validator.result_type.should == :error
       end
@@ -1340,7 +1340,7 @@ module Pod
         validator.validate
 
         validator.results.count.should == 1
-        validator.results.map(&:to_s).first.should.match /`monkey\.a` does not match the expected static library name format/
+        validator.results.map(&:to_s).first.should.match /`monkey\.a` does not match the expected library name format/
         validator.result_type.should == :warning
       end
     end
