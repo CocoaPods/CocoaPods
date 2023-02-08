@@ -26,6 +26,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [MagnificentMiles](https://github.com/MagnificentMiles)
   [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
 
+* Fix AppHost infoplist integration, inject `info_plist_entries` into AppHost application.
+  [blastmann](https://github.com/blastmann)
+  [#11692](https://github.com/CocoaPods/CocoaPods/issues/11692)
+
 ## 1.14.3 (2023-11-19)
 
 ##### Enhancements
