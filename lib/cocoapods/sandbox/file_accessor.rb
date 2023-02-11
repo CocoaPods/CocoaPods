@@ -12,7 +12,7 @@ module Pod
       HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
       SOURCE_FILE_EXTENSIONS = (%w(.m .mm .i .c .cc .cxx .cpp .c++ .swift) + HEADER_EXTENSIONS).uniq.freeze
       MAX_AUTO_DETECTED_DOCS = 100
-      
+
       GLOB_PATTERNS = {
         :readme              => 'readme{*,.*}'.freeze,
         :license             => 'licen{c,s}e{*,.*}'.freeze,
