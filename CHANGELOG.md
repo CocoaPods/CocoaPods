@@ -72,6 +72,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Justin Martin](https://github.com/justinseanmartin)
   [#11660](https://github.com/CocoaPods/CocoaPods/pull/11660)
 
+* Limit auto-detected docs in development pods to avoid crashing
+  [radex](https://github.com/radex)
+  [#11753](https://github.com/CocoaPods/CocoaPods/issues/11753)
+
 ## 1.11.3 (2022-03-16)
 
 ##### Enhancements
