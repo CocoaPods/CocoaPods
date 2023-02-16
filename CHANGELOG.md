@@ -8,7 +8,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Add ability to specify the `validation-dir` during `lint`.    
+* Add ability to specify the `validation-dir` during `lint`.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11773](https://github.com/CocoaPods/CocoaPods/pull/11773)
 
