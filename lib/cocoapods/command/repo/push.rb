@@ -38,6 +38,7 @@ module Pod
              'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file'],
             ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec'],
             ['--update-sources', 'Make sure sources are up-to-date before a push'],
+            ['--validaton-dir', 'The directory to use for validation. If none is specified a temporary directory will be used.'],
           ].concat(super)
         end
 
@@ -59,6 +60,7 @@ module Pod
           @skip_import_validation = argv.flag?('skip-import-validation', false)
           @skip_tests = argv.flag?('skip-tests', false)
           @allow_overwrite = argv.flag?('overwrite', true)
+          @validation_dir = argv.option('validation-dir', nil)
           super
         end
 
@@ -144,6 +146,7 @@ module Pod
             validator.swift_version = @swift_version
             validator.skip_import_validation = @skip_import_validation
             validator.skip_tests = @skip_tests
+            validator.validation_dir = @validation_dir
             begin
               validator.validate
             rescue => e

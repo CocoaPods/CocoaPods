@@ -58,7 +58,6 @@ module Pod
         end
         result
       end
-      @use_frameworks = true
     end
 
     #-------------------------------------------------------------------------#
@@ -322,6 +321,10 @@ module Pod
     #
     def validation_dir
       @validation_dir ||= Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{spec.name}"]))
+    end
+
+    def validation_dir=(validation_dir)
+      @validation_dir = Pathname(validation_dir) unless validation_dir.nil?
     end
 
     # @return [String] The SWIFT_VERSION that should be used to validate the pod. This is set by passing the
