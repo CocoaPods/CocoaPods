@@ -7,7 +7,7 @@ jobs:
       matrix:
         task: [SPECS]
         ruby: [2.6, 2.7, 3.0]
-        os: [ubuntu-18.04]
+        os: [ubuntu-20.04]
         include:
           - task: SPECS
             os: macos-12
