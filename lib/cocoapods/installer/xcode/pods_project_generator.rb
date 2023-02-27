@@ -268,6 +268,7 @@ module Pod
               if scheme_configuration.key?(:parallelizable)
                 scheme.test_action.testables.each { |testable| testable.parallelizable = scheme_configuration[:parallelizable] }
               end
+              set_scheme_build_configurations(scheme, scheme_configuration.fetch(:build_configurations, {}))
 
               hosted_test_specs_by_host[spec].each do |hosted_spec|
                 # We are an app spec which hosts this test spec.
@@ -286,6 +287,35 @@ module Pod
               scheme.save!
             end
             Xcodeproj::XCScheme.share_scheme(project.path, scheme_name) if share_scheme
+          end
+        end
+
+        # @param [Xcodeproj::XCSheme] scheme
+        # scheme to apply configuration to
+        #
+        # @param [Hash{String => String}] configuration
+        # action => build configuration to use for the action 
+        #
+        # @return [void]
+        #
+        def set_scheme_build_configurations(scheme, configuration)
+          configuration.each do |k, v|
+            raise Informative, "Unable to set #{v} as a build_configuration as " \
+            "it doesn't match with any of your projects build_configurations" unless @build_configurations.include?(v)
+
+            case k 
+              when 'Run'
+                scheme.launch_action.build_configuration = v
+              when 'Test'
+                scheme.test_action.build_configuration = v
+              when 'Analyze'
+                scheme.analyze_action.build_configuration = v
+              when 'Archive'
+                scheme.archive_action.build_configuration = v
+              else
+                raise Informative, "#{k} is not a valid scheme action " \
+                "only one of ['run', 'test', 'analyze', 'archive'] is available"
+            end
           end
         end
       end
