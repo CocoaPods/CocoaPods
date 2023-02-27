@@ -294,27 +294,29 @@ module Pod
         # scheme to apply configuration to
         #
         # @param [Hash{String => String}] configuration
-        # action => build configuration to use for the action 
+        # action => build configuration to use for the action
         #
         # @return [void]
         #
         def set_scheme_build_configurations(scheme, configuration)
           configuration.each do |k, v|
-            raise Informative, "Unable to set #{v} as a build_configuration as " \
-            "it doesn't match with any of your projects build_configurations" unless @build_configurations.include?(v)
+            unless @build_configurations.include?(v)
+              raise Informative, "Unable to set `#{v}` as a build configuration as " \
+              "it doesn't match with any of your projects build configurations."
+            end
 
-            case k 
-              when 'Run'
-                scheme.launch_action.build_configuration = v
-              when 'Test'
-                scheme.test_action.build_configuration = v
-              when 'Analyze'
-                scheme.analyze_action.build_configuration = v
-              when 'Archive'
-                scheme.archive_action.build_configuration = v
-              else
-                raise Informative, "#{k} is not a valid scheme action " \
-                "only one of ['run', 'test', 'analyze', 'archive'] is available"
+            case k
+            when 'Run'
+              scheme.launch_action.build_configuration = v
+            when 'Test'
+              scheme.test_action.build_configuration = v
+            when 'Analyze'
+              scheme.analyze_action.build_configuration = v
+            when 'Archive'
+              scheme.archive_action.build_configuration = v
+            else
+              raise Informative, "#{k} is not a valid scheme action " \
+              "only one of ['run', 'test', 'analyze', 'archive'] is available"
             end
           end
         end

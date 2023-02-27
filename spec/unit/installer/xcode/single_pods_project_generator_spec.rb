@@ -493,8 +493,7 @@ module Pod
                                             :environment_variables => { 'Key1' => 'Val1' },
                                             :code_coverage => true,
                                             :parallelizable => true,
-                                            :build_configurations => { 'Run' => 'Debug', 'Archive' => 'App Store', 'Test' => 'Test'} 
-                                          }
+                                            :build_configurations => { 'Run' => 'Debug', 'Archive' => 'App Store', 'Test' => 'Test' } }
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(true)

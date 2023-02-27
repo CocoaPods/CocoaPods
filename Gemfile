@@ -53,7 +53,7 @@ group :development do
   # Code Quality
 
   # Revert to released gem once https://github.com/segiddins/inch_by_inch/pull/5 lands and a new version is published
-  gem 'inch_by_inch', :git => 'https://github.com/CocoaPods/inch_by_inch.git', branch: 'loosen-dependency'
+  gem 'inch_by_inch', :git => 'https://github.com/CocoaPods/inch_by_inch.git', :branch => 'loosen-dependency'
   gem 'rubocop', '0.50.0'
   gem 'simplecov', '< 0.18'
 
