@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+- Use TARGET_BUILD_DIR for actool output  
+  [Akio Yasui](https://github.com/akkyie)
+  [#11762](https://github.com/CocoaPods/CocoaPods/pull/11762)
 
 ##### Bug Fixes
 
