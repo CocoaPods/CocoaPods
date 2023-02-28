@@ -37,6 +37,7 @@ module Pod
             ['--test-specs=test-spec1,test-spec2,etc', 'List of test specs to run'],
             ['--analyze', 'Validate with the Xcode Static Analysis tool'],
             ['--configuration=CONFIGURATION', 'Build using the given configuration (defaults to Release)'],
+            ['--validaton-dir', 'The directory to use for validation. If none is specified a temporary directory will be used.'],
           ].concat(super)
         end
 
@@ -60,6 +61,7 @@ module Pod
           @analyze         = argv.flag?('analyze', false)
           @podspecs_paths  = argv.arguments!
           @configuration   = argv.option('configuration', nil)
+          @validation_dir = argv.option('validation-dir', nil)
           super
         end
 
@@ -84,6 +86,7 @@ module Pod
             validator.test_specs = @test_specs
             validator.analyze = @analyze
             validator.configuration = @configuration
+            validator.validation_dir = @validation_dir
             validator.validate
             failure_reasons << validator.failure_reason
 

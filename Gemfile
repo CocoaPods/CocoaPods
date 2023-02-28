@@ -33,7 +33,8 @@ group :development do
 
   gem 'cocoapods-dependencies', '~> 1.0.beta.1'
 
-  gem 'activesupport', '> 5', '< 6' # Pinned < 6 because 6 requires Ruby 2.5.0
+  # Pin activesupport to < 7 because we still test with Ruby 2.6 in CI.
+  gem 'activesupport', '> 5', '< 7'
   gem 'bacon', :git => 'https://github.com/leahneukirchen/bacon.git'
   gem 'mocha', '< 1.5'
   gem 'mocha-on-bacon'
@@ -53,7 +54,7 @@ group :development do
   # Code Quality
 
   # Revert to released gem once https://github.com/segiddins/inch_by_inch/pull/5 lands and a new version is published
-  gem 'inch_by_inch', :git => 'https://github.com/CocoaPods/inch_by_inch.git', branch: 'loosen-dependency'
+  gem 'inch_by_inch', :git => 'https://github.com/CocoaPods/inch_by_inch.git', :branch => 'loosen-dependency'
   gem 'rubocop', '0.50.0'
   gem 'simplecov', '< 0.18'
 

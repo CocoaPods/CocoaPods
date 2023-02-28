@@ -8,7 +8,22 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Correctly handle .docc documentation in source_files.  
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.12.0 (2023-02-27)
+
+##### Enhancements
+
+* Add ability to specify the `validation-dir` during `lint`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11773](https://github.com/CocoaPods/CocoaPods/pull/11773)
+
+* Correctly handle `.docc` documentation in source_files.  
   [haifengkao](https://github.com/haifengkao)
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11438](https://github.com/CocoaPods/CocoaPods/pull/11438)
@@ -74,7 +89,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Seth Friedman](https://github.com/sethfri)
   [#11235](https://github.com/CocoaPods/CocoaPods/pull/11235)
 
-* Fix publishing podspecs with watchOS support on Xcode 14
+* Fix publishing podspecs with watchOS support on Xcode 14  
   [Justin Martin](https://github.com/justinseanmartin)
   [#11660](https://github.com/CocoaPods/CocoaPods/pull/11660)
 
