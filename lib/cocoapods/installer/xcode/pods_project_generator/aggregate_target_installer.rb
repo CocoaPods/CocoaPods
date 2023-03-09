@@ -174,13 +174,13 @@ module Pod
           end
 
           # Deletes the script that embeds the frameworks to the bundle of the client
-          # target.
+          # target, if it was previously created.
           #
           # @return [void]
           #
           def delete_embed_frameworks_script
             path = target.embed_frameworks_script_path
-            File.delete(path)
+            File.delete(path) if File.exist?(path)
           end
 
           # Generates the acknowledgement files (markdown and plist) for the target.
