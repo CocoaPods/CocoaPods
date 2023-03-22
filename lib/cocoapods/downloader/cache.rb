@@ -163,12 +163,13 @@ module Pod
       #
       def ensure_matching_version
         version_file = root + 'VERSION'
-        version = version_file.read.strip if version_file.file?
+        version = nil
+        Cache.read_lock(version_file) { version = version_file.read.strip if version_file.file? }
 
         root.rmtree if version != Pod::VERSION && root.exist?
         root.mkpath
 
-        version_file.open('w') { |f| f << Pod::VERSION }
+        Cache.write_lock(version_file) { version_file.open('w') { |f| f << Pod::VERSION } }
       end
 
       # @param  [Request] request
