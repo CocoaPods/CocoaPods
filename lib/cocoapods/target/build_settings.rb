@@ -359,7 +359,7 @@ module Pod
                    else
                      "'@loader_path/Frameworks'"
                    end
-          paths << '${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}' if uses_swift
+          paths << '${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}' if uses_swift && test_bundle
         else
           paths << "'@executable_path/Frameworks'"
           paths << "'@loader_path/Frameworks'"
