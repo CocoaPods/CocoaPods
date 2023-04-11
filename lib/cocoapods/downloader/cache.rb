@@ -164,7 +164,7 @@ module Pod
       def ensure_matching_version
         version_file = root + 'VERSION'
         version = nil
-        Cache.read_lock(version_file) { version = version_file.read.strip if version_file.file? }
+        Cache.read_lock(version_file) { version = version_file.read.strip } if version_file.file?
 
         root.rmtree if version != Pod::VERSION && root.exist?
         root.mkpath
