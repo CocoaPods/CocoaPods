@@ -16,6 +16,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Chris Vasselli](https://github.com/chrisvasselli)
   [#11828](https://github.com/CocoaPods/CocoaPods/pull/11828)
   [#11808](https://github.com/CocoaPods/CocoaPods/issues/11808)
+* Fix typo in validation for `--validation-dir` help message  
+  [Austin Evans](https://github.com/ajevans99)
+  [#11857](https://github.com/CocoaPods/CocoaPods/issues/11857)
 
 # Xcode 14.3 fix: `pod lib lint` warning generation from main.m.  
   [Paul Beusterien](https://github.com/paulb777)
