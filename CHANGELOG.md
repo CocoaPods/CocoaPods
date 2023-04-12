@@ -9,6 +9,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 ##### Enhancements
 
 * None.  
+* Skip `create_dummy_source` when a target uses swift  
+  [CrazyFanFan](https://github.com/CrazyFanFan)
+  [#issue_number](https://github.com/CocoaPods/CocoaPods/issues/issue_number)
+
 
 ##### Bug Fixes
 
