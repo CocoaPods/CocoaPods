@@ -38,7 +38,7 @@ module Pod
             ['--test-specs=test-spec1,test-spec2,etc', 'List of test specs to run'],
             ['--analyze', 'Validate with the Xcode Static Analysis tool'],
             ['--configuration=CONFIGURATION', 'Build using the given configuration (defaults to Release)'],
-            ['--validaton-dir', 'The directory to use for validation. If none is specified a temporary directory will be used.'],
+            ['--validation-dir', 'The directory to use for validation. If none is specified a temporary directory will be used.'],
           ].concat(super)
         end
 

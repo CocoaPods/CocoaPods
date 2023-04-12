@@ -38,7 +38,7 @@ module Pod
              'This takes precedence over the Swift versions specified by the spec or a `.swift-version` file'],
             ['--no-overwrite', 'Disallow pushing that would overwrite an existing spec'],
             ['--update-sources', 'Make sure sources are up-to-date before a push'],
-            ['--validaton-dir', 'The directory to use for validation. If none is specified a temporary directory will be used.'],
+            ['--validation-dir', 'The directory to use for validation. If none is specified a temporary directory will be used.'],
           ].concat(super)
         end
 
