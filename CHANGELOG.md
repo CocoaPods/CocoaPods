@@ -21,9 +21,14 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Austin Evans](https://github.com/ajevans99)
   [#11857](https://github.com/CocoaPods/CocoaPods/issues/11857)
 
-# Xcode 14.3 fix: `pod lib lint` warning generation from main.m.  
+* Xcode 14.3 fix: `pod lib lint` warning generation from main.m.  
   [Paul Beusterien](https://github.com/paulb777)
-  [#11846](https://github.com/CocoaPods/CocoaPods/issuess/11846)
+  [#11846](https://github.com/CocoaPods/CocoaPods/issues/11846)
+
+* Fix Concurrent building occasionally cleans the Pods cache directory  
+  [fabcz](https://github.com/fabcz)
+  [#11827](https://github.com/CocoaPods/CocoaPods/pull/11827)
+  [#11826](https://github.com/CocoaPods/CocoaPods/issues/11826)
 
 ## 1.12.0 (2023-02-27)
 
@@ -388,7 +393,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Fix missing `-ObjC` for static XCFrameworks - take 2  
   [Paul Beusterien](https://github.com/paulb777)
-  [#10459](https://github.com/CocoaPods/CocoaPods/issuess/10459)
+  [#10459](https://github.com/CocoaPods/CocoaPods/issues/10459)
 
 * Change URL validation failure to a note  
   [Paul Beusterien](https://github.com/paulb777)
