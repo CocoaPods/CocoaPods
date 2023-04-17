@@ -30,7 +30,7 @@ module Pod
                 @import Foundation;
                 @import UIKit;
                 @import ModuleName;
-                int main() {}
+                int main(void) {}
             OBJC
           end
 
@@ -67,7 +67,7 @@ module Pod
                 @import Foundation;
                 @import UIKit;
                 #import <ModuleName/ModuleName.h>
-                int main() {}
+                int main(void) {}
             OBJC
           end
 
@@ -83,7 +83,7 @@ module Pod
             file.read.should == <<-OBJC.strip_heredoc
                 @import Foundation;
                 @import UIKit;
-                int main() {}
+                int main(void) {}
             OBJC
           end
         end
