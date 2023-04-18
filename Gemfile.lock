@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 3633e53436e8e8637be32441c0a5ddb10a72ccf9
+  revision: 01226592d7a295cb5567d346f996af5b3bfed2f6
   branch: master
   specs:
-    cocoapods-core (1.12.0)
+    cocoapods-core (1.12.1)
       activesupport (>= 5.0, < 8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Nanaimo.git
-  revision: f04a2e3db256497faf71a9ed4e1baa3ea810d7ac
+  revision: 2a5c613f3f1f95903293d10ecd87ee4ce2400c75
   branch: master
   specs:
     nanaimo (0.3.0)
@@ -119,10 +119,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.12.0)
+    cocoapods (1.12.1)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.12.0)
+      cocoapods-core (= 1.12.1)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.6.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -143,13 +143,13 @@ GEM
   specs:
     CFPropertyList (3.0.6)
       rexml
-    activesupport (6.1.7.2)
+    activesupport (6.1.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
@@ -245,7 +245,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.17.0)
+    minitest (5.18.0)
     mocha (1.4.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)

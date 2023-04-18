@@ -12,6 +12,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* None.  
+
+
+## 1.12.1 (2023-04-18)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
 * Xcode 14.3 fix: Pass the -f option when resolving the path to the symlinked source.  
   [Chris Vasselli](https://github.com/chrisvasselli)
   [#11828](https://github.com/CocoaPods/CocoaPods/pull/11828)
