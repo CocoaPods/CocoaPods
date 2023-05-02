@@ -22,6 +22,7 @@ module Pod
           Classes/BananaLib.pch
           Classes/BananaPrivate.h
           Classes/BananaTrace.d
+          Classes/Documentation.docc/Documentation.md
           LICENSE
           README
           Resources/Base.lproj/Main.storyboard
@@ -67,6 +68,8 @@ module Pod
           BananaFramework.framework/Versions/A/Headers/SubDir
           BananaFramework.framework/Versions/Current
           Classes
+          Classes/Documentation.docc
+          Classes/Documentation.docc/Resources
           Resources
           Resources/Base.lproj
           Resources/Images.xcassets

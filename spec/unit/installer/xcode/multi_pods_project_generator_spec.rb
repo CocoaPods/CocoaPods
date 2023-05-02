@@ -708,7 +708,9 @@ module Pod
               @coconut_spec.scheme = { :launch_arguments => ['Arg1'] }
               @coconut_test_spec.scheme = { :launch_arguments => ['TestArg1'],
                                             :environment_variables => { 'Key1' => 'Val1' },
-                                            :code_coverage => true }
+                                            :code_coverage => true,
+                                            :parallelizable => true,
+                                            :build_configurations => { 'Run' => 'Debug', 'Archive' => 'App Store', 'Test' => 'Test' } }
               @generator.installation_options.
                   stubs(:share_schemes_for_development_pods).
                   returns(true)
@@ -738,7 +740,11 @@ module Pod
               test_scheme.launch_action.environment_variables.all_variables.map(&:to_h).should == [
                 { :key => 'Key1', :value => 'Val1', :enabled => true },
               ]
+              test_scheme.launch_action.build_configuration.should == 'Debug'
+              test_scheme.test_action.build_configuration.should == 'Test'
+              test_scheme.archive_action.build_configuration.should == 'App Store'
               test_scheme.test_action.code_coverage_enabled?.should.be.true
+              test_scheme.test_action.testables.each { |testable| testable.parallelizable?.should.be.true }
               test_scheme.launch_action.macro_expansions.empty?.should.be.false
             end
 

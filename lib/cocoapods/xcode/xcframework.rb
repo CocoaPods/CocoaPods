@@ -91,7 +91,7 @@ module Pod
           slice_path = slice_root.join(relative_path)
           headers = slice_root.join(headers) unless headers.nil?
           XCFramework::Slice.new(slice_path, identifier, archs, platform_name, :platform_variant => platform_variant, :headers => headers)
-        end
+        end.sort_by(&:identifier)
         raise Informative, "XCFramework at #{path} does not contain any frameworks or libraries." if slices.empty?
       end
     end

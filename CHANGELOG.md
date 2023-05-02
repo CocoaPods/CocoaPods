@@ -8,6 +8,56 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.12.1 (2023-04-18)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Xcode 14.3 fix: Pass the -f option when resolving the path to the symlinked source.  
+  [Chris Vasselli](https://github.com/chrisvasselli)
+  [#11828](https://github.com/CocoaPods/CocoaPods/pull/11828)
+  [#11808](https://github.com/CocoaPods/CocoaPods/issues/11808)
+
+* Fix typo in validation for `--validation-dir` help message  
+  [Austin Evans](https://github.com/ajevans99)
+  [#11857](https://github.com/CocoaPods/CocoaPods/issues/11857)
+
+* Xcode 14.3 fix: `pod lib lint` warning generation from main.m.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#11846](https://github.com/CocoaPods/CocoaPods/issues/11846)
+
+## 1.12.0 (2023-02-27)
+
+##### Enhancements
+
+* Add ability to specify the `validation-dir` during `lint`.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11773](https://github.com/CocoaPods/CocoaPods/pull/11773)
+
+* Correctly handle `.docc` documentation in source_files.  
+  [haifengkao](https://github.com/haifengkao)
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11438](https://github.com/CocoaPods/CocoaPods/pull/11438)
+  [#10885](https://github.com/CocoaPods/CocoaPods/issues/10885)
+
+* Re-use the same path lists for pods that share the same root.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11417](https://github.com/CocoaPods/CocoaPods/pull/11417)
+
+* Integrate `parallelizable` scheme DSL option.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11399](https://github.com/CocoaPods/CocoaPods/pull/11399)
+
 * Use `${DEVELOPMENT_LANGUAGE}` as the default `CFBundleDevelopmentRegion` value in any generated `Info.plist`.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#10950](https://github.com/CocoaPods/CocoaPods/pull/10950)
@@ -28,11 +78,20 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#11224](https://github.com/CocoaPods/CocoaPods/pull/11224)
 
+* Ensure the order of slices passed to the `install_xcframework` script (in the "Copy XCFrameworks" script build phase) is stable.  
+  [Olivier Halligon](https://github.com/AliSoftware)
+  [#11707](https://github.com/CocoaPods/CocoaPods/pull/11707)
+
 ##### Bug Fixes
 
 * Sources priority in Podfile works as stated in documentation.
   [Ilya Myakotin](https://github.com/rehsals)
   [#8679](https://github.com/CocoaPods/CocoaPods/issues/8679)
+
+* Fix incremental installation when a development pod is deleted.  
+  [John Szumski](https://github.com/jszumski)
+  [#11438](https://github.com/CocoaPods/CocoaPods/pull/11681)
+
 
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
@@ -49,6 +108,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add .gitignores to the banana and snake fixtures  
   [Seth Friedman](https://github.com/sethfri)
   [#11235](https://github.com/CocoaPods/CocoaPods/pull/11235)
+
+* Fix publishing podspecs with watchOS support on Xcode 14  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#11660](https://github.com/CocoaPods/CocoaPods/pull/11660)
 
 ## 1.11.3 (2022-03-16)
 

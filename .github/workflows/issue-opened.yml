@@ -1,0 +1,64 @@
+on:
+  issues:
+    types: [opened]
+
+permissions: 
+  issues: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            console.log(context)
+            const [owner, repo] = context.payload.repository.full_name.split('/')
+            const issue = context.payload.issue
+            if (
+              issue.body.includes("incompatible architecture (have (x86_64), need (arm64e)))") ||
+              issue.body.includes("missing compatible arch in")
+            ) {
+              github.rest.issues.createComment({
+                issue_number: issue.number,
+                owner,
+                repo,
+                body: "👋 Thanks for reporting! This is likely an issue with your installation not being set up for your M-class mac. We recommend reading some of the resources on getting your computer set up: https://duckduckgo.com/?q=ruby+cocoapods+m1&t=h_&ia=web#",
+              })
+            }
+
+            const ghIssueTemplateResponse = await github.rest.repos.getContent({
+              owner,
+              repo,
+              path: ".github/ISSUE_TEMPLATE.md",
+            })
+
+            const buffer = new Buffer(ghIssueTemplateResponse.data.content, "base64")
+            const template = buffer.toString()
+
+            // Whitespace between code on disk vs text which comes from GitHub is different.
+            // This took far too long to figure.
+            
+            console.log( template.replace(/\s+/g, "") )
+            console.log( issue.body.replace(/\s+/g, "") )
+            console.log( issue.body.replace(/\s+/g, "").includes(template.replace(/\s+/g, "")))
+            console.log( issue.body.toLowerCase().replace(/\s+/g, "").includes(template.toLowerCase().replace(/\s+/g, "")))
+
+
+            if (issue.state === "open" && template && issue.body.replace(/\s+/g, "").includes(template.replace(/\s+/g, ""))) {
+              // Post a message
+              await github.rest.issues.createComment({
+                issue_number: issue.number,
+                owner,
+                repo,
+                body: `Hi there, thanks for the issue, but it seem that this issue is just the default template. Please create a new issue with the template filled out.`,
+              })
+
+              // Close the issue
+              await github.rest.issues.update({
+                issue_number: issue.number,
+                owner,
+                repo,
+                state: "closed",
+              })
+            }

@@ -203,7 +203,7 @@ module Pod
             f << "@import Foundation;\n"
             f << "@import UIKit;\n" if platform == :ios || platform == :tvos
             f << "@import Cocoa;\n" if platform == :osx
-            f << "#{import_statement}int main() {}\n"
+            f << "#{import_statement}int main(void) {}\n"
           end
         end
         source_file

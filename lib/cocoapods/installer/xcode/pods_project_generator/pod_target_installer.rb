@@ -600,6 +600,9 @@ module Pod
                   # classes from the parent module.
                   configuration.build_settings['IBSC_MODULE'] = target.product_module_name
 
+                  # Xcode 14.x throws an error about code signing on resource bundles, turn it off for now.
+                  configuration.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+
                   # Set the `SWIFT_VERSION` build setting for resource bundles that could have resources that get
                   # compiled such as an `xcdatamodeld` file which has 'Swift' as its code generation language.
                   if contains_compile_phase_refs && file_accessors.any? { |fa| target.uses_swift_for_spec?(fa.spec) }
@@ -1010,6 +1013,9 @@ module Pod
             error_message_for_missing_reference = lambda do |sf, target|
               "Unable to find #{file_type} ref for `#{sf.basename}` for target `#{target.name}`."
             end
+
+            # Remove all file ref under .docc folder, but preserve the .docc folder
+            files = merge_to_docc_folder(files)
             files.map do |sf|
               begin
                 project.reference_for_path(sf).tap do |ref|

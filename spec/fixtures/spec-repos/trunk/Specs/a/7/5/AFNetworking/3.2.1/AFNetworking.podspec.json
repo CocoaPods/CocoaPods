@@ -23,6 +23,7 @@
     "watchos": "2.0",
     "tvos": "9.0"
   },
+  "deprecated_in_favor_of": "Alamofire",
   "subspecs": [
     {
       "name": "Serialization",

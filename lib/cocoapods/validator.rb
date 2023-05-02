@@ -58,7 +58,6 @@ module Pod
         end
         result
       end
-      @use_frameworks = true
     end
 
     #-------------------------------------------------------------------------#
@@ -322,6 +321,10 @@ module Pod
     #
     def validation_dir
       @validation_dir ||= Pathname(Dir.mktmpdir(['CocoaPods-Lint-', "-#{spec.name}"]))
+    end
+
+    def validation_dir=(validation_dir)
+      @validation_dir = Pathname(validation_dir) unless validation_dir.nil?
     end
 
     # @return [String] The SWIFT_VERSION that should be used to validate the pod. This is set by passing the
@@ -827,8 +830,8 @@ module Pod
       file_accessor.vendored_libraries.each do |lib|
         basename = File.basename(lib)
         lib_name = basename.downcase
-        unless lib_name.end_with?('.a') && lib_name.start_with?('lib')
-          warning('vendored_libraries', "`#{basename}` does not match the expected static library name format `lib[name].a`")
+        unless lib_name.end_with?('.a', '.dylib') && lib_name.start_with?('lib')
+          warning('vendored_libraries', "`#{basename}` does not match the expected library name format `lib[name].a` or `lib[name].dylib`")
         end
       end
       validate_nonempty_patterns(:vendored_libraries, :warning)
@@ -1098,7 +1101,6 @@ module Pod
         end
       when :watchos
         command += %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
-        command += Fourflusher::SimControl.new.destination(:oldest, 'watchOS', deployment_target)
       when :tvos
         command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
