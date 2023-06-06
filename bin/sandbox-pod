@@ -61,7 +61,7 @@ PROFILE_ERB_TEMPLATE = <<-EOS
 
 (allow file-read-metadata)
 (allow file-read*
-  ; This is currenly only added because using `xcodebuild` to build a resource
+  ; This is currently only added because using `xcodebuild` to build a resource
   ; bundle target starts a FSEvents stream on `/`. No idea why that would be
   ; needed, but for now it doesn’t seem like a real problem.
   (literal "/")
