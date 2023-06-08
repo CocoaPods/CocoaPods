@@ -12,7 +12,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix potential Gatekeeper problems by removing the `LD_RUNPATH_SEARCH_PATHS` referencing outside the App bundle for
+  macOS targets.  
+  [Ethan Wong](https://github.com/GetToSet)
+  [#11837](https://github.com/CocoaPods/CocoaPods/pull/11773)
+  [#10954](https://github.com/CocoaPods/CocoaPods/issues/10954)
 
 
 ## 1.12.1 (2023-04-18)

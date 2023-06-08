@@ -440,7 +440,7 @@ module Pod
             mock_user_target = mock('usertarget')
             mock_user_target.stubs(:symbol_type).returns(:application)
             @target.stubs(:user_targets).returns([mock_user_target])
-            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == %q[$(inherited) /usr/lib/swift '@executable_path/../Frameworks' '@loader_path/Frameworks' "${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}"]
+            @generator.generate.to_hash['LD_RUNPATH_SEARCH_PATHS'].should == "$(inherited) /usr/lib/swift '@executable_path/../Frameworks' '@loader_path/Frameworks'"
           end
 
           it 'uses the target definition swift version' do
