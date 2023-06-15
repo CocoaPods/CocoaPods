@@ -392,6 +392,14 @@ module Pod
       build_configuration
     end
 
+    def add_spm_dependency(url, requirement)
+      spm_dependency = new(XCRemoteSwiftPackageReference)
+      spm_dependency.repositoryURL = url
+      spm_dependency.requirement = requirement
+      root_object.package_references << spm_dependency
+      spm_dependency
+    end
+
     # @param  [String] name
     #         The name of the build configuration.
     #

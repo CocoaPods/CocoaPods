@@ -15,6 +15,7 @@ module Pod
                                                    platforms, project_object_version, config.podfile_path)
           project = project_generator.generate!
           install_file_references(project, pod_targets)
+          spm_references_by_url = install_spm_dedpendecies(project, pod_targets)
 
           pod_target_installation_results = install_all_pod_targets(project, pod_targets)
           aggregate_target_installation_results = install_aggregate_targets(project, aggregate_targets)
@@ -22,6 +23,7 @@ module Pod
 
           integrate_targets(target_installation_results.pod_target_installation_results)
           wire_target_dependencies(target_installation_results)
+          wire_target_spm_dependencies(target_installation_results, spm_references_by_url)
           PodsProjectGeneratorResult.new(project, {}, target_installation_results)
         end
 
