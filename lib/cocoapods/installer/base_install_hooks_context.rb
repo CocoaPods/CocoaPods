@@ -97,7 +97,7 @@ module Pod
         #
         attr_reader :specs
 
-        # @return [Symbol] The platform (either `:ios`, `:watchos`, `:tvos`, or `:osx`).
+        # @return [Symbol] The platform (either `:ios`, `:watchos`, `:tvos`, `:visionos`, or `:osx`).
         #
         attr_reader :platform_name
 
