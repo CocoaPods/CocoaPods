@@ -218,6 +218,7 @@ module Pod
       Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, true, [], false, nil).twice.returns(stub('Podfile'))
       Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, true, [], false, nil).twice.returns(stub('Podfile'))
       Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, true, [], false, nil).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:visionos, nil, true, [], false, nil).twice.returns(stub('Podfile'))
 
       cmd = command('repo', 'push', 'master')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
@@ -232,6 +233,7 @@ module Pod
       Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, [], false, nil).twice.returns(stub('Podfile'))
       Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, [], false, nil).twice.returns(stub('Podfile'))
       Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, [], false, nil).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:visionos, nil, false, [], false, nil).twice.returns(stub('Podfile'))
 
       cmd = command('repo', 'push', 'master', '--use-libraries')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
@@ -246,6 +248,7 @@ module Pod
       Validator.any_instance.expects(:podfile_from_spec).with(:osx, nil, false, [], true, nil).twice.returns(stub('Podfile'))
       Validator.any_instance.expects(:podfile_from_spec).with(:watchos, nil, false, [], true, nil).twice.returns(stub('Podfile'))
       Validator.any_instance.expects(:podfile_from_spec).with(:tvos, nil, false, [], true, nil).twice.returns(stub('Podfile'))
+      Validator.any_instance.expects(:podfile_from_spec).with(:visionos, nil, false, [], true, nil).twice.returns(stub('Podfile'))
 
       cmd = command('repo', 'push', 'master', '--use-libraries', '--use-modular-headers')
       # Git push will throw an exception here since this is a local custom git repo. All we care is the validator
