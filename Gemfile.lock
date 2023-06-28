@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 01226592d7a295cb5567d346f996af5b3bfed2f6
+  revision: 9320bf557741d7ae80eda4415bc6fb2b0b3a8b9c
   branch: master
   specs:
     cocoapods-core (1.12.1)
@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: 2fe65ce43a244370c245bcbf4176f16ff0f442cf
+  revision: 2ce68b60856c4680c2b3cd7aa5b221529120c7c4
   branch: master
   specs:
     xcodeproj (1.22.0)
@@ -143,7 +143,7 @@ GEM
   specs:
     CFPropertyList (3.0.6)
       rexml
-    activesupport (6.1.7.3)
+    activesupport (6.1.7.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -224,7 +224,7 @@ GEM
       rchardet (~> 1.8)
     hashdiff (1.0.1)
     httpclient (2.8.3)
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     inch (0.8.0)
       pry
@@ -245,7 +245,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.18.0)
+    minitest (5.18.1)
     mocha (1.4.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -321,7 +321,7 @@ GEM
     webrick (1.7.0)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   ruby
