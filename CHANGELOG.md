@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Add `visionOS` as a new platform. 
+  [Gabriel Donadel](https://github.com/gabrieldonadel)
+  [#11965](https://github.com/CocoaPods/CocoaPods/pull/11965)
 
 ##### Bug Fixes
 
