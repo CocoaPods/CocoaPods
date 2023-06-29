@@ -16,6 +16,7 @@
     "osx": null,
     "ios": null,
     "tvos": null,
+    "visionos": null,
     "watchos": null
   },
   "subspecs": [

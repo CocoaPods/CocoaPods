@@ -43,8 +43,8 @@ EXTERNAL SOURCES:
     :path: testkit
 
 SPEC CHECKSUMS:
-  asserts: cdb8f1318ddf6d68ae8ddc0bb9b506d8df6d556e
+  asserts: b96cb1547daf94e17b31fc2c239dbd871737f4d3
   CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
-  logger: fec205745589b5883665e954c3e56a602ad28c3a
-  sharedlib: 96a90f21e91e9a25c9f47c3a8f65cd06883cab94
-  testkit: 994a8781f993b6dc13c40c4cf43fa67f3678453e
+  logger: 948a7b05ffe6f8efb3bc67c8fa6ca69af7cedf52
+  sharedlib: 792e72a21a2e03445efc3b3a15aa747d4d12f7d0
+  testkit: 9d8c7af3eb51762bd8b8a82904162f8aef5d28ca
