@@ -17,14 +17,14 @@ Fetching external sources
 Resolving dependencies of `Podfile`
 
 Comparing resolved specification to the sandbox manifest
-  - Reachability
-  - Reachability2
+  M Reachability
+  M Reachability2
 
 Downloading dependencies
 
--> Using Reachability (3.1.0)
+-> Installing Reachability 3.1.0
 
--> Using Reachability2 (3.1.0)
+-> Installing Reachability2 3.1.0
   - Running pre install hooks
   - Running pre integrate hooks
 
