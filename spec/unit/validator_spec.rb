@@ -340,10 +340,10 @@ module Pod
           file = write_podspec(stub_podspec)
           validator = Validator.new(file, config.sources_manager.master.map(&:url))
           validator.stubs(:validate_url)
-          validator.expects(:install_pod).times(4)
-          validator.expects(:build_pod).times(4)
-          validator.expects(:add_app_project_import).times(4)
-          validator.expects(:check_file_patterns).times(4)
+          validator.expects(:install_pod).times(5)
+          validator.expects(:build_pod).times(5)
+          validator.expects(:add_app_project_import).times(5)
+          validator.expects(:check_file_patterns).times(5)
           validator.validate
         end
 
@@ -608,6 +608,7 @@ module Pod
         validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         validator.expects(:podfile_from_spec).with(:ios, '7.0', false, [], nil, nil).once.returns(stub('Podfile'))
         validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        validator.expects(:podfile_from_spec).with(:visionos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         validator.send(:perform_extensive_analysis, validator.spec)
 
@@ -821,6 +822,8 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro')
+        Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
@@ -849,6 +852,8 @@ module Pod
         args = %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
+        Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
@@ -880,6 +885,8 @@ module Pod
         args = %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s') + analyzer_args
+        Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
@@ -913,6 +920,8 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro') + analyzer_args
+        Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
@@ -936,6 +945,8 @@ module Pod
         args = %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator) + Fourflusher::SimControl.new.destination('Apple TV 1080p')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk iphonesimulator) + Fourflusher::SimControl.new.destination('iPhone 4s')
+        Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
+        args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
@@ -1275,6 +1286,7 @@ module Pod
         @validator.expects(:podfile_from_spec).with(:osx, nil, true, [], nil, nil).once.returns(stub('Podfile'))
         @validator.expects(:podfile_from_spec).with(:ios, '8.0', true, [], nil, nil).once.returns(stub('Podfile'))
         @validator.expects(:podfile_from_spec).with(:tvos, nil, true, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:visionos, nil, true, [], nil, nil).once.returns(stub('Podfile'))
         @validator.expects(:podfile_from_spec).with(:watchos, nil, true, [], nil, nil).once.returns(stub('Podfile'))
         @validator.send(:perform_extensive_analysis, @validator.spec)
 
@@ -1289,6 +1301,7 @@ module Pod
         @validator.expects(:podfile_from_spec).with(:osx, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         @validator.expects(:podfile_from_spec).with(:ios, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         @validator.expects(:podfile_from_spec).with(:tvos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
+        @validator.expects(:podfile_from_spec).with(:visionos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         @validator.expects(:podfile_from_spec).with(:watchos, nil, false, [], nil, nil).once.returns(stub('Podfile'))
         @validator.send(:perform_extensive_analysis, @validator.spec)
 

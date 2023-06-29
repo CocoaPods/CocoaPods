@@ -57,6 +57,7 @@ module Pod
         :osx => Version.new('10.8'),
         :watchos => Version.new('2.0'),
         :tvos => Version.new('9.0'),
+        :visionos => Version.new('1.0'),
       }
 
       # @return [Boolean] Whether the external strings file is supported by the

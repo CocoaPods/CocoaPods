@@ -103,11 +103,13 @@ module Pod
             ios_deployment_target = platforms.select { |p| p.name == :ios }.map(&:deployment_target).min
             watchos_deployment_target = platforms.select { |p| p.name == :watchos }.map(&:deployment_target).min
             tvos_deployment_target = platforms.select { |p| p.name == :tvos }.map(&:deployment_target).min
+            visionos_deployment_target = platforms.select { |p| p.name == :visionos }.map(&:deployment_target).min
             project.build_configurations.each do |build_configuration|
               build_configuration.build_settings['MACOSX_DEPLOYMENT_TARGET'] = osx_deployment_target.to_s if osx_deployment_target
               build_configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target.to_s if ios_deployment_target
               build_configuration.build_settings['WATCHOS_DEPLOYMENT_TARGET'] = watchos_deployment_target.to_s if watchos_deployment_target
               build_configuration.build_settings['TVOS_DEPLOYMENT_TARGET'] = tvos_deployment_target.to_s if tvos_deployment_target
+              build_configuration.build_settings['XROS_DEPLOYMENT_TARGET'] = visionos_deployment_target.to_s if visionos_deployment_target
               build_configuration.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO'
               build_configuration.build_settings['CLANG_ENABLE_OBJC_ARC'] = 'YES'
               build_configuration.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
