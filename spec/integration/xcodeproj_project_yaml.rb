@@ -10,6 +10,9 @@ class Xcodeproj::Project
       yaml = { key => pretty_print_output[key] }.to_yaml
       sections << yaml
     end
+    if root_object.package_references.any?
+      sections << {'Package References' => root_object.package_references.map(&:to_hash)}.to_yaml
+    end
     (sections * "\n\n").gsub!('---', '')
   end
 end
