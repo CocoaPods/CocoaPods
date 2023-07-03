@@ -14,7 +14,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Use safe_load during custom YAML config loading.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11974](https://github.com/CocoaPods/CocoaPods/pull/11974)
 
 
 ## 1.12.1 (2023-04-18)
