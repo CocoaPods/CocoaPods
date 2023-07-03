@@ -111,7 +111,8 @@ module Pod
 
       if use_user_settings && user_settings_file.exist?
         require 'yaml'
-        user_settings = YAML.load_file(user_settings_file)
+        user_settings_contents = File.read(user_settings_file)
+        user_settings = YAML.safe_load(user_settings_contents)
         configure_with(user_settings)
       end
 
