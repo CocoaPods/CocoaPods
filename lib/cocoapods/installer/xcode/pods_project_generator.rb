@@ -193,6 +193,67 @@ module Pod
           PodTargetDependencyInstaller.new(sandbox, pod_target_installation_results_hash, metadata_cache).install!
         end
 
+        def _merge_spm_requirements(url, requirements)
+          if requirements.count > 1
+            requirements.reduce(requirements.first) do |acc, req|
+              if acc != req
+                error "SPM dependencies with different requirements: #{requirements} for #{url} is not yet supported"
+              end
+              acc
+            end
+          else
+            requirements.first
+          end
+        end
+
+        def install_spm_dedpendecies(project, pod_targets)
+          spm_dependencies = pod_targets.flat_map { |target| target.root_spec.consumer(target.platform).spm_dependencies }
+          spm_dependencies_by_url = spm_dependencies.group_by { |dep| dep[:url] }
+          merged_spm_dependencies = spm_dependencies_by_url.map do |url, deps|
+            [url, _merge_spm_requirements(url, deps.map { |dep| dep[:requirement] })]
+          end
+
+          spm_dependencies_by_url = merged_spm_dependencies.map do |url, requirement|
+            [url, project.add_spm_dependency(url, requirement.to_h)]
+          end
+
+          spm_dependencies_by_url.to_h
+        end
+
+        def _spm_deps_workaround_for_swift(native_target)
+          # Seems to be an XCode issue where subprojects SWITFT_INCLUDE_PATHS doesn't the added SPM dependency's products
+          # without this Swift code trying to import the SPM dependency's product will fail with "No such module"
+          search_path = '${SYMROOT}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/'
+          native_target.build_configurations.each do |config|
+            build_settings = native_target.build_settings(config.name)
+            build_settings['SWIFT_INCLUDE_PATHS'] ||= ['$(inherited)']
+            unless build_settings['SWIFT_INCLUDE_PATHS'].include?(search_path)
+              build_settings['SWIFT_INCLUDE_PATHS'].push(search_path)
+            end
+          end
+        end
+
+        def wire_target_spm_dependencies(target_installation_results, spm_dependencies_by_url)
+          target_installation_results.pod_target_installation_results.each_value do |pod_target_installation_result|
+            target = pod_target_installation_result.target
+            spm_deps_to_wire = target.spec_consumers.flat_map(&:spm_dependencies)
+            spm_deps_to_wire.each do |spm_dep|
+              native_target = pod_target_installation_result.native_target
+              project = native_target.project
+
+              spm_dep[:products].each do |product_name|
+                product_reference = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
+                product_reference.product_name = product_name
+                product_reference.package = spm_dependencies_by_url[spm_dep[:url]]
+
+                native_target.package_product_dependencies << product_reference
+
+                _spm_deps_workaround_for_swift(native_target)
+              end
+            end
+          end
+        end
+
         # @param  [String] pod The root name of the development pod.
         #
         # @return [Boolean] whether the scheme for the given development pod should be

@@ -361,6 +361,11 @@ describe_cli 'pod' do
                             'install --no-repo-update'
     end
 
+  describe 'Installs a podspec with SPM dependencies' do
+    behaves_like cli_spec 'install_spm_dependency',
+                          'install --no-repo-update'
+  end
+
     describe 'Integrates a Pod with circular subspec dependencies' do
       behaves_like cli_spec 'install_circular_subspec_dependency',
                             'install --no-repo-update'
