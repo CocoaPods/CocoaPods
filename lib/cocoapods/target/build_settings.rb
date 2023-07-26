@@ -359,7 +359,7 @@ module Pod
                    else
                      "'@loader_path/Frameworks'"
                    end
-          paths << '${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}' if uses_swift
+          paths << '${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}' if uses_swift
         else
           paths << "'@executable_path/Frameworks'"
           paths << "'@loader_path/Frameworks'"
@@ -866,7 +866,7 @@ module Pod
           search_paths = vendored_static_library_search_paths + vendored_dynamic_library_search_paths
           if target.uses_swift? || other_swift_flags_without_swift?
             search_paths << '/usr/lib/swift'
-            search_paths << '${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}'
+            search_paths << '${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}'
             search_paths << '$(PLATFORM_DIR)/Developer/Library/Frameworks' if test_xcconfig?
           end
           return search_paths if target.build_as_framework? || !target.should_build?
