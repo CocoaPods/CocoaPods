@@ -17,7 +17,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Use safe_load during custom YAML config loading.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11974](https://github.com/CocoaPods/CocoaPods/pull/11974)
-
+* Xcode 15 fix: Replace `DT_TOOLCHAIN_DIR` with `TOOLCHAIN_DIR` when generating sciprt.
+  [Marcus Wu](https://github.com/marcuswu0814)
+  [#12009](https://github.com/CocoaPods/CocoaPods/pull/12009)
 
 ## 1.12.1 (2023-04-18)
 
