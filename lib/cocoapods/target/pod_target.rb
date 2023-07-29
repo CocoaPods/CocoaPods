@@ -419,11 +419,9 @@ module Pod
                           end
             dirname = framework_path.dirname
             bcsymbolmap_paths = if dirname.exist?
-                                  Dir.chdir(dirname) do
-                                    Dir.glob('*.bcsymbolmap').map do |bcsymbolmap_file_name|
-                                      bcsymbolmap_path = dirname + bcsymbolmap_file_name
-                                      "${PODS_ROOT}/#{bcsymbolmap_path.relative_path_from(sandbox.root)}"
-                                    end
+                                  Dir.glob('*.bcsymbolmap', :base => dirname).map do |bcsymbolmap_file_name|
+                                    bcsymbolmap_path = dirname + bcsymbolmap_file_name
+                                    "${PODS_ROOT}/#{bcsymbolmap_path.relative_path_from(sandbox.root)}"
                                   end
                                 end
             Xcode::FrameworkPaths.new(framework_source, dsym_source, bcsymbolmap_paths)

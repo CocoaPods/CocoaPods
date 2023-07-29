@@ -18,6 +18,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11974](https://github.com/CocoaPods/CocoaPods/pull/11974)
 
+* Make `PodSourcePreparer.run_prepare_command` thread-safe for use with the `parallel_pod_downloads` option.
+  [till0xff](https://github.com/till0xff)
+  [#12016](https://github.com/CocoaPods/CocoaPods/pull/12016)
+
 
 ## 1.12.1 (2023-04-18)
 
