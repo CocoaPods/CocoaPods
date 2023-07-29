@@ -194,9 +194,7 @@ EOS
         #
         # @return [String] the current git SHA
         def git_hash(source)
-          Dir.chdir(source.repo) do
-            `git rev-parse HEAD 2>&1`
-          end
+          `git -C #{source.repo.shellescape} rev-parse HEAD 2>&1`
         end
       end
     end
