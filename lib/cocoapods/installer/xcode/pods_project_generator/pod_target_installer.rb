@@ -898,6 +898,7 @@ module Pod
             :osx => Version.new('10.8'),
             :watchos => Version.new('2.0'),
             :tvos => Version.new('9.0'),
+            :visionos => Version.new('1.0'),
           }.freeze
 
           # Returns the compiler flags for the source files of the given specification.

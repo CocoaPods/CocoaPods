@@ -152,6 +152,8 @@ module Pod
           platform_message = '[watchOS] '
         elsif result.platforms == [:tvos]
           platform_message = '[tvOS] '
+        elsif result.platforms == [:visionos]
+          platform_message = '[visionOS] '
         end
 
         subspecs_message = ''
@@ -1104,6 +1106,9 @@ module Pod
       when :tvos
         command += %w(CODE_SIGN_IDENTITY=- -sdk appletvsimulator)
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
+      when :visionos
+        command += %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator)
+        command += Fourflusher::SimControl.new.destination(:oldest, 'visionOS', deployment_target)
       end
 
       if analyze
