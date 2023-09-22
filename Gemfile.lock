@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 9320bf557741d7ae80eda4415bc6fb2b0b3a8b9c
+  revision: 47f0c02fff9b3d16df049fc85390a7e1ac690fef
   branch: master
   specs:
-    cocoapods-core (1.12.1)
+    cocoapods-core (1.13.0)
       activesupport (>= 5.0, < 8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -119,10 +119,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.12.1)
+    cocoapods (1.13.0)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.12.1)
+      cocoapods-core (= 1.13.0)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 1.6.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -143,13 +143,13 @@ GEM
   specs:
     CFPropertyList (3.0.6)
       rexml
-    activesupport (6.1.7.4)
+    activesupport (6.1.7.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.4)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
@@ -245,7 +245,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.18.1)
+    minitest (5.20.0)
     mocha (1.4.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -321,7 +321,7 @@ GEM
     webrick (1.7.0)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   ruby
