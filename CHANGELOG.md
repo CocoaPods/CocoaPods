@@ -12,6 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Gabriel Donadel](https://github.com/gabrieldonadel)
   [#11965](https://github.com/CocoaPods/CocoaPods/pull/11965)
 
+* Extend `script_phase` DSL to support `always_out_of_date` attribute.  
+  [Alvar Hansen](https://github.com/alvarhansen)
+  [#12055](https://github.com/CocoaPods/CocoaPods/pull/12055)
+
 ##### Bug Fixes
 
 * Use safe_load during custom YAML config loading.  
