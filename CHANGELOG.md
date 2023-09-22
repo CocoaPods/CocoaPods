@@ -8,7 +8,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* Add `visionOS` as a new platform. 
+* Add `visionOS` as a new platform.  
   [Gabriel Donadel](https://github.com/gabrieldonadel)
   [#11965](https://github.com/CocoaPods/CocoaPods/pull/11965)
 
@@ -18,10 +18,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* Use safe_load during custom YAML config loading.  
+* Use `safe_load` during custom YAML config loading.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#11974](https://github.com/CocoaPods/CocoaPods/pull/11974)
-* Xcode 15 fix: Replace `DT_TOOLCHAIN_DIR` with `TOOLCHAIN_DIR` when generating script.
+
+* Xcode 15 fix: Replace `DT_TOOLCHAIN_DIR` with `TOOLCHAIN_DIR` when generating script.  
   [Marcus Wu](https://github.com/marcuswu0814)
   [#12009](https://github.com/CocoaPods/CocoaPods/pull/12009)
 
