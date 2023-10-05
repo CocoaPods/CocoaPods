@@ -5,7 +5,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.6]
+        ruby: [2.7]
         os: [ubuntu-20.04]
 
     name: Lint
