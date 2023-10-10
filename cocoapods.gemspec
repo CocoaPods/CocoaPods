@@ -52,5 +52,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler', '~> 2.0'
   s.add_development_dependency 'rake', '~> 12.3'
 
-  s.required_ruby_version = '>= 2.7'
+  s.required_ruby_version = '>= 2.6'
 end
