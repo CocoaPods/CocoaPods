@@ -4,6 +4,19 @@ To install or update CocoaPods see this [guide](https://guides.cocoapods.org/usi
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix a crash when running with activesupport 7.1.0.  
+  [MCanhisares](https://github.com/MCanhisares)
+  [#12081](https://github.com/CocoaPods/CocoaPods/issues/12081)
+
+
 ## 1.13.0 (2023-09-22)
 
 ##### Enhancements
