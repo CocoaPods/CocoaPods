@@ -15,6 +15,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix a crash when running with activesupport 7.1.0.  
   [MCanhisares](https://github.com/MCanhisares)
   [#12081](https://github.com/CocoaPods/CocoaPods/issues/12081)
+* Fix another crash when running with activesupport 7.1.0.
+  [movila](https://github.com/movila)
+  [#12089](https://github.com/CocoaPods/CocoaPods/issues/12089)
 
 
 ## 1.13.0 (2023-09-22)
