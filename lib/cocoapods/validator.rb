@@ -566,7 +566,7 @@ module Pod
     def deployment_target
       deployment_target = spec.subspec_by_name(subspec_name).deployment_target(consumer.platform_name)
       if consumer.platform_name == :ios && use_frameworks
-        minimum = Version.new('8.0')
+        minimum = Version.new('13.0')
         deployment_target = [Version.new(deployment_target), minimum].max.to_s
       end
       deployment_target
