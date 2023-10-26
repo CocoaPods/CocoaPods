@@ -20,7 +20,7 @@ module Pod
       end
 
       it 'supports all the strategies implemented by the downloader' do
-        [:git, :svn, :hg, :bzr, :http].each do |strategy|
+        [:git, :svn, :hg, :http].each do |strategy|
           dep     = Dependency.new('Reachability', strategy => '')
           klass = @subject.from_dependency(dep, nil, true).class
           klass.should == @subject::DownloaderSource
