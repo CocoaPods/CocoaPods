@@ -20,6 +20,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [movila](https://github.com/movila)
   [#12089](https://github.com/CocoaPods/CocoaPods/issues/12089)
 
+##### Other
+
+* Drop support for `bazaar` SCM  
+
 
 ## 1.13.0 (2023-09-22)
 
