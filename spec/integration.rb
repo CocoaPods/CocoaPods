@@ -151,7 +151,7 @@ describe_cli 'pod' do
     s.replace_pattern /\d{4}-\d\d-\d\d \d\d:\d\d:\d\d [-+]\d{4}/, '<#DATE#>'
     s.replace_pattern /\(Took \d+.\d+ seconds\)/, '(Took <#DURATION#> seconds)'
     s.replace_pattern /\b#{Regexp.escape(Pod::VERSION)}\b/, '<#Pod::VERSION#>'
-    s.replace_pattern /\b#{Regexp.escape(Pod::Downloader::VERSION)}\b/, '<#Pod::Downloader::VERSION#>'
+    s.replace_pattern /cocoapods-downloader\/#{Regexp.escape(Pod::Downloader::VERSION)}\b/, 'cocoapods-downloader/<#Pod::Downloader::VERSION#>'
 
     # This was changed in a very recent git version
     s.replace_pattern /git checkout -b <new-branch-name>/, 'git checkout -b new_branch_name'
