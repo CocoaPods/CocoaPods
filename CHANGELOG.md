@@ -15,6 +15,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.14.1 (2023-10-26)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 1.14.0 (2023-10-26)
 
 ##### Enhancements
