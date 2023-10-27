@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # This will build and export `CoconutLib.xcframework` to `build/CoconutLib.xcframework` including all supported slices.
 # Use the `--static` flag to build static frameworks instead.
