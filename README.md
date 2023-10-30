@@ -8,6 +8,8 @@ This fork contains some PRs that haven't yet been merged or released upstream bu
 - CocoaPods/CocoaPods#11324
 - CocoaPods/CocoaPods#11332
 
+Up-to-date with the upstream version [1.14.1](https://github.com/CocoaPods/CocoaPods/releases/tag/1.14.1).
+
 ### CocoaPods: The Cocoa dependency manager
 
 [![Build Status](https://github.com/CocoaPods/CocoaPods/workflows/Specs/badge.svg)](https://github.com/CocoaPods/CocoaPods/actions/workflows/Specs.yml)
