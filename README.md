@@ -1,5 +1,13 @@
 ![CocoaPods Logo](https://raw.github.com/CocoaPods/shared_resources/master/assets/cocoapods-banner-readme.png)
 
+### FORK
+
+This fork contains some PRs that haven't yet been merged or released upstream but are useful for us:
+
+- ~CocoaPods/CocoaPods#11264~ (released in 1.12.0)
+- CocoaPods/CocoaPods#11324
+- CocoaPods/CocoaPods#11332
+
 ### CocoaPods: The Cocoa dependency manager
 
 [![Build Status](https://github.com/CocoaPods/CocoaPods/workflows/Specs/badge.svg)](https://github.com/CocoaPods/CocoaPods/actions/workflows/Specs.yml)
