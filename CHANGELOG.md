@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* `generate_platform_import_header` is missing support for `:visionos`.  
+  [CrazyFanFan](https://github.com/CrazyFanFan)
+  [#12148](https://github.com/CocoaPods/CocoaPods/issues/12148)
 
 ## 1.14.1 (2023-10-26)
 
