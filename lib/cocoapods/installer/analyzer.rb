@@ -865,7 +865,7 @@ module Pod
           Version.new(library_spec.deployment_target(platform_name) || default)
         end.max
         if platform_name == :ios && build_type.framework?
-          minimum = Version.new('8.0')
+          minimum = Version.new('12.0')
           deployment_target = [deployment_target, minimum].max
         end
         Platform.new(platform_name, deployment_target)
