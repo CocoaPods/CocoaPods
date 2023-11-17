@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Optimize performance during uncached pod installation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#12154](https://github.com/CocoaPods/CocoaPods/pull/12154)
 
 ##### Bug Fixes
 
