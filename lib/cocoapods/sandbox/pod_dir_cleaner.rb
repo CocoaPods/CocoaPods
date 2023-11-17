@@ -15,7 +15,7 @@ module Pod
       # @return [void]
       #
       def clean!
-        clean_paths.each { |path| FileUtils.rm_rf(path) } if root.exist?
+        FileUtils.rm_rf(clean_paths) if root.exist?
       end
 
       private

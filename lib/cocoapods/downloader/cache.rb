@@ -282,11 +282,12 @@ module Pod
       def copy_and_clean(source, destination, spec)
         specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
+        Cache.write_lock(source) do
+          Sandbox::PodDirCleaner.new(source, specs_by_platform).clean!
+        end
         Cache.write_lock(destination) do
-          FileUtils.rm_rf(destination)
-          FileUtils.cp_r(source, destination)
+          FileUtils.cp_r(source, destination, :remove_destination => true)
           Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
-          Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
         end
       end
 
