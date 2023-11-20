@@ -17,6 +17,30 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.14.3 (2023-11-19)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Revert minimum required Ruby version to 2.6 to support macOS system Ruby  
+  [Eric Amorde](https://github.com/amorde)
+  [#12122](https://github.com/CocoaPods/CocoaPods/issues/12122)
+
+
+## 1.14.2 (2023-10-27)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 1.14.1 (2023-10-26)
 
 ##### Enhancements

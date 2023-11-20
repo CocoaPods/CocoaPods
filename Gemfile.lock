@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 6d8282c3d34394d53b09defbed34149c20fdf493
+  revision: 1f4c2c52e2b21ab8988313f138758d406db91d9b
   branch: master
   specs:
-    cocoapods-core (1.14.1)
+    cocoapods-core (1.14.3)
       activesupport (>= 5.0, < 8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -57,10 +57,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 3492e7bb3c0f39ba4b09b3bbd12b36f8a76b05e9
+  revision: e6851647294166da0b47f2619cc60b761b77f498
   branch: master
   specs:
-    cocoapods-downloader (2.0)
+    cocoapods-downloader (2.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
@@ -79,7 +79,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 993aef6e12609c8ac1fe0abd98e27aedac74f194
+  revision: 080730057d0d832811be54f9fd825e1174d2af71
   branch: master
   specs:
     cocoapods-trunk (1.6.0)
@@ -119,12 +119,12 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.14.1)
+    cocoapods (1.14.3)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.14.1)
+      cocoapods-core (= 1.14.3)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
-      cocoapods-downloader (>= 2.0)
+      cocoapods-downloader (>= 2.1, < 3.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
       cocoapods-search (>= 1.0.0, < 2.0)
       cocoapods-trunk (>= 1.6.0, < 2.0)
@@ -310,7 +310,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     tins (1.32.1)
       sync
-    typhoeus (1.4.0)
+    typhoeus (1.4.1)
       ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
