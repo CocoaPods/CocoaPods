@@ -34,6 +34,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#12122](https://github.com/CocoaPods/CocoaPods/issues/12122)
 
+* Support `visionos` in `pod lib lint --platforms=` and use `xros` for `Fourflush`  
+  [MagnificentMiles](https://github.com/MagnificentMiles)
+  [#issue_number](https://github.com/CocoaPods/CocoaPods/issues/issue_number)
 
 ## 1.14.2 (2023-10-27)
 
