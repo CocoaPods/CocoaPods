@@ -51,7 +51,8 @@ module Pod
       if target && result.location && target != result.location
         UI.message "Copying #{request.name} from `#{result.location}` to #{UI.path target}", '> ' do
           Cache.read_lock(result.location) do
-            FileUtils.cp_r(result.location, target, :remove_destination => true)
+            FileUtils.rm_rf(target)
+            FileUtils.cp_r(result.location, target)
           end
         end
       end
