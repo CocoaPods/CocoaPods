@@ -21,9 +21,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Don't use the `remove_destination` parameter in FileUtils.cp_r  
   [Justin Martin](https://github.com/justinseanmartin)
   [#12165](https://github.com/CocoaPods/CocoaPods/pull/12165)
+
 * Support `visionos` in `pod lib lint --platforms=` and use `xros` for `Fourflusher`  
   [MagnificentMiles](https://github.com/MagnificentMiles)
-  [#issue_number](https://github.com/CocoaPods/CocoaPods/issues/issue_number)
+  [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
 
 ## 1.14.3 (2023-11-19)
 
