@@ -22,6 +22,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Justin Martin](https://github.com/justinseanmartin)
   [#12165](https://github.com/CocoaPods/CocoaPods/pull/12165)
 
+* Support `visionos` in `pod lib lint --platforms=` and use `xros` for `Fourflusher`  
+  [MagnificentMiles](https://github.com/MagnificentMiles)
+  [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
+
 ## 1.14.3 (2023-11-19)
 
 ##### Enhancements
@@ -33,7 +37,6 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Revert minimum required Ruby version to 2.6 to support macOS system Ruby  
   [Eric Amorde](https://github.com/amorde)
   [#12122](https://github.com/CocoaPods/CocoaPods/issues/12122)
-
 
 ## 1.14.2 (2023-10-27)
 
