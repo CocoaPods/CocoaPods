@@ -141,7 +141,7 @@ module Pod
                 @installer.target.root_spec.info_plist = { 'CFBundleIdentifier' => 'CocoaPods.test.id' }
                 @installer.send(:info_plist_bundle_id)
                 UI.warnings.should.include 'The `BananaLib` target ' \
-              'sets a Bundle Identifier of `CocoaPods.test.id` in it\'s info.plist file. ' \
+              'sets a Bundle Identifier of `CocoaPods.test.id` in its info.plist file. ' \
               'The Bundle Identifier should be set using pod_target_xcconfig: ' \
               's.pod_target_xcconfig = { \'PRODUCT_BUNDLE_IDENTIFIER\': \'CocoaPods.test.id\' }`.'
               end
@@ -153,7 +153,7 @@ module Pod
                 @installer.send(:info_plist_bundle_id).should.nil?
                 @installer.instance_variable_get(:@plist_bundle_id).should.nil?
                 UI.warnings.should.not.include 'The `BananaLib` target ' \
-              'sets a Bundle Identifier of `CocoaPods.test.id` in it\'s info.plist file. ' \
+              'sets a Bundle Identifier of `CocoaPods.test.id` in its info.plist file. ' \
               'The Bundle Identifier should be set using pod_target_xcconfig: ' \
               's.pod_target_xcconfig = { \'PRODUCT_BUNDLE_IDENTIFIER\': \'CocoaPods.test.id\' }`.'
               end
