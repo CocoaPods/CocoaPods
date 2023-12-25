@@ -19,6 +19,7 @@ module Pod
                                                                  Pod::Target::DEFAULT_BUILD_CONFIGURATIONS, [],
                                                                  Pod::Platform.new(:ios, '6.0'),
                                                                  secondary_target_definition)
+          @targets_by_label = Hash[(@pod_targets + [@main_aggregate_target] + [@secondary_aggregate_target]).map { |target| [target.label, target] }]
           @sandbox.project_path.mkpath
           @main_aggregate_target.support_files_dir.mkpath
           @secondary_aggregate_target.support_files_dir.mkpath
@@ -39,8 +40,8 @@ module Pod
           end
 
           it 'returns an empty result if no targets have changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
@@ -50,8 +51,8 @@ module Pod
           end
 
           it 'returns the list of pod targets that have changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             @banana_lib.root_spec.stubs(:checksum).returns('Blah')
@@ -62,8 +63,8 @@ module Pod
           end
 
           it 'returns all pod targets and aggregate targets if the build configurations have changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations.merge('Production' => :release), @project_object_version, {}, @pod_targets, [@main_aggregate_target], {})
@@ -73,8 +74,8 @@ module Pod
           end
 
           it 'returns all pod targets and aggregate targets if the list of podfile plugins changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, {})
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => {} }, @pod_targets, [@main_aggregate_target], {})
@@ -84,8 +85,8 @@ module Pod
           end
 
           it 'returns empty list when comparing plugins with different ordering of arguments' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins' => %w[B A])
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins' => %w[A B] }, @pod_targets, [@main_aggregate_target], {})
@@ -95,8 +96,8 @@ module Pod
           end
 
           it 'returns all pod targets and aggregate targets if the list of podfile plugins params changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins-1' => {}, 'my-plugins-2' => {})
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins-2' => { 'input' => 1 }, 'my-plugins-1' => {} }, @pod_targets, [@main_aggregate_target], {})
@@ -106,8 +107,8 @@ module Pod
           end
 
           it 'returns empty list if the list of podfile plugins is not different' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, 'my-plugins-1' => {}, 'my-plugins-2' => {})
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, { 'my-plugins-2' => {}, 'my-plugins-1' => {} }, @pod_targets, [@main_aggregate_target], {})
@@ -117,8 +118,8 @@ module Pod
           end
 
           it 'returns all pod targets and aggregate targets if the project object version configurations has changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, 2, {}, @pod_targets, [@main_aggregate_target], {})
@@ -128,8 +129,8 @@ module Pod
           end
 
           it 'returns all pod targets and aggregate targets if a project name has changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             @banana_lib.stubs(:project_name).returns('SomeProject')
@@ -140,9 +141,9 @@ module Pod
           end
 
           it 'returns all aggregate targets if one has changed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
             cache_key_by_aggregate_target_labels = {
-              @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target),
+              @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target),
               @secondary_aggregate_target.label => TargetCacheKey.from_cache_hash(@sandbox, 'BUILD_SETTINGS_CHECKSUM' => 'Blah'),
             }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
@@ -155,10 +156,10 @@ module Pod
           end
 
           it 'returns all aggregate targets if one has been removed' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
             cache_key_by_aggregate_target_labels = {
-              @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target),
-              @secondary_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @secondary_aggregate_target),
+              @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target),
+              @secondary_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @secondary_aggregate_target),
             }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
@@ -170,7 +171,7 @@ module Pod
           end
 
           it 'returns all aggregate targets if one has been added' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
             cache_key_by_aggregate_target_labels = {}
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
@@ -191,7 +192,7 @@ module Pod
 
           it 'returns a pod if its target support dir is dirty' do
             FileUtils.rm_rf @orange_lib.support_files_dir
-            cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [], {})
             result = analyzer.analyze
@@ -201,7 +202,7 @@ module Pod
 
           it 'returns a pod if its project file is dirty' do
             FileUtils.rm_rf @sandbox.pod_target_project_path(@orange_lib.pod_name)
-            cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
+            cache_key_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
             analyzer = ProjectCacheAnalyzer.new(@sandbox, cache, @build_configurations, @project_object_version, {}, @pod_targets, [], {})
             result = analyzer.analyze
@@ -213,8 +214,8 @@ module Pod
             cache_pod_targets = [@banana_lib, @orange_lib]
             FileUtils.rm_rf @sandbox.pod_target_project_path(@monkey_lib.pod_name)
 
-            cache_key_by_pod_target_labels = Hash[cache_pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[cache_pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version)
 
@@ -236,7 +237,7 @@ module Pod
             end
 
             cache_key_by_aggregate_target_labels = {
-              subspec_target_1.label => TargetCacheKey.from_pod_target(@sandbox, subspec_target_1),
+              subspec_target_1.label => TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, subspec_target_1),
               subspec_target_2.label => TargetCacheKey.from_cache_hash(@sandbox, 'BUILD_SETTINGS_CHECKSUM' => 'Blah'),
             }
             cache = ProjectInstallationCache.new(cache_key_by_aggregate_target_labels, @build_configurations, @project_object_version)
@@ -260,7 +261,7 @@ module Pod
             end
 
             cache_key_by_aggregate_target_labels = {
-              subspec_target_1.label => TargetCacheKey.from_pod_target(@sandbox, original_subspec),
+              subspec_target_1.label => TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, original_subspec),
             }
 
             cache = ProjectInstallationCache.new(cache_key_by_aggregate_target_labels, @build_configurations, @project_object_version)
@@ -271,8 +272,8 @@ module Pod
           end
 
           it 'returns all pod targets when installation options change' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, {}, 'share_schemes_for_development_pods' => false, 'lock_pod_sources' => true)
             installation_options = { 'share_schemes_for_development_pods' => false }
@@ -283,8 +284,8 @@ module Pod
           end
 
           it 'returns empty list when installation options do not change' do
-            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, pod_target)] }]
-            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @main_aggregate_target) }
+            cache_key_by_pod_target_labels = Hash[@pod_targets.map { |pod_target| [pod_target.label, TargetCacheKey.from_pod_target(@sandbox, @targets_by_label, pod_target)] }]
+            cache_key_by_aggregate_target_labels = { @main_aggregate_target.label => TargetCacheKey.from_aggregate_target(@sandbox, @targets_by_label, @main_aggregate_target) }
             cache_key_target_labels = cache_key_by_pod_target_labels.merge(cache_key_by_aggregate_target_labels)
             cache = ProjectInstallationCache.new(cache_key_target_labels, @build_configurations, @project_object_version, {}, 'share_schemes_for_development_pods' => false, 'lock_pod_sources' => true)
             installation_options = { 'lock_pod_sources' => true, 'share_schemes_for_development_pods' => false }

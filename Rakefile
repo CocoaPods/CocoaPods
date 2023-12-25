@@ -136,7 +136,7 @@ begin
         sh 'bundle exec bacon spec/integration.rb'
       end
 
-      if examples
+      if examples && ENV['SKIP_EXAMPLES'].nil?
         title 'Running examples'
         Rake::Task['examples:build'].invoke
       end

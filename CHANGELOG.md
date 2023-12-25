@@ -8,12 +8,100 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* Optimize performance during uncached pod installation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#12154](https://github.com/CocoaPods/CocoaPods/pull/12154)
+
+##### Bug Fixes
+
+* Fix pod install issue when git's `core.fsmonitor` feature is enabled  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#11640](https://github.com/CocoaPods/CocoaPods/issues/11640)
+
+* Don't use the `remove_destination` parameter in FileUtils.cp_r  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#12165](https://github.com/CocoaPods/CocoaPods/pull/12165)
+
+* Support `visionos` in `pod lib lint --platforms=` and use `xros` for `Fourflusher`  
+  [MagnificentMiles](https://github.com/MagnificentMiles)
+  [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
+
+## 1.14.3 (2023-11-19)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Revert minimum required Ruby version to 2.6 to support macOS system Ruby  
+  [Eric Amorde](https://github.com/amorde)
+  [#12122](https://github.com/CocoaPods/CocoaPods/issues/12122)
+
+## 1.14.2 (2023-10-27)
+
+##### Enhancements
+
 * None.  
 
 ##### Bug Fixes
 
 * None.  
 
+
+## 1.14.1 (2023-10-26)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.14.0 (2023-10-26)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix a crash when running with activesupport 7.1.0.  
+  [MCanhisares](https://github.com/MCanhisares)
+  [#12081](https://github.com/CocoaPods/CocoaPods/issues/12081)
+
+* Fix another crash when running with activesupport 7.1.0.  
+  [movila](https://github.com/movila)
+  [#12089](https://github.com/CocoaPods/CocoaPods/issues/12089)
+
+##### Other
+
+* Drop support for `bazaar` SCM  
+
+
+## 1.13.0 (2023-09-22)
+
+##### Enhancements
+
+* Add `visionOS` as a new platform.  
+  [Gabriel Donadel](https://github.com/gabrieldonadel)
+  [#11965](https://github.com/CocoaPods/CocoaPods/pull/11965)
+
+* Extend `script_phase` DSL to support `always_out_of_date` attribute.  
+  [Alvar Hansen](https://github.com/alvarhansen)
+  [#12055](https://github.com/CocoaPods/CocoaPods/pull/12055)
+
+##### Bug Fixes
+
+* Use `safe_load` during custom YAML config loading.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#11974](https://github.com/CocoaPods/CocoaPods/pull/11974)
+
+* Xcode 15 fix: Replace `DT_TOOLCHAIN_DIR` with `TOOLCHAIN_DIR` when generating script.  
+  [Marcus Wu](https://github.com/marcuswu0814)
+  [#12009](https://github.com/CocoaPods/CocoaPods/pull/12009)
 
 ## 1.12.1 (2023-04-18)
 

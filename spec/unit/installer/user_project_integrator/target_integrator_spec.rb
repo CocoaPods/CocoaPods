@@ -546,6 +546,7 @@ module Pod
           phase.output_file_list_paths.should.be.nil
           phase.show_env_vars_in_log.should.be.nil
           phase.dependency_file.should.be.nil
+          phase.always_out_of_date.should.be.nil
         end
 
         it 'adds a custom shell script phase with input/output paths' do
@@ -567,6 +568,7 @@ module Pod
           phase.output_file_list_paths.should == ['/path/to/output_file.xcfilelist']
           phase.show_env_vars_in_log.should.be.nil
           phase.dependency_file.should.be.nil
+          phase.always_out_of_date.should.be.nil
         end
 
         it 'adds a custom shell script phase with dependency file' do
@@ -586,6 +588,7 @@ module Pod
           phase.output_file_list_paths.should.be.nil
           phase.show_env_vars_in_log.should.be.nil
           phase.dependency_file.should == '/path/to/depfile.d'
+          phase.always_out_of_date.should.be.nil
         end
 
         it 'sets the show_env_vars_in_log value to 0 if its explicitly set' do
@@ -751,6 +754,28 @@ module Pod
             '[CP] Copy Pods Resources',
           ]
         end
+      end
+
+      it 'sets the always_out_of_date value to 1 if its explicitly set' do
+        @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script',
+                                                                     :script => 'echo "Hello World"',
+                                                                     :always_out_of_date => '1'])
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+        phase.should.not.be.nil?
+        phase.always_out_of_date.should == '1'
+      end
+
+      it 'sets the always_out_of_date value to 1 if its explicitly set' do
+        @pod_bundle.target_definition.stubs(:script_phases).returns([:name => 'Custom Script',
+                                                                     :script => 'echo "Hello World"',
+                                                                     :always_out_of_date => '1'])
+        @target_integrator.integrate!
+        target = @target_integrator.send(:native_targets).first
+        phase = target.shell_script_build_phases.find { |bp| bp.name == @user_script_phase_name }
+        phase.should.not.be.nil?
+        phase.always_out_of_date.should == '1'
       end
 
       it 'adds and remove on demand resources to the user target resources build phase' do

@@ -31,13 +31,13 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'claide',                '>= 1.0.2', '< 2.0'
   s.add_runtime_dependency 'cocoapods-deintegrate', '>= 1.0.3', '< 2.0'
-  s.add_runtime_dependency 'cocoapods-downloader',  '>= 1.6.0', '< 2.0'
+  s.add_runtime_dependency 'cocoapods-downloader',  '>= 2.1', '< 3.0'
   s.add_runtime_dependency 'cocoapods-plugins',     '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-search',      '>= 1.0.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-trunk',       '>= 1.6.0', '< 2.0'
   s.add_runtime_dependency 'cocoapods-try',         '>= 1.1.0', '< 2.0'
   s.add_runtime_dependency 'molinillo',             '~> 0.8.0'
-  s.add_runtime_dependency 'xcodeproj',             '>= 1.21.0', '< 2.0'
+  s.add_runtime_dependency 'xcodeproj',             '>= 1.23.0', '< 2.0'
 
   s.add_runtime_dependency 'colored2',       '~> 3.1'
   s.add_runtime_dependency 'escape',        '~> 0.0.4'
