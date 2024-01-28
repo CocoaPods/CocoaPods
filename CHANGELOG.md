@@ -8,6 +8,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.15.0 (2024-01-28)
+
+##### Enhancements
+
 * Optimize performance during uncached pod installation.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
   [#12154](https://github.com/CocoaPods/CocoaPods/pull/12154)
