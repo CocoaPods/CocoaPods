@@ -41,6 +41,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Fix pod install issue when git's `core.fsmonitor` feature is enabled  
   [Justin Martin](https://github.com/justinseanmartin)
   [#11640](https://github.com/CocoaPods/CocoaPods/issues/11640)
+* None.  
+
 
 * Don't use the `remove_destination` parameter in FileUtils.cp_r  
   [Justin Martin](https://github.com/justinseanmartin)

@@ -308,7 +308,7 @@ module Pod
         specs_by_platform = group_subspecs_by_platform([spec])
         destination.parent.mkpath
         Cache.write_lock(destination) do
-          Pod::Executable.execute_command('rsync', ['-a', '--exclude=.git/fsmonitor--daemon.ipc', '--delete', "#{source}/", destination])
+          FileUtils.cp_r(source, destination, :remove_destination => true)
           Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
           Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
         end
