@@ -59,6 +59,11 @@ if [ -z ${FRAMEWORKS_FOLDER_PATH+x} ]; then
   exit 0
 fi
 
+if [ "${ENABLE_USER_SCRIPT_SANDBOXING}" = "YES" ]; then
+  echo "error: Copy Frameworks operation failed due to User-Space Script Sandboxing being enabled. Disable 'ENABLE_USER_SCRIPT_SANDBOXING' in your Xcode target build_settings and try again."
+  exit 1
+fi
+
 echo "mkdir -p ${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 
