@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Fix an issue when caching downloads of certain Pods.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12226](https://github.com/CocoaPods/CocoaPods/issues/12226)
 
 
 ## 1.15.0 (2024-01-28)
