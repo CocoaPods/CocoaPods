@@ -4,7 +4,41 @@ To install or update CocoaPods see this [guide](https://guides.cocoapods.org/usi
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
-## Master
+## 1.15.0 (2024-01-28)
+
+##### Enhancements
+
+* Optimize performance during uncached pod installation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#12154](https://github.com/CocoaPods/CocoaPods/pull/12154)
+
+##### Bug Fixes
+
+* Fix pod install issue when git's `core.fsmonitor` feature is enabled  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#11640](https://github.com/CocoaPods/CocoaPods/issues/11640)
+
+* Don't use the `remove_destination` parameter in FileUtils.cp_r  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#12165](https://github.com/CocoaPods/CocoaPods/pull/12165)
+
+* Support `visionos` in `pod lib lint --platforms=` and use `xros` for `Fourflusher`  
+  [MagnificentMiles](https://github.com/MagnificentMiles)
+  [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
+
+## 1.14.3 (2023-11-19)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Revert minimum required Ruby version to 2.6 to support macOS system Ruby  
+  [Eric Amorde](https://github.com/amorde)
+  [#12122](https://github.com/CocoaPods/CocoaPods/issues/12122)
+
+## 1.14.2 (2023-10-27)
 
 ##### Enhancements
 

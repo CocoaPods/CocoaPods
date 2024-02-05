@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 6d8282c3d34394d53b09defbed34149c20fdf493
+  revision: 745dbe57344b958c63e8f3cd8afbbcb091519f62
   branch: master
   specs:
-    cocoapods-core (1.14.1)
+    cocoapods-core (1.15.0)
       activesupport (>= 5.0, < 8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: de61027e8d4e3c4e9eccac2f190ee504c5b99be5
+  revision: 2328a5087067abad3a548a2065021827b4f24072
   branch: master
   specs:
     xcodeproj (1.23.0)
@@ -57,10 +57,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-downloader.git
-  revision: 3492e7bb3c0f39ba4b09b3bbd12b36f8a76b05e9
+  revision: e6851647294166da0b47f2619cc60b761b77f498
   branch: master
   specs:
-    cocoapods-downloader (2.0)
+    cocoapods-downloader (2.1)
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-plugins.git
@@ -79,7 +79,7 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/cocoapods-trunk.git
-  revision: 993aef6e12609c8ac1fe0abd98e27aedac74f194
+  revision: 080730057d0d832811be54f9fd825e1174d2af71
   branch: master
   specs:
     cocoapods-trunk (1.6.0)
@@ -119,12 +119,12 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.14.1)
+    cocoapods (1.15.0)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.14.1)
+      cocoapods-core (= 1.15.0)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
-      cocoapods-downloader (>= 2.0)
+      cocoapods-downloader (>= 2.1, < 3.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
       cocoapods-search (>= 1.0.0, < 2.0)
       cocoapods-trunk (>= 1.6.0, < 2.0)
@@ -149,7 +149,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     algoliasearch (1.27.5)
       httpclient (~> 2.8, >= 2.8.3)
@@ -168,7 +168,7 @@ GEM
       pry (= 0.10.3)
     coderay (1.1.3)
     colored2 (3.1.2)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.5)
@@ -232,7 +232,7 @@ GEM
       sparkr (>= 0.2.0)
       term-ansicolor
       yard (~> 0.9.12)
-    json (2.6.3)
+    json (2.7.1)
     kicker (3.0.0)
       listen (~> 1.3.0)
       notify (~> 0.5.2)
@@ -246,7 +246,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.20.0)
+    minitest (5.21.2)
     mocha (1.4.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -310,7 +310,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     tins (1.32.1)
       sync
-    typhoeus (1.4.0)
+    typhoeus (1.4.1)
       ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)

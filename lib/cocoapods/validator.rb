@@ -1108,7 +1108,7 @@ module Pod
         command += Fourflusher::SimControl.new.destination(:oldest, 'tvOS', deployment_target)
       when :visionos
         command += %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator)
-        command += Fourflusher::SimControl.new.destination(:oldest, 'visionOS', deployment_target)
+        command += Fourflusher::SimControl.new.destination(:oldest, 'xrOS', deployment_target)
       end
 
       if analyze

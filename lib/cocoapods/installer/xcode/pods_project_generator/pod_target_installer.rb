@@ -245,7 +245,7 @@ module Pod
               @plist_bundle_id = target.info_plist_entries['CFBundleIdentifier']
               unless @plist_bundle_id.nil?
                 message = "The `#{target.name}` target " \
-              "sets a Bundle Identifier of `#{@plist_bundle_id}` in it's info.plist file. " \
+              "sets a Bundle Identifier of `#{@plist_bundle_id}` in its info.plist file. " \
               'The Bundle Identifier should be set using pod_target_xcconfig: ' \
               "s.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': '#{@plist_bundle_id}' }`."
                 UI.warn message
