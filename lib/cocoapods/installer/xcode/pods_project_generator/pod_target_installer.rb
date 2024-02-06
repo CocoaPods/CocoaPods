@@ -134,7 +134,9 @@ module Pod
                   add_file_to_support_group(path)
                 end
               end
-              create_dummy_source(native_target) if target.should_build?
+              if target.should_build? && !target.uses_swift?
+                create_dummy_source(native_target)
+              end
               create_copy_dsyms_script
               clean_support_files_temp_dir
               TargetInstallationResult.new(target, native_target, resource_bundle_targets,
