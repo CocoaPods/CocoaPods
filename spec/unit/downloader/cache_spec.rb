@@ -49,7 +49,7 @@ module Pod
         end
       end
 
-      @cache.send(:group_subspecs_by_platform, [@spec]).should == {
+      @cache.send(:group_subspecs_by_platform, @spec).should == {
         Platform.new(:ios, '8.0') => [@spec.subspecs.first],
         Platform.new(:ios, '6.0') => [@spec],
         Platform.new(:osx, '10.7') => [@spec],
@@ -81,7 +81,7 @@ module Pod
         end
 
         it 'downloads the source' do
-          @cache.expects(:copy_files).twice
+          @cache.expects(:copy_and_clean).twice
           response = @cache.download_pod(@unreleased_request)
           response.should == Downloader::Response.new(@cache.root + @unreleased_request.slug, @spec, @spec.source)
         end
