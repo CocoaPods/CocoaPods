@@ -12,8 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Revert #12154, #12165, and #12158 to fix regressions in 1.15.0 and 1.15.1.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#12226](https://github.com/CocoaPods/CocoaPods/issues/12226)
 
 ## 1.15.1 (2024-02-06)
 

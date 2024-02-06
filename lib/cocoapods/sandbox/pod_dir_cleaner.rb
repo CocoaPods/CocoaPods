@@ -15,8 +15,10 @@ module Pod
       # @return [void]
       #
       def clean!
-        FileUtils.rm_rf(clean_paths) if root.exist?
+        clean_paths.each { |path| FileUtils.rm_rf(path) } if root.exist?
       end
+
+      private
 
       # @return [Array<Sandbox::FileAccessor>] the file accessors for all the
       #         specifications on their respective platform.
@@ -26,8 +28,6 @@ module Pod
           specs.flat_map { |spec| Sandbox::FileAccessor.new(path_list, spec.consumer(platform)) }
         end
       end
-
-      private
 
       # @return [Sandbox::PathList] The path list for this Pod.
       #
