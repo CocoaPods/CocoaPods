@@ -4,6 +4,19 @@ To install or update CocoaPods see this [guide](https://guides.cocoapods.org/usi
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## 1.15.1 (2024-02-06)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix an issue when caching downloads of certain Pods.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12226](https://github.com/CocoaPods/CocoaPods/issues/12226)
+
+
 ## 1.15.0 (2024-01-28)
 
 ##### Enhancements

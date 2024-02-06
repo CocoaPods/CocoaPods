@@ -327,13 +327,15 @@ module Pod
       # @return [Void]
       #
       def copy_files(files, source, destination)
-        files = files.select { |f| File.exist?(f) }
+        files = files.
+                map { |f| Pathname(f) }.
+                select { |p| p.exist? && p.file? }
         destination.parent.mkpath
         Cache.write_lock(destination) do
           FileUtils.rm_rf(destination)
           destination.mkpath
           files_by_dir = files.group_by do |file|
-            relative_path = Pathname(file).relative_path_from(Pathname(source)).to_s
+            relative_path = file.relative_path_from(source)
             destination_path = File.join(destination, relative_path)
             File.dirname(destination_path)
           end
