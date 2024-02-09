@@ -4,6 +4,18 @@ To install or update CocoaPods see this [guide](https://guides.cocoapods.org/usi
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## 1.15.2 (2024-02-06)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Revert #12154, #12165, and #12158 to fix regressions in 1.15.0 and 1.15.1.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#12226](https://github.com/CocoaPods/CocoaPods/issues/12226)
+
 ## 1.15.1 (2024-02-06)
 
 ##### Enhancements
