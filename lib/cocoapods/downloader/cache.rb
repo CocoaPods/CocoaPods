@@ -235,38 +235,13 @@ module Pod
       #         was not found in the download cache.
       #
       def uncached_pod(request)
-        in_tmpdir do |tmp_dir|
-          result, podspecs = download(request, tmp_dir)
+        in_tmpdir do |target|
+          result, podspecs = download(request, target)
           result.location = nil
 
-          # Split by pods that require a prepare command or not to speed up installation.
-          no_prep_cmd_specs, prep_cmd_specs = podspecs.partition { |_, spec| spec.prepare_command.nil? }.map(&:to_h)
-
-          # Pods with a prepare command currently copy the entire repo, run the prepare command against the whole
-          # repo and then clean it up. We configure those first to ensure the repo is pristine.
-          prep_cmd_specs.each do |name, spec|
+          podspecs.each do |name, spec|
             destination = path_for_pod(request, :name => name, :params => result.checkout_options)
-            copy_source_and_clean(tmp_dir, destination, spec)
-            write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
-            if request.name == name
-              result.location = destination
-            end
-          end
-
-          specs_by_platform = group_subspecs_by_platform(no_prep_cmd_specs.values)
-
-          # Remaining pods without a prepare command can be optimized by cleaning the repo first
-          # and then copying only the files needed.
-          pod_dir_cleaner = Sandbox::PodDirCleaner.new(tmp_dir, specs_by_platform)
-          Cache.write_lock(tmp_dir) do
-            pod_dir_cleaner.clean!
-          end
-
-          no_prep_cmd_specs.each do |name, spec|
-            destination = path_for_pod(request, :name => name, :params => result.checkout_options)
-            file_accessors = pod_dir_cleaner.file_accessors.select { |fa| fa.spec.root.name == spec.name }
-            files = Pod::Sandbox::FileAccessor.all_files(file_accessors).map(&:to_s)
-            copy_files(files, tmp_dir, destination)
+            copy_and_clean(target, destination, spec)
             write_spec(spec, path_for_spec(request, :name => name, :params => result.checkout_options))
             if request.name == name
               result.location = destination
@@ -304,55 +279,23 @@ module Pod
       #
       # @return [Void]
       #
-      def copy_source_and_clean(source, destination, spec)
-        specs_by_platform = group_subspecs_by_platform([spec])
+      def copy_and_clean(source, destination, spec)
+        specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
         Cache.write_lock(destination) do
-          Pod::Executable.execute_command('rsync', ['-a', '--exclude=.git/fsmonitor--daemon.ipc', '--delete', "#{source}/", destination])
+          FileUtils.rm_rf(destination)
+          FileUtils.cp_r(source, destination)
           Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
           Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
         end
       end
 
-      # Copies the `files` from the `source` directory to `destination` _without_ cleaning the
-      # `destination` directory of any files unused by `spec`. This is a faster version used when
-      # installing pods without a prepare command which has already happened prior.
-      #
-      # @param  [Array<Pathname>] files
-      #
-      # @param  [Pathname] source
-      #
-      # @param  [Pathname] destination
-      #
-      # @return [Void]
-      #
-      def copy_files(files, source, destination)
-        files = files.select { |f| File.exist?(f) }
-        destination.parent.mkpath
-        Cache.write_lock(destination) do
-          FileUtils.rm_rf(destination)
-          destination.mkpath
-          files_by_dir = files.group_by do |file|
-            relative_path = Pathname(file).relative_path_from(Pathname(source)).to_s
-            destination_path = File.join(destination, relative_path)
-            File.dirname(destination_path)
-          end
-
-          files_by_dir.each do |dir, files_to_copy|
-            FileUtils.mkdir_p(dir)
-            FileUtils.cp_r(files_to_copy, dir)
-          end
-        end
-      end
-
-      def group_subspecs_by_platform(specs)
+      def group_subspecs_by_platform(spec)
         specs_by_platform = {}
-        specs.each do |spec|
-          [spec, *spec.recursive_subspecs].each do |ss|
-            ss.available_platforms.each do |platform|
-              specs_by_platform[platform] ||= []
-              specs_by_platform[platform] << ss
-            end
+        [spec, *spec.recursive_subspecs].each do |ss|
+          ss.available_platforms.each do |platform|
+            specs_by_platform[platform] ||= []
+            specs_by_platform[platform] << ss
           end
         end
         specs_by_platform

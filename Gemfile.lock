@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 745dbe57344b958c63e8f3cd8afbbcb091519f62
+  revision: d9cdb56b6b5d8bf11ab7b04cc3e01587f6196d8c
   branch: master
   specs:
-    cocoapods-core (1.15.0)
+    cocoapods-core (1.15.2)
       activesupport (>= 5.0, < 8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -119,10 +119,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.15.0)
+    cocoapods (1.15.2)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.15.0)
+      cocoapods-core (= 1.15.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 2.1, < 3.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -246,7 +246,7 @@ GEM
       rb-kqueue (>= 0.2)
     metaclass (0.0.4)
     method_source (0.8.2)
-    minitest (5.21.2)
+    minitest (5.22.0)
     mocha (1.4.0)
       metaclass (~> 0.0.1)
     mocha-on-bacon (0.2.3)
@@ -320,7 +320,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     yard (0.9.34)
-    zeitwerk (2.6.12)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   ruby
