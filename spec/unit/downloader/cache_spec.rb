@@ -159,6 +159,8 @@ module Pod
             FileUtils.mkdir_p 'Classes'
             File.open('Classes/a.m', 'w') {}
           end
+          checksum = @cache.send(:checksum_for_directory, path_for_pod)
+          @cache.send(:save_checksum, checksum, path_for_pod)
         end
       end
 
