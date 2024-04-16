@@ -41,6 +41,10 @@ module Pod
       source.specification_path(name, version)
     end
 
+    def stub_downloader_cache_rsync
+      Downloader::Cache.any_instance.expects(:rsync_contents).with { |_, destination| FileUtils.mkdir_p(destination) }
+    end
+
     #-------------------------------------------------------------------------#
 
     describe 'Quick mode' do
@@ -786,6 +790,7 @@ module Pod
         require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
+        stub_downloader_cache_rsync
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
@@ -803,6 +808,7 @@ module Pod
         require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
+        stub_downloader_cache_rsync
         PodTarget.any_instance.stubs(:should_build?).returns(true)
         Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
@@ -833,6 +839,7 @@ module Pod
         require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
+        stub_downloader_cache_rsync
         PodTarget.any_instance.stubs(:should_build?).returns(true)
         Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
@@ -864,6 +871,7 @@ module Pod
         require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
+        stub_downloader_cache_rsync
         PodTarget.any_instance.stubs(:should_build?).returns(true)
         Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
@@ -897,6 +905,7 @@ module Pod
         require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
+        stub_downloader_cache_rsync
         PodTarget.any_instance.stubs(:should_build?).returns(true)
         Installer::Xcode::PodsProjectGenerator::PodTargetInstaller.any_instance.stubs(:validate_targets_contain_sources) # since we skip downloading
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
@@ -931,6 +940,7 @@ module Pod
         require 'fourflusher'
         Fourflusher::SimControl.any_instance.stubs(:destination).returns(['-destination', 'id=XXX'])
         Validator.any_instance.unstub(:xcodebuild)
+        stub_downloader_cache_rsync
         validator = Validator.new(podspec_path, config.sources_manager.master.map(&:url))
         validator.stubs(:check_file_patterns)
         validator.stubs(:validate_url)
