@@ -28,6 +28,7 @@ module Pod
         OTHER_CFLAGS
         OTHER_CPLUSPLUSFLAGS
         OTHER_LDFLAGS
+        OTHER_MODULE_VERIFIER_FLAGS
         OTHER_SWIFT_FLAGS
         REZ_SEARCH_PATHS
         SECTORDER_FLAGS
@@ -291,6 +292,11 @@ module Pod
       # @return [Array<String>]
       define_build_settings_method :other_cflags, :build_setting => true, :memoized => true do
         module_map_files.map { |f| "-fmodule-map-file=#{f}" }
+      end
+
+      # @return [Array<String>]
+      define_build_settings_method :other_module_verifier_flags, :build_setting => true, :memoized => true do
+        []
       end
 
       # @return [Array<String>]
@@ -1230,6 +1236,13 @@ module Pod
           flags += silenced_headers.uniq.flat_map { |p| ['-isystem', p] }
           flags += silenced_frameworks.uniq.flat_map { |p| ['-iframework', p] }
 
+          flags
+        end
+
+        # @return [Array<String>]
+        define_build_settings_method :other_module_verifier_flags, :memoized => true do
+          flags = super()
+          flags += pod_targets.map { |pt| '-F' + pt.build_settings[@configuration].configuration_build_dir }
           flags
         end
 
