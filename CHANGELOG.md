@@ -4,6 +4,19 @@ To install or update CocoaPods see this [guide](https://guides.cocoapods.org/usi
 
 To install release candidates run `[sudo] gem install cocoapods --pre`
 
+## Master
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix pod install issue when git's `core.fsmonitor` feature is enabled (again)
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#12349](https://github.com/CocoaPods/CocoaPods/issues/12349)
+
+
 ## 1.15.2 (2024-02-06)
 
 ##### Enhancements

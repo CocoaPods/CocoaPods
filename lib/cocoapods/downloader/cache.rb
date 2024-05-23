@@ -283,11 +283,14 @@ module Pod
         specs_by_platform = group_subspecs_by_platform(spec)
         destination.parent.mkpath
         Cache.write_lock(destination) do
-          FileUtils.rm_rf(destination)
-          FileUtils.cp_r(source, destination)
+          rsync_contents(source, destination)
           Pod::Installer::PodSourcePreparer.new(spec, destination).prepare!
           Sandbox::PodDirCleaner.new(destination, specs_by_platform).clean!
         end
+      end
+
+      def rsync_contents(source, destination)
+        Pod::Executable.execute_command('rsync', ['-a', '--exclude=.git', '--delete', "#{source}/", destination])
       end
 
       def group_subspecs_by_platform(spec)
