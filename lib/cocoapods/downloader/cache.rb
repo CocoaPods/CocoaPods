@@ -129,11 +129,14 @@ module Pod
         ensure
           if lock_type == File::LOCK_SH
             f.flock(File::LOCK_EX)
-            File.delete(lockfile) if Cache.valid_lock?(f, lockfile)
+            if Cache.valid_lock?(f, lockfile)
+              f.close
+              File.delete(lockfile)
+            end
           else
+            f.close
             File.delete(lockfile)
           end
-          f.close
         end
       end
 
