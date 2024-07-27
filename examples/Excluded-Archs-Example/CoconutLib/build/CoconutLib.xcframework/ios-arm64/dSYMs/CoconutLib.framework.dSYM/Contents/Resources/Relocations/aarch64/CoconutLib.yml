@@ -1,0 +1,9 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/eamorde/Library/Developer/Xcode/DerivedData/CoconutLib-ahtxmvfdbnhcpfbjtvbonsgihshs/Build/Intermediates.noindex/ArchiveIntermediates/CoconutLib/InstallationBuildProductsLocation/Library/Frameworks/CoconutLib.framework/CoconutLib'
+relocations:
+  - { offsetInCU: 0x34, offset: 0x2DC3A, size: 0x8, addend: 0x0, symName: _CoconutLibVersionString, symObjAddr: 0x0, symBinAddr: 0x4050, symSize: 0x0 }
+  - { offsetInCU: 0x69, offset: 0x2DC6F, size: 0x8, addend: 0x0, symName: _CoconutLibVersionNumber, symObjAddr: 0x30, symBinAddr: 0x4080, symSize: 0x0 }
+  - { offsetInCU: 0x27, offset: 0x2DCAC, size: 0x8, addend: 0x0, symName: '-[Coconut makeCoconuts]', symObjAddr: 0x0, symBinAddr: 0x4000, symSize: 0x1C }
+  - { offsetInCU: 0x4D, offset: 0x2DCD2, size: 0x8, addend: 0x0, symName: '-[Coconut makeCoconuts]', symObjAddr: 0x0, symBinAddr: 0x4000, symSize: 0x1C }
+...

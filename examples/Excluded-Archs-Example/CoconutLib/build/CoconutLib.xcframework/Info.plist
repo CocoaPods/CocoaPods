@@ -5,8 +5,8 @@
 	<key>AvailableLibraries</key>
 	<array>
 		<dict>
-			<key>BitcodeSymbolMapsPath</key>
-			<string>BCSymbolMaps</string>
+			<key>BinaryPath</key>
+			<string>CoconutLib.framework/CoconutLib</string>
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
 			<key>LibraryIdentifier</key>
@@ -21,6 +21,8 @@
 			<string>ios</string>
 		</dict>
 		<dict>
+			<key>BinaryPath</key>
+			<string>CoconutLib.framework/CoconutLib</string>
 			<key>DebugSymbolsPath</key>
 			<string>dSYMs</string>
 			<key>LibraryIdentifier</key>
