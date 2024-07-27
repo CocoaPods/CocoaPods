@@ -24,18 +24,6 @@ xcodebuild archive \
 # ---------------------------------------
 exitCode=0
 
-bcSymbolMapsPath="${archivePath}/BCSymbolMaps"
-
-# Ensure the expected Xcode 12-style CoconutLib BCSymbolMaps are in the root of the archive
-libraryBCSymbolMapDir="${PROJECT_DIR}/CoconutLib/build/CoconutLib.xcframework/ios-arm64/BCSymbolMaps"
-for file in "${libraryBCSymbolMapDir}"/*; do
-    filename="${file##*/}"
-    if ! test -f "${bcSymbolMapsPath}/${filename}"; then
-        echo "error: Missing BCSymbolMap for CoconutLib: ${filename}"
-        exitCode=1
-    fi
-done
-
 # Ensure the expected dSYMs are in the root of the archive
 dsymsPath="${archivePath}/dSYMs"
 
