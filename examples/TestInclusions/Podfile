@@ -1,10 +1,12 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
 
 workspace 'Examples.xcworkspace'
 project 'TestInclusions.xcodeproj'
-platform :ios, '6.0'
+platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
 
 abstract_target 'TestInclusionsPods' do
     pod 'SwrveConversationSDK', '~> 4.3.0'

@@ -1,3 +1,5 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
