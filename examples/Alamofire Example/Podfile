@@ -6,8 +6,8 @@ workspace 'Examples.xcworkspace'
 project 'iOS Example.xcodeproj'
 
 target 'iOS Example' do
-  platform :ios, '8.0'
+  platform :ios, '14.0'
   use_frameworks!
-  pod 'Alamofire', :path => './Alamofire'
+  pod 'Alamofire', '5.9.1'
 end
 
