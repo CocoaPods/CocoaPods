@@ -1,3 +1,5 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
@@ -8,11 +10,11 @@ workspace 'Examples.xcworkspace'
 project 'HeaderMappingsDir Example.xcodeproj'
 
 target 'App' do
-  platform :osx, '10.9'
+  platform :osx, DEFAULT_MACOS_DEPLOYMENT_TARGET
   pod 'HeaderMappingsDirPod', :path => 'HeaderMappingsDirPod'
 end
 
 target 'CatalystApp' do
-  platform :ios, '13.0'
+  platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
   pod 'HeaderMappingsDirPod', :path => 'HeaderMappingsDirPod'
 end

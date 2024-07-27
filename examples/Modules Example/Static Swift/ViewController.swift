@@ -32,11 +32,11 @@ class ViewController: BaseViewController {
     }
 
     func networkRequest() {
-        Alamofire.request("https://httpbin.org/get").responseJSON { response in
+        AF.request("https://httpbin.org/get").responseJSON { response in
             print("\n\nAlamofire:\n")
             print("Request: \(String(describing: response.request))")   // original url request
 
-            if let json = response.result.value {
+            if let json = try? response.result.get() {
                 print("JSON: \(json)") // serialized json response
             }
         }

@@ -70,7 +70,6 @@
 				CFDA82AEB5C8A1B1DD6949AC /* Pods-Abstract Target-macOS Pods-Static.debug.xcconfig */,
 				47E1D32B15E8199CE61CF31B /* Pods-Abstract Target-macOS Pods-Static.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -116,6 +115,7 @@
 				C06248E12016A708009EF3DE /* Sources */,
 				C06248E22016A708009EF3DE /* Frameworks */,
 				C06248E32016A708009EF3DE /* Resources */,
+				A86223C7522EDA59A035D4EC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -219,6 +219,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A86223C7522EDA59A035D4EC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire-library-macOS/Alamofire.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Alamofire.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-macOS Pods-Static/Pods-Abstract Target-macOS Pods-Static-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CCC86C1196895CEB7F2D0C9B /* [CP] Embed Pods Frameworks */ = {
@@ -419,6 +437,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Static Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -437,6 +456,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Static Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -455,7 +475,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Static Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -476,7 +496,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Static Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

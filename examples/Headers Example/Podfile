@@ -1,3 +1,5 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
@@ -8,7 +10,7 @@ workspace 'Examples.xcworkspace'
 project 'Headers Example.xcodeproj'
 
 target 'App' do
-  platform :osx, '10.9'
+  platform :osx, DEFAULT_MACOS_DEPLOYMENT_TARGET
   pod 'FooHeadersPod', :path => 'FooHeadersPod'
   pod 'BarHeadersPod', :path => 'BarHeadersPod'
 end
