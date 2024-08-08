@@ -389,6 +389,10 @@ module Pod
               @xcconfig.to_hash['FRAMEWORK_SEARCH_PATHS'].should == '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework"'
             end
 
+            it 'adds the framework build path to the xcconfig, with quotes, as module verifier flags' do
+              @xcconfig.to_hash['OTHER_MODULE_VERIFIER_FLAGS'].should == '$(inherited) "-F${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework"'
+            end
+
             it 'adds the framework header paths to the xcconfig, with quotes, as local headers' do
               expected = '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/OrangeFramework/OrangeFramework.framework/Headers"'
               @xcconfig.to_hash['HEADER_SEARCH_PATHS'].should == expected
