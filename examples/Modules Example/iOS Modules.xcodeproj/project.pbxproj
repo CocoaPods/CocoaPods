@@ -113,7 +113,6 @@
 				33A84E66EBEDC738A1DC928D /* Pods-Abstract Target-iOS Pods-Static.debug.xcconfig */,
 				BCCB47A125EFE121F6CB0060 /* Pods-Abstract Target-iOS Pods-Static.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -128,6 +127,7 @@
 				C06248E12016A708009EF3DE /* Sources */,
 				C06248E22016A708009EF3DE /* Frameworks */,
 				C06248E32016A708009EF3DE /* Resources */,
+				7FC33CB91EFA971AF59360AF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -283,6 +283,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract Target-iOS Pods-Dynamic-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7FC33CB91EFA971AF59360AF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract Target-iOS Pods-Static-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire-library-iOS/Alamofire.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Alamofire.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract Target-iOS Pods-Static-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -378,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
@@ -435,7 +453,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -457,6 +475,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Static Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -475,6 +494,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Static Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -494,7 +514,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Static Swift/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -516,7 +536,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Static Swift/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.segiddins.Static-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";

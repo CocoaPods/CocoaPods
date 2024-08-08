@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -21,24 +21,18 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		251DA73D2C558A1800BFBA53 /* TestAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251DA7152C558A0100BFBA53 /* TestAppApp.swift */; };
+		251DA73E2C558A1800BFBA53 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251DA7172C558A0100BFBA53 /* ContentView.swift */; };
 		4B92F4F948B2627D25C3B487 /* Pods_VendoredXCFrameworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBF7E1F8F8EBA8AAED7B760 /* Pods_VendoredXCFrameworkExample.framework */; };
-		5BFCC8D4252E3B9D000564E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D3252E3B9D000564E9 /* AppDelegate.swift */; };
-		5BFCC8D6252E3B9D000564E9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D5252E3B9D000564E9 /* SceneDelegate.swift */; };
-		5BFCC8D8252E3B9D000564E9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D7252E3B9D000564E9 /* ViewController.swift */; };
-		5BFCC8DB252E3B9D000564E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BFCC8D9252E3B9D000564E9 /* Main.storyboard */; };
 		5BFCC8DD252E3BA0000564E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BFCC8DC252E3BA0000564E9 /* Assets.xcassets */; };
-		5BFCC8E0252E3BA0000564E9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BFCC8DE252E3BA0000564E9 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		251DA7152C558A0100BFBA53 /* TestAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppApp.swift; sourceTree = "<group>"; };
+		251DA7172C558A0100BFBA53 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2FBF7E1F8F8EBA8AAED7B760 /* Pods_VendoredXCFrameworkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VendoredXCFrameworkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFCC8D0252E3B9D000564E9 /* VendoredXCFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VendoredXCFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BFCC8D3252E3B9D000564E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5BFCC8D5252E3B9D000564E9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		5BFCC8D7252E3B9D000564E9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		5BFCC8DA252E3B9D000564E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5BFCC8DC252E3BA0000564E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		5BFCC8DF252E3BA0000564E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5BFCC8E1252E3BA0000564E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCAE785A6DBB4A53A381B7A1 /* Pods-VendoredXCFrameworkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VendoredXCFrameworkExample.release.xcconfig"; path = "Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample.release.xcconfig"; sourceTree = "<group>"; };
 		D02A199032E77CA06241E6EB /* Pods-VendoredXCFrameworkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VendoredXCFrameworkExample.debug.xcconfig"; path = "Target Support Files/Pods-VendoredXCFrameworkExample/Pods-VendoredXCFrameworkExample.debug.xcconfig"; sourceTree = "<group>"; };
@@ -77,12 +71,9 @@
 		5BFCC8D2252E3B9D000564E9 /* VendoredXCFrameworkExample */ = {
 			isa = PBXGroup;
 			children = (
-				5BFCC8D3252E3B9D000564E9 /* AppDelegate.swift */,
-				5BFCC8D5252E3B9D000564E9 /* SceneDelegate.swift */,
-				5BFCC8D7252E3B9D000564E9 /* ViewController.swift */,
-				5BFCC8D9252E3B9D000564E9 /* Main.storyboard */,
+				251DA7152C558A0100BFBA53 /* TestAppApp.swift */,
+				251DA7172C558A0100BFBA53 /* ContentView.swift */,
 				5BFCC8DC252E3BA0000564E9 /* Assets.xcassets */,
-				5BFCC8DE252E3BA0000564E9 /* LaunchScreen.storyboard */,
 				5BFCC8E1252E3BA0000564E9 /* Info.plist */,
 			);
 			path = VendoredXCFrameworkExample;
@@ -133,7 +124,7 @@
 		5BFCC8C8252E3B9D000564E9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1170;
+				LastSwiftUpdateCheck = 1510;
 				LastUpgradeCheck = 1170;
 				TargetAttributes = {
 					5BFCC8CF252E3B9D000564E9 = {
@@ -168,9 +159,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BFCC8E0252E3BA0000564E9 /* LaunchScreen.storyboard in Resources */,
 				5BFCC8DD252E3BA0000564E9 /* Assets.xcassets in Resources */,
-				5BFCC8DB252E3B9D000564E9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,32 +229,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BFCC8D8252E3B9D000564E9 /* ViewController.swift in Sources */,
-				5BFCC8D4252E3B9D000564E9 /* AppDelegate.swift in Sources */,
-				5BFCC8D6252E3B9D000564E9 /* SceneDelegate.swift in Sources */,
+				251DA73E2C558A1800BFBA53 /* ContentView.swift in Sources */,
+				251DA73D2C558A1800BFBA53 /* TestAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		5BFCC8D9252E3B9D000564E9 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5BFCC8DA252E3B9D000564E9 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		5BFCC8DE252E3BA0000564E9 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5BFCC8DF252E3BA0000564E9 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5BFCC8E2252E3BA0000564E9 /* Debug */ = {
@@ -318,6 +287,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -371,6 +341,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -385,14 +356,20 @@
 			baseConfigurationReference = D02A199032E77CA06241E6EB /* Pods-VendoredXCFrameworkExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = VendoredXCFrameworkExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample.VendoredXCFrameworkExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -403,14 +380,20 @@
 			baseConfigurationReference = BCAE785A6DBB4A53A381B7A1 /* Pods-VendoredXCFrameworkExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = VendoredXCFrameworkExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.VendoredXCFrameworkExample.VendoredXCFrameworkExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

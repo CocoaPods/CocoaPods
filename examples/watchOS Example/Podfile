@@ -1,3 +1,5 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
@@ -8,10 +10,11 @@ workspace 'Examples.xcworkspace'
 project 'watchOSsample.xcodeproj'
 
 target 'watchOSsample' do
-  pod 'Alamofire', :path => '../Alamofire Example/Alamofire'
+  platform :watchos, DEFAULT_WATCHOS_DEPLOYMENT_TARGET
+  pod 'Alamofire', '5.9.1'
 end
 
 target 'watchOSsample WatchKit Extension' do
-  platform :watchos, '4.0'
-  pod 'Alamofire', :path => '../Alamofire Example/Alamofire'
+  platform :watchos, DEFAULT_WATCHOS_DEPLOYMENT_TARGET
+  pod 'Alamofire', '5.9.1'
 end

@@ -1,3 +1,5 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
@@ -12,15 +14,15 @@ abstract_target 'Abstract Target' do
     pod 'MixedPod', path: 'MixedPod'
     pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
 
-    pod 'Alamofire', path: '../Alamofire Example/Alamofire'
+    pod 'Alamofire', '5.9.1'
 
     %w[iOS macOS].each do |platform|
         abstract_target "#{platform} Pods" do
             project "#{platform} Modules.xcodeproj"
 
             case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
+            when 'iOS' then self.platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
+            when 'macOS' then self.platform :macos, DEFAULT_MACOS_DEPLOYMENT_TARGET
             end
 
             target 'Static' do

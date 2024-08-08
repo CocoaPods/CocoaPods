@@ -1,9 +1,11 @@
+require_relative '../defaults.rb'
+
 project 'VendoredXCFrameworkExample.xcodeproj'
 
 workspace 'Examples'
 
 target 'VendoredXCFrameworkExample' do
-  platform :ios, '13.0'
+  platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
   use_frameworks!
 
   # XCFramework with Xcode 11 style inclusion of debug symbols
