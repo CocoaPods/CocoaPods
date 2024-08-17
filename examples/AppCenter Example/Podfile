@@ -1,3 +1,5 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
@@ -6,7 +8,7 @@ workspace 'Examples.xcworkspace'
 project 'iOS Example.xcodeproj'
 
 target 'iOS Example' do
-  platform :ios, '9.0'
+  platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
   use_frameworks!
   pod 'AppCenter', '4.2.0'
 end

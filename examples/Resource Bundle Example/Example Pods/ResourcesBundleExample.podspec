@@ -1,11 +1,13 @@
+require_relative '../../defaults.rb'
+
 Pod::Spec.new do |s|
   s.name                         = "ResourcesBundleExample"
   s.version                      = "0.0.1"
   s.summary                      = "Resources in a spec test pod."
   s.description                  = "This spec specifies images as resources."
 
-  s.ios.deployment_target        = '8.0'
-  s.osx.deployment_target        = '10.9'
+  s.ios.deployment_target        = DEFAULT_IOS_DEPLOYMENT_TARGET
+  s.osx.deployment_target        = DEFAULT_MACOS_DEPLOYMENT_TARGET
   s.homepage                     = "https://cocoapods.org"
   s.license                      = { :type => "MIT", :file => "../../../LICENSE" }
   s.author                       = { "Ben Asher" => "benasher44@gmail.com" }

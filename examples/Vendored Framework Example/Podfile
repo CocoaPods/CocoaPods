@@ -1,8 +1,10 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
   source "#{repo}"
 end
 
-platform :ios, '8.0'
+platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
 use_frameworks!
 
 workspace 'Examples.xcworkspace'
