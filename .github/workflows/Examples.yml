@@ -1,17 +1,42 @@
-name: Specs
+name: Examples
 
 jobs:
-  specs:
+  prepare:
+    runs-on: ubuntu-latest
+    name: Prepare Subtasks
+    outputs:
+      subtask: ${{ steps.fetch-subtasks.outputs.subtask }}
+    steps:
+      - name: Checkout git
+        uses: actions/checkout@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+
+      - name: Run bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3 --without debugging documentation
+
+      - name: Fetch example subtasks
+        id: fetch-subtasks
+        run: |
+          echo "subtask=$(bundle exec rake spec:subtasks)" | tee -a $GITHUB_OUTPUT
+        env:
+          COCOAPODS_CI_TASKS: EXAMPLES
+  examples:
+    needs: prepare
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.6, 2.7, 3.0]
-        os: [ubuntu-20.04]
-        include:
-          - os: macos-12
-            ruby: system
+        task: [EXAMPLES]
+        subtask: ${{ fromJson(needs.prepare.outputs.subtask) }}
+        ruby: [system]
+        os: [macos-latest]
 
-    name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
+    name: ${{ matrix.subtask }} / ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -52,10 +77,15 @@ jobs:
           git config --global user.email "tests@cocoapods.org"
           git config --global user.name "CocoaPods Tests"
 
-      - name: Run Tests
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15.1
+
+      - name: Run Examples
         run: bundle exec rake spec:all
         env:
-          COCOAPODS_CI_TASKS: SPECS
+          COCOAPODS_CI_TASKS: ${{ matrix.task }}
+          COCOAPODS_CI_SUBTASK: ${{ matrix.subtask }}
 
 on:
   push:

@@ -115,6 +115,7 @@ begin
     #
     task :all => 'fixture_tarballs:unpack' do
       tasks = ENV.fetch('COCOAPODS_CI_TASKS') { 'ALL' }.upcase.split(/\s+/)
+      subtask = ENV.fetch('COCOAPODS_CI_SUBTASK', nil)
       if %w(ALL SPECS EXAMPLES LINT).&(tasks).empty?
         raise "Unknown tasks #{tasks} -- supported options for COCOAPODS_CI_TASKS are " \
               'ALL, SPECS, EXAMPLES, LINT'
@@ -138,7 +139,11 @@ begin
 
       if examples && ENV['SKIP_EXAMPLES'].nil?
         title 'Running examples'
-        Rake::Task['examples:build'].invoke
+        if subtask.nil?
+          Rake::Task['examples:build'].invoke
+        else
+          Rake::Task['examples:build'].invoke("^#{subtask}$")
+        end
       end
 
       if lint
@@ -238,6 +243,19 @@ begin
     end
 
     task :clean_env => [:clean_vcr, 'fixture_tarballs:unpack', 'ext:cleanbuild']
+
+    desc 'Used on CI to create an additional matrix for a specific spec task'
+    task :subtasks do
+      require 'json'
+      require 'shellwords'
+      tasks = ENV.fetch('COCOAPODS_CI_TASKS') { 'ALL' }.upcase.split(/\s+/)
+      data = if tasks == ['EXAMPLES']
+               JSON.generate(Dir['examples/*'].select { |p| File.directory?(p) }.map { |d| File.basename(d) })
+             else
+               JSON.generate(['all'])
+             end
+      puts data
+    end
   end
 
   # Examples
@@ -285,7 +303,7 @@ begin
                 end
       Dir['examples/*'].sort.each do |dir|
         next unless File.directory?(dir)
-        unless dir.match?(pattern)
+        unless File.basename(dir).match?(pattern)
           puts "Skipping #{dir}"
           next
         end
