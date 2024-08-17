@@ -276,10 +276,19 @@ begin
     end
 
     desc 'Build all examples'
-    task :build do
+    task :build, [:pattern] do |_t, args|
       Bundler.require 'xcodeproj', :development
+      pattern = if (p = args[:pattern])
+                  /#{p}/
+                else
+                  /.*/
+                end
       Dir['examples/*'].sort.each do |dir|
         next unless File.directory?(dir)
+        unless dir.match?(pattern)
+          puts "Skipping #{dir}"
+          next
+        end
         Dir.chdir(dir) do
           puts "Example: #{dir}"
 
