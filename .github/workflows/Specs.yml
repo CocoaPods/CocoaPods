@@ -35,7 +35,8 @@ jobs:
       - name: Update git submodules
         run: git submodule update --init
 
-      - uses: actions/cache@v2
+      - uses: actions/cache/restore@v4
+        id: bundle-cache-restore
         with:
           path: vendor/bundle
           key: gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
@@ -46,6 +47,11 @@ jobs:
           gem install bundler -v "~> 1.17"
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3 --without debugging documentation
+      - uses: actions/cache/save@v4
+        id: bundle-cache-save
+        with:
+          path: vendor/bundle
+          key: ${{ steps.bundle-cache-restore.outputs.cache-primary-key }}
       - name: Set up git identity
         run: |
           git config --global user.email "tests@cocoapods.org"
