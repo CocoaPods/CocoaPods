@@ -40,11 +40,10 @@ module Pod
       #
       # @param  [PodTarget, AggregateTarget] target @see target
       #
-      def initialize(target)
+      def initialize(target, skip_umbrella = false, private_module_map = false)
         @target = target
-        @headers = [
-          Header.new(target.umbrella_header_path.basename, true),
-        ]
+        @headers = skip_umbrella ? [] : [Header.new(target.umbrella_header_path.basename, true)]
+        @private_module_map = private_module_map
       end
 
       # Generates and saves the Info.plist to the given path.
@@ -67,11 +66,11 @@ module Pod
       #
       def generate
         <<-MODULE_MAP.strip_heredoc
-#{module_specifier_prefix}module #{target.product_module_name}#{module_declaration_attributes} {
+#{module_specifier_prefix}module #{target.product_module_name}#{module_name_suffix}#{module_declaration_attributes} {
   #{headers.join("\n  ")}
 
   export *
-  module * { export * }
+  #{exported_submodules}
 }
         MODULE_MAP
       end
@@ -93,6 +92,20 @@ module Pod
       #
       def module_declaration_attributes
         ''
+      end
+
+      def module_name_suffix
+        @private_module_map ? '_Private' : ''
+      end
+
+      def exported_submodules
+        ret = if @private_module_map
+          ''
+        else
+          'module * { export * }'
+        end
+
+        return ret
       end
     end
   end
