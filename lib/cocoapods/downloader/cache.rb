@@ -127,12 +127,6 @@ module Pod
         begin
           yield location
         ensure
-          if lock_type == File::LOCK_SH
-            f.flock(File::LOCK_EX)
-            File.delete(lockfile) if Cache.valid_lock?(f, lockfile)
-          else
-            File.delete(lockfile)
-          end
           f.close
         end
       end
