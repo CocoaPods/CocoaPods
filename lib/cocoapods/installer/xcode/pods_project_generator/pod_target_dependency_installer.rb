@@ -63,7 +63,7 @@ module Pod
         def wire_resource_bundle_targets(resource_bundle_targets, native_target, pod_target)
           resource_bundle_targets.each do |resource_bundle_target|
             native_target.add_dependency(resource_bundle_target)
-            if pod_target.build_as_dynamic_framework? && pod_target.should_build?
+            if pod_target.build_as_framework? && pod_target.should_build?
               native_target.add_resources([resource_bundle_target.product_reference])
             end
           end
