@@ -1,0 +1,21 @@
+PODS:
+  - Reachability (3.1.0)
+  - Reachability2 (3.1.0)
+
+DEPENDENCIES:
+  - Reachability (from `Reachability`)
+  - Reachability2 (from `Reachability2`)
+
+EXTERNAL SOURCES:
+  Reachability:
+    :path: Reachability
+  Reachability2:
+    :path: Reachability2
+
+SPEC CHECKSUMS:
+  Reachability: ffc2f3aeee14f8163014be574d92774c474b6534
+  Reachability2: 72d87edbc45d2fda5f85fd79a6a8921bffed40dd
+
+PODFILE CHECKSUM: 1d4dea7b33954deec1a4c26ca574e773c584e1ed
+
+COCOAPODS: 1.6.0.beta.2

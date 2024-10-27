@@ -1,0 +1,6 @@
+framework module CocoaLumberjack {
+  umbrella header "CocoaLumberjack-umbrella.h"
+
+  export *
+  module * { export * }
+}

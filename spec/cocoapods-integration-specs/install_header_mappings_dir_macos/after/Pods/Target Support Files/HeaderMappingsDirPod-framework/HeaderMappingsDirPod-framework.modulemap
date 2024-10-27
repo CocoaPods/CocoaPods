@@ -1,0 +1,6 @@
+framework module HeaderMappingsDirPod {
+  umbrella header "HeaderMappingsDirPod-framework-umbrella.h"
+
+  export *
+  module * { export * }
+}

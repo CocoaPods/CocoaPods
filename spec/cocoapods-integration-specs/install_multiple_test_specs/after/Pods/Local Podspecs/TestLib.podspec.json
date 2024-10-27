@@ -1,0 +1,39 @@
+{
+  "name": "TestLib",
+  "version": "0.1.0",
+  "summary": "A short description of TestLib.",
+  "platforms": {
+    "ios": "10.0"
+  },
+  "authors": {
+    "Jeff Overwatch": "jeff@overwatch.com"
+  },
+  "homepage": "https://github.com/",
+  "license": "MIT",
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/TestLib.git",
+    "tag": "0.1.0"
+  },
+  "source_files": "TestLib/Classes/**/*",
+  "swift_versions": "4",
+  "testspecs": [
+    {
+      "name": "UnitTests1",
+      "test_type": "unit",
+      "source_files": "TestLib/UnitTests1/**/*"
+    },
+    {
+      "name": "UnitTests2",
+      "test_type": "unit",
+      "requires_app_host": true,
+      "source_files": "TestLib/UnitTests2/**/*"
+    }
+  ],
+  "appspecs": [
+    {
+      "name": "App",
+      "source_files": "TestLib/App/**/*"
+    }
+  ],
+  "swift_version": "4"
+}

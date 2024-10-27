@@ -1,0 +1,28 @@
+{
+  "name": "HeaderMappingsDirPod",
+  "version": "1.0.0",
+  "authors": [
+    "CocoaPods"
+  ],
+  "license": "MIT",
+  "homepage": "https://example.com",
+  "source": {
+    "git": "https://example.com"
+  },
+  "summary": "A summary",
+  "source_files": [
+    "src/**/*.{h,m}",
+    "include/**/*.h"
+  ],
+  "header_mappings_dir": "include",
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES"
+  },
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  }
+}

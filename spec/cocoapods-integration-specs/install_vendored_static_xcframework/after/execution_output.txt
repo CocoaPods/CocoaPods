@@ -1,0 +1,65 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-XCFrameworkIntegration`: (``)
+
+Fetching external sources
+-> Fetching podspec for `BananaLib` from `BananaLib`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A BananaLib
+
+Downloading dependencies
+
+-> Installing BananaLib (0.0.1)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `BananaLib` iOS 13.0
+      - Generating Info.plist file at `Pods/Target Support Files/BananaLib/BananaLib-Unit-Tests-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/BananaLib/BananaLib.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/BananaLib/BananaLib-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/BananaLib/BananaLib-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/BananaLib/BananaLib-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-XCFrameworkIntegration` iOS 13.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-XCFrameworkIntegration/Pods-XCFrameworkIntegration-dummy.m`
+  - Integrating targets
+
+Integrating target `BananaLib`
+    Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+    Adding Build Phase '[CP] Copy XCFrameworks' to project.
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `XCFrameworkIntegration.xcworkspace` for this project from now on.
+
+Integrating target `Pods-XCFrameworkIntegration` (`XCFrameworkIntegration.xcodeproj` project)
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 2 dependencies from the Podfile and 1 total pod installed.

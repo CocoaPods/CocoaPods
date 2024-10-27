@@ -1,0 +1,12 @@
+platform :ios, '6.0'
+workspace 'Workspace.xcworkspace'
+
+target 'SampleApp_1' do
+  project 'SampleApp_1.xcodeproj'
+  pod 'Reachability', '3.1.0'
+end
+
+target :SampleApp_2 do
+  project 'SampleApp_2.xcodeproj'
+  pod 'Reachability'
+end

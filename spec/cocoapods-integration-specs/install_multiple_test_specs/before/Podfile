@@ -1,0 +1,18 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '10.0'
+
+target 'InstallMultipleTestSpecs' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+  
+  # Pods for InstallMultipleTestSpecs
+  pod 'TestLib', :path => 'TestLib', :testspecs => %w[UnitTests1 UnitTests2]
+  pod 'HostedTestLib', :path => 'HostedTestLib', :testspecs => %w[UnitTests3 UnitTests4 UnitTests5 UnitTests6]
+end
+
+target 'Other' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  pod 'DepPod', :path => 'DepPod'
+end

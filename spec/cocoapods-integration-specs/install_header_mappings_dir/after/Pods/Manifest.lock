@@ -1,0 +1,18 @@
+PODS:
+  - DepPod (1.0.0):
+    - HeaderMappingsDirPod
+  - HeaderMappingsDirPod (1.0.0)
+
+DEPENDENCIES:
+  - DepPod (from `DepPod`)
+  - HeaderMappingsDirPod (from `HeaderMappingsDirPod`)
+
+EXTERNAL SOURCES:
+  DepPod:
+    :path: DepPod
+  HeaderMappingsDirPod:
+    :path: HeaderMappingsDirPod
+
+SPEC CHECKSUMS:
+  DepPod: 99ce4035871faac7ded80730803c36226db7d304
+  HeaderMappingsDirPod: dbe312f11e2602454d56f06c315b80daee37d8a9

@@ -1,0 +1,32 @@
+{
+  "name": "PodTest",
+  "version": "1.0",
+  "source": {
+    "http": "./PodTest.zip"
+  },
+  "authors": [
+    "Fabio"
+  ],
+  "license": {
+    "type": "MIT"
+  },
+  "homepage": "http://example.com",
+  "summary": "A test pod.",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  },
+  "subspecs": [
+    {
+      "name": "subspec_1",
+      "source_files": "subspec_1.{h,m}"
+    },
+    {
+      "name": "subspec_2",
+      "source_files": "subspec_2.{h,m}"
+    }
+  ]
+}

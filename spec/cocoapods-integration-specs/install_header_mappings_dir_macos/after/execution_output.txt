@@ -1,0 +1,84 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-OtherSampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `DepPod` from `DepPod`
+-> Fetching podspec for `HeaderMappingsDirPod` from `HeaderMappingsDirPod`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A DepPod
+  A HeaderMappingsDirPod
+
+Downloading dependencies
+
+-> Installing DepPod (1.0.0)
+
+-> Installing HeaderMappingsDirPod (1.0.0)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `DepPod-framework` macOS 10.6
+      - Generating module map file at `Pods/Target Support Files/DepPod-framework/DepPod-framework.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/DepPod-framework/DepPod-framework-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/DepPod-framework/DepPod-framework-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/DepPod-framework/DepPod-framework-dummy.m`
+    - Installing target `DepPod-library` macOS 10.6
+      - Generating module map file at `Pods/Target Support Files/DepPod-library/DepPod-library.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/DepPod-library/DepPod-library-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/DepPod-library/DepPod-library-dummy.m`
+    - Installing target `HeaderMappingsDirPod-framework` macOS 10.6
+      - Generating module map file at `Pods/Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-dummy.m`
+    - Installing target `HeaderMappingsDirPod-library` macOS 10.6
+      - Generating module map file at `Pods/Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-OtherSampleApp` macOS 10.14
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-dummy.m`
+    - Installing target `Pods-SampleApp` macOS 10.14
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods-OtherSampleApp` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 2 dependencies from the Podfile and 2 total pods installed.

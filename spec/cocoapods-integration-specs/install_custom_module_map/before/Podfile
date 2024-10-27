@@ -1,0 +1,4 @@
+target 'Example' do
+  use_frameworks!
+  pod 'BananaLib', :path => 'banana-lib/BananaLib.podspec'
+end

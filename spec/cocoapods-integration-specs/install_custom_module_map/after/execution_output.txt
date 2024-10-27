@@ -1,0 +1,62 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-Example`: (``)
+
+Fetching external sources
+-> Fetching podspec for `BananaLib` from `banana-lib/BananaLib.podspec`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A BananaLib
+
+Downloading dependencies
+
+-> Installing BananaLib (1.0)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `BananaLib` iOS 8.0
+      - Copying module map file to `Pods/Target Support Files/BananaLib/BananaLib.modulemap`
+      - Generating Info.plist file at `Pods/Target Support Files/BananaLib/BananaLib-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/BananaLib/BananaLib-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-Example` iOS 8.2
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-Example/Pods-Example-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-Example/Pods-Example.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-Example/Pods-Example-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-Example/Pods-Example-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Example.xcworkspace` for this project from now on.
+
+Integrating target `Pods-Example` (`Example.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
+
+[!] Automatically assigning platform `iOS` with version `8.2` on target `Example` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.

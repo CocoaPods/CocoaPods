@@ -1,0 +1,20 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod outdated --no-repo-update --verbose --no-ansi 2>&1
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-iOS App`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A Reachability
+  M AFNetworking
+  - PodTest
+
+The following pod updates are available:
+- AFNetworking 1.3.4 -> 3.2.1 (latest version 3.2.1)
+- Reachability 3.1.0 -> 3.1.0 (latest version 3.2)
+
+The following pods are deprecated:
+- AFNetworking (in favor of Alamofire)

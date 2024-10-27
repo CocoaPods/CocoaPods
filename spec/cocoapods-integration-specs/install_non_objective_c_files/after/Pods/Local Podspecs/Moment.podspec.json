@@ -1,0 +1,25 @@
+{
+  "name": "Moment",
+  "version": "0.0.1",
+  "summary": "Natural language date parser using Lex/Yacc/C.",
+  "homepage": "https://github.com/kmussel/Moment",
+  "license": "MIT",
+  "authors": "kmussel",
+  "source": {
+    "git": "https://github.com/kmussel/Moment.git",
+    "commit": "39f21fee0cef410c6d89c9fa94ff5638527ef7bc"
+  },
+  "source_files": [
+    "TimeParser.{c,h}",
+    "parseIt.ym",
+    "tokeIt.l"
+  ],
+  "requires_arc": false,
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  }
+}
