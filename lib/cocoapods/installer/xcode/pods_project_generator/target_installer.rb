@@ -97,6 +97,9 @@ module Pod
             # This interferes with our custom run script phases
             settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
 
+            # We aren't yet ready to support this for our targets
+            settings['ENABLE_MODULE_VERIFIER'] = 'NO'
+
             settings
           end
 
