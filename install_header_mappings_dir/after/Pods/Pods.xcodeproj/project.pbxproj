@@ -103,7 +103,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/DepPod-framework/DepPod-framework-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -121,6 +121,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_EMIT_LOC_STRINGS: 'YES'
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -135,7 +136,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/DepPod-framework/DepPod-framework-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -153,6 +154,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_EMIT_LOC_STRINGS: 'YES'
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -180,6 +182,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/DepPod-library/DepPod-library-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -194,6 +197,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: DepPod-library.debug.xcconfig
     - Release:
@@ -203,6 +207,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/DepPod-library/DepPod-library-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -217,6 +222,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: DepPod-library.release.xcconfig
@@ -272,7 +278,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -290,6 +296,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_EMIT_LOC_STRINGS: 'YES'
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VERSIONING_SYSTEM: apple-generic
           VERSION_INFO_PREFIX: ''
@@ -304,7 +311,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-framework/HeaderMappingsDirPod-framework-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -322,6 +329,7 @@ Targets:
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
           SWIFT_EMIT_LOC_STRINGS: 'YES'
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
           VERSIONING_SYSTEM: apple-generic
@@ -349,6 +357,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -363,6 +372,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: HeaderMappingsDirPod-library.debug.xcconfig
     - Release:
@@ -372,6 +382,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/HeaderMappingsDirPod-library/HeaderMappingsDirPod-library-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -386,6 +397,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: HeaderMappingsDirPod-library.release.xcconfig
@@ -414,7 +426,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GENERATE_INFOPLIST_FILE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-Info.plist
@@ -451,7 +463,7 @@ Targets:
           DYLIB_COMPATIBILITY_VERSION: '1'
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
-          ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GENERATE_INFOPLIST_FILE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-OtherSampleApp/Pods-OtherSampleApp-Info.plist
@@ -491,6 +503,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           MACH_O_TYPE: staticlib
@@ -510,6 +523,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           MACH_O_TYPE: staticlib
