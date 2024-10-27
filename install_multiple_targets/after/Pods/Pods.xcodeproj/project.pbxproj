@@ -67,6 +67,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -80,6 +81,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: JSONKit.debug.xcconfig
     - Release:
@@ -89,6 +91,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/JSONKit/JSONKit-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -102,6 +105,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: JSONKit.release.xcconfig
@@ -119,6 +123,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -137,6 +142,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -163,6 +169,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -181,6 +188,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -207,6 +215,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -225,6 +234,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '6.0'
           MACH_O_TYPE: staticlib
@@ -256,6 +266,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -269,6 +280,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
         Base Configuration: Reachability.debug.xcconfig
     - Release:
@@ -278,6 +290,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
           ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/Reachability/Reachability-prefix.pch
           GENERATE_INFOPLIST_FILE: 'NO'
@@ -291,6 +304,7 @@ Targets:
           SDKROOT: iphoneos
           SKIP_INSTALL: 'YES'
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
           TARGETED_DEVICE_FAMILY: '1,2'
           VALIDATE_PRODUCT: 'YES'
         Base Configuration: Reachability.release.xcconfig
