@@ -10,7 +10,7 @@ jobs:
         os: [ubuntu-20.04]
         include:
           - task: SPECS
-            os: macos-12
+            os: macos-latest
             ruby: system
           - task: EXAMPLES
             os: macos-14
