@@ -13,7 +13,7 @@ jobs:
             os: macos-12
             ruby: system
           - task: EXAMPLES
-            os: macos-latest
+            os: macos-14
             ruby: system
 
     name: ${{ matrix.task }} / ${{ matrix.os }} / Ruby ${{ matrix.ruby }}

@@ -226,6 +226,9 @@ module Pod
 
             settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = '$(inherited) '
 
+            # Added in Xcode 16. We manually generate our own Info.plist file so opt out.
+            settings['GENERATE_INFOPLIST_FILE'] = 'NO'
+
             if target.swift_version
               settings['SWIFT_VERSION'] = target.swift_version
             end
