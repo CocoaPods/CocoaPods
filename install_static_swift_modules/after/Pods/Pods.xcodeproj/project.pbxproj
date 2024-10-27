@@ -326,8 +326,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -358,8 +359,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -409,7 +411,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: CustomModuleMapPod-framework-iOS-Unit-Tests
@@ -425,7 +429,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-iOS/CustomModuleMapPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: CustomModuleMapPod-framework-iOS-Unit-Tests
@@ -467,8 +473,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -501,8 +508,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -550,7 +558,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: CustomModuleMapPod-framework-macOS-Unit-Tests
@@ -566,7 +576,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-framework-macOS/CustomModuleMapPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: CustomModuleMapPod-framework-macOS-Unit-Tests
@@ -596,7 +608,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Private/CustomModuleMapPod/CustomModuleMapPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -616,7 +630,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Private/CustomModuleMapPod/CustomModuleMapPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -648,7 +664,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -667,7 +685,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-iOS/CustomModuleMapPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -703,8 +723,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Private/CustomModuleMapPod/CustomModuleMapPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -725,8 +747,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Private/CustomModuleMapPod/CustomModuleMapPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -756,7 +780,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -775,7 +801,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/CustomModuleMapPod-library-macOS/CustomModuleMapPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -815,8 +843,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -849,8 +878,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -907,7 +937,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
@@ -924,7 +956,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-iOS/MixedPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: MixedPod-framework-iOS-Unit-Tests
@@ -965,8 +999,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -1001,8 +1036,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -1057,7 +1093,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
@@ -1074,7 +1112,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-framework-macOS/MixedPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: MixedPod-framework-macOS-Unit-Tests
@@ -1122,7 +1162,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Public/MixedPod/MixedPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1142,7 +1184,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Public/MixedPod/MixedPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1176,7 +1220,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -1196,7 +1242,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-library-iOS/MixedPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -1250,8 +1298,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Public/MixedPod/MixedPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1272,8 +1322,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Public/MixedPod/MixedPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1305,7 +1357,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -1325,7 +1379,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/MixedPod-library-macOS/MixedPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -1363,8 +1419,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -1395,8 +1452,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -1446,7 +1504,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: ObjCPod-framework-iOS-Unit-Tests
@@ -1462,7 +1522,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-iOS/ObjCPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: ObjCPod-framework-iOS-Unit-Tests
@@ -1501,8 +1563,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -1535,8 +1598,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -1584,7 +1648,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: ObjCPod-framework-macOS-Unit-Tests
@@ -1600,7 +1666,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-framework-macOS/ObjCPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: ObjCPod-framework-macOS-Unit-Tests
@@ -1627,7 +1695,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Public/ObjCPod/ObjCPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1647,7 +1717,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Public/ObjCPod/ObjCPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1679,7 +1751,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -1698,7 +1772,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-library-iOS/ObjCPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -1731,8 +1807,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Public/ObjCPod/ObjCPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1753,8 +1831,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Public/ObjCPod/ObjCPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -1784,7 +1864,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -1803,7 +1885,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/ObjCPod-library-macOS/ObjCPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -1840,6 +1924,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GENERATE_INFOPLIST_FILE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract
             Target-iOS Pods-Dynamic-Info.plist
@@ -1879,6 +1964,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GENERATE_INFOPLIST_FILE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Dynamic/Pods-Abstract
             Target-iOS Pods-Dynamic-Info.plist
@@ -1922,6 +2008,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           MACH_O_TYPE: staticlib
           MODULEMAP_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract
@@ -1941,6 +2028,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '10.0'
           MACH_O_TYPE: staticlib
           MODULEMAP_FILE: Target Support Files/Pods-Abstract Target-iOS Pods-Static/Pods-Abstract
@@ -1982,6 +2070,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GENERATE_INFOPLIST_FILE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract
             Target-macOS Pods-Dynamic-Info.plist
@@ -2022,6 +2111,7 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GENERATE_INFOPLIST_FILE: 'YES'
           INFOPLIST_FILE: Target Support Files/Pods-Abstract Target-macOS Pods-Dynamic/Pods-Abstract
             Target-macOS Pods-Dynamic-Info.plist
@@ -2064,6 +2154,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -2084,6 +2175,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           MACH_O_TYPE: staticlib
           MACOSX_DEPLOYMENT_TARGET: '10.10'
@@ -2121,8 +2213,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -2155,8 +2248,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
@@ -2208,7 +2302,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
@@ -2225,7 +2321,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-iOS/SwiftPod-framework-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           PRODUCT_NAME: SwiftPod-framework-iOS-Unit-Tests
@@ -2262,8 +2360,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -2298,8 +2397,9 @@ Targets:
           DYLIB_CURRENT_VERSION: '1'
           DYLIB_INSTALL_NAME_BASE: "@rpath"
           ENABLE_MODULE_VERIFIER: 'YES'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-prefix.pch
-          GENERATE_INFOPLIST_FILE: 'YES'
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Info.plist
           INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Frameworks"
           LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks"
@@ -2349,7 +2449,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
@@ -2366,7 +2468,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-framework-macOS/SwiftPod-framework-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           PRODUCT_NAME: SwiftPod-framework-macOS-Unit-Tests
@@ -2410,7 +2514,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Public/SwiftPod/SwiftPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -2430,7 +2536,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           MODULEMAP_FILE: Headers/Public/SwiftPod/SwiftPod-library-iOS.modulemap
           OTHER_LDFLAGS: ''
@@ -2463,7 +2571,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -2483,7 +2593,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-library-iOS/SwiftPod-library-iOS-Unit-Tests-Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: '9.0'
           OTHER_LIBTOOLFLAGS: ''
@@ -2533,8 +2645,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Public/SwiftPod/SwiftPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -2555,8 +2669,10 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           EXECUTABLE_PREFIX: lib
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           MODULEMAP_FILE: Headers/Public/SwiftPod/SwiftPod-library-macOS.modulemap
           OTHER_LDFLAGS: ''
@@ -2587,7 +2703,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
@@ -2607,7 +2725,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           INFOPLIST_FILE: Target Support Files/SwiftPod-library-macOS/SwiftPod-library-macOS-Unit-Tests-Info.plist
           MACOSX_DEPLOYMENT_TARGET: '10.10'
           OTHER_LIBTOOLFLAGS: ''
