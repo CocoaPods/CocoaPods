@@ -1,0 +1,37 @@
+PODS:
+  - AFNetworking (1.3.4)
+  - PodTest (1.0):
+    - PodTest/subspec_1 (= 1.0)
+    - PodTest/subspec_2 (= 1.0)
+  - PodTest/subspec_1 (1.0)
+  - PodTest/subspec_2 (1.0)
+  - Reachability (3.1.0)
+
+DEPENDENCIES:
+  - AFNetworking (~> 1.0)
+  - PodTest (from `PodTest-hg-source`)
+  - Reachability (from `Reachability`)
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+
+EXTERNAL SOURCES:
+  PodTest:
+    :hg: PodTest-hg-source
+  Reachability:
+    :path: Reachability
+
+CHECKOUT OPTIONS:
+  PodTest:
+    :hg: PodTest-hg-source
+    :revision: da4e9da48d5a2bf65bad68f5dec35d6ddf8825a1
+
+SPEC CHECKSUMS:
+  AFNetworking: cf8e418e16f0c9c7e5c3150d019a3c679d015018
+  PodTest: 671615d047bc2a9e8c271feb99b749411b66aed2
+  Reachability: b14c20321fa00f7f4600d8c9856fc57e71ef2ffe
+
+PODFILE CHECKSUM: 35e891e49460f8954b796b9025b7d9eb17f3dea7
+
+COCOAPODS: 1.6.0.beta.1

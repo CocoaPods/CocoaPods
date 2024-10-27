@@ -1,0 +1,8 @@
+use_frameworks!
+
+target 'SampleApp' do
+  pod 'SamplePodWithResources', :path => 'SamplePodWithResources'
+  target 'SampleAppTests' do
+    inherit! :search_paths
+  end
+end

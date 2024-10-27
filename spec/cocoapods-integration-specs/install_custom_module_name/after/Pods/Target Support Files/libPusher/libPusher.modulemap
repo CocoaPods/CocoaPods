@@ -1,0 +1,6 @@
+framework module Pusher {
+  umbrella header "libPusher-umbrella.h"
+
+  export *
+  module * { export * }
+}

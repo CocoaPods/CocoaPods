@@ -1,0 +1,6 @@
+framework module ObjCPod {
+  umbrella header "ObjCPod-framework-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

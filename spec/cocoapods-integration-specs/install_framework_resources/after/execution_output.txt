@@ -1,0 +1,73 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (``)
+  Using `ARCHS` setting to build architectures of target `Pods-SampleAppTests`: (``)
+
+Fetching external sources
+-> Fetching podspec for `SamplePodWithResources` from `SamplePodWithResources`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A SamplePodWithResources
+
+Downloading dependencies
+
+-> Installing SamplePodWithResources (0.1.0)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `SamplePodWithResources` macOS 10.0
+      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/ResourceBundle-SamplePodWithResources-SamplePodWithResources-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/SamplePodWithResources/SamplePodWithResources-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-SampleApp` macOS 10.10
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
+    - Installing target `Pods-SampleAppTests` macOS 10.10
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleAppTests/Pods-SampleAppTests-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+
+Integrating target `Pods-SampleAppTests` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.
+
+[!] Automatically assigning platform `macOS` with version `10.10` on target `SampleApp` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.

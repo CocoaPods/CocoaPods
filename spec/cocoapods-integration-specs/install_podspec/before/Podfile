@@ -1,0 +1,4 @@
+target 'SampleApp' do
+  platform :ios, '6.0'
+  pod 'Reachability', :podspec => 'Reachability.podspec'
+end

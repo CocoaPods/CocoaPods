@@ -1,0 +1,67 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SubSpecCircular`: (``)
+
+Fetching external sources
+-> Fetching podspec for `Pod1` from `./DeveloperPods/Pod1`
+-> Fetching podspec for `Pod2` from `./DeveloperPods/Pod2`
+-> Fetching podspec for `Pod3` from `./DeveloperPods/Pod3`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A Pod1
+  A Pod2
+  A Pod3
+
+Downloading dependencies
+
+-> Installing Pod1 (1.0)
+
+-> Installing Pod2 (1.0)
+
+-> Installing Pod3 (1.0)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `Pod1` iOS 8.0
+      - Generating dummy source at `Pods/Target Support Files/Pod1/Pod1-dummy.m`
+    - Installing target `Pod2` iOS 8.0
+      - Generating dummy source at `Pods/Target Support Files/Pod2/Pod2-dummy.m`
+    - Installing target `Pod3` iOS 8.0
+      - Generating dummy source at `Pods/Target Support Files/Pod3/Pod3-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-SubSpecCircular` iOS 9.3
+      - Generating dummy source at `Pods/Target Support Files/Pods-SubSpecCircular/Pods-SubSpecCircular-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SubSpecCircular.xcworkspace` for this project from now on.
+
+Integrating target `Pods-SubSpecCircular` (`SubSpecCircular.xcodeproj` project)
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 3 dependencies from the Podfile and 3 total pods installed.
+
+[!] Automatically assigning platform `iOS` with version `9.3` on target `SubSpecCircular` because no platform was specified. Please specify a platform for this target in your Podfile. See `https://guides.cocoapods.org/syntax/podfile.html#platform`.

@@ -1,0 +1,38 @@
+PODS:
+  - DepPod (1.0.0)
+  - HostedTestLib (0.1.0):
+    - TestLib
+  - HostedTestLib/App (0.1.0):
+    - TestLib
+  - HostedTestLib/UnitTests3 (0.1.0):
+    - HostedTestLib/App
+    - DepPod
+    - TestLib
+  - HostedTestLib/UnitTests4 (0.1.0):
+    - TestLib
+    - TestLib/App
+  - TestLib (0.1.0)
+  - TestLib/App (0.1.0)
+  - TestLib/UnitTests1 (0.1.0):
+    - DepPod
+  - TestLib/UnitTests2 (0.1.0)
+
+DEPENDENCIES:
+  - DepPod (from `DepPod`)
+  - HostedTestLib (from `HostedTestLib`)
+  - HostedTestLib/UnitTests3 (from `HostedTestLib`)
+  - HostedTestLib/UnitTests4 (from `HostedTestLib`)
+  - TestLib (from `TestLib`)
+  - TestLib/UnitTests1 (from `TestLib`)
+  - TestLib/UnitTests2 (from `TestLib`)
+
+EXTERNAL SOURCES:
+  DepPod:
+    :path: DepPod
+  HostedTestLib:
+    :path: HostedTestLib
+  TestLib:
+    :path: TestLib
+
+COCOAPODS: 1.7.0.beta.3
+

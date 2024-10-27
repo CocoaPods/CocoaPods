@@ -1,0 +1,12 @@
+PODS:
+  - Reachability (3.1.0)
+
+DEPENDENCIES:
+  - Reachability (from `Reachability`)
+
+EXTERNAL SOURCES:
+  Reachability:
+    :path: Reachability
+
+SPEC CHECKSUMS:
+  Reachability: 966f9d76e7659b89d7a45e36a3a424ec289b9b11

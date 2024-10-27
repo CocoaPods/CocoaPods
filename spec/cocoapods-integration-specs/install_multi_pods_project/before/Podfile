@@ -1,0 +1,8 @@
+install! 'cocoapods',
+	generate_multiple_pod_projects: true
+
+target 'iOS App' do
+  platform :ios
+  pod 'Reachability', :path => 'Reachability'
+  pod 'Reachability2', :path => 'Reachability2'
+end

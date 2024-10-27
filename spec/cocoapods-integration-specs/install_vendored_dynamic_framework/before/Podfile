@@ -1,0 +1,34 @@
+# The Realm podspecs use a `build.sh` build script that isn't strictly POSIX
+# compliant, so hack around that
+module EnsureBash
+  def prepare_command
+    command = super
+    command && <<-SH
+      rm -rf RealmSwift
+      mv RealmSwift-swift1.2 RealmSwift
+    SH
+  end
+
+  def version=(version)
+    version = "0.94.1" if version.strip.empty?
+    super(version)
+  end
+end
+
+Pod::Specification.send(:prepend, EnsureBash)
+
+module SilenceBackticks
+  def `(cmd)
+    return super unless cmd =~ /sh build\.sh/
+    super("#{cmd} 2>/dev/null")
+  end
+end
+
+(class << Pod; self; end).send(:prepend, SilenceBackticks)
+
+target 'SampleApp' do
+  platform :ios, '8.0'
+  use_frameworks!
+  pod 'Realm', :podspec => 'https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec'
+  pod 'RealmSwift', :git => 'https://github.com/realm/realm-cocoa.git', :tag => 'v0.94.1'
+end

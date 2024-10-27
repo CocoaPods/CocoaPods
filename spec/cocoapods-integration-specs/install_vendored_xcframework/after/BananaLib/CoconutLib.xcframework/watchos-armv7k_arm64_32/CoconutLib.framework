@@ -1,0 +1,8 @@
+BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework
+  BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/CoconutLib
+  BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/Headers
+    BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/Headers/Coconut.h
+    BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/Headers/CoconutLib.h
+  BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/Info.plist
+  BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/Modules
+    BananaLib/CoconutLib.xcframework/watchos-armv7k_arm64_32/CoconutLib.framework/Modules/module.modulemap

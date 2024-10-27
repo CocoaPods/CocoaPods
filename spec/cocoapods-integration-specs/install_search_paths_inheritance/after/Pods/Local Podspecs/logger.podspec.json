@@ -1,0 +1,41 @@
+{
+  "name": "logger",
+  "version": "0.0.1",
+  "summary": "summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.",
+  "description": "not emptynot emptynot emptynot emptynot emptynot empty",
+  "homepage": "http://blalblalba/testutils",
+  "license": "MIT",
+  "authors": {
+    "Felipe Cypriano": "felipe@thumbtack.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "default_subspecs": "Core",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  },
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": "Classes/**/*.{h,m}",
+      "dependencies": {
+        "CocoaLumberjack": [
+          "3.0.0"
+        ]
+      }
+    },
+    {
+      "name": "Crashlytics",
+      "dependencies": {
+        "CrashlyticsRecorder": [
+
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+framework module sharedlib {
+  umbrella header "sharedlib-Core-umbrella.h"
+
+  export *
+  module * { export * }
+}

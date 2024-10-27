@@ -1,0 +1,59 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-iOS App`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `Test` from `https://raw.githubusercontent.com/luisdelarosa/AFRaptureXMLRequestOperation/9800263d87304d0cda5e8b6afbe702e1dab55392/Test.spec`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A Test
+
+Downloading dependencies
+
+-> Installing Test (0.0.1)
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git PROJECT/Pods/Test --template= --single-branch --depth 1
+
+  $ GIT_BIN -C PROJECT/Pods/Test rev-parse HEAD
+  919903db28535c3f387c4bbaa6a3feae4428e993
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `Test` iOS 5.0
+      - Generating dummy source at `Pods/Target Support Files/Test/Test-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-iOS App` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-iOS App/Pods-iOS App-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.

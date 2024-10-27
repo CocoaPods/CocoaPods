@@ -1,0 +1,4 @@
+target 'iOS App' do
+  platform :ios
+  pod 'PodTest', :hg => 'PodTest-hg-source'
+end

@@ -1,0 +1,10 @@
+target 'SubSpecCircular' do
+
+  # Pods for SubSpecCircular
+
+  pod "Pod3/s3", :path => "./DeveloperPods/Pod3"
+  pod "Pod1", :path => "./DeveloperPods/Pod1"
+  pod "Pod2", :path => "./DeveloperPods/Pod2"
+
+  project "./SubSpecCircular.xcodeproj"
+end
