@@ -44,6 +44,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           MACH_O_TYPE: staticlib
           OTHER_LDFLAGS: ''
@@ -62,6 +63,7 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           MACH_O_TYPE: staticlib
           OTHER_LDFLAGS: ''
@@ -97,7 +99,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/PodTest/PodTest-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
@@ -117,7 +121,9 @@ Targets:
           CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
           CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
           CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
           GCC_PREFIX_HEADER: Target Support Files/PodTest/PodTest-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
           IPHONEOS_DEPLOYMENT_TARGET: '4.3'
           OTHER_LDFLAGS: ''
           OTHER_LIBTOOLFLAGS: ''
