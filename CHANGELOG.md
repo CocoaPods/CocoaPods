@@ -11,10 +11,18 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * Add Support for Xcode 14.3's ENABLE_MODULE_VERIFIER.  
   [sharplet](https://github.com/sharplet)
   [#12390](https://github.com/CocoaPods/CocoaPods/pull/12390)  
+* Xcode 16 support.
+  * Bump minimum `xcodeproj` to `1.26.0`
+  * Update project generator to set `GENERATE_INFOPLIST_FILE = NO` on pod targets
+  * Update project generator to set `ENABLE_USER_SCRIPT_SANDBOXING = NO` = NO` on pod targets to fix build failures with vendored frameworks.  
+  * Update project geneerator to set `SWIFT_INSTALL_OBJC_HEADER = YES` on pod targets to enable consuming Swift pods from Objective-C.
+
+[Eric Amorde](https://github.com/amorde)
+[#12656](https://github.com/CocoaPods/CocoaPods/pull/12656)
 
 ##### Bug Fixes
 
-* Fix pod install issue when git's `core.fsmonitor` feature is enabled (again)
+* Fix pod install issue when git's `core.fsmonitor` feature is enabled (again)  
   [Justin Martin](https://github.com/justinseanmartin)
   [#12349](https://github.com/CocoaPods/CocoaPods/issues/12349)
 

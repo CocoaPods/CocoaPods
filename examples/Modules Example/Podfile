@@ -34,3 +34,15 @@ abstract_target 'Abstract Target' do
         end
     end
 end
+
+post_install do |installer|
+  installer.generated_projects.each do |project|
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+          config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = DEFAULT_MACOS_DEPLOYMENT_TARGET
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = DEFAULT_IOS_DEPLOYMENT_TARGET
+      end
+    end
+  end
+end
+

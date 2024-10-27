@@ -13,7 +13,7 @@ jobs:
             os: macos-12
             ruby: system
           - task: EXAMPLES
-            os: macos-latest
+            os: macos-14
             ruby: system
 
     name: ${{ matrix.task }} / ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
@@ -60,7 +60,7 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         if: ${{ matrix.task == 'EXAMPLES' }}
         with:
-          xcode-version: 15.1
+          xcode-version: 15.4
 
       - name: Run Tests
         run: bundle exec rake spec:all

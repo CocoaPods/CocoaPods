@@ -226,6 +226,11 @@ module Pod
 
             settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = '$(inherited) '
 
+            # Added in Xcode 16. We manually generate our own Info.plist file so opt out.
+            settings['GENERATE_INFOPLIST_FILE'] = 'NO'
+            # Added in Xcode 16. For Swift-only Pods to be visible to Objective-C we to enable this.
+            settings['SWIFT_INSTALL_OBJC_HEADER'] = 'YES'
+
             if target.swift_version
               settings['SWIFT_VERSION'] = target.swift_version
             end
@@ -1102,6 +1107,9 @@ module Pod
             native_target = project.new_aggregate_target(target.label, [], target.platform.name, deployment_target)
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)
+            end
+            native_target.build_configurations.each do |configuration|
+              configuration.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
             end
             unless target.archs.empty?
               native_target.build_configurations.each do |configuration|
