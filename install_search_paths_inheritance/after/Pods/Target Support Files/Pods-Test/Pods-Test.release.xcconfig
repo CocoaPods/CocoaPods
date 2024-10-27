@@ -4,6 +4,7 @@ GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CocoaLumberjack/CocoaLumberjack.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/asserts/asserts.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/logger/logger.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/sharedlib-Core/sharedlib.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/sharedlib-Testing/sharedlib.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/testkit/testkit.framework/Headers"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 OTHER_LDFLAGS = $(inherited) -framework "CocoaLumberjack" -framework "XCTest" -framework "asserts" -framework "logger" -framework "sharedlib" -framework "testkit"
+OTHER_MODULE_VERIFIER_FLAGS = $(inherited) "-F${PODS_CONFIGURATION_BUILD_DIR}/CocoaLumberjack" "-F${PODS_CONFIGURATION_BUILD_DIR}/asserts" "-F${PODS_CONFIGURATION_BUILD_DIR}/logger" "-F${PODS_CONFIGURATION_BUILD_DIR}/sharedlib-Testing" "-F${PODS_CONFIGURATION_BUILD_DIR}/testkit"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
