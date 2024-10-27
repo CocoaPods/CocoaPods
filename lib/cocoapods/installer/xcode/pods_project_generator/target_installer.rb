@@ -94,6 +94,9 @@ module Pod
               settings.merge!('OTHER_LDFLAGS' => '', 'OTHER_LIBTOOLFLAGS' => '')
             end
 
+            # This interferes with our custom run script phases
+            settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+
             settings
           end
 

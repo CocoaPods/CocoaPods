@@ -1106,6 +1106,9 @@ module Pod
             target.user_build_configurations.each do |bc_name, type|
               native_target.add_build_configuration(bc_name, type)
             end
+            native_target.build_configurations.each do |configuration|
+              configuration.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+            end
             unless target.archs.empty?
               native_target.build_configurations.each do |configuration|
                 configuration.build_settings['ARCHS'] = target.archs
