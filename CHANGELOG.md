@@ -15,6 +15,19 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 * None.  
 
 
+## 1.16.1 (2024-10-29)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix an issue breaking `pod lib lint` / `pod spec lint` due to new `ENABLE_USER_SCRIPT_SANDBOXING` setting.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12664](https://github.com/CocoaPods/CocoaPods/issues/12664)
+
+
 ## 1.16.0 (2024-10-29)
 
 ##### Enhancements
