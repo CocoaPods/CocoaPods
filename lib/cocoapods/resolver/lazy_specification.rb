@@ -56,10 +56,12 @@ module Pod
         @all_specifications ||= {}
         @all_specifications[requirement] ||= begin
           sources_by_version = {}
+          satisfactory_versions_by_source = {}
           versions_by_source.each do |source, versions|
             versions.each do |v|
               next unless requirement.satisfied_by?(v)
 
+              (satisfactory_versions_by_source[source] ||= []) << v
               (sources_by_version[v] ||= []) << source
             end
           end
@@ -75,11 +77,11 @@ module Pod
             end
           end
 
-          # sort versions from high to low
-          sources_by_version.sort_by(&:first).flat_map do |version, sources|
-            # within each version, we want the prefered (first-specified) source
-            # to be the _last_ one
-            sources.reverse_each.map { |source| LazySpecification.new(name, version, source) }
+          # we want the prefered (first-specified) source
+          # to be the _last_ one
+          satisfactory_versions_by_source.reverse_each.flat_map do |source, versions|
+            # sort versions from low to high within each source
+            versions.sort.each.map { |v| LazySpecification.new(name, v, source) }
           end
         end
       end
