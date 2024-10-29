@@ -8,6 +8,17 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.16.0 (2024-10-29)
+
+##### Enhancements
+
 * Add Support for Xcode 14.3's ENABLE_MODULE_VERIFIER.  
   [sharplet](https://github.com/sharplet)
   [#12390](https://github.com/CocoaPods/CocoaPods/pull/12390)
