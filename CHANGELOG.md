@@ -12,8 +12,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
-
+* Fix Concurrent building occasionally cleans the Pods cache directory  
+  [fabcz](https://github.com/fabcz)
+  [#11827](https://github.com/CocoaPods/CocoaPods/pull/11827)
+  [#11826](https://github.com/CocoaPods/CocoaPods/issues/11826)
 
 ## 1.16.1 (2024-10-29)
 
@@ -560,7 +562,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 * Fix missing `-ObjC` for static XCFrameworks - take 2  
   [Paul Beusterien](https://github.com/paulb777)
-  [#10459](https://github.com/CocoaPods/CocoaPods/issuess/10459)
+  [#10459](https://github.com/CocoaPods/CocoaPods/issues/10459)
 
 * Change URL validation failure to a note  
   [Paul Beusterien](https://github.com/paulb777)
