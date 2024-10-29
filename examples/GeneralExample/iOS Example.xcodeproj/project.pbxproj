@@ -174,10 +174,18 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/ResourceAssetsExample/ResourceAssetsExample.framework",
+				"${BUILT_PRODUCTS_DIR}/ResourceExample/ResourceExample.framework",
+				"${BUILT_PRODUCTS_DIR}/ResourcesBundleExample/ResourcesBundleExample.framework",
+				"${BUILT_PRODUCTS_DIR}/ResourcesExample/ResourcesExample.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResourceAssetsExample.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResourceExample.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResourcesBundleExample.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResourcesExample.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

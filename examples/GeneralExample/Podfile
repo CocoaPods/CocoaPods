@@ -10,7 +10,13 @@ project 'iOS Example.xcodeproj'
 target 'iOS Example' do
   platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
   use_frameworks!
+  pod 'Alamofire', '5.9.1'
   pod 'AppCenter', '4.2.0'
+  
+  pod 'ResourceExample', :path =>  'Example Pods'
+  pod 'ResourcesExample', :path =>  'Example Pods'
+  pod 'ResourceAssetsExample', :path =>  'Example Pods'
+  pod 'ResourcesBundleExample', :path =>  'Example Pods'
 end
 
 post_install do |installer|
@@ -22,4 +28,3 @@ post_install do |installer|
     end
   end
 end
-
