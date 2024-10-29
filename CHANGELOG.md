@@ -27,7 +27,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   * Bump minimum `xcodeproj` to `1.26.0`
   * Update project generator to set `GENERATE_INFOPLIST_FILE = NO` on pod targets
   * Update project generator to set `ENABLE_USER_SCRIPT_SANDBOXING = NO` = NO` on pod targets to fix build failures with vendored frameworks.  
-  * Update project geneerator to set `SWIFT_INSTALL_OBJC_HEADER = YES` on pod targets to enable consuming Swift pods from Objective-C.
+  * Update project generator to set `SWIFT_INSTALL_OBJC_HEADER = YES` on pod targets to enable consuming Swift pods from Objective-C.
 
 [Eric Amorde](https://github.com/amorde)
 [#12656](https://github.com/CocoaPods/CocoaPods/pull/12656)
