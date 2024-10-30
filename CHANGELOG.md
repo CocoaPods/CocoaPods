@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* An error message has been added to the '**Embed Pods Frameworks**' script, when the app target's `ENABLE_USER_SCRIPT_SANDBOXING` is set to `YES`.  
+  [CrazyFanFan](https://github.com/CrazyFanFan)
+  [#12235](https://github.com/CocoaPods/CocoaPods/pull/12235)
 
 ##### Bug Fixes
 
