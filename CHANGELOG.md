@@ -12,7 +12,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
-* None.  
+* Bump min xcodeproj to 1.27.0 to include revert of breaking build setting changes.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12675](https://github.com/CocoaPods/CocoaPods/pull/12675)
 
 
 ## 1.16.1 (2024-10-29)
