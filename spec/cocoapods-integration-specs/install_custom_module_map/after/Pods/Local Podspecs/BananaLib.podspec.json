@@ -1,0 +1,32 @@
+{
+  "name": "BananaLib",
+  "version": "1.0",
+  "authors": [
+    "Banana Corp",
+    {
+      "Monkey Boy": "monkey@banana-corp.local"
+    }
+  ],
+  "homepage": "http://banana-corp.local/banana-lib.html",
+  "summary": "Chunky bananas!",
+  "description": "Full of chunky bananas.",
+  "source": {
+    "git": "http://banana-corp.local/banana-lib.git",
+    "tag": "v1.0"
+  },
+  "license": {
+    "type": "MIT",
+    "text": "Permission is hereby granted ..."
+  },
+  "source_files": "Classes/*.{h,m}",
+  "public_header_files": "Classes/Banana.h",
+  "private_header_files": "Classes/BananaPrivate.h",
+  "module_map": "BananaLib.modulemap",
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  }
+}

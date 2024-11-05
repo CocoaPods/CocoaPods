@@ -1,0 +1,1 @@
+extern void CMM_doThing(void);

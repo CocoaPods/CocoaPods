@@ -1,0 +1,19 @@
+PODS:
+  - PodTest/subspec_1 (1.0)
+  - PodTest/subspec_2 (1.0)
+
+DEPENDENCIES:
+  - PodTest/subspec_1 (from `PodTest-hg-source`)
+  - PodTest/subspec_2 (from `PodTest-hg-source`)
+
+EXTERNAL SOURCES:
+  PodTest:
+    :hg: PodTest-hg-source
+
+CHECKOUT OPTIONS:
+  PodTest:
+    :hg: PodTest-hg-source
+    :revision: da4e9da48d5a2bf65bad68f5dec35d6ddf8825a1
+
+SPEC CHECKSUMS:
+  PodTest: cf3376f849b253cf9bcd0151681de4bd03d5401a

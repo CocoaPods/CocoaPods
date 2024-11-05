@@ -257,10 +257,38 @@ begin
       end
     end
 
-    desc 'Build all examples'
-    task :build do
-      Bundler.require 'xcodeproj', :development
+    desc 'pod install all examples'
+    task :pod_install do
       Dir['examples/*'].sort.each do |dir|
+        next unless File.directory?(dir)
+        Dir.chdir(dir) do
+          puts "Example: #{dir}"
+
+          puts '    Installing Pods'
+          # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
+          # TODO: The sandbox is blocking local git repos making bundler crash
+          pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
+
+          execute_command 'rm -rf Pods'
+          execute_command "#{pod_command} install --verbose --no-repo-update"
+        end
+      end
+    end
+
+    desc 'Build all examples'
+    task :build, [:pattern] do |_t, args|
+      Bundler.require 'xcodeproj', :development
+      pattern = if (p = args[:pattern])
+                  /#{p}/
+                else
+                  /.*/
+                end
+      Dir['examples/*'].sort.each do |dir|
+        next unless File.directory?(dir)
+        unless dir.match?(pattern)
+          puts "Skipping #{dir}"
+          next
+        end
         Dir.chdir(dir) do
           puts "Example: #{dir}"
 
@@ -293,10 +321,10 @@ begin
             when :osx
               execute_command(*xcodebuild_args)
             when :ios
-              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', '-destination', 'platform=iOS Simulator,name=iPhone 11 Pro']
+              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', 'CODE_SIGNING_ALLOWED=NO', '-destination', 'platform=iOS Simulator,name=iPhone 14 Pro']
               execute_command(*xcodebuild_args)
             when :watchos
-              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', '-destination', 'platform=watchOS Simulator,name=Apple Watch Series 5 - 40mm']
+              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', 'CODE_SIGNING_ALLOWED=NO', '-destination', 'platform=watchOS Simulator,name=Apple Watch Series 5 - 40mm']
             else
               raise "Unknown platform #{platform}"
             end

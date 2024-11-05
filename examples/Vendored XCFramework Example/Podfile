@@ -8,40 +8,42 @@
 #   mv build/CoconutLib.dSYMs ../BananaLib
 #
 
+require_relative '../defaults.rb'
+
 project 'VendoredXCFrameworkExample.xcodeproj'
 
 workspace 'Examples'
 
 target 'VendoredXCFrameworkExample' do
-  platform :ios, '13.0'
+  platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
   use_frameworks!(:linkage => :dynamic)
 
   pod 'BananaLib/DynamicFramework', path: 'BananaLib'
 end
 
 target 'AmazingMacApp' do
-  platform :osx, '10.12'
+  platform :osx, DEFAULT_MACOS_DEPLOYMENT_TARGET
   use_frameworks!(:linkage => :static)
 
   pod 'BananaLib/StaticFramework', path: 'BananaLib'
 end
 
 target 'AwesomeWatchApp' do
-  platform :watchos, '6.0'
+  platform :watchos, DEFAULT_WATCHOS_DEPLOYMENT_TARGET
   use_frameworks!
 
   pod 'BananaLib', path: 'BananaLib'
 end
 
 target 'AwesomeWatchApp Extension' do
-  platform :watchos, '6.0'
+  platform :watchos, DEFAULT_WATCHOS_DEPLOYMENT_TARGET
   use_frameworks!
 
   pod 'BananaLib', path: 'BananaLib'
 end
 
 target 'AppUsingStaticLibraries' do
-  platform :ios, '13.0'
+  platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
   
   pod 'BananaLib/StaticLibrary', path: 'BananaLib'
 end

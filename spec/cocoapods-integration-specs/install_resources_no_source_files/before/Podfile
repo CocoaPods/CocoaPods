@@ -1,0 +1,3 @@
+target 'SampleApp' do
+  pod 'res', :path => 'res'
+end

@@ -1,0 +1,16 @@
+platform :ios, '6.0'
+pod 'Reachability', '3.1.0'
+
+target 'SampleApp' # Should inherit Reachability
+
+pre_install do |installer|
+  memo = "PODS:#{installer.pod_targets.map(&:root_spec) * ', '} TARGETS:#{installer.aggregate_targets.map(&:name) * ', '}"
+  File.open(installer.config.project_pods_root + '../pre_install.txt', 'w') { |f| f.puts memo }
+end
+
+post_install do |installer|
+  target = installer.pods_project.targets.first
+  target.build_configurations.each do |config|
+    config.build_settings['GCC_ENABLE_OBJC_GC'] = 'supported'
+  end
+end

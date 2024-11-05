@@ -1,0 +1,114 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-App`: (``)
+  Using `ARCHS` setting to build architectures of target `Pods-Test`: (``)
+
+Fetching external sources
+-> Fetching podspec for `asserts` from `asserts`
+-> Fetching podspec for `logger` from `logger`
+-> Fetching podspec for `sharedlib` from `sharedlib`
+-> Fetching podspec for `testkit` from `testkit`
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A CocoaLumberjack
+  A asserts
+  A logger
+  A sharedlib
+  A testkit
+
+Downloading dependencies
+
+-> Installing CocoaLumberjack (3.0.0)
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/CocoaLumberjack/CocoaLumberjack.git PROJECT/Pods/CocoaLumberjack --template= --single-branch --depth 1 --branch 3.0.0
+
+-> Installing asserts (0.0.1)
+
+-> Installing logger (0.0.1)
+
+-> Installing sharedlib (0.0.1)
+
+-> Installing testkit (0.0.1)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Adding development pod helper files
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `CocoaLumberjack` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/CocoaLumberjack/CocoaLumberjack-dummy.m`
+    - Installing target `asserts` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/asserts/asserts.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/asserts/asserts-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/asserts/asserts-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/asserts/asserts-dummy.m`
+    - Installing target `logger` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/logger/logger.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/logger/logger-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/logger/logger-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/logger/logger-dummy.m`
+    - Installing target `sharedlib-Core` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/sharedlib-Core/sharedlib-Core.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/sharedlib-Core/sharedlib-Core-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/sharedlib-Core/sharedlib-Core-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/sharedlib-Core/sharedlib-Core-dummy.m`
+    - Installing target `sharedlib-Testing` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/sharedlib-Testing/sharedlib-Testing.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/sharedlib-Testing/sharedlib-Testing-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/sharedlib-Testing/sharedlib-Testing-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/sharedlib-Testing/sharedlib-Testing-dummy.m`
+    - Installing target `testkit` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/testkit/testkit.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/testkit/testkit-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/testkit/testkit-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/testkit/testkit-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-App` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-App/Pods-App-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-App/Pods-App.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-App/Pods-App-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-App/Pods-App-dummy.m`
+    - Installing target `Pods-Test` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-Test/Pods-Test-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-Test/Pods-Test.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-Test/Pods-Test-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-Test/Pods-Test-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `App.xcworkspace` for this project from now on.
+
+Integrating target `Pods-App` (`App.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+
+Integrating target `Pods-Test` (`App.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 5 dependencies from the Podfile and 5 total pods installed.

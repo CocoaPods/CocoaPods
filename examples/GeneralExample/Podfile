@@ -1,0 +1,30 @@
+require_relative '../defaults.rb'
+
+if (repo = ENV['COCOAPODS_SPEC_REPO'])
+    source "#{repo}"
+end
+
+workspace 'Examples.xcworkspace'
+project 'iOS Example.xcodeproj'
+
+target 'iOS Example' do
+  platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
+  use_frameworks!
+  pod 'Alamofire', '5.9.1'
+  pod 'AppCenter', '4.2.0'
+  
+  pod 'ResourceExample', :path =>  'Example Pods'
+  pod 'ResourcesExample', :path =>  'Example Pods'
+  pod 'ResourceAssetsExample', :path =>  'Example Pods'
+  pod 'ResourcesBundleExample', :path =>  'Example Pods'
+end
+
+post_install do |installer|
+  installer.generated_projects.each do |project|
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = DEFAULT_IOS_DEPLOYMENT_TARGET
+      end
+    end
+  end
+end

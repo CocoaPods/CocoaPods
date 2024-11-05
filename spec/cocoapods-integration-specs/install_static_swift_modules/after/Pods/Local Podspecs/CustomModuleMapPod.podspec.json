@@ -1,0 +1,29 @@
+{
+  "name": "CustomModuleMapPod",
+  "version": "0.0.1",
+  "summary": "A long description of CustomModuleMapPod.",
+  "source": {
+    "git": "http://foo/CustomModuleMapPod.git",
+    "tag": "0.0.1"
+  },
+  "authors": [
+    "me"
+  ],
+  "homepage": "http://example.com",
+  "license": "proprietary",
+  "source_files": "src/**/*.{h,m,swift}",
+  "private_header_files": "src/Private/*.h",
+  "module_map": "src/CustomModuleMapPod.modulemap",
+  "platforms": {
+    "ios": "9.0",
+    "osx": "10.10"
+  },
+  "testspecs": [
+    {
+      "name": "Tests",
+      "test_type": "unit",
+      "source_files": "test/**/*.{h,m,swift}",
+      "frameworks": "XCTest"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ module Pod
             @target.stubs(:requires_frameworks?).returns(true)
             @target.stubs(:uses_swift?).returns(true)
             @installer.send(:add_target).resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').should == {
-              'Release' => '-O',
+              'Release' => nil,
               'Debug' => '-Onone',
               'Test' => nil,
               'AppStore' => nil,

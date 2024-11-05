@@ -1,0 +1,78 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Finding Podfile changes
+  - AFNetworking
+  - RKValueTransformers
+  - SEGModules
+
+Fetching external sources
+-> Pre-downloading: `AFNetworking` from `https://github.com/AFNetworking/AFNetworking.git`, commit `ba7b6e541fd18bdf48da6d4845670e3e6b990637`
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/AFNetworking/AFNetworking.git PROJECT/Pods/AFNetworking --template=
+
+   $ GIT_BIN -C PROJECT/Pods/AFNetworking checkout --quiet ba7b6e541fd18bdf48da6d4845670e3e6b990637
+-> Pre-downloading: `RKValueTransformers` from `https://github.com/RestKit/RKValueTransformers`, commit `d76a00894b8c3c9331e36d91ab952681426a49df`
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/RestKit/RKValueTransformers PROJECT/Pods/RKValueTransformers --template=
+
+   $ GIT_BIN -C PROJECT/Pods/RKValueTransformers checkout --quiet d76a00894b8c3c9331e36d91ab952681426a49df
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A AFNetworking
+  M RKValueTransformers
+  - SEGModules
+
+Downloading dependencies
+
+-> Installing AFNetworking (2.4.1)
+
+-> Installing RKValueTransformers 1.1.0
+
+-> Using SEGModules (0.1.0)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `AFNetworking` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/AFNetworking/AFNetworking-dummy.m`
+    - Installing target `RKValueTransformers` iOS 5.1.1
+      - Generating dummy source at `Pods/Target Support Files/RKValueTransformers/RKValueTransformers-dummy.m`
+    - Installing target `SEGModules` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/SEGModules/SEGModules-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-SampleApp` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Removing old product reference `libPods.a` from project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 3 dependencies from the Podfile and 3 total pods installed.

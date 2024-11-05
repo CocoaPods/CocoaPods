@@ -1,0 +1,12 @@
+PODS:
+  - SamplePodWithResources (0.1.0)
+
+DEPENDENCIES:
+  - SamplePodWithResources (from `SamplePodWithResources`)
+
+EXTERNAL SOURCES:
+  SamplePodWithResources:
+    :path: SamplePodWithResources
+
+SPEC CHECKSUMS:
+  SamplePodWithResources: fa04b098017de1f8d45a1d8a76c691b1a1c06113

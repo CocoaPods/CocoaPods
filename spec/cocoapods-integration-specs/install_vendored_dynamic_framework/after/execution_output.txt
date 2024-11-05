@@ -1,0 +1,1027 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --no-verbose --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Fetching podspec for `Realm` from `https://gist.githubusercontent.com/segiddins/3a6d67837e0f84ea2f3f/raw/6867e04999d2e947fdefe7c9ff065c29815735cd/Realm.podspec`
+-> Pre-downloading: `RealmSwift` from `https://github.com/realm/realm-cocoa.git`, tag `v0.94.1`
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/realm/realm-cocoa.git PROJECT/Pods/RealmSwift --template= --single-branch --depth 1 --branch v0.94.1
+
+ > Running prepare command
+   $ BASH_BIN -c  set -e rm -rf RealmSwift mv RealmSwift-swift1.2 RealmSwift
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A Realm
+  A RealmSwift
+
+Downloading dependencies
+
+-> Installing Realm (0.94.1)
+ > Http download
+   $ CURL_BIN -f -L -o PROJECT/Pods/Realm/file.zip https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip --create-dirs --netrc-optional --retry 2 -A 'CocoaPods/<#Pod::VERSION#> cocoapods-downloader/<#Pod::Downloader::VERSION#>'
+
+   $ /usr/bin/unzip PROJECT/Pods/Realm/file.zip -d PROJECT/Pods/Realm
+   Archive:  PROJECT/Pods/Realm/file.zip
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/docs.webloc
+      creating: PROJECT/Pods/Realm/__MACOSX/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._docs.webloc
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Backlink/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Backlink
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/ViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Encryption/._ViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Encryption
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._AppDelegate.swift
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/AppIcon.appiconset/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/._AppIcon.appiconset
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/LaunchImage.launchimage/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Images.xcassets/._LaunchImage.launchimage
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._Images.xcassets
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/GroupedTableView/._TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._GroupedTableView
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/default-v0.realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._default-v0.realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/default-v1.realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._default-v1.realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/default-v2.realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._default-v2.realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Migration/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Migration
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/project.pbxproj
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/._project.pbxproj
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Backlink.xcscheme
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Backlink.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Encryption.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Encryption.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/GroupedTableView.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._GroupedTableView.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Migration.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Migration.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/Simple.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Simple.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/TableView.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/xcschemes/._TableView.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/xcshareddata/._xcschemes
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/RealmExamples.xcodeproj/._xcshareddata
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._RealmExamples.xcodeproj
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/Simple/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._Simple
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._AppDelegate.swift
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/AppIcon.appiconset/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/._AppIcon.appiconset
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/LaunchImage.launchimage/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Images.xcassets/._LaunchImage.launchimage
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._Images.xcassets
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/TableView/._TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-1.2/._TableView
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/._swift-1.2
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Backlink/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Backlink
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/ViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Encryption/._ViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Encryption
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._AppDelegate.swift
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/AppIcon.appiconset/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/._AppIcon.appiconset
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/LaunchImage.launchimage/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Images.xcassets/._LaunchImage.launchimage
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._Images.xcassets
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/GroupedTableView/._TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._GroupedTableView
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/default-v0.realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._default-v0.realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/default-v1.realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._default-v1.realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/default-v2.realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._default-v2.realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Migration/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Migration
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/project.pbxproj
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/._project.pbxproj
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Backlink.xcscheme
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Backlink.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Encryption.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Encryption.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/GroupedTableView.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._GroupedTableView.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Migration.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Migration.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/Simple.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._Simple.xcscheme
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/TableView.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/xcschemes/._TableView.xcscheme
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/xcshareddata/._xcschemes
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/RealmExamples.xcodeproj/._xcshareddata
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._RealmExamples.xcodeproj
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/._AppDelegate.swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/Simple/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._Simple
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/AppDelegate.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._AppDelegate.swift
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/AppIcon.appiconset/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/._AppIcon.appiconset
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/Contents.json
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/LaunchImage.launchimage/._Contents.json
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Images.xcassets/._LaunchImage.launchimage
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._Images.xcassets
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/TableView/._TableViewController.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/swift-2.0/._TableView
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/ios/._swift-2.0
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/._ios
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/examples/README.md
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/examples/._README.md
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._examples
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/CodeResources
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/_CodeSignature/._CodeResources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/.__CodeSignature
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/Realm.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._Realm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMArray.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMArray.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMCollection.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMCollection.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMConstants.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMConstants.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMDefines.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMDefines.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMMigration.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMMigration.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMObject.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMObject.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMProperty.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMProperty.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMRealm.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMRealm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMResults.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMResults.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Headers/._RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Headers
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Info.plist
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Modules/._module.modulemap
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Modules
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMArray_Private.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMArray_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMListBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMListBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/PrivateHeaders/._RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._PrivateHeaders
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._Realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/strip-frameworks.sh
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/Realm.framework/._strip-frameworks.sh
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/._Realm.framework
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/CodeResources
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/_CodeSignature/._CodeResources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/.__CodeSignature
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/RealmSwift-Swift.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Headers/._RealmSwift-Swift.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._Headers
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._Info.plist
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/._module.modulemap
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftdoc
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/Modules/._RealmSwift.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._Modules
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/RealmSwift.framework/._RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-1.2/._RealmSwift.framework
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/._swift-1.2
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/CodeResources
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/_CodeSignature/._CodeResources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/.__CodeSignature
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/Realm.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._Realm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMArray.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMArray.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMCollection.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMCollection.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMConstants.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMConstants.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMDefines.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMDefines.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMMigration.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMMigration.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMObject.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMObject.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMProperty.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMProperty.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMRealm.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMRealm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMResults.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMResults.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Headers/._RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Headers
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Info.plist
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Modules/._module.modulemap
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Modules
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMArray_Private.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMArray_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMListBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMListBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/PrivateHeaders/._RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._PrivateHeaders
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._Realm
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/strip-frameworks.sh
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/Realm.framework/._strip-frameworks.sh
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/._Realm.framework
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/CodeResources
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/_CodeSignature/._CodeResources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/.__CodeSignature
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/RealmSwift-Swift.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Headers/._RealmSwift-Swift.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._Headers
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._Info.plist
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/._module.modulemap
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftdoc
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm64.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/Modules/._RealmSwift.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._Modules
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/RealmSwift.framework/._RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/swift-2.0/._RealmSwift.framework
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/ios/._swift-2.0
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._ios
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/LICENSE.txt
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._LICENSE.txt
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Headers  -> Versions/Current/Headers
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Headers
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Modules  -> Versions/Current/Modules
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Modules
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/PrivateHeaders  -> Versions/Current/PrivateHeaders
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._PrivateHeaders
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Realm  -> Versions/Current/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Realm
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Resources  -> Versions/Current/Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Resources
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/Realm.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._Realm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMArray.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMArray.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMCollection.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMCollection.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMConstants.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMConstants.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMDefines.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMDefines.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMMigration.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMMigration.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMObject.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMObject.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMProperty.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMProperty.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMRealm.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMRealm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMResults.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMResults.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Headers/._RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Headers
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Modules/._module.modulemap
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Modules
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMArray_Private.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMArray_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMListBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMListBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/PrivateHeaders/._RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._PrivateHeaders
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Realm
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/CHANGELOG.md
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/._CHANGELOG.md
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/LICENSE
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/Resources/._LICENSE
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/A/._Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/._A
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/Current  -> A
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/._Current
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/._Versions
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/._Realm.framework
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Headers  -> Versions/Current/Headers
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Headers
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Modules  -> Versions/Current/Modules
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Modules
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/RealmSwift  -> Versions/Current/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._RealmSwift
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Resources  -> Versions/Current/Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Resources
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/RealmSwift-Swift.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Headers/._RealmSwift-Swift.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._Headers
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/._module.modulemap
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Modules/._RealmSwift.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._Modules
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._RealmSwift
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/Info.plist
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/Resources/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/A/._Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/._A
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/Current  -> A
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/._Current
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/._Versions
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-1.2/._RealmSwift.framework
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/._swift-1.2
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Headers  -> Versions/Current/Headers
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Headers
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Modules  -> Versions/Current/Modules
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Modules
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/PrivateHeaders  -> Versions/Current/PrivateHeaders
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._PrivateHeaders
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Realm  -> Versions/Current/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Realm
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Resources  -> Versions/Current/Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Resources
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/Realm.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._Realm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMArray.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMArray.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMCollection.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMCollection.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMConstants.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMConstants.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMDefines.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMDefines.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMMigration.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMMigration.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMObject.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMObject.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMProperty.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMProperty.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMRealm.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMRealm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMResults.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMResults.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Headers/._RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Headers
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Modules/._module.modulemap
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Modules
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMArray_Private.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMArray_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMListBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMListBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/PrivateHeaders/._RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._PrivateHeaders
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Realm
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/CHANGELOG.md
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/._CHANGELOG.md
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/._Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/LICENSE
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/Resources/._LICENSE
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/A/._Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/._A
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/Current  -> A
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/._Current
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/._Versions
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/._Realm.framework
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Headers  -> Versions/Current/Headers
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Headers
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Modules  -> Versions/Current/Modules
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Modules
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/RealmSwift  -> Versions/Current/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._RealmSwift
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Resources  -> Versions/Current/Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Resources
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/RealmSwift-Swift.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Headers/._RealmSwift-Swift.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._Headers
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/._module.modulemap
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftdoc
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/RealmSwift.swiftmodule/._x86_64.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Modules/._RealmSwift.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._Modules
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._RealmSwift
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/Info.plist
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/Resources/._Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/A/._Resources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/._A
+       linking: PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/Current  -> A
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/._Current
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/._Versions
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/swift-2.0/._RealmSwift.framework
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/osx/._swift-2.0
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._osx
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/README.md
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._README.md
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/InfoPlist.strings
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/en.lproj/._InfoPlist.strings
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._en.lproj
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RealmPlugin-Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RealmPlugin-Info.plist
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RealmPlugin-Prefix.pch
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RealmPlugin-Prefix.pch
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPRealmPlugin.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPRealmPlugin.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPRealmPlugin.m
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPRealmPlugin.m
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPSimulatorManager.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPSimulatorManager.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin/RLMPSimulatorManager.m
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin/._RLMPSimulatorManager.m
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._RealmPlugin
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/project.pbxproj
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/RealmPlugin.xcodeproj/._project.pbxproj
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._RealmPlugin.xcodeproj
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/rlm_lldb.py
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._rlm_lldb.py
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/___FILEBASENAME___.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/.____FILEBASENAME___.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/___FILEBASENAME___.m
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Objective-C/.____FILEBASENAME___.m
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._Objective-C
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/___FILEBASENAME___.swift
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/Swift/.____FILEBASENAME___.swift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._Swift
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/TemplateIcon.icns
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._TemplateIcon.icns
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/TemplateInfo.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/Realm Model Object.xctemplate/._TemplateInfo.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/file_templates/._Realm Model Object.xctemplate
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/._file_templates
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/plugin/Templates/install_templates.sh
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/Templates/._install_templates.sh
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/plugin/._Templates
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._plugin
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/CodeResources
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/_CodeSignature/._CodeResources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/.__CodeSignature
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/Realm.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._Realm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMArray.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMArray.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMCollection.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMCollection.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMConstants.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMConstants.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMDefines.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMDefines.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMMigration.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMMigration.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMObject.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMObject.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMObjectBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMObjectSchema.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMPlatform.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMProperty.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMProperty.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMRealm.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMRealm.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMResults.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMResults.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Headers/RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Headers/._RLMSchema.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Headers
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Info.plist
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/Modules/._module.modulemap
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Modules
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMArray_Private.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMArray_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMListBase.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMListBase.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMMigration_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMObject_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMObjectSchema_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMObjectStore.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMProperty_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMRealm_Dynamic.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMRealm_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMRealmUtil.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMResults_Private.h
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/PrivateHeaders/._RLMSchema_Private.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._PrivateHeaders
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/Realm.framework/Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/Realm.framework/._Realm
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/._Realm.framework
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/CodeResources
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/_CodeSignature/._CodeResources
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/.__CodeSignature
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/RealmSwift-Swift.h
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Headers/._RealmSwift-Swift.h
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._Headers
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Info.plist
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._Info.plist
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/module.modulemap
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/._module.modulemap
+      creating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftdoc
+      creating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/arm.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._arm.swiftmodule
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftdoc
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftdoc
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/i386.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/RealmSwift.swiftmodule/._i386.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/Modules/._RealmSwift.swiftmodule
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._Modules
+     inflating: PROJECT/Pods/Realm/realm-swift-0.94.1/watchos/RealmSwift.framework/RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/RealmSwift.framework/._RealmSwift
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/watchos/._RealmSwift.framework
+     inflating: PROJECT/Pods/Realm/__MACOSX/realm-swift-0.94.1/._watchos
+     inflating: PROJECT/Pods/Realm/__MACOSX/._realm-swift-0.94.1
+   finishing deferred symbolic links:
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Headers -> Versions/Current/Headers
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Modules -> Versions/Current/Modules
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/PrivateHeaders -> Versions/Current/PrivateHeaders
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Realm -> Versions/Current/Realm
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Resources -> Versions/Current/Resources
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/Realm.framework/Versions/Current -> A
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Headers -> Versions/Current/Headers
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Modules -> Versions/Current/Modules
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/RealmSwift -> Versions/Current/RealmSwift
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Resources -> Versions/Current/Resources
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-1.2/RealmSwift.framework/Versions/Current -> A
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Headers -> Versions/Current/Headers
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Modules -> Versions/Current/Modules
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/PrivateHeaders -> Versions/Current/PrivateHeaders
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Realm -> Versions/Current/Realm
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Resources -> Versions/Current/Resources
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/Realm.framework/Versions/Current -> A
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Headers -> Versions/Current/Headers
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Modules -> Versions/Current/Modules
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/RealmSwift -> Versions/Current/RealmSwift
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Resources -> Versions/Current/Resources
+     PROJECT/Pods/Realm/realm-swift-0.94.1/osx/swift-2.0/RealmSwift.framework/Versions/Current -> A
+
+-> Installing RealmSwift (0.94.1)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `Realm` iOS 8.0
+    - Installing target `RealmSwift` iOS 8.0
+      - Generating module map file at `Pods/Target Support Files/RealmSwift/RealmSwift.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/RealmSwift/RealmSwift-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/RealmSwift/RealmSwift-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/RealmSwift/RealmSwift-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-SampleApp` iOS 8.0
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 2 dependencies from the Podfile and 2 total pods installed.

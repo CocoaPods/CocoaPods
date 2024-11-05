@@ -1,0 +1,29 @@
+{
+  "name": "Pod3",
+  "version": "1.0",
+  "summary": "Pod3",
+  "description": "Pod3",
+  "homepage": "https://github.com/CocoaPods/CocoaPods/issues/5362",
+  "license": "Proprietary",
+  "authors": {
+    "Peter Wiesner": ""
+  },
+  "source": {
+    "path": "."
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "subspecs": [
+    {
+      "name": "s3",
+      "dependencies": {
+        "Pod1/s2": [
+
+        ]
+      },
+      "source_files": "*.{h,m}"
+    }
+  ]
+}

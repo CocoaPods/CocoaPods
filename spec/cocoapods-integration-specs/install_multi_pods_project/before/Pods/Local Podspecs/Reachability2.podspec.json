@@ -1,0 +1,24 @@
+{
+  "name": "Reachability2",
+  "version": "3.1.0",
+  "license": "BSD",
+  "homepage": "https://github.com/tonymillion/Reachability",
+  "authors": {
+    "Tony Million": "tonymillion@gmail.com"
+  },
+  "summary": "ARC and GCD Compatible Reachability Class for iOS. Drop in replacement for Apple Reachability.",
+  "source": {
+    "git": "https://github.com/tonymillion/Reachability.git",
+    "tag": "v3.1.0"
+  },
+  "source_files": "Reachability2.{h,m}",
+  "frameworks": "SystemConfiguration",
+  "requires_arc": false,
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  }
+}

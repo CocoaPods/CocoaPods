@@ -1,0 +1,145 @@
+
+File References:
+- Example:
+  - AppDelegate.swift
+  - ViewController.swift
+  - Supporting Files:
+    - Info.plist
+- Products:
+  - Example.app
+- Pods:
+  - Pods-Example.debug.xcconfig
+  - Pods-Example.release.xcconfig
+- Frameworks:
+  - Pods_Example.framework
+
+
+
+Targets:
+- Example:
+    Build Phases:
+    - "[CP] Check Pods Manifest.lock":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_PODFILE_DIR_PATH}/Podfile.lock"
+        - "${PODS_ROOT}/Manifest.lock"
+        Output File List Paths: []
+        Output Paths:
+        - "$(DERIVED_FILE_DIR)/Pods-Example-checkManifestLockResult.txt"
+        Shell Path: "/bin/sh"
+        Shell Script: |
+          diff "${PODS_PODFILE_DIR_PATH}/Podfile.lock" "${PODS_ROOT}/Manifest.lock" > /dev/null
+          if [ $? != 0 ] ; then
+              # print error to STDERR
+              echo "error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation." >&2
+              exit 1
+          fi
+          # This output is used by Xcode 'outputs' to avoid re-running this script phase.
+          echo "SUCCESS" > "${SCRIPT_OUTPUT_FILE_0}"
+    - Sources:
+      - ViewController.swift
+      - AppDelegate.swift
+    - Frameworks:
+      - Pods_Example.framework
+    - Resources: []
+    - "[CP] Embed Pods Frameworks":
+        Input File List Paths: []
+        Input Paths:
+        - "${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh"
+        - "${BUILT_PRODUCTS_DIR}/BananaLib/BananaLib.framework"
+        Output File List Paths: []
+        Output Paths:
+        - "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BananaLib.framework"
+        Shell Path: "/bin/sh"
+        Shell Script: '"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh"
+
+          '
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          INFOPLIST_FILE: Example/Info.plist
+          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+          PRODUCT_NAME: "$(TARGET_NAME)"
+        Base Configuration: Pods-Example.debug.xcconfig
+    - Release:
+        Build Settings:
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          INFOPLIST_FILE: Example/Info.plist
+          LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
+          PRODUCT_NAME: "$(TARGET_NAME)"
+        Base Configuration: Pods-Example.release.xcconfig
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+      COPY_PHASE_STRIP: 'NO'
+      ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - DEBUG=1
+      - "$(inherited)"
+      GCC_SYMBOLS_PRIVATE_EXTERN: 'NO'
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+      MTL_ENABLE_DEBUG_INFO: 'YES'
+      ONLY_ACTIVE_ARCH: 'YES'
+      SDKROOT: iphoneos
+      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+      TARGETED_DEVICE_FAMILY: '1,2'
+- Release:
+    Build Settings:
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++0x
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      CODE_SIGN_IDENTITY[sdk=iphoneos*]: iPhone Developer
+      COPY_PHASE_STRIP: 'YES'
+      ENABLE_NS_ASSERTIONS: 'NO'
+      ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu99
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      IPHONEOS_DEPLOYMENT_TARGET: '8.2'
+      MTL_ENABLE_DEBUG_INFO: 'NO'
+      SDKROOT: iphoneos
+      TARGETED_DEVICE_FAMILY: '1,2'
+      VALIDATE_PRODUCT: 'YES'

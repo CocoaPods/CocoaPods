@@ -1,0 +1,4 @@
+target 'SampleApp' do
+  platform :ios, '6.0'
+  pod 'Reachability', '3.1.0'
+end

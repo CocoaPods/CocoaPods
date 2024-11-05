@@ -1,0 +1,7 @@
+module SwiftPod {
+  umbrella header "SwiftPod-library-iOS-umbrella.h"
+  exclude header "SwiftPod-library-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

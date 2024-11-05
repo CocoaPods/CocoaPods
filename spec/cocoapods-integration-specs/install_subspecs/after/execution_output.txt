@@ -1,0 +1,72 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-iOS App`: (`$(ARCHS_STANDARD_64_BIT)`)
+  Using `ARCHS` setting to build architectures of target `Pods-OS X App`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Fetching external sources
+-> Pre-downloading: `PodTest` from `PodTest-hg-source`
+ > Mercurial download
+   $ HG_BIN clone PodTest-hg-source PROJECT/Pods/PodTest
+   updating to branch default
+   5 files updated, 0 files merged, 0 files removed, 0 files unresolved
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  A PodTest
+
+Downloading dependencies
+
+-> Installing PodTest (1.0)
+  - Running pre install hooks
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `PodTest-subspec_1` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/PodTest-subspec_1/PodTest-subspec_1-dummy.m`
+    - Installing target `PodTest-subspec_2` macOS 10.6
+      - Generating module map file at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2-umbrella.h`
+      - Generating Info.plist file at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2-Info.plist`
+      - Generating dummy source at `Pods/Target Support Files/PodTest-subspec_2/PodTest-subspec_2-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-OS X App` macOS 10.6
+      - Generating Info.plist file at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App-Info.plist`
+      - Generating module map file at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App.modulemap`
+      - Generating umbrella header at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App-umbrella.h`
+      - Generating dummy source at `Pods/Target Support Files/Pods-OS X App/Pods-OS X App-dummy.m`
+    - Installing target `Pods-iOS App` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Pods-iOS App/Pods-iOS App-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `SampleApp.xcworkspace` for this project from now on.
+
+Integrating target `Pods-OS X App` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Embed Pods Frameworks' to project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+
+Integrating target `Pods-iOS App` (`SampleApp.xcodeproj` project)
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There are 2 dependencies from the Podfile and 1 total pod installed.

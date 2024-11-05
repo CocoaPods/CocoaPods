@@ -1,0 +1,12 @@
+platform :ios, '10.0'
+
+pod 'DepPod', :path => 'DepPod'
+pod 'HeaderMappingsDirPod', :path => 'HeaderMappingsDirPod'
+
+target 'SampleApp' do
+
+end
+
+target 'OtherSampleApp' do
+  use_frameworks!(true)
+end
