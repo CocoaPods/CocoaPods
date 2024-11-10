@@ -6,13 +6,16 @@ jobs:
       fail-fast: false
       matrix:
         task: [SPECS]
-        ruby: [2.6, 2.7, 3.0]
+        ruby: [2.6, 2.7]
         os: [ubuntu-20.04]
         coverage: [0]
         include:
           - task: SPECS
             os: macos-latest
             ruby: system
+          - task: SPECS
+            os: ubuntu-20.04
+            ruby: 3.0
             coverage: 1
           - task: EXAMPLES
             os: macos-14
