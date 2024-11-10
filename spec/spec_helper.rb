@@ -6,6 +6,7 @@ if ENV['GENERATE_COVERAGE']
 
   SimpleCov.start do
     add_filter '/spec_helper/'
+    add_filter '/vendor/bundle'
   end
 end
 
