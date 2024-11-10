@@ -6,17 +6,12 @@ jobs:
       fail-fast: false
       matrix:
         task: [SPECS]
-        ruby: [2.6, 2.7]
+        ruby: [2.6, 2.7, 3.0]
         os: [ubuntu-20.04]
-        coverage: [0]
         include:
           - task: SPECS
             os: macos-latest
             ruby: system
-          - task: SPECS
-            os: ubuntu-20.04
-            ruby: 3.0
-            coverage: 1
           - task: EXAMPLES
             os: macos-14
             ruby: system
@@ -72,11 +67,6 @@ jobs:
         env:
           COCOAPODS_CI_TASKS: ${{ matrix.task }}
           GENERATE_COVERAGE: ${{ matrix.coverage }}
-      - name: Publish Code Coverage
-        uses: paambaati/codeclimate-action@v9.0.0
-        if: ${{ github.ref_name == 'master' && matrix.coverage == '1' }}
-        env:
-          CC_TEST_REPORTER_ID: 501acd9bc61d80ef6119b69ab42c52fa66cefddcc6724a1e93a79c3d3e32bf55
 
 on:
   push:
