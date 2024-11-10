@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Core.git
-  revision: 402822393a2d4837729f8ad352d54413ada6d0ec
+  revision: a53e235aa4d1eec8a21042e022ba7bcaca14ae56
   branch: master
   specs:
-    cocoapods-core (1.16.1)
+    cocoapods-core (1.16.2)
       activesupport (>= 5.0, < 8)
       addressable (~> 2.8)
       algoliasearch (~> 1.0)
@@ -37,10 +37,10 @@ GIT
 
 GIT
   remote: https://github.com/CocoaPods/Xcodeproj.git
-  revision: a1d2206fc535b35853b52c6303d3c6470ad2e212
+  revision: ab3dfa504b5a97cae3a653a8924f4616dcaa062e
   branch: master
   specs:
-    xcodeproj (1.26.0)
+    xcodeproj (1.27.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
@@ -119,10 +119,10 @@ GIT
 PATH
   remote: .
   specs:
-    cocoapods (1.16.1)
+    cocoapods (1.16.2)
       addressable (~> 2.8)
       claide (>= 1.0.2, < 2.0)
-      cocoapods-core (= 1.16.1)
+      cocoapods-core (= 1.16.2)
       cocoapods-deintegrate (>= 1.0.3, < 2.0)
       cocoapods-downloader (>= 2.1, < 3.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -136,7 +136,7 @@ PATH
       molinillo (~> 0.8.0)
       nap (~> 1.0)
       ruby-macho (>= 2.3.0, < 3.0)
-      xcodeproj (>= 1.26.0, < 2.0)
+      xcodeproj (>= 1.27.0, < 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -236,7 +236,7 @@ GEM
       sparkr (>= 0.2.0)
       term-ansicolor
       yard (~> 0.9.12)
-    json (2.7.4)
+    json (2.7.5)
     kicker (3.0.0)
       listen (~> 1.3.0)
       notify (~> 0.5.2)
