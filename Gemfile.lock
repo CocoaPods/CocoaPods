@@ -301,11 +301,12 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    simplecov (0.17.1)
+    simplecov (0.22.0)
       docile (~> 1.1)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.2)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.1)
+    simplecov_json_formatter (0.1.4)
     slop (3.6.0)
     sparkr (0.4.1)
     sync (0.5.0)
@@ -326,7 +327,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     yard (0.9.37)
-    zeitwerk (2.7.1)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   ruby
@@ -366,7 +367,7 @@ DEPENDENCIES
   rubocop (= 0.50.0)
   ruby-graphviz (< 1.2.5)
   ruby-prof
-  simplecov (< 0.18)
+  simplecov
   typhoeus
   webmock
   xcodeproj!

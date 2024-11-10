@@ -1,7 +1,7 @@
 # Set up coverage analysis
 #-----------------------------------------------------------------------------#
 
-if ENV['GENERATE_COVERAGE']
+if ENV['GENERATE_COVERAGE'] == '1'
   require 'simplecov'
 
   SimpleCov.start do
