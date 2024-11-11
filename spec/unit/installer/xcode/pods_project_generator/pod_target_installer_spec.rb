@@ -385,6 +385,16 @@ module Pod
                 installation_result.app_native_targets.count.should == 1
               end
 
+              it 'snapshot tests must contains info_plist_entries' do
+                @ios_installer.install!
+                apphost_target = @project.targets[5]
+                info_plist_config_path = apphost_target.build_configurations[0].build_settings['INFOPLIST_FILE']
+                info_plist_path = temporary_sandbox.root.join(info_plist_config_path)
+                info_plist = info_plist_path.read
+                info_plist.should =~ %r{<key>NSPhotoLibraryUsageDescription<\/key>}
+                info_plist.should =~ %r{<string>Photo Library Access Warning.<\/string>}
+              end
+
               it 'raises when a test spec has no source files' do
                 @watermelon_ios_pod_target.test_spec_consumers.first.stubs(:source_files).returns([])
                 e = ->() { @ios_installer.install! }.should.raise Informative
