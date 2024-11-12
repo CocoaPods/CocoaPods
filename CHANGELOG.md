@@ -260,9 +260,16 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+
+* Do not copy resources to non-library (App, Tests) targets bundles from dynamically built dependencies
+  [Ilya Myakotin](https://github.com/rehsals)
+  [#11331](https://github.com/CocoaPods/CocoaPods/issues/11331)
+
+
 * Fix incremental installation when a development pod is deleted.  
   [John Szumski](https://github.com/jszumski)
   [#11438](https://github.com/CocoaPods/CocoaPods/pull/11681)
+
 
 * Clean sandbox when a pod switches from remote to local.  
   [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
