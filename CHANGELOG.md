@@ -260,6 +260,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Sources priority in Podfile works as stated in documentation.
+  [Ilya Myakotin](https://github.com/rehsals)
+  [#8679](https://github.com/CocoaPods/CocoaPods/issues/8679)
+
 * Fix incremental installation when a development pod is deleted.  
   [John Szumski](https://github.com/jszumski)
   [#11438](https://github.com/CocoaPods/CocoaPods/pull/11681)
