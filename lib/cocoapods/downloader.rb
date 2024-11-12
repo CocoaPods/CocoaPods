@@ -52,7 +52,7 @@ module Pod
         UI.message "Copying #{request.name} from `#{result.location}` to #{UI.path target}", '> ' do
           Cache.read_lock(result.location) do
             FileUtils.rm_rf target
-            FileUtils.cp_r(result.location, target)
+            FileUtils.cp_r(result.location.force_encoding('UTF-8'), target.force_encoding('UTF-8'))
           end
         end
       end
