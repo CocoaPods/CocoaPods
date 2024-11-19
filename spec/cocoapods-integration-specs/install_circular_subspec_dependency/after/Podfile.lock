@@ -1,0 +1,33 @@
+PODS:
+  - Pod1 (1.0):
+    - Pod1/s1 (= 1.0)
+    - Pod1/s2 (= 1.0)
+  - Pod1/s1 (1.0)
+  - Pod1/s2 (1.0):
+    - Pod2/s2
+  - Pod2 (1.0):
+    - Pod2/s1 (= 1.0)
+    - Pod2/s2 (= 1.0)
+  - Pod2/s1 (1.0):
+    - Pod1/s1
+  - Pod2/s2 (1.0)
+  - Pod3/s3 (1.0):
+    - Pod1/s2
+
+DEPENDENCIES:
+  - Pod1 (from `./DeveloperPods/Pod1`)
+  - Pod2 (from `./DeveloperPods/Pod2`)
+  - Pod3/s3 (from `./DeveloperPods/Pod3`)
+
+EXTERNAL SOURCES:
+  Pod1:
+    :path: "./DeveloperPods/Pod1"
+  Pod2:
+    :path: "./DeveloperPods/Pod2"
+  Pod3:
+    :path: "./DeveloperPods/Pod3"
+
+SPEC CHECKSUMS:
+  Pod1: 94fcc2b419412321eb22c5abaf3949fdf7eda51c
+  Pod2: a6cf65fc66ea1d3e2233d7c8a0ead515171be325
+  Pod3: 2de70b44dac206b206d5d111f1a00b0735b663f9

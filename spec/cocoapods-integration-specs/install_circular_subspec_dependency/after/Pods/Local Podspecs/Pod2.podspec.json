@@ -1,0 +1,33 @@
+{
+  "name": "Pod2",
+  "version": "1.0",
+  "summary": "Pod2",
+  "description": "Pod1",
+  "homepage": "https://github.com/CocoaPods/CocoaPods/issues/5362",
+  "license": "Proprietary",
+  "authors": {
+    "Peter Wiesner": ""
+  },
+  "source": {
+    "path": "."
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "source_files": "./**/*.{h,m}",
+  "subspecs": [
+    {
+      "name": "s1",
+      "dependencies": {
+        "Pod1/s1": [
+
+        ]
+      }
+    },
+    {
+      "name": "s2",
+      "source_files": "*.{h,m}"
+    }
+  ]
+}

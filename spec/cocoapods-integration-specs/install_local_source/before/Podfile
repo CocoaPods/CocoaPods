@@ -1,0 +1,4 @@
+target 'iOS App' do
+  platform :ios
+  pod 'Reachability', :path => 'Reachability'
+end

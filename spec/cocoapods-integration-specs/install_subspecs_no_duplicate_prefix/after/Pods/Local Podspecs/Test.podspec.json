@@ -1,0 +1,25 @@
+{
+  "name": "Test",
+  "version": "0.0.1",
+  "platforms": {
+    "ios": "5.0"
+  },
+  "license": "MIT",
+  "source": {
+    "git": "https://github.com/luisdelarosa/AFRaptureXMLRequestOperation.git"
+  },
+  "source_files": "AFRaptureXMLRequestOperation/*.{h,m}",
+  "requires_arc": true,
+  "homepage": "https://github.com/jansanz/AFRaptureXMLRequestOperation",
+  "summary": "RaptureXML support for AFNetworking's AFHTTPClient.",
+  "authors": {
+    "Jan Sanchez": "janfsd+github@gmail.com"
+  },
+  "prefix_header_contents": "// Some great header comment",
+  "subspecs": [
+    {
+      "name": "Foo",
+      "source_files": "FakeSubspec/*.{h,m}"
+    }
+  ]
+}

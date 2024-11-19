@@ -1,0 +1,6 @@
+framework module SwiftPod {
+  umbrella header "SwiftPod-framework-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,9 +1,10 @@
+require_relative '../defaults.rb'
+
 if (repo = ENV['COCOAPODS_SPEC_REPO'])
     source "#{repo}"
 end
 
-# Uncomment the next line to define a global platform for your project
-platform :ios, '10.0'
+platform :ios, DEFAULT_IOS_DEPLOYMENT_TARGET
 
 workspace 'Examples'
 

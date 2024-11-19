@@ -1,0 +1,50 @@
+PODS:
+  - asserts (0.0.1):
+    - logger
+  - CocoaLumberjack (3.0.0):
+    - CocoaLumberjack/Default (= 3.0.0)
+    - CocoaLumberjack/Extensions (= 3.0.0)
+  - CocoaLumberjack/Core (3.0.0)
+  - CocoaLumberjack/Default (3.0.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (3.0.0):
+    - CocoaLumberjack/Default
+  - logger (0.0.1):
+    - logger/Core (= 0.0.1)
+  - logger/Core (0.0.1):
+    - CocoaLumberjack (= 3.0.0)
+  - sharedlib/Core (0.0.1):
+    - asserts
+    - logger
+  - sharedlib/Testing (0.0.1):
+    - testkit
+  - testkit (0.0.1):
+    - asserts
+
+DEPENDENCIES:
+  - asserts (from `asserts`)
+  - logger (from `logger`)
+  - sharedlib/Core (from `sharedlib`)
+  - sharedlib/Testing (from `sharedlib`)
+  - testkit (from `testkit`)
+
+SPEC REPOS:
+  trunk:
+    - CocoaLumberjack
+
+EXTERNAL SOURCES:
+  asserts:
+    :path: asserts
+  logger:
+    :path: logger
+  sharedlib:
+    :path: sharedlib
+  testkit:
+    :path: testkit
+
+SPEC CHECKSUMS:
+  asserts: b96cb1547daf94e17b31fc2c239dbd871737f4d3
+  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
+  logger: 948a7b05ffe6f8efb3bc67c8fa6ca69af7cedf52
+  sharedlib: 792e72a21a2e03445efc3b3a15aa747d4d12f7d0
+  testkit: 9d8c7af3eb51762bd8b8a82904162f8aef5d28ca

@@ -1,0 +1,6 @@
+module Pods_Abstract_Target_macOS_Pods_Static {
+  umbrella header "Pods-Abstract Target-macOS Pods-Static-umbrella.h"
+
+  export *
+  module * { export * }
+}

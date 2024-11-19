@@ -12,7 +12,161 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  
+    [Parsa Nasirimehr](https://github.com/TheRogue76)
+    [#12691](https://github.com/CocoaPods/CocoaPods/pull/12691)
+
+
+## 1.16.2 (2024-10-31)
+
+##### Enhancements
+
 * None.  
+
+##### Bug Fixes
+
+* Bump min xcodeproj to 1.27.0 to include revert of breaking build setting changes.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12675](https://github.com/CocoaPods/CocoaPods/pull/12675)
+
+
+## 1.16.1 (2024-10-29)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix an issue breaking `pod lib lint` / `pod spec lint` due to new `ENABLE_USER_SCRIPT_SANDBOXING` setting.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12664](https://github.com/CocoaPods/CocoaPods/issues/12664)
+
+
+## 1.16.0 (2024-10-29)
+
+##### Enhancements
+
+* Add Support for Xcode 14.3's ENABLE_MODULE_VERIFIER.  
+  [sharplet](https://github.com/sharplet)
+  [#12390](https://github.com/CocoaPods/CocoaPods/pull/12390)
+
+* Xcode 16 support.
+  * Bump minimum `xcodeproj` to `1.26.0`
+  * Update project generator to set `GENERATE_INFOPLIST_FILE = NO` on pod targets
+  * Update project generator to set `ENABLE_USER_SCRIPT_SANDBOXING = NO` = NO` on pod targets to fix build failures with vendored frameworks.  
+  * Update project generator to set `SWIFT_INSTALL_OBJC_HEADER = YES` on pod targets to enable consuming Swift pods from Objective-C.
+
+[Eric Amorde](https://github.com/amorde)
+[#12656](https://github.com/CocoaPods/CocoaPods/pull/12656)
+
+##### Bug Fixes
+
+* Fix pod install issue when git's `core.fsmonitor` feature is enabled (again)  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#12349](https://github.com/CocoaPods/CocoaPods/issues/12349)
+
+
+## 1.15.2 (2024-02-06)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Revert #12154, #12165, and #12158 to fix regressions in 1.15.0 and 1.15.1.  
+  [Paul Beusterien](https://github.com/paulb777)
+  [#12226](https://github.com/CocoaPods/CocoaPods/issues/12226)
+
+## 1.15.1 (2024-02-06)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix an issue when caching downloads of certain Pods.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12226](https://github.com/CocoaPods/CocoaPods/issues/12226)
+
+
+## 1.15.0 (2024-01-28)
+
+##### Enhancements
+
+* Optimize performance during uncached pod installation.  
+  [Dimitris Koutsogiorgas](https://github.com/dnkoutso)
+  [#12154](https://github.com/CocoaPods/CocoaPods/pull/12154)
+
+##### Bug Fixes
+
+* Fix pod install issue when git's `core.fsmonitor` feature is enabled  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#11640](https://github.com/CocoaPods/CocoaPods/issues/11640)
+
+* Don't use the `remove_destination` parameter in FileUtils.cp_r  
+  [Justin Martin](https://github.com/justinseanmartin)
+  [#12165](https://github.com/CocoaPods/CocoaPods/pull/12165)
+
+* Support `visionos` in `pod lib lint --platforms=` and use `xros` for `Fourflusher`  
+  [MagnificentMiles](https://github.com/MagnificentMiles)
+  [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
+
+## 1.14.3 (2023-11-19)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Revert minimum required Ruby version to 2.6 to support macOS system Ruby  
+  [Eric Amorde](https://github.com/amorde)
+  [#12122](https://github.com/CocoaPods/CocoaPods/issues/12122)
+
+## 1.14.2 (2023-10-27)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.14.1 (2023-10-26)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
+## 1.14.0 (2023-10-26)
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* Fix a crash when running with activesupport 7.1.0.  
+  [MCanhisares](https://github.com/MCanhisares)
+  [#12081](https://github.com/CocoaPods/CocoaPods/issues/12081)
+
+* Fix another crash when running with activesupport 7.1.0.  
+  [movila](https://github.com/movila)
+  [#12089](https://github.com/CocoaPods/CocoaPods/issues/12089)
+
+##### Other
+
+* Drop support for `bazaar` SCM  
 
 
 ## 1.13.0 (2023-09-22)

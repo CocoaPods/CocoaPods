@@ -1,0 +1,4 @@
+target 'Example' do
+  use_frameworks!
+  pod 'libPusher', '1.6.2'
+end

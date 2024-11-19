@@ -1,0 +1,102 @@
+{
+  "name": "HostedTestLib",
+  "version": "0.1.0",
+  "summary": "A short description of HostedTestLib.",
+  "platforms": {
+    "ios": "10.0"
+  },
+  "authors": {
+    "Jeff Overwatch": "jeff@overwatch.com"
+  },
+  "homepage": "https://github.com/",
+  "license": "MIT",
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/HostedTestLib.git",
+    "tag": "0.1.0"
+  },
+  "source_files": "Sources/**/*",
+  "dependencies": {
+    "TestLib": [
+
+    ]
+  },
+  "swift_versions": "4",
+  "testspecs": [
+    {
+      "name": "UnitTests3",
+      "test_type": "unit",
+      "requires_app_host": true,
+      "app_host_name": "HostedTestLib/App",
+      "dependencies": {
+        "HostedTestLib/App": [
+
+        ],
+        "DepPod": [
+
+        ]
+      },
+      "source_files": "UnitTests3/**/*"
+    },
+    {
+      "name": "UnitTests4",
+      "test_type": "unit",
+      "requires_app_host": true,
+      "app_host_name": "TestLib/App",
+      "dependencies": {
+        "TestLib/App": [
+
+        ]
+      },
+      "source_files": "UnitTests4/**/*"
+    },
+    {
+      "name": "UnitTests5",
+      "test_type": "unit",
+      "requires_app_host": true,
+      "app_host_name": "HostedTestLib/AppWithDep",
+      "dependencies": {
+        "HostedTestLib/AppWithDep": [
+
+        ]
+      },
+      "source_files": "UnitTests4/**/*"
+    },
+    {
+      "name": "UnitTests6",
+      "test_type": "unit",
+      "requires_app_host": true,
+      "app_host_name": "HostedTestLib/AppWithDep",
+      "dependencies": {
+        "HostedTestLib/AppWithDep": [
+
+        ],
+        "DepPod": [
+
+        ]
+      },
+      "source_files": "UnitTests4/**/*"
+    }
+  ],
+  "appspecs": [
+    {
+      "name": "App",
+      "source_files": "App/**/*",
+      "pod_target_xcconfig": {
+        "PRODUCT_NAME": "App Host"
+      }
+    },
+    {
+      "name": "AppWithDep",
+      "source_files": "App/**/*",
+      "dependencies": {
+        "DepPod": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "PRODUCT_NAME": "App Host with Dep"
+      }
+    }
+  ],
+  "swift_version": "4"
+}

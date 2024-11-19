@@ -1,0 +1,6 @@
+target 'iOS App' do
+  platform :ios, '12.0'
+  pod 'Reachability', :path => 'Reachability'
+  pod 'PodTest', :hg => 'PodTest-hg-source'
+  pod 'AFNetworking'
+end

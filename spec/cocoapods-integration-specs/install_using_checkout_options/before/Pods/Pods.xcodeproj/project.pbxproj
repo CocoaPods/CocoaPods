@@ -1,0 +1,634 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07F2915BEDCBDAB25C8A0677 /* Pods-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C8EE004390FC46D6FBA993 /* Pods-dummy.m */; };
+		0A498A603B4B479972EDC529 /* RKValueTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BAD9E2A43BFCBA63622D93A /* RKValueTransformers.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		12C0A17EB1E77C138C7876C5 /* Pods-SEGModules-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 92BDE719E6871EE2299457B6 /* Pods-SEGModules-dummy.m */; };
+		40EFEF7EE15AFA03C6C27EA3 /* SEGModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 182BE9EEC3FB2B7470B1D8D2 /* SEGModule.h */; };
+		51267F9DA9D1DC82814C93D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3937CDD5EEF35E372AB4DFB /* Foundation.framework */; };
+		7C781470B00B42F3582E9BBB /* SEGModule.m in Sources */ = {isa = PBXBuildFile; fileRef = D098725E7A1C6B92AFDF99B4 /* SEGModule.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		89C98C16FD1610449622979A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3937CDD5EEF35E372AB4DFB /* Foundation.framework */; };
+		9847852C1C82A15E00AC1247 /* Pods-RKValueTransformers-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 17BCB4BD682A591125EF6974 /* Pods-RKValueTransformers-dummy.m */; };
+		E68B2A5CEB7A1555276A8B3F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3937CDD5EEF35E372AB4DFB /* Foundation.framework */; };
+		EE96C97B8DF77EE7096B232D /* RKValueTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = 9EBAA8162D1E89092AE694B1 /* RKValueTransformers.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		29DA24DCB742762636FBDCB3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3310116AE33612D36136AFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 385EFCB0D79E65D96EE662A0;
+			remoteInfo = "Pods-SEGModules";
+		};
+		BC4D591190D5F95ADC776350 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3310116AE33612D36136AFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F695E6ED51B1717020F7F36E;
+			remoteInfo = "Pods-RKValueTransformers";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		17BCB4BD682A591125EF6974 /* Pods-RKValueTransformers-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-RKValueTransformers-dummy.m"; sourceTree = "<group>"; };
+		182BE9EEC3FB2B7470B1D8D2 /* SEGModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SEGModule.h; path = Classes/SEGModule.h; sourceTree = "<group>"; };
+		22BF62695E0B6728E44C9F77 /* Pods-RKValueTransformers-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RKValueTransformers-Private.xcconfig"; sourceTree = "<group>"; };
+		2AA0BAB77CFE099127B5DC5E /* libPods-RKValueTransformers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RKValueTransformers.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E34CA9D0D699B7546B37DD5 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.release.xcconfig; sourceTree = "<group>"; };
+		3692C58447981D3018EC0E67 /* Pods-SEGModules-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SEGModules-Private.xcconfig"; sourceTree = "<group>"; };
+		37C8EE004390FC46D6FBA993 /* Pods-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-dummy.m"; sourceTree = "<group>"; };
+		40136E3DCC65F6E8EAB257B9 /* libPods-SEGModules.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SEGModules.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EBC0DF58F2E20C67D7D2032 /* Pods-SEGModules.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SEGModules.xcconfig"; sourceTree = "<group>"; };
+		5244C0B00D5A6CD81925F28B /* Pods-RKValueTransformers-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-RKValueTransformers-prefix.pch"; sourceTree = "<group>"; };
+		5E1A77C43EAFC54729EBF107 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.debug.xcconfig; sourceTree = "<group>"; };
+		6FFD6DBB3D9740C64E932307 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BAD9E2A43BFCBA63622D93A /* RKValueTransformers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKValueTransformers.m; path = Code/RKValueTransformers.m; sourceTree = "<group>"; };
+		7F9632501576CB3B7C7BF9F3 /* Pods-SEGModules-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SEGModules-prefix.pch"; sourceTree = "<group>"; };
+		92BDE719E6871EE2299457B6 /* Pods-SEGModules-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SEGModules-dummy.m"; sourceTree = "<group>"; };
+		9EBAA8162D1E89092AE694B1 /* RKValueTransformers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKValueTransformers.h; path = Code/RKValueTransformers.h; sourceTree = "<group>"; };
+		A8E9B359B09E4352184A55C2 /* Pods-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-acknowledgements.markdown"; sourceTree = "<group>"; };
+		AA2F4E5915705925C8BEA688 /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
+		B3937CDD5EEF35E372AB4DFB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		B7477CD1639BDA27FC593C80 /* Pods-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-resources.sh"; sourceTree = "<group>"; };
+		BAC8DF9B43E0396805EC8F27 /* Pods-RKValueTransformers.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RKValueTransformers.xcconfig"; sourceTree = "<group>"; };
+		D098725E7A1C6B92AFDF99B4 /* SEGModule.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SEGModule.m; path = Classes/SEGModule.m; sourceTree = "<group>"; };
+		D6B76D017A7C1A6C93094823 /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		FC4F9443F16CD03C57C32194 /* Pods-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-environment.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		031B387A3E51686FBF4B0D06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51267F9DA9D1DC82814C93D4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		38D7A023577C546D85FF3D73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89C98C16FD1610449622979A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E10467C5D5111722067CAA74 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E68B2A5CEB7A1555276A8B3F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00BAF94590CFD92F19B24EF9 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				054F325D901098F83EA36F98 /* Pods */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		054F325D901098F83EA36F98 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A8E9B359B09E4352184A55C2 /* Pods-acknowledgements.markdown */,
+				AA2F4E5915705925C8BEA688 /* Pods-acknowledgements.plist */,
+				37C8EE004390FC46D6FBA993 /* Pods-dummy.m */,
+				FC4F9443F16CD03C57C32194 /* Pods-environment.h */,
+				B7477CD1639BDA27FC593C80 /* Pods-resources.sh */,
+				5E1A77C43EAFC54729EBF107 /* Pods.debug.xcconfig */,
+				2E34CA9D0D699B7546B37DD5 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			path = "Target Support Files/Pods";
+			sourceTree = "<group>";
+		};
+		2E55309A64F213A67AFF80A9 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				BAC8DF9B43E0396805EC8F27 /* Pods-RKValueTransformers.xcconfig */,
+				22BF62695E0B6728E44C9F77 /* Pods-RKValueTransformers-Private.xcconfig */,
+				17BCB4BD682A591125EF6974 /* Pods-RKValueTransformers-dummy.m */,
+				5244C0B00D5A6CD81925F28B /* Pods-RKValueTransformers-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-RKValueTransformers";
+			sourceTree = "<group>";
+		};
+		31214673B3DD131E09F4E079 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				B3937CDD5EEF35E372AB4DFB /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		81D0025E62933F788BFFC807 /* SEGModules */ = {
+			isa = PBXGroup;
+			children = (
+				182BE9EEC3FB2B7470B1D8D2 /* SEGModule.h */,
+				D098725E7A1C6B92AFDF99B4 /* SEGModule.m */,
+				9E19058EEFBC480165224B18 /* Support Files */,
+			);
+			path = SEGModules;
+			sourceTree = "<group>";
+		};
+		859599CDDC60F3F2127A3DAA = {
+			isa = PBXGroup;
+			children = (
+				D6B76D017A7C1A6C93094823 /* Podfile */,
+				B1A2AC92F87673A9CC50C6BF /* Frameworks */,
+				AE1AE56805B41AED6B418772 /* Pods */,
+				901B8A0C92F3702BD637FF40 /* Products */,
+				00BAF94590CFD92F19B24EF9 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		90090A562B96CE5617EEA137 /* RKValueTransformers */ = {
+			isa = PBXGroup;
+			children = (
+				9EBAA8162D1E89092AE694B1 /* RKValueTransformers.h */,
+				7BAD9E2A43BFCBA63622D93A /* RKValueTransformers.m */,
+				2E55309A64F213A67AFF80A9 /* Support Files */,
+			);
+			path = RKValueTransformers;
+			sourceTree = "<group>";
+		};
+		901B8A0C92F3702BD637FF40 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6FFD6DBB3D9740C64E932307 /* libPods.a */,
+				2AA0BAB77CFE099127B5DC5E /* libPods-RKValueTransformers.a */,
+				40136E3DCC65F6E8EAB257B9 /* libPods-SEGModules.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9E19058EEFBC480165224B18 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				4EBC0DF58F2E20C67D7D2032 /* Pods-SEGModules.xcconfig */,
+				3692C58447981D3018EC0E67 /* Pods-SEGModules-Private.xcconfig */,
+				92BDE719E6871EE2299457B6 /* Pods-SEGModules-dummy.m */,
+				7F9632501576CB3B7C7BF9F3 /* Pods-SEGModules-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-SEGModules";
+			sourceTree = "<group>";
+		};
+		AE1AE56805B41AED6B418772 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				90090A562B96CE5617EEA137 /* RKValueTransformers */,
+				81D0025E62933F788BFFC807 /* SEGModules */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B1A2AC92F87673A9CC50C6BF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				31214673B3DD131E09F4E079 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7B07557D943BA18A4612A064 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE96C97B8DF77EE7096B232D /* RKValueTransformers.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CFCDD5F6D330D112489E2740 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40EFEF7EE15AFA03C6C27EA3 /* SEGModule.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0E6CF81D8AB212B8EB08DF98 /* Pods */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCF07008F23C595DCA6B1910 /* Build configuration list for PBXNativeTarget "Pods" */;
+			buildPhases = (
+				CC5F7FB3165DD48D736289F3 /* Sources */,
+				031B387A3E51686FBF4B0D06 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				17921AB9B9D62DA48BF86F02 /* PBXTargetDependency */,
+				94F3C0EE1EBB368AF5B4728E /* PBXTargetDependency */,
+			);
+			name = Pods;
+			productName = Pods;
+			productReference = 6FFD6DBB3D9740C64E932307 /* libPods.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		385EFCB0D79E65D96EE662A0 /* Pods-SEGModules */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C4CE1AF75BA4EFC0900746B /* Build configuration list for PBXNativeTarget "Pods-SEGModules" */;
+			buildPhases = (
+				E1EA908F0058C91F1231969B /* Sources */,
+				E10467C5D5111722067CAA74 /* Frameworks */,
+				CFCDD5F6D330D112489E2740 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-SEGModules";
+			productName = "Pods-SEGModules";
+			productReference = 40136E3DCC65F6E8EAB257B9 /* libPods-SEGModules.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		F695E6ED51B1717020F7F36E /* Pods-RKValueTransformers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DB934553790657E6352627E2 /* Build configuration list for PBXNativeTarget "Pods-RKValueTransformers" */;
+			buildPhases = (
+				232A359268DBA789AD5B0878 /* Sources */,
+				38D7A023577C546D85FF3D73 /* Frameworks */,
+				7B07557D943BA18A4612A064 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-RKValueTransformers";
+			productName = "Pods-RKValueTransformers";
+			productReference = 2AA0BAB77CFE099127B5DC5E /* libPods-RKValueTransformers.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3310116AE33612D36136AFA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 08C7E4D7ADB6F7647D1B14D1 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 859599CDDC60F3F2127A3DAA;
+			productRefGroup = 901B8A0C92F3702BD637FF40 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0E6CF81D8AB212B8EB08DF98 /* Pods */,
+				F695E6ED51B1717020F7F36E /* Pods-RKValueTransformers */,
+				385EFCB0D79E65D96EE662A0 /* Pods-SEGModules */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		232A359268DBA789AD5B0878 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9847852C1C82A15E00AC1247 /* Pods-RKValueTransformers-dummy.m in Sources */,
+				0A498A603B4B479972EDC529 /* RKValueTransformers.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC5F7FB3165DD48D736289F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07F2915BEDCBDAB25C8A0677 /* Pods-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1EA908F0058C91F1231969B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12C0A17EB1E77C138C7876C5 /* Pods-SEGModules-dummy.m in Sources */,
+				7C781470B00B42F3582E9BBB /* SEGModule.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		17921AB9B9D62DA48BF86F02 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-RKValueTransformers";
+			target = F695E6ED51B1717020F7F36E /* Pods-RKValueTransformers */;
+			targetProxy = BC4D591190D5F95ADC776350 /* PBXContainerItemProxy */;
+		};
+		94F3C0EE1EBB368AF5B4728E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-SEGModules";
+			target = 385EFCB0D79E65D96EE662A0 /* Pods-SEGModules */;
+			targetProxy = 29DA24DCB742762636FBDCB3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0A68DAEFD27E3EF55D4FC2C7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5E1A77C43EAFC54729EBF107 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		1CD834E5AC539ACA7F955364 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				STRIP_INSTALLED_PRODUCT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2EF28AD8BF50F507644F638C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22BF62695E0B6728E44C9F77 /* Pods-RKValueTransformers-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-RKValueTransformers/Pods-RKValueTransformers-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		3F96F160415B7BC68C5E65CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3692C58447981D3018EC0E67 /* Pods-SEGModules-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-SEGModules/Pods-SEGModules-prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		A646689BF8FFAA9BFD7976E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3692C58447981D3018EC0E67 /* Pods-SEGModules-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-SEGModules/Pods-SEGModules-prefix.pch";
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD163B867CF1FF221A3B8EF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		BB5B901210B4FB4EE5E4942B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2E34CA9D0D699B7546B37DD5 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E2B85E02C935BF71075D5F46 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22BF62695E0B6728E44C9F77 /* Pods-RKValueTransformers-Private.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/xcodeproj.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-RKValueTransformers/Pods-RKValueTransformers-prefix.pch";
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		08C7E4D7ADB6F7647D1B14D1 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD163B867CF1FF221A3B8EF7 /* Debug */,
+				1CD834E5AC539ACA7F955364 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3C4CE1AF75BA4EFC0900746B /* Build configuration list for PBXNativeTarget "Pods-SEGModules" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F96F160415B7BC68C5E65CC /* Debug */,
+				A646689BF8FFAA9BFD7976E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DB934553790657E6352627E2 /* Build configuration list for PBXNativeTarget "Pods-RKValueTransformers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EF28AD8BF50F507644F638C /* Debug */,
+				E2B85E02C935BF71075D5F46 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCF07008F23C595DCA6B1910 /* Build configuration list for PBXNativeTarget "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A68DAEFD27E3EF55D4FC2C7 /* Debug */,
+				BB5B901210B4FB4EE5E4942B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3310116AE33612D36136AFA /* Project object */;
+}

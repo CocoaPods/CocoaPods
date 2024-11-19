@@ -1,0 +1,6 @@
+framework module asserts {
+  umbrella header "asserts-umbrella.h"
+
+  export *
+  module * { export * }
+}

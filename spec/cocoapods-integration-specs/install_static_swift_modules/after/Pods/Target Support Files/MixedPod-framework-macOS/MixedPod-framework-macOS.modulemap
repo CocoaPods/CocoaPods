@@ -1,0 +1,6 @@
+framework module MixedPod {
+  umbrella header "MixedPod-framework-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

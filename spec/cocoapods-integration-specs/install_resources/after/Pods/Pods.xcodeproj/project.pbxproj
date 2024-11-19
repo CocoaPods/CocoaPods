@@ -1,0 +1,293 @@
+
+File References:
+- Podfile
+- Development Pods:
+  - res:
+    - 512_black.png
+    - foo.m
+    - troll.png
+    - Pod:
+      - LICENSE
+      - res.podspec
+    - Support Files:
+      - res-dummy.m
+      - res-prefix.pch
+      - res.debug.xcconfig
+      - res.release.xcconfig
+      - ResourceBundle-res-res-Info.plist
+- Frameworks: []
+- Products:
+  - Pods-SampleApp
+  - res
+  - res-res
+- Targets Support Files:
+  - Pods-SampleApp:
+    - Pods-SampleApp-acknowledgements.markdown
+    - Pods-SampleApp-acknowledgements.plist
+    - Pods-SampleApp-dummy.m
+    - Pods-SampleApp-resources.sh
+    - Pods-SampleApp.debug.xcconfig
+    - Pods-SampleApp.release.xcconfig
+
+
+
+Targets:
+- Pods-SampleApp:
+    Build Phases:
+    - Headers: []
+    - Sources:
+      - Pods-SampleApp-dummy.m
+    - Frameworks: []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
+          EXECUTABLE_PREFIX: lib
+          MACH_O_TYPE: staticlib
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PODS_ROOT: "$(SRCROOT)"
+          PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+        Base Configuration: Pods-SampleApp.debug.xcconfig
+    - Release:
+        Build Settings:
+          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: 'NO'
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
+          EXECUTABLE_PREFIX: lib
+          MACH_O_TYPE: staticlib
+          MACOSX_DEPLOYMENT_TARGET: '10.8'
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PODS_ROOT: "$(SRCROOT)"
+          PRODUCT_BUNDLE_IDENTIFIER: org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+        Base Configuration: Pods-SampleApp.release.xcconfig
+- res:
+    Build Phases:
+    - Headers: []
+    - Sources:
+      - foo.m:
+          COMPILER_FLAGS: "-DOS_OBJECT_USE_OBJC=0"
+      - res-dummy.m
+    - Frameworks: []
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
+          EXECUTABLE_PREFIX: lib
+          GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: res
+          PRODUCT_NAME: res
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
+        Base Configuration: res.debug.xcconfig
+    - Release:
+        Build Settings:
+          ARCHS: "$(ARCHS_STANDARD_64_BIT)"
+          CLANG_ENABLE_OBJC_WEAK: 'NO'
+          CODE_SIGN_IDENTITY[sdk=appletvos*]: ''
+          CODE_SIGN_IDENTITY[sdk=iphoneos*]: ''
+          CODE_SIGN_IDENTITY[sdk=watchos*]: ''
+          ENABLE_MODULE_VERIFIER: 'NO'
+          ENABLE_USER_SCRIPT_SANDBOXING: 'NO'
+          EXECUTABLE_PREFIX: lib
+          GCC_PREFIX_HEADER: Target Support Files/res/res-prefix.pch
+          GENERATE_INFOPLIST_FILE: 'NO'
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
+          OTHER_LDFLAGS: ''
+          OTHER_LIBTOOLFLAGS: ''
+          PRIVATE_HEADERS_FOLDER_PATH: ''
+          PRODUCT_MODULE_NAME: res
+          PRODUCT_NAME: res
+          PUBLIC_HEADERS_FOLDER_PATH: ''
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) "
+          SWIFT_INSTALL_OBJC_HEADER: 'YES'
+        Base Configuration: res.release.xcconfig
+- res-res:
+    Build Phases:
+    - Sources: []
+    - Frameworks: []
+    - Resources:
+      - 512_black.png
+    Build Configurations:
+    - Debug:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'NO'
+          COMBINE_HIDPI_IMAGES: 'YES'
+          CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
+          IBSC_MODULE: res
+          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-res-Info.plist
+          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Bundles"
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
+          PRODUCT_NAME: res
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          WRAPPER_EXTENSION: bundle
+        Base Configuration: res.debug.xcconfig
+    - Release:
+        Build Settings:
+          CODE_SIGNING_ALLOWED: 'NO'
+          COMBINE_HIDPI_IMAGES: 'YES'
+          CONFIGURATION_BUILD_DIR: "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/res"
+          IBSC_MODULE: res
+          INFOPLIST_FILE: Target Support Files/res/ResourceBundle-res-res-Info.plist
+          INSTALL_PATH: "$(LOCAL_LIBRARY_DIR)/Bundles"
+          MACOSX_DEPLOYMENT_TARGET: '10.0'
+          PRODUCT_NAME: res
+          SDKROOT: macosx
+          SKIP_INSTALL: 'YES'
+          WRAPPER_EXTENSION: bundle
+        Base Configuration: res.release.xcconfig
+
+
+
+Build Configurations:
+- Debug:
+    Build Settings:
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: 'YES'
+      CLANG_ANALYZER_NONNULL: 'YES'
+      CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: YES_AGGRESSIVE
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++14
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_ENABLE_OBJC_WEAK: 'YES'
+      CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_COMMA: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      CLANG_WARN_DOCUMENTATION_COMMENTS: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INFINITE_RECURSION: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_NON_LITERAL_NULL_CONVERSION: 'YES'
+      CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: 'YES'
+      CLANG_WARN_OBJC_LITERAL_CONVERSION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: 'YES'
+      CLANG_WARN_RANGE_LOOP_ANALYSIS: 'YES'
+      CLANG_WARN_STRICT_PROTOTYPES: 'YES'
+      CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
+      CLANG_WARN_UNGUARDED_AVAILABILITY: YES_AGGRESSIVE
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      DEBUG_INFORMATION_FORMAT: dwarf
+      ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+      ENABLE_TESTABILITY: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu11
+      GCC_DYNAMIC_NO_PIC: 'NO'
+      GCC_NO_COMMON_BLOCKS: 'YES'
+      GCC_OPTIMIZATION_LEVEL: '0'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - POD_CONFIGURATION_DEBUG=1
+      - DEBUG=1
+      - "$(inherited)"
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      MTL_ENABLE_DEBUG_INFO: INCLUDE_SOURCE
+      MTL_FAST_MATH: 'YES'
+      ONLY_ACTIVE_ARCH: 'YES'
+      PRODUCT_NAME: "$(TARGET_NAME)"
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+      SWIFT_VERSION: '5.0'
+      SYMROOT: "${SRCROOT}/../build"
+- Release:
+    Build Settings:
+      ALWAYS_SEARCH_USER_PATHS: 'NO'
+      CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: 'YES'
+      CLANG_ANALYZER_NONNULL: 'YES'
+      CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: YES_AGGRESSIVE
+      CLANG_CXX_LANGUAGE_STANDARD: gnu++14
+      CLANG_CXX_LIBRARY: libc++
+      CLANG_ENABLE_MODULES: 'YES'
+      CLANG_ENABLE_OBJC_ARC: 'YES'
+      CLANG_ENABLE_OBJC_WEAK: 'YES'
+      CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING: 'YES'
+      CLANG_WARN_BOOL_CONVERSION: 'YES'
+      CLANG_WARN_COMMA: 'YES'
+      CLANG_WARN_CONSTANT_CONVERSION: 'YES'
+      CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS: 'YES'
+      CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+      CLANG_WARN_DOCUMENTATION_COMMENTS: 'YES'
+      CLANG_WARN_EMPTY_BODY: 'YES'
+      CLANG_WARN_ENUM_CONVERSION: 'YES'
+      CLANG_WARN_INFINITE_RECURSION: 'YES'
+      CLANG_WARN_INT_CONVERSION: 'YES'
+      CLANG_WARN_NON_LITERAL_NULL_CONVERSION: 'YES'
+      CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: 'YES'
+      CLANG_WARN_OBJC_LITERAL_CONVERSION: 'YES'
+      CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+      CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: 'YES'
+      CLANG_WARN_RANGE_LOOP_ANALYSIS: 'YES'
+      CLANG_WARN_STRICT_PROTOTYPES: 'YES'
+      CLANG_WARN_SUSPICIOUS_MOVE: 'YES'
+      CLANG_WARN_UNGUARDED_AVAILABILITY: YES_AGGRESSIVE
+      CLANG_WARN_UNREACHABLE_CODE: 'YES'
+      CLANG_WARN__DUPLICATE_METHOD_MATCH: 'YES'
+      COPY_PHASE_STRIP: 'NO'
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+      ENABLE_NS_ASSERTIONS: 'NO'
+      ENABLE_STRICT_OBJC_MSGSEND: 'YES'
+      GCC_C_LANGUAGE_STANDARD: gnu11
+      GCC_NO_COMMON_BLOCKS: 'YES'
+      GCC_PREPROCESSOR_DEFINITIONS:
+      - POD_CONFIGURATION_RELEASE=1
+      - "$(inherited)"
+      GCC_WARN_64_TO_32_BIT_CONVERSION: 'YES'
+      GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+      GCC_WARN_UNDECLARED_SELECTOR: 'YES'
+      GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
+      GCC_WARN_UNUSED_FUNCTION: 'YES'
+      GCC_WARN_UNUSED_VARIABLE: 'YES'
+      MACOSX_DEPLOYMENT_TARGET: '10.8'
+      MTL_ENABLE_DEBUG_INFO: 'NO'
+      MTL_FAST_MATH: 'YES'
+      PRODUCT_NAME: "$(TARGET_NAME)"
+      STRIP_INSTALLED_PRODUCT: 'NO'
+      SWIFT_COMPILATION_MODE: wholemodule
+      SWIFT_OPTIMIZATION_LEVEL: "-O"
+      SWIFT_VERSION: '5.0'
+      SYMROOT: "${SRCROOT}/../build"

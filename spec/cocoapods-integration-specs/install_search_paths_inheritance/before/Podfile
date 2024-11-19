@@ -1,0 +1,16 @@
+platform :ios, '8.0'
+
+target 'App' do
+  use_frameworks!
+
+  pod 'logger', path: 'logger'
+  pod 'sharedlib/Core', path: 'sharedlib'
+  pod 'asserts', path: 'asserts'
+
+  target 'Test' do
+    inherit! :search_paths
+
+    pod 'testkit', path: 'testkit'
+    pod 'sharedlib/Testing', path: 'sharedlib'
+  end
+end

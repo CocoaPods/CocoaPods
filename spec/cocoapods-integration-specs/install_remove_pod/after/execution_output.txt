@@ -1,0 +1,60 @@
+CLAIDE_DISABLE_AUTO_WRAP=TRUE COCOAPODS_DISABLE_STATS=TRUE COCOAPODS_SKIP_CACHE=TRUE COCOAPODS_VALIDATOR_SKIP_XCODEBUILD=TRUE CP_REPOS_DIR=ROOT/spec/fixtures/spec-repos ruby -W0 ROOT/bin/pod install --no-repo-update --verbose --no-ansi 2>&1
+  Preparing
+
+Analyzing dependencies
+
+Inspecting targets to integrate
+  Using `ARCHS` setting to build architectures of target `Pods-SampleApp`: (`$(ARCHS_STANDARD_64_BIT)`)
+
+Finding Podfile changes
+  R JSONKit
+  - Reachability
+
+Resolving dependencies of `Podfile`
+
+Comparing resolved specification to the sandbox manifest
+  R JSONKit
+  M Reachability
+
+Downloading dependencies
+
+-> Installing Reachability 3.1.0
+ > Git download
+ > Git download
+     $ GIT_BIN clone https://github.com/tonymillion/Reachability.git PROJECT/Pods/Reachability --template= --single-branch --depth 1 --branch v3.1.0
+
+  - Running pre install hooks
+
+-> Removing JSONKit
+  - Running pre integrate hooks
+
+Generating Pods project
+  - Creating Pods project
+  - Installing files into Pods project
+    - Adding source files
+    - Adding frameworks
+    - Adding libraries
+    - Adding resources
+    - Linking headers
+  - Installing Pod Targets
+    - Installing target `Reachability` iOS 4.3
+      - Generating dummy source at `Pods/Target Support Files/Reachability/Reachability-dummy.m`
+  - Installing Aggregate Targets
+    - Installing target `Pods-SampleApp` iOS 6.0
+      - Generating dummy source at `Pods/Target Support Files/Pods-SampleApp/Pods-SampleApp-dummy.m`
+  - Generating deterministic UUIDs
+  - Stabilizing target UUIDs
+  - Running post install hooks
+  - Writing Xcode project file to `Pods/Pods.xcodeproj`
+  Cleaning up sandbox directory
+
+Integrating client project
+
+Integrating target `Pods-SampleApp` (`SampleApp.xcodeproj` project)
+  Removing old product reference `libPods.a` from project.
+  Adding Build Phase '[CP] Check Pods Manifest.lock' to project.
+  - Running post integrate hooks
+  - Writing Lockfile in `Podfile.lock`
+  - Writing Manifest in `Pods/Manifest.lock`
+
+-> Pod installation complete! There is 1 dependency from the Podfile and 1 total pod installed.

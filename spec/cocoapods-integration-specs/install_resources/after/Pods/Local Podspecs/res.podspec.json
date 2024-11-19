@@ -1,0 +1,24 @@
+{
+  "name": "res",
+  "version": "0.1.0",
+  "summary": "MIND BLOWN",
+  "homepage": "https://github.com/",
+  "license": "MIT",
+  "authors": {
+    "Boris Bügling": "boris@icculus.org"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/res.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "osx": "10.0"
+  },
+  "source_files": "*.m",
+  "resources": "troll.png",
+  "resource_bundles": {
+    "res": [
+      "512_black.png"
+    ]
+  }
+}

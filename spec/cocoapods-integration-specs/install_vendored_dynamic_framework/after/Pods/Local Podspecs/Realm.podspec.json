@@ -1,0 +1,32 @@
+{
+  "name": "Realm",
+  "version": "0.94.1",
+  "summary": "Realm is a modern data framework & database for iOS & OS X.",
+  "description": "The Realm database, for Objective-C. (If you want to use Realm from Swift, see the “RealmSwift” pod.)\n\nRealm is a mobile database: a replacement for Core Data & SQLite. You can use it on iOS & OS X. Realm is not an ORM on top SQLite: instead it uses its own persistence engine, built for simplicity (& speed). Learn more and get help at https://realm.io",
+  "homepage": "https://realm.io",
+  "source": {
+    "http": "https://github.com/realm/realm-cocoa/releases/download/v0.94.1/realm-swift-0.94.1.zip",
+    "flatten": true
+  },
+  "authors": {
+    "Realm": "help@realm.io"
+  },
+  "libraries": "c++",
+  "requires_arc": true,
+  "social_media_url": "https://twitter.com/realm",
+  "documentation_url": "https://realm.io/docs/objc/0.94.1",
+  "license": {
+    "type": "Apache 2.0",
+    "file": "realm-swift-0.94.1/LICENSE.txt"
+  },
+  "ios": {
+    "vendored_frameworks": "realm-swift-0.94.1/ios/swift-1.2/Realm.framework"
+  },
+  "osx": {
+    "vendored_frameworks": "realm-swift-0.94.1/osx/swift-1.2/Realm.framework"
+  },
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9"
+  }
+}

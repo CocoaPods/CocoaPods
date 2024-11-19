@@ -1,0 +1,44 @@
+{
+  "name": "sharedlib",
+  "version": "0.0.1",
+  "summary": "summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.summary: The summary is not meaningful.",
+  "description": "not emptynot emptynot emptynot emptynot emptynot empty",
+  "homepage": "http://blalblalba/testutils",
+  "license": "MIT",
+  "authors": {
+    "Felipe Cypriano": "felipe@thumbtack.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "platforms": {
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
+  },
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": "Classes/Core/*.{h,m}",
+      "dependencies": {
+        "asserts": [
+
+        ],
+        "logger": [
+
+        ]
+      }
+    },
+    {
+      "name": "Testing",
+      "source_files": "Classes/Testing/*.{h,m}",
+      "dependencies": {
+        "testkit": [
+
+        ]
+      }
+    }
+  ]
+}

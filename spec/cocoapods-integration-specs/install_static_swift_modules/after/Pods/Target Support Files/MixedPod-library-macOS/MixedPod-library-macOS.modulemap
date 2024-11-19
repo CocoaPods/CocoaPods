@@ -1,0 +1,7 @@
+module MixedPod {
+  umbrella header "MixedPod-library-macOS-umbrella.h"
+  exclude header "MixedPod-library-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

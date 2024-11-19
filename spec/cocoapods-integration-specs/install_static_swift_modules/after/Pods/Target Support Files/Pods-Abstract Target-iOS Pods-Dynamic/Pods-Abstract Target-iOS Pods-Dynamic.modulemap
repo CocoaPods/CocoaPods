@@ -1,0 +1,6 @@
+framework module Pods_Abstract_Target_iOS_Pods_Dynamic {
+  umbrella header "Pods-Abstract Target-iOS Pods-Dynamic-umbrella.h"
+
+  export *
+  module * { export * }
+}

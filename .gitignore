@@ -7,6 +7,8 @@
 .rbenv-version
 .rbx/
 xcuserdata
+xcuserdata/*.xcuserdatad
+!xcuserdata/INTEGRATION.xcuserdatad
 project.xcworkspace
 DerivedData
 /concatenated.*
@@ -23,6 +25,7 @@ spec/fixtures/integration/Headers/
 spec/fixtures/snake
 spec/fixtures/vcr
 spec/fixtures/spec-repos/Spec_Lock
+.hg
 tmp
 
 # Examples

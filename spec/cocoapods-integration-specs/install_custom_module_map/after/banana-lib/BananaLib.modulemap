@@ -1,0 +1,10 @@
+module BananaLib {
+    umbrella header "Banana.h"
+
+    export *
+    module * { export * }
+
+    explicit module Private {
+        header "BananaPrivate.h"
+    }
+}

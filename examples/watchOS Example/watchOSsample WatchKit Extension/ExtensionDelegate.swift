@@ -7,6 +7,7 @@
 //
 
 import WatchKit
+import Alamofire
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
