@@ -160,6 +160,15 @@ module Pod
       (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
     end
 
+    it 'successfully pushes spec without validating it when flag no-lint' do
+      cmd = command('repo', 'push', 'master', '--no-lint')
+      Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
+      cmd.expects(:validate_podspec_files).never
+      Dir.chdir(temporary_directory) { cmd.run }
+      Dir.chdir(@upstream) { `git checkout main -q` }
+      (@upstream + 'PushTest/1.4/PushTest.podspec').read.should.include('PushTest')
+    end
+
     it 'successfully pushes a spec to URL' do
       cmd = command('repo', 'push', @upstream)
       Dir.chdir(@upstream) { `git checkout -b tmp_for_push -q` }
