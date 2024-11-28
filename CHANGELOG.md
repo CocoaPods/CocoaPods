@@ -284,6 +284,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Justin Martin](https://github.com/justinseanmartin)
   [#11660](https://github.com/CocoaPods/CocoaPods/pull/11660)
 
+* Add missing pre-integrate and post-integrate plugin hooks.  
+  [Soumya Ranjan Mahunt](https://github.com/soumyamahunt)
+  [#11277](https://github.com/CocoaPods/CocoaPods/issues/11277)
+  [#11299](https://github.com/CocoaPods/CocoaPods/pull/11299)
+
 ## 1.11.3 (2022-03-16)
 
 ##### Enhancements
