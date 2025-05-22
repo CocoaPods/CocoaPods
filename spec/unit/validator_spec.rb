@@ -830,7 +830,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch SE')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -862,7 +862,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch SE')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -896,7 +896,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + analyzer_args
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch SE') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -931,7 +931,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + analyzer_args
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch SE') + analyzer_args
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate.should == true
       end
@@ -958,7 +958,7 @@ module Pod
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         args = %w(CODE_SIGN_IDENTITY=- -sdk xrsimulator) + Fourflusher::SimControl.new.destination('Apple Vision Pro')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
-        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator)
+        args = %w(CODE_SIGN_IDENTITY=- -sdk watchsimulator) + Fourflusher::SimControl.new.destination('Apple Watch SE')
         Executable.expects(:execute_command).with('xcodebuild', command + args, true).once.returns('')
         validator.validate
       end
