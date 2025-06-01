@@ -28,6 +28,7 @@ module Pod
             ["--sources=#{Pod::TrunkSource::TRUNK_REPO_URL}", 'The sources from which to pull dependent pods ' \
              '(defaults to all available repos). Multiple sources must be comma-delimited'],
             ['--local-only', 'Does not perform the step of pushing REPO to its remote'],
+            ['--no-lint', 'Does not perform the Lint step'],
             ['--no-private', 'Lint includes checks that apply only to public repos'],
             ['--skip-import-validation', 'Lint skips validating that the pod can be imported'],
             ['--skip-tests', 'Lint skips building and running tests during validation'],
@@ -52,6 +53,7 @@ module Pod
           @podspec = argv.shift_argument
           @use_frameworks = !argv.flag?('use-libraries')
           @use_modular_headers = argv.flag?('use-modular-headers', false)
+          @lint = argv.flag?('lint', true)
           @private = argv.flag?('private', true)
           @message = argv.option('commit-message')
           @commit_message = argv.flag?('commit-message', false)
@@ -78,7 +80,7 @@ module Pod
           open_editor if @commit_message && @message.nil?
           check_if_push_allowed
           update_sources if @update_sources
-          validate_podspec_files
+          validate_podspec_files if @lint
           check_repo_status
           update_repo
           add_specs_to_repo

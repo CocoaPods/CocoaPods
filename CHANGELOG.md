@@ -8,7 +8,9 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Enhancements
 
-* None.  
+* Added `--no-lint` option for `pod repo push` command to allow skipping Lint phase when publishing a Pod.  
+  [Guillermo Mazzola](https://github.com/gmazzo)
+  [#12706](https://github.com/CocoaPods/CocoaPods/pull/12706)
 
 ##### Bug Fixes
 
