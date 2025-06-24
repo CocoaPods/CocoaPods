@@ -11,6 +11,7 @@ module Pod
     class FileAccessor
       HEADER_EXTENSIONS = Xcodeproj::Constants::HEADER_FILES_EXTENSIONS
       SOURCE_FILE_EXTENSIONS = (%w(.m .mm .i .c .cc .cxx .cpp .c++ .swift) + HEADER_EXTENSIONS).uniq.freeze
+      MAX_AUTO_DETECTED_DOCS = 100
 
       GLOB_PATTERNS = {
         :readme              => 'readme{*,.*}'.freeze,
@@ -401,7 +402,12 @@ module Pod
       # @return [Array<Pathname>] The paths of auto-detected docs
       #
       def docs
-        path_list.glob([GLOB_PATTERNS[:docs]])
+        files = path_list.glob([GLOB_PATTERNS[:docs]])
+        if files.count > MAX_AUTO_DETECTED_DOCS
+          UI.warn "Limiting development docs for podspec `#{spec.name}` to #{MAX_AUTO_DETECTED_DOCS} files"
+        end
+
+        files.first MAX_AUTO_DETECTED_DOCS
       end
 
       # @return [Pathname] The path of the license file specified in the
