@@ -954,7 +954,8 @@ module Pod
     end
 
     def shares_pod_target_xcscheme?(pod_target)
-      Pathname.new(@installer.pods_project.path + pod_target.label).exist?
+      scheme_path = Xcodeproj::XCScheme.user_data_dir(@installer.pods_project.path) + "#{pod_target.label}.xcscheme"
+      File.exist?(scheme_path)
     end
 
     def add_result(type, attribute_name, message, public_only = false)

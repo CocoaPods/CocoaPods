@@ -1621,6 +1621,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Share pod target xcscheme if present during validation  
+  [icecrystal23](https://github.com/icecrystal23)
+  [#8473](https://github.com/CocoaPods/CocoaPods/pull/8473)
+
 * Fix linking of vendored libraries and frameworks in pod targets  
   [Wes Campaigne](https://github.com/Westacular)
   [#8453](https://github.com/CocoaPods/CocoaPods/issues/8453)
