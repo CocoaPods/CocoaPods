@@ -76,6 +76,18 @@ module Pod
                 create_module_map(native_target) do |generator|
                   generator.headers.concat module_map_additional_headers
                 end
+
+                if target.uses_swift?
+                  create_objc_bridging_module_map(native_target) do |generator|
+                    library_file_accessors.flat_map do |file_accessor|
+                      all_headers = file_accessor.source_files.select { |i| i.extname == '.h'}
+                      (all_headers - file_accessor.public_headers).map do |private_header|
+                        generator.headers.append Generator::ModuleMap::Header.new(private_header.basename)
+                      end
+                    end
+                  end
+                end
+
                 create_umbrella_header(native_target) do |generator|
                   generator.imports += library_file_accessors.flat_map do |file_accessor|
                     header_dir = if !target.build_as_framework? && dir = file_accessor.spec_consumer.header_dir
@@ -992,6 +1004,31 @@ module Pod
               relative_path = target.module_map_path.relative_path_from(sandbox.root).to_s
               native_target.build_configurations.each do |c|
                 c.build_settings['MODULEMAP_FILE'] = relative_path.to_s
+              end
+            end
+          end
+
+          def create_objc_bridging_module_map(native_target)
+            generator = Generator::ModuleMap.new(target, true, true)
+            yield generator if block_given?
+            path = target.objc_bridging_module_map_path_to_write
+
+            UI.message "- Generating ObjC-to-Swift bridging module map file at #{UI.path(path)}" do
+              update_changed_file(generator, path)
+              add_file_to_support_group(path)
+
+              linked_path = target.objc_bridging_module_map_path
+              if path != linked_path
+                linked_path.dirname.mkpath
+                source = path.relative_path_from(linked_path.dirname)
+                FileUtils.ln_sf(source, linked_path)
+              end
+
+              relative_path = target.objc_bridging_module_map_path
+                                    .relative_path_from(sandbox.root)
+                                    .dirname.to_s.gsub(' ', '\\ ')
+              native_target.build_configurations.each do |c|
+                c.build_settings['SWIFT_INCLUDE_PATHS'] = relative_path
               end
             end
           end
