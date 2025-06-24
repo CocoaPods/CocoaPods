@@ -1009,8 +1009,8 @@ You have either:
         end
 
         resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
-        resolver.resolve.values.flatten.map { |rs| rs.spec.to_s }.sort.
-          should == ['Core (1.0.1)', 'Data (1.0.1)', 'Data/Tests (1.0.1)', 'Testing (1.0.1)']
+        resolver.resolve.values.flatten.map { |rs| "#{rs.spec} #{rs.spec.spec_source.name}" }.sort.
+          should == ['Core (1.0.1) test_repo1', 'Data (1.0.1) test_repo1', 'Data/Tests (1.0.1) test_repo1', 'Testing (1.0.1) test_repo1']
       end
 
       it 'does not warn when multiple sources contain a pod but a dependency ' \
