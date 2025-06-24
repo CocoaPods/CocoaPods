@@ -93,7 +93,7 @@ module Pod
     def clean_pod(name, pod_dir)
       pod_dir.rmtree if pod_dir&.exist?
       podspec_path = specification_path(name)
-      podspec_path.rmtree if podspec_path&.exist?
+      podspec_path.rmtree if podspec_path&.exist? && !local?(name)
       pod_target_project_path = pod_target_project_path(name)
       pod_target_project_path.rmtree if pod_target_project_path&.exist?
     end
