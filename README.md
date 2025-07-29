@@ -8,7 +8,7 @@ This fork contains some PRs that haven't yet been merged or released upstream bu
 - CocoaPods/CocoaPods#11324
 - CocoaPods/CocoaPods#11332
 
-Up-to-date with the upstream version [1.15.2](https://github.com/CocoaPods/CocoaPods/releases/tag/1.15.2).
+Up-to-date with the upstream version [1.16.2](https://github.com/CocoaPods/CocoaPods/releases/tag/1.16.2).
 
 ### CocoaPods: The Cocoa dependency manager
 
