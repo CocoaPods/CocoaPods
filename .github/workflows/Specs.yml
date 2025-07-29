@@ -66,6 +66,7 @@ jobs:
         run: bundle exec rake spec:all
         env:
           COCOAPODS_CI_TASKS: ${{ matrix.task }}
+          GENERATE_COVERAGE: ${{ matrix.coverage }}
 
 on:
   push:

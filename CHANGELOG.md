@@ -12,7 +12,22 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  
+    [Parsa Nasirimehr](https://github.com/TheRogue76)
+    [#12691](https://github.com/CocoaPods/CocoaPods/pull/12691)
+
+
+## 1.16.2 (2024-10-31)
+
+##### Enhancements
+
 * None.  
+
+##### Bug Fixes
+
+* Bump min xcodeproj to 1.27.0 to include revert of breaking build setting changes.  
+  [Eric Amorde](https://github.com/amorde)
+  [#12675](https://github.com/CocoaPods/CocoaPods/pull/12675)
 
 
 ## 1.16.1 (2024-10-29)

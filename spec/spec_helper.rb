@@ -1,11 +1,12 @@
 # Set up coverage analysis
 #-----------------------------------------------------------------------------#
 
-if ENV['GENERATE_COVERAGE']
+if ENV['GENERATE_COVERAGE'] == '1'
   require 'simplecov'
 
   SimpleCov.start do
     add_filter '/spec_helper/'
+    add_filter '/vendor/bundle'
   end
 end
 
