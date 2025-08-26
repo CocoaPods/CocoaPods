@@ -1,3 +1,9 @@
+# ⚠️ CocoaPods is in maintenance mode
+
+Cocoapods is not receiving active development. Refer to [the blog](https://blog.cocoapods.org/) for the latest status of the project.
+
+---
+
 ![CocoaPods Logo](https://raw.github.com/CocoaPods/shared_resources/master/assets/cocoapods-banner-readme.png)
 
 ### CocoaPods: The Cocoa dependency manager
