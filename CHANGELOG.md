@@ -114,6 +114,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [MagnificentMiles](https://github.com/MagnificentMiles)
   [#12159](https://github.com/CocoaPods/CocoaPods/pull/12159)
 
+* Correctly process multiple `xcframeworks` dSYMs a pod provides.  
+  [Soumya Ranjan Mahunt](https://github.com/soumyamahunt)
+  [#12215](https://github.com/CocoaPods/CocoaPods/pull/12215)
+
 ## 1.14.3 (2023-11-19)
 
 ##### Enhancements
