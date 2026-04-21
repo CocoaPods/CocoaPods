@@ -12,6 +12,8 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Serialize concurrent rsync invocations in the `[CP] Copy XCFrameworks` build phase to prevent races when multiple Pods targets depend on the same xcframework (e.g. the same pod at different deployment targets).  
+
 * Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  
     [Parsa Nasirimehr](https://github.com/TheRogue76)
     [#12691](https://github.com/CocoaPods/CocoaPods/pull/12691)
