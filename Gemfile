@@ -35,7 +35,7 @@ group :development do
 
   # Pin activesupport to < 7 because we still test with Ruby 2.6 in CI.
   gem 'activesupport', '> 5', '< 7'
-  gem 'bacon', :git => 'https://github.com/leahneukirchen/bacon.git'
+  gem 'bacon', :git => 'https://github.com/CocoaPods/bacon.git'
   gem 'mocha', '< 1.5'
   gem 'mocha-on-bacon'
   gem 'netrc'

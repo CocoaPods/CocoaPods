@@ -49,6 +49,12 @@ GIT
       rexml (>= 3.3.6, < 4.0)
 
 GIT
+  remote: https://github.com/CocoaPods/bacon.git
+  revision: dc4f9b88530b80117a9ab008260b7120e09c9ff9
+  specs:
+    bacon (1.2.0)
+
+GIT
   remote: https://github.com/CocoaPods/cocoapods-deintegrate.git
   revision: 2e378b88c65a21a4b89fad989a81a23caec48cdf
   branch: master
@@ -101,12 +107,6 @@ GIT
     inch_by_inch (1.0.1)
       inch (~> 0.8)
       rake
-
-GIT
-  remote: https://github.com/leahneukirchen/bacon.git
-  revision: 34068e01b6cc8b83f744b28e8ae7b4fd07affccb
-  specs:
-    bacon (1.2.0)
 
 GIT
   remote: https://github.com/mrackwitz/CLIntegracon.git
