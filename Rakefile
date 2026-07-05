@@ -321,7 +321,7 @@ begin
             when :osx
               execute_command(*xcodebuild_args)
             when :ios
-              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', 'CODE_SIGNING_ALLOWED=NO', '-destination', 'platform=iOS Simulator,name=iPhone 14 Pro']
+              xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', 'CODE_SIGNING_ALLOWED=NO', '-destination', 'platform=iOS Simulator,name=iPhone 16 Pro']
               execute_command(*xcodebuild_args)
             when :watchos
               xcodebuild_args.concat ['ONLY_ACTIVE_ARCH=NO', 'CODE_SIGNING_ALLOWED=NO', '-destination', 'platform=watchOS Simulator,name=Apple Watch Series 5 - 40mm']
