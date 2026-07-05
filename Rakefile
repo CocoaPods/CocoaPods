@@ -267,10 +267,10 @@ begin
           puts '    Installing Pods'
           # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
           # TODO: The sandbox is blocking local git repos making bundler crash
-          pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
+          pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec pod'
 
           execute_command 'rm -rf Pods'
-          execute_command "#{pod_command} install --verbose --no-repo-update"
+          execute_command "#{pod_command} install --verbose"
         end
       end
     end
@@ -295,10 +295,10 @@ begin
           puts '    Installing Pods'
           # pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/sandbox-pod'
           # TODO: The sandbox is blocking local git repos making bundler crash
-          pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec ../../bin/pod'
+          pod_command = ENV['FROM_GEM'] ? 'sandbox-pod' : 'bundle exec pod'
 
           execute_command 'rm -rf Pods'
-          execute_command "#{pod_command} install --verbose --no-repo-update"
+          execute_command "#{pod_command} install --verbose"
 
           workspace_path = 'Examples.xcworkspace'
           workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
