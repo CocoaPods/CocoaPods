@@ -7,13 +7,13 @@ jobs:
       matrix:
         task: [SPECS]
         ruby: [2.6, 2.7, 3.0]
-        os: [ubuntu-20.04]
+        os: [ubuntu-24.04]
         include:
           - task: SPECS
             os: macos-latest
             ruby: system
           - task: EXAMPLES
-            os: macos-14
+            os: macos-15
             ruby: system
 
     name: ${{ matrix.task }} / ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
@@ -46,7 +46,8 @@ jobs:
         run: |
           gem install bundler -v "~> 1.17"
           bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3 --without debugging documentation
+          bundle config set without 'debugging documentation'
+          bundle install --jobs 4 --retry 3
       - uses: actions/cache/save@v4
         id: bundle-cache-save
         with:
