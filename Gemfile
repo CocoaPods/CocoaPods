@@ -38,6 +38,7 @@ group :development do
   gem 'bacon', :git => 'https://github.com/CocoaPods/bacon.git'
   gem 'mocha', '< 1.5'
   gem 'mocha-on-bacon'
+  gem 'mutex_m'
   gem 'netrc'
   gem 'prettybacon'
   gem 'typhoeus'

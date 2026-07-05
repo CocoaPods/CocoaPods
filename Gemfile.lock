@@ -256,6 +256,7 @@ GEM
     mocha-on-bacon (0.2.3)
       mocha (>= 0.13.0)
     multipart-post (2.4.1)
+    mutex_m (0.3.0)
     nap (1.1.0)
     netrc (0.11.0)
     nkf (0.2.0)
@@ -357,6 +358,7 @@ DEPENDENCIES
   mocha (< 1.5)
   mocha-on-bacon
   molinillo!
+  mutex_m
   nanaimo!
   netrc
   octokit (~> 4.18.0)
