@@ -61,7 +61,7 @@ group :development do
 
   gem 'octokit', '~> 4.18.0'
 
-  gem 'danger', '~> 8.0'
+  gem 'danger'
 end
 
 group :debugging do
