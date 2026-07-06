@@ -16,6 +16,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#12913](https://github.com/CocoaPods/CocoaPods/pull/12913)
 
+* Remove unused escape dependency.  
+  [Samuel Giddins](https://github.com/segiddins), [Eric Amorde](https://github.com/amorde)
+  [#12914](https://github.com/CocoaPods/CocoaPods/pull/12914)
+
 ##### Bug Fixes
 
 * Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  
