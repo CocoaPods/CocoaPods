@@ -24,7 +24,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
 
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         id: bundle-cache-restore
         with:
           path: vendor/bundle
@@ -40,7 +40,7 @@ jobs:
       - name: Run Tests
         run: bundle exec rake spec:all
 
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         id: bundle-cache-save
         with:
           path: vendor/bundle
