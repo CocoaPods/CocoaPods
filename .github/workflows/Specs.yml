@@ -32,6 +32,26 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
 
+      # 'system' means Apple's /usr/bin/ruby, NOT the Homebrew Ruby that the
+      # GitHub macOS images put first on PATH. Overwrite PATH with the stock
+      # system directories so none of the image's preinstalled rubies can
+      # shadow /usr/bin/ruby. Apple's default gem home is not writable, so
+      # gems go to ~/.gem (whose bin dir leads the stubbed PATH).
+      - name: Use Apple system Ruby
+        if: ${{ matrix.ruby == 'system' }}
+        run: |
+          echo "GEM_HOME=$HOME/.gem" >> $GITHUB_ENV
+          echo "PATH=$HOME/.gem/bin:/usr/bin:/bin:/usr/sbin:/sbin" >> $GITHUB_ENV
+
+      - name: Verify system Ruby
+        if: ${{ matrix.ruby == 'system' }}
+        run: |
+          ruby --version
+          if [ "$(which ruby)" != "/usr/bin/ruby" ]; then
+            echo "::error::Expected /usr/bin/ruby, got $(which ruby) ($(ruby --version))"
+            exit 1
+          fi
+
       - name: Update git submodules
         run: git submodule update --init
 
@@ -39,12 +59,19 @@ jobs:
         id: bundle-cache-restore
         with:
           path: vendor/bundle
-          key: gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
+          key: gems@v2-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
           restore-keys: |
-            gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-
+            gems@v2-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-
       - name: Run bundle install
         run: |
-          gem install bundler -v "~> 1.17"
+          # Match the Gemfile.lock BUNDLED WITH version; 2.3.26 supports all
+          # matrix Rubies (>= 2.6). For 'system', /usr/bin/gem pins the
+          # binstub to Apple's Ruby.
+          if [ "${{ matrix.ruby }}" = "system" ]; then
+            /usr/bin/gem install bundler -v 2.3.26
+          else
+            gem install bundler -v 2.3.26
+          fi
           bundle config path vendor/bundle
           bundle config set without 'debugging documentation'
           bundle install --jobs 4 --retry 3
