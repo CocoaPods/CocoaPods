@@ -4,7 +4,8 @@ require 'xcodeproj'
 # It is very likely that we'll need these and as some of those paths will atm
 # result in a I18n deprecation warning, we load those here now so that we can
 # get rid of that warning.
-require 'mutex_m'
+require 'mutex_m' # fix a crash when requiring certain active_support versions
+require 'logger' # fix a crash when requiring certain active_support versions
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_support/core_ext/string/strip'
