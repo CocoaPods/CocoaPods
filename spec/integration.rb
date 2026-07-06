@@ -160,6 +160,10 @@ describe_cli 'pod' do
     # git sometimes prints this, but not always ¯\_(ツ)_/¯
     s.replace_pattern /^\s*Checking out files.*done\./, ''
 
+    # Info-ZIP unzip (Linux) prints `creating:` entries with a trailing
+    # slash; the libarchive-based unzip on newer macOS does not.
+    s.replace_pattern %r{^(\s*creating: .+?)/(\r?)$}, '\1\2'
+
     s.replace_path %r{
       `[^`]*? # The opening backtick on a plugin path
       ([[[:alnum:]]_+-]+?) # The plugin name
