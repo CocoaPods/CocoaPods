@@ -1,3 +1,5 @@
+require 'bundler'
+
 # Bootstrap task
 #-----------------------------------------------------------------------------#
 
@@ -130,10 +132,14 @@ begin
 
       if specs
         title 'Running the specs'
-        sh "bundle exec bacon #{specs('**/*')}"
+        Bundler.with_unbundled_env do
+          sh "bundle exec bacon #{specs('**/*')}"
+        end
 
         title 'Running Integration tests'
-        sh 'bundle exec bacon spec/integration.rb'
+        Bundler.with_unbundled_env do
+          sh 'bundle exec bacon spec/integration.rb'
+        end
       end
 
       if examples && ENV['SKIP_EXAMPLES'].nil?
