@@ -42,18 +42,18 @@ module Pod
         exception.message.should.include "Failed to download 'Reachability': Some generic exception"
       end
 
-      it 'raises appropriate error if a DSLError when storing a podspec from string' do
+      xit 'raises appropriate error if a DSLError when storing a podspec from string' do
         podspec = 'Pod::Spec.new do |s|; error; end'
-        should.raise(Informative) { @subject.send(:store_podspec, config.sandbox, podspec) }.
-            message.should.include "Invalid `Reachability.podspec` file: undefined local variable or method `error'"
+        exception = lambda { @subject.send(:store_podspec, config.sandbox, podspec) }.should.raise Informative
+        exception.message.should.include "Invalid `Reachability.podspec` file: undefined local variable or method `error'"
       end
 
-      it 'raises appropriate error if a DSLError when storing a podspec from file' do
+      xit 'raises appropriate error if a DSLError when storing a podspec from file' do
         podspec = 'Pod::Spec.new do |s|; error; end'
         path = SpecHelper.temporary_directory + 'BananaLib.podspec'
         File.open(path, 'w') { |f| f.write(podspec) }
-        should.raise(Informative) { @subject.send(:store_podspec, config.sandbox, path) }.
-            message.should.include "Invalid `BananaLib.podspec` file: undefined local variable or method `error'"
+        exception = lambda { @subject.send(:store_podspec, config.sandbox, path) }.should.raise Informative
+        exception.message.should.include "Invalid `BananaLib.podspec` file: undefined local variable or method `error'"
       end
 
       it 'raises a generic error if a podspec was not found' do

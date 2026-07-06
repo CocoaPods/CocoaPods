@@ -6,7 +6,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby: [2.7]
-        os: [ubuntu-20.04]
+        os: [ubuntu-24.04]
 
     name: Lint
     runs-on: ${{ matrix.os }}
@@ -24,7 +24,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache/restore@v4
+        id: bundle-cache-restore
         with:
           path: vendor/bundle
           key: gems@v1-${{ matrix.os }}-${{ env.ImageVersion }}-Ruby${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
@@ -33,10 +34,17 @@ jobs:
       - name: Run bundle install
         run: |
           bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3 --without debugging documentation
+          bundle config set without 'debugging documentation'
+          bundle install --jobs 4 --retry 3
 
       - name: Run Tests
         run: bundle exec rake spec:all
+
+      - uses: actions/cache/save@v4
+        id: bundle-cache-save
+        with:
+          path: vendor/bundle
+          key: ${{ steps.bundle-cache-restore.outputs.cache-primary-key }}
 
 on:
   push:

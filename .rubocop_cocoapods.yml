@@ -1,34 +1,34 @@
 
 #- CocoaPods -----------------------------------------------------------------#
 
-ParameterLists:
+Metrics/ParameterLists:
   CountKeywordArgs: false
 
 Style/SafeNavigation:
   Enabled: false
 
 # We adopted raise instead of fail.
-SignalException:
+Style/SignalException:
   EnforcedStyle: only_raise
 
 # They are idiomatic
-AssignmentInCondition:
+Lint/AssignmentInCondition:
   Enabled: false
 
 # Allow backticks
-AsciiComments:
+Style/AsciiComments:
   Enabled: false
 
 # Indentation clarifies logic branches in implementations
-IfUnlessModifier:
+Style/IfUnlessModifier:
   Enabled: false
 
 # No enforced convention here.
-SingleLineBlockParams:
+Style/SingleLineBlockParams:
   Enabled: false
 
 # We only add the comment when needed.
-Encoding:
+Style/Encoding:
   Enabled: false
 
 # Having these make it easier to *not* forget to add one when adding a new
@@ -36,7 +36,7 @@ Encoding:
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 
 Layout/MultilineOperationIndentation:
@@ -54,7 +54,7 @@ GuardClause:
   Enabled: false
 
 # Not always desirable: lib/claide/command/plugins_helper.rb:12:15
-Next:
+Style/Next:
   Enabled: false
 
 # Arbitrary max lengths for classes simply do not work and enabling this will
@@ -98,16 +98,16 @@ Metrics/PerceivedComplexity:
 
 #- CocoaPods support for Ruby 1.8.7 ------------------------------------------#
 
-HashSyntax:
+Style/HashSyntax:
   EnforcedStyle: hash_rockets
 
-Lambda:
+Style/Lambda:
   Enabled: false
 
-DotPosition:
+Layout/DotPosition:
   EnforcedStyle: trailing
 
-EachWithObject:
+Style/EachWithObject:
   Enabled: false
 
 Style/SpecialGlobalVars:
@@ -116,27 +116,19 @@ Style/SpecialGlobalVars:
 #- CocoaPods specs -----------------------------------------------------------#
 
 # Allow for `should.match /regexp/`.
-AmbiguousRegexpLiteral:
-  Exclude:
-    - spec/**/*
-
-Performance/RedundantMatch:
-  Exclude:
-    - spec/**/*
-
-Performance/Count:
+Lint/AmbiguousRegexpLiteral:
   Exclude:
     - spec/**/*
 
 # Allow `object.should == object` syntax.
-Void:
+Lint/Void:
   Exclude:
     - spec/**/*
 
-ClassAndModuleChildren:
+Style/ClassAndModuleChildren:
   Exclude:
     - spec/**/*
 
-UselessComparison:
+Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
     - spec/**/*

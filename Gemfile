@@ -35,9 +35,10 @@ group :development do
 
   # Pin activesupport to < 7 because we still test with Ruby 2.6 in CI.
   gem 'activesupport', '> 5', '< 7'
-  gem 'bacon', :git => 'https://github.com/leahneukirchen/bacon.git'
+  gem 'bacon', :git => 'https://github.com/CocoaPods/bacon.git'
   gem 'mocha', '< 1.5'
   gem 'mocha-on-bacon'
+  gem 'mutex_m'
   gem 'netrc'
   gem 'prettybacon'
   gem 'typhoeus'
@@ -55,12 +56,12 @@ group :development do
 
   # Revert to released gem once https://github.com/segiddins/inch_by_inch/pull/5 lands and a new version is published
   gem 'inch_by_inch', :git => 'https://github.com/CocoaPods/inch_by_inch.git', :branch => 'loosen-dependency'
-  gem 'rubocop', '0.50.0'
+  gem 'rubocop'
   gem 'simplecov'
 
   gem 'octokit', '~> 4.18.0'
 
-  gem 'danger', '~> 8.0'
+  gem 'danger'
 end
 
 group :debugging do
