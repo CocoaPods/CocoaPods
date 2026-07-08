@@ -37,5 +37,14 @@ module Pod
       # Second argument to `install_xcframework` is a boolean indicating whether to embed the framework
       generator.send(:script).should.include 'CoconutLib.xcframework'
     end
+
+    it 'serializes concurrent rsync invocations with a file lock' do
+      xcframework = Xcode::XCFramework.new('CoconutLib', fixture('CoconutLib.xcframework'))
+      generator = CopyXCFrameworksScript.new([xcframework], temporary_sandbox.root, Platform.ios)
+      script = generator.send(:script)
+      script.should.include 'lock_dir="${TMPDIR:-/tmp}/cocoapods-xcframework-'
+      script.should.include 'until mkdir "${lock_dir}"'
+      script.should.include 'rmdir "${lock_dir}" 2>/dev/null || true'
+    end
   end
 end
