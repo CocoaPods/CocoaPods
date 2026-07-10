@@ -1064,7 +1064,7 @@ module Pod
 
             if target.build_as_framework? && !header_mappings_dir(file_accessor).nil? && acl != 'Project'
               relative_path = if mapping_dir = header_mappings_dir(file_accessor)
-                                file_ref.real_path.relative_path_from(mapping_dir)
+                                file_ref.real_path.relative_path_from(Pathname.new(mapping_dir).realpath)
                               else
                                 file_ref.real_path.relative_path_from(file_accessor.path_list.root)
                               end
