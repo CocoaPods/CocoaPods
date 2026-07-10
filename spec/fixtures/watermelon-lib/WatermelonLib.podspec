@@ -31,6 +31,9 @@ Pod::Spec.new do |s|
 
   s.test_spec 'SnapshotTests' do |test_spec|
     test_spec.requires_app_host = true
+    test_spec.info_plist = {
+      'NSPhotoLibraryUsageDescription' => 'Photo Library Access Warning.'
+    }
     test_spec.source_files = 'SnapshotTests/*.{h,m}'
     test_spec.dependency 'iOSSnapshotTestCase/Core'
   end

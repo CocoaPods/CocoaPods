@@ -464,9 +464,11 @@ module Pod
             end
 
             target.test_spec_consumers.select(&:requires_app_host?).reject(&:app_host_name).group_by { |consumer| target.app_host_target_label(consumer.spec) }.
-              map do |(_, target_name), _|
-                AppHostInstaller.new(sandbox, project, target.platform, target_name, target.pod_name, target_name).install!
-              end
+              map do |(_, target_name), consumer| # expose consumer to the block
+              info_plist_entries = consumer.map(&:info_plist).reduce({}, &:merge)
+              # integrate `info_plist_entries` to AppHost for Photos\Location API testing
+              AppHostInstaller.new(sandbox, project, target.platform, target_name, target.pod_name, target_name, :info_plist_entries => info_plist_entries).install!
+            end
           end
 
           # Adds the app targets for the library to the Pods project with the
