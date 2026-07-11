@@ -537,26 +537,11 @@ module Pod
 
               create_app_target_embed_frameworks_script(app_spec)
               create_app_target_copy_resources_script(app_spec)
-              add_resources_to_target(resources, app_native_target)
+              filter_resource_file_references(resources) do |_compile_phase_refs, resource_phase_refs|
+                app_native_target.add_resources(resource_phase_refs)
+              end
 
               hash[app_spec] = app_native_target
-            end
-          end
-
-          # Adds the resources to the compile resources phase of the target.
-          #
-          # @param  [Array<Pathname>] paths the paths to add to the target.
-          #
-          # @param  [PBXNativeTarget] target the target resources are added to.
-          #
-          # @return [Boolean] whether any compile phase references were added.
-          #
-          def add_resources_to_target(paths, target)
-            filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
-              # Resource bundles are only meant to have resources, so install everything
-              # into the resources phase. See note in filter_resource_file_references.
-              target.add_resources(resource_phase_refs + compile_phase_refs)
-              !compile_phase_refs.empty?
             end
           end
 
@@ -576,7 +561,12 @@ module Pod
                 label = target.resources_bundle_target_label(bundle_name)
                 resource_bundle_target = project.new_resources_bundle(label, file_accessor.spec_consumer.platform_name, nil, bundle_name)
                 resource_bundle_target.product_reference.name = label
-                contains_compile_phase_refs = add_resources_to_target(paths, resource_bundle_target)
+                contains_compile_phase_refs = filter_resource_file_references(paths) do |compile_phase_refs, resource_phase_refs|
+                  # Resource bundles are only meant to have resources, so install everything
+                  # into the resources phase. See note in filter_resource_file_references.
+                  resource_bundle_target.add_resources(resource_phase_refs + compile_phase_refs)
+                  !compile_phase_refs.empty?
+                end
 
                 target.user_build_configurations.each do |bc_name, type|
                   resource_bundle_target.add_build_configuration(bc_name, type)
