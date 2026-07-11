@@ -549,9 +549,9 @@ module Pod
       basename = "#{label}.modulemap"
       if build_as_framework?
         super
-      elsif file_accessors.any?(&:module_map)
-        build_headers.root + product_module_name + basename
       else
+        # modulemap should be placed at the same directory with all Public Headers.
+        # To let `export *` works and no Private Headers is exported outside.
         sandbox.public_headers.root + product_module_name + basename
       end
     end
