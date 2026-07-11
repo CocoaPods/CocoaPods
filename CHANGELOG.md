@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#12915](https://github.com/CocoaPods/CocoaPods/pull/12915)
 
+* Override Xcode 12 default for erroring on quoted imports in umbrellas.  
+  This change addresses Apple's requirement to use angle-bracketed includes instead of double-quoted includes for framework headers.
+  [Snow Wu](https://github.com/RbBtSn0w)
+  [#9902](https://github.com/CocoaPods/CocoaPods/issues/9902)
 
 ## 1.16.2 (2024-10-31)
 

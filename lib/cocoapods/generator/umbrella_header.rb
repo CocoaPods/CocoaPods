@@ -30,6 +30,12 @@ module Pod
       def generate
         result = super
 
+        # Modify the result to transform imports, CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER
+        result.gsub!(/#import "([^"]+)"/) do |match|
+          filename = $1
+          "#import <#{target.product_module_name}/#{filename}>"
+        end
+
         result << "\n"
 
         result << <<-eos.strip_heredoc
