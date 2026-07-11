@@ -494,12 +494,13 @@ You have either:
           platform :ios
           pod 'JSONKit', '<= 1.5pre'
         end
-        resolver = create_resolver(podfile)
+        sources = config.sources_manager.sources(%w(trunk))
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
         version = resolver.resolve.values.flatten.first.spec.version
         version.to_s.should == '1.5pre'
 
         locked_deps = dependency_graph_from_array([Dependency.new('JSONKit', '= 1.4')])
-        resolver = create_resolver(podfile, locked_deps)
+        resolver = Resolver.new(config.sandbox, podfile, locked_deps, sources, false)
         version = resolver.resolve.values.flatten.first.spec.version
         version.to_s.should == '1.4'
       end
@@ -963,6 +964,99 @@ You have either:
         resolver.resolve.values.flatten.first.spec.defined_in_file.should == fixture('spec-repos/test_repo/JSONKit/1.4/JSONKit.podspec')
 
         UI.warnings.should.match /multiple specifications/
+      end
+
+      it 'chooses the first source despite having newer version in another source' do
+        test_repo1 = MockSource.new('test_repo1') do
+          pod 'Core', '1.0.0' do
+            test_spec
+          end
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.0' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+        end
+
+        test_repo2 = MockSource.new('test_repo2') do
+          pod 'Core', '1.0.2' do
+            test_spec
+          end
+          pod 'Data', '1.0.2' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+        end
+        podfile = Podfile.new do
+          platform :ios, '9.0'
+          pod 'Data', '~> 1.0'
+        end
+
+        sources = [test_repo1, test_repo2]
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
+        resolver.resolve.values.flatten.map { |rs| rs.spec.to_s }.sort.
+          should == ['Core (1.0.1)', 'Data (1.0.1)']
+
+        sources = [test_repo2, test_repo1]
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
+        resolver.resolve.values.flatten.map { |rs| rs.spec.to_s }.sort.
+          should == ['Core (1.0.2)', 'Data (1.0.2)']
+      end
+
+      it 'chooses the first source while having same versions in another' do
+        test_repo1 = MockSource.new('test_repo1') do
+          pod 'Core', '1.0.0' do
+            test_spec
+          end
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.0' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+        end
+
+        test_repo2 = MockSource.new('test_repo2') do
+          pod 'Core', '1.0.0' do
+            test_spec
+          end
+          pod 'Core', '1.0.1' do
+            test_spec
+          end
+          pod 'Data', '1.0.0' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+          pod 'Data', '1.0.1' do |s|
+            s.dependency 'Core', '~> 1.0'
+            test_spec { |ts| ts.dependency 'Testing', '~> 1.0' }
+          end
+        end
+        podfile = Podfile.new do
+          platform :ios, '9.0'
+          pod 'Data', '~> 1.0'
+        end
+
+        sources = [test_repo1, test_repo2]
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
+        resolver.resolve.values.flatten.map { |rs| "#{rs.spec} #{rs.spec.spec_source.name}" }.sort.
+          should == ['Core (1.0.1) test_repo1', 'Data (1.0.1) test_repo1']
+
+        sources = [test_repo2, test_repo1]
+        resolver = Resolver.new(config.sandbox, podfile, empty_graph, sources, false)
+        resolver.resolve.values.flatten.map { |rs| "#{rs.spec} #{rs.spec.spec_source.name}" }.sort.
+          should == ['Core (1.0.1) test_repo2', 'Data (1.0.1) test_repo2']
       end
 
       it 'chooses the first source in a complicated scenario' do
