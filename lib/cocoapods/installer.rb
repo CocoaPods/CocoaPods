@@ -165,7 +165,7 @@ module Pod
       clean_sandbox
       if installation_options.skip_pods_project_generation?
         show_skip_pods_project_generation_message
-        run_podfile_post_install_hooks
+        run_post_install_hooks
       else
         integrate
       end
@@ -179,7 +179,7 @@ module Pod
     end
 
     def integrate
-      run_podfile_pre_integrate_hooks
+      run_pre_integrate_hooks
       generate_pods_project
       if installation_options.integrate_targets?
         integrate_user_project
@@ -226,7 +226,6 @@ module Pod
         deintegrate_if_different_major_version
         sandbox.prepare
         ensure_plugins_are_installed!
-        run_plugins_pre_install_hooks
       end
     end
 
@@ -256,7 +255,7 @@ module Pod
     def download_dependencies
       UI.section 'Downloading dependencies' do
         install_pod_sources
-        run_podfile_pre_install_hooks
+        run_pre_install_hooks
         clean_pod_sources
       end
     end
@@ -334,7 +333,7 @@ module Pod
         projects_writer = Xcode::PodsProjectWriter.new(sandbox, generated_projects,
                                                        target_installation_results.pod_target_installation_results, installation_options)
         projects_writer.write! do
-          run_podfile_post_install_hooks
+          run_post_install_hooks
         end
 
         pods_project_pod_targets = pod_targets_to_generate - projects_by_pod_targets.values.flatten
@@ -666,6 +665,16 @@ module Pod
       validator.validate!
     end
 
+    # Runs the registered callbacks for the plugins
+    # and Podfile pre install hooks respectively.
+    #
+    # @return [void]
+    #
+    def run_pre_install_hooks
+      run_plugins_pre_install_hooks
+      run_podfile_pre_install_hooks
+    end
+
     # Runs the registered callbacks for the plugins pre install hooks.
     #
     # @return [void]
@@ -680,7 +689,6 @@ module Pod
     # @return [void]
     #
     def perform_post_install_actions
-      run_plugins_post_install_hooks
       warn_for_deprecations
       warn_for_installed_script_phases
       warn_for_removing_git_master_specs_repo
@@ -696,6 +704,36 @@ module Pod
                         "#{'dependency'.pluralize(podfile_dependencies)} from the Podfile " \
                         "and #{pods_installed} total #{'pod'.pluralize(pods_installed)} installed.".green,
                         title_options)
+    end
+
+    # Runs the registered callbacks for the plugins
+    # and Podfile pre integrate hooks respectively.
+    #
+    # @return [void]
+    #
+    def run_pre_integrate_hooks
+      run_plugins_pre_integrate_hooks
+      run_podfile_pre_integrate_hooks
+    end
+
+    # Runs the registered callbacks for the plugins
+    # and Podfile post install hooks respectively.
+    #
+    # @return [void]
+    #
+    def run_post_install_hooks
+      run_plugins_post_install_hooks
+      run_podfile_post_install_hooks
+    end
+
+    # Runs the registered callbacks for the plugins
+    # and Podfile post integrate hooks respectively.
+    #
+    # @return [void]
+    #
+    def run_post_integrate_hooks
+      run_plugins_post_integrate_hooks
+      run_podfile_post_integrate_hooks
     end
 
     # Runs the registered callbacks for the plugins pre integrate hooks.
@@ -927,7 +965,7 @@ module Pod
         integrator = UserProjectIntegrator.new(podfile, sandbox, installation_root, aggregate_targets, generated_aggregate_targets,
                                                :use_input_output_paths => !installation_options.disable_input_output_paths?)
         integrator.integrate!
-        run_podfile_post_integrate_hooks
+        run_post_integrate_hooks
       end
     end
 
