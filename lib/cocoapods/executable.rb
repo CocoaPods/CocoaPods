@@ -90,17 +90,17 @@ module Pod
     #
     def self.which(program)
       program = program.to_s
+      if path_program?(program)
+        return executable_path_for(program)
+      end
+
       paths = ENV.fetch('PATH') { '' }.split(File::PATH_SEPARATOR)
-      paths.unshift('./')
       paths.uniq!
       paths.each do |path|
-        bin = File.expand_path(program, path)
-        if Gem.win_platform?
-          bin += '.exe'
-        end
-        if File.file?(bin) && File.executable?(bin)
-          return bin
-        end
+        next if path.nil? || path.empty? || path == '.'
+
+        bin = executable_path_for(program, path)
+        return bin if bin
       end
       nil
     end
@@ -169,6 +169,19 @@ module Pod
     end
 
     private
+
+    def self.path_program?(program)
+      separator = File::ALT_SEPARATOR
+      program.include?(File::SEPARATOR) || (separator && program.include?(separator))
+    end
+
+    def self.executable_path_for(program, path = nil)
+      bin = path ? File.expand_path(program, path) : File.expand_path(program)
+      if Gem.win_platform? && File.extname(bin).downcase != '.exe'
+        bin += '.exe'
+      end
+      return bin if File.file?(bin) && File.executable?(bin)
+    end
 
     def self.popen3(bin, command, stdout, stderr)
       require 'open3'

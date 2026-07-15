@@ -30,6 +30,10 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Eric Amorde](https://github.com/amorde)
   [#12915](https://github.com/CocoaPods/CocoaPods/pull/12915)
 
+* Harden executable lookup in `Pod::Executable.which` by removing implicit current-directory search, honoring explicit path executables only, and skipping unsafe PATH entries (`''` and `.`) to prevent local executable hijacking.  
+  [Sam Sanoop](https://github.com/snoopysecurity)
+  [#12899](https://github.com/CocoaPods/CocoaPods/pull/TBD)
+
 
 ## 1.16.2 (2024-10-31)
 

@@ -108,6 +108,36 @@ module Pod
       ruby_path.should == 'ruby.exe'
     end
 
+    it 'does not search the current working directory before PATH locations' do
+      ENV.expects(:fetch).with('PATH').returns('/usr/bin:/bin')
+
+      expected_bin = File.expand_path('git', '/usr/bin')
+      File.expects(:file?).with(expected_bin).returns(true)
+      File.expects(:executable?).with(expected_bin).returns(true)
+
+      Executable.which('git').should == expected_bin
+    end
+
+    it 'supports explicit relative executable paths' do
+      explicit_bin = File.expand_path('./git')
+
+      ENV.expects(:fetch).never
+      File.expects(:file?).with(explicit_bin).returns(true)
+      File.expects(:executable?).with(explicit_bin).returns(true)
+
+      Executable.which('./git').should == explicit_bin
+    end
+
+    it 'ignores unsafe PATH entries for current directory' do
+      ENV.expects(:fetch).with('PATH').returns(':/usr/bin:.')
+
+      expected_bin = File.expand_path('git', '/usr/bin')
+      File.expects(:file?).with(expected_bin).returns(true)
+      File.expects(:executable?).with(expected_bin).returns(true)
+
+      Executable.which('git').should == expected_bin
+    end
+
     it 'adds --force-local flag for tar on Windows' do
       Executable.stubs(:which).returns('/usr/bin/tar.exe')
       status = Object.new
