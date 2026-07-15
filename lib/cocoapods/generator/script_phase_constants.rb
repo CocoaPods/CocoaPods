@@ -2,7 +2,7 @@ module Pod
   module Generator
     module ScriptPhaseConstants
       DEFAULT_SCRIPT_PHASE_HEADER = <<-SH.strip_heredoc.freeze
-#!/bin/sh
+#!/bin/bash
 set -e
 set -u
 set -o pipefail
