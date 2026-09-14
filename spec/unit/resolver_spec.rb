@@ -248,6 +248,7 @@ module Pod
           pod 'BlocksKit', '1.5.2'
         end
         Specification.any_instance.stubs(:all_dependencies).returns([Dependency.new('Windows')])
+        Specification.any_instance.stubs(:dependencies).returns([Dependency.new('Windows')])
         create_resolver
         message = should.raise Informative do
           @resolver.resolve
@@ -545,6 +546,43 @@ You have either:
           osx_target = resolved.keys.find { |td| td.label == 'Pods-OSX' }
           resolved[ios_target].map(&:spec).map(&:to_s).should.include ios_subspec
           resolved[osx_target].map(&:spec).map(&:to_s).should.not.include ios_subspec
+        end
+
+        it 'does not require a spec scoped to a platform no target builds for' do
+          # `s.ios.dependency` on a Podfile that only has macOS targets can never be
+          # activated, so resolution must not insist that the pod is findable.
+          spec_hash = {
+            'name' => 'LocalPod',
+            'version' => '1.0',
+            'platforms' => { 'ios' => '8.0', 'osx' => '10.10' },
+            'ios' => { 'dependencies' => { 'PodThatOnlyExistsForIOS' => [] } },
+          }
+          config.sandbox.stubs(:specification).with('LocalPod').returns(Specification.from_hash(spec_hash))
+          @podfile = Podfile.new do
+            target 'OSX' do
+              platform :osx, '10.10'
+              pod 'LocalPod', :path => '../'
+            end
+          end
+          resolve.values.flatten.map(&:spec).map(&:name).should == ['LocalPod']
+        end
+
+        it 'still requires a spec that is not scoped to any platform' do
+          spec_hash = {
+            'name' => 'LocalPod',
+            'version' => '1.0',
+            'platforms' => { 'ios' => '8.0', 'osx' => '10.10' },
+            'dependencies' => { 'PodThatDoesNotExist' => [] },
+          }
+          config.sandbox.stubs(:specification).with('LocalPod').returns(Specification.from_hash(spec_hash))
+          @podfile = Podfile.new do
+            target 'OSX' do
+              platform :osx, '10.10'
+              pod 'LocalPod', :path => '../'
+            end
+          end
+          should.raise(Informative) { resolve }.message.
+            should.match /Unable to find a specification for `PodThatDoesNotExist`/
         end
 
         it 'includes dependencies in the target for the requested platform only' do

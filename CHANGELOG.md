@@ -22,6 +22,11 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Do not require a platform-scoped dependency (`s.ios.dependency`) to be resolvable
+  when no target in the Podfile builds for that platform.  
+  [Gabriel Donadel](https://github.com/gabrieldonadel)
+  [#12916](https://github.com/CocoaPods/CocoaPods/pull/12916)
+
 * Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  
   [Parsa Nasirimehr](https://github.com/TheRogue76)
   [#12691](https://github.com/CocoaPods/CocoaPods/pull/12691)

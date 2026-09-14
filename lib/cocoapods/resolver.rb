@@ -175,7 +175,7 @@ module Pod
     #
     def dependencies_for(specification)
       root_name = Specification.root_name(specification.name)
-      specification.all_dependencies.map do |dependency|
+      dependencies_reachable_from_podfile_platforms(specification).map do |dependency|
         if dependency.root_name == root_name
           dependency.dup.tap { |d| d.specific_version = specification.version }
         else
@@ -520,6 +520,53 @@ You have either:#{specs_update_message}
         EOS
       end
       raise type.new(message).tap { |e| e.set_backtrace(error.backtrace) }
+    end
+
+    # The platform names of every target definition in the Podfile.
+    #
+    # @return [Array<Symbol>]
+    #
+    def podfile_platform_names
+      @podfile_platform_names ||= @podfile_dependency_cache.target_definition_list.
+        map(&:platform).compact.map(&:name).uniq
+    end
+
+    # The dependencies of `specification` that at least one of the Podfile's
+    # target platforms can activate.
+    #
+    # A platform-scoped dependency (`s.ios.dependency`) belonging only to
+    # platforms that no target in the Podfile builds for can never be activated,
+    # so requiring it to be resolvable would fail the install over a pod that
+    # would then be discarded by {#edge_is_valid_for_target_platform?} anyway.
+    #
+    # Dependencies on other specs of the same pod (subspecs) are always kept,
+    # since {#dependencies_for} pins them to the parent's version.
+    #
+    # @param  [Specification] specification
+    #
+    # @return [Array<Dependency>]
+    #
+    def dependencies_reachable_from_podfile_platforms(specification)
+      all_dependencies = specification.all_dependencies
+      platform_names = podfile_platform_names
+      return all_dependencies if platform_names.empty?
+
+      # A spec is only consumable on a platform it declares support for, so ask
+      # only about those. If it supports none of them it does not belong in this
+      # install at all, which `validate_platform` reports far better than an
+      # empty dependency list would.
+      supported = platform_names.select { |name| specification.supported_on_platform?(name) }
+      return all_dependencies if supported.empty?
+
+      root_name = Specification.root_name(specification.name)
+      reachable = supported.flat_map do |platform_name|
+        specification.dependencies(Platform.new(platform_name))
+      end.map(&:name).to_set
+
+      all_dependencies.select do |dependency|
+        reachable.include?(dependency.name) ||
+          Specification.root_name(dependency.name) == root_name
+      end
     end
 
     # Returns whether the given spec is platform-compatible with the dependency
