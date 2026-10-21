@@ -22,6 +22,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix the download cache being imploded by concurrent installations, e.g. parallel CI jobs or
+  the `parallel_pod_downloads` installation option. The `VERSION` file is no longer rewritten
+  when it matches, and a mismatching cache is imploded only once, under a lock.  
+  [levili](https://github.com/levili-T)
+  [#11826](https://github.com/CocoaPods/CocoaPods/issues/11826)
+  [#11149](https://github.com/CocoaPods/CocoaPods/issues/11149)
+
 * Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  
   [Parsa Nasirimehr](https://github.com/TheRogue76)
   [#12691](https://github.com/CocoaPods/CocoaPods/pull/12691)
