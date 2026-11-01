@@ -135,7 +135,6 @@ PATH
       fourflusher (>= 2.3.0, < 3.0)
       gh_inspector (~> 1.0)
       molinillo (~> 0.8.0)
-      nap (~> 1.0)
       ruby-macho (~> 4.1.0)
       xcodeproj (>= 1.28.1, < 2.0)
 
