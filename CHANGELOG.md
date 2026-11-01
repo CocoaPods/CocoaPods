@@ -20,6 +20,13 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   [Samuel Giddins](https://github.com/segiddins), [Eric Amorde](https://github.com/amorde)
   [#12914](https://github.com/CocoaPods/CocoaPods/pull/12914)
 
+* Remove the `nap` dependency, as nap's README now recommends using the
+  standard library. HTTP requests go through `Net::HTTP` (see the matching
+  cocoapods-core, cocoapods-trunk and cocoapods-plugins changes), which uses
+  its default certificate verification against the system trust store.  
+  [Matthew Mongeau](https://github.com/halogenandtoast)
+  [#12934](https://github.com/CocoaPods/CocoaPods/pull/12934)
+
 ##### Bug Fixes
 
 * Update ruby-macho to 4.1.0 to address new mergable libraries not beind detected correctly.  

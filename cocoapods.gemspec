@@ -42,7 +42,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'colored2',       '~> 3.1'
   s.add_runtime_dependency 'fourflusher',   '>= 2.3.0', '< 3.0'
   s.add_runtime_dependency 'gh_inspector',  '~> 1.0'
-  s.add_runtime_dependency 'nap',           '~> 1.0'
   s.add_runtime_dependency 'ruby-macho',    '~> 4.1.0'
 
   s.add_runtime_dependency 'addressable', '~> 2.8'
