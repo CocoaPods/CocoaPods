@@ -25,6 +25,7 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
   cocoapods-core, cocoapods-trunk and cocoapods-plugins changes), which uses
   its default certificate verification against the system trust store.  
   [Matthew Mongeau](https://github.com/halogenandtoast)
+  [#12934](https://github.com/CocoaPods/CocoaPods/pull/12934)
 
 ##### Bug Fixes
 
