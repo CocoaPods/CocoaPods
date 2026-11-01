@@ -2,7 +2,6 @@ require 'cocoapods-core/source'
 require 'cocoapods/open-uri'
 require 'netrc'
 require 'set'
-require 'rest'
 require 'yaml'
 
 module Pod
