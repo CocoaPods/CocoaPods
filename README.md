@@ -69,7 +69,6 @@ contributor [code of conduct](CODE_OF_CONDUCT.md).
 [Mailing List](https://groups.google.com/group/cocoapods) | Feel free to ask any kind of question.
 [Guides](https://guides.cocoapods.org) | Everything you want to know about CocoaPods.
 [Changelog](https://github.com/CocoaPods/CocoaPods/blob/master/CHANGELOG.md) | See the changes introduced in each CocoaPods version.
-[New Pods RSS](https://feeds.cocoapods.org/new-pods.rss) | Don't miss any new Pods.
 [Code of Conduct](CODE_OF_CONDUCT.md) | Find out the standards we hold ourselves to.
 
 ## Projects
