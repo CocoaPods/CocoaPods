@@ -45,7 +45,7 @@ module Pod
               # For the specs, its necessary that to_s is called here even though it is redundant
               # https://github.com/CocoaPods/CocoaPods/pull/7204#issuecomment-342512015
               UI.puts "- #{name} #{from_version.to_s.send(color)} -> #{matching_version.to_s.send(color)} " \
-              "(latest version #{to_version.to_s})" # rubocop:disable Lint/StringConversionInInterpolation
+              "(latest version #{to_version.to_s})" # rubocop:disable Lint/RedundantStringCoercion
             end
           end
         end

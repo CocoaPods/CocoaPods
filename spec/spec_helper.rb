@@ -75,11 +75,11 @@ module SpecHelper
   def self.reset_config_instance
     ::Pod::Config.instance = nil
     ::Pod::Config.instance.tap do |c|
-      c.verbose           =  false
-      c.silent            =  true
-      c.repos_dir         =  fixture('spec-repos')
-      c.installation_root =  SpecHelper.temporary_directory
-      c.cache_root        =  SpecHelper.temporary_directory + 'Cache'
+      c.verbose           = false
+      c.silent            = true
+      c.repos_dir         = fixture('spec-repos')
+      c.installation_root = SpecHelper.temporary_directory
+      c.cache_root        = SpecHelper.temporary_directory + 'Cache'
     end
   end
 end

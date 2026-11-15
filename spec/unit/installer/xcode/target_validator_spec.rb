@@ -111,7 +111,7 @@ module Pod
               end
 
               target 'Today Extension' do
-                pod 'matryoshka/Foo',       :path => (fixture_path + 'matryoshka').to_s
+                pod 'matryoshka/Foo', :path => (fixture_path + 'matryoshka').to_s
               end
             end
             lockfile = generate_lockfile
