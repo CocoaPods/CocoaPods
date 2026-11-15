@@ -48,11 +48,11 @@ module Pod
                      end
 
       @platforms = platforms.map do |platform|
-        result =  case platform.to_s.downcase
-                  # Platform doesn't recognize 'macos' as being the same as 'osx' when initializing
-                  when 'macos' then Platform.macos
-                  else Platform.new(platform, nil)
-                  end
+        result = case platform.to_s.downcase
+                 # Platform doesn't recognize 'macos' as being the same as 'osx' when initializing
+                 when 'macos' then Platform.macos
+                 else Platform.new(platform, nil)
+                 end
         unless valid_platform?(result)
           raise Informative, "Unrecognized platform `#{platform}`. Valid platforms: #{VALID_PLATFORMS.join(', ')}"
         end

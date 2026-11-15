@@ -8,9 +8,9 @@ module Pod
   module UserInterface
     require 'colored2'
 
-    @title_colors      =  %w( yellow green )
-    @title_level       =  0
-    @indentation_level =  2
+    @title_colors      = %w( yellow green )
+    @title_level       = 0
+    @indentation_level = 2
     @treat_titles_as_messages = false
     @warnings = []
 
