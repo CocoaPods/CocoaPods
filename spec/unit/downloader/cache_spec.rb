@@ -39,6 +39,47 @@ module Pod
       root.+('FILE').should.not.exist?
     end
 
+    it 'does not rewrite the VERSION file when it matches the CocoaPods version' do
+      version_file = @cache.root + 'VERSION'
+      inode = version_file.stat.ino
+      Downloader::Cache.new(@cache.root)
+      version_file.stat.ino.should == inode
+      version_file.read.should == Pod::VERSION
+    end
+
+    it 'does not implode a matching cache when instantiated concurrently' do
+      marker = @cache.root + 'FILE'
+      marker.open('w') { |f| f << 'cached' }
+      threads = Array.new(16) do
+        Thread.new { 50.times { Downloader::Cache.new(@cache.root) } }
+      end
+      threads.each(&:join)
+      marker.should.exist?
+      (@cache.root + 'VERSION').read.should == Pod::VERSION
+    end
+
+    it 'implodes a cache from a different CocoaPods version only once when instantiated concurrently' do
+      root = Pathname(Dir.mktmpdir)
+      root.+('VERSION').open('w') { |f| f << '0.0.0' }
+      root.+('FILE').open('w') { |f| f << '0.0.0' }
+      errors = Queue.new
+      threads = Array.new(16) do
+        Thread.new do
+          begin
+            Downloader::Cache.new(root)
+          rescue StandardError => e
+            errors << e
+          end
+        end
+      end
+      threads.each(&:join)
+      errors.should.be.empty?
+      root.+('VERSION').read.should == Pod::VERSION
+      root.+('FILE').should.not.exist?
+      root.children.map(&:basename).map(&:to_s).should == ['VERSION']
+      root.rmtree
+    end
+
     it 'groups subspecs by platform' do
       @spec = Specification.new do |s|
         s.ios.deployment_target = '6.0'

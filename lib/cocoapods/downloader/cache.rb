@@ -159,16 +159,60 @@ module Pod
       # Ensures the cache on disk was created with the same CocoaPods version as
       # is currently running.
       #
+      # @note   A new cache is created for every download, so this check runs
+      #         many times concurrently: in other processes, and in the download
+      #         threads used by the `parallel_pod_downloads` installation option.
+      #         Previously the `VERSION` file was rewritten on every call, and a
+      #         concurrent reader could observe it truncated, mistake the cache
+      #         for a different version and implode it while other installations
+      #         were still copying from it.
+      #
+      #         Now the common case (the version matches) performs no writes at
+      #         all. When the version does not match, the check is repeated while
+      #         holding an exclusive lock, so the cache is imploded only once, and
+      #         the `VERSION` file is replaced atomically.
+      #
       # @return [Void]
       #
       def ensure_matching_version
-        version_file = root + 'VERSION'
-        version = version_file.read.strip if version_file.file?
+        return if cached_version == Pod::VERSION
 
-        root.rmtree if version != Pod::VERSION && root.exist?
-        root.mkpath
+        # The lock file lives next to the root, so imploding the root cannot delete it.
+        root.dirname.mkpath
+        Cache.write_lock(root) do
+          next if cached_version == Pod::VERSION
 
-        version_file.open('w') { |f| f << Pod::VERSION }
+          root.rmtree if root.exist?
+          root.mkpath
+          write_version_file
+        end
+      end
+
+      # @return [Pathname] The file recording which CocoaPods version created the cache.
+      #
+      def version_file
+        root + 'VERSION'
+      end
+
+      # @return [String, Nil] The CocoaPods version that created the cache, if any.
+      #
+      def cached_version
+        version_file.read.strip if version_file.file?
+      rescue Errno::ENOENT
+        nil
+      end
+
+      # Writes the current CocoaPods version to {#version_file} atomically, so
+      # concurrent readers never observe a partially written file.
+      #
+      # @return [Void]
+      #
+      def write_version_file
+        tmp = version_file.sub_ext(".#{Process.pid}.#{Thread.current.object_id}.tmp")
+        tmp.open('w') { |f| f << Pod::VERSION }
+        File.rename(tmp, version_file)
+      ensure
+        tmp.delete if tmp && tmp.exist?
       end
 
       # @param  [Request] request
