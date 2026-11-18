@@ -1117,6 +1117,10 @@ module Pod
         command += %w(CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer)
       end
 
+      if !ENV['COCOAPODS_DERIVED_DATA_PATH'].nil? && !ENV['COCOAPODS_DERIVED_DATA_PATH'].empty?
+        command += %W(-derivedDataPath #{ENV['COCOAPODS_DERIVED_DATA_PATH']})
+      end
+
       begin
         _xcodebuild(command, true)
       rescue => e
