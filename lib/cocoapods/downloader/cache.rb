@@ -290,7 +290,7 @@ module Pod
       end
 
       def rsync_contents(source, destination)
-        Pod::Executable.execute_command('rsync', ['-a', '--exclude=.git', '--delete', "#{source}/", destination])
+        Pod::Executable.execute_command('rsync', ['-a', '--delete', "#{source}/", destination])
       end
 
       def group_subspecs_by_platform(spec)
