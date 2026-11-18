@@ -272,6 +272,16 @@ module Pod
             @coconut_spec = fixture_spec('coconut-lib/CoconutLib.podspec')
             @coconut_test_spec = @coconut_spec.test_specs.first
             @coconut_pod_target = fixture_pod_target_with_specs([@coconut_spec, @coconut_test_spec])
+
+            @pineapple_spec = fixture_spec('pineapple-lib/PineappleLib.podspec')
+            @pineapple_app_spec = @pineapple_spec.app_specs.first
+            @pineapple_test_spec = @pineapple_spec.test_specs.first
+            @pineapple_pod_target = fixture_pod_target_with_specs([@pineapple_spec, @pineapple_test_spec, @pineapple_app_spec])
+
+            @pineapple_pod_target.app_dependent_targets_by_spec_name = { @pineapple_app_spec.name => [@pineapple_pod_target] }
+            @pineapple_pod_target.test_app_hosts_by_spec = @pineapple_spec.test_specs.each_with_object({}) do |test_spec, hash|
+              hash[test_spec] = [@pineapple_app_spec, @pineapple_pod_target]
+            end
           end
 
           it 'does not merge pod target xcconfig of test specifications for a non test xcconfig' do
@@ -316,6 +326,12 @@ module Pod
             generator = PodTargetSettings.new(@coconut_pod_target, @coconut_test_spec, :configuration => :debug)
             xcconfig = generator.generate
             xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC -l"CoconutLib"'
+          end
+
+          it 'includes correct other ld flags if there is a host app' do
+            generator = PodTargetSettings.new(@pineapple_pod_target, @pineapple_test_spec, :configuration => :debug)
+            xcconfig = generator.generate
+            xcconfig.to_hash['OTHER_LDFLAGS'].should == '$(inherited) -ObjC'
           end
 
           it 'includes correct other ld flags when requires frameworks' do
