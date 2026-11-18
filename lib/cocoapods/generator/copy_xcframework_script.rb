@@ -73,9 +73,30 @@ copy_dir()
   local source="$1"
   local destination="$2"
 
+  # Serialize rsync invocations across parallel Xcode build phases that target the
+  # same xcframework destination (e.g. two Pods targets that differ only by
+  # deployment-target share $PODS_XCFRAMEWORKS_BUILD_DIR within a configuration).
+  # `mkdir` is atomic on POSIX and requires no external tools.
+  local lock_dir
+  lock_dir="${TMPDIR:-/tmp}/cocoapods-xcframework-$(printf '%s' "${destination}" | shasum | cut -c1-40).lock"
+  local waited=0
+  until mkdir "${lock_dir}" 2>/dev/null; do
+    sleep 0.1
+    waited=$((waited + 1))
+    # Stale-lock timeout: 6000 iterations * 0.1s = 600s.
+    if [ "${waited}" -ge 6000 ]; then
+      echo "warning: [CP] Removing stale lock ${lock_dir} after 600s"
+      rmdir "${lock_dir}" 2>/dev/null || true
+    fi
+  done
+
   # Use filter instead of exclude so missing patterns don't throw errors.
   echo "rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter \\"- CVS/\\" --filter \\"- .svn/\\" --filter \\"- .git/\\" --filter \\"- .hg/\\" \\"${source}*\\" \\"${destination}\\""
-  rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" "${source}"/* "${destination}"
+  local rsync_status=0
+  rsync --delete -av "${RSYNC_PROTECT_TMP_FILES[@]}" --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" "${source}"/* "${destination}" || rsync_status=$?
+
+  rmdir "${lock_dir}" 2>/dev/null || true
+  return "${rsync_status}"
 }
 
 SELECT_SLICE_RETVAL=""
