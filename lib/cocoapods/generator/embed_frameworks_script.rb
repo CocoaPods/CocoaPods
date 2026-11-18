@@ -83,7 +83,13 @@ install_framework()
 
   if [ -L "${source}" ]; then
     echo "Symlinked..."
-    source="$(readlink -f "${source}")"
+    # Fixed https://github.com/CocoaPods/CocoaPods/commit/e9d39e166ae40191c20b3e28e80ada94a5da8553#r111438187
+    # Xcode 14.3+ need absolute path, otherwise will fail.
+    if [ "${XCODE_VERSION_ACTUAL}" -ge 1430 ]; then
+      source="$(readlink -f "${source}")"
+    else
+      source="$(readlink "${source}")"
+    fi
   fi
 
   if [ -d "${source}/${BCSYMBOLMAP_DIR}" ]; then
