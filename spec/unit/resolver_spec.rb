@@ -467,19 +467,19 @@ You have either:
           platform :ios
           pod 'AFNetworking', '3.0.1'
         end
-        locked_deps = dependency_graph_from_array([Dependency.new('AFNetworking', '= 1.4')])
+        locked_deps = dependency_graph_from_array([Dependency.new('AFNetworking', '= 1.3.4')])
 
         resolver = create_resolver(podfile, locked_deps)
         e = lambda { resolver.resolve }.should.raise NoSpecFoundError
         e.message.should.include <<-EOS.strip
 [!] CocoaPods could not find compatible versions for pod "AFNetworking":
   In snapshot (Podfile.lock):
-    AFNetworking (= 1.4)
+    AFNetworking (= 1.3.4)
 
   In Podfile:
     AFNetworking (= 3.0.1)
 
-None of your spec sources contain a spec satisfying the dependencies: `AFNetworking (= 3.0.1), AFNetworking (= 1.4)`.
+None of your spec sources contain a spec satisfying the dependencies: `AFNetworking (= 3.0.1), AFNetworking (= 1.3.4)`.
 
 You have either:
  * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
