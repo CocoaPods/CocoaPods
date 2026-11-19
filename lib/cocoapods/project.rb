@@ -68,7 +68,11 @@ module Pod
     # @return [Void]
     #
     def generate_available_uuid_list(count = 100)
-      start = @generated_uuids.size
+      # Keep a separate counter: `Xcodeproj::Project::UUIDGenerator#generate!` (used by
+      # `TargetUUIDGenerator`) replaces `@generated_uuids` with the list of available UUIDs,
+      # so its size would start the next batch over at UUIDs that are already in use.
+      start = @uuid_counter || 0
+      @uuid_counter = start + count
       uniques = Array.new(count) { |i| format('%.6s%07X0', @uuid_prefix, start + i) }
       @generated_uuids += uniques
       @available_uuids += uniques
