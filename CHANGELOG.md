@@ -17,6 +17,12 @@ To install release candidates run `[sudo] gem install cocoapods --pre`
 
 ##### Bug Fixes
 
+* Fix objects created in a `post_install` hook reusing the UUIDs of existing
+  objects in the Pods project, such as the root object, when
+  `deterministic_uuids` is `false`.  
+  [Dezhen Lu](https://github.com/0z5a)
+  [#12936](https://github.com/CocoaPods/CocoaPods/issues/12936)
+
 * Standardize podspec JSON serialization to Ruby 2.7+ behavior. This may result in checksum changes for
   projects using Ruby 2.6 (macOS System Ruby).  
   [Eric Amorde](https://github.com/amorde)
